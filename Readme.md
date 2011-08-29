@@ -95,11 +95,21 @@ describe('Array', function(){
 ["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
 ````
 
-## T.A.P
+## TAP
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
   ![test anything protocol](http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png)
+
+## List
+
+  The "List" reporter outputs a simple specifications list as
+  test cases pass or fail, outputting the failure details at 
+  the bottom of the output.
+
+  ![list reporter](http://f.cl.ly/items/0Y0x1B3l3K0n3t3h3l0p/Screenshot.png)
+  
+  ![failures](http://f.cl.ly/items/2Z0E150v20042G2d1J0i/Screenshot.png)
 
 ## Best practices
 
