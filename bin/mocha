@@ -1,0 +1,95 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander')
+  , path = require('path')
+  , mocha = require('../')
+  , reporters = mocha.reporters
+  , interfaces = mocha.interfaces
+  , Runner = mocha.Runner
+  , Suite = mocha.Suite
+  , vm = require('vm')
+  , fs = require('fs')
+  , join = path.join
+  , cwd = process.cwd();
+
+/**
+ * Files.
+ */
+
+var files = [];
+
+// options
+
+program
+  .version(mocha.version)
+  .usage('[options] <files>')
+  .option('-r, --require <name>', 'require the given module')
+  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
+  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+
+// report help
+
+program.on('--help', function(){
+  console.log('  Reporters:');
+  console.log('');
+  console.log('    dot - dot matrix');
+  console.log('    json - single json object');
+  console.log('    progress - progress bar');
+  console.log('    list - spec-style listing');
+  console.log('    tap - test-anything-protocol');
+  console.log('    landing - unicode landing strip');
+  console.log('    json-stream - newline delimited json events');
+  console.log('');
+});
+
+// -r, --require
+
+program.on('require', function(mod){
+  require(mod);
+});
+
+// parse args
+
+program.parse(process.argv);
+
+// reporter
+
+var suite = new Suite('')
+  , reporter = require('../lib/reporters/' + program.reporter)
+  , ui = interfaces[program.ui](suite);
+
+// files
+
+var files = program.args;
+
+// display help when no files are given
+
+if (!files.length) {
+  process.stdout.write(program.helpInformation());
+  process.exit(0);
+}
+
+var pending = files.length;
+files.forEach(function(file){
+  file = require.resolve(join(cwd, file));
+  fs.readFile(file, 'utf8', function(err, str){
+    if (err) throw err;
+    var context = {};
+    for (var key in global) context[key] = global[key];
+    suite.emit('file', context, file);
+    vm.runInNewContext(str, context, file);
+    suite.emit('file end', context, file);
+    --pending || run(suite);
+  });
+});
+
+function run(suite) {
+  suite.emit('run');
+  var runner = new Runner(suite);
+  new reporter(runner);
+  runner.run();
+}
