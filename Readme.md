@@ -63,6 +63,19 @@ describe('Array', function(){
    [ ] global leak reporting
    [ ] ability to target any test(s) to run
 
+## Reporters
+
+  Mocha reporters adjust to the terminal window,
+  and always disable ansi-escape colouring when
+  the stdio streams are not associated with a tty.
+
+### Dot Matrix
+
+  The Dot Matrix reporter is simply a series of dots
+  that represent test cases, failures highlight in red.
+
+   ![dot matrix reporter](http://f.cl.ly/items/3b3b471Z1p2U3D1P2Y1n/Screenshot.png)
+
 ## Best practices
 
 ### Makefiles
