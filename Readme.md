@@ -33,28 +33,15 @@ describe('Array', function(){
 
 ## Todo
 
-     [√] spec style
-     [√] export style
-     [√] tdd style
-     [√] CLI
      [ ] before callbacks
      [ ] after callbacks
      [ ] fix progress reporter
-     [√] todo stdout only
-     [√] nesting
-     [√] nested concat titles
      [ ] mutation cov etc
      [ ] browser support
      [ ] hook for should.js?
      [ ] assertions expected
-     [√] timeouts, never hang
-     [√] explicit done when arity > 1
      [ ] reporting
-       [√] plain text
-       [√] ansi-escape colored text
        [ ] html
-       [ ] TAP
-       [ ] json
        [ ] xunit
      [ ] pure-js code coverage
      [ ] optional parallelism via processes
