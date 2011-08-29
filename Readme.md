@@ -33,16 +33,16 @@ describe('Array', function(){
 
 ## Todo
 
-     [ ] spec style
-     [ ] export style
-     [ ] vows style
-     [ ] tdd style
-     [ ] CLI
+     [√] spec style
+     [√] export style
+     [√] tdd style
+     [√] CLI
      [ ] before callbacks
      [ ] after callbacks
+     [ ] fix progress reporter
      [√] todo stdout only
      [√] nesting
-     [ ] nested concat titles
+     [√] nested concat titles
      [ ] mutation cov etc
      [ ] browser support
      [ ] hook for should.js?
