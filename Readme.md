@@ -76,6 +76,8 @@ describe('Array', function(){
 
    ![dot matrix reporter](http://f.cl.ly/items/3b3b471Z1p2U3D1P2Y1n/Screenshot.png)
 
+   ![dot matrix failure](http://f.cl.ly/items/1P11330L033r423g1y1n/Screenshot.png)
+
 ## Best practices
 
 ### Makefiles
