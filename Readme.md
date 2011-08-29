@@ -78,6 +78,23 @@ describe('Array', function(){
 
    ![dot matrix failure](http://f.cl.ly/items/1P11330L033r423g1y1n/Screenshot.png)
 
+## JSON
+
+  The JSON reporter outputs a single large JSON object when
+  the tests have completed (failures or not).
+
+## JSON Stream
+
+  The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
+
+```json
+["start",{"total":12}]
+["pass",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present","duration":0}]
+["pass",{"title":"should return the index when present","fullTitle":"Array #indexOf() should return the index when present","duration":0}]
+["fail",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present"}]
+["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
+````
+
 ## Best practices
 
 ### Makefiles
