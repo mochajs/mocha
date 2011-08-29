@@ -40,7 +40,7 @@ describe('Array', function(){
      [ ] CLI
      [ ] before callbacks
      [ ] after callbacks
-     [ ] todo stdout only
+     [√] todo stdout only
      [√] nesting
      [ ] nested concat titles
      [ ] mutation cov etc
