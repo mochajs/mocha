@@ -101,6 +101,13 @@ describe('Array', function(){
 
   ![test anything protocol](http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png)
 
+## Landing Strip
+
+  The Landing Strip reporter is a gimmicky test reporter simulating
+  a plane landing :) unicode ftw
+
+  ![landing strip plane reporter](http://f.cl.ly/items/0z1k400K1N1Y2G3u2u0i/Screenshot.png)
+
 ## List
 
   The "List" reporter outputs a simple specifications list as
