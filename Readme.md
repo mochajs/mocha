@@ -3,22 +3,6 @@
 
   Mocha aims to take the best of several popular frameworks. BDD-style inspired by JSpec, parallelism inspired by Expresso, opt-in serial execution from Vows, and assertion expectancy from Qunit. 
 
-```js
-describe('Array', function(){
-  describe('#indexOf()', function(){
-    it('should return -1 when not present', function(){
-      [1,2,3].indexOf(4).should.equal(-1);
-    });
-
-    it('should return the index when present', function(){
-      [1,2,3].indexOf(3).should.equal(2);
-      [1,2,3].indexOf(2).should.equal(1);
-      [1,2,3].indexOf(1).should.equal(0);
-    });
-  });
-});
-```
-
 ## Features
 
   - proper exit status for CI support etc
@@ -33,6 +17,7 @@ describe('Array', function(){
 
 ## Todo
 
+     [ ] default to all sync ... toggle back / forthwith flag or block
      [ ] before callbacks
      [ ] after callbacks
      [ ] fix progress reporter
@@ -49,6 +34,74 @@ describe('Array', function(){
      [ ] CI-friendly (exit code)
      [ ] global leak reporting
      [ ] ability to target any test(s) to run
+
+## Interfaces
+
+ Mocha "interfaces" providing BDD, TDD, and expresso export-style flavoured APIs on top of the internals.
+ 
+### BDD
+
+```js
+describe('Array', function(){
+  before(function(){
+    // ...
+  });
+
+  describe('#indexOf()', function(){
+    it('should return -1 when not present', function(){
+      [1,2,3].indexOf(4).should.equal(-1);
+    });
+
+    it('should return the index when present', function(){
+      [1,2,3].indexOf(3).should.equal(2);
+      [1,2,3].indexOf(2).should.equal(1);
+      [1,2,3].indexOf(1).should.equal(0);
+    });
+  });
+});
+```
+
+### TDD
+
+```js
+suite('Array', function(){
+  setup(function(){
+    // ...
+  });
+
+  suite('#indexOf()', function(){
+    test('should return -1 when not present', function(){
+      assert.equal(-1, [1,2,3].indexOf(4));
+    });
+
+    test('should return the index when present', function(){
+      assert.equal(2, [1,2,3].indexOf(3));
+      assert.equal(1, [1,2,3].indexOf(2));
+      assert.equal(0, [1,2,3].indexOf(1));
+    });
+  });
+});
+```
+
+### Exports
+
+```js
+module.exports = {
+  'Array': {
+    '#indexOf()': {
+      'should return -1 when not present': function(){
+        [1,2,3].indexOf(4).should.equal(-1);
+      },
+      
+      'should return the index when present': function(){
+        [1,2,3].indexOf(3).should.equal(2);
+        [1,2,3].indexOf(2).should.equal(1);
+        [1,2,3].indexOf(1).should.equal(0);
+      }
+    }
+  }
+};
+```
 
 ## Reporters
 
