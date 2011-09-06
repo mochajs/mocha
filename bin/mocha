@@ -79,9 +79,9 @@ if (!files.length) {
 var pending = files.length;
 files.forEach(function(file){
   file = join(cwd, file);
-  suite.emit('file', global, file);
-  require(file);
-  suite.emit('file end', global, file);
+  // suite.emit('file', global, file);
+  suite.emit('require', require(file), file);
+  // suite.emit('file end', global, file);
   --pending || run(suite);
 });
 
