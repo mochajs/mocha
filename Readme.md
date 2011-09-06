@@ -34,6 +34,7 @@
      [ ] CI-friendly (exit code)
      [ ] global leak reporting
      [ ] ability to target any test(s) to run
+     [ ] hook for when all tests are complete (to manually exit or kill connections etc)
 
 ## Interfaces
 
