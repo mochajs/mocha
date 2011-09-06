@@ -1,7 +1,7 @@
 
 # mocha
 
-  Mocha aims to take the best of several popular frameworks. BDD-style inspired by JSpec, parallelism inspired by Expresso, opt-in serial execution from Vows, and assertion expectancy from Qunit. 
+  Mocha aims to take the best of several popular frameworks. BDD-style inspired by JSpec, parallelism inspired by Expresso, opt-in serial execution from Vows, and assertion expectancy from Qunit, as well as bits from others. 
 
 ## Features
 
