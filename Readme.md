@@ -15,27 +15,6 @@
     - JSON reporter
     - streaming JSON reporter
 
-## Todo
-
-     [ ] default to all sync ... toggle back / forthwith flag or block
-     [ ] before callbacks
-     [ ] after callbacks
-     [ ] fix progress reporter
-     [ ] mutation cov etc
-     [ ] browser support
-     [ ] hook for should.js?
-     [ ] assertions expected
-     [ ] reporting
-       [ ] html
-       [ ] xunit
-     [ ] pure-js code coverage
-     [ ] optional parallelism via processes
-     [ ] optional opt-in block-based serial execution
-     [ ] CI-friendly (exit code)
-     [ ] global leak reporting
-     [ ] ability to target any test(s) to run
-     [ ] hook for when all tests are complete (to manually exit or kill connections etc)
-
 ## Interfaces
 
  Mocha "interfaces" providing BDD, TDD, and expresso export-style flavoured APIs on top of the internals.
