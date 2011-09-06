@@ -73,19 +73,19 @@ if (!files.length) {
   process.exit(0);
 }
 
+// require test files before running
+// the root suite
+
 var pending = files.length;
 files.forEach(function(file){
-  file = require.resolve(join(cwd, file));
-  fs.readFile(file, 'utf8', function(err, str){
-    if (err) throw err;
-    var context = {};
-    for (var key in global) context[key] = global[key];
-    suite.emit('file', context, file);
-    vm.runInNewContext(str, context, file);
-    suite.emit('file end', context, file);
-    --pending || run(suite);
-  });
+  file = join(cwd, file);
+  suite.emit('file', global, file);
+  require(file);
+  suite.emit('file end', global, file);
+  --pending || run(suite);
 });
+
+// run the given suite
 
 function run(suite) {
   suite.emit('run');
