@@ -1,9 +1,12 @@
 var assert = require('assert');
 
 describe("Setup", function(){
-
+  var x = 0;
+  before(function(){
+    x = 1;
+  });
   it("should have executed before", function(){
-    assert.equal([1,2,3].indexOf(4), -1);
+    assert.equal(x, 1);
   })
   
 });
