@@ -4,7 +4,7 @@ TESTS = test/*.js
 test:
 	@./bin/mocha \
 		--require should \
-		--reporter spec \
+		--reporter list \
 		--ui bdd \
 		$(TESTS)
 
