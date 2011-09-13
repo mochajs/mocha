@@ -1,8 +1,18 @@
 
 describe('serial', function(){
-  describe('beforeEach()', function(){
-    var calls = [];
+  var calls = [];
 
+  beforeEach(function(test){
+    // not hit
+    calls.push('parent before ' + test.title);
+  });
+
+  afterEach(function(test){
+    // not hit
+    calls.push('parent after ' + test.title);
+  });
+
+  describe('beforeEach()', function(){
     beforeEach(function(test){
       calls.push('before ' + test.title);
     });
