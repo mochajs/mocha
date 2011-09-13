@@ -3,6 +3,11 @@ TESTS = test/unit/*.js
 REPORTER = list
 
 test: test-bdd test-tdd test-exports
+	@./bin/mocha \
+		--require should \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		$(TESTS)
 
 test-bdd:
 	@./bin/mocha \
