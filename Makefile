@@ -2,7 +2,9 @@
 TESTS = test/unit/*.js
 REPORTER = list
 
-test: test-bdd test-tdd test-exports test-unit
+test: test-unit
+
+test-all: test-bdd test-tdd test-exports test-unit
 
 test-unit:
 	@./bin/mocha \
@@ -32,4 +34,4 @@ test-exports:
 		--ui exports \
 		test/exports.js
 
-.PHONY: test test-bdd test-tdd test-exports test-unit
+.PHONY: test test-all test-bdd test-tdd test-exports test-unit
