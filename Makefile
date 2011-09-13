@@ -2,7 +2,9 @@
 TESTS = test/unit/*.js
 REPORTER = list
 
-test: test-bdd test-tdd test-exports
+test: test-bdd test-tdd test-exports test-unit
+
+test-unit:
 	@./bin/mocha \
 		--require should \
 		--reporter $(REPORTER) \
@@ -30,4 +32,4 @@ test-exports:
 		--ui exports \
 		test/exports.js
 
-.PHONY: test test-bdd test-tdd test-exports
+.PHONY: test test-bdd test-tdd test-exports test-unit
