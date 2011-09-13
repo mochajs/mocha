@@ -56,6 +56,10 @@ program.on('require', function(mod){
 
 program.parse(process.argv);
 
+// infinite stack traces
+
+Error.stackTraceLimit = Infinity; // TODO: config
+
 // reporter
 
 var suite = new Suite('')

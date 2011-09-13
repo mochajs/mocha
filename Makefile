@@ -1,5 +1,5 @@
 
-TESTS = test/unit/*.js
+TESTS = test/unit/hook.async.js
 REPORTER = list
 
 test: test-unit
