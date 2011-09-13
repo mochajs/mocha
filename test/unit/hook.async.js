@@ -24,8 +24,9 @@ describe('async', function(){
       }, 20);
     });
 
-    it('one', function(){
+    it('one', function(done){
       calls.should.eql(['before one']);
+      setTimeout(done, 10);
     });
     
     it('two', function(){
