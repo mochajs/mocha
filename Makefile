@@ -1,12 +1,28 @@
 
-TESTS = test/*.js
+TESTS = test/unit/*.js
 REPORTER = list
 
-test:
+test: test-bdd test-tdd test-exports
+
+test-bdd:
 	@./bin/mocha \
 		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		$(TESTS)
+		test/bdd.js
 
-.PHONY: test
+test-tdd:
+	@./bin/mocha \
+		--require should \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/tdd.js
+
+test-exports:
+	@./bin/mocha \
+		--require should \
+		--reporter $(REPORTER) \
+		--ui exports \
+		test/exports.js
+
+.PHONY: test test-bdd test-tdd test-exports
