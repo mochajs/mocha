@@ -1,10 +1,11 @@
 
 TESTS = test/*.js
+REPORTER = list
 
 test:
 	@./bin/mocha \
 		--require should \
-		--reporter list \
+		--reporter $(REPORTER) \
 		--ui bdd \
 		$(TESTS)
 
