@@ -1,5 +1,11 @@
 
+TESTS = test/*.js
+
 test:
-	@echo "populate me"
+	@./bin/mocha \
+		--require should \
+		--reporter list \
+		--ui bdd \
+		$(TESTS)
 
 .PHONY: test
