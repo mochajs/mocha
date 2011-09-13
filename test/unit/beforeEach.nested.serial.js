@@ -12,27 +12,14 @@ describe('serial', function(){
     });
 
     it('foo', function(){
-      calls.should.eql([
-          'before one'
-        , 'after one'
-        , 'before two'
-        , 'after two'
-        , 'before three'
-        , 'after three'
-        , 'parent before foo']);
+      calls.should.eql(['parent before foo']);
     });
 
     it('bar', function(){
       calls.should.eql([
-          'before one'
-        , 'after one'
-        , 'before two'
-        , 'after two'
-        , 'before three'
-        , 'after three'
-        , 'parent before foo'
-        , 'parent after foo'
-        , 'parent before bar']);
+        'parent before foo'
+      , 'parent after foo'
+      , 'parent before bar']);
     });
 
     describe('beforeEach()', function(){
@@ -41,23 +28,36 @@ describe('serial', function(){
       });
 
       it('one', function(){
-        calls.should.eql(['before one']);
+        calls.should.eql([
+          'parent before foo'
+        , 'parent after foo'
+        , 'parent before bar'
+        , 'parent after bar'
+        , 'before one']);
       });
 
       it('two', function(){
         calls.should.eql([
-            'before one'
-          , 'after one'
-          , 'before two']);
+          'parent before foo'
+        , 'parent after foo'
+        , 'parent before bar'
+        , 'parent after bar'
+        , 'before one'
+        , 'after one'
+        , 'before two']);
       });
-
+      
       it('three', function(){
         calls.should.eql([
-            'before one'
-          , 'after one'
-          , 'before two'
-          , 'after two'
-          , 'before three']);
+          'parent before foo'
+        , 'parent after foo'
+        , 'parent before bar'
+        , 'parent after bar'
+        , 'before one'
+        , 'after one'
+        , 'before two'
+        , 'after two'
+        , 'before three']);
       });
 
       afterEach(function(test){
