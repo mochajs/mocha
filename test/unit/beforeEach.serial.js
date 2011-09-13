@@ -4,24 +4,31 @@ describe('serial', function(){
     var calls = [];
 
     beforeEach(function(test){
-      calls.push(test.fullTitle());
+      calls.push('before ' + test.title);
     });
 
     it('one', function(){
-      calls.should.eql(['serial beforeEach() one']);
+      calls.should.eql(['before one']);
     });
 
     it('two', function(){
       calls.should.eql([
-          'serial beforeEach() one'
-        , 'serial beforeEach() two']);
+          'before one'
+        , 'after one'
+        , 'before two']);
     });
 
     it('three', function(){
       calls.should.eql([
-          'serial beforeEach() one'
-        , 'serial beforeEach() two'
-        , 'serial beforeEach() three']);
+          'before one'
+        , 'after one'
+        , 'before two'
+        , 'after two'
+        , 'before three']);
+    });
+
+    afterEach(function(test){
+      calls.push('after ' + test.title);
     });
   });
 });
