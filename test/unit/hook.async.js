@@ -18,15 +18,15 @@ describe('async', function(){
 
   describe('beforeEach()', function(){
     beforeEach(function(test, done){
-      setTimeout(function(){
+      process.nextTick(function(){
         calls.push('before ' + test.title);
         done();
-      }, 20);
+      });
     });
 
     it('one', function(done){
       calls.should.eql(['before one']);
-      setTimeout(done, 10);
+      process.nextTick(done);
     });
     
     it('two', function(){
@@ -46,10 +46,10 @@ describe('async', function(){
     });
 
     afterEach(function(test, done){
-      setTimeout(function(){
+      process.nextTick(function(){
         calls.push('after ' + test.title);
         done();
-      }, 20);
+      });
     });
   });
 });
