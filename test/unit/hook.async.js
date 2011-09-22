@@ -14,14 +14,14 @@ describe('async', function(){
       , 'after all']);
   })
 
-  beforeEach(function(test, done){
+  beforeEach(function(){
     // not hit
-    calls.push('parent before ' + test.title);
+    calls.push('parent before');
   })
 
-  afterEach(function(test, done){
+  afterEach(function(){
     // not hit
-    calls.push('parent after ' + test.title);
+    calls.push('parent after' );
   })
 
   describe('beforeEach()', function(){
@@ -33,7 +33,7 @@ describe('async', function(){
       calls.push('after all');
     });
 
-    beforeEach(function(test, done){
+    beforeEach(function(done){
       process.nextTick(function(){
         calls.push('before ' + test.title);
         done();
@@ -65,7 +65,7 @@ describe('async', function(){
         , 'before three']);
     })
 
-    afterEach(function(test, done){
+    afterEach(function(done){
       process.nextTick(function(){
         calls.push('after ' + test.title);
         done();

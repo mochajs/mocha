@@ -2,43 +2,62 @@
 describe('serial', function(){
   var calls = [];
 
-  beforeEach(function(test){
+  beforeEach(function(){
     // not hit
-    calls.push('parent before ' + test.title);
+    calls.push('parent before');
   })
 
-  afterEach(function(test){
+  afterEach(function(){
     // not hit
-    calls.push('parent after ' + test.title);
+    calls.push('parent after');
   })
 
   describe('beforeEach()', function(){
-    beforeEach(function(test){
-      calls.push('before ' + test.title);
+    beforeEach(function(){
+      calls.push('before');
     })
 
     it('one', function(){
-      calls.should.eql(['before one']);
+      calls.should.eql(['before']);
+      calls.push('one');
     })
 
     it('two', function(){
       calls.should.eql([
-          'before one'
-        , 'after one'
-        , 'before two']);
+          'before'
+        , 'one'
+        , 'after'
+        , 'before']);
+      calls.push('two');
     })
 
     it('three', function(){
       calls.should.eql([
-          'before one'
-        , 'after one'
-        , 'before two'
-        , 'after two'
-        , 'before three']);
+          'before'
+        , 'one'
+        , 'after'
+        , 'before'
+        , 'two'
+        , 'after'
+        , 'before']);
+      calls.push('three');
     })
 
-    afterEach(function(test){
-      calls.push('after ' + test.title);
+    afterEach(function(){
+      calls.push('after');
+    })
+
+    after(function(){
+      calls.should.eql([
+          'before'
+        , 'one'
+        , 'after'
+        , 'before'
+        , 'two'
+        , 'after'
+        , 'before'
+        , 'three'
+        , 'after']);
     })
   })
 })
