@@ -5,7 +5,7 @@ describe('serial', function(){
 
     beforeEach(function(test){
       calls.push('parent before ' + test.title);
-    });
+    })
 
     afterEach(function(test){
       calls.push('parent after ' + test.title);
@@ -13,19 +13,19 @@ describe('serial', function(){
 
     it('foo', function(){
       calls.should.eql(['parent before foo']);
-    });
+    })
 
     it('bar', function(){
       calls.should.eql([
         'parent before foo'
       , 'parent after foo'
       , 'parent before bar']);
-    });
+    })
 
     describe('beforeEach()', function(){
       beforeEach(function(test){
         calls.push('before ' + test.title);
-      });
+      })
 
       it('one', function(){
         calls.should.eql([
@@ -34,7 +34,7 @@ describe('serial', function(){
         , 'parent before bar'
         , 'parent after bar'
         , 'before one']);
-      });
+      })
 
       it('two', function(){
         calls.should.eql([
@@ -58,11 +58,11 @@ describe('serial', function(){
         , 'before two'
         , 'after two'
         , 'before three']);
-      });
+      })
 
       afterEach(function(test){
         calls.push('after ' + test.title);
-      });
-    });
-  });
-});
+      })
+    })
+  })
+})
