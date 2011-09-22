@@ -1,7 +1,7 @@
 
 # mocha
 
-  Mocha aims to take the best of several popular frameworks. BDD-style inspired by JSpec, parallelism inspired by Expresso, opt-in serial execution from Vows, and assertion expectancy from Qunit, as well as bits from others. 
+  Mocha aims to take the best of several popular JavaScript test frameworks, providing a fun, accessible, robust browser & node.js based test experience.
 
 ## Features
 
@@ -9,11 +9,13 @@
   - auto-detects and disables coloring for non-ttys
   - async test timeout support
   - extensible reporting
-    - dot matrix reporter
-    - landing strip reporter
+    - dot matrix
+    - landing strip
     - test-anything-protocol (TAP) producer
-    - JSON reporter
-    - streaming JSON reporter
+    - progress bar
+    - spec list
+    - streaming JSON
+    - JSON
 
 ## Interfaces
 
