@@ -16,6 +16,10 @@
     - spec list
     - streaming JSON
     - JSON
+  - extensible test DSLs
+    - BDD
+    - TDD
+    - exports
 
 ## Interfaces
 
