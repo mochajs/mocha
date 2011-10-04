@@ -11,4 +11,9 @@ describe('global leaks', function(){
     bar = 'baz';
     // baz = 'raz';
   });
+
+  afterEach(function(){
+    // uncomment to test
+    // foo = 'bar'
+  });
 });
