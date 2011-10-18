@@ -9,6 +9,7 @@
   - auto-detects and disables coloring for non-ttys
   - async test timeout support
   - growl notification support
+  - highlights slow tests
   - extensible reporting
     - dot matrix
     - landing strip
