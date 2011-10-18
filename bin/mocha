@@ -5,6 +5,7 @@
  */
 
 var program = require('commander')
+  , exec = require('child_process').exec
   , path = require('path')
   , mocha = require('../')
   , reporters = mocha.reporters
@@ -30,6 +31,7 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-g, --growl', 'enable growl support')
 
 // report help
 
@@ -63,7 +65,7 @@ Error.stackTraceLimit = Infinity; // TODO: config
 // reporter
 
 var suite = new Suite('')
-  , reporter = require('../lib/reporters/' + program.reporter)
+  , Reporter = require('../lib/reporters/' + program.reporter)
   , ui = interfaces[program.ui](suite);
 
 // files
@@ -94,6 +96,57 @@ files.forEach(function(file){
 function run(suite) {
   suite.emit('run');
   var runner = new Runner(suite);
-  new reporter(runner);
+  var reporter = new Reporter(runner);
+  if (program.growl) growl(runner, reporter)
   runner.run();
+}
+
+// enable growl notifications
+
+function growl(runner, reporter) {
+  runner.on('end', function(){
+    var stats = reporter.stats;
+    if (stats.failures) {
+      var msg = stats.failures + ' of ' + stats.tests + ' tests failed:\n\n';
+      msg += titles(reporter.failures).join('\n');
+      notify(msg, { title: 'Fail' });
+    } else {
+      notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
+        title: 'Pass'
+      });
+    }
+  });
+}
+
+// test titles
+
+function titles(tests) {
+  return tests.map(function(test, i){
+    return i + ') ' + test.title + ': ' + test.err.message;
+  });
+}
+
+// growl notification
+
+function notify(msg, options) {
+  var image
+    , args = ['growlnotify', '-m', '"' + msg + '"']
+    , options = options || {}
+    , fn = fn || function(){};
+
+  if (image = options.image) {
+    var flag, ext = path.extname(image).substr(1)
+    flag = flag || ext == 'icns' && 'iconpath'
+    flag = flag || /^[A-Z]/.test(image) && 'appIcon'
+    flag = flag || /^png|gif|jpe?g$/.test(ext) && 'image'
+    flag = flag || ext && (image = ext) && 'icon'
+    flag = flag || 'icon'
+    args.push('--' + flag, image)
+  }
+
+  if (options.sticky) args.push('--sticky');
+  if (options.priority) args.push('--priority', options.priority);
+  if (options.name) args.push('--name', options.name);
+  if (options.title) args.push(options.title);
+  exec(args.join(' '), fn);
 }
