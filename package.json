@@ -2,7 +2,7 @@
     "name": "mocha"
   , "version": "0.0.1"
   , "description": "Test framework inspired by JSpec, Expresso, Vows, & Qunit"
-  , "keywords": []
+  , "keywords": ["test", "bdd", "tdd", "tap"]
   , "bin": { "mocha": "./bin/mocha" }
   , "author": "TJ Holowaychuk <tj@vision-media.ca>"
   , "main": "index"
