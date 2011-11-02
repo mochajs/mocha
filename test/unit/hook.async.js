@@ -2,21 +2,6 @@
 describe('async', function(){
   var calls = [];
   
-  process.on('exit', function(){
-    calls.should.eql([
-        'before all'
-      , 'before'
-      , 'one'
-      , 'after'
-      , 'before'
-      , 'two'
-      , 'after'
-      , 'before'
-      , 'three'
-      , 'after'
-      , 'after all']);
-  })
-  
   beforeEach(function(){
     // not hit
     calls.push('parent before');
@@ -79,6 +64,21 @@ describe('async', function(){
         calls.push('after');
         done();
       })
+    })
+
+    after(function(){
+      calls.should.eql([
+          'before all'
+        , 'before'
+        , 'one'
+        , 'after'
+        , 'before'
+        , 'two'
+        , 'after'
+        , 'before'
+        , 'three'
+        , 'after'
+        , 'after all']);
     })
   })
 })
