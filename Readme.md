@@ -40,6 +40,7 @@ Usage: mocha [options] <files>
     -R, --reporter <name>  specify the reporter to use
     -u, --ui <name>        specify user-interface (bdd|tdd|exports)
     -g, --grep <pattern>   only run tests matching <pattern>
+    -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
     -G, --growl            enable growl support
 
   Reporters:
