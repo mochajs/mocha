@@ -24,7 +24,7 @@ describe('serial', function(){
         , 'parent before']);
     })
     
-    describe('beforeEach()', function(){
+    describe('hooks', function(){
       beforeEach(function(){
         calls.push('before');
       })

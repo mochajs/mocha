@@ -1,7 +1,7 @@
 
 # mocha
 
-  Mocha aims to take the best of several popular JavaScript test frameworks, providing a fun, accessible, robust browser & node.js based test experience.
+  Mocha aims to combine the best of several popular JavaScript test frameworks, providing a fun, accessible, robust browser & node.js based test experience.
 
 ## Features
 
@@ -9,6 +9,7 @@
   - auto-detects and disables coloring for non-ttys
   - async test timeout support
   - growl notification support
+  - reports test durations
   - highlights slow tests
   - extensible reporting
     - dot matrix

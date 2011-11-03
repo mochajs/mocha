@@ -12,7 +12,7 @@ describe('serial', function(){
     calls.push('parent after');
   })
 
-  describe('beforeEach()', function(){
+  describe('hooks', function(){
     beforeEach(function(){
       calls.push('before');
     })

@@ -1,18 +1,40 @@
 
 describe('async', function(){
   var calls = [];
+
+  before(function(){
+    calls.push('root before all');
+  })
   
+  after(function(){
+    calls.push('root after all');
+    calls.should.eql([
+        'root before all'
+      , 'before all'
+      , 'before'
+      , 'one'
+      , 'after'
+      , 'before'
+      , 'two'
+      , 'after'
+      , 'before'
+      , 'three'
+      , 'after'
+      , 'after all'
+      , 'root after all']);
+  })
+
   beforeEach(function(){
-    // not hit
+    // should not be invoked
     calls.push('parent before');
   })
   
   afterEach(function(){
-    // not hit
+    // should not be invoked
     calls.push('parent after' );
   })
   
-  describe('beforeEach()', function(){
+  describe('hooks', function(){
     before(function(){
       calls.push('before all');
     });
@@ -30,7 +52,8 @@ describe('async', function(){
   
     it('one', function(done){
       calls.should.eql([
-          'before all'
+          'root before all'
+        , 'before all'
         , 'before']);
       calls.push('one');
       process.nextTick(done);
@@ -38,7 +61,8 @@ describe('async', function(){
     
     it('two', function(){
       calls.should.eql([
-          'before all'
+          'root before all'
+        , 'before all'
         , 'before'
         , 'one'
         , 'after'
@@ -48,7 +72,8 @@ describe('async', function(){
     
     it('three', function(){
       calls.should.eql([
-          'before all'
+          'root before all'
+        , 'before all'
         , 'before'
         , 'one'
         , 'after'
@@ -64,21 +89,6 @@ describe('async', function(){
         calls.push('after');
         done();
       })
-    })
-
-    after(function(){
-      calls.should.eql([
-          'before all'
-        , 'before'
-        , 'one'
-        , 'after'
-        , 'before'
-        , 'two'
-        , 'after'
-        , 'before'
-        , 'three'
-        , 'after'
-        , 'after all']);
     })
   })
 })
