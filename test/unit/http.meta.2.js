@@ -64,7 +64,6 @@ function get(url) {
       }
     }
   };
-
 }
 
 describe('http server', function(){
