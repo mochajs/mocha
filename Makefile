@@ -1,6 +1,6 @@
 
 TESTS = test/unit/*.js
-REPORTER = spec
+REPORTER = dot
 
 test: test-unit
 
