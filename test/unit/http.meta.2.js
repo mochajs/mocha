@@ -21,15 +21,10 @@ var server = http.createServer(function(req, res){
 
 server.listen(8899);
 
-function get(url, header) {
+function get(url) {
   var fields
-    , expected;
-
-  if (header) {
-    fields = Object.keys(header).map(function(field){
-      return field + ': ' + header[field];
-    }).join(', ');
-  }
+    , expected
+    , header = {};
 
   function request(done) {
     http.get({ path: url, port: 8899, headers: header }, function(res){
@@ -45,8 +40,17 @@ function get(url, header) {
   }
 
   return {
+    set: function(field, val){
+      header[field] = val;
+      return this;
+    },
+
     should: {
       respond: function(body){
+        fields = Object.keys(header).map(function(field){
+          return field + ': ' + header[field];
+        }).join(', ');
+
         expected = body;
         describe('GET ' + url, function(){
           if (fields) {
@@ -64,8 +68,16 @@ function get(url, header) {
 }
 
 describe('http server', function(){
-  var json = 'application/json';
-  get('/').should.respond('hello')
-  get('/users').should.respond('tobi, loki, jane')
-  get('/users', { Accept: json }).should.respond('["tobi","loki","jane"]')
+  get('/')
+    .should
+    .respond('hello')
+
+  get('/users')
+    .should
+    .respond('tobi, loki, jane')
+
+  get('/users')
+    .set('Accept', 'application/json')
+    .should
+    .respond('["tobi","loki","jane"]')
 })
