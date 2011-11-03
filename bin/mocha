@@ -32,6 +32,7 @@ program
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
+  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-G, --growl', 'enable growl support')
 
 // report help
@@ -68,6 +69,10 @@ Error.stackTraceLimit = Infinity; // TODO: config
 var suite = new Suite('')
   , Reporter = require('../lib/reporters/' + program.reporter)
   , ui = interfaces[program.ui](suite);
+
+// --timeout
+
+if (program.timeout) suite.timeout(~~program.timeout);
 
 // files
 
