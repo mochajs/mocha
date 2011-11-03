@@ -25,6 +25,34 @@
     - TDD
     - exports
 
+## Usage
+
+```
+
+Usage: mocha [options] <files>
+
+  Options:
+
+    -h, --help             output usage information
+    -v, --version          output the version number
+    -r, --require <name>   require the given module
+    -R, --reporter <name>  specify the reporter to use
+    -u, --ui <name>        specify user-interface (bdd|tdd|exports)
+    -g, --grep <pattern>   only run tests matching <pattern>
+    -G, --growl            enable growl support
+
+  Reporters:
+
+    dot - dot matrix
+    json - single json object
+    progress - progress bar
+    list - spec-style listing
+    tap - test-anything-protocol
+    landing - unicode landing strip
+    json-stream - newline delimited json events
+
+```
+
 ## Interfaces
 
  Mocha "interfaces" providing BDD, TDD, and expresso export-style flavoured APIs on top of the internals.
