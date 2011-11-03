@@ -11,6 +11,7 @@
   - growl notification support
   - reports test durations
   - highlights slow tests
+  - optionally run tests that match a regexp
   - extensible reporting
     - dot matrix
     - landing strip
