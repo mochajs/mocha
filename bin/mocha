@@ -31,7 +31,8 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
-  .option('-g, --growl', 'enable growl support')
+  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
+  .option('-G, --growl', 'enable growl support')
 
 // report help
 
@@ -97,6 +98,7 @@ function run(suite) {
   suite.emit('run');
   var runner = new Runner(suite);
   var reporter = new Reporter(runner);
+  if (program.grep) runner.grep(new RegExp(program.grep));
   if (program.growl) growl(runner, reporter)
   runner.run();
 }
