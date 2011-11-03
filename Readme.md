@@ -3,6 +3,10 @@
 
   Mocha aims to combine the best of several popular JavaScript test frameworks, providing a fun, accessible, robust browser & node.js based test experience.
 
+## About
+
+  Mocha tests run serially, easing debugging and making it an ideal choice when mocking and stubbing is involved. Existing frameworks such as [expresso](http://github.com/visionmedia/expresso) can be much faster, though not without cost, Mocha aims to be the simple and "fun" test framework.
+
 ## Features
 
   - proper exit status for CI support etc
