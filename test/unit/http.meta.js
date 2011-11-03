@@ -36,7 +36,7 @@ function get(url, body, header) {
   }
 }
 
-describe('http', function(){
+describe('http requests', function(){
   describe('GET /', function(){
     it('should respond with hello',
       get('/', 'hello'))

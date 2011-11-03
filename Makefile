@@ -1,6 +1,6 @@
 
 TESTS = test/unit/*.js
-REPORTER = list
+REPORTER = spec
 
 test: test-unit
 
