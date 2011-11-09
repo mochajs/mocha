@@ -10,6 +10,7 @@
 ## Features
 
   - proper exit status for CI support etc
+  - ideal for asynchronous APIs
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
   - async test timeout support
