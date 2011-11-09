@@ -11,6 +11,7 @@
 
   - proper exit status for CI support etc
   - auto-detects and disables coloring for non-ttys
+  - maps uncaught exceptions to the correct test case
   - async test timeout support
   - growl notification support
   - reports test durations
