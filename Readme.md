@@ -18,12 +18,15 @@
   - global variable leak detection
   - configurable test-case timeout
   - optionally run tests that match a regexp
+  - auto-exit to prevent "hanging" tests
+  - easily meta-generate suites & test-cases
   - extensible reporting
     - dot matrix
     - landing strip
     - test-anything-protocol (TAP) producer
     - progress bar
-    - spec list
+    - specification listing
+    - hierarchical specification
     - streaming JSON
     - JSON
   - extensible test DSLs
