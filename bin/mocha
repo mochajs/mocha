@@ -114,22 +114,13 @@ function growl(runner, reporter) {
   runner.on('end', function(){
     var stats = reporter.stats;
     if (stats.failures) {
-      var msg = stats.failures + ' of ' + stats.tests + ' tests failed:\n\n';
-      msg += titles(reporter.failures).join('\n');
-      notify(msg, { title: 'Fail' });
+      var msg = stats.failures + ' of ' + stats.tests + ' tests failed';
+      notify(msg, { title: 'Failed' });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-        title: 'Pass'
+        title: 'Passed'
       });
     }
-  });
-}
-
-// test titles
-
-function titles(tests) {
-  return tests.map(function(test, i){
-    return i + ') ' + test.title + ': ' + test.err.message;
   });
 }
 

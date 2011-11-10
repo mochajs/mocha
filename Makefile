@@ -11,6 +11,7 @@ test-unit:
 		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \
+		--growl \
 		$(TESTS)
 
 test-bdd:
