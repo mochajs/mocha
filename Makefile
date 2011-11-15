@@ -1,5 +1,4 @@
 
-TESTS = test/unit/*.js
 REPORTER = dot
 
 test: test-unit
@@ -8,8 +7,7 @@ test-all: test-bdd test-tdd test-exports test-unit test-grep
 
 test-unit:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
-		$(TESTS)
+		--reporter $(REPORTER)
 
 test-bdd:
 	@./bin/mocha \
