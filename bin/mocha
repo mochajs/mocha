@@ -32,8 +32,8 @@ program
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
-  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
+  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]', parseInt)
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
   .option('-G, --growl', 'enable growl support')
 
 // report help
@@ -86,11 +86,11 @@ var suite = new Suite('')
 
 // --slow <ms>
 
-if (program.slow) Base.slow = ~~program.slow;
+if (program.slow) Base.slow = program.slow;
 
 // --timeout
 
-if (program.timeout) suite.timeout(~~program.timeout);
+if (program.timeout) suite.timeout(program.timeout);
 
 // files
 
