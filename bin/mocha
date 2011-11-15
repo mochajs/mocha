@@ -49,6 +49,13 @@ program.on('--help', function(){
   console.log('    landing - unicode landing strip');
   console.log('    json-stream - newline delimited json events');
   console.log('');
+
+  console.log('  Interfaces:');
+  console.log('');
+  console.log('    bdd - describe() / it()');
+  console.log('    tdd - suite() / test()');
+  console.log('    exports - module.exports');
+  console.log('');
 });
 
 // -r, --require
