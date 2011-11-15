@@ -33,6 +33,6 @@ test-grep:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
 	  --grep fast \
-	  test/grep
+	  test/misc/grep
 
 .PHONY: test test-all test-bdd test-tdd test-exports test-unit test-grep
