@@ -60,7 +60,7 @@ program.on('require', function(mod){
 
 try {
   var opts = fs.readFileSync('test/mocha.opts', 'utf8');
-  opts = opts.split(/\s+/);
+  opts = opts.split(/\s+/).slice(0, -1);
   process.argv = process.argv
     .slice(0, 2)
     .concat(opts.concat(process.argv.slice(2)));
