@@ -27,7 +27,7 @@ var files = [];
 
 program
   .version(mocha.version)
-  .usage('[options] <files>')
+  .usage('[options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
@@ -78,11 +78,14 @@ if (program.timeout) suite.timeout(~~program.timeout);
 
 var files = program.args;
 
-// display help when no files are given
+// default files to test/*.js
 
 if (!files.length) {
-  process.stdout.write(program.helpInformation());
-  process.exit(0);
+  files = fs.readdirSync('test').filter(function(path){
+    return path.match(/\.js$/);
+  }).map(function(path){
+    return join('test', path);
+  });
 }
 
 // require test files before running
