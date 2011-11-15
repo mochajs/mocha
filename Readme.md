@@ -198,6 +198,32 @@ module.exports = {
 ["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
 ````
 
+## Async tests
+
+ Testing async code with mocha is simple, invoke the `done()` callback
+ when complete, if called multiple times (due to a race-condition etc)
+ will cause mocha to fail, this is invaluable for testing async code.
+
+```js
+describe('something async', function(){
+  it('should finish after 300ms', function(done){
+    setTimeout(done, 300);
+  })
+})
+```
+
+ The `done()` callback also accepts an error, so it's easy to write
+ tests that adhere to node's callback convention of `(err, result)`:
+
+ ```js
+ describe('User.save()', function(){
+   it('should save without failing', function(done){
+     var user = new User('tj');
+     user.save(done);
+   })
+ })
+ ```
+
 ## Best practices
 
 ### test/*
