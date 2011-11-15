@@ -43,28 +43,35 @@
 
 ```
 
-Usage: mocha [options] <files>
+Usage: mocha [options] [files]
 
-  Options:
+Options:
 
-    -h, --help             output usage information
-    -v, --version          output the version number
-    -r, --require <name>   require the given module
-    -R, --reporter <name>  specify the reporter to use
-    -u, --ui <name>        specify user-interface (bdd|tdd|exports)
-    -g, --grep <pattern>   only run tests matching <pattern>
-    -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
-    -G, --growl            enable growl support
+  -h, --help             output usage information
+  -V, --version          output the version number
+  -r, --require <name>   require the given module
+  -R, --reporter <name>  specify the reporter to use
+  -u, --ui <name>        specify user-interface (bdd|tdd|exports)
+  -g, --grep <pattern>   only run tests matching <pattern>
+  -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
+  -s, --slow <ms>        "slow" test threshold in milliseconds [75]
+  -G, --growl            enable growl support
 
-  Reporters:
+Reporters:
 
-    dot - dot matrix
-    json - single json object
-    progress - progress bar
-    list - spec-style listing
-    tap - test-anything-protocol
-    landing - unicode landing strip
-    json-stream - newline delimited json events
+  dot - dot matrix
+  json - single json object
+  progress - progress bar
+  list - spec-style listing
+  tap - test-anything-protocol
+  landing - unicode landing strip
+  json-stream - newline delimited json events
+
+Interfaces:
+
+  bdd - describe() / it()
+  tdd - suite() / test()
+  exports - module.exports
 
 ```
 
