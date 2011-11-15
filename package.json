@@ -1,12 +1,15 @@
 {
     "name": "mocha"
-  , "version": "0.0.1-alpha2"
+  , "version": "0.0.1-alpha3"
   , "description": "Test framework inspired by JSpec, Expresso, & Qunit"
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "bin": { "mocha": "./bin/mocha" }
   , "author": "TJ Holowaychuk <tj@vision-media.ca>"
   , "main": "index"
-  , "bin": { "mocha": "./bin/mocha" }
+  , "bin": {
+      "mocha": "./bin/mocha"
+    , "mocha-debug": "./bin/mocha-debug"
+  }
   , "engines": { "node": ">= 0.4.x < 0.7.0" }
   , "dependencies":{
     "commander": "0.3.2"
