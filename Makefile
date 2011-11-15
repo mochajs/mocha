@@ -15,19 +15,19 @@ test-bdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		test/bdd
+		test/interfaces/bdd
 
 test-tdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
-		test/tdd
+		test/interfaces/tdd
 
 test-exports:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
-		test/exports
+		test/interfaces/exports
 
 test-grep:
 	@./bin/mocha \
