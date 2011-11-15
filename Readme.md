@@ -198,20 +198,6 @@ module.exports = {
 ["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
 ````
 
-## Running tests
-
- Run mocha tests:
-
-   $ make test
-
- Run all tests, including interfaces:
-
-   $ make test-all
-
- Alter the reporter:
-
-   $ make test REPORTER=list
-
 ## Best practices
 
 ### test/*
@@ -250,6 +236,20 @@ test:
 
 .PHONY: test
 ```
+
+## Running tests
+
+ Run mocha tests:
+
+   $ make test
+
+ Run all tests, including interfaces:
+
+   $ make test-all
+
+ Alter the reporter:
+
+   $ make test REPORTER=list
 
 ## License 
 
