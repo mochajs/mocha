@@ -56,6 +56,18 @@ program.on('require', function(mod){
   require(mod);
 });
 
+// mocha.opts support
+
+try {
+  var opts = fs.readFileSync('test/mocha.opts', 'utf8');
+  opts = opts.split(/\s+/);
+  process.argv = process.argv
+    .slice(0, 2)
+    .concat(opts.concat(process.argv.slice(2)));
+} catch (err) {
+  // ignore
+}
+
 // parse args
 
 program.parse(process.argv);

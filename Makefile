@@ -8,29 +8,23 @@ test-all: test-bdd test-tdd test-exports test-unit test-grep
 
 test-unit:
 	@./bin/mocha \
-		--require should \
 		--reporter $(REPORTER) \
-		--ui bdd \
-		--growl \
 		$(TESTS)
 
 test-bdd:
 	@./bin/mocha \
-		--require should \
 		--reporter $(REPORTER) \
 		--ui bdd \
 		test/bdd
 
 test-tdd:
 	@./bin/mocha \
-		--require should \
 		--reporter $(REPORTER) \
 		--ui tdd \
 		test/tdd
 
 test-exports:
 	@./bin/mocha \
-		--require should \
 		--reporter $(REPORTER) \
 		--ui exports \
 		test/exports
