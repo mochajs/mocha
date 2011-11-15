@@ -22,6 +22,9 @@
   - optionally run tests that match a regexp
   - auto-exit to prevent "hanging" tests
   - easily meta-generate suites & test-cases
+  - mocha.opts file support
+  - `mocha-debug(1)` for node debugger support
+  - detects multiple calls to `done()`
   - extensible reporting
     - dot matrix
     - landing strip
