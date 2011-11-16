@@ -267,7 +267,9 @@ test:
 
 ## TextMate Bundle
 
- To install the TextMate bundle run:
+ The Mocha TextMate bundle includes snippets to
+ make writing tests quicker and more enjoyable.
+ To install the bundle run:
  
    $ make tm
 
