@@ -25,6 +25,7 @@
   - mocha.opts file support
   - `mocha-debug(1)` for node debugger support
   - detects multiple calls to `done()`
+  - TextMate bundle
   - use any assertion library you want ([should](http://github.com/visionmedia/should.js), `assert`, etc)
   - extensible reporting
     - dot matrix
@@ -263,6 +264,12 @@ test:
 
 .PHONY: test
 ```
+
+## TextMate Bundle
+
+ To install the TextMate bundle run:
+ 
+   $ make tm
 
 ## Running tests
 
