@@ -20,7 +20,7 @@
   - global variable leak detection
   - configurable test-case timeout
   - optionally run tests that match a regexp
-  - auto-exit to prevent "hanging" tests
+  - auto-exit to prevent "hanging" due to an active event loop
   - easily meta-generate suites & test-cases
   - mocha.opts file support
   - `mocha-debug(1)` for node debugger support
