@@ -25,6 +25,7 @@
   - mocha.opts file support
   - `mocha-debug(1)` for node debugger support
   - detects multiple calls to `done()`
+  - use any assertion library you want ([should](http://github.com/visionmedia/should.js), `assert`, etc)
   - extensible reporting
     - dot matrix
     - landing strip
