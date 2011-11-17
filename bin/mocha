@@ -42,6 +42,7 @@ program.on('--help', function(){
   console.log('  Reporters:');
   console.log('');
   console.log('    dot - dot matrix');
+  console.log('    doc - html documentation');
   console.log('    json - single json object');
   console.log('    progress - progress bar');
   console.log('    list - spec-style listing');

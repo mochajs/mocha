@@ -29,6 +29,7 @@
   - use any assertion library you want ([should](http://github.com/visionmedia/should.js), `assert`, etc)
   - extensible reporting
     - dot matrix
+    - doc generator (html)
     - landing strip
     - test-anything-protocol (TAP) producer
     - progress bar
@@ -62,6 +63,7 @@ Options:
 Reporters:
 
   dot - dot matrix
+  doc - html documentation
   json - single json object
   progress - progress bar
   list - spec-style listing
@@ -199,6 +201,12 @@ module.exports = {
 ["fail",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present"}]
 ["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
 ````
+
+## Doc
+
+ The "doc" reporter outputs a hierarchical HTML body representation
+ of your tests, wrap it with a header, footer, some styling and you
+ have some fantastic documentation!
 
 ## Async tests
 
