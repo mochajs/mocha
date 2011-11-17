@@ -350,21 +350,21 @@ test:
  make writing tests quicker and more enjoyable.
  To install the bundle run:
  
-   $ make tm
+     $ make tm
 
 ## Running tests
 
  Run mocha tests:
 
-   $ make test
+     $ make test
 
  Run all tests, including interfaces:
 
-   $ make test-all
+     $ make test-all
 
  Alter the reporter:
 
-   $ make test REPORTER=list
+     $ make test REPORTER=list
 
 ## License 
 
