@@ -208,6 +208,37 @@ module.exports = {
  of your tests, wrap it with a header, footer, some styling and you
  have some fantastic documentation!
 
+ For example suppose you have the following JavaScript:
+
+```js
+describe('Array', function(){
+  describe('#indexOf()', function(){
+    it('should return -1 when the value is not present', function(){
+      [1,2,3].indexOf(5).should.equal(-1);
+      [1,2,3].indexOf(0).should.equal(-1);
+    })
+  })
+})
+```
+
+ The command `mocha --reporter doc array` would yield:
+
+```html
+<section class="suite">
+  <h1>Array</h1>
+  <dl>
+    <section class="suite">
+      <h1>#indexOf()</h1>
+      <dl>
+      <dt>should return -1 when the value is not present</dt>
+      <dd><pre><code>[1,2,3].indexOf(5).should.equal(-1);
+  [1,2,3].indexOf(0).should.equal(-1);</code></pre></dd>
+      </dl>
+    </section>
+  </dl>
+</section>
+```
+
 ## Async tests
 
  Testing async code with mocha is simple, invoke the `done()` callback
