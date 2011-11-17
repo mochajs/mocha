@@ -252,6 +252,46 @@ describe('something async', function(){
 $ mocha --reporter list --growl
 ```
 
+### Suite merging
+
+  Suites with common names are "merged" in order
+  to produce unified reporting, especially when
+  meta-generating tests.
+
+```js
+describe('merge', function(){
+  describe('stuff', function(){
+    describe('one', function(){
+      it('should do something', function(){
+        
+      })
+    })
+  })
+})
+
+describe('merge', function(){
+  describe('stuff', function(){
+    describe('two', function(){
+      it('should do something', function(){
+        
+      })
+    })
+  })
+})
+
+describe('merge stuff', function(){
+  describe('three', function(){
+    it('should do something', function(){
+      
+    })
+  })
+})
+```
+
+will produce the following:
+
+  ![mocha suite merging](http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png)
+
 ### Makefiles
 
   Be kind and don't make developers hunt around in your docs to figure
