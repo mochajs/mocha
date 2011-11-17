@@ -1,5 +1,17 @@
 
-0.0.1-alpha3 / 2011-11-15 
+0.0.1-alpha5 / 2011-11-17 
+==================
+
+  * Added `doc` reporter. Closes #33
+  * Added suite merging. Closes #28
+  * Added TextMate bundle and `make tm`. Closes #20
+
+0.0.1-alpha4 / 2011-11-15
+==================
+
+  * Fixed getWindowSize() for 0.4.x
+
+0.0.1-alpha3 / 2011-11-15
 ==================
 
   * Added `-s, --slow <ms>` to specify "slow" test threshold
