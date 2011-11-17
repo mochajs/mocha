@@ -28,15 +28,15 @@
   - TextMate bundle
   - use any assertion library you want ([should](http://github.com/visionmedia/should.js), `assert`, etc)
   - extensible reporting
-    - dot matrix
-    - doc generator (html)
-    - landing strip
-    - test-anything-protocol (TAP) producer
-    - progress bar
-    - specification listing
-    - hierarchical specification
-    - streaming JSON
-    - JSON
+    - `dot`: a dot matrix
+    - `doc`: a documentation generator (html) based on your tests
+    - `landing`: a unicode landing strip ✈
+    - `tap`: test-anything-protocol (TAP) producer
+    - `progress`: a progress bar
+    - `spec`: hierarchical specification
+    - `list`: similar to `spec` as a flat-list
+    - `json-stream`: streaming JSON delimited by a LF
+    - `json`: a single JSON chunk on exit
   - extensible test DSLs
     - BDD
     - TDD
