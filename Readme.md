@@ -1,11 +1,12 @@
 
 # mocha
 
-  Mocha aims to combine the best of several popular JavaScript test frameworks, providing a fun, accessible, robust browser & node.js based test experience.
+  Mocha is a _simple_, _fun_, _extensible_ JavaScript test framework rich with features, running on [node](http://nodejs.org) and the browser. Mocha tests run serially, allowing reporting flexibility, and mapping uncaught exceptions to the correct test cases; This also makes Mocha an ideal choice when mocking and stubbing is involved.
 
-## About
+  Mocha allows you to use any assertion library you want, if it throws an error, it will work. This means you can utilize libraries such as [should](http://github.com/visionmedia/should.js), node's regular `assert` module, or others.
 
-  Mocha tests run serially, easing debugging and making it an ideal choice when mocking and stubbing is involved. Existing frameworks such as [expresso](http://github.com/visionmedia/expresso) can be much faster, though not without cost, Mocha aims to be the simple and "fun" test framework.
+  Testing asynchronous code with Mocha could not be simpler, when your tests are sync simple omit the callback, when they are async add a callback and invoke it when your test is complete.
+
 
 ## Features
 
