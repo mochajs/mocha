@@ -13,3 +13,13 @@ describe('Array', function(){
     })
   })
 })
+
+describe('Array', function(){
+  describe('#pop()', function(){
+    it('should remove and return the last value', function(){
+      var arr = [1,2,3];
+      arr.pop().should.equal(3);
+      arr.should.eql([1,2]);
+    })
+  })
+})
