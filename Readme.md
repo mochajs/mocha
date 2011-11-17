@@ -232,7 +232,7 @@ describe('Array', function(){
       <dl>
       <dt>should return -1 when the value is not present</dt>
       <dd><pre><code>[1,2,3].indexOf(5).should.equal(-1);
-  [1,2,3].indexOf(0).should.equal(-1);</code></pre></dd>
+[1,2,3].indexOf(0).should.equal(-1);</code></pre></dd>
       </dl>
     </section>
   </dl>
