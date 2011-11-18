@@ -57,12 +57,11 @@ h2 {
 }
 
 .test pre.error {
-  display: inline-block;
   color: #c00;
 }
 
 .test pre {
-  display: none;
+  display: inline-block;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;

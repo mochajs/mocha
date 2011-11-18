@@ -824,8 +824,9 @@ function HTML(runner) {
     });
 
     // code
+    // TODO: defer
     var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
-    pre.appendTo(el);
+    pre.appendTo(el).hide();
     stack[0].append(el);
   });
 
