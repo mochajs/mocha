@@ -34,7 +34,7 @@ args.forEach(function(file){
  */
 
 function parse(js) {
-  return parseRequires(parseInheritance(parseConditionals(js)));
+  return parseRequires(parseInheritance(js));
 }
 
 /**
@@ -57,41 +57,6 @@ function parseInheritance(js) {
       return child + '.prototype = new ' + parent + ';\n'
         + child + '.prototype.constructor = '+ child + ';\n';
     });
-}
-
-/**
- * Parse the given `js`, currently supporting:
- * 
- *    'if' ['node' | 'browser']
- *    'end'
- * 
- */
-
-function parseConditionals(js) {
-  var lines = js.split('\n')
-    , len = lines.length
-    , buffer = true
-    , browser = false
-    , buf = []
-    , line
-    , cond;
-
-  for (var i = 0; i < len; ++i) {
-    line = lines[i];
-    if (/^ *\/\/ *if *(node|browser)/gm.exec(line)) {
-      cond = RegExp.$1;
-      buffer = browser = 'browser' == cond;
-    } else if (/^ *\/\/ *end/.test(line)) {
-      buffer = true;
-      browser = false;
-    } else if (browser) {
-      buf.push(line.replace(/^( *)\/\//, '$1'));
-    } else if (buffer) {
-      buf.push(line);
-    }
-  }
-
-  return buf.join('\n');
 }
 
 /**
