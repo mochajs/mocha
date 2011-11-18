@@ -43,7 +43,10 @@ test-grep:
 	  --grep fast \
 	  test/misc/grep
 
+watch:
+	watch --interval=1 $(MAKE) mocha.js
+
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: test test-all test-bdd test-tdd test-exports test-unit test-grep tm clean
+.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit test-grep tm clean
