@@ -55,8 +55,14 @@ h2 {
   color: #c00;
 }
 
+.test pre.error {
+  display: block;
+  color: #c00;
+}
+
 .test pre {
   display: none;
+  font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
   border: 1px solid #eee;
@@ -66,7 +72,6 @@ h2 {
 }
 
 .test:hover pre {
-  font: 12px/1.5 monaco, monospace;
   display: inline-block;
 }
 
