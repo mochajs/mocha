@@ -38,12 +38,17 @@ h2 {
   margin-right: 5px;
 }
 
+.test.fail {
+  color: #c00;
+}
+
 .test.fail::before {
   content: '✖';
   font-size: 12px;
   display: block;
   float: left;
   margin-right: 5px;
+  color: #c00;
 }
 
 .test pre {
