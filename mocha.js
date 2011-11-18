@@ -763,12 +763,6 @@ var statsTemplate = '<ul id="stats">'
   + '</ul>';
 
 /**
- * $ is annoying.
- */
-
-var o = $;
-
-/**
  * Initialize a new `Doc` reporter.
  *
  * @param {Runner} runner
@@ -783,9 +777,9 @@ function HTML(runner) {
   var self = this
     , stats = this.stats
     , total = runner.total
-    , root = o('#mocha')
+    , root = $('#mocha')
     , stack = [root]
-    , stat = o(statsTemplate).appendTo(root);
+    , stat = $(statsTemplate).appendTo(root);
 
   if (!root.length) error('#mocha div missing, add it to your document');
 
@@ -793,7 +787,7 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var el = o('<div class="suite"><h1>' + suite.title + '</h1></div>');
+    var el = $('<div class="suite"><h1>' + suite.title + '</h1></div>');
 
     // container
     stack[0].append(el);
@@ -815,10 +809,10 @@ function HTML(runner) {
 
     // test
     var str = test.passed ? 'pass' : 'fail';
-    var el = o('<div class="test ' + str + '"><h2>' + test.title + '</h2></div>')
+    var el = $('<div class="test ' + str + '"><h2>' + test.title + '</h2></div>')
 
     // code
-    var pre = o('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
+    var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
     pre.appendTo(el);
     stack[0].append(el);
   });
@@ -1580,13 +1574,20 @@ Runner.prototype.runTest = function(fn){
     , self = this;
 
   // async
-  if (test.async) return test.run(function(err){
-    if (test.finished) {
-      self.fail(test, new Error('done() called multiple times'));
-      return;
+  if (test.async) {
+    try {
+      return test.run(function(err){
+        if (test.finished) {
+          self.fail(test, new Error('done() called multiple times'));
+          return;
+        }
+        fn(err);
+      });
+    } catch (err) {
+      fn(err);
     }
-    fn(err);
-  });
+  }
+
   // sync  
   process.nextTick(function(){
     try {
