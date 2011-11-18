@@ -42,6 +42,10 @@ h2 {
   color: #c00;
 }
 
+.test.fail pre {
+  color: black;
+}
+
 .test.fail::before {
   content: '✖';
   font-size: 12px;
