@@ -4,6 +4,11 @@ TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f)
 
+all: mocha.js mocha.css
+
+mocha.css: test/browser/style.css
+	cp -f $< $@
+
 mocha.js: $(SRC)
 	@node support/compile $^
 	@cat support/tail.js >> mocha.js

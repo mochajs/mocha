@@ -1,0 +1,91 @@
+
+body {
+  font: 20px/1.5 "Helvetica Neue", Helvetica, Aria;, sans-serif;
+  padding: 60px 50px;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1em;
+  font-weight: 200;
+}
+
+.suite .suite h1 {
+  font-size: .8em;
+}
+
+h2 {
+  font-size: 12px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.suite {
+  margin-left: 15px;
+}
+
+.test {
+  margin-left: 15px;
+}
+
+.test.pass::before {
+  content: '◦';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+}
+
+.test.fail {
+  color: #c00;
+}
+
+.test.fail pre {
+  color: black;
+}
+
+.test.fail::before {
+  content: '✖';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+  color: #c00;
+}
+
+.test pre.error {
+  color: #c00;
+}
+
+.test pre {
+  display: inline-block;
+  font: 12px/1.5 monaco, monospace;
+  margin: 5px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-bottom-color: #ddd;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 1px 3px #eee;
+}
+
+#error {
+  color: #c00;
+  font-size: 1.5  em;
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
+#stats {
+  position: fixed;
+  top: 15px;
+  right: 30px;
+  font-size: 12px;
+  margin: 0;
+}
+
+#stats li {
+  list-style: none;
+}

@@ -781,7 +781,7 @@ function HTML(runner) {
     , stack = [root]
     , stat = $(statsTemplate).appendTo(root);
 
-  if (root.length) return error('#mocha div missing, add it to your document');
+  if (!root.length) return error('#mocha div missing, add it to your document');
 
   runner.on('suite', function(suite){
     if (suite.root) return;
