@@ -26,7 +26,7 @@ global = this;
   mocha.interfaces.bdd(suite);
   suite.emit('pre-require', global);
 
-  setTimeout(run, 0);
+  global.onload = run; // TODO: remove
 
   function run() {
     suite.emit('run');

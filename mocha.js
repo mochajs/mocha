@@ -2009,7 +2009,6 @@ process = {};
 process.nextTick = function(fn){ setTimeout(fn, 0); };
 process.on = function(){};
 process.exit = function(status){};
-
 process.stdout = {};
 
 global = this;
@@ -2023,7 +2022,7 @@ global = this;
   mocha.interfaces.bdd(suite);
   suite.emit('pre-require', global);
 
-  setTimeout(run, 0);
+  global.onload = run; // TODO: remove
 
   function run() {
     suite.emit('run');
