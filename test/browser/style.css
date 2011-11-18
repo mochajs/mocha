@@ -56,7 +56,7 @@ h2 {
 }
 
 .test pre.error {
-  display: block;
+  display: inline-block;
   color: #c00;
 }
 
