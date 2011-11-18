@@ -1579,24 +1579,23 @@ Runner.prototype.runTest = function(fn){
   var test = this.test
     , self = this;
 
-  // run the test
-  try {
-    // async
-    if (test.async) return test.run(function(err){
-      if (test.finished) {
-        self.fail(test, new Error('done() called multiple times'));
-        return;
-      }
-      fn(err);
-    });
-    // sync  
-    process.nextTick(function(){
+  // async
+  if (test.async) return test.run(function(err){
+    if (test.finished) {
+      self.fail(test, new Error('done() called multiple times'));
+      return;
+    }
+    fn(err);
+  });
+  // sync  
+  process.nextTick(function(){
+    try {
       test.run();
       fn();
-    });
-  } catch (err) {
-    fn(err);
-  }
+    } catch (err) {
+      fn(err);
+    }
+  });
 };
 
 /**
