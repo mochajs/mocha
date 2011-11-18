@@ -13,6 +13,7 @@ process = {};
 process.nextTick = function(fn){ setTimeout(fn, 0); };
 process.on = function(){};
 process.exit = function(status){};
+process.stdout = {};
 
 global = this;
 

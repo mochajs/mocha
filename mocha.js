@@ -360,7 +360,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.0.1-alpha4';
+exports.version = '0.0.1-alpha5';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -437,9 +437,9 @@ var color = exports.color = function(type, str) {
 
 exports.window = {
   width: isatty
-    ? tty.getWindowSize
-      ? tty.getWindowSize()[1]
-      : process.stdout.getWindowSize(1)[0]
+    ? process.stdout.getWindowSize
+      ? process.stdout.getWindowSize(1)[0]
+      : tty.getWindowSize()[1]
     : 75
 };
 
@@ -2009,6 +2009,8 @@ process = {};
 process.nextTick = function(fn){ setTimeout(fn, 0); };
 process.on = function(){};
 process.exit = function(status){};
+
+process.stdout = {};
 
 global = this;
 
