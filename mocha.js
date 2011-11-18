@@ -816,6 +816,13 @@ function HTML(runner) {
       el.append(err);
     }
 
+    // toggle code
+    el.find('h2').toggle(function(){
+      pre.slideDown('fast');
+    }, function(){
+      pre.slideUp('fast');
+    });
+
     // code
     var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
     pre.appendTo(el);

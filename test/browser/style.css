@@ -20,6 +20,7 @@ h1 {
 h2 {
   font-size: 12px;
   font-weight: normal;
+  cursor: pointer;
 }
 
 .suite {
@@ -69,10 +70,6 @@ h2 {
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
-}
-
-.test:hover pre {
-  display: inline-block;
 }
 
 #stats {
