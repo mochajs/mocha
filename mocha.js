@@ -1449,10 +1449,11 @@ module.exports = Runner;
  */
 
 function Runner(suite) {
+  var self = this;
   this.suite = suite;
   this.total = suite.total();
   this.globals = Object.keys(global).concat(['errno']);
-  this.on('test end', this.checkGlobals.bind(this));
+  this.on('test end', function(){ self.checkGlobals(); });
   this.grep(/.*/);
 }
 
