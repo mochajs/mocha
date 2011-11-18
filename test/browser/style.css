@@ -78,12 +78,6 @@ h2 {
   letter-spacing: 1px;
 }
 
-#error::before {
-  content: 'Error:';
-  margin-right: 5px;
-  font-weight: 200;
-}
-
 #stats {
   position: fixed;
   top: 15px;
