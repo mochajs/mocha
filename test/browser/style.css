@@ -1,6 +1,6 @@
 
 body {
-  font: 18px/1.5 "Helvetica Neue", Helvetica, Aria;, sans-serif;
+  font: 20px/1.5 "Helvetica Neue", Helvetica, Aria;, sans-serif;
   padding: 60px 50px;
 }
 
@@ -48,7 +48,7 @@ h2 {
 #stats {
   position: fixed;
   top: 15px;
-  right: 20px;
+  right: 30px;
   font-size: 12px;
   margin: 0;
 }
