@@ -753,6 +753,21 @@ var Base = require('./base');
 exports = module.exports = HTML;
 
 /**
+ * Stats template.
+ */
+
+var statsTemplate = '<ul id="stats">'
+  + '<li class="passes">passes: <em>0</em></li>'
+  + '<li class="failures">failures: <em>0</em></li>'
+  + '</ul>';
+
+/**
+ * $ is annoying.
+ */
+
+var o = $;
+
+/**
  * Initialize a new `Doc` reporter.
  *
  * @param {Runner} runner
@@ -767,36 +782,22 @@ function HTML(runner) {
   var self = this
     , stats = this.stats
     , total = runner.total
-    , root = document.getElementById('mocha')
+    , root = o('#mocha')
     , stack = [root]
-    , stat = document.createElement('div');
+    , stat = o(statsTemplate).appendTo(root);
 
-  stat.innerHTML = '<ul id="stats">'
-    + '<li class="passes">passes: <em>0</em></li>'
-    + '<li class="failures">failures: <em>0</em></li>'
-    + '</ul>';
-
-  if (!root) error('#mocha div missing, add it to your document');
-
-  document.body.appendChild(root);
-  document.body.appendChild(stat);
+  if (!root.length) error('#mocha div missing, add it to your document');
 
   runner.on('suite', function(suite){
     if (suite.root) return;
 
     // suite
-    var el = document.createElement('div');
-    el.setAttribute('class', 'suite');
-
-    // title
-    var title = document.createElement('h1');
-    title.textContent = suite.title;
-    el.appendChild(title);
+    var el = o('<div class="suite"><h1>' + suite.title + '</h1></div>');
 
     // container
-    stack[0].appendChild(el);
-    stack.unshift(document.createElement('div'));
-    el.appendChild(stack[0]);
+    stack[0].append(el);
+    stack.unshift($('<div>'));
+    el.append(stack[0]);
   });
 
   runner.on('suite end', function(suite){
@@ -807,22 +808,13 @@ function HTML(runner) {
   runner.on('test end', function(test){
     console.log(stats);
     // test
-    var el = document.createElement('div');
-    el.setAttribute('class', 'test ' + (test.passed ? 'pass' : 'fail'));
-
-    // title
-    var title = document.createElement('h2');
-    title.textContent = test.title;
-    el.appendChild(title);
+    var str = test.passed ? 'pass' : 'fail';
+    var el = o('<div class="' + str + '"><h2>' + test.title + '</h2></div>')
 
     // code
-    var pre = document.createElement('pre');
-    var code = document.createElement('code');
-    pre.appendChild(code);
-    code.textContent = clean(test.fn.toString());
-    el.appendChild(pre);
-
-    stack[0].appendChild(el);
+    var pre = o('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
+    pre.appendTo(el);
+    stack[0].append(el);
   });
 
   runner.on('end', function(){
