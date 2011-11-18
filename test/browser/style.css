@@ -10,6 +10,7 @@ h1, h2 {
 
 h1 {
   font-size: 1em;
+  font-weight: 200;
 }
 
 .suite .suite h1 {
@@ -42,4 +43,16 @@ h2 {
 .test:hover pre {
   font: 12px/1.5 monaco, monospace;
   display: inline-block;
+}
+
+#stats {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 12px;
+  margin: 0;
+}
+
+#stats li {
+  list-style: none;
 }
