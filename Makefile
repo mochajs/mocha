@@ -2,6 +2,14 @@
 REPORTER = dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
+SRC = $(shell find lib -name "*.js" -type f)
+
+mocha.js: $(SRC)
+	@node support/compile $^
+	@cat support/tail.js >> mocha.js
+
+clean:
+	rm -f mocha.js
 
 test: test-unit
 
@@ -38,4 +46,4 @@ test-grep:
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: test test-all test-bdd test-tdd test-exports test-unit test-grep tm
+.PHONY: test test-all test-bdd test-tdd test-exports test-unit test-grep tm clean
