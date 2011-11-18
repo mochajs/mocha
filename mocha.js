@@ -317,7 +317,7 @@ module.exports = function(suite){
      * Execute before each test case.
      */
 
-    context.tearDown = function(fn){
+    context.teardown = function(fn){
       suites[0].afterEach(fn);
     };
 
@@ -1389,7 +1389,7 @@ function TAP(runner) {
     , n = 1;
 
   runner.on('start', function(){
-    console.log('  %d..%d', 1, total);
+    console.log('%d..%d', 1, total);
   });
 
   runner.on('test end', function(){
@@ -1397,11 +1397,12 @@ function TAP(runner) {
   });
 
   runner.on('pass', function(test){
-    console.log('  ok %d %s', n, test.fullTitle());
+    console.log('ok %d %s', n, test.fullTitle());
   });
 
-  runner.on('fail', function(test){
-    console.log('  not ok %d %s', n, test.fullTitle());
+  runner.on('fail', function(test, err){
+    console.log('not ok %d %s', n, test.fullTitle());
+    console.log(err.stack.replace(/^/gm, '  '));
   });
 
   runner.on('end', function(){
