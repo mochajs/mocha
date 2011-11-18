@@ -759,6 +759,7 @@ exports = module.exports = HTML;
 var statsTemplate = '<ul id="stats">'
   + '<li class="passes">passes: <em>0</em></li>'
   + '<li class="failures">failures: <em>0</em></li>'
+  + '<li class="duration">duration: <em>0</em>ms</li>'
   + '</ul>';
 
 /**
@@ -809,6 +810,7 @@ function HTML(runner) {
     // update stats
     stat.find('.passes em').text(stats.passes);
     stat.find('.failures em').text(stats.failures);
+    stat.find('.duration em').text(new Date - stats.start);
 
     // test
     var str = test.passed ? 'pass' : 'fail';
