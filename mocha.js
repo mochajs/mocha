@@ -1615,7 +1615,10 @@ Runner.prototype.runTests = function(suite, fn){
 
   function next(err) {
     // error handling
-    if (err) self.fail(test, err);
+    if (err) {
+      self.fail(test, err);
+      self.emit('test end', test);
+    }
 
     // next test
     test = tests.shift();
