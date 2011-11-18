@@ -30,6 +30,22 @@ h2 {
   margin-left: 15px;
 }
 
+.test.pass::before {
+  content: '◦';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+}
+
+.test.fail::before {
+  content: '✖';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+}
+
 .test pre {
   display: none;
   margin: 5px;
