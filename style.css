@@ -19,6 +19,7 @@ h1 {
   color: white;
   display: inline-block;
   padding: 48px 30px;
+  font-size: 2em;
   opacity: 0;
   -webkit-border-radius: 100px;
   -webkit-transition: opacity 1s, background-color 200ms;
