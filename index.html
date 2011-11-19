@@ -273,11 +273,16 @@ Options:
 &lt;/section&gt;
 </code></pre>
 
-<h3>Browser support</h3>
+<h3>HTML</h3>
 
-<p>Mocha runs in the browser. Every release of Mocha will have new builds of <em>./mocha.js</em> and <em>./mocha.css</em> for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call <code>mocha.setup('bdd')</code> to use the <strong>BDD</strong> interface before loading the test scripts, running them <code>onload</code> with <code>mocha.run()</code>.</p>
+<p>The <strong>HTML</strong> reporter is currently the only browser reporter
+ supported by Mocha, and it looks like this:</p>
 
 <p><img src="images/reporter-html.png" alt="HTML test reporter" title="" /></p>
+
+<h2>Browser support</h2>
+
+<p>Mocha runs in the browser. Every release of Mocha will have new builds of <em>./mocha.js</em> and <em>./mocha.css</em> for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call <code>mocha.setup('bdd')</code> to use the <strong>BDD</strong> interface before loading the test scripts, running them <code>onload</code> with <code>mocha.run()</code>.</p>
 
 <pre><code>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
 &lt;link rel="stylesheet" href="style.css" /&gt;
@@ -289,7 +294,7 @@ Options:
 &lt;script&gt;onload = mocha.run;&lt;/script&gt;
 </code></pre>
 
-<h3>mocha.opts</h3>
+<h2>mocha.opts</h2>
 
 <p>Mocha will attempt to load <code>./test/mocha.opts</code>, these are concatenated with <code>process.argv</code>, though command-line args will take precedence. For example suppose you have the following <em>mocha.opts</em> file:</p>
 
@@ -306,7 +311,7 @@ Options:
 <pre><code>$ mocha --reporter list --growl
 </code></pre>
 
-<h3>Suite merging</h3>
+<h2>Suite merging</h2>
 
 <p>Suites with common names are "merged" in order
   to produce unified reporting, especially when
@@ -335,7 +340,7 @@ describe('merge stuff', function(){
 })
 </code></pre>
 
-<p>will produce the following:</p>
+<p>Instead of reporting these as distinct suites, they are merged, yielding the following: </p>
 
 <p><img src="http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png" alt="mocha suite merging" title="" /></p>
 

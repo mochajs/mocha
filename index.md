@@ -245,11 +245,16 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       </dl>
     </section>
 
-### Browser support
+### HTML
+
+ The __HTML__ reporter is currently the only browser reporter
+ supported by Mocha, and it looks like this:
+ 
+ ![HTML test reporter](images/reporter-html.png)
+
+## Browser support
 
  Mocha runs in the browser. Every release of Mocha will have new builds of _./mocha.js_ and _./mocha.css_ for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the __BDD__ interface before loading the test scripts, running them `onload` with `mocha.run()`.
- 
-   ![HTML test reporter](images/reporter-html.png)
  
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css" />
@@ -260,7 +265,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     <script src="test.xhr.js"></script>
     <script>onload = mocha.run;</script>
 
-### mocha.opts
+## mocha.opts
 
  Mocha will attempt to load `./test/mocha.opts`, these are concatenated with `process.argv`, though command-line args will take precedence. For example suppose you have the following _mocha.opts_ file:
 
@@ -275,7 +280,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ mocha --reporter list --growl
 
-### Suite merging
+## Suite merging
 
   Suites with common names are "merged" in order
   to produce unified reporting, especially when
@@ -303,7 +308,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-will produce the following:
+Instead of reporting these as distinct suites, they are merged, yielding the following: 
 
   ![mocha suite merging](http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png)
 
