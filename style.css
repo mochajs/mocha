@@ -112,12 +112,7 @@ img {
   padding: 1px;
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
-}
-
-@media all and (max-width: 800px) {
-  img {
-    max-width: 100%;
-  }
+  max-width: 100%;
 }
 
 @media all and (max-width: 600px) {
