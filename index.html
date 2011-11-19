@@ -18,6 +18,7 @@
 <h2>Features</h2>
 
 <ul>
+<li>browser support</li>
 <li>proper exit status for CI support etc</li>
 <li>ideal for asynchronous APIs</li>
 <li>auto-detects and disables coloring for non-ttys</li>
@@ -29,34 +30,33 @@
 <li>global variable leak detection</li>
 <li>configurable test-case timeout</li>
 <li>optionally run tests that match a regexp</li>
-<li>auto-exit to prevent &ldquo;hanging&rdquo; with an active loop</li>
+<li>auto-exit to prevent "hanging" with an active loop</li>
 <li>easily meta-generate suites &amp; test-cases</li>
 <li>mocha.opts file support</li>
 <li><code>mocha-debug(1)</code> for node debugger support</li>
 <li>detects multiple calls to <code>done()</code></li>
 <li>use any assertion library you want</li>
 <li>extensible reporting, bundled with 9+ reporters</li>
-<li>extensible test DSLs or &ldquo;interfaces&rdquo;</li>
+<li>extensible test DSLs or "interfaces"</li>
 <li>before, after, before each, after each hooks</li>
 <li>TextMate bundle</li>
 <li>and more!</li>
 </ul>
 
-
 <h2>Installation</h2>
 
-<p>  Install with <a href="http://npmjs.org">npm</a>:</p>
+<p>Install with <a href="http://npmjs.org">npm</a>:</p>
 
 <pre><code>$ npm install -g mocha
 </code></pre>
 
 <h2>Assertions</h2>
 
-<p>Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, node&rsquo;s regular <code>assert</code> module, or others.</p>
+<p>Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, node's regular <code>assert</code> module, or others.</p>
 
 <h2>Synchronous code</h2>
 
-<p> When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.</p>
+<p>When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.</p>
 
 <pre><code>describe('Array', function(){
   describe('#indexOf()', function(){
@@ -85,7 +85,7 @@
 })
 </code></pre>
 
-<p> To make things even easier, the <code>done()</code> callback accepts an error, so we may use this directly:</p>
+<p>To make things even easier, the <code>done()</code> callback accepts an error, so we may use this directly:</p>
 
 <pre><code>describe('User', function(){
   describe('#save()', function(){
@@ -99,7 +99,7 @@
 
 <h2>Pending tests</h2>
 
-<p> Pending test-cases are simply those without a callback:</p>
+<p>Pending test-cases are simply those without a callback:</p>
 
 <pre><code>describe('Array', function(){
   describe('#indexOf()', function(){
@@ -127,15 +127,15 @@ Options:
 
 <h2>mocha-debug(1)</h2>
 
-<p>  <code>mocha-debug(1)</code> is identical to <code>mocha(1)</code>, however it enables node&rsquo;s debugger so you may step through tests with the <strong>debugger</strong> statement.</p>
+<p><code>mocha-debug(1)</code> is identical to <code>mocha(1)</code>, however it enables node's debugger so you may step through tests with the <strong>debugger</strong> statement.</p>
 
 <h2>Interfaces</h2>
 
-<p>  Mocha &ldquo;interface&rdquo; system allows developers to choose their style of DSL. Shipping with <strong>BDD</strong>, <strong>TDD</strong>, and <strong>export</strong> flavoured interfaces.</p>
+<p>Mocha "interface" system allows developers to choose their style of DSL. Shipping with <strong>BDD</strong>, <strong>TDD</strong>, and <strong>export</strong> flavoured interfaces.</p>
 
 <h3>BDD</h3>
 
-<p>  The &ldquo;<strong>BDD</strong>&rdquo; interface provides <code>describe()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
+<p>The "<strong>BDD</strong>" interface provides <code>describe()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>: </p>
 
 <pre><code>describe('Array', function(){
   before(function(){
@@ -152,7 +152,7 @@ Options:
 
 <h3>TDD</h3>
 
-<p>  The &ldquo;<strong>TDD</strong>&rdquo; interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
+<p>The "<strong>TDD</strong>" interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
 
 <pre><code>suite('Array', function(){
   setup(function(){
@@ -169,7 +169,7 @@ Options:
 
 <h3>Exports</h3>
 
-<p>  The &ldquo;<strong>exports</strong>&rdquo; interface is much like Mocha&rsquo;s predecessor <a href="http://github.com/visionmedia/expresso">expresso</a>. The keys <code>before</code>, <code>after</code>, <code>beforeEach</code>, and <code>afterEach</code> are special-cased, object values
+<p>The "<strong>exports</strong>" interface is much like Mocha's predecessor <a href="http://github.com/visionmedia/expresso">expresso</a>. The keys <code>before</code>, <code>after</code>, <code>beforeEach</code>, and <code>afterEach</code> are special-cased, object values
   are suites, and function values are test-cases.</p>
 
 <pre><code>module.exports = {
@@ -189,65 +189,62 @@ Options:
 
 <h2>Reporters</h2>
 
-<p>  Mocha reporters adjust to the terminal window,
+<p>Mocha reporters adjust to the terminal window,
   and always disable ansi-escape colouring when
   the stdio streams are not associated with a tty.</p>
 
 <h3>Dot Matrix</h3>
 
-<p>  The Dot Matrix reporter is simply a series of dots
-  that represent test cases, failures highlight in red.</p>
+<p>The Dot Matrix reporter is simply a series of dots
+  that represent test cases, failures highlight in red,
+  pending in blue, slow as yellow.</p>
 
-<p>   <img src="http://f.cl.ly/items/3b3b471Z1p2U3D1P2Y1n/Screenshot.png" alt="dot matrix reporter" /></p>
-
-<p>   <img src="http://f.cl.ly/items/1P11330L033r423g1y1n/Screenshot.png" alt="dot matrix failure" /></p>
+<p><img src="images/reporter-dot.png" alt="dot matrix reporter" title="" /></p>
 
 <h2>TAP</h2>
 
-<p>  The TAP reporter emits lines for a <a href="http://en.wikipedia.org/wiki/Test_Anything_Protocol">Test-Anything-Protocol</a> consumer.</p>
+<p>The TAP reporter emits lines for a <a href="http://en.wikipedia.org/wiki/Test_Anything_Protocol">Test-Anything-Protocol</a> consumer.</p>
 
-<p>  <img src="http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png" alt="test anything protocol" /></p>
+<p><img src="http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png" alt="test anything protocol" title="" /></p>
 
 <h2>Landing Strip</h2>
 
-<p>  The Landing Strip reporter is a gimmicky test reporter simulating
+<p>The Landing Strip reporter is a gimmicky test reporter simulating
   a plane landing :) unicode ftw</p>
 
-<p>  <img src="http://f.cl.ly/items/0z1k400K1N1Y2G3u2u0i/Screenshot.png" alt="landing strip plane reporter" /></p>
+<p><img src="images/reporter-landing.png" alt="landing strip plane reporter" title="" />
+  <img src="images/reporter-landing-fail.png" alt="landing strip with failure" title="" /></p>
 
 <h2>List</h2>
 
-<p>  The &ldquo;List&rdquo; reporter outputs a simple specifications list as
-  test cases pass or fail, outputting the failure details at
+<p>The "List" reporter outputs a simple specifications list as
+  test cases pass or fail, outputting the failure details at 
   the bottom of the output.</p>
 
-<p>  <img src="http://f.cl.ly/items/0Y0x1B3l3K0n3t3h3l0p/Screenshot.png" alt="list reporter" /></p>
-
-<p>  <img src="http://f.cl.ly/items/2Z0E150v20042G2d1J0i/Screenshot.png" alt="failures" /></p>
+<p><img src="images/reporter-list.png" alt="list reporter" title="" /></p>
 
 <h2>JSON</h2>
 
-<p>  The JSON reporter outputs a single large JSON object when
+<p>The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).</p>
+
+<p><img src="images/reporter-json.png" alt="json reporter" title="" /></p>
 
 <h2>JSON Stream</h2>
 
-<p>  The JSON Stream reporter outputs newline-delimited JSON &ldquo;events&rdquo; as they occur, beginning with a &ldquo;start&rdquo; event, followed by test passes or failures, and then the final &ldquo;end&rdquo; event.</p>
+<p>The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.</p>
 
-<pre><code>["start",{"total":12}]
-["pass",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present","duration":0}]
-["pass",{"title":"should return the index when present","fullTitle":"Array #indexOf() should return the index when present","duration":0}]
-["fail",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present"}]
-["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
-</code></pre>
+<p><img src="images/reporter-json-stream.png" alt="json stream reporter" title="" /></p>
 
 <h2>Doc</h2>
 
-<p> The &ldquo;doc&rdquo; reporter outputs a hierarchical HTML body representation
+<p>The "doc" reporter outputs a hierarchical HTML body representation
  of your tests, wrap it with a header, footer, some styling and you
  have some fantastic documentation!</p>
 
-<p> For example suppose you have the following JavaScript:</p>
+<p><img src="images/reporter-doc.png" alt="doc reporter" title="" /></p>
+
+<p>For example suppose you have the following JavaScript:</p>
 
 <pre><code>describe('Array', function(){
   describe('#indexOf()', function(){
@@ -259,7 +256,7 @@ Options:
 })
 </code></pre>
 
-<p> The command <code>mocha --reporter doc array</code> would yield:</p>
+<p>The command <code>mocha --reporter doc array</code> would yield:</p>
 
 <pre><code>&lt;section class="suite"&gt;
   &lt;h1&gt;Array&lt;/h1&gt;
@@ -276,16 +273,32 @@ Options:
 &lt;/section&gt;
 </code></pre>
 
+<h3>Browser support</h3>
+
+<p>Mocha runs in the browser. Every release of Mocha will have new builds of <em>./mocha.js</em> and <em>./mocha.css</em> for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call <code>mocha.setup('bdd')</code> to use the <strong>BDD</strong> interface before loading the test scripts, running them <code>onload</code> with <code>mocha.run()</code>.</p>
+
+<p><img src="images/reporter-html.png" alt="HTML test reporter" title="" /></p>
+
+<pre><code>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" href="style.css" /&gt;
+&lt;script src="../mocha.js"&gt;&lt;/script&gt;
+&lt;script&gt;mocha.setup('bdd')&lt;/script&gt;
+&lt;script src="test.array.js"&gt;&lt;/script&gt;
+&lt;script src="test.object.js"&gt;&lt;/script&gt;
+&lt;script src="test.xhr.js"&gt;&lt;/script&gt;
+&lt;script&gt;onload = mocha.run;&lt;/script&gt;
+</code></pre>
+
 <h3>mocha.opts</h3>
 
-<p> Mocha will attempt to load <code>./test/mocha.opts</code>, these are concatenated with <code>process.argv</code>, though command-line args will take precedence. For example suppose you have the following <em>mocha.opts</em> file:</p>
+<p>Mocha will attempt to load <code>./test/mocha.opts</code>, these are concatenated with <code>process.argv</code>, though command-line args will take precedence. For example suppose you have the following <em>mocha.opts</em> file:</p>
 
 <pre><code>--require should
 --reporter dot
 --ui bdd
 </code></pre>
 
-<p>  This will default the reporter to <code>dot</code>, require the <code>should</code> library,
+<p>This will default the reporter to <code>dot</code>, require the <code>should</code> library,
   and use <code>bdd</code> as the interface. With this you may then invoke <code>mocha(1)</code>
   with additional arguments, here enabling growl support and changing
   the reporter to <code>spec</code>:</p>
@@ -295,7 +308,7 @@ Options:
 
 <h3>Suite merging</h3>
 
-<p>  Suites with common names are &ldquo;merged&rdquo; in order
+<p>Suites with common names are "merged" in order
   to produce unified reporting, especially when
   meta-generating tests.</p>
 
@@ -324,18 +337,18 @@ describe('merge stuff', function(){
 
 <p>will produce the following:</p>
 
-<p>  <img src="http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png" alt="mocha suite merging" /></p>
+<p><img src="http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png" alt="mocha suite merging" title="" /></p>
 
 <h2>Best practices</h2>
 
 <h3>test/*</h3>
 
-<p> By default <code>mocha(1)</code> will use the pattern <code>./test/*.js</code>, so
- it&rsquo;s usually a good place to put your tests.</p>
+<p>By default <code>mocha(1)</code> will use the pattern <code>./test/*.js</code>, so
+ it's usually a good place to put your tests.</p>
 
 <h3>Makefiles</h3>
 
-<p> Be kind and don&rsquo;t make developers hunt around in your docs to figure
+<p>Be kind and don't make developers hunt around in your docs to figure
  out how to run the tests, add a <code>make test</code> target to your <em>Makefile</em>:</p>
 
 <pre><code> test:
@@ -347,30 +360,30 @@ describe('merge stuff', function(){
 
 <h2>Editors</h2>
 
-<p>  The following editor-related packages are available:</p>
+<p>The following editor-related packages are available:</p>
 
 <h3>TextMate bundle</h3>
 
-<p>  The Mocha TextMate bundle includes snippets to
+<p>The Mocha TextMate bundle includes snippets to
   make writing tests quicker and more enjoyable.
   To install the bundle run:</p>
 
 <pre><code>  $ make tm
 </code></pre>
 
-<h2>Running mocha&rsquo;s tests</h2>
+<h2>Running mocha's tests</h2>
 
-<p> Run the tests:</p>
+<p>Run the tests:</p>
 
 <pre><code>   $ make test
 </code></pre>
 
-<p> Run all tests, including interfaces:</p>
+<p>Run all tests, including interfaces:</p>
 
 <pre><code>   $ make test-all
 </code></pre>
 
-<p> Alter the reporter:</p>
+<p>Alter the reporter:</p>
 
 <pre><code>   $ make test REPORTER=list
 </code></pre>

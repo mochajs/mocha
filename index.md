@@ -171,11 +171,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ### Dot Matrix
 
   The Dot Matrix reporter is simply a series of dots
-  that represent test cases, failures highlight in red.
+  that represent test cases, failures highlight in red,
+  pending in blue, slow as yellow.
 
-   ![dot matrix reporter](http://f.cl.ly/items/3b3b471Z1p2U3D1P2Y1n/Screenshot.png)
-
-   ![dot matrix failure](http://f.cl.ly/items/1P11330L033r423g1y1n/Screenshot.png)
+   ![dot matrix reporter](images/reporter-dot.png)
 
 ## TAP
 
@@ -188,7 +187,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   The Landing Strip reporter is a gimmicky test reporter simulating
   a plane landing :) unicode ftw
 
-  ![landing strip plane reporter](http://f.cl.ly/items/0z1k400K1N1Y2G3u2u0i/Screenshot.png)
+  ![landing strip plane reporter](images/reporter-landing.png)
+  ![landing strip with failure](images/reporter-landing-fail.png)
 
 ## List
 
@@ -196,30 +196,28 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   test cases pass or fail, outputting the failure details at 
   the bottom of the output.
 
-  ![list reporter](http://f.cl.ly/items/0Y0x1B3l3K0n3t3h3l0p/Screenshot.png)
+  ![list reporter](images/reporter-list.png)
   
-  ![failures](http://f.cl.ly/items/2Z0E150v20042G2d1J0i/Screenshot.png)
-
 ## JSON
 
   The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).
+  
+  ![json reporter](images/reporter-json.png)
 
 ## JSON Stream
 
   The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
-    ["start",{"total":12}]
-    ["pass",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present","duration":0}]
-    ["pass",{"title":"should return the index when present","fullTitle":"Array #indexOf() should return the index when present","duration":0}]
-    ["fail",{"title":"should return -1 when not present","fullTitle":"Array #indexOf() should return -1 when not present"}]
-    ["end",{"start":"2011-08-29T03:21:02.050Z","suites":13,"passes":11,"tests":12,"failures":1,"end":"2011-08-29T03:21:02.052Z","duration":2}]
+  ![json stream reporter](images/reporter-json-stream.png)
 
 ## Doc
 
  The "doc" reporter outputs a hierarchical HTML body representation
  of your tests, wrap it with a header, footer, some styling and you
  have some fantastic documentation!
+
+  ![doc reporter](images/reporter-doc.png)
 
  For example suppose you have the following JavaScript:
 
@@ -251,6 +249,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ### Browser support
 
  Mocha runs in the browser. Every release of Mocha will have new builds of _./mocha.js_ and _./mocha.css_ for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the __BDD__ interface before loading the test scripts, running them `onload` with `mocha.run()`.
+ 
+   ![HTML test reporter](images/reporter-html.png)
  
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css" />
