@@ -51,10 +51,24 @@ test-grep:
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
-		test/interfaces/bdd > /tmp/dot.out
+		test/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
+
+	@./bin/mocha \
+		--reporter list \
+		test/interfaces/bdd 2>&1 > /tmp/list.out
+
+	@echo list:
+	@cat /tmp/list.out
+
+	@./bin/mocha \
+		--reporter spec \
+		test/interfaces/bdd 2>&1 > /tmp/spec.out
+
+	@echo spec:
+	@cat /tmp/spec.out
 
 watch:
 	watch --interval=1 $(MAKE) mocha.js
