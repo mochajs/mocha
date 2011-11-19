@@ -1,11 +1,11 @@
 
-Mocha is a feature-rich JavaScript test framework running on [node](http://nodejs.org) and the browser, aiming to make async testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases.
+Mocha is a feature-rich JavaScript test framework running on [node](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases.
 
 ## Features
 
   - browser support
+  - simple async support
   - proper exit status for CI support etc
-  - ideal for asynchronous APIs
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
   - async test timeout support
@@ -13,7 +13,6 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - reports test durations
   - highlights slow tests
   - global variable leak detection
-  - configurable test-case timeout
   - optionally run tests that match a regexp
   - auto-exit to prevent "hanging" with an active loop
   - easily meta-generate suites & test-cases
