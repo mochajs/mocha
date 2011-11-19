@@ -368,6 +368,15 @@ Instead of reporting these as distinct suites, they are merged, yielding the fol
 
       $ make tm
 
+## Example test suites
+
+  The following test suites are from real projects putting Mocha to use,
+  so they serve as good examples:
+  
+   - [Express](https://github.com/visionmedia/express/tree/master/test)
+   - [Connect](https://github.com/senchalabs/connect/tree/master/test)
+   - [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
+
 ## Running mocha's tests
 
  Run the tests:
@@ -381,3 +390,4 @@ Instead of reporting these as distinct suites, they are merged, yielding the fol
  Alter the reporter:
 
        $ make test REPORTER=list
+
