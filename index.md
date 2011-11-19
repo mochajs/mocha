@@ -3,6 +3,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 
 ## Features
 
+  - browser support
   - proper exit status for CI support etc
   - ideal for asynchronous APIs
   - auto-detects and disables coloring for non-ttys
