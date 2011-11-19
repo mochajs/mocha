@@ -129,6 +129,12 @@ img {
   max-width: 100%;
 }
 
+@media all and (max-width: 850px) {
+  ul li {
+    width: 100%;
+  }
+}
+
 @media all and (max-width: 600px) {
   #tag {
     margin-top: 0;
@@ -138,9 +144,5 @@ img {
   
   .onload #tag {
     margin-left: 0;
-  }
-  
-  ul li {
-    width: 100%;
   }
 }
