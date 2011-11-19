@@ -55,15 +55,21 @@ describe('serial', function(){
 
     after(function(){
       calls.should.eql([
-          'before'
+          'parent before'
+        , 'before'
         , 'one'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before'
         , 'two'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before'
         , 'three'
-        , 'after']);
+        , 'after'
+        , 'parent after']);
     })
   })
 })
