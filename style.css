@@ -2,9 +2,12 @@
 body {
   font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 0;
-  padding: 140px 110px;
   color: #2C2C2C;
   border-top: 2px solid #ddd;
+}
+
+#content {
+  padding: 140px 110px 60px 110px;
 }
 
 h1 {
@@ -127,6 +130,21 @@ img {
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
   max-width: 100%;
+}
+
+footer {
+  background: #eee;
+  width: 100%;
+  padding: 50px 0;
+  text-align: right;
+  border-top: 1px solid #ddd;
+}
+
+footer span {
+  display: block;
+  margin-right: 30px;
+  color: #888;
+  font-size: 12px;
 }
 
 @media all and (max-width: 850px) {
