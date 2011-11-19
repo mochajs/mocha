@@ -83,13 +83,20 @@ a:hover {
 }
 
 ul {
+  margin-top: 20px;
+  padding: 0 15px;
   width: 100%;
 }
 
 ul li {
   float: left;
   width: 40%;
+  margin-top: 5px;
   margin-right: 60px;
+  list-style: none;
+  border-bottom: 1px solid #eee;
+  padding: 5px 0;
+  font-size: 12px;
 }
 
 ul::after {
