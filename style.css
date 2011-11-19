@@ -39,7 +39,7 @@ h1 a:hover {
 }
 
 h2 {
-  margin-top: 40px;
+  margin-top: 80px;
   font-weight: 100;
   letter-spacing: 1px;
   border-bottom: 1px solid #eee;
@@ -99,11 +99,19 @@ code {
 }
 
 pre {
+  margin: 30px;
   padding: 30px;
   border: 1px solid #eee;
   border-bottom-color: #ddd;
   -webkit-border-radius: 2px;
   -webkit-box-shadow: inset 0 0 10px #eee;
+}
+
+img {
+  margin: 30px;
+  padding: 1px;
+  -webkit-border-radius: 3px;
+  -webkit-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
 }
 
 @media all and (max-width: 600px) {
