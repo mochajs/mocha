@@ -36,6 +36,7 @@ describe('serial', function(){
           , 'parent after'
           , 'parent before'
           , 'parent after'
+          , 'parent before'
           , 'before']);
         calls.push('one');
       })
@@ -47,9 +48,12 @@ describe('serial', function(){
           , 'parent after'
           , 'parent before'
           , 'parent after'
+          , 'parent before'
           , 'before'
           , 'one'
           , 'after'
+          , 'parent after'
+          , 'parent before'
           , 'before']);
         calls.push('two');
       });
