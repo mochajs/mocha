@@ -176,13 +176,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
    ![dot matrix reporter](images/reporter-dot.png)
 
-## TAP
+### TAP
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
   ![test anything protocol](http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png)
 
-## Landing Strip
+### Landing Strip
 
   The Landing Strip reporter is a gimmicky test reporter simulating
   a plane landing :) unicode ftw
@@ -190,7 +190,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   ![landing strip plane reporter](images/reporter-landing.png)
   ![landing strip with failure](images/reporter-landing-fail.png)
 
-## List
+### List
 
   The "List" reporter outputs a simple specifications list as
   test cases pass or fail, outputting the failure details at 
@@ -198,20 +198,20 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![list reporter](images/reporter-list.png)
   
-## JSON
+### JSON
 
   The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).
   
   ![json reporter](images/reporter-json.png)
 
-## JSON Stream
+### JSON Stream
 
   The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
   ![json stream reporter](images/reporter-json-stream.png)
 
-## Doc
+### Doc
 
  The "doc" reporter outputs a hierarchical HTML body representation
  of your tests, wrap it with a header, footer, some styling and you
