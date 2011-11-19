@@ -66,6 +66,12 @@ h2 {
   margin-left: 170px;
 }
 
+#tag + p {
+  font-size: 22px;
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
 a {
   color: #8A6343;
   font-weight: bold;
