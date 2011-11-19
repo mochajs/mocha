@@ -3,12 +3,10 @@ describe('serial', function(){
   var calls = [];
 
   beforeEach(function(){
-    // not hit
     calls.push('parent before');
   })
 
   afterEach(function(){
-    // not hit
     calls.push('parent after');
   })
 
@@ -18,27 +16,35 @@ describe('serial', function(){
     })
 
     it('one', function(){
-      calls.should.eql(['before']);
+      calls.should.eql(['parent before', 'before']);
       calls.push('one');
     })
 
     it('two', function(){
       calls.should.eql([
-          'before'
+          'parent before'
+        , 'before'
         , 'one'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before']);
       calls.push('two');
     })
 
     it('three', function(){
       calls.should.eql([
-          'before'
+          'parent before'
+        , 'before'
         , 'one'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before'
         , 'two'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before']);
       calls.push('three');
     })
