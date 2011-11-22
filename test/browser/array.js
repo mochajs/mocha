@@ -5,6 +5,8 @@ describe('Array', function(){
       assert(-1 == arr.indexOf(5));
     })
 
+    it('should be pending')
+
     it('should return the correct index when the value is present', function(){
       var arr = [1,2,3];
         assert(0 == arr.indexOf(1)); // just to test indentation

@@ -360,7 +360,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.0.1-alpha5';
+exports.version = '0.0.1';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -402,6 +402,9 @@ exports.useColors = isatty;
 exports.colors = {
     'pass': 90
   , 'fail': 31
+  , 'bright pass': 92
+  , 'bright fail': 91
+  , 'bright yellow': 93
   , 'pending': 36
   , 'suite': '40'
   , 'error title': 0
@@ -411,6 +414,8 @@ exports.colors = {
   , 'fast': 90
   , 'medium': 33
   , 'slow': 31
+  , 'green': 32
+  , 'light': 90
 };
 
 /**
@@ -560,15 +565,18 @@ function Base(runner) {
  */
 
 Base.prototype.epilogue = function(){
-  var stats = this.stats;
+  var stats = this.stats
+    , fmt;
 
   console.log();
 
   // failure
   if (stats.failures) {
-    console.error(
-        '  \033[91m✖\033[31m %d of %d tests failed\033[90m:\033[0m'
-      , stats.failures, stats.tests);
+    fmt = color('bright fail', '  ✖')
+      + color('fail', ' %d of %d tests failed')
+      + color('light', ':')
+
+    console.error(fmt, stats.failures, stats.tests);
     Base.list(this.failures);
     console.error();
     process.nextTick(function(){
@@ -578,11 +586,11 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  console.log(
-      '  \033[92m✔\033[32m %d tests completed\033[90m (%dms)\033[0m'
-    , stats.tests || 0
-    , stats.duration);
+  fmt = color('bright pass', '  ✔')
+    + color('green', ' %d tests complete')
+    + color('light', ' (%dms)');
 
+  console.log(fmt, stats.tests || 0, stats.duration);
   console.log();
   process.nextTick(function(){
     process.exit(0);
@@ -712,7 +720,7 @@ function Dot(runner) {
   runner.on('pass', function(test){
     if (++n % width == 0) process.stdout.write('\n  ');
     if ('slow' == test.speed) {
-      process.stdout.write('\033[93m.\033[0m');
+      process.stdout.write(color('bright yellow', '.'));
     } else {
       process.stdout.write(color(test.speed, '.'));
     }
@@ -810,6 +818,8 @@ function HTML(runner) {
     // test
     if (test.passed) {
       var el = $('<div class="test pass"><h2>' + test.title + '</h2></div>')
+    } else if (test.pending) {
+      var el = $('<div class="test pass pending"><h2>' + test.title + '</h2></div>')
     } else {
       var el = $('<div class="test fail"><h2>' + test.title + '</h2></div>');
       var str = test.err.stack || test.err;
@@ -826,8 +836,10 @@ function HTML(runner) {
 
     // code
     // TODO: defer
-    var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
-    pre.appendTo(el).hide();
+    if (!test.pending) {
+      var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
+      pre.appendTo(el).hide();
+    }
     stack[0].append(el);
   });
 
@@ -1577,6 +1589,82 @@ Runner.prototype.hook = function(name, fn){
 };
 
 /**
+ * Run hook `name` for the given array of `suites`
+ * in order, and callback `fn(err)`.
+ *
+ * @param {String} name
+ * @param {Array} suites
+ * @param {Function} fn
+ * @api private
+ */
+
+Runner.prototype.hooks = function(name, suites, fn){
+  var self = this
+    , orig = this.suite;
+
+  function next(suite) {
+    self.suite = suite;
+
+    if (!suite) {
+      self.suite = orig;
+      return fn();
+    }
+
+    self.hook(name, function(err){
+      if (err) {
+        self.suite = orig;
+        return fn(err);
+      }
+
+      next(suites.pop());
+    });
+  }
+
+  next(suites.pop());
+};
+
+/**
+ * Run hooks from the top level down.
+ *
+ * @param {String} name
+ * @param {Function} fn
+ * @api private
+ */
+
+Runner.prototype.hookUp = function(name, fn){
+  var suites = [this.suite].concat(this.parents()).reverse();
+  this.hooks(name, suites, fn);
+};
+
+/**
+ * Run hooks from the bottom up.
+ *
+ * @param {String} name
+ * @param {Function} fn
+ * @api private
+ */
+
+Runner.prototype.hookDown = function(name, fn){
+  var suites = [this.suite].concat(this.parents());
+  this.hooks(name, suites, fn);
+};
+
+/**
+ * Return an array of parent Suites from
+ * closest to furthest.
+ *
+ * @return {Array}
+ * @api private
+ */
+
+Runner.prototype.parents = function(){
+  var suite = this.suite
+    , suites = [];
+  while (suite = suite.parent) suites.push(suite);
+  return suites;
+};
+
+/**
  * Run the current test and callback `fn(err)`.
  *
  * @param {Function} fn
@@ -1652,7 +1740,7 @@ Runner.prototype.runTests = function(suite, fn){
 
     // execute test and hook(s)
     self.emit('test', self.test = test);
-    self.hook('beforeEach', function(err){
+    self.hookDown('beforeEach', function(err){
       if (err) return self.failHook('beforeEach', err);
       self.runTest(function(err){
         if (err) return next(err);
@@ -1660,7 +1748,7 @@ Runner.prototype.runTests = function(suite, fn){
         test.passed = true;
         self.emit('test end', test);
         if (err) return self.failHook('beforeEach', err);
-        self.hook('afterEach', function(err){
+        self.hookUp('afterEach', function(err){
           if (err) return self.failHook('afterEach', err);
           next();
         });
@@ -1726,6 +1814,7 @@ Runner.prototype.run = function(){
   // uncaught exception
   process.on('uncaughtException', function(err){
     self.fail(self.test, err);
+    self.emit('test end', self.test);
     self.emit('end');
   });
 
@@ -1803,15 +1892,16 @@ Suite.prototype.constructor = Suite;
 
 
 /**
- * Set timeout `ms`.
+ * Set timeout `ms` or short-hand such as "2s".
  *
- * @param {Number} ms
+ * @param {Number|String} ms
  * @return {Suite} for chaining
  * @api private
  */
 
 Suite.prototype.timeout = function(ms){
-  this._timeout = ms;
+  if (String(ms).match(/s$/)) ms = parseFloat(ms) * 1000;
+  this._timeout = parseInt(ms, 10);
   return this;
 };
 
