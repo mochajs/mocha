@@ -48,10 +48,32 @@ test-grep:
 	  --grep fast \
 	  test/misc/grep
 
+non-tty:
+	@./bin/mocha \
+		--reporter dot \
+		test/interfaces/bdd 2>&1 > /tmp/dot.out
+
+	@echo dot:
+	@cat /tmp/dot.out
+
+	@./bin/mocha \
+		--reporter list \
+		test/interfaces/bdd 2>&1 > /tmp/list.out
+
+	@echo list:
+	@cat /tmp/list.out
+
+	@./bin/mocha \
+		--reporter spec \
+		test/interfaces/bdd 2>&1 > /tmp/spec.out
+
+	@echo spec:
+	@cat /tmp/spec.out
+
 watch:
 	watch --interval=1 $(MAKE) mocha.js
 
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit test-grep tm clean
+.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit non-tty test-grep tm clean

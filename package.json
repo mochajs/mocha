@@ -1,6 +1,6 @@
 {
     "name": "mocha"
-  , "version": "0.0.1-alpha5"
+  , "version": "0.0.1-alpha6"
   , "description": "Test framework inspired by JSpec, Expresso, & Qunit"
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "bin": { "mocha": "./bin/mocha" }
@@ -11,6 +11,9 @@
     , "mocha-debug": "./bin/mocha-debug"
   }
   , "engines": { "node": ">= 0.4.x < 0.7.0" }
+  , "scripts": {
+    "test": "make test"
+  }
   , "dependencies":{
     "commander": "0.3.2"
   }

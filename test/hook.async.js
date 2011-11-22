@@ -11,26 +11,30 @@ describe('async', function(){
     calls.should.eql([
         'root before all'
       , 'before all'
+      , 'parent before'
       , 'before'
       , 'one'
       , 'after'
+      , 'parent after'
+      , 'parent before'
       , 'before'
       , 'two'
       , 'after'
+      , 'parent after'
+      , 'parent before'
       , 'before'
       , 'three'
       , 'after'
+      , 'parent after'
       , 'after all'
       , 'root after all']);
   })
 
   beforeEach(function(){
-    // should not be invoked
     calls.push('parent before');
   })
   
   afterEach(function(){
-    // should not be invoked
     calls.push('parent after' );
   })
   
@@ -54,6 +58,7 @@ describe('async', function(){
       calls.should.eql([
           'root before all'
         , 'before all'
+        , 'parent before'
         , 'before']);
       calls.push('one');
       process.nextTick(done);
@@ -63,9 +68,12 @@ describe('async', function(){
       calls.should.eql([
           'root before all'
         , 'before all'
+        , 'parent before'
         , 'before'
         , 'one'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before']);
       calls.push('two');
     })
@@ -74,12 +82,17 @@ describe('async', function(){
       calls.should.eql([
           'root before all'
         , 'before all'
+        , 'parent before'
         , 'before'
         , 'one'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before'
         , 'two'
         , 'after'
+        , 'parent after'
+        , 'parent before'
         , 'before']);
       calls.push('three');
     })

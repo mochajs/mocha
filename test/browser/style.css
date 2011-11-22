@@ -84,8 +84,13 @@ h2 {
   right: 30px;
   font-size: 12px;
   margin: 0;
+  color: #888;
 }
 
+
+#stats em {
+  color: black;
+}
 #stats li {
   list-style: none;
 }

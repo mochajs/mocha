@@ -1,4 +1,17 @@
 
+0.0.1-alpha6 / 2011-11-19 
+==================
+
+  * Added travis CI support (needs enabling when public)
+  * Added preliminary browser support
+  * Added `make mocha.css` target. Closes #45
+  * Added stack trace to TAP errors. Closes #52
+  * Renamed tearDown to teardown. Closes #49
+  * Fixed: cascading hooksc. Closes #30
+  * Fixed some colors for non-tty
+  * Fixed errors thrown in sync test-cases due to nextTick
+  * Fixed Base.window.width... again give precedence to 0.6.x
+
 0.0.1-alpha5 / 2011-11-17 
 ==================
 
