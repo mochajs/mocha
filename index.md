@@ -128,6 +128,36 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -s, --slow <ms>        "slow" test threshold in milliseconds [75]
       -G, --growl            enable growl support
 
+### -r, --require &lt;name&gt;
+
+  The `--require` option is useful for libraries such as [should.js](http://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file.
+
+### -u, --ui &lt;name&gt;
+
+  The `--ui` option lets you specify the interface to use, defaulting to "bdd".
+  
+### -R, --reporter &lt;name&gt;
+
+  The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot".
+
+### -g, --grep &lt;pattern&gt;
+
+  The `--grep` option when specified will trigger mocha to only run tests matching the given `pattern` which is internally compiled to a `RegExp`. 
+  
+  Suppose for example you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
+
+    describe('api', function(){
+      describe('GET /api/users', function(){
+        it('respond with an array of users')
+      })
+    })
+    
+    describe('app', function(){
+      describe('GET /users', function(){
+        it('respond with an array of users')
+      })
+    })
+
 ## mocha-debug(1)
 
   `mocha-debug(1)` is identical to `mocha(1)`, however it enables node's debugger so you may step through tests with the __debugger__ statement.
