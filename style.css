@@ -172,3 +172,8 @@ footer span {
     margin-left: 0;
   }
 }
+
+code .init { color: #17B8E9 }
+code .number { color: #17B8E9 }
+code .string { color: #36A343 }
+code .keyword { color: #8A6343 }

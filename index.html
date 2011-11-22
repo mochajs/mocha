@@ -4,10 +4,12 @@
     <title>Mocha - the fun, simple, flexible JavaScript test framework</title>
     <link rel="stylesheet" href="style.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="jquery.js"></script>
+    <script src="highlight.js"></script>
     <script>
-    onload = function(){
-      document.body.setAttribute('class', 'onload');
-    };
+      $(function(){
+        $(document).addClass('onload');
+      })
     </script>
   </head>
   <body>
