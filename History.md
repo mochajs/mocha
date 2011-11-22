@@ -1,4 +1,10 @@
 
+0.0.1 / 2011-11-22 
+==================
+
+  * Added `--timeout` second shorthand support, ex `--timeout 3s`.
+  * Fixed "test end" event for uncaughtExceptions. Closes #61
+
 0.0.1-alpha6 / 2011-11-19 
 ==================
 
