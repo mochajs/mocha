@@ -9,6 +9,7 @@ function highlight(js) {
   return js
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
     .replace(/('.*')/gm, '<span class="string">$1</span>')
     .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
     .replace(/(\d+)/gm, '<span class="number">$1</span>')
