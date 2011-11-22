@@ -4,12 +4,10 @@
     <title>Mocha - the fun, simple, flexible JavaScript test framework</title>
     <link rel="stylesheet" href="style.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script src="jquery.js"></script>
-    <script src="highlight.js"></script>
     <script>
-      $(function(){
-        $('body').addClass('onload');
-      })
+    onload = function(){
+      document.body.setAttribute('class', 'onload');
+    };
     </script>
   </head>
   <body>
@@ -166,6 +164,14 @@ Options:
 <h3>-R, &mdash;reporter &lt;name&gt;</h3>
 
 <p>  The <code>--reporter</code> option allows you to specify the reporter that will be used, defaulting to &ldquo;dot&rdquo;.</p>
+
+<h3>-t, &mdash;timeout &lt;ms&gt;</h3>
+
+<p>  Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the <code>s</code> suffix, ex: <code>--timeout 2s</code> or <code>--timeout 2000</code> would be equivalent.</p>
+
+<h3>-s, &mdash;slow &lt;ms&gt;</h3>
+
+<p>  Specify the &ldquo;slow&rdquo; test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.</p>
 
 <h3>-g, &mdash;grep &lt;pattern&gt;</h3>
 
