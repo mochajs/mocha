@@ -1,4 +1,12 @@
 
+0.0.2 / 2011-11-22 
+==================
+
+  * Fixed global leak detection due to Safari bind() change
+  * Fixed: escape html entities in Doc reporter
+  * Fixed: escape html entities in HTML reporter
+  * Fixed pending test support for HTML reporter. Closes #66
+
 0.0.1 / 2011-11-22 
 ==================
 
