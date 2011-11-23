@@ -415,6 +415,7 @@ Instead of reporting these as distinct suites, they are merged, yielding the fol
    - [Connect](https://github.com/senchalabs/connect/tree/master/test)
    - [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
    - [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
+   - [Mocha](https://github.com/visionmedia/mocha/tree/master/test)
 
 ## Running mocha's tests
 
