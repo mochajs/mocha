@@ -605,7 +605,8 @@ require.register("reporters/doc.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var Base = require('./base');
+var Base = require('./base')
+  , utils = require('../utils');
 
 /**
  * Expose `Doc`.
@@ -651,7 +652,7 @@ function Doc(runner) {
 
   runner.on('pass', function(test){
     console.log('%s  <dt>%s</dt>', indent(), test.title);
-    var code = clean(test.fn.toString());
+    var code = utils.escape(clean(test.fn.toString()));
     console.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
   });
 
@@ -752,7 +753,8 @@ require.register("reporters/html.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var Base = require('./base');
+var Base = require('./base')
+  , utils = require('../utils');
 
 /**
  * Expose `Doc`.
@@ -837,7 +839,8 @@ function HTML(runner) {
     // code
     // TODO: defer
     if (!test.pending) {
-      var pre = $('<pre><code>' + clean(test.fn.toString()) + '</code></pre>');
+      var code = utils.escape(clean(test.fn.toString()));
+      var pre = $('<pre><code>' + code + '</code></pre>');
       pre.appendTo(el).hide();
     }
     stack[0].append(el);
@@ -2110,6 +2113,25 @@ Test.prototype.run = function(fn){
 };
 
 }); // module: test.js
+
+require.register("utils.js", function(module, exports, require){
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {String} html
+ * @return {String}
+ * @api private
+ */
+
+exports.escape = function(html) {
+  return String(html)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+};
+}); // module: utils.js
 
 /**
  * Node shims.
