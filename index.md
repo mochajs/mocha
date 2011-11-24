@@ -23,6 +23,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - extensible reporting, bundled with 9+ reporters
   - extensible test DSLs or "interfaces"
   - before, after, before each, after each hooks
+  - coffee-script support
   - TextMate bundle
   - and more!
 
