@@ -35,6 +35,7 @@ program
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
   .option('-C, --no-colors', 'force disabling of colors')
+  .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl support')
 
 // report help
@@ -96,6 +97,13 @@ var suite = new Suite('')
 // --no-colors
 
 if (!program.colors) Base.useColors = false;
+
+// --colors
+
+if (~process.argv.indexOf('--colors') ||
+    ~process.argv.indexOf('-c')) {
+  Base.useColors = true;
+}
 
 // --slow <ms>
 
