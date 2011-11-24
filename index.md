@@ -245,7 +245,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
-  ![test anything protocol](http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png)
+  ![test anything protocol](images/reporter-tap.png)
 
 ### Landing Strip
 
@@ -262,7 +262,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   the bottom of the output.
 
   ![list reporter](images/reporter-list.png)
-  
+
+### Progress
+
+  The progress reporter implements a simple progress-bar:
+
+  ![progress bar](images/reporter-progress.png)
+
 ### JSON
 
   The JSON reporter outputs a single large JSON object when

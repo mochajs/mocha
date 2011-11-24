@@ -41,6 +41,7 @@
 <li>extensible reporting, bundled with 9+ reporters</li>
 <li>extensible test DSLs or &ldquo;interfaces&rdquo;</li>
 <li>before, after, before each, after each hooks</li>
+<li>coffee-script support</li>
 <li>TextMate bundle</li>
 <li>and more!</li>
 </ul>
@@ -152,6 +153,7 @@ Options:
   -g, --grep &lt;pattern&gt;   only run tests matching &lt;pattern&gt;
   -t, --timeout &lt;ms&gt;     set test-case timeout in milliseconds [2000]
   -s, --slow &lt;ms&gt;        "slow" test threshold in milliseconds [75]
+  -C, --no-colors        force disabling of colors
   -G, --growl            enable growl support
 </code></pre>
 
@@ -274,7 +276,7 @@ describe('app', function(){
 
 <p>  The TAP reporter emits lines for a <a href="http://en.wikipedia.org/wiki/Test_Anything_Protocol">Test-Anything-Protocol</a> consumer.</p>
 
-<p>  <img src="http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png" alt="test anything protocol" /></p>
+<p>  <img src="images/reporter-tap.png" alt="test anything protocol" /></p>
 
 <h3>Landing Strip</h3>
 
@@ -291,6 +293,12 @@ describe('app', function(){
   the bottom of the output.</p>
 
 <p>  <img src="images/reporter-list.png" alt="list reporter" /></p>
+
+<h3>Progress</h3>
+
+<p>  The progress reporter implements a simple progress-bar:</p>
+
+<p>  <img src="images/reporter-progress.png" alt="progress bar" /></p>
 
 <h3>JSON</h3>
 
@@ -455,6 +463,7 @@ describe('merge stuff', function(){
 <li> <a href="https://github.com/senchalabs/connect/tree/master/test">Connect</a></li>
 <li> <a href="https://github.com/visionmedia/superagent/tree/master/test/node">SuperAgent</a></li>
 <li> <a href="https://github.com/LearnBoost/websocket.io/tree/master/test">WebSocket.io</a></li>
+<li> <a href="https://github.com/visionmedia/mocha/tree/master/test">Mocha</a></li>
 </ul>
 
 
