@@ -139,6 +139,14 @@
 })
 </code></pre>
 
+<h2>Test duration</h2>
+
+<p>  Most of the reporters support some form of displaying
+  test duration, as well as flagging tests that are slow,
+  as shown here with the &ldquo;spec&rdquo; reporter:</p>
+
+<p>   <img src="images/reporter-spec-duration.js" alt="test duration" /></p>
+
 <h2>mocha(1)</h2>
 
 <pre><code>Usage: mocha [options] [files]
@@ -266,11 +274,19 @@ describe('app', function(){
 
 <h3>Dot Matrix</h3>
 
-<p>  The Dot Matrix reporter is simply a series of dots
+<p>  The &ldquo;dot&rdquo; matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
   pending in blue, slow as yellow.</p>
 
 <p>   <img src="images/reporter-dot.png" alt="dot matrix reporter" /></p>
+
+<h3>Spec</h3>
+
+<p>  The &ldquo;spec&rdquo; reporter outputs a hierarchical view
+  nested just as the test cases are.</p>
+
+<p>   <img src="images/reporter-spec.png" alt="spec reporter" />
+   <img src="images/reporter-spec-fail.png" alt="spec reporter with failure" /></p>
 
 <h3>TAP</h3>
 
