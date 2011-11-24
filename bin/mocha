@@ -104,19 +104,17 @@ if (program.timeout) suite.timeout(program.timeout);
 
 var files = program.args;
 
-/**
- * Defaults matching path to test/*.js and adjusts
- * to check for *.coffee as well if CS is available
- */
+// default files to test/*.js
+// with optional coffee-script support
 
 if (!files.length) {
-  var fileMatcher = /\.js$/;
   files = fs.readdirSync('test').filter(function(path){
-	try {
-	  require('coffee-script');
-      fileMatcher = /\.(js|coffee)$/;
-	} catch (e) {}
-    return path.match(fileMatcher);
+    try {
+      require('coffee-script');
+      return path.match(/\.(js|coffee)$/);
+    } catch (e) {
+      return path.match(/\.js$/);
+    }
   }).map(function(path){
     return join('test', path);
   });
