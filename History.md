@@ -1,4 +1,10 @@
 
+0.0.3 / 2011-11-23 
+==================
+
+  * Added `-C, --no-colors` to explicitly disable
+  * Added coffee-script support
+
 0.0.2 / 2011-11-22 
 ==================
 

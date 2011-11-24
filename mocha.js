@@ -360,7 +360,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.0.1';
+exports.version = '0.0.2';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -1469,7 +1469,7 @@ function Runner(suite) {
   this.suite = suite;
   this.total = suite.total();
   this.globals = Object.keys(global).concat(['errno']);
-  this.on('test end', function(){ self.checkGlobals(); });
+  this.on('test end', function(test){ self.checkGlobals(test); });
   this.grep(/.*/);
 }
 
