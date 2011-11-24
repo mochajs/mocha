@@ -77,8 +77,8 @@ program.on('require', function(mod){
 // mocha.opts support
 
 try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8');
-  opts = opts.split(/\s+/).slice(0, -1);
+  var opts = fs.readFileSync('test/mocha.opts', 'utf8').trim();
+  opts = opts.split(/\s+/);
   process.argv = process.argv
     .slice(0, 2)
     .concat(opts.concat(process.argv.slice(2)));
