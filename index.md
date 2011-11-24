@@ -182,7 +182,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   
 ## Interfaces
 
-  Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __export__ flavoured interfaces.
+  Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __exports__ flavoured interfaces.
 
 ### BDD
 
