@@ -112,7 +112,7 @@ if (!files.length) {
     try {
       require('coffee-script');
       return path.match(/\.(js|coffee)$/);
-    } catch (e) {
+    } catch (err) {
       return path.match(/\.js$/);
     }
   }).map(function(path){
