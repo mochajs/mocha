@@ -37,28 +37,35 @@ program
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl support')
+  .option('--interfaces', 'display available interfaces')
+  .option('--reporters', 'display available reporters')
 
-// report help
+// --reporters
 
-program.on('--help', function(){
-  console.log('  Reporters:');
-  console.log('');
+program.on('reporters', function(){
+  console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
+  console.log('    spec - hierarchical spec list');
   console.log('    json - single json object');
   console.log('    progress - progress bar');
   console.log('    list - spec-style listing');
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
   console.log('    json-stream - newline delimited json events');
-  console.log('');
+  console.log();
+  process.exit();
+});
 
-  console.log('  Interfaces:');
+// --interfaces
+
+program.on('interfaces', function(){
   console.log('');
-  console.log('    bdd - describe() / it()');
-  console.log('    tdd - suite() / test()');
-  console.log('    exports - module.exports');
+  console.log('    bdd');
+  console.log('    tdd');
+  console.log('    exports');
   console.log('');
+  process.exit();
 });
 
 // -r, --require
