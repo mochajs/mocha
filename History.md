@@ -1,4 +1,12 @@
 
+0.0.4 / 2011-11-24 
+==================
+
+  * Added `--interfaces`
+  * Added `--reporters`
+  * Added `-c, --colors`. Closes #69
+  * Fixed hook timeouts
+
 0.0.3 / 2011-11-23 
 ==================
 
