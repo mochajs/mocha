@@ -235,11 +235,19 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### Dot Matrix
 
-  The Dot Matrix reporter is simply a series of dots
+  The "dot" matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
   pending in blue, slow as yellow.
 
    ![dot matrix reporter](images/reporter-dot.png)
+
+### Spec
+
+  The "spec" reporter outputs a hierarchical view
+  nested just as the test cases are.
+
+   ![spec reporter](images/reporter-spec.png)
+   ![spec reporter with failure](images/reporter-spec-fail.png)
 
 ### TAP
 
