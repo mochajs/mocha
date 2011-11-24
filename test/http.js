@@ -10,7 +10,7 @@ server.listen(8888);
 describe('http', function(){
   it('should provide an example', function(done){
     http.get({ path: '/', port: 8888 }, function(res){
-      res.statusCode.should.equal(200);
+      res.should.have.status(200);
       done();
     })
   })
