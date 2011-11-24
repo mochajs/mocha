@@ -34,6 +34,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
+  .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl support')
 
 // report help
@@ -91,6 +92,10 @@ var suite = new Suite('')
   , Base = require('../lib/reporters/base')
   , Reporter = require('../lib/reporters/' + program.reporter)
   , ui = interfaces[program.ui](suite);
+
+// --no-colors
+
+if (!program.colors) Base.useColors = false;
 
 // --slow <ms>
 
