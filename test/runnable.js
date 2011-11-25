@@ -116,6 +116,33 @@ describe('Runnable(title, fn)', function(){
             });
           })
         })
+
+        describe('with an error', function(){
+          it('should emit a single "error" event', function(done){
+            var calls = 0;
+            var errCalls = 0;
+
+            var test = new Runnable('foo', function(done){
+              done(new Error('fail'));
+              process.nextTick(done);
+              done(new Error('fail'));
+              process.nextTick(done);
+              process.nextTick(done);
+            });
+
+            test.on('error', function(err){
+              ++errCalls;
+              err.message.should.equal('done() called multiple times');
+              calls.should.equal(1);
+              errCalls.should.equal(1);
+              done();
+            });
+
+            test.run(function(){
+              ++calls;
+            });
+          })
+        })
       })
 
       describe('when an exception is thrown', function(){
