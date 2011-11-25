@@ -1,4 +1,14 @@
 
+0.0.7 / 2011-11-25 
+==================
+
+  * Added `Hook`
+  * Added `Runnable`
+  * Changed: `Test` is `Runnable`
+  * Fixed global leak reporting in hooks
+  * Fixed: > 2 calls to done() only report the error once
+  * Fixed: clear timer on failure. Closes #80
+
 0.0.6 / 2011-11-25 
 ==================
 
