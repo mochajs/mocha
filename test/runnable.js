@@ -93,6 +93,20 @@ describe('Runnable(title, fn)', function(){
           });
         })
       })
+
+      describe('when an error is passed', function(){
+        it('should invoke the callback', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            done(new Error('fail'));
+          });
+
+          test.run(function(err){
+            err.message.should.equal('fail');
+            done();
+          });
+        })
+      })
     })
 
   })
