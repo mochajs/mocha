@@ -50,7 +50,7 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
-      describe('when throwing an exception', function(){
+      describe('when an exception is thrown', function(){
         it('should invoke the callback', function(done){
           var calls = 0;
           var test = new Runnable('foo', function(){
@@ -66,5 +66,34 @@ describe('Runnable(title, fn)', function(){
         })
       })
     })
+
+    describe('when async', function(){
+      describe('without error', function(){
+        it('should invoke the callback', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            process.nextTick(done);
+          });
+
+          test.run(done);
+        })
+      })
+
+      describe('when an exception is thrown', function(){
+        it('should invoke the callback', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            throw new Error('fail');
+            process.nextTick(done);
+          });
+
+          test.run(function(err){
+            err.message.should.equal('fail');
+            done();
+          });
+        })
+      })
+    })
+
   })
 })
