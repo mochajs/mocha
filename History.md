@@ -1,4 +1,9 @@
 
+0.0.5 / 2011-11-24 
+==================
+
+  * Fixed: make mocha.opts whitespace less picky [kkaefer]
+
 0.0.4 / 2011-11-24 
 ==================
 
