@@ -32,4 +32,22 @@ describe('Runnable(title, fn)', function(){
       run.sync.should.be.true;
     })
   })
+
+  describe('.run(fn)', function(){
+    describe('when sync', function(){
+      describe('without error', function(){
+        it('should invoke the callback', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(){
+            ++calls;
+          });
+
+          test.run(function(err){
+            calls.should.equal(1);
+            done(err);
+          })
+        })
+      })
+    })
+  })
 })
