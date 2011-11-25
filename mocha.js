@@ -360,7 +360,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.0.2';
+exports.version = '0.0.5';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -481,8 +481,8 @@ exports.list = function(failures){
   console.error();
   failures.forEach(function(test, i){
     // format
-    var fmt = color('error title', '  %s) %s: ')
-      + color('error message', '%s')
+    var fmt = color('error title', '  %s) %s:\n')
+      + color('error message', '     %s')
       + color('error stack', '\n%s\n');
 
     // msg
@@ -1553,19 +1553,25 @@ Runner.prototype.failHook = function(hook, err){
 
 Runner.prototype.hook = function(name, fn){
   var suite = this.suite
-    , test = this.test
     , callbacks = suite[name + 'Callbacks']
-    , pending = callbacks.length;
+    , ms = suite._timeout
+    , timer;
 
   function next(i) {
-    var callback = callbacks[i]
+    var callback = callbacks[i];
     if (!callback) return fn();
 
     // async
     if (1 == callback.length) {
+      // timeout
+      timer = setTimeout(function(){
+        fn(new Error('timeout of ' + ms + 'ms exceeded'));
+      }, ms);
+
       // async
       try {
         callback(function(err){
+          clearTimeout(timer);
           if (err) return fn(err);
           next(++i);
         });
@@ -1681,7 +1687,7 @@ Runner.prototype.runTest = function(fn){
   // async
   if (test.async) {
     try {
-      return test.run(function(err){
+      test.run(function(err){
         if (test.finished) {
           self.fail(test, new Error('done() called multiple times'));
           return;
@@ -1691,6 +1697,8 @@ Runner.prototype.runTest = function(fn){
     } catch (err) {
       fn(err);
     }
+
+    return;
   }
 
   // sync  
@@ -1793,7 +1801,6 @@ Runner.prototype.runSuite = function(suite, fn){
   }
 
   this.hook('beforeAll', function(err){
-    // TODO: use interface names
     if (err) return self.failHook('beforeAll', err);
     self.runTests(suite, next);
   });
@@ -1884,6 +1891,7 @@ function Suite(title) {
   this.afterAllCallbacks = [];
   this.afterEachCallbacks = [];
   this.root = !title;
+  this.timeout(2000);
 }
 
 /**
