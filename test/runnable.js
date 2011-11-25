@@ -90,6 +90,31 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when the callback is invoked several times', function(){
+        describe('without an error', function(){
+          it('should emit a single "error" event', function(done){
+            var calls = 0;
+            var errCalls = 0;
+
+            var test = new Runnable('foo', function(done){
+              process.nextTick(done);
+              process.nextTick(done);
+              process.nextTick(done);
+            });
+
+            test.on('error', function(err){
+              ++errCalls;
+              console.log(err);
+            });
+
+            test.run(function(){
+              ++calls;
+              console.log('called');
+            });
+          })
+        })
+      })
+
       describe('when an exception is thrown', function(){
         it('should invoke the callback', function(done){
           var calls = 0;
