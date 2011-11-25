@@ -100,16 +100,19 @@ describe('Runnable(title, fn)', function(){
               process.nextTick(done);
               process.nextTick(done);
               process.nextTick(done);
+              process.nextTick(done);
             });
 
             test.on('error', function(err){
               ++errCalls;
-              console.log(err);
+              err.message.should.equal('done() called multiple times');
+              calls.should.equal(1);
+              errCalls.should.equal(1);
+              done();
             });
 
             test.run(function(){
               ++calls;
-              console.log('called');
             });
           })
         })
