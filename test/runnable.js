@@ -48,6 +48,22 @@ describe('Runnable(title, fn)', function(){
           })
         })
       })
+
+      describe('when throwing an exception', function(){
+        it('should invoke the callback', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(){
+            ++calls;
+            throw new Error('fail');
+          });
+
+          test.run(function(err){
+            calls.should.equal(1);
+            err.message.should.equal('fail');
+            done();
+          })
+        })
+      })
     })
   })
 })
