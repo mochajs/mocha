@@ -23,6 +23,15 @@ var program = require('commander')
 
 var files = [];
 
+/**
+ * Images.
+ */
+
+var images = {
+    fail: __dirname + '/../images/error.png'
+  , pass: __dirname + '/../images/ok.png'
+};
+
 // options
 
 program
@@ -170,10 +179,11 @@ function growl(runner, reporter) {
     var stats = reporter.stats;
     if (stats.failures) {
       var msg = stats.failures + ' of ' + stats.tests + ' tests failed';
-      notify(msg, { title: 'Failed' });
+      notify(msg, { title: 'Failed', image: images.fail });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-        title: 'Passed'
+          title: 'Passed'
+        , image: images.pass
       });
     }
   });
