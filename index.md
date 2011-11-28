@@ -119,7 +119,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   test duration, as well as flagging tests that are slow,
   as shown here with the "spec" reporter:
 
-   ![test duration](images/reporter-spec-duration.js)
+   ![test duration](images/reporter-spec-duration.png)
 
 ## mocha(1)
 
