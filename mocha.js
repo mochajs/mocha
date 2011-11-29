@@ -2270,7 +2270,7 @@ exports.escape = function(html) {
 
 /**
  * Node shims.
- * 
+ *
  * These are meant only to allow
  * mocha.js to run untouched, not
  * to allow running node code in
@@ -2287,10 +2287,22 @@ global = this;
 mocha = require('mocha');
 
 // boot
-
 ;(function(){
   var suite = new mocha.Suite;
   var Reporter = mocha.reporters.HTML;
+  function parse(qs) {
+    return qs
+      .replace('?', '')
+      .split('&')
+      .reduce(function(obj, pair){
+        var i = pair.indexOf('=')
+          , key = pair.slice(0, i)
+          , val = pair.slice(++i);
+
+        obj[key] = decodeURIComponent(val);
+        return obj;
+      }, {});
+  }
 
   mocha.setup = function(ui){
     ui = mocha.interfaces[ui];
@@ -2303,6 +2315,8 @@ mocha = require('mocha');
     suite.emit('run');
     var runner = new mocha.Runner(suite);
     var reporter = new Reporter(runner);
+    var params = parse(window.location.search || "");
+    if (pattern = params['grep']) runner.grep(new RegExp(pattern));
     runner.run();
   };
 })();
