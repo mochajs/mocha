@@ -131,19 +131,23 @@ if (program.timeout) suite.timeout(program.timeout);
 
 // files
 
-var files = program.args;
+var files = program.args
+  , re = /\.js$/;
 
-// default files to test/*.js
-// with optional coffee-script support
+// coffee-script support
+
+try {
+  require('coffee-script');
+  re = /\.(js|coffee)$/;
+} catch (err) {
+  // ignore
+}
+
+// default files to test/*.{js,coffee}
 
 if (!files.length) {
   files = fs.readdirSync('test').filter(function(path){
-    try {
-      require('coffee-script');
-      return path.match(/\.(js|coffee)$/);
-    } catch (err) {
-      return path.match(/\.js$/);
-    }
+    return path.match(re);
   }).map(function(path){
     return join('test', path);
   });
