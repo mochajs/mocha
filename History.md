@@ -1,4 +1,11 @@
 
+0.1.0 / 2011-11-29 
+==================
+
+  * Added `suiteSetup` and `suiteTeardown` to TDD interface [David Henderson]
+  * Added growl icons. Closes #84
+  * Fixed coffee-script support
+
 0.0.8 / 2011-11-25 
 ==================
 
