@@ -321,9 +321,13 @@ var Suite = require('../suite')
 
 /**
  * TDD-style interface:
- * 
+ *
  *      suite('Array', function(){
  *        suite('#indexOf()', function(){
+ *          suiteSetup(function(){
+ *
+ *          });
+ *          
  *          test('should return -1 when not present', function(){
  *
  *          });
@@ -331,9 +335,13 @@ var Suite = require('../suite')
  *          test('should return the index when present', function(){
  *
  *          });
+ *
+ *          suiteTeardown(function(){
+ *
+ *          });
  *        });
  *      });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -350,7 +358,7 @@ module.exports = function(suite){
     };
 
     /**
-     * Execute before each test case.
+     * Execute after each test case.
      */
 
     context.teardown = function(fn){
@@ -358,11 +366,27 @@ module.exports = function(suite){
     };
 
     /**
+     * Execute before the suite.
+     */
+
+    context.suiteSetup = function(fn){
+      suites[0].beforeAll(fn);
+    };
+
+    /**
+     * Execute after the suite.
+     */
+
+    context.suiteTeardown = function(fn){
+      suites[0].afterAll(fn);
+    };
+
+    /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
      * and/or tests.
      */
-    
+
     context.suite = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
@@ -396,7 +420,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.0.6';
+exports.version = '0.2.0';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -524,12 +548,13 @@ exports.list = function(failures){
       + color('error stack', '\n%s\n');
 
     // msg
-    var stack = test.err.stack
-      , index = stack.indexOf('at')
+    var err = test.err
+      , stack = err.stack
+      , index = stack.indexOf(err.message) + err.message.length
       , msg = stack.slice(0, index);
 
     // indent stack trace without msg
-    stack = stack.slice(index)
+    stack = stack.slice(index + 1)
       .replace(/^/gm, '  ');
 
     console.error(fmt, i, test.fullTitle(), msg, stack);
@@ -554,6 +579,7 @@ function Base(runner) {
     , failures = this.failures = [];
 
   if (!runner) return;
+  this.runner = runner;
 
   runner.on('start', function(){
     stats.start = new Date;
@@ -614,7 +640,7 @@ Base.prototype.epilogue = function(){
       + color('fail', ' %d of %d tests failed')
       + color('light', ':')
 
-    console.error(fmt, stats.failures, stats.tests);
+    console.error(fmt, stats.failures, this.runner.total);
     Base.list(this.failures);
     console.error();
     process.nextTick(function(){
@@ -1376,7 +1402,7 @@ function Spec(runner) {
   });
 
   runner.on('test', function(test){
-    process.stdout.write(indent() + color('pass', test.title + ': '));
+    process.stdout.write(indent() + color('pass', '  ◦ ' + test.title + ': '));
   });
 
   runner.on('pending', function(test){
@@ -1542,7 +1568,7 @@ Runnable.prototype.fullTitle = function(){
 
 Runnable.prototype.run = function(fn){
   var self = this
-    , ms = this._timeout
+    , ms = this.timeout()
     , start = new Date
     , finished
     , emitted
@@ -1551,7 +1577,7 @@ Runnable.prototype.run = function(fn){
   // timeout
   if (this.async) {
     timer = setTimeout(function(){
-      fn(new Error('timeout of ' + ms + 'ms exceeded'));
+      done(new Error('timeout of ' + ms + 'ms exceeded'));
     }, ms);
   }
 
@@ -1630,12 +1656,13 @@ module.exports = Runner;
 
 function Runner(suite) {
   var self = this;
+  this._globals = [];
   this.suite = suite;
   this.total = suite.total();
-  this.globals = Object.keys(global).concat(['errno']);
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
+  this.globals(Object.keys(global).concat(['errno']));
 }
 
 /**
@@ -1660,6 +1687,21 @@ Runner.prototype.grep = function(re){
 };
 
 /**
+ * Allow the given `arr` of globals.
+ *
+ * @param {Array} arr
+ * @return {Runner} for chaining
+ * @api public
+ */
+
+Runner.prototype.globals = function(arr){
+  arr.forEach(function(arr){
+    this._globals.push(arr);
+  }, this);
+  return this;
+};
+
+/**
  * Check for global variable leaks.
  *
  * @api private
@@ -1667,10 +1709,10 @@ Runner.prototype.grep = function(re){
 
 Runner.prototype.checkGlobals = function(test){
   var leaks = Object.keys(global).filter(function(key){
-    return !~this.globals.indexOf(key);
+    return !~this._globals.indexOf(key);
   }, this);
 
-  this.globals = this.globals.concat(leaks);
+  this._globals = this._globals.concat(leaks);
 
   if (leaks.length > 1) {
     this.fail(test, new Error('global leaks detected: ' + leaks.join(', ') + ''));

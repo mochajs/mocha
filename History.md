@@ -1,4 +1,12 @@
 
+0.2.0 / 2011-11-30 
+==================
+
+  * Added `--globals <names>` to specify accepted globals. Closes #99
+  * Fixed funky highlighting of messages. Closes #97
+  * Fixed `mocha-debug(1)`. Closes #232
+  * Fixed growl total, use runner.total
+
 0.1.0 / 2011-11-29 
 ==================
 
