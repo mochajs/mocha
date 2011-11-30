@@ -1,3 +1,2 @@
-#!/usr/bin/env node debug
-
-require('./mocha');
+#!/usr/bin/env bash
+node debug $(dirname $0)/mocha
