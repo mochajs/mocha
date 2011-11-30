@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-node debug $(dirname $0)/mocha
+node debug $(dirname $0)/mocha $@
