@@ -21,6 +21,7 @@ mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite;
   var Reporter = mocha.reporters.HTML;
+
   function parse(qs) {
     return qs
       .replace('?', '')
@@ -46,8 +47,8 @@ mocha = require('mocha');
     suite.emit('run');
     var runner = new mocha.Runner(suite);
     var reporter = new Reporter(runner);
-    var params = parse(window.location.search || "");
-    if (pattern = params['grep']) runner.grep(new RegExp(pattern));
+    var query = parse(window.location.search || "");
+    if (query.grep) runner.grep(new RegExp(query.grep));
     runner.run();
   };
 })();
