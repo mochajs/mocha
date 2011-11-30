@@ -184,7 +184,7 @@ function growl(runner, reporter) {
   runner.on('end', function(){
     var stats = reporter.stats;
     if (stats.failures) {
-      var msg = stats.failures + ' of ' + stats.tests + ' tests failed';
+      var msg = stats.failures + ' of ' + runner.total + ' tests failed';
       notify(msg, { title: 'Failed', image: images.fail });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
