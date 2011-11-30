@@ -45,7 +45,8 @@ program
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
-  .option('-G, --growl', 'enable growl support')
+  .option('-G, --growl', 'enable growl notification support')
+  .option('--globals <names>', 'allow the given comma-delimited global [names]', list)
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
 
@@ -171,6 +172,7 @@ function run(suite) {
   suite.emit('run');
   var runner = new Runner(suite);
   var reporter = new Reporter(runner);
+  runner.globals(program.globals);
   if (program.grep) runner.grep(new RegExp(program.grep));
   if (program.growl) growl(runner, reporter)
   runner.run();
@@ -216,4 +218,10 @@ function notify(msg, options) {
   if (options.name) args.push('--name', options.name);
   if (options.title) args.push(options.title);
   exec(args.join(' '), fn);
+}
+
+// parse comma delimited list
+
+function list(str) {
+  return str.split(/ *, */);
 }

@@ -17,7 +17,12 @@ describe('global leaks', function(){
     // bar = 'baz';
     // baz = 'raz';
   });
-  
+
+  it('should pass when accepted', function(){
+    okGlobalA = 1;
+    okGlobalB = 1;
+  })
+
   afterEach(function(){
     // uncomment to test
     // foo = 'bar'
