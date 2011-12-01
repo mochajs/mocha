@@ -21,8 +21,6 @@ describe('global leaks', function(){
   it('should pass when accepted', function(){
     okGlobalA = 1;
     okGlobalB = 1;
-    foo = 'test';
-    bar = 'test';
   })
 
   afterEach(function(){

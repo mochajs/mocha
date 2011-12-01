@@ -176,8 +176,7 @@ function run(suite) {
   var runner = new Runner(suite);
   var reporter = new Reporter(runner);
   runner.globals(program.globals);
-  if(program.leaks)
-    runner.check_global_leaks = false;
+  if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
   if (program.growl) growl(runner, reporter)
   runner.run();
