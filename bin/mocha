@@ -47,6 +47,7 @@ program
   .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
+  .option('--leaks', 'ignore var global leaks')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
 
@@ -175,6 +176,8 @@ function run(suite) {
   var runner = new Runner(suite);
   var reporter = new Reporter(runner);
   runner.globals(program.globals);
+  if(program.leaks)
+    runner.check_global_leaks = false;
   if (program.grep) runner.grep(new RegExp(program.grep));
   if (program.growl) growl(runner, reporter)
   runner.run();
