@@ -45,7 +45,7 @@ h2 {
 }
 
 .test.pending::before {
-  content: '-';
+  content: '◦';
   color: #0b97c4;
 }
 
