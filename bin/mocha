@@ -43,6 +43,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
+  .option('-w, --watch', 'watch test files for changes')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -157,29 +158,75 @@ if (!files.length) {
   });
 }
 
-// require test files before running
-// the root suite
+// --watch
 
-var pending = files.length;
-files.forEach(function(file){
-  file = join(cwd, file);
-  suite.emit('pre-require', global, file);
-  suite.emit('require', require(file), file);
-  suite.emit('post-require', global, file);
-  --pending || run(suite);
+if (program.watch) {
+  console.log();
+  hideCursor();
+  process.on('SIGINT', function(){
+    showCursor();
+    console.log('\n');
+    process.exit();
+  });
+
+  var frames = [
+      '  \033[96m◜ \033[90mwatching\033[0m'
+    , '  \033[96m◠ \033[90mwatching\033[0m'
+    , '  \033[96m◝ \033[90mwatching\033[0m'
+    , '  \033[96m◞ \033[90mwatching\033[0m'
+    , '  \033[96m◡ \033[90mwatching\033[0m'
+    , '  \033[96m◟ \033[90mwatching\033[0m'
+  ];
+
+  play(frames);
+
+  mocha.watch(files, function(){
+    stop()
+    suite = suite.clone();
+    ui = interfaces[program.ui](suite);
+    Suite.reset();
+    load(files, function(){
+      run(suite, function(){
+        play(frames);
+      });
+    });
+  });
+
+  return;
+}
+
+// load
+
+load(files, function(){
+  run(suite, process.exit);
 });
+
+// require test files before
+// running the root suite
+
+function load(files, fn) {
+  var pending = files.length;
+  files.forEach(function(file){
+    file = join(cwd, file);
+    delete require.cache[file];
+    suite.emit('pre-require', global, file);
+    suite.emit('require', require(file), file);
+    suite.emit('post-require', global, file);
+    --pending || fn();
+  });
+}
 
 // run the given suite
 
-function run(suite) {
+function run(suite, fn) {
   suite.emit('run');
   var runner = new Runner(suite);
   var reporter = new Reporter(runner);
   runner.globals(program.globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
-  if (program.growl) growl(runner, reporter)
-  runner.run();
+  if (program.growl) growl(runner, reporter);
+  runner.run(fn);
 }
 
 // enable growl notifications
@@ -224,8 +271,49 @@ function notify(msg, options) {
   exec(args.join(' '), fn);
 }
 
-// parse comma delimited list
+/**
+ * Parse list.
+ */
 
 function list(str) {
   return str.split(/ *, */);
+}
+
+/**
+ * Hide the cursor.
+ */
+
+function hideCursor(){
+  process.stdout.write('\033[?25l');
+};
+
+/**
+ * Show the cursor.
+ */
+
+function showCursor(){
+  process.stdout.write('\033[?25h');
+};
+
+/**
+ * Stop play()ing.
+ */
+
+function stop() {
+  clearInterval(play.timer);
+}
+
+/**
+ * Play the given array of strings.
+ */
+
+function play(arr, interval) {
+  var len = arr.length
+    , interval = interval || 100
+    , i = 0;
+
+  play.timer = setInterval(function(){
+    var str = arr[i++ % len];
+    process.stdout.write('\r' + str);
+  }, interval);
 }
