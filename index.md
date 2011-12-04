@@ -136,6 +136,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       --interfaces           display available interfaces
       --reporters            display available reporters
 
+### --globals &lt;names&gt;
+
+  Accepts a comma-delimited list of accepted global variable names. For example suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`.
+
+### --ignore-leaks
+
+  By default Mocha will fail when global variables are introduced, you may use `--globals` to specify a few, or use `--ignore-leaks` to disable this functionality. 
+
 ### -r, --require &lt;name&gt;
 
   The `--require` option is useful for libraries such as [should.js](http://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file.
