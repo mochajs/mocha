@@ -103,6 +103,10 @@ EventEmitter.prototype.emit = function(event){
 
 }); // module: browser/events.js
 
+require.register("browser/fs.js", function(module, exports, require){
+
+}); // module: browser/fs.js
+
 require.register("browser/tty.js", function(module, exports, require){
 
 exports.isatty = function(){
@@ -2290,7 +2294,7 @@ require.register("watch.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var fs = require('fs');
+var fs = require('browser/fs');
 
 module.exports = function(paths, fn){
   var options = { interval: 100 };
