@@ -420,7 +420,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.2.0';
+exports.version = '0.3.0';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -429,6 +429,7 @@ exports.Runner = require('./runner');
 exports.Suite = require('./suite');
 exports.Hook = require('./hook');
 exports.Test = require('./test');
+exports.watch = require('./watch');
 }); // module: mocha.js
 
 require.register("reporters/base.js", function(module, exports, require){
@@ -643,9 +644,6 @@ Base.prototype.epilogue = function(){
     console.error(fmt, stats.failures, this.runner.total);
     Base.list(this.failures);
     console.error();
-    process.nextTick(function(){
-      process.exit(stats.failures);
-    });
     return;
   }
 
@@ -656,9 +654,6 @@ Base.prototype.epilogue = function(){
 
   console.log(fmt, stats.tests || 0, stats.duration);
   console.log();
-  process.nextTick(function(){
-    process.exit(0);
-  });
 };
 
 }); // module: reporters/base.js
@@ -718,10 +713,6 @@ function Doc(runner) {
     console.log('%s  <dt>%s</dt>', indent(), test.title);
     var code = utils.escape(clean(test.fn.toString()));
     console.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
-  });
-
-  runner.on('end', function(){
-    process.exit(stats.failures);
   });
 }
 
@@ -909,10 +900,6 @@ function HTML(runner) {
     }
     stack[0].append(el);
   });
-
-  runner.on('end', function(){
-    process.exit(stats.failures);
-  });
 }
 
 function error(msg) {
@@ -997,9 +984,7 @@ function List(runner) {
   });
 
   runner.on('end', function(){
-    process.stdout.write(JSON.stringify(['end', self.stats]), function(){
-      process.exit(0);
-    });
+    process.stdout.write(JSON.stringify(['end', self.stats]));
   });
 }
 
@@ -1072,9 +1057,7 @@ function JSONReporter(runner) {
       , passes: passes.map(clean)
     };
 
-    process.stdout.write(JSON.stringify(obj), function(){
-      process.exit(0);
-    });
+    process.stdout.write(JSON.stringify(obj));
   });
 }
 
@@ -1488,10 +1471,6 @@ function TAP(runner) {
     console.log('not ok %d %s', n, test.fullTitle());
     console.log(err.stack.replace(/^/gm, '  '));
   });
-
-  runner.on('end', function(){
-    process.exit(stats.failures);
-  });
 }
 }); // module: reporters/tap.js
 
@@ -1659,6 +1638,7 @@ function Runner(suite) {
   this._globals = [];
   this.suite = suite;
   this.total = suite.total();
+  this.failures = 0;
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
@@ -1708,6 +1688,8 @@ Runner.prototype.globals = function(arr){
  */
 
 Runner.prototype.checkGlobals = function(test){
+  if (this.ignoreLeaks) return;
+
   var leaks = Object.keys(global).filter(function(key){
     return !~this._globals.indexOf(key);
   }, this);
@@ -1730,6 +1712,7 @@ Runner.prototype.checkGlobals = function(test){
  */
 
 Runner.prototype.fail = function(test, err){
+  ++this.failures;
   test.failed = true;
   this.emit('fail', test, err);
 };
@@ -1737,7 +1720,7 @@ Runner.prototype.fail = function(test, err){
 /**
  * Fail the given `hook` with `err`.
  *
- * Hook failures (currently) hard-exit due
+ * Hook failures (currently) hard-end due
  * to that fact that a failing hook will
  * surely cause subsequent tests to fail,
  * causing jumbled reporting.
@@ -1748,9 +1731,9 @@ Runner.prototype.fail = function(test, err){
  */
 
 Runner.prototype.failHook = function(hook, err){
+  ++this.failures;
   this.fail(hook, err);
   this.emit('end');
-  process.exit(0);
 };
 
 /**
@@ -1975,13 +1958,21 @@ Runner.prototype.runSuite = function(suite, fn){
 };
 
 /**
- * Run the root suite.
+ * Run the root suite and invoke `fn(failures)`
+ * on completion.
  *
+ * @param {Function} fn
  * @api public
  */
 
-Runner.prototype.run = function(){
+Runner.prototype.run = function(fn){
   var self = this;
+
+  // callback
+  self.on('end', function(){
+    process.removeListener('uncaughtException', uncaught);
+    fn(self.failures);
+  });
 
   // run suites
   this.emit('start');
@@ -1990,11 +1981,13 @@ Runner.prototype.run = function(){
   });
 
   // uncaught exception
-  process.on('uncaughtException', function(err){
+  function uncaught(err){
     self.fail(self.test, err);
     self.emit('test end', self.test);
     self.emit('end');
-  });
+  }
+
+  process.on('uncaughtException', uncaught);
 
   return this;
 };
@@ -2021,6 +2014,16 @@ exports = module.exports = Suite;
  */
 
 var map = {};
+
+/**
+ * Reset the suite map.
+ *
+ * @api public
+ */
+
+exports.reset = function(){
+  map = {};
+};
 
 /**
  * Create a new `Suite` with the given `title`
@@ -2070,6 +2073,19 @@ function Suite(title) {
 Suite.prototype = new EventEmitter;
 Suite.prototype.constructor = Suite;
 
+
+/**
+ * Return a clone of this `Suite`.
+ *
+ * @return {Suite}
+ * @api private
+ */
+
+Suite.prototype.clone = function(){
+  var suite = new Suite(this.title);
+  suite.timeout(this._timeout);
+  return suite;
+};
 
 /**
  * Set timeout `ms` or short-hand such as "2s".
@@ -2268,6 +2284,24 @@ exports.escape = function(html) {
 };
 }); // module: utils.js
 
+require.register("watch.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var fs = require('fs');
+
+module.exports = function(paths, fn){
+  var options = { interval: 100 };
+  paths.forEach(function(path){
+    fs.watchFile(path, options, function(curr, prev){
+      if (prev.mtime < curr.mtime) fn(path);
+    });
+  });
+};
+}); // module: watch.js
+
 /**
  * Node shims.
  *
@@ -2290,6 +2324,7 @@ mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite;
   var Reporter = mocha.reporters.HTML;
+
   function parse(qs) {
     return qs
       .replace('?', '')
@@ -2315,8 +2350,8 @@ mocha = require('mocha');
     suite.emit('run');
     var runner = new mocha.Runner(suite);
     var reporter = new Reporter(runner);
-    var params = parse(window.location.search || "");
-    if (pattern = params['grep']) runner.grep(new RegExp(pattern));
+    var query = parse(window.location.search || "");
+    if (query.grep) runner.grep(new RegExp(query.grep));
     runner.run();
   };
 })();
