@@ -350,6 +350,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     <script src="test.xhr.js"></script>
     <script>onload = mocha.run;</script>
 
+### grep
+
+  The client-side may utilize `--grep` as well, however you use the query-string, for example `?grep=api`.
+
 ## mocha.opts
 
  Mocha will attempt to load `./test/mocha.opts`, these are concatenated with `process.argv`, though command-line args will take precedence. For example suppose you have the following _mocha.opts_ file:
