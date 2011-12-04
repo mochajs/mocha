@@ -158,6 +158,13 @@ if (!files.length) {
   });
 }
 
+// resolve
+
+files = files.map(function(path){
+  path = require.resolve(join(cwd, path));
+  return path;
+});
+
 // --watch
 
 if (program.watch) {
@@ -207,7 +214,6 @@ load(files, function(){
 function load(files, fn) {
   var pending = files.length;
   files.forEach(function(file){
-    file = join(cwd, file);
     delete require.cache[file];
     suite.emit('pre-require', global, file);
     suite.emit('require', require(file), file);
