@@ -57,9 +57,11 @@ mocha = require('mocha');
     if (typeof(hooks) === 'object') {
       for (event in hooks) {
         if (typeof(hooks[event]) === 'function') {
-          runner.on(event, function(data) {
-            hooks[event](typeof(data) === 'undefined' ? reporter.stats : data);
-          });
+          (function(event){
+            runner.on(event, function(data) {
+              hooks[event](typeof(data) === 'undefined' ? reporter.stats : data);
+            });
+          })(event);
         }
       }
     }
