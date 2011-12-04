@@ -1970,7 +1970,8 @@ Runner.prototype.runSuite = function(suite, fn){
  */
 
 Runner.prototype.run = function(fn){
-  var self = this;
+  var self = this
+    , fn = fn || function(){};
 
   // callback
   self.on('end', function(){
@@ -2317,6 +2318,7 @@ module.exports = function(paths, fn){
 
 process = {};
 process.nextTick = function(fn){ setTimeout(fn, 0); };
+process.removeListener = function(fn){};
 process.on = function(){};
 process.exit = function(status){};
 process.stdout = {};
