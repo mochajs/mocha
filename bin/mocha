@@ -306,6 +306,7 @@ function showCursor(){
  */
 
 function stop() {
+  process.stdout.write('\033[2K');
   clearInterval(play.timer);
 }
 
