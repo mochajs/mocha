@@ -24,6 +24,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - extensible reporting, bundled with 9+ reporters
   - extensible test DSLs or "interfaces"
   - before, after, before each, after each hooks
+  - coffee-script support
   - TextMate bundle
   - and more!
 
@@ -113,6 +114,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
+## Test duration
+
+  Most of the reporters support some form of displaying
+  test duration, as well as flagging tests that are slow,
+  as shown here with the "spec" reporter:
+
+   ![test duration](images/reporter-spec-duration.png)
+
 ## mocha(1)
 
 
@@ -193,7 +202,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   
 ## Interfaces
 
-  Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __export__ flavoured interfaces.
+  Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __exports__ flavoured interfaces.
 
 ### BDD
 
@@ -254,17 +263,25 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### Dot Matrix
 
-  The Dot Matrix reporter is simply a series of dots
+  The "dot" matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
   pending in blue, slow as yellow.
 
    ![dot matrix reporter](images/reporter-dot.png)
 
+### Spec
+
+  The "spec" reporter outputs a hierarchical view
+  nested just as the test cases are.
+
+   ![spec reporter](images/reporter-spec.png)
+   ![spec reporter with failure](images/reporter-spec-fail.png)
+
 ### TAP
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
-  ![test anything protocol](http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png)
+  ![test anything protocol](images/reporter-tap.png)
 
 ### Landing Strip
 
@@ -281,7 +298,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   the bottom of the output.
 
   ![list reporter](images/reporter-list.png)
-  
+
+### Progress
+
+  The progress reporter implements a simple progress-bar:
+
+  ![progress bar](images/reporter-progress.png)
+
 ### JSON
 
   The JSON reporter outputs a single large JSON object when
@@ -440,6 +463,7 @@ Instead of reporting these as distinct suites, they are merged, yielding the fol
    - [Connect](https://github.com/senchalabs/connect/tree/master/test)
    - [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
    - [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
+   - [Mocha](https://github.com/visionmedia/mocha/tree/master/test)
 
 ## Running mocha's tests
 

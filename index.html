@@ -4,10 +4,12 @@
     <title>Mocha - the fun, simple, flexible JavaScript test framework</title>
     <link rel="stylesheet" href="style.css" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="jquery.js"></script>
+    <script src="highlight.js"></script>
     <script>
-    onload = function(){
-      document.body.setAttribute('class', 'onload');
-    };
+      setTimeout(function(){
+        $('body').addClass('onload');
+      }, 0);
     </script>
   </head>
   <body>
@@ -39,6 +41,7 @@
 <li>extensible reporting, bundled with 9+ reporters</li>
 <li>extensible test DSLs or &ldquo;interfaces&rdquo;</li>
 <li>before, after, before each, after each hooks</li>
+<li>coffee-script support</li>
 <li>TextMate bundle</li>
 <li>and more!</li>
 </ul>
@@ -136,6 +139,14 @@
 })
 </code></pre>
 
+<h2>Test duration</h2>
+
+<p>  Most of the reporters support some form of displaying
+  test duration, as well as flagging tests that are slow,
+  as shown here with the &ldquo;spec&rdquo; reporter:</p>
+
+<p>   <img src="images/reporter-spec-duration.png" alt="test duration" /></p>
+
 <h2>mocha(1)</h2>
 
 <pre><code>Usage: mocha [options] [files]
@@ -150,6 +161,7 @@ Options:
   -g, --grep &lt;pattern&gt;   only run tests matching &lt;pattern&gt;
   -t, --timeout &lt;ms&gt;     set test-case timeout in milliseconds [2000]
   -s, --slow &lt;ms&gt;        "slow" test threshold in milliseconds [75]
+  -C, --no-colors        force disabling of colors
   -G, --growl            enable growl support
 </code></pre>
 
@@ -198,7 +210,7 @@ describe('app', function(){
 
 <h2>Interfaces</h2>
 
-<p>  Mocha &ldquo;interface&rdquo; system allows developers to choose their style of DSL. Shipping with <strong>BDD</strong>, <strong>TDD</strong>, and <strong>export</strong> flavoured interfaces.</p>
+<p>  Mocha &ldquo;interface&rdquo; system allows developers to choose their style of DSL. Shipping with <strong>BDD</strong>, <strong>TDD</strong>, and <strong>exports</strong> flavoured interfaces.</p>
 
 <h3>BDD</h3>
 
@@ -262,17 +274,25 @@ describe('app', function(){
 
 <h3>Dot Matrix</h3>
 
-<p>  The Dot Matrix reporter is simply a series of dots
+<p>  The &ldquo;dot&rdquo; matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
   pending in blue, slow as yellow.</p>
 
 <p>   <img src="images/reporter-dot.png" alt="dot matrix reporter" /></p>
 
+<h3>Spec</h3>
+
+<p>  The &ldquo;spec&rdquo; reporter outputs a hierarchical view
+  nested just as the test cases are.</p>
+
+<p>   <img src="images/reporter-spec.png" alt="spec reporter" />
+   <img src="images/reporter-spec-fail.png" alt="spec reporter with failure" /></p>
+
 <h3>TAP</h3>
 
 <p>  The TAP reporter emits lines for a <a href="http://en.wikipedia.org/wiki/Test_Anything_Protocol">Test-Anything-Protocol</a> consumer.</p>
 
-<p>  <img src="http://f.cl.ly/items/2O0X3h0d1Q430O1t1T3p/Screenshot.png" alt="test anything protocol" /></p>
+<p>  <img src="images/reporter-tap.png" alt="test anything protocol" /></p>
 
 <h3>Landing Strip</h3>
 
@@ -289,6 +309,12 @@ describe('app', function(){
   the bottom of the output.</p>
 
 <p>  <img src="images/reporter-list.png" alt="list reporter" /></p>
+
+<h3>Progress</h3>
+
+<p>  The progress reporter implements a simple progress-bar:</p>
+
+<p>  <img src="images/reporter-progress.png" alt="progress bar" /></p>
 
 <h3>JSON</h3>
 
@@ -453,6 +479,7 @@ describe('merge stuff', function(){
 <li> <a href="https://github.com/senchalabs/connect/tree/master/test">Connect</a></li>
 <li> <a href="https://github.com/visionmedia/superagent/tree/master/test/node">SuperAgent</a></li>
 <li> <a href="https://github.com/LearnBoost/websocket.io/tree/master/test">WebSocket.io</a></li>
+<li> <a href="https://github.com/visionmedia/mocha/tree/master/test">Mocha</a></li>
 </ul>
 
 
