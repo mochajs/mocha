@@ -1,4 +1,10 @@
 
+0.3.1 / 2011-12-04 
+==================
+
+  * Fixed hook event emitter leak. Closes #117
+  * Fixed: export `Spec` constructor. Closes #116
+
 0.3.0 / 2011-12-04 
 ==================
 
