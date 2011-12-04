@@ -114,10 +114,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ## mocha(1)
 
+
     Usage: mocha [options] [files]
-
+    
     Options:
-
+    
       -h, --help             output usage information
       -V, --version          output the version number
       -r, --require <name>   require the given module
@@ -126,7 +127,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -g, --grep <pattern>   only run tests matching <pattern>
       -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
       -s, --slow <ms>        "slow" test threshold in milliseconds [75]
-      -G, --growl            enable growl support
+      -w, --watch            watch test files for changes
+      -C, --no-colors        force disabling of colors
+      -c, --colors           force enabling of colors
+      -G, --growl            enable growl notification support
+      --globals <names>      allow the given comma-delimited global [names]
+      --ignore-leaks         ignore global variable leaks
+      --interfaces           display available interfaces
+      --reporters            display available reporters
 
 ### -r, --require &lt;name&gt;
 
