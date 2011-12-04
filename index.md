@@ -136,6 +136,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       --interfaces           display available interfaces
       --reporters            display available reporters
 
+### -w, --watch
+
+  Executes tests on changes to the test files.
+
 ### --globals &lt;names&gt;
 
   Accepts a comma-delimited list of accepted global variable names. For example suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`.
