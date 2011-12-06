@@ -1,4 +1,9 @@
 
+0.3.2 / 2011-12-05 
+==================
+
+  * Fixed weird reporting when `err.message` is not present
+
 0.3.1 / 2011-12-04 
 ==================
 
