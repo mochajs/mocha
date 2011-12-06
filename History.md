@@ -1,4 +1,20 @@
 
+0.3.1 / 2011-12-04 
+==================
+
+  * Fixed hook event emitter leak. Closes #117
+  * Fixed: export `Spec` constructor. Closes #116
+
+0.3.0 / 2011-12-04 
+==================
+
+  * Added `-w, --watch`. Closes #72
+  * Added `--ignore-leaks` to ignore global leak checking
+  * Added browser `?grep=pattern` support
+  * Added `--globals <names>` to specify accepted globals. Closes #99
+  * Fixed `mocha-debug(1)` on some systems. Closes #232
+  * Fixed growl total, use `runner.total`
+
 0.2.0 / 2011-11-30 
 ==================
 

@@ -32,11 +32,21 @@ h2 {
 }
 
 .test.pass::before {
-  content: '◦';
+  content: '✓';
   font-size: 12px;
   display: block;
   float: left;
   margin-right: 5px;
+  color: #00c41c;
+}
+
+.test.pending {
+  color: #0b97c4;
+}
+
+.test.pending::before {
+  content: '◦';
+  color: #0b97c4;
 }
 
 .test.fail {
