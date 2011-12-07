@@ -15,7 +15,8 @@
     "test": "make test"
   }
   , "dependencies":{
-    "commander": "0.3.2"
+      "commander": "0.3.2"
+    , "debug": "*"
   }
   , "devDependencies": {
     "should": "0.3.x"
