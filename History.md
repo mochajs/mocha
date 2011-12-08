@@ -1,4 +1,10 @@
 
+0.3.3 / 2011-12-08 
+==================
+
+  * Fixed hook timeouts. Closes #120
+  * Fixed uncaught exceptions in hooks
+
 0.3.2 / 2011-12-05 
 ==================
 
