@@ -1,6 +1,7 @@
 
 var mocha = require('../')
-  , Runnable = mocha.Runnable;
+  , Runnable = mocha.Runnable
+  , EventEmitter = require('events').EventEmitter;
 
 describe('Runnable(title, fn)', function(){
   describe('#timeout(ms)', function(){
@@ -87,6 +88,14 @@ describe('Runnable(title, fn)', function(){
           });
 
           test.run(done);
+        })
+      })
+
+      describe('when the callback is invoked with a non-Error', function(){
+        it('should pass', function(done){
+          var thing = new EventEmitter;
+          thing.on('foo', done);
+          thing.emit('foo', 'bar');
         })
       })
 
