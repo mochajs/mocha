@@ -46,6 +46,15 @@ require.relative = function (parent) {
   };
 
 
+require.register("browser/debug.js", function(module, exports, require){
+
+module.exports = function(type){
+  return function(){
+    
+  }
+};
+}); // module: browser/debug.js
+
 require.register("browser/events.js", function(module, exports, require){
 
 /**
@@ -424,7 +433,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.3.0';
+exports.version = '0.3.3';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -555,7 +564,8 @@ exports.list = function(failures){
     // msg
     var err = test.err
       , stack = err.stack
-      , index = stack.indexOf(err.message) + err.message.length
+      , message = err.message || ''
+      , index = stack.indexOf(message) + message.length
       , msg = stack.slice(0, index);
 
     // indent stack trace without msg
@@ -940,6 +950,7 @@ exports.TAP = require('./tap');
 exports.JSON = require('./json');
 exports.HTML = require('./html');
 exports.List = require('./list');
+exports.Spec = require('./spec');
 exports.Progress = require('./progress');
 exports.Landing = require('./landing');
 exports.JSONStream = require('./json-stream');
@@ -1484,7 +1495,8 @@ require.register("runnable.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var EventEmitter = require('browser/events').EventEmitter;
+var EventEmitter = require('browser/events').EventEmitter
+  , debug = require('browser/debug')('runnable');
 
 /**
  * Expose `Runnable`.
@@ -1505,7 +1517,7 @@ function Runnable(title, fn) {
   this.fn = fn;
   this.async = fn && fn.length;
   this.sync = ! this.async;
-  this.timeout(2000);
+  this._timeout = 2000;
 }
 
 /**
@@ -1526,6 +1538,7 @@ Runnable.prototype.constructor = Runnable;
 
 Runnable.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
+  debug('timeout %d', ms);
   this._timeout = ms;
   return this;
 };
@@ -1609,6 +1622,7 @@ require.register("runner.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
+  , debug = require('browser/debug')('runner')
   , Test = require('./test')
   , noop = function(){};
 
@@ -1666,6 +1680,7 @@ Runner.prototype.constructor = Runner;
  */
 
 Runner.prototype.grep = function(re){
+  debug('grep %s', re);
   this._grep = re;
   return this;
 };
@@ -1679,6 +1694,7 @@ Runner.prototype.grep = function(re){
  */
 
 Runner.prototype.globals = function(arr){
+  debug('globals %j', arr);
   arr.forEach(function(arr){
     this._globals.push(arr);
   }, this);
@@ -1758,6 +1774,7 @@ Runner.prototype.hook = function(name, fn){
   function next(i) {
     var hook = hooks[i];
     if (!hook) return fn();
+    self.currentRunnable = hook;
 
     self.emit('hook', hook);
 
@@ -1766,6 +1783,7 @@ Runner.prototype.hook = function(name, fn){
     });
 
     hook.run(function(err){
+      hook.removeAllListeners('error');
       if (err) return self.failHook(hook, err);
       self.emit('hook end', hook);
       next(++i);
@@ -1912,7 +1930,7 @@ Runner.prototype.runTests = function(suite, fn){
     }
 
     // execute test and hook(s)
-    self.emit('test', self.test = test);
+    self.emit('test', self.test = self.currentRunnable = test);
     self.hookDown('beforeEach', function(){
       self.runTest(function(err){
         if (err) return next(err);
@@ -1940,6 +1958,7 @@ Runner.prototype.runSuite = function(suite, fn){
   var self = this
     , i = 0;
 
+  debug('run suite %s', suite.fullTitle());
   this.emit('suite', this.suite = suite);
 
   function next() {
@@ -1973,8 +1992,11 @@ Runner.prototype.run = function(fn){
   var self = this
     , fn = fn || function(){};
 
+  debug('start');
+
   // callback
   self.on('end', function(){
+    debug('end');
     process.removeListener('uncaughtException', uncaught);
     fn(self.failures);
   });
@@ -1982,12 +2004,14 @@ Runner.prototype.run = function(fn){
   // run suites
   this.emit('start');
   this.runSuite(this.suite, function(){
+    debug('finished running');
     self.emit('end');
   });
 
   // uncaught exception
   function uncaught(err){
-    self.fail(self.test, err);
+    debug('uncaught exception');
+    self.fail(self.currentRunnable, err);
     self.emit('test end', self.test);
     self.emit('end');
   }
@@ -2006,6 +2030,7 @@ require.register("suite.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
+  , debug = require('browser/debug')('suite')
   , Hook = require('./hook');
 
 /**
@@ -2068,7 +2093,7 @@ function Suite(title) {
   this._afterEach = [];
   this._afterAll = [];
   this.root = !title;
-  this.timeout(2000);
+  this._timeout = 2000;
 }
 
 /**
@@ -2088,7 +2113,8 @@ Suite.prototype.constructor = Suite;
 
 Suite.prototype.clone = function(){
   var suite = new Suite(this.title);
-  suite.timeout(this._timeout);
+  debug('clone');
+  suite.timeout(this.timeout());
   return suite;
 };
 
@@ -2096,12 +2122,14 @@ Suite.prototype.clone = function(){
  * Set timeout `ms` or short-hand such as "2s".
  *
  * @param {Number|String} ms
- * @return {Suite} for chaining
+ * @return {Suite|Number} for chaining
  * @api private
  */
 
 Suite.prototype.timeout = function(ms){
+  if (0 == arguments.length) return this._timeout;
   if (String(ms).match(/s$/)) ms = parseFloat(ms) * 1000;
+  debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);
   return this;
 };
@@ -2117,6 +2145,7 @@ Suite.prototype.timeout = function(ms){
 Suite.prototype.beforeAll = function(fn){
   var hook = new Hook('"before all" hook', fn);
   hook.parent = this;
+  hook.timeout(this.timeout());
   this._beforeAll.push(hook);
   this.emit('beforeAll', hook);
   return this;
@@ -2133,6 +2162,7 @@ Suite.prototype.beforeAll = function(fn){
 Suite.prototype.afterAll = function(fn){
   var hook = new Hook('"after all" hook', fn);
   hook.parent = this;
+  hook.timeout(this.timeout());
   this._afterAll.push(hook);
   this.emit('afterAll', hook);
   return this;
@@ -2149,6 +2179,7 @@ Suite.prototype.afterAll = function(fn){
 Suite.prototype.beforeEach = function(fn){
   var hook = new Hook('"before each" hook', fn);
   hook.parent = this;
+  hook.timeout(this.timeout());
   this._beforeEach.push(hook);
   this.emit('beforeEach', hook);
   return this;
@@ -2165,6 +2196,7 @@ Suite.prototype.beforeEach = function(fn){
 Suite.prototype.afterEach = function(fn){
   var hook = new Hook('"after each" hook', fn);
   hook.parent = this;
+  hook.timeout(this.timeout());
   this._afterEach.push(hook);
   this.emit('afterEach', hook);
   return this;
@@ -2180,7 +2212,7 @@ Suite.prototype.afterEach = function(fn){
 
 Suite.prototype.addSuite = function(suite){
   suite.parent = this;
-  if (this._timeout) suite.timeout(this._timeout);
+  suite.timeout(this.timeout());
   this.suites.push(suite);
   this.emit('suite', suite);
   return this;
@@ -2196,7 +2228,7 @@ Suite.prototype.addSuite = function(suite){
 
 Suite.prototype.addTest = function(test){
   test.parent = this;
-  if (this._timeout) test.timeout(this._timeout);
+  test.timeout(this.timeout());
   this.tests.push(test);
   this.emit('test', test);
   return this;
@@ -2295,11 +2327,13 @@ require.register("watch.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var fs = require('browser/fs');
+var fs = require('browser/fs')
+  , debug = require('browser/debug')('watch');
 
 module.exports = function(paths, fn){
   var options = { interval: 100 };
   paths.forEach(function(path){
+    debug('watch %s', path);
     fs.watchFile(path, options, function(curr, prev){
       if (prev.mtime < curr.mtime) fn(path);
     });
