@@ -379,6 +379,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       };
     </script>
 
+  Feel free to hot-link the [mocha.css](https://raw.github.com/visionmedia/mocha/master/mocha.css) and [mocha.js](https://raw.github.com/visionmedia/mocha/master/mocha.js) from GitHub.
+
 ### grep
 
   The client-side may utilize `--grep` as well, however you use the query-string, for example `?grep=api`.
