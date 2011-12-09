@@ -218,7 +218,7 @@ EventEmitter.prototype.emit = function (name) {
     return false;
   }
 
-  var args = [].slice.call(arguments);
+  var args = [].slice.call(arguments, 1);
 
   if ('function' == typeof handler) {
     handler.apply(this, args);
