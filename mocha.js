@@ -433,7 +433,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.3.3';
+exports.version = '0.3.4';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -1596,7 +1596,10 @@ Runnable.prototype.run = function(fn){
   // async
   if (this.async) {
     try {
-      this.fn(done);
+      this.fn(function(err){
+        if (err instanceof Error) return done(err);
+        done();
+      });
     } catch (err) {
       done(err);
     }
@@ -1907,12 +1910,6 @@ Runner.prototype.runTests = function(suite, fn){
     , test;
 
   function next(err) {
-    // error handling
-    if (err) {
-      self.fail(test, err);
-      self.emit('test end', test);
-    }
-
     // next test
     test = tests.shift();
 
@@ -1933,7 +1930,12 @@ Runner.prototype.runTests = function(suite, fn){
     self.emit('test', self.test = self.currentRunnable = test);
     self.hookDown('beforeEach', function(){
       self.runTest(function(err){
-        if (err) return next(err);
+        if (err) {
+          self.fail(test, err);
+          self.emit('test end', test);
+          return self.hookUp('afterEach', next);
+        }
+
         self.emit('pass', test);
         test.passed = true;
         self.emit('test end', test);

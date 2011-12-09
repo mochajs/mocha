@@ -14,7 +14,7 @@ mocha.js: $(SRC)
 	@cat support/tail.js >> mocha.js
 
 clean:
-	rm -f mocha.js
+	rm -f mocha.{js,css}
 
 test: test-unit
 
