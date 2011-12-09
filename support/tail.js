@@ -9,10 +9,13 @@
  */
 
 process = {};
-process.nextTick = function(fn){ setTimeout(fn, 0); };
 process.exit = function(status){};
 process.stdout = {};
 global = this;
+
+process.nextTick = function(fn){
+  setTimeout(fn, 0);
+};
 
 process.removeListener = function(ev){
   if ('uncaughtException' == ev) {
