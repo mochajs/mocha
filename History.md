@@ -1,4 +1,12 @@
 
+0.3.4 / 2011-12-08 
+==================
+
+  * Added: allow `done()` to be called with non-Error
+  * Added: return Runner from `mocha.run()`. Closes #126
+  * Fixed: run afterEach even on failures. Closes #125
+  * Fixed clobbering of current runnable. Closes #121
+
 0.3.3 / 2011-12-08 
 ==================
 

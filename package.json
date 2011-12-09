@@ -1,6 +1,6 @@
 {
     "name": "mocha"
-  , "version": "0.3.3"
+  , "version": "0.3.4"
   , "description": "Test framework inspired by JSpec, Expresso, & Qunit"
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "bin": { "mocha": "./bin/mocha" }
