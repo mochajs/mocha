@@ -13,14 +13,7 @@
     </script>
     <script src="large.js"></script>
     <script>
-      onload = function(){
-        var runner = mocha.run();
-        runner.globals(['foo', 'bar', 'baz']);
-
-        runner.on('test end', function(test){
-          console.log(test.fullTitle());
-        });
-      };
+      onload = mocha.run;
     </script>
   </head>
   <body>

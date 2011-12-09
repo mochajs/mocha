@@ -81,26 +81,30 @@ body {
   -webkit-box-shadow: 0 1px 3px #eee;
 }
 
-#mocha #error {
+#error {
   color: #c00;
   font-size: 1.5  em;
   font-weight: 100;
   letter-spacing: 1px;
 }
 
-#mocha #stats {
+#stats {
   position: fixed;
-  top: 15px;
+  top: 30px;
   right: 30px;
   font-size: 12px;
   margin: 0;
   color: #888;
 }
 
+#stats .progress {
+  margin-bottom: 10px;
+}
 
 #stats em {
   color: black;
 }
+
 #stats li {
   list-style: none;
 }

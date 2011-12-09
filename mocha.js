@@ -242,6 +242,135 @@ require.register("browser/fs.js", function(module, exports, require){
 
 }); // module: browser/fs.js
 
+require.register("browser/progress.js", function(module, exports, require){
+
+/**
+ * Expose `Progress`.
+ */
+
+module.exports = Progress;
+
+/**
+ * Initialize a new `Progress` indicator.
+ */
+
+function Progress() {
+  this.percent = 0;
+  this.size(0);
+  this.fontSize(12);
+  this.font('helvetica, arial, sans-serif');
+}
+
+/**
+ * Set progress size to `n`.
+ *
+ * @param {Number} n
+ * @return {Progress} for chaining
+ * @api public
+ */
+
+Progress.prototype.size = function(n){
+  this._size = n;
+  return this;
+};
+
+/**
+ * Set text to `str`.
+ *
+ * @param {String} str
+ * @return {Progress} for chaining
+ * @api public
+ */
+
+Progress.prototype.text = function(str){
+  this._text = str;
+  return this;
+};
+
+/**
+ * Set font size to `n`.
+ *
+ * @param {Number} n
+ * @return {Progress} for chaining
+ * @api public
+ */
+
+Progress.prototype.fontSize = function(n){
+  this._fontSize = n;
+  return this;
+};
+
+/**
+ * Set font `family`.
+ *
+ * @param {String} family
+ * @return {Progress} for chaining
+ */
+
+Progress.prototype.font = function(family){
+  this._font = family;
+  return this;
+};
+
+/**
+ * Update percentage to `n`.
+ *
+ * @param {Number} n
+ * @return {Progress} for chaining
+ */
+
+Progress.prototype.update = function(n){
+  this.percent = n;
+  return this;
+};
+
+/**
+ * Draw on `ctx`.
+ *
+ * @param {CanvasRenderingContext2d} ctx
+ * @return {Progress} for chaining
+ */
+
+Progress.prototype.draw = function(ctx){
+  var percent = Math.min(this.percent, 100)
+    , size = this._size
+    , half = size / 2
+    , x = half
+    , y = half
+    , rad = half - 1
+    , fontSize = this._fontSize;
+
+  ctx.font = fontSize + 'px ' + this._font;
+
+  var angle = Math.PI * 2 * (percent / 100);
+  ctx.clearRect(0, 0, size, size);
+
+  // outer circle
+  ctx.strokeStyle = '#9f9f9f';
+  ctx.beginPath();
+  ctx.arc(x, y, rad, 0, angle, false);
+  ctx.stroke();
+
+  // inner circle
+  ctx.strokeStyle = '#eee';
+  ctx.beginPath();
+  ctx.arc(x, y, rad - 1, 0, angle, true);
+  ctx.stroke();
+
+  // text
+  var text = this._text || (percent | 0) + '%'
+    , w = ctx.measureText(text).width;
+
+  ctx.fillText(
+      text
+    , x - w / 2 + 1
+    , y + fontSize / 2 - 1);
+
+  return this;
+};
+
+}); // module: browser/progress.js
+
 require.register("browser/tty.js", function(module, exports, require){
 
 exports.isatty = function(){
@@ -949,7 +1078,8 @@ require.register("reporters/html.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , utils = require('../utils');
+  , utils = require('../utils')
+  , Progress = require('../browser/progress');
 
 /**
  * Expose `Doc`.
@@ -962,6 +1092,7 @@ exports = module.exports = HTML;
  */
 
 var statsTemplate = '<ul id="stats">'
+  + '<li class="progress"><canvas width="50" height="50"></canvas></li>'
   + '<li class="passes">passes: <em>0</em></li>'
   + '<li class="failures">failures: <em>0</em></li>'
   + '<li class="duration">duration: <em>0</em>s</li>'
@@ -984,9 +1115,13 @@ function HTML(runner) {
     , total = runner.total
     , root = $('#mocha')
     , stack = [root]
-    , stat = $(statsTemplate).appendTo(root);
+    , stat = $(statsTemplate).appendTo(root)
+    , canvas = stat.find('canvas').get(0)
+    , ctx = canvas.getContext('2d')
+    , progress = new Progress;
 
   if (!root.length) return error('#mocha div missing, add it to your document');
+  progress.size(50);
 
   runner.on('suite', function(suite){
     if (suite.root) return;
@@ -1006,6 +1141,12 @@ function HTML(runner) {
   });
 
   runner.on('test end', function(test){
+    // TODO: add to stats
+    var percent = stats.tests / total * 100 | 0;
+
+    // update progress bar
+    progress.update(percent).draw(ctx);
+
     // update stats
     var ms = new Date - stats.start;
     stat.find('.passes em').text(stats.passes);
