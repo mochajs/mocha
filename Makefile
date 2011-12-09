@@ -76,4 +76,4 @@ watch:
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit non-tty test-grep tm clean
+.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit non-tty test-grep tm clean mocha.js
