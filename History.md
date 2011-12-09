@@ -1,4 +1,12 @@
 
+0.3.5 / 2011-12-08 
+==================
+
+  * Added support for `window.onerror` [guillermo]
+  * Fixed: clear timeout on uncaught exceptions. Closes #131 [guillermo]
+  * Added `mocha.css` to PHONY list.
+  * Added `mocha.js` to PHONY list.
+
 0.3.4 / 2011-12-08 
 ==================
 

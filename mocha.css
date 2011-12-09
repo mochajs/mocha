@@ -4,34 +4,34 @@ body {
   padding: 60px 50px;
 }
 
-h1, h2 {
+#mocha h1, h2 {
   margin: 0;
 }
 
-h1 {
+#mocha h1 {
   font-size: 1em;
   font-weight: 200;
 }
 
-.suite .suite h1 {
+#mocha .suite .suite h1 {
   font-size: .8em;
 }
 
-h2 {
+#mocha h2 {
   font-size: 12px;
   font-weight: normal;
   cursor: pointer;
 }
 
-.suite {
+#mocha .suite {
   margin-left: 15px;
 }
 
-.test {
+#mocha .test {
   margin-left: 15px;
 }
 
-.test.pass::before {
+#mocha .test.pass::before {
   content: '✓';
   font-size: 12px;
   display: block;
@@ -40,24 +40,24 @@ h2 {
   color: #00c41c;
 }
 
-.test.pending {
+#mocha .test.pending {
   color: #0b97c4;
 }
 
-.test.pending::before {
+#mocha .test.pending::before {
   content: '◦';
   color: #0b97c4;
 }
 
-.test.fail {
+#mocha .test.fail {
   color: #c00;
 }
 
-.test.fail pre {
+#mocha .test.fail pre {
   color: black;
 }
 
-.test.fail::before {
+#mocha .test.fail::before {
   content: '✖';
   font-size: 12px;
   display: block;
@@ -66,11 +66,11 @@ h2 {
   color: #c00;
 }
 
-.test pre.error {
+#mocha .test pre.error {
   color: #c00;
 }
 
-.test pre {
+#mocha .test pre {
   display: inline-block;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
@@ -81,14 +81,14 @@ h2 {
   -webkit-box-shadow: 0 1px 3px #eee;
 }
 
-#error {
+#mocha #error {
   color: #c00;
   font-size: 1.5  em;
   font-weight: 100;
   letter-spacing: 1px;
 }
 
-#stats {
+#mocha #stats {
   position: fixed;
   top: 15px;
   right: 30px;

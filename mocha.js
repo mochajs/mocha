@@ -433,7 +433,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.3.4';
+exports.version = '0.3.5';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -1556,6 +1556,16 @@ Runnable.prototype.fullTitle = function(){
 };
 
 /**
+ * Clear the timeout.
+ *
+ * @api private
+ */
+
+Runnable.prototype.clearTimeout = function(){
+  clearTimeout(this.timer);
+};
+
+/**
  * Run the test and invoke `fn(err)`.
  *
  * @param {Function} fn
@@ -1567,12 +1577,11 @@ Runnable.prototype.run = function(fn){
     , ms = this.timeout()
     , start = new Date
     , finished
-    , emitted
-    , timer;
+    , emitted;
 
   // timeout
   if (this.async) {
-    timer = setTimeout(function(){
+    this.timer = setTimeout(function(){
       done(new Error('timeout of ' + ms + 'ms exceeded'));
     }, ms);
   }
@@ -1587,7 +1596,7 @@ Runnable.prototype.run = function(fn){
   // finished
   function done(err) {
     if (finished) return multiple();
-    clearTimeout(timer);
+    self.clearTimeout();
     self.duration = new Date - start;
     finished = true;
     fn(err);
@@ -2014,6 +2023,7 @@ Runner.prototype.run = function(fn){
   // uncaught exception
   function uncaught(err){
     debug('uncaught exception');
+    self.currentRunnable.clearTimeout();
     self.fail(self.currentRunnable, err);
     self.emit('test end', self.test);
     self.emit('end');
@@ -2354,20 +2364,25 @@ module.exports = function(paths, fn){
  */
 
 process = {};
-process.nextTick = function(fn){ setTimeout(fn, 0); };
+process.exit = function(status){};
+process.stdout = {};
+global = this;
+
+process.nextTick = function(fn){
+  setTimeout(fn, 0);
+};
+
 process.removeListener = function(ev){
   if ('uncaughtException' == ev) {
     window.onerror = null;
   }
 };
+
 process.on = function(ev, fn){
   if ('uncaughtException' == ev) {
     window.onerror = fn;
   }
 };
-process.exit = function(status){};
-process.stdout = {};
-global = this;
 
 mocha = require('mocha');
 
