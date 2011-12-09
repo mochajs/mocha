@@ -433,7 +433,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.3.5';
+exports.version = '0.3.6';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -2053,22 +2053,6 @@ var EventEmitter = require('browser/events').EventEmitter
 exports = module.exports = Suite;
 
 /**
- * Suite map.
- */
-
-var map = {};
-
-/**
- * Reset the suite map.
- *
- * @api public
- */
-
-exports.reset = function(){
-  map = {};
-};
-
-/**
  * Create a new `Suite` with the given `title`
  * and parent `Suite`. When a suite with the
  * same title is already present, that suite
@@ -2085,9 +2069,8 @@ exports.create = function(parent, title){
   var suite = new Suite(title);
   suite.parent = parent;
   title = suite.fullTitle();
-  if (map[title]) return map[title];
   parent.addSuite(suite);
-  return map[title] = suite;
+  return suite;
 };
 
 /**
