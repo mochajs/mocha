@@ -10,11 +10,21 @@
 
 process = {};
 process.nextTick = function(fn){ setTimeout(fn, 0); };
-process.removeListener = function(fn){};
-process.on = function(){};
 process.exit = function(status){};
 process.stdout = {};
 global = this;
+
+process.removeListener = function(ev){
+  if ('uncaughtException' == ev) {
+    window.onerror = null;
+  }
+};
+
+process.on = function(ev, fn){
+  if ('uncaughtException' == ev) {
+    window.onerror = fn;
+  }
+};
 
 mocha = require('mocha');
 
