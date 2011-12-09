@@ -50,6 +50,6 @@ mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
-    runner.run();
+    return runner.run();
   };
 })();

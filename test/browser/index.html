@@ -14,7 +14,16 @@
     <script src="array.js"></script>
     <script src="../duration.js"></script>
     <script src="../timeout.js"></script>
-    <script>onload = mocha.run;</script>
+    <script>
+      onload = function(){
+        var runner = mocha.run();
+        runner.globals(['foo', 'bar', 'baz']);
+
+        runner.on('test end', function(test){
+          console.log(test.fullTitle());
+        });
+      };
+    </script>
   </head>
   <body>
     <div id="mocha"></div>

@@ -1985,6 +1985,7 @@ Runner.prototype.runSuite = function(suite, fn){
  * on completion.
  *
  * @param {Function} fn
+ * @return {Runner} for chaining
  * @api public
  */
 
@@ -2392,6 +2393,6 @@ mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
-    runner.run();
+    return runner.run();
   };
 })();
