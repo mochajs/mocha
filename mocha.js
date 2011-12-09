@@ -61,7 +61,7 @@ require.register("browser/events.js", function(module, exports, require){
  * Module exports.
  */
 
-module.exports = EventEmitter
+exports.EventEmitter = EventEmitter;
 
 /**
  * Check if `obj` is an array.
