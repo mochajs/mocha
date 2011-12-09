@@ -392,38 +392,6 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ mocha --reporter list --growl
 
-## Suite merging
-
-  Suites with common names are "merged" in order
-  to produce unified reporting, especially when
-  meta-generating tests.
-
-    describe('merge', function(){
-      describe('stuff', function(){
-        describe('one', function(){
-          it('should do something', function(){})
-        })
-      })
-    })
-
-    describe('merge', function(){
-      describe('stuff', function(){
-        describe('two', function(){
-          it('should do something', function(){})
-        })
-      })
-    })
-
-    describe('merge stuff', function(){
-      describe('three', function(){
-        it('should do something', function(){})
-      })
-    })
-
-Instead of reporting these as distinct suites, they are merged, yielding the following: 
-
-  ![mocha suite merging](http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png)
-
 ## Best practices
 
 ### test/*
