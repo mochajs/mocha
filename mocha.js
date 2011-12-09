@@ -1,3 +1,5 @@
+;(function(){
+
 
 // CommonJS require()
 
@@ -2527,4 +2529,5 @@ mocha = require('mocha');
     if (query.grep) runner.grep(new RegExp(query.grep));
     return runner.run();
   };
+})();
 })();
