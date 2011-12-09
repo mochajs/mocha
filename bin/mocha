@@ -191,7 +191,6 @@ if (program.watch) {
     stop()
     suite = suite.clone();
     ui = interfaces[program.ui](suite);
-    Suite.reset();
     load(files, function(){
       run(suite, function(){
         play(frames);
