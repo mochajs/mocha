@@ -71,7 +71,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 watch:
-	watch --interval=1 $(MAKE) mocha.js
+	watch --interval=1 $(MAKE) mocha.{js,css}
 
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
