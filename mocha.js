@@ -737,7 +737,7 @@ exports.colors = {
   , 'bright fail': 91
   , 'bright yellow': 93
   , 'pending': 36
-  , 'suite': '40'
+  , 'suite': 0
   , 'error title': 0
   , 'error message': 31
   , 'error stack': 90
@@ -2618,9 +2618,7 @@ process.exit = function(status){};
 process.stdout = {};
 global = this;
 
-process.nextTick = function(fn){
-  setTimeout(fn, 0);
-};
+process.nextTick = function(fn){ fn(); };
 
 process.removeListener = function(ev){
   if ('uncaughtException' == ev) {
