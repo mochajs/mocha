@@ -11,18 +11,9 @@
         if (!expr) throw new Error(msg || 'failed');
       }
     </script>
-    <script src="array.js"></script>
-    <script src="../duration.js"></script>
-    <script src="../timeout.js"></script>
+    <script src="large.js"></script>
     <script>
-      onload = function(){
-        var runner = mocha.run();
-        runner.globals(['foo', 'bar', 'baz']);
-
-        runner.on('test end', function(test){
-          console.log(test.fullTitle());
-        });
-      };
+      onload = mocha.run;
     </script>
   </head>
   <body>

@@ -11,10 +11,10 @@ mocha.css: test/browser/style.css
 
 mocha.js: $(SRC)
 	@node support/compile $^
-	@cat support/tail.js >> mocha.js
+	@cat support/head.js _mocha.js support/{tail,foot}.js > mocha.js
 
 clean:
-	rm -f mocha.js
+	rm -f mocha.{js,css}
 
 test: test-unit
 
@@ -71,7 +71,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 watch:
-	watch --interval=1 $(MAKE) mocha.js
+	watch --interval=1 $(MAKE) mocha.{js,css}
 
 tm:
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)

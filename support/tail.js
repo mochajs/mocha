@@ -9,11 +9,23 @@
  */
 
 process = {};
-process.nextTick = function(fn){ setTimeout(fn, 0); };
-process.on = function(){};
 process.exit = function(status){};
 process.stdout = {};
 global = this;
+
+process.nextTick = function(fn){ fn(); };
+
+process.removeListener = function(ev){
+  if ('uncaughtException' == ev) {
+    window.onerror = null;
+  }
+};
+
+process.on = function(ev, fn){
+  if ('uncaughtException' == ev) {
+    window.onerror = fn;
+  }
+};
 
 mocha = require('mocha');
 
@@ -66,6 +78,6 @@ mocha = require('mocha');
       }
     }
 
-    runner.run();
+    return runner.run();
   };
 })();

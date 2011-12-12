@@ -1,4 +1,52 @@
 
+0.3.6 / 2011-12-09 
+==================
+
+  * Removed suite merging (for now)
+
+0.3.5 / 2011-12-08 
+==================
+
+  * Added support for `window.onerror` [guillermo]
+  * Fixed: clear timeout on uncaught exceptions. Closes #131 [guillermo]
+  * Added `mocha.css` to PHONY list.
+  * Added `mocha.js` to PHONY list.
+
+0.3.4 / 2011-12-08 
+==================
+
+  * Added: allow `done()` to be called with non-Error
+  * Added: return Runner from `mocha.run()`. Closes #126
+  * Fixed: run afterEach even on failures. Closes #125
+  * Fixed clobbering of current runnable. Closes #121
+
+0.3.3 / 2011-12-08 
+==================
+
+  * Fixed hook timeouts. Closes #120
+  * Fixed uncaught exceptions in hooks
+
+0.3.2 / 2011-12-05 
+==================
+
+  * Fixed weird reporting when `err.message` is not present
+
+0.3.1 / 2011-12-04 
+==================
+
+  * Fixed hook event emitter leak. Closes #117
+  * Fixed: export `Spec` constructor. Closes #116
+
+0.3.0 / 2011-12-04 
+==================
+
+  * Added `-w, --watch`. Closes #72
+  * Added `--ignore-leaks` to ignore global leak checking
+  * Added browser `?grep=pattern` support
+  * Added `--globals <names>` to specify accepted globals. Closes #99
+  * Fixed `mocha-debug(1)` on some systems. Closes #232
+  * Fixed growl total, use `runner.total`
+
 0.2.0 / 2011-11-30 
 ==================
 

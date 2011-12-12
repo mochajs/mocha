@@ -44,7 +44,9 @@ function parse(js) {
 function parseRequires(js) {
   return js
     .replace(/require\('events'\)/g, "require('browser/events')")
+    .replace(/require\('debug'\)/g, "require('browser/debug')")
     .replace(/require\('tty'\)/g, "require('browser/tty')")
+    .replace(/require\('fs'\)/g, "require('browser/fs')")
 }
 
 /**
@@ -78,7 +80,7 @@ function compile() {
     buf += js;
     buf += '\n}); // module: ' + file + '\n';
   });
-  fs.writeFile('mocha.js', buf, function(err){
+  fs.writeFile('_mocha.js', buf, function(err){
     if (err) throw err;
     console.log('  \033[90m create : \033[0m\033[36m%s\033[0m', 'mocha.js');
     console.log();
