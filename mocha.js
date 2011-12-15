@@ -688,7 +688,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.3.6';
+exports.version = '0.4.0';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -1745,15 +1745,32 @@ function TAP(runner) {
     ++n;
   });
 
+  runner.on('pending', function(test){
+    console.log('ok %d %s # SKIP -', n, title(test));
+  });
+
   runner.on('pass', function(test){
-    console.log('ok %d %s', n, test.fullTitle());
+    console.log('ok %d %s', n, title(test));
   });
 
   runner.on('fail', function(test, err){
-    console.log('not ok %d %s', n, test.fullTitle());
+    console.log('not ok %d %s', n, title(test));
     console.log(err.stack.replace(/^/gm, '  '));
   });
 }
+
+/**
+ * Return a TAP-safe title of `test`
+ *
+ * @param {Object} test
+ * @return {String}
+ * @api private
+ */
+
+function title(test) {
+  return test.fullTitle().replace(/#/g, '');
+}
+
 }); // module: reporters/tap.js
 
 require.register("runnable.js", function(module, exports, require){
@@ -1807,6 +1824,7 @@ Runnable.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
   debug('timeout %d', ms);
   this._timeout = ms;
+  if (this.timer) this.resetTimeout();
   return this;
 };
 
@@ -1833,6 +1851,24 @@ Runnable.prototype.clearTimeout = function(){
 };
 
 /**
+ * Reset the timeout.
+ *
+ * @api private
+ */
+
+Runnable.prototype.resetTimeout = function(){
+  var self = this
+    , ms = this.timeout();
+
+  this.clearTimeout();
+  if (ms) {
+    this.timer = setTimeout(function(){
+      self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
+    }, ms);
+  }
+};
+
+/**
  * Run the test and invoke `fn(err)`.
  *
  * @param {Function} fn
@@ -1848,9 +1884,11 @@ Runnable.prototype.run = function(fn){
 
   // timeout
   if (this.async) {
-    this.timer = setTimeout(function(){
-      done(new Error('timeout of ' + ms + 'ms exceeded'));
-    }, ms);
+    if (ms) {
+      this.timer = setTimeout(function(){
+        done(new Error('timeout of ' + ms + 'ms exceeded'));
+      }, ms);
+    }
   }
 
   // called multiple times
@@ -1868,6 +1906,9 @@ Runnable.prototype.run = function(fn){
     finished = true;
     fn(err);
   }
+
+  // for .resetTimeout()
+  this.callback = done;
 
   // async
   if (this.async) {
