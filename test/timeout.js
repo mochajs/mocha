@@ -11,4 +11,10 @@ describe('timeouts', function(){
     // setTimeout(done, 3000);
     done();
   })
-});
+
+  it('should allow overriding per-test', function(done){
+    this.timeout(1000);
+    setTimeout(done, 300);
+  })
+})
+
