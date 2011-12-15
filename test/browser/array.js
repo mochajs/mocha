@@ -19,7 +19,7 @@ describe('Array', function(){
   describe('#pop()', function(){
     it('should remove and return the last value', function(){
       var arr = [1,2,3];
-      assert(arr.pop() == 5);
+      assert(arr.pop() == 3);
     })
   })
 })
