@@ -688,7 +688,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.4.0';
+exports.version = '0.5.0';
 
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
@@ -1773,6 +1773,51 @@ function title(test) {
 
 }); // module: reporters/tap.js
 
+require.register("reporters/teamcity.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base');
+
+/**
+ * Expose `Teamcity`.
+ */
+
+exports = module.exports = Teamcity;
+
+function Teamcity(runner) {
+  Base.call(this, runner);
+  var stats = this.stats;
+
+  runner.on('start', function() {
+    console.log("##teamcity[testSuiteStarted name='mocha.suite']");
+  });
+
+  runner.on('test', function(test) {
+    console.log("##teamcity[testStarted name='%s']", test.fullTitle());
+  });
+
+  runner.on('fail', function(test, err) {
+    console.log("##teamcity[testFailed name='%s' message='%s']", test.fullTitle(), err.message);
+  });
+
+  runner.on('pending', function(test) {
+    console.log("##teamcity[testIgnored name='%s' message='pending']", test.fullTitle());
+  });
+
+  runner.on('test end', function(test) {
+    console.log("##teamcity[testFinished name='%s' duration='%s']", test.fullTitle(), test.duration);
+  });
+
+  runner.on('end', function() {
+    console.log("##teamcity[testSuiteFinished name='mocha.suite' duration='%s']", stats.duration);
+  });
+}
+
+}); // module: reporters/teamcity.js
+
 require.register("runnable.js", function(module, exports, require){
 
 /**
@@ -2253,14 +2298,15 @@ Runner.prototype.runTests = function(suite, fn){
           return self.hookUp('afterEach', next);
         }
 
-        self.emit('pass', test);
         test.passed = true;
+        self.emit('pass', test);
         self.emit('test end', test);
         self.hookUp('afterEach', next);
       });
     });
   }
 
+  this.next = next;
   next();
 };
 
@@ -2330,11 +2376,19 @@ Runner.prototype.run = function(fn){
 
   // uncaught exception
   function uncaught(err){
+    var runnable = self.currentRunnable;
     debug('uncaught exception');
-    self.currentRunnable.clearTimeout();
-    self.fail(self.currentRunnable, err);
-    self.emit('test end', self.test);
-    self.emit('end');
+    runnable.clearTimeout();
+    self.fail(runnable, err);
+
+    // recover from test
+    if ('test' == runnable.type) {
+      self.emit('test end', runnable);
+      self.hookUp('afterEach', self.next);
+    // bail on hooks
+    } else {
+      self.emit('end');
+    }
   }
 
   process.on('uncaughtException', uncaught);
@@ -2594,6 +2648,7 @@ module.exports = Test;
 function Test(title, fn) {
   Runnable.call(this, title, fn);
   this.pending = !fn;
+  this.type = 'test';
 }
 
 /**

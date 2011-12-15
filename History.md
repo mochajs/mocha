@@ -1,4 +1,12 @@
 
+0.5.0 / 2011-12-14 
+==================
+
+  * Added: push node_modules directory onto module.paths for relative require Closes #93
+  * Added teamcity reporter [blindsey]
+  * Fixed: recover from uncaught exceptions for tests. Closes #94
+  * Fixed: only emit "test end" for uncaught within test, not hook
+
 0.4.0 / 2011-12-14 
 ==================
 
