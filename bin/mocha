@@ -64,6 +64,7 @@ program.on('reporters', function(){
   console.log('    list - spec-style listing');
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
+  console.log('    teamcity - teamcity ci support');
   console.log('    json-stream - newline delimited json events');
   console.log();
   process.exit();
@@ -82,6 +83,7 @@ program.on('interfaces', function(){
 
 // -r, --require
 
+module.paths.push(join(cwd, 'node_modules'));
 program.on('require', function(mod){
   require(mod);
 });
