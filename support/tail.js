@@ -33,6 +33,7 @@ mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite;
   var Reporter = mocha.reporters.HTML;
+  var hooks;
 
   function parse(qs) {
     return qs
@@ -48,11 +49,12 @@ mocha = require('mocha');
       }, {});
   }
 
-  mocha.setup = function(ui){
+  mocha.setup = function(ui, globalHooks){
     ui = mocha.interfaces[ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     ui(suite);
     suite.emit('pre-require', global);
+    hooks = globalHooks;
   };
 
   mocha.run = function(){
@@ -61,6 +63,21 @@ mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+
+    // inject global hooks given to setup
+    var event;
+    if (typeof(hooks) === 'object') {
+      for (event in hooks) {
+        if (typeof(hooks[event]) === 'function') {
+          (function(event){
+            runner.on(event, function(data) {
+              hooks[event](typeof(data) === 'undefined' ? reporter.stats : data);
+            });
+          })(event);
+        }
+      }
+    }
+
     return runner.run();
   };
 })();
