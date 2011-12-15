@@ -8,6 +8,7 @@
  * the browser.
  */
 
+module = {};
 process = {};
 process.exit = function(status){};
 process.stdout = {};
@@ -53,6 +54,10 @@ mocha = require('mocha');
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     ui(suite);
     suite.emit('pre-require', global);
+  };
+
+  mocha.add = function(tests){
+    suite.emit('require', tests);
   };
 
   mocha.run = function(){
