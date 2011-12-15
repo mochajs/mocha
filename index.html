@@ -27,6 +27,7 @@
 <li>auto-detects and disables coloring for non-ttys</li>
 <li>maps uncaught exceptions to the correct test case</li>
 <li>async test timeout support</li>
+<li>test-specific timeouts</li>
 <li>growl notification support</li>
 <li>reports test durations</li>
 <li>highlights slow tests</li>
@@ -433,6 +434,16 @@ describe('app', function(){
   the reporter to <code>spec</code>:</p>
 
 <pre><code>$ mocha --reporter list --growl
+</code></pre>
+
+<h2>Test specific timeouts</h2>
+
+<p>  To compliment the global <code>--timeout</code> option, you may also specific test-specific timeouts via <code>this.timeout()</code>, or disable the timeout all-together with <code>this.timeout(0)</code>.</p>
+
+<pre><code>it('should take less than 500ms', function(done){
+  this.timeout(500);
+  setTimeout(done, 300);
+})
 </code></pre>
 
 <h2>Best practices</h2>
