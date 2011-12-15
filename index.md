@@ -9,6 +9,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
   - async test timeout support
+  - test-specific timeouts
   - growl notification support
   - reports test durations
   - highlights slow tests
@@ -399,6 +400,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   the reporter to `spec`:
 
     $ mocha --reporter list --growl
+
+## Test specific timeouts
+
+  To compliment the global `--timeout` option, you may also specific test-specific timeouts via `this.timeout()`, or disable the timeout all-together with `this.timeout(0)`.
+
+    it('should take less than 500ms', function(done){
+      this.timeout(500);
+      setTimeout(done, 300);
+    })
 
 ## Best practices
 
