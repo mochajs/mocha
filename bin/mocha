@@ -81,8 +81,10 @@ program.on('interfaces', function(){
   process.exit();
 });
 
-// -r, --require
+// Push the module paths for the current directory onto mochas own, to allow lookups under cwd
+module.paths = require('module')._nodeModulePaths(process.cwd()).concat(module.paths);
 
+// -r, --require
 program.on('require', function(mod){
   require(mod);
 });
