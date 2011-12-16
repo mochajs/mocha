@@ -40,7 +40,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](http://github.com/visionmedia/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
 
   - [should.js](http://github.com/visionmedia/should.js) should style shown throughout these docs
-  - [chai](https://github.com/logicalparadox/chai) expect(), assert() and should style assertions
+  - [chai](http://chaijs.com/) expect(), assert() and should style assertions
 
 ## Synchronous code
 
