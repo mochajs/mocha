@@ -6,6 +6,7 @@
 
 var program = require('commander')
   , exec = require('child_process').exec
+  , notify = require('growl')
   , path = require('path')
   , mocha = require('../')
   , reporters = mocha.reporters
@@ -251,31 +252,6 @@ function growl(runner, reporter) {
       });
     }
   });
-}
-
-// growl notification
-
-function notify(msg, options) {
-  var image
-    , args = ['growlnotify', '-m', '"' + msg + '"']
-    , options = options || {}
-    , fn = fn || function(){};
-
-  if (image = options.image) {
-    var flag, ext = path.extname(image).substr(1)
-    flag = flag || ext == 'icns' && 'iconpath'
-    flag = flag || /^[A-Z]/.test(image) && 'appIcon'
-    flag = flag || /^png|gif|jpe?g$/.test(ext) && 'image'
-    flag = flag || ext && (image = ext) && 'icon'
-    flag = flag || 'icon'
-    args.push('--' + flag, image)
-  }
-
-  if (options.sticky) args.push('--sticky');
-  if (options.priority) args.push('--priority', options.priority);
-  if (options.name) args.push('--name', options.name);
-  if (options.title) args.push(options.title);
-  exec(args.join(' '), fn);
 }
 
 /**
