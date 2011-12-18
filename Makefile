@@ -11,7 +11,12 @@ mocha.css: test/browser/style.css
 
 mocha.js: $(SRC)
 	@node support/compile $^
-	@cat support/head.js _mocha.js support/{tail,foot}.js > mocha.js
+	@cat \
+	  support/head.js \
+	  _mocha.js \
+	  support/setZeroTimeout.js \
+	  support/{tail,foot}.js \
+	  > mocha.js
 
 clean:
 	rm -f mocha.{js,css}
