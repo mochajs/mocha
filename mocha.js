@@ -1141,7 +1141,7 @@ function HTML(runner) {
   });
 
   runner.on('fail', function(test, err){
-    runner.emit('test end', test);
+    if (err.uncaught) runner.emit('test end', test);
   });
 
   runner.on('test end', function(test){
@@ -2383,6 +2383,7 @@ Runner.prototype.run = function(fn){
     var runnable = self.currentRunnable;
     debug('uncaught exception');
     runnable.clearTimeout();
+    err.uncaught = true;
     self.fail(runnable, err);
 
     // recover from test
