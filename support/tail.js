@@ -48,7 +48,7 @@ process.on = function(ev, fn){
   }
 };
 
-global.mocha = require('mocha');
+window.mocha = require('mocha');
 
 // boot
 ;(function(){
@@ -71,7 +71,7 @@ global.mocha = require('mocha');
     ui = mocha.interfaces[ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     ui(suite);
-    suite.emit('pre-require', global);
+    suite.emit('pre-require', window);
   };
 
   mocha.run = function(){
