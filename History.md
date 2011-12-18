@@ -1,4 +1,10 @@
 
+0.7.0 / 2011-12-18 
+==================
+
+  * Added support for IE{7,8} [guille]
+  * Changed: better browser nextTick implementation [guille]
+
 0.6.0 / 2011-12-18 
 ==================
 
