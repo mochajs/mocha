@@ -3,14 +3,15 @@ REPORTER = dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f)
+SUPPORT = $(shell find support -name "*.js" -type f)
 
 all: mocha.js mocha.css
 
 mocha.css: test/browser/style.css
 	cp -f $< $@
 
-mocha.js: $(SRC)
-	@node support/compile $^
+mocha.js: $(SRC) $(SUPPORT)
+	@node support/compile $(SRC)
 	@cat support/head.js _mocha.js support/{tail,foot}.js > mocha.js
 
 clean:
