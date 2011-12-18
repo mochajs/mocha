@@ -31,14 +31,12 @@ global.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite;
-  var Reporter = mocha.reporters.HTML;
+  var suite = new mocha.Suite
+    , utils = mocha.utils
+    , Reporter = mocha.reporters.HTML
 
   function parse(qs) {
-    return qs
-      .replace('?', '')
-      .split('&')
-      .reduce(function(obj, pair){
+    return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
         var i = pair.indexOf('=')
           , key = pair.slice(0, i)
           , val = pair.slice(++i);
