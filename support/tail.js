@@ -11,7 +11,7 @@
 process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = this;
+global = window;
 
 process.nextTick = function(fn){ fn(); };
 
@@ -27,7 +27,7 @@ process.on = function(ev, fn){
   }
 };
 
-mocha = require('mocha');
+global.mocha = require('mocha');
 
 // boot
 ;(function(){
