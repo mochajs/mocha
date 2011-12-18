@@ -3,7 +3,7 @@ REPORTER = dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f)
-SUPPORT = $(shell find support -name "*.js" -type f)
+SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js mocha.css
 

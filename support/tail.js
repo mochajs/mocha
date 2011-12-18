@@ -14,36 +14,36 @@ process.stdout = {};
 global = window;
 
 process.nextTick = (function(){
+  // postMessage behaves badly on IE8
   if (window.ActiveXObject || !window.postMessage) {
-    // postMessage behaves badly on IE8
     return function(fn){ fn() };
-  } else {
-    // based on setZeroTimeout by David Baron
-    // - http://dbaron.org/log/20100309-faster-timeouts
-    var timeouts = []
-      , name = 'mocha-zero-timeout'
+  }
 
-    return function(fn){
-      timeouts.push(fn);
-      window.postMessage(name, '*');
-      window.addEventListener('message', function(event){
-        if (event.source == window && event.data == name) {
-          if (event.stopPropagation) event.stopPropagation();
-          if (timeouts.length) timeouts.shift()();
-        }
-      }, true);
-    }
+  // based on setZeroTimeout by David Baron
+  // - http://dbaron.org/log/20100309-faster-timeouts
+  var timeouts = []
+    , name = 'mocha-zero-timeout'
+
+  return function(fn){
+    timeouts.push(fn);
+    window.postMessage(name, '*');
+    window.addEventListener('message', function(e){
+      if (e.source == window && e.data == name) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (timeouts.length) timeouts.shift()();
+      }
+    }, true);
   }
 })();
 
-process.removeListener = function(ev){
-  if ('uncaughtException' == ev) {
+process.removeListener = function(e){
+  if ('uncaughtException' == e) {
     window.onerror = null;
   }
 };
 
-process.on = function(ev, fn){
-  if ('uncaughtException' == ev) {
+process.on = function(e, fn){
+  if ('uncaughtException' == e) {
     window.onerror = fn;
   }
 };

@@ -31,7 +31,7 @@ require.register = function (path, fn){
 
 require.relative = function (parent) {
     return function(p){
-      if ('.' != p[0]) return require(p);
+      if ('.' != p.charAt(0)) return require(p);
       
       var path = parent.split('/')
         , segs = p.split('/');
@@ -688,8 +688,9 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.5.0';
+exports.version = '0.6.0';
 
+exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
 exports.Runnable = require('./runnable');
@@ -698,6 +699,7 @@ exports.Suite = require('./suite');
 exports.Hook = require('./hook');
 exports.Test = require('./test');
 exports.watch = require('./watch');
+
 }); // module: mocha.js
 
 require.register("reporters/base.js", function(module, exports, require){
@@ -1117,11 +1119,18 @@ function HTML(runner) {
     , stack = [root]
     , stat = $(statsTemplate).appendTo(root)
     , canvas = stat.find('canvas').get(0)
-    , ctx = canvas.getContext('2d')
-    , progress = new Progress;
+    , ctx, progress
+
+  if (canvas.getContext) {
+    ctx = canvas.getContext('2d');
+    progress = new Progress;
+  }
 
   if (!root.length) return error('#mocha div missing, add it to your document');
-  progress.size(50);
+
+  if (progress) {
+    progress.size(50);
+  }
 
   runner.on('suite', function(suite){
     if (suite.root) return;
@@ -1148,8 +1157,10 @@ function HTML(runner) {
     // TODO: add to stats
     var percent = stats.tests / total * 100 | 0;
 
-    // update progress bar
-    progress.update(percent).draw(ctx);
+    if (progress) {
+      // update progress bar
+      progress.update(percent).draw(ctx);
+    }
 
     // update stats
     var ms = new Date - stats.start;
@@ -1165,6 +1176,13 @@ function HTML(runner) {
     } else {
       var el = $('<div class="test fail"><h2>' + test.title + '</h2></div>');
       var str = test.err.stack || test.err;
+
+      // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
+      // check for the result of the stringifying.
+      if ('[object Error]' == str) {
+        str = test.err.message;
+      }
+
       var err = $('<pre class="error">' + str + '</pre>');
       el.append(err);
     }
@@ -1210,6 +1228,7 @@ function clean(str) {
 
   return str;
 }
+
 }); // module: reporters/html.js
 
 require.register("reporters/index.js", function(module, exports, require){
@@ -1993,6 +2012,7 @@ require.register("runner.js", function(module, exports, require){
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('runner')
   , Test = require('./test')
+  , utils = require('./utils')
   , noop = function(){};
 
 /**
@@ -2029,7 +2049,7 @@ function Runner(suite) {
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.globals(Object.keys(global).concat(['errno']));
+  this.globals(utils.keys(global).concat(['errno']));
 }
 
 /**
@@ -2064,7 +2084,7 @@ Runner.prototype.grep = function(re){
 
 Runner.prototype.globals = function(arr){
   debug('globals %j', arr);
-  arr.forEach(function(arr){
+  utils.forEach(arr, function(arr){
     this._globals.push(arr);
   }, this);
   return this;
@@ -2079,8 +2099,8 @@ Runner.prototype.globals = function(arr){
 Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
 
-  var leaks = Object.keys(global).filter(function(key){
-    return !~this._globals.indexOf(key);
+  var leaks = utils.filter(utils.keys(global), function(key){
+    return !~utils.indexOf(this._globals, key);
   }, this);
 
   this._globals = this._globals.concat(leaks);
@@ -2411,6 +2431,7 @@ require.register("suite.js", function(module, exports, require){
 
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('suite')
+  , utils = require('./utils')
   , Hook = require('./hook');
 
 /**
@@ -2621,7 +2642,7 @@ Suite.prototype.fullTitle = function(){
  */
 
 Suite.prototype.total = function(){
-  return this.suites.reduce(function(sum, suite){
+  return utils.reduce(this.suites, function(sum, suite){
     return sum + suite.total();
   }, 0) + this.tests.length;
 };
@@ -2683,6 +2704,100 @@ exports.escape = function(html) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 };
+
+/**
+ * Array#forEach (<=IE8)
+ *
+ * @param {Array} array
+ * @param {Function} fn
+ * @param {Object} scope
+ * @api private
+ */
+
+exports.forEach = function(arr, fn, scope) {
+  for (var i = 0, l = arr.length; i < l; i++)
+    fn.call(scope, arr[i], i);
+};
+
+/**
+ * Array#indexOf (<=IE8)
+ *
+ * @parma {Array} arr
+ * @param {Object} obj to find index of
+ * @param {Number} start
+ * @api private
+ */
+
+exports.indexOf = function (arr, obj, start) {
+  for (var i = start || 0, l = arr.length; i < l; i++) {
+    if (arr[i] === obj)
+      return i;
+  }
+  return -1;
+};
+
+/**
+ * Array#reduce (<=IE8)
+ * 
+ * @param {Array} array
+ * @param {Function} fn
+ * @param {Object} initial value
+ * @param {Object} scope
+ * @api private
+ */
+
+exports.reduce = function(arr, fn, val, scope) {
+  var rval = val;
+
+  for (var i = 0, l = arr.length; i < l; i++) {
+    rval = fn.call(scope, rval, arr[i], i, arr);
+  }
+
+  return rval;
+};
+
+/**
+ * Array#filter (<=IE8)
+ *
+ * @param {Array} array
+ * @param {Function} fn
+ * @param {Object} scope
+ * @api private
+ */
+
+exports.filter = function(arr, fn, scope) {
+  var ret = [];
+
+  for (var i = 0, l = arr.length; i < l; i++) {
+    var val = arr[i];
+    if (fn.call(scope, val, i, arr))
+      ret.push(val);
+  }
+
+  return ret;
+};
+
+/**
+ * Object.keys (<=IE8)
+ *
+ * @param {Object} obj
+ * @return {Array} keys
+ * @api private
+ */
+
+exports.keys = Object.keys || function(obj) {
+  var keys = []
+    , has = Object.prototype.hasOwnProperty // for `window` on <=IE8
+
+  for (var i in obj) {
+    if (has.call(obj, i)) {
+      keys.push(i);
+    }
+  }
+
+  return keys;
+};
+
 }); // module: utils.js
 
 require.register("watch.js", function(module, exports, require){
@@ -2704,47 +2819,7 @@ module.exports = function(paths, fn){
   });
 };
 }); // module: watch.js
-// Only add setZeroTimeout to the window object, and hide everything else in a closure.
-(function() {
 
-  var timeouts = [],
-      messageName = 'zero-timeout-message';
-
-  // Like setTimeout, but only takes a function argument.  There's
-  // no time argument (always zero) and no arguments (you have to
-  // use a closure).
-  function setZeroTimeoutPostMessage(fn) {
-    timeouts.push(fn);
-    window.postMessage(messageName, '*');
-  }
-
-  function setZeroTimeout(fn) {
-    setTimeout(fn, 0);
-  }
-
-  function handleMessage(event) {
-    if (event.source == window && event.data == messageName) {
-      if (event.stopPropagation) {
-        event.stopPropagation();
-      }
-      if (timeouts.length) {
-        timeouts.shift()();
-      }
-    }
-  }
-
-  if (window.postMessage) {
-    if (window.addEventListener) {
-      window.addEventListener('message', handleMessage, true);
-    } else if (window.attachEvent) {
-      window.attachEvent('onmessage', handleMessage);
-    }
-    window.setZeroTimeout = setZeroTimeoutPostMessage;
-  } else {
-    window.setZeroTimeout = setZeroTimeout;
-  }
-
-}());
 /**
  * Node shims.
  *
@@ -2757,34 +2832,53 @@ module.exports = function(paths, fn){
 process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = this;
+global = window;
 
-process.nextTick = setZeroTimeout;
+process.nextTick = (function(){
+  // postMessage behaves badly on IE8
+  if (window.ActiveXObject || !window.postMessage) {
+    return function(fn){ fn() };
+  }
 
-process.removeListener = function(ev){
-  if ('uncaughtException' == ev) {
+  // based on setZeroTimeout by David Baron
+  // - http://dbaron.org/log/20100309-faster-timeouts
+  var timeouts = []
+    , name = 'mocha-zero-timeout'
+
+  return function(fn){
+    timeouts.push(fn);
+    window.postMessage(name, '*');
+    window.addEventListener('message', function(e){
+      if (e.source == window && e.data == name) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (timeouts.length) timeouts.shift()();
+      }
+    }, true);
+  }
+})();
+
+process.removeListener = function(e){
+  if ('uncaughtException' == e) {
     window.onerror = null;
   }
 };
 
-process.on = function(ev, fn){
-  if ('uncaughtException' == ev) {
+process.on = function(e, fn){
+  if ('uncaughtException' == e) {
     window.onerror = fn;
   }
 };
 
-mocha = require('mocha');
+window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite;
-  var Reporter = mocha.reporters.HTML;
+  var suite = new mocha.Suite
+    , utils = mocha.utils
+    , Reporter = mocha.reporters.HTML
 
   function parse(qs) {
-    return qs
-      .replace('?', '')
-      .split('&')
-      .reduce(function(obj, pair){
+    return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
         var i = pair.indexOf('=')
           , key = pair.slice(0, i)
           , val = pair.slice(++i);
@@ -2798,7 +2892,7 @@ mocha = require('mocha');
     ui = mocha.interfaces[ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     ui(suite);
-    suite.emit('pre-require', global);
+    suite.emit('pre-require', window);
   };
 
   mocha.run = function(){
