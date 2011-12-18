@@ -15,7 +15,6 @@ mocha.js: $(SRC) $(SUPPORT)
 	@cat \
 	  support/head.js \
 	  _mocha.js \
-	  support/setZeroTimeout.js \
 	  support/{tail,foot}.js \
 	  > mocha.js
 
