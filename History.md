@@ -1,4 +1,13 @@
 
+0.6.0 / 2011-12-18 
+==================
+
+  * Added setZeroTimeout timeout for browser (nicer stack traces). Closes #153
+  * Added "view source" on hover for HTML reporter to make it obvious
+  * Changed: replace custom growl with growl lib
+  * Fixed duplicate reporting for HTML reporter. Closes #154
+  * Fixed silent hook errors in the HTML reporter. Closes #150
+
 0.5.0 / 2011-12-14 
 ==================
 
