@@ -1140,6 +1140,10 @@ function HTML(runner) {
     stack.shift();
   });
 
+  runner.on('fail', function(test, err){
+    if (err.uncaught) runner.emit('test end', test);
+  });
+
   runner.on('test end', function(test){
     // TODO: add to stats
     var percent = stats.tests / total * 100 | 0;
@@ -2379,6 +2383,7 @@ Runner.prototype.run = function(fn){
     var runnable = self.currentRunnable;
     debug('uncaught exception');
     runnable.clearTimeout();
+    err.uncaught = true;
     self.fail(runnable, err);
 
     // recover from test
@@ -2699,7 +2704,47 @@ module.exports = function(paths, fn){
   });
 };
 }); // module: watch.js
+// Only add setZeroTimeout to the window object, and hide everything else in a closure.
+(function() {
 
+  var timeouts = [],
+      messageName = 'zero-timeout-message';
+
+  // Like setTimeout, but only takes a function argument.  There's
+  // no time argument (always zero) and no arguments (you have to
+  // use a closure).
+  function setZeroTimeoutPostMessage(fn) {
+    timeouts.push(fn);
+    window.postMessage(messageName, '*');
+  }
+
+  function setZeroTimeout(fn) {
+    setTimeout(fn, 0);
+  }
+
+  function handleMessage(event) {
+    if (event.source == window && event.data == messageName) {
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      }
+      if (timeouts.length) {
+        timeouts.shift()();
+      }
+    }
+  }
+
+  if (window.postMessage) {
+    if (window.addEventListener) {
+      window.addEventListener('message', handleMessage, true);
+    } else if (window.attachEvent) {
+      window.attachEvent('onmessage', handleMessage);
+    }
+    window.setZeroTimeout = setZeroTimeoutPostMessage;
+  } else {
+    window.setZeroTimeout = setZeroTimeout;
+  }
+
+}());
 /**
  * Node shims.
  *
@@ -2714,7 +2759,7 @@ process.exit = function(status){};
 process.stdout = {};
 global = this;
 
-process.nextTick = function(fn){ fn(); };
+process.nextTick = setZeroTimeout;
 
 process.removeListener = function(ev){
   if ('uncaughtException' == ev) {

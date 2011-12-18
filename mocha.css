@@ -31,6 +31,15 @@ body {
   margin-left: 15px;
 }
 
+#mocha .test:hover h2::after {
+  position: relative;
+  top: 0;
+  right: -10px;
+  content: '(view source)';
+  font-size: 12px;
+  color: #888;
+}
+
 #mocha .test.pass::before {
   content: '✓';
   font-size: 12px;

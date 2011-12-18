@@ -13,7 +13,7 @@ process.exit = function(status){};
 process.stdout = {};
 global = window;
 
-process.nextTick = function(fn){ fn(); };
+process.nextTick = setZeroTimeout;
 
 process.removeListener = function(ev){
   if ('uncaughtException' == ev) {
