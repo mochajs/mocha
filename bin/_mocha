@@ -6,7 +6,6 @@
 
 var program = require('commander')
   , exec = require('child_process').exec
-  , notify = require('growl')
   , path = require('path')
   , mocha = require('../')
   , reporters = mocha.reporters
@@ -241,6 +240,8 @@ function run(suite, fn) {
 // enable growl notifications
 
 function growl(runner, reporter) {
+  var notify = require('growl');
+
   runner.on('end', function(){
     var stats = reporter.stats;
     if (stats.failures) {
