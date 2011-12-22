@@ -793,6 +793,19 @@ exports.cursor = {
 
   show: function(){
     process.stdout.write('\033[?25h');
+  },
+
+  deleteLine: function(){
+    process.stdout.write('\033[2K');
+  },
+
+  beginningOfLine: function(){
+    process.stdout.write('\033[0G');
+  },
+
+  CR: function(){
+    exports.cursor.deleteLine();
+    exports.cursor.beginningOfLine();
   }
 };
 
@@ -1081,7 +1094,8 @@ require.register("reporters/html.js", function(module, exports, require){
 
 var Base = require('./base')
   , utils = require('../utils')
-  , Progress = require('../browser/progress');
+  , Progress = require('../browser/progress')
+  , escape = utils.escape;
 
 /**
  * Expose `Doc`.
@@ -1119,7 +1133,8 @@ function HTML(runner) {
     , stack = [root]
     , stat = $(statsTemplate).appendTo(root)
     , canvas = stat.find('canvas').get(0)
-    , ctx, progress
+    , progress
+    , ctx
 
   if (canvas.getContext) {
     ctx = canvas.getContext('2d');
@@ -1128,9 +1143,7 @@ function HTML(runner) {
 
   if (!root.length) return error('#mocha div missing, add it to your document');
 
-  if (progress) {
-    progress.size(50);
-  }
+  if (progress) progress.size(50);
 
   runner.on('suite', function(suite){
     if (suite.root) return;
@@ -1158,7 +1171,6 @@ function HTML(runner) {
     var percent = stats.tests / total * 100 | 0;
 
     if (progress) {
-      // update progress bar
       progress.update(percent).draw(ctx);
     }
 
@@ -1170,21 +1182,18 @@ function HTML(runner) {
 
     // test
     if (test.passed) {
-      var el = $('<div class="test pass"><h2>' + test.title + '</h2></div>')
+      var el = $('<div class="test pass"><h2>' + escape(test.title) + '</h2></div>')
     } else if (test.pending) {
-      var el = $('<div class="test pass pending"><h2>' + test.title + '</h2></div>')
+      var el = $('<div class="test pass pending"><h2>' + escape(test.title) + '</h2></div>')
     } else {
-      var el = $('<div class="test fail"><h2>' + test.title + '</h2></div>');
+      var el = $('<div class="test fail"><h2>' + escape(test.title) + '</h2></div>');
       var str = test.err.stack || test.err;
 
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
-      if ('[object Error]' == str) {
-        str = test.err.message;
-      }
+      if ('[object Error]' == str) str = test.err.message;
 
-      var err = $('<pre class="error">' + str + '</pre>');
-      el.append(err);
+      $('<pre class="error">' + escape(str) + '</pre>').appendTo(el);
     }
 
     // toggle code
@@ -1197,7 +1206,7 @@ function HTML(runner) {
     // code
     // TODO: defer
     if (!test.pending) {
-      var code = utils.escape(clean(test.fn.toString()));
+      var code = escape(clean(test.fn.toString()));
       var pre = $('<pre><code>' + code + '</code></pre>');
       pre.appendTo(el).hide();
     }
@@ -1493,6 +1502,7 @@ require.register("reporters/list.js", function(module, exports, require){
  */
 
 var Base = require('./base')
+  , cursor = Base.cursor
   , color = Base.color;
 
 /**
@@ -1533,11 +1543,13 @@ function List(runner) {
     var fmt = color('checkmark', '  ✓')
       + color('pass', ' %s: ')
       + color(test.speed, '%dms');
-    console.log('\r' + fmt, test.fullTitle(), test.duration);
+    cursor.CR();
+    console.log(fmt, test.fullTitle(), test.duration);
   });
 
   runner.on('fail', function(test, err){
-    console.log('\r' + color('fail', '  %d) %s'), n++, test.fullTitle());
+    cursor.CR();
+    console.log(color('fail', '  %d) %s'), n++, test.fullTitle());
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -1549,6 +1561,7 @@ function List(runner) {
 
 List.prototype = new Base;
 List.prototype.constructor = List;
+
 
 }); // module: reporters/list.js
 
@@ -1613,7 +1626,8 @@ function Progress(runner, options) {
       , n = width * percent | 0
       , i = width - n;
 
-    process.stdout.write('\r\033[J');
+    cursor.CR();
+    process.stdout.write('\033[J');
     process.stdout.write(color('progress', '  ' + options.open));
     process.stdout.write(Array(n).join(options.complete));
     process.stdout.write(Array(i).join(options.incomplete));
@@ -1639,6 +1653,7 @@ function Progress(runner, options) {
 Progress.prototype = new Base;
 Progress.prototype.constructor = Progress;
 
+
 }); // module: reporters/progress.js
 
 require.register("reporters/spec.js", function(module, exports, require){
@@ -1648,6 +1663,7 @@ require.register("reporters/spec.js", function(module, exports, require){
  */
 
 var Base = require('./base')
+  , cursor = Base.cursor
   , color = Base.color;
 
 /**
@@ -1703,18 +1719,21 @@ function Spec(runner) {
       var fmt = indent()
         + color('checkmark', '  ✓')
         + color('pass', ' %s ');
-      console.log('\r' + fmt, test.title);
+      cursor.CR();
+      console.log(fmt, test.title);
     } else {
       var fmt = indent()
         + color('checkmark', '  ✓')
         + color('pass', ' %s ')
         + color(test.speed, '(%dms)');
-      console.log('\r' + fmt, test.title, test.duration);
+      cursor.CR();
+      console.log(fmt, test.title, test.duration);
     }
   });
 
   runner.on('fail', function(test, err){
-    console.log('\r' + indent() + color('fail', '  %d) %s'), n++, test.title);
+    cursor.CR();
+    console.log(indent() + color('fail', '  %d) %s'), n++, test.title);
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -1726,6 +1745,7 @@ function Spec(runner) {
 
 Spec.prototype = new Base;
 Spec.prototype.constructor = Spec;
+
 
 }); // module: reporters/spec.js
 
