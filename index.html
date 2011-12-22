@@ -37,7 +37,7 @@
 <li>auto-exit to prevent "hanging" with an active loop</li>
 <li>easily meta-generate suites &amp; test-cases</li>
 <li>mocha.opts file support</li>
-<li><code>mocha-debug(1)</code> for node debugger support</li>
+<li>node debugger support</li>
 <li>detects multiple calls to <code>done()</code></li>
 <li>use any assertion library you want</li>
 <li>extensible reporting, bundled with 9+ reporters</li>
@@ -171,6 +171,7 @@ Options:
   -C, --no-colors        force disabling of colors
   -c, --colors           force enabling of colors
   -G, --growl            enable growl notification support
+  -d, --debug            enable node's debugger
   --globals &lt;names&gt;      allow the given comma-delimited global [names]
   --ignore-leaks         ignore global variable leaks
   --interfaces           display available interfaces
@@ -180,6 +181,10 @@ Options:
 <h3>-w, --watch</h3>
 
 <p>Executes tests on changes to the test files.</p>
+
+<h3>-d, --debug</h3>
+
+<p>Enables node's debugger support, this executes your script(s) with <code>node debug &lt;file ...&gt;</code> allowing you to step through code and break with the <strong>debugger</strong> statement.</p>
 
 <h3>--globals &lt;names&gt;</h3>
 
@@ -227,10 +232,6 @@ describe('app', function(){
   })
 })
 </code></pre>
-
-<h2>mocha-debug(1)</h2>
-
-<p><code>mocha-debug(1)</code> is identical to <code>mocha(1)</code>, however it enables node's debugger so you may step through tests with the <strong>debugger</strong> statement.</p>
 
 <h2>Interfaces</h2>
 
