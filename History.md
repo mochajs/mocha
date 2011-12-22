@@ -1,4 +1,13 @@
 
+0.7.1 / 2011-12-22 
+==================
+
+  * Removed `mocha-debug(1)`, use `mocha --debug`
+  * Fixed CWD relative requires
+  * Fixed growl issue on windows [Raynos]
+  * Fixed: platform specific line endings [TooTallNate]
+  * Fixed: escape strings in HTML reporter. Closes #164
+
 0.7.0 / 2011-12-18 
 ==================
 
