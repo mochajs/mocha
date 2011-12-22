@@ -19,7 +19,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - auto-exit to prevent "hanging" with an active loop
   - easily meta-generate suites & test-cases
   - mocha.opts file support
-  - `mocha-debug(1)` for node debugger support
+  - node debugger support
   - detects multiple calls to `done()`
   - use any assertion library you want
   - extensible reporting, bundled with 9+ reporters
@@ -128,11 +128,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ## mocha(1)
 
-
     Usage: mocha [options] [files]
-    
+
     Options:
-    
+
       -h, --help             output usage information
       -V, --version          output the version number
       -r, --require <name>   require the given module
@@ -145,6 +144,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -C, --no-colors        force disabling of colors
       -c, --colors           force enabling of colors
       -G, --growl            enable growl notification support
+      -d, --debug            enable node's debugger
       --globals <names>      allow the given comma-delimited global [names]
       --ignore-leaks         ignore global variable leaks
       --interfaces           display available interfaces
@@ -153,6 +153,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ### -w, --watch
 
   Executes tests on changes to the test files.
+
+### -d, --debug
+
+  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the __debugger__ statement.
 
 ### --globals &lt;names&gt;
 
@@ -200,10 +204,6 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-## mocha-debug(1)
-
-  `mocha-debug(1)` is identical to `mocha(1)`, however it enables node's debugger so you may step through tests with the __debugger__ statement.
-  
 ## Interfaces
 
   Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __exports__ flavoured interfaces.
