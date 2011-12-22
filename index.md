@@ -357,6 +357,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       </dl>
     </section>
 
+  The SuperAgent request library [test documentation](http://visionmedia.github.com/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
+  
+    test-docs:
+    	make test REPORTER=doc \
+    		| cat docs/head.html - docs/tail.html \
+    		> docs/test.html
+
+  View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
+
 ### HTML
 
  The __HTML__ reporter is currently the only browser reporter
