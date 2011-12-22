@@ -17,9 +17,12 @@ describe('Array', function(){
 
 describe('Array', function(){
   describe('#pop()', function(){
-    it('should remove and return the last value', function(){
+    it('should remove and return the last value', function(done){
       var arr = [1,2,3];
       assert(arr.pop() == 3);
+      setTimeout(function(){
+        doesNotExist();
+      }, 0);
     })
 
     it('should adjust .length', function(){
