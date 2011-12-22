@@ -91,14 +91,6 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
-      describe('when the callback is invoked with a non-Error', function(){
-        it('should pass', function(done){
-          var thing = new EventEmitter;
-          thing.on('foo', done);
-          thing.emit('foo', 'bar');
-        })
-      })
-
       describe('when the callback is invoked several times', function(){
         describe('without an error', function(){
           it('should emit a single "error" event', function(done){
