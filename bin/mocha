@@ -4,7 +4,7 @@ DEBUG=0
 
 for arg in $@; do
   case $arg in
-    --debug) DEBUG=1 ;;
+    -d|--debug) DEBUG=1 ;;
   esac
 done
 
