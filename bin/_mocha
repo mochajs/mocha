@@ -53,6 +53,8 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
 
+program.name = 'mocha';
+
 // --reporters
 
 program.on('reporters', function(){
