@@ -261,6 +261,8 @@ function growl(runner, reporter) {
   });
 }
 
+// say(1) support
+
 function say(runner, reporter) {
   var say = require('say');
 
@@ -273,6 +275,7 @@ function say(runner, reporter) {
     } else {
       msg = stats.passes + ' tests passed in ' + stats.duration + 'ms';
     }
+
     say.speak('string' == typeof program.say ? program.say : 'Alex', msg);
   });
 }
