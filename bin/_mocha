@@ -47,6 +47,7 @@ program
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl notification support')
+  .option('-S, --say [voice]', 'enable say notification support')
   .option('-d, --debug', "enable node's debugger")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--ignore-leaks', 'ignore global variable leaks')
@@ -237,6 +238,7 @@ function run(suite, fn) {
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
   if (program.growl) growl(runner, reporter);
+  if (program.say) say(runner, reporter);
   runner.run(fn);
 }
 
@@ -256,6 +258,22 @@ function growl(runner, reporter) {
         , image: images.pass
       });
     }
+  });
+}
+
+function say(runner, reporter) {
+  var say = require('say');
+
+  runner.on('end', function(){
+    var stats = reporter.stats
+      , msg;
+
+    if (stats.failures) {
+      msg = stats.failures + ' of ' + runner.total + ' tests failed';
+    } else {
+      msg = stats.passes + ' tests passed in ' + stats.duration + 'ms';
+    }
+    say.speak('string' == typeof program.say ? program.say : 'Alex', msg);
   });
 }
 
