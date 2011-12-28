@@ -1,15 +1,22 @@
-#!/usr/bin/env bash
+#!/usr/bin/env node
 
-DEBUG=0
+/**
+ * This tiny wrapper file checks for known node flags and appends them
+ * when found, before invoking the "real" _mocha(1) executable.
+ */
 
-for arg in $@; do
-  case $arg in
-    -d|--debug) DEBUG=1 ;;
-  esac
-done
+var spawn = require('child_process').spawn
+  , args = process.argv.slice(2)
 
-if test $DEBUG -eq 1; then
-  node debug $(dirname $0)/_mocha $@
-else
-  node $(dirname $0)/_mocha $@
-fi
+args.unshift(__dirname + '/_mocha');
+
+process.argv.forEach(function (arg) {
+  switch (arg) {
+    case '-d':
+    case '--debug':
+      args.unshift('debug');
+      break;
+  }
+});
+
+spawn(process.argv[0], args, { customFds: [0,1,2] });
