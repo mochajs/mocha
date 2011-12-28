@@ -2,7 +2,7 @@
 
 /**
  * This tiny wrapper file checks for known node flags and appends them
- * when found, before invoking the "real" _mocha executable.
+ * when found, before invoking the "real" _mocha(1) executable.
  */
 
 var spawn = require('child_process').spawn
@@ -11,8 +11,11 @@ var spawn = require('child_process').spawn
 args.unshift(__dirname + '/_mocha');
 
 process.argv.forEach(function (arg) {
-  if (/^(-d|--debug)$/.test(arg)) {
-    args.unshift('debug');
+  switch (arg) {
+    case '-d':
+    case '--debug':
+      args.unshift('debug');
+      break;
   }
 });
 
