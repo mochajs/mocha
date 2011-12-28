@@ -68,6 +68,7 @@ program.on('reporters', function(){
   console.log('    list - spec-style listing');
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
+  console.log('    xunit - xunit reportert');
   console.log('    teamcity - teamcity ci support');
   console.log('    json-stream - newline delimited json events');
   console.log();

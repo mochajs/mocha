@@ -1,4 +1,15 @@
 
+0.8.0 / 2011-12-28 
+==================
+
+  * Added `XUnit` reporter [FeeFighters/visionmedia]
+  * Added `say(1)` notification support [Maciej Małecki]
+  * Changed: fail when done() is invoked with a non-Error. Closes #171
+  * Fixed `err.stack`, defaulting to message. Closes #180
+  * Fixed: `make tm` mkdir -p the dest. Closes #137
+  * Fixed mocha(1) --help bin name
+  * Fixed `-d` for `--debug` support
+
 0.7.1 / 2011-12-22 
 ==================
 

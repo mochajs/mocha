@@ -688,7 +688,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.7.0';
+exports.version = '0.8.0';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -833,7 +833,7 @@ exports.list = function(failures){
 
     // msg
     var err = test.err
-      , stack = err.stack
+      , stack = err.stack || err.message
       , message = err.message || ''
       , index = stack.indexOf(message) + message.length
       , msg = stack.slice(0, index);
@@ -1214,6 +1214,10 @@ function HTML(runner) {
   });
 }
 
+/**
+ * Display error `msg`.
+ */
+
 function error(msg) {
   $('<div id="error">' + msg + '</div>').appendTo('body');
 }
@@ -1253,6 +1257,7 @@ exports.Spec = require('./spec');
 exports.Progress = require('./progress');
 exports.Landing = require('./landing');
 exports.JSONStream = require('./json-stream');
+exports.XUnit = require('./xunit')
 
 }); // module: reporters/index.js
 
@@ -1830,6 +1835,13 @@ var Base = require('./base');
 
 exports = module.exports = Teamcity;
 
+/**
+ * Initialize a new `Teamcity` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
 function Teamcity(runner) {
   Base.call(this, runner);
   var stats = this.stats;
@@ -1839,19 +1851,19 @@ function Teamcity(runner) {
   });
 
   runner.on('test', function(test) {
-    console.log("##teamcity[testStarted name='%s']", test.fullTitle());
+    console.log("##teamcity[testStarted name='%s']", escape(test.fullTitle()));
   });
 
   runner.on('fail', function(test, err) {
-    console.log("##teamcity[testFailed name='%s' message='%s']", test.fullTitle(), err.message);
+    console.log("##teamcity[testFailed name='%s' message='%s']", escape(test.fullTitle()), escape(err.message));
   });
 
   runner.on('pending', function(test) {
-    console.log("##teamcity[testIgnored name='%s' message='pending']", test.fullTitle());
+    console.log("##teamcity[testIgnored name='%s' message='pending']", escape(test.fullTitle()));
   });
 
   runner.on('test end', function(test) {
-    console.log("##teamcity[testFinished name='%s' duration='%s']", test.fullTitle(), test.duration);
+    console.log("##teamcity[testFinished name='%s' duration='%s']", escape(test.fullTitle()), test.duration);
   });
 
   runner.on('end', function() {
@@ -1859,7 +1871,120 @@ function Teamcity(runner) {
   });
 }
 
+/**
+ * Escape the given `str`.
+ */
+
+function escape(str) {
+  return str.replace(/'/g, "|'");
+}
 }); // module: reporters/teamcity.js
+
+require.register("reporters/xunit.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , utils = require('../utils')
+  , escape = utils.escape;
+
+/**
+ * Expose `XUnit`.
+ */
+
+exports = module.exports = XUnit;
+
+/**
+ * Initialize a new `XUnit` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function XUnit(runner) {
+  Base.call(this, runner);
+  var stats = this.stats
+    , tests = []
+    , self = this;
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('end', function(){
+    console.log(tag('testsuite', {
+        name: 'Mocha Tests'
+      , tests: stats.tests
+      , failures: stats.failures
+      , skip: stats.tests - stats.failures - stats.passes
+      , timestamp: (new Date).toUTCString()
+      , time: stats.duration / 1000
+    }, false));
+
+    tests.forEach(test);
+    console.log('</testsuite>');    
+  });
+}
+
+/**
+ * Inherit from `Base.prototype`.
+ */
+
+XUnit.prototype = new Base;
+XUnit.prototype.constructor = XUnit;
+
+
+/**
+ * Output tag for the given `test.`
+ */
+
+function test(test) {
+  var attrs = {
+      classname: test.fullTitle()
+    , name: test.title
+    , time: test.duration / 1000
+  };
+
+  if (test.failed) {
+    var err = test.err;
+    attrs.message = escape(err.message);
+    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+  } else if (test.pending) {
+    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+  } else {
+    console.log(tag('testcase', attrs, true) );
+  }
+}
+
+/**
+ * HTML tag helper.
+ */
+
+function tag(name, attrs, close, content) {
+  var end = close ? '/>' : '>'
+    , pairs = []
+    , tag;
+
+  for (var key in attrs) {
+    pairs.push(key + '="' + escape(attrs[key]) + '"');
+  }
+
+  tag = '<' + name + (pairs.length ? ' ' + pairs.join(' ') : '') + end;
+  if (content) tag += content + '</' + name + end;
+  return tag;
+}
+
+/**
+ * Return cdata escaped CDATA `str`.
+ */
+
+function cdata(str) {
+  return '<![CDATA[' + escape(str) + ']]>';
+}
+
+}); // module: reporters/xunit.js
 
 require.register("runnable.js", function(module, exports, require){
 
@@ -2003,6 +2128,7 @@ Runnable.prototype.run = function(fn){
     try {
       this.fn(function(err){
         if (err instanceof Error) return done(err);
+        if (null != err) return done(new Error('done() invoked with non-Error: ' + err));
         done();
       });
     } catch (err) {
@@ -2120,7 +2246,7 @@ Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
 
   var leaks = utils.filter(utils.keys(global), function(key){
-    return !~utils.indexOf(this._globals, key);
+    return !~utils.indexOf(this._globals, key) && (!global.navigator || 'onerror' !== key);
   }, this);
 
   this._globals = this._globals.concat(leaks);
