@@ -1,4 +1,11 @@
 
+0.8.1 / 2011-12-30 
+==================
+
+  * Fixed reporting of uncaught exceptions. Closes #183
+  * Fixed error message defaulting [indutny]
+  * Changed mocha(1) from bash to node for windows [Nathan Rajlich]
+
 0.8.0 / 2011-12-28 
 ==================
 

@@ -688,7 +688,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.8.0';
+exports.version = '0.8.1';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -833,8 +833,8 @@ exports.list = function(failures){
 
     // msg
     var err = test.err
-      , stack = err.stack || err.message
       , message = err.message || ''
+      , stack = err.stack || message
       , index = stack.indexOf(message) + message.length
       , msg = stack.slice(0, index);
 
@@ -2459,8 +2459,9 @@ Runner.prototype.runTests = function(suite, fn){
     }
 
     // execute test and hook(s)
-    self.emit('test', self.test = self.currentRunnable = test);
+    self.emit('test', self.test = test);
     self.hookDown('beforeEach', function(){
+      self.currentRunnable = test;
       self.runTest(function(err){
         if (err) {
           self.fail(test, err);
