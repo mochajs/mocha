@@ -367,6 +367,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
 
+### XUnit
+
+   Documentation needed.
+
+### TeamCity
+
+   Documentation needed.
+
 ### HTML
 
  The __HTML__ reporter is currently the only browser reporter
