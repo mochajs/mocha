@@ -688,7 +688,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.8.1';
+exports.version = '0.9.0';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -2015,6 +2015,7 @@ function Runnable(title, fn) {
   this.async = fn && fn.length;
   this.sync = ! this.async;
   this._timeout = 2000;
+  this.context = this;
 }
 
 /**
@@ -2092,6 +2093,7 @@ Runnable.prototype.run = function(fn){
   var self = this
     , ms = this.timeout()
     , start = new Date
+    , ctx = this.context
     , finished
     , emitted;
 
@@ -2126,7 +2128,7 @@ Runnable.prototype.run = function(fn){
   // async
   if (this.async) {
     try {
-      this.fn(function(err){
+      this.fn.call(ctx, function(err){
         if (err instanceof Error) return done(err);
         if (null != err) return done(new Error('done() invoked with non-Error: ' + err));
         done();
@@ -2139,7 +2141,7 @@ Runnable.prototype.run = function(fn){
   
   // sync
   try {
-    if (!this.pending) this.fn();
+    if (!this.pending) this.fn.call(ctx);
     this.duration = new Date - start;
     fn();
   } catch (err) {
@@ -2310,6 +2312,7 @@ Runner.prototype.hook = function(name, fn){
     var hook = hooks[i];
     if (!hook) return fn();
     self.currentRunnable = hook;
+    hook.context = self.test;
 
     self.emit('hook', hook);
 

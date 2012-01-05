@@ -1,4 +1,11 @@
 
+0.8.2 / 2012-01-05 
+==================
+
+  * Added test-case context support. Closes #113
+  * Fixed exit status. Closes #187
+  * Update commander. Closes #190
+
 0.8.1 / 2011-12-30 
 ==================
 
