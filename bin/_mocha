@@ -8,6 +8,7 @@ var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
   , mocha = require('../')
+  , utils = mocha.utils
   , reporters = mocha.reporters
   , interfaces = mocha.interfaces
   , Runner = mocha.Runner
@@ -195,7 +196,7 @@ if (program.watch) {
 
   play(frames);
 
-  mocha.watch(files, function(){
+  utils.watch(utils.files(cwd), function(){
     stop()
     suite = suite.clone();
     ui = interfaces[program.ui](suite);

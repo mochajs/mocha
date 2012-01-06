@@ -76,7 +76,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 watch:
-	watch --interval=1 $(MAKE) mocha.{js,css}
+	@watch -q $(MAKE) mocha.{js,css}
 
 tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
