@@ -141,7 +141,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -g, --grep <pattern>   only run tests matching <pattern>
       -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
       -s, --slow <ms>        "slow" test threshold in milliseconds [75]
-      -w, --watch            watch test files for changes
+      -w, --watch            watch files for changes
       -C, --no-colors        force disabling of colors
       -c, --colors           force enabling of colors
       -G, --growl            enable growl notification support
