@@ -242,6 +242,10 @@ require.register("browser/fs.js", function(module, exports, require){
 
 }); // module: browser/fs.js
 
+require.register("browser/path.js", function(module, exports, require){
+
+}); // module: browser/path.js
+
 require.register("browser/progress.js", function(module, exports, require){
 
 /**
@@ -698,7 +702,6 @@ exports.Runner = require('./runner');
 exports.Suite = require('./suite');
 exports.Hook = require('./hook');
 exports.Test = require('./test');
-exports.watch = require('./watch');
 
 }); // module: mocha.js
 
@@ -2464,8 +2467,10 @@ Runner.prototype.runTests = function(suite, fn){
     // execute test and hook(s)
     self.emit('test', self.test = test);
     self.hookDown('beforeEach', function(){
-      self.currentRunnable = test;
+      self.currentRunnable = self.test;
       self.runTest(function(err){
+        test = self.test;
+
         if (err) {
           self.fail(test, err);
           self.emit('test end', test);
@@ -2840,6 +2845,21 @@ Test.prototype.constructor = Test;
 require.register("utils.js", function(module, exports, require){
 
 /**
+ * Module dependencies.
+ */
+
+var fs = require('browser/fs')
+  , path = require('browser/path')
+  , join = path.join
+  , debug = require('browser/debug')('watch');
+
+/**
+ * Ignored directories.
+ */
+
+var ignore = ['node_modules', '.git'];
+
+/**
  * Escape special characters in the given string of html.
  *
  * @param  {String} html
@@ -2948,27 +2968,57 @@ exports.keys = Object.keys || function(obj) {
   return keys;
 };
 
-}); // module: utils.js
-
-require.register("watch.js", function(module, exports, require){
-
 /**
- * Module dependencies.
+ * Watch the given `files` for changes
+ * and invoke `fn(file)` on modification.
+ *
+ * @param {Array} files
+ * @param {Function} fn
+ * @api private
  */
 
-var fs = require('browser/fs')
-  , debug = require('browser/debug')('watch');
-
-module.exports = function(paths, fn){
+exports.watch = function(files, fn){
   var options = { interval: 100 };
-  paths.forEach(function(path){
-    debug('watch %s', path);
-    fs.watchFile(path, options, function(curr, prev){
-      if (prev.mtime < curr.mtime) fn(path);
+  files.forEach(function(file){
+    debug('file %s', file);
+    fs.watchFile(file, options, function(curr, prev){
+      if (prev.mtime < curr.mtime) fn(file);
     });
   });
 };
-}); // module: watch.js
+
+/**
+ * Ignored files.
+ */
+
+function ignored(path){
+  return !~ignore.indexOf(path);
+}
+
+/**
+ * Lookup files in the given `dir`.
+ *
+ * @return {Array}
+ * @api public
+ */
+
+exports.files = function(dir, ret){
+  ret = ret || [];
+
+  fs.readdirSync(dir)
+  .filter(ignored)
+  .forEach(function(path){
+    path = join(dir, path);
+    if (fs.statSync(path).isDirectory()) {
+      exports.files(path, ret);
+    } else if (path.match(/\.js$/)) {
+      ret.push(path);
+    }
+  });
+
+  return ret;
+};
+}); // module: utils.js
 
 /**
  * Node shims.

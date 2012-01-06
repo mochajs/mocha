@@ -45,6 +45,7 @@ function parseRequires(js) {
   return js
     .replace(/require\('events'\)/g, "require('browser/events')")
     .replace(/require\('debug'\)/g, "require('browser/debug')")
+    .replace(/require\('path'\)/g, "require('browser/path')")
     .replace(/require\('tty'\)/g, "require('browser/tty')")
     .replace(/require\('fs'\)/g, "require('browser/fs')")
 }
