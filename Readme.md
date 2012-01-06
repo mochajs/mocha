@@ -8,20 +8,27 @@
 
 ```
 project: mocha
-commits: 440
-files  : 84
+commits: 502
+files  : 86
 authors: 
-  334	Tj Holowaychuk          75.9%
-   69	TJ Holowaychuk          15.7%
-   20	Guillermo Rauch         4.5%
-    6	James Carr              1.4%
-    2	Quang Van               0.5%
-    2	FARKAS Máté             0.5%
-    1	Ben Lindsey             0.2%
+  352	Tj Holowaychuk          70.1%
+   98	TJ Holowaychuk          19.5%
+   21	Guillermo Rauch         4.2%
+    6	James Carr              1.2%
+    4	Joshua Krall            0.8%
+    3	Ben Lindsey             0.6%
+    3	Nathan Rajlich          0.6%
+    2	FARKAS Máté           0.4%
+    2	Quang Van               0.4%
+    1	Steve Mason             0.2%
+    1	Yuest Wang              0.2%
     1	hokaccha                0.2%
     1	David Henderson         0.2%
+    1	Fedor Indutny           0.2%
     1	Fredrik Lindin          0.2%
     1	Harry Brundage          0.2%
-    1	Konstantin Käfer        0.2%
-    1	Steve Mason             0.2%
+    1	Konstantin Käfer      0.2%
+    1	Maciej Małecki         0.2%
+    1	Raynos                  0.2%
+    1	Ryunosuke SATO          0.2%
 ```
