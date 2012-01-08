@@ -8,7 +8,6 @@ var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
   , mocha = require('../')
-  , utils = mocha.utils
   , reporters = mocha.reporters
   , interfaces = mocha.interfaces
   , Runner = mocha.Runner
@@ -16,6 +15,7 @@ var program = require('commander')
   , vm = require('vm')
   , fs = require('fs')
   , join = path.join
+  , rreaddir = require('recursive-readdir')
   , cwd = process.cwd();
 
 /**
@@ -44,7 +44,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
-  .option('-w, --watch', 'watch files for changes')
+  .option('-w, --watch', 'watch test files for changes')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -160,62 +160,62 @@ try {
 // default files to test/*.{js,coffee}
 
 if (!files.length) {
-  files = fs.readdirSync('test').filter(function(path){
-    return path.match(re);
-  }).map(function(path){
-    return join('test', path);
-  });
-}
+  rreaddir('./test',function(err,files){
+    files.filter(function(path){
+      return path.match(re);
+    });
 
-// resolve
+  // resolve
 
-files = files.map(function(path){
-  path = require.resolve(join(cwd, path));
-  return path;
-});
-
-// --watch
-
-if (program.watch) {
-  console.log();
-  hideCursor();
-  process.on('SIGINT', function(){
-    showCursor();
-    console.log('\n');
-    process.exit();
+  files = files.map(function(path){
+    path = require.resolve(join(cwd, path));
+    return path;
   });
 
-  var frames = [
-      '  \033[96m◜ \033[90mwatching\033[0m'
-    , '  \033[96m◠ \033[90mwatching\033[0m'
-    , '  \033[96m◝ \033[90mwatching\033[0m'
-    , '  \033[96m◞ \033[90mwatching\033[0m'
-    , '  \033[96m◡ \033[90mwatching\033[0m'
-    , '  \033[96m◟ \033[90mwatching\033[0m'
-  ];
+  // --watch
 
-  play(frames);
+  if (program.watch) {
+    console.log();
+    hideCursor();
+    process.on('SIGINT', function(){
+      showCursor();
+      console.log('\n');
+      process.exit();
+    });
 
-  utils.watch(utils.files(cwd), function(){
-    stop()
-    suite = suite.clone();
-    ui = interfaces[program.ui](suite);
-    load(files, function(){
-      run(suite, function(){
-        play(frames);
+    var frames = [
+        '  \033[96m◜ \033[90mwatching\033[0m'
+      , '  \033[96m◠ \033[90mwatching\033[0m'
+      , '  \033[96m◝ \033[90mwatching\033[0m'
+      , '  \033[96m◞ \033[90mwatching\033[0m'
+      , '  \033[96m◡ \033[90mwatching\033[0m'
+      , '  \033[96m◟ \033[90mwatching\033[0m'
+    ];
+
+    play(frames);
+
+    mocha.watch(files, function(){
+      stop()
+      suite = suite.clone();
+      ui = interfaces[program.ui](suite);
+      load(files, function(){
+        run(suite, function(){
+          play(frames);
+        });
       });
     });
+
+    return;
+  }
+
+  // load
+
+  load(files, function(){
+    run(suite, process.exit);
   });
 
-  return;
+  })
 }
-
-// load
-
-load(files, function(){
-  run(suite, process.exit);
-});
-
 // require test files before
 // running the root suite
 

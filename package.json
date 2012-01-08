@@ -15,6 +15,7 @@
     , "growl": "1.4.x"
     , "debug": "*"
     , "say": "0.5.x"
+    , "recursive-readdir":"0.0.1"
   }
   , "devDependencies": {
     "should": "0.3.x"
