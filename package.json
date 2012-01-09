@@ -10,6 +10,9 @@
   , "scripts": {
     "test": "make test"
   }
+  , "bin":{
+    "mocha": "./bin/mocha"
+  }
   , "dependencies":{
       "commander": "0.5.1"
     , "growl": "1.4.x"
