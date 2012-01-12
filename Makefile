@@ -23,7 +23,7 @@ clean:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-exports test-unit test-grep
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep
 
 test-unit:
 	@./bin/mocha \
@@ -40,6 +40,12 @@ test-tdd:
 		--reporter $(REPORTER) \
 		--ui tdd \
 		test/interfaces/tdd
+
+test-qunit:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/interfaces/qunit
 
 test-exports:
 	@./bin/mocha \
@@ -82,4 +88,4 @@ tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: watch test test-all test-bdd test-tdd test-exports test-unit non-tty test-grep tm clean
+.PHONY: watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
