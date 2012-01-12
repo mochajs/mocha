@@ -82,6 +82,7 @@ program.on('interfaces', function(){
   console.log('');
   console.log('    bdd');
   console.log('    tdd');
+  console.log('    qunit');
   console.log('    exports');
   console.log('');
   process.exit();
