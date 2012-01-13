@@ -129,31 +129,36 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ## mocha(1)
 
-    Usage: mocha [options] [files]
+  Usage: mocha [options] [files]
 
-    Options:
+  Options:
 
-      -h, --help             output usage information
-      -V, --version          output the version number
-      -r, --require <name>   require the given module
-      -R, --reporter <name>  specify the reporter to use
-      -u, --ui <name>        specify user-interface (bdd|tdd|exports)
-      -g, --grep <pattern>   only run tests matching <pattern>
-      -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
-      -s, --slow <ms>        "slow" test threshold in milliseconds [75]
-      -w, --watch            watch files for changes
-      -C, --no-colors        force disabling of colors
-      -c, --colors           force enabling of colors
-      -G, --growl            enable growl notification support
-      -d, --debug            enable node's debugger
-      --globals <names>      allow the given comma-delimited global [names]
-      --ignore-leaks         ignore global variable leaks
-      --interfaces           display available interfaces
-      --reporters            display available reporters
+    -h, --help             output usage information
+    -V, --version          output the version number
+    -r, --require <name>   require the given module
+    -R, --reporter <name>  specify the reporter to use
+    -u, --ui <name>        specify user-interface (bdd|tdd|exports)
+    -g, --grep <pattern>   only run tests matching <pattern>
+    -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
+    -s, --slow <ms>        "slow" test threshold in milliseconds [75]
+    -w, --watch            watch files for changes
+    -C, --no-colors        force disabling of colors
+    -c, --colors           force enabling of colors
+    -G, --growl            enable growl notification support
+    -d, --debug            enable node's debugger
+    -b, --bail             bail after first test failure
+    --globals <names>      allow the given comma-delimited global [names]
+    --ignore-leaks         ignore global variable leaks
+    --interfaces           display available interfaces
+    --reporters            display available reporters
 
 ### -w, --watch
 
   Executes tests on changes to the test files.
+
+### -b, --bail
+
+  Only interested in the first exception? use `--bail` !
 
 ### -d, --debug
 
