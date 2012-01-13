@@ -1,4 +1,15 @@
 
+0.10.0 / 2012-01-13 
+==================
+
+  * Added `-b, --bail` to exit on first exception [guillermo]
+  * Added support for `-gc` / `--expose-gc` [TooTallNate]
+  * Added `qunit`-inspired interface
+  * Added MIT LICENSE. Closes #194
+  * Added: `--watch` all .js in the CWD. Closes #139
+  * Fixed `self.test` reference in runner. Closes #189
+  * Fixed double reporting of uncaught exceptions after timeout. Closes #195
+
 0.8.2 / 2012-01-05 
 ==================
 
