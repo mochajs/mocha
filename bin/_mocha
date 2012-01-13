@@ -145,6 +145,10 @@ if (program.slow) Base.slow = program.slow;
 
 if (program.timeout) suite.timeout(program.timeout);
 
+// --bail
+
+suite.bail(null != program.bail);
+
 // files
 
 var files = program.args
