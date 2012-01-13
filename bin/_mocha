@@ -147,7 +147,7 @@ if (program.timeout) suite.timeout(program.timeout);
 
 // --bail
 
-suite.bail(null != program.bail);
+suite.bail(program.bail);
 
 // files
 
