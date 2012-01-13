@@ -1,4 +1,3 @@
-
 suite('Array', function(){
   suite('#indexOf()', function(){
     var initialValue = 32;
@@ -13,17 +12,22 @@ suite('Array', function(){
       initialValue.should.eql(42);
       [1,2,3].indexOf(5).should.equal(-1);
       [1,2,3].indexOf(0).should.equal(-1);
-    })
+    });
     
     test('should return the correct index when the value is present', function(){
       initialValue.should.eql(42);      
       [1,2,3].indexOf(1).should.equal(0);
       [1,2,3].indexOf(2).should.equal(1);
       [1,2,3].indexOf(3).should.equal(2);
-    })
+    });
+
     suiteTeardown(function(done){
       initialValue.should.eql(42);
       done();
     });
-  })
-})
+  });
+});
+
+test('should recognize options.pending', function(){
+  throw new Error('should not be called');
+}, {pending: true});
