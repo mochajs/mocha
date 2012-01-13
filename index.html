@@ -158,34 +158,37 @@
 
 <h2>mocha(1)</h2>
 
-<pre><code>Usage: mocha [options] [files]
+<p>  Usage: mocha [options] [files]</p>
 
-Options:
+<p>  Options:</p>
 
-  -h, --help             output usage information
-  -V, --version          output the version number
-  -r, --require &lt;name&gt;   require the given module
-  -R, --reporter &lt;name&gt;  specify the reporter to use
-  -u, --ui &lt;name&gt;        specify user-interface (bdd|tdd|exports)
-  -g, --grep &lt;pattern&gt;   only run tests matching &lt;pattern&gt;
-  -t, --timeout &lt;ms&gt;     set test-case timeout in milliseconds [2000]
-  -s, --slow &lt;ms&gt;        "slow" test threshold in milliseconds [75]
-  -w, --watch            watch files for changes
-  -C, --no-colors        force disabling of colors
-  -c, --colors           force enabling of colors
-  -G, --growl            enable growl notification support
-  -S, --say [voice]      enable say notification support
-  -d, --debug            enable node's debugger
-  -b, --bail             bail after first test failure
-  --globals &lt;names&gt;      allow the given comma-delimited global [names]
-  --ignore-leaks         ignore global variable leaks
-  --interfaces           display available interfaces
-  --reporters            display available reporters
+<pre><code>-h, --help             output usage information
+-V, --version          output the version number
+-r, --require &lt;name&gt;   require the given module
+-R, --reporter &lt;name&gt;  specify the reporter to use
+-u, --ui &lt;name&gt;        specify user-interface (bdd|tdd|exports)
+-g, --grep &lt;pattern&gt;   only run tests matching &lt;pattern&gt;
+-t, --timeout &lt;ms&gt;     set test-case timeout in milliseconds [2000]
+-s, --slow &lt;ms&gt;        "slow" test threshold in milliseconds [75]
+-w, --watch            watch files for changes
+-C, --no-colors        force disabling of colors
+-c, --colors           force enabling of colors
+-G, --growl            enable growl notification support
+-d, --debug            enable node's debugger
+-b, --bail             bail after first test failure
+--globals &lt;names&gt;      allow the given comma-delimited global [names]
+--ignore-leaks         ignore global variable leaks
+--interfaces           display available interfaces
+--reporters            display available reporters
 </code></pre>
 
 <h3>-w, &mdash;watch</h3>
 
-<p>  Executes tests on changes to the test files.</p>
+<p>  Executes tests on changes to JavaScript in the CWD.</p>
+
+<h3>-b, &mdash;bail</h3>
+
+<p>  Only interested in the first exception? use <code>--bail</code> !</p>
 
 <h3>-d, &mdash;debug</h3>
 
@@ -294,6 +297,35 @@ describe('app', function(){
     }
   }
 };
+</code></pre>
+
+<h3>QUnit</h3>
+
+<p>  The qunit-inspired interface matches the &ldquo;flat&rdquo; look of QUnit where the test suite title is simply defined before the test-cases.</p>
+
+<pre><code>function ok(expr, msg) {
+  if (!expr) throw new Error(msg);
+}
+
+suite('Array');
+
+test('#length', function(){
+  var arr = [1,2,3];
+  ok(arr.length == 3);
+});
+
+test('#indexOf()', function(){
+  var arr = [1,2,3];
+  ok(arr.indexOf(1) == 0);
+  ok(arr.indexOf(2) == 1);
+  ok(arr.indexOf(3) == 2);
+});
+
+suite('String');
+
+test('#length', function(){
+  ok('foo'.length == 3);
+});
 </code></pre>
 
 <h2>Reporters</h2>
@@ -425,20 +457,30 @@ describe('app', function(){
 
 <p> Mocha runs in the browser. Every release of Mocha will have new builds of <em>./mocha.js</em> and <em>./mocha.css</em> for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call <code>mocha.setup('bdd')</code> to use the <strong>BDD</strong> interface before loading the test scripts, running them <code>onload</code> with <code>mocha.run()</code>.</p>
 
-<pre><code>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"&gt;&lt;/script&gt;
-&lt;link rel="stylesheet" href="mocha.css" /&gt;
-&lt;script src="mocha.js"&gt;&lt;/script&gt;
-&lt;script&gt;mocha.setup('bdd')&lt;/script&gt;
-&lt;script src="test.array.js"&gt;&lt;/script&gt;
-&lt;script src="test.object.js"&gt;&lt;/script&gt;
-&lt;script src="test.xhr.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-  onload = function(){
-    mocha
-      .run()
-      .globals(['foo', 'bar']) // acceptable globals 
-  };
-&lt;/script&gt;
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Mocha Tests&lt;/title&gt;
+  &lt;link rel="stylesheet" href="https://raw.github.com/visionmedia/mocha/master/mocha.css" /&gt;
+  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"&gt;&lt;/script&gt;
+  &lt;script src="https://raw.github.com/LearnBoost/expect.js/d2440da086bf8dc38c6085641f23b968a0f48b29/expect.js"&gt;&lt;/script&gt;
+  &lt;script src="https://raw.github.com/visionmedia/mocha/master/mocha.js"&gt;&lt;/script&gt;
+  &lt;script&gt;mocha.setup('bdd')&lt;/script&gt;
+  &lt;script src="test.array.js"&gt;&lt;/script&gt;
+  &lt;script src="test.object.js"&gt;&lt;/script&gt;
+  &lt;script src="test.xhr.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    $(function () {
+      mocha
+        .run()
+        .globals(['foo', 'bar']) // acceptable globals
+    })
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="mocha"&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
 
 <p>  Feel free to hot-link the <a href="https://raw.github.com/visionmedia/mocha/master/mocha.css">mocha.css</a> and <a href="https://raw.github.com/visionmedia/mocha/master/mocha.js">mocha.js</a> from GitHub.</p>
