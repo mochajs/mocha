@@ -9,6 +9,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
   - async test timeout support
+  - test-specific timeouts
   - growl notification support
   - reports test durations
   - highlights slow tests
@@ -18,7 +19,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - auto-exit to prevent "hanging" with an active loop
   - easily meta-generate suites & test-cases
   - mocha.opts file support
-  - `mocha-debug(1)` for node debugger support
+  - node debugger support
   - detects multiple calls to `done()`
   - use any assertion library you want
   - extensible reporting, bundled with 9+ reporters
@@ -36,7 +37,11 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 
 ## Assertions
 
-Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](http://github.com/visionmedia/should.js), node's regular `assert` module, or others.
+Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](http://github.com/visionmedia/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
+
+  - [should.js](http://github.com/visionmedia/should.js) BDD style shown throughout these docs
+  - [expect.js](https://github.com/LearnBoost/expect.js) expect() style assertions
+  - [chai](http://chaijs.com/) expect(), assert() and should style assertions
 
 ## Synchronous code
 
@@ -124,11 +129,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ## mocha(1)
 
-
     Usage: mocha [options] [files]
-    
+
     Options:
-    
+
       -h, --help             output usage information
       -V, --version          output the version number
       -r, --require <name>   require the given module
@@ -137,10 +141,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -g, --grep <pattern>   only run tests matching <pattern>
       -t, --timeout <ms>     set test-case timeout in milliseconds [2000]
       -s, --slow <ms>        "slow" test threshold in milliseconds [75]
-      -w, --watch            watch test files for changes
+      -w, --watch            watch files for changes
       -C, --no-colors        force disabling of colors
       -c, --colors           force enabling of colors
       -G, --growl            enable growl notification support
+      -d, --debug            enable node's debugger
       --globals <names>      allow the given comma-delimited global [names]
       --ignore-leaks         ignore global variable leaks
       --interfaces           display available interfaces
@@ -149,6 +154,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ### -w, --watch
 
   Executes tests on changes to the test files.
+
+### -d, --debug
+
+  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the __debugger__ statement.
 
 ### --globals &lt;names&gt;
 
@@ -196,10 +205,6 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-## mocha-debug(1)
-
-  `mocha-debug(1)` is identical to `mocha(1)`, however it enables node's debugger so you may step through tests with the __debugger__ statement.
-  
 ## Interfaces
 
   Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __exports__ flavoured interfaces.
@@ -353,6 +358,23 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       </dl>
     </section>
 
+  The SuperAgent request library [test documentation](http://visionmedia.github.com/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
+  
+    test-docs:
+    	make test REPORTER=doc \
+    		| cat docs/head.html - docs/tail.html \
+    		> docs/test.html
+
+  View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
+
+### XUnit
+
+   Documentation needed.
+
+### TeamCity
+
+   Documentation needed.
+
 ### HTML
 
  The __HTML__ reporter is currently the only browser reporter
@@ -363,15 +385,33 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ## Browser support
 
  Mocha runs in the browser. Every release of Mocha will have new builds of _./mocha.js_ and _./mocha.css_ for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the __BDD__ interface before loading the test scripts, running them `onload` with `mocha.run()`.
- 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="style.css" />
-    <script src="../mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script src="test.array.js"></script>
-    <script src="test.object.js"></script>
-    <script src="test.xhr.js"></script>
-    <script>onload = mocha.run;</script>
+
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Mocha Tests</title>
+      <link rel="stylesheet" href="https://raw.github.com/visionmedia/mocha/master/mocha.css" />
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+      <script src="https://raw.github.com/LearnBoost/expect.js/d2440da086bf8dc38c6085641f23b968a0f48b29/expect.js"></script>
+      <script src="https://raw.github.com/visionmedia/mocha/master/mocha.js"></script>
+      <script>mocha.setup('bdd')</script>
+      <script src="test.array.js"></script>
+      <script src="test.object.js"></script>
+      <script src="test.xhr.js"></script>
+      <script>
+        $(function () {
+          mocha
+            .run()
+            .globals(['foo', 'bar']) // acceptable globals
+        })
+      </script>
+    </head>
+    <body>
+      <div id="mocha"></div>
+    </body>
+    </html>
+
+  Feel free to hot-link the [mocha.css](https://raw.github.com/visionmedia/mocha/master/mocha.css) and [mocha.js](https://raw.github.com/visionmedia/mocha/master/mocha.js) from GitHub.
 
 ### grep
 
@@ -392,37 +432,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ mocha --reporter list --growl
 
-## Suite merging
+## Test specific timeouts
 
-  Suites with common names are "merged" in order
-  to produce unified reporting, especially when
-  meta-generating tests.
+  To compliment the global `--timeout` option, you may also specific test-specific timeouts via `this.timeout()`, or disable the timeout all-together with `this.timeout(0)`.
 
-    describe('merge', function(){
-      describe('stuff', function(){
-        describe('one', function(){
-          it('should do something', function(){})
-        })
-      })
+    it('should take less than 500ms', function(done){
+      this.timeout(500);
+      setTimeout(done, 300);
     })
-
-    describe('merge', function(){
-      describe('stuff', function(){
-        describe('two', function(){
-          it('should do something', function(){})
-        })
-      })
-    })
-
-    describe('merge stuff', function(){
-      describe('three', function(){
-        it('should do something', function(){})
-      })
-    })
-
-Instead of reporting these as distinct suites, they are merged, yielding the following: 
-
-  ![mocha suite merging](http://f.cl.ly/items/380R3S1t1t0b0O2K250V/Screenshot.png)
 
 ## Best practices
 
