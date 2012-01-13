@@ -154,7 +154,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### -w, --watch
 
-  Executes tests on changes to the test files.
+  Executes tests on changes to JavaScript in the CWD.
 
 ### -b, --bail
 
