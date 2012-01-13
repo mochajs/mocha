@@ -59,6 +59,12 @@ test-grep:
 	  --grep fast \
 	  test/misc/grep
 
+test-bail:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--bail \
+		test/misc/bail
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
