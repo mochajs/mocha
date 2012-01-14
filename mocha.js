@@ -1298,9 +1298,9 @@ function HTML(runner) {
 
     // toggle code
     el.find('h2').toggle(function(){
-      pre.slideDown('fast');
+      'undefined' !== typeof pre && pre.slideDown('fast');
     }, function(){
-      pre.slideUp('fast');
+      'undefined' !== typeof pre && pre.slideUp('fast');
     });
 
     // code
