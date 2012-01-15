@@ -16,6 +16,7 @@ var program = require('commander')
   , vm = require('vm')
   , fs = require('fs')
   , join = path.join
+  , pathresolve = path.resolve
   , cwd = process.cwd();
 
 /**
@@ -159,6 +160,7 @@ try {
   require('coffee-script');
   re = /\.(js|coffee)$/;
 } catch (err) {
+  console.log(err);
   // ignore
 }
 
@@ -175,7 +177,8 @@ if (!files.length) {
 // resolve
 
 files = files.map(function(path){
-  path = require.resolve(join(cwd, path));
+  path = pathresolve(path);
+  path = require.resolve(path);
   return path;
 });
 
