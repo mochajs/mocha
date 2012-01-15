@@ -96,7 +96,7 @@ describe('Suite', function() {
         this.suite.clone()._afterEach.length.should.equal(0);
       });
 
-      it('the valurs from the _afterAll array', function() {
+      it('the values from the _afterAll array', function() {
         this.suite.clone()._afterAll.length.should.equal(0);
       });
     });
