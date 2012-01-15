@@ -12,27 +12,27 @@ describe('Suite', function() {
     });
 
     it('the suites array is empty', function() {
-      this.suite.suites.should.have.length(0);
+      this.suite.suites.should.be.empty;
     });
 
     it('the tests array is empty', function() {
-      this.suite.tests.should.have.length(0);
+      this.suite.tests.should.be.empty;
     });
 
     it('the _beforeEach array is empty', function() {
-      this.suite._beforeEach.should.have.length(0);
+      this.suite._beforeEach.should.be.empty;
     });
 
     it('the _beforeAll array is empty', function() {
-      this.suite._beforeEach.should.have.length(0);
+      this.suite._beforeEach.should.be.empty;
     });
 
     it('the _afterEach array is empty', function() {
-      this.suite._afterEach.should.have.length(0);
+      this.suite._afterEach.should.be.empty;
     });
 
     it('the _afterAll array is empty', function() {
-      this.suite._afterAll.should.have.length(0);
+      this.suite._afterAll.should.be.empty;
     });
 
     it('the root is false', function() {
@@ -77,27 +77,27 @@ describe('Suite', function() {
 
     describe('does NOT copy', function() {
       it('the values from the suites array', function() {
-        this.suite.clone().suites.should.have.length(0);
+        this.suite.clone().suites.should.be.empty;
       });
 
       it('the values from the tests array', function() {
-        this.suite.clone().tests.should.have.length(0);
+        this.suite.clone().tests.should.be.empty;
       });
 
       it('the values from the _beforeEach array', function() {
-        this.suite.clone()._beforeEach.should.have.length(0);
+        this.suite.clone()._beforeEach.should.be.empty;
       });
 
       it('the values from the _beforeAll array', function() {
-        this.suite.clone()._beforeAll.should.have.length(0);
+        this.suite.clone()._beforeAll.should.be.empty;
       });
 
       it('the values from the _afterEach array', function() {
-        this.suite.clone()._afterEach.should.have.length(0);
+        this.suite.clone()._afterEach.should.be.empty;
       });
 
       it('the values from the _afterAll array', function() {
-        this.suite.clone()._afterAll.should.have.length(0);
+        this.suite.clone()._afterAll.should.be.empty;
       });
     });
 
