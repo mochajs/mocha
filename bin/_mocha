@@ -7,6 +7,7 @@
 var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
+  , resolve = path.resolve
   , mocha = require('../')
   , utils = mocha.utils
   , reporters = mocha.reporters
@@ -175,8 +176,7 @@ if (!files.length) {
 // resolve
 
 files = files.map(function(path){
-  path = require.resolve(join(cwd, path));
-  return path;
+  return resolve(path);
 });
 
 // --watch
