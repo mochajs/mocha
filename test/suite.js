@@ -12,31 +12,31 @@ describe('Suite', function() {
     });
 
     it('the suites array is empty', function() {
-      this.suite.suites.length.should.equal(0);
+      this.suite.suites.should.have.length(0);
     });
 
     it('the tests array is empty', function() {
-      this.suite.tests.length.should.equal(0);
+      this.suite.tests.should.have.length(0);
     });
 
     it('the _beforeEach array is empty', function() {
-      this.suite._beforeEach.length.should.equal(0);
+      this.suite._beforeEach.should.have.length(0);
     });
 
     it('the _beforeAll array is empty', function() {
-      this.suite._beforeEach.length.should.equal(0);
+      this.suite._beforeEach.should.have.length(0);
     });
 
     it('the _afterEach array is empty', function() {
-      this.suite._afterEach.length.should.equal(0);
+      this.suite._afterEach.should.have.length(0);
     });
 
     it('the _afterAll array is empty', function() {
-      this.suite._afterAll.length.should.equal(0);
+      this.suite._afterAll.should.have.length(0);
     });
 
     it('the root is false', function() {
-      this.suite.root.should.equal(false);
+      this.suite.root.should.be.false;
     });
 
     it('the _timeout is 2000', function() {
@@ -44,7 +44,7 @@ describe('Suite', function() {
     });
 
     it('the _bail is false', function() {
-      this.suite._bail.should.equal(false);
+      this.suite._bail.should.be.false;
     });
   });
 
@@ -71,33 +71,33 @@ describe('Suite', function() {
       });
 
       it('the bail value', function() {
-        this.suite.clone().bail().should.equal(true);
+        this.suite.clone().bail().should.be.true;
       });
     });
 
     describe('does NOT copy', function() {
       it('the values from the suites array', function() {
-        this.suite.clone().suites.length.should.equal(0);
+        this.suite.clone().suites.should.have.length(0);
       });
 
       it('the values from the tests array', function() {
-        this.suite.clone().tests.length.should.equal(0);
+        this.suite.clone().tests.should.have.length(0);
       });
 
       it('the values from the _beforeEach array', function() {
-        this.suite.clone()._beforeEach.length.should.equal(0);
+        this.suite.clone()._beforeEach.should.have.length(0);
       });
 
       it('the values from the _beforeAll array', function() {
-        this.suite.clone()._beforeAll.length.should.equal(0);
+        this.suite.clone()._beforeAll.should.have.length(0);
       });
 
       it('the values from the _afterEach array', function() {
-        this.suite.clone()._afterEach.length.should.equal(0);
+        this.suite.clone()._afterEach.should.have.length(0);
       });
 
       it('the values from the _afterAll array', function() {
-        this.suite.clone()._afterAll.length.should.equal(0);
+        this.suite.clone()._afterAll.should.have.length(0);
       });
     });
 
