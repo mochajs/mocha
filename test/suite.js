@@ -1,5 +1,6 @@
 var mocha = require('../')
-  , Suite = mocha.Suite;
+  , Suite = mocha.Suite
+  , Test = mocha.Test;
 
 describe('Suite', function() {
   describe('when initialized', function() {
@@ -101,5 +102,200 @@ describe('Suite', function() {
       });
     });
 
+  });
+
+  describe('timeout', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when no argument is passed', function() {
+      it('returns the _timeout value', function() {
+        this.suite.timeout().should.equal(2000);
+      });
+    });
+
+    describe('when argument is passed', function() {
+      it('returns the Suite object', function() {
+        var newSuite = this.suite.timeout(5000);
+        newSuite.timeout().should.equal(5000);
+      });
+    });
+  });
+
+  describe('bail', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+      this.suite._bail = true
+    });
+
+    describe('when no argument is passed', function() {
+      it('returns the _bail value', function() {
+        this.suite.bail().should.be.true;
+      });
+    });
+
+    describe('when argument is passed', function() {
+      it('returns the Suite object', function() {
+        var newSuite = this.suite.bail(false);
+        newSuite.bail().should.be.false;
+      });
+    });
+  });
+
+  describe('beforeAll', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('wraps the passed in function in a Hook', function() {
+      it('adds it to _beforeAll', function() {
+        var inputFn = function() {}
+        this.suite.beforeAll(inputFn);
+
+        this.suite._beforeAll.should.have.length(1);
+        var beforeAllItem = this.suite._beforeAll[0];
+        beforeAllItem.title.should.equal('"before all" hook');
+        beforeAllItem.fn.should.equal(inputFn);
+      });
+    });
+  });
+
+  describe('afterAll', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('wraps the passed in function in a Hook', function() {
+      it('adds it to _afterAll', function() {
+        var inputFn = function() {}
+        this.suite.afterAll(inputFn);
+
+        this.suite._afterAll.should.have.length(1);
+        var afterAllItem = this.suite._afterAll[0];
+        afterAllItem.title.should.equal('"after all" hook');
+        afterAllItem.fn.should.equal(inputFn);
+      });
+    });
+  });
+
+  describe('beforeEach', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('wraps the passed in function in a Hook', function() {
+      it('adds it to _beforeEach', function() {
+        var inputFn = function() {}
+        this.suite.beforeEach(inputFn);
+
+        this.suite._beforeEach.should.have.length(1);
+        var beforeEachItem = this.suite._beforeEach[0];
+        beforeEachItem.title.should.equal('"before each" hook');
+        beforeEachItem.fn.should.equal(inputFn);
+      });
+    });
+  });
+
+  describe('afterEach', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('wraps the passed in function in a Hook', function() {
+      it('adds it to _afterEach', function() {
+        var inputFn = function() {}
+        this.suite.afterEach(inputFn);
+
+        this.suite._afterEach.should.have.length(1);
+        var afterEachItem = this.suite._afterEach[0];
+        afterEachItem.title.should.equal('"after each" hook');
+        afterEachItem.fn.should.equal(inputFn);
+      });
+    });
+  });
+
+  describe('addSuite', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+      this.suite.timeout(4002);
+      this.suiteToAdd = new Suite('Suite to Add');
+      this.suite.addSuite(this.suiteToAdd);
+    });
+
+    it('sets the parent on the added Suite', function() {
+      this.suiteToAdd.parent.should.equal(this.suite);
+    });
+
+    it('copies the timeout value', function() {
+      this.suiteToAdd.timeout().should.equal(4002);
+    });
+
+    it('adds the suite to the suites collection', function() {
+      this.suite.suites.should.have.length(1);
+      this.suite.suites[0].should.equal(this.suiteToAdd);
+    });
+  });
+
+  describe('addTest', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+      this.suite.timeout(4002);
+      this.testToAdd = new Test('Suite to Add');
+      this.suite.addTest(this.testToAdd);
+    });
+
+    it('sets the parent on the added test', function() {
+      this.testToAdd.parent.should.equal(this.suite);
+    });
+
+    it('copies the timeout value', function() {
+      this.testToAdd.timeout().should.equal(4002);
+    });
+
+    it('adds the test to the tests collection', function() {
+      this.suite.tests.should.have.length(1);
+      this.suite.tests[0].should.equal(this.testToAdd);
+    });
+  });
+
+  describe('fullTitle', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when there is no parent', function() {
+      it('returns the suite title', function() {
+        this.suite.fullTitle().should.equal('A Suite');
+      });
+    });
+
+    describe('when there is a parent', function() {
+      it('returns the combination of parent\'s and suite\'s title', function() {
+        var parentSuite = new Suite('I am a parent');
+        parentSuite.addSuite(this.suite);
+        this.suite.fullTitle().should.equal('I am a parent A Suite');
+      });
+    });
+  });
+
+  describe('total', function() {
+    beforeEach(function() {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when there are no other suites or tests under the suite', function() {
+      it('returns 0', function() {
+        this.suite.total().should.equal(0);
+      });
+    });
+
+    describe('when there are two tests under the suite', function() {
+      it('returns 2', function() {
+        this.suite.addTest(new Test('a child test'));
+        this.suite.addTest(new Test('another child test'));
+        this.suite.total().should.equal(2);
+      });
+    });
   });
 });
