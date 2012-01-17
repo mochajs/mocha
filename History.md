@@ -1,4 +1,12 @@
 
+0.10.1 / 2012-01-17 
+==================
+
+  * Added support for node 0.7.x
+  * Fixed absolute path support. Closes #215 [kompiro]
+  * Fixed `--no-colors` option [Jussi Virtanen]
+  * Fixed Arial CSS typo in the correct file
+
 0.10.0 / 2012-01-13 
 ==================
 

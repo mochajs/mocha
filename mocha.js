@@ -789,7 +789,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.10.0';
+exports.version = '0.10.1';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -2756,7 +2756,7 @@ Suite.prototype.clone = function(){
   var suite = new Suite(this.title);
   debug('clone');
   suite.timeout(this.timeout());
-  suite.bail(this._bail());
+  suite.bail(this.bail());
   return suite;
 };
 
