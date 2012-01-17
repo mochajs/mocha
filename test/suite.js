@@ -271,7 +271,7 @@ describe('Suite', function() {
     });
 
     describe('when there is a parent', function() {
-      it('returns the combination of parent\'s and suite title', function() {
+      it('returns the combination of parent\'s and suite\'s title', function() {
         var parentSuite = new Suite('I am a parent');
         parentSuite.addSuite(this.suite);
         this.suite.fullTitle().should.equal('I am a parent A Suite');
@@ -291,7 +291,7 @@ describe('Suite', function() {
     });
 
     describe('when there are two tests under the suite', function() {
-      it('returns 1', function() {
+      it('returns 2', function() {
         this.suite.addTest(new Test('a child test'));
         this.suite.addTest(new Test('another child test'));
         this.suite.total().should.equal(2);
