@@ -7,6 +7,7 @@
 var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
+  , resolve = path.resolve
   , mocha = require('../')
   , utils = mocha.utils
   , reporters = mocha.reporters
@@ -45,8 +46,8 @@ program
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
   .option('-w, --watch', 'watch files for changes')
-  .option('-C, --no-colors', 'force disabling of colors')
   .option('-c, --colors', 'force enabling of colors')
+  .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('-d, --debug', "enable node's debugger")
   .option('-b, --bail', "bail after first test failure")
@@ -175,8 +176,7 @@ if (!files.length) {
 // resolve
 
 files = files.map(function(path){
-  path = require.resolve(join(cwd, path));
-  return path;
+  return resolve(path);
 });
 
 // --watch
