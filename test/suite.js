@@ -241,21 +241,21 @@ describe('Suite', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
       this.suite.timeout(4002);
-      this.testToAdd = new Test('Suite to Add');
-      this.suite.addTest(this.testToAdd);
+      this.test = new Test('Suite to Add');
+      this.suite.addTest(this.test);
     });
 
     it('sets the parent on the added test', function(){
-      this.testToAdd.parent.should.equal(this.suite);
+      this.test.parent.should.equal(this.suite);
     });
 
     it('copies the timeout value', function(){
-      this.testToAdd.timeout().should.equal(4002);
+      this.test.timeout().should.equal(4002);
     });
 
     it('adds the test to the tests collection', function(){
       this.suite.tests.should.have.length(1);
-      this.suite.tests[0].should.equal(this.testToAdd);
+      this.suite.tests[0].should.equal(this.test);
     });
   });
 
