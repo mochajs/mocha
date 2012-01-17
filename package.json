@@ -11,7 +11,7 @@
     "test": "make test"
   }
   , "dependencies":{
-      "commander": "0.5.1"
+      "commander": "0.5.x"
     , "growl": "1.4.x"
     , "debug": "*"
   }
