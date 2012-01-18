@@ -40,7 +40,7 @@ body {
   color: #888;
 }
 
-#mocha .test.pending:hover h2::after{
+#mocha .test.pending:hover h2::after {
   content: '(pending)';
 }
 
