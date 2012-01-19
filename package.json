@@ -16,6 +16,6 @@
     , "debug": "*"
   }
   , "devDependencies": {
-    "should": "0.4.x"
+    "should": "*"
   }
 }
