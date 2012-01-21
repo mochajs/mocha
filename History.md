@@ -1,4 +1,11 @@
 
+0.10.2 / 2012-01-21 
+==================
+
+  * Fixed suite count in reporter stats. Closes #222
+  * Fixed `done()` after timeout error reporting [Phil Sung]
+  * Changed the 0-based errors to 1
+
 0.10.1 / 2012-01-17 
 ==================
 

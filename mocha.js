@@ -789,7 +789,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.10.1';
+exports.version = '0.11.0';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -942,7 +942,7 @@ exports.list = function(failures){
     stack = stack.slice(index + 1)
       .replace(/^/gm, '  ');
 
-    console.error(fmt, i, test.fullTitle(), msg, stack);
+    console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
 };
 
@@ -972,7 +972,7 @@ function Base(runner) {
 
   runner.on('suite', function(suite){
     stats.suites = stats.suites || 0;
-    stats.suites++;
+    suite.root || stats.suites++;
   });
 
   runner.on('test end', function(test){
@@ -1298,9 +1298,9 @@ function HTML(runner) {
 
     // toggle code
     el.find('h2').toggle(function(){
-      pre.slideDown('fast');
+      pre && pre.slideDown('fast');
     }, function(){
-      pre.slideUp('fast');
+      pre && pre.slideUp('fast');
     });
 
     // code
@@ -1654,7 +1654,7 @@ function List(runner) {
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(color('fail', '  %d) %s'), n++, test.fullTitle());
+    console.log(color('fail', '  %d) %s'), ++n, test.fullTitle());
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -2115,6 +2115,7 @@ function Runnable(title, fn) {
   this.async = fn && fn.length;
   this.sync = ! this.async;
   this._timeout = 2000;
+  this.timedOut = false;
   this.context = this;
 }
 
@@ -2178,6 +2179,7 @@ Runnable.prototype.resetTimeout = function(){
   if (ms) {
     this.timer = setTimeout(function(){
       self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
+      self.timedOut = true;
     }, ms);
   }
 };
@@ -2202,6 +2204,7 @@ Runnable.prototype.run = function(fn){
     if (ms) {
       this.timer = setTimeout(function(){
         done(new Error('timeout of ' + ms + 'ms exceeded'));
+        self.timedOut = true;
       }, ms);
     }
   }
@@ -2215,6 +2218,7 @@ Runnable.prototype.run = function(fn){
 
   // finished
   function done(err) {
+    if (self.timedOut) return;
     if (finished) return multiple();
     self.clearTimeout();
     self.duration = new Date - start;
@@ -2331,6 +2335,7 @@ Runner.prototype.grep = function(re){
  */
 
 Runner.prototype.globals = function(arr){
+  if (0 == arguments.length) return this._globals;
   debug('globals %j', arr);
   utils.forEach(arr, function(arr){
     this._globals.push(arr);
@@ -2388,7 +2393,6 @@ Runner.prototype.fail = function(test, err){
  */
 
 Runner.prototype.failHook = function(hook, err){
-  ++this.failures;
   this.fail(hook, err);
   this.emit('end');
 };
@@ -2625,6 +2629,32 @@ Runner.prototype.runSuite = function(suite, fn){
 };
 
 /**
+ * Handle uncaught exceptions.
+ *
+ * @param {Error} err
+ * @api private
+ */
+
+Runner.prototype.uncaught = function(err){
+  debug('uncaught exception');
+  var runnable = this.currentRunnable;
+  if (runnable.failed) return;
+  runnable.clearTimeout();
+  err.uncaught = true;
+  this.fail(runnable, err);
+
+  // recover from test
+  if ('test' == runnable.type) {
+    this.emit('test end', runnable);
+    this.hookUp('afterEach', this.next);
+    return;
+  }
+
+  // bail on hooks
+  this.emit('end');
+};
+
+/**
  * Run the root suite and invoke `fn(failures)`
  * on completion.
  *
@@ -2640,9 +2670,9 @@ Runner.prototype.run = function(fn){
   debug('start');
 
   // callback
-  self.on('end', function(){
+  this.on('end', function(){
     debug('end');
-    process.removeListener('uncaughtException', uncaught);
+    process.removeListener('uncaughtException', this.uncaught);
     fn(self.failures);
   });
 
@@ -2654,25 +2684,9 @@ Runner.prototype.run = function(fn){
   });
 
   // uncaught exception
-  function uncaught(err){
-    var runnable = self.currentRunnable;
-    debug('uncaught exception');
-    if (runnable.failed) return;
-    runnable.clearTimeout();
-    err.uncaught = true;
-    self.fail(runnable, err);
-
-    // recover from test
-    if ('test' == runnable.type) {
-      self.emit('test end', runnable);
-      self.hookUp('afterEach', self.next);
-    // bail on hooks
-    } else {
-      self.emit('end');
-    }
-  }
-
-  process.on('uncaughtException', uncaught);
+  process.on('uncaughtException', function(err){
+    self.uncaught(err);
+  });
 
   return this;
 };
