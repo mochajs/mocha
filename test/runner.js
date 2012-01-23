@@ -18,10 +18,8 @@ describe('Runner', function(){
 
     it('should white-list globals', function(){
       runner.globals(['foo', 'bar']);
-      var globals = runner.globals();
-      var globalsLength = globals.length;
-      globals[globalsLength - 2].should.equal('foo');
-      globals[globalsLength - 1].should.equal('bar');
+      runner.globals().should.contain('foo');
+      runner.globals().should.contain('bar');
     })
   })
 
