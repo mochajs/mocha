@@ -18,8 +18,8 @@ describe('Runner', function(){
 
     it('should white-list globals', function(){
       runner.globals(['foo', 'bar']);
-      runner.globals().should.include('foo');
-      runner.globals().should.include('bar');
+      runner.globals().should.contain('foo');
+      runner.globals().should.contain('bar');
     })
   })
 
