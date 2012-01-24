@@ -7,7 +7,7 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js mocha.css
 
-mocha.css: test/browser/style.css
+mocha.css: test/samples/browser/style.css
 	cp -f $< $@
 
 mocha.js: $(SRC) $(SUPPORT)
@@ -33,56 +33,56 @@ test-bdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		test/interfaces/bdd
+		test/samples/interfaces/bdd
 
 test-tdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
-		test/interfaces/tdd
+		test/samples/interfaces/tdd
 
 test-qunit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
-		test/interfaces/qunit
+		test/samples/interfaces/qunit
 
 test-exports:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
-		test/interfaces/exports
+		test/samples/interfaces/exports
 
 test-grep:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
 	  --grep fast \
-	  test/misc/grep
+	  test/samples/misc/grep
 
 test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--bail \
-		test/misc/bail
+		test/samples/misc/bail
 
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
-		test/interfaces/bdd 2>&1 > /tmp/dot.out
+		test/samples/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
 	@./bin/mocha \
 		--reporter list \
-		test/interfaces/bdd 2>&1 > /tmp/list.out
+		test/samples/interfaces/bdd 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
 	@./bin/mocha \
 		--reporter spec \
-		test/interfaces/bdd 2>&1 > /tmp/spec.out
+		test/samples/interfaces/bdd 2>&1 > /tmp/spec.out
 
 	@echo spec:
 	@cat /tmp/spec.out
