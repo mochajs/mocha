@@ -33,56 +33,56 @@ test-bdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		test/interfaces/bdd
+		test/acceptance/interfaces/bdd
 
 test-tdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
-		test/interfaces/tdd
+		test/acceptance/interfaces/tdd
 
 test-qunit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
-		test/interfaces/qunit
+		test/acceptance/interfaces/qunit
 
 test-exports:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
-		test/interfaces/exports
+		test/acceptance/interfaces/exports
 
 test-grep:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
 	  --grep fast \
-	  test/misc/grep
+	  test/acceptance/misc/grep
 
 test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--bail \
-		test/misc/bail
+		test/acceptance/misc/bail
 
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
-		test/interfaces/bdd 2>&1 > /tmp/dot.out
+		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
 	@./bin/mocha \
 		--reporter list \
-		test/interfaces/bdd 2>&1 > /tmp/list.out
+		test/acceptance/interfaces/bdd 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
 	@./bin/mocha \
 		--reporter spec \
-		test/interfaces/bdd 2>&1 > /tmp/spec.out
+		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
 
 	@echo spec:
 	@cat /tmp/spec.out
