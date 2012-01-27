@@ -94,7 +94,30 @@ program.on('interfaces', function(){
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
 program.on('require', function(mod){
-  require(mod[0] == '.' ? cwd+'/'+mod : mod);
+
+  // relative file modules support
+
+  if (mod[0] == '.') {
+
+    mod = cwd +'/'+ mod;
+
+    // coffee-script support
+
+    try {
+      if (!mod.match(/\.js$/) && fs.statSync(mod+'.coffee').isFile()){
+        mod = mod+'.coffee';
+      }
+    } catch (err) {
+      // ignore
+    }
+
+    if (mod.match(/\.coffee$/)) {
+      require('coffee-script');
+    }
+  }
+
+  require(mod);
+
 });
 
 // mocha.opts support
