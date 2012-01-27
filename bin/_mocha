@@ -97,12 +97,11 @@ program.on('require', function(mod){
 
   // relative file modules support
 
-  if (mod[0] == '.') {
+  if (mod[0] == '.') mod = cwd +'/'+ mod;
 
-    mod = cwd +'/'+ mod;
+  // coffee-script support for relative and absolute require paths
 
-    // coffee-script support
-
+  if (mod[0] == '/') {
     try {
       if (!mod.match(/\.js$/) && fs.statSync(mod+'.coffee').isFile()){
         mod = mod+'.coffee';
@@ -114,6 +113,7 @@ program.on('require', function(mod){
     if (mod.match(/\.coffee$/)) {
       require('coffee-script');
     }
+    
   }
 
   require(mod);
