@@ -94,7 +94,7 @@ program.on('interfaces', function(){
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
 program.on('require', function(mod){
-  require(mod);
+  require(mod[0] == '.' ? cwd+'/'+mod : mod);
 });
 
 // mocha.opts support
