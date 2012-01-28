@@ -103,9 +103,15 @@ program.on('require', function(mod){
 
   if (mod[0] == '/' && !mod.match(/\.(js|coffee)$/)) {
 
-    try { 
-      if(fs.statSync(mod+'.coffee').isFile()) mod += '.coffee';
-    } catch (err) {}  // ignores file does not exist error 
+    // .js modules takes precedence over .coffee
+
+    try {
+      fs.statSync(mod+'.js').isFile() == true;
+    } catch(err){
+      try {
+        if(fs.statSync(mod+'.coffee').isFile()) mod += '.coffee';
+      } catch (err) {}  // ignores file does not exist errors
+    }
 
   }
 
