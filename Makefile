@@ -27,7 +27,9 @@ test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep
 
 test-unit:
 	@./bin/mocha \
-		--reporter $(REPORTER)
+		--reporter $(REPORTER) \
+		test/acceptance/*.js \
+		test/*.js
 
 test-bdd:
 	@./bin/mocha \
