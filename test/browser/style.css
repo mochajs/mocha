@@ -37,11 +37,13 @@ body {
   right: -10px;
   content: '(view source)';
   font-size: 12px;
+  font-family: arial;
   color: #888;
 }
 
 #mocha .test.pending:hover h2::after {
   content: '(pending)';
+  font-family: arial;
 }
 
 #mocha .test.pass::before {
