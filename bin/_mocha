@@ -42,6 +42,7 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-n, --name <name>', 'test suite name')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
@@ -148,6 +149,10 @@ if (program.slow) Base.slow = program.slow;
 // --timeout
 
 if (program.timeout) suite.timeout(program.timeout);
+
+// --name
+
+if (program.name) suite.title = program.name;
 
 // --bail
 
@@ -260,11 +265,13 @@ function growl(runner, reporter) {
   runner.on('end', function(){
     var stats = reporter.stats;
     if (stats.failures) {
-      var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { title: 'Failed', image: images.fail });
+      notify(stats.failures + ' of ' + runner.total + ' tests failed', {
+          title: (runner.suite.title ? runner.suite.title + ' failed' : 'Failed')
+        , image: images.fail
+      });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-          title: 'Passed'
+          title: (runner.suite.title ? runner.suite.title + ' passed' : 'Passed')
         , image: images.pass
       });
     }
