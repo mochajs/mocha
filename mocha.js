@@ -261,7 +261,7 @@ module.exports = Progress;
 function Progress() {
   this.percent = 0;
   this.size(0);
-  this.fontSize(12);
+  this.fontSize(11);
   this.font('helvetica, arial, sans-serif');
 }
 
@@ -1208,7 +1208,7 @@ exports = module.exports = HTML;
  */
 
 var statsTemplate = '<ul id="stats">'
-  + '<li class="progress"><canvas width="50" height="50"></canvas></li>'
+  + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
   + '<li class="passes">passes: <em>0</em></li>'
   + '<li class="failures">failures: <em>0</em></li>'
   + '<li class="duration">duration: <em>0</em>s</li>'
@@ -1243,7 +1243,7 @@ function HTML(runner) {
 
   if (!root.length) return error('#mocha div missing, add it to your document');
 
-  if (progress) progress.size(50);
+  if (progress) progress.size(40);
 
   runner.on('suite', function(suite){
     if (suite.root) return;
@@ -3145,7 +3145,7 @@ exports.files = function(dir, ret){
     path = join(dir, path);
     if (fs.statSync(path).isDirectory()) {
       exports.files(path, ret);
-    } else if (path.match(/\.js$/)) {
+    } else if (path.match(/\.(js|coffee)$/)) {
       ret.push(path);
     }
   });
@@ -3167,6 +3167,10 @@ process = {};
 process.exit = function(status){};
 process.stdout = {};
 global = window;
+
+/**
+ * next tick implementation.
+ */
 
 process.nextTick = (function(){
   // postMessage behaves badly on IE8
@@ -3191,17 +3195,29 @@ process.nextTick = (function(){
   }
 })();
 
+/**
+ * Remove uncaughtException listener.
+ */
+
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
     window.onerror = null;
   }
 };
 
+/**
+ * Implements uncaughtException listener.
+ */
+
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
     window.onerror = fn;
   }
 };
+
+/**
+ * Expose mocha.
+ */
 
 window.mocha = require('mocha');
 
@@ -3210,6 +3226,10 @@ window.mocha = require('mocha');
   var suite = new mocha.Suite
     , utils = mocha.utils
     , Reporter = mocha.reporters.HTML
+
+  /**
+   * Highlight the given string of `js`.
+   */
 
   function highlight(js) {
     return js
@@ -3223,6 +3243,10 @@ window.mocha = require('mocha');
       .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
   }
 
+  /**
+   * Parse the given `qs`.
+   */
+
   function parse(qs) {
     return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
         var i = pair.indexOf('=')
@@ -3234,12 +3258,20 @@ window.mocha = require('mocha');
       }, {});
   }
 
+  /**
+   * Setup mocha with the give `ui` name.
+   */
+
   mocha.setup = function(ui){
     ui = mocha.interfaces[ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     ui(suite);
     suite.emit('pre-require', window);
   };
+
+  /**
+   * Run mocha, returning the Runner.
+   */
 
   mocha.run = function(){
     suite.emit('run');
@@ -3249,7 +3281,6 @@ window.mocha = require('mocha');
     if (query.grep) runner.grep(new RegExp(query.grep));
     runner.on('end', function(){
       $('code').each(function(){
-        console.log('code');
         $(this).html(highlight($(this).text()));
       });
     });
