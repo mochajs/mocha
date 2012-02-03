@@ -529,3 +529,6 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
        $ make test REPORTER=list
 
+## More information
+
+  For additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/visionmedia/mocha/wiki) on GitHub.
