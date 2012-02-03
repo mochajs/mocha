@@ -789,7 +789,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.11.0';
+exports.version = '0.12.0';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');

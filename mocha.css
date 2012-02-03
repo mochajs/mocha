@@ -103,8 +103,8 @@ body {
 
 #stats {
   position: fixed;
-  top: 10px;
-  right: 0;
+  top: 15px;
+  right: 10px;
   font-size: 12px;
   margin: 0;
   color: #888;
@@ -112,6 +112,7 @@ body {
 
 #stats .progress {
   float: right;
+  padding-top: 0;
 }
 
 #stats em {
@@ -122,6 +123,7 @@ body {
   display: inline-block;
   margin: 0 5px;
   list-style: none;
+  padding-top: 11px;
 }
 
 code .comment { color: #ddd }

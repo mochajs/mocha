@@ -1,6 +1,6 @@
 {
     "name": "mocha"
-  , "version": "0.10.2"
+  , "version": "0.11.0"
   , "description": "simple, flexible, fun test framework"
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "author": "TJ Holowaychuk <tj@vision-media.ca>"

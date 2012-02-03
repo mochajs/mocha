@@ -1,4 +1,13 @@
 
+0.12.0 / 2012-02-02 
+==================
+
+  * Added .coffee `--watch` support. Closes #242
+  * Added support to `--require` files relative to the CWD. Closes #241
+  * Added quick n dirty syntax highlighting. Closes #248
+  * Changed: made HTML progress indicator smaller
+  * Fixed xunit errors attribute [dhendo]
+
 0.10.2 / 2012-01-21 
 ==================
 
