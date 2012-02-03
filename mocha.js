@@ -1838,7 +1838,7 @@ function Spec(runner) {
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(indent() + color('fail', '  %d) %s'), n++, test.title);
+    console.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -2018,6 +2018,7 @@ function XUnit(runner) {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
+      , errors: stats.failures
       , skip: stats.tests - stats.failures - stats.passes
       , timestamp: (new Date).toUTCString()
       , time: stats.duration / 1000
@@ -2042,7 +2043,7 @@ XUnit.prototype.constructor = XUnit;
 
 function test(test) {
   var attrs = {
-      classname: test.fullTitle()
+      classname: test.parent.fullTitle()
     , name: test.title
     , time: test.duration / 1000
   };
@@ -3210,6 +3211,18 @@ window.mocha = require('mocha');
     , utils = mocha.utils
     , Reporter = mocha.reporters.HTML
 
+  function highlight(js) {
+    return js
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
+      .replace(/('.*')/gm, '<span class="string">$1</span>')
+      .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
+      .replace(/(\d+)/gm, '<span class="number">$1</span>')
+      .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
+      .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
+  }
+
   function parse(qs) {
     return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
         var i = pair.indexOf('=')
@@ -3234,6 +3247,12 @@ window.mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+    runner.on('end', function(){
+      $('code').each(function(){
+        console.log('code');
+        $(this).html(highlight($(this).text()));
+      });
+    });
     return runner.run();
   };
 })();
