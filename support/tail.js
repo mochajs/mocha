@@ -13,6 +13,10 @@ process.exit = function(status){};
 process.stdout = {};
 global = window;
 
+/**
+ * next tick implementation.
+ */
+
 process.nextTick = (function(){
   // postMessage behaves badly on IE8
   if (window.ActiveXObject || !window.postMessage) {
@@ -36,17 +40,29 @@ process.nextTick = (function(){
   }
 })();
 
+/**
+ * Remove uncaughtException listener.
+ */
+
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
     window.onerror = null;
   }
 };
 
+/**
+ * Implements uncaughtException listener.
+ */
+
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
     window.onerror = fn;
   }
 };
+
+/**
+ * Expose mocha.
+ */
 
 window.mocha = require('mocha');
 
@@ -62,6 +78,10 @@ window.mocha = require('mocha');
     });
   });
 
+  /**
+   * Highlight the given string of `js`.
+   */
+
   function highlight(js) {
     return js
       .replace(/</g, '&lt;')
@@ -74,6 +94,10 @@ window.mocha = require('mocha');
       .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
   }
 
+  /**
+   * Parse the given `qs`.
+   */
+
   function parse(qs) {
     return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
         var i = pair.indexOf('=')
@@ -85,6 +109,10 @@ window.mocha = require('mocha');
       }, {});
   }
 
+  /**
+   * Setup mocha with the give `ui` name.
+   */
+
   mocha.setup = function(ui){
     ui = mocha.interfaces[ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
@@ -92,12 +120,21 @@ window.mocha = require('mocha');
     suite.emit('pre-require', window);
   };
 
+  /**
+   * Run mocha, returning the Runner.
+   */
+
   mocha.run = function(){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+    runner.on('end', function(){
+      $('code').each(function(){
+        $(this).html(highlight($(this).text()));
+      });
+    });
     return runner.run();
   };
 })();
