@@ -386,6 +386,65 @@ exports.getWindowSize = function(){
 };
 }); // module: browser/tty.js
 
+require.register("context.js", function(module, exports, require){
+
+/**
+ * Expose `Context`.
+ */
+
+module.exports = Context;
+
+/**
+ * Initialize a new `Context`.
+ *
+ * @api private
+ */
+
+function Context(){}
+
+/**
+ * Set the context `Test` to `test`.
+ *
+ * @param {Test} test
+ * @return {Context}
+ * @api private
+ */
+
+Context.prototype.test = function(test){
+  this._test = test;
+  return this;
+};
+
+/**
+ * Set test timeout `ms`.
+ *
+ * @param {Number} ms
+ * @return {Context} self
+ * @api private
+ */
+
+Context.prototype.timeout = function(ms){
+  this._test.timeout(ms);
+  return this;
+};
+
+/**
+ * Inspect the context void of `._test`.
+ *
+ * @return {String}
+ * @api private
+ */
+
+Context.prototype.inspect = function(){
+  return JSON.stringify(this, function(key, val){
+    return '_test' == key
+      ? undefined
+      : val;
+  }, 2);
+};
+
+}); // module: context.js
+
 require.register("hook.js", function(module, exports, require){
 
 /**
@@ -410,6 +469,7 @@ module.exports = Hook;
 
 function Hook(title, fn) {
   Runnable.call(this, title, fn);
+  this.type = 'hook';
 }
 
 /**
@@ -795,6 +855,7 @@ exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
 exports.Runnable = require('./runnable');
+exports.Context = require('./Context');
 exports.Runner = require('./runner');
 exports.Suite = require('./suite');
 exports.Hook = require('./hook');
@@ -2117,7 +2178,6 @@ function Runnable(title, fn) {
   this.sync = ! this.async;
   this._timeout = 2000;
   this.timedOut = false;
-  this.context = this;
 }
 
 /**
@@ -2196,7 +2256,7 @@ Runnable.prototype.run = function(fn){
   var self = this
     , ms = this.timeout()
     , start = new Date
-    , ctx = this.context
+    , ctx = this.ctx
     , finished
     , emitted;
 
@@ -2417,7 +2477,7 @@ Runner.prototype.hook = function(name, fn){
     var hook = hooks[i];
     if (!hook) return fn();
     self.currentRunnable = hook;
-    hook.context = self.test;
+    hook.ctx.test(self.test);
 
     self.emit('hook', hook);
 
@@ -2526,6 +2586,7 @@ Runner.prototype.runTest = function(fn){
     , self = this;
 
   try {
+    test.ctx.test(test);
     test.on('error', function(err){
       self.fail(test, err);
     });
@@ -2725,7 +2786,7 @@ exports = module.exports = Suite;
  */
 
 exports.create = function(parent, title){
-  var suite = new Suite(title);
+  var suite = new Suite(title, parent.ctx);
   suite.parent = parent;
   title = suite.fullTitle();
   parent.addSuite(suite);
@@ -2733,14 +2794,17 @@ exports.create = function(parent, title){
 };
 
 /**
- * Initialize a new `Suite` with the given `title`.
+ * Initialize a new `Suite` with the given
+ * `title` and `ctx`.
  *
  * @param {String} title
+ * @param {Context} ctx
  * @api private
  */
 
-function Suite(title) {
+function Suite(title, ctx) {
   this.title = title;
+  this.ctx = ctx;
   this.suites = [];
   this.tests = [];
   this._beforeEach = [];
@@ -2818,6 +2882,7 @@ Suite.prototype.beforeAll = function(fn){
   var hook = new Hook('"before all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.ctx = this.ctx;
   this._beforeAll.push(hook);
   this.emit('beforeAll', hook);
   return this;
@@ -2835,6 +2900,7 @@ Suite.prototype.afterAll = function(fn){
   var hook = new Hook('"after all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.ctx = this.ctx;
   this._afterAll.push(hook);
   this.emit('afterAll', hook);
   return this;
@@ -2852,6 +2918,7 @@ Suite.prototype.beforeEach = function(fn){
   var hook = new Hook('"before each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.ctx = this.ctx;
   this._beforeEach.push(hook);
   this.emit('beforeEach', hook);
   return this;
@@ -2869,6 +2936,7 @@ Suite.prototype.afterEach = function(fn){
   var hook = new Hook('"after each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.ctx = this.ctx;
   this._afterEach.push(hook);
   this.emit('afterEach', hook);
   return this;
@@ -2902,6 +2970,7 @@ Suite.prototype.addSuite = function(suite){
 Suite.prototype.addTest = function(test){
   test.parent = this;
   test.timeout(this.timeout());
+  test.ctx = this.ctx;
   this.tests.push(test);
   this.emit('test', test);
   return this;
@@ -2974,6 +3043,22 @@ Test.prototype = new Runnable;
 Test.prototype.constructor = Test;
 
 
+/**
+ * Inspect the context void of private properties.
+ *
+ * @return {String}
+ * @api private
+ */
+
+Test.prototype.inspect = function(){
+  return JSON.stringify(this, function(key, val){
+    return '_' == key[0]
+      ? undefined
+      : 'parent' == key
+        ? '#<Suite>'
+        : val;
+  }, 2);
+};
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
@@ -3226,6 +3311,12 @@ window.mocha = require('mocha');
   var suite = new mocha.Suite
     , utils = mocha.utils
     , Reporter = mocha.reporters.HTML
+
+  $(function(){
+    $('code').each(function(){
+      $(this).html(highlight($(this).text()));
+    });
+  });
 
   /**
    * Highlight the given string of `js`.
