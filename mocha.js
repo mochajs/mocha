@@ -855,7 +855,7 @@ exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
 exports.Runnable = require('./runnable');
-exports.Context = require('./Context');
+exports.Context = require('./context');
 exports.Runner = require('./runner');
 exports.Suite = require('./suite');
 exports.Hook = require('./hook');
@@ -3308,7 +3308,7 @@ window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite
+  var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
     , Reporter = mocha.reporters.HTML
 

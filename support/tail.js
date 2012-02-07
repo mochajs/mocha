@@ -68,7 +68,7 @@ window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite
+  var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
     , Reporter = mocha.reporters.HTML
 
