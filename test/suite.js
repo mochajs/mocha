@@ -1,55 +1,11 @@
+
 var mocha = require('../')
+  , Context = mocha.Context
   , Suite = mocha.Suite
   , Test = mocha.Test;
 
 describe('Suite', function(){
-  describe('when initialized', function(){
-    beforeEach(function(){
-      this.suite = new Suite('A Suite');
-    });
-
-    it('is initialized with a title', function(){
-      this.suite.title.should.equal('A Suite');
-    });
-
-    it('the suites array is empty', function(){
-      this.suite.suites.should.be.empty;
-    });
-
-    it('the tests array is empty', function(){
-      this.suite.tests.should.be.empty;
-    });
-
-    it('the _beforeEach array is empty', function(){
-      this.suite._beforeEach.should.be.empty;
-    });
-
-    it('the _beforeAll array is empty', function(){
-      this.suite._beforeEach.should.be.empty;
-    });
-
-    it('the _afterEach array is empty', function(){
-      this.suite._afterEach.should.be.empty;
-    });
-
-    it('the _afterAll array is empty', function(){
-      this.suite._afterAll.should.be.empty;
-    });
-
-    it('the root is false', function(){
-      this.suite.root.should.be.false;
-    });
-
-    it('the _timeout is 2000', function(){
-      this.suite._timeout.should.equal(2000);
-    });
-
-    it('the _bail is false', function(){
-      this.suite._bail.should.be.false;
-    });
-  });
-
-  describe('cloning', function(){
+  describe('.clone()', function(){
     beforeEach(function(){
       this.suite = new Suite('To be cloned');
       this.suite._timeout = 3043;
@@ -62,88 +18,83 @@ describe('Suite', function(){
       this.suite._afterAll.push(5);
     });
 
-    describe('copies', function(){
-      it('the title', function(){
-        this.suite.clone().title.should.equal('To be cloned');
-      });
-
-      it('the timeout value', function(){
-        this.suite.clone().timeout().should.equal(3043);
-      });
-
-      it('the bail value', function(){
-        this.suite.clone().bail().should.be.true;
-      });
+    it('should copy the title', function(){
+      this.suite.clone().title.should.equal('To be cloned');
     });
 
-    describe('does NOT copy', function(){
-      it('the values from the suites array', function(){
-        this.suite.clone().suites.should.be.empty;
-      });
-
-      it('the values from the tests array', function(){
-        this.suite.clone().tests.should.be.empty;
-      });
-
-      it('the values from the _beforeEach array', function(){
-        this.suite.clone()._beforeEach.should.be.empty;
-      });
-
-      it('the values from the _beforeAll array', function(){
-        this.suite.clone()._beforeAll.should.be.empty;
-      });
-
-      it('the values from the _afterEach array', function(){
-        this.suite.clone()._afterEach.should.be.empty;
-      });
-
-      it('the values from the _afterAll array', function(){
-        this.suite.clone()._afterAll.should.be.empty;
-      });
+    it('should copy the timeout value', function(){
+      this.suite.clone().timeout().should.equal(3043);
     });
 
+    it('should copy the bail value', function(){
+      this.suite.clone().bail().should.be.true;
+    });
+
+    it('should not copy the values from the suites array', function(){
+      this.suite.clone().suites.should.be.empty;
+    });
+
+    it('should not copy the values from the tests array', function(){
+      this.suite.clone().tests.should.be.empty;
+    });
+
+    it('should not copy the values from the _beforeEach array', function(){
+      this.suite.clone()._beforeEach.should.be.empty;
+    });
+
+    it('should not copy the values from the _beforeAll array', function(){
+      this.suite.clone()._beforeAll.should.be.empty;
+    });
+
+    it('should not copy the values from the _afterEach array', function(){
+      this.suite.clone()._afterEach.should.be.empty;
+    });
+
+    it('should not copy the values from the _afterAll array', function(){
+      this.suite.clone()._afterAll.should.be.empty;
+    });
   });
 
-  describe('timeout', function(){
+  describe('.timeout()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
 
     describe('when no argument is passed', function(){
-      it('returns the _timeout value', function(){
+      it('should return the timeout value', function(){
         this.suite.timeout().should.equal(2000);
       });
     });
 
     describe('when argument is passed', function(){
-      it('returns the Suite object', function(){
+      it('should return the Suite object', function(){
         var newSuite = this.suite.timeout(5000);
         newSuite.timeout().should.equal(5000);
       });
     });
   });
 
-  describe('bail', function(){
+  describe('.bail()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
       this.suite._bail = true
     });
 
     describe('when no argument is passed', function(){
-      it('returns the _bail value', function(){
+      it('should return the bail value', function(){
         this.suite.bail().should.be.true;
       });
     });
 
     describe('when argument is passed', function(){
-      it('returns the Suite object', function(){
+      it('should return the Suite object', function(){
         var newSuite = this.suite.bail(false);
         newSuite.bail().should.be.false;
       });
     });
   });
 
-  describe('beforeAll', function(){
+  describe('.beforeAll()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -161,7 +112,7 @@ describe('Suite', function(){
     });
   });
 
-  describe('afterAll', function(){
+  describe('.afterAll()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -179,7 +130,7 @@ describe('Suite', function(){
     });
   });
 
-  describe('beforeEach', function(){
+  describe('.beforeEach()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -197,7 +148,7 @@ describe('Suite', function(){
     });
   });
 
-  describe('afterEach', function(){
+  describe('.afterEach()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -215,51 +166,51 @@ describe('Suite', function(){
     });
   });
 
-  describe('addSuite', function(){
+  describe('.addSuite()', function(){
     beforeEach(function(){
-      this.suite = new Suite('A Suite');
-      this.suite.timeout(4002);
-      this.suiteToAdd = new Suite('Suite to Add');
-      this.suite.addSuite(this.suiteToAdd);
+      this.first = new Suite('First suite');
+      this.first.timeout(4002);
+      this.second = new Suite('Second suite');
+      this.first.addSuite(this.second);
     });
 
     it('sets the parent on the added Suite', function(){
-      this.suiteToAdd.parent.should.equal(this.suite);
+      this.second.parent.should.equal(this.first);
     });
 
     it('copies the timeout value', function(){
-      this.suiteToAdd.timeout().should.equal(4002);
+      this.second.timeout().should.equal(4002);
     });
 
     it('adds the suite to the suites collection', function(){
-      this.suite.suites.should.have.length(1);
-      this.suite.suites[0].should.equal(this.suiteToAdd);
+      this.first.suites.should.have.length(1);
+      this.first.suites[0].should.equal(this.second);
     });
   });
 
-  describe('addTest', function(){
-    beforeEach(function(){
-      this.suite = new Suite('A Suite');
-      this.suite.timeout(4002);
-      this.test = new Test('Suite to Add');
-      this.suite.addTest(this.test);
-    });
+  // describe('.addTest()', function(){
+  //   beforeEach(function(){
+  //     this.suite = new Suite('A Suite', new Context);
+  //     this.suite.timeout(4002);
+  //     this.test = new Test('test');
+  //     this.suite.addTest(this.test);
+  //   });
+  // 
+  //   it('sets the parent on the added test', function(){
+  //     this.test.parent.should.equal(this.suite);
+  //   });
+  //   
+  //   it('copies the timeout value', function(){
+  //     this.test.timeout().should.equal(4002);
+  //   });
+  //   
+  //   it('adds the test to the tests collection', function(){
+  //     this.suite.tests.should.have.length(1);
+  //     this.suite.tests[0].should.equal(this.test);
+  //   });
+  // });
 
-    it('sets the parent on the added test', function(){
-      this.test.parent.should.equal(this.suite);
-    });
-
-    it('copies the timeout value', function(){
-      this.test.timeout().should.equal(4002);
-    });
-
-    it('adds the test to the tests collection', function(){
-      this.suite.tests.should.have.length(1);
-      this.suite.tests[0].should.equal(this.test);
-    });
-  });
-
-  describe('fullTitle', function(){
+  describe('.fullTitle()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -279,19 +230,19 @@ describe('Suite', function(){
     });
   });
 
-  describe('total', function(){
+  describe('.total()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
 
-    describe('when there are no other suites or tests under the suite', function(){
-      it('returns 0', function(){
+    describe('when there are no nested suites or tests', function(){
+      it('should return 0', function(){
         this.suite.total().should.equal(0);
       });
     });
 
-    describe('when there are two tests under the suite', function(){
-      it('returns 2', function(){
+    describe('when there are several tests in the suite', function(){
+      it('should return the number', function(){
         this.suite.addTest(new Test('a child test'));
         this.suite.addTest(new Test('another child test'));
         this.suite.total().should.equal(2);

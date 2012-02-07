@@ -12,6 +12,7 @@ var program = require('commander')
   , utils = mocha.utils
   , reporters = mocha.reporters
   , interfaces = mocha.interfaces
+  , Context = mocha.Context
   , Runner = mocha.Runner
   , Suite = mocha.Suite
   , vm = require('vm')
@@ -121,7 +122,7 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-var suite = new Suite('')
+var suite = new Suite('', new Context)
   , Base = require('../lib/reporters/base')
   , Reporter = require('../lib/reporters/' + program.reporter)
   , ui = interfaces[program.ui](suite);
