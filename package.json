@@ -12,7 +12,7 @@
   }
   , "dependencies":{
       "commander": "0.5.x"
-    , "growl": "1.4.x"
+    , "growl": "1.5.x"
     , "debug": "*"
   }
   , "devDependencies": {
