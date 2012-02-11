@@ -10,18 +10,22 @@ var spawn = require('child_process').spawn
 
 process.argv.slice(2).forEach(function (arg) {
   switch (arg) {
-    case '-d':
+    case 'debug':
     case '--debug':
+    case '--debug-brk':
+    case '--expose-gc':
+      args.unshift(arg);
+      break;
+    case '-d':
       args.unshift('debug');
       break;
     case '-gc':
-    case '--expose-gc':
       args.unshift('--expose-gc');
       break;
     default:
       args.push(arg);
       break;
-  }
+  }    
 });
 
 var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
