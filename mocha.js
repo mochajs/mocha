@@ -2239,7 +2239,7 @@ Runnable.prototype.resetTimeout = function(){
   this.clearTimeout();
   if (ms) {
     this.timer = setTimeout(function(){
-      self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
+      self.mocha_callback(new Error('timeout of ' + ms + 'ms exceeded'));
       self.timedOut = true;
     }, ms);
   }
@@ -2288,7 +2288,7 @@ Runnable.prototype.run = function(fn){
   }
 
   // for .resetTimeout()
-  this.callback = done;
+  this.mocha_callback = done;
 
   // async
   if (this.async) {
