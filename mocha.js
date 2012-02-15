@@ -1355,6 +1355,9 @@ function HTML(runner) {
       var el = $('<div class="test fail"><h2>' + escape(test.title) + '</h2></div>');
       var str = test.err.stack || test.err;
 
+      // Opera omits the .message
+      if (test.err.stacktrace) str = test.err.message + '\n' + str;
+
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
       if ('[object Error]' == str) str = test.err.message;
