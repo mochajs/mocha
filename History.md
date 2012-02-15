@@ -1,4 +1,11 @@
 
+0.12.1 / 2012-02-14 
+==================
+
+  * Added `npm docs mocha` support [TooTallNate]
+  * Added a `Context` object used for hook and test-case this. Closes #253
+  * Fixed `Suite#clone()` `.ctx` reference. Closes #262
+
 0.12.0 / 2012-02-02 
 ==================
 

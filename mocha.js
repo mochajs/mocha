@@ -849,7 +849,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.12.0';
+exports.version = '0.12.1';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -2834,6 +2834,7 @@ Suite.prototype.constructor = Suite;
 Suite.prototype.clone = function(){
   var suite = new Suite(this.title);
   debug('clone');
+  suite.ctx = this.ctx;
   suite.timeout(this.timeout());
   suite.bail(this.bail());
   return suite;
@@ -3218,7 +3219,7 @@ function ignored(path){
  * Lookup files in the given `dir`.
  *
  * @return {Array}
- * @api public
+ * @api private
  */
 
 exports.files = function(dir, ret){
