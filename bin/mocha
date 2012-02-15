@@ -11,8 +11,12 @@ var spawn = require('child_process').spawn
 process.argv.slice(2).forEach(function (arg) {
   switch (arg) {
     case '-d':
+      args.unshift('--debug');
+      break;
+    case 'debug':
     case '--debug':
-      args.unshift('debug');
+    case '--debug-brk':
+      args.unshift(arg);
       break;
     case '-gc':
     case '--expose-gc':
