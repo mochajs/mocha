@@ -513,6 +513,11 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context){
 
+    // noop variants
+
+    context.xdescribe = function(){};
+    context.xit = function(){};
+
     /**
      * Execute before running tests.
      */
@@ -1342,7 +1347,7 @@ function HTML(runner) {
     stat.find('.duration em').text((ms / 1000).toFixed(2));
 
     // test
-    if (test.passed) {
+    if ('passed' == test.state) {
       var el = $('<div class="test pass"><h2>' + escape(test.title) + '</h2></div>')
     } else if (test.pending) {
       var el = $('<div class="test pass pending"><h2>' + escape(test.title) + '</h2></div>')
@@ -1629,7 +1634,7 @@ function Landing(runner) {
       : crashed;
 
     // show the crash
-    if (test.failed) {
+    if ('failed' == test.state) {
       plane = color('plane crash', '✈');
       crashed = col;
     }
@@ -2109,7 +2114,7 @@ function test(test) {
     , time: test.duration / 1000
   };
 
-  if (test.failed) {
+  if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
     console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
@@ -2436,7 +2441,7 @@ Runner.prototype.checkGlobals = function(test){
 
 Runner.prototype.fail = function(test, err){
   ++this.failures;
-  test.failed = true;
+  test.state = 'failed';
   this.emit('fail', test, err);
 };
 
@@ -2643,7 +2648,7 @@ Runner.prototype.runTests = function(suite, fn){
           return self.hookUp('afterEach', next);
         }
 
-        test.passed = true;
+        test.state = 'passed';
         self.emit('pass', test);
         self.emit('test end', test);
         self.hookUp('afterEach', next);
@@ -2700,7 +2705,7 @@ Runner.prototype.runSuite = function(suite, fn){
 Runner.prototype.uncaught = function(err){
   debug('uncaught exception');
   var runnable = this.currentRunnable;
-  if (runnable.failed) return;
+  if ('failed' == runnable.state) return;
   runnable.clearTimeout();
   err.uncaught = true;
   this.fail(runnable, err);
@@ -3179,9 +3184,9 @@ exports.keys = Object.keys || function(obj) {
   var keys = []
     , has = Object.prototype.hasOwnProperty // for `window` on <=IE8
 
-  for (var i in obj) {
-    if (has.call(obj, i)) {
-      keys.push(i);
+  for (var key in obj) {
+    if (has.call(obj, key)) {
+      keys.push(key);
     }
   }
 

@@ -60,10 +60,10 @@ describe('Runner', function(){
       runner.failures.should.equal(2);
     })
 
-    it('should set test.failed to true', function(){
+    it('should set test.state to "failed"', function(){
       var test = {};
       runner.fail(test, 'some error');
-      test.failed.should.be.true;
+      test.state.should.equal('failed');
     })
 
     it('should emit "fail"', function(done){
