@@ -210,12 +210,10 @@ if (program.watch) {
   watchFiles = utils.files(cwd);
 
   // Invalidate require() cache for watched files
-
   function invalidate() {
-    var file, files = watchFiles.concat();
-    while (file = files.shift()) {
+    watchFiles.forEach(function(file) {
       delete require.cache[file];
-    } 
+    });
   }
   utils.watch(watchFiles, function() {
     invalidate();
