@@ -207,11 +207,21 @@ if (program.watch) {
 
   play(frames);
 
-  utils.watch(utils.files(cwd), function(file){
+  watchFiles = utils.files(cwd);
+
+  // Invalidate require() cache for watched files
+
+  function invalidate() {
+    var file, files = watchFiles.concat();
+    while (file = files.shift()) {
+      delete require.cache[file];
+    } 
+  }
+  utils.watch(watchFiles, function() {
+    invalidate();
     stop();
     suite = suite.clone();
     ui = interfaces[program.ui](suite);
-    delete require.cache[file];
     load(files, function(){
       run(suite, function(){
         play(frames);
