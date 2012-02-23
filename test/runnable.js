@@ -161,6 +161,42 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when no exception is thrown async in done(fn)', function(){
+        it('should invoke the callback without an error', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            process.nextTick(function () {
+              done(function () {  // provide verify fn to done
+                var a = 1;
+                return 'bar';  // this is ignored, only thrown exeptions cause fail
+              });
+            });
+          });
+
+          test.run(function(err){
+            done(err);  // err should be undefined since no exceptions thrown in verify fn
+          });
+        })
+      })
+      
+      describe('when an exception is thrown async in done(fn)', function(){
+        it('should invoke the callback with exception', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            process.nextTick(function () {
+              done(function () {  // provide verify fn to done
+                throw new Error('fail'); // is caught and reported               
+              });
+            });
+          });
+
+          test.run(function(err){
+            err.message.should.equal('fail');
+            done();
+          });
+        })
+      })      
+
       describe('when an error is passed', function(){
         it('should invoke the callback', function(done){
           var calls = 0;
