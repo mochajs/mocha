@@ -1,3 +1,5 @@
+coverage.html
+lib-cov
 .DS_Store
 node_modules
 *.sock

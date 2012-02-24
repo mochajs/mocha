@@ -5,7 +5,7 @@
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "author": "TJ Holowaychuk <tj@vision-media.ca>"
   , "repository": { "type": "git", "url": "git://github.com/visionmedia/mocha.git" }
-  , "main": "index"
+  , "main": "./index"
   , "bin": { "mocha": "./bin/mocha", "_mocha": "./bin/_mocha" }
   , "engines": { "node": ">= 0.4.x < 0.8.0" }
   , "scripts": {
@@ -14,6 +14,7 @@
   , "dependencies":{
       "commander": "0.5.x"
     , "growl": "1.5.x"
+    , "jade": "0.20.3"
     , "debug": "*"
   }
   , "devDependencies": {
