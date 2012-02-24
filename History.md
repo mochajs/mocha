@@ -1,4 +1,15 @@
 
+0.13.0 / 2012-02-23 
+==================
+
+  * Added preliminary test coverage support. Closes #5
+  * Added `HTMLCov` reporter
+  * Added `JSONCov` reporter [kunklejr]
+  * Added `xdescribe()` and `xit()` to the BDD interface. Closes #263 (docs   * Changed: make json reporter output pretty json
+  * Fixed node-inspector support, swapped `--debug` for `debug` to match node. 
+needed)
+Closes #247
+
 0.12.1 / 2012-02-14 
 ==================
 

@@ -74,6 +74,8 @@ program.on('reporters', function(){
   console.log('    landing - unicode landing strip');
   console.log('    xunit - xunit reportert');
   console.log('    teamcity - teamcity ci support');
+  console.log('    html-cov - HTML test coverage');
+  console.log('    json-cov - JSON test coverage');
   console.log('    json-stream - newline delimited json events');
   console.log();
   process.exit();
