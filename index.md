@@ -5,6 +5,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 
   - browser support
   - simple async support
+  - test coverage reporting
   - proper exit status for CI support etc
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
@@ -355,6 +356,18 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
   ![json stream reporter](images/reporter-json-stream.png)
+
+### JSONCov
+
+  The JSONCov reporter is similar to the JSON reporter, however when run against a library instrumented by [node-jscoverage](https://github.com/visionmedia/node-jscoverage) it will produce coverage output.
+
+### HTMLCov
+
+  The HTMLCov reporter extends the JSONCov reporter. The library being tested should first be instrumented by [node-jscoverage](https://github.com/visionmedia/node-jscoverage), this allows Mocha to capture the coverage information necessary to produce a single-page HTML report.
+
+  Click to view the current [Express test coverage](coverage.html) report. For an integration example view the mcoha test coverage support [commit](https://github.com/visionmedia/express/commit/b6ee5fafd0d6c79cf7df5560cb324ebee4fe3a7f) for Express.
+
+  ![code coverage reporting](http://f.cl.ly/items/3T3G1h1d3Z2i3M3Y1Y0Y/Screen%20Shot%202012-02-23%20at%208.37.13%20PM.png)
 
 ### Doc
 
