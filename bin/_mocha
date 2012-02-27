@@ -234,15 +234,19 @@ load(files, function(){
 
 function load(files, fn) {
   var pending = files.length;
-  files.forEach(function(file){
-    fs.stat(file, function (err, stats) {
+  files.forEach(function(file, index){
+    fs.stat(file, function (err, stats){
       if (err && (err.code !== 'ENOENT')) { throw err; }
-      if (!err || (err.code === 'ENOENT')) {
+      var enoent = false;
+      if (err && (err.code === 'ENOENT')) { enoent = true; }
+      if (!enoent) {
         delete require.cache[file];
         suite.emit('pre-require', global, file);
         suite.emit('require', require(file), file);
         suite.emit('post-require', global, file);
         --pending || fn();
+      } else {
+        files.splice(index, 1);
       }
     });
   });
