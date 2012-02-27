@@ -236,9 +236,14 @@ function load(files, fn) {
   var pending = files.length;
   files.forEach(function(file, index){
     fs.stat(file, function (err, stats){
-      if (err && (err.code !== 'ENOENT')) { throw err; }
       var enoent = false;
-      if (err && (err.code === 'ENOENT')) { enoent = true; }
+      if (err) {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        } else {
+          enoent = true;
+        }
+      }
       if (!enoent) {
         delete require.cache[file];
         suite.emit('pre-require', global, file);
