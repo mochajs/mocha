@@ -326,6 +326,7 @@ function play(arr, interval) {
     , interval = interval || 100
     , i = 0;
 
+  clearInterval(play.timer);
   play.timer = setInterval(function(){
     var str = arr[i++ % len];
     process.stdout.write('\r' + str);
