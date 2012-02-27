@@ -244,10 +244,10 @@ function load(files, fn) {
         suite.emit('pre-require', global, file);
         suite.emit('require', require(file), file);
         suite.emit('post-require', global, file);
-        --pending || fn();
       } else {
         files.splice(index, 1);
       }
+      --pending || fn();
     });
   });
 }
