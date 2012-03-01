@@ -1,4 +1,9 @@
 
+0.14.0 / 2012-03-01 
+==================
+
+  * Added string diff support for terminal reporters
+
 0.13.0 / 2012-02-23 
 ==================
 
