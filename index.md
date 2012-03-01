@@ -6,6 +6,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - browser support
   - simple async support
   - test coverage reporting
+  - string diff support
   - proper exit status for CI support etc
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
@@ -127,6 +128,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   as shown here with the "spec" reporter:
 
    ![test duration](images/reporter-spec-duration.png)
+
+## String diffs
+
+  Mocha supports the `err.expected`, and `err.actual` properties
+  when available to present expectations to the developer. Currently
+  Mocha provides string diffs, however in the future object diffs and
+  others may be provided.
+
+  ![string diffs](http://f.cl.ly/items/3L0T1A0h2N1J3G021i0F/Screen%20Shot%202012-03-01%20at%202.31.31%20PM.png)
 
 ## mocha(1)
 

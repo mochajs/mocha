@@ -24,6 +24,7 @@
 <li>browser support</li>
 <li>simple async support</li>
 <li>test coverage reporting</li>
+<li>string diff support</li>
 <li>proper exit status for CI support etc</li>
 <li>auto-detects and disables coloring for non-ttys</li>
 <li>maps uncaught exceptions to the correct test case</li>
@@ -156,6 +157,15 @@
   as shown here with the &ldquo;spec&rdquo; reporter:</p>
 
 <p>   <img src="images/reporter-spec-duration.png" alt="test duration" /></p>
+
+<h2>String diffs</h2>
+
+<p>  Mocha supports the <code>err.expected</code>, and <code>err.actual</code> properties
+  when available to present expectations to the developer. Currently
+  Mocha provides string diffs, however in the future object diffs and
+  others may be provided.</p>
+
+<p>  <img src="http://f.cl.ly/items/3L0T1A0h2N1J3G021i0F/Screen%20Shot%202012-03-01%20at%202.31.31%20PM.png" alt="string diffs" /></p>
 
 <h2>mocha(1)</h2>
 
