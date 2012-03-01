@@ -87,7 +87,7 @@ window.mocha = require('mocha');
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
-      .replace(/('.*')/gm, '<span class="string">$1</span>')
+      .replace(/('.*?')/gm, '<span class="string">$1</span>')
       .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
       .replace(/(\d+)/gm, '<span class="number">$1</span>')
       .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
