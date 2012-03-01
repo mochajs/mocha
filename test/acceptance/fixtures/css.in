@@ -1,0 +1,9 @@
+body {
+  font: "Helvetica Neue", Helvetica, arial, sans-serif;
+  background: black;
+  color: white;
+}
+
+a {
+  color: blue
+}

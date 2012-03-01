@@ -1,0 +1,13 @@
+body {
+  font: "Helvetica Neue", Helvetica, arial, sans-serif;
+  background: black;
+  color: #fff;
+}
+
+a {
+  color: blue;
+}
+
+foo {
+  bar: 'baz';
+}
