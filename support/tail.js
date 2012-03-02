@@ -70,7 +70,6 @@ window.mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
-    , Reporter = mocha.reporters.HTML
 
   $(function(){
     $('code').each(function(){
@@ -124,9 +123,10 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(){
+  mocha.run = function(Reporter){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
+    Reporter = Reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
