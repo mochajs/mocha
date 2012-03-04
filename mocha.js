@@ -1453,7 +1453,7 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var el = fragment('<div class="suite"><h1>' + suite.title + '</h1></div>');
+    var el = fragment('<div class="suite"><h1>%s</h1></div>', suite.title);
 
     // container
     stack[0].appendChild(el);
@@ -1483,18 +1483,18 @@ function HTML(runner) {
 
     // test
     if ('passed' == test.state) {
-      var el = fragment('<div class="test pass"><h2>' + escape(test.title) + '</h2></div>')
+      var el = fragment('<div class="test pass"><h2>%s</h2></div>', escape(test.title));
     } else if (test.pending) {
-      var el = fragment('<div class="test pass pending"><h2>' + escape(test.title) + '</h2></div>')
+      var el = fragment('<div class="test pass pending"><h2>%s</h2></div>', escape(test.title));
     } else {
-      var el = fragment('<div class="test fail"><h2>' + escape(test.title) + '</h2></div>');
+      var el = fragment('<div class="test fail"><h2>%s</h2></div>', escape(test.title));
       var str = test.err.stack || test.err;
 
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
       if ('[object Error]' == str) str = test.err.message;
 
-      el.appendChild(fragment('<pre class="error">' + escape(str) + '</pre>'));
+      el.appendChild(fragment('<pre class="error">%s</pre>', escape(str)));
     }
 
     // toggle code
@@ -1510,7 +1510,7 @@ function HTML(runner) {
     // TODO: defer
     if (!test.pending) {
       var code = escape(clean(test.fn.toString()));
-      var pre = fragment('<pre><code>' + code + '</code></pre>');
+      var pre = fragment('<pre><code>%s</code></pre>', code);
       el.appendChild(pre);
       pre.style.display = 'none';
     }
@@ -1524,7 +1524,7 @@ function HTML(runner) {
  */
 
 function error(msg) {
-  document.body.appendChild(fragment('<div id="error">' + msg + '</div>'));
+  document.body.appendChild(fragment('<div id="error">%s</div>', msg));
 }
 
 /**
@@ -1532,8 +1532,14 @@ function error(msg) {
  */
 
 function fragment(html) {
-  var div = document.createElement('div');
-  div.innerHTML = html;
+  var args = arguments
+    , div = document.createElement('div')
+    , i = 1;
+
+  div.innerHTML = html.replace(/%s/g, function(){
+    return args[i++];
+  });
+
   return div.firstChild;
 }
 
