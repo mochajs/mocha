@@ -71,12 +71,6 @@ window.mocha = require('mocha');
   var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
 
-  $(function(){
-    $('code').each(function(){
-      $(this).html(highlight($(this).text()));
-    });
-  });
-
   /**
    * Highlight the given string of `js`.
    */
@@ -131,9 +125,9 @@ window.mocha = require('mocha');
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
     runner.on('end', function(){
-      $('code').each(function(){
-        $(this).html(highlight($(this).text()));
-      });
+      // $('code').each(function(){
+      //   $(this).html(highlight($(this).text()));
+      // });
     });
     return runner.run();
   };
