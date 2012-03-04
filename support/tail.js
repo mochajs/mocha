@@ -88,6 +88,17 @@ window.mocha = require('mocha');
   }
 
   /**
+   * Highlight code contents.
+   */
+
+  function highlightCode() {
+    var code = document.getElementsByTagName('code');
+    for (var i = 0, len = code.length; i < len; ++i) {
+      code[i].innerHTML = highlight(code[i].innerHTML);
+    }
+  }
+
+  /**
    * Parse the given `qs`.
    */
 
@@ -124,11 +135,7 @@ window.mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
-    runner.on('end', function(){
-      // $('code').each(function(){
-      //   $(this).html(highlight($(this).text()));
-      // });
-    });
+    runner.on('end', highlightCode);
     return runner.run();
   };
 })();
