@@ -209,8 +209,17 @@ if (program.watch) {
 
   play(frames);
 
-  utils.watch(utils.files(cwd), function(){
-    stop()
+  watchFiles = utils.files(cwd);
+
+  // Invalidate require() cache for watched files
+  function invalidate() {
+    watchFiles.forEach(function(file) {
+      delete require.cache[file];
+    });
+  }
+  utils.watch(watchFiles, function() {
+    invalidate();
+    stop();
     suite = suite.clone();
     ui = interfaces[program.ui](suite);
     load(files, function(){
@@ -317,6 +326,7 @@ function play(arr, interval) {
     , interval = interval || 100
     , i = 0;
 
+  clearInterval(play.timer);
   play.timer = setInterval(function(){
     var str = arr[i++ % len];
     process.stdout.write('\r' + str);
