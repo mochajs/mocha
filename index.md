@@ -446,10 +446,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     <head>
       <meta charset="utf-8">
       <title>Mocha Tests</title>
-      <link rel="stylesheet" href="https://raw.github.com/visionmedia/mocha/master/mocha.css" />
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-      <script src="https://raw.github.com/LearnBoost/expect.js/d2440da086bf8dc38c6085641f23b968a0f48b29/expect.js"></script>
-      <script src="https://raw.github.com/visionmedia/mocha/master/mocha.js"></script>
+      <link rel="stylesheet" href="mocha.css" />
+      <script src="jquery.js"></script>
+      <script src="expect.js"></script>
+      <script src="mocha.js"></script>
       <script>mocha.setup('bdd')</script>
       <script src="test.array.js"></script>
       <script src="test.object.js"></script>
