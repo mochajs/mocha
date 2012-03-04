@@ -57,6 +57,10 @@ module.exports = function(type){
 };
 }); // module: browser/debug.js
 
+require.register("browser/diff.js", function(module, exports, require){
+
+}); // module: browser/diff.js
+
 require.register("browser/events.js", function(module, exports, require){
 
 /**
@@ -854,7 +858,7 @@ require.register("mocha.js", function(module, exports, require){
  * Library version.
  */
 
-exports.version = '0.13.0';
+exports.version = '0.14.0';
 
 exports.utils = require('./utils');
 exports.interfaces = require('./interfaces');
@@ -874,7 +878,8 @@ require.register("reporters/base.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var tty = require('browser/tty');
+var tty = require('browser/tty')
+  , diff = require('browser/diff');
 
 /**
  * Check if both stdio streams are associated with a tty.
@@ -915,6 +920,9 @@ exports.colors = {
   , 'slow': 31
   , 'green': 32
   , 'light': 90
+  , 'diff gutter': 90
+  , 'diff added': 42
+  , 'diff removed': 41
 };
 
 /**
@@ -1002,7 +1010,41 @@ exports.list = function(failures){
       , message = err.message || ''
       , stack = err.stack || message
       , index = stack.indexOf(message) + message.length
-      , msg = stack.slice(0, index);
+      , msg = stack.slice(0, index)
+      , actual = err.actual
+      , expected = err.expected;
+
+    // actual / expected diff
+    if ('string' == typeof actual && 'string' == typeof expected) {
+      var len = Math.max(actual.length, expected.length);
+
+      if (len < 20) msg = errorDiff(err, 'Chars');
+      else msg = errorDiff(err, 'Words');
+
+      // linenos
+      var lines = msg.split('\n');
+      if (lines.length > 4) {
+        var width = String(lines.length).length;
+        msg = lines.map(function(str, i){
+          return pad(++i, width) + ' |' + ' ' + str;
+        }).join('\n');
+      }
+
+      // legend
+      msg = '\n'
+        + color('diff removed', 'actual')
+        + ' '
+        + color('diff added', 'expected')
+        + '\n\n'
+        + msg
+        + '\n';
+
+      // indent
+      msg = msg.replace(/^/gm, '      ');
+
+      fmt = color('error title', '  %s) %s:\n%s')
+        + color('error stack', '\n%s\n');
+    }
 
     // indent stack trace without msg
     stack = stack.slice(index + 1)
@@ -1105,6 +1147,51 @@ Base.prototype.epilogue = function(){
   console.log(fmt, stats.tests || 0, stats.duration);
   console.log();
 };
+
+/**
+ * Pad the given `str` to `len`.
+ *
+ * @param {String} str
+ * @param {String} len
+ * @return {String}
+ * @api private
+ */
+
+function pad(str, len) {
+  str = String(str);
+  return Array(len - str.length + 1).join(' ') + str;
+}
+
+/**
+ * Return a character diff for `err`.
+ *
+ * @param {Error} err
+ * @return {String}
+ * @api private
+ */
+
+function errorDiff(err, type) {
+  return diff['diff' + type](err.actual, err.expected).map(function(str){
+    if (str.added) return colorLines('diff added', str.value);
+    if (str.removed) return colorLines('diff removed', str.value);
+    return str.value;
+  }).join('');
+}
+
+/**
+ * Color lines for `str`, using the color `name`.
+ *
+ * @param {String} name
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+function colorLines(name, str) {
+  return str.split('\n').map(function(str){
+    return color(name, str);
+  }).join('\n');
+}
 
 }); // module: reporters/base.js
 
@@ -3518,7 +3605,6 @@ window.mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
-    , Reporter = mocha.reporters.HTML
 
   $(function(){
     $('code').each(function(){
@@ -3535,7 +3621,7 @@ window.mocha = require('mocha');
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
-      .replace(/('.*')/gm, '<span class="string">$1</span>')
+      .replace(/('.*?')/gm, '<span class="string">$1</span>')
       .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
       .replace(/(\d+)/gm, '<span class="number">$1</span>')
       .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
@@ -3572,9 +3658,10 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(){
+  mocha.run = function(Reporter){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
+    Reporter = Reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
