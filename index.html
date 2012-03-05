@@ -493,10 +493,10 @@ test('#length', function(){
   &lt;script src="test.object.js"&gt;&lt;/script&gt;
   &lt;script src="test.xhr.js"&gt;&lt;/script&gt;
   &lt;script&gt;
-    $(function () {
+    $(function(){
       mocha
-        .run()
         .globals(['foo', 'bar']) // acceptable globals
+        .run()
     })
   &lt;/script&gt;
 &lt;/head&gt;
