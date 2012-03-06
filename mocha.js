@@ -3710,13 +3710,21 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(Reporter){
+  mocha.run = function(options){
+    options = options || {};
+
     suite.emit('run');
+
+    var Reporter = options.hasOwnProperty('Reporter') ? options.Reporter : mocha.reporters.HTML;
     var runner = new mocha.Runner(suite);
-    Reporter = Reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
+
     if (query.grep) runner.grep(new RegExp(query.grep));
+
+    if (options && options.hasOwnProperty('ignoreLeaks'))
+      runner.ignoreLeaks = options.ignoreLeaks;
+
     runner.on('end', highlightCode);
     return runner.run();
   };
