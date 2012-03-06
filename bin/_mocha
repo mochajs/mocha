@@ -209,7 +209,16 @@ if (program.watch) {
 
   play(frames);
 
-  utils.watch(utils.files(cwd), function(){
+  var watchFiles = utils.files(cwd);
+
+  function purge() {
+    watchFiles.forEach(function(file){
+      delete require.cache[file];
+    });
+  }
+
+  utils.watch(watchFiles, function(){
+    purge();
     stop()
     suite = suite.clone();
     ui = interfaces[program.ui](suite);
