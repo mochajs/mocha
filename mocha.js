@@ -3710,11 +3710,12 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(Reporter, options){
-    Reporter = Reporter || mocha.reporters.HTML;
+  mocha.run = function(options){
+    options = options || {};
 
     suite.emit('run');
 
+    var Reporter = options.hasOwnProperty('Reporter') ? options.Reporter : mocha.reporters.HTML;
     var runner = new mocha.Runner(suite);
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
