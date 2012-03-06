@@ -1,4 +1,13 @@
 
+0.14.1 / 2012-03-06 
+==================
+
+  * Added lib-cov to _.npmignore_
+  * Added reporter to `mocha.run([reporter])` as argument
+  * Added some margin-top to the HTML reporter
+  * Removed jQuery dependency
+  * Fixed `--watch`: purge require cache. Closes #266
+
 0.14.0 / 2012-03-01 
 ==================
 
