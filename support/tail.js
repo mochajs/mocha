@@ -70,6 +70,7 @@ window.mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
+    , options = {}
 
   /**
    * Highlight the given string of `js`.
@@ -114,12 +115,16 @@ window.mocha = require('mocha');
   }
 
   /**
-   * Setup mocha with the give `ui` name.
+   * Setup mocha with the give setting options.
    */
 
-  mocha.setup = function(ui){
-    ui = mocha.interfaces[ui];
+  mocha.setup = function(opts){
+    if ('string' === typeof opts) options.ui = opts;
+    else options = opts;
+
+    ui = mocha.interfaces[options.ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
+    if (options.timeout) suite.timeout(options.timeout);
     ui(suite);
     suite.emit('pre-require', window);
   };
@@ -128,13 +133,15 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(Reporter){
+  mocha.run = function(){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
-    Reporter = Reporter || mocha.reporters.HTML;
+    var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+    if (options.ignoreLeaks) runner.ignoreLeaks = true;
+    if (options.globals) runner.globals(options.globals);
     runner.on('end', highlightCode);
     return runner.run();
   };

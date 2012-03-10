@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="style.css" />
+    <script src="../../mocha.js"></script>
+    <script>
+      mocha.setup({
+        ui: 'bdd',
+        globals: ['okGlobalA', 'okGlobalB'],
+        timeout: 1500
+      })
+    </script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="opts.js"></script>
+    <script src="../acceptance/globals.js"></script>
+    <script>
+      onload = function() { mocha.run(); };
+    </script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  </body>
+</html>
