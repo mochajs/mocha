@@ -450,15 +450,18 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <script src="jquery.js"></script>
       <script src="expect.js"></script>
       <script src="mocha.js"></script>
-      <script>mocha.setup('bdd')</script>
+      <script>
+        mocha.setup({
+          ui: 'bdd'
+        , globals: ['foo', 'bar'] // acceptable globals
+        })
+      </script>
       <script src="test.array.js"></script>
       <script src="test.object.js"></script>
       <script src="test.xhr.js"></script>
       <script>
         $(function(){
-          mocha
-            .globals(['foo', 'bar']) // acceptable globals
-            .run()
+          mocha.run()
         })
       </script>
     </head>
