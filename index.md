@@ -243,7 +243,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### TDD
 
-  The "__TDD__" interface provides `suite()`, `test()`, `setup()`, and `teardown()`.
+  The "__TDD__" interface provides `suite()`, `test()`, `setup()`, `teardown()`, `suiteSetup()` and `suiteTeardown()`.
 
     suite('Array', function(){
       setup(function(){
