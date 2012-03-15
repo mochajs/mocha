@@ -1,4 +1,4 @@
-;(function(){
+;(function(Date, setTimeout, setInterval, clearTimeout, clearInterval){
 
 
 // CommonJS require()
@@ -3728,4 +3728,4 @@ window.mocha = require('mocha');
     return runner.run();
   };
 })();
-})();
+})(Date, setTimeout, setInterval, clearTimeout, clearInterval);
