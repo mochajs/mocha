@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep
+test-all: test-unit test-bdd test-tdd test-qunit test-exports test-grep test-reporters
 
 test-unit:
 	@./bin/mocha \
@@ -75,6 +75,12 @@ test-bail:
 		--reporter $(REPORTER) \
 		--bail \
 		test/acceptance/misc/bail
+
+test-reporters:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/reporters/dot
 
 non-tty:
 	@./bin/mocha \
