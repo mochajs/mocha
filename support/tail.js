@@ -115,7 +115,7 @@ window.mocha = require('mocha');
   }
 
   /**
-   * Setup mocha with the give setting options.
+   * Setup mocha with the given setting options.
    */
 
   mocha.setup = function(opts){
