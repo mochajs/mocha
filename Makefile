@@ -32,13 +32,18 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-compilers
 
 test-unit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
 		test/*.js
+
+test-compilers:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/acceptance/test.coffee
 
 test-bdd:
 	@./bin/mocha \
