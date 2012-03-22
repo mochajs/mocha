@@ -43,7 +43,7 @@ test-unit:
 test-compilers:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script,foo:../test/compiler/foo \
+		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 

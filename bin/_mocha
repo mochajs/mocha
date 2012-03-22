@@ -165,6 +165,9 @@ program.compilers.forEach(function(c) {
   var compiler = c.split(':');
   var ext = compiler[0];
   var mod = compiler[1];
+  if (mod[0] == '.') {
+    mod = process.cwd() + '/' + mod;
+  }
   require(mod);
   extensions.push(ext);
 });
