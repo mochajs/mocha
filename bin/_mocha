@@ -166,7 +166,11 @@ var files = program.args
 // coffee-script support
 
 try {
-  require('coffee-script');
+  try {
+    require('coffee-script');
+  } catch (err) {
+    require('iced-coffee-script');
+  }
   re = /\.(js|coffee)$/;
 } catch (err) {
   // ignore
