@@ -43,6 +43,7 @@ test-unit:
 test-compilers:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
+		--compile coffee:coffee-script \
 		test/acceptance/test.coffee
 
 test-bdd:
