@@ -19,6 +19,7 @@
     , "debug": "*"
   }
   , "devDependencies": {
-    "should": "*"
+      "should": "*"
+    , "coffee-script": "1.2"
   }
 }
