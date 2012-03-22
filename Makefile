@@ -32,7 +32,10 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+
+test-jsapi:
+	@node test/jsapi
 
 test-unit:
 	@./bin/mocha \
@@ -112,4 +115,4 @@ tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: test-cov watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean

@@ -1490,6 +1490,11 @@ function HTML(runner) {
       var el = fragment('<div class="test fail"><h2>%e</h2></div>', test.title);
       var str = test.err.stack || test.err;
 
+      // FF / Opera do not add the message
+      if (!~str.indexOf(test.err.message)) {
+        str = test.err.message + '\n' + str;
+      }
+
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
       if ('[object Error]' == str) str = test.err.message;
@@ -1607,6 +1612,7 @@ exports.JSONCov = require('./json-cov');
 exports.HTMLCov = require('./html-cov');
 exports.JSONStream = require('./json-stream');
 exports.XUnit = require('./xunit')
+exports.Teamcity = require('./teamcity')
 
 }); // module: reporters/index.js
 
