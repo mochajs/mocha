@@ -57,7 +57,7 @@ program
   .option('--ignore-leaks', 'ignore global variable leaks')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
-  .option('--compile <extension>:<module>', 'use the given module to compile files')
+  .option('--compilers <extension>:<module>,...', 'use the given module(s) to compile files', list, [])
 
 program.name = 'mocha';
 
@@ -161,13 +161,13 @@ suite.bail(program.bail);
 // custom compiler support
 
 var extensions = ['js'];
-if (program.compile) {
-  var compiler = program.compile.split(':');
+program.compilers.forEach(function(c) {
+  var compiler = c.split(':');
   var ext = compiler[0];
   var mod = compiler[1];
   require(mod);
   extensions.push(ext);
-}
+});
 var re = new RegExp('\\.(' + extensions.join('|') + ')$');
 
 // files
