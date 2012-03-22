@@ -115,4 +115,4 @@ tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
