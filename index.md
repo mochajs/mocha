@@ -387,6 +387,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![code coverage reporting](http://f.cl.ly/items/3T3G1h1d3Z2i3M3Y1Y0Y/Screen%20Shot%202012-02-23%20at%208.37.13%20PM.png)
 
+### Markdown
+
+  The "markdown" reporter generates a markdown TOC and body for your
+  test suite. This is great if you want to use the tests as documentation
+  within a Github wiki page, or a markdown file in the repository that
+  Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
+
 ### Doc
 
  The "doc" reporter outputs a hierarchical HTML body representation
