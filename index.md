@@ -387,12 +387,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![code coverage reporting](http://f.cl.ly/items/3T3G1h1d3Z2i3M3Y1Y0Y/Screen%20Shot%202012-02-23%20at%208.37.13%20PM.png)
 
-### Markdown
+### Min
 
-  The "markdown" reporter generates a markdown TOC and body for your
-  test suite. This is great if you want to use the tests as documentation
-  within a Github wiki page, or a markdown file in the repository that
-  Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
+  The "min" reporter displays the summary only, while still outputting errors
+  on failure. This reporter works great with `--watch` as it clears the terminal
+  in order to keep your test summary at the top.
+  
+  ![](http://f.cl.ly/items/460B2r3p3M3k2D3J250m/Screen%20Shot%202012-03-24%20at%2010.46.01%20AM.png)
 
 ### Doc
 
@@ -445,6 +446,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 ### TeamCity
 
    Documentation needed.
+
+### Markdown
+
+  The "markdown" reporter generates a markdown TOC and body for your
+  test suite. This is great if you want to use the tests as documentation
+  within a Github wiki page, or a markdown file in the repository that
+  Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
 
 ### HTML
 
