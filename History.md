@@ -1,4 +1,19 @@
 
+1.0.0 / 2012-03-24 
+==================
+
+  * Added js API. Closes #265
+  * Added: initial run of tests with `--watch`. Closes #345
+  * Added: mark `location` as a global on the CS. Closes #311
+  * Added `markdown` reporter (github flavour)
+  * Added: scrolling menu to coverage.html. Closes #335
+  * Added source line to html report for Safari [Tyson Tate]
+  * Added "min" reporter, useful for `--watch` [Jakub Nešetřil]
+  * Added support for arbitrary compilers via . Closes #338 [Ian Young]
+  * Added Teamcity export to lib/reporters/index [Michael Riley]
+  * Fixed chopping of first char in error reporting. Closes #334 [reported by topfunky]
+  * Fixed terrible FF / Opera stack traces
+
 0.14.1 / 2012-03-06 
 ==================
 
