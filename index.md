@@ -167,7 +167,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### -w, --watch
 
-  Executes tests on changes to JavaScript in the CWD.
+  Executes tests on changes to JavaScript in the CWD, and once initially.
+
+### --compilers
+
+  coffee-script is no longer supported out of the box. CS and similar transpilers
+  may be used by mapping the file extensions (for use with --watch) and the module
+  name. For example `--compilers coffee:coffee-script`.
 
 ### -b, --bail
 
