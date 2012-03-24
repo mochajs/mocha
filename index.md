@@ -7,6 +7,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - simple async support
   - test coverage reporting
   - string diff support
+  - javascript API for running tests
   - proper exit status for CI support etc
   - auto-detects and disables coloring for non-ttys
   - maps uncaught exceptions to the correct test case
@@ -27,7 +28,7 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - extensible reporting, bundled with 9+ reporters
   - extensible test DSLs or "interfaces"
   - before, after, before each, after each hooks
-  - coffee-script support
+  - arbitrary transpiler support (coffee-script etc)
   - TextMate bundle
   - and more!
 
