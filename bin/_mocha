@@ -215,9 +215,15 @@ if (program.watch) {
     , '  \033[96m◟ \033[90mwatching\033[0m'
   ];
 
-  play(frames);
-
   var watchFiles = utils.files(cwd);
+
+  function loadAndRun() {
+    load(files, function(){
+      run(suite, function(){
+        play(frames);
+      });
+    });
+  }
 
   function purge() {
     watchFiles.forEach(function(file){
@@ -225,16 +231,14 @@ if (program.watch) {
     });
   }
 
+  loadAndRun();
+
   utils.watch(watchFiles, function(){
     purge();
     stop()
     suite = suite.clone();
     ui = interfaces[program.ui](suite);
-    load(files, function(){
-      run(suite, function(){
-        play(frames);
-      });
-    });
+    loadAndRun();
   });
 
   return;
