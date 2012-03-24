@@ -887,13 +887,16 @@ exports.Hook = require('./hook');
 exports.Test = require('./test');
 
 /**
- * Growl images.
+ * Return image `name` path.
+ *
+ * @param {String} name
+ * @return {String}
+ * @api private
  */
 
-var images = {
-    fail: __dirname + '/../images/error.png'
-  , pass: __dirname + '/../images/ok.png'
-};
+function image(name) {
+  return __dirname + '/../images/' + name + '.png';
+}
 
 /**
  * Setup mocha with `options`.
@@ -990,11 +993,11 @@ Mocha.prototype.growl = function(runner, reporter) {
     var stats = reporter.stats;
     if (stats.failures) {
       var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { title: 'Failed', image: images.fail });
+      notify(msg, { title: 'Failed', image: image('fail') });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
           title: 'Passed'
-        , image: images.pass
+        , image: image('pass')
       });
     }
   });
@@ -2348,8 +2351,7 @@ require.register("reporters/min.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var Base = require('./base')
-  , color = Base.color;
+var Base = require('./base');
 
 /**
  * Expose `Min`.
@@ -2366,16 +2368,15 @@ exports = module.exports = Min;
 
 function Min(runner) {
   Base.call(this, runner);
-
-  var self = this
-    , stats = this.stats;
   
   runner.on('start', function(){
-    process.stdout.write('\033[2J');   // clear screen
-    process.stdout.write('\033[1;3H'); // set cursor position
+    // clear screen
+    process.stdout.write('\033[2J');
+    // set cursor position
+    process.stdout.write('\033[1;3H');
   });
 
-  runner.on('end', function(){ self.epilogue(); });
+  runner.on('end', this.epilogue.bind(this));
 }
 
 /**
