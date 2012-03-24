@@ -2274,7 +2274,7 @@ function Markdown(runner) {
 
   function mapTOC(suite, obj) {
     var ret = obj;
-    obj = obj[suite.title] = obj[suite.title] || {};
+    obj = obj[suite.title] = obj[suite.title] || { suite: suite };
     suite.suites.forEach(function(suite){
       mapTOC(suite, obj);
     });
@@ -2286,7 +2286,8 @@ function Markdown(runner) {
     var buf = '';
     var link;
     for (var key in obj) {
-      if (key) link = ' - [' + key + '](#' + utils.slug(key) + ')\n';
+      if ('suite' == key) continue;
+      if (key) link = ' - [' + key + '](#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
       if (key) buf += Array(level).join('  ') + link;
       buf += stringifyTOC(obj[key], level);
     }
@@ -4054,6 +4055,7 @@ window.mocha = require('mocha');
     if (query.grep) runner.grep(new RegExp(query.grep));
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
+    runner.globals(['location']);
     runner.on('end', highlightCode);
     return runner.run();
   };

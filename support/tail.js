@@ -142,6 +142,7 @@ window.mocha = require('mocha');
     if (query.grep) runner.grep(new RegExp(query.grep));
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
+    runner.globals(['location']);
     runner.on('end', highlightCode);
     return runner.run();
   };
