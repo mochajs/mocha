@@ -57,7 +57,15 @@ body {
   color: #00c41c;
 }
 
-#mocha .test.pending {
+#mocha .dots {
+  font-size: 12px;
+}
+
+#mocha .dots .totals .passed {
+  color: #080;
+}
+
+#mocha .test.pending, #mocha .dots .pending {
   color: #0b97c4;
 }
 
@@ -66,7 +74,7 @@ body {
   color: #0b97c4;
 }
 
-#mocha .test.fail {
+#mocha .test.fail, #mocha .dots .failed  {
   color: #c00;
 }
 
