@@ -57,7 +57,15 @@ body {
   color: #00c41c;
 }
 
-#mocha .test.pending {
+#mocha .dots {
+  font-size: 12px;
+}
+
+#mocha .dots .totals .passed {
+  color: #080;
+}
+
+#mocha .test.pending, #mocha .dots .pending {
   color: #0b97c4;
 }
 
@@ -66,7 +74,7 @@ body {
   color: #0b97c4;
 }
 
-#mocha .test.fail {
+#mocha .test.fail, #mocha .dots .failed  {
   color: #c00;
 }
 
@@ -135,3 +143,35 @@ code .init { color: #2F6FAD }
 code .string { color: #5890AD }
 code .keyword { color: #8A6343 }
 code .number { color: #2F6FAD }
+
+#stats li.run-all {
+  display: none;
+}
+
+.hide-empty #stats li.run-all {
+  display: inline-block;
+}
+
+.hide-empty .suite.empty {
+    display: none;
+}
+
+.hide-passed .suite.pass, .hide-passed .test.pass {
+    display: none;
+}
+
+.hide-passed .test.pending {
+    display: block;
+}
+
+a.focus {
+  display: none;
+  text-decoration: none;
+  font-family: arial;
+  color: #888;
+  margin-left: 0.5em;
+}
+
+h1:hover a.focus, h2:hover a.focus {
+  display: inline;
+}
