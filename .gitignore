@@ -1,7 +1,4 @@
-coverage.html
-lib-cov
-.DS_Store
+test-reports
 node_modules
-*.sock
-testing
-_mocha.js
+.project
+.settings
