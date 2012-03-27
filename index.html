@@ -224,7 +224,7 @@
 
 <h3>-r, &ndash;require &lt;name&gt;</h3>
 
-<p>  The <code>--require</code> option is useful for libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, so you may simply <code>--require should</code> instead of manually invoking <code>require('should')</code> within each test file.</p>
+<p>  The <code>--require</code> option is useful for libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, so you may simply <code>--require should</code> instead of manually invoking <code>require('should')</code> within each test file. Note that this works well for <code>should</code> as it augments <code>Object.prototype</code>, however if you wish to access a module&rsquo;s exports you will have to require them, for example <code>var should = require('should')</code>.</p>
 
 <h3>-u, &ndash;ui &lt;name&gt;</h3>
 
