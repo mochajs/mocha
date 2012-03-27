@@ -156,11 +156,12 @@ code .number { color: #2F6FAD }
     display: none;
 }
 
-.hide-passed .suite.pass, .hide-passed .test.pass {
+.hide-passed .suite, .hide-passed .test {
     display: none;
 }
 
-.hide-passed .test.pending {
+.hide-passed .suite.pending, .hide-passed .test.pending,
+.hide-passed .suite.failed, .hide-passed .test.failed {
     display: block;
 }
 
