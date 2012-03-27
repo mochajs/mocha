@@ -194,7 +194,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 ### -r, --require &lt;name&gt;
 
-  The `--require` option is useful for libraries such as [should.js](http://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file.
+  The `--require` option is useful for libraries such as [should.js](http://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`.
 
 ### -u, --ui &lt;name&gt;
 
