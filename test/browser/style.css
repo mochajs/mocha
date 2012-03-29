@@ -61,11 +61,11 @@ body {
   font-size: 12px;
 }
 
-#mocha .dots .totals .passed {
+#mocha .current-test .totals .passed {
   color: #080;
 }
 
-#mocha .test.pending, #mocha .dots .pending {
+#mocha .test.pending, #mocha .dots .pending, #mocha .current-test .totals .pending {
   color: #0b97c4;
 }
 
@@ -74,7 +74,7 @@ body {
   color: #0b97c4;
 }
 
-#mocha .test.fail, #mocha .dots .failed  {
+#mocha .test.fail, #mocha .dots .failed, #mocha .current-test .totals .failed  {
   color: #c00;
 }
 
@@ -156,7 +156,12 @@ code .number { color: #2F6FAD }
     display: none;
 }
 
-.hide-passed .suite, .hide-passed .test {
+.hide-empty div.passed {
+    display: inherit;
+}
+
+.hide-passed .suite, .hide-passed .suite.passed,
+.hide-passed .test, .hide-passed .test.passed {
     display: none;
 }
 
@@ -175,4 +180,16 @@ a.focus {
 
 h1:hover a.focus, h2:hover a.focus {
   display: inline;
+}
+
+pre.current-test {
+  display: inline-block;
+  font: 12px/1.5 monaco, monospace;
+  margin: 0 -5px;
+  padding: 0 5px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  xbackground: #666;
+  xcolor: yellow;
 }
