@@ -152,7 +152,7 @@ code .number { color: #2F6FAD }
   display: inline-block;
 }
 
-.hide-empty .suite.empty {
+.hide-empty .suite {
     display: none;
 }
 
@@ -160,8 +160,8 @@ code .number { color: #2F6FAD }
     display: none;
 }
 
-.hide-passed .suite.pending, .hide-passed .test.pending,
-.hide-passed .suite.failed, .hide-passed .test.failed {
+.suite.pending, .test.pending,
+.suite.failed, .test.failed {
     display: block;
 }
 
