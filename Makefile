@@ -32,13 +32,23 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+
+test-jsapi:
+	@node test/jsapi
 
 test-unit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
 		test/*.js
+
+test-compilers:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--compilers coffee:coffee-script,foo:./test/compiler/foo \
+		test/acceptance/test.coffee \
+		test/acceptance/test.foo
 
 test-bdd:
 	@./bin/mocha \
@@ -105,4 +115,4 @@ tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
 
-.PHONY: test-cov watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean

@@ -9,11 +9,13 @@ body {
 }
 
 #mocha h1 {
+  margin-top: 15px;
   font-size: 1em;
   font-weight: 200;
 }
 
 #mocha .suite .suite h1 {
+  margin-top: 0;
   font-size: .8em;
 }
 

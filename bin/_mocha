@@ -57,6 +57,7 @@ program
   .option('--ignore-leaks', 'ignore global variable leaks')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
+  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
 
 program.name = 'mocha';
 
@@ -76,7 +77,9 @@ program.on('reporters', function(){
   console.log('    teamcity - teamcity ci support');
   console.log('    html-cov - HTML test coverage');
   console.log('    json-cov - JSON test coverage');
+  console.log('    min - minimal reporter (great with --watch)');
   console.log('    json-stream - newline delimited json events');
+  console.log('    markdown - markdown documentation (github flavour)');
   console.log();
   process.exit();
 });
@@ -157,19 +160,24 @@ if (program.timeout) suite.timeout(program.timeout);
 
 suite.bail(program.bail);
 
+// custom compiler support
+
+var extensions = ['js'];
+program.compilers.forEach(function(c) {
+  var compiler = c.split(':')
+    , ext = compiler[0]
+    , mod = compiler[1];
+
+  if (mod[0] == '.') mod = join(process.cwd(), mod);
+  require(mod);
+  extensions.push(ext);
+});
+
+var re = new RegExp('\\.(' + extensions.join('|') + ')$');
+
 // files
 
-var files = program.args
-  , re = /\.js$/;
-
-// coffee-script support
-
-try {
-  require('coffee-script');
-  re = /\.(js|coffee)$/;
-} catch (err) {
-  // ignore
-}
+var files = program.args;
 
 // default files to test/*.{js,coffee}
 
@@ -207,17 +215,30 @@ if (program.watch) {
     , '  \033[96m◟ \033[90mwatching\033[0m'
   ];
 
-  play(frames);
+  var watchFiles = utils.files(cwd);
 
-  utils.watch(utils.files(cwd), function(){
-    stop()
-    suite = suite.clone();
-    ui = interfaces[program.ui](suite);
+  function loadAndRun() {
     load(files, function(){
       run(suite, function(){
         play(frames);
       });
     });
+  }
+
+  function purge() {
+    watchFiles.forEach(function(file){
+      delete require.cache[file];
+    });
+  }
+
+  loadAndRun();
+
+  utils.watch(watchFiles, function(){
+    purge();
+    stop()
+    suite = suite.clone();
+    ui = interfaces[program.ui](suite);
+    loadAndRun();
   });
 
   return;

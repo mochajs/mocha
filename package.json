@@ -1,6 +1,6 @@
 {
     "name": "mocha"
-  , "version": "0.13.0"
+  , "version": "1.0.0"
   , "description": "simple, flexible, fun test framework"
   , "keywords": ["test", "bdd", "tdd", "tap"]
   , "author": "TJ Holowaychuk <tj@vision-media.ca>"
@@ -15,9 +15,11 @@
       "commander": "0.5.x"
     , "growl": "1.5.x"
     , "jade": "0.20.3"
+    , "diff": "1.0.2"
     , "debug": "*"
   }
   , "devDependencies": {
-    "should": "*"
+      "should": "*"
+    , "coffee-script": "1.2"
   }
 }

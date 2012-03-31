@@ -70,13 +70,7 @@ window.mocha = require('mocha');
 ;(function(){
   var suite = new mocha.Suite('', new mocha.Context)
     , utils = mocha.utils
-    , Reporter = mocha.reporters.HTML
-
-  $(function(){
-    $('code').each(function(){
-      $(this).html(highlight($(this).text()));
-    });
-  });
+    , options = {}
 
   /**
    * Highlight the given string of `js`.
@@ -87,11 +81,22 @@ window.mocha = require('mocha');
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
-      .replace(/('.*')/gm, '<span class="string">$1</span>')
+      .replace(/('.*?')/gm, '<span class="string">$1</span>')
       .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
       .replace(/(\d+)/gm, '<span class="number">$1</span>')
       .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
       .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
+  }
+
+  /**
+   * Highlight code contents.
+   */
+
+  function highlightCode() {
+    var code = document.getElementsByTagName('code');
+    for (var i = 0, len = code.length; i < len; ++i) {
+      code[i].innerHTML = highlight(code[i].innerHTML);
+    }
   }
 
   /**
@@ -110,12 +115,16 @@ window.mocha = require('mocha');
   }
 
   /**
-   * Setup mocha with the give `ui` name.
+   * Setup mocha with the given setting options.
    */
 
-  mocha.setup = function(ui){
-    ui = mocha.interfaces[ui];
+  mocha.setup = function(opts){
+    if ('string' === typeof opts) options.ui = opts;
+    else options = opts;
+
+    ui = mocha.interfaces[options.ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
+    if (options.timeout) suite.timeout(options.timeout);
     ui(suite);
     suite.emit('pre-require', window);
   };
@@ -127,14 +136,14 @@ window.mocha = require('mocha');
   mocha.run = function(){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
+    var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
-    runner.on('end', function(){
-      $('code').each(function(){
-        $(this).html(highlight($(this).text()));
-      });
-    });
+    if (options.ignoreLeaks) runner.ignoreLeaks = true;
+    if (options.globals) runner.globals(options.globals);
+    runner.globals(['location']);
+    runner.on('end', highlightCode);
     return runner.run();
   };
 })();

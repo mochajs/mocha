@@ -2,3 +2,4 @@ support
 test
 examples
 *.sock
+lib-cov
