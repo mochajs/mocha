@@ -143,7 +143,6 @@ window.mocha = require('mocha');
     if (options.globals) runner.globals(options.globals);
     runner.globals(['location']);
     runner.on('end', highlightCode);
-    if (fn) runner.on('end', fn);
-    return runner.run();
+    return runner.run(fn);
   };
 })();
