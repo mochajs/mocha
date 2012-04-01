@@ -870,7 +870,7 @@ exports = module.exports = Mocha;
  * Library version.
  */
 
-exports.version = '0.14.1';
+exports.version = '1.0.0';
 
 /**
  * Expose internals.
@@ -887,13 +887,16 @@ exports.Hook = require('./hook');
 exports.Test = require('./test');
 
 /**
- * Growl images.
+ * Return image `name` path.
+ *
+ * @param {String} name
+ * @return {String}
+ * @api private
  */
 
-var images = {
-    fail: __dirname + '/../images/error.png'
-  , pass: __dirname + '/../images/ok.png'
-};
+function image(name) {
+  return __dirname + '/../images/' + name + '.png';
+}
 
 /**
  * Setup mocha with `options`.
@@ -990,11 +993,11 @@ Mocha.prototype.growl = function(runner, reporter) {
     var stats = reporter.stats;
     if (stats.failures) {
       var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { title: 'Failed', image: images.fail });
+      notify(msg, { title: 'Failed', image: image('fail') });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
           title: 'Passed'
-        , image: images.pass
+        , image: image('pass')
       });
     }
   });
@@ -1734,7 +1737,7 @@ function HTML(runner) {
     } else {
       test.parent.failed = (test.parent.failed || 0) + 1;
       var el = fragment('<div class="test fail"><h2>%e</h2></div>', test.title);
-      var str = test.err.stack || test.err;
+      var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
       if (!~str.indexOf(test.err.message)) {
@@ -1744,6 +1747,11 @@ function HTML(runner) {
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
       if ('[object Error]' == str) str = test.err.message;
+
+      // Safari doesn't give you a stack. Let's at least provide a source line.
+      if (!test.err.stack && test.err.sourceURL && test.err.line !== undefined) {
+        str += "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
+      }
 
       el.appendChild(fragment('<pre class="error">%e</pre>', str));
     }
@@ -2367,7 +2375,7 @@ function Markdown(runner) {
 
   function mapTOC(suite, obj) {
     var ret = obj;
-    obj = obj[suite.title] = obj[suite.title] || {};
+    obj = obj[suite.title] = obj[suite.title] || { suite: suite };
     suite.suites.forEach(function(suite){
       mapTOC(suite, obj);
     });
@@ -2379,7 +2387,8 @@ function Markdown(runner) {
     var buf = '';
     var link;
     for (var key in obj) {
-      if (key) link = ' - [' + key + '](#' + utils.slug(key) + ')\n';
+      if ('suite' == key) continue;
+      if (key) link = ' - [' + key + '](#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
       if (key) buf += Array(level).join('  ') + link;
       buf += stringifyTOC(obj[key], level);
     }
@@ -4120,7 +4129,7 @@ window.mocha = require('mocha');
   }
 
   /**
-   * Setup mocha with the give setting options.
+   * Setup mocha with the given setting options.
    */
 
   mocha.setup = function(opts){
@@ -4147,6 +4156,7 @@ window.mocha = require('mocha');
     if (query.grep) runner.grep(new RegExp(query.grep));
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
+    runner.globals(['location']);
     runner.on('end', highlightCode);
     return runner.run();
   };
