@@ -74,15 +74,15 @@ body {
   color: #0b97c4;
 }
 
-#mocha .test.fail, #mocha .dots .failed, #mocha .current-test .totals .failed  {
+#mocha .test.failed, #mocha .dots .failed, #mocha .current-test .totals .failed  {
   color: #c00;
 }
 
-#mocha .test.fail pre {
+#mocha .test.failed pre {
   color: black;
 }
 
-#mocha .test.fail::before {
+#mocha .test.failed::before {
   content: '✖';
   font-size: 12px;
   display: block;
