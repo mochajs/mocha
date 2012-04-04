@@ -1,4 +1,11 @@
 
+1.0.1 / 2012-04-04 
+==================
+
+  * Fixed `.timeout()` in hooks
+  * Fixed: allow callback for `mocha.run()` in client version
+  * Fixed browser hook error display. Closes #361
+
 1.0.0 / 2012-03-24 
 ==================
 

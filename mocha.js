@@ -407,15 +407,15 @@ module.exports = Context;
 function Context(){}
 
 /**
- * Set the context `Test` to `test`.
+ * Set the context `Runnable` to `runnable`.
  *
- * @param {Test} test
+ * @param {Runnable} runnable
  * @return {Context}
  * @api private
  */
 
-Context.prototype.test = function(test){
-  this._test = test;
+Context.prototype.runnable = function(runnable){
+  this._runnable = runnable;
   return this;
 };
 
@@ -428,12 +428,12 @@ Context.prototype.test = function(test){
  */
 
 Context.prototype.timeout = function(ms){
-  this._test.timeout(ms);
+  this._runnable.timeout(ms);
   return this;
 };
 
 /**
- * Inspect the context void of `._test`.
+ * Inspect the context void of `._runnable`.
  *
  * @return {String}
  * @api private
@@ -441,7 +441,7 @@ Context.prototype.timeout = function(ms){
 
 Context.prototype.inspect = function(){
   return JSON.stringify(this, function(key, val){
-    return '_test' == key
+    return '_runnable' == key
       ? undefined
       : val;
   }, 2);
@@ -870,7 +870,7 @@ exports = module.exports = Mocha;
  * Library version.
  */
 
-exports.version = '1.0.0';
+exports.version = '1.0.1';
 
 /**
  * Expose internals.
@@ -1621,7 +1621,7 @@ function HTML(runner) {
   });
 
   runner.on('fail', function(test, err){
-    if (err.uncaught) runner.emit('test end', test);
+    if ('hook' == test.type || err.uncaught) runner.emit('test end', test);
   });
 
   runner.on('test end', function(test){
@@ -2923,6 +2923,8 @@ Runnable.prototype.run = function(fn){
     , finished
     , emitted;
 
+  if (ctx) ctx.runnable(this);
+
   // timeout
   if (this.async) {
     if (ms) {
@@ -3140,7 +3142,6 @@ Runner.prototype.hook = function(name, fn){
     var hook = hooks[i];
     if (!hook) return fn();
     self.currentRunnable = hook;
-    hook.ctx.test(self.test);
 
     self.emit('hook', hook);
 
@@ -3249,7 +3250,6 @@ Runner.prototype.runTest = function(fn){
     , self = this;
 
   try {
-    test.ctx.test(test);
     test.on('error', function(err){
       self.fail(test, err);
     });
@@ -3916,7 +3916,6 @@ exports.slug = function(str){
     .replace(/[^-\w]/g, '');
 };
 }); // module: utils.js
-
 /**
  * Node shims.
  *
@@ -4051,7 +4050,7 @@ window.mocha = require('mocha');
    * Run mocha, returning the Runner.
    */
 
-  mocha.run = function(){
+  mocha.run = function(fn){
     suite.emit('run');
     var runner = new mocha.Runner(suite);
     var Reporter = options.reporter || mocha.reporters.HTML;
@@ -4062,7 +4061,7 @@ window.mocha = require('mocha');
     if (options.globals) runner.globals(options.globals);
     runner.globals(['location']);
     runner.on('end', highlightCode);
-    return runner.run();
+    return runner.run(fn);
   };
 })();
 })();
