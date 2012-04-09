@@ -23,6 +23,16 @@ describe('Runner', function(){
     })
   })
 
+  describe('.grepTotal()', function(){
+    it('should return the total number of matched tests', function(){
+      suite.addTest(new Test('im a test about lions'));
+      suite.addTest(new Test('im another test about lions'));
+      suite.addTest(new Test('im a test about bears'));
+      runner.grep(/lions/);
+      runner.grepTotal(suite).should.equal(2);
+    })
+  })
+
   describe('.globals()', function(){
     it('should default to the known globals', function(){
       runner.globals().length.should.be.above(10);
