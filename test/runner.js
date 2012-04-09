@@ -1,7 +1,8 @@
 
 var mocha = require('../')
   , Suite = mocha.Suite
-  , Runner = mocha.Runner;
+  , Runner = mocha.Runner
+  , Test = mocha.Test;
 
 describe('Runner', function(){
   var suite, runner;
@@ -9,6 +10,17 @@ describe('Runner', function(){
   beforeEach(function(){
     suite = new Suite(null, 'root');
     runner = new Runner(suite);
+  })
+
+  describe('.grep()', function(){
+    it('should update the runner.total with number of matched tests', function(){
+      suite.addTest(new Test('im a test about lions'));
+      suite.addTest(new Test('im another test about lions'));
+      suite.addTest(new Test('im a test about bears'));
+      var newRunner = new Runner(suite);
+      newRunner.grep(/lions/);
+      newRunner.total.should.equal(2);
+    })
   })
 
   describe('.globals()', function(){
