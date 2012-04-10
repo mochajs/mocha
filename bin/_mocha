@@ -18,7 +18,8 @@ var program = require('commander')
   , vm = require('vm')
   , fs = require('fs')
   , join = path.join
-  , cwd = process.cwd();
+  , cwd = process.cwd()
+  , require_injected_hooks = [];
 
 /**
  * Files.
@@ -105,7 +106,10 @@ program.on('require', function(mod){
     || path.existsSync(mod + '.js');
 
   if (abs) mod = join(cwd, mod);
-  require(mod);
+  var loaded = require(mod);
+  if(loaded.hasOwnProperty('mocha_hooks')) {
+    require_injected_hooks.push(loaded.mocha_hooks);
+  };
 });
 
 // mocha.opts support
@@ -264,11 +268,21 @@ function load(files, fn) {
   });
 }
 
+function add_require_injected_hooks(runner) {
+  require_injected_hooks.forEach(function(hooks) {
+    collection.each(hooks, function(hook, event) {
+      runner.on(event, hook);
+    });
+  });
+};
+
+
 // run the given suite
 
 function run(suite, fn) {
   suite.emit('run');
   var runner = new Runner(suite);
+  add_require_injected_hooks(runner);
   var reporter = new Reporter(runner);
   runner.globals(program.globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
