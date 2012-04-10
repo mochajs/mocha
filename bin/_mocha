@@ -32,7 +32,9 @@ var files = [];
 
 var images = {
     fail: __dirname + '/../images/error.png'
-  , pass: __dirname + '/../images/ok.png'
+  , fast: __dirname + '/../images/fast.png'
+  , medium: __dirname + '/../images/medium.png'
+  , slow: __dirname + '/../images/slow.png'
 };
 
 // options
@@ -290,7 +292,7 @@ function growl(runner, reporter) {
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
           title: 'Passed'
-        , image: images.pass
+        , image: images[stats.maxSpeedType]
       });
     }
   });
