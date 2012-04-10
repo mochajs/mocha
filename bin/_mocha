@@ -269,10 +269,10 @@ function load(files, fn) {
 function run(suite, fn) {
   suite.emit('run');
   var runner = new Runner(suite);
-  var reporter = new Reporter(runner);
   runner.globals(program.globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
+  var reporter = new Reporter(runner);
   if (program.growl) growl(runner, reporter);
   runner.run(fn);
 }
