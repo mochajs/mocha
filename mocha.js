@@ -3052,7 +3052,6 @@ Runner.prototype.grep = function(re){
   debug('grep %s', re);
   this._grep = re;
   this.total = this.grepTotal(this.suite);
-
   return this;
 };
 
@@ -3070,9 +3069,7 @@ Runner.prototype.grepTotal = function(suite) {
   var total = 0;
 
   suite.eachTest(function(test){
-    if (self._grep.test(test.fullTitle())){
-      total++;
-    };
+    if (self._grep.test(test.fullTitle())) total++;
   });
 
   return total;
@@ -3354,14 +3351,15 @@ Runner.prototype.runTests = function(suite, fn){
  */
 
 Runner.prototype.runSuite = function(suite, fn){
-  var self = this
+  var total = this.grepTotal(suite)
+    , self = this
     , i = 0;
 
   debug('run suite %s', suite.fullTitle());
 
-  if(self.grepTotal(suite)) {
-    this.emit('suite', this.suite = suite);
-  }
+  if (!total) return fn();
+
+  this.emit('suite', this.suite = suite);
 
   function next() {
     var curr = suite.suites[i++];
