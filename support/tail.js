@@ -129,6 +129,15 @@ window.mocha = require('mocha');
   };
 
   /**
+   * Set a string to grep for.
+   */
+
+  mocha.grep = function(re){
+    if ('string' === typeof re) options.grep = re;
+    return this;
+  };
+
+  /**
    * Run mocha, returning the Runner.
    */
 
@@ -139,6 +148,7 @@ window.mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+    if (options.grep) runner.grep(new RegExp(options.grep));
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
     runner.globals(['location']);
