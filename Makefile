@@ -15,7 +15,8 @@ mocha.js: $(SRC) $(SUPPORT)
 	@cat \
 	  support/head.js \
 	  _mocha.js \
-	  support/{tail,foot}.js \
+	  support/tail.js \
+	  support/foot.js \
 	  > mocha.js
 
 clean:
