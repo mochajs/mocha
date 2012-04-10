@@ -2450,8 +2450,9 @@ function Progress(runner, options) {
 
   // tests complete
   runner.on('test end', function(){
+    complete++;
     var incomplete = total - complete
-      , percent = complete++ / total
+      , percent = complete / total
       , n = width * percent | 0
       , i = width - n;
 
@@ -3039,7 +3040,8 @@ Runner.prototype.constructor = Runner;
 
 
 /**
- * Run tests with full titles matching `re`.
+ * Run tests with full titles matching `re`. Updates runner.total
+ * with number of tests matched.
  *
  * @param {RegExp} re
  * @return {Runner} for chaining
@@ -3049,7 +3051,31 @@ Runner.prototype.constructor = Runner;
 Runner.prototype.grep = function(re){
   debug('grep %s', re);
   this._grep = re;
+  this.total = this.grepTotal(this.suite);
+
   return this;
+};
+
+/**
+ * Returns the number of tests matching the grep search for the 
+ * given suite.
+ *
+ * @param {Suite} suite
+ * @return {Number}
+ * @api public
+ */
+
+Runner.prototype.grepTotal = function(suite) {
+  var self = this;
+  var total = 0;
+
+  suite.eachTest(function(test){
+    if (self._grep.test(test.fullTitle())){
+      total++;
+    };
+  });
+
+  return total;
 };
 
 /**
@@ -3332,7 +3358,10 @@ Runner.prototype.runSuite = function(suite, fn){
     , i = 0;
 
   debug('run suite %s', suite.fullTitle());
-  this.emit('suite', this.suite = suite);
+
+  if(self.grepTotal(suite)) {
+    this.emit('suite', this.suite = suite);
+  }
 
   function next() {
     var curr = suite.suites[i++];
@@ -3667,6 +3696,24 @@ Suite.prototype.total = function(){
   return utils.reduce(this.suites, function(sum, suite){
     return sum + suite.total();
   }, 0) + this.tests.length;
+};
+
+/**
+ * Iterates through each suite recursively to find
+ * all tests. Applies a function in the format
+ * `fn(test)`.
+ *
+ * @param {Function} fn
+ * @return {Suite}
+ * @api private
+ */
+
+Suite.prototype.eachTest = function(fn){
+  utils.forEach(this.tests, fn);
+  utils.forEach(this.suites, function(suite){
+    suite.eachTest(fn);
+  });
+  return this;
 };
 
 }); // module: suite.js
