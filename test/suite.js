@@ -257,12 +257,10 @@ describe('Suite', function(){
 
     describe('when there are no nested suites or tests', function(){
       it('should return 0', function(){
-        var counter = 0;
-        function fn(){
-          counter++;
-        }
+        var n = 0;
+        function fn(){ n++; }
         this.suite.eachTest(fn);
-        counter.should.equal(0);
+        n.should.equal(0);
       });
     });
 
@@ -271,28 +269,24 @@ describe('Suite', function(){
         this.suite.addTest(new Test('a child test'));
         this.suite.addTest(new Test('another child test'));
  
-        var counter = 0;
-        function fn(){
-          counter++;
-        }
+        var n = 0;
+        function fn(){ n++; }
         this.suite.eachTest(fn);
-        counter.should.equal(2);
+        n.should.equal(2);
       });
     });
 
     describe('when there are several levels of nested suites', function(){
       it('should return the number', function(){
         this.suite.addTest(new Test('a child test'));
-        var suite = (new Suite('a child suite'));
+        var suite = new Suite('a child suite');
         suite.addTest(new Test('a test in a child suite'));
         this.suite.addSuite(suite);
  
-        var counter = 0;
-        function fn(){
-          counter++;
-        }
+        var n = 0;
+        function fn(){ n++; }
         this.suite.eachTest(fn);
-        counter.should.equal(2);
+        n.should.equal(2);
       });
     });
 
