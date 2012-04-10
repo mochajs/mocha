@@ -250,7 +250,7 @@ describe('Suite', function(){
     });
   });
 
-  describe('.iterateTests(fn)', function(){
+  describe('.eachTest(fn)', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');
     });
@@ -261,7 +261,7 @@ describe('Suite', function(){
         function fn(){
           counter++;
         }
-        this.suite.iterateTests(fn);
+        this.suite.eachTest(fn);
         counter.should.equal(0);
       });
     });
@@ -275,7 +275,7 @@ describe('Suite', function(){
         function fn(){
           counter++;
         }
-        this.suite.iterateTests(fn);
+        this.suite.eachTest(fn);
         counter.should.equal(2);
       });
     });
@@ -291,7 +291,7 @@ describe('Suite', function(){
         function fn(){
           counter++;
         }
-        this.suite.iterateTests(fn);
+        this.suite.eachTest(fn);
         counter.should.equal(2);
       });
     });
