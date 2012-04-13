@@ -61,6 +61,14 @@ program
 
 program.name = 'mocha';
 
+// --globals
+
+var globals = [];
+program.on('globals', function(){
+  globals = globals.concat(program.globals);
+  program.globals = globals;
+});
+
 // --reporters
 
 program.on('reporters', function(){
