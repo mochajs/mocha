@@ -27,6 +27,12 @@ var program = require('commander')
 var files = [];
 
 /**
+ * Globals.
+ */
+
+var globals = [];
+
+/**
  * Images.
  */
 
@@ -63,10 +69,8 @@ program.name = 'mocha';
 
 // --globals
 
-var globals = [];
-program.on('globals', function(){
-  globals = globals.concat(program.globals);
-  program.globals = globals;
+program.on('globals', function(val){
+  globals = globals.concat(list(val));
 });
 
 // --reporters
@@ -277,7 +281,7 @@ function load(files, fn) {
 function run(suite, fn) {
   suite.emit('run');
   var runner = new Runner(suite);
-  runner.globals(program.globals);
+  runner.globals(globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
   var reporter = new Reporter(runner);

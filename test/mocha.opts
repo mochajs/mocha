@@ -2,6 +2,6 @@
 --reporter dot
 --ui bdd
 --growl
---globals okGlobalA
---globals okGlobalB
+--globals okGlobalA,okGlobalB
+--globals okGlobalC
 --timeout 200
