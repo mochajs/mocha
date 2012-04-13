@@ -1222,7 +1222,7 @@ exports.list = function(failures){
 
 function Base(runner) {
   var self = this
-    , stats = this.stats = { suites: 0, tests: 0, passes: 0, failures: 0 }
+    , stats = this.stats = { suites: 0, tests: 0, passes: 0, pending: 0, failures: 0 }
     , failures = this.failures = [];
 
   if (!runner) return;
@@ -1266,6 +1266,10 @@ function Base(runner) {
     stats.end = new Date;
     stats.duration = new Date - stats.start;
   });
+
+  runner.on('pending', function(){
+    stats.pending++;
+  });
 }
 
 /**
@@ -1277,17 +1281,26 @@ function Base(runner) {
 
 Base.prototype.epilogue = function(){
   var stats = this.stats
-    , fmt;
+    , fmt
+    , tests;
 
   console.log();
+
+  function pluralize(n) {
+    return 1 == n ? 'test' : 'tests';
+  }
 
   // failure
   if (stats.failures) {
     fmt = color('bright fail', '  ✖')
-      + color('fail', ' %d of %d tests failed')
+      + color('fail', ' %d of %d %s failed')
       + color('light', ':')
 
-    console.error(fmt, stats.failures, this.runner.total);
+    console.error(fmt,
+      stats.failures,
+      this.runner.total,
+      pluralize(this.runner.total));
+
     Base.list(this.failures);
     console.error();
     return;
@@ -1295,10 +1308,22 @@ Base.prototype.epilogue = function(){
 
   // pass
   fmt = color('bright pass', '  ✔')
-    + color('green', ' %d tests complete')
+    + color('green', ' %d %s complete')
     + color('light', ' (%dms)');
 
-  console.log(fmt, stats.tests || 0, stats.duration);
+  console.log(fmt,
+    stats.tests || 0,
+    pluralize(stats.tests),
+    stats.duration);
+
+  // pending
+  if (stats.pending) {
+    fmt = color('pending', '  •')
+      + color('pending', ' %d %s pending');
+
+    console.log(fmt, stats.pending, pluralize(stats.pending));
+  }
+
   console.log();
 };
 
@@ -1569,6 +1594,16 @@ var statsTemplate = '<ul id="stats">'
   + '</ul>';
 
 /**
+ * Filters for tests results
+ */
+
+var resultFilterTemplate = '<ul id="result-filter">'
+  + '<li class="select-all filter-selected">All</li>'
+  + '<li class="select-pass">Pass</li>'
+  + '<li class="select-fail">Fail</li>'
+  + '</ul>';
+
+/**
  * Initialize a new `Doc` reporter.
  *
  * @param {Runner} runner
@@ -1588,6 +1623,8 @@ function HTML(runner) {
     , failures = items[2].getElementsByTagName('em')[0]
     , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
+    , filter = fragment(resultFilterTemplate)
+    , filterItems = filter.getElementsByTagName('li')
     , stack = [root]
     , progress
     , ctx
@@ -1598,6 +1635,31 @@ function HTML(runner) {
   }
 
   if (!root) return error('#mocha div missing, add it to your document');
+
+  // Results filter
+
+  root.appendChild(filter);
+
+  function filterUpdate() {
+    var selected = getElementsByClassName('filter-selected');
+    var selectedClass = selected[0].className.split(" ")[0].split('-')[1];
+    var selected = getElementsByClassName('t', filter);
+    utils.forEach(getElementsByClassName('test'), function(el) {
+      if(selectedClass === "all" || hasClass(el, selectedClass)) {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  on(filter, 'click', function(e) {
+    utils.forEach(filterItems, function(el) {
+      removeClass(el, 'filter-selected');
+      addClass(e.target, 'filter-selected');
+    });
+    filterUpdate();
+  });
 
   root.appendChild(stat);
 
@@ -1659,6 +1721,8 @@ function HTML(runner) {
       }
 
       el.appendChild(fragment('<pre class="error">%e</pre>', str));
+    
+      filterUpdate();
     }
 
     // toggle code
@@ -1752,6 +1816,74 @@ function clean(str) {
 
   return str;
 }
+
+/**
+ * DOM - Returns all elements which have the class `className`
+ *
+ * @param {String} className
+ * @return {Array}
+ */
+function getElementsByClassName(className) {
+  if('getElementsByClassName' in document) {
+    return document.getElementsByClassName(className);
+  } else {
+    var result = [];
+    var root = document.getElementsByTagName("body")[0];
+    var re = new RegExp('\\b' + className + '\\b');
+    utils.forEach(root.getElementsByTagName("*"), function(el) {
+      if(re.test(el.className)) result.push(el);
+    });
+    return result;
+  }
+}
+
+/**
+ * DOM - Returns true if the provided DOM element has 
+ * `className` as a class
+ *
+ * @param {Object} el
+ * @param {String} className
+ * @return {Boolean} 
+ */
+function hasClass(el, className) {
+  var re = new RegExp('\\b' + className + '\\b');
+  return re.test(el.className);
+}
+
+/**
+ * DOM - Removes the class `className` from the provided DOM
+ * element, if it has the class
+ *
+ * @param {Object} el
+ * @param {String} className
+ * @return {Object} el
+ */
+function removeClass(el, className) {
+  if(!hasClass(el, className)) return el;
+  var previousClass = el.className;
+  var re = new RegExp('(^| )' + className + '( |$)');
+  var newClass = previousClass.replace(re, '$1');
+  newClass = newClass.replace(/ $/, '');
+  el.className = newClass;
+  return el;
+}
+
+/**
+ * DOM - Adds the class `className` from the provided DOM
+ * element, if it hasn't already the class
+ *
+ * @param {Object} el
+ * @param {String} className
+ * @return {Object} el
+ */
+function addClass(el, className) {
+  if(!hasClass(el, className)) {
+    el.className = el.className + ' ' + className;
+  }
+  return el;
+}
+
+
 
 }); // module: reporters/html.js
 
@@ -1929,70 +2061,6 @@ function clean(test) {
 
 }); // module: reporters/json-cov.js
 
-require.register("reporters/json-stream.js", function(module, exports, require){
-
-/**
- * Module dependencies.
- */
-
-var Base = require('./base')
-  , color = Base.color;
-
-/**
- * Expose `List`.
- */
-
-exports = module.exports = List;
-
-/**
- * Initialize a new `List` test reporter.
- *
- * @param {Runner} runner
- * @api public
- */
-
-function List(runner) {
-  Base.call(this, runner);
-
-  var self = this
-    , stats = this.stats
-    , total = runner.total;
-
-  runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
-  });
-
-  runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
-  });
-
-  runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
-  });
-
-  runner.on('end', function(){
-    process.stdout.write(JSON.stringify(['end', self.stats]));
-  });
-}
-
-/**
- * Return a plain-object representation of `test`
- * free of cyclic properties etc.
- *
- * @param {Object} test
- * @return {Object}
- * @api private
- */
-
-function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
-  }
-}
-}); // module: reporters/json-stream.js
-
 require.register("reporters/json.js", function(module, exports, require){
 
 /**
@@ -2065,6 +2133,70 @@ function clean(test) {
   }
 }
 }); // module: reporters/json.js
+
+require.register("reporters/json-stream.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , color = Base.color;
+
+/**
+ * Expose `List`.
+ */
+
+exports = module.exports = List;
+
+/**
+ * Initialize a new `List` test reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function List(runner) {
+  Base.call(this, runner);
+
+  var self = this
+    , stats = this.stats
+    , total = runner.total;
+
+  runner.on('start', function(){
+    console.log(JSON.stringify(['start', { total: total }]));
+  });
+
+  runner.on('pass', function(test){
+    console.log(JSON.stringify(['pass', clean(test)]));
+  });
+
+  runner.on('fail', function(test, err){
+    console.log(JSON.stringify(['fail', clean(test)]));
+  });
+
+  runner.on('end', function(){
+    process.stdout.write(JSON.stringify(['end', self.stats]));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+}); // module: reporters/json-stream.js
 
 require.register("reporters/landing.js", function(module, exports, require){
 
@@ -3960,6 +4092,9 @@ exports.slug = function(str){
     .replace(/ +/g, '-')
     .replace(/[^-\w]/g, '');
 };
+
+
+
 }); // module: utils.js
 /**
  * Node shims.
