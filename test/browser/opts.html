@@ -19,7 +19,9 @@
     <script src="opts.js"></script>
     <script src="../acceptance/globals.js"></script>
     <script>
-      onload = mocha.run;
+     onload = function(){
+        var runner = mocha.run();
+      };
     </script>
   </head>
   <body>
