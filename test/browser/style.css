@@ -1,7 +1,11 @@
 
 body {
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 60px 50px;
+  padding: 0 50px;
+}
+
+#mocha {
+  position: relative;
 }
 
 #mocha h1, h2 {
@@ -9,12 +13,14 @@ body {
 }
 
 #mocha h1 {
+  padding-top: 40px;
   margin-top: 15px;
   font-size: 1em;
   font-weight: 200;
 }
 
 #mocha .suite .suite h1 {
+  padding-top: 0;
   margin-top: 0;
   font-size: .8em;
 }
@@ -49,7 +55,7 @@ body {
 }
 
 #mocha .test.pass::before {
-  content: '✓';
+  content: '\02713';
   font-size: 12px;
   display: block;
   float: left;
@@ -62,7 +68,7 @@ body {
 }
 
 #mocha .test.pending::before {
-  content: '◦';
+  content: '\02022';
   color: #0b97c4;
 }
 
@@ -75,7 +81,7 @@ body {
 }
 
 #mocha .test.fail::before {
-  content: '✖';
+  content: '\02716';
   font-size: 12px;
   display: block;
   float: left;
@@ -106,17 +112,19 @@ body {
 }
 
 #stats {
-  position: fixed;
-  top: 15px;
+  position: absolute;
+  top: 0;
   right: 10px;
   font-size: 12px;
-  margin: 0;
+  margin: 15px 0 0;
   color: #888;
+  width: 280px;
 }
 
 #stats .progress {
   float: right;
   padding-top: 0;
+  margin-top: -11px;
 }
 
 #stats em {
@@ -124,10 +132,38 @@ body {
 }
 
 #stats li {
-  display: inline-block;
+  display: inline;
   margin: 0 5px;
   list-style: none;
-  padding-top: 11px;
+}
+
+#mocha.fallback #stats {
+  width: 320px;
+}
+
+#mocha.fallback #stats .progress canvas {
+  display: none;
+}
+
+#mocha.fallback #stats .progress .bar {
+  margin-top: 8px;
+  width: 80px;
+  height: 20px;
+  border: 1px solid #aaa;
+}
+
+#mocha.fallback #stats .progress .innerBar {
+  background-color: #00C41C;
+  height: 20px;
+  width: 0;
+}
+
+#mocha.fallback .test.pass h2 {
+  color: #00c41c;
+}
+
+#mocha.fallback .test.fail h2 {
+  color: #c00;
 }
 
 code .comment { color: #ddd }
