@@ -129,15 +129,6 @@ window.mocha = require('mocha');
   };
 
   /**
-   * Set a string to grep for.
-   */
-
-  mocha.grep = function(re){
-    if ('string' === typeof re) options.grep = re;
-    return this;
-  };
-
-  /**
    * Run mocha, returning the Runner.
    */
 
