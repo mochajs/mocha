@@ -5,3 +5,4 @@ node_modules
 *.sock
 testing
 _mocha.js
+test.js
