@@ -1637,7 +1637,7 @@ function HTML(runner) {
 
     // test
     if ('passed' == test.state) {
-      var el = fragment('<div class="test pass"><h2>%e</h2></div>', test.title);
+      var el = fragment('<div class="test pass %e"><h2>%e<span class="duration">%ems</span></h2></div>', test.speed, test.title, test.duration);
     } else if (test.pending) {
       var el = fragment('<div class="test pass pending"><h2>%e</h2></div>', test.title);
     } else {

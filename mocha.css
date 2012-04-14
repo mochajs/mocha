@@ -48,13 +48,35 @@ body {
   font-family: arial;
 }
 
+#mocha .test.pass.fast {
+  color: #468847;
+}
+
+#mocha .test.pass.medium {
+  color: #C09853;
+}
+
+#mocha .test.pass.slow {
+  color: #B94A48;
+}
+
 #mocha .test.pass::before {
   content: '✓';
   font-size: 12px;
   display: block;
   float: left;
   margin-right: 5px;
-  color: #00c41c;
+}
+
+#mocha .test.pass .duration {
+  color: #999999;
+  font-style: italic;
+  padding-left: 7px;
+  font-size: 10px;
+}
+
+#mocha .test.pass.fast .duration {
+  display: none;
 }
 
 #mocha .test.pending {
