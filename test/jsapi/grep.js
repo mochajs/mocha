@@ -19,7 +19,7 @@ describe('Mocha', function(){
 
     it('should convert grep string to a RegExp', function(){
       var mocha = new Mocha({grep:'foo'});
-      mocha.options.grep.constructor.name.should.equal('RegExp');
+      this.reEqual(/foo/, mocha.options.grep).should.be.ok;
     })
   })
 
@@ -33,7 +33,7 @@ describe('Mocha', function(){
     it('should convert grep string to a RegExp', function(){
       var mocha = new Mocha();
       mocha.grep('foo');
-      mocha.options.grep.constructor.name.should.equal('RegExp');
+      this.reEqual(/foo/, mocha.options.grep).should.be.ok;
     })
 
     it('should return it\'s parent Mocha object for chainability', function(){
