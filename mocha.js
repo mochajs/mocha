@@ -1591,22 +1591,12 @@ function HTML(runner) {
     , stack = [root]
     , progress
     , ctx
-    , progressBar
-    , bar
-    , innerBar
-    , innerText
 
   if (canvas.getContext) {
     ctx = canvas.getContext('2d');
     progress = new Progress;
   } else {
     root.className = 'fallback';
-    progressBar = document.createElement('div');
-    items[0].appendChild(progressBar);
-    progressBar.innerHTML = '<div class="bar"><div class="innerBar"></div></div><span></span>';
-    bar = progressBar.getElementsByTagName('div')[0];
-    innerBar = bar.getElementsByTagName('div')[0];
-    innerText = progressBar.getElementsByTagName('span')[0];
   }
 
   if (!root) return error('#mocha div missing, add it to your document');
@@ -1639,12 +1629,7 @@ function HTML(runner) {
   runner.on('test end', function(test){
     // TODO: add to stats
     var percent = stats.tests / total * 100 | 0;
-    if (progress){
-      progress.update(percent).draw(ctx);
-    } else {
-      innerBar.style.width = percent + '%';
-      innerText.innerHTML = percent + '%';
-    }
+    if (progress) progress.update(percent).draw(ctx);
 
     // update stats
     var ms = new Date - stats.start;
