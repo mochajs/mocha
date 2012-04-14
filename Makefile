@@ -7,9 +7,6 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js mocha.css
 
-mocha.css: test/browser/style.css
-	cp -f $< $@
-
 mocha.js: $(SRC) $(SUPPORT)
 	@node support/compile $(SRC)
 	@cat \
