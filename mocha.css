@@ -48,15 +48,11 @@ body {
   font-family: arial;
 }
 
-#mocha .test.pass.fast {
-  color: #468847;
-}
-
-#mocha .test.pass.medium {
+#mocha .test.pass.medium .duration {
   color: #C09853;
 }
 
-#mocha .test.pass.slow {
+#mocha .test.pass.slow .duration {
   color: #B94A48;
 }
 
