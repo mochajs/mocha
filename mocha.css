@@ -49,11 +49,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  color: #C09853;
+  background: #C09853;
 }
 
 #mocha .test.pass.slow .duration {
-  color: #B94A48;
+  background: #B94A48;
 }
 
 #mocha .test.pass::before {
@@ -65,10 +65,15 @@ body {
 }
 
 #mocha .test.pass .duration {
-  color: #999999;
-  font-style: italic;
-  padding-left: 7px;
-  font-size: 10px;
+  font-size: 9px;
+  margin-left: 5px;
+  padding: 2px 5px;
+  color: white;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 
 #mocha .test.pass.fast .duration {
