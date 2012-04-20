@@ -38,6 +38,12 @@ process.argv.slice(2).forEach(function (arg) {
     case '--expose-gc':
       args.unshift('--expose-gc');
       break;
+    case '--trace-gc':
+      args.unshift('--trace-gc');
+      break;
+    case '--trace-gc-verbose':
+      args.unshift('--trace-gc-verbose');
+      break;
     default:
       args.push(arg);
       break;

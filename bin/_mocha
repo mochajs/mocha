@@ -60,6 +60,8 @@ program
   .option('-b, --bail', "bail after first test failure")
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--expose-gc', "expose v8's garbage collector as the gc() function")
+  .option('--trace-gc', "print one trace line following each v8 garbage collection")
+  .option('--trace-gc-verbose', "print more details following each v8 garbage collection (must be used with --trace-gc-verbose)")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--ignore-leaks', 'ignore global variable leaks')
   .option('--interfaces', 'display available interfaces')
