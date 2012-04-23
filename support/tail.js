@@ -27,15 +27,16 @@ process.nextTick = (function(){
   var timeouts = []
     , name = 'mocha-zero-timeout'
 
+  window.addEventListener('message', function(e){
+    if (e.source == window && e.data == name) {
+      if (e.stopPropagation) e.stopPropagation();
+      if (timeouts.length) timeouts.shift()();
+    }
+  }, true);
+
   return function(fn){
     timeouts.push(fn);
     window.postMessage(name, '*');
-    window.addEventListener('message', function(e){
-      if (e.source == window && e.data == name) {
-        if (e.stopPropagation) e.stopPropagation();
-        if (timeouts.length) timeouts.shift()();
-      }
-    }, true);
   }
 })();
 
