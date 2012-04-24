@@ -1222,7 +1222,7 @@ exports.list = function(failures){
 
 function Base(runner) {
   var self = this
-    , stats = this.stats = { suites: 0, tests: 0, passes: 0, failures: 0 }
+    , stats = this.stats = { suites: 0, tests: 0, passes: 0, pending: 0, failures: 0 }
     , failures = this.failures = [];
 
   if (!runner) return;
@@ -1266,6 +1266,10 @@ function Base(runner) {
     stats.end = new Date;
     stats.duration = new Date - stats.start;
   });
+
+  runner.on('pending', function(){
+    stats.pending++;
+  });
 }
 
 /**
@@ -1277,17 +1281,26 @@ function Base(runner) {
 
 Base.prototype.epilogue = function(){
   var stats = this.stats
-    , fmt;
+    , fmt
+    , tests;
 
   console.log();
+
+  function pluralize(n) {
+    return 1 == n ? 'test' : 'tests';
+  }
 
   // failure
   if (stats.failures) {
     fmt = color('bright fail', '  ✖')
-      + color('fail', ' %d of %d tests failed')
+      + color('fail', ' %d of %d %s failed')
       + color('light', ':')
 
-    console.error(fmt, stats.failures, this.runner.total);
+    console.error(fmt,
+      stats.failures,
+      this.runner.total,
+      pluralize(this.runner.total));
+
     Base.list(this.failures);
     console.error();
     return;
@@ -1295,10 +1308,22 @@ Base.prototype.epilogue = function(){
 
   // pass
   fmt = color('bright pass', '  ✔')
-    + color('green', ' %d tests complete')
+    + color('green', ' %d %s complete')
     + color('light', ' (%dms)');
 
-  console.log(fmt, stats.tests || 0, stats.duration);
+  console.log(fmt,
+    stats.tests || 0,
+    pluralize(stats.tests),
+    stats.duration);
+
+  // pending
+  if (stats.pending) {
+    fmt = color('pending', '  •')
+      + color('pending', ' %d %s pending');
+
+    console.log(fmt, stats.pending, pluralize(stats.pending));
+  }
+
   console.log();
 };
 
@@ -1773,6 +1798,7 @@ exports.HTMLCov = require('./html-cov');
 exports.JSONStream = require('./json-stream');
 exports.XUnit = require('./xunit')
 exports.Teamcity = require('./teamcity')
+exports.WebConsole = require('./web-console')
 
 }); // module: reporters/index.js
 
@@ -2704,6 +2730,182 @@ function escape(str) {
   return str.replace(/'/g, "|'");
 }
 }); // module: reporters/teamcity.js
+
+require.register("reporters/web-console.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , cursor = Base.cursor
+  , color = Base.color;
+
+/**
+ * Expose `WebConsole`.
+ */
+
+exports = module.exports = WebConsoleReporter;
+
+/**
+ * Initialize a new `WebConsole` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function WebConsoleReporter(runner) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = []
+
+  runner.on('end', function(){
+    group(runner.suite.suites);
+  });
+
+
+  runner.on('suite', function(suite){
+    if (suite.root) return;
+    suite.completedTests = [];
+    suite.passedCount = 0;
+    suite.failedCount = 0;
+    suite.pendingCount = 0;
+    suite.totalCount = 0;
+  });
+
+  runner.on('test end', function(test){
+    var suite = test.parent;
+    suite.completedTests.push(test);
+    while (suite && !suite.root) {
+      suite.totalCount += 1;
+      suite = suite.parent
+    }
+    suite = test.parent;
+    if ('passed' == test.state) {
+      while (suite && !suite.root) {
+        suite.passedCount += 1;
+        suite = suite.parent
+      }
+      // test.speed, test.title, test.duration
+    } else if (test.pending) {
+      // test.title
+      while (suite && !suite.root) {
+        suite.pendingCount += 1;
+        suite.pending = true;
+        suite = suite.parent
+      }
+    } else {
+      while (suite && !suite.root) {
+        suite.failed = true;
+        suite.failedCount += 1;
+        suite = suite.parent
+      }
+      // test.title
+      var str = test.err.stack || test.err.toString();
+
+      // FF / Opera do not add the message
+      if (!~str.indexOf(test.err.message)) {
+        str = test.err.message + '\n' + str;
+      }
+
+      // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
+      // check for the result of the stringifying.
+      if ('[object Error]' == str) str = test.err.message;
+
+      // Safari doesn't give you a stack. Let's at least provide a source line.
+      if (!test.err.stack && test.err.sourceURL && test.err.line !== undefined) {
+        str += "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
+      }
+
+      test.message = str;
+    }  
+    tests.push(test);
+  });
+}
+
+/**
+ * Group test output using console.group or console.groupCollapsed.
+ */
+
+function group(suites) {
+  suites.forEach(function(suite) {
+    consoleGroupStart(!suite.failed && !suite.pending, title(suite));
+    
+    if (suite.completedTests.length) {
+      suite.completedTests.forEach(function(test) {
+        switch (test.state) {
+          case 'failed':
+            consoleGroupStart(false, test.title);
+            console.info(clean(test.fn.toString()));
+            console.error(test.message);
+            consoleGroupEnd();
+            break;
+          case 'passed':
+            consoleGroupStart(true, test.title);
+            console.info(clean(test.fn.toString()));
+            consoleGroupEnd();
+            break;
+          default:
+            console.warn(test.title);
+        }
+      });
+    }
+
+    if (suite.suites.length) {
+      group(suite.suites);
+    }
+
+    consoleGroupEnd();
+  });
+}
+
+function title(suite) {
+  var title = suite.title + " (" + suite.passedCount + "/" + suite.totalCount + " passed";
+  
+  if (suite.failedCount) {
+    title += ", " + suite.failedCount + " failures";
+  }
+  if (suite.pendingCount) {
+    title += ", " + suite.pendingCount + " pending";
+  }
+  title += ")";
+  
+  return title;
+}
+
+function consoleGroupStart(collapse, string) {
+  if (console.group) {
+    return collapse && console.groupCollapsed ? console.groupCollapsed(string) : console.group(string);
+  }
+}
+
+function consoleGroupEnd() {
+  if (console.groupEnd) {
+    console.groupEnd();
+  }
+}
+
+/**
+ * Strip the function definition from `str`,
+ * and re-indent for pre whitespace.
+ */
+
+function clean(str) {
+ str = str
+   .replace(/^function *\(.*\) *{/, '')
+   .replace(/\s+\}$/, '');
+
+ var spaces = str.match(/^\n?( *)/)[1].length
+   , re = new RegExp('^ {' + spaces + '}', 'gm');
+
+ str = str
+   .replace(re, '')
+   .replace(/^\s+/, '');
+
+ return str;
+}
+}); // module: reporters/web-console.js
 
 require.register("reporters/xunit.js", function(module, exports, require){
 
