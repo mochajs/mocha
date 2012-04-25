@@ -107,7 +107,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 watch:
-	@watch -q $(MAKE) mocha.{js,css}
+	@watch -q $(MAKE) mocha.js
 
 tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
