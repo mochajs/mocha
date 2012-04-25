@@ -17,7 +17,7 @@ mocha.js: $(SRC) $(SUPPORT)
 	  > mocha.js
 
 clean:
-	rm -f mocha.{js,css}
+	rm -f mocha.js
 	rm -fr lib-cov
 	rm -f coverage.html
 
@@ -107,7 +107,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 watch:
-	@watch -q $(MAKE) mocha.js
+	@watch -q $(MAKE) mocha.{js,css}
 
 tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
