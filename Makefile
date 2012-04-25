@@ -5,7 +5,7 @@ TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
 
-all: mocha.js mocha.css
+all: mocha.js
 
 mocha.js: $(SRC) $(SUPPORT)
 	@node support/compile $(SRC)
