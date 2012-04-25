@@ -106,9 +106,6 @@ non-tty:
 	@echo spec:
 	@cat /tmp/spec.out
 
-watch:
-	@watch -q $(MAKE) mocha.{js,css}
-
 tm:
 	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
