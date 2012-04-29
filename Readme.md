@@ -32,3 +32,7 @@ authors:
     1	Raynos                  0.2%
     1	Ryunosuke SATO          0.2%
 ```
+
+## Links
+
+  - [Google Group](http://groups.google.com/group/mochajs)
