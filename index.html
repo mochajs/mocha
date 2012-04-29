@@ -18,7 +18,8 @@
       <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
 <p>Mocha is a feature-rich JavaScript test framework running on <a href="http://nodejs.org">node</a> and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on <a href="http://github.com/visionmedia/mocha">GitHub</a>.</p>
 
-<h2>Features</h2>
+<h2 id="features">Features</h2>
+
 
 <ul>
 <li>browser support</li>
@@ -52,14 +53,16 @@
 </ul>
 
 
-<h2>Installation</h2>
+<h2 id="installation">Installation</h2>
+
 
 <p>  Install with <a href="http://npmjs.org">npm</a>:</p>
 
 <pre><code>$ npm install -g mocha
 </code></pre>
 
-<h2>Assertions</h2>
+<h2 id="assertions">Assertions</h2>
+
 
 <p>Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, node&rsquo;s regular <code>assert</code> module, or others. The following is a list of known assertion libraries for node and/or the browser:</p>
 
@@ -70,7 +73,8 @@
 </ul>
 
 
-<h2>Synchronous code</h2>
+<h2 id="synchronous-code">Synchronous code</h2>
+
 
 <p> When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.</p>
 
@@ -84,7 +88,8 @@
 })
 </code></pre>
 
-<h2>Asynchronous code</h2>
+<h2 id="asynchronous-code">Asynchronous code</h2>
+
 
 <p>Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete:</p>
 
@@ -140,7 +145,8 @@
 })
 </code></pre>
 
-<h2>Pending tests</h2>
+<h2 id="pending-tests">Pending tests</h2>
+
 
 <p> Pending test-cases are simply those without a callback:</p>
 
@@ -151,7 +157,8 @@
 })
 </code></pre>
 
-<h2>Test duration</h2>
+<h2 id="test-duration">Test duration</h2>
+
 
 <p>  Most of the reporters support some form of displaying
   test duration, as well as flagging tests that are slow,
@@ -159,7 +166,8 @@
 
 <p>   <img src="images/reporter-spec-duration.png" alt="test duration" /></p>
 
-<h2>String diffs</h2>
+<h2 id="string diffs">String diffs</h2>
+
 
 <p>  Mocha supports the <code>err.expected</code>, and <code>err.actual</code> properties
   when available to present expectations to the developer. Currently
@@ -168,7 +176,8 @@
 
 <p>  <img src="http://f.cl.ly/items/3L0T1A0h2N1J3G021i0F/Screen%20Shot%202012-03-01%20at%202.31.31%20PM.png" alt="string diffs" /></p>
 
-<h2>mocha(1)</h2>
+<h2 id="usage">mocha(1)</h2>
+
 
 <pre><code> Usage: mocha [debug] [options] [files]
 
@@ -196,53 +205,65 @@
    --compilers &lt;ext&gt;:&lt;module&gt;,...  use the given module(s) to compile files
 </code></pre>
 
-<h3>-w, &ndash;watch</h3>
+<h3 id="watch-option">-w, --watch</h3>
+
 
 <p>  Executes tests on changes to JavaScript in the CWD, and once initially.</p>
 
-<h3>&ndash;compilers</h3>
+<h3 id="compilers-option">--compilers</h3>
+
 
 <p>  coffee-script is no longer supported out of the box. CS and similar transpilers
   may be used by mapping the file extensions (for use with &ndash;watch) and the module
   name. For example <code>--compilers coffee:coffee-script</code>.</p>
 
-<h3>-b, &ndash;bail</h3>
+<h3 id="bail-option">-b, --bail</h3>
+
 
 <p>  Only interested in the first exception? use <code>--bail</code> !</p>
 
-<h3>-d, &ndash;debug</h3>
+<h3 id="debug-option">-d, --debug</h3>
+
 
 <p>  Enables node&rsquo;s debugger support, this executes your script(s) with <code>node debug &lt;file ...&gt;</code> allowing you to step through code and break with the <strong>debugger</strong> statement.</p>
 
-<h3>&ndash;globals &lt;names&gt;</h3>
+<h3 id="globals-option">--globals &lt;names&gt;</h3>
+
 
 <p>  Accepts a comma-delimited list of accepted global variable names. For example suppose your app deliberately exposes a global named <code>app</code> and <code>YUI</code>, you may want to add <code>--globals app,YUI</code>.</p>
 
-<h3>&ndash;ignore-leaks</h3>
+<h3 id="ignore-leaks-option">--ignore-leaks</h3>
+
 
 <p>  By default Mocha will fail when global variables are introduced, you may use <code>--globals</code> to specify a few, or use <code>--ignore-leaks</code> to disable this functionality.</p>
 
-<h3>-r, &ndash;require &lt;name&gt;</h3>
+<h3 id="require-option">-r, --require &lt;name&gt;</h3>
+
 
 <p>  The <code>--require</code> option is useful for libraries such as <a href="http://github.com/visionmedia/should.js">should.js</a>, so you may simply <code>--require should</code> instead of manually invoking <code>require('should')</code> within each test file. Note that this works well for <code>should</code> as it augments <code>Object.prototype</code>, however if you wish to access a module&rsquo;s exports you will have to require them, for example <code>var should = require('should')</code>.</p>
 
-<h3>-u, &ndash;ui &lt;name&gt;</h3>
+<h3 id="ui-option">-u, --ui &lt;name&gt;</h3>
+
 
 <p>  The <code>--ui</code> option lets you specify the interface to use, defaulting to &ldquo;bdd&rdquo;.</p>
 
-<h3>-R, &ndash;reporter &lt;name&gt;</h3>
+<h3 id="reporter-option">-R, --reporter &lt;name&gt;</h3>
+
 
 <p>  The <code>--reporter</code> option allows you to specify the reporter that will be used, defaulting to &ldquo;dot&rdquo;.</p>
 
-<h3>-t, &ndash;timeout &lt;ms&gt;</h3>
+<h3 id="timeout-option">-t, --timeout &lt;ms&gt;</h3>
+
 
 <p>  Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the <code>s</code> suffix, ex: <code>--timeout 2s</code> or <code>--timeout 2000</code> would be equivalent.</p>
 
-<h3>-s, &ndash;slow &lt;ms&gt;</h3>
+<h3 id="slow-option">-s, --slow &lt;ms&gt;</h3>
+
 
 <p>  Specify the &ldquo;slow&rdquo; test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.</p>
 
-<h3>-g, &ndash;grep &lt;pattern&gt;</h3>
+<h3 id="grep-option">-g, --grep &lt;pattern&gt;</h3>
+
 
 <p>  The <code>--grep</code> option when specified will trigger mocha to only run tests matching the given <code>pattern</code> which is internally compiled to a <code>RegExp</code>.</p>
 
@@ -261,11 +282,13 @@ describe('app', function(){
 })
 </code></pre>
 
-<h2>Interfaces</h2>
+<h2 id="interfaces">Interfaces</h2>
+
 
 <p>  Mocha &ldquo;interface&rdquo; system allows developers to choose their style of DSL. Shipping with <strong>BDD</strong>, <strong>TDD</strong>, and <strong>exports</strong> flavoured interfaces.</p>
 
-<h3>BDD</h3>
+<h3 id="bdd-interface">BDD</h3>
+
 
 <p>  The &ldquo;<strong>BDD</strong>&rdquo; interface provides <code>describe()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
 
@@ -282,7 +305,8 @@ describe('app', function(){
 });
 </code></pre>
 
-<h3>TDD</h3>
+<h3 id="tdd-interface">TDD</h3>
+
 
 <p>  The &ldquo;<strong>TDD</strong>&rdquo; interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
 
@@ -299,7 +323,8 @@ describe('app', function(){
 });
 </code></pre>
 
-<h3>Exports</h3>
+<h3 id="exports-interface">Exports</h3>
+
 
 <p>  The &ldquo;<strong>exports</strong>&rdquo; interface is much like Mocha&rsquo;s predecessor <a href="http://github.com/visionmedia/expresso">expresso</a>. The keys <code>before</code>, <code>after</code>, <code>beforeEach</code>, and <code>afterEach</code> are special-cased, object values
   are suites, and function values are test-cases.</p>
@@ -319,7 +344,8 @@ describe('app', function(){
 };
 </code></pre>
 
-<h3>QUnit</h3>
+<h3 id="qunit-interface">QUnit</h3>
+
 
 <p>  The qunit-inspired interface matches the &ldquo;flat&rdquo; look of QUnit where the test suite title is simply defined before the test-cases.</p>
 
@@ -348,13 +374,15 @@ test('#length', function(){
 });
 </code></pre>
 
-<h2>Reporters</h2>
+<h2 id="reporters">Reporters</h2>
+
 
 <p>  Mocha reporters adjust to the terminal window,
   and always disable ansi-escape colouring when
   the stdio streams are not associated with a tty.</p>
 
-<h3>Dot Matrix</h3>
+<h3 id="dot-matrix-reporter">Dot Matrix</h3>
+
 
 <p>  The &ldquo;dot&rdquo; matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
@@ -362,7 +390,8 @@ test('#length', function(){
 
 <p>   <img src="images/reporter-dot.png" alt="dot matrix reporter" /></p>
 
-<h3>Spec</h3>
+<h3 id="spec-reporter">Spec</h3>
+
 
 <p>  The &ldquo;spec&rdquo; reporter outputs a hierarchical view
   nested just as the test cases are.</p>
@@ -370,13 +399,15 @@ test('#length', function(){
 <p>   <img src="images/reporter-spec.png" alt="spec reporter" />
    <img src="images/reporter-spec-fail.png" alt="spec reporter with failure" /></p>
 
-<h3>TAP</h3>
+<h3 id="tap-reporter">TAP</h3>
+
 
 <p>  The TAP reporter emits lines for a <a href="http://en.wikipedia.org/wiki/Test_Anything_Protocol">Test-Anything-Protocol</a> consumer.</p>
 
 <p>  <img src="images/reporter-tap.png" alt="test anything protocol" /></p>
 
-<h3>Landing Strip</h3>
+<h3 id="landing-strip-reporter">Landing Strip</h3>
+
 
 <p>  The Landing Strip reporter is a gimmicky test reporter simulating
   a plane landing :) unicode ftw</p>
@@ -384,7 +415,8 @@ test('#length', function(){
 <p>  <img src="images/reporter-landing.png" alt="landing strip plane reporter" />
   <img src="images/reporter-landing-fail.png" alt="landing strip with failure" /></p>
 
-<h3>List</h3>
+<h3 id="list-reporter">List</h3>
+
 
 <p>  The &ldquo;List&rdquo; reporter outputs a simple specifications list as
   test cases pass or fail, outputting the failure details at
@@ -392,30 +424,35 @@ test('#length', function(){
 
 <p>  <img src="images/reporter-list.png" alt="list reporter" /></p>
 
-<h3>Progress</h3>
+<h3 id="progress-reporter">Progress</h3>
+
 
 <p>  The progress reporter implements a simple progress-bar:</p>
 
 <p>  <img src="images/reporter-progress.png" alt="progress bar" /></p>
 
-<h3>JSON</h3>
+<h3 id="json-reporter">JSON</h3>
+
 
 <p>  The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).</p>
 
 <p>  <img src="images/reporter-json.png" alt="json reporter" /></p>
 
-<h3>JSON Stream</h3>
+<h3 id="json-stream-reporter">JSON Stream</h3>
+
 
 <p>  The JSON Stream reporter outputs newline-delimited JSON &ldquo;events&rdquo; as they occur, beginning with a &ldquo;start&rdquo; event, followed by test passes or failures, and then the final &ldquo;end&rdquo; event.</p>
 
 <p>  <img src="images/reporter-json-stream.png" alt="json stream reporter" /></p>
 
-<h3>JSONCov</h3>
+<h3 id="jsoncov-reporter">JSONCov</h3>
+
 
 <p>  The JSONCov reporter is similar to the JSON reporter, however when run against a library instrumented by <a href="https://github.com/visionmedia/node-jscoverage">node-jscoverage</a> it will produce coverage output.</p>
 
-<h3>HTMLCov</h3>
+<h3 id="htmlcov-reporter">HTMLCov</h3>
+
 
 <p>  The HTMLCov reporter extends the JSONCov reporter. The library being tested should first be instrumented by <a href="https://github.com/visionmedia/node-jscoverage">node-jscoverage</a>, this allows Mocha to capture the coverage information necessary to produce a single-page HTML report.</p>
 
@@ -423,7 +460,8 @@ test('#length', function(){
 
 <p>  <img src="http://f.cl.ly/items/3T3G1h1d3Z2i3M3Y1Y0Y/Screen%20Shot%202012-02-23%20at%208.37.13%20PM.png" alt="code coverage reporting" /></p>
 
-<h3>Min</h3>
+<h3 id="min-reporter">Min</h3>
+
 
 <p>  The &ldquo;min&rdquo; reporter displays the summary only, while still outputting errors
   on failure. This reporter works great with <code>--watch</code> as it clears the terminal
@@ -431,7 +469,8 @@ test('#length', function(){
 
 <p>  <img src="http://f.cl.ly/items/460B2r3p3M3k2D3J250m/Screen%20Shot%202012-03-24%20at%2010.46.01%20AM.png" alt="" /></p>
 
-<h3>Doc</h3>
+<h3 id="doc-reporter">Doc</h3>
+
 
 <p> The &ldquo;doc&rdquo; reporter outputs a hierarchical HTML body representation
  of your tests, wrap it with a header, footer, some styling and you
@@ -478,29 +517,34 @@ test('#length', function(){
 
 <p>  View the entire <a href="https://github.com/visionmedia/superagent/blob/master/Makefile">Makefile</a> for reference.</p>
 
-<h3>XUnit</h3>
+<h3 id="xunit-reporter">XUnit</h3>
+
 
 <p>   Documentation needed.</p>
 
-<h3>TeamCity</h3>
+<h3 id="teamcity-reporter">TeamCity</h3>
+
 
 <p>   Documentation needed.</p>
 
-<h3>Markdown</h3>
+<h3 id="markdown-reporter">Markdown</h3>
+
 
 <p>  The &ldquo;markdown&rdquo; reporter generates a markdown TOC and body for your
   test suite. This is great if you want to use the tests as documentation
   within a Github wiki page, or a markdown file in the repository that
   Github can render. For example here is the Connect <a href="https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md">test output</a>.</p>
 
-<h3>HTML</h3>
+<h3 id="html-reporter">HTML</h3>
+
 
 <p> The <strong>HTML</strong> reporter is currently the only browser reporter
  supported by Mocha, and it looks like this:</p>
 
 <p> <img src="images/reporter-html.png" alt="HTML test reporter" /></p>
 
-<h2>Browser support</h2>
+<h2 id="browser-support">Browser support</h2>
+
 
 <p> Mocha runs in the browser. Every release of Mocha will have new builds of <em>./mocha.js</em> and <em>./mocha.css</em> for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call <code>mocha.setup('bdd')</code> to use the <strong>BDD</strong> interface before loading the test scripts, running them <code>onload</code> with <code>mocha.run()</code>.</p>
 
@@ -530,11 +574,13 @@ test('#length', function(){
 &lt;/html&gt;
 </code></pre>
 
-<h3>grep</h3>
+<h3 id="grep-query">grep</h3>
+
 
 <p>  The client-side may utilize <code>--grep</code> as well, however you use the query-string, for example <code>?grep=api</code>.</p>
 
-<h2>mocha.opts</h2>
+<h2 id="mocha.opts">mocha.opts</h2>
+
 
 <p> Mocha will attempt to load <code>./test/mocha.opts</code>, these are concatenated with <code>process.argv</code>, though command-line args will take precedence. For example suppose you have the following <em>mocha.opts</em> file:</p>
 
@@ -551,7 +597,8 @@ test('#length', function(){
 <pre><code>$ mocha --reporter list --growl
 </code></pre>
 
-<h2>Test specific timeouts</h2>
+<h2 id="test-specific-timeouts">Test specific timeouts</h2>
+
 
 <p>  To compliment the global <code>--timeout</code> option, you may also specific test-specific timeouts via <code>this.timeout()</code>, or disable the timeout all-together with <code>this.timeout(0)</code>.</p>
 
@@ -561,14 +608,19 @@ test('#length', function(){
 })
 </code></pre>
 
-<h2>Best practices</h2>
+<h2 id="best-practices">Best practices</h2>
 
-<h3>test/*</h3>
+
+
+
+<h3 id="test-directory">test/*</h3>
+
 
 <p> By default <code>mocha(1)</code> will use the pattern <code>./test/*.js</code>, so
  it&rsquo;s usually a good place to put your tests.</p>
 
-<h3>Makefiles</h3>
+<h3 id="makefiles">Makefiles</h3>
+
 
 <p> Be kind and don&rsquo;t make developers hunt around in your docs to figure
  out how to run the tests, add a <code>make test</code> target to your <em>Makefile</em>:</p>
@@ -580,11 +632,13 @@ test('#length', function(){
  .PHONY: test
 </code></pre>
 
-<h2>Editors</h2>
+<h2 id="editors">Editors</h2>
+
 
 <p>  The following editor-related packages are available:</p>
 
-<h3>TextMate bundle</h3>
+<h3 id="textmate-bundle">TextMate bundle</h3>
+
 
 <p>  The Mocha TextMate bundle includes snippets to
   make writing tests quicker and more enjoyable.
@@ -593,7 +647,8 @@ test('#length', function(){
 <pre><code>  $ make tm
 </code></pre>
 
-<h2>Example test suites</h2>
+<h2 id="example-test-suites">Example test suites</h2>
+
 
 <p>  The following test suites are from real projects putting Mocha to use,
   so they serve as good examples:</p>
@@ -607,7 +662,8 @@ test('#length', function(){
 </ul>
 
 
-<h2>Running mocha&rsquo;s tests</h2>
+<h2 id="running-mochas-tests">Running mocha's tests</h2>
+
 
 <p> Run the tests:</p>
 
@@ -624,7 +680,8 @@ test('#length', function(){
 <pre><code>   $ make test REPORTER=list
 </code></pre>
 
-<h2>More information</h2>
+<h2 id="more-information">More information</h2>
+
 
 <p>  For additional information such as using spies, mocking, and shared behaviours be sure to check out the <a href="https://github.com/visionmedia/mocha/wiki">Mocha Wiki</a> on GitHub. For discussions join the <a href="http://groups.google.com/group/mochajs">Google Group</a>.</p>
     </section>
