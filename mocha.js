@@ -1351,6 +1351,7 @@ function pad(str, len) {
 
 function errorDiff(err, type) {
   return diff['diff' + type](err.actual, err.expected).map(function(str){
+    if (str.value == '\n') str.value = '<newline>\n';
     if (str.added) return colorLines('diff added', str.value);
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
