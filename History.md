@@ -1,4 +1,10 @@
 
+1.0.3 / 2012-04-30 
+==================
+
+  * Fixed string diff newlines
+  * Fixed: removed mocha.css target. Closes #401
+
 1.0.2 / 2012-04-25 
 ==================
 
