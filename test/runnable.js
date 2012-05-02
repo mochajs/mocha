@@ -19,18 +19,19 @@ describe('Runnable(title, fn)', function(){
     throw new Error("Don't use global time-related stuff.");
   }
 
-  beforeEach(function () {
+  beforeEach(function(){
     global.setTimeout =
     global.setInterval =
     global.clearTimeout =
     global.clearInterval = poisonPill;
-  });
-  afterEach(function () {
+  })
+
+  afterEach(function(){
     global.setTimeout = setTimeout;
     global.setInterval = setInterval;
     global.clearTimeout = clearTimeout;
     global.clearInterval = clearInterval;
-  });
+  })
 
   describe('#timeout(ms)', function(){
     it('should set the timeout', function(){
