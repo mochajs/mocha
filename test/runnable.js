@@ -4,6 +4,34 @@ var mocha = require('../')
   , EventEmitter = require('events').EventEmitter;
 
 describe('Runnable(title, fn)', function(){
+  // For every test we poison the global time-related methods.
+  // runnable.js etc. should keep its own local copy, in order to fix GH-237.
+  // NB: we can't poison global.Date because the normal implementation of
+  // global.setTimeout uses it [1] so if the runnable.js keeps a copy of
+  // global.setTimeout (like it's supposed to), that will blow up.
+  // [1]: https://github.com/joyent/node/blob/7fc835afe362ebd30a0dbec81d3360bd24525222/lib/timers.js#L74
+  var setTimeout = global.setTimeout
+    , setInterval = global.setInterval
+    , clearTimeout = global.clearTimeout
+    , clearInterval = global.clearInterval;
+
+  function poisonPill() {
+    throw new Error("Don't use global time-related stuff.");
+  }
+
+  beforeEach(function () {
+    global.setTimeout =
+    global.setInterval =
+    global.clearTimeout =
+    global.clearInterval = poisonPill;
+  });
+  afterEach(function () {
+    global.setTimeout = setTimeout;
+    global.setInterval = setInterval;
+    global.clearTimeout = clearTimeout;
+    global.clearInterval = clearInterval;
+  });
+
   describe('#timeout(ms)', function(){
     it('should set the timeout', function(){
       var run = new Runnable;
