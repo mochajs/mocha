@@ -870,7 +870,7 @@ exports = module.exports = Mocha;
  * Library version.
  */
 
-exports.version = '1.0.2';
+exports.version = '1.0.3';
 
 /**
  * Expose internals.
@@ -908,6 +908,7 @@ function image(name) {
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
  *   - `ignoreLeaks` ignore global leaks
+ *   - `grep` string or regexp to filter tests with
  *
  * @param {Object} options
  * @api public
@@ -915,6 +916,9 @@ function image(name) {
 
 function Mocha(options) {
   options = options || {};
+  options.grep = 'string' == typeof options.grep
+    ? new RegExp(options.grep)
+    : options.grep;
   this.files = [];
   this.options = options;
   this.suite = new exports.Suite('', new exports.Context);
@@ -1004,6 +1008,21 @@ Mocha.prototype.growl = function(runner, reporter) {
 };
 
 /**
+ * Add regexp to grep for to the options object
+ *
+ * @param {RegExp} or {String} re
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.grep = function(re){
+  this.options.grep = 'string' == typeof re
+    ? new RegExp(re)
+    : re;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
@@ -1034,6 +1053,16 @@ require.register("reporters/base.js", function(module, exports, require){
 
 var tty = require('browser/tty')
   , diff = require('browser/diff');
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date
+  , setTimeout = global.setTimeout
+  , setInterval = global.setInterval
+  , clearTimeout = global.clearTimeout
+  , clearInterval = global.clearInterval;
 
 /**
  * Check if both stdio streams are associated with a tty.
@@ -1351,7 +1380,7 @@ function pad(str, len) {
 
 function errorDiff(err, type) {
   return diff['diff' + type](err.actual, err.expected).map(function(str){
-    if (str.value == '\n') str.value = '<newline>\n';
+    if (/^(\n+)$/.test(str.value)) str.value = Array(++RegExp.$1.length).join('<newline>');
     if (str.added) return colorLines('diff added', str.value);
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
@@ -1576,6 +1605,16 @@ var Base = require('./base')
   , utils = require('../utils')
   , Progress = require('../browser/progress')
   , escape = utils.escape;
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date
+  , setTimeout = global.setTimeout
+  , setInterval = global.setInterval
+  , clearTimeout = global.clearTimeout
+  , clearInterval = global.clearInterval;
 
 /**
  * Expose `Doc`.
@@ -2702,23 +2741,23 @@ function Teamcity(runner) {
   });
 
   runner.on('test', function(test) {
-    console.log("##teamcity[testStarted name='%s']", escape(test.fullTitle()));
+    console.log("##teamcity[testStarted name='" + escape(test.fullTitle()) + "']");
   });
 
   runner.on('fail', function(test, err) {
-    console.log("##teamcity[testFailed name='%s' message='%s']", escape(test.fullTitle()), escape(err.message));
+    console.log("##teamcity[testFailed name='" + escape(test.fullTitle()) + "' message='" + escape(err.message) + "']");
   });
 
   runner.on('pending', function(test) {
-    console.log("##teamcity[testIgnored name='%s' message='pending']", escape(test.fullTitle()));
+    console.log("##teamcity[testIgnored name='" + escape(test.fullTitle()) + "' message='pending']");
   });
 
   runner.on('test end', function(test) {
-    console.log("##teamcity[testFinished name='%s' duration='%s']", escape(test.fullTitle()), test.duration);
+    console.log("##teamcity[testFinished name='" + escape(test.fullTitle()) + "' duration='" + test.duration + "']");
   });
 
   runner.on('end', function() {
-    console.log("##teamcity[testSuiteFinished name='mocha.suite' duration='%s']", stats.duration);
+    console.log("##teamcity[testSuiteFinished name='mocha.suite' duration='" + stats.duration + "']");
   });
 }
 
@@ -2740,6 +2779,16 @@ require.register("reporters/xunit.js", function(module, exports, require){
 var Base = require('./base')
   , utils = require('../utils')
   , escape = utils.escape;
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date
+  , setTimeout = global.setTimeout
+  , setInterval = global.setInterval
+  , clearTimeout = global.clearTimeout
+  , clearInterval = global.clearInterval;
 
 /**
  * Expose `XUnit`.
@@ -2846,6 +2895,16 @@ require.register("runnable.js", function(module, exports, require){
 
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('runnable');
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date
+  , setTimeout = global.setTimeout
+  , setInterval = global.setInterval
+  , clearTimeout = global.clearTimeout
+  , clearInterval = global.clearInterval;
 
 /**
  * Expose `Runnable`.
@@ -3151,6 +3210,9 @@ Runner.prototype.checkGlobals = function(test){
 Runner.prototype.fail = function(test, err){
   ++this.failures;
   test.state = 'failed';
+  if ('string' == typeof err) {
+    err = new Error('the string "' + err + '" was thrown, throw an Error :)');
+  }
   this.emit('fail', test, err);
 };
 
