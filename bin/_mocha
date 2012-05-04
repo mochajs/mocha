@@ -19,7 +19,8 @@ var program = require('commander')
   , vm = require('vm')
   , fs = require('fs')
   , join = path.join
-  , cwd = process.cwd();
+  , cwd = process.cwd()
+  , moduleLoader = require('../lib/module-loader');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -70,6 +71,7 @@ program
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
   .option('--recursive', 'include sub directories')
+  .option('--requirejs', "loads tests with RequireJs instead of Node's native require")
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--ignore-leaks', 'ignore global variable leaks')
@@ -184,6 +186,12 @@ if (program.timeout) suite.timeout(program.timeout);
 
 suite.bail(program.bail);
 
+// --requirejs
+
+if (program.requirejs) {
+  moduleLoader.UseRequireJs();
+}
+
 // custom compiler support
 
 var extensions = ['js'];
@@ -223,11 +231,27 @@ files = files.map(function(path){
 if (program.watch) {
   console.log();
   hideCursor();
-  process.on('SIGINT', function(){
-    showCursor();
-    console.log('\n');
-    process.exit();
-  });
+
+  if (process.platform === 'win32') {
+    var tty = require('tty');
+
+    process.stdin.resume();
+    tty.setRawMode(true);
+
+    process.stdin.on('keypress', function(char, key){
+      if (key && key.ctrl && key.name === 'c') {
+        showCursor();
+        console.log('\n');
+        process.exit();
+      }
+    });
+  } else {
+    process.on('SIGINT', function(){
+      showCursor();
+      console.log('\n');
+      process.exit();
+    });
+  }
 
   var frames = [
       '  \033[96m◜ \033[90mwatching\033[0m'
@@ -241,6 +265,7 @@ if (program.watch) {
   var watchFiles = utils.files(cwd);
 
   function loadAndRun() {
+    console.log('Re-Running');
     load(files, function(){
       run(suite, function(){
         play(frames);
@@ -257,6 +282,7 @@ if (program.watch) {
   loadAndRun();
 
   utils.watch(watchFiles, function(){
+    console.log('Recognized change');
     purge();
     stop()
     suite = suite.clone();
@@ -281,7 +307,7 @@ function load(files, fn) {
   files.forEach(function(file){
     delete require.cache[file];
     suite.emit('pre-require', global, file);
-    suite.emit('require', require(file), file);
+    suite.emit('require', moduleLoader(file), file);
     suite.emit('post-require', global, file);
     --pending || fn();
   });
