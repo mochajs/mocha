@@ -4,6 +4,15 @@ body {
   padding: 60px 50px;
 }
 
+#mocha ul, #mocha li {
+  margin: 0;
+  padding: 0;
+}
+
+#mocha ul {
+  list-style: none;
+}
+
 #mocha h1, #mocha h2 {
   margin: 0;
 }
