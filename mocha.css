@@ -23,6 +23,15 @@ body {
   font-weight: 200;
 }
 
+#mocha h1 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#mocha h1 a:hover {
+  text-decoration: underline;
+}
+
 #mocha .suite .suite h1 {
   margin-top: 0;
   font-size: .8em;
