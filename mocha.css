@@ -4,7 +4,7 @@ body {
   padding: 60px 50px;
 }
 
-#mocha h1, h2 {
+#mocha h1, #mocha h2 {
   margin: 0;
 }
 
