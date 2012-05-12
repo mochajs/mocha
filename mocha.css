@@ -4,7 +4,16 @@ body {
   padding: 60px 50px;
 }
 
-#mocha h1, h2 {
+#mocha ul, #mocha li {
+  margin: 0;
+  padding: 0;
+}
+
+#mocha ul {
+  list-style: none;
+}
+
+#mocha h1, #mocha h2 {
   margin: 0;
 }
 
@@ -12,6 +21,15 @@ body {
   margin-top: 15px;
   font-size: 1em;
   font-weight: 200;
+}
+
+#mocha h1 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#mocha h1 a:hover {
+  text-decoration: underline;
 }
 
 #mocha .suite .suite h1 {
@@ -62,6 +80,7 @@ body {
   display: block;
   float: left;
   margin-right: 5px;
+  color: #00d6b2;
 }
 
 #mocha .test.pass .duration {

@@ -916,11 +916,9 @@ function image(name) {
 
 function Mocha(options) {
   options = options || {};
-  options.grep = 'string' == typeof options.grep
-    ? new RegExp(options.grep)
-    : options.grep;
   this.files = [];
   this.options = options;
+  this.grep(options.grep);
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
   this.reporter(options.reporter);
@@ -1042,7 +1040,6 @@ Mocha.prototype.run = function(fn){
   if (options.growl) this.growl(runner, reporter);
   return runner.run(fn);
 };
-
 }); // module: mocha.js
 
 require.register("reporters/base.js", function(module, exports, require){
@@ -1653,7 +1650,8 @@ function HTML(runner) {
     , failures = items[2].getElementsByTagName('em')[0]
     , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
-    , stack = [root]
+    , report = fragment('<ul id="report"></ul>')
+    , stack = [report]
     , progress
     , ctx
 
@@ -1665,6 +1663,7 @@ function HTML(runner) {
   if (!root) return error('#mocha div missing, add it to your document');
 
   root.appendChild(stat);
+  root.appendChild(report);
 
   if (progress) progress.size(40);
 
@@ -1672,11 +1671,11 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var el = fragment('<div class="suite"><h1>%s</h1></div>', suite.title);
+    var el = fragment('<li class="suite"><h1>%s</h1></li>', suite.title);
 
     // container
     stack[0].appendChild(el);
-    stack.unshift(document.createElement('div'));
+    stack.unshift(document.createElement('ul'));
     el.appendChild(stack[0]);
   });
 
@@ -1702,11 +1701,11 @@ function HTML(runner) {
 
     // test
     if ('passed' == test.state) {
-      var el = fragment('<div class="test pass %e"><h2>%e<span class="duration">%ems</span></h2></div>', test.speed, test.title, test.duration);
+      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span></h2></li>', test.speed, test.title, test.duration);
     } else if (test.pending) {
-      var el = fragment('<div class="test pass pending"><h2>%e</h2></div>', test.title);
+      var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
-      var el = fragment('<div class="test fail"><h2>%e</h2></div>', test.title);
+      var el = fragment('<li class="test fail"><h2>%e</h2></li>', test.title);
       var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
@@ -2766,8 +2765,18 @@ function Teamcity(runner) {
  */
 
 function escape(str) {
-  return str.replace(/'/g, "|'");
+  return str
+    .replace(/\|/g, "||")
+    .replace(/\n/g, "|n")
+    .replace(/\r/g, "|r")
+    .replace(/\[/g, "|[")
+    .replace(/\]/g, "|]")
+    .replace(/\u0085/g, "|x")
+    .replace(/\u2028/g, "|l")
+    .replace(/\u2029/g, "|p")
+    .replace(/'/g, "|'");
 }
+
 }); // module: reporters/teamcity.js
 
 require.register("reporters/xunit.js", function(module, exports, require){
