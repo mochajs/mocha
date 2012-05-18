@@ -1671,7 +1671,8 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var el = fragment('<li class="suite"><h1>%s</h1></li>', suite.title);
+    var url = location.origin + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
+    var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, suite.title);
 
     // container
     stack[0].appendChild(el);
@@ -4049,6 +4050,7 @@ exports.files = function(dir, ret){
  *
  * @param {String} str
  * @return {String}
+ * @api private
  */
 
 exports.slug = function(str){
@@ -4056,6 +4058,18 @@ exports.slug = function(str){
     .toLowerCase()
     .replace(/ +/g, '-')
     .replace(/[^-\w]/g, '');
+};
+
+/**
+ * Escape regular expression characters in `str`.
+ *
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+exports.escapeRegexp = function(str){
+  return str.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 }); // module: utils.js
 /**
