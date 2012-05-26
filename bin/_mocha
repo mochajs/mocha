@@ -68,6 +68,7 @@ program
   .option('-G, --growl', 'enable growl notification support')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
+  .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--ignore-leaks', 'ignore global variable leaks')
@@ -204,11 +205,18 @@ var files = program.args;
 // default files to test/*.{js,coffee}
 
 if (!files.length) {
-  files = fs.readdirSync('test').filter(function(path){
-    return path.match(re);
-  }).map(function(path){
-    return join('test', path);
-  });
+  var recursive = ~process.argv.indexOf('--recursive')
+  , dir = function(p) {
+    fs.readdirSync(p)
+    .forEach(function(child) {
+      child = path.join(p, child);
+      var stat = fs.statSync(child);
+      if (stat.isDirectory()) return recursive ? dir(child) : null
+      if (!stat.isFile()) return
+      files.push(child);
+    });
+  }
+  dir(path.join(cwd, 'test'))
 }
 
 // resolve
