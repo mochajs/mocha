@@ -80,7 +80,7 @@ function isArray(obj) {
 /**
  * Event emitter constructor.
  *
- * @api public.
+ * @api public
  */
 
 function EventEmitter(){};
@@ -188,7 +188,7 @@ EventEmitter.prototype.removeAllListeners = function (name) {
 /**
  * Gets all listeners for a certain event.
  *
- * @api publci
+ * @api public
  */
 
 EventEmitter.prototype.listeners = function (name) {
