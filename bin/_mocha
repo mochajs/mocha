@@ -221,7 +221,7 @@ files = files.reduce(function (prev, current) {
       return prev.concat(current);
     }
   } catch (err) {
-    console.log('No "' + current + '" directory found.');
+    console.error('No "' + current + '" directory found.');
     process.exit(1);
   }
 }, []);
@@ -232,7 +232,7 @@ if (!files.length) {
   try {
     files = filesInDir("test");
   } catch (err) {
-    console.log('No test files specified and no "test" directory found.');
+    console.error('No test files specified and no "test" directory found.');
     process.exit(1);
   }
 }
