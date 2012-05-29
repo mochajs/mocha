@@ -204,18 +204,17 @@ var files = program.args;
 
 // default files to test/*.{js,coffee}
 
-if (!files.length) {
-  var recursive = ~process.argv.indexOf('--recursive')
-  , dir = function(p) {
-    fs.readdirSync(p)
-    .forEach(function(child) {
+function dir(p) {
+  fs.readdirSync(p).forEach(function(child) {
       child = path.join(p, child);
       var stat = fs.statSync(child);
-      if (stat.isDirectory()) return recursive ? dir(child) : null
-      if (!stat.isFile()) return
+      if (stat.isDirectory()) return program.recursive ? dir(child) : null
+      if (!stat.isFile() || !re.test(child)) return
       files.push(child);
-    });
-  }
+  });
+}
+
+if (!files.length) {
   dir(path.join(cwd, 'test'))
 }
 
