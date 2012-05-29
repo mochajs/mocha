@@ -201,14 +201,40 @@ var re = new RegExp('\\.(' + extensions.join('|') + ')$');
 
 var files = program.args;
 
+// find test files within a directory
+
+function filesInDir(dir) {
+  return fs.readdirSync(dir).filter(function(path) {
+    return path.match(re);
+  }).map(function(path) {
+    return join(dir, path);
+  });
+}
+
+// expand directories
+
+files = files.reduce(function (prev, current) {
+  try {
+    if (fs.statSync(current).isDirectory()) {
+      return prev.concat(filesInDir(current));
+    } else {
+      return prev.concat(current);
+    }
+  } catch (err) {
+    console.log('No "' + current + '" directory found.');
+    process.exit(1);
+  }
+}, []);
+
 // default files to test/*.{js,coffee}
 
 if (!files.length) {
-  files = fs.readdirSync('test').filter(function(path){
-    return path.match(re);
-  }).map(function(path){
-    return join('test', path);
-  });
+  try {
+    files = filesInDir("test");
+  } catch (err) {
+    console.log('No test files specified and no "test" directory found.');
+    process.exit(1);
+  }
 }
 
 // resolve
