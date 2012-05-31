@@ -204,18 +204,8 @@ var files = program.args;
 
 // default files to test/*.{js,coffee}
 
-function dir(p) {
-  fs.readdirSync(p).forEach(function(file){
-    file = path.join(p, file);
-    var stat = fs.statSync(file);
-    if (stat.isDirectory()) return program.recursive ? dir(file) : null;
-    if (!stat.isFile() || !re.test(file)) return;
-    files.push(file);
-  });
-}
-
 if (!files.length) {
-  dir(path.join(cwd, 'test'))
+  files = lookupFiles(path.join(cwd, 'test'), program.recursive);
 }
 
 // resolve
@@ -356,6 +346,25 @@ function showCursor(){
 function stop() {
   process.stdout.write('\033[2K');
   clearInterval(play.timer);
+}
+
+/**
+ * Lookup file names at the given `path`.
+ */
+
+function lookupFiles(p, recursive) {
+  var files = [];
+  fs.readdirSync(p).forEach(function(file){
+    file = path.join(p, file);
+    var stat = fs.statSync(file);
+    if (stat.isDirectory()) {
+      if (recursive) files = files.concat(lookupFiles(file, true));
+      return
+    }
+    if (!stat.isFile() || !re.test(file)) return;
+    files.push(file);
+  });
+  return files;
 }
 
 /**
