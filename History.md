@@ -1,4 +1,18 @@
 
+1.1.0 / 2012-05-30 
+==================
+
+  * Added: check each `mocha(1)` arg for directories to walk
+  * Added `--recursive` [tricknotes]
+  * Added `context` for BDD [hokaccha]
+  * Added styling for new clickable titles
+  * Added clickable suite titles to HTML reporter
+  * Added warning when strings are thrown as errors
+  * Changed: green arrows again in HTML reporter styling
+  * Changed ul/li elements instead of divs for better copy-and-pasting [joliss]
+  * Fixed issue #325 - add better grep support to js api
+  * Fixed: save timer references to avoid Sinon interfering.
+
 1.0.3 / 2012-04-30 
 ==================
 
