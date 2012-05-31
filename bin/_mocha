@@ -200,13 +200,16 @@ var re = new RegExp('\\.(' + extensions.join('|') + ')$');
 
 // files
 
-var files = program.args;
+var files = []
+  , args = program.args;
 
 // default files to test/*.{js,coffee}
 
-if (!files.length) {
-  files = lookupFiles(path.join(cwd, 'test'), program.recursive);
-}
+if (!args.length) args.push('test');
+
+args.forEach(function(arg){
+  files = files.concat(lookupFiles(arg, program.recursive));
+});
 
 // resolve
 
@@ -352,18 +355,23 @@ function stop() {
  * Lookup file names at the given `path`.
  */
 
-function lookupFiles(p, recursive) {
+function lookupFiles(path, recursive) {
   var files = [];
-  fs.readdirSync(p).forEach(function(file){
-    file = path.join(p, file);
+
+  var stat = fs.statSync(path);
+  if (stat.isFile()) return path;
+
+  fs.readdirSync(path).forEach(function(file){
+    file = join(path, file);
     var stat = fs.statSync(file);
     if (stat.isDirectory()) {
-      if (recursive) files = files.concat(lookupFiles(file, true));
+      if (recursive) files = files.concat(lookupFiles(file, recursive));
       return
     }
     if (!stat.isFile() || !re.test(file)) return;
     files.push(file);
   });
+
   return files;
 }
 
