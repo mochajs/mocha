@@ -205,12 +205,12 @@ var files = program.args;
 // default files to test/*.{js,coffee}
 
 function dir(p) {
-  fs.readdirSync(p).forEach(function(child) {
-      child = path.join(p, child);
-      var stat = fs.statSync(child);
-      if (stat.isDirectory()) return program.recursive ? dir(child) : null
-      if (!stat.isFile() || !re.test(child)) return
-      files.push(child);
+  fs.readdirSync(p).forEach(function(file){
+    file = path.join(p, file);
+    var stat = fs.statSync(file);
+    if (stat.isDirectory()) return program.recursive ? dir(file) : null;
+    if (!stat.isFile() || !re.test(file)) return;
+    files.push(file);
   });
 }
 
