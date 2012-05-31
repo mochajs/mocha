@@ -105,13 +105,13 @@ window.mocha = require('mocha');
 
   function parse(qs) {
     return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
-        var i = pair.indexOf('=')
-          , key = pair.slice(0, i)
-          , val = pair.slice(++i);
+      var i = pair.indexOf('=')
+        , key = pair.slice(0, i)
+        , val = pair.slice(++i);
 
-        obj[key] = decodeURIComponent(val);
-        return obj;
-      }, {});
+      obj[key] = decodeURIComponent(val);
+      return obj;
+    }, {});
   }
 
   /**
