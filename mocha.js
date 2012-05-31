@@ -560,7 +560,7 @@ module.exports = function(suite){
      * and/or tests.
      */
   
-    context.describe = function(title, fn){
+    context.describe = context.context = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
       fn();
