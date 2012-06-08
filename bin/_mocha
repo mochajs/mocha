@@ -8,6 +8,7 @@ var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
   , resolve = path.resolve
+  , exists = path.existsSync
   , mocha = require('../')
   , utils = mocha.utils
   , reporters = mocha.reporters
@@ -358,6 +359,7 @@ function stop() {
 function lookupFiles(path, recursive) {
   var files = [];
 
+  if (!exists(path)) path += '.js';
   var stat = fs.statSync(path);
   if (stat.isFile()) return path;
 
