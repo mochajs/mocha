@@ -52,37 +52,37 @@ test-bdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
-		test/acceptance/interfaces/bdd
+		test/acceptance/interfaces/bdd.js
 
 test-tdd:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
-		test/acceptance/interfaces/tdd
+		test/acceptance/interfaces/tdd.js
 
 test-qunit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
-		test/acceptance/interfaces/qunit
+		test/acceptance/interfaces/qunit.js
 
 test-exports:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
-		test/acceptance/interfaces/exports
+		test/acceptance/interfaces/exports.js
 
 test-grep:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
 	  --grep fast \
-	  test/acceptance/misc/grep
+	  test/acceptance/misc/grep.js
 
 test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--bail \
-		test/acceptance/misc/bail
+		test/acceptance/misc/bail.js
 
 non-tty:
 	@./bin/mocha \
