@@ -3197,7 +3197,7 @@ Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
   var leaks = utils.filter(utils.keys(global), function(key){
     var matched = utils.filter(this._globals, function(allowed){
-      return allowed == key || key.lastIndexOf(allowed.split('%')[0], 0) == 0;
+      return allowed == key || key.lastIndexOf(allowed.split('*')[0], 0) == 0;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   }, this);
