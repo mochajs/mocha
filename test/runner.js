@@ -46,6 +46,16 @@ describe('Runner', function(){
   })
 
   describe('.checkGlobals(test)', function(){
+    it('should allow variables that match a wildcard', function(done) {
+      runner.globals(['foo*', 'giz*']);
+      foo = 'baz';
+      gizmo = 'quux'
+      runner.checkGlobals();
+      delete global.foo;
+      delete global.gizmo;
+      done()
+    })
+
     it('should emit "fail" when a new global is introduced', function(done){
       runner.checkGlobals();
       foo = 'bar';

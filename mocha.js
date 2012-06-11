@@ -870,7 +870,7 @@ exports = module.exports = Mocha;
  * Library version.
  */
 
-exports.version = '1.0.3';
+exports.version = '1.1.0';
 
 /**
  * Expose internals.
@@ -1671,7 +1671,7 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var url = location.origin + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
+    var url = location.protocol + '//' + location.host + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
     var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, suite.title);
 
     // container
@@ -3151,7 +3151,7 @@ Runner.prototype.grep = function(re){
 };
 
 /**
- * Returns the number of tests matching the grep search for the 
+ * Returns the number of tests matching the grep search for the
  * given suite.
  *
  * @param {Suite} suite
@@ -3195,9 +3195,11 @@ Runner.prototype.globals = function(arr){
 
 Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
-
   var leaks = utils.filter(utils.keys(global), function(key){
-    return !~utils.indexOf(this._globals, key) && (!global.navigator || 'onerror' !== key);
+    var matched = utils.filter(this._globals, function(allowed){
+      return allowed == key || key.lastIndexOf(allowed.split('*')[0], 0) == 0;
+    });
+    return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   }, this);
 
   this._globals = this._globals.concat(leaks);
@@ -4179,13 +4181,13 @@ window.mocha = require('mocha');
 
   function parse(qs) {
     return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
-        var i = pair.indexOf('=')
-          , key = pair.slice(0, i)
-          , val = pair.slice(++i);
+      var i = pair.indexOf('=')
+        , key = pair.slice(0, i)
+        , val = pair.slice(++i);
 
-        obj[key] = decodeURIComponent(val);
-        return obj;
-      }, {});
+      obj[key] = decodeURIComponent(val);
+      return obj;
+    }, {});
   }
 
   /**
