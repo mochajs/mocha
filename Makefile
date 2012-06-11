@@ -30,7 +30,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-testcase
 
 test-jsapi:
 	@node test/jsapi
@@ -71,6 +71,13 @@ test-exports:
 		--reporter $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
+
+test-testcase:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui testcase \
+		test/acceptance/interfaces/testcase
+
 
 test-grep:
 	@./bin/mocha \
