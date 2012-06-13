@@ -309,10 +309,11 @@ function growl(runner, reporter) {
     var stats = reporter.stats;
     if (stats.failures) {
       var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { title: 'Failed', image: images.fail });
+      notify(msg, { name: 'mocha', title: 'Failed', image: images.fail });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-          title: 'Passed'
+          name: 'mocha'
+        , title: 'Passed'
         , image: images.pass
       });
     }
