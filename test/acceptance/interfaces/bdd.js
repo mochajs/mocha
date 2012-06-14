@@ -23,3 +23,13 @@ describe('Array', function(){
     })
   })
 })
+
+context('Array', function(){
+  beforeEach(function(){
+    this.arr = [1,2,3];
+  })
+
+  specify('has a length property', function(){
+    this.arr.length.should.equal(3);
+  })
+})
