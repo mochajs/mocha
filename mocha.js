@@ -576,6 +576,17 @@ module.exports = function(suite){
     context.it = function(title, fn){
       suites[0].addTest(new Test(title, fn));
     };
+
+    /**
+     * Set tests to pending by using the
+     * "pending" function instead of "it"
+     */
+
+    context.pending = function(title, fn) {
+      test = new Test(title, fn);
+      test.pending = true;
+      suites[0].addTest(test);
+    };
   });
 };
 
@@ -847,7 +858,6 @@ module.exports = function(suite){
 }); // module: interfaces/tdd.js
 
 require.register("mocha.js", function(module, exports, require){
-
 /*!
  * mocha
  * Copyright(c) 2011 TJ Holowaychuk <tj@vision-media.ca>
@@ -995,11 +1005,12 @@ Mocha.prototype.growl = function(runner, reporter) {
     var stats = reporter.stats;
     if (stats.failures) {
       var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { title: 'Failed', image: image('fail') });
+      notify(msg, { name: 'mocha', title: 'Failed', image: image('error') });
     } else {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-          title: 'Passed'
-        , image: image('pass')
+          name: 'mocha'
+        , title: 'Passed'
+        , image: image('ok')
       });
     }
   });
@@ -1040,6 +1051,7 @@ Mocha.prototype.run = function(fn){
   if (options.growl) this.growl(runner, reporter);
   return runner.run(fn);
 };
+
 }); // module: mocha.js
 
 require.register("reporters/base.js", function(module, exports, require){
@@ -3087,6 +3099,8 @@ var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('runner')
   , Test = require('./test')
   , utils = require('./utils')
+  , filter = utils.filter
+  , keys = utils.keys
   , noop = function(){};
 
 /**
@@ -3195,12 +3209,7 @@ Runner.prototype.globals = function(arr){
 
 Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
-  var leaks = utils.filter(utils.keys(global), function(key){
-    var matched = utils.filter(this._globals, function(allowed){
-      return allowed == key || key.lastIndexOf(allowed.split('*')[0], 0) == 0;
-    });
-    return matched.length == 0 && (!global.navigator || 'onerror' !== key);
-  }, this);
+  var leaks = filterLeaks(this._globals);
 
   this._globals = this._globals.concat(leaks);
 
@@ -3543,6 +3552,22 @@ Runner.prototype.run = function(fn){
   return this;
 };
 
+/**
+ * Filter leaks with the given globals flagged as `ok`.
+ *
+ * @param {Array} ok
+ * @return {Array}
+ * @api private
+ */
+
+function filterLeaks(ok) {
+  return filter(keys(global), function(key){
+    var matched = filter(ok, function(ok){
+      return 0 == key.indexOf(ok.split('*')[0]);
+    });
+    return matched.length == 0 && (!global.navigator || 'onerror' !== key);
+  });
+}
 }); // module: runner.js
 
 require.register("suite.js", function(module, exports, require){
