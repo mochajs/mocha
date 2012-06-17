@@ -79,6 +79,21 @@ program
 
 program.name = 'mocha';
 
+// init command
+
+program
+  .command('init <path>')
+  .description('initialize a client-side mocha setup at <path>')
+  .action(function(path){
+    var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
+    var js = fs.readFileSync(join(__dirname, '..', 'mocha.js'));
+    var tmpl = fs.readFileSync(join(__dirname, '..', 'support/template.html'));
+    fs.writeFileSync(join(path, 'mocha.css'), css);
+    fs.writeFileSync(join(path, 'mocha.js'), js);
+    fs.writeFileSync(join(path, 'tests.html'), tmpl);
+    process.exit(0);
+  });
+
 // --globals
 
 program.on('globals', function(val){
