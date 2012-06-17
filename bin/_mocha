@@ -293,12 +293,26 @@ load(files, function(){
 
 function load(files, fn) {
   var pending = files.length;
-  files.forEach(function(file){
-    delete require.cache[file];
-    suite.emit('pre-require', global, file);
-    suite.emit('require', require(file), file);
-    suite.emit('post-require', global, file);
-    --pending || fn();
+  files.forEach(function(file, index){
+    fs.stat(file, function (err, stats){
+      var enoent = false;
+      if (err) {
+        if (err.code !== 'ENOENT') {
+          throw err;
+        } else {
+          enoent = true;
+        }
+      }
+      if (!enoent) {
+        delete require.cache[file];
+        suite.emit('pre-require', global, file);
+        suite.emit('require', require(file), file);
+        suite.emit('post-require', global, file);
+      } else {
+        files.splice(index, 1);
+      }
+      --pending || fn();
+    });
   });
 }
 
