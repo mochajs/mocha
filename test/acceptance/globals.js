@@ -24,6 +24,11 @@ describe('global leaks', function(){
     okGlobalC = 1;
   })
 
+  it('should pass with wildcard', function(){
+    callback123 = 'foo';
+    callback345 = 'bar';
+  })
+
   afterEach(function(){
     // uncomment to test
     // foo = 'bar'
