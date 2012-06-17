@@ -4,6 +4,7 @@ var Mocha = require('../../')
 
 var mocha = new Mocha({
   ui: 'bdd',
+  reporter: false, //Turn off reporter this time
   globals: ['okGlobalA', 'okGlobalB', 'okGlobalC'],
   // ignoreLeaks: true,
   growl: true
@@ -24,8 +25,24 @@ mocha.addFile('test/acceptance/globals.js');
 mocha.addFile('test/acceptance/pending.js');
 mocha.addFile('test/acceptance/timeout.js');
 
-mocha.run(function(){
-  console.log('done');
+mocha.run(function(stats, testList){
+  console.log('Done:');
+  console.log('  Passed: %d', stats.passes);
+  console.log('  Pending: %d', stats.pending);
+  console.log('  Failed: %d', stats.failures);
+  console.log('  Total time: %dms', stats.duration);
+  console.log();
+
+  var pending = testList.filter(function(test){
+    return test.pending;
+  });
+
+  console.log('Pending tests:');
+  pending.forEach(function(test){
+    console.log(' - %s: %s', (test.parent && test.parent.title || '#'), test.title);
+  });
 }).on('pass', function(test){
-  // console.log('... %s', test.title);
+  // console.log('...passed %s', test.title);
+}).on('fail', function(test){
+  // console.log('...failed %s', test.title);
 });
