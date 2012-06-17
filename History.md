@@ -1,4 +1,14 @@
 
+1.2.0 / 2012-06-17 
+==================
+
+  * Added `nyan` reporter [Atsuya Takagi]
+  * Added `mocha init <path>` to copy client files
+  * Added "specify" synonym for "it" [domenic]
+  * Added global leak wildcard support [nathanbowser]
+  * Fixed runner emitter leak. closes #432
+  * Fixed omission of .js extension. Closes #454
+
 1.1.0 / 2012-05-30 
 ==================
 
