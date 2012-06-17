@@ -15,6 +15,7 @@
     <script src="../acceptance/timeout.js"></script>
     <script>
       onload = function(){
+        //mocha.setup({ui: 'bdd', reporter: mocha.reporters.WebConsole});
         var runner = mocha.run();
         runner.globals(['foo', 'bar', 'baz']);
 
