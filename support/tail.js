@@ -68,9 +68,10 @@ window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite('', new mocha.Context)
-    , utils = mocha.utils
+  var utils = mocha.utils
     , options = {}
+
+  mocha.suite = new mocha.Suite('', new mocha.Context());
 
   /**
    * Highlight the given string of `js`.
@@ -124,9 +125,9 @@ window.mocha = require('mocha');
 
     ui = mocha.interfaces[options.ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
-    if (options.timeout) suite.timeout(options.timeout);
-    ui(suite);
-    suite.emit('pre-require', window);
+    if (options.timeout) mocha.suite.timeout(options.timeout);
+    ui(mocha.suite);
+    mocha.suite.emit('pre-require', window);
   };
 
   /**
@@ -134,8 +135,8 @@ window.mocha = require('mocha');
    */
 
   mocha.run = function(fn){
-    suite.emit('run');
-    var runner = new mocha.Runner(suite);
+    mocha.suite.emit('run');
+    var runner = new mocha.Runner(mocha.suite);
     var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
