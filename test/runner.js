@@ -45,6 +45,64 @@ describe('Runner', function(){
     })
   })
 
+  describe('.runTest()', function(){
+    // make a test-like object that runs the given function
+    var make_test = function(fn) {
+      return {
+        ctx: {test: function() {} },
+        run: fn,
+        on: function() {}
+      };
+    };
+
+    it('should call the "test verify" hook on success', function(done){
+      var test = make_test(function(done) { done(); });
+      var called = false;
+      runner.test = test;
+      runner.on('test verify', function() { called = true; });
+      runner.runTest(function(e) {
+        (e == undefined).should.be.true; // should.not.exist(e) doesn't seem to work?
+        called.should.be.true;
+        done();
+      });
+    });
+
+    it('should call the "test verify" hook on failure', function(done) {
+      var test = make_test(function(done) {  throw new Error("boo!"); });
+      var called = false;
+      runner.test = test;
+      runner.on('test verify', function() { called = true; });
+      runner.runTest(function(e) {
+        e.message.should.equal("boo!");
+        called.should.be.true;
+        done();
+      });
+    });
+
+    it('should allow "test verify" to fail the test', function(done) {
+      var test = make_test(function(done) { done(); });
+      var called = false;
+      runner.test = test;
+      runner.on('test verify', function() { throw new Error("verify failure");});
+      runner.runTest(function(e) {
+        e.message.should.equal("verify failure");
+        done();
+      });
+    });
+
+    it('should not allow "test verify" to shadow the reason for a failed test', function(done) {
+      var test = make_test(function(done) { throw new Error("test failure"); });
+      var called = false;
+      runner.test = test;
+      runner.on('test verify', function() { called = true; throw new Error("verify failure");});
+      runner.runTest(function(e) {
+        e.message.should.equal("test failure");
+        called.should.be.true;
+        done();
+      });
+    });
+  })
+
   describe('.checkGlobals(test)', function(){
     it('should allow variables that match a wildcard', function(done) {
       runner.globals(['foo*', 'giz*']);
