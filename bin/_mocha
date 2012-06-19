@@ -7,8 +7,10 @@
 var program = require('commander')
   , exec = require('child_process').exec
   , path = require('path')
+  , fs = require('fs')
+  , vm = require('vm')
   , resolve = path.resolve
-  , exists = path.existsSync
+  , exists = fs.existsSync || path.existsSync
   , mocha = require('../')
   , utils = mocha.utils
   , reporters = mocha.reporters
@@ -16,8 +18,6 @@ var program = require('commander')
   , Context = mocha.Context
   , Runner = mocha.Runner
   , Suite = mocha.Suite
-  , vm = require('vm')
-  , fs = require('fs')
   , join = path.join
   , cwd = process.cwd();
 
@@ -141,8 +141,8 @@ program.on('interfaces', function(){
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
 program.on('require', function(mod){
-  var abs = path.existsSync(mod)
-    || path.existsSync(mod + '.js');
+  var abs = exists(mod)
+    || exists(mod + '.js');
 
   if (abs) mod = join(cwd, mod);
   require(mod);
