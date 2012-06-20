@@ -407,7 +407,7 @@ module.exports = Context;
 function Context(){}
 
 /**
- * Set the context `Runnable` to `runnable`.
+ * Set or get the context `Runnable` to `runnable`.
  *
  * @param {Runnable} runnable
  * @return {Context}
@@ -415,7 +415,8 @@ function Context(){}
  */
 
 Context.prototype.runnable = function(runnable){
-  this._runnable = runnable;
+  if (0 == arguments.length) return this._runnable;
+  this.test = this._runnable = runnable;
   return this;
 };
 
@@ -428,7 +429,7 @@ Context.prototype.runnable = function(runnable){
  */
 
 Context.prototype.timeout = function(ms){
-  this._runnable.timeout(ms);
+  this.runnable().timeout(ms);
   return this;
 };
 
@@ -441,9 +442,9 @@ Context.prototype.timeout = function(ms){
 
 Context.prototype.inspect = function(){
   return JSON.stringify(this, function(key, val){
-    return '_runnable' == key
-      ? undefined
-      : val;
+    if ('_runnable' == key) return;
+    if ('test' == key) return;
+    return val;
   }, 2);
 };
 
@@ -482,6 +483,25 @@ function Hook(title, fn) {
 
 Hook.prototype = new Runnable;
 Hook.prototype.constructor = Hook;
+
+
+/**
+ * Get or set the test `err`.
+ *
+ * @param {Error} err
+ * @return {Error}
+ * @api public
+ */
+
+Hook.prototype.error = function(err){
+  if (0 == arguments.length) {
+    var err = this._error;
+    this._error = null;
+    return err;
+  }
+
+  this._error = err;
+};
 
 
 }); // module: hook.js
@@ -904,6 +924,7 @@ function image(name) {
  *
  *   - `ui` name "bdd", "tdd", "exports" etc
  *   - `reporter` reporter instance, defaults to `mocha.reporters.Dot`
+ *   - `file` name of the output file
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
  *   - `ignoreLeaks` ignore global leaks
@@ -921,6 +942,7 @@ function Mocha(options) {
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
   this.reporter(options.reporter);
+  this.file(options.file)
   if (options.timeout) this.suite.timeout(options.timeout);
 }
 
@@ -948,6 +970,19 @@ Mocha.prototype.reporter = function(name){
   this._reporter = require('./reporters/' + name);
   if (!this._reporter) throw new Error('invalid reporter "' + name + '"');
   return this;
+};
+
+/**
+ * Set output file to `filename`, defaults to false.
+ *
+ * @param {String} name
+ * @api public
+ */
+
+Mocha.prototype.file = function(filename){
+    filename = filename || false;
+    this._file = filename;
+    return this;
 };
 
 /**
@@ -1033,7 +1068,8 @@ Mocha.prototype.run = function(fn){
   var suite = this.suite;
   var options = this.options;
   var runner = new exports.Runner(suite);
-  var reporter = new this._reporter(runner);
+  var file = this._file;
+  var reporter = new this._reporter(runner, {file: file});
   runner.ignoreLeaks = options.ignoreLeaks;
   if (options.grep) runner.grep(options.grep);
   if (options.globals) runner.globals(options.globals);
@@ -1551,20 +1587,35 @@ exports = module.exports = HTMLCov;
  * @api public
  */
 
-function HTMLCov(runner) {
+function HTMLCov(runner, output) {
   var jade = require('jade')
     , file = __dirname + '/templates/coverage.jade'
     , str = fs.readFileSync(file, 'utf8')
     , fn = jade.compile(str, { filename: file })
     , self = this;
 
-  JSONCov.call(this, runner, false);
+  JSONCov.call(this, runner, {isDisabled: true});
+
+  if(output && output.file) {
+    var outputStream = fs.createWriteStream(output.file)
+  }
+
+  function write(message) {
+    if(outputStream) {
+      outputStream.write(message)
+    } else {
+      process.stdout.write(message)
+    }
+  }
 
   runner.on('end', function(){
-    process.stdout.write(fn({
+    write(fn({
         cov: self.cov
       , coverageClass: coverageClass
     }));
+    if(outputStream) {
+      outputStream.end()
+    }
   });
 }
 
@@ -1818,7 +1869,7 @@ require.register("reporters/json-cov.js", function(module, exports, require){
  */
 
 var Base = require('./base');
-
+var fs   = require('browser/fs');
 /**
  * Expose `JSONCov`.
  */
@@ -1835,9 +1886,21 @@ exports = module.exports = JSONCov;
 
 function JSONCov(runner, output) {
   var self = this
-    , output = 1 == arguments.length ? true : output;
+    , outputDisabled = output && output.isDisabled;
 
   Base.call(this, runner);
+
+  if(output && output.file) {
+    var outputStream = fs.createWriteStream(output.file)
+  }
+
+  function write(message) {
+    if(outputStream) {
+        outputStream.write(message)
+    } else {
+      process.stdout.write(message)
+    }
+  }
 
   var tests = []
     , failures = []
@@ -1862,8 +1925,11 @@ function JSONCov(runner, output) {
     result.tests = tests.map(clean);
     result.failures = failures.map(clean);
     result.passes = passes.map(clean);
-    if (!output) return;
-    process.stdout.write(JSON.stringify(result, null, 2 ));
+    if (outputDisabled) return;
+    write(JSON.stringify(result, null, 2 ));
+    if(outputStream) {
+        outputStream.end()
+    }
   });
 }
 
@@ -2036,7 +2102,8 @@ require.register("reporters/json.js", function(module, exports, require){
 
 var Base = require('./base')
   , cursor = Base.cursor
-  , color = Base.color;
+  , color = Base.color
+  , fs = require('browser/fs');
 
 /**
  * Expose `JSON`.
@@ -2051,13 +2118,25 @@ exports = module.exports = JSONReporter;
  * @api public
  */
 
-function JSONReporter(runner) {
+function JSONReporter(runner, output) {
   var self = this;
   Base.call(this, runner);
 
   var tests = []
     , failures = []
     , passes = [];
+
+  if(output && output.file) {
+    var outputStream = fs.createWriteStream(output.file)
+  }
+
+  function write(message) {
+    if(outputStream) {
+      outputStream.write(message)
+    } else {
+      process.stdout.write(message)
+    }
+  }
 
   runner.on('test end', function(test){
     tests.push(test);
@@ -2079,7 +2158,10 @@ function JSONReporter(runner) {
       , passes: passes.map(clean)
     };
 
-    process.stdout.write(JSON.stringify(obj, null, 2));
+    write(JSON.stringify(obj, null, 2));
+    if(outputStream) {
+      outputStream.end()
+    }
   });
 }
 
@@ -2569,7 +2651,7 @@ NyanCat.prototype.drawNyanCat = function(status) {
         break;
       case 1:
         var padding = self.tick ? '  ' : '   ';
-        write('_|' + padding + '/\\_/\\');
+        write('_|' + padding + '/\\_/\\ ');
         write('\n');
         break;
       case 2:
@@ -2586,12 +2668,12 @@ NyanCat.prototype.drawNyanCat = function(status) {
           default:
             face = '( - .-)';
         }
-        write(tail + '|' + padding + face);
+        write(tail + '|' + padding + face + ' ');
         write('\n');
         break;
       case 3:
         var padding = self.tick ? ' ' : '  ';
-        write(padding + '""  ""');
+        write(padding + '""  "" ');
         write('\n');
         break;
     }
@@ -3203,6 +3285,22 @@ Runnable.prototype.clearTimeout = function(){
 };
 
 /**
+ * Inspect the runnable void of private properties.
+ *
+ * @return {String}
+ * @api private
+ */
+
+Runnable.prototype.inspect = function(){
+  return JSON.stringify(this, function(key, val){
+    if ('_' == key[0]) return;
+    if ('parent' == key) return '#<Suite>';
+    if ('ctx' == key) return '#<Context>';
+    return val;
+  }, 2);
+};
+
+/**
  * Reset the timeout.
  *
  * @api private
@@ -3488,6 +3586,8 @@ Runner.prototype.hook = function(name, fn){
 
     hook.run(function(err){
       hook.removeAllListeners('error');
+      var testError = hook.error();
+      if (testError) self.fail(self.test, testError);
       if (err) return self.failHook(hook, err);
       self.emit('hook end', hook);
       next(++i);
@@ -3771,7 +3871,8 @@ Runner.prototype.run = function(fn){
 function filterLeaks(ok) {
   return filter(keys(global), function(key){
     var matched = filter(ok, function(ok){
-      return 0 == key.indexOf(ok.split('*')[0]);
+      if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
+      return key == ok;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   });
@@ -4085,22 +4186,6 @@ Test.prototype = new Runnable;
 Test.prototype.constructor = Test;
 
 
-/**
- * Inspect the context void of private properties.
- *
- * @return {String}
- * @api private
- */
-
-Test.prototype.inspect = function(){
-  return JSON.stringify(this, function(key, val){
-    return '_' == key[0]
-      ? undefined
-      : 'parent' == key
-        ? '#<Suite>'
-        : val;
-  }, 2);
-};
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
@@ -4395,9 +4480,10 @@ window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite('', new mocha.Context)
-    , utils = mocha.utils
+  var utils = mocha.utils
     , options = {}
+
+  mocha.suite = new mocha.Suite('', new mocha.Context());
 
   /**
    * Highlight the given string of `js`.
@@ -4451,9 +4537,9 @@ window.mocha = require('mocha');
 
     ui = mocha.interfaces[options.ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
-    if (options.timeout) suite.timeout(options.timeout);
-    ui(suite);
-    suite.emit('pre-require', window);
+    if (options.timeout) mocha.suite.timeout(options.timeout);
+    ui(mocha.suite);
+    mocha.suite.emit('pre-require', window);
   };
 
   /**
@@ -4461,8 +4547,8 @@ window.mocha = require('mocha');
    */
 
   mocha.run = function(fn){
-    suite.emit('run');
-    var runner = new mocha.Runner(suite);
+    mocha.suite.emit('run');
+    var runner = new mocha.Runner(mocha.suite);
     var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");

@@ -59,6 +59,7 @@ program
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
+  .option('-f, --file <name>', 'specify the output file for json-cov, json and html-cov reports')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
@@ -311,7 +312,8 @@ function run(suite, fn) {
   runner.globals(globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(program.grep));
-  var reporter = new Reporter(runner);
+  var file = program.file ?  program.file : false;
+  var reporter = new Reporter(runner, {file: file});
   if (program.growl) growl(runner, reporter);
   runner.run(fn);
 }
