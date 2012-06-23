@@ -11,6 +11,11 @@ describe('pending tests', function() {
     latestTestIsPending = false;
     oldAddTest = mocha.Suite.prototype.addTest;
     mocha.Suite.prototype.addTest = function(test) {
+      // We need to call the original addTest for the events to be fired correctly
+      oldAddTest.call(this, test);
+      // but we don't want to actually add any tests within these tests.
+      this.tests = [];
+
       allTests.push(test);
       latestTestIsPending = !!test.pending;
     };
