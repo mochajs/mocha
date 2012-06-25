@@ -407,7 +407,7 @@ module.exports = Context;
 function Context(){}
 
 /**
- * Set the context `Runnable` to `runnable`.
+ * Set or get the context `Runnable` to `runnable`.
  *
  * @param {Runnable} runnable
  * @return {Context}
@@ -415,7 +415,8 @@ function Context(){}
  */
 
 Context.prototype.runnable = function(runnable){
-  this._runnable = runnable;
+  if (0 == arguments.length) return this._runnable;
+  this.test = this._runnable = runnable;
   return this;
 };
 
@@ -428,7 +429,7 @@ Context.prototype.runnable = function(runnable){
  */
 
 Context.prototype.timeout = function(ms){
-  this._runnable.timeout(ms);
+  this.runnable().timeout(ms);
   return this;
 };
 
@@ -441,9 +442,9 @@ Context.prototype.timeout = function(ms){
 
 Context.prototype.inspect = function(){
   return JSON.stringify(this, function(key, val){
-    return '_runnable' == key
-      ? undefined
-      : val;
+    if ('_runnable' == key) return;
+    if ('test' == key) return;
+    return val;
   }, 2);
 };
 
@@ -482,6 +483,25 @@ function Hook(title, fn) {
 
 Hook.prototype = new Runnable;
 Hook.prototype.constructor = Hook;
+
+
+/**
+ * Get or set the test `err`.
+ *
+ * @param {Error} err
+ * @return {Error}
+ * @api public
+ */
+
+Hook.prototype.error = function(err){
+  if (0 == arguments.length) {
+    var err = this._error;
+    this._error = null;
+    return err;
+  }
+
+  this._error = err;
+};
 
 
 }); // module: hook.js
@@ -869,7 +889,7 @@ exports = module.exports = Mocha;
  * Library version.
  */
 
-exports.version = '1.2.0';
+exports.version = '1.2.1';
 
 /**
  * Expose internals.
@@ -2274,7 +2294,6 @@ List.prototype.constructor = List;
 }); // module: reporters/list.js
 
 require.register("reporters/markdown.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2356,7 +2375,7 @@ function Markdown(runner) {
   runner.on('pass', function(test){
     var code = utils.clean(test.fn.toString());
     buf += test.title + '.\n';
-    buf += '\n```js';
+    buf += '\n```js\n';
     buf += code + '\n';
     buf += '```\n\n';
   });
@@ -2569,7 +2588,7 @@ NyanCat.prototype.drawNyanCat = function(status) {
         break;
       case 1:
         var padding = self.tick ? '  ' : '   ';
-        write('_|' + padding + '/\\_/\\');
+        write('_|' + padding + '/\\_/\\ ');
         write('\n');
         break;
       case 2:
@@ -2586,12 +2605,12 @@ NyanCat.prototype.drawNyanCat = function(status) {
           default:
             face = '( - .-)';
         }
-        write(tail + '|' + padding + face);
+        write(tail + '|' + padding + face + ' ');
         write('\n');
         break;
       case 3:
         var padding = self.tick ? ' ' : '  ';
-        write(padding + '""  ""');
+        write(padding + '""  "" ');
         write('\n');
         break;
     }
@@ -3203,6 +3222,22 @@ Runnable.prototype.clearTimeout = function(){
 };
 
 /**
+ * Inspect the runnable void of private properties.
+ *
+ * @return {String}
+ * @api private
+ */
+
+Runnable.prototype.inspect = function(){
+  return JSON.stringify(this, function(key, val){
+    if ('_' == key[0]) return;
+    if ('parent' == key) return '#<Suite>';
+    if ('ctx' == key) return '#<Context>';
+    return val;
+  }, 2);
+};
+
+/**
  * Reset the timeout.
  *
  * @api private
@@ -3488,6 +3523,8 @@ Runner.prototype.hook = function(name, fn){
 
     hook.run(function(err){
       hook.removeAllListeners('error');
+      var testError = hook.error();
+      if (testError) self.fail(self.test, testError);
       if (err) return self.failHook(hook, err);
       self.emit('hook end', hook);
       next(++i);
@@ -3771,7 +3808,8 @@ Runner.prototype.run = function(fn){
 function filterLeaks(ok) {
   return filter(keys(global), function(key){
     var matched = filter(ok, function(ok){
-      return 0 == key.indexOf(ok.split('*')[0]);
+      if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
+      return key == ok;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   });
@@ -4085,22 +4123,6 @@ Test.prototype = new Runnable;
 Test.prototype.constructor = Test;
 
 
-/**
- * Inspect the context void of private properties.
- *
- * @return {String}
- * @api private
- */
-
-Test.prototype.inspect = function(){
-  return JSON.stringify(this, function(key, val){
-    return '_' == key[0]
-      ? undefined
-      : 'parent' == key
-        ? '#<Suite>'
-        : val;
-  }, 2);
-};
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
@@ -4395,9 +4417,10 @@ window.mocha = require('mocha');
 
 // boot
 ;(function(){
-  var suite = new mocha.Suite('', new mocha.Context)
-    , utils = mocha.utils
+  var utils = mocha.utils
     , options = {}
+
+  mocha.suite = new mocha.Suite('', new mocha.Context());
 
   /**
    * Highlight the given string of `js`.
@@ -4451,9 +4474,9 @@ window.mocha = require('mocha');
 
     ui = mocha.interfaces[options.ui];
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
-    if (options.timeout) suite.timeout(options.timeout);
-    ui(suite);
-    suite.emit('pre-require', window);
+    if (options.timeout) mocha.suite.timeout(options.timeout);
+    ui(mocha.suite);
+    mocha.suite.emit('pre-require', window);
   };
 
   /**
@@ -4461,8 +4484,8 @@ window.mocha = require('mocha');
    */
 
   mocha.run = function(fn){
-    suite.emit('run');
-    var runner = new mocha.Runner(suite);
+    mocha.suite.emit('run');
+    var runner = new mocha.Runner(mocha.suite);
     var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");

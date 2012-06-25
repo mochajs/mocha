@@ -1,4 +1,15 @@
 
+1.2.1 / 2012-06-25 
+==================
+
+  * Added `this.test.error(err)` support to after each hooks. Closes #287
+  * Added: export top-level suite on global mocha object (mocha.suite). Closes #448
+  * Fixed `js` code block format error in markdown reporter
+  * Fixed deprecation warning when using `path.existsSync`
+  * Fixed --globals with wildcard
+  * Fixed chars in nyan when his head moves back
+  * Remove `--growl` from test/mocha.opts. Closes #289
+
 1.2.0 / 2012-06-17 
 ==================
 
