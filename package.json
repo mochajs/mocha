@@ -7,7 +7,7 @@
   , "repository": { "type": "git", "url": "git://github.com/visionmedia/mocha.git" }
   , "main": "./index"
   , "bin": { "mocha": "./bin/mocha", "_mocha": "./bin/_mocha" }
-  , "engines": { "node": ">= 0.4.x < 0.8.0" }
+  , "engines": { "node": ">= 0.4.x" }
   , "scripts": {
     "test": "make test"
   }
