@@ -12,7 +12,7 @@
     "test": "make test"
   }
   , "dependencies":{
-      "commander": "0.5.x"
+      "commander": "0.6.1"
     , "growl": "1.5.x"
     , "jade": "0.20.3"
     , "diff": "1.0.2"
