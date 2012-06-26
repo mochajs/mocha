@@ -39,13 +39,13 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 
     $ npm install -g mocha
 
-
 <h2 id="getting-started">1. 2. 3. Mocha!</h2>
 
 
     $ npm install -g mocha
     $ mkdir test
     $ $EDITOR test/test.js
+
     var assert = require("assert")
     describe('Array', function(){
       describe('#indexOf()', function(){
@@ -55,12 +55,12 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
         })
       })
     })
+
     $  mocha
 
       .
 
       ✔ 1 test complete (1ms)
-    $
 
 
 <h2 id="assertions">Assertions</h2>
