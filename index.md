@@ -39,6 +39,30 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
 
     $ npm install -g mocha
 
+
+<h2 id="getting-started">1. 2. 3. Mocha!</h2>
+
+
+    $ npm install -g mocha
+    $ mkdir test
+    $ $EDITOR test/test.js
+    var assert = require("assert")
+    describe('Array', function(){
+      describe('#indexOf()', function(){
+        it('should return -1 when the value is not present', function(){
+          assert.equal(-1, [1,2,3].indexOf(5));
+          assert.equal(-1, [1,2,3].indexOf(0));
+        })
+      })
+    })
+    $  mocha
+
+      .
+
+      ✔ 1 test complete (1ms)
+    $
+
+
 <h2 id="assertions">Assertions</h2>
 
 Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](http://github.com/visionmedia/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
