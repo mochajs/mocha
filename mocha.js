@@ -886,12 +886,6 @@ var path = require('browser/path');
 exports = module.exports = Mocha;
 
 /**
- * Library version.
- */
-
-exports.version = '1.2.1';
-
-/**
  * Expose internals.
  */
 

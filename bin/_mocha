@@ -55,7 +55,7 @@ var images = {
 // options
 
 program
-  .version(mocha.version)
+  .version(require('../package').version)
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
