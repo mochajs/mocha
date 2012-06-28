@@ -311,7 +311,7 @@ function run(suite, fn) {
   var runner = new Runner(suite);
   runner.globals(globals);
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
-  if (program.grep) runner.grep(new RegExp(program.grep), program.invert);
+  if (program.grep) runner.grep(new RegExp(utils.escapeRegexp(program.grep)), program.invert);
   var reporter = new Reporter(runner);
   if (program.growl) growl(runner, reporter);
   runner.run(fn);
