@@ -78,6 +78,13 @@ test-grep:
 	  --grep fast \
 	  test/acceptance/misc/grep
 
+test-invert:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  --grep slow \
+	  --invert \
+	  test/acceptance/misc/grep
+
 test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
