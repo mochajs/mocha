@@ -162,7 +162,7 @@ describe('Runnable(title, fn)', function(){
 
             test.on('error', function(err){
               ++errCalls;
-              err.message.should.equal('done() called multiple times');
+              err.message.should.equal('fail');
               calls.should.equal(1);
               errCalls.should.equal(1);
               done();
