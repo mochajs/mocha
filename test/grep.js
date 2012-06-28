@@ -32,4 +32,11 @@ describe('Mocha', function(){
       mocha.grep().should.equal(mocha);
     })
   })
+
+  describe('"invert" option', function(){
+    it('should add a Boolean to the mocha.options object', function(){
+      var mocha = new Mocha({ invert: true });
+      mocha.options.invert.should.be.ok;
+    })
+  })
 })

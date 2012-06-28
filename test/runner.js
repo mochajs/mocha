@@ -21,6 +21,15 @@ describe('Runner', function(){
       newRunner.grep(/lions/);
       newRunner.total.should.equal(2);
     })
+
+    it('should update the runner.total with number of matched tests when inverted', function(){
+      suite.addTest(new Test('im a test about lions'));
+      suite.addTest(new Test('im another test about lions'));
+      suite.addTest(new Test('im a test about bears'));
+      var newRunner = new Runner(suite);
+      newRunner.grep(/lions/, true);
+      newRunner.total.should.equal(1);
+    })
   })
 
   describe('.grepTotal()', function(){
@@ -30,6 +39,14 @@ describe('Runner', function(){
       suite.addTest(new Test('im a test about bears'));
       runner.grep(/lions/);
       runner.grepTotal(suite).should.equal(2);
+    })
+
+    it('should return the total number of matched tests when inverted', function(){
+      suite.addTest(new Test('im a test about lions'));
+      suite.addTest(new Test('im another test about lions'));
+      suite.addTest(new Test('im a test about bears'));
+      runner.grep(/lions/, true);
+      runner.grepTotal(suite).should.equal(1);
     })
   })
 
