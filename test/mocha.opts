@@ -4,4 +4,4 @@
 --globals okGlobalA,okGlobalB
 --globals okGlobalC
 --globals callback*
---timeout 400
+--timeout 200
