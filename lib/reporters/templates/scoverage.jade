@@ -1,0 +1,47 @@
+!!! 5
+html
+  head
+    title Coverage
+    include script.html
+    include style.html
+  body
+    #coverage
+      h1#overview Coverage
+      include menu
+
+      #stats(class=coverageClass(cov.coverage))
+        .percentage #{cov.coverage | 0}%
+        .ssoc= cov.ssoc
+        .hits= cov.hits
+        .misses= cov.misses
+
+      #files
+        for file in cov.files
+          .file
+            h2(id=file.filename)= file.filename
+            #stats(class=coverageClass(file.coverage))
+              .percentage #{file.coverage | 0}%
+              .ssoc= file.ssoc
+              .hits= file.hits
+              .misses= file.misses
+
+            table#source
+              thead
+                tr
+                  th Line
+                  th Source
+              tbody
+                - var covered= ' '
+                for line, number in file.source
+                  if line.covered == false
+                    - covered= 'miss'
+                  else
+                    - covered= ' '
+                  tr(class=covered)
+                    td.line= number
+                    td.source
+                      for part in line.parts
+                        if part.html != true
+                          span #{part.src}
+                        else
+                          sup #{part.id} (#{part.cover})
