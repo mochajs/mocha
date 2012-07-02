@@ -1325,7 +1325,7 @@ Base.prototype.epilogue = function(){
     , fmt
     , tests;
 
-  console.log();
+  console.log('');
 
   function pluralize(n) {
     return 1 == n ? 'test' : 'tests';
@@ -1365,7 +1365,7 @@ Base.prototype.epilogue = function(){
     console.log(fmt, stats.pending, pluralize(stats.pending));
   }
 
-  console.log();
+  console.log('');
 };
 
 /**
@@ -1529,7 +1529,7 @@ function Dot(runner) {
   });
 
   runner.on('end', function(){
-    console.log();
+    console.log('');
     self.epilogue();
   });
 }
@@ -2203,7 +2203,7 @@ function Landing(runner) {
 
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    console.log('');
     self.epilogue();
   });
 }
@@ -2248,7 +2248,7 @@ function List(runner) {
     , n = 0;
 
   runner.on('start', function(){
-    console.log();
+    console.log('');
   });
 
   runner.on('test', function(test){
@@ -2739,7 +2739,7 @@ function Progress(runner, options) {
 
   // tests started
   runner.on('start', function(){
-    console.log();
+    console.log('');
     cursor.hide();
   });
 
@@ -2766,7 +2766,7 @@ function Progress(runner, options) {
   // and the failures if any
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    console.log('');
     self.epilogue();
   });
 }
@@ -2817,7 +2817,7 @@ function Spec(runner) {
   }
 
   runner.on('start', function(){
-    console.log();
+    console.log('');
   });
 
   runner.on('suite', function(suite){
@@ -2827,7 +2827,7 @@ function Spec(runner) {
 
   runner.on('suite end', function(suite){
     --indents;
-    if (1 == indents) console.log();
+    if (1 == indents) console.log('');
   });
 
   runner.on('test', function(test){
