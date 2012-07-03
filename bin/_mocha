@@ -175,8 +175,20 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 var suite = new Suite('', new Context)
   , Base = require('../lib/reporters/base')
-  , Reporter = require('../lib/reporters/' + program.reporter)
-  , ui = interfaces[program.ui](suite);
+  , ui = interfaces[program.ui](suite)
+  , Reporter;
+
+// load reporter
+
+try {
+  Reporter = require('../lib/reporters/' + program.reporter);
+} catch (err) {
+  try {
+    Reporter = require(program.reporter);
+  } catch (err) {
+    throw new Error('reporter "' + program.reporter + '" does not exist');
+  }
+}
 
 // --no-colors
 
