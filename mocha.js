@@ -1677,7 +1677,7 @@ function HTML(runner) {
 
     // suite
     var url = location.protocol + '//' + location.host + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
-    var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, suite.title);
+    var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, escape(suite.title));
 
     // container
     stack[0].appendChild(el);
@@ -3278,16 +3278,16 @@ Runnable.prototype.run = function(fn){
   }
 
   // called multiple times
-  function multiple() {
+  function multiple(err) {
     if (emitted) return;
     emitted = true;
-    self.emit('error', new Error('done() called multiple times'));
+    self.emit('error', err || new Error('done() called multiple times'));
   }
 
   // finished
   function done(err) {
     if (self.timedOut) return;
-    if (finished) return multiple();
+    if (finished) return multiple(err);
     self.clearTimeout();
     self.duration = new Date - start;
     finished = true;
@@ -3387,13 +3387,15 @@ Runner.prototype.constructor = Runner;
  * with number of tests matched.
  *
  * @param {RegExp} re
+ * @param {Boolean} invert
  * @return {Runner} for chaining
  * @api public
  */
 
-Runner.prototype.grep = function(re){
+Runner.prototype.grep = function(re, invert){
   debug('grep %s', re);
   this._grep = re;
+  this._invert = invert;
   this.total = this.grepTotal(this.suite);
   return this;
 };
@@ -3412,7 +3414,9 @@ Runner.prototype.grepTotal = function(suite) {
   var total = 0;
 
   suite.eachTest(function(test){
-    if (self._grep.test(test.fullTitle())) total++;
+    var match = self._grep.test(test.fullTitle());
+    if (self._invert) match = !match;
+    if (match) total++;
   });
 
   return total;
@@ -3652,7 +3656,9 @@ Runner.prototype.runTests = function(suite, fn){
     if (!test) return fn();
 
     // grep
-    if (!self._grep.test(test.fullTitle())) return next();
+    var match = self._grep.test(test.fullTitle());
+    if (self._invert) match = !match;
+    if (!match) return next();
 
     // pending
     if (test.pending) {
