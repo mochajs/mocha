@@ -19,14 +19,14 @@ describe('global leaks', function(){
   });
 
   it('should pass when accepted', function(){
-    okGlobalA = 1;
-    okGlobalB = 1;
-    okGlobalC = 1;
+    global.okGlobalA = 1;
+    global.okGlobalB = 1;
+    global.okGlobalC = 1;
   })
 
   it('should pass with wildcard', function(){
-    callback123 = 'foo';
-    callback345 = 'bar';
+    global.callback123 = 'foo';
+    global.callback345 = 'bar';
   })
 
   afterEach(function(){
