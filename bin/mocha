@@ -23,7 +23,8 @@ process.argv.slice(2).forEach(function (arg) {
       args.unshift('--expose-gc');
       break;
     default:
-      args.push(arg);
+      if (0 == arg.indexOf('--trace')) args.unshift(arg);
+      else args.push(arg);
       break;
   }
 });

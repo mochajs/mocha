@@ -6,3 +6,4 @@ node_modules
 testing
 _mocha.js
 test.js
+my-reporter.js
