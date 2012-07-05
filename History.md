@@ -1,4 +1,16 @@
 
+1.3.0 / 2012-07-05 
+==================
+
+  * add window scrolling to `HTML` reporter
+  * add v8 `--trace-*` option support
+  * add support for custom reports via `--reporter MODULE`
+  * add `--invert` switch to invert `--grep` matches
+  * fix export of `Nyan` reporter. Closes #495
+  * fix escaping of `HTML` suite titles. Closes #486
+  * fix `done()` called multiple times with an error test
+  * change `--grep` - regexp escape the input
+
 1.2.2 / 2012-06-28 
 ==================
 
