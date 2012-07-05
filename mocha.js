@@ -1695,6 +1695,8 @@ function HTML(runner) {
   });
 
   runner.on('test end', function(test){
+    window.scrollTo(0, document.body.scrollHeight);
+
     // TODO: add to stats
     var percent = stats.tests / total * 100 | 0;
     if (progress) progress.update(percent).draw(ctx);
@@ -1815,13 +1817,14 @@ exports.HTML = require('./html');
 exports.List = require('./list');
 exports.Min = require('./min');
 exports.Spec = require('./spec');
+exports.Nyan = require('./nyan');
+exports.XUnit = require('./xunit');
 exports.Progress = require('./progress');
 exports.Landing = require('./landing');
 exports.JSONCov = require('./json-cov');
 exports.HTMLCov = require('./html-cov');
 exports.JSONStream = require('./json-stream');
-exports.XUnit = require('./xunit')
-exports.Teamcity = require('./teamcity')
+exports.Teamcity = require('./teamcity');
 
 }); // module: reporters/index.js
 
@@ -2383,6 +2386,7 @@ function Markdown(runner) {
 }); // module: reporters/markdown.js
 
 require.register("reporters/min.js", function(module, exports, require){
+
 /**
  * Module dependencies.
  */
