@@ -152,9 +152,8 @@ program.on('require', function(mod){
 // mocha.opts support
 
 try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
-    .trim()
-    .split(/\s+/);
+  var opts = fs.readFileSync('test/mocha.opts', 'utf8').trim();
+  opts = (opts.length === 0) ? [] : opts.split(/\s+/);
 
   process.argv = process.argv
     .slice(0, 2)
