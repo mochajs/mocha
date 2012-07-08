@@ -19,6 +19,7 @@ var program = require('commander')
   , Runner = mocha.Runner
   , Suite = mocha.Suite
   , join = path.join
+  , basename = path.basename
   , cwd = process.cwd();
 
 /**
@@ -400,7 +401,7 @@ function lookupFiles(path, recursive) {
       if (recursive) files = files.concat(lookupFiles(file, recursive));
       return
     }
-    if (!stat.isFile() || !re.test(file)) return;
+    if (!stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
     files.push(file);
   });
 
