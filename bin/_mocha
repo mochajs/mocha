@@ -68,6 +68,7 @@ program
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
+  .option('-E, --growl-errors', 'enable growl on failures')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
   .option('--recursive', 'include sub directories')
@@ -325,13 +326,13 @@ function run(suite, fn) {
   if (program.ignoreLeaks) runner.ignoreLeaks = true;
   if (program.grep) runner.grep(new RegExp(utils.escapeRegexp(program.grep)), program.invert);
   var reporter = new Reporter(runner);
-  if (program.growl) growl(runner, reporter);
+  if (program.growl || program.growlErrors) growl(runner, reporter, program.growlErrors);
   runner.run(fn);
 }
 
 // enable growl notifications
 
-function growl(runner, reporter) {
+function growl(runner, reporter, failuresOnly) {
   var notify = require('growl');
 
   runner.on('end', function(){
@@ -339,7 +340,7 @@ function growl(runner, reporter) {
     if (stats.failures) {
       var msg = stats.failures + ' of ' + runner.total + ' tests failed';
       notify(msg, { name: 'mocha', title: 'Failed', image: images.fail });
-    } else {
+    } else if (!failuresOnly) {
       notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
           name: 'mocha'
         , title: 'Passed'
