@@ -9,7 +9,7 @@
   , "bin": { "mocha": "./bin/mocha", "_mocha": "./bin/_mocha" }
   , "engines": { "node": ">= 0.4.x" }
   , "scripts": {
-    "test": "make test"
+    "test": "make test-all"
   }
   , "dependencies":{
       "commander": "0.6.1"
