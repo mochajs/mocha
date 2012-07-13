@@ -56,7 +56,7 @@ var images = {
 // options
 
 program
-  .version(require('../package').version)
+  .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
