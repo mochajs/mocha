@@ -2,11 +2,27 @@
 
 /**
  * This tiny wrapper file checks for known node flags and appends them
- * when found, before invoking the "real" _mocha(1) executable.
+ * when found, before invoking the "real" _mocha(1) executable.  It will
+ * also respect known node flags set in mocha.opts
  */
 
 var spawn = require('child_process').spawn
-  , args = [ __dirname + '/_mocha' ];
+  , args = [ __dirname + '/_mocha' ]
+  , fs = require('fs');
+
+// mocha.opts support
+
+try {
+  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
+    .trim()
+    .split(/\s+/);
+
+  process.argv = process.argv
+    .slice(0, 2)
+    .concat(opts.concat(process.argv.slice(2)));
+} catch (err) {
+  // ignore
+}
 
 process.argv.slice(2).forEach(function (arg) {
   switch (arg) {
@@ -21,6 +37,12 @@ process.argv.slice(2).forEach(function (arg) {
     case '-gc':
     case '--expose-gc':
       args.unshift('--expose-gc');
+      break;
+    case '--trace-gc':
+      args.unshift('--trace-gc');
+      break;
+    case '--trace-gc-verbose':
+      args.unshift('--trace-gc-verbose');
       break;
     default:
       if (0 == arg.indexOf('--trace')) args.unshift(arg);
