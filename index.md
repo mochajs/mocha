@@ -184,6 +184,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
        -G, --growl                     enable growl notification support
        -d, --debug                     enable node's debugger, synonym for node --debug
        -b, --bail                      bail after first test failure
+       --recursive                     include sub directories
        --debug-brk                     enable node's debugger breaking on the first line
        --globals <names>               allow the given comma-delimited global [names]
        --ignore-leaks                  ignore global variable leaks
