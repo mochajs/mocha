@@ -11,16 +11,15 @@ var program = require('commander')
   , vm = require('vm')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
-  , mocha = require('../')
-  , utils = mocha.utils
-  , reporters = mocha.reporters
-  , interfaces = mocha.interfaces
-  , Context = mocha.Context
-  , Runner = mocha.Runner
-  , Suite = mocha.Suite
+  , Mocha = require('../')
+  , utils = Mocha.utils
+  , reporters = Mocha.reporters
+  , interfaces = Mocha.interfaces
+  , Base = reporters.Base
   , join = path.join
   , basename = path.basename
-  , cwd = process.cwd();
+  , cwd = process.cwd()
+  , mocha = new Mocha;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -174,10 +173,11 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-var suite = new Suite('', new Context)
-  , Base = require('../lib/reporters/base')
-  , ui = interfaces[program.ui](suite)
-  , Reporter;
+mocha.reporter(program.reporter);
+
+// interface
+
+mocha.ui(program.ui);
 
 // load reporter
 
@@ -208,11 +208,31 @@ if (program.slow) Base.slow = program.slow;
 
 // --timeout
 
-if (program.timeout) suite.timeout(program.timeout);
+if (program.timeout) mocha.suite.timeout(program.timeout);
 
 // --bail
 
-suite.bail(program.bail);
+mocha.suite.bail(program.bail);
+
+// --grep
+
+if (program.grep) mocha.grep(new RegExp(utils.escapeRegexp(program.grep)));
+
+// --invert
+
+if (program.invert) mocha.invert();
+
+// --ignore-leaks
+
+if (program.ignoreLeaks) mocha.ignoreLeaks();
+
+// --growl
+
+if (program.growl) mocha.growl();
+
+// --globals
+
+mocha.globals(globals);
 
 // custom compiler support
 
@@ -271,8 +291,9 @@ if (program.watch) {
   var watchFiles = utils.files(cwd);
 
   function loadAndRun() {
-    load(files, function(){
-      run(suite, function(){
+    mocha.files = files;
+    mocha.loadFiles(function(){
+      mocha.run(function(){
         play(frames);
       });
     });
@@ -289,8 +310,8 @@ if (program.watch) {
   utils.watch(watchFiles, function(){
     purge();
     stop()
-    suite = suite.clone();
-    ui = interfaces[program.ui](suite);
+    mocha.suite = mocha.suite.clone();
+    mocha.ui(program.ui);
     loadAndRun();
   });
 
@@ -299,36 +320,10 @@ if (program.watch) {
 
 // load
 
-load(files, function(){
-  run(suite, process.exit);
+mocha.files = files;
+mocha.loadFiles(function(){
+  mocha.run(process.exit);
 });
-
-// require test files before
-// running the root suite
-
-function load(files, fn) {
-  var pending = files.length;
-  files.forEach(function(file){
-    delete require.cache[file];
-    suite.emit('pre-require', global, file);
-    suite.emit('require', require(file), file);
-    suite.emit('post-require', global, file);
-    --pending || fn();
-  });
-}
-
-// run the given suite
-
-function run(suite, fn) {
-  suite.emit('run');
-  var runner = new Runner(suite);
-  runner.globals(globals);
-  if (program.ignoreLeaks) runner.ignoreLeaks = true;
-  if (program.grep) runner.grep(new RegExp(utils.escapeRegexp(program.grep)), program.invert);
-  var reporter = new Reporter(runner);
-  if (program.growl) growl(runner, reporter);
-  runner.run(fn);
-}
 
 // enable growl notifications
 
