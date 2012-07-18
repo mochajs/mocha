@@ -114,7 +114,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 tm:
-	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
-	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
+	mkdir -p $(TM_DEST)
+	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)
 
 .PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
