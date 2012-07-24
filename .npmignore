@@ -2,3 +2,4 @@ test
 examples
 *.sock
 lib-cov
+editors
