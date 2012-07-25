@@ -143,6 +143,14 @@ body {
   -webkit-box-shadow: 0 1px 3px #eee;
 }
 
+#report.pass .test.fail {
+  display: none;
+}
+
+#report.fail .test.pass {
+  display: none;
+}
+
 #error {
   color: #c00;
   font-size: 1.5  em;
