@@ -65,8 +65,8 @@ describe('Runner', function(){
   describe('.checkGlobals(test)', function(){
     it('should allow variables that match a wildcard', function(done) {
       runner.globals(['foo*', 'giz*']);
-      foo = 'baz';
-      gizmo = 'quux'
+      global.foo = 'baz';
+      global.gizmo = 'quux';
       runner.checkGlobals();
       delete global.foo;
       delete global.gizmo;
@@ -75,7 +75,7 @@ describe('Runner', function(){
 
     it('should emit "fail" when a new global is introduced', function(done){
       runner.checkGlobals();
-      foo = 'bar';
+      global.foo = 'bar';
       runner.on('fail', function(test, err){
         test.should.equal('im a test');
         err.message.should.equal('global leak detected: foo');
@@ -87,8 +87,8 @@ describe('Runner', function(){
 
     it('should pluralize the error message when several are introduced', function(done){
       runner.checkGlobals();
-      foo = 'bar';
-      bar = 'baz';
+      global.foo = 'bar';
+      global.bar = 'baz';
       runner.on('fail', function(test, err){
         test.should.equal('im a test');
         err.message.should.equal('global leaks detected: foo, bar');

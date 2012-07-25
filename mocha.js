@@ -1134,7 +1134,7 @@ exports.colors = {
 
 var color = exports.color = function(type, str) {
   if (!exports.useColors) return str;
-  return '\033[' + exports.colors[type] + 'm' + str + '\033[0m';
+  return '\u001b[' + exports.colors[type] + 'm' + str + '\u001b[0m';
 };
 
 /**
@@ -1157,19 +1157,19 @@ exports.window = {
 
 exports.cursor = {
   hide: function(){
-    process.stdout.write('\033[?25l');
+    process.stdout.write('\u001b[?25l');
   },
 
   show: function(){
-    process.stdout.write('\033[?25h');
+    process.stdout.write('\u001b[?25h');
   },
 
   deleteLine: function(){
-    process.stdout.write('\033[2K');
+    process.stdout.write('\u001b[2K');
   },
 
   beginningOfLine: function(){
-    process.stdout.write('\033[0G');
+    process.stdout.write('\u001b[0G');
   },
 
   CR: function(){
@@ -2194,14 +2194,14 @@ function Landing(runner) {
     }
 
     // render landing strip
-    stream.write('\033[4F\n\n');
+    stream.write('\u001b[4F\n\n');
     stream.write(runway());
     stream.write('\n  ');
     stream.write(color('runway', Array(col).join('⋅')));
     stream.write(plane)
     stream.write(color('runway', Array(width - col).join('⋅') + '\n'));
     stream.write(runway());
-    stream.write('\033[0m');
+    stream.write('\u001b[0m');
   });
 
   runner.on('end', function(){
@@ -2411,9 +2411,9 @@ function Min(runner) {
   
   runner.on('start', function(){
     // clear screen
-    process.stdout.write('\033[2J');
+    process.stdout.write('\u001b[2J');
     // set cursor position
-    process.stdout.write('\033[1;3H');
+    process.stdout.write('\u001b[1;3H');
   });
 
   runner.on('end', this.epilogue.bind(this));
@@ -2518,7 +2518,7 @@ NyanCat.prototype.drawScoreboard = function(){
 
   function draw(color, n) {
     write(' ');
-    write('\033[' + color + 'm' + n + '\033[0m');
+    write('\u001b[' + color + 'm' + n + '\u001b[0m');
     write('\n');
   }
 
@@ -2557,7 +2557,7 @@ NyanCat.prototype.drawRainbow = function(){
   var self = this;
 
   this.trajectories.forEach(function(line, index) {
-    write('\033[' + self.scoreboardWidth + 'C');
+    write('\u001b[' + self.scoreboardWidth + 'C');
     write(line.join(''));
     write('\n');
   });
@@ -2577,7 +2577,7 @@ NyanCat.prototype.drawNyanCat = function(status) {
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
 
   [0, 1, 2, 3].forEach(function(index) {
-    write('\033[' + startWidth + 'C');
+    write('\u001b[' + startWidth + 'C');
 
     switch (index) {
       case 0:
@@ -2625,7 +2625,7 @@ NyanCat.prototype.drawNyanCat = function(status) {
  */
 
 NyanCat.prototype.cursorUp = function(n) {
-  write('\033[' + n + 'A');
+  write('\u001b[' + n + 'A');
 };
 
 /**
@@ -2636,7 +2636,7 @@ NyanCat.prototype.cursorUp = function(n) {
  */
 
 NyanCat.prototype.cursorDown = function(n) {
-  write('\033[' + n + 'B');
+  write('\u001b[' + n + 'B');
 };
 
 /**
@@ -2672,7 +2672,7 @@ NyanCat.prototype.generateColors = function(){
 NyanCat.prototype.rainbowify = function(str){
   var color = this.rainbowColors[this.colorIndex % this.rainbowColors.length];
   this.colorIndex += 1;
-  return '\033[38;5;' + color + 'm' + str + '\033[0m';
+  return '\u001b[38;5;' + color + 'm' + str + '\u001b[0m';
 };
 
 /**
@@ -2756,7 +2756,7 @@ function Progress(runner, options) {
       , i = width - n;
 
     cursor.CR();
-    process.stdout.write('\033[J');
+    process.stdout.write('\u001b[J');
     process.stdout.write(color('progress', '  ' + options.open));
     process.stdout.write(Array(n).join(options.complete));
     process.stdout.write(Array(i).join(options.incomplete));
