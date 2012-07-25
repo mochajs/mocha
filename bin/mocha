@@ -16,8 +16,6 @@ process.argv.slice(2).forEach(function (arg) {
     case 'debug':
     case '--debug':
     case '--debug-brk':
-    case '--trace-gc':
-    case '--trace-gc-verbose':
       args.unshift(arg);
       break;
     case '-gc':
