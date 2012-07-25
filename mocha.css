@@ -181,6 +181,10 @@ body {
   color: inherit;
 }
 
+#stats a:hover {
+  border-bottom: 1px solid #eee;
+}
+
 #stats li {
   display: inline-block;
   margin: 0 5px;
