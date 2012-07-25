@@ -176,6 +176,11 @@ body {
   color: black;
 }
 
+#stats a {
+  text-decoration: none;
+  color: inherit;
+}
+
 #stats li {
   display: inline-block;
   margin: 0 5px;
