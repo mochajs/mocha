@@ -985,13 +985,15 @@ Mocha.prototype.ui = function(name){
  * @api private
  */
 
-Mocha.prototype.loadFiles = function(){
+Mocha.prototype.loadFiles = function(fn){
   var suite = this.suite;
+  var pending = this.files.length;
   this.files.forEach(function(file){
     file = path.resolve(file);
     suite.emit('pre-require', global, file);
     suite.emit('require', require(file), file);
     suite.emit('post-require', global, file);
+    --pending || (fn && fn());
   });
 };
 
@@ -1001,7 +1003,7 @@ Mocha.prototype.loadFiles = function(){
  * @api private
  */
 
-Mocha.prototype.growl = function(runner, reporter) {
+Mocha.prototype._growl = function(runner, reporter) {
   var notify = require('growl');
 
   runner.on('end', function(){
@@ -1035,6 +1037,55 @@ Mocha.prototype.grep = function(re){
 };
 
 /**
+ * Invert `.grep()` matches.
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.invert = function(){
+  this.options.invert = true;
+  return this;
+};
+
+/**
+ * Ignore global leaks.
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.ignoreLeaks = function(){
+  this.options.ignoreLeaks = true;
+  return this;
+};
+
+/**
+ * Enable growl support.
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.growl = function(){
+  this.options.growl = true;
+  return this;
+};
+
+/**
+ * Ignore `globals`.
+ *
+ * @param {Array} globals
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.globals = function(globals){
+  this.options.globals = globals;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
@@ -1049,9 +1100,9 @@ Mocha.prototype.run = function(fn){
   var runner = new exports.Runner(suite);
   var reporter = new this._reporter(runner);
   runner.ignoreLeaks = options.ignoreLeaks;
-  if (options.grep) runner.grep(options.grep);
+  if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
-  if (options.growl) this.growl(runner, reporter);
+  if (options.growl) this._growl(runner, reporter);
   return runner.run(fn);
 };
 
@@ -1504,6 +1555,7 @@ function Dot(runner) {
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
+    , c = '․'
     , n = 0;
 
   runner.on('start', function(){
@@ -1511,21 +1563,21 @@ function Dot(runner) {
   });
 
   runner.on('pending', function(test){
-    process.stdout.write(color('pending', '.'));
+    process.stdout.write(color('pending', c));
   });
 
   runner.on('pass', function(test){
     if (++n % width == 0) process.stdout.write('\n  ');
     if ('slow' == test.speed) {
-      process.stdout.write(color('bright yellow', '.'));
+      process.stdout.write(color('bright yellow', c));
     } else {
-      process.stdout.write(color(test.speed, '.'));
+      process.stdout.write(color(test.speed, c));
     }
   });
 
   runner.on('fail', function(test, err){
     if (++n % width == 0) process.stdout.write('\n  ');
-    process.stdout.write(color('fail', '.'));
+    process.stdout.write(color('fail', c));
   });
 
   runner.on('end', function(){
@@ -1630,8 +1682,8 @@ exports = module.exports = HTML;
 
 var statsTemplate = '<ul id="stats">'
   + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
-  + '<li class="passes">passes: <em>0</em></li>'
-  + '<li class="failures">failures: <em>0</em></li>'
+  + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
+  + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
   + '<li class="duration">duration: <em>0</em>s</li>'
   + '</ul>';
 
@@ -1652,7 +1704,9 @@ function HTML(runner) {
     , stat = fragment(statsTemplate)
     , items = stat.getElementsByTagName('li')
     , passes = items[1].getElementsByTagName('em')[0]
+    , passesLink = items[1].getElementsByTagName('a')[0]
     , failures = items[2].getElementsByTagName('em')[0]
+    , failuresLink = items[2].getElementsByTagName('a')[0]
     , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
     , report = fragment('<ul id="report"></ul>')
@@ -1666,6 +1720,18 @@ function HTML(runner) {
   }
 
   if (!root) return error('#mocha div missing, add it to your document');
+
+  // pass toggle
+  on(passesLink, 'click', function () {
+    var className = /pass/.test(report.className) ? '' : ' pass';
+    report.className = report.className.replace(/fail|pass/g, '') + className;
+  });
+
+  // failure toggle
+  on(failuresLink, 'click', function () {
+    var className = /fail/.test(report.className) ? '' : ' fail';
+    report.className = report.className.replace(/fail|pass/g, '') + className;
+  });
 
   root.appendChild(stat);
   root.appendChild(report);
@@ -1734,17 +1800,16 @@ function HTML(runner) {
     }
 
     // toggle code
-    var h2 = el.getElementsByTagName('h2')[0];
-
-    on(h2, 'click', function(){
-      pre.style.display = 'none' == pre.style.display
-        ? 'block'
-        : 'none';
-    });
-
-    // code
     // TODO: defer
     if (!test.pending) {
+      var h2 = el.getElementsByTagName('h2')[0];
+
+      on(h2, 'click', function(){
+        pre.style.display = 'none' == pre.style.display
+          ? 'inline-block'
+          : 'none';
+      });
+
       var pre = fragment('<pre><code>%e</code></pre>', utils.clean(test.fn.toString()));
       el.appendChild(pre);
       pre.style.display = 'none';
@@ -1804,6 +1869,7 @@ function on(el, event, fn) {
     el.attachEvent('on' + event, fn);
   }
 }
+
 }); // module: reporters/html.js
 
 require.register("reporters/index.js", function(module, exports, require){
@@ -3138,7 +3204,7 @@ require.register("runnable.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
-  , debug = require('browser/debug')('runnable');
+  , debug = require('browser/debug')('mocha:runnable');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -3334,7 +3400,7 @@ require.register("runner.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
-  , debug = require('browser/debug')('runner')
+  , debug = require('browser/debug')('mocha:runner')
   , Test = require('./test')
   , utils = require('./utils')
   , filter = utils.filter
@@ -3743,9 +3809,9 @@ Runner.prototype.runSuite = function(suite, fn){
  */
 
 Runner.prototype.uncaught = function(err){
-  debug('uncaught exception');
+  debug('uncaught exception %s', err.message);
   var runnable = this.currentRunnable;
-  if ('failed' == runnable.state) return;
+  if (!runnable || 'failed' == runnable.state) return;
   runnable.clearTimeout();
   err.uncaught = true;
   this.fail(runnable, err);
@@ -3827,7 +3893,7 @@ require.register("suite.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
-  , debug = require('browser/debug')('suite')
+  , debug = require('browser/debug')('mocha:suite')
   , utils = require('./utils')
   , Hook = require('./hook');
 
@@ -4138,7 +4204,7 @@ require.register("utils.js", function(module, exports, require){
 var fs = require('browser/fs')
   , path = require('browser/path')
   , join = path.join
-  , debug = require('browser/debug')('watch');
+  , debug = require('browser/debug')('mocha:watch');
 
 /**
  * Ignored directories.
