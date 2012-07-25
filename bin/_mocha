@@ -280,12 +280,12 @@ if (program.watch) {
   });
 
   var frames = [
-      '  \033[96m◜ \033[90mwatching\033[0m'
-    , '  \033[96m◠ \033[90mwatching\033[0m'
-    , '  \033[96m◝ \033[90mwatching\033[0m'
-    , '  \033[96m◞ \033[90mwatching\033[0m'
-    , '  \033[96m◡ \033[90mwatching\033[0m'
-    , '  \033[96m◟ \033[90mwatching\033[0m'
+      '  \u001b[96m◜ \u001b[90mwatching\u001b[0m'
+    , '  \u001b[96m◠ \u001b[90mwatching\u001b[0m'
+    , '  \u001b[96m◝ \u001b[90mwatching\u001b[0m'
+    , '  \u001b[96m◞ \u001b[90mwatching\u001b[0m'
+    , '  \u001b[96m◡ \u001b[90mwatching\u001b[0m'
+    , '  \u001b[96m◟ \u001b[90mwatching\u001b[0m'
   ];
 
   var watchFiles = utils.files(cwd);
@@ -358,7 +358,7 @@ function list(str) {
  */
 
 function hideCursor(){
-  process.stdout.write('\033[?25l');
+  process.stdout.write('\u001b[?25l');
 };
 
 /**
@@ -366,7 +366,7 @@ function hideCursor(){
  */
 
 function showCursor(){
-  process.stdout.write('\033[?25h');
+  process.stdout.write('\u001b[?25h');
 };
 
 /**
@@ -374,7 +374,7 @@ function showCursor(){
  */
 
 function stop() {
-  process.stdout.write('\033[2K');
+  process.stdout.write('\u001b[2K');
   clearInterval(play.timer);
 }
 
