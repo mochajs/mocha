@@ -537,10 +537,18 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context){
 
-    // noop variants
+    // pending variants
 
-    context.xdescribe = function(){};
-    context.xit = function(){};
+    context.xdescribe = function(title, fn){
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn();
+      suites.shift();
+    };
+    context.xit = function(title){
+      context.it(title);
+    };
 
     /**
      * Execute before running tests.
@@ -594,6 +602,7 @@ module.exports = function(suite){
      */
 
     context.it = context.specify = function(title, fn){
+      if (suites[0].pending) var fn = undefined;
       suites[0].addTest(new Test(title, fn));
     };
   });
