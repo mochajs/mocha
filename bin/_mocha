@@ -292,10 +292,8 @@ if (program.watch) {
 
   function loadAndRun() {
     mocha.files = files;
-    mocha.loadFiles(function(){
-      mocha.run(function(){
-        play(frames);
-      });
+    mocha.run(function(){
+      play(frames);
     });
   }
 
@@ -321,9 +319,7 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.loadFiles(function(){
-  mocha.run(process.exit);
-});
+mocha.run(process.exit);
 
 // enable growl notifications
 
