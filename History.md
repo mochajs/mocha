@@ -1,4 +1,9 @@
 
+1.3.2 / 2012-08-01 
+==================
+
+  * fix exports double-execution regression. Closes #531
+
 1.3.1 / 2012-08-01 
 ==================
 
