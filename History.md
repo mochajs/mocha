@@ -1,4 +1,20 @@
 
+1.3.1 / 2012-08-01 
+==================
+
+  * add passes/failures toggling to HTML reporter
+  * add pending state to `xit()` and `xdescribe()` [Brian Moore]
+  * add the @charset "UTF-8"; to fix #522 with FireFox. [Jonathan Creamer]
+  * add border-bottom to #stats links
+  * add check for runnable in `Runner#uncaught()`. Closes #494
+  * add 0.4 and 0.6 back to travis.yml
+  * add `-E, --growl-errors` to growl on failures only
+  * add prefixes to debug() names. Closes #497
+  * add `Mocha#invert()` to js api
+  * change dot reporter to use sexy unicode dots
+  * fix error when clicking pending test in HTML reporter
+  * fix `make tm`
+
 1.3.0 / 2012-07-05 
 ==================
 

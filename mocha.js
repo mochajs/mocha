@@ -537,19 +537,6 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context){
 
-    // pending variants
-
-    context.xdescribe = function(title, fn){
-      var suite = Suite.create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn();
-      suites.shift();
-    };
-    context.xit = function(title){
-      context.it(title);
-    };
-
     /**
      * Execute before running tests.
      */
@@ -583,6 +570,18 @@ module.exports = function(suite){
     };
 
     /**
+     * Pending describe.
+     */
+
+    context.xdescribe = context.xcontext = function(title, fn){
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn();
+      suites.shift();
+    };
+
+    /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
      * and/or tests.
@@ -602,8 +601,17 @@ module.exports = function(suite){
      */
 
     context.it = context.specify = function(title, fn){
-      if (suites[0].pending) var fn = undefined;
-      suites[0].addTest(new Test(title, fn));
+      var suite = suites[0];
+      if (suite.pending) var fn = null;
+      suite.addTest(new Test(title, fn));
+    };
+
+    /**
+     * Pending test case.
+     */
+
+    context.xit = context.xspecify = function(title){
+      context.it(title);
     };
   });
 };
@@ -3128,7 +3136,11 @@ function XUnit(runner) {
     , tests = []
     , self = this;
 
-  runner.on('test end', function(test){
+  runner.on('pass', function(test){
+    tests.push(test);
+  });
+  
+  runner.on('fail', function(test){
     tests.push(test);
   });
 
@@ -3928,6 +3940,7 @@ exports = module.exports = Suite;
 exports.create = function(parent, title){
   var suite = new Suite(title, parent.ctx);
   suite.parent = parent;
+  if (parent.pending) suite.pending = true;
   title = suite.fullTitle();
   parent.addSuite(suite);
   return suite;
@@ -3947,6 +3960,7 @@ function Suite(title, ctx) {
   this.ctx = ctx;
   this.suites = [];
   this.tests = [];
+  this.pending = false;
   this._beforeEach = [];
   this._beforeAll = [];
   this._afterEach = [];
@@ -4020,6 +4034,7 @@ Suite.prototype.bail = function(bail){
  */
 
 Suite.prototype.beforeAll = function(fn){
+  if (this.pending) return this;
   var hook = new Hook('"before all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
@@ -4038,6 +4053,7 @@ Suite.prototype.beforeAll = function(fn){
  */
 
 Suite.prototype.afterAll = function(fn){
+  if (this.pending) return this;
   var hook = new Hook('"after all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
@@ -4056,6 +4072,7 @@ Suite.prototype.afterAll = function(fn){
  */
 
 Suite.prototype.beforeEach = function(fn){
+  if (this.pending) return this;
   var hook = new Hook('"before each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
@@ -4074,6 +4091,7 @@ Suite.prototype.beforeEach = function(fn){
  */
 
 Suite.prototype.afterEach = function(fn){
+  if (this.pending) return this;
   var hook = new Hook('"after each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
