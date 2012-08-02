@@ -1,6 +1,7 @@
 
 var mocha = require('../')
   , Runnable = mocha.Runnable
+  , Context = mocha.Context
   , EventEmitter = require('events').EventEmitter;
 
 describe('Runnable(title, fn)', function(){
@@ -205,5 +206,20 @@ describe('Runnable(title, fn)', function(){
       })
     })
 
+    it('should not have any extra properties on the context', function(done){
+      var test = new Runnable('foo', function(){
+        var context = this;
+        var propNames = [];
+        while (context !== Object.prototype) {
+          propNames = propNames.concat(Object.getOwnPropertyNames(context));
+          context = Object.getPrototypeOf(context);
+        }
+
+        propNames.sort().should.eql(['_mocha', 'constructor']);
+      });
+      test.ctx = new Context();
+
+      test.run(done);
+    })
   })
 })
