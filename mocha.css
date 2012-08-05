@@ -37,6 +37,10 @@ body {
   font-size: .8em;
 }
 
+.hidden {
+  display: none;
+}
+
 #mocha h2 {
   font-size: 12px;
   font-weight: normal;

@@ -1740,15 +1740,36 @@ function HTML(runner) {
 
   // pass toggle
   on(passesLink, 'click', function () {
+    unHideClasses();
     var className = /pass/.test(report.className) ? '' : ' pass';
     report.className = report.className.replace(/fail|pass/g, '') + className;
+    if (report.className.trim() !== '') checkEmptySuites('test pass')
   });
 
   // failure toggle
   on(failuresLink, 'click', function () {
+    unHideClasses();
     var className = /fail/.test(report.className) ? '' : ' fail';
     report.className = report.className.replace(/fail|pass/g, '') + className;
+    if (report.className.trim() !== '') checkEmptySuites('test fail')
   });
+
+  // Hides empty suites on passes/failures links click
+  function checkEmptySuites (classNotHidden) {
+    var suites = document.getElementsByClassName('suite');
+    var suitesLength = suites.length;
+    for (var i = 0; i < suitesLength; i++) {
+      if (suites[i].getElementsByClassName(classNotHidden).length === 0) suites[i].className += ' hidden';
+    }
+  }
+
+  // Show hidden elements (those with the class .hidden set)
+  function unHideClasses () {
+    var hiddenElements = document.getElementsByClassName('suite hidden');
+    if (hiddenElements.length === 0) return;
+    hiddenElements[0].className = hiddenElements[0].className.replace(/suite hidden/g, 'suite');
+    unHideClasses();
+  }
 
   root.appendChild(stat);
   root.appendChild(report);
