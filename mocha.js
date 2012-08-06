@@ -1767,7 +1767,7 @@ function HTML(runner) {
   function unHideClasses () {
     var hiddenElements = document.getElementsByClassName('suite hidden');
     if (hiddenElements.length === 0) return;
-    hiddenElements[0].className = hiddenElements[0].className.replace('hidden', '');
+    hiddenElements[0].className = 'suite';
     unHideClasses();
   }
 
