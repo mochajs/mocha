@@ -33,7 +33,12 @@ html
                   th Source
               tbody
                 for line, number in file.source
-                  if line.coverage > 0
+                  if true === line.ignored
+                    tr.skip
+                      td.line= number
+                      td.hits= line.coverage
+                      td.source= line.source
+                  else if line.coverage > 0
                     tr.hit 
                       td.line= number
                       td.hits= line.coverage
@@ -42,11 +47,6 @@ html
                     tr.miss 
                       td.line= number
                       td.hits 0
-                      td.source= line.source
-                  else if 'n/a' === line.coverage
-                    tr.skip
-                      td.line= number
-                      td.hits n/a
                       td.source= line.source
                   else
                     tr
