@@ -43,6 +43,11 @@ html
                       td.line= number
                       td.hits 0
                       td.source= line.source
+                  else if 'n/a' === line.coverage
+                    tr.skip
+                      td.line= number
+                      td.hits n/a
+                      td.source= line.source
                   else
                     tr
                       td.line= number
