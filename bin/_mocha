@@ -88,7 +88,7 @@ program
   .action(function(path){
     var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
     var js = fs.readFileSync(join(__dirname, '..', 'mocha.js'));
-    var tmpl = fs.readFileSync(join(__dirname, '..', 'support/template.html'));
+    var tmpl = fs.readFileSync(join(__dirname, '..', 'lib/template.html'));
     fs.writeFileSync(join(path, 'mocha.css'), css);
     fs.writeFileSync(join(path, 'mocha.js'), js);
     fs.writeFileSync(join(path, 'tests.html'), tmpl);
