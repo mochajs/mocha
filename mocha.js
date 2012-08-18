@@ -1732,7 +1732,12 @@ function HTML(runner) {
     , ctx
 
   if (canvas.getContext) {
+    canvas.style.width = canvas.width;
+    canvas.style.height = canvas.height;
+    canvas.width *= devicePixelRatio;
+    canvas.height *= devicePixelRatio;
     ctx = canvas.getContext('2d');
+    ctx.scale(devicePixelRatio, devicePixelRatio);
     progress = new Progress;
   }
 
@@ -4429,7 +4434,7 @@ exports.clean = function(str) {
 
   str = str.replace(re, '');
 
-  return str.trim();
+  return exports.trim(str);
 };
 
 /**
@@ -4442,6 +4447,18 @@ exports.clean = function(str) {
 
 exports.escapeRegexp = function(str){
   return str.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
+};
+
+/**
+ * Trim the given `str`.
+ *
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+exports.trim = function(str){
+  return str.replace(/^\s+|\s+$/g, '');
 };
 }); // module: utils.js
 /**
