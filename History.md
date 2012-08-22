@@ -1,4 +1,13 @@
 
+1.4.0 / 2012-08-22 
+==================
+
+  * add mkdir -p to `mocha init`. Closes #539
+  * add `.only()`. Closes #524
+  * add `.skip()`. Closes #524
+  * change str.trim() to use utils.trim(). Closes #533
+  * fix HTML progress indicator retina display
+
 1.3.2 / 2012-08-01 
 ==================
 
