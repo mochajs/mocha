@@ -182,6 +182,67 @@ $  mocha
 })
 </code></pre>
 
+<h2 id="exclusive-tests">Exclusive tests</h2>
+
+
+<p> The exclusivity feature allows you to run only the specified suite or test-case
+ by appending <code>.only()</code> to the call as shown here:</p>
+
+<pre><code>describe('Array', function(){
+  describe.only('#indexOf()', function(){
+    ...
+  })
+})
+</code></pre>
+
+<p>  Or a specific test-case:</p>
+
+<pre><code>describe('Array', function(){
+  describe('#indexOf()', function(){
+    it.only('should return -1 unless present', function(){
+
+    })
+
+    it('should return the index when present', function(){
+
+    })
+  })
+})
+</code></pre>
+
+<p>  Note that currently only one <code>.only()</code> call is respected, this
+  effectively turns into a <code>--grep</code>.</p>
+
+<h2 id="exclusive-tests">Inclusive tests</h2>
+
+
+<p> This feature is similar to <code>.only()</code>, however by appending <code>.skip()</code>
+ you may tell Mocha to simply ignore these suite(s) and test-case(s). This
+ puts them in a pending state, and is favoured over commenting out tests
+ which you may forget to uncomment.</p>
+
+<pre><code>describe('Array', function(){
+  describe.skip('#indexOf()', function(){
+    ...
+  })
+})
+</code></pre>
+
+<p>  Or a specific test-case:</p>
+
+<pre><code>describe('Array', function(){
+  describe('#indexOf()', function(){
+    it.skip('should return -1 unless present', function(){
+
+    })
+
+    it('should return the index when present', function(){
+
+    })
+  })
+})
+</code></pre>
+
 <h2 id="test-duration">Test duration</h2>
 
 
@@ -204,31 +265,37 @@ $  mocha
 <h2 id="usage">mocha(1)</h2>
 
 
-<pre><code> Usage: mocha [debug] [options] [files]
+<pre><code>Usage: mocha [debug] [options] [files]
 
- Options:
+Commands:
 
-   -h, --help                      output usage information
-   -V, --version                   output the version number
-   -r, --require &lt;name&gt;            require the given module
-   -R, --reporter &lt;name&gt;           specify the reporter to use
-   -u, --ui &lt;name&gt;                 specify user-interface (bdd|tdd|exports)
-   -g, --grep &lt;pattern&gt;            only run tests matching &lt;pattern&gt;
-   -t, --timeout &lt;ms&gt;              set test-case timeout in milliseconds [2000]
-   -s, --slow &lt;ms&gt;                 "slow" test threshold in milliseconds [75]
-   -w, --watch                     watch files for changes
-   -c, --colors                    force enabling of colors
-   -C, --no-colors                 force disabling of colors
-   -G, --growl                     enable growl notification support
-   -d, --debug                     enable node's debugger, synonym for node --debug
-   -b, --bail                      bail after first test failure
-   --recursive                     include sub directories
-   --debug-brk                     enable node's debugger breaking on the first line
-   --globals &lt;names&gt;               allow the given comma-delimited global [names]
-   --ignore-leaks                  ignore global variable leaks
-   --interfaces                    display available interfaces
-   --reporters                     display available reporters
-   --compilers &lt;ext&gt;:&lt;module&gt;,...  use the given module(s) to compile files
+  init &lt;path&gt;
+  initialize a client-side mocha setup at &lt;path&gt;
+
+Options:
+
+  -h, --help                      output usage information
+  -V, --version                   output the version number
+  -r, --require &lt;name&gt;            require the given module
+  -R, --reporter &lt;name&gt;           specify the reporter to use
+  -u, --ui &lt;name&gt;                 specify user-interface (bdd|tdd|exports)
+  -g, --grep &lt;pattern&gt;            only run tests matching &lt;pattern&gt;
+  -i, --invert                    inverts --grep matches
+  -t, --timeout &lt;ms&gt;              set test-case timeout in milliseconds [2000]
+  -s, --slow &lt;ms&gt;                 "slow" test threshold in milliseconds [75]
+  -w, --watch                     watch files for changes
+  -c, --colors                    force enabling of colors
+  -C, --no-colors                 force disabling of colors
+  -G, --growl                     enable growl notification support
+  -d, --debug                     enable node's debugger, synonym for node --debug
+  -b, --bail                      bail after first test failure
+  --recursive                     include sub directories
+  --debug-brk                     enable node's debugger breaking on the first line
+  --globals &lt;names&gt;               allow the given comma-delimited global [names]
+  --ignore-leaks                  ignore global variable leaks
+  --interfaces                    display available interfaces
+  --reporters                     display available reporters
+  --compilers &lt;ext&gt;:&lt;module&gt;,...  use the given module(s) to compile files
 </code></pre>
 
 <h3 id="watch-option">-w, --watch</h3>
@@ -276,7 +343,7 @@ $  mocha
 <h3 id="reporter-option">-R, --reporter &lt;name&gt;</h3>
 
 
-<p>  The <code>--reporter</code> option allows you to specify the reporter that will be used, defaulting to &ldquo;dot&rdquo;.</p>
+<p>  The <code>--reporter</code> option allows you to specify the reporter that will be used, defaulting to &ldquo;dot&rdquo;. This flag may also be used to utilize third-party reporters. For example if you <code>npm install mocha-lcov-reporter</code> you may then do <code>--reporter mocha-lcov-reporter</code>.</p>
 
 <h3 id="timeout-option">-t, --timeout &lt;ms&gt;</h3>
 
@@ -424,6 +491,14 @@ test('#length', function(){
 
 <p>   <img src="images/reporter-spec.png" alt="spec reporter" />
    <img src="images/reporter-spec-fail.png" alt="spec reporter with failure" /></p>
+
+<h3 id="nyan-reporter">Nyan</h3>
+
+
+<p>  The &ldquo;nyan&rdquo; reporter is exactly what you might expect:</p>
+
+<pre><code>![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
+</code></pre>
 
 <h3 id="tap-reporter">TAP</h3>
 

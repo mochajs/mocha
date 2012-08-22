@@ -172,6 +172,9 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
+  Note that currently only one `.only()` call is respected, this
+  effectively turns into a `--grep`.
+
 <h2 id="exclusive-tests">Inclusive tests</h2>
 
  This feature is similar to `.only()`, however by appending `.skip()`
