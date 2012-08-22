@@ -361,6 +361,12 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
    ![spec reporter](images/reporter-spec.png)
    ![spec reporter with failure](images/reporter-spec-fail.png)
 
+<h3 id="nyan-reporter">Nyan</h3>
+
+  The "nyan" reporter is exactly what you might expect:
+  
+    ![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
+
 <h3 id="tap-reporter">TAP</h3>
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
