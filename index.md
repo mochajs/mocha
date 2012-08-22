@@ -147,6 +147,58 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
+<h2 id="exclusive-tests">Exclusive tests</h2>
+
+ The exclusivity feature allows you to run only the specified suite or test-case
+ by appending `.only()` to the call as shown here:
+
+    describe('Array', function(){
+      describe.only('#indexOf()', function(){
+        ...
+      })
+    })
+
+  Or a specific test-case:
+
+    describe('Array', function(){
+      describe('#indexOf()', function(){
+        it.only('should return -1 unless present', function(){
+          
+        })
+
+        it('should return the index when present', function(){
+          
+        })
+      })
+    })
+
+<h2 id="exclusive-tests">Inclusive tests</h2>
+
+ This feature is similar to `.only()`, however by appending `.skip()`
+ you may tell Mocha to simply ignore these suite(s) and test-case(s). This
+ puts them in a pending state, and is favoured over commenting out tests
+ which you may forget to uncomment.
+
+    describe('Array', function(){
+      describe.skip('#indexOf()', function(){
+        ...
+      })
+    })
+
+  Or a specific test-case:
+
+    describe('Array', function(){
+      describe('#indexOf()', function(){
+        it.skip('should return -1 unless present', function(){
+          
+        })
+
+        it('should return the index when present', function(){
+          
+        })
+      })
+    })
+
 <h2 id="test-duration">Test duration</h2>
 
   Most of the reporters support some form of displaying
