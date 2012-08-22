@@ -71,6 +71,8 @@ window.mocha = require('mocha');
   var utils = mocha.utils
     , options = {}
 
+  // TODO: use new Mocha here... not mocha.grep etc
+
   mocha.suite = new mocha.Suite('', new mocha.Context());
 
   /**
@@ -116,6 +118,14 @@ window.mocha = require('mocha');
   }
 
   /**
+   * Grep.
+   */
+
+  mocha.grep = function(str){
+    options.grep = new RegExp(utils.escapeRegexp(str));
+  };
+
+  /**
    * Setup mocha with the given setting options.
    */
 
@@ -127,7 +137,7 @@ window.mocha = require('mocha');
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     if (options.timeout) mocha.suite.timeout(options.timeout);
     ui(mocha.suite);
-    mocha.suite.emit('pre-require', window);
+    mocha.suite.emit('pre-require', window, null, mocha);
   };
 
   /**
@@ -141,6 +151,7 @@ window.mocha = require('mocha');
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
     if (query.grep) runner.grep(new RegExp(query.grep));
+    if (options.grep) runner.grep(options.grep);
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
     runner.globals(['location']);

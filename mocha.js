@@ -535,7 +535,7 @@ var Suite = require('../suite')
 module.exports = function(suite){
   var suites = [suite];
 
-  suite.on('pre-require', function(context){
+  suite.on('pre-require', function(context, file, mocha){
 
     /**
      * Execute before running tests.
@@ -570,18 +570,6 @@ module.exports = function(suite){
     };
 
     /**
-     * Pending describe.
-     */
-
-    context.xdescribe = context.xcontext = function(title, fn){
-      var suite = Suite.create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn();
-      suites.shift();
-    };
-
-    /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
      * and/or tests.
@@ -592,6 +580,30 @@ module.exports = function(suite){
       suites.unshift(suite);
       fn();
       suites.shift();
+      return suite;
+    };
+
+    /**
+     * Pending describe.
+     */
+
+    context.xdescribe =
+    context.xcontext =
+    context.describe.skip = function(title, fn){
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn();
+      suites.shift();
+    };
+
+    /**
+     * Exclusive suite.
+     */
+
+    context.describe.only = function(title, fn){
+      var suite = context.describe(title, fn);
+      mocha.grep(suite.fullTitle());
     };
 
     /**
@@ -603,14 +615,27 @@ module.exports = function(suite){
     context.it = context.specify = function(title, fn){
       var suite = suites[0];
       if (suite.pending) var fn = null;
-      suite.addTest(new Test(title, fn));
+      var test = new Test(title, fn);
+      suite.addTest(test);
+      return test;
+    };
+
+    /**
+     * Exclusive test-case.
+     */
+
+    context.it.only = function(title, fn){
+      var test = context.it(title, fn);
+      mocha.grep(test.fullTitle());
     };
 
     /**
      * Pending test case.
      */
 
-    context.xit = context.xspecify = function(title){
+    context.xit =
+    context.xspecify =
+    context.it.skip = function(title){
       context.it(title);
     };
   });
@@ -822,7 +847,7 @@ var Suite = require('../suite')
 module.exports = function(suite){
   var suites = [suite];
 
-  suite.on('pre-require', function(context){
+  suite.on('pre-require', function(context, file, mocha){
 
     /**
      * Execute before each test case.
@@ -867,6 +892,16 @@ module.exports = function(suite){
       suites.unshift(suite);
       fn();
       suites.shift();
+      return suite;
+    };
+
+    /**
+     * Exclusive test-case.
+     */
+
+    context.suite.only = function(title, fn){
+      var suite = context.suite(title, fn);
+      mocha.grep(suite.fullTitle());
     };
 
     /**
@@ -876,7 +911,18 @@ module.exports = function(suite){
      */
 
     context.test = function(title, fn){
-      suites[0].addTest(new Test(title, fn));
+      var test = new Test(title, fn);
+      suites[0].addTest(test);
+      return test;
+    };
+
+    /**
+     * Exclusive test-case.
+     */
+
+    context.test.only = function(title, fn){
+      var test = context.test(title, fn);
+      mocha.grep(test.fullTitle());
     };
   });
 };
@@ -1003,13 +1049,14 @@ Mocha.prototype.ui = function(name){
  */
 
 Mocha.prototype.loadFiles = function(fn){
+  var self = this;
   var suite = this.suite;
   var pending = this.files.length;
   this.files.forEach(function(file){
     file = path.resolve(file);
-    suite.emit('pre-require', global, file);
-    suite.emit('require', require(file), file);
-    suite.emit('post-require', global, file);
+    suite.emit('pre-require', global, file, self);
+    suite.emit('require', require(file), file, self);
+    suite.emit('post-require', global, file, self);
     --pending || (fn && fn());
   });
 };
@@ -1764,7 +1811,8 @@ function HTML(runner) {
     if (suite.root) return;
 
     // suite
-    var url = location.protocol + '//' + location.host + location.pathname + '?grep=^' + utils.escapeRegexp(suite.fullTitle());
+    var grep = '^' + encodeURIComponent(utils.escapeRegexp(suite.fullTitle()));
+    var url = location.protocol + '//' + location.host + location.pathname + '?grep=' + grep;
     var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, escape(suite.title));
 
     // container
@@ -4534,6 +4582,8 @@ window.mocha = require('mocha');
   var utils = mocha.utils
     , options = {}
 
+  // TODO: use new Mocha here... not mocha.grep etc
+
   mocha.suite = new mocha.Suite('', new mocha.Context());
 
   /**
@@ -4579,6 +4629,14 @@ window.mocha = require('mocha');
   }
 
   /**
+   * Grep.
+   */
+
+  mocha.grep = function(str){
+    options.grep = new RegExp(utils.escapeRegexp(str));
+  };
+
+  /**
    * Setup mocha with the given setting options.
    */
 
@@ -4590,7 +4648,7 @@ window.mocha = require('mocha');
     if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
     if (options.timeout) mocha.suite.timeout(options.timeout);
     ui(mocha.suite);
-    mocha.suite.emit('pre-require', window);
+    mocha.suite.emit('pre-require', window, null, mocha);
   };
 
   /**
@@ -4603,7 +4661,10 @@ window.mocha = require('mocha');
     var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
-    if (query.grep) runner.grep(new RegExp(query.grep));
+    console.log(query.grep);
+    console.log(decodeURIComponent(query.grep));
+    if (query.grep) runner.grep(new RegExp(decodeURIComponent(query.grep)));
+    if (options.grep) runner.grep(options.grep);
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
     runner.globals(['location']);
