@@ -427,7 +427,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The "nyan" reporter is exactly what you might expect:
   
-    ![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
+  ![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
 
 <h3 id="tap-reporter">TAP</h3>
 
