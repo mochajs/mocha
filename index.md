@@ -235,7 +235,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   
 <h3 id="reporter-option">-R, --reporter &lt;name&gt;</h3>
 
-  The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot".
+  The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
   
 <h3 id="timeout-option">-t, --timeout &lt;ms&gt;</h3>
 
