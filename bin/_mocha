@@ -181,18 +181,6 @@ mocha.reporter(program.reporter);
 
 mocha.ui(program.ui);
 
-// load reporter
-
-try {
-  Reporter = require('../lib/reporters/' + program.reporter);
-} catch (err) {
-  try {
-    Reporter = require(program.reporter);
-  } catch (err) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
-  }
-}
-
 // --no-colors
 
 if (!program.colors) Base.useColors = false;
