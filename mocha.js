@@ -1779,12 +1779,13 @@ function HTML(runner) {
     , ctx
 
   if (canvas.getContext) {
+    var ratio = window.devicePixelRatio || 1;
     canvas.style.width = canvas.width;
     canvas.style.height = canvas.height;
-    canvas.width *= devicePixelRatio;
-    canvas.height *= devicePixelRatio;
+    canvas.width *= ratio;
+    canvas.height *= ratio;
     ctx = canvas.getContext('2d');
-    ctx.scale(devicePixelRatio, devicePixelRatio);
+    ctx.scale(ratio, ratio);
     progress = new Progress;
   }
 
@@ -4661,9 +4662,7 @@ window.mocha = require('mocha');
     var Reporter = options.reporter || mocha.reporters.HTML;
     var reporter = new Reporter(runner);
     var query = parse(window.location.search || "");
-    console.log(query.grep);
-    console.log(decodeURIComponent(query.grep));
-    if (query.grep) runner.grep(new RegExp(decodeURIComponent(query.grep)));
+    if (query.grep) runner.grep(new RegExp(query.grep));
     if (options.grep) runner.grep(options.grep);
     if (options.ignoreLeaks) runner.ignoreLeaks = true;
     if (options.globals) runner.globals(options.globals);
