@@ -3,23 +3,32 @@ REPORTER = dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
+TMPL = $(shell find lib/reporters/templates -name "*.jade" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
-mocha.js: $(SRC) $(SUPPORT)
-	@node support/compile $(SRC)
+mocha.js: $(SRC) $(SUPPORT) templates
+	@node support/compile $(SRC) `find lib/reporters/templates -type f -name "*.js"`
 	@cat \
+	  node_modules/jade/runtime.js \
 	  support/head.js \
 	  _mocha.js \
 	  support/tail.js \
 	  support/foot.js \
 	  > mocha.js
 
+templates: 
+	@node_modules/jade/bin/jade -c $(TMPL)
+	@find lib/reporters/templates -type f -name "*.js" | \
+		xargs sed -i '' -e '1 s/^/module.exports=anonymous;&/'
+
+
 clean:
 	rm -f mocha.js
 	rm -fr lib-cov
 	rm -f coverage.html
+	rm -f lib/reporters/templates/*.js
 
 test-cov: lib-cov
 	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
