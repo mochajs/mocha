@@ -7,3 +7,4 @@ testing
 _mocha.js
 test.js
 my-reporter.js
+.idea/
