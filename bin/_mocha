@@ -218,7 +218,7 @@ mocha.suite.bail(program.bail);
 
 // --grep
 
-if (program.grep) mocha.grep(new RegExp(utils.escapeRegexp(program.grep)));
+if (program.grep) mocha.grep(new RegExp(program.grep));
 
 // --invert
 
