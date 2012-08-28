@@ -940,7 +940,8 @@ require.register("mocha.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var path = require('browser/path');
+var path = require('browser/path')
+  , utils = require('./utils');
 
 /**
  * Expose `Mocha`.
@@ -952,7 +953,7 @@ exports = module.exports = Mocha;
  * Expose internals.
  */
 
-exports.utils = require('./utils');
+exports.utils = utils;
 exports.interfaces = require('./interfaces');
 exports.reporters = require('./reporters');
 exports.Runnable = require('./runnable');
@@ -1086,16 +1087,16 @@ Mocha.prototype._growl = function(runner, reporter) {
 };
 
 /**
- * Add regexp to grep for to the options object
+ * Add regexp to grep, if `re` is a string it is escaped.
  *
- * @param {RegExp} or {String} re
+ * @param {RegExp|String} re
  * @return {Mocha}
  * @api public
  */
 
 Mocha.prototype.grep = function(re){
   this.options.grep = 'string' == typeof re
-    ? new RegExp(re)
+    ? new RegExp(utils.escapeRegexp(re))
     : re;
   return this;
 };
@@ -1956,6 +1957,7 @@ exports.Min = require('./min');
 exports.Spec = require('./spec');
 exports.Nyan = require('./nyan');
 exports.XUnit = require('./xunit');
+exports.Markdown = require('./markdown');
 exports.Progress = require('./progress');
 exports.Landing = require('./landing');
 exports.JSONCov = require('./json-cov');

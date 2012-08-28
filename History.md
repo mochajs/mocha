@@ -1,4 +1,11 @@
 
+1.4.1 / 2012-08-28 
+==================
+
+  * add missing `Markdown` export
+  * fix `Mocha#grep()`, escape regexp strings
+  * fix reference error when `devicePixelRatio` is not defined. Closes #549
+
 1.4.0 / 2012-08-22 
 ==================
 
