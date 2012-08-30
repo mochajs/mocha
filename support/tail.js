@@ -71,33 +71,6 @@ process.on = function(e, fn){
       mocha = window.mocha = new Mocha({ reporter: 'html' });
 
   /**
-   * Highlight the given string of `js`.
-   */
-
-  function highlight(js) {
-    return js
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
-      .replace(/('.*?')/gm, '<span class="string">$1</span>')
-      .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
-      .replace(/(\d+)/gm, '<span class="number">$1</span>')
-      .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
-      .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
-  }
-
-  /**
-   * Highlight code contents.
-   */
-
-  function highlightCode() {
-    var code = document.getElementsByTagName('code');
-    for (var i = 0, len = code.length; i < len; ++i) {
-      code[i].innerHTML = highlight(code[i].innerHTML);
-    }
-  }
-
-  /**
    * Parse the given `qs`.
    */
 
@@ -146,7 +119,7 @@ process.on = function(e, fn){
     if (query.grep) this.grep(query.grep);
 
     return Mocha.prototype.run.call(this, function () {
-      highlightCode();
+      Mocha.utils.highlightTags('code');
       if (fn) fn();
     });
   };
