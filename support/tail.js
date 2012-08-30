@@ -62,11 +62,13 @@ process.on = function(e, fn){
 
 // boot
 ;(function(){
+
   /**
    * Expose mocha.
    */
+
   var Mocha = window.Mocha = require('mocha'),
-      mocha = window.mocha = new Mocha({reporter: 'html'});
+      mocha = window.mocha = new Mocha({ reporter: 'html' });
 
   /**
    * Highlight the given string of `js`.
@@ -115,7 +117,7 @@ process.on = function(e, fn){
    * Normally this would happen in Mocha.prototype.loadFiles.
    */
 
-  mocha.ui = function(ui) {
+  mocha.ui = function(ui){
     Mocha.prototype.ui.call(this, ui);
     this.suite.emit('pre-require', window, null, this);
     return this;
@@ -126,7 +128,7 @@ process.on = function(e, fn){
    */
 
   mocha.setup = function(opts){
-    if ('string' === typeof opts) opts = {ui: opts};
+    if ('string' == typeof opts) opts = { ui: opts };
     for (var opt in opts) this[opt](opts[opt]);
     return this;
   };
