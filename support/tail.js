@@ -9,7 +9,11 @@
 
 process = {};
 process.exit = function(status){};
-process.stdout = {};
+process.stdout = {
+  write: function(str){
+    console.log(str);
+  }
+};
 global = window;
 
 /**
