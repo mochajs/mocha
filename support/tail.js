@@ -96,9 +96,8 @@ process.on = function(e, fn){
    */
 
   mocha.run = function(fn){
-    var options = this.options;
-    options.globals = options.globals || [];
-    options.globals.push('location');
+    var options = mocha.options;
+    mocha.globals('location');
 
     var query = Mocha.utils.parseQuery(window.location.search || '');
     if (query.grep) mocha.grep(query.grep);
