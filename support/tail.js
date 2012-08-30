@@ -71,21 +71,6 @@ process.on = function(e, fn){
       mocha = window.mocha = new Mocha({ reporter: 'html' });
 
   /**
-   * Parse the given `qs`.
-   */
-
-  function parse(qs) {
-    return Mocha.utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
-      var i = pair.indexOf('=')
-        , key = pair.slice(0, i)
-        , val = pair.slice(++i);
-
-      obj[key] = decodeURIComponent(val);
-      return obj;
-    }, {});
-  }
-
-  /**
    * Override ui to ensure that the ui functions are initialized.
    * Normally this would happen in Mocha.prototype.loadFiles.
    */
@@ -115,7 +100,7 @@ process.on = function(e, fn){
     options.globals = options.globals || [];
     options.globals.push('location');
 
-    var query = parse(window.location.search || "");
+    var query = Mocha.utils.parseQuery(window.location.search || "");
     if (query.grep) this.grep(query.grep);
 
     return Mocha.prototype.run.call(this, function () {
