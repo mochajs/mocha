@@ -21,7 +21,7 @@ mocha.js: $(SRC) $(SUPPORT) templates
 templates: 
 	@node_modules/jade/bin/jade -c $(TMPL)
 	@find lib/reporters/templates -type f -name "*.js" | \
-		xargs sed -i '' -e '1 s/^/module.exports=anonymous;&/'
+		xargs sed -i '' -e '1 s/^/if(typeof jade===\"undefined\"){jade=require(\"jade\").runtime};module.exports=anonymous;&/'
 
 
 clean:
