@@ -100,10 +100,10 @@ process.on = function(e, fn){
     options.globals = options.globals || [];
     options.globals.push('location');
 
-    var query = Mocha.utils.parseQuery(window.location.search || "");
-    if (query.grep) this.grep(query.grep);
+    var query = Mocha.utils.parseQuery(window.location.search || '');
+    if (query.grep) mocha.grep(query.grep);
 
-    return Mocha.prototype.run.call(this, function () {
+    return Mocha.prototype.run.call(mocha, function(){
       Mocha.utils.highlightTags('code');
       if (fn) fn();
     });
