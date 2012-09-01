@@ -1026,7 +1026,11 @@ Mocha.prototype.reporter = function(reporter){
     this._reporter = reporter;
   } else {
     reporter = reporter || 'dot';
-    this._reporter = require('./reporters/' + reporter);
+    try {
+      this._reporter = require('./reporters/' + reporter);
+    } catch (err) {
+      this._reporter = require(reporter);
+    }
     if (!this._reporter) throw new Error('invalid reporter "' + reporter + '"');
   }
   return this;

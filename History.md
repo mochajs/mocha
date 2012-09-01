@@ -1,4 +1,16 @@
 
+1.4.2 / 2012-09-01 
+==================
+
+  * add support to multiple `Mocha#globals()` calls, and strings
+  * add `mocha.reporter()` constructor support [joliss]
+  * add `mocha.timeout()`
+  * move query-string parser to utils.js
+  * move highlight code to utils.js
+  * fix third-party reporter support [exogen]
+  * fix client-side API to match node-side [jfirebaugh]
+  * fix mocha in iframe [joliss]
+
 1.4.1 / 2012-08-28 
 ==================
 
