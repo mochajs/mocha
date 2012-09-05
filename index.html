@@ -170,6 +170,13 @@ $  mocha
 })
 </code></pre>
 
+<p>  You may also pick any file and add &ldquo;root&rdquo; level hooks, for example add <code>beforeEach()</code> outside of <code>describe()</code>s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root <code>Suite</code> with no name.</p>
+
+<pre><code>beforeEach(function(){
+  console.log('before every test')
+})
+</code></pre>
+
 <h2 id="pending-tests">Pending tests</h2>
 
 

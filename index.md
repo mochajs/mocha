@@ -137,6 +137,12 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
+  You may also pick any file and add "root" level hooks, for example add `beforeEach()` outside of `describe()`s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root `Suite` with no name.
+
+    beforeEach(function(){
+      console.log('before every test')
+    })
+
 <h2 id="pending-tests">Pending tests</h2>
 
  Pending test-cases are simply those without a callback:
