@@ -1,0 +1,7 @@
+{
+  "name": "mocha",
+  "repo": "visionmedia/mocha",
+  "description": "simple, flexible, fun test framework",
+  "styles": ["mocha.css"],
+  "scripts": []
+}
