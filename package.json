@@ -18,7 +18,7 @@
     , "diff": "1.0.2"
     , "debug": "*"
     , "mkdirp": "0.3.3"
-    , "ms": "0.2.1"
+    , "ms": "0.3.0"
   }
   , "devDependencies": {
       "should": "*"
