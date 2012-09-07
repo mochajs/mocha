@@ -63,7 +63,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-w, --watch', 'watch files for changes')
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
