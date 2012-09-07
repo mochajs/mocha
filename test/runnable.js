@@ -41,6 +41,14 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#slow(ms)', function(){
+    it('should set the slow threshold', function(){
+      var run = new Runnable;
+      run.slow(100)
+      run.slow().should.equal(100);
+    })
+  })
+
   describe('.title', function(){
     it('should be present', function(){
       new Runnable('foo').title.should.equal('foo');
