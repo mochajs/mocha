@@ -206,7 +206,7 @@ if (~process.argv.indexOf('--colors') ||
 
 // --slow <ms>
 
-if (program.slow) Base.slow = program.slow;
+if (program.slow) mocha.suite.slow(program.slow);
 
 // --timeout
 

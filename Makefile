@@ -1,5 +1,5 @@
 
-REPORTER = dot
+REPORTER ?= dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
