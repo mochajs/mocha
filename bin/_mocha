@@ -244,7 +244,11 @@ program.compilers.forEach(function(c) {
     , ext = compiler[0]
     , mod = compiler[1];
 
-  if (mod[0] == '.') mod = join(process.cwd(), mod);
+  try {
+    if (mod[0] == '.') mod = join(process.cwd(), mod);
+  } catch (err) {
+    throw new Error('"--compilers <ext>:<module>,..." argument missing');
+  }
   require(mod);
   extensions.push(ext);
 });
