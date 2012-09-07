@@ -84,6 +84,13 @@ describe('Suite', function(){
       this.suite = new Suite('A Suite');
     });
 
+    describe('when given a string', function(){
+      it('should parse it', function(){
+        this.suite.slow('5 seconds');
+        this.suite.slow().should.equal(5000);
+      })
+    })
+
     describe('when no argument is passed', function(){
       it('should return the slow value', function(){
         this.suite.slow().should.equal(75);
