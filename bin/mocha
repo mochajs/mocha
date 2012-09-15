@@ -22,6 +22,9 @@ process.argv.slice(2).forEach(function (arg) {
     case '--expose-gc':
       args.unshift('--expose-gc');
       break;
+    case '--gc-global':
+      args.unshift('--gc-global');
+      break;
     case '--harmony-proxies':
     case '--harmony-collections':
       args.unshift(arg);
