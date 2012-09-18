@@ -434,6 +434,19 @@ Context.prototype.timeout = function(ms){
 };
 
 /**
+ * Set test slowness threshold `ms`.
+ *
+ * @param {Number} ms
+ * @return {Context} self
+ * @api private
+ */
+
+Context.prototype.slow = function(ms){
+  this.runnable().slow(ms);
+  return this;
+};
+
+/**
  * Inspect the context void of `._runnable`.
  *
  * @return {String}
@@ -984,6 +997,7 @@ function image(name) {
  *   - `reporter` reporter instance, defaults to `mocha.reporters.Dot`
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
+ *   - `slow` milliseconds to wait before considering a test slow
  *   - `ignoreLeaks` ignore global leaks
  *   - `grep` string or regexp to filter tests with
  *
@@ -1000,6 +1014,7 @@ function Mocha(options) {
   this.ui(options.ui);
   this.reporter(options.reporter);
   if (options.timeout) this.timeout(options.timeout);
+  if (options.slow) this.slow(options.slow);
 }
 
 /**
@@ -1172,6 +1187,19 @@ Mocha.prototype.timeout = function(timeout){
 };
 
 /**
+ * Set slowness threshold in milliseconds.
+ *
+ * @param {Number} slow
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.slow = function(slow){
+  this.suite.slow(slow);
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
@@ -1180,7 +1208,7 @@ Mocha.prototype.timeout = function(timeout){
  */
 
 Mocha.prototype.run = function(fn){
-  this.loadFiles();
+  if (this.files.length) this.loadFiles();
   var suite = this.suite;
   var options = this.options;
   var runner = new exports.Runner(suite);
@@ -1201,7 +1229,8 @@ require.register("reporters/base.js", function(module, exports, require){
  */
 
 var tty = require('browser/tty')
-  , diff = require('browser/diff');
+  , diff = require('browser/diff')
+  , ms = require('ms');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -1316,13 +1345,6 @@ exports.cursor = {
 };
 
 /**
- * A test is considered slow if it
- * exceeds the following value in milliseconds.
- */
-
-exports.slow = 75;
-
-/**
  * Outut the given `failures` as a list.
  *
  * @param {Array} failures
@@ -1423,8 +1445,8 @@ function Base(runner) {
   runner.on('pass', function(test){
     stats.passes = stats.passes || 0;
 
-    var medium = exports.slow / 2;
-    test.speed = test.duration > exports.slow
+    var medium = test.slow() / 2;
+    test.speed = test.duration > test.slow()
       ? 'slow'
       : test.duration > medium
         ? 'medium'
@@ -1487,12 +1509,12 @@ Base.prototype.epilogue = function(){
   // pass
   fmt = color('bright pass', '  ✔')
     + color('green', ' %d %s complete')
-    + color('light', ' (%dms)');
+    + color('light', ' (%s)');
 
   console.log(fmt,
     stats.tests || 0,
     pluralize(stats.tests),
-    stats.duration);
+    ms(stats.duration));
 
   // pending
   if (stats.pending) {
@@ -1529,7 +1551,10 @@ function pad(str, len) {
 
 function errorDiff(err, type) {
   return diff['diff' + type](err.actual, err.expected).map(function(str){
-    if (/^(\n+)$/.test(str.value)) str.value = Array(++RegExp.$1.length).join('<newline>');
+    str.value = str.value
+      .replace(/\t/g, '<tab>')
+      .replace(/\r/g, '<CR>')
+      .replace(/\n/g, '<LF>\n');
     if (str.added) return colorLines('diff added', str.value);
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
@@ -3066,10 +3091,10 @@ function TAP(runner) {
 
   var self = this
     , stats = this.stats
-    , total = runner.total
     , n = 1;
 
   runner.on('start', function(){
+    var total = runner.grepTotal(runner.suite);
     console.log('%d..%d', 1, total);
   });
 
@@ -3334,6 +3359,7 @@ function Runnable(title, fn) {
   this.async = fn && fn.length;
   this.sync = ! this.async;
   this._timeout = 2000;
+  this._slow = 75;
   this.timedOut = false;
 }
 
@@ -3358,6 +3384,21 @@ Runnable.prototype.timeout = function(ms){
   debug('timeout %d', ms);
   this._timeout = ms;
   if (this.timer) this.resetTimeout();
+  return this;
+};
+
+/**
+ * Set & get slow `ms`.
+ *
+ * @param {Number} ms
+ * @return {Runnable|Number} ms or self
+ * @api private
+ */
+
+Runnable.prototype.slow = function(ms){
+  if (0 === arguments.length) return this._slow;
+  debug('timeout %d', ms);
+  this._slow = ms;
   return this;
 };
 
@@ -3672,7 +3713,6 @@ Runner.prototype.failHook = function(hook, err){
 Runner.prototype.hook = function(name, fn){
   var suite = this.suite
     , hooks = suite['_' + name]
-    , ms = suite._timeout
     , self = this
     , timer;
 
@@ -3982,6 +4022,7 @@ function filterLeaks(ok) {
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
   });
 }
+
 }); // module: runner.js
 
 require.register("suite.js", function(module, exports, require){
@@ -3992,6 +4033,7 @@ require.register("suite.js", function(module, exports, require){
 
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('mocha:suite')
+  , milliseconds = require('ms')
   , utils = require('./utils')
   , Hook = require('./hook');
 
@@ -4044,6 +4086,7 @@ function Suite(title, ctx) {
   this._afterAll = [];
   this.root = !title;
   this._timeout = 2000;
+  this._slow = 75;
   this._bail = false;
 }
 
@@ -4067,6 +4110,7 @@ Suite.prototype.clone = function(){
   debug('clone');
   suite.ctx = this.ctx;
   suite.timeout(this.timeout());
+  suite.slow(this.slow());
   suite.bail(this.bail());
   return suite;
 };
@@ -4081,9 +4125,25 @@ Suite.prototype.clone = function(){
 
 Suite.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
-  if (String(ms).match(/s$/)) ms = parseFloat(ms) * 1000;
+  if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);
+  return this;
+};
+
+/**
+ * Set slow `ms` or short-hand such as "2s".
+ *
+ * @param {Number|String} ms
+ * @return {Suite|Number} for chaining
+ * @api private
+ */
+
+Suite.prototype.slow = function(ms){
+  if (0 === arguments.length) return this._slow;
+  if ('string' == typeof ms) ms = milliseconds(ms);
+  debug('slow %d', ms);
+  this._slow = ms;
   return this;
 };
 
@@ -4115,6 +4175,7 @@ Suite.prototype.beforeAll = function(fn){
   var hook = new Hook('"before all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.slow(this.slow());
   hook.ctx = this.ctx;
   this._beforeAll.push(hook);
   this.emit('beforeAll', hook);
@@ -4134,6 +4195,7 @@ Suite.prototype.afterAll = function(fn){
   var hook = new Hook('"after all" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.slow(this.slow());
   hook.ctx = this.ctx;
   this._afterAll.push(hook);
   this.emit('afterAll', hook);
@@ -4153,6 +4215,7 @@ Suite.prototype.beforeEach = function(fn){
   var hook = new Hook('"before each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.slow(this.slow());
   hook.ctx = this.ctx;
   this._beforeEach.push(hook);
   this.emit('beforeEach', hook);
@@ -4172,6 +4235,7 @@ Suite.prototype.afterEach = function(fn){
   var hook = new Hook('"after each" hook', fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.slow(this.slow());
   hook.ctx = this.ctx;
   this._afterEach.push(hook);
   this.emit('afterEach', hook);
@@ -4189,6 +4253,7 @@ Suite.prototype.afterEach = function(fn){
 Suite.prototype.addSuite = function(suite){
   suite.parent = this;
   suite.timeout(this.timeout());
+  suite.slow(this.slow());
   suite.bail(this.bail());
   this.suites.push(suite);
   this.emit('suite', suite);
@@ -4206,6 +4271,7 @@ Suite.prototype.addSuite = function(suite){
 Suite.prototype.addTest = function(test){
   test.parent = this;
   test.timeout(this.timeout());
+  test.slow(this.slow());
   test.ctx = this.ctx;
   this.tests.push(test);
   this.emit('test', test);
@@ -4585,6 +4651,7 @@ exports.highlightTags = function(name) {
     code[i].innerHTML = highlight(code[i].innerHTML);
   }
 };
+
 }); // module: utils.js
 /**
  * Node shims.
