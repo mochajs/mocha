@@ -2,7 +2,8 @@
 var mocha = require('../')
   , Suite = mocha.Suite
   , Runner = mocha.Runner
-  , Test = mocha.Test;
+  , Test = mocha.Test
+  , should = require('should');
 
 describe('Runner', function(){
   var suite, runner;
@@ -97,6 +98,16 @@ describe('Runner', function(){
         done();
       });
       runner.checkGlobals('im a test');
+    })
+  })
+
+  describe('.cleanCtx(test)', function(){
+    it('polluting context', function(){
+      this.polluted = true
+    })
+
+    it('should clear out context properties from other test runs', function(){
+      should.not.exist(this.polluted);
     })
   })
 
