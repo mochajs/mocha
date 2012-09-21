@@ -6,6 +6,7 @@
   * add `Mocha#checkLeaks()` to re-enable global leak checks
   * add `this.slow()` option [aheckmann]
   * add tab, CR, LF to error diffs for now
+  * add faster `.checkGlobals()` solution [guille]
   * remove `fn.call()` from reduce util
   * remove `fn.call()` from filter util
   * fix forEach. Closes #582
