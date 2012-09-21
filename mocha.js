@@ -4474,7 +4474,7 @@ var ignore = ['node_modules', '.git'];
  * @api private
  */
 
-exports.escape = function(html) {
+exports.escape = function(html){
   return String(html)
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
@@ -4491,7 +4491,7 @@ exports.escape = function(html) {
  * @api private
  */
 
-exports.forEach = function(arr, fn, scope) {
+exports.forEach = function(arr, fn, scope){
   for (var i = 0, l = arr.length; i < l; i++)
     fn.call(scope, arr[i], i);
 };
@@ -4505,7 +4505,7 @@ exports.forEach = function(arr, fn, scope) {
  * @api private
  */
 
-exports.indexOf = function (arr, obj, start) {
+exports.indexOf = function(arr, obj, start){
   for (var i = start || 0, l = arr.length; i < l; i++) {
     if (arr[i] === obj)
       return i;
@@ -4523,7 +4523,7 @@ exports.indexOf = function (arr, obj, start) {
  * @api private
  */
 
-exports.reduce = function(arr, fn, val, scope) {
+exports.reduce = function(arr, fn, val, scope){
   var rval = val;
 
   for (var i = 0, l = arr.length; i < l; i++) {
@@ -4542,13 +4542,12 @@ exports.reduce = function(arr, fn, val, scope) {
  * @api private
  */
 
-exports.filter = function(arr, fn, scope) {
+exports.filter = function(arr, fn){
   var ret = [];
 
   for (var i = 0, l = arr.length; i < l; i++) {
     var val = arr[i];
-    if (fn.call(scope, val, i, arr))
-      ret.push(val);
+    if (fn(val, i, arr)) ret.push(val);
   }
 
   return ret;
