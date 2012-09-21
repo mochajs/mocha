@@ -660,28 +660,22 @@ test('#length', function(){
   &lt;meta charset="utf-8"&gt;
   &lt;title&gt;Mocha Tests&lt;/title&gt;
   &lt;link rel="stylesheet" href="mocha.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="mocha"&gt;&lt;/div&gt;
   &lt;script src="jquery.js"&gt;&lt;/script&gt;
   &lt;script src="expect.js"&gt;&lt;/script&gt;
   &lt;script src="mocha.js"&gt;&lt;/script&gt;
   &lt;script&gt;mocha.setup('bdd')&lt;/script&gt;
   &lt;script src="test.array.js"&gt;&lt;/script&gt;
   &lt;script src="test.object.js"&gt;&lt;/script&gt;
-  &lt;script src="test.xhr.js"&gt;&lt;/script&gt;
+  &lt;script src="test.xhr.js"&gt;&lt;/script&gt;  
   &lt;script&gt;
-    $(function(){
-      mocha
-        .ignoreLeaks()
-        .run()
-    })
+    mocha.run();
   &lt;/script&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div id="mocha"&gt;&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-
-<p>  <strong>NOTE</strong>: it&rsquo;s sometimes a good idea to <code>.ignoreLeaks()</code> in the browser, as this may have a significant impact on performance.</p>
 
 <h3 id="grep-query">grep</h3>
 

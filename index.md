@@ -571,27 +571,21 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <meta charset="utf-8">
       <title>Mocha Tests</title>
       <link rel="stylesheet" href="mocha.css" />
+    </head>
+    <body>
+      <div id="mocha"></div>
       <script src="jquery.js"></script>
       <script src="expect.js"></script>
       <script src="mocha.js"></script>
       <script>mocha.setup('bdd')</script>
       <script src="test.array.js"></script>
       <script src="test.object.js"></script>
-      <script src="test.xhr.js"></script>
+      <script src="test.xhr.js"></script>  
       <script>
-        $(function(){
-          mocha
-            .ignoreLeaks()
-            .run()
-        })
+        mocha.run();
       </script>
-    </head>
-    <body>
-      <div id="mocha"></div>
     </body>
     </html>
-
-  __NOTE__: it's sometimes a good idea to `.ignoreLeaks()` in the browser, as this may have a significant impact on performance.
 
 <h3 id="grep-query">grep</h3>
 
