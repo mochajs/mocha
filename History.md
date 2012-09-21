@@ -1,4 +1,17 @@
 
+1.5.0 / 2012-09-21 
+==================
+
+  * add `ms()` to `.slow()` and `.timeout()`
+  * add `Mocha#checkLeaks()` to re-enable global leak checks
+  * add `this.slow()` option [aheckmann]
+  * add tab, CR, LF to error diffs for now
+  * remove `fn.call()` from reduce util
+  * remove `fn.call()` from filter util
+  * fix forEach. Closes #582
+  * fix relaying of signals [TooTallNate]
+  * fix TAP reporter grep number
+
 1.4.2 / 2012-09-01 
 ==================
 
