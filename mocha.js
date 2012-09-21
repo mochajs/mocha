@@ -4519,15 +4519,14 @@ exports.indexOf = function(arr, obj, start){
  * @param {Array} array
  * @param {Function} fn
  * @param {Object} initial value
- * @param {Object} scope
  * @api private
  */
 
-exports.reduce = function(arr, fn, val, scope){
+exports.reduce = function(arr, fn, val){
   var rval = val;
 
   for (var i = 0, l = arr.length; i < l; i++) {
-    rval = fn.call(scope, rval, arr[i], i, arr);
+    rval = fn(rval, arr[i], i, arr);
   }
 
   return rval;
@@ -4538,7 +4537,6 @@ exports.reduce = function(arr, fn, val, scope){
  *
  * @param {Array} array
  * @param {Function} fn
- * @param {Object} scope
  * @api private
  */
 
