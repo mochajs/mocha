@@ -3752,8 +3752,16 @@ Runner.prototype.globals = function(arr){
 
 Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
-  var leaks = filterLeaks(this._globals);
+  var ok = this._globals;
+  var globals = keys(global);
+  var isNode = process.kill;
+  var leaks;
 
+  // check length - 2 ('errno' and 'location' globals)
+  if (isNode && 1 == ok.length - globals.length) return
+  else if (2 == ok.length - globals.length) return;
+
+  leaks = filterLeaks(ok, globals);
   this._globals = this._globals.concat(leaks);
 
   if (leaks.length > 1) {
@@ -4105,12 +4113,13 @@ Runner.prototype.run = function(fn){
  * Filter leaks with the given globals flagged as `ok`.
  *
  * @param {Array} ok
+ * @param {Array} globals
  * @return {Array}
  * @api private
  */
 
-function filterLeaks(ok) {
-  return filter(keys(global), function(key){
+function filterLeaks(ok, globals) {
+  return filter(globals, function(key){
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
       return key == ok;
