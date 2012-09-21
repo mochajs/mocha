@@ -16,7 +16,7 @@ while (n--) {
       it('should return the correct index when the value is present', function(done){
         assert(0 == arr.indexOf(1));
         assert(1 == arr.indexOf(2));
-        setTimeout(function(){ done() }, Math.random() * 200 | 0)
+        done();
       })
     })
   })
