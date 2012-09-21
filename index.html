@@ -670,7 +670,7 @@ test('#length', function(){
   &lt;script&gt;
     $(function(){
       mocha
-        .globals(['foo', 'bar']) // acceptable globals
+        .ignoreLeaks()
         .run()
     })
   &lt;/script&gt;
@@ -680,6 +680,8 @@ test('#length', function(){
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
+
+<p>  <strong>NOTE</strong>: it&rsquo;s sometimes a good idea to <code>.ignoreLeaks()</code> in the browser, as this may have a significant impact on performance.</p>
 
 <h3 id="grep-query">grep</h3>
 
