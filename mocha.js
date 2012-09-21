@@ -1149,6 +1149,18 @@ Mocha.prototype.ignoreLeaks = function(){
 };
 
 /**
+ * Enable global leak checking.
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.checkLeaks = function(){
+  this.options.ignoreLeaks = false;
+  return this;
+};
+
+/**
  * Enable growl support.
  *
  * @return {Mocha}
