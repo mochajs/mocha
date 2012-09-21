@@ -581,7 +581,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <script>
         $(function(){
           mocha
-            .globals(['foo', 'bar']) // acceptable globals
+            .ignoreLeaks()
             .run()
         })
       </script>
@@ -590,6 +590,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <div id="mocha"></div>
     </body>
     </html>
+
+  __NOTE__: it's sometimes a good idea to `.ignoreLeaks()` in the browser, as this may have a significant impact on performance.
 
 <h3 id="grep-query">grep</h3>
 
