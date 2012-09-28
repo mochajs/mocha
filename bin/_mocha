@@ -63,7 +63,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]', parseInt)
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-w, --watch', 'watch files for changes')
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
@@ -86,9 +86,11 @@ program
   .command('init <path>')
   .description('initialize a client-side mocha setup at <path>')
   .action(function(path){
+    var mkdir = require('mkdirp');
+    mkdir.sync(path);
     var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
     var js = fs.readFileSync(join(__dirname, '..', 'mocha.js'));
-    var tmpl = fs.readFileSync(join(__dirname, '..', 'support/template.html'));
+    var tmpl = fs.readFileSync(join(__dirname, '..', 'lib/template.html'));
     fs.writeFileSync(join(path, 'mocha.css'), css);
     fs.writeFileSync(join(path, 'mocha.js'), js);
     fs.writeFileSync(join(path, 'tests.html'), tmpl);
@@ -204,7 +206,7 @@ if (~process.argv.indexOf('--colors') ||
 
 // --slow <ms>
 
-if (program.slow) Base.slow = program.slow;
+if (program.slow) mocha.suite.slow(program.slow);
 
 // --timeout
 
@@ -216,7 +218,7 @@ mocha.suite.bail(program.bail);
 
 // --grep
 
-if (program.grep) mocha.grep(new RegExp(utils.escapeRegexp(program.grep)));
+if (program.grep) mocha.grep(new RegExp(program.grep));
 
 // --invert
 

@@ -22,8 +22,11 @@ process.argv.slice(2).forEach(function (arg) {
     case '--expose-gc':
       args.unshift('--expose-gc');
       break;
+    case '--gc-global':
+    case '--harmony':
     case '--harmony-proxies':
-      args.unshift('--harmony-proxies');
+    case '--harmony-collections':
+      args.unshift(arg);
       break;
     default:
       if (0 == arg.indexOf('--trace')) args.unshift(arg);
@@ -33,4 +36,12 @@ process.argv.slice(2).forEach(function (arg) {
 });
 
 var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
-proc.on('exit', process.exit);
+proc.on('exit', function (code, signal) {
+  process.on('exit', function(){
+    if (signal) {
+      process.kill(process.pid, signal);
+    } else {
+      process.exit(code);
+    }
+  });
+});

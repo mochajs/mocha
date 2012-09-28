@@ -7,9 +7,8 @@
     <script>
       mocha.setup({
         ui: 'bdd',
-        globals: ['okGlobalA', 'okGlobalB'],
-        timeout: 1500
-      })
+        globals: ['okGlobalA', 'okGlobalB', 'okGlobalC', 'callback*']
+      }).timeout(1500)
     </script>
     <script>
       function assert(expr, msg) {
