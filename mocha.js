@@ -1743,7 +1743,7 @@ function HTML(runner) {
     unHideClasses();
     var className = /pass/.test(report.className) ? '' : ' pass';
     report.className = report.className.replace(/fail|pass/g, '') + className;
-    if (report.className.trim() !== '') checkEmptySuites('test pass')
+    if (report.className.trim() !== '') checkEmptySuites('test pass');
   });
 
   // failure toggle
@@ -1751,7 +1751,7 @@ function HTML(runner) {
     unHideClasses();
     var className = /fail/.test(report.className) ? '' : ' fail';
     report.className = report.className.replace(/fail|pass/g, '') + className;
-    if (report.className.trim() !== '') checkEmptySuites('test fail')
+    if (report.className.trim() !== '') checkEmptySuites('test fail');
   });
 
   // Hides empty suites on passes/failures links click
@@ -1770,6 +1770,7 @@ function HTML(runner) {
     hiddenElements[0].className = hiddenElements[0].className.replace(/suite hidden/g, 'suite');
     unHideClasses();
   }
+
 
   root.appendChild(stat);
   root.appendChild(report);
