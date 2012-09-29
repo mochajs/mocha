@@ -26,7 +26,7 @@ function find(y) {
 
   while (i--) {
     heading = headings[i];
-    if (y > heading.offsetTop) {
+    if (y >= heading.offsetTop) {
       return heading;
     }
   }
