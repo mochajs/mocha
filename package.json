@@ -14,7 +14,7 @@
   , "dependencies":{
       "commander": "0.6.x"
     , "growl": "1.5.x"
-    , "jade": "0.26.x"
+    , "jade": "0.27.x"
     , "diff": "1.0.x"
     , "debug": "*"
     , "mkdirp": "0.3.x"
