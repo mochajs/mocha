@@ -1,4 +1,11 @@
 
+1.6.0 / 2012-10-02 
+==================
+
+  * add object diffs when `err.showDiff` is present
+  * add hiding of empty suites when pass/failures are toggled
+  * add faster `.length` checks to `checkGlobals()` before performing the filter
+
 1.5.0 / 2012-09-21 
 ==================
 
