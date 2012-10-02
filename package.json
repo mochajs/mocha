@@ -19,6 +19,7 @@
     , "debug": "*"
     , "mkdirp": "0.3.3"
     , "ms": "0.3.0"
+    , "jsDump": "1.x"
   }
   , "devDependencies": {
       "should": "*"
