@@ -1940,7 +1940,7 @@ function HTML(runner, root) {
     unhide();
     var name = /pass/.test(report.className) ? '' : ' pass';
     report.className = report.className.replace(/fail|pass/g, '') + name;
-    if (report.className.trim()) checkEmptySuites('test pass');
+    if (report.className.trim()) hideSuitesWithout('test pass');
   });
 
   // failure toggle
@@ -1948,7 +1948,7 @@ function HTML(runner, root) {
     unhide();
     var name = /fail/.test(report.className) ? '' : ' fail';
     report.className = report.className.replace(/fail|pass/g, '') + name;
-    if (report.className.trim()) checkEmptySuites('test fail');
+    if (report.className.trim()) hideSuitesWithout('test fail');
   });
 
   root.appendChild(stat);
@@ -2069,7 +2069,7 @@ function fragment(html) {
  * with `classname`, and hide them.
  */
 
-function checkEmptySuites(classname) {
+function hideSuitesWithout(classname) {
   var suites = document.getElementsByClassName('suite');
   for (var i = 0; i < suites.length; i++) {
     var els = suites[i].getElementsByClassName(classname);
