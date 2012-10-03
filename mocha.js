@@ -1532,6 +1532,8 @@ function Base(runner) {
   if (!runner) return;
   this.runner = runner;
 
+  runner.stats = stats;
+
   runner.on('start', function(){
     stats.start = new Date;
   });
@@ -3461,7 +3463,8 @@ require.register("runnable.js", function(module, exports, require){
  */
 
 var EventEmitter = require('browser/events').EventEmitter
-  , debug = require('browser/debug')('mocha:runnable');
+  , debug = require('browser/debug')('mocha:runnable')
+  , milliseconds = require('./ms');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -3508,13 +3511,14 @@ Runnable.prototype.constructor = Runnable;
 /**
  * Set & get timeout `ms`.
  *
- * @param {Number} ms
+ * @param {Number|String} ms
  * @return {Runnable|Number} ms or self
  * @api private
  */
 
 Runnable.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
+  if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = ms;
   if (this.timer) this.resetTimeout();
@@ -3524,13 +3528,14 @@ Runnable.prototype.timeout = function(ms){
 /**
  * Set & get slow `ms`.
  *
- * @param {Number} ms
+ * @param {Number|String} ms
  * @return {Runnable|Number} ms or self
  * @api private
  */
 
 Runnable.prototype.slow = function(ms){
   if (0 === arguments.length) return this._slow;
+  if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._slow = ms;
   return this;
@@ -3992,7 +3997,7 @@ Runner.prototype.runTest = function(fn){
 
 Runner.prototype.runTests = function(suite, fn){
   var self = this
-    , tests = suite.tests
+    , tests = suite.tests.slice()
     , test;
 
   function next(err) {
