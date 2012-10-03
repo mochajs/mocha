@@ -1462,14 +1462,22 @@ exports.list = function(failures){
       , index = stack.indexOf(message) + message.length
       , msg = stack.slice(0, index)
       , actual = err.actual
-      , expected = err.expected;
+      , expected = err.expected
+      , escape = true;
+
+    // explicitly show diff
+    if (err.showDiff) {
+      escape = false;
+      err.actual = actual = JSON.stringify(actual, null, 2);
+      err.expected = expected = JSON.stringify(expected, null, 2);
+    }
 
     // actual / expected diff
     if ('string' == typeof actual && 'string' == typeof expected) {
       var len = Math.max(actual.length, expected.length);
 
-      if (len < 20) msg = errorDiff(err, 'Chars');
-      else msg = errorDiff(err, 'Words');
+      if (len < 20) msg = errorDiff(err, 'Chars', escape);
+      else msg = errorDiff(err, 'Words', escape);
 
       // linenos
       var lines = msg.split('\n');
@@ -1645,12 +1653,14 @@ function pad(str, len) {
  * @api private
  */
 
-function errorDiff(err, type) {
+function errorDiff(err, type, escape) {
   return diff['diff' + type](err.actual, err.expected).map(function(str){
-    str.value = str.value
-      .replace(/\t/g, '<tab>')
-      .replace(/\r/g, '<CR>')
-      .replace(/\n/g, '<LF>\n');
+    if (escape) {
+      str.value = str.value
+        .replace(/\t/g, '<tab>')
+        .replace(/\r/g, '<CR>')
+        .replace(/\n/g, '<LF>\n');
+    }
     if (str.added) return colorLines('diff added', str.value);
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
@@ -1936,15 +1946,19 @@ function HTML(runner, root) {
   if (!root) return error('#mocha div missing, add it to your document');
 
   // pass toggle
-  on(passesLink, 'click', function () {
-    var className = /pass/.test(report.className) ? '' : ' pass';
-    report.className = report.className.replace(/fail|pass/g, '') + className;
+  on(passesLink, 'click', function(){
+    unhide();
+    var name = /pass/.test(report.className) ? '' : ' pass';
+    report.className = report.className.replace(/fail|pass/g, '') + name;
+    if (report.className.trim()) hideSuitesWithout('test pass');
   });
 
   // failure toggle
-  on(failuresLink, 'click', function () {
-    var className = /fail/.test(report.className) ? '' : ' fail';
-    report.className = report.className.replace(/fail|pass/g, '') + className;
+  on(failuresLink, 'click', function(){
+    unhide();
+    var name = /fail/.test(report.className) ? '' : ' fail';
+    report.className = report.className.replace(/fail|pass/g, '') + name;
+    if (report.className.trim()) hideSuitesWithout('test fail');
   });
 
   root.appendChild(stat);
@@ -2058,6 +2072,30 @@ function fragment(html) {
   });
 
   return div.firstChild;
+}
+
+/**
+ * Check for suites that do not have elements
+ * with `classname`, and hide them.
+ */
+
+function hideSuitesWithout(classname) {
+  var suites = document.getElementsByClassName('suite');
+  for (var i = 0; i < suites.length; i++) {
+    var els = suites[i].getElementsByClassName(classname);
+    if (0 == els.length) suites[i].className += ' hidden';
+  }
+}
+
+/**
+ * Unhide .hidden suites.
+ */
+
+function unhide() {
+  var els = document.getElementsByClassName('suite hidden');
+  for (var i = 0; i < els.length; ++i) {
+    els[i].className = els[i].className.replace('suite hidden', 'suite');
+  }
 }
 
 /**
