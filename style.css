@@ -23,6 +23,7 @@ h1 {
   opacity: 0;
   -webkit-border-radius: 100px;
   -moz-border-radius: 100px;
+  border-radius: 100px;
   -webkit-transition: opacity 1s, background-color 200ms;
   -moz-transition: opacity 1s, background-color 200ms;
 }
