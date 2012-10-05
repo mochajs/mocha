@@ -70,6 +70,7 @@ Mocha allows you to use any assertion library you want, if it throws an error, i
   - [should.js](http://github.com/visionmedia/should.js) BDD style shown throughout these docs
   - [expect.js](https://github.com/LearnBoost/expect.js) expect() style assertions
   - [chai](http://chaijs.com/) expect(), assert() and should style assertions
+  - [better-assert](https://github.com/visionmedia/better-assert) c-style self-documenting assert()
 
 <h2 id="synchronous-code">Synchronous code</h2>
 
