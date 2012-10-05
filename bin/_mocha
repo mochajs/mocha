@@ -77,6 +77,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--cluster-master-only', 'run only in cluster master process')
 
 program.name = 'mocha';
 
@@ -235,6 +236,9 @@ if (program.growl) mocha.growl();
 // --globals
 
 mocha.globals(globals);
+
+
+if (program.clusterMasterOnly) mocha.clusterMasterOnly();
 
 // custom compiler support
 
