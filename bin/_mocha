@@ -70,7 +70,7 @@ program
   .option('-G, --growl', 'enable growl notification support')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
-  .option('-f, --fileconf <path>', 'specify the path to configuration file') 
+  .option('-f, --config <path>', 'specify the path to configuration file') 
   .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -152,12 +152,12 @@ program.on('require', function(mod){
   require(mod);
 });
 
-//-f, --fileconf
+//-f, --config
 
 program.parse(process.argv);
 var pathConf = 'test/mocha.opts';
-if (program.fileconf) {
-  pathConf = program.fileconf;
+if (program.config && exists(program.config)) {
+  pathConf = program.config;
 }    
 
 // mocha.opts support
