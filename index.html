@@ -701,10 +701,31 @@ test('#length', function(){
 <pre><code>$ mocha --reporter list --growl
 </code></pre>
 
+<h2 id="suite-specific-timeouts">Suite specific timeouts</h2>
+
+
+<p>  Suite-level timeouts may be applied to entire test &ldquo;suites&rdquo;, or disabled
+  via <code>this.timeout(0)</code>. This will be inherited by all nested suites and test-cases
+  that do not override the value.</p>
+
+<pre><code>describe('a suite of tests', function(){
+  this.timeout(500);
+
+  it('should take less than 500ms', function(done){
+    setTimeout(done, 300);
+  })
+
+  it('should take less than 500ms as well', function(done){
+    setTimeout(done, 200);
+  })
+})
+</code></pre>
+
 <h2 id="test-specific-timeouts">Test specific timeouts</h2>
 
 
-<p>  To compliment the global <code>--timeout</code> option, you may also specific test-specific timeouts via <code>this.timeout()</code>, or disable the timeout all-together with <code>this.timeout(0)</code>.</p>
+<p>  Test-specific timeouts may also be applied, or the use of <code>this.timeout(0)</code>
+  to disable timeouts all together:</p>
 
 <pre><code>it('should take less than 500ms', function(done){
   this.timeout(500);
