@@ -607,9 +607,29 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ mocha --reporter list --growl
 
+<h2 id="suite-specific-timeouts">Suite specific timeouts</h2>
+
+  Suite-level timeouts may be applied to entire test "suites", or disabled
+  via `this.timeout(0)`. This will be inherited by all nested suites and test-cases
+  that do not override the value.
+
+    describe('a suite of tests', function(){
+      this.timeout(500);
+
+      it('should take less than 500ms', function(done){
+        setTimeout(done, 300);
+      })
+
+      it('should take less than 500ms as well', function(done){
+        setTimeout(done, 200);
+      })
+    })
+
+
 <h2 id="test-specific-timeouts">Test specific timeouts</h2>
 
-  To compliment the global `--timeout` option, you may also specific test-specific timeouts via `this.timeout()`, or disable the timeout all-together with `this.timeout(0)`.
+  Test-specific timeouts may also be applied, or the use of `this.timeout(0)`
+  to disable timeouts all together:
 
     it('should take less than 500ms', function(done){
       this.timeout(500);
