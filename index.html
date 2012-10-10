@@ -117,7 +117,7 @@ $  mocha
 <h2 id="asynchronous-code">Asynchronous code</h2>
 
 
-<p>Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete:</p>
+<p>Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named <code>done</code>) to <code>it()</code> Mocha will know that it should wait for completion.</p>
 
 <pre><code>describe('User', function(){
   describe('#save()', function(){
