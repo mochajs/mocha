@@ -149,6 +149,12 @@ body {
   -webkit-box-shadow: 0 1px 3px #eee;
 }
 
+#mocha .test a, #mocha .test a:visited {
+    text-decoration: none;
+    vertical-align: middle;
+    color: green;
+}
+
 #report.pass .test.fail {
   display: none;
 }
