@@ -1448,7 +1448,7 @@ exports.cursor = {
  */
 
 exports.list = function(failures){
-  console.error();
+  mconsole.error();
   failures.forEach(function(test, i){
     // format
     var fmt = color('error title', '  %s) %s:\n')
@@ -1508,7 +1508,7 @@ exports.list = function(failures){
     stack = stack.slice(index ? index + 1 : index)
       .replace(/^/gm, '  ');
 
-    console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
+    mconsole.error(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
 };
 
@@ -1590,7 +1590,7 @@ Base.prototype.epilogue = function(){
     , fmt
     , tests;
 
-  console.log();
+  mconsole.log();
 
   function pluralize(n) {
     return 1 == n ? 'test' : 'tests';
@@ -1602,13 +1602,13 @@ Base.prototype.epilogue = function(){
       + color('fail', ' %d of %d %s failed')
       + color('light', ':')
 
-    console.error(fmt,
+    mconsole.error(fmt,
       stats.failures,
       this.runner.total,
       pluralize(this.runner.total));
 
     Base.list(this.failures);
-    console.error();
+    mconsole.error();
     return;
   }
 
@@ -1617,7 +1617,7 @@ Base.prototype.epilogue = function(){
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
-  console.log(fmt,
+  mconsole.log(fmt,
     stats.tests || 0,
     pluralize(stats.tests),
     ms(stats.duration));
@@ -1627,10 +1627,10 @@ Base.prototype.epilogue = function(){
     fmt = color('pending', '  •')
       + color('pending', ' %d %s pending');
 
-    console.log(fmt, stats.pending, pluralize(stats.pending));
+    mconsole.log(fmt, stats.pending, pluralize(stats.pending));
   }
 
-  console.log();
+  mconsole.log();
 };
 
 /**
@@ -1723,24 +1723,24 @@ function Doc(runner) {
   runner.on('suite', function(suite){
     if (suite.root) return;
     ++indents;
-    console.log('%s<section class="suite">', indent());
+    mconsole.log('%s<section class="suite">', indent());
     ++indents;
-    console.log('%s<h1>%s</h1>', indent(), suite.title);
-    console.log('%s<dl>', indent());
+    mconsole.log('%s<h1>%s</h1>', indent(), suite.title);
+    mconsole.log('%s<dl>', indent());
   });
 
   runner.on('suite end', function(suite){
     if (suite.root) return;
-    console.log('%s</dl>', indent());
+    mconsole.log('%s</dl>', indent());
     --indents;
-    console.log('%s</section>', indent());
+    mconsole.log('%s</section>', indent());
     --indents;
   });
 
   runner.on('pass', function(test){
-    console.log('%s  <dt>%s</dt>', indent(), test.title);
+    mconsole.log('%s  <dt>%s</dt>', indent(), test.title);
     var code = utils.escape(utils.clean(test.fn.toString()));
-    console.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
+    mconsole.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
   });
 }
 
@@ -1800,7 +1800,7 @@ function Dot(runner) {
   });
 
   runner.on('end', function(){
-    console.log();
+    mconsole.log();
     self.epilogue();
   });
 }
@@ -2332,15 +2332,15 @@ function List(runner) {
     , total = runner.total;
 
   runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
+    mconsole.log(JSON.stringify(['start', { total: total }]));
   });
 
   runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
+    mconsole.log(JSON.stringify(['pass', clean(test)]));
   });
 
   runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
+    mconsole.log(JSON.stringify(['fail', clean(test)]));
   });
 
   runner.on('end', function(){
@@ -2527,7 +2527,7 @@ function Landing(runner) {
 
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    mconsole.log();
     self.epilogue();
   });
 }
@@ -2572,7 +2572,7 @@ function List(runner) {
     , n = 0;
 
   runner.on('start', function(){
-    console.log();
+    mconsole.log();
   });
 
   runner.on('test', function(test){
@@ -2582,7 +2582,7 @@ function List(runner) {
   runner.on('pending', function(test){
     var fmt = color('checkmark', '  -')
       + color('pending', ' %s');
-    console.log(fmt, test.fullTitle());
+    mconsole.log(fmt, test.fullTitle());
   });
 
   runner.on('pass', function(test){
@@ -2590,12 +2590,12 @@ function List(runner) {
       + color('pass', ' %s: ')
       + color(test.speed, '%dms');
     cursor.CR();
-    console.log(fmt, test.fullTitle(), test.duration);
+    mconsole.log(fmt, test.fullTitle(), test.duration);
   });
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(color('fail', '  %d) %s'), ++n, test.fullTitle());
+    mconsole.log(color('fail', '  %d) %s'), ++n, test.fullTitle());
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -3064,7 +3064,7 @@ function Progress(runner, options) {
 
   // tests started
   runner.on('start', function(){
-    console.log();
+    mconsole.log();
     cursor.hide();
   });
 
@@ -3091,7 +3091,7 @@ function Progress(runner, options) {
   // and the failures if any
   runner.on('end', function(){
     cursor.show();
-    console.log();
+    mconsole.log();
     self.epilogue();
   });
 }
@@ -3142,17 +3142,17 @@ function Spec(runner) {
   }
 
   runner.on('start', function(){
-    console.log();
+    mconsole.log();
   });
 
   runner.on('suite', function(suite){
     ++indents;
-    console.log(color('suite', '%s%s'), indent(), suite.title);
+    mconsole.log(color('suite', '%s%s'), indent(), suite.title);
   });
 
   runner.on('suite end', function(suite){
     --indents;
-    if (1 == indents) console.log();
+    if (1 == indents) mconsole.log();
   });
 
   runner.on('test', function(test){
@@ -3161,7 +3161,7 @@ function Spec(runner) {
 
   runner.on('pending', function(test){
     var fmt = indent() + color('pending', '  - %s');
-    console.log(fmt, test.title);
+    mconsole.log(fmt, test.title);
   });
 
   runner.on('pass', function(test){
@@ -3170,20 +3170,20 @@ function Spec(runner) {
         + color('checkmark', '  ✓')
         + color('pass', ' %s ');
       cursor.CR();
-      console.log(fmt, test.title);
+      mconsole.log(fmt, test.title);
     } else {
       var fmt = indent()
         + color('checkmark', '  ✓')
         + color('pass', ' %s ')
         + color(test.speed, '(%dms)');
       cursor.CR();
-      console.log(fmt, test.title, test.duration);
+      mconsole.log(fmt, test.title, test.duration);
     }
   });
 
   runner.on('fail', function(test, err){
     cursor.CR();
-    console.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
+    mconsole.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
   });
 
   runner.on('end', self.epilogue.bind(self));
@@ -3231,7 +3231,7 @@ function TAP(runner) {
 
   runner.on('start', function(){
     var total = runner.grepTotal(runner.suite);
-    console.log('%d..%d', 1, total);
+    mconsole.log('%d..%d', 1, total);
   });
 
   runner.on('test end', function(){
@@ -3239,16 +3239,16 @@ function TAP(runner) {
   });
 
   runner.on('pending', function(test){
-    console.log('ok %d %s # SKIP -', n, title(test));
+    mconsole.log('ok %d %s # SKIP -', n, title(test));
   });
 
   runner.on('pass', function(test){
-    console.log('ok %d %s', n, title(test));
+    mconsole.log('ok %d %s', n, title(test));
   });
 
   runner.on('fail', function(test, err){
-    console.log('not ok %d %s', n, title(test));
-    console.log(err.stack.replace(/^/gm, '  '));
+    mconsole.log('not ok %d %s', n, title(test));
+    mconsole.log(err.stack.replace(/^/gm, '  '));
   });
 }
 
@@ -3292,27 +3292,27 @@ function Teamcity(runner) {
   var stats = this.stats;
 
   runner.on('start', function() {
-    console.log("##teamcity[testSuiteStarted name='mocha.suite']");
+    mconsole.log("##teamcity[testSuiteStarted name='mocha.suite']");
   });
 
   runner.on('test', function(test) {
-    console.log("##teamcity[testStarted name='" + escape(test.fullTitle()) + "']");
+    mconsole.log("##teamcity[testStarted name='" + escape(test.fullTitle()) + "']");
   });
 
   runner.on('fail', function(test, err) {
-    console.log("##teamcity[testFailed name='" + escape(test.fullTitle()) + "' message='" + escape(err.message) + "']");
+    mconsole.log("##teamcity[testFailed name='" + escape(test.fullTitle()) + "' message='" + escape(err.message) + "']");
   });
 
   runner.on('pending', function(test) {
-    console.log("##teamcity[testIgnored name='" + escape(test.fullTitle()) + "' message='pending']");
+    mconsole.log("##teamcity[testIgnored name='" + escape(test.fullTitle()) + "' message='pending']");
   });
 
   runner.on('test end', function(test) {
-    console.log("##teamcity[testFinished name='" + escape(test.fullTitle()) + "' duration='" + test.duration + "']");
+    mconsole.log("##teamcity[testFinished name='" + escape(test.fullTitle()) + "' duration='" + test.duration + "']");
   });
 
   runner.on('end', function() {
-    console.log("##teamcity[testSuiteFinished name='mocha.suite' duration='" + stats.duration + "']");
+    mconsole.log("##teamcity[testSuiteFinished name='mocha.suite' duration='" + stats.duration + "']");
   });
 }
 
@@ -3383,7 +3383,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    console.log(tag('testsuite', {
+    mconsole.log(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -3394,7 +3394,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');    
+    mconsole.log('</testsuite>');
   });
 }
 
@@ -3420,11 +3420,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    mconsole.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    mconsole.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    console.log(tag('testcase', attrs, true) );
+    mconsole.log(tag('testcase', attrs, true) );
   }
 }
 

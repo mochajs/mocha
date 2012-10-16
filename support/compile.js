@@ -13,7 +13,7 @@ var args = process.argv.slice(2)
   , pending = args.length
   , files = {};
 
-console.log('');
+mconsole.log('');
 
 // parse arguments
 
@@ -21,7 +21,7 @@ args.forEach(function(file){
   var mod = file.replace('lib/', '');
   fs.readFile(file, 'utf8', function(err, js){
     if (err) throw err;
-    console.log('  \u001b[90mcompile : \u001b[0m\u001b[36m%s\u001b[0m', file);
+    mconsole.log('  \u001b[90mcompile : \u001b[0m\u001b[36m%s\u001b[0m', file);
     files[file] = ~js.indexOf('require: off')
       ? js
       : parse(js);
@@ -84,8 +84,8 @@ function compile() {
   });
   fs.writeFile('_mocha.js', buf, function(err){
     if (err) throw err;
-    console.log('  \u001b[90m create : \u001b[0m\u001b[36m%s\u001b[0m', 'mocha.js');
-    console.log();
+    mconsole.log('  \u001b[90m create : \u001b[0m\u001b[36m%s\u001b[0m', 'mocha.js');
+    mconsole.log();
   });
 }
 
