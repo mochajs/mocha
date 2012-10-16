@@ -1,57 +1,57 @@
 
 describe('one', function(){
   before(function(){
-    console.log('before one');
+    mconsole.log('before one');
   })
   
   after(function(){
-    console.log('after one');
+    mconsole.log('after one');
   })
   
   beforeEach(function(){
-    console.log('  before each one');
+    mconsole.log('  before each one');
   })
 
   afterEach(function(){
-    console.log('  after each one');
+    mconsole.log('  after each one');
   })
 
   describe('two', function(){
     before(function(){
-      console.log('  before two');
+      mconsole.log('  before two');
     })
     
     after(function(){
-      console.log('  after two');
+      mconsole.log('  after two');
     })
     
     beforeEach(function(){
-      console.log('    before each two');
+      mconsole.log('    before each two');
     })
     
     afterEach(function(){
-      console.log('    after each two');
+      mconsole.log('    after each two');
     })
     
     describe('three', function(){
       before(function(){
-        console.log('    before three');
+        mconsole.log('    before three');
       })
       
       after(function(){
-        console.log('    after three');
+        mconsole.log('    after three');
       })
 
       beforeEach(function(){
-        console.log('    before each three');
+        mconsole.log('    before each three');
       })
       
       afterEach(function(){
-        console.log('    after each three');
+        mconsole.log('    after each three');
       })
 
       it('should three', function(){
-        console.log('      TEST three');
+        mconsole.log('      TEST three');
       })
     })
   })
