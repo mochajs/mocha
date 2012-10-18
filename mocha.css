@@ -55,16 +55,6 @@ body {
   margin-left: 15px;
 }
 
-#mocha .test:hover h2::after {
-  position: relative;
-  top: 0;
-  right: -10px;
-  content: '(view source)';
-  font-size: 12px;
-  font-family: arial;
-  color: #888;
-}
-
 #mocha .test.pending:hover h2::after {
   content: '(pending)';
   font-family: arial;
@@ -147,6 +137,38 @@ body {
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
+  -moz-border-radius: 3px;
+  -moz-box-shadow: 0 1px 3px #eee;
+}
+
+#mocha .test h2 {
+  position: relative;
+}
+
+#mocha .test a.replay {
+  position: absolute;
+  top: 3px;
+  right: -20px;
+  text-decoration: none;
+  vertical-align: middle;
+  display: block;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  text-align: center;
+  background: #eee;
+  font-size: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  -webkit-transition: opacity 200ms;
+  -moz-transition: opacity 200ms;
+  transition: opacity 200ms;
+  opacity: 0.2;
+  color: #888;
+}
+
+#mocha .test:hover a.replay {
+  opacity: 1;
 }
 
 #report.pass .test.fail {

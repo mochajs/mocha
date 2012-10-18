@@ -591,7 +591,7 @@ module.exports = function(suite){
     context.describe = context.context = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
-      fn();
+      fn.call(suite);
       suites.shift();
       return suite;
     };
@@ -606,7 +606,7 @@ module.exports = function(suite){
       var suite = Suite.create(suites[0], title);
       suite.pending = true;
       suites.unshift(suite);
-      fn();
+      fn.call(suite);
       suites.shift();
     };
 
@@ -903,7 +903,7 @@ module.exports = function(suite){
     context.suite = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
-      fn();
+      fn.call(suite);
       suites.shift();
       return suite;
     };
@@ -1725,7 +1725,7 @@ function Doc(runner) {
     ++indents;
     console.log('%s<section class="suite">', indent());
     ++indents;
-    console.log('%s<h1>%s</h1>', indent(), suite.title);
+    console.log('%s<h1>%s</h1>', indent(), utils.escape(suite.title));
     console.log('%s<dl>', indent());
   });
 
@@ -1738,7 +1738,7 @@ function Doc(runner) {
   });
 
   runner.on('pass', function(test){
-    console.log('%s  <dt>%s</dt>', indent(), test.title);
+    console.log('%s  <dt>%s</dt>', indent(), utils.escape(test.title));
     var code = utils.escape(utils.clean(test.fn.toString()));
     console.log('%s  <dd><pre><code>%s</code></pre></dd>', indent(), code);
   });
@@ -2003,14 +2003,14 @@ function HTML(runner, root) {
     text(failures, stats.failures);
     text(duration, (ms / 1000).toFixed(2));
 
-    // test
-    if ('passed' == test.state) {
-      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span></h2></li>', test.speed, test.title, test.duration);
-    } else if (test.pending) {
-      var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
-    } else {
-      var el = fragment('<li class="test fail"><h2>%e</h2></li>', test.title);
-      var str = test.err.stack || test.err.toString();
+      // test
+      if ('passed' == test.state) {
+        var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, test.fullTitle());
+      } else if (test.pending) {
+        var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
+      } else {
+        var el = fragment('<li class="test fail"><h2>%e <a href="?grep=%e" class="replay">‣</a></h2></li>', test.title, test.fullTitle());
+        var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
       if (!~str.indexOf(test.err.message)) {
