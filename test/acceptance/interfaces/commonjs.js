@@ -28,3 +28,8 @@ exports['test Array'] = {
 
   } // end #indexOf() suite
 } // end Array suite
+
+exports['test async tests use the done() callback'] = function(assert, done) {
+  assert.ok(typeof done === 'function' ? true : false);
+  done();
+}
