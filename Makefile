@@ -30,7 +30,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-commonjs test-unit test-grep test-jsapi test-compilers
 
 test-jsapi:
 	@node test/jsapi
@@ -71,6 +71,12 @@ test-exports:
 		--reporter $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
+
+test-commonjs:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui commonjs \
+		test/acceptance/interfaces/commonjs
 
 test-grep:
 	@./bin/mocha \
@@ -117,4 +123,4 @@ tm:
 	mkdir -p $(TM_DEST)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-commonjs test-unit non-tty test-grep tm clean
