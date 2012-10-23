@@ -59,7 +59,7 @@ program
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports|commonjs)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
@@ -135,6 +135,7 @@ program.on('interfaces', function(){
   console.log('    tdd');
   console.log('    qunit');
   console.log('    exports');
+  console.log('    commonjs');
   console.log('');
   process.exit();
 });
