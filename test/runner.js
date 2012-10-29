@@ -50,9 +50,21 @@ describe('Runner', function(){
     })
   })
 
+  describe('.globalProps()', function(){
+    it('should include common non enumerable globals', function() {
+      var props = runner.globalProps();
+      props.should.include('setTimeout');
+      props.should.include('clearTimeout');
+      props.should.include('setInterval');
+      props.should.include('clearInterval');
+      props.should.include('Date');
+      props.should.include('XMLHttpRequest');
+    });
+  });
+
   describe('.globals()', function(){
     it('should default to the known globals', function(){
-      runner.globals().length.should.be.above(10);
+      runner.globals().length.should.be.above(16);
     })
 
     it('should white-list globals', function(){
@@ -84,6 +96,28 @@ describe('Runner', function(){
       });
       runner.checkGlobals('im a test');
     })
+
+    it ('should not fail when a new common global is introduced', function(){
+      // verify that the prop isn't enumerable
+      delete global.XMLHttpRequest;
+      global.propertyIsEnumerable('XMLHttpRequest').should.not.be.ok;
+
+      // create a new runner and keep a reference to the test.
+      var test = new Test('im a test about bears');
+      suite.addTest(test);
+      var newRunner = new Runner(suite);
+
+      // make the prop enumerable again.
+      global.XMLHttpRequest = function() {};
+      global.propertyIsEnumerable('XMLHttpRequest').should.be.ok;
+
+      // verify the test hasn't failed.
+      newRunner.checkGlobals(test);
+      test.should.not.have.key('state');
+
+      // clean up our global space.
+      delete global.XMLHttpRequest;
+    });
 
     it('should pluralize the error message when several are introduced', function(done){
       runner.checkGlobals();
