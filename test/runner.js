@@ -50,9 +50,21 @@ describe('Runner', function(){
     })
   })
 
+  describe('.globalProps()', function(){
+    it('should include common non enumerable globals', function() {
+      var props = runner.globalProps();
+      props.should.include('setTimeout');
+      props.should.include('clearTimeout');
+      props.should.include('setInterval');
+      props.should.include('clearInterval');
+      props.should.include('Date');
+      props.should.include('XMLHttpRequest');
+    });
+  });
+
   describe('.globals()', function(){
     it('should default to the known globals', function(){
-      runner.globals().length.should.be.above(10);
+      runner.globals().length.should.be.above(16);
     })
 
     it('should white-list globals', function(){
