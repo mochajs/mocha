@@ -91,6 +91,12 @@ test-bail:
 		--bail \
 		test/acceptance/misc/bail
 
+test-async-only:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  --async-only \
+	  test/acceptance/misc/asyncOnly
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
