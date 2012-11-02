@@ -171,22 +171,22 @@ body {
   opacity: 1;
 }
 
-#report.pass .test.fail {
+#mocha-report.pass .test.fail {
   display: none;
 }
 
-#report.fail .test.pass {
+#mocha-report.fail .test.pass {
   display: none;
 }
 
-#error {
+#mocha-error {
   color: #c00;
   font-size: 1.5  em;
   font-weight: 100;
   letter-spacing: 1px;
 }
 
-#stats {
+#mocha-stats {
   position: fixed;
   top: 15px;
   right: 10px;
@@ -195,25 +195,25 @@ body {
   color: #888;
 }
 
-#stats .progress {
+#mocha-stats .progress {
   float: right;
   padding-top: 0;
 }
 
-#stats em {
+#mocha-stats em {
   color: black;
 }
 
-#stats a {
+#mocha-stats a {
   text-decoration: none;
   color: inherit;
 }
 
-#stats a:hover {
+#mocha-stats a:hover {
   border-bottom: 1px solid #eee;
 }
 
-#stats li {
+#mocha-stats li {
   display: inline-block;
   margin: 0 5px;
   list-style: none;
