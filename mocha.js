@@ -2027,7 +2027,6 @@ function HTML(runner, root) {
     // test
     if ('passed' == test.state) {
       var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, encodeURIComponent(test.fullTitle()));
-      console.log(el.querySelector('a'));
     } else if (test.pending) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
