@@ -625,15 +625,28 @@ test('#length', function(){
 
 <p>  View the entire <a href="https://github.com/visionmedia/superagent/blob/master/Makefile">Makefile</a> for reference.</p>
 
+
+
+<h3 id="teamcity-reporter">TeamCity</h3>
+
+
+<p> The "teamcity" reporter integrates with TeamCity CI builds.</p>
+<p>  <img src="images/reporter-teamcity.png" alt="teamcity reporter" /></p>
+<p> To mocha run on TeamCity, just add build step "Command Line" and in custom script dialog put: make test-ci</p>
+<p>Sample Makefile:</p>
+<pre>
+    <code>test-ci:
+       ./node_modules/.bin/mocha \
+       --reporter teamcity
+</code></pre>
+
+
+
 <h3 id="xunit-reporter">XUnit</h3>
 
 
 <p>   Documentation needed.</p>
 
-<h3 id="teamcity-reporter">TeamCity</h3>
-
-
-<p>   Documentation needed.</p>
 
 <h3 id="markdown-reporter">Markdown</h3>
 
