@@ -2743,7 +2743,7 @@ var Base = require('./base');
 exports = module.exports = Min;
 
 /**
- * Initialize a new `Min` minimal test reporter (best used with --watch).
+ * Initialize a new `Min` minimal test reporter.
  *
  * @param {Runner} runner
  * @api public
@@ -4584,7 +4584,7 @@ require.register("utils.js", function(module, exports, require){
 var fs = require('browser/fs')
   , path = require('browser/path')
   , join = path.join
-  , debug = require('browser/debug')('mocha:watch');
+  , debug = require('browser/debug')('mocha:utils');
 
 /**
  * Ignored directories.
@@ -4696,25 +4696,6 @@ exports.keys = Object.keys || function(obj) {
   }
 
   return keys;
-};
-
-/**
- * Watch the given `files` for changes
- * and invoke `fn(file)` on modification.
- *
- * @param {Array} files
- * @param {Function} fn
- * @api private
- */
-
-exports.watch = function(files, fn){
-  var options = { interval: 100 };
-  files.forEach(function(file){
-    debug('file %s', file);
-    fs.watchFile(file, options, function(curr, prev){
-      if (prev.mtime < curr.mtime) fn(file);
-    });
-  });
 };
 
 /**
