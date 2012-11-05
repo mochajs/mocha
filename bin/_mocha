@@ -64,7 +64,6 @@ program
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch', 'watch files for changes')
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -120,7 +119,7 @@ program.on('reporters', function(){
   console.log('    teamcity - teamcity ci support');
   console.log('    html-cov - HTML test coverage');
   console.log('    json-cov - JSON test coverage');
-  console.log('    min - minimal reporter (great with --watch)');
+  console.log('    min - minimal reporter');
   console.log('    json-stream - newline delimited json events');
   console.log('    markdown - markdown documentation (github flavour)');
   console.log('    nyan - nyan cat!');
@@ -275,54 +274,6 @@ files = files.map(function(path){
   return resolve(path);
 });
 
-// --watch
-
-if (program.watch) {
-  console.log();
-  hideCursor();
-  process.on('SIGINT', function(){
-    showCursor();
-    console.log('\n');
-    process.exit();
-  });
-
-  var frames = [
-      '  \u001b[96m◜ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◠ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◝ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◞ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◡ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◟ \u001b[90mwatching\u001b[0m'
-  ];
-
-  var watchFiles = utils.files(cwd);
-
-  function loadAndRun() {
-    mocha.files = files;
-    mocha.run(function(){
-      play(frames);
-    });
-  }
-
-  function purge() {
-    watchFiles.forEach(function(file){
-      delete require.cache[file];
-    });
-  }
-
-  loadAndRun();
-
-  utils.watch(watchFiles, function(){
-    purge();
-    stop()
-    mocha.suite = mocha.suite.clone();
-    mocha.ui(program.ui);
-    loadAndRun();
-  });
-
-  return;
-}
-
 // load
 
 mocha.files = files;
@@ -357,31 +308,6 @@ function list(str) {
 }
 
 /**
- * Hide the cursor.
- */
-
-function hideCursor(){
-  process.stdout.write('\u001b[?25l');
-};
-
-/**
- * Show the cursor.
- */
-
-function showCursor(){
-  process.stdout.write('\u001b[?25h');
-};
-
-/**
- * Stop play()ing.
- */
-
-function stop() {
-  process.stdout.write('\u001b[2K');
-  clearInterval(play.timer);
-}
-
-/**
  * Lookup file names at the given `path`.
  */
 
@@ -404,19 +330,4 @@ function lookupFiles(path, recursive) {
   });
 
   return files;
-}
-
-/**
- * Play the given array of strings.
- */
-
-function play(arr, interval) {
-  var len = arr.length
-    , interval = interval || 100
-    , i = 0;
-
-  play.timer = setInterval(function(){
-    var str = arr[i++ % len];
-    process.stdout.write('\r' + str);
-  }, interval);
 }
