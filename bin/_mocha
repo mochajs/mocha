@@ -78,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--no-animations', 'disable animations (saves power)')
 
 program.name = 'mocha';
 
@@ -285,15 +286,23 @@ if (program.watch) {
     console.log('\n');
     process.exit();
   });
-
-  var frames = [
-      '  \u001b[96m◜ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◠ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◝ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◞ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◡ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◟ \u001b[90mwatching\u001b[0m'
-  ];
+  
+  var frames;
+  
+  if (program.animations) {
+    frames = [
+        '  \u001b[96m◜ \u001b[90mwatching\u001b[0m'
+      , '  \u001b[96m◠ \u001b[90mwatching\u001b[0m'
+      , '  \u001b[96m◝ \u001b[90mwatching\u001b[0m'
+      , '  \u001b[96m◞ \u001b[90mwatching\u001b[0m'
+      , '  \u001b[96m◡ \u001b[90mwatching\u001b[0m'
+      , '  \u001b[96m◟ \u001b[90mwatching\u001b[0m'
+    ];
+  } else {
+    frames = [
+        '  \u001b[96m⟳ \u001b[90mwatching\u001b[0m'
+    ];
+  }
 
   var watchFiles = utils.files(cwd);
 
@@ -414,9 +423,14 @@ function play(arr, interval) {
   var len = arr.length
     , interval = interval || 100
     , i = 0;
-
-  play.timer = setInterval(function(){
+  
+  if (len > 1) {
+    play.timer = setInterval(function(){
+      var str = arr[i++ % len];
+      process.stdout.write('\r' + str);
+    }, interval);
+  } else {
     var str = arr[i++ % len];
     process.stdout.write('\r' + str);
-  }, interval);
+  }
 }
