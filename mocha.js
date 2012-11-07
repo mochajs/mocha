@@ -1404,6 +1404,23 @@ exports.colors = {
 };
 
 /**
+ * Default symbol map.
+ */
+ 
+exports.symbols = {
+  ok: '✔',
+  err: '✖',
+  dot: '․'
+};
+
+// With node.js on Windows: use symbols available in terminal default fonts
+if ('win32' == process.platform) {
+  exports.symbols.ok = '\u221A';
+  exports.symbols.err = '\u00D7';
+  exports.symbols.dot = '.';
+}
+
+/**
  * Color `str` with the given `type`,
  * allowing colors to be disabled,
  * as well as user-defined color
@@ -1619,7 +1636,7 @@ Base.prototype.epilogue = function(){
 
   // failure
   if (stats.failures) {
-    fmt = color('bright fail', '  ✖')
+    fmt = color('bright fail', '  ' + exports.symbols.err)
       + color('fail', ' %d of %d %s failed')
       + color('light', ':')
 
@@ -1634,7 +1651,7 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  fmt = color('bright pass', '  ✔')
+  fmt = color('bright pass', '  ' + exports.symbols.ok)
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
@@ -1795,7 +1812,6 @@ function Dot(runner) {
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
-    , c = '․'
     , n = 0;
 
   runner.on('start', function(){
@@ -1803,21 +1819,21 @@ function Dot(runner) {
   });
 
   runner.on('pending', function(test){
-    process.stdout.write(color('pending', c));
+    process.stdout.write(color('pending', Base.symbols.dot));
   });
 
   runner.on('pass', function(test){
     if (++n % width == 0) process.stdout.write('\n  ');
     if ('slow' == test.speed) {
-      process.stdout.write(color('bright yellow', c));
+      process.stdout.write(color('bright yellow', Base.symbols.dot));
     } else {
-      process.stdout.write(color(test.speed, c));
+      process.stdout.write(color(test.speed, Base.symbols.dot));
     }
   });
 
   runner.on('fail', function(test, err){
     if (++n % width == 0) process.stdout.write('\n  ');
-    process.stdout.write(color('fail', c));
+    process.stdout.write(color('fail', Base.symbols.dot));
   });
 
   runner.on('end', function(){
@@ -2254,6 +2270,10 @@ function map(cov) {
     ret.sloc += data.sloc;
   }
 
+  ret.files.sort(function(a, b) {
+    return a.filename.localeCompare(b.filename);
+  });
+
   if (ret.sloc > 0) {
     ret.coverage = (ret.hits / ret.sloc) * 100;
   }
@@ -2608,7 +2628,7 @@ function List(runner) {
   });
 
   runner.on('pass', function(test){
-    var fmt = color('checkmark', '  ✓')
+    var fmt = color('checkmark', '  '+Base.symbols.dot)
       + color('pass', ' %s: ')
       + color(test.speed, '%dms');
     cursor.CR();
@@ -3080,7 +3100,7 @@ function Progress(runner, options) {
   // default chars
   options.open = options.open || '[';
   options.complete = options.complete || '▬';
-  options.incomplete = options.incomplete || '⋅';
+  options.incomplete = options.incomplete || Base.symbols.dot;
   options.close = options.close || ']';
   options.verbose = false;
 
@@ -3189,13 +3209,13 @@ function Spec(runner) {
   runner.on('pass', function(test){
     if ('fast' == test.speed) {
       var fmt = indent()
-        + color('checkmark', '  ✓')
+        + color('checkmark', '  ' + Base.symbols.ok)
         + color('pass', ' %s ');
       cursor.CR();
       console.log(fmt, test.title);
     } else {
       var fmt = indent()
-        + color('checkmark', '  ✓')
+        + color('checkmark', '  ' + Base.symbols.ok)
         + color('pass', ' %s ')
         + color(test.speed, '(%dms)');
       cursor.CR();
