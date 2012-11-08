@@ -1,4 +1,19 @@
 
+1.7.0 / 2012-11-07 
+==================
+
+  * add `--async-only` support to prevent false positives for missing `done()`
+  * add sorting by filename in code coverage
+  * add HTML 5 doctype to browser template.
+  * add play button to html reporter to rerun a single test
+  * add `this.timeout(ms)` as Suite#timeout(ms). Closes #599
+  * update growl dependency to 1.6.x
+  * fix encoding of test-case ?grep. Closes #637
+  * fix unicode chars on windows
+  * fix dom globals in Opera/IE. Closes #243
+  * fix markdown reporter a tags
+  * fix `this.timeout("5s")` support
+
 1.6.0 / 2012-10-02 
 ==================
 

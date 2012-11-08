@@ -35,6 +35,7 @@ authors:
 
 ## Links
 
+  - [Konacha](https://github.com/jfirebaugh/konacha) -- for testing Rails applications with Mocha
   - [Chai](https://github.com/chaijs/chai) - BDD, TDD, and assert for node & the browser
   - [Should.js](http://github.com/visionmedia/should.js) - BDD style assertions for node
   - [Expect.js](https://github.com/LearnBoost/expect.js) - BDD style assertions for node & the browser

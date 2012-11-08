@@ -937,6 +937,14 @@ module.exports = function(suite){
       var test = context.test(title, fn);
       mocha.grep(test.fullTitle());
     };
+
+    /**
+     * Pending test case.
+     */
+
+    context.test.skip = function(title){
+      context.test(title);
+    };
   });
 };
 
@@ -1212,6 +1220,18 @@ Mocha.prototype.slow = function(slow){
 };
 
 /**
+ * Makes all tests async (accepting a callback)
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.asyncOnly = function(){
+  this.options.asyncOnly = true;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
@@ -1226,6 +1246,7 @@ Mocha.prototype.run = function(fn){
   var runner = new exports.Runner(suite);
   var reporter = new this._reporter(runner);
   runner.ignoreLeaks = options.ignoreLeaks;
+  runner.asyncOnly = options.asyncOnly;
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
@@ -1306,14 +1327,14 @@ function parse(str) {
  */
 
 function format(ms) {
-  if (ms == d) return (ms / d) + ' day';
-  if (ms > d) return (ms / d) + ' days';
-  if (ms == h) return (ms / h) + ' hour';
-  if (ms > h) return (ms / h) + ' hours';
-  if (ms == m) return (ms / m) + ' minute';
-  if (ms > m) return (ms / m) + ' minutes';
-  if (ms == s) return (ms / s) + ' second';
-  if (ms > s) return (ms / s) + ' seconds';
+  if (ms == d) return Math.round(ms / d) + ' day';
+  if (ms > d) return Math.round(ms / d) + ' days';
+  if (ms == h) return Math.round(ms / h) + ' hour';
+  if (ms > h) return Math.round(ms / h) + ' hours';
+  if (ms == m) return Math.round(ms / m) + ' minute';
+  if (ms > m) return Math.round(ms / m) + ' minutes';
+  if (ms == s) return Math.round(ms / s) + ' second';
+  if (ms > s) return Math.round(ms / s) + ' seconds';
   return ms + ' ms';
 }
 }); // module: ms.js
@@ -1381,6 +1402,23 @@ exports.colors = {
   , 'diff added': 42
   , 'diff removed': 41
 };
+
+/**
+ * Default symbol map.
+ */
+ 
+exports.symbols = {
+  ok: '✔',
+  err: '✖',
+  dot: '․'
+};
+
+// With node.js on Windows: use symbols available in terminal default fonts
+if ('win32' == process.platform) {
+  exports.symbols.ok = '\u221A';
+  exports.symbols.err = '\u00D7';
+  exports.symbols.dot = '.';
+}
 
 /**
  * Color `str` with the given `type`,
@@ -1598,7 +1636,7 @@ Base.prototype.epilogue = function(){
 
   // failure
   if (stats.failures) {
-    fmt = color('bright fail', '  ✖')
+    fmt = color('bright fail', '  ' + exports.symbols.err)
       + color('fail', ' %d of %d %s failed')
       + color('light', ':')
 
@@ -1613,7 +1651,7 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  fmt = color('bright pass', '  ✔')
+  fmt = color('bright pass', '  ' + exports.symbols.ok)
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
@@ -1774,7 +1812,6 @@ function Dot(runner) {
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
-    , c = '․'
     , n = 0;
 
   runner.on('start', function(){
@@ -1782,21 +1819,21 @@ function Dot(runner) {
   });
 
   runner.on('pending', function(test){
-    process.stdout.write(color('pending', c));
+    process.stdout.write(color('pending', Base.symbols.dot));
   });
 
   runner.on('pass', function(test){
     if (++n % width == 0) process.stdout.write('\n  ');
     if ('slow' == test.speed) {
-      process.stdout.write(color('bright yellow', c));
+      process.stdout.write(color('bright yellow', Base.symbols.dot));
     } else {
-      process.stdout.write(color(test.speed, c));
+      process.stdout.write(color(test.speed, Base.symbols.dot));
     }
   });
 
   runner.on('fail', function(test, err){
     if (++n % width == 0) process.stdout.write('\n  ');
-    process.stdout.write(color('fail', c));
+    process.stdout.write(color('fail', Base.symbols.dot));
   });
 
   runner.on('end', function(){
@@ -1899,7 +1936,7 @@ exports = module.exports = HTML;
  * Stats template.
  */
 
-var statsTemplate = '<ul id="stats">'
+var statsTemplate = '<ul id="mocha-stats">'
   + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
   + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
   + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
@@ -1927,7 +1964,7 @@ function HTML(runner, root) {
     , failuresLink = items[2].getElementsByTagName('a')[0]
     , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
-    , report = fragment('<ul id="report"></ul>')
+    , report = fragment('<ul id="mocha-report"></ul>')
     , stack = [report]
     , progress
     , ctx
@@ -1994,7 +2031,7 @@ function HTML(runner, root) {
     window.scrollTo(0, document.body.scrollHeight);
 
     // TODO: add to stats
-    var percent = stats.tests / total * 100 | 0;
+    var percent = stats.tests / this.total * 100 | 0;
     if (progress) progress.update(percent).draw(ctx);
 
     // update stats
@@ -2003,14 +2040,14 @@ function HTML(runner, root) {
     text(failures, stats.failures);
     text(duration, (ms / 1000).toFixed(2));
 
-      // test
-      if ('passed' == test.state) {
-        var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, test.fullTitle());
-      } else if (test.pending) {
-        var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
-      } else {
-        var el = fragment('<li class="test fail"><h2>%e <a href="?grep=%e" class="replay">‣</a></h2></li>', test.title, test.fullTitle());
-        var str = test.err.stack || test.err.toString();
+    // test
+    if ('passed' == test.state) {
+      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, encodeURIComponent(test.fullTitle()));
+    } else if (test.pending) {
+      var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
+    } else {
+      var el = fragment('<li class="test fail"><h2>%e <a href="?grep=%e" class="replay">‣</a></h2></li>', test.title, encodeURIComponent(test.fullTitle()));
+      var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
       if (!~str.indexOf(test.err.message)) {
@@ -2045,7 +2082,8 @@ function HTML(runner, root) {
       pre.style.display = 'none';
     }
 
-    stack[0].appendChild(el);
+    // Don't call .appendChild if #mocha-report was already .shift()'ed off the stack.
+    if (stack[0]) stack[0].appendChild(el);
   });
 }
 
@@ -2054,7 +2092,7 @@ function HTML(runner, root) {
  */
 
 function error(msg) {
-  document.body.appendChild(fragment('<div id="error">%s</div>', msg));
+  document.body.appendChild(fragment('<div id="mocha-error">%s</div>', msg));
 }
 
 /**
@@ -2231,6 +2269,10 @@ function map(cov) {
     ret.misses += data.misses;
     ret.sloc += data.sloc;
   }
+
+  ret.files.sort(function(a, b) {
+    return a.filename.localeCompare(b.filename);
+  });
 
   if (ret.sloc > 0) {
     ret.coverage = (ret.hits / ret.sloc) * 100;
@@ -2586,7 +2628,7 @@ function List(runner) {
   });
 
   runner.on('pass', function(test){
-    var fmt = color('checkmark', '  ✓')
+    var fmt = color('checkmark', '  '+Base.symbols.dot)
       + color('pass', ' %s: ')
       + color(test.speed, '%dms');
     cursor.CR();
@@ -2682,7 +2724,7 @@ function Markdown(runner) {
   runner.on('suite', function(suite){
     ++level;
     var slug = utils.slug(suite.fullTitle());
-    buf += '<a name="' + slug + '" />' + '\n';
+    buf += '<a name="' + slug + '"></a>' + '\n';
     buf += title(suite.title) + '\n';
   });
 
@@ -3058,7 +3100,7 @@ function Progress(runner, options) {
   // default chars
   options.open = options.open || '[';
   options.complete = options.complete || '▬';
-  options.incomplete = options.incomplete || '⋅';
+  options.incomplete = options.incomplete || Base.symbols.dot;
   options.close = options.close || ']';
   options.verbose = false;
 
@@ -3167,13 +3209,13 @@ function Spec(runner) {
   runner.on('pass', function(test){
     if ('fast' == test.speed) {
       var fmt = indent()
-        + color('checkmark', '  ✓')
+        + color('checkmark', '  ' + Base.symbols.ok)
         + color('pass', ' %s ');
       cursor.CR();
       console.log(fmt, test.title);
     } else {
       var fmt = indent()
-        + color('checkmark', '  ✓')
+        + color('checkmark', '  ' + Base.symbols.ok)
         + color('pass', ' %s ')
         + color(test.speed, '(%dms)');
       cursor.CR();
@@ -3658,7 +3700,11 @@ Runnable.prototype.run = function(fn){
     }
     return;
   }
-  
+
+  if (this.asyncOnly) {
+    return done(new Error('--async-only option in use without declaring `done()`'));
+  }
+
   // sync
   try {
     if (!this.pending) this.fn.call(ctx);
@@ -3684,6 +3730,19 @@ var EventEmitter = require('browser/events').EventEmitter
   , filter = utils.filter
   , keys = utils.keys
   , noop = function(){};
+
+/**
+ * Non-enumerable globals.
+ */
+
+var globals = [
+  'setTimeout',
+  'clearTimeout',
+  'setInterval',
+  'clearInterval',
+  'XMLHttpRequest',
+  'Date'
+];
 
 /**
  * Expose `Runner`.
@@ -3719,7 +3778,7 @@ function Runner(suite) {
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.globals(utils.keys(global).concat(['errno']));
+  this.globals(this.globalProps().concat(['errno']));
 }
 
 /**
@@ -3771,6 +3830,25 @@ Runner.prototype.grepTotal = function(suite) {
 };
 
 /**
+ * Return a list of global properties.
+ *
+ * @return {Array}
+ * @api private
+ */
+
+Runner.prototype.globalProps = function() {
+  var props = utils.keys(global);
+
+  // non-enumerables
+  for (var i = 0; i < globals.length; ++i) {
+    if (~props.indexOf(globals[i])) continue;
+    props.push(globals[i]);
+  }
+
+  return props;
+};
+
+/**
  * Allow the given `arr` of globals.
  *
  * @param {Array} arr
@@ -3796,7 +3874,7 @@ Runner.prototype.globals = function(arr){
 Runner.prototype.checkGlobals = function(test){
   if (this.ignoreLeaks) return;
   var ok = this._globals;
-  var globals = keys(global);
+  var globals = this.globalProps();
   var isNode = process.kill;
   var leaks;
 
@@ -3975,6 +4053,8 @@ Runner.prototype.parents = function(){
 Runner.prototype.runTest = function(fn){
   var test = this.test
     , self = this;
+
+  if (this.asyncOnly) test.asyncOnly = true;
 
   try {
     test.on('error', function(err){
@@ -4165,6 +4245,8 @@ function filterLeaks(ok, globals) {
   return filter(globals, function(key){
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
+      // Opera and IE expose global variables for HTML element IDs (issue #243)
+      if (/^mocha-/.test(key)) return true;
       return key == ok;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
@@ -4901,6 +4983,7 @@ process.on = function(e, fn){
 
     var query = Mocha.utils.parseQuery(window.location.search || '');
     if (query.grep) mocha.grep(query.grep);
+    if (query.invert) mocha.invert();
 
     return Mocha.prototype.run.call(mocha, function(){
       Mocha.utils.highlightTags('code');

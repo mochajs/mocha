@@ -70,6 +70,7 @@ program
   .option('-G, --growl', 'enable growl notification support')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
+  .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -231,6 +232,10 @@ if (program.ignoreLeaks) mocha.ignoreLeaks();
 // --growl
 
 if (program.growl) mocha.growl();
+
+// --async-only
+
+if (program.asyncOnly) mocha.asyncOnly();
 
 // --globals
 
