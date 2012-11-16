@@ -94,11 +94,12 @@ ul {
   margin-top: 20px;
   padding: 0 15px;
   width: 100%;
+  column-count: 2;
+  -moz-column-count: 2;
+  -webkit-column-count: 2;
 }
 
 ul li {
-  float: left;
-  width: 40%;
   margin-top: 5px;
   margin-right: 60px;
   list-style: none;

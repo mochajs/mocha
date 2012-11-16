@@ -33,6 +33,31 @@ Mocha is a feature-rich JavaScript test framework running on [node](http://nodej
   - TextMate bundle
   - and more!
 
+<h2 id="table-of-contents">Table of contents</h2>
+
+  - [Installation](#installation)
+  - [1\. 2\. 3\. Mocha!](#getting-started)
+  - [Assertions](#assertions)
+  - [Synchronous code](#synchronous-code)
+  - [Asynchronous code](#asynchronous-code)
+  - [Pending tests](#pending-tests)
+  - [Exclusive tests](#exclusive-tests)
+  - [Inclusive tests](#inclusive-tests)
+  - [Test duration](#test-duration)
+  - [String diffs](#string-diffs)
+  - [mocha(1)](#usage)
+  - [Interfaces](#interfaces)
+  - [Reporters](#reporters)
+  - [Browser support](#browser-support)
+  - [mocha.opts](#mocha.opts)
+  - [Suite specific timeouts](#suite-specific-timeouts)
+  - [Test specific timeouts](#test-specific-timeouts)
+  - [Best practices](#best-practices)
+  - [Editors](#editors)
+  - [Example test suites](#example-test-suites)
+  - [Running mocha's tests](#running-mochas-tests)
+  - [More information](#more-information)
+
 <h2 id="installation">Installation</h2>
 
   Install with [npm](http://npmjs.org):
@@ -182,7 +207,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   Note that currently only one `.only()` call is respected, this
   effectively turns into a `--grep`.
 
-<h2 id="exclusive-tests">Inclusive tests</h2>
+<h2 id="inclusive-tests">Inclusive tests</h2>
 
  This feature is similar to `.only()`, however by appending `.skip()`
  you may tell Mocha to simply ignore these suite(s) and test-case(s). This
@@ -217,7 +242,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
    ![test duration](images/reporter-spec-duration.png)
 
-<h2 id="string diffs">String diffs</h2>
+<h2 id="string-diffs">String diffs</h2>
 
   Mocha supports the `err.expected`, and `err.actual` properties
   when available to present expectations to the developer. Currently
