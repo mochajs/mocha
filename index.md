@@ -182,7 +182,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   Note that currently only one `.only()` call is respected, this
   effectively turns into a `--grep`.
 
-<h2 id="exclusive-tests">Inclusive tests</h2>
+<h2 id="inclusive-tests">Inclusive tests</h2>
 
  This feature is similar to `.only()`, however by appending `.skip()`
  you may tell Mocha to simply ignore these suite(s) and test-case(s). This
@@ -217,7 +217,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
    ![test duration](images/reporter-spec-duration.png)
 
-<h2 id="string diffs">String diffs</h2>
+<h2 id="string-diffs">String diffs</h2>
 
   Mocha supports the `err.expected`, and `err.actual` properties
   when available to present expectations to the developer. Currently
