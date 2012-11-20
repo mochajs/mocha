@@ -1408,7 +1408,7 @@ exports.colors = {
  */
  
 exports.symbols = {
-  ok: '✓',
+  ok: '✔',
   err: '✖',
   dot: '․'
 };
@@ -1651,7 +1651,7 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  fmt = color('bright pass', ' ')
+  fmt = color('bright pass', '  ' + exports.symbols.ok)
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
@@ -1662,7 +1662,7 @@ Base.prototype.epilogue = function(){
 
   // pending
   if (stats.pending) {
-    fmt = color('pending', ' ')
+    fmt = color('pending', '  •')
       + color('pending', ' %d %s pending');
 
     console.log(fmt, stats.pending, pluralize(stats.pending));
@@ -3519,12 +3519,6 @@ var Date = global.Date
   , clearInterval = global.clearInterval;
 
 /**
- * Object#toString().
- */
-
-var toString = Object.prototype.toString;
-
-/**
  * Expose `Runnable`.
  */
 
@@ -3697,7 +3691,7 @@ Runnable.prototype.run = function(fn){
   if (this.async) {
     try {
       this.fn.call(ctx, function(err){
-        if (toString.call(err) === "[object Error]") return done(err);
+        if (err instanceof Error) return done(err);
         if (null != err) return done(new Error('done() invoked with non-Error: ' + err));
         done();
       });
@@ -3918,10 +3912,10 @@ Runner.prototype.fail = function(test, err){
 /**
  * Fail the given `hook` with `err`.
  *
- * Hook failures should emit a `fail`
- * and `hook end`.
- * Subsequent tests in the current suite
- * will not be run.
+ * Hook failures (currently) hard-end due
+ * to that fact that a failing hook will
+ * surely cause subsequent tests to fail,
+ * causing jumbled reporting.
  *
  * @param {Hook} hook
  * @param {Error} err
@@ -3930,7 +3924,7 @@ Runner.prototype.fail = function(test, err){
 
 Runner.prototype.failHook = function(hook, err){
   this.fail(hook, err);
-  this.emit('hook end', hook);
+  this.emit('end');
 };
 
 /**
@@ -3956,17 +3950,13 @@ Runner.prototype.hook = function(name, fn){
 
     hook.on('error', function(err){
       self.failHook(hook, err);
-      return fn(err);
     });
 
     hook.run(function(err){
       hook.removeAllListeners('error');
       var testError = hook.error();
       if (testError) self.fail(self.test, testError);
-      if (err) {
-        self.failHook(hook, err); 
-        return fn(err);
-      }
+      if (err) return self.failHook(hook, err);
       self.emit('hook end', hook);
       next(++i);
     });
@@ -4114,10 +4104,7 @@ Runner.prototype.runTests = function(suite, fn){
 
     // execute test and hook(s)
     self.emit('test', self.test = test);
-    self.hookDown('beforeEach', function(err){
-      if(err){
-        return fn();
-      }
+    self.hookDown('beforeEach', function(){
       self.currentRunnable = self.test;
       self.runTest(function(err){
         test = self.test;
@@ -4174,10 +4161,7 @@ Runner.prototype.runSuite = function(suite, fn){
     });
   }
 
-  this.hook('beforeAll', function(err){
-    if(err){
-      return done();
-    }
+  this.hook('beforeAll', function(){
     self.runTests(suite, next);
   });
 };
