@@ -94,7 +94,6 @@ test-bail:
 test-hook-fail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--bail \
 		test/acceptance/misc/hook.fail
 
 test-async-only:

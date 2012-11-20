@@ -179,9 +179,12 @@ describe('Runner', function(){
       runner.failHook(hook, err);
     })
 
-    it('should emit "end"', function(done){
+    it('should emit "hook end"', function(done){
       var hook = {}, err = {};
-      runner.on('end', done);
+      runner.on('hook end', function(returnHook){
+          hook.should.equal(hook);
+          done();
+      });
       runner.failHook(hook, err);
     })
   })
