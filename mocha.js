@@ -1408,7 +1408,7 @@ exports.colors = {
  */
  
 exports.symbols = {
-  ok: '✔',
+  ok: '✓',
   err: '✖',
   dot: '․'
 };
@@ -1651,7 +1651,7 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  fmt = color('bright pass', '  ' + exports.symbols.ok)
+  fmt = color('bright pass', ' ')
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
@@ -1662,7 +1662,7 @@ Base.prototype.epilogue = function(){
 
   // pending
   if (stats.pending) {
-    fmt = color('pending', '  •')
+    fmt = color('pending', ' ')
       + color('pending', ' %d %s pending');
 
     console.log(fmt, stats.pending, pluralize(stats.pending));
@@ -2382,6 +2382,7 @@ function List(runner) {
   });
 
   runner.on('fail', function(test, err){
+    test.error = err;
     console.log(JSON.stringify(['fail', clean(test)]));
   });
 
@@ -2400,11 +2401,20 @@ function List(runner) {
  */
 
 function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
+  var obj = {
+    title: test.title,
+    fullTitle: test.fullTitle(),
+    duration: test.duration
+  };
+
+  if (test.error) {
+    obj.error = {
+      message: test.error.message,
+      stack: test.error.stack
+    };
   }
+
+  return obj;
 }
 }); // module: reporters/json-stream.js
 
@@ -2447,16 +2457,17 @@ function JSONReporter(runner) {
     passes.push(test);
   });
 
-  runner.on('fail', function(test){
+  runner.on('fail', function(test, err){
+    test.error = err;
     failures.push(test);
   });
 
   runner.on('end', function(){
     var obj = {
-        stats: self.stats
-      , tests: tests.map(clean)
-      , failures: failures.map(clean)
-      , passes: passes.map(clean)
+      stats: self.stats,
+      tests: tests.map(clean),
+      failures: failures.map(clean),
+      passes: passes.map(clean)
     };
 
     process.stdout.write(JSON.stringify(obj, null, 2));
@@ -2473,11 +2484,20 @@ function JSONReporter(runner) {
  */
 
 function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
+  var obj = {
+    title: test.title,
+    fullTitle: test.fullTitle(),
+    duration: test.duration
+  };
+
+  if (test.error) {
+    obj.error = {
+      message: test.error.message,
+      stack: test.error.stack
+    };
   }
+
+  return obj;
 }
 }); // module: reporters/json.js
 
@@ -3519,6 +3539,12 @@ var Date = global.Date
   , clearInterval = global.clearInterval;
 
 /**
+ * Object#toString().
+ */
+
+var toString = Object.prototype.toString;
+
+/**
  * Expose `Runnable`.
  */
 
@@ -3691,7 +3717,7 @@ Runnable.prototype.run = function(fn){
   if (this.async) {
     try {
       this.fn.call(ctx, function(err){
-        if (err instanceof Error) return done(err);
+        if (toString.call(err) === "[object Error]") return done(err);
         if (null != err) return done(new Error('done() invoked with non-Error: ' + err));
         done();
       });
