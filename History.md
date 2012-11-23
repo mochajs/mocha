@@ -1,4 +1,10 @@
 
+1.7.1 / 2012-11-23 
+==================
+
+  * add better checkmark
+  * add `.error.{stack,message}` to json-stream and json reporters
+
 1.7.0 / 2012-11-07 
 ==================
 
