@@ -148,7 +148,7 @@ program.on('require', function(mod){
   var abs = exists(mod)
     || exists(mod + '.js');
 
-  if (abs) mod = join(cwd, mod);
+  if (abs) mod = resolve(cwd, mod);
   require(mod);
 });
 
