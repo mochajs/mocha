@@ -1,4 +1,9 @@
 
+1.7.1 / 2012-11-28 
+==================
+
+  * fix uncaught errors to expose the original error message  
+
 1.7.0 / 2012-11-07 
 ==================
 

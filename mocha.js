@@ -1408,7 +1408,7 @@ exports.colors = {
  */
  
 exports.symbols = {
-  ok: '✔',
+  ok: '✓',
   err: '✖',
   dot: '․'
 };
@@ -1651,7 +1651,7 @@ Base.prototype.epilogue = function(){
   }
 
   // pass
-  fmt = color('bright pass', '  ' + exports.symbols.ok)
+  fmt = color('bright pass', ' ')
     + color('green', ' %d %s complete')
     + color('light', ' (%s)');
 
@@ -1662,7 +1662,7 @@ Base.prototype.epilogue = function(){
 
   // pending
   if (stats.pending) {
-    fmt = color('pending', '  •')
+    fmt = color('pending', ' ')
       + color('pending', ' %d %s pending');
 
     console.log(fmt, stats.pending, pluralize(stats.pending));
@@ -2024,7 +2024,7 @@ function HTML(runner, root) {
   });
 
   runner.on('fail', function(test, err){
-    if ('hook' == test.type || err.uncaught) runner.emit('test end', test);
+    if ('hook' == test.type) runner.emit('test end', test);
   });
 
   runner.on('test end', function(test){
@@ -3519,6 +3519,12 @@ var Date = global.Date
   , clearInterval = global.clearInterval;
 
 /**
+ * Object#toString().
+ */
+
+var toString = Object.prototype.toString;
+
+/**
  * Expose `Runnable`.
  */
 
@@ -3691,7 +3697,7 @@ Runnable.prototype.run = function(fn){
   if (this.async) {
     try {
       this.fn.call(ctx, function(err){
-        if (err instanceof Error) return done(err);
+        if (toString.call(err) === "[object Error]") return done(err);
         if (null != err) return done(new Error('done() invoked with non-Error: ' + err));
         done();
       });
@@ -3903,9 +3909,11 @@ Runner.prototype.checkGlobals = function(test){
 Runner.prototype.fail = function(test, err){
   ++this.failures;
   test.state = 'failed';
+
   if ('string' == typeof err) {
     err = new Error('the string "' + err + '" was thrown, throw an Error :)');
   }
+  
   this.emit('fail', test, err);
 };
 
@@ -4208,8 +4216,8 @@ Runner.prototype.run = function(fn){
   debug('start');
 
   // uncaught callback
-  function uncaught(err) {
-    self.uncaught(err);
+  function uncaught(err, url, line) {
+    self.uncaught(new Error(err + ' (' + url + ':' + line + ')'));
   }
 
   // callback
