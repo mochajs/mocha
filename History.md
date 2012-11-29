@@ -1,5 +1,5 @@
 
-1.7.1 / 2012-11-28 
+1.7.2 / 2012-11-28 
 ==================
 
   * fix uncaught errors to expose the original error message  
