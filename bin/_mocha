@@ -5,6 +5,7 @@
  */
 
 var program = require('commander')
+  , sprintf = require('util').format
   , path = require('path')
   , fs = require('fs')
   , resolve = path.resolve
@@ -284,14 +285,14 @@ if (program.watch) {
     process.exit();
   });
 
-  var frames = [
-      '  \u001b[96m◜ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◠ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◝ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◞ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◡ \u001b[90mwatching\u001b[0m'
-    , '  \u001b[96m◟ \u001b[90mwatching\u001b[0m'
-  ];
+  var spinner = ['◜','◠','◝','◞','◡','◟'];
+  if ('win32' === process.platform)  {
+    spinner = ['|','/','-','\\'];
+  }
+
+  var frames = spinner.map(function(c) {
+    return sprintf('  \u001b[96m%s \u001b[90mwatching\u001b[0m', c);
+  });
 
   var watchFiles = utils.files(cwd);
 
@@ -415,6 +416,6 @@ function play(arr, interval) {
 
   play.timer = setInterval(function(){
     var str = arr[i++ % len];
-    process.stdout.write('\r' + str);
+    process.stdout.write('\u001b[0G' + str);
   }, interval);
 }
