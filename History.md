@@ -1,4 +1,10 @@
 
+1.7.3 / 2012-11-30 
+==================
+
+  * fix uncaught error support for the browser
+  * revert uncaught "fix" which breaks node
+
 1.7.2 / 2012-11-28 
 ==================
 
