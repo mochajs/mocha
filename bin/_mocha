@@ -60,9 +60,8 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
-  .option('-g, --grep <regex>', 'only run tests matching <regex>')
-  .option('-f, --find <string>', 'only run tests containing <string>')
-  .option('-i, --invert', 'inverts --grep matches')
+  .option('-o, --only <string>', 'only run tests containing <string>')
+  .option('-i, --invert', 'inverts --only and --only-regexp matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-w, --watch', 'watch files for changes')
@@ -79,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--only-regexp <pattern>', 'only run tests matching <pattern>')
 
 program.name = 'mocha';
 
@@ -218,13 +218,13 @@ if (program.timeout) mocha.suite.timeout(program.timeout);
 
 mocha.suite.bail(program.bail);
 
-// --grep
+// --only
 
-if (program.grep) mocha.grep(program.grep);
+if (program.only) mocha.only(program.only);
 
-// --find
+// --only-regexp
 
-if (program.find) mocha.find(program.find);
+if (program.onlyRegexp) mocha.only(new RegExp(program.onlyRegexp));
 
 // --invert
 

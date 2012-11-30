@@ -2,65 +2,46 @@
 var Mocha = require('../');
 
 describe('Mocha', function(){
-  describe('"grep" option', function(){
+  describe('"only-regexp" option', function(){
     it('should add a RegExp to the mocha.options object', function(){
-      var mocha = new Mocha({ grep: /foo()/ });
+      var mocha = new Mocha({ 'only-regexp': /foo()/ });
       mocha.options.grep.toString().should.equal('/foo()/');
     })
 
-    it('should convert grep string to a RegExp', function(){
-      var mocha = new Mocha({ grep: 'foo()' });
+    it('should convert string to a RegExp', function(){
+      var mocha = new Mocha({ 'only-regexp': 'foo()' });
       mocha.options.grep.toString().should.equal('/foo()/');
     })
   })
 
-  describe('.grep()', function(){
+  describe('.only()', function(){
     it('should add a RegExp to the mocha.options object', function(){
       var mocha = new Mocha;
-      mocha.grep(/foo()/);
+      mocha.only(/foo()/);
       mocha.options.grep.toString().should.equal('/foo()/');
     })
 
-    it('should convert grep string to a RegExp', function(){
+    it('should convert string to an escaped RegExp', function(){
       var mocha = new Mocha;
-      mocha.grep('foo()');
-      mocha.options.grep.toString().should.equal('/foo()/');
-    })
-
-    it('should return it\'s parent Mocha object for chainability', function(){
-      var mocha = new Mocha;
-      mocha.grep().should.equal(mocha);
-    })
-  })
-
-  describe('"find" option', function(){
-    it('should add a RegExp to the mocha.options object', function(){
-      var mocha = new Mocha({ find: /foo()/ });
-      mocha.options.grep.toString().should.equal('/foo()/');
-    })
-
-    it('should convert find string to an escaped RegExp', function(){
-      var mocha = new Mocha({ find: 'foo()' });
-      mocha.options.grep.toString().should.equal('/foo\\(\\)/');
-    })
-  })
-
-  describe('.find()', function(){
-    it('should add a RegExp to the mocha.options object', function(){
-      var mocha = new Mocha;
-      mocha.find(/foo()/);
-      mocha.options.grep.toString().should.equal('/foo()/');
-    })
-
-    it('should convert find string to an escaped RegExp', function(){
-      var mocha = new Mocha;
-      mocha.find('foo()');
+      mocha.only('foo()');
       mocha.options.grep.toString().should.equal('/foo\\(\\)/');
     })
 
     it('should return it\'s parent Mocha object for chainability', function(){
       var mocha = new Mocha;
-      mocha.find().should.equal(mocha);
+      mocha.only().should.equal(mocha);
+    })
+  })
+
+  describe('"only" option', function(){
+    it('should add a RegExp to the mocha.options object', function(){
+      var mocha = new Mocha({ 'only': /foo()/ });
+      mocha.options.grep.toString().should.equal('/foo()/');
+    })
+
+    it('should convert string to an escaped RegExp', function(){
+      var mocha = new Mocha({ 'only': 'foo()' });
+      mocha.options.grep.toString().should.equal('/foo\\(\\)/');
     })
   })
 
