@@ -4215,15 +4215,10 @@ Runner.prototype.run = function(fn){
 
   debug('start');
 
-  // uncaught callback
-  function uncaught(err, url, line) {
-    self.uncaught(new Error(err + ' (' + url + ':' + line + ')'));
-  }
-
   // callback
   this.on('end', function(){
     debug('end');
-    process.removeListener('uncaughtException', uncaught);
+    process.removeListener('uncaughtException', self.uncaught.bind(self));
     fn(self.failures);
   });
 
@@ -4235,7 +4230,7 @@ Runner.prototype.run = function(fn){
   });
 
   // uncaught exception
-  process.on('uncaughtException', uncaught);
+  process.on('uncaughtException', this.uncaught.bind(this));
 
   return this;
 };
@@ -4946,7 +4941,9 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = fn;
+    window.onerror = function(err, url, line){
+      fn(new Error(err + ' (' + url + ':' + line + ')'));
+    };
   }
 };
 

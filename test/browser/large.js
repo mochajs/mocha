@@ -21,3 +21,12 @@ while (n--) {
     })
   })
 }
+
+describe('something', function(){
+  it('should provide a useful error', function(done){
+    setTimeout(function(){
+      throw new Error('boom');
+      done();
+    }, 1);
+  })
+})
