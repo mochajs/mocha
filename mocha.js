@@ -3290,7 +3290,7 @@ function TAP(runner) {
 
   runner.on('fail', function(test, err){
     console.log('not ok %d %s', n, title(test));
-    console.log(err.stack.replace(/^/gm, '  '));
+    if (err.stack) console.log(err.stack.replace(/^/gm, '  '));
   });
 }
 
