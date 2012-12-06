@@ -30,7 +30,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-only test-jsapi test-compilers
 
 test-jsapi:
 	@node test/jsapi
@@ -72,16 +72,16 @@ test-exports:
 		--ui exports \
 		test/acceptance/interfaces/exports
 
-test-grep:
+test-only:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
-	  --grep fast \
+	  --only fast \
 	  test/acceptance/misc/grep
 
 test-invert:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
-	  --grep slow \
+	  --only slow \
 	  --invert \
 	  test/acceptance/misc/grep
 
@@ -123,4 +123,4 @@ tm:
 	mkdir -p $(TM_DEST)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-only tm clean

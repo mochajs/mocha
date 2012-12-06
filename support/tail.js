@@ -102,7 +102,8 @@ process.on = function(e, fn){
     mocha.globals('location');
 
     var query = Mocha.utils.parseQuery(window.location.search || '');
-    if (query.grep) mocha.grep(query.grep);
+    if (query.only) mocha.only(query.only);
+    if (query['only-regexp']) mocha.only(new RegExp(query['only-regexp']));
     if (query.invert) mocha.invert();
 
     return Mocha.prototype.run.call(mocha, function(){
