@@ -3269,7 +3269,9 @@ function TAP(runner) {
 
   var self = this
     , stats = this.stats
-    , n = 1;
+    , n = 1
+    , passes = 0
+    , failures = 1;
 
   runner.on('start', function(){
     var total = runner.grepTotal(runner.suite);
@@ -3285,12 +3287,20 @@ function TAP(runner) {
   });
 
   runner.on('pass', function(test){
+    passes++;
     console.log('ok %d %s', n, title(test));
   });
 
   runner.on('fail', function(test, err){
+    failures++;
     console.log('not ok %d %s', n, title(test));
     console.log(err.stack.replace(/^/gm, '  '));
+  });
+
+  runner.on('end', function(){
+    console.log('# tests ' + (passes + failures));
+    console.log('# pass ' + passes);
+    console.log('# fail ' + failures);
   });
 }
 
@@ -3847,7 +3857,7 @@ Runner.prototype.globalProps = function() {
 
   // non-enumerables
   for (var i = 0; i < globals.length; ++i) {
-    if (~props.indexOf(globals[i])) continue;
+    if (~utils.indexOf(props, globals[i])) continue;
     props.push(globals[i]);
   }
 
@@ -4218,7 +4228,9 @@ Runner.prototype.run = function(fn){
   // callback
   this.on('end', function(){
     debug('end');
-    process.removeListener('uncaughtException', self.uncaught.bind(self));
+    process.removeListener('uncaughtException', function(err){
+      self.uncaught(err);
+    });
     fn(self.failures);
   });
 
@@ -4230,7 +4242,9 @@ Runner.prototype.run = function(fn){
   });
 
   // uncaught exception
-  process.on('uncaughtException', this.uncaught.bind(this));
+  process.on('uncaughtException', function(err){
+    self.uncaught(err);
+  });
 
   return this;
 };

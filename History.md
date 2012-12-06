@@ -1,4 +1,11 @@
 
+1.7.4 / 2012-12-06 
+==================
+
+  * add total number of passes and failures to TAP
+  * remove .bind() calls. re #680
+  * fix indexOf. Closes #680
+
 1.7.3 / 2012-11-30 
 ==================
 
