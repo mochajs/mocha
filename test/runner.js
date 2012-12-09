@@ -88,7 +88,7 @@ describe('Runner', function(){
     it('should emit "fail" when a new global is introduced', function(done){
       runner.checkGlobals();
       global.foo = 'bar';
-      runner.on('fail', function(test, err){
+      runner.on('fail', function(time, test, err){
         test.should.equal('im a test');
         err.message.should.equal('global leak detected: foo');
         delete global.foo;
@@ -123,7 +123,7 @@ describe('Runner', function(){
       runner.checkGlobals();
       global.foo = 'bar';
       global.bar = 'baz';
-      runner.on('fail', function(test, err){
+      runner.on('fail', function(time, test, err){
         test.should.equal('im a test');
         err.message.should.equal('global leaks detected: foo, bar');
         delete global.foo;
@@ -151,7 +151,7 @@ describe('Runner', function(){
 
     it('should emit "fail"', function(done){
       var test = {}, err = {};
-      runner.on('fail', function(test, err){
+      runner.on('fail', function(time, test, err){
         test.should.equal(test);
         err.should.equal(err);
         done();
@@ -171,7 +171,7 @@ describe('Runner', function(){
 
     it('should emit "fail"', function(done){
       var hook = {}, err = {};
-      runner.on('fail', function(hook, err){
+      runner.on('fail', function(time, hook, err){
         hook.should.equal(hook);
         err.should.equal(err);
         done();
@@ -181,7 +181,7 @@ describe('Runner', function(){
 
     it('should emit "end"', function(done){
       var hook = {}, err = {};
-      runner.on('end', done);
+      runner.on('end', function () { done() });
       runner.failHook(hook, err);
     })
   })
