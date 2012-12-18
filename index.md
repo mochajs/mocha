@@ -1,4 +1,3 @@
-
 Mocha is a feature-rich JavaScript test framework running on [node](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](http://github.com/visionmedia/mocha).
 
 <h2 id="features">Features</h2>
@@ -302,7 +301,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="debug-option">-d, --debug</h3>
 
-  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the __debugger__ statement.
+  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the __debugger__ statement (`mocha debug ...` will fire up node's built-in debug client, `mocha --debug ...` will allow you to use a different client, such as the WebKit Web Inspector).
 
 <h3 id="globals-option">--globals &lt;names&gt;</h3>
 
