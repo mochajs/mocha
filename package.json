@@ -1,27 +1,40 @@
 {
-    "name": "mocha"
-  , "version": "1.7.4"
-  , "description": "simple, flexible, fun test framework"
-  , "keywords": ["test", "bdd", "tdd", "tap"]
-  , "author": "TJ Holowaychuk <tj@vision-media.ca>"
-  , "repository": { "type": "git", "url": "git://github.com/visionmedia/mocha.git" }
-  , "main": "./index"
-  , "bin": { "mocha": "./bin/mocha", "_mocha": "./bin/_mocha" }
-  , "engines": { "node": ">= 0.4.x" }
-  , "scripts": {
+  "name": "mocha",
+  "version": "1.7.4",
+  "description": "simple, flexible, fun test framework",
+  "keywords": [
+    "test",
+    "bdd",
+    "tdd",
+    "tap"
+  ],
+  "author": "TJ Holowaychuk <tj@vision-media.ca>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/visionmedia/mocha.git"
+  },
+  "main": "./index",
+  "bin": {
+    "mocha": "./bin/mocha",
+    "_mocha": "./bin/_mocha"
+  },
+  "engines": {
+    "node": ">= 0.4.x"
+  },
+  "scripts": {
     "test": "make test-all"
-  }
-  , "dependencies":{
-      "commander": "0.6.1"
-    , "growl": "1.6.x"
-    , "jade": "0.26.3"
-    , "diff": "1.0.2"
-    , "debug": "*"
-    , "mkdirp": "0.3.3"
-    , "ms": "0.3.0"
-  }
-  , "devDependencies": {
-      "should": "*"
-    , "coffee-script": "1.2"
+  },
+  "dependencies": {
+    "commander": "0.6.1",
+    "growl": "1.6.x",
+    "jade": "0.26.3",
+    "diff": "1.0.2",
+    "debug": "*",
+    "mkdirp": "0.3.3",
+    "ms": "0.3.0"
+  },
+  "devDependencies": {
+    "should": "*",
+    "coffee-script": "1.2"
   }
 }
