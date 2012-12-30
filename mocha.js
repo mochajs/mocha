@@ -2679,7 +2679,6 @@ function Markdown(runner) {
 
   var self = this
     , stats = this.stats
-    , total = runner.total
     , level = 0
     , buf = '';
 
@@ -3271,7 +3270,7 @@ function TAP(runner) {
     , stats = this.stats
     , n = 1
     , passes = 0
-    , failures = 1;
+    , failures = 0;
 
   runner.on('start', function(){
     var total = runner.grepTotal(runner.suite);
