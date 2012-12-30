@@ -3,6 +3,7 @@
   "version": "1.7.4",
   "description": "simple, flexible, fun test framework",
   "keywords": [
+    "mocha",
     "test",
     "bdd",
     "tdd",

@@ -1,0 +1,16 @@
+{
+  "name": "mocha",
+  "version": "1.7.4",
+  "repo": "visionmedia/mocha",
+  "description": "simple, flexible, fun test framework",
+  "keywords": [
+    "mocha",
+    "test",
+    "bdd",
+    "tdd",
+    "tap"
+  ],
+  "main": "mocha.js",
+  "scripts": ["mocha.js"],
+  "styles": ["mocha.css"]
+}
