@@ -1,7 +1,15 @@
 @charset "UTF-8";
-body {
+
+#mocha {
+  background-color: #fff;
+  color: #333;
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 60px 50px;
+  text-align: left;
+}
+
+#mocha.integration {
+  padding: 0;
 }
 
 #mocha ul, #mocha li {
@@ -21,6 +29,7 @@ body {
   margin-top: 15px;
   font-size: 1em;
   font-weight: 200;
+  color: #000;
 }
 
 #mocha h1 a {
@@ -43,8 +52,10 @@ body {
 
 #mocha h2 {
   font-size: 12px;
+  line-height: 18px;
   font-weight: normal;
   cursor: pointer;
+  color: #333;
 }
 
 #mocha .suite {
@@ -133,6 +144,7 @@ body {
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
+  background-color: #fff;
   border: 1px solid #eee;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
@@ -179,6 +191,18 @@ body {
   display: none;
 }
 
+#mocha.integration #mocha-report {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  position: absolute;
+  padding-bottom: 20px;
+  top: 15px;
+  left: 10px;
+  bottom: 15px;
+  width: 800px;
+  overflow: scroll;
+}
+
 #mocha-error {
   color: #c00;
   font-size: 1.5  em;
@@ -187,6 +211,8 @@ body {
 }
 
 #mocha-stats {
+  background-color: #eee;
+  border: 1px solid #999;
   position: fixed;
   top: 15px;
   right: 10px;
@@ -195,9 +221,25 @@ body {
   color: #888;
 }
 
+#mocha-stats .toggle {
+  display: none;
+}
+#mocha.integration #mocha-stats .toggle {
+  display: inline-block;
+}
+
+#mocha.integration.bottom #mocha-stats {
+  top: auto;
+  bottom: 15px;
+}
+#mocha.integration.left #mocha-stats {
+  left: 10px;
+}
+
 #mocha-stats .progress {
   float: right;
   padding-top: 0;
+  height: 40px;
 }
 
 #mocha-stats em {
@@ -220,8 +262,9 @@ body {
   padding-top: 11px;
 }
 
-code .comment { color: #ddd }
-code .init { color: #2F6FAD }
-code .string { color: #5890AD }
-code .keyword { color: #8A6343 }
-code .number { color: #2F6FAD }
+#mocha code { color: #333 }
+#mocha code .comment { color: #ddd }
+#mocha code .init { color: #2F6FAD }
+#mocha code .string { color: #5890AD }
+#mocha code .keyword { color: #8A6343 }
+#mocha code .number { color: #2F6FAD }

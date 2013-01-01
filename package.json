@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "should": "*",
-    "coffee-script": "1.2"
+    "coffee-script": "1.2",
+    "express": "*"
   }
 }
