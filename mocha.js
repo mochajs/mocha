@@ -1232,14 +1232,14 @@ Mocha.prototype.asyncOnly = function(){
 };
 
 /**
- * Run tests and invoke `fn()` when complete.
+ * Init mocha, and return test runner
  *
  * @param {Function} fn
  * @return {Runner}
  * @api public
  */
 
-Mocha.prototype.run = function(fn){
+Mocha.prototype.init = function() {
   if (this.files.length) this.loadFiles();
   var suite = this.suite;
   var options = this.options;
@@ -1250,6 +1250,19 @@ Mocha.prototype.run = function(fn){
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
+  return runner;
+};
+
+/**
+ * Run tests and invoke `fn()` when complete.
+ *
+ * @param {Function} fn
+ * @return {Runner}
+ * @api public
+ */
+
+Mocha.prototype.run = function(fn){
+  var runner = this.init();
   return runner.run(fn);
 };
 
@@ -1937,6 +1950,7 @@ exports = module.exports = HTML;
  */
 
 var statsTemplate = '<ul id="mocha-stats">'
+  + '<li class="toggle"><a href="#">all: <em>0</em></li>'
   + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
   + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
   + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
@@ -1958,11 +1972,13 @@ function HTML(runner, root) {
     , total = runner.total
     , stat = fragment(statsTemplate)
     , items = stat.getElementsByTagName('li')
-    , passes = items[1].getElementsByTagName('em')[0]
-    , passesLink = items[1].getElementsByTagName('a')[0]
-    , failures = items[2].getElementsByTagName('em')[0]
-    , failuresLink = items[2].getElementsByTagName('a')[0]
-    , duration = items[3].getElementsByTagName('em')[0]
+    , all = items[0].getElementsByTagName('em')[0]
+    , allLink = items[0].getElementsByTagName('a')[0]
+    , passes = items[2].getElementsByTagName('em')[0]
+    , passesLink = items[2].getElementsByTagName('a')[0]
+    , failures = items[3].getElementsByTagName('em')[0]
+    , failuresLink = items[3].getElementsByTagName('a')[0]
+    , duration = items[4].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
     , report = fragment('<ul id="mocha-report"></ul>')
     , stack = [report]
@@ -1985,23 +2001,53 @@ function HTML(runner, root) {
   if (!root) return error('#mocha div missing, add it to your document');
 
   // pass toggle
-  on(passesLink, 'click', function(){
-    unhide();
+  on(passesLink, 'click', function(e){
+    e.preventDefault();
+    unhide(report);
     var name = /pass/.test(report.className) ? '' : ' pass';
     report.className = report.className.replace(/fail|pass/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test pass');
   });
 
   // failure toggle
-  on(failuresLink, 'click', function(){
-    unhide();
+  on(failuresLink, 'click', function(e){
+    e.preventDefault();
+    unhide(report);
     var name = /fail/.test(report.className) ? '' : ' fail';
     report.className = report.className.replace(/fail|pass/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test fail');
   });
 
+  // all toggle
+  on(allLink, 'click', function(e) {
+    e.preventDefault();
+    if (report.style.display=='none' || /fail|pass/.test(report.className)) {
+      unhide(report);
+      report.className = report.className.replace(/fail|pass/g, '');
+    } else {
+      report.style.display = 'none';
+    }
+  });
+
   root.appendChild(stat);
   root.appendChild(report);
+  if (root.className.match(/integration/)) {
+    report.style.display = 'none';
+
+    // hide report when click outside it
+    on(document, 'click', function(e) {
+      var node = e.target;
+      while (node) {
+        if (node.id==='mocha') return;
+        node = node.parentNode;
+      }
+      report.style.display = 'none'
+    });
+
+    runner.on('end', function() {
+      unhide(report);
+    });
+  }
 
   if (progress) progress.size(40);
 
@@ -2036,6 +2082,7 @@ function HTML(runner, root) {
 
     // update stats
     var ms = new Date - stats.start;
+    text(all, stats.tests);
     text(passes, stats.passes);
     text(failures, stats.failures);
     text(duration, (ms / 1000).toFixed(2));
@@ -2131,7 +2178,8 @@ function hideSuitesWithout(classname) {
  * Unhide .hidden suites.
  */
 
-function unhide() {
+function unhide(report) {
+  report.style.display = 'block';
   var els = document.getElementsByClassName('suite hidden');
   for (var i = 0; i < els.length; ++i) {
     els[i].className = els[i].className.replace('suite hidden', 'suite');

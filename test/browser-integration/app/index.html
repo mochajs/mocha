@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha browser integration tests</title>
+    <script src="/app/page.js"></script>
+    <style>
+      body {
+        background: #333;
+        color: #fff;
+      }
+      a {
+        color: #259dff;
+        font-weight: bold;
+      }
+    </style>
+    <link rel="stylesheet" href="/mocha.css" />
+  </head>
+  <body>
+    <h1>Basic</h1>
+    <p></p>
+    <ul>
+      <li><a href="./">/</a></li>
+      <li><a href="#whoop">#whoop</a></li>
+      <li><a href="./about">/about</a></li>
+      <li><a href="./contact">/contact</a></li>
+      <li><a href="./not-found?foo=bar">/not-found</a></li>
+    </ul>
+    <div id="mocha" class="integration bottom"></div>
+    <script>
+      page('/', index);
+      page('/about', about);
+      page('/contact', contact);
+      page();
+
+      function index() {
+        document.querySelector('p').textContent = 'viewing index';
+      }
+
+      function about() {
+        document.querySelector('p').textContent = 'viewing about';
+      }
+
+      function contact() {
+        document.querySelector('p').textContent = 'viewing contact';
+      }
+    </script>
+    <script src="/app/expect.js"></script>
+    <script src="/mocha.js"></script>
+    <script>
+      mocha.setup('bdd');
+    </script>
+    <script src="page.tests.js"></script>
+    <script>
+      onload = function(){
+        // only run if we are the parent frame. If run from testacular, the
+        // mocha runner will be controlled from outside this frame.
+        if (top === self) {
+          var runner = mocha.run();
+        }
+      };
+    </script>
+  </body>
+</html>
