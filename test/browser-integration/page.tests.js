@@ -11,5 +11,20 @@ describe("Basic page transitions", function() {
   });
 
   it("should have a failing test", function() {
-    expect(document.querySelector('p').innerHTML).to.equal('not this'); });
+    expect(document.querySelector('p').innerHTML).to.equal('not this');
+  });
+
+  describe("A nested suite", function() {
+    it('should start again', function(done) {
+      page('/');
+      setTimeout(done, 1000);
+    });
+  });
+});
+
+
+describe("Another suite", function() {
+  it('should start again', function() {
+    page('/');
+  });
 });

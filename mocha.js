@@ -2043,6 +2043,10 @@ function HTML(runner, root) {
       }
       report.style.display = 'none'
     });
+
+    runner.on('end', function() {
+      unhide(report);
+    });
   }
 
   if (progress) progress.size(40);
