@@ -201,6 +201,7 @@
   bottom: 15px;
   width: 800px;
   overflow: scroll;
+  z-index: 1000;
 }
 
 #mocha-error {
