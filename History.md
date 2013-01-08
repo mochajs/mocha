@@ -1,3 +1,10 @@
+1.7.5 / 2013-01-08
+==================
+
+  * add Mocha#bail() method
+  * bump growl to version 1.7x
+  * Added a number of tdd style snippets to the TextMate bundle
+  * checkGlobals err.stack fix. Closes #681
 
 1.7.4 / 2012-12-06 
 ==================
