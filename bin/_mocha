@@ -5,10 +5,8 @@
  */
 
 var program = require('commander')
-  , exec = require('child_process').exec
   , path = require('path')
   , fs = require('fs')
-  , vm = require('vm')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
