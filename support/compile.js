@@ -58,7 +58,9 @@ function parseRequires(js) {
 function parseInheritance(js) {
   return js
     .replace(/^ *(\w+)\.prototype\.__proto__ * = *(\w+)\.prototype *;?/gm, function(_, child, parent){
-      return child + '.prototype = new ' + parent + ';\n'
+      return 'function F(){};\n'
+        + 'F.prototype = ' + parent + '.prototype;\n'
+        + child + '.prototype = new F;\n'
         + child + '.prototype.constructor = '+ child + ';\n';
     });
 }
