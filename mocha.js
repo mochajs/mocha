@@ -1005,6 +1005,7 @@ function image(name) {
  *   - `reporter` reporter instance, defaults to `mocha.reporters.Dot`
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
+ *   - `bail` bail on the first test failure
  *   - `slow` milliseconds to wait before considering a test slow
  *   - `ignoreLeaks` ignore global leaks
  *   - `grep` string or regexp to filter tests with
@@ -1020,10 +1021,24 @@ function Mocha(options) {
   this.grep(options.grep);
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
+  this.bail(options.bail);
   this.reporter(options.reporter);
   if (options.timeout) this.timeout(options.timeout);
   if (options.slow) this.slow(options.slow);
 }
+
+/**
+ * Enable or disable bailing on the first failure.
+ *
+ * @param {Boolean} [bail]
+ * @api public
+ */
+
+Mocha.prototype.bail = function(bail){
+  if (null == bail) bail = true;
+  this.suite.bail(bail);
+  return this;
+};
 
 /**
  * Add test `file`.
@@ -1040,7 +1055,7 @@ Mocha.prototype.addFile = function(file){
 /**
  * Set reporter to `reporter`, defaults to "dot".
  *
- * @param {String|Function} reporter name of a reporter or a reporter constructor
+ * @param {String|Function} reporter name or constructor
  * @api public
  */
 
@@ -2073,7 +2088,7 @@ function HTML(runner, root) {
 
       on(h2, 'click', function(){
         pre.style.display = 'none' == pre.style.display
-          ? 'inline-block'
+          ? 'block'
           : 'none';
       });
 

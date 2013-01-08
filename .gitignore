@@ -9,3 +9,5 @@ test.js
 my-reporter.js
 *.sw*
 lib/browser/diff.js
+.idea
+*.iml
