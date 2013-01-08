@@ -8,3 +8,5 @@ _mocha.js
 test.js
 my-reporter.js
 *.sw*
+.idea
+*.iml

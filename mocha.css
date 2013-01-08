@@ -53,6 +53,7 @@ body {
 
 #mocha .test {
   margin-left: 15px;
+  overflow: hidden;
 }
 
 #mocha .test.pending:hover h2::after {
@@ -129,7 +130,9 @@ body {
 }
 
 #mocha .test pre {
-  display: inline-block;
+  display: block;
+  float: left;
+  clear: left;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
