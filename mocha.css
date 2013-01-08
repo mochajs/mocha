@@ -1,4 +1,5 @@
-@charset "UTF-8";
+@charset "utf-8";
+
 body {
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 60px 50px;
@@ -151,7 +152,7 @@ body {
 #mocha .test a.replay {
   position: absolute;
   top: 3px;
-  right: -20px;
+  right: 0;
   text-decoration: none;
   vertical-align: middle;
   display: block;
@@ -166,7 +167,7 @@ body {
   -webkit-transition: opacity 200ms;
   -moz-transition: opacity 200ms;
   transition: opacity 200ms;
-  opacity: 0.2;
+  opacity: 0.3;
   color: #888;
 }
 
