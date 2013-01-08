@@ -50,6 +50,12 @@ var images = {
   , pass: __dirname + '/../images/ok.png'
 };
 
+/**
+ * 'test/mocha.opts'
+ */
+
+var mochaOptsPath = 'test/mocha.opts';
+
 // options
 
 program
@@ -151,9 +157,13 @@ program.on('require', function(mod){
 });
 
 // mocha.opts support
+if (process.argv.length == 3 && process.argv[2].indexOf('.')) {
+  mochaOptsPath = process.argv[2];
+  process.argv.splice(2, 1);
+}
 
 try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
+  var opts = fs.readFileSync(mochaOptsPath, 'utf8')
     .trim()
     .split(/\s+/);
 
