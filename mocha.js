@@ -1324,7 +1324,7 @@ function Mocha(options) {
  */
 
 Mocha.prototype.bail = function(bail){
-  if (null == bail) bail = true;
+  if (0 == arguments.length) bail = true;
   this.suite.bail(bail);
   return this;
 };
