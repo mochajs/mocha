@@ -6,6 +6,8 @@
 	<string>assert.fail($0);</string>
 	<key>name</key>
 	<string>tdd - assert.fail</string>
+	<key>scope</key>
+	<string>source.js</string>
 	<key>tabTrigger</key>
 	<string>fail</string>
 	<key>uuid</key>

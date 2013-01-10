@@ -6,6 +6,8 @@
 	<string>assert($0);</string>
 	<key>name</key>
 	<string>tdd - assert</string>
+	<key>scope</key>
+	<string>source.js</string>
 	<key>tabTrigger</key>
 	<string>as</string>
 	<key>uuid</key>

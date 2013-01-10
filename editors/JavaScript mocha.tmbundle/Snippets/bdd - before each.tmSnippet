@@ -8,6 +8,8 @@
 })</string>
 	<key>name</key>
 	<string>bdd - before each</string>
+	<key>scope</key>
+	<string>source.js</string>
 	<key>tabTrigger</key>
 	<string>be</string>
 	<key>uuid</key>

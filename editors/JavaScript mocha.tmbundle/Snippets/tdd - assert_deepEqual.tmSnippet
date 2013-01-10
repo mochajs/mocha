@@ -6,6 +6,8 @@
 	<string>assert.deepEqual($1, $2);</string>
 	<key>name</key>
 	<string>tdd - assert.deepEqual</string>
+	<key>scope</key>
+	<string>source.js</string>
 	<key>tabTrigger</key>
 	<string>deq</string>
 	<key>uuid</key>
