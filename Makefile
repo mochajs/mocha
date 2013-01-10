@@ -1,6 +1,7 @@
 
 REPORTER ?= dot
 TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
+SUBLIME_DEST = ~/.config/sublime-text-2/Packages/JavaScript
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
@@ -126,4 +127,8 @@ tm:
 	mkdir -p $(TM_DEST)
 	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+sublime:
+	mkdir -p $(SUBLIME_DEST)
+	cp -fr editors/$(TM_BUNDLE) $(SUBLIME_DEST)
+
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm sublime clean
