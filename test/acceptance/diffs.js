@@ -19,6 +19,12 @@ describe('diffs', function(){
   })
 
   it('should display a word diff for large strings', function(){
-    // cssin.should.equal(cssout);
+    var err = new Error();
+    err.message = 'strings are not the same';
+    err.expected = cssout;
+    err.actual = cssin;
+    // showDiff = true to check conflicts with multi-line string diffs
+    err.showDiff = true;
+    // throw err;
   })
 })
