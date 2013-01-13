@@ -224,6 +224,11 @@ body {
   padding-top: 11px;
 }
 
+#mocha-stats canvas {
+  width: 40px;
+  height: 40px;
+}
+
 code .comment { color: #ddd }
 code .init { color: #2F6FAD }
 code .string { color: #5890AD }
