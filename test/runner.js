@@ -10,6 +10,7 @@ describe('Runner', function(){
   beforeEach(function(){
     suite = new Suite(null, 'root');
     runner = new Runner(suite);
+    runner.initDefaultGlobals();
   })
 
   describe('.grep()', function(){
@@ -18,6 +19,7 @@ describe('Runner', function(){
       suite.addTest(new Test('im another test about lions'));
       suite.addTest(new Test('im a test about bears'));
       var newRunner = new Runner(suite);
+      newRunner.initDefaultGlobals();
       newRunner.grep(/lions/);
       newRunner.total.should.equal(2);
     })
@@ -27,6 +29,7 @@ describe('Runner', function(){
       suite.addTest(new Test('im another test about lions'));
       suite.addTest(new Test('im a test about bears'));
       var newRunner = new Runner(suite);
+      newRunner.initDefaultGlobals();
       newRunner.grep(/lions/, true);
       newRunner.total.should.equal(1);
     })
