@@ -99,7 +99,7 @@ process.on = function(e, fn){
 
   mocha.run = function(fn){
     var options = mocha.options;
-    mocha.globals('location');
+    mocha.globals(['location', 'navigator', 'getInterface']);
 
     var query = Mocha.utils.parseQuery(window.location.search || '');
     if (query.grep) mocha.grep(query.grep);
