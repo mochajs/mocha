@@ -1710,7 +1710,7 @@ exports.colors = {
 /**
  * Default symbol map.
  */
- 
+
 exports.symbols = {
   ok: '✓',
   err: '✖',
@@ -1818,7 +1818,7 @@ exports.list = function(failures){
     if ('string' == typeof actual && 'string' == typeof expected) {
       var len = Math.max(actual.length, expected.length);
 
-      if (len < 20) msg = errorDiff(err, 'Chars', escape);
+      if (len < 20) msg = simpleDiff(err);
       else msg = errorDiff(err, 'Words', escape);
 
       // linenos
@@ -2009,6 +2009,13 @@ function errorDiff(err, type, escape) {
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
   }).join('');
+}
+
+simpleDiff = function(err) {
+ return ''
+   + color('diff removed', err.actual)
+   + ' '
+   + color('diff added', err.expected)
 }
 
 /**
