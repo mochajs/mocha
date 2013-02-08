@@ -4544,16 +4544,17 @@ Runner.prototype.uncaught = function(err){
 
 Runner.prototype.run = function(fn){
   var self = this
-    , fn = fn || function(){};
+    , fn = fn || function(){}
+    , uncaught = function(err){
+      self.uncaught(err);
+    };
 
   debug('start');
 
   // callback
   this.on('end', function(){
     debug('end');
-    process.removeListener('uncaughtException', function(err){
-      self.uncaught(err);
-    });
+    process.removeListener('uncaughtException', uncaught);
     fn(self.failures);
   });
 
@@ -4565,9 +4566,7 @@ Runner.prototype.run = function(fn){
   });
 
   // uncaught exception
-  process.on('uncaughtException', function(err){
-    self.uncaught(err);
-  });
+  process.on('uncaughtException', uncaught);
 
   return this;
 };
