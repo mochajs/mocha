@@ -13,9 +13,7 @@ var program = require('commander')
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , reporters = Mocha.reporters
   , interfaces = Mocha.interfaces
-  , Base = reporters.Base
   , join = path.join
   , basename = path.basename
   , cwd = process.cwd()
@@ -202,13 +200,13 @@ try {
 
 // --no-colors
 
-if (!program.colors) Base.useColors = false;
+if (!program.colors) mocha.useColors(false);
 
 // --colors
 
 if (~process.argv.indexOf('--colors') ||
     ~process.argv.indexOf('-c')) {
-  Base.useColors = true;
+  mocha.useColors(true);
 }
 
 // --inline-diffs
