@@ -229,3 +229,13 @@ code .init { color: #2F6FAD }
 code .string { color: #5890AD }
 code .keyword { color: #8A6343 }
 code .number { color: #2F6FAD }
+
+@media screen and (max-device-width: 480px) {
+  body {
+    padding: 60px 0px;
+  }
+
+  #stats {
+    position: absolute;
+  }
+}
