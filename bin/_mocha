@@ -285,10 +285,9 @@ if (program.watch) {
     process.exit();
   });
 
-  var spinner = ['◜','◠','◝','◞','◡','◟'];
-  if ('win32' === process.platform)  {
-    spinner = ['|','/','-','\\'];
-  }
+  var spinner = 'win32' == process.platform
+    ? ['|','/','-','\\']
+    : ['◜','◠','◝','◞','◡','◟'];
 
   var frames = spinner.map(function(c) {
     return sprintf('  \u001b[96m%s \u001b[90mwatching\u001b[0m', c);
