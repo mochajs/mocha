@@ -1,0 +1,91 @@
+.TH MOCHA "1" "March 2013" "mocha 1.8.1" "User Commands"
+.SH NAME
+mocha \- A feature-rich JavaScript test framework for Node.js
+.SH SYNOPSIS
+Usage: mocha [debug] [options] [files]
+.SH DESCRIPTION
+Mocha is a feature-rich JavaScript test framework running on node and the
+browser, making asynchronous testing simple and fun. Mocha tests run serially,
+allowing for flexible and accurate reporting, while mapping uncaught
+exceptions to the correct test cases.
+.SH COMMANDS
+.TP
+init <path>
+initialize a client\-side mocha setup at <path>
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+output usage information
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+output the version number
+.TP
+\fB\-r\fR, \fB\-\-require\fR <name>
+require the given module
+.TP
+\fB\-R\fR, \fB\-\-reporter\fR <name>
+specify the reporter to use
+.TP
+\fB\-u\fR, \fB\-\-ui\fR <name>
+specify user\-interface (bdd|tdd|exports)
+.TP
+\fB\-g\fR, \fB\-\-grep\fR <pattern>
+only run tests matching <pattern>
+.TP
+\fB\-i\fR, \fB\-\-invert\fR
+inverts \fB\-\-grep\fR matches
+.TP
+\fB\-t\fR, \fB\-\-timeout\fR <ms>
+set test\-case timeout in milliseconds [2000]
+.TP
+\fB\-s\fR, \fB\-\-slow\fR <ms>
+"slow" test threshold in milliseconds [75]
+.TP
+\fB\-w\fR, \fB\-\-watch\fR
+watch files for changes
+.TP
+\fB\-c\fR, \fB\-\-colors\fR
+force enabling of colors
+.TP
+\fB\-C\fR, \fB\-\-no\-colors\fR
+force disabling of colors
+.TP
+\fB\-G\fR, \fB\-\-growl\fR
+enable growl notification support
+.TP
+\fB\-d\fR, \fB\-\-debug\fR
+enable node's debugger, synonym for node \fB\-\-debug\fR
+.TP
+\fB\-b\fR, \fB\-\-bail\fR
+bail after first test failure
+.TP
+\fB\-A\fR, \fB\-\-async\-only\fR
+force all tests to take a callback (async)
+.TP
+\fB\-\-recursive\fR
+include sub directories
+.TP
+\fB\-\-debug\-brk\fR
+enable node's debugger breaking on the first line
+.TP
+\fB\-\-globals\fR <names>
+allow the given comma\-delimited global [names]
+.TP
+\fB\-\-ignore\-leaks\fR
+ignore global variable leaks
+.TP
+\fB\-\-interfaces\fR
+display available interfaces
+.TP
+\fB\-\-reporters\fR
+display available reporters
+.TP
+\fB\-\-compilers\fR <ext>:<module>,...
+use the given module(s) to compile files
+.SH AUTHORS
+The main author of mocha is TJ Holowaychuk <\fBtj@vision-media.ca\fR>.
+For a more complete list of contributors, see the GitHub page at
+<\fBhttps://github.com/visionmedia/mocha\fR>
+.SH REPORTING BUGS
+Please report bugs on the GitHub issue tracker:
+<\fBhttps://github.com/visionmedia/mocha/issues\fR>
