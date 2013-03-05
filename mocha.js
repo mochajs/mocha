@@ -1196,6 +1196,17 @@ module.exports = function(suite){
       suites.shift();
       return suite;
     };
+	
+    /**
+     * Pending suite.
+     */
+    context.suite.skip = function(title, fn) {
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn.call(suite);
+      suites.shift();
+    };
 
     /**
      * Exclusive test-case.
@@ -1213,8 +1224,10 @@ module.exports = function(suite){
      */
 
     context.test = function(title, fn){
+      var suite = suites[0];
+      if (suite.pending) var fn = null;
       var test = new Test(title, fn);
-      suites[0].addTest(test);
+      suite.addTest(test);
       return test;
     };
 
