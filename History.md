@@ -1,4 +1,10 @@
 
+1.8.2 / 2013-03-11 
+==================
+
+  * add `setImmediate` support for 0.10.x
+  * fix mocha -w spinner on windows
+
 1.8.1 / 2013-01-09 
 ==================
 
