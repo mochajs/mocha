@@ -7,7 +7,7 @@ describe('durations', function(){
       }, 100);
     })
   })
-  
+
   describe('when reasonable', function(){
     it('should highlight in yellow', function(done){
       setTimeout(function(){
@@ -15,7 +15,7 @@ describe('durations', function(){
       }, 50);
     })
   })
-  
+
   describe('when fast', function(){
     it('should highlight in green', function(done){
       setTimeout(function(){

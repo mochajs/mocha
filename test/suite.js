@@ -231,15 +231,15 @@ describe('Suite', function(){
   //     this.test = new Test('test');
   //     this.suite.addTest(this.test);
   //   });
-  // 
+  //
   //   it('sets the parent on the added test', function(){
   //     this.test.parent.should.equal(this.suite);
   //   });
-  //   
+  //
   //   it('copies the timeout value', function(){
   //     this.test.timeout().should.equal(4002);
   //   });
-  //   
+  //
   //   it('adds the test to the tests collection', function(){
   //     this.suite.tests.should.have.length(1);
   //     this.suite.tests[0].should.equal(this.test);
@@ -304,7 +304,7 @@ describe('Suite', function(){
       it('should return the number', function(){
         this.suite.addTest(new Test('a child test'));
         this.suite.addTest(new Test('another child test'));
- 
+
         var n = 0;
         function fn(){ n++; }
         this.suite.eachTest(fn);
@@ -318,7 +318,7 @@ describe('Suite', function(){
         var suite = new Suite('a child suite');
         suite.addTest(new Test('a test in a child suite'));
         this.suite.addSuite(suite);
- 
+
         var n = 0;
         function fn(){ n++; }
         this.suite.eachTest(fn);

@@ -5,7 +5,7 @@ exports.Array = {
   before: function(){
     calls.push('before');
   },
-  
+
   after: function(){
     calls.push('after');
     calls.should.eql([
@@ -23,7 +23,7 @@ exports.Array = {
     beforeEach: function(){
       calls.push('before each');
     },
-    
+
     afterEach: function(){
       calls.push('after each');
     },
@@ -33,7 +33,7 @@ exports.Array = {
       [1,2,3].indexOf(5).should.equal(-1);
       [1,2,3].indexOf(0).should.equal(-1);
     },
-    
+
     'should return the correct index when the value is present': function(){
       calls.push('two');
       [1,2,3].indexOf(1).should.equal(0);

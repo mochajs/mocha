@@ -14,4 +14,3 @@ describe('bail-2', function(){
     throw new Error('this should not be displayed');
   })
 })
-

@@ -1,5 +1,5 @@
 
-1.8.1 / 2013-01-09 
+1.8.1 / 2013-01-09
 ==================
 
   * fix .bail() arity check causing it to default to true
