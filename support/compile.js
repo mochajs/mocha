@@ -95,11 +95,11 @@ function compile() {
 // https://github.com/weepy/brequire/blob/master/browser/brequire.js
 
 var browser = {
-  
+
   /**
    * Require a module.
    */
-  
+
   require: function require(p){
     var path = require.resolve(p)
       , mod = require.modules[path];
@@ -110,7 +110,7 @@ var browser = {
     }
     return mod.exports;
   },
-  
+
   /**
    * Resolve module path.
    */
@@ -123,7 +123,7 @@ var browser = {
       || require.modules[index] && index
       || orig;
   },
-  
+
   /**
    * Return relative require().
    */
@@ -131,11 +131,11 @@ var browser = {
   relative: function(parent) {
     return function(p){
       if ('.' != p.charAt(0)) return require(p);
-      
+
       var path = parent.split('/')
         , segs = p.split('/');
       path.pop();
-      
+
       for (var i = 0; i < segs.length; i++) {
         var seg = segs[i];
         if ('..' == seg) path.pop();
@@ -145,7 +145,7 @@ var browser = {
       return require(path.join('/'));
     };
   },
-  
+
   /**
    * Register a module.
    */

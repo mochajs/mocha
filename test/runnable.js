@@ -62,7 +62,7 @@ describe('Runnable(title, fn)', function(){
       run.sync.should.be.false;
     })
   })
-  
+
   describe('when arity == 0', function(){
     it('should be .sync', function(){
       var run = new Runnable('foo', function(){});
