@@ -7,7 +7,7 @@
  * the browser.
  */
 
-process = {};
+var process = {};
 process.exit = function(status){};
 process.stdout = {};
 global = window;
