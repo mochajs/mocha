@@ -13,7 +13,7 @@ repo age : 1 year, 3 months
 active   : 233 days
 commits  : 1034
 files    : 114
-authors  : 
+authors  :
   451	TJ Holowaychuk          43.6%
   389	Tj Holowaychuk          37.6%
    31	Guillermo Rauch         3.0%

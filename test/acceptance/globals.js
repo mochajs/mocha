@@ -5,7 +5,7 @@ describe('global leaks', function(){
     // foo = 'hey';
     // bar = 'hey';
   })
-  
+
   beforeEach(function(){
     // uncomment to test
     // foo = 'bar'

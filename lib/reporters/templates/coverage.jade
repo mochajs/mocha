@@ -34,12 +34,12 @@ html
               tbody
                 for line, number in file.source
                   if line.coverage > 0
-                    tr.hit 
+                    tr.hit
                       td.line= number
                       td.hits= line.coverage
                       td.source= line.source
                   else if 0 === line.coverage
-                    tr.miss 
+                    tr.miss
                       td.line= number
                       td.hits 0
                       td.source= line.source

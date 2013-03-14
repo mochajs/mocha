@@ -23,12 +23,12 @@ describe('serial', function(){
         , 'parent after'
         , 'parent before']);
     })
-    
+
     describe('hooks', function(){
       beforeEach(function(){
         calls.push('before');
       })
-    
+
       it('one', function(){
         calls.should.eql([
             'parent before'
@@ -40,7 +40,7 @@ describe('serial', function(){
           , 'before']);
         calls.push('one');
       })
-    
+
       it('two', function(){
         calls.should.eql([
             'parent before'
@@ -57,7 +57,7 @@ describe('serial', function(){
           , 'before']);
         calls.push('two');
       });
-    
+
       afterEach(function(){
         calls.push('after');
       })
