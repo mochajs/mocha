@@ -1,6 +1,5 @@
 ;(function(){
 
-
 // CommonJS require()
 
 function require(p){
@@ -32,11 +31,11 @@ require.register = function (path, fn){
 require.relative = function (parent) {
     return function(p){
       if ('.' != p.charAt(0)) return require(p);
-      
+
       var path = parent.split('/')
         , segs = p.split('/');
       path.pop();
-      
+
       for (var i = 0; i < segs.length; i++) {
         var seg = segs[i];
         if ('..' == seg) path.pop();
@@ -52,9 +51,9 @@ require.register("browser/debug.js", function(module, exports, require){
 
 module.exports = function(type){
   return function(){
-    
   }
 };
+
 }); // module: browser/debug.js
 
 require.register("browser/diff.js", function(module, exports, require){
@@ -805,7 +804,6 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
-
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
@@ -819,7 +817,7 @@ var Suite = require('../suite')
 
 /**
  * BDD-style interface:
- * 
+ *
  *      describe('Array', function(){
  *        describe('#indexOf()', function(){
  *          it('should return -1 when not present', function(){
@@ -831,7 +829,7 @@ var Suite = require('../suite')
  *          });
  *        });
  *      });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -876,7 +874,7 @@ module.exports = function(suite){
      * and callback `fn` containing nested suites
      * and/or tests.
      */
-  
+
     context.describe = context.context = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
@@ -956,19 +954,19 @@ var Suite = require('../suite')
 
 /**
  * TDD-style interface:
- * 
+ *
  *     exports.Array = {
  *       '#indexOf()': {
  *         'should return -1 when the value is not present': function(){
- *           
+ *
  *         },
  *
  *         'should return the correct index when the value is present': function(){
- *           
+ *
  *         }
  *       }
  *     };
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1006,6 +1004,7 @@ module.exports = function(suite){
     }
   }
 };
+
 }); // module: interfaces/exports.js
 
 require.register("interfaces/index.js", function(module, exports, require){
@@ -1028,27 +1027,27 @@ var Suite = require('../suite')
 
 /**
  * QUnit-style interface:
- * 
+ *
  *     suite('Array');
- *     
+ *
  *     test('#length', function(){
  *       var arr = [1,2,3];
  *       ok(arr.length == 3);
  *     });
- *     
+ *
  *     test('#indexOf()', function(){
  *       var arr = [1,2,3];
  *       ok(arr.indexOf(1) == 0);
  *       ok(arr.indexOf(2) == 1);
  *       ok(arr.indexOf(3) == 2);
  *     });
- *     
+ *
  *     suite('String');
- *     
+ *
  *     test('#length', function(){
  *       ok('foo'.length == 3);
  *     });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1091,7 +1090,7 @@ module.exports = function(suite){
     /**
      * Describe a "suite" with the given `title`.
      */
-  
+
     context.suite = function(title){
       if (suites.length > 1) suites.shift();
       var suite = Suite.create(suites[0], title);
@@ -1129,7 +1128,7 @@ var Suite = require('../suite')
  *          suiteSetup(function(){
  *
  *          });
- *          
+ *
  *          test('should return -1 when not present', function(){
  *
  *          });
@@ -1710,7 +1709,7 @@ exports.colors = {
 /**
  * Default symbol map.
  */
- 
+
 exports.symbols = {
   ok: '✓',
   err: '✖',
@@ -2233,7 +2232,7 @@ var Date = global.Date
   , clearInterval = global.clearInterval;
 
 /**
- * Expose `Doc`.
+ * Expose `HTML`.
  */
 
 exports = module.exports = HTML;
@@ -2250,7 +2249,7 @@ var statsTemplate = '<ul id="mocha-stats">'
   + '</ul>';
 
 /**
- * Initialize a new `Doc` reporter.
+ * Initialize a new `HTML` reporter.
  *
  * @param {Runner} runner
  * @api public
@@ -2315,7 +2314,7 @@ function HTML(runner, root) {
     if (suite.root) return;
 
     // suite
-    var url = '?grep=' + encodeURIComponent(suite.fullTitle());
+    var url = self.suiteURL(suite);
     var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, escape(suite.title));
 
     // container
@@ -2348,7 +2347,8 @@ function HTML(runner, root) {
 
     // test
     if ('passed' == test.state) {
-      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, encodeURIComponent(test.fullTitle()));
+      var url = self.testURL(test);
+      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="%s" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, url);
     } else if (test.pending) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
@@ -2392,6 +2392,26 @@ function HTML(runner, root) {
     if (stack[0]) stack[0].appendChild(el);
   });
 }
+
+/**
+ * Provide suite URL
+ *
+ * @param {Object} [suite]
+ */
+
+HTML.prototype.suiteURL = function(suite){
+  return '?grep=' + encodeURIComponent(suite.fullTitle());
+};
+
+/**
+ * Provide test URL
+ *
+ * @param {Object} [test]
+ */
+
+HTML.prototype.testURL = function(test){
+  return '?grep=' + encodeURIComponent(test.fullTitle());
+};
 
 /**
  * Display error `msg`.
@@ -2650,70 +2670,6 @@ function clean(test) {
 
 }); // module: reporters/json-cov.js
 
-require.register("reporters/json-stream.js", function(module, exports, require){
-
-/**
- * Module dependencies.
- */
-
-var Base = require('./base')
-  , color = Base.color;
-
-/**
- * Expose `List`.
- */
-
-exports = module.exports = List;
-
-/**
- * Initialize a new `List` test reporter.
- *
- * @param {Runner} runner
- * @api public
- */
-
-function List(runner) {
-  Base.call(this, runner);
-
-  var self = this
-    , stats = this.stats
-    , total = runner.total;
-
-  runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
-  });
-
-  runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
-  });
-
-  runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
-  });
-
-  runner.on('end', function(){
-    process.stdout.write(JSON.stringify(['end', self.stats]));
-  });
-}
-
-/**
- * Return a plain-object representation of `test`
- * free of cyclic properties etc.
- *
- * @param {Object} test
- * @return {Object}
- * @api private
- */
-
-function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
-  }
-}
-}); // module: reporters/json-stream.js
-
 require.register("reporters/json.js", function(module, exports, require){
 
 /**
@@ -2786,6 +2742,70 @@ function clean(test) {
   }
 }
 }); // module: reporters/json.js
+
+require.register("reporters/json-stream.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , color = Base.color;
+
+/**
+ * Expose `List`.
+ */
+
+exports = module.exports = List;
+
+/**
+ * Initialize a new `List` test reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function List(runner) {
+  Base.call(this, runner);
+
+  var self = this
+    , stats = this.stats
+    , total = runner.total;
+
+  runner.on('start', function(){
+    console.log(JSON.stringify(['start', { total: total }]));
+  });
+
+  runner.on('pass', function(test){
+    console.log(JSON.stringify(['pass', clean(test)]));
+  });
+
+  runner.on('fail', function(test, err){
+    console.log(JSON.stringify(['fail', clean(test)]));
+  });
+
+  runner.on('end', function(){
+    process.stdout.write(JSON.stringify(['end', self.stats]));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+}); // module: reporters/json-stream.js
 
 require.register("reporters/landing.js", function(module, exports, require){
 
@@ -3080,7 +3100,7 @@ exports = module.exports = Min;
 
 function Min(runner) {
   Base.call(this, runner);
-  
+
   runner.on('start', function(){
     // clear screen
     process.stdout.write('\u001b[2J');
@@ -3100,10 +3120,10 @@ F.prototype = Base.prototype;
 Min.prototype = new F;
 Min.prototype.constructor = Min;
 
+
 }); // module: reporters/min.js
 
 require.register("reporters/nyan.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3249,44 +3269,39 @@ NyanCat.prototype.drawRainbow = function(){
 NyanCat.prototype.drawNyanCat = function(status) {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
-
-  [0, 1, 2, 3].forEach(function(index) {
-    write('\u001b[' + startWidth + 'C');
-
-    switch (index) {
-      case 0:
-        write('_,------,');
-        write('\n');
-        break;
-      case 1:
-        var padding = self.tick ? '  ' : '   ';
-        write('_|' + padding + '/\\_/\\ ');
-        write('\n');
-        break;
-      case 2:
-        var padding = self.tick ? '_' : '__';
-        var tail = self.tick ? '~' : '^';
-        var face;
-        switch (status) {
-          case 'pass':
-            face = '( ^ .^)';
-            break;
-          case 'fail':
-            face = '( o .o)';
-            break;
-          default:
-            face = '( - .-)';
-        }
-        write(tail + '|' + padding + face + ' ');
-        write('\n');
-        break;
-      case 3:
-        var padding = self.tick ? ' ' : '  ';
-        write(padding + '""  "" ');
-        write('\n');
-        break;
-    }
-  });
+  var color = '\u001b[' + startWidth + 'C';
+  var padding = '';
+  
+  write(color);
+  write('_,------,');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '  ' : '   ';
+  write('_|' + padding + '/\\_/\\ ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '_' : '__';
+  var tail = self.tick ? '~' : '^';
+  var face;
+  switch (status) {
+    case 'pass':
+      face = '( ^ .^)';
+      break;
+    case 'fail':
+      face = '( o .o)';
+      break;
+    default:
+      face = '( - .-)';
+  }
+  write(tail + '|' + padding + face + ' ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? ' ' : '  ';
+  write(padding + '""  "" ');
+  write('\n');
 
   this.cursorUp(this.numberOfLines);
 };
@@ -3746,7 +3761,7 @@ function XUnit(runner) {
   runner.on('pass', function(test){
     tests.push(test);
   });
-  
+
   runner.on('fail', function(test){
     tests.push(test);
   });
@@ -3763,7 +3778,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');    
+    console.log('</testsuite>');
   });
 }
 
@@ -5006,7 +5021,7 @@ exports.indexOf = function(arr, obj, start){
 
 /**
  * Array#reduce (<=IE8)
- * 
+ *
  * @param {Array} array
  * @param {Function} fn
  * @param {Object} initial value
