@@ -1,6 +1,5 @@
 ;(function(){
 
-
 // CommonJS require()
 
 function require(p){
@@ -32,11 +31,11 @@ require.register = function (path, fn){
 require.relative = function (parent) {
     return function(p){
       if ('.' != p.charAt(0)) return require(p);
-      
+
       var path = parent.split('/')
         , segs = p.split('/');
       path.pop();
-      
+
       for (var i = 0; i < segs.length; i++) {
         var seg = segs[i];
         if ('..' == seg) path.pop();
@@ -52,9 +51,9 @@ require.register("browser/debug.js", function(module, exports, require){
 
 module.exports = function(type){
   return function(){
-    
   }
 };
+
 }); // module: browser/debug.js
 
 require.register("browser/diff.js", function(module, exports, require){
@@ -673,8 +672,13 @@ exports.isatty = function(){
 };
 
 exports.getWindowSize = function(){
-  return [window.innerHeight, window.innerWidth];
+  if ('undefined' === typeof window) {
+    return [640, 480];
+  } else {
+    return [window.innerHeight, window.innerWidth];
+  }
 };
+
 }); // module: browser/tty.js
 
 require.register("context.js", function(module, exports, require){
@@ -805,7 +809,6 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
-
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
@@ -819,7 +822,7 @@ var Suite = require('../suite')
 
 /**
  * BDD-style interface:
- * 
+ *
  *      describe('Array', function(){
  *        describe('#indexOf()', function(){
  *          it('should return -1 when not present', function(){
@@ -831,7 +834,7 @@ var Suite = require('../suite')
  *          });
  *        });
  *      });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -876,7 +879,7 @@ module.exports = function(suite){
      * and callback `fn` containing nested suites
      * and/or tests.
      */
-  
+
     context.describe = context.context = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
@@ -956,19 +959,19 @@ var Suite = require('../suite')
 
 /**
  * TDD-style interface:
- * 
+ *
  *     exports.Array = {
  *       '#indexOf()': {
  *         'should return -1 when the value is not present': function(){
- *           
+ *
  *         },
  *
  *         'should return the correct index when the value is present': function(){
- *           
+ *
  *         }
  *       }
  *     };
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1006,6 +1009,7 @@ module.exports = function(suite){
     }
   }
 };
+
 }); // module: interfaces/exports.js
 
 require.register("interfaces/index.js", function(module, exports, require){
@@ -1028,27 +1032,27 @@ var Suite = require('../suite')
 
 /**
  * QUnit-style interface:
- * 
+ *
  *     suite('Array');
- *     
+ *
  *     test('#length', function(){
  *       var arr = [1,2,3];
  *       ok(arr.length == 3);
  *     });
- *     
+ *
  *     test('#indexOf()', function(){
  *       var arr = [1,2,3];
  *       ok(arr.indexOf(1) == 0);
  *       ok(arr.indexOf(2) == 1);
  *       ok(arr.indexOf(3) == 2);
  *     });
- *     
+ *
  *     suite('String');
- *     
+ *
  *     test('#length', function(){
  *       ok('foo'.length == 3);
  *     });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1091,7 +1095,7 @@ module.exports = function(suite){
     /**
      * Describe a "suite" with the given `title`.
      */
-  
+
     context.suite = function(title){
       if (suites.length > 1) suites.shift();
       var suite = Suite.create(suites[0], title);
@@ -1129,7 +1133,7 @@ var Suite = require('../suite')
  *          suiteSetup(function(){
  *
  *          });
- *          
+ *
  *          test('should return -1 when not present', function(){
  *
  *          });
@@ -1710,7 +1714,7 @@ exports.colors = {
 /**
  * Default symbol map.
  */
- 
+
 exports.symbols = {
   ok: '✓',
   err: '✖',
@@ -2490,6 +2494,7 @@ exports.JSONCov = require('./json-cov');
 exports.HTMLCov = require('./html-cov');
 exports.JSONStream = require('./json-stream');
 exports.Teamcity = require('./teamcity');
+exports.PostMessage = require('./post-message');
 
 }); // module: reporters/index.js
 
@@ -2650,6 +2655,78 @@ function clean(test) {
 
 }); // module: reporters/json-cov.js
 
+require.register("reporters/json.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base');
+
+/**
+ * Expose `JSON`.
+ */
+
+exports = module.exports = JSONReporter;
+
+/**
+ * Initialize a new `JSON` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function JSONReporter(runner) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = []
+    , failures = []
+    , passes = [];
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('pass', function(test){
+    passes.push(test);
+  });
+
+  runner.on('fail', function(test){
+    failures.push(test);
+  });
+
+  runner.on('end', function(){
+    var obj = {
+        stats: self.stats
+      , tests: tests.map(clean)
+      , failures: failures.map(clean)
+      , passes: passes.map(clean)
+    };
+
+    process.stdout.write(JSON.stringify(obj, null, 2));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+
+}); // module: reporters/json.js
+
 require.register("reporters/json-stream.js", function(module, exports, require){
 
 /**
@@ -2713,79 +2790,6 @@ function clean(test) {
   }
 }
 }); // module: reporters/json-stream.js
-
-require.register("reporters/json.js", function(module, exports, require){
-
-/**
- * Module dependencies.
- */
-
-var Base = require('./base')
-  , cursor = Base.cursor
-  , color = Base.color;
-
-/**
- * Expose `JSON`.
- */
-
-exports = module.exports = JSONReporter;
-
-/**
- * Initialize a new `JSON` reporter.
- *
- * @param {Runner} runner
- * @api public
- */
-
-function JSONReporter(runner) {
-  var self = this;
-  Base.call(this, runner);
-
-  var tests = []
-    , failures = []
-    , passes = [];
-
-  runner.on('test end', function(test){
-    tests.push(test);
-  });
-
-  runner.on('pass', function(test){
-    passes.push(test);
-  });
-
-  runner.on('fail', function(test){
-    failures.push(test);
-  });
-
-  runner.on('end', function(){
-    var obj = {
-        stats: self.stats
-      , tests: tests.map(clean)
-      , failures: failures.map(clean)
-      , passes: passes.map(clean)
-    };
-
-    process.stdout.write(JSON.stringify(obj, null, 2));
-  });
-}
-
-/**
- * Return a plain-object representation of `test`
- * free of cyclic properties etc.
- *
- * @param {Object} test
- * @return {Object}
- * @api private
- */
-
-function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
-  }
-}
-}); // module: reporters/json.js
 
 require.register("reporters/landing.js", function(module, exports, require){
 
@@ -3080,7 +3084,7 @@ exports = module.exports = Min;
 
 function Min(runner) {
   Base.call(this, runner);
-  
+
   runner.on('start', function(){
     // clear screen
     process.stdout.write('\u001b[2J');
@@ -3100,10 +3104,10 @@ F.prototype = Base.prototype;
 Min.prototype = new F;
 Min.prototype.constructor = Min;
 
+
 }); // module: reporters/min.js
 
 require.register("reporters/nyan.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3249,44 +3253,39 @@ NyanCat.prototype.drawRainbow = function(){
 NyanCat.prototype.drawNyanCat = function(status) {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
-
-  [0, 1, 2, 3].forEach(function(index) {
-    write('\u001b[' + startWidth + 'C');
-
-    switch (index) {
-      case 0:
-        write('_,------,');
-        write('\n');
-        break;
-      case 1:
-        var padding = self.tick ? '  ' : '   ';
-        write('_|' + padding + '/\\_/\\ ');
-        write('\n');
-        break;
-      case 2:
-        var padding = self.tick ? '_' : '__';
-        var tail = self.tick ? '~' : '^';
-        var face;
-        switch (status) {
-          case 'pass':
-            face = '( ^ .^)';
-            break;
-          case 'fail':
-            face = '( o .o)';
-            break;
-          default:
-            face = '( - .-)';
-        }
-        write(tail + '|' + padding + face + ' ');
-        write('\n');
-        break;
-      case 3:
-        var padding = self.tick ? ' ' : '  ';
-        write(padding + '""  "" ');
-        write('\n');
-        break;
-    }
-  });
+  var color = '\u001b[' + startWidth + 'C';
+  var padding = '';
+  
+  write(color);
+  write('_,------,');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '  ' : '   ';
+  write('_|' + padding + '/\\_/\\ ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '_' : '__';
+  var tail = self.tick ? '~' : '^';
+  var face;
+  switch (status) {
+    case 'pass':
+      face = '( ^ .^)';
+      break;
+    case 'fail':
+      face = '( o .o)';
+      break;
+    default:
+      face = '( - .-)';
+  }
+  write(tail + '|' + padding + face + ' ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? ' ' : '  ';
+  write(padding + '""  "" ');
+  write('\n');
 
   this.cursorUp(this.numberOfLines);
 };
@@ -3368,6 +3367,80 @@ NyanCat.prototype.constructor = NyanCat;
 
 
 }); // module: reporters/nyan.js
+
+require.register("reporters/post-message.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base');
+
+/**
+ * Expose `PostMessage`.
+ */
+
+exports = module.exports = PostMessageReporter;
+
+/**
+ * Initialize a new `PostMessage` reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function PostMessageReporter(runner) {
+  var self = this;
+  Base.call(this, runner);
+
+  var tests = []
+    , failures = []
+    , passes = [];
+
+  runner.on('test end', function(test){
+    tests.push(test);
+  });
+
+  runner.on('pass', function(test){
+    passes.push(test);
+    global.postMessage({ type: 'pass', test: clean(test) });
+  });
+
+  runner.on('fail', function(test){
+    failures.push(test);
+    global.postMessage({ type: 'fail', test: clean(test) });
+  });
+
+  runner.on('end', function(){
+    var obj = {
+        type: 'done'
+      , stats: self.stats
+      , tests: tests.map(clean)
+      , failures: failures.map(clean)
+      , passes: passes.map(clean)
+    };
+    global.postMessage(obj);
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+
+}); // module: reporters/post-message.js
 
 require.register("reporters/progress.js", function(module, exports, require){
 
@@ -3746,7 +3819,7 @@ function XUnit(runner) {
   runner.on('pass', function(test){
     tests.push(test);
   });
-  
+
   runner.on('fail', function(test){
     tests.push(test);
   });
@@ -3763,7 +3836,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');    
+    console.log('</testsuite>');
   });
 }
 
@@ -5006,7 +5079,7 @@ exports.indexOf = function(arr, obj, start){
 
 /**
  * Array#reduce (<=IE8)
- * 
+ *
  * @param {Array} array
  * @param {Function} fn
  * @param {Object} initial value
@@ -5237,7 +5310,7 @@ exports.highlightTags = function(name) {
 process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
+global = ('undefined' === typeof window) ? self : window;
 
 /**
  * next tick implementation.
@@ -5245,7 +5318,7 @@ global = window;
 
 process.nextTick = (function(){
   // postMessage behaves badly on IE8
-  if (window.ActiveXObject || !window.postMessage) {
+  if (global.ActiveXObject || !global.postMessage) {
     return function(fn){ fn() };
   }
 
@@ -5254,16 +5327,32 @@ process.nextTick = (function(){
   var timeouts = []
     , name = 'mocha-zero-timeout'
 
-  window.addEventListener('message', function(e){
-    if (e.source == window && e.data == name) {
-      if (e.stopPropagation) e.stopPropagation();
-      if (timeouts.length) timeouts.shift()();
+  if ('undefined' === typeof window) {
+    // Web Worker implementation.
+    if ('function' === typeof MessageChannel) {
+      var channel = new MessageChannel();
+      channel.port1.onmessage = function() {
+        if (timeouts.length) timeouts.shift()();
+      }
+      return function(fn) {
+        timeouts.push(fn);
+        channel.port2.postMessage('*');
+      }
+    } else {
+      return function(fn) { fn() };
     }
-  }, true);
+  } else {
+    window.addEventListener('message', function(e){
+      if (e.source == window && e.data == name) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (timeouts.length) timeouts.shift()();
+      }
+    }, true);
 
-  return function(fn){
-    timeouts.push(fn);
-    window.postMessage(name, '*');
+    return function(fn){
+      timeouts.push(fn);
+      window.postMessage(name, '*');
+    }
   }
 })();
 
@@ -5273,7 +5362,7 @@ process.nextTick = (function(){
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function(){};
   }
 };
 
@@ -5283,7 +5372,7 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = function(err, url, line){
+    global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
   }
@@ -5296,8 +5385,8 @@ process.on = function(e, fn){
    * Expose mocha.
    */
 
-  var Mocha = window.Mocha = require('mocha'),
-      mocha = window.mocha = new Mocha({ reporter: 'html' });
+  var Mocha = global.Mocha = require('mocha'),
+      mocha = global.mocha = new Mocha({ reporter: 'html' });
 
   /**
    * Override ui to ensure that the ui functions are initialized.
@@ -5306,7 +5395,7 @@ process.on = function(e, fn){
 
   mocha.ui = function(ui){
     Mocha.prototype.ui.call(this, ui);
-    this.suite.emit('pre-require', window, null, this);
+    this.suite.emit('pre-require', global, null, this);
     return this;
   };
 
@@ -5328,12 +5417,15 @@ process.on = function(e, fn){
     var options = mocha.options;
     mocha.globals('location');
 
-    var query = Mocha.utils.parseQuery(window.location.search || '');
+    var location = ('undefined' === typeof window) ? self.location : window.location;
+    var query = Mocha.utils.parseQuery(location.search || '');
     if (query.grep) mocha.grep(query.grep);
     if (query.invert) mocha.invert();
 
     return Mocha.prototype.run.call(mocha, function(){
-      Mocha.utils.highlightTags('code');
+      if ('undefined' !== typeof document) {
+        Mocha.utils.highlightTags('code');
+      }
       if (fn) fn();
     });
   };
