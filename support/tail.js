@@ -10,7 +10,7 @@
 process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
+global = ('undefined' === typeof window) ? self : window;
 
 /**
  * next tick implementation.
@@ -18,7 +18,7 @@ global = window;
 
 process.nextTick = (function(){
   // postMessage behaves badly on IE8
-  if (window.ActiveXObject || !window.postMessage) {
+  if (global.ActiveXObject || !global.postMessage) {
     return function(fn){ fn() };
   }
 
@@ -27,16 +27,32 @@ process.nextTick = (function(){
   var timeouts = []
     , name = 'mocha-zero-timeout'
 
-  window.addEventListener('message', function(e){
-    if (e.source == window && e.data == name) {
-      if (e.stopPropagation) e.stopPropagation();
-      if (timeouts.length) timeouts.shift()();
+  if ('undefined' === typeof window) {
+    // Web Worker implementation.
+    if ('function' === typeof MessageChannel) {
+      var channel = new MessageChannel();
+      channel.port1.onmessage = function() {
+        if (timeouts.length) timeouts.shift()();
+      }
+      return function(fn) {
+        timeouts.push(fn);
+        channel.port2.postMessage('*');
+      }
+    } else {
+      return function(fn) { fn() };
     }
-  }, true);
+  } else {
+    window.addEventListener('message', function(e){
+      if (e.source == window && e.data == name) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (timeouts.length) timeouts.shift()();
+      }
+    }, true);
 
-  return function(fn){
-    timeouts.push(fn);
-    window.postMessage(name, '*');
+    return function(fn){
+      timeouts.push(fn);
+      window.postMessage(name, '*');
+    }
   }
 })();
 
@@ -46,7 +62,7 @@ process.nextTick = (function(){
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function(){};
   }
 };
 
@@ -56,7 +72,7 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = function(err, url, line){
+    global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
   }
@@ -69,8 +85,8 @@ process.on = function(e, fn){
    * Expose mocha.
    */
 
-  var Mocha = window.Mocha = require('mocha'),
-      mocha = window.mocha = new Mocha({ reporter: 'html' });
+  var Mocha = global.Mocha = require('mocha'),
+      mocha = global.mocha = new Mocha({ reporter: 'html' });
 
   /**
    * Override ui to ensure that the ui functions are initialized.
@@ -79,7 +95,7 @@ process.on = function(e, fn){
 
   mocha.ui = function(ui){
     Mocha.prototype.ui.call(this, ui);
-    this.suite.emit('pre-require', window, null, this);
+    this.suite.emit('pre-require', global, null, this);
     return this;
   };
 
@@ -101,12 +117,15 @@ process.on = function(e, fn){
     var options = mocha.options;
     mocha.globals('location');
 
-    var query = Mocha.utils.parseQuery(window.location.search || '');
+    var location = ('undefined' === typeof window) ? self.location : window.location;
+    var query = Mocha.utils.parseQuery(location.search || '');
     if (query.grep) mocha.grep(query.grep);
     if (query.invert) mocha.invert();
 
     return Mocha.prototype.run.call(mocha, function(){
-      Mocha.utils.highlightTags('code');
+      if ('undefined' !== typeof document) {
+        Mocha.utils.highlightTags('code');
+      }
       if (fn) fn();
     });
   };
