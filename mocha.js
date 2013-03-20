@@ -4103,15 +4103,14 @@ module.exports = Runner;
 
 function Runner(suite) {
   var self = this;
-  this._globals = this.globalProps();
+  this._globals = [];
   this.suite = suite;
   this.total = suite.total();
   this.failures = 0;
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.specifiedGlobalsLen = 0;
-  this.globals(['errno']);
+  this.globals(this.globalProps().concat(['errno']));
 }
 
 /**
@@ -4197,7 +4196,6 @@ Runner.prototype.globals = function(arr){
   utils.forEach(arr, function(arr){
     this._globals.push(arr);
   }, this);
-  this.specifiedGlobalsLen = this.specifiedGlobalsLen + arr.length;
   return this;
 };
 
@@ -4215,11 +4213,15 @@ Runner.prototype.checkGlobals = function(test){
   var leaks;
 
   // check length - 2 ('errno' and 'location' globals)
-  if (isNode && this.specifiedGlobalsLen == ok.length - globals.length) return
-  else if (this.specifiedGlobalsLen == ok.length - globals.length) return;
-  console.time('filterLeaksTime');
+  if (isNode && 1 == ok.length - globals.length) return;
+  else if (2 == ok.length - globals.length) return;
+  
+  if(this.prevGlobalsLength == globals.length) return;
+  this.prevGlobalsLength = globals.length;
+  
+  //console.time('filterLeaksTime');
   leaks = filterLeaks(ok, globals);
-  console.timeEnd('filterLeaksTime');
+  //console.timeEnd('filterLeaksTime');
   this._globals = this._globals.concat(leaks);
 
   if (leaks.length > 1) {
@@ -4596,7 +4598,6 @@ function filterLeaks(ok, globals) {
     
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
-      
       return key == ok;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
