@@ -1,6 +1,5 @@
 ;(function(){
 
-
 // CommonJS require()
 
 function require(p){
@@ -32,11 +31,11 @@ require.register = function (path, fn){
 require.relative = function (parent) {
     return function(p){
       if ('.' != p.charAt(0)) return require(p);
-      
+
       var path = parent.split('/')
         , segs = p.split('/');
       path.pop();
-      
+
       for (var i = 0; i < segs.length; i++) {
         var seg = segs[i];
         if ('..' == seg) path.pop();
@@ -52,9 +51,9 @@ require.register("browser/debug.js", function(module, exports, require){
 
 module.exports = function(type){
   return function(){
-    
   }
 };
+
 }); // module: browser/debug.js
 
 require.register("browser/diff.js", function(module, exports, require){
@@ -805,7 +804,6 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
-
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
@@ -819,7 +817,7 @@ var Suite = require('../suite')
 
 /**
  * BDD-style interface:
- * 
+ *
  *      describe('Array', function(){
  *        describe('#indexOf()', function(){
  *          it('should return -1 when not present', function(){
@@ -831,7 +829,7 @@ var Suite = require('../suite')
  *          });
  *        });
  *      });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -876,7 +874,7 @@ module.exports = function(suite){
      * and callback `fn` containing nested suites
      * and/or tests.
      */
-  
+
     context.describe = context.context = function(title, fn){
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
@@ -956,19 +954,19 @@ var Suite = require('../suite')
 
 /**
  * TDD-style interface:
- * 
+ *
  *     exports.Array = {
  *       '#indexOf()': {
  *         'should return -1 when the value is not present': function(){
- *           
+ *
  *         },
  *
  *         'should return the correct index when the value is present': function(){
- *           
+ *
  *         }
  *       }
  *     };
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1006,6 +1004,7 @@ module.exports = function(suite){
     }
   }
 };
+
 }); // module: interfaces/exports.js
 
 require.register("interfaces/index.js", function(module, exports, require){
@@ -1028,27 +1027,27 @@ var Suite = require('../suite')
 
 /**
  * QUnit-style interface:
- * 
+ *
  *     suite('Array');
- *     
+ *
  *     test('#length', function(){
  *       var arr = [1,2,3];
  *       ok(arr.length == 3);
  *     });
- *     
+ *
  *     test('#indexOf()', function(){
  *       var arr = [1,2,3];
  *       ok(arr.indexOf(1) == 0);
  *       ok(arr.indexOf(2) == 1);
  *       ok(arr.indexOf(3) == 2);
  *     });
- *     
+ *
  *     suite('String');
- *     
+ *
  *     test('#length', function(){
  *       ok('foo'.length == 3);
  *     });
- * 
+ *
  */
 
 module.exports = function(suite){
@@ -1091,7 +1090,7 @@ module.exports = function(suite){
     /**
      * Describe a "suite" with the given `title`.
      */
-  
+
     context.suite = function(title){
       if (suites.length > 1) suites.shift();
       var suite = Suite.create(suites[0], title);
@@ -1129,7 +1128,7 @@ var Suite = require('../suite')
  *          suiteSetup(function(){
  *
  *          });
- *          
+ *
  *          test('should return -1 when not present', function(){
  *
  *          });
@@ -1710,7 +1709,7 @@ exports.colors = {
 /**
  * Default symbol map.
  */
- 
+
 exports.symbols = {
   ok: '✓',
   err: '✖',
@@ -3080,7 +3079,7 @@ exports = module.exports = Min;
 
 function Min(runner) {
   Base.call(this, runner);
-  
+
   runner.on('start', function(){
     // clear screen
     process.stdout.write('\u001b[2J');
@@ -3100,10 +3099,10 @@ F.prototype = Base.prototype;
 Min.prototype = new F;
 Min.prototype.constructor = Min;
 
+
 }); // module: reporters/min.js
 
 require.register("reporters/nyan.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3249,44 +3248,39 @@ NyanCat.prototype.drawRainbow = function(){
 NyanCat.prototype.drawNyanCat = function(status) {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
-
-  [0, 1, 2, 3].forEach(function(index) {
-    write('\u001b[' + startWidth + 'C');
-
-    switch (index) {
-      case 0:
-        write('_,------,');
-        write('\n');
-        break;
-      case 1:
-        var padding = self.tick ? '  ' : '   ';
-        write('_|' + padding + '/\\_/\\ ');
-        write('\n');
-        break;
-      case 2:
-        var padding = self.tick ? '_' : '__';
-        var tail = self.tick ? '~' : '^';
-        var face;
-        switch (status) {
-          case 'pass':
-            face = '( ^ .^)';
-            break;
-          case 'fail':
-            face = '( o .o)';
-            break;
-          default:
-            face = '( - .-)';
-        }
-        write(tail + '|' + padding + face + ' ');
-        write('\n');
-        break;
-      case 3:
-        var padding = self.tick ? ' ' : '  ';
-        write(padding + '""  "" ');
-        write('\n');
-        break;
-    }
-  });
+  var color = '\u001b[' + startWidth + 'C';
+  var padding = '';
+  
+  write(color);
+  write('_,------,');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '  ' : '   ';
+  write('_|' + padding + '/\\_/\\ ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? '_' : '__';
+  var tail = self.tick ? '~' : '^';
+  var face;
+  switch (status) {
+    case 'pass':
+      face = '( ^ .^)';
+      break;
+    case 'fail':
+      face = '( o .o)';
+      break;
+    default:
+      face = '( - .-)';
+  }
+  write(tail + '|' + padding + face + ' ');
+  write('\n');
+  
+  write(color);
+  padding = self.tick ? ' ' : '  ';
+  write(padding + '""  "" ');
+  write('\n');
 
   this.cursorUp(this.numberOfLines);
 };
@@ -3746,7 +3740,7 @@ function XUnit(runner) {
   runner.on('pass', function(test){
     tests.push(test);
   });
-  
+
   runner.on('fail', function(test){
     tests.push(test);
   });
@@ -3763,7 +3757,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');    
+    console.log('</testsuite>');
   });
 }
 
@@ -4587,6 +4581,16 @@ function filterLeaks(ok, globals) {
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
       // Opera and IE expose global variables for HTML element IDs (issue #243)
+      
+      // in firefox
+      // if runner runs in an iframe, this iframe's window.getInterface method not init at first
+      // it is assigned in some seconds
+      if (global.navigator && /^getInterface/.test(key)) return true;
+      
+      // an iframe could be approached by window[iframeIndex]
+      // in ie6,7,8 and opera, iframeIndex is enumerable, this could cause leak
+      if (global.navigator && /^\d+/.test(key)) return true;
+      
       if (/^mocha-/.test(key)) return true;
       return key == ok;
     });
@@ -5006,7 +5010,7 @@ exports.indexOf = function(arr, obj, start){
 
 /**
  * Array#reduce (<=IE8)
- * 
+ *
  * @param {Array} array
  * @param {Function} fn
  * @param {Object} initial value
