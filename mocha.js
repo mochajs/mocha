@@ -4103,14 +4103,15 @@ module.exports = Runner;
 
 function Runner(suite) {
   var self = this;
-  this._globals = [];
+  this._globals = this.globalProps();
   this.suite = suite;
   this.total = suite.total();
   this.failures = 0;
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  this.globals(this.globalProps().concat(['errno']));
+  this.specifiedGlobalsLen = 0;
+  this.globals(['errno']);
 }
 
 /**
@@ -4196,6 +4197,7 @@ Runner.prototype.globals = function(arr){
   utils.forEach(arr, function(arr){
     this._globals.push(arr);
   }, this);
+  this.specifiedGlobalsLen = this.specifiedGlobalsLen + arr.length;
   return this;
 };
 
@@ -4213,10 +4215,11 @@ Runner.prototype.checkGlobals = function(test){
   var leaks;
 
   // check length - 2 ('errno' and 'location' globals)
-  if (isNode && 1 == ok.length - globals.length) return
-  else if (2 == ok.length - globals.length) return;
-
+  if (isNode && this.specifiedGlobalsLen == ok.length - globals.length) return
+  else if (this.specifiedGlobalsLen == ok.length - globals.length) return;
+  console.time('filterLeaksTime');
   leaks = filterLeaks(ok, globals);
+  console.timeEnd('filterLeaksTime');
   this._globals = this._globals.concat(leaks);
 
   if (leaks.length > 1) {
@@ -4578,20 +4581,22 @@ Runner.prototype.run = function(fn){
 
 function filterLeaks(ok, globals) {
   return filter(globals, function(key){
+    // Opera and IE expose global variables for HTML element IDs (issue #243)
+    
+    // in firefox
+    // if runner runs in an iframe, this iframe's window.getInterface method not init at first
+    // it is assigned in some seconds
+    if (global.navigator && /^getInterface/.test(key)) return false;
+    
+    // an iframe could be approached by window[iframeIndex]
+    // in ie6,7,8 and opera, iframeIndex is enumerable, this could cause leak
+    if (global.navigator && /^\d+/.test(key)) return false;
+    
+    if (/^mocha-/.test(key)) return false;
+    
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
-      // Opera and IE expose global variables for HTML element IDs (issue #243)
       
-      // in firefox
-      // if runner runs in an iframe, this iframe's window.getInterface method not init at first
-      // it is assigned in some seconds
-      if (global.navigator && /^getInterface/.test(key)) return true;
-      
-      // an iframe could be approached by window[iframeIndex]
-      // in ie6,7,8 and opera, iframeIndex is enumerable, this could cause leak
-      if (global.navigator && /^\d+/.test(key)) return true;
-      
-      if (/^mocha-/.test(key)) return true;
       return key == ok;
     });
     return matched.length == 0 && (!global.navigator || 'onerror' !== key);
