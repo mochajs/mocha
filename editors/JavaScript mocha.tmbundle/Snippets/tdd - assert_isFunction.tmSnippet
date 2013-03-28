@@ -6,6 +6,8 @@
 	<string>assert.isFunction($0);</string>
 	<key>name</key>
 	<string>tdd - assert.isFunction</string>
+	<key>scope</key>
+	<string>source.js</string>
 	<key>tabTrigger</key>
 	<string>isf</string>
 	<key>uuid</key>
