@@ -13,34 +13,6 @@ process.stdout = {};
 global = window;
 
 /**
- * next tick implementation.
- */
-
-process.nextTick = (function(){
-  // postMessage behaves badly on IE8
-  if (window.ActiveXObject || !window.postMessage) {
-    return function(fn){ fn() };
-  }
-
-  // based on setZeroTimeout by David Baron
-  // - http://dbaron.org/log/20100309-faster-timeouts
-  var timeouts = []
-    , name = 'mocha-zero-timeout'
-
-  window.addEventListener('message', function(e){
-    if (e.source == window && e.data == name) {
-      if (e.stopPropagation) e.stopPropagation();
-      if (timeouts.length) timeouts.shift()();
-    }
-  }, true);
-
-  return function(fn){
-    timeouts.push(fn);
-    window.postMessage(name, '*');
-  }
-})();
-
-/**
  * Remove uncaughtException listener.
  */
 
@@ -71,6 +43,31 @@ process.on = function(e, fn){
 
   var Mocha = window.Mocha = require('mocha'),
       mocha = window.mocha = new Mocha({ reporter: 'html' });
+
+  var immediateQueue = []
+    , immediateTimeout;
+
+  function timeslice() {
+    var immediateStart = new Date().getTime();
+    while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
+      immediateQueue.shift()();
+    }
+    if (immediateQueue.length) {
+      immediateTimeout = setTimeout(timeslice, 0);
+    } else {
+      immediateTimeout = null;
+    }
+  }
+
+  /**
+   * High-performance override of Runner.immediately.
+   */
+  Mocha.Runner.immediately = function(callback) {
+    immediateQueue.push(callback);
+    if (!immediateTimeout) {
+      immediateTimeout = setTimeout(timeslice, 0);
+    }
+  };
 
   /**
    * Override ui to ensure that the ui functions are initialized.
