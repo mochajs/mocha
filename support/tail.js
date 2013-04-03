@@ -62,6 +62,7 @@ process.on = function(e, fn){
   /**
    * High-performance override of Runner.immediately.
    */
+
   Mocha.Runner.immediately = function(callback) {
     immediateQueue.push(callback);
     if (!immediateTimeout) {
