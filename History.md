@@ -1,4 +1,14 @@
 
+1.9.0 / 2013-04-03 
+==================
+
+  * add improved setImmediate implementation
+  * replace --ignore-leaks with --check-leaks
+  * change default of ignoreLeaks to true. Closes #791
+  * remove scrolling for HTML reporter
+  * fix retina support
+  * fix tmbundle, restrict to js scope  
+
 1.8.2 / 2013-03-11 
 ==================
 
