@@ -650,6 +650,8 @@ test('#length', function(){
   &lt;script src="test.object.js"&gt;&lt;/script&gt;
   &lt;script src="test.xhr.js"&gt;&lt;/script&gt;
   &lt;script&gt;
+    mocha.checkLeaks();
+    mocha.globals(['jQuery']);
     mocha.run();
   &lt;/script&gt;
 &lt;/body&gt;
@@ -771,7 +773,7 @@ test('#length', function(){
 
 <h2 id="more-information">More information</h2>
 
-<p>For additional information such as using spies, mocking, and shared behaviours be sure to check out the <a href="https://github.com/visionmedia/mocha/wiki">Mocha Wiki</a> on GitHub. For discussions join the <a href="http://groups.google.com/group/mochajs">Google Group</a>. For a running example of mocha view <a href="example/tests.html">example/tests.html</a>.</p>
+<p>For additional information such as using spies, mocking, and shared behaviours be sure to check out the <a href="https://github.com/visionmedia/mocha/wiki">Mocha Wiki</a> on GitHub. For discussions join the <a href="http://groups.google.com/group/mochajs">Google Group</a>. For a running example of mocha view <a href="example/tests.html">example/tests.html</a>. For the JavaScript API view the <a href="https://github.com/visionmedia/mocha/blob/master/lib/mocha.js#L51">source</a>.</p>
     </section>
     <footer>
       <span>© 2011 TJ Holowaychuk. All rights reserved.</span>
