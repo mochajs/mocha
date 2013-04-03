@@ -138,7 +138,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     })
 
   All "hooks", that is `before()`, `after()`, `beforeEach()`, `afterEach()` may be sync or async as well, behaving much like a regular test-case. For example you may wish to populate database with dummy content before each test:
-  
+
     describe('Connection', function(){
       var db = new Connection
         , tobi = new User('tobi')
@@ -195,11 +195,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     describe('Array', function(){
       describe('#indexOf()', function(){
         it.only('should return -1 unless present', function(){
-          
+
         })
 
         it('should return the index when present', function(){
-          
+
         })
       })
     })
@@ -225,11 +225,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     describe('Array', function(){
       describe('#indexOf()', function(){
         it.skip('should return -1 unless present', function(){
-          
+
         })
 
         it('should return the index when present', function(){
-          
+
         })
       })
     })
@@ -278,10 +278,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -G, --growl                     enable growl notification support
       -d, --debug                     enable node's debugger, synonym for node --debug
       -b, --bail                      bail after first test failure
+      -A, --async-only                force all tests to take a callback (async)
       --recursive                     include sub directories
       --debug-brk                     enable node's debugger breaking on the first line
       --globals <names>               allow the given comma-delimited global [names]
-      --ignore-leaks                  ignore global variable leaks
+      --check-leaks                   check for global variable leaks
       --interfaces                    display available interfaces
       --reporters                     display available reporters
       --compilers <ext>:<module>,...  use the given module(s) to compile files
@@ -308,9 +309,9 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   Accepts a comma-delimited list of accepted global variable names. For example suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`.
 
-<h3 id="ignore-leaks-option">--ignore-leaks</h3>
+<h3 id="ignore-leaks-option">--check-leaks</h3>
 
-  By default Mocha will fail when global variables are introduced, you may use `--globals` to specify a few, or use `--ignore-leaks` to disable this functionality. 
+  By default Mocha will not check for global variables leaked while running tests, to enable this pass `--check-leaks`, to specify globals that are acceptable use `--globals`, for example `--globals jQuery,MyLib`.
 
 <h3 id="require-option">-r, --require &lt;name&gt;</h3>
 
@@ -319,11 +320,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="ui-option">-u, --ui &lt;name&gt;</h3>
 
   The `--ui` option lets you specify the interface to use, defaulting to "bdd".
-  
+
 <h3 id="reporter-option">-R, --reporter &lt;name&gt;</h3>
 
   The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
-  
+
 <h3 id="timeout-option">-t, --timeout &lt;ms&gt;</h3>
 
   Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the `s` suffix, ex: `--timeout 2s` or `--timeout 2000` would be equivalent.
@@ -334,8 +335,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="grep-option">-g, --grep &lt;pattern&gt;</h3>
 
-  The `--grep` option when specified will trigger mocha to only run tests matching the given `pattern` which is internally compiled to a `RegExp`. 
-  
+  The `--grep` option when specified will trigger mocha to only run tests matching the given `pattern` which is internally compiled to a `RegExp`.
+
   Suppose for example you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
     describe('api', function(){
@@ -343,7 +344,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
         it('respond with an array of users')
       })
     })
-    
+
     describe('app', function(){
       describe('GET /users', function(){
         it('respond with an array of users')
@@ -356,7 +357,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="bdd-interface">BDD</h3>
 
-  The "__BDD__" interface provides `describe()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`: 
+  The "__BDD__" interface provides `describe()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`:
 
     describe('Array', function(){
       before(function(){
@@ -408,7 +409,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="qunit-interface">QUnit</h3>
 
   The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases.
-  
+
     function ok(expr, msg) {
       if (!expr) throw new Error(msg);
     }
@@ -458,7 +459,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="nyan-reporter">Nyan</h3>
 
   The "nyan" reporter is exactly what you might expect:
-  
+
   ![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
 
 <h3 id="tap-reporter">TAP</h3>
@@ -478,7 +479,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="list-reporter">List</h3>
 
   The "List" reporter outputs a simple specifications list as
-  test cases pass or fail, outputting the failure details at 
+  test cases pass or fail, outputting the failure details at
   the bottom of the output.
 
   ![list reporter](images/reporter-list.png)
@@ -493,7 +494,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).
-  
+
   ![json reporter](images/reporter-json.png)
 
 <h3 id="json-stream-reporter">JSON Stream</h3>
@@ -519,7 +520,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   The "min" reporter displays the summary only, while still outputting errors
   on failure. This reporter works great with `--watch` as it clears the terminal
   in order to keep your test summary at the top.
-  
+
   ![](http://f.cl.ly/items/460B2r3p3M3k2D3J250m/Screen%20Shot%202012-03-24%20at%2010.46.01%20AM.png)
 
 <h3 id="doc-reporter">Doc</h3>
@@ -558,7 +559,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     </section>
 
   The SuperAgent request library [test documentation](http://visionmedia.github.com/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
-  
+
     test-docs:
     	make test REPORTER=doc \
     		| cat docs/head.html - docs/tail.html \
@@ -585,7 +586,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
  The __HTML__ reporter is currently the only browser reporter
  supported by Mocha, and it looks like this:
- 
+
  ![HTML test reporter](images/reporter-html.png)
 
 <h2 id="browser-support">Browser support</h2>
@@ -606,7 +607,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <script>mocha.setup('bdd')</script>
       <script src="test.array.js"></script>
       <script src="test.object.js"></script>
-      <script src="test.xhr.js"></script>  
+      <script src="test.xhr.js"></script>
       <script>
         mocha.run();
       </script>
@@ -676,7 +677,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
      test:
        ./node_modules/.bin/mocha \
          --reporter list
-     
+
      .PHONY: test
 
 <h2 id="editors">Editors</h2>
@@ -695,7 +696,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The following test suites are from real projects putting Mocha to use,
   so they serve as good examples:
-  
+
    - [Express](https://github.com/visionmedia/express/tree/master/test)
    - [Connect](https://github.com/senchalabs/connect/tree/master/test)
    - [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
