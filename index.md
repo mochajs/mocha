@@ -609,6 +609,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       <script src="test.object.js"></script>
       <script src="test.xhr.js"></script>
       <script>
+        mocha.checkLeaks();
+        mocha.globals(['jQuery']);
         mocha.run();
       </script>
     </body>
