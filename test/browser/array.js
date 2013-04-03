@@ -1,6 +1,7 @@
 describe('Array', function(){
   describe('#push()', function(){
     it('should append a value', function(){
+      foo = 'asdf'
       var arr = [];
       arr.push('foo');
       arr.push('bar');

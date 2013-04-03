@@ -16,8 +16,9 @@
     <script src="../acceptance/timeout.js"></script>
     <script>
       onload = function(){
+        mocha.checkLeaks();
+        mocha.globals(['foo']);
         var runner = mocha.run();
-        runner.globals(['foo', 'bar', 'baz']);
 
         // runner.on('test end', function(test){
         //   console.log(test.fullTitle());
