@@ -13,10 +13,16 @@ describe('serial', function(){
   describe('hooks', function(){
     beforeEach(function(){
       calls.push('before');
+      if (this.currentTest) {
+        calls.push('before test ' + this.currentTest.title);
+      }
     })
 
     it('one', function(){
-      calls.should.eql(['parent before', 'before']);
+      calls.should.eql([
+          'parent before'
+        , 'before'
+        , 'before test one']);
       calls.push('one');
     })
 
@@ -24,11 +30,13 @@ describe('serial', function(){
       calls.should.eql([
           'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test two']);
       calls.push('two');
     })
 
@@ -36,16 +44,19 @@ describe('serial', function(){
       calls.should.eql([
           'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
         , 'parent after'
         , 'parent before'
         , 'before'
+        , 'before test two'
         , 'two'
         , 'after'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test three']);
       calls.push('three');
     })
 
@@ -57,16 +68,19 @@ describe('serial', function(){
       calls.should.eql([
           'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
         , 'parent after'
         , 'parent before'
         , 'before'
+        , 'before test two'
         , 'two'
         , 'after'
         , 'parent after'
         , 'parent before'
         , 'before'
+        , 'before test three'
         , 'three'
         , 'after'
         , 'parent after']);

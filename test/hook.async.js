@@ -13,16 +13,19 @@ describe('async', function(){
       , 'before all'
       , 'parent before'
       , 'before'
+      , 'before test one'
       , 'one'
       , 'after'
       , 'parent after'
       , 'parent before'
       , 'before'
+      , 'before test two'
       , 'two'
       , 'after'
       , 'parent after'
       , 'parent before'
       , 'before'
+      , 'before test three'
       , 'three'
       , 'after'
       , 'parent after'
@@ -48,8 +51,12 @@ describe('async', function(){
     });
 
     beforeEach(function(done){
+      var ctx = this;
       process.nextTick(function(){
         calls.push('before');
+        if (ctx.currentTest) {
+          calls.push('before test ' + ctx.currentTest.title);
+        }
         done();
       })
     })
@@ -59,7 +66,8 @@ describe('async', function(){
           'root before all'
         , 'before all'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test one']);
       calls.push('one');
       process.nextTick(done);
     })
@@ -70,11 +78,13 @@ describe('async', function(){
         , 'before all'
         , 'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test two']);
       calls.push('two');
     })
 
@@ -84,16 +94,19 @@ describe('async', function(){
         , 'before all'
         , 'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
         , 'parent after'
         , 'parent before'
         , 'before'
+        , 'before test two'
         , 'two'
         , 'after'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test three']);
       calls.push('three');
     })
 
