@@ -264,9 +264,16 @@ var files = []
 
 if (!args.length) args.push('test');
 
-args.forEach(function(arg){
-  files = files.concat(lookupFiles(arg, program.recursive));
-});
+try{
+  args.forEach(function(arg){
+    files = files.concat(lookupFiles(arg, program.recursive));
+  });
+}
+catch(err){
+  console.error("\t" + err);
+  process.exit(0);
+}
+
 
 // resolve
 
@@ -387,6 +394,7 @@ function lookupFiles(path, recursive) {
   var files = [];
 
   if (!exists(path)) path += '.js';
+  if (!exists(path)) throw new Error("Couldn't resolve path or js from: " + path.slice(0,path.length-3));
   var stat = fs.statSync(path);
   if (stat.isFile()) return path;
 
