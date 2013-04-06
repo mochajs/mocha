@@ -47,6 +47,16 @@ process.on = function(e, fn){
   var immediateQueue = []
     , immediateTimeout;
 
+  /**
+   * Save timer references to avoid Sinon interfering (see GH-237).
+   */
+  
+  var Date = global.Date
+    , setTimeout = global.setTimeout
+    , setInterval = global.setInterval
+    , clearTimeout = global.clearTimeout
+    , clearInterval = global.clearInterval;
+
   function timeslice() {
     var immediateStart = new Date().getTime();
     while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
