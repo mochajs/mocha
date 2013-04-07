@@ -33,6 +33,7 @@ describe('serial', function(){
         , 'before test one'
         , 'one'
         , 'after'
+        , 'after test one passed'
         , 'parent after'
         , 'parent before'
         , 'before'
@@ -47,12 +48,14 @@ describe('serial', function(){
         , 'before test one'
         , 'one'
         , 'after'
+        , 'after test one passed'
         , 'parent after'
         , 'parent before'
         , 'before'
         , 'before test two'
         , 'two'
         , 'after'
+        , 'after test two passed'
         , 'parent after'
         , 'parent before'
         , 'before'
@@ -62,6 +65,9 @@ describe('serial', function(){
 
     afterEach(function(){
       calls.push('after');
+      if (this.currentTest) {
+        calls.push('after test ' + this.currentTest.title + ' ' + this.currentTest.state);
+      }
     })
 
     after(function(){
@@ -71,18 +77,21 @@ describe('serial', function(){
         , 'before test one'
         , 'one'
         , 'after'
+        , 'after test one passed'
         , 'parent after'
         , 'parent before'
         , 'before'
         , 'before test two'
         , 'two'
         , 'after'
+        , 'after test two passed'
         , 'parent after'
         , 'parent before'
         , 'before'
         , 'before test three'
         , 'three'
         , 'after'
+        , 'after test three passed'
         , 'parent after']);
     })
   })
