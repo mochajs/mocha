@@ -2237,6 +2237,7 @@ var Date = global.Date
 
 exports = module.exports = HTML;
 
+
 /**
  * Stats template.
  */
@@ -2244,6 +2245,7 @@ exports = module.exports = HTML;
 var statsTemplate = '<ul id="mocha-stats">'
   + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
   + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
+  + '<li class="pending"><a href="#">pending:</a> <em>0</em></li>'
   + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
   + '<li class="duration">duration: <em>0</em>s</li>'
   + '</ul>';
@@ -2265,9 +2267,11 @@ function HTML(runner, root) {
     , items = stat.getElementsByTagName('li')
     , passes = items[1].getElementsByTagName('em')[0]
     , passesLink = items[1].getElementsByTagName('a')[0]
-    , failures = items[2].getElementsByTagName('em')[0]
-    , failuresLink = items[2].getElementsByTagName('a')[0]
-    , duration = items[3].getElementsByTagName('em')[0]
+    , pending = items[2].getElementsByTagName('em')[0]
+    , pendingLink = items[2].getElementsByTagName('a')[0]
+    , failures = items[3].getElementsByTagName('em')[0]
+    , failuresLink = items[3].getElementsByTagName('a')[0]
+    , duration = items[4].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
     , report = fragment('<ul id="mocha-report"></ul>')
     , stack = [report]
@@ -2295,6 +2299,14 @@ function HTML(runner, root) {
     var name = /pass/.test(report.className) ? '' : ' pass';
     report.className = report.className.replace(/fail|pass/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test pass');
+  });
+
+  // pending toggle
+  on(pendingLink, 'click', function(){
+    unhide();
+    var name = /pending/.test(report.className) ? '' : ' pending';
+    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
+    if (report.className.trim()) hideSuitesWithout('test pending');
   });
 
   // failure toggle
@@ -2341,6 +2353,7 @@ function HTML(runner, root) {
     var ms = new Date - stats.start;
     text(passes, stats.passes);
     text(failures, stats.failures);
+    text(pending, stats.pending);
     text(duration, (ms / 1000).toFixed(2));
 
     // test
@@ -2426,7 +2439,7 @@ function hideSuitesWithout(classname) {
   var suites = document.getElementsByClassName('suite');
   for (var i = 0; i < suites.length; i++) {
     var els = suites[i].getElementsByClassName(classname);
-    if (0 == els.length) suites[i].className += ' hidden';
+    if (0 == els.length && !/hidden/.test(suites[i].className)) suites[i].className += ' hidden';
   }
 }
 
@@ -2435,7 +2448,7 @@ function hideSuitesWithout(classname) {
  */
 
 function unhide() {
-  var els = document.getElementsByClassName('suite hidden');
+  var els = document.getElementsByClassName('suite');
   for (var i = 0; i < els.length; ++i) {
     els[i].className = els[i].className.replace('suite hidden', 'suite');
   }
