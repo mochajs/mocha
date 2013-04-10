@@ -2297,7 +2297,7 @@ function HTML(runner, root) {
   on(passesLink, 'click', function(){
     unhide();
     var name = /pass/.test(report.className) ? '' : ' pass';
-    report.className = report.className.replace(/fail|pass/g, '') + name;
+    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test pass');
   });
 
@@ -2313,7 +2313,7 @@ function HTML(runner, root) {
   on(failuresLink, 'click', function(){
     unhide();
     var name = /fail/.test(report.className) ? '' : ' fail';
-    report.className = report.className.replace(/fail|pass/g, '') + name;
+    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test fail');
   });
 
