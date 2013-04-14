@@ -93,7 +93,8 @@ program
     var tmpl = fs.readFileSync(join(__dirname, '..', 'lib/template.html'));
     fs.writeFileSync(join(path, 'mocha.css'), css);
     fs.writeFileSync(join(path, 'mocha.js'), js);
-    fs.writeFileSync(join(path, 'tests.html'), tmpl);
+    fs.writeFileSync(join(path, 'tests.js'), '');
+    fs.writeFileSync(join(path, 'index.html'), tmpl);
     process.exit(0);
   });
 
