@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi
@@ -133,6 +133,12 @@ test-only:
 		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/misc/only/qunit
+
+test-sort:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--sort \
+		test/acceptance/sort
 
 non-tty:
 	@./bin/mocha \

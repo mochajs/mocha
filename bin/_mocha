@@ -77,6 +77,7 @@ program
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
   .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('-S, --sort', "sort test files")
   .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -285,6 +286,10 @@ args.forEach(function(arg){
 files = files.map(function(path){
   return resolve(path);
 });
+
+if (program.sort) {
+  files.sort();
+}
 
 // --watch
 
