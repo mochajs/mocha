@@ -100,6 +100,12 @@ test-async-only:
 	  --async-only \
 	  test/acceptance/misc/asyncOnly
 
+test-sort:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--sort \
+		test/acceptance/sort
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
