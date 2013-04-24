@@ -42,6 +42,7 @@ test-unit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
+		--growl \
 		test/*.js
 
 test-compilers:
