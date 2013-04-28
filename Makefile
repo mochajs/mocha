@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-requires
 
 test-jsapi:
 	@node test/jsapi
@@ -50,6 +50,16 @@ test-compilers:
 		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
+
+test-requires:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--compilers coffee:coffee-script \
+		--require test/acceptance/require/a.js \
+		--require test/acceptance/require/b.coffee \
+		--require test/acceptance/require/c.js \
+		--require test/acceptance/require/d.coffee \
+		test/acceptance/require/require.js
 
 test-bdd:
 	@./bin/mocha \
