@@ -13,11 +13,11 @@ lib/browser/diff.js: node_modules/diff/diff.js
 mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
 	@node support/compile $(SRC)
 	@cat \
-	  support/head.js \
-	  _mocha.js \
-	  support/tail.js \
-	  support/foot.js \
-	  > mocha.js
+		support/head.js \
+		_mocha.js \
+		support/tail.js \
+		support/foot.js \
+		> mocha.js
 
 clean:
 	rm -f mocha.js
@@ -39,83 +39,83 @@ test-jsapi:
 	@node test/jsapi
 
 test-unit:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
 		test/*.js
 
 test-compilers:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-bdd:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
 		test/acceptance/interfaces/bdd
 
 test-tdd:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
 		test/acceptance/interfaces/tdd
 
 test-qunit:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/interfaces/qunit
 
 test-exports:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
 
 test-grep:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep fast \
-	  test/acceptance/misc/grep
+	mocha \
+		--reporter $(REPORTER) \
+		--grep fast \
+		test/acceptance/misc/grep
 
 test-invert:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep slow \
-	  --invert \
-	  test/acceptance/misc/grep
+	mocha \
+		--reporter $(REPORTER) \
+		--grep slow \
+		--invert \
+		test/acceptance/misc/grep
 
 test-bail:
-	@./bin/mocha \
+	mocha \
 		--reporter $(REPORTER) \
 		--bail \
 		test/acceptance/misc/bail
 
 test-async-only:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --async-only \
-	  test/acceptance/misc/asyncOnly
+	mocha \
+		--reporter $(REPORTER) \
+		--async-only \
+		test/acceptance/misc/asyncOnly
 
 non-tty:
-	@./bin/mocha \
+	mocha \
 		--reporter dot \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
-	@./bin/mocha \
+	mocha \
 		--reporter list \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
-	@./bin/mocha \
+	mocha \
 		--reporter spec \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
 
