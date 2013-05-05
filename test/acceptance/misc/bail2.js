@@ -2,7 +2,7 @@ describe("Granular bail tests: ", function () {
 
   var runs = 0;
 
-  this.bail(false);
+  this.bail(false); // override any previous bail setting
 
   describe("bailing suite: ", function () {
     this.bail(true);
@@ -58,9 +58,17 @@ describe("Granular bail tests: ", function () {
   describe("third bailing suite: ", function () {
     this.bail(true);
 
-    it("should have run 3 successful tests by now", function () {
+    after(function () {
+      throw new Error("we should have bailed");
+    });
+
+    before(function () {
       runs += 1;
-      runs.should.eql(4);
+    });
+
+    it("should have run 4 successful tests by now", function () {
+      runs += 1;
+      runs.should.eql(5);
     });
 
     it("should fail", function () {

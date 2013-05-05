@@ -92,7 +92,7 @@ test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--bail \
-		test/acceptance/misc/bail
+		test/acceptance/misc/bail*
 
 test-async-only:
 	@./bin/mocha \
