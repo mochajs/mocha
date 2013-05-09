@@ -30,7 +30,7 @@ describe("Granular bail tests: ", function () {
     it("should not get here", function () {
       throw new Error("we should have bailed");
     });
-    
+
   });
 
   describe("non-bailing suite: ", function () {
@@ -59,7 +59,8 @@ describe("Granular bail tests: ", function () {
     this.bail(true);
 
     after(function () {
-      throw new Error("we should have bailed");
+      runs += 1;
+      runs.should.eql(6);
     });
 
     before(function () {
@@ -78,7 +79,22 @@ describe("Granular bail tests: ", function () {
     it("should not get here", function () {
       throw new Error("we should have bailed");
     });
-    
+
+    describe("child suite: ", function () {
+
+      after(function () {
+        throw new Error("we should have bailed");
+      });
+
+      before(function () {
+        throw new Error("we should have bailed");
+      });
+
+      it("should fail", function () {
+        throw new Error("we should have bailed");
+      });
+    });
+
   });
 
 });
