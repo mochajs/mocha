@@ -1,0 +1,15 @@
+{
+  "asi": true
+  "laxcomma": true,
+  "white": false,
+  "onevar": false,
+  "curly": false,
+  "plusplus": false,
+  "bitwise": false,
+  "eqeqeq": false,
+  "latedef": false,
+  "proto": true,
+  "boss": true,
+  "eqnull": false,
+  "scripturl": true
+}
