@@ -23,9 +23,11 @@ describe('parallel suite', function () {
       setTimeout(done, 100);
     });
 
+    it('pending test');
+
     after(function (done) {
       var end = new Date();
-      //(end.getTime() - start.getTime()).should.be.below(110);
+      (end.getTime() - start.getTime()).should.be.below(110);
       done();
     })
   })

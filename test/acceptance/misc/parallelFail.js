@@ -47,6 +47,8 @@ describe('parallel failing', function () {
       runs++;
     })
 
+    it('pending test');
+
     it('should fail', function (done) {
       throw new Error('this is ok (3-2)');
     });
