@@ -18,7 +18,7 @@ describe('parallel failing', function () {
     })
 
     it('should fail', function (done) {
-      throw new Error('this is ok');
+      throw new Error('this is ok (1-2)');
     });
 
     it('should not run this', function (done) {
@@ -33,7 +33,7 @@ describe('parallel failing', function () {
     })
 
     it('should fail', function (done) {
-      throw new Error('this is ok');
+      throw new Error('this is ok (2-2)');
     });
 
     it('should run this if not bailing', function () {
@@ -47,8 +47,10 @@ describe('parallel failing', function () {
       runs++;
     })
 
+    it('pending test');
+
     it('should fail', function (done) {
-      throw new Error('this is ok');
+      throw new Error('this is ok (3-2)');
     });
   })
 })
