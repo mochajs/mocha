@@ -1,6 +1,6 @@
 describe('parallel failing', function () {
 
-  this._parallel = true;
+  this.parallel(true);
   var runs = 0;
 
   after(function (done) {
