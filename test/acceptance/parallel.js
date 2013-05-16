@@ -1,7 +1,7 @@
 describe('parallel suite', function () {
   var start;
 
-  this._parallel = true;
+  this.parallel(true);
 
   before(function (done) {
     start = new Date();

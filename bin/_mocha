@@ -240,7 +240,7 @@ if (program.asyncOnly) mocha.asyncOnly();
 
 // --parallel
 
-if (program.parallel) mocha.parallel(true);
+if (program.parallel) mocha.parallel();
 
 // --globals
 
