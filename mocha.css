@@ -1,7 +1,9 @@
 @charset "utf-8";
+
 body {
   margin:0;
 }
+
 #mocha {
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 60px 50px;
