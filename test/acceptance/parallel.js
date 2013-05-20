@@ -27,7 +27,7 @@ describe('parallel suite', function () {
 
     after(function (done) {
       var end = new Date();
-      (end.getTime() - start.getTime()).should.be.below(110);
+      (end.getTime() - start.getTime()).should.be.below(115);
       done();
     })
   })
@@ -43,7 +43,7 @@ describe('parallel suite', function () {
 
     after(function (done) {
       var end = new Date();
-      (end.getTime() - start.getTime()).should.be.below(130);
+      (end.getTime() - start.getTime()).should.be.below(135);
       done();
     })
   });
