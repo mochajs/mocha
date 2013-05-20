@@ -51,8 +51,10 @@ describe('parallel failing', function () {
 
     it('pending test');
 
-    it('should fail', function (done) {
-      throw new Error('this is ok (3-2)');
+    it('should fail by passing Error to done()', function (done) {
+      setTimeout(function () {
+        done(new Error('this is ok (3-2)'));
+      }, 10)
     });
   })
 })
