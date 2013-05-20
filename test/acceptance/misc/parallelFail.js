@@ -29,11 +29,13 @@ describe('parallel failing', function () {
   describe('suite 2', function () {
     it('test 2-1', function (done) {
       runs++;
-      setTimeout(done, 80);
+      setTimeout(done, 10);
     })
 
     it('should fail', function (done) {
-      throw new Error('this is ok (2-2)');
+      setTimeout(function () {
+        throw new Error('this is ok (2-2)');
+      }, 10);
     });
 
     it('should run this if not bailing', function () {
