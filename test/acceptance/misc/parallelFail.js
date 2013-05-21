@@ -58,3 +58,12 @@ describe('parallel failing', function () {
     });
   })
 })
+
+
+describe('parallel no children', function () {
+
+  this.parallel(true);
+
+  it("should report after this", function () {});
+
+});
