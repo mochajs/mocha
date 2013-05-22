@@ -33,7 +33,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob
 
 test-jsapi:
 	@node test/jsapi
@@ -100,6 +100,9 @@ test-async-only:
 	  --reporter $(REPORTER) \
 	  --async-only \
 	  test/acceptance/misc/asyncOnly
+
+test-glob:
+	@./test/acceptance/glob/glob.sh
 
 non-tty:
 	@./bin/mocha \
