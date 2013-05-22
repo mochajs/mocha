@@ -113,6 +113,6 @@ mocha.run = function(fn){
 
   return Mocha.prototype.run.call(mocha, function(){
     Mocha.utils.highlightTags('code');
-    if (fn) fn();
+    fn && fn();
   });
 };
