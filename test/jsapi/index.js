@@ -5,12 +5,12 @@ var Mocha = require('../../')
 var mocha = new Mocha({
   ui: 'bdd',
   globals: ['okGlobalA', 'okGlobalB', 'okGlobalC', 'callback*'],
+  require: ['should'],
   // ignoreLeaks: true,
   growl: true
 });
 
 // mocha.reporter('spec');
-require('should');
 
 mocha.addFile('test/suite.js');
 mocha.addFile('test/runner.js');
