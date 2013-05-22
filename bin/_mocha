@@ -146,10 +146,8 @@ program.on('interfaces', function(){
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
 program.on('require', function(mod){
-  var abs = exists(mod)
-    || exists(mod + '.js');
-
-  if (abs) mod = join(cwd, mod);
+  var abs = exists(mod) || exists(mod + '.js');
+  if (abs) mod = resolve(mod);
   require(mod);
 });
 
