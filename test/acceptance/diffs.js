@@ -4,7 +4,7 @@ var fs = require('fs')
   , cssout = fs.readFileSync('test/acceptance/fixtures/css.out', 'ascii');
 
 describe('diffs', function(){
-  it('should display a char diff for small strings', function(){
+  it('should display a word diff for small strings', function(){
     var a = 'foo bar baz'
       , b = 'foo rar baz';
 
