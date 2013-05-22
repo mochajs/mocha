@@ -42,10 +42,10 @@ process.on = function(e, fn){
    */
 
   var Date = global.Date,
-    setTimeout = global.setTimeout,
-    setInterval = global.setInterval,
-    clearTimeout = global.clearTimeout,
-    clearInterval = global.clearInterval;
+  var setTimeout = global.setTimeout;
+  var setInterval = global.setInterval;
+  var clearTimeout = global.clearTimeout;
+  var clearInterval = global.clearInterval;
 
   /**
    * Expose mocha.
