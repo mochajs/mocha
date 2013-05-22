@@ -35,6 +35,10 @@ process.argv.slice(2).forEach(function(arg){
       else args.push(arg);
       break;
   }
+  //support --debug-brk=1234
+  if (/^--debug-brk(=\d+)?$/.test(arg)) {
+    args.unshift(arg);
+  }
 });
 
 var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
