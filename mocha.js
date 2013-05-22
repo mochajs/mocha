@@ -4036,7 +4036,7 @@ Runnable.prototype.run = function(fn){
     self.clearTimeout();
     self.duration = new Date - start;
     finished = true;
-    fn(err);
+    fn && fn(err);
   }
 
   // for .resetTimeout()
@@ -4064,9 +4064,9 @@ Runnable.prototype.run = function(fn){
   try {
     if (!this.pending) this.fn.call(ctx);
     this.duration = new Date - start;
-    fn();
+    fn && fn();
   } catch (err) {
-    fn(err);
+    fn && fn(err);
   }
 };
 
@@ -4310,7 +4310,7 @@ Runner.prototype.hook = function(name, fn){
 
   function next(i) {
     var hook = hooks[i];
-    if (!hook) return fn();
+    if (!hook) return fn && fn();
     self.currentRunnable = hook;
 
     self.emit('hook', hook);
@@ -4353,13 +4353,13 @@ Runner.prototype.hooks = function(name, suites, fn){
 
     if (!suite) {
       self.suite = orig;
-      return fn();
+      return fn && fn();
     }
 
     self.hook(name, function(err){
       if (err) {
         self.suite = orig;
-        return fn(err);
+        return fn && fn(err);
       }
 
       next(suites.pop());
@@ -4429,7 +4429,7 @@ Runner.prototype.runTest = function(fn){
     });
     test.run(fn);
   } catch (err) {
-    fn(err);
+    fn && fn(err);
   }
 };
 
@@ -4455,7 +4455,7 @@ Runner.prototype.runTests = function(suite, fn){
     test = tests.shift();
 
     // all done
-    if (!test) return fn();
+    if (!test) return fn && fn();
 
     // grep
     var match = self._grep.test(test.fullTitle());
@@ -4510,7 +4510,7 @@ Runner.prototype.runSuite = function(suite, fn){
 
   debug('run suite %s', suite.fullTitle());
 
-  if (!total) return fn();
+  if (!total) return fn && fn();
 
   this.emit('suite', this.suite = suite);
 
@@ -4524,7 +4524,7 @@ Runner.prototype.runSuite = function(suite, fn){
     self.suite = suite;
     self.hook('afterAll', function(){
       self.emit('suite end', suite);
-      fn();
+      fn && fn();
     });
   }
 
@@ -4570,7 +4570,6 @@ Runner.prototype.uncaught = function(err){
 
 Runner.prototype.run = function(fn){
   var self = this
-    , fn = fn || function(){};
 
   function uncaught(err){
     self.uncaught(err);
@@ -4582,7 +4581,7 @@ Runner.prototype.run = function(fn){
   this.on('end', function(){
     debug('end');
     process.removeListener('uncaughtException', uncaught);
-    fn(self.failures);
+    fn && fn(self.failures);
   });
 
   // run suites
@@ -5367,7 +5366,7 @@ mocha.run = function(fn){
 
   return Mocha.prototype.run.call(mocha, function(){
     Mocha.utils.highlightTags('code');
-    if (fn) fn();
+    fn && fn();
   });
 };
 })();
