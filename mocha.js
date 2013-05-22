@@ -1053,7 +1053,7 @@ var Suite = require('../suite')
 module.exports = function(suite){
   var suites = [suite];
 
-  suite.on('pre-require', function(context){
+  suite.on('pre-require', function(context, file, mocha){
 
     /**
      * Execute before running tests.
@@ -1095,6 +1095,16 @@ module.exports = function(suite){
       if (suites.length > 1) suites.shift();
       var suite = Suite.create(suites[0], title);
       suites.unshift(suite);
+      return suite;
+    };
+
+    /**
+     * Exclusive test-case.
+     */
+
+    context.suite.only = function(title, fn){
+      var suite = context.suite(title, fn);
+      mocha.grep(suite.fullTitle());
     };
 
     /**
@@ -1104,7 +1114,26 @@ module.exports = function(suite){
      */
 
     context.test = function(title, fn){
-      suites[0].addTest(new Test(title, fn));
+      var test = new Test(title, fn);
+      suites[0].addTest(test);
+      return test;
+    };
+
+    /**
+     * Exclusive test-case.
+     */
+
+    context.test.only = function(title, fn){
+      var test = context.test(title, fn);
+      mocha.grep(test.fullTitle());
+    };
+
+    /**
+     * Pending test case.
+     */
+
+    context.test.skip = function(title){
+      context.test(title);
     };
   });
 };
@@ -1815,10 +1844,7 @@ exports.list = function(failures){
 
     // actual / expected diff
     if ('string' == typeof actual && 'string' == typeof expected) {
-      var len = Math.max(actual.length, expected.length);
-
-      if (len < 20) msg = errorDiff(err, 'Chars', escape);
-      else msg = errorDiff(err, 'Words', escape);
+      msg = errorDiff(err, 'Words', escape);
 
       // linenos
       var lines = msg.split('\n');
@@ -4583,6 +4609,8 @@ Runner.prototype.run = function(fn){
 
 function filterLeaks(ok, globals) {
   return filter(globals, function(key){
+    // Firefox and Chrome exposes iframes as index inside the window object
+    if (/^d+/.test(key)) return false;
     var matched = filter(ok, function(ok){
       if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
       // Opera and IE expose global variables for HTML element IDs (issue #243)
@@ -5224,6 +5252,17 @@ exports.highlightTags = function(name) {
 };
 
 }); // module: utils.js
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = window.Date;
+var setTimeout = window.setTimeout;
+var setInterval = window.setInterval;
+var clearTimeout = window.clearTimeout;
+var clearInterval = window.clearInterval;
+
 /**
  * Node shims.
  *
@@ -5260,79 +5299,75 @@ process.on = function(e, fn){
   }
 };
 
-// boot
-;(function(){
+/**
+ * Expose mocha.
+ */
 
-  /**
-   * Expose mocha.
-   */
+var Mocha = window.Mocha = require('mocha'),
+    mocha = window.mocha = new Mocha({ reporter: 'html' });
 
-  var Mocha = window.Mocha = require('mocha'),
-      mocha = window.mocha = new Mocha({ reporter: 'html' });
+var immediateQueue = []
+  , immediateTimeout;
 
-  var immediateQueue = []
-    , immediateTimeout;
-
-  function timeslice() {
-    var immediateStart = new Date().getTime();
-    while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
-      immediateQueue.shift()();
-    }
-    if (immediateQueue.length) {
-      immediateTimeout = setTimeout(timeslice, 0);
-    } else {
-      immediateTimeout = null;
-    }
+function timeslice() {
+  var immediateStart = new Date().getTime();
+  while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
+    immediateQueue.shift()();
   }
+  if (immediateQueue.length) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  } else {
+    immediateTimeout = null;
+  }
+}
 
-  /**
-   * High-performance override of Runner.immediately.
-   */
+/**
+ * High-performance override of Runner.immediately.
+ */
 
-  Mocha.Runner.immediately = function(callback) {
-    immediateQueue.push(callback);
-    if (!immediateTimeout) {
-      immediateTimeout = setTimeout(timeslice, 0);
-    }
-  };
+Mocha.Runner.immediately = function(callback) {
+  immediateQueue.push(callback);
+  if (!immediateTimeout) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  }
+};
 
-  /**
-   * Override ui to ensure that the ui functions are initialized.
-   * Normally this would happen in Mocha.prototype.loadFiles.
-   */
+/**
+ * Override ui to ensure that the ui functions are initialized.
+ * Normally this would happen in Mocha.prototype.loadFiles.
+ */
 
-  mocha.ui = function(ui){
-    Mocha.prototype.ui.call(this, ui);
-    this.suite.emit('pre-require', window, null, this);
-    return this;
-  };
+mocha.ui = function(ui){
+  Mocha.prototype.ui.call(this, ui);
+  this.suite.emit('pre-require', window, null, this);
+  return this;
+};
 
-  /**
-   * Setup mocha with the given setting options.
-   */
+/**
+ * Setup mocha with the given setting options.
+ */
 
-  mocha.setup = function(opts){
-    if ('string' == typeof opts) opts = { ui: opts };
-    for (var opt in opts) this[opt](opts[opt]);
-    return this;
-  };
+mocha.setup = function(opts){
+  if ('string' == typeof opts) opts = { ui: opts };
+  for (var opt in opts) this[opt](opts[opt]);
+  return this;
+};
 
-  /**
-   * Run mocha, returning the Runner.
-   */
+/**
+ * Run mocha, returning the Runner.
+ */
 
-  mocha.run = function(fn){
-    var options = mocha.options;
-    mocha.globals('location');
+mocha.run = function(fn){
+  var options = mocha.options;
+  mocha.globals('location');
 
-    var query = Mocha.utils.parseQuery(window.location.search || '');
-    if (query.grep) mocha.grep(query.grep);
-    if (query.invert) mocha.invert();
+  var query = Mocha.utils.parseQuery(window.location.search || '');
+  if (query.grep) mocha.grep(query.grep);
+  if (query.invert) mocha.invert();
 
-    return Mocha.prototype.run.call(mocha, function(){
-      Mocha.utils.highlightTags('code');
-      if (fn) fn();
-    });
-  };
-})();
+  return Mocha.prototype.run.call(mocha, function(){
+    Mocha.utils.highlightTags('code');
+    if (fn) fn();
+  });
+};
 })();

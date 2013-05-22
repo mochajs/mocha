@@ -1,5 +1,19 @@
 
-1.9.0 / 2013-04-03 
+1.10.0 / 2013-05-21
+==================
+
+ * add add better globbing support for windows via `glob` module
+ * add support to pass through flags such as --debug-brk=1234. Closes #852
+ * add test.only, test.skip to qunit interface
+ * change to always use word-based diffs for now. Closes #733
+ * change `mocha init` tests.html to index.html
+ * fix `process` global leak in the browser
+ * fix: use resolve() instead of join() for --require
+ * fix: filterLeaks() condition to not consider indices in global object as leaks
+ * fix: restrict mocha.css styling to #mocha id
+ * fix: save timer references to avoid Sinon interfering in the browser build.
+
+1.9.0 / 2013-04-03
 ==================
 
   * add improved setImmediate implementation
@@ -7,15 +21,15 @@
   * change default of ignoreLeaks to true. Closes #791
   * remove scrolling for HTML reporter
   * fix retina support
-  * fix tmbundle, restrict to js scope  
+  * fix tmbundle, restrict to js scope
 
-1.8.2 / 2013-03-11 
+1.8.2 / 2013-03-11
 ==================
 
   * add `setImmediate` support for 0.10.x
   * fix mocha -w spinner on windows
 
-1.8.1 / 2013-01-09 
+1.8.1 / 2013-01-09
 ==================
 
   * fix .bail() arity check causing it to default to true

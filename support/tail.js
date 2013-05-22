@@ -3,11 +3,11 @@
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = global.Date,
-var setTimeout = global.setTimeout;
-var setInterval = global.setInterval;
-var clearTimeout = global.clearTimeout;
-var clearInterval = global.clearInterval;
+var Date = window.Date;
+var setTimeout = window.setTimeout;
+var setInterval = window.setInterval;
+var clearTimeout = window.clearTimeout;
+var clearInterval = window.clearInterval;
 
 /**
  * Node shims.
