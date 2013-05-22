@@ -1,3 +1,14 @@
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date,
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
+
 /**
  * Node shims.
  *
@@ -34,88 +45,74 @@ process.on = function(e, fn){
   }
 };
 
-// boot
-;(function(){
+/**
+ * Expose mocha.
+ */
 
-  /**
-   * Save timer references to avoid Sinon interfering (see GH-237).
-   */
+var Mocha = window.Mocha = require('mocha'),
+    mocha = window.mocha = new Mocha({ reporter: 'html' });
 
-  var Date = global.Date,
-  var setTimeout = global.setTimeout;
-  var setInterval = global.setInterval;
-  var clearTimeout = global.clearTimeout;
-  var clearInterval = global.clearInterval;
+var immediateQueue = []
+  , immediateTimeout;
 
-  /**
-   * Expose mocha.
-   */
-
-  var Mocha = window.Mocha = require('mocha'),
-      mocha = window.mocha = new Mocha({ reporter: 'html' });
-
-  var immediateQueue = []
-    , immediateTimeout;
-
-  function timeslice() {
-    var immediateStart = new Date().getTime();
-    while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
-      immediateQueue.shift()();
-    }
-    if (immediateQueue.length) {
-      immediateTimeout = setTimeout(timeslice, 0);
-    } else {
-      immediateTimeout = null;
-    }
+function timeslice() {
+  var immediateStart = new Date().getTime();
+  while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
+    immediateQueue.shift()();
   }
+  if (immediateQueue.length) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  } else {
+    immediateTimeout = null;
+  }
+}
 
-  /**
-   * High-performance override of Runner.immediately.
-   */
+/**
+ * High-performance override of Runner.immediately.
+ */
 
-  Mocha.Runner.immediately = function(callback) {
-    immediateQueue.push(callback);
-    if (!immediateTimeout) {
-      immediateTimeout = setTimeout(timeslice, 0);
-    }
-  };
+Mocha.Runner.immediately = function(callback) {
+  immediateQueue.push(callback);
+  if (!immediateTimeout) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  }
+};
 
-  /**
-   * Override ui to ensure that the ui functions are initialized.
-   * Normally this would happen in Mocha.prototype.loadFiles.
-   */
+/**
+ * Override ui to ensure that the ui functions are initialized.
+ * Normally this would happen in Mocha.prototype.loadFiles.
+ */
 
-  mocha.ui = function(ui){
-    Mocha.prototype.ui.call(this, ui);
-    this.suite.emit('pre-require', window, null, this);
-    return this;
-  };
+mocha.ui = function(ui){
+  Mocha.prototype.ui.call(this, ui);
+  this.suite.emit('pre-require', window, null, this);
+  return this;
+};
 
-  /**
-   * Setup mocha with the given setting options.
-   */
+/**
+ * Setup mocha with the given setting options.
+ */
 
-  mocha.setup = function(opts){
-    if ('string' == typeof opts) opts = { ui: opts };
-    for (var opt in opts) this[opt](opts[opt]);
-    return this;
-  };
+mocha.setup = function(opts){
+  if ('string' == typeof opts) opts = { ui: opts };
+  for (var opt in opts) this[opt](opts[opt]);
+  return this;
+};
 
-  /**
-   * Run mocha, returning the Runner.
-   */
+/**
+ * Run mocha, returning the Runner.
+ */
 
-  mocha.run = function(fn){
-    var options = mocha.options;
-    mocha.globals('location');
+mocha.run = function(fn){
+  var options = mocha.options;
+  mocha.globals('location');
 
-    var query = Mocha.utils.parseQuery(window.location.search || '');
-    if (query.grep) mocha.grep(query.grep);
-    if (query.invert) mocha.invert();
+  var query = Mocha.utils.parseQuery(window.location.search || '');
+  if (query.grep) mocha.grep(query.grep);
+  if (query.invert) mocha.invert();
 
-    return Mocha.prototype.run.call(mocha, function(){
-      Mocha.utils.highlightTags('code');
-      if (fn) fn();
-    });
-  };
-})();
+  return Mocha.prototype.run.call(mocha, function(){
+    Mocha.utils.highlightTags('code');
+    if (fn) fn();
+  });
+};
