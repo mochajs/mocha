@@ -78,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--watch-cooldown <ms>', 'min time between watch re-runs [0]', 0)
 
 program.name = 'mocha';
 
@@ -310,7 +311,7 @@ if (program.watch) {
 
   loadAndRun();
 
-  utils.watch(watchFiles, function(){
+  utils.watch(watchFiles, program.watchCooldown, function(){
     purge();
     stop()
     mocha.suite = mocha.suite.clone();
