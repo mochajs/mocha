@@ -392,7 +392,6 @@ function lookupFiles(path, recursive) {
     if (exists(path + '.js')) {
       path += '.js'
     } else {
-      // Try glob expansion of path. This will return empty if not glob or no matches found.
       return glob.sync(path);
     }
   }
