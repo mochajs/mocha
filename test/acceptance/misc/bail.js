@@ -11,7 +11,7 @@ describe('bail', function(){
 
 describe('bail-2', function(){
 
-	before(function (done) {
+	before(function(done){
     throw new Error('this hook should not be displayed');
 	})
 
