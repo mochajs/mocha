@@ -151,6 +151,20 @@ program.on('require', function(mod){
   require(mod);
 });
 
+// support for MOCHA_OPTS environment variable
+if (process.env.MOCHA_OPTS) {
+ var opts = process.env.MOCHA_OPTS
+    .trim()
+    .split(/\s+/);
+ try {
+    process.argv = process.argv
+    .slice(0, 2)
+    .concat(opts.concat(process.argv.slice(2)));
+ } catch (err) {
+   // ignore
+ }
+}
+
 // mocha.opts support
 
 try {
