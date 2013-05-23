@@ -1710,6 +1710,12 @@ exports = module.exports = Base;
 exports.useColors = isatty;
 
 /**
+ * Enable coloring by default.
+ */
+
+exports.unifiedDiff = false;
+
+/**
  * Default color map.
  */
 
@@ -1843,32 +1849,13 @@ exports.list = function(failures){
     }
 
     // actual / expected diff
-    if ('string' == typeof actual && 'string' == typeof expected) {
-      msg = errorDiff(err, 'Words', escape);
-
-      // linenos
-      var lines = msg.split('\n');
-      if (lines.length > 4) {
-        var width = String(lines.length).length;
-        msg = lines.map(function(str, i){
-          return pad(++i, width) + ' |' + ' ' + str;
-        }).join('\n');
+    if ('string' == typeof actual && 'string' == typeof expected) {      
+      fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
+      if (exports.unifiedDiff) {
+        msg = unifiedDiff(err);
+      } else {
+        msg = inlineDiff(err);
       }
-
-      // legend
-      msg = '\n'
-        + color('diff removed', 'actual')
-        + ' '
-        + color('diff added', 'expected')
-        + '\n\n'
-        + msg
-        + '\n';
-
-      // indent
-      msg = msg.replace(/^/gm, '      ');
-
-      fmt = color('error title', '  %s) %s:\n%s')
-        + color('error stack', '\n%s\n');
     }
 
     // indent stack trace without msg
@@ -2012,6 +1999,59 @@ Base.prototype.epilogue = function(){
 function pad(str, len) {
   str = String(str);
   return Array(len - str.length + 1).join(' ') + str;
+}
+
+
+/**
+ * Returns an inline diff between 2 strings with coloured ANSI output
+ *
+ * @param {Error} Error with actual/expected
+ * @return {String} Diff
+ * @api private
+ */
+
+function inlineDiff(err) {
+  var msg = errorDiff(err, 'Words', escape);
+
+  // linenos
+  var lines = msg.split('\n');
+  if (lines.length > 4) {
+    var width = String(lines.length).length;
+    msg = lines.map(function(str, i){
+      return pad(++i, width) + ' |' + ' ' + str;
+    }).join('\n');
+  }
+
+  // legend
+  msg = '\n'
+    + color('diff removed', 'actual')
+    + ' '
+    + color('diff added', 'expected')
+    + '\n\n'
+    + msg
+    + '\n';
+
+  // indent
+  msg = msg.replace(/^/gm, '      ');
+  return msg;
+}
+
+/**
+ * Returns a unified diff between 2 strings
+ *
+ * @param {Error} Error with actual/expected
+ * @return {String} Diff
+ * @api private
+ */
+
+function unifiedDiff(err) {
+  msg = diff.createPatch('string', err.actual, err.expected);
+  msg = msg.replace(/(.*)/g, function(match, line) {
+    if (line[0] === '+') return colorLines('diff added', line);
+    if (line[0] === '-') return colorLines('diff removed', line);
+    else return line;
+  });
+  return msg;
 }
 
 /**
