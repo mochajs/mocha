@@ -78,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--unified-diff', 'display actual/expected errors as a patch')
 
 program.name = 'mocha';
 
@@ -203,6 +204,10 @@ if (~process.argv.indexOf('--colors') ||
     ~process.argv.indexOf('-c')) {
   Base.useColors = true;
 }
+
+// --unified-diff
+
+if (~process.argv.indexOf('--unified-diff')) Base.unifiedDiff = true;
 
 // --slow <ms>
 
