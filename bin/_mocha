@@ -78,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--inline-diffs', 'display actual/expected differences inline within each string')
 
 program.name = 'mocha';
 
@@ -203,6 +204,10 @@ if (~process.argv.indexOf('--colors') ||
     ~process.argv.indexOf('-c')) {
   Base.useColors = true;
 }
+
+// --inline-diffs
+
+if (program.inlineDiffs) Base.inlineDiffs = true;
 
 // --slow <ms>
 
