@@ -1,4 +1,4 @@
 \["start"
 \["fail",[{]"title":".*should fail.*",
 \["pass",[{]"title":".*should pass.*",
-\["end"
+\["end",[{]"suites":4,"tests":8,"passes":4,"pending":0,"failures":4,
