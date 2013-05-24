@@ -9,21 +9,21 @@ describe('diffs', function(){
   // ex: --color, --no-color, --unified-diff
   
   it('should display a diff for small strings', function(){
-    var a = 'foo bar baz'
-      , b = 'foo rar baz';
-    //a.should.eql(b);
+    var expected = 'one two three';
+    var actual   = 'one zzz three';
+    //actual.should.eql(expected);
   });
 
-  it('should display a diff for medium strings', function(){
-    var a = 'foo bar baz\nfoo bar baz\nfoo bar baz'
-      , b = 'foo bar baz\nfoo rar baz\nfoo bar raz';
-    //a.should.eql(b);
+  it('should display a diff for multi-line strings', function(){
+    var expected = 'one two three\nfour five six\nseven eight nine';
+    var actual   = 'one two three\nfour zzzz six\nseven eight nine';
+    //actual.should.eql(expected);
   });
 
   it('should display a diff for entire object dumps', function(){
-    var a = { name: 'joe',  age: 30, address: {city: 'new york', country: 'us'}}
-      , b = { name: 'joel', age: 30, address: {city: 'new york', country: 'usa'}};
-    //a.should.eql(b);
+    var expected = { name: 'joe',  age: 30, address: {city: 'new york', country: 'us'  }}
+    var actual   = { name: 'joel', age: 30, address: {city: 'new york', country: 'usa' }};
+    //actual.should.eql(expected);
   });
 
   it('should display a word diff for large strings', function(){
