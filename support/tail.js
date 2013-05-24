@@ -1,13 +1,15 @@
+// The global object is "self" in Web Workers.
+global = (function() { return this; })();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = window.Date;
-var setTimeout = window.setTimeout;
-var setInterval = window.setInterval;
-var clearTimeout = window.clearTimeout;
-var clearInterval = window.clearInterval;
+var Date = global.Date;
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
 
 /**
  * Node shims.
@@ -21,7 +23,6 @@ var clearInterval = window.clearInterval;
 var process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
 
 /**
  * Remove uncaughtException listener.
@@ -29,7 +30,7 @@ global = window;
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function() {};
   }
 };
 
@@ -39,7 +40,7 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = function(err, url, line){
+    global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
   }
@@ -49,8 +50,8 @@ process.on = function(e, fn){
  * Expose mocha.
  */
 
-var Mocha = window.Mocha = require('mocha'),
-    mocha = window.mocha = new Mocha({ reporter: 'html' });
+var Mocha = global.Mocha = require('mocha'),
+    mocha = global.mocha = new Mocha({ reporter: 'html' });
 
 var immediateQueue = []
   , immediateTimeout;
@@ -85,7 +86,7 @@ Mocha.Runner.immediately = function(callback) {
 
 mocha.ui = function(ui){
   Mocha.prototype.ui.call(this, ui);
-  this.suite.emit('pre-require', window, null, this);
+  this.suite.emit('pre-require', global, null, this);
   return this;
 };
 
@@ -107,12 +108,15 @@ mocha.run = function(fn){
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(window.location.search || '');
+  var query = Mocha.utils.parseQuery(global.location.search || '');
   if (query.grep) mocha.grep(query.grep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(){
-    Mocha.utils.highlightTags('code');
+    // The DOM Document is not available in Web Workers.
+    if (global.document) {
+      Mocha.utils.highlightTags('code');
+    }
     if (fn) fn();
   });
 };
