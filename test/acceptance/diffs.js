@@ -26,6 +26,12 @@ describe('diffs', function(){
     //actual.should.eql(expected);
   });
 
+  it('should display a full-comparison with escaped special characters', function(){
+    var expected = 'one\ttab\ntwo\t\ttabs';
+    var actual   = 'one\ttab\ntwo\t\t\ttabs';
+    //actual.should.equal(expected);
+  });
+
   it('should display a word diff for large strings', function(){
     // cssin.should.equal(cssout);
   });
