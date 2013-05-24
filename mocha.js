@@ -1710,10 +1710,10 @@ exports = module.exports = Base;
 exports.useColors = isatty;
 
 /**
- * Enable coloring by default.
+ * Inline diffs instead of +/-
  */
 
-exports.unifiedDiff = false;
+exports.inlineDiffs = false;
 
 /**
  * Default color map.
@@ -1851,10 +1851,10 @@ exports.list = function(failures){
     // actual / expected diff
     if ('string' == typeof actual && 'string' == typeof expected) {      
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
-      if (exports.unifiedDiff) {
-        msg = unifiedDiff(err);
-      } else {
+      if (exports.inlineDiffs) {
         msg = inlineDiff(err);
+      } else {
+        msg = unifiedDiff(err);
       }
     }
 
@@ -2045,13 +2045,21 @@ function inlineDiff(err) {
  */
 
 function unifiedDiff(err) {
-  msg = diff.createPatch('string', err.actual, err.expected);
-  msg = msg.replace(/(.*)/g, function(match, line) {
+  function cleanUp(line) {
     if (line[0] === '+') return colorLines('diff added', line);
     if (line[0] === '-') return colorLines('diff removed', line);
+    if (line.match(/\@\@/)) return null;
+    if (line.match(/\\ No newline/)) return null;
     else return line;
-  });
-  return msg;
+  }
+  function notBlank(line) {
+    return line != null;
+  }
+  msg = diff.createPatch('string', err.actual, err.expected);
+  var lines = msg.split('\n').splice(4);
+  return '\n' + colorLines('diff added',   '+ expected') + 
+         '\n' + colorLines('diff removed', '- actual') + 
+         '\n\n' + lines.map(cleanUp).filter(notBlank).join('\n');
 }
 
 /**
