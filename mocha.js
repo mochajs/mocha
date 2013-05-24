@@ -1852,9 +1852,9 @@ exports.list = function(failures){
     if ('string' == typeof actual && 'string' == typeof expected) {      
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       if (exports.inlineDiffs) {
-        msg = inlineDiff(err);
+        msg = inlineDiff(err, escape);
       } else {
-        msg = unifiedDiff(err);
+        msg = unifiedDiff(err, escape);
       }
     }
 
@@ -2044,22 +2044,28 @@ function inlineDiff(err) {
  * @api private
  */
 
-function unifiedDiff(err) {
+function unifiedDiff(err, escape) {
+  var indent = '      ';
   function cleanUp(line) {
-    if (line[0] === '+') return colorLines('diff added', line);
-    if (line[0] === '-') return colorLines('diff removed', line);
+    if (escape) {
+      line = escapeInvisibles(line);
+    }
+    if (line[0] === '+') return indent + colorLines('diff added', line);
+    if (line[0] === '-') return indent + colorLines('diff removed', line);
     if (line.match(/\@\@/)) return null;
     if (line.match(/\\ No newline/)) return null;
-    else return line;
+    else return indent + line;
   }
   function notBlank(line) {
     return line != null;
   }
   msg = diff.createPatch('string', err.actual, err.expected);
   var lines = msg.split('\n').splice(4);
-  return '\n' + colorLines('diff added',   '+ expected') + 
-         '\n' + colorLines('diff removed', '- actual') + 
-         '\n\n' + lines.map(cleanUp).filter(notBlank).join('\n');
+  return '\n      '
+         + colorLines('diff added',   '+ expected') + ' '
+         + colorLines('diff removed', '- actual')
+         + '\n\n'
+         + lines.map(cleanUp).filter(notBlank).join('\n');
 }
 
 /**
@@ -2071,17 +2077,26 @@ function unifiedDiff(err) {
  */
 
 function errorDiff(err, type, escape) {
-  return diff['diff' + type](err.actual, err.expected).map(function(str){
-    if (escape) {
-      str.value = str.value
-        .replace(/\t/g, '<tab>')
-        .replace(/\r/g, '<CR>')
-        .replace(/\n/g, '<LF>\n');
-    }
+  var actual   = escape ? escapeInvisibles(err.actual)   : err.actual;
+  var expected = escape ? escapeInvisibles(err.expected) : err.expected;
+  return diff['diff' + type](actual, expected).map(function(str){
     if (str.added) return colorLines('diff added', str.value);
     if (str.removed) return colorLines('diff removed', str.value);
     return str.value;
   }).join('');
+}
+
+/**
+ * Returns a string with all invisible characters in plain text
+ *
+ * @param {String} line
+ * @return {String}
+ * @api private
+ */
+function escapeInvisibles(line) {
+    return line.replace(/\t/g, '<tab>')
+               .replace(/\r/g, '<CR>')
+               .replace(/\n/g, '<LF>\n');
 }
 
 /**
