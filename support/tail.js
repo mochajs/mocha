@@ -41,6 +41,7 @@ process.on = function(e, fn){
   if ('uncaughtException' == e) {
     window.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
+      return true;
     };
   }
 };
