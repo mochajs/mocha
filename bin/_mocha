@@ -71,6 +71,7 @@ program
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
   .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('--suiteBail', "bail remaining tests in a suite")
   .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -215,6 +216,10 @@ if (program.timeout) mocha.suite.timeout(program.timeout);
 // --bail
 
 mocha.suite.bail(program.bail);
+
+// --suiteBail
+
+mocha.suite.suiteBail(program.suiteBail);
 
 // --grep
 
