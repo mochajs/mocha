@@ -27,6 +27,13 @@ suite('Array', function(){
       zero.should.equal(1, 'this test should have been skipped');
     });
 
+    suite.skip('should skip this suite', function(){
+      test('should skip this test', function(){
+        var zero = 0;
+        zero.should.equal(1, 'this test should have been skipped');
+      });
+    });
+
     suiteTeardown(function(done){
       initialValue.should.eql(42);
       done();
