@@ -211,6 +211,18 @@ describe('Runnable(title, fn)', function(){
           });
         })
       })
+
+      it('should allow updating the timeout', function(done){
+        var test = new Runnable('foo', function(done){
+          this.timeout(10);
+        });
+        test.run(function(err){
+          err.message.should.include('timeout');
+          done();
+        });
+      })
+
+      it('should allow a timeout of 0')
     })
 
   })
