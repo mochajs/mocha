@@ -26,6 +26,11 @@ describe('async', function(){
       , 'three'
       , 'after'
       , 'parent after'
+      , 'parent before'
+      , 'before'
+      , 'four'
+      , 'after'
+      , 'parent after'
       , 'after all'
       , 'root after all']);
   })
@@ -95,6 +100,14 @@ describe('async', function(){
         , 'parent before'
         , 'before']);
       calls.push('three');
+    })
+
+    it('four', function(done){
+      process.nextTick(function () {
+        done.resume(function () {
+          calls.push('four');
+        })
+      })
     })
 
     afterEach(function(done){
