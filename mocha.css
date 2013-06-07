@@ -201,6 +201,7 @@ body {
   font-size: 12px;
   margin: 0;
   color: #888;
+  z-index: 1;
 }
 
 #mocha-stats .progress {
