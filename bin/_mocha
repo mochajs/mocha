@@ -59,6 +59,7 @@ program
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
+  .option('-O, --output <file>', 'specify the output file', '-')
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
@@ -176,6 +177,10 @@ Error.stackTraceLimit = Infinity; // TODO: config
 // reporter
 
 mocha.reporter(program.reporter);
+
+// output
+
+mocha.output(program.output);
 
 // interface
 

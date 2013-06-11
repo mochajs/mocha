@@ -4,6 +4,7 @@ TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
+REPORTERS := $(shell bin/mocha --reporters | sed -e 's/ - .*//')
 
 all: mocha.js
 
@@ -33,7 +34,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-reporter-output
 
 test-jsapi:
 	@node test/jsapi
@@ -103,6 +104,22 @@ test-async-only:
 
 test-glob:
 	@./test/acceptance/glob/glob.sh
+
+
+# The html reporter isn't supported at the command line
+TEST_REPORTERS := $(patsubst %,test-reporter-output-%,$(REPORTERS))
+TEST_REPORTERS := $(filter-out test-reporter-output-html,$(TEST_REPORTERS))
+
+.PHONY: $(REPORTERS)
+test-reporter-output: $(TEST_REPORTERS)
+test-reporter-output-%: %
+	@echo "Testing file output for reporter $<"
+	@./bin/mocha --no-color --reporter $< test/acceptance/interfaces/bdd 2>&1 > /tmp/$<.stdout
+	@./bin/mocha --no-color --reporter $< test/acceptance/interfaces/bdd -O /tmp/$<.file 2>&1 > /tmp/dot.file.stdout
+	@test -s /tmp/$<.file || \
+		(echo "ERROR: reporter $< does not support file output" && exit 1)
+	@test ! -s /tmp/$<.file.stdout || \
+		(echo "ERROR: reporter $< file output wrote to stdout" && exit 1)
 
 non-tty:
 	@./bin/mocha \
