@@ -1,8 +1,8 @@
  [![Build Status](https://secure.travis-ci.org/visionmedia/mocha.png)](http://travis-ci.org/visionmedia/mocha)
 
-  [![Mocha test framework](http://f.cl.ly/items/3l1k0n2A1U3M1I1L210p/Screen%20Shot%202012-02-24%20at%202.21.43%20PM.png)](http://visionmedia.github.com/mocha)
+  [![Mocha test framework](http://f.cl.ly/items/3l1k0n2A1U3M1I1L210p/Screen%20Shot%202012-02-24%20at%202.21.43%20PM.png)](http://visionmedia.github.io/mocha)
 
-  Mocha is a simple, flexible, fun JavaScript test framework for node.js and the browser. For more information view the [documentation](http://visionmedia.github.com/mocha).
+  Mocha is a simple, flexible, fun JavaScript test framework for node.js and the browser. For more information view the [documentation](http://visionmedia.github.io/mocha).
 
 ## Contributors
 
