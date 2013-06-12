@@ -1,4 +1,17 @@
 
+1.11.0 / 2013-06-12
+==================
+
+ * add --prof support
+ * add --harmony support
+ * add --harmony-generators support
+ * add "Uncaught " prefix to uncaught exceptions
+ * add web workers support
+ * add `suite.skip()`
+ * change to output # of pending / passing even on failures. Closes #872
+ * fix: prevent hooks from being called if we are bailing
+ * fix `this.timeout(0)`
+
 1.10.0 / 2013-05-21
 ==================
 
