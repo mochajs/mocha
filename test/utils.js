@@ -1,12 +1,10 @@
 
-var mocha = require('../')
-  , utils = mocha.utils;
+var mocha = require('..');
+var utils = mocha.utils;
+var clean = utils.clean;
 
-describe("Utils", function (){
-
-  describe('.clean()', function() {
-    var clean = utils.clean;
-
+describe('utils', function(){
+  describe('.clean()', function(){
     it('should remove the wrapping function declaration', function(){
       clean('function  (one, two, three)  {\n//code\n}').should.equal('//code');
     })
