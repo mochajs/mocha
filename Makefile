@@ -32,7 +32,8 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers \
+  test-glob test-error
 
 test-jsapi:
 	@node test/jsapi
@@ -102,6 +103,9 @@ test-async-only:
 
 test-glob:
 	@./test/acceptance/glob/glob.sh
+
+test-error:
+	@./test/acceptance/error/error.sh
 
 non-tty:
 	@./bin/mocha \
