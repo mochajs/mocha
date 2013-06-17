@@ -672,8 +672,14 @@ exports.isatty = function(){
 };
 
 exports.getWindowSize = function(){
-  return [window.innerHeight, window.innerWidth];
+  if ('innerHeight' in global) {
+    return [global.innerHeight, global.innerWidth];
+  } else {
+    // In a Web Worker, the DOM Window is not available.
+    return [640, 480];
+  }
 };
+
 }); // module: browser/tty.js
 
 require.register("context.js", function(module, exports, require){
@@ -1226,6 +1232,17 @@ module.exports = function(suite){
     };
 
     /**
+     * Pending suite.
+     */
+    context.suite.skip = function(title, fn) {
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn.call(suite);
+      suites.shift();
+    };
+
+    /**
      * Exclusive test-case.
      */
 
@@ -1241,8 +1258,10 @@ module.exports = function(suite){
      */
 
     context.test = function(title, fn){
+      var suite = suites[0];
+      if (suite.pending) var fn = null;
       var test = new Test(title, fn);
-      suites[0].addTest(test);
+      suite.addTest(test);
       return test;
     };
 
@@ -1297,6 +1316,7 @@ exports.reporters = require('./reporters');
 exports.Runnable = require('./runnable');
 exports.Context = require('./context');
 exports.Runner = require('./runner');
+exports.output = require('./output');
 exports.Suite = require('./suite');
 exports.Hook = require('./hook');
 exports.Test = require('./test');
@@ -1340,6 +1360,7 @@ function Mocha(options) {
   this.ui(options.ui);
   this.bail(options.bail);
   this.reporter(options.reporter);
+  this.output(options.output);
   if (options.timeout) this.timeout(options.timeout);
   if (options.slow) this.slow(options.slow);
 }
@@ -1389,6 +1410,19 @@ Mocha.prototype.reporter = function(reporter){
     if (!this._reporter) throw new Error('invalid reporter "' + reporter + '"');
   }
   return this;
+};
+
+/**
+ * Set output to `output`, defaults to "-".
+ *
+ * @param {String} target file name
+ * @api public
+ */
+
+Mocha.prototype.output = function(target) {
+    if (target !== undefined) {
+        exports.output.initialize(target);
+    }
 };
 
 /**
@@ -1582,7 +1616,10 @@ Mocha.prototype.run = function(fn){
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
-  return runner.run(fn);
+  var self = this;
+  return runner.run(function(errCount) {
+      exports.output.end(errCount, fn);
+  });
 };
 
 }); // module: mocha.js
@@ -1671,6 +1708,74 @@ function format(ms) {
 }
 }); // module: ms.js
 
+require.register("output.js", function(module, exports, require){
+var debug = require('browser/debug')('mocha:output');
+var fs = require('browser/fs');
+
+// Initialize to be in stdout mode
+var stream = process.stdout;
+var _console = console;
+
+/**
+ * Write preformatted output directly to the stream.
+ */
+var write = exports.write = function(data) {
+    stream.write(data);
+};
+
+
+/**
+ * Wrapper for console.log output.
+ */
+var log = exports.log = function() {
+    _console.log.apply(_console, arguments);
+};
+
+/**
+ * Wrapper for console.error output.
+ */
+var error = exports.error = function() {
+    _console.error.apply(_console, arguments);
+};
+
+/**
+ * Hook that's called when the test process is done to close the
+ * output stream.
+ */
+var end = exports.end = function(errCount, fn) {
+    if (stream === process.stdout) {
+        // nothing to do
+        return fn(errCount);
+    }
+
+    stream.end(function() { 
+        debug("stream ended");
+        fn(errCount);
+
+        // Reset the stream
+        stream = process.stdout;
+    } );
+};
+
+/**
+ * Initialize the output layer.
+ *
+ * If target is undefined or "-" then use stdout, otherwise open the
+ * target file.
+ */
+var initialize = exports.initialize = function(target) {
+    if (target === undefined || target === "-") {
+        return; // nothing to do - stay in stdout mode
+    }
+
+    stream = fs.createWriteStream(target);
+    _console = new console.Console(stream);
+};
+
+
+
+}); // module: output.js
+
 require.register("reporters/base.js", function(module, exports, require){
 
 /**
@@ -1679,7 +1784,8 @@ require.register("reporters/base.js", function(module, exports, require){
 
 var tty = require('browser/tty')
   , diff = require('browser/diff')
-  , ms = require('../ms');
+  , ms = require('../ms')
+  , output = require('../output');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -1702,6 +1808,12 @@ var isatty = tty.isatty(1) && tty.isatty(2);
  */
 
 exports = module.exports = Base;
+
+/**
+ * Expose the output hooks
+ */
+exports.output = output;
+
 
 /**
  * Enable coloring by default.
@@ -1782,6 +1894,7 @@ exports.window = {
     : 75
 };
 
+
 /**
  * Expose some basic cursor interactions
  * that are common among reporters.
@@ -1818,7 +1931,7 @@ exports.cursor = {
  */
 
 exports.list = function(failures){
-  console.error();
+  output.error();
   failures.forEach(function(test, i){
     // format
     var fmt = color('error title', '  %s) %s:\n')
@@ -1834,6 +1947,11 @@ exports.list = function(failures){
       , actual = err.actual
       , expected = err.expected
       , escape = true;
+
+    // uncaught
+    if (err.uncaught) {
+      msg = 'Uncaught ' + msg;
+    }
 
     // explicitly show diff
     if (err.showDiff) {
@@ -1875,7 +1993,7 @@ exports.list = function(failures){
     stack = stack.slice(index ? index + 1 : index)
       .replace(/^/gm, '  ');
 
-    console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
+    output.error(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
 };
 
@@ -1953,51 +2071,41 @@ function Base(runner) {
  */
 
 Base.prototype.epilogue = function(){
-  var stats = this.stats
-    , fmt
-    , tests;
+  var stats = this.stats;
+  var tests;
+  var fmt;
 
-  console.log();
+  output.log();
 
-  function pluralize(n) {
-    return 1 == n ? 'test' : 'tests';
-  }
-
-  // failure
-  if (stats.failures) {
-    fmt = color('bright fail', '  ' + exports.symbols.err)
-      + color('fail', ' %d of %d %s failed')
-      + color('light', ':')
-
-    console.error(fmt,
-      stats.failures,
-      this.runner.total,
-      pluralize(this.runner.total));
-
-    Base.list(this.failures);
-    console.error();
-    return;
-  }
-
-  // pass
+  // passes
   fmt = color('bright pass', ' ')
-    + color('green', ' %d %s complete')
+    + color('green', ' %d passing')
     + color('light', ' (%s)');
 
-  console.log(fmt,
-    stats.tests || 0,
-    pluralize(stats.tests),
+  output.log(fmt,
+    stats.passes || 0,
     ms(stats.duration));
 
   // pending
   if (stats.pending) {
     fmt = color('pending', ' ')
-      + color('pending', ' %d %s pending');
+      + color('pending', ' %d pending');
 
-    console.log(fmt, stats.pending, pluralize(stats.pending));
+    output.log(fmt, stats.pending);
   }
 
-  console.log();
+  // failures
+  if (stats.failures) {
+    fmt = color('fail', '  %d failing');
+
+    output.error(fmt,
+      stats.failures);
+
+    Base.list(this.failures);
+    output.error();
+  }
+
+  output.log();
 };
 
 /**
@@ -2120,6 +2228,7 @@ require.register("reporters/dot.js", function(module, exports, require){
  */
 
 var Base = require('./base')
+  , output = Base.output
   , color = Base.color;
 
 /**
@@ -2144,29 +2253,29 @@ function Dot(runner) {
     , n = 0;
 
   runner.on('start', function(){
-    process.stdout.write('\n  ');
+    output.write('\n  ');
   });
 
   runner.on('pending', function(test){
-    process.stdout.write(color('pending', Base.symbols.dot));
+    output.write(color('pending', Base.symbols.dot));
   });
 
   runner.on('pass', function(test){
-    if (++n % width == 0) process.stdout.write('\n  ');
+    if (++n % width == 0) output.write('\n  ');
     if ('slow' == test.speed) {
-      process.stdout.write(color('bright yellow', Base.symbols.dot));
+      output.write(color('bright yellow', Base.symbols.dot));
     } else {
-      process.stdout.write(color(test.speed, Base.symbols.dot));
+      output.write(color(test.speed, Base.symbols.dot));
     }
   });
 
   runner.on('fail', function(test, err){
-    if (++n % width == 0) process.stdout.write('\n  ');
-    process.stdout.write(color('fail', Base.symbols.dot));
+    if (++n % width == 0) output.write('\n  ');
+    output.write(color('fail', Base.symbols.dot));
   });
 
   runner.on('end', function(){
-    console.log();
+    output.writeln();
     self.epilogue();
   });
 }
@@ -2179,6 +2288,7 @@ function F(){};
 F.prototype = Base.prototype;
 Dot.prototype = new F;
 Dot.prototype.constructor = Dot;
+
 
 }); // module: reporters/dot.js
 
@@ -3729,6 +3839,7 @@ require.register("reporters/xunit.js", function(module, exports, require){
  */
 
 var Base = require('./base')
+  , output = Base.output
   , utils = require('../utils')
   , escape = utils.escape;
 
@@ -3770,7 +3881,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    console.log(tag('testsuite', {
+    output.writeln(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -3781,7 +3892,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');
+    output.writeln('</testsuite>');
   });
 }
 
@@ -3809,11 +3920,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    output.writeln(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    output.writeln(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    console.log(tag('testcase', attrs, true) );
+    output.writeln(tag('testcase', attrs, true) );
   }
 }
 
@@ -3983,16 +4094,14 @@ Runnable.prototype.inspect = function(){
  */
 
 Runnable.prototype.resetTimeout = function(){
-  var self = this
-    , ms = this.timeout();
+  var self = this;
+  var ms = this.timeout() || 1e9;
 
   this.clearTimeout();
-  if (ms) {
-    this.timer = setTimeout(function(){
-      self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
-      self.timedOut = true;
-    }, ms);
-  }
+  this.timer = setTimeout(function(){
+    self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
+    self.timedOut = true;
+  }, ms);
 };
 
 /**
@@ -4073,7 +4182,6 @@ Runnable.prototype.run = function(fn){
 }); // module: runnable.js
 
 require.register("runner.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -4119,6 +4227,7 @@ module.exports = Runner;
  *   - `hook end`  (hook) hook complete
  *   - `pass`  (test) test passed
  *   - `fail`  (test, err) test failed
+ *   - `pending`  (test) test pending
  *
  * @api public
  */
@@ -4311,6 +4420,7 @@ Runner.prototype.hook = function(name, fn){
   function next(i) {
     var hook = hooks[i];
     if (!hook) return fn();
+    if (self.failures && suite.bail()) return fn();
     self.currentRunnable = hook;
 
     self.emit('hook', hook);
@@ -5252,16 +5362,18 @@ exports.highlightTags = function(name) {
 };
 
 }); // module: utils.js
+// The global object is "self" in Web Workers.
+global = (function() { return this; })();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = window.Date;
-var setTimeout = window.setTimeout;
-var setInterval = window.setInterval;
-var clearTimeout = window.clearTimeout;
-var clearInterval = window.clearInterval;
+var Date = global.Date;
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
 
 /**
  * Node shims.
@@ -5275,7 +5387,6 @@ var clearInterval = window.clearInterval;
 var process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
 
 /**
  * Remove uncaughtException listener.
@@ -5283,7 +5394,7 @@ global = window;
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function() {};
   }
 };
 
@@ -5293,7 +5404,7 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = function(err, url, line){
+    global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
   }
@@ -5303,8 +5414,8 @@ process.on = function(e, fn){
  * Expose mocha.
  */
 
-var Mocha = window.Mocha = require('mocha'),
-    mocha = window.mocha = new Mocha({ reporter: 'html' });
+var Mocha = global.Mocha = require('mocha'),
+    mocha = global.mocha = new Mocha({ reporter: 'html' });
 
 var immediateQueue = []
   , immediateTimeout;
@@ -5339,7 +5450,7 @@ Mocha.Runner.immediately = function(callback) {
 
 mocha.ui = function(ui){
   Mocha.prototype.ui.call(this, ui);
-  this.suite.emit('pre-require', window, null, this);
+  this.suite.emit('pre-require', global, null, this);
   return this;
 };
 
@@ -5361,12 +5472,15 @@ mocha.run = function(fn){
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(window.location.search || '');
+  var query = Mocha.utils.parseQuery(global.location.search || '');
   if (query.grep) mocha.grep(query.grep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(){
-    Mocha.utils.highlightTags('code');
+    // The DOM Document is not available in Web Workers.
+    if (global.document) {
+      Mocha.utils.highlightTags('code');
+    }
     if (fn) fn();
   });
 };
