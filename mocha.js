@@ -672,8 +672,14 @@ exports.isatty = function(){
 };
 
 exports.getWindowSize = function(){
-  return [window.innerHeight, window.innerWidth];
+  if ('innerHeight' in global) {
+    return [global.innerHeight, global.innerWidth];
+  } else {
+    // In a Web Worker, the DOM Window is not available.
+    return [640, 480];
+  }
 };
+
 }); // module: browser/tty.js
 
 require.register("context.js", function(module, exports, require){
@@ -1226,6 +1232,17 @@ module.exports = function(suite){
     };
 
     /**
+     * Pending suite.
+     */
+    context.suite.skip = function(title, fn) {
+      var suite = Suite.create(suites[0], title);
+      suite.pending = true;
+      suites.unshift(suite);
+      fn.call(suite);
+      suites.shift();
+    };
+
+    /**
      * Exclusive test-case.
      */
 
@@ -1241,8 +1258,10 @@ module.exports = function(suite){
      */
 
     context.test = function(title, fn){
+      var suite = suites[0];
+      if (suite.pending) var fn = null;
       var test = new Test(title, fn);
-      suites[0].addTest(test);
+      suite.addTest(test);
       return test;
     };
 
@@ -1479,12 +1498,13 @@ Mocha.prototype.invert = function(){
 /**
  * Ignore global leaks.
  *
+ * @param {Boolean} ignore
  * @return {Mocha}
  * @api public
  */
 
-Mocha.prototype.ignoreLeaks = function(){
-  this.options.ignoreLeaks = true;
+Mocha.prototype.ignoreLeaks = function(ignore){
+  this.options.ignoreLeaks = !!ignore;
   return this;
 };
 
@@ -1835,11 +1855,16 @@ exports.list = function(failures){
       , expected = err.expected
       , escape = true;
 
+    // uncaught
+    if (err.uncaught) {
+      msg = 'Uncaught ' + msg;
+    }
+
     // explicitly show diff
     if (err.showDiff) {
       escape = false;
-      err.actual = actual = JSON.stringify(actual, null, 2);
-      err.expected = expected = JSON.stringify(expected, null, 2);
+      err.actual = actual = stringify(actual);
+      err.expected = expected = stringify(expected);
     }
 
     // actual / expected diff
@@ -1953,48 +1978,38 @@ function Base(runner) {
  */
 
 Base.prototype.epilogue = function(){
-  var stats = this.stats
-    , fmt
-    , tests;
+  var stats = this.stats;
+  var tests;
+  var fmt;
 
   console.log();
 
-  function pluralize(n) {
-    return 1 == n ? 'test' : 'tests';
-  }
-
-  // failure
-  if (stats.failures) {
-    fmt = color('bright fail', '  ' + exports.symbols.err)
-      + color('fail', ' %d of %d %s failed')
-      + color('light', ':')
-
-    console.error(fmt,
-      stats.failures,
-      this.runner.total,
-      pluralize(this.runner.total));
-
-    Base.list(this.failures);
-    console.error();
-    return;
-  }
-
-  // pass
+  // passes
   fmt = color('bright pass', ' ')
-    + color('green', ' %d %s complete')
+    + color('green', ' %d passing')
     + color('light', ' (%s)');
 
   console.log(fmt,
-    stats.tests || 0,
-    pluralize(stats.tests),
+    stats.passes || 0,
     ms(stats.duration));
 
   // pending
   if (stats.pending) {
     fmt = color('pending', ' ')
-      + color('pending', ' %d %s pending');
+      + color('pending', ' %d pending');
 
-    console.log(fmt, stats.pending, pluralize(stats.pending));
+    console.log(fmt, stats.pending);
+  }
+
+  // failures
+  if (stats.failures) {
+    fmt = color('fail', '  %d failing');
+
+    console.error(fmt,
+      stats.failures);
+
+    Base.list(this.failures);
+    console.error();
   }
 
   console.log();
@@ -2049,6 +2064,19 @@ function colorLines(name, str) {
   return str.split('\n').map(function(str){
     return color(name, str);
   }).join('\n');
+}
+
+/**
+ * Stringify `obj`.
+ *
+ * @param {Mixed} obj
+ * @return {String}
+ * @api private
+ */
+
+function stringify(obj) {
+  if (obj instanceof RegExp) return obj.toString();
+  return JSON.stringify(obj, null, 2);
 }
 
 }); // module: reporters/base.js
@@ -3775,9 +3803,9 @@ function XUnit(runner) {
       , tests: stats.tests
       , failures: stats.failures
       , errors: stats.failures
-      , skip: stats.tests - stats.failures - stats.passes
+      , skipped: stats.tests - stats.failures - stats.passes
       , timestamp: (new Date).toUTCString()
-      , time: stats.duration / 1000
+      , time: (stats.duration / 1000) || 0
     }, false));
 
     tests.forEach(test);
@@ -3983,16 +4011,14 @@ Runnable.prototype.inspect = function(){
  */
 
 Runnable.prototype.resetTimeout = function(){
-  var self = this
-    , ms = this.timeout();
+  var self = this;
+  var ms = this.timeout() || 1e9;
 
   this.clearTimeout();
-  if (ms) {
-    this.timer = setTimeout(function(){
-      self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
-      self.timedOut = true;
-    }, ms);
-  }
+  this.timer = setTimeout(function(){
+    self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
+    self.timedOut = true;
+  }, ms);
 };
 
 /**
@@ -4073,7 +4099,6 @@ Runnable.prototype.run = function(fn){
 }); // module: runnable.js
 
 require.register("runner.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -4119,6 +4144,7 @@ module.exports = Runner;
  *   - `hook end`  (hook) hook complete
  *   - `pass`  (test) test passed
  *   - `fail`  (test, err) test failed
+ *   - `pending`  (test) test pending
  *
  * @api public
  */
@@ -4311,6 +4337,7 @@ Runner.prototype.hook = function(name, fn){
   function next(i) {
     var hook = hooks[i];
     if (!hook) return fn();
+    if (self.failures && suite.bail()) return fn();
     self.currentRunnable = hook;
 
     self.emit('hook', hook);
@@ -5166,8 +5193,8 @@ exports.clean = function(str) {
     .replace(/^function *\(.*\) *{/, '')
     .replace(/\s+\}$/, '');
 
-  var spaces = str.match(/^\n?( *)/)[1].length
-    , re = new RegExp('^ {' + spaces + '}', 'gm');
+  var whitespace = str.match(/^\n?(\s*)/)[1]
+    , re = new RegExp('^' + whitespace, 'gm');
 
   str = str.replace(re, '');
 
@@ -5252,16 +5279,18 @@ exports.highlightTags = function(name) {
 };
 
 }); // module: utils.js
+// The global object is "self" in Web Workers.
+global = (function() { return this; })();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = window.Date;
-var setTimeout = window.setTimeout;
-var setInterval = window.setInterval;
-var clearTimeout = window.clearTimeout;
-var clearInterval = window.clearInterval;
+var Date = global.Date;
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
 
 /**
  * Node shims.
@@ -5275,7 +5304,6 @@ var clearInterval = window.clearInterval;
 var process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
 
 /**
  * Remove uncaughtException listener.
@@ -5283,7 +5311,7 @@ global = window;
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function() {};
   }
 };
 
@@ -5293,7 +5321,7 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = function(err, url, line){
+    global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
   }
@@ -5303,8 +5331,8 @@ process.on = function(e, fn){
  * Expose mocha.
  */
 
-var Mocha = window.Mocha = require('mocha'),
-    mocha = window.mocha = new Mocha({ reporter: 'html' });
+var Mocha = global.Mocha = require('mocha'),
+    mocha = global.mocha = new Mocha({ reporter: 'html' });
 
 var immediateQueue = []
   , immediateTimeout;
@@ -5339,7 +5367,7 @@ Mocha.Runner.immediately = function(callback) {
 
 mocha.ui = function(ui){
   Mocha.prototype.ui.call(this, ui);
-  this.suite.emit('pre-require', window, null, this);
+  this.suite.emit('pre-require', global, null, this);
   return this;
 };
 
@@ -5361,12 +5389,15 @@ mocha.run = function(fn){
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(window.location.search || '');
+  var query = Mocha.utils.parseQuery(global.location.search || '');
   if (query.grep) mocha.grep(query.grep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(){
-    Mocha.utils.highlightTags('code');
+    // The DOM Document is not available in Web Workers.
+    if (global.document) {
+      Mocha.utils.highlightTags('code');
+    }
     if (fn) fn();
   });
 };
