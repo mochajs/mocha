@@ -78,6 +78,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--no-spinner', 'disable animated spinner in --watch mode')
 
 program.name = 'mocha';
 
@@ -298,7 +299,11 @@ if (program.watch) {
   function loadAndRun() {
     mocha.files = files;
     mocha.run(function(){
-      play(frames);
+      if (program.spinner) {
+        play(frames);
+      } else {
+        process.stdout.write('  \u001b[90mwatching...\u001b[0m');
+      }
     });
   }
 
