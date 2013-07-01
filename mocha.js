@@ -1861,7 +1861,7 @@ exports.list = function(failures){
     }
 
     // explicitly show diff
-    if (err.showDiff) {
+    if (err.showDiff && sameType(actual, expected)) {
       escape = false;
       err.actual = actual = stringify(actual);
       err.expected = expected = stringify(expected);
@@ -2077,6 +2077,21 @@ function colorLines(name, str) {
 function stringify(obj) {
   if (obj instanceof RegExp) return obj.toString();
   return JSON.stringify(obj, null, 2);
+}
+
+/**
+ * Check that a / b have the same type.
+ *
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Boolean}
+ * @api private
+ */
+
+function sameType(a, b) {
+  a = Object.prototype.toString.call(a);
+  b = Object.prototype.toString.call(b);
+  return a == b;
 }
 
 }); // module: reporters/base.js
@@ -4340,6 +4355,8 @@ Runner.prototype.hook = function(name, fn){
     if (self.failures && suite.bail()) return fn();
     self.currentRunnable = hook;
 
+    hook.ctx.currentTest = self.test;
+
     self.emit('hook', hook);
 
     hook.on('error', function(err){
@@ -4352,6 +4369,7 @@ Runner.prototype.hook = function(name, fn){
       if (testError) self.fail(self.test, testError);
       if (err) return self.failHook(hook, err);
       self.emit('hook end', hook);
+      delete hook.ctx.currentTest;
       next(++i);
     });
   }
@@ -5401,4 +5419,10 @@ mocha.run = function(fn){
     if (fn) fn();
   });
 };
+
+/**
+ * Expose the process shim.
+ */
+
+Mocha.process = process;
 })();

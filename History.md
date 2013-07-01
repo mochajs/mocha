@@ -1,4 +1,15 @@
 
+1.12.0 / 2013-07-01 
+==================
+
+ * add: prevent diffs for differing types. Closes #900
+ * add `Mocha.process` hack for phantomjs 
+ * fix: use compilers with requires
+ * fix regexps in diffs. Closes #890
+ * fix xunit NaN on failure. Closes #894
+ * fix: strip tab indentation in `clean` utility method
+ * fix: textmate bundle installation
+
 1.11.0 / 2013-06-12
 ==================
 
