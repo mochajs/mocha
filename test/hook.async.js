@@ -13,18 +13,24 @@ describe('async', function(){
       , 'before all'
       , 'parent before'
       , 'before'
+      , 'before test one'
       , 'one'
       , 'after'
+      , 'after test one passed'
       , 'parent after'
       , 'parent before'
       , 'before'
+      , 'before test two'
       , 'two'
       , 'after'
+      , 'after test two passed'
       , 'parent after'
       , 'parent before'
       , 'before'
+      , 'before test three'
       , 'three'
       , 'after'
+      , 'after test three passed'
       , 'parent after'
       , 'after all'
       , 'root after all']);
@@ -48,8 +54,12 @@ describe('async', function(){
     });
 
     beforeEach(function(done){
+      var ctx = this;
       process.nextTick(function(){
         calls.push('before');
+        if (ctx.currentTest) {
+          calls.push('before test ' + ctx.currentTest.title);
+        }
         done();
       })
     })
@@ -59,7 +69,8 @@ describe('async', function(){
           'root before all'
         , 'before all'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test one']);
       calls.push('one');
       process.nextTick(done);
     })
@@ -70,11 +81,14 @@ describe('async', function(){
         , 'before all'
         , 'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
+        , 'after test one passed'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test two']);
       calls.push('two');
     })
 
@@ -84,22 +98,31 @@ describe('async', function(){
         , 'before all'
         , 'parent before'
         , 'before'
+        , 'before test one'
         , 'one'
         , 'after'
+        , 'after test one passed'
         , 'parent after'
         , 'parent before'
         , 'before'
+        , 'before test two'
         , 'two'
         , 'after'
+        , 'after test two passed'
         , 'parent after'
         , 'parent before'
-        , 'before']);
+        , 'before'
+        , 'before test three']);
       calls.push('three');
     })
 
     afterEach(function(done){
+      var ctx = this;
       process.nextTick(function(){
         calls.push('after');
+        if (ctx.currentTest) {
+          calls.push('after test ' + ctx.currentTest.title + ' ' + ctx.currentTest.state);
+        }
         done();
       })
     })
