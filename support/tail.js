@@ -120,3 +120,9 @@ mocha.run = function(fn){
     if (fn) fn();
   });
 };
+
+/**
+ * Expose the process shim.
+ */
+
+Mocha.process = process;
