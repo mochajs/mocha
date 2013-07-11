@@ -2388,7 +2388,7 @@ function HTML(runner, root) {
 
     // container
     stack[0].appendChild(el);
-    stack.unshift(document.createElement('ul'));
+    stack.unshift(parent.document.createElement('ul'));
     el.appendChild(stack[0]);
   });
 
@@ -2464,7 +2464,7 @@ function HTML(runner, root) {
  */
 
 function error(msg) {
-  document.body.appendChild(fragment('<div id="mocha-error">%s</div>', msg));
+  parent.document.body.appendChild(fragment('<div id="mocha-error">%s</div>', msg));
 }
 
 /**
@@ -2473,7 +2473,7 @@ function error(msg) {
 
 function fragment(html) {
   var args = arguments
-    , div = document.createElement('div')
+    , div = parent.document.createElement('div')
     , i = 1;
 
   div.innerHTML = html.replace(/%([se])/g, function(_, type){
@@ -5013,7 +5013,6 @@ Test.prototype.constructor = Test;
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -5178,7 +5177,7 @@ exports.files = function(dir, ret){
     path = join(dir, path);
     if (fs.statSync(path).isDirectory()) {
       exports.files(path, ret);
-    } else if (path.match(/\.(js|coffee)$/)) {
+    } else if (path.match(/\.(js|coffee|litcoffee|coffee.md)$/)) {
       ret.push(path);
     }
   });
