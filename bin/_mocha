@@ -409,7 +409,7 @@ function lookupFiles(path, recursive) {
   var stat = fs.statSync(path);
   if (stat.isFile()) return path;
 
-  fs.readdirSync(path).forEach(function(file){
+  fs.readdirSync(path).sort().forEach(function(file){
     file = join(path, file);
     var stat = fs.statSync(file);
     if (stat.isDirectory()) {
