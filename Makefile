@@ -39,21 +39,21 @@ test-jsapi:
 
 test-unit:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		test/acceptance/*.js \
 		--growl \
 		test/*.js
 
 test-compilers:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-requires:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--compilers coffee:coffee-script \
 		--require test/acceptance/require/a.js \
 		--require test/acceptance/require/b.coffee \
@@ -63,59 +63,59 @@ test-requires:
 
 test-bdd:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--ui bdd \
 		test/acceptance/interfaces/bdd
 
 test-tdd:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--ui tdd \
 		test/acceptance/interfaces/tdd
 
 test-qunit:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--ui qunit \
 		test/acceptance/interfaces/qunit
 
 test-exports:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
 
 test-grep:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
+	  --reporters $(REPORTER) \
 	  --grep fast \
 	  test/acceptance/misc/grep
 
 test-invert:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
+	  --reporters $(REPORTER) \
 	  --grep slow \
 	  --invert \
 	  test/acceptance/misc/grep
 
 test-bail:
 	@./bin/mocha \
-		--reporter $(REPORTER) \
+		--reporters $(REPORTER) \
 		--bail \
 		test/acceptance/misc/bail
 
 test-async-only:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
+	  --reporters $(REPORTER) \
 	  --async-only \
 	  test/acceptance/misc/asyncOnly
 
 test-glob:
-	@./test/acceptance/glob/glob.sh
+	./test/acceptance/glob/glob.sh
 
 non-tty:
 	@./bin/mocha \
-		--reporter dot \
+		--reporters dot \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
@@ -129,7 +129,7 @@ non-tty:
 	@cat /tmp/list.out
 
 	@./bin/mocha \
-		--reporter spec \
+		--reporters spec \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
 
 	@echo spec:
