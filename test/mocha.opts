@@ -1,5 +1,5 @@
 --require should
---reporters dot
+--reporter dot
 --ui bdd
 --globals okGlobalA,okGlobalB
 --globals okGlobalC

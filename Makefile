@@ -39,21 +39,21 @@ test-jsapi:
 
 test-unit:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		test/acceptance/*.js \
 		--growl \
 		test/*.js
 
 test-compilers:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-requires:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--compilers coffee:coffee-script \
 		--require test/acceptance/require/a.js \
 		--require test/acceptance/require/b.coffee \
@@ -63,50 +63,50 @@ test-requires:
 
 test-bdd:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--ui bdd \
 		test/acceptance/interfaces/bdd
 
 test-tdd:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--ui tdd \
 		test/acceptance/interfaces/tdd
 
 test-qunit:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/interfaces/qunit
 
 test-exports:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
 
 test-grep:
 	@./bin/mocha \
-	  --reporters $(REPORTER) \
+	  --reporter $(REPORTER) \
 	  --grep fast \
 	  test/acceptance/misc/grep
 
 test-invert:
 	@./bin/mocha \
-	  --reporters $(REPORTER) \
+	  --reporter $(REPORTER) \
 	  --grep slow \
 	  --invert \
 	  test/acceptance/misc/grep
 
 test-bail:
 	@./bin/mocha \
-		--reporters $(REPORTER) \
+		--reporter $(REPORTER) \
 		--bail \
 		test/acceptance/misc/bail
 
 test-async-only:
 	@./bin/mocha \
-	  --reporters $(REPORTER) \
+	  --reporter $(REPORTER) \
 	  --async-only \
 	  test/acceptance/misc/asyncOnly
 
@@ -115,7 +115,7 @@ test-glob:
 
 non-tty:
 	@./bin/mocha \
-		--reporters dot \
+		--reporter dot \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
 
 	@echo dot:
@@ -129,7 +129,7 @@ non-tty:
 	@cat /tmp/list.out
 
 	@./bin/mocha \
-		--reporters spec \
+		--reporter spec \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
 
 	@echo spec:

@@ -64,7 +64,7 @@ program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
-  .option('-R, --reporters <name>,...', 'specify the reporters to use', ['dot'])
+  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['dot'])
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
@@ -82,7 +82,7 @@ program
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--check-leaks', 'check for global variable leaks')
   .option('--interfaces', 'display available interfaces')
-  .option('--list-reporters', 'display available reporters')
+  .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
 
 program.name = 'mocha';
@@ -113,7 +113,7 @@ program.on('globals', function(val){
 
 // --reporters
 
-program.on('list-reporters', function(){
+program.on('reporters', function(){
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -181,7 +181,7 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-mocha.reporters(program.reporters);
+mocha.reporters(program.reporter);
 
 // interface
 
