@@ -1,4 +1,5 @@
 
+GRUNT = node_modules/.bin/grunt
 REPORTER ?= dot
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -19,9 +20,7 @@ mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
 	  > mocha.js
 
 clean:
-	rm -f mocha.js
-	rm -fr lib-cov
-	rm -f coverage.html
+	$(GRUNT) clean
 
 test-cov: lib-cov
 	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
