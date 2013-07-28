@@ -8,7 +8,7 @@ SUPPORT = $(wildcard support/*.js)
 all: mocha.js
 
 lib/browser/diff.js: node_modules/diff/diff.js
-	cp node_modules/diff/diff.js lib/browser/diff.js
+	$(GRUNT) copy:lib/browser/diff.js
 
 mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
 	@node support/compile $(SRC)
