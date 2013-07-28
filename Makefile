@@ -1,4 +1,5 @@
 
+GRUNT = node_modules/.bin/grunt
 REPORTER ?= dot
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -7,35 +8,27 @@ SUPPORT = $(wildcard support/*.js)
 all: mocha.js
 
 lib/browser/diff.js: node_modules/diff/diff.js
-	cp node_modules/diff/diff.js lib/browser/diff.js
+	$(GRUNT) copy:lib/browser/diff.js
 
 mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
-	@node support/compile $(SRC)
-	@cat \
-	  support/head.js \
-	  _mocha.js \
-	  support/tail.js \
-	  support/foot.js \
-	  > mocha.js
+	$(GRUNT) shell:build
 
 clean:
-	rm -f mocha.js
-	rm -fr lib-cov
-	rm -f coverage.html
+	$(GRUNT) clean
 
 test-cov: lib-cov
 	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 
 lib-cov:
-	@rm -fr ./$@
-	@jscoverage lib $@
+	$(GRUNT) lib-cov
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-requires
+test-all:
+	$(GRUNT) test-all
 
 test-jsapi:
-	@node test/jsapi
+	$(GRUNT) test-jsapi
 
 test-unit:
 	@./bin/mocha \
@@ -45,95 +38,40 @@ test-unit:
 		test/*.js
 
 test-compilers:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script,foo:./test/compiler/foo \
-		test/acceptance/test.coffee \
-		test/acceptance/test.foo
+	$(GRUNT) test-compilers
 
 test-requires:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script \
-		--require test/acceptance/require/a.js \
-		--require test/acceptance/require/b.coffee \
-		--require test/acceptance/require/c.js \
-		--require test/acceptance/require/d.coffee \
-		test/acceptance/require/require.js
+	$(GRUNT) test-requires
 
 test-bdd:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--ui bdd \
-		test/acceptance/interfaces/bdd
+	$(GRUNT) test-bdd
 
 test-tdd:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--ui tdd \
-		test/acceptance/interfaces/tdd
+	$(GRUNT) test-tdd
 
 test-qunit:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--ui qunit \
-		test/acceptance/interfaces/qunit
+	$(GRUNT) test-qunit
 
 test-exports:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--ui exports \
-		test/acceptance/interfaces/exports
+	$(GRUNT) test-exports
 
 test-grep:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep fast \
-	  test/acceptance/misc/grep
+	$(GRUNT) test-grep
 
 test-invert:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep slow \
-	  --invert \
-	  test/acceptance/misc/grep
+	$(GRUNT) test-invert
 
 test-bail:
-	@./bin/mocha \
-		--reporter $(REPORTER) \
-		--bail \
-		test/acceptance/misc/bail
+	$(GRUNT) test-bail
 
 test-async-only:
-	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --async-only \
-	  test/acceptance/misc/asyncOnly
+	$(GRUNT) test-only
 
 test-glob:
-	@./test/acceptance/glob/glob.sh
+	$(GRUNT) test-glob
 
 non-tty:
-	@./bin/mocha \
-		--reporter dot \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
-
-	@echo dot:
-	@cat /tmp/dot.out
-
-	@./bin/mocha \
-		--reporter list \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/list.out
-
-	@echo list:
-	@cat /tmp/list.out
-
-	@./bin/mocha \
-		--reporter spec \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
-
-	@echo spec:
-	@cat /tmp/spec.out
+	$(GRUNT) non-tty
 
 tm:
 	@open editors/$(TM_BUNDLE)
