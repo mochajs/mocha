@@ -226,6 +226,24 @@ describe('Runnable(title, fn)', function(){
             done(err);
           });
         })
+
+        describe('when an assertion error is thrown async in the function', function(){
+          it('should fail with given error', function(done){
+            var calls = 0;
+            var test = new Runnable('foo', function(done){
+              process.nextTick(function () {
+                done(function () {
+                  throw new Error('fail');
+                });
+              });
+            });
+
+            test.run(function(err){
+              err.message.should.equal('fail');
+              done();
+            });
+          })
+        })
       })
 
       it('should allow updating the timeout', function(done){
