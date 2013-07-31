@@ -212,6 +212,22 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when a function is passed', function(){
+        it('should invoke the function', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            done(function() {
+              ++calls;
+            });
+          });
+
+          test.run(function(err){
+            calls.should.equal(1);
+            done(err);
+          });
+        })
+      })
+
       it('should allow updating the timeout', function(done){
         var test = new Runnable('foo', function(done){
           this.timeout(10);
