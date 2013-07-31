@@ -252,6 +252,7 @@ describe('Runnable(title, fn)', function(){
           var test = new Runnable('foo', function(done){
             var callback = done.wrap(function() {
               callArgs.push(arguments);
+              done();
             });
 
             process.nextTick(function () {
