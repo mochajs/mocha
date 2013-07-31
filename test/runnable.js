@@ -229,7 +229,6 @@ describe('Runnable(title, fn)', function(){
 
         describe('when an assertion error is thrown async in the function', function(){
           it('should fail with given error', function(done){
-            var calls = 0;
             var test = new Runnable('foo', function(done){
               process.nextTick(function () {
                 done(function () {
