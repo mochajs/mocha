@@ -245,6 +245,46 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when a callback needs to be wrapped', function () {
+        it('should invoke the wrapped function', function(done){
+          var callArgs = [];
+
+          var test = new Runnable('foo', function(done){
+            var callback = done.wrap(function() {
+              callArgs.push(arguments);
+            });
+
+            process.nextTick(function () {
+              callback('a', 'b', 'c', 'd');
+            });
+          });
+
+          test.run(function(err){
+            callArgs.should.eql([
+              ['a', 'b', 'c', 'd']
+            ]);
+            done(err);
+          });
+        })
+
+        describe('when an assertion error is thrown in wrapped function', function(){
+          it('should fail with given error', function(done){
+            var test = new Runnable('foo', function(done){
+              var callback = done.wrap(function() {
+                throw new Error('fail');
+              });
+
+              process.nextTick(callback);
+            });
+
+            test.run(function(err){
+              err.message.should.equal('fail');
+              done();
+            });
+          })
+        })
+      })
+
       it('should allow updating the timeout', function(done){
         var test = new Runnable('foo', function(done){
           this.timeout(10);
