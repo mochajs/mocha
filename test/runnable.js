@@ -245,12 +245,12 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
-      describe('when a callback needs to be wrapped', function () {
-        it('should invoke the wrapped function', function(done){
+      describe('when an async callback is passed to dotry', function () {
+        it('should return an wrapped version of the callback', function(done){
           var callArgs = [];
 
-          var test = new Runnable('foo', function(done){
-            var callback = done.wrap(function() {
+          var test = new Runnable('foo', function(done, dotry){
+            var callback = dotry(function() {
               callArgs.push(arguments);
               done();
             });
@@ -268,10 +268,10 @@ describe('Runnable(title, fn)', function(){
           });
         })
 
-        describe('when an assertion error is thrown in wrapped function', function(){
+        describe('when an assertion error is thrown in the callback', function(){
           it('should fail with given error', function(done){
-            var test = new Runnable('foo', function(done){
-              var callback = done.wrap(function() {
+            var test = new Runnable('foo', function(done, dotry){
+              var callback = dotry(function() {
                 throw new Error('fail');
               });
 
