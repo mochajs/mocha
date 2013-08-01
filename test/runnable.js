@@ -251,18 +251,21 @@ describe('Runnable(title, fn)', function(){
 
           var test = new Runnable('foo', function(done, dotry){
             var callback = dotry(function() {
-              callArgs.push(arguments);
+              callArgs.push({
+                context: JSON.stringify(this),
+                args: Array.prototype.slice.call(arguments)
+              });
               done();
             });
 
             process.nextTick(function () {
-              callback('a', 'b', 'c', 'd');
+              callback.call('a context', 'a', 'b', 'c', 'd');
             });
           });
 
           test.run(function(err){
             callArgs.should.eql([
-              ['a', 'b', 'c', 'd']
+              { context: '\"a context\"', args: ['a', 'b', 'c', 'd'] }
             ]);
             done(err);
           });
