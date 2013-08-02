@@ -187,7 +187,7 @@ if (program.reporterOptions !== undefined) {
     program.reporterOptions.split(",").forEach(function(opt) {
         var L = opt.split("=");
         if (L.length != 2) {
-            throw new Error("invalid reporter option", opt);
+            throw new Error("invalid reporter option '" + opt + "'");
         }
         reporter_options[L[0]] = L[1];
     });
