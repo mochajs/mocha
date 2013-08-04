@@ -308,10 +308,14 @@ if (program.watch) {
   var watchFiles = utils.files(cwd);
 
   function loadAndRun() {
-    mocha.files = files;
-    mocha.run(function(){
-      play(frames);
-    });
+    try {
+      mocha.files = files;
+      mocha.run(function(){
+        play(frames);
+      });
+    } catch(e) {
+      process.stdout.write(e.stack);
+    }
   }
 
   function purge() {
