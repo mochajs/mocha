@@ -11,6 +11,6 @@ test('should not run this test', function() {
 test.only('should run this test', function() {
   ok(0 === 0, 'this .only test should run');
 });
-test('should run this test, not (including a subset of the .only test title)', function() {
+test('should run this test, not (includes the title of the .only test)', function() {
   ok(0 === 1, 'this test should have been skipped');
 });

@@ -8,7 +8,7 @@ suite('should only run .only test in this tdd suite', function() {
     var zero = 0;
     zero.should.equal(0, 'this .only test should run');
   });
-  test('should run this test, not (including a subset of the .only test title)', function() {
+  test('should run this test, not (includes the title of the .only test)', function() {
     var zero = 0;
     zero.should.equal(1, 'this test should have been skipped');
   });
