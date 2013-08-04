@@ -651,7 +651,8 @@ test('#length', function(){
   &lt;script src="test.xhr.js"&gt;&lt;/script&gt;
   &lt;script&gt;
     mocha.checkLeaks();
-    mocha.globals(['jQuery']);
+    // Set accepted leaks in your test
+    mocha.globals(['leak1', 'leak2']);
     mocha.run();
   &lt;/script&gt;
 &lt;/body&gt;
