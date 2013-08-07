@@ -6,6 +6,9 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
+node_modules/diff/diff.js:
+	npm install diff
+
 lib/browser/diff.js: node_modules/diff/diff.js
 	cp node_modules/diff/diff.js lib/browser/diff.js
 
