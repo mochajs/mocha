@@ -2716,70 +2716,6 @@ function clean(test) {
 
 }); // module: reporters/json-cov.js
 
-require.register("reporters/json-stream.js", function(module, exports, require){
-
-/**
- * Module dependencies.
- */
-
-var Base = require('./base')
-  , color = Base.color;
-
-/**
- * Expose `List`.
- */
-
-exports = module.exports = List;
-
-/**
- * Initialize a new `List` test reporter.
- *
- * @param {Runner} runner
- * @api public
- */
-
-function List(runner) {
-  Base.call(this, runner);
-
-  var self = this
-    , stats = this.stats
-    , total = runner.total;
-
-  runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
-  });
-
-  runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
-  });
-
-  runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
-  });
-
-  runner.on('end', function(){
-    process.stdout.write(JSON.stringify(['end', self.stats]));
-  });
-}
-
-/**
- * Return a plain-object representation of `test`
- * free of cyclic properties etc.
- *
- * @param {Object} test
- * @return {Object}
- * @api private
- */
-
-function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
-  }
-}
-}); // module: reporters/json-stream.js
-
 require.register("reporters/json.js", function(module, exports, require){
 
 /**
@@ -2852,6 +2788,70 @@ function clean(test) {
   }
 }
 }); // module: reporters/json.js
+
+require.register("reporters/json-stream.js", function(module, exports, require){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , color = Base.color;
+
+/**
+ * Expose `List`.
+ */
+
+exports = module.exports = List;
+
+/**
+ * Initialize a new `List` test reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function List(runner) {
+  Base.call(this, runner);
+
+  var self = this
+    , stats = this.stats
+    , total = runner.total;
+
+  runner.on('start', function(){
+    console.log(JSON.stringify(['start', { total: total }]));
+  });
+
+  runner.on('pass', function(test){
+    console.log(JSON.stringify(['pass', clean(test)]));
+  });
+
+  runner.on('fail', function(test, err){
+    console.log(JSON.stringify(['fail', clean(test)]));
+  });
+
+  runner.on('end', function(){
+    process.stdout.write(JSON.stringify(['end', self.stats]));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+}); // module: reporters/json-stream.js
 
 require.register("reporters/landing.js", function(module, exports, require){
 
@@ -3192,7 +3192,6 @@ exports = module.exports = NyanCat;
 
 function NyanCat(runner) {
   Base.call(this, runner);
-
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
@@ -3208,19 +3207,19 @@ function NyanCat(runner) {
 
   runner.on('start', function(){
     Base.cursor.hide();
-    self.draw('start');
+    self.draw();
   });
 
   runner.on('pending', function(test){
-    self.draw('pending');
+    self.draw();
   });
 
   runner.on('pass', function(test){
-    self.draw('pass');
+    self.draw();
   });
 
   runner.on('fail', function(test, err){
-    self.draw('fail');
+    self.draw();
   });
 
   runner.on('end', function(){
@@ -3231,17 +3230,16 @@ function NyanCat(runner) {
 }
 
 /**
- * Draw the nyan cat with runner `status`.
+ * Draw the nyan cat
  *
- * @param {String} status
  * @api private
  */
 
-NyanCat.prototype.draw = function(status){
+NyanCat.prototype.draw = function(){
   this.appendRainbow();
   this.drawScoreboard();
   this.drawRainbow();
-  this.drawNyanCat(status);
+  this.drawNyanCat();
   this.tick = !this.tick;
 };
 
@@ -3306,44 +3304,33 @@ NyanCat.prototype.drawRainbow = function(){
 };
 
 /**
- * Draw the nyan cat with `status`.
+ * Draw the nyan cat
  *
- * @param {String} status
  * @api private
  */
 
-NyanCat.prototype.drawNyanCat = function(status) {
+NyanCat.prototype.drawNyanCat = function() {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
   var color = '\u001b[' + startWidth + 'C';
   var padding = '';
-  
+
   write(color);
   write('_,------,');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? '  ' : '   ';
   write('_|' + padding + '/\\_/\\ ');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? '_' : '__';
   var tail = self.tick ? '~' : '^';
   var face;
-  switch (status) {
-    case 'pass':
-      face = '( ^ .^)';
-      break;
-    case 'fail':
-      face = '( o .o)';
-      break;
-    default:
-      face = '( - .-)';
-  }
-  write(tail + '|' + padding + face + ' ');
+  write(tail + '|' + padding + this.face() + ' ');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? ' ' : '  ';
   write(padding + '""  "" ');
@@ -3351,6 +3338,26 @@ NyanCat.prototype.drawNyanCat = function(status) {
 
   this.cursorUp(this.numberOfLines);
 };
+
+/**
+ * Draw nyan cat face.
+ *
+ * @return {String}
+ * @api private
+ */
+
+NyanCat.prototype.face = function() {
+  var stats = this.stats;
+  if (stats.failures) {
+    return '( x .x)';
+  } else if (stats.pending) {
+    return '( o .o)';
+  } else if(stats.passes) {
+    return '( ^ .^)';
+  } else {
+    return '( - .-)';
+  }
+}
 
 /**
  * Move cursor up `n`.
@@ -5013,7 +5020,6 @@ Test.prototype.constructor = Test;
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -5178,7 +5184,7 @@ exports.files = function(dir, ret){
     path = join(dir, path);
     if (fs.statSync(path).isDirectory()) {
       exports.files(path, ret);
-    } else if (path.match(/\.(js|coffee)$/)) {
+    } else if (path.match(/\.(js|coffee|litcoffee|coffee.md)$/)) {
       ret.push(path);
     }
   });
@@ -5425,4 +5431,41 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
+
+/**
+ * Array.prototype.indexOf shim for IE 7/8 compatibility
+ * Pulled from MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+ */
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError();
+    }
+    var n, k, t = Object(this),
+        len = t.length >>> 0;
+
+    if (len === 0) {
+      return -1;
+    }
+    n = 0;
+    if (arguments.length > 1) {
+      n = Number(arguments[1]);
+      if (n != n) { // shortcut for verifying if it's NaN
+        n = 0;
+      } else if (n != 0 && n != Infinity && n != -Infinity) {
+        n = (n > 0 || -1) * Math.floor(Math.abs(n));
+      }
+    }
+    if (n >= len) {
+      return -1;
+    }
+    for (k = n >= 0 ? n : Math.max(len - Math.abs(n), 0); k < len; k++) {
+      if (k in t && t[k] === searchElement) {
+        return k;
+      }
+    }
+    return -1;
+  };
+}
 })();
