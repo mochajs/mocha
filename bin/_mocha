@@ -64,7 +64,7 @@ program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
   .option('-r, --require <name>', 'require the given module')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
+  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['dot'])
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-i, --invert', 'inverts --grep matches')
@@ -181,23 +181,11 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-mocha.reporter(program.reporter);
+mocha.reporters(program.reporter);
 
 // interface
 
 mocha.ui(program.ui);
-
-// load reporter
-
-try {
-  Reporter = require('../lib/reporters/' + program.reporter);
-} catch (err) {
-  try {
-    Reporter = require(program.reporter);
-  } catch (err) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
-  }
-}
 
 // --no-colors
 
