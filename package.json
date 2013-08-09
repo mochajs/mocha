@@ -38,5 +38,13 @@
   "devDependencies": {
     "should": "*",
     "coffee-script": "1.2"
-  }
+  },
+  "files": [
+    "bin",
+    "images",
+    "lib",
+    "index.js",
+    "mocha.css",
+    "mocha.js"
+  ]
 }
