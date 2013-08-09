@@ -33,7 +33,7 @@
     "debug": "*",
     "mkdirp": "0.3.5",
     "ms": "0.3.0",
-    "glob": "3.2.1"
+    "glob": "3.2.3"
   },
   "devDependencies": {
     "should": "*",
