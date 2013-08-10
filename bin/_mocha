@@ -314,7 +314,7 @@ if (program.watch) {
         play(frames);
       });
     } catch(e) {
-      process.stdout.write(e.stack);
+      console.log(e.stack);
     }
   }
 
