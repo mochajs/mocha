@@ -914,6 +914,15 @@ module.exports = function(suite){
     };
 
     /**
+     * Abortive suite.
+     */
+
+    context.describe.skipsOnFailure = function(title, fn){
+      var suite = context.describe(title, fn);
+      suite._skip = true;
+    };
+
+    /**
      * Describe a specification or test-case
      * with the given `title` and callback `fn`
      * acting as a thunk.
@@ -4583,6 +4592,11 @@ Runner.prototype.runSuite = function(suite, fn){
   this.emit('suite', this.suite = suite);
 
   function next() {
+    if (suite._skip) {
+      var failed = 0;
+      suite.eachTest(function(test) { failed += test.state == 'failed'; });
+      if (failed) return done();
+    }
     var curr = suite.suites[i++];
     if (!curr) return done();
     self.runSuite(curr, next);
@@ -4754,6 +4768,7 @@ function Suite(title, ctx) {
   this._timeout = 2000;
   this._slow = 75;
   this._bail = false;
+  this._skip = false;
 }
 
 /**
@@ -5020,6 +5035,7 @@ module.exports = Test;
 function Test(title, fn) {
   Runnable.call(this, title, fn);
   this.pending = !fn;
+  this._skip = false;
   this.type = 'test';
 }
 
