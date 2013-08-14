@@ -938,6 +938,15 @@ module.exports = function(suite){
     };
 
     /**
+     * Abortive test-case.
+     */
+
+    context.it.skipsOnFailure = function(title, fn){
+      var test = context.it(title, fn);
+      test._skip = true;
+    };
+
+    /**
      * Pending test case.
      */
 
@@ -4508,6 +4517,7 @@ Runner.prototype.runTests = function(suite, fn){
   function next(err) {
     // if we bail after first err
     if (self.failures && suite._bail) return fn();
+    if (test && test._skip && test.state == 'failed') return fn();
 
     // next test
     test = tests.shift();
