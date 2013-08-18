@@ -403,8 +403,8 @@ describe('app', function(){
       [1,2,3].indexOf(4).should.equal(-1);
     });
     
-    specify('should return 1 when present', function(){
-      [1,2,3].indexOf(1).should.equal(1);
+    specify('should return true when present', function(){
+      assert.equal(true, !!~[1,2,3].indexOf(1));
     });
   });
 });
