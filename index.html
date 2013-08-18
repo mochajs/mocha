@@ -402,6 +402,10 @@ describe('app', function(){
     it('should return -1 when not present', function(){
       [1,2,3].indexOf(4).should.equal(-1);
     });
+    
+    specify('should return 1 when present', function(){
+      [1,2,3].indexOf(1).should.equal(1);
+    });
   });
 });
 </code></pre>
