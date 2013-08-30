@@ -819,7 +819,8 @@ require.register("interfaces/bdd.js", function(module, exports, require){
  */
 
 var Suite = require('../suite')
-  , Test = require('../test');
+  , Test = require('../test')
+  , utils = require('../utils');
 
 /**
  * BDD-style interface:
@@ -932,7 +933,8 @@ module.exports = function(suite){
 
     context.it.only = function(title, fn){
       var test = context.it(title, fn);
-      mocha.grep(test.fullTitle());
+      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      mocha.grep(new RegExp(reString));
     };
 
     /**
@@ -1029,7 +1031,8 @@ require.register("interfaces/qunit.js", function(module, exports, require){
  */
 
 var Suite = require('../suite')
-  , Test = require('../test');
+  , Test = require('../test')
+  , utils = require('../utils');
 
 /**
  * QUnit-style interface:
@@ -1131,7 +1134,8 @@ module.exports = function(suite){
 
     context.test.only = function(title, fn){
       var test = context.test(title, fn);
-      mocha.grep(test.fullTitle());
+      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      mocha.grep(new RegExp(reString));
     };
 
     /**
@@ -1153,7 +1157,8 @@ require.register("interfaces/tdd.js", function(module, exports, require){
  */
 
 var Suite = require('../suite')
-  , Test = require('../test');
+  , Test = require('../test')
+  , utils = require('../utils');;
 
 /**
  * TDD-style interface:
@@ -1271,7 +1276,8 @@ module.exports = function(suite){
 
     context.test.only = function(title, fn){
       var test = context.test(title, fn);
-      mocha.grep(test.fullTitle());
+      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      mocha.grep(new RegExp(reString));
     };
 
     /**
@@ -1359,7 +1365,7 @@ function Mocha(options) {
   this.ui(options.ui);
   this.bail(options.bail);
   this.reporter(options.reporter);
-  if (options.timeout) this.timeout(options.timeout);
+  if (typeof options.timeout === 'number') this.timeout(options.timeout);
   if (options.slow) this.slow(options.slow);
 }
 
@@ -1608,7 +1614,6 @@ Mocha.prototype.run = function(fn){
 }); // module: mocha.js
 
 require.register("ms.js", function(module, exports, require){
-
 /**
  * Helpers.
  */
@@ -1617,19 +1622,28 @@ var s = 1000;
 var m = s * 60;
 var h = m * 60;
 var d = h * 24;
+var y = d * 365.25;
 
 /**
  * Parse or format the given `val`.
  *
+ * Options:
+ *
+ *  - `long` verbose formatting [false]
+ *
  * @param {String|Number} val
+ * @param {Object} options
  * @return {String|Number}
  * @api public
  */
 
-module.exports = function(val){
+module.exports = function(val, options){
+  options = options || {};
   if ('string' == typeof val) return parse(val);
-  return format(val);
-}
+  return options.long
+    ? long(val)
+    : short(val);
+};
 
 /**
  * Parse the given `str` and return milliseconds.
@@ -1640,55 +1654,78 @@ module.exports = function(val){
  */
 
 function parse(str) {
-  var m = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(str);
-  if (!m) return;
-  var n = parseFloat(m[1]);
-  var type = (m[2] || 'ms').toLowerCase();
+  var match = /^((?:\d+)?\.?\d+) *(ms|seconds?|s|minutes?|m|hours?|h|days?|d|years?|y)?$/i.exec(str);
+  if (!match) return;
+  var n = parseFloat(match[1]);
+  var type = (match[2] || 'ms').toLowerCase();
   switch (type) {
     case 'years':
     case 'year':
     case 'y':
-      return n * 31557600000;
+      return n * y;
     case 'days':
     case 'day':
     case 'd':
-      return n * 86400000;
+      return n * d;
     case 'hours':
     case 'hour':
     case 'h':
-      return n * 3600000;
+      return n * h;
     case 'minutes':
     case 'minute':
     case 'm':
-      return n * 60000;
+      return n * m;
     case 'seconds':
     case 'second':
     case 's':
-      return n * 1000;
+      return n * s;
     case 'ms':
       return n;
   }
 }
 
 /**
- * Format the given `ms`.
+ * Short format for `ms`.
  *
  * @param {Number} ms
  * @return {String}
- * @api public
+ * @api private
  */
 
-function format(ms) {
-  if (ms == d) return Math.round(ms / d) + ' day';
-  if (ms > d) return Math.round(ms / d) + ' days';
-  if (ms == h) return Math.round(ms / h) + ' hour';
-  if (ms > h) return Math.round(ms / h) + ' hours';
-  if (ms == m) return Math.round(ms / m) + ' minute';
-  if (ms > m) return Math.round(ms / m) + ' minutes';
-  if (ms == s) return Math.round(ms / s) + ' second';
-  if (ms > s) return Math.round(ms / s) + ' seconds';
-  return ms + ' ms';
+function short(ms) {
+  if (ms >= d) return Math.round(ms / d) + 'd';
+  if (ms >= h) return Math.round(ms / h) + 'h';
+  if (ms >= m) return Math.round(ms / m) + 'm';
+  if (ms >= s) return Math.round(ms / s) + 's';
+  return ms + 'ms';
 }
+
+/**
+ * Long format for `ms`.
+ *
+ * @param {Number} ms
+ * @return {String}
+ * @api private
+ */
+
+function long(ms) {
+  return plural(ms, d, 'day')
+    || plural(ms, h, 'hour')
+    || plural(ms, m, 'minute')
+    || plural(ms, s, 'second')
+    || ms + ' ms';
+}
+
+/**
+ * Pluralization helper.
+ */
+
+function plural(ms, n, name) {
+  if (ms < n) return;
+  if (ms < n * 1.5) return Math.floor(ms / n) + ' ' + name;
+  return Math.ceil(ms / n) + ' ' + name + 's';
+}
+
 }); // module: ms.js
 
 require.register("reporters/base.js", function(module, exports, require){
@@ -2306,7 +2343,6 @@ var Date = global.Date
 
 exports = module.exports = HTML;
 
-
 /**
  * Stats template.
  */
@@ -2314,7 +2350,6 @@ exports = module.exports = HTML;
 var statsTemplate = '<ul id="mocha-stats">'
   + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
   + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
-  + '<li class="pending"><a href="#">pending:</a> <em>0</em></li>'
   + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
   + '<li class="duration">duration: <em>0</em>s</li>'
   + '</ul>';
@@ -2336,11 +2371,9 @@ function HTML(runner, root) {
     , items = stat.getElementsByTagName('li')
     , passes = items[1].getElementsByTagName('em')[0]
     , passesLink = items[1].getElementsByTagName('a')[0]
-    , pending = items[2].getElementsByTagName('em')[0]
-    , pendingLink = items[2].getElementsByTagName('a')[0]
-    , failures = items[3].getElementsByTagName('em')[0]
-    , failuresLink = items[3].getElementsByTagName('a')[0]
-    , duration = items[4].getElementsByTagName('em')[0]
+    , failures = items[2].getElementsByTagName('em')[0]
+    , failuresLink = items[2].getElementsByTagName('a')[0]
+    , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
     , report = fragment('<ul id="mocha-report"></ul>')
     , stack = [report]
@@ -2366,23 +2399,15 @@ function HTML(runner, root) {
   on(passesLink, 'click', function(){
     unhide();
     var name = /pass/.test(report.className) ? '' : ' pass';
-    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
+    report.className = report.className.replace(/fail|pass/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test pass');
-  });
-
-  // pending toggle
-  on(pendingLink, 'click', function(){
-    unhide();
-    var name = /pending/.test(report.className) ? '' : ' pending';
-    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
-    if (report.className.trim()) hideSuitesWithout('test pending');
   });
 
   // failure toggle
   on(failuresLink, 'click', function(){
     unhide();
     var name = /fail/.test(report.className) ? '' : ' fail';
-    report.className = report.className.replace(/fail|pass|pending/g, '') + name;
+    report.className = report.className.replace(/fail|pass/g, '') + name;
     if (report.className.trim()) hideSuitesWithout('test fail');
   });
 
@@ -2422,7 +2447,6 @@ function HTML(runner, root) {
     var ms = new Date - stats.start;
     text(passes, stats.passes);
     text(failures, stats.failures);
-    text(pending, stats.pending);
     text(duration, (ms / 1000).toFixed(2));
 
     // test
@@ -2508,7 +2532,7 @@ function hideSuitesWithout(classname) {
   var suites = document.getElementsByClassName('suite');
   for (var i = 0; i < suites.length; i++) {
     var els = suites[i].getElementsByClassName(classname);
-    if (0 == els.length && !/hidden/.test(suites[i].className)) suites[i].className += ' hidden';
+    if (0 == els.length) suites[i].className += ' hidden';
   }
 }
 
@@ -2517,7 +2541,7 @@ function hideSuitesWithout(classname) {
  */
 
 function unhide() {
-  var els = document.getElementsByClassName('suite');
+  var els = document.getElementsByClassName('suite hidden');
   for (var i = 0; i < els.length; ++i) {
     els[i].className = els[i].className.replace('suite hidden', 'suite');
   }
@@ -3205,7 +3229,6 @@ exports = module.exports = NyanCat;
 
 function NyanCat(runner) {
   Base.call(this, runner);
-
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
@@ -3221,19 +3244,19 @@ function NyanCat(runner) {
 
   runner.on('start', function(){
     Base.cursor.hide();
-    self.draw('start');
+    self.draw();
   });
 
   runner.on('pending', function(test){
-    self.draw('pending');
+    self.draw();
   });
 
   runner.on('pass', function(test){
-    self.draw('pass');
+    self.draw();
   });
 
   runner.on('fail', function(test, err){
-    self.draw('fail');
+    self.draw();
   });
 
   runner.on('end', function(){
@@ -3244,17 +3267,16 @@ function NyanCat(runner) {
 }
 
 /**
- * Draw the nyan cat with runner `status`.
+ * Draw the nyan cat
  *
- * @param {String} status
  * @api private
  */
 
-NyanCat.prototype.draw = function(status){
+NyanCat.prototype.draw = function(){
   this.appendRainbow();
   this.drawScoreboard();
   this.drawRainbow();
-  this.drawNyanCat(status);
+  this.drawNyanCat();
   this.tick = !this.tick;
 };
 
@@ -3319,44 +3341,33 @@ NyanCat.prototype.drawRainbow = function(){
 };
 
 /**
- * Draw the nyan cat with `status`.
+ * Draw the nyan cat
  *
- * @param {String} status
  * @api private
  */
 
-NyanCat.prototype.drawNyanCat = function(status) {
+NyanCat.prototype.drawNyanCat = function() {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
   var color = '\u001b[' + startWidth + 'C';
   var padding = '';
-  
+
   write(color);
   write('_,------,');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? '  ' : '   ';
   write('_|' + padding + '/\\_/\\ ');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? '_' : '__';
   var tail = self.tick ? '~' : '^';
   var face;
-  switch (status) {
-    case 'pass':
-      face = '( ^ .^)';
-      break;
-    case 'fail':
-      face = '( o .o)';
-      break;
-    default:
-      face = '( - .-)';
-  }
-  write(tail + '|' + padding + face + ' ');
+  write(tail + '|' + padding + this.face() + ' ');
   write('\n');
-  
+
   write(color);
   padding = self.tick ? ' ' : '  ';
   write(padding + '""  "" ');
@@ -3364,6 +3375,26 @@ NyanCat.prototype.drawNyanCat = function(status) {
 
   this.cursorUp(this.numberOfLines);
 };
+
+/**
+ * Draw nyan cat face.
+ *
+ * @return {String}
+ * @api private
+ */
+
+NyanCat.prototype.face = function() {
+  var stats = this.stats;
+  if (stats.failures) {
+    return '( x .x)';
+  } else if (stats.pending) {
+    return '( o .o)';
+  } else if(stats.passes) {
+    return '( ^ .^)';
+  } else {
+    return '( - .-)';
+  }
+}
 
 /**
  * Move cursor up `n`.
@@ -5026,7 +5057,6 @@ Test.prototype.constructor = Test;
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -5191,7 +5221,7 @@ exports.files = function(dir, ret){
     path = join(dir, path);
     if (fs.statSync(path).isDirectory()) {
       exports.files(path, ret);
-    } else if (path.match(/\.(js|coffee)$/)) {
+    } else if (path.match(/\.(js|coffee|litcoffee|coffee.md)$/)) {
       ret.push(path);
     }
   });
