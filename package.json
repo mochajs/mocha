@@ -32,11 +32,18 @@
     "diff": "1.0.2",
     "debug": "*",
     "mkdirp": "0.3.5",
-    "ms": "0.6.0",
     "glob": "3.2.1"
   },
   "devDependencies": {
     "should": "*",
     "coffee-script": "1.2"
-  }
+  },
+  "files": [
+    "bin",
+    "images",
+    "lib",
+    "index.js",
+    "mocha.css",
+    "mocha.js"
+  ]
 }
