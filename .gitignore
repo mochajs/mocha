@@ -5,7 +5,6 @@ node_modules
 *.sock
 testing
 _mocha.js
-test.js
 my-reporter.js
 *.sw*
 lib/browser/diff.js
