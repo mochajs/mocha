@@ -187,8 +187,8 @@ body {
   display: none;
 }
 
-#mocha-report.pending .test.pass
-#mocha-report.pending .test.fail, {
+#mocha-report.pending .test.pass,
+#mocha-report.pending .test.fail {
   display: none;
 }
 #mocha-report.pending .test.pass.pending {
