@@ -391,7 +391,7 @@ describe('app', function(){
 
 <h3 id="bdd-interface">BDD</h3>
 
-<p>The "<strong>BDD</strong>" interface provides <code>describe()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
+<p>The "<strong>BDD</strong>" interface provides <code>describe()</code>, <code>it()</code> or <code>specify()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
 
 <pre><code>describe('Array', function(){
   before(function(){
@@ -401,6 +401,10 @@ describe('app', function(){
   describe('#indexOf()', function(){
     it('should return -1 when not present', function(){
       [1,2,3].indexOf(4).should.equal(-1);
+    });
+    
+    specify('should return true when present', function(){
+      assert.equal(true, !!~[1,2,3].indexOf(1));
     });
   });
 });
