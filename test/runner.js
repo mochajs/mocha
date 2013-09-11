@@ -178,11 +178,5 @@ describe('Runner', function(){
       });
       runner.failHook(hook, err);
     })
-
-    it('should emit "end"', function(done){
-      var hook = {}, err = {};
-      runner.on('end', done);
-      runner.failHook(hook, err);
-    })
   })
 })

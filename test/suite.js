@@ -245,6 +245,35 @@ describe('Suite', function(){
   //     this.suite.tests[0].should.equal(this.test);
   //   });
   // });
+  describe('.markPending', function() {
+    beforeEach(function() {
+      this.suite = new Suite('Parent');
+      this.suite.addTest(new Test('test 1', function() {}));
+
+      // add a child suite
+      var child = new Suite('Child');
+      this.suite.addSuite(child);
+
+      // test in child
+      child.addTest(new Test('test 2', function() {}));
+
+      this.suite.markPending();
+    });
+
+    it('should mark suite pending', function() {
+      this.suite.pending.should.be.true;
+    });
+
+    it('should mark tests pending', function() {
+      this.suite.eachTest(function(test) {
+        test.pending.should.be.true;
+      });
+    });
+
+    it('should mark child suite pending', function() {
+      this.suite.suites[0].pending.should.be.true;
+    });
+  });
 
   describe('.fullTitle()', function(){
     beforeEach(function(){
