@@ -32,10 +32,13 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
+test-all: test-integration test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi
+
+test-integration:
+	test/integration/hook_fail_before_each.js
 
 test-unit:
 	@./bin/mocha \
