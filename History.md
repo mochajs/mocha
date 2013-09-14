@@ -1,15 +1,23 @@
+??? / ???
+==================
 
-1.12.1 / 2013-08-29 
+  * add: --sort (#813)
+  * fix: diffs show whitespace differences (#976)
+    * update: diff depedency to 1.0.7
+  * update: glob dependency to 3.2.3 (#927)
+  * fix: reporter pending css selector (#970)
+
+1.12.1 / 2013-08-29
 ==================
 
  * remove test.js from .gitignore
  * update included version of ms.js
 
-1.12.0 / 2013-07-01 
+1.12.0 / 2013-07-01
 ==================
 
  * add: prevent diffs for differing types. Closes #900
- * add `Mocha.process` hack for phantomjs 
+ * add `Mocha.process` hack for phantomjs
  * fix: use compilers with requires
  * fix regexps in diffs. Closes #890
  * fix xunit NaN on failure. Closes #894
