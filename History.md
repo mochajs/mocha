@@ -4,6 +4,9 @@
   * add: --sort (#813)
   * fix: diffs show whitespace differences (#976)
     * update: diff depedency to 1.0.7
+  * fix: improve global leaks (#783)
+    * fix: firefox window.getInterface leak
+    * fix: accessing iframe via window[iframeIndex] leak
   * update: glob dependency to 3.2.3 (#927)
   * fix: reporter pending css selector (#970)
 
