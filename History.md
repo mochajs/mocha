@@ -7,6 +7,7 @@
   * fix: improve global leaks (#783)
     * fix: firefox window.getInterface leak
     * fix: accessing iframe via window[iframeIndex] leak
+    * fix: faster global leak checking
   * update: glob dependency to 3.2.3 (#927)
   * fix: reporter pending css selector (#970)
 
