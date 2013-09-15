@@ -1,7 +1,7 @@
 ??? / ???
 ==================
 
-  * add: --sort (#813)
+  * add: sort test files with --sort (#813)
   * fix: diffs show whitespace differences (#976)
     * update: diff depedency to 1.0.7
   * fix: improve global leaks (#783)
