@@ -1,14 +1,15 @@
-??? / ???
+
+1.13.0 / 2013-09-15
 ==================
 
   * add: sort test files with --sort (#813)
-  * fix: diffs show whitespace differences (#976)
-    * update: diff depedency to 1.0.7
-  * fix: improve global leaks (#783)
-    * fix: firefox window.getInterface leak
-    * fix: accessing iframe via window[iframeIndex] leak
-    * fix: faster global leak checking
+  * update: diff depedency to 1.0.7
   * update: glob dependency to 3.2.3 (#927)
+  * fix: diffs show whitespace differences (#976)
+  * fix: improve global leaks (#783)
+  * fix: firefox window.getInterface leak
+  * fix: accessing iframe via window[iframeIndex] leak
+  * fix: faster global leak checking
   * fix: reporter pending css selector (#970)
 
 1.12.1 / 2013-08-29
