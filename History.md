@@ -3,6 +3,7 @@
 
   * add: unified diff (#862)
   * add: set MOCHA_COLORS env var to use colors (#965)
+  * remove: teamcity reporter (#954)
   * fix: consistent return of it, it.only, and describe, describe.only (#840)
 
 1.13.0 / 2013-09-15
