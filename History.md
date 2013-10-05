@@ -3,6 +3,7 @@
 
   * add: unified diff (#862)
   * add: set MOCHA_COLORS env var to use colors (#965)
+  * add: able to override tests links in html reporters (#776)
   * remove: teamcity reporter (#954)
   * fix: consistent return of it, it.only, and describe, describe.only (#840)
 
