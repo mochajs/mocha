@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-requires
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi
@@ -112,6 +112,33 @@ test-async-only:
 
 test-glob:
 	@./test/acceptance/glob/glob.sh
+
+test-reporters:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/reporters/*.js
+
+test-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/only/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/only/bdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/acceptance/misc/only/qunit
+
+test-sort:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--sort \
+		test/acceptance/sort
 
 non-tty:
 	@./bin/mocha \

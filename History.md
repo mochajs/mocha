@@ -1,9 +1,36 @@
+??? / ???
+==================
 
-1.12.0 / 2013-07-01 
+  * add: unified diff (#862)
+  * add: set MOCHA_COLORS env var to use colors (#965)
+  * add: able to override tests links in html reporters (#776)
+  * remove: teamcity reporter (#954)
+  * fix: consistent return of it, it.only, and describe, describe.only (#840)
+
+1.13.0 / 2013-09-15
+==================
+
+  * add: sort test files with --sort (#813)
+  * update: diff depedency to 1.0.7
+  * update: glob dependency to 3.2.3 (#927)
+  * fix: diffs show whitespace differences (#976)
+  * fix: improve global leaks (#783)
+  * fix: firefox window.getInterface leak
+  * fix: accessing iframe via window[iframeIndex] leak
+  * fix: faster global leak checking
+  * fix: reporter pending css selector (#970)
+
+1.12.1 / 2013-08-29
+==================
+
+ * remove test.js from .gitignore
+ * update included version of ms.js
+
+1.12.0 / 2013-07-01
 ==================
 
  * add: prevent diffs for differing types. Closes #900
- * add `Mocha.process` hack for phantomjs 
+ * add `Mocha.process` hack for phantomjs
  * fix: use compilers with requires
  * fix regexps in diffs. Closes #890
  * fix xunit NaN on failure. Closes #894
