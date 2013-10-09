@@ -2493,7 +2493,12 @@ var statsTemplate = '<ul id="mocha-stats">'
  * @api public
  */
 
+var rootDocument = typeof document != 'undefined' ? document : undefined;
+
 function HTML(runner, root) {
+  root = root || document.getElementById('mocha');
+  rootDocument = root ? root.ownerDocument : rootDocument;
+
   Base.call(this, runner);
 
   var self = this
@@ -2512,7 +2517,7 @@ function HTML(runner, root) {
     , progress
     , ctx
 
-  root = root || document.getElementById('mocha');
+
 
   if (canvas.getContext) {
     var ratio = window.devicePixelRatio || 1;
@@ -2557,7 +2562,7 @@ function HTML(runner, root) {
 
     // container
     stack[0].appendChild(el);
-    stack.unshift(document.createElement('ul'));
+    stack.unshift(rootDocument.createElement('ul'));
     el.appendChild(stack[0]);
   });
 
@@ -2633,7 +2638,7 @@ function HTML(runner, root) {
  */
 
 function error(msg) {
-  document.body.appendChild(fragment('<div id="mocha-error">%s</div>', msg));
+  rootDocument.body.appendChild(fragment('<div id="mocha-error">%s</div>', msg));
 }
 
 /**
@@ -2642,7 +2647,7 @@ function error(msg) {
 
 function fragment(html) {
   var args = arguments
-    , div = document.createElement('div')
+    , div = rootDocument.createElement('div')
     , i = 1;
 
   div.innerHTML = html.replace(/%([se])/g, function(_, type){
