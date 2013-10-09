@@ -1,7 +1,7 @@
 
 var n = 30;
 while (n--) {
-  describe('Array', function(){
+  describe('Array ' + n, function(){
     var arr;
 
     beforeEach(function(){
@@ -13,10 +13,20 @@ while (n--) {
         assert(-1 == arr.indexOf(5));
       })
 
-      it('should return the correct index when the value is present', function(){
+      it('should return the correct index when the value is present', function(done){
         assert(0 == arr.indexOf(1));
         assert(1 == arr.indexOf(2));
+        done();
       })
     })
   })
 }
+
+describe('something', function(){
+  it('should provide a useful error', function(done){
+    setTimeout(function(){
+      throw new Error('boom');
+      done();
+    }, 1);
+  })
+})

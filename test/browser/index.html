@@ -2,7 +2,8 @@
   <head>
     <title>Mocha</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../mocha.css" />
     <script src="../../mocha.js"></script>
     <script>mocha.setup('bdd')</script>
     <script>
@@ -15,8 +16,9 @@
     <script src="../acceptance/timeout.js"></script>
     <script>
       onload = function(){
+        mocha.checkLeaks();
+        mocha.globals(['foo']);
         var runner = mocha.run();
-        runner.globals(['foo', 'bar', 'baz']);
 
         // runner.on('test end', function(test){
         //   console.log(test.fullTitle());

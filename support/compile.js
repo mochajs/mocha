@@ -21,7 +21,7 @@ args.forEach(function(file){
   var mod = file.replace('lib/', '');
   fs.readFile(file, 'utf8', function(err, js){
     if (err) throw err;
-    console.log('  \033[90mcompile : \033[0m\033[36m%s\033[0m', file);
+    console.log('  \u001b[90mcompile : \u001b[0m\u001b[36m%s\u001b[0m', file);
     files[file] = ~js.indexOf('require: off')
       ? js
       : parse(js);
@@ -58,7 +58,9 @@ function parseRequires(js) {
 function parseInheritance(js) {
   return js
     .replace(/^ *(\w+)\.prototype\.__proto__ * = *(\w+)\.prototype *;?/gm, function(_, child, parent){
-      return child + '.prototype = new ' + parent + ';\n'
+      return 'function F(){};\n'
+        + 'F.prototype = ' + parent + '.prototype;\n'
+        + child + '.prototype = new F;\n'
         + child + '.prototype.constructor = '+ child + ';\n';
     });
 }
@@ -84,7 +86,7 @@ function compile() {
   });
   fs.writeFile('_mocha.js', buf, function(err){
     if (err) throw err;
-    console.log('  \033[90m create : \033[0m\033[36m%s\033[0m', 'mocha.js');
+    console.log('  \u001b[90m create : \u001b[0m\u001b[36m%s\u001b[0m', 'mocha.js');
     console.log();
   });
 }
@@ -93,11 +95,11 @@ function compile() {
 // https://github.com/weepy/brequire/blob/master/browser/brequire.js
 
 var browser = {
-  
+
   /**
    * Require a module.
    */
-  
+
   require: function require(p){
     var path = require.resolve(p)
       , mod = require.modules[path];
@@ -108,7 +110,7 @@ var browser = {
     }
     return mod.exports;
   },
-  
+
   /**
    * Resolve module path.
    */
@@ -121,7 +123,7 @@ var browser = {
       || require.modules[index] && index
       || orig;
   },
-  
+
   /**
    * Return relative require().
    */
@@ -129,11 +131,11 @@ var browser = {
   relative: function(parent) {
     return function(p){
       if ('.' != p.charAt(0)) return require(p);
-      
+
       var path = parent.split('/')
         , segs = p.split('/');
       path.pop();
-      
+
       for (var i = 0; i < segs.length; i++) {
         var seg = segs[i];
         if ('..' == seg) path.pop();
@@ -143,7 +145,7 @@ var browser = {
       return require(path.join('/'));
     };
   },
-  
+
   /**
    * Register a module.
    */

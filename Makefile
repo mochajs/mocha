@@ -1,25 +1,25 @@
 
-REPORTER = dot
-TM_DEST = ~/Library/Application\ Support/TextMate/Bundles
+REPORTER ?= dot
 TM_BUNDLE = JavaScript\ mocha.tmbundle
-SRC = $(shell find lib -name "*.js" -type f)
+SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
 
-all: mocha.js mocha.css
+all: mocha.js
 
-mocha.css: test/browser/style.css
-	cp -f $< $@
+lib/browser/diff.js: node_modules/diff/diff.js
+	cp node_modules/diff/diff.js lib/browser/diff.js
 
-mocha.js: $(SRC) $(SUPPORT)
+mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
 	@node support/compile $(SRC)
 	@cat \
 	  support/head.js \
 	  _mocha.js \
-	  support/{tail,foot}.js \
+	  support/tail.js \
+	  support/foot.js \
 	  > mocha.js
 
 clean:
-	rm -f mocha.{js,css}
+	rm -f mocha.js
 	rm -fr lib-cov
 	rm -f coverage.html
 
@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi
@@ -41,6 +41,7 @@ test-unit:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
+		--growl \
 		test/*.js
 
 test-compilers:
@@ -49,6 +50,16 @@ test-compilers:
 		--compilers coffee:coffee-script,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
+
+test-requires:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--compilers coffee:coffee-script \
+		--require test/acceptance/require/a.js \
+		--require test/acceptance/require/b.coffee \
+		--require test/acceptance/require/c.js \
+		--require test/acceptance/require/d.coffee \
+		test/acceptance/require/require.js
 
 test-bdd:
 	@./bin/mocha \
@@ -80,11 +91,54 @@ test-grep:
 	  --grep fast \
 	  test/acceptance/misc/grep
 
+test-invert:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  --grep slow \
+	  --invert \
+	  test/acceptance/misc/grep
+
 test-bail:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--bail \
 		test/acceptance/misc/bail
+
+test-async-only:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  --async-only \
+	  test/acceptance/misc/asyncOnly
+
+test-glob:
+	@./test/acceptance/glob/glob.sh
+
+test-reporters:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/reporters/*.js
+
+test-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/only/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/only/bdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/acceptance/misc/only/qunit
+
+test-sort:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--sort \
+		test/acceptance/sort
 
 non-tty:
 	@./bin/mocha \
@@ -108,11 +162,7 @@ non-tty:
 	@echo spec:
 	@cat /tmp/spec.out
 
-watch:
-	@watch -q $(MAKE) mocha.{js,css}
-
 tm:
-	mkdir -p $(TM_DEST)/$(TM_BUNDLE)
-	cp -fr editors/$(TM_BUNDLE) $(TM_DEST)/$(TM_BUNDLE)
+	@open editors/$(TM_BUNDLE)
 
 .PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean

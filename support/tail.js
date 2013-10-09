@@ -1,3 +1,15 @@
+// The global object is "self" in Web Workers.
+global = (function() { return this; })();
+
+/**
+ * Save timer references to avoid Sinon interfering (see GH-237).
+ */
+
+var Date = global.Date;
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
 
 /**
  * Node shims.
@@ -8,37 +20,9 @@
  * the browser.
  */
 
-process = {};
+var process = {};
 process.exit = function(status){};
 process.stdout = {};
-global = window;
-
-/**
- * next tick implementation.
- */
-
-process.nextTick = (function(){
-  // postMessage behaves badly on IE8
-  if (window.ActiveXObject || !window.postMessage) {
-    return function(fn){ fn() };
-  }
-
-  // based on setZeroTimeout by David Baron
-  // - http://dbaron.org/log/20100309-faster-timeouts
-  var timeouts = []
-    , name = 'mocha-zero-timeout'
-
-  return function(fn){
-    timeouts.push(fn);
-    window.postMessage(name, '*');
-    window.addEventListener('message', function(e){
-      if (e.source == window && e.data == name) {
-        if (e.stopPropagation) e.stopPropagation();
-        if (timeouts.length) timeouts.shift()();
-      }
-    }, true);
-  }
-})();
 
 /**
  * Remove uncaughtException listener.
@@ -46,7 +30,7 @@ process.nextTick = (function(){
 
 process.removeListener = function(e){
   if ('uncaughtException' == e) {
-    window.onerror = null;
+    global.onerror = function() {};
   }
 };
 
@@ -56,7 +40,9 @@ process.removeListener = function(e){
 
 process.on = function(e, fn){
   if ('uncaughtException' == e) {
-    window.onerror = fn;
+    global.onerror = function(err, url, line){
+      fn(new Error(err + ' (' + url + ':' + line + ')'));
+    };
   }
 };
 
@@ -64,86 +50,79 @@ process.on = function(e, fn){
  * Expose mocha.
  */
 
-window.mocha = require('mocha');
+var Mocha = global.Mocha = require('mocha'),
+    mocha = global.mocha = new Mocha({ reporter: 'html' });
 
-// boot
-;(function(){
-  var suite = new mocha.Suite('', new mocha.Context)
-    , utils = mocha.utils
-    , options = {}
+var immediateQueue = []
+  , immediateTimeout;
 
-  /**
-   * Highlight the given string of `js`.
-   */
-
-  function highlight(js) {
-    return js
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
-      .replace(/('.*?')/gm, '<span class="string">$1</span>')
-      .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
-      .replace(/(\d+)/gm, '<span class="number">$1</span>')
-      .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
-      .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
+function timeslice() {
+  var immediateStart = new Date().getTime();
+  while (immediateQueue.length && (new Date().getTime() - immediateStart) < 100) {
+    immediateQueue.shift()();
   }
+  if (immediateQueue.length) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  } else {
+    immediateTimeout = null;
+  }
+}
 
-  /**
-   * Highlight code contents.
-   */
+/**
+ * High-performance override of Runner.immediately.
+ */
 
-  function highlightCode() {
-    var code = document.getElementsByTagName('code');
-    for (var i = 0, len = code.length; i < len; ++i) {
-      code[i].innerHTML = highlight(code[i].innerHTML);
+Mocha.Runner.immediately = function(callback) {
+  immediateQueue.push(callback);
+  if (!immediateTimeout) {
+    immediateTimeout = setTimeout(timeslice, 0);
+  }
+};
+
+/**
+ * Override ui to ensure that the ui functions are initialized.
+ * Normally this would happen in Mocha.prototype.loadFiles.
+ */
+
+mocha.ui = function(ui){
+  Mocha.prototype.ui.call(this, ui);
+  this.suite.emit('pre-require', global, null, this);
+  return this;
+};
+
+/**
+ * Setup mocha with the given setting options.
+ */
+
+mocha.setup = function(opts){
+  if ('string' == typeof opts) opts = { ui: opts };
+  for (var opt in opts) this[opt](opts[opt]);
+  return this;
+};
+
+/**
+ * Run mocha, returning the Runner.
+ */
+
+mocha.run = function(fn){
+  var options = mocha.options;
+  mocha.globals('location');
+
+  var query = Mocha.utils.parseQuery(global.location.search || '');
+  if (query.grep) mocha.grep(query.grep);
+  if (query.invert) mocha.invert();
+
+  return Mocha.prototype.run.call(mocha, function(){
+    // The DOM Document is not available in Web Workers.
+    if (global.document) {
+      Mocha.utils.highlightTags('code');
     }
-  }
+    if (fn) fn();
+  });
+};
 
-  /**
-   * Parse the given `qs`.
-   */
+/**
+ * Expose the process shim.
+ */
 
-  function parse(qs) {
-    return utils.reduce(qs.replace('?', '').split('&'), function(obj, pair){
-        var i = pair.indexOf('=')
-          , key = pair.slice(0, i)
-          , val = pair.slice(++i);
-
-        obj[key] = decodeURIComponent(val);
-        return obj;
-      }, {});
-  }
-
-  /**
-   * Setup mocha with the given setting options.
-   */
-
-  mocha.setup = function(opts){
-    if ('string' === typeof opts) options.ui = opts;
-    else options = opts;
-
-    ui = mocha.interfaces[options.ui];
-    if (!ui) throw new Error('invalid mocha interface "' + ui + '"');
-    if (options.timeout) suite.timeout(options.timeout);
-    ui(suite);
-    suite.emit('pre-require', window);
-  };
-
-  /**
-   * Run mocha, returning the Runner.
-   */
-
-  mocha.run = function(){
-    suite.emit('run');
-    var runner = new mocha.Runner(suite);
-    var Reporter = options.reporter || mocha.reporters.HTML;
-    var reporter = new Reporter(runner);
-    var query = parse(window.location.search || "");
-    if (query.grep) runner.grep(new RegExp(query.grep));
-    if (options.ignoreLeaks) runner.ignoreLeaks = true;
-    if (options.globals) runner.globals(options.globals);
-    runner.globals(['location']);
-    runner.on('end', highlightCode);
-    return runner.run();
-  };
-})();
+Mocha.process = process;

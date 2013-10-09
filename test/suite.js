@@ -9,6 +9,7 @@ describe('Suite', function(){
     beforeEach(function(){
       this.suite = new Suite('To be cloned');
       this.suite._timeout = 3043;
+      this.suite._slow = 101;
       this.suite._bail = true;
       this.suite.suites.push(1);
       this.suite.tests.push('hello');
@@ -24,6 +25,10 @@ describe('Suite', function(){
 
     it('should copy the timeout value', function(){
       this.suite.clone().timeout().should.equal(3043);
+    });
+
+    it('should copy the slow value', function(){
+      this.suite.clone().slow().should.equal(101);
     });
 
     it('should copy the bail value', function(){
@@ -70,6 +75,32 @@ describe('Suite', function(){
       it('should return the Suite object', function(){
         var newSuite = this.suite.timeout(5000);
         newSuite.timeout().should.equal(5000);
+      });
+    });
+  });
+
+  describe('.slow()', function(){
+    beforeEach(function(){
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when given a string', function(){
+      it('should parse it', function(){
+        this.suite.slow('5 seconds');
+        this.suite.slow().should.equal(5000);
+      })
+    })
+
+    describe('when no argument is passed', function(){
+      it('should return the slow value', function(){
+        this.suite.slow().should.equal(75);
+      });
+    });
+
+    describe('when argument is passed', function(){
+      it('should return the Suite object', function(){
+        var newSuite = this.suite.slow(5000);
+        newSuite.slow().should.equal(5000);
       });
     });
   });
@@ -170,6 +201,7 @@ describe('Suite', function(){
     beforeEach(function(){
       this.first = new Suite('First suite');
       this.first.timeout(4002);
+      this.first.slow(200);
       this.second = new Suite('Second suite');
       this.first.addSuite(this.second);
     });
@@ -180,6 +212,10 @@ describe('Suite', function(){
 
     it('copies the timeout value', function(){
       this.second.timeout().should.equal(4002);
+    });
+
+    it('copies the slow value', function(){
+      this.second.slow().should.equal(200);
     });
 
     it('adds the suite to the suites collection', function(){
@@ -195,15 +231,15 @@ describe('Suite', function(){
   //     this.test = new Test('test');
   //     this.suite.addTest(this.test);
   //   });
-  // 
+  //
   //   it('sets the parent on the added test', function(){
   //     this.test.parent.should.equal(this.suite);
   //   });
-  //   
+  //
   //   it('copies the timeout value', function(){
   //     this.test.timeout().should.equal(4002);
   //   });
-  //   
+  //
   //   it('adds the test to the tests collection', function(){
   //     this.suite.tests.should.have.length(1);
   //     this.suite.tests[0].should.equal(this.test);
@@ -248,5 +284,47 @@ describe('Suite', function(){
         this.suite.total().should.equal(2);
       });
     });
+  });
+
+  describe('.eachTest(fn)', function(){
+    beforeEach(function(){
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when there are no nested suites or tests', function(){
+      it('should return 0', function(){
+        var n = 0;
+        function fn(){ n++; }
+        this.suite.eachTest(fn);
+        n.should.equal(0);
+      });
+    });
+
+    describe('when there are several tests in the suite', function(){
+      it('should return the number', function(){
+        this.suite.addTest(new Test('a child test'));
+        this.suite.addTest(new Test('another child test'));
+
+        var n = 0;
+        function fn(){ n++; }
+        this.suite.eachTest(fn);
+        n.should.equal(2);
+      });
+    });
+
+    describe('when there are several levels of nested suites', function(){
+      it('should return the number', function(){
+        this.suite.addTest(new Test('a child test'));
+        var suite = new Suite('a child suite');
+        suite.addTest(new Test('a test in a child suite'));
+        this.suite.addSuite(suite);
+
+        var n = 0;
+        function fn(){ n++; }
+        this.suite.eachTest(fn);
+        n.should.equal(2);
+      });
+    });
+
   });
 });

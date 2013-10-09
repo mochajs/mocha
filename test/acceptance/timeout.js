@@ -19,4 +19,3 @@ describe('timeouts', function(){
     }, 300);
   })
 })
-

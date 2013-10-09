@@ -8,8 +8,10 @@
 var spawn = require('child_process').spawn
   , args = [ __dirname + '/_mocha' ];
 
-process.argv.slice(2).forEach(function (arg) {
-  switch (arg) {
+process.argv.slice(2).forEach(function(arg){
+  var flag = arg.split('=')[0];
+
+  switch (flag) {
     case '-d':
       args.unshift('--debug');
       break;
@@ -22,11 +24,28 @@ process.argv.slice(2).forEach(function (arg) {
     case '--expose-gc':
       args.unshift('--expose-gc');
       break;
+    case '--gc-global':
+    case '--harmony':
+    case '--harmony-proxies':
+    case '--harmony-collections':
+    case '--harmony-generators':
+    case '--prof':
+      args.unshift(arg);
+      break;
     default:
-      args.push(arg);
+      if (0 == arg.indexOf('--trace')) args.unshift(arg);
+      else args.push(arg);
       break;
   }
 });
 
 var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
-proc.on('exit', process.exit);
+proc.on('exit', function (code, signal) {
+  process.on('exit', function(){
+    if (signal) {
+      process.kill(process.pid, signal);
+    } else {
+      process.exit(code);
+    }
+  });
+});
