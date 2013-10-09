@@ -1,4 +1,3 @@
-
 body {
   font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 0;
@@ -26,6 +25,7 @@ h1 {
   border-radius: 100px;
   -webkit-transition: opacity 1s, background-color 200ms;
   -moz-transition: opacity 1s, background-color 200ms;
+  -o-transition: opacity 1s, background-color 200ms;
 }
 
 h1:hover {
@@ -63,6 +63,7 @@ h2 {
   letter-spacing: 2px;
   -webkit-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
   -moz-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
+  -o-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
 }
 
 #tag em {
@@ -173,7 +174,7 @@ footer span {
     margin-left: 0;
     margin-bottom: 0;
   }
-  
+
   .onload #tag {
     margin-left: 0;
   }
