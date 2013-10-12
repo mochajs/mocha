@@ -95,9 +95,12 @@ ul {
   margin-top: 20px;
   padding: 0 15px;
   width: 100%;
-  column-count: 2;
-  -moz-column-count: 2;
   -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
 
 ul li {
