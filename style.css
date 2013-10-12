@@ -1,7 +1,7 @@
 body {
   font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 0;
-  color: #2C2C2C;
+  color: #2c2c2c;
   border-top: 2px solid #ddd;
 }
 
@@ -14,7 +14,7 @@ h1 {
   font-style: normal;
   font-weight: 100;
   text-transform: lowercase;
-  background: #8A6343;
+  background: #8a6343;
   color: white;
   display: inline-block;
   padding: 48px 30px;
@@ -29,7 +29,7 @@ h1 {
 }
 
 h1:hover {
-  background: #A07A5C;
+  background: #a07a5c;
 }
 
 h1 a {
@@ -54,7 +54,7 @@ h2 {
 
 #tag {
   opacity: 0;
-  color: #C29D7F;
+  color: #c29d7f;
   font-weight: 100;
   font-size: 30px;
   margin-top: -110px;
@@ -82,7 +82,7 @@ h2 {
 }
 
 a {
-  color: #8A6343;
+  color: #8a6343;
   font-weight: bold;
   text-decoration: none;
 }
@@ -181,7 +181,7 @@ footer span {
 }
 
 code .comment { color: #ddd }
-code .init { color: #2F6FAD }
-code .string { color: #5890AD }
-code .keyword { color: #8A6343 }
-code .number { color: #2F6FAD }
+code .init { color: #2f6fad }
+code .string { color: #5890ad }
+code .keyword { color: #8a6343 }
+code .number { color: #2f6fad }
