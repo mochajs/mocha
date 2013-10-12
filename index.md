@@ -248,7 +248,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   Mocha provides string diffs, however in the future object diffs and
   others may be provided.
 
-  ![string diffs](http://f.cl.ly/items/3L0T1A0h2N1J3G021i0F/Screen%20Shot%202012-03-01%20at%202.31.31%20PM.png)
+  ![string diffs](images/reporter-string-diffs.png)
 
 <h2 id="usage">mocha(1)</h2>
 
@@ -459,7 +459,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The "nyan" reporter is exactly what you might expect:
 
-  ![js nyan cat reporter](http://f.cl.ly/items/3f1P1d2U1y1E0K1W1M0m/Screen%20Shot%202012-08-22%20at%203.59.08%20PM.png)
+  ![js nyan cat reporter](images/reporter-nyan.png)
 
 <h3 id="tap-reporter">TAP</h3>
 
@@ -512,7 +512,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   Click to view the current [Express test coverage](coverage.html) report. For an integration example view the mcoha test coverage support [commit](https://github.com/visionmedia/express/commit/b6ee5fafd0d6c79cf7df5560cb324ebee4fe3a7f) for Express.
 
-  ![code coverage reporting](http://f.cl.ly/items/3T3G1h1d3Z2i3M3Y1Y0Y/Screen%20Shot%202012-02-23%20at%208.37.13%20PM.png)
+  ![code coverage reporting](images/reporter-htmlcov.png)
 
 <h3 id="min-reporter">Min</h3>
 
@@ -520,7 +520,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   on failure. This reporter works great with `--watch` as it clears the terminal
   in order to keep your test summary at the top.
 
-  ![](http://f.cl.ly/items/460B2r3p3M3k2D3J250m/Screen%20Shot%202012-03-24%20at%2010.46.01%20AM.png)
+  ![min reporter](images/reporter-min.png)
 
 <h3 id="doc-reporter">Doc</h3>
 
