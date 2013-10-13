@@ -675,11 +675,10 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
  Be kind and don't make developers hunt around in your docs to figure
  out how to run the tests, add a `make test` target to your _Makefile_:
 
-     test:
-       ./node_modules/.bin/mocha \
-         --reporter list
+    test:
+        ./node_modules/.bin/mocha --reporter list
 
-     .PHONY: test
+    .PHONY: test
 
 <h2 id="editors">Editors</h2>
 
@@ -691,7 +690,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   make writing tests quicker and more enjoyable.
   To install the bundle run:
 
-      $ make tm
+    $ make tm
 
 <h2 id="example-test-suites">Example test suites</h2>
 
@@ -708,15 +707,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
  Run the tests:
 
-       $ make test
+    $ make test
 
  Run all tests, including interfaces:
 
-       $ make test-all
+    $ make test-all
 
  Alter the reporter:
 
-       $ make test REPORTER=list
+    $ make test REPORTER=list
 
 <h2 id="more-information">More information</h2>
 

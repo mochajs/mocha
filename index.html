@@ -727,9 +727,8 @@ test('#length', function(){
 <p>Be kind and don't make developers hunt around in your docs to figure
  out how to run the tests, add a <code>make test</code> target to your <em>Makefile</em>:</p>
 
-<pre><code> test:
-   ./node_modules/.bin/mocha \
-     --reporter list
+<pre><code>test:
+   ./node_modules/.bin/mocha --reporter list
 
  .PHONY: test
 </code></pre>
@@ -744,7 +743,7 @@ test('#length', function(){
   make writing tests quicker and more enjoyable.
   To install the bundle run:</p>
 
-<pre><code>  $ make tm
+<pre><code>$ make tm
 </code></pre>
 
 <h2 id="example-test-suites">Example test suites</h2>
@@ -764,17 +763,17 @@ test('#length', function(){
 
 <p>Run the tests:</p>
 
-<pre><code>   $ make test
+<pre><code>$ make test
 </code></pre>
 
 <p>Run all tests, including interfaces:</p>
 
-<pre><code>   $ make test-all
+<pre><code>$ make test-all
 </code></pre>
 
 <p>Alter the reporter:</p>
 
-<pre><code>   $ make test REPORTER=list
+<pre><code>$ make test REPORTER=list
 </code></pre>
 
 <h2 id="more-information">More information</h2>
