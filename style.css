@@ -1,6 +1,8 @@
-body {
+html {
   font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: 0;
+}
+
+body {
   color: #2c2c2c;
   border-top: 2px solid #ddd;
 }
