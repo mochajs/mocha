@@ -8,11 +8,28 @@
     <link rel="shortcut icon" href="favicon.ico">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="jquery.js"><\/script>')</script>
-    <script src="highlight.js"></script>
     <script>
       setTimeout(function(){
         $('body').addClass('onload');
       }, 0);
+
+      $(function(){
+        $('code').each(function(){
+          $(this).html(highlight($(this).text()));
+        });
+      });
+
+      function highlight(js){
+        return js
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\/\/(.*)/gm, '<span class="comment">//$1</span>')
+          .replace(/('.*?')/gm, '<span class="string">$1</span>')
+          .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
+          .replace(/(\d+)/gm, '<span class="number">$1</span>')
+          .replace(/\bnew *(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
+          .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>');
+      }
     </script>
     <!--[if lt IE 9]>
     <script src="html5shiv.js"></script>
