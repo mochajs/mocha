@@ -1,10 +1,10 @@
-
 body {
   font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 60px 50px;
 }
 
-#mocha ul, #mocha li {
+#mocha ul,
+#mocha li {
   margin: 0;
   padding: 0;
 }
@@ -13,7 +13,8 @@ body {
   list-style: none;
 }
 
-#mocha h1, #mocha h2 {
+#mocha h1,
+#mocha h2 {
   margin: 0;
 }
 
@@ -140,12 +141,16 @@ body {
   border: 1px solid #eee;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
+  -moz-box-shadow: 0 1px 3px #eee;
+  box-shadow: 0 1px 3px #eee;
 }
 
 #error {
   color: #c00;
-  font-size: 1.5  em;
+  font-size: 1.5em;
   font-weight: 100;
   letter-spacing: 1px;
 }
