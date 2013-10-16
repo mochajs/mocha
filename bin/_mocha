@@ -13,9 +13,7 @@ var program = require('commander')
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , reporters = Mocha.reporters
   , interfaces = Mocha.interfaces
-  , Base = reporters.Base
   , join = path.join
   , basename = path.basename
   , cwd = process.cwd()
@@ -77,6 +75,7 @@ program
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-b, --bail', "bail after first test failure")
   .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('-S, --sort', "sort test files")
   .option('--recursive', 'include sub directories')
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -84,6 +83,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--inline-diffs', 'display actual/expected differences inline within each string')
 
 program.name = 'mocha';
 
@@ -124,7 +124,6 @@ program.on('reporters', function(){
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
   console.log('    xunit - xunit reporter');
-  console.log('    teamcity - teamcity ci support');
   console.log('    html-cov - HTML test coverage');
   console.log('    json-cov - JSON test coverage');
   console.log('    min - minimal reporter (great with --watch)');
@@ -201,14 +200,18 @@ try {
 
 // --no-colors
 
-if (!program.colors) Base.useColors = false;
+if (!program.colors) mocha.useColors(false);
 
 // --colors
 
 if (~process.argv.indexOf('--colors') ||
     ~process.argv.indexOf('-c')) {
-  Base.useColors = true;
+  mocha.useColors(true);
 }
+
+// --inline-diffs
+
+if (program.inlineDiffs) Base.inlineDiffs = true;
 
 // --slow <ms>
 
@@ -286,6 +289,10 @@ files = files.map(function(path){
   return resolve(path);
 });
 
+if (program.sort) {
+  files.sort();
+}
+
 // --watch
 
 if (program.watch) {
@@ -308,10 +315,14 @@ if (program.watch) {
   var watchFiles = utils.files(cwd);
 
   function loadAndRun() {
-    mocha.files = files;
-    mocha.run(function(){
-      play(frames);
-    });
+    try {
+      mocha.files = files;
+      mocha.run(function(){
+        play(frames);
+      });
+    } catch(e) {
+      console.log(e.stack);
+    }
   }
 
   function purge() {
