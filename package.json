@@ -26,7 +26,7 @@
     "test": "make test-all"
   },
   "dependencies": {
-    "commander": "0.6.1",
+    "commander": "2.0.0",
     "growl": "1.7.x",
     "jade": "0.26.3",
     "diff": "1.0.7",
