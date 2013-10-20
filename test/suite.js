@@ -246,6 +246,7 @@ describe('Suite', function(){
   //   });
   // });
   describe('.markPending', function() {
+    var result;
     beforeEach(function() {
       this.suite = new Suite('Parent');
       this.suite.addTest(new Test('test 1', function() {}));
@@ -257,7 +258,11 @@ describe('Suite', function(){
       // test in child
       child.addTest(new Test('test 2', function() {}));
 
-      this.suite.markPending();
+      result = this.suite.markPending();
+    });
+
+    it('should be chainable', function() {
+      result.should.equal(this.suite);
     });
 
     it('should mark suite pending', function() {
