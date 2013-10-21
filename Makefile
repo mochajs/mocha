@@ -168,4 +168,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean test-integration
