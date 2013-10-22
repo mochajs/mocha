@@ -93,7 +93,7 @@ describe('Runnable(title, fn)', function(){
 
           test.run(function(err){
             calls.should.equal(1);
-            test.duration.should.be.a('number');
+            test.duration.should.be.type('number');
             done(err);
           })
         })
