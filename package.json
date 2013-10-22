@@ -35,7 +35,7 @@
     "glob": "3.2.3"
   },
   "devDependencies": {
-    "should": "*",
+    "should": ">= 2.0.x",
     "coffee-script": "1.2"
   },
   "files": [
