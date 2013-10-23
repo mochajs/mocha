@@ -84,6 +84,7 @@ program
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--flakey-before-each', "prevent a single beforeEach failure from ending the entire suite")
 
 program.name = 'mocha';
 
@@ -244,6 +245,10 @@ if (program.growl) mocha.growl();
 // --async-only
 
 if (program.asyncOnly) mocha.asyncOnly();
+
+// --flakey-before-each
+
+if (program.flakeyBeforeEach) mocha.flakeyBeforeEach();
 
 // --globals
 
