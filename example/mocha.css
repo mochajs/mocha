@@ -1,10 +1,15 @@
+@charset "utf-8";
+
 body {
-  font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding: 60px 50px;
+  margin:0;
 }
 
-#mocha ul,
-#mocha li {
+#mocha {
+  font: 20px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 60px 50px;
+}
+
+#mocha ul, #mocha li {
   margin: 0;
   padding: 0;
 }
@@ -13,8 +18,7 @@ body {
   list-style: none;
 }
 
-#mocha h1,
-#mocha h2 {
+#mocha h1, #mocha h2 {
   margin: 0;
 }
 
@@ -38,6 +42,10 @@ body {
   font-size: .8em;
 }
 
+#mocha .hidden {
+  display: none;
+}
+
 #mocha h2 {
   font-size: 12px;
   font-weight: normal;
@@ -50,21 +58,12 @@ body {
 
 #mocha .test {
   margin-left: 15px;
-}
-
-#mocha .test:hover h2::after {
-  position: relative;
-  top: 0;
-  right: -10px;
-  content: '(view source)';
-  font-size: 12px;
-  font-family: arial;
-  color: #888;
+  overflow: hidden;
 }
 
 #mocha .test.pending:hover h2::after {
   content: '(pending)';
-  font-family: arial;
+  font-family: arial, sans-serif;
 }
 
 #mocha .test.pass.medium .duration {
@@ -131,57 +130,131 @@ body {
 
 #mocha .test pre.error {
   color: #c00;
+  max-height: 300px;
+  overflow: auto;
 }
 
 #mocha .test pre {
-  display: inline-block;
+  display: block;
+  float: left;
+  clear: left;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
   border: 1px solid #eee;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
+  -moz-border-radius: 3px;
   -moz-box-shadow: 0 1px 3px #eee;
-  box-shadow: 0 1px 3px #eee;
+  border-radius: 3px;
 }
 
-#error {
+#mocha .test h2 {
+  position: relative;
+}
+
+#mocha .test a.replay {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  text-decoration: none;
+  vertical-align: middle;
+  display: block;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
+  text-align: center;
+  background: #eee;
+  font-size: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  -webkit-transition: opacity 200ms;
+  -moz-transition: opacity 200ms;
+  transition: opacity 200ms;
+  opacity: 0.3;
+  color: #888;
+}
+
+#mocha .test:hover a.replay {
+  opacity: 1;
+}
+
+#mocha-report.pass .test.fail {
+  display: none;
+}
+
+#mocha-report.fail .test.pass {
+  display: none;
+}
+
+#mocha-report.pending .test.pass,
+#mocha-report.pending .test.fail {
+  display: none;
+}
+#mocha-report.pending .test.pass.pending {
+  display: block;
+}
+
+#mocha-error {
   color: #c00;
   font-size: 1.5em;
   font-weight: 100;
   letter-spacing: 1px;
 }
 
-#stats {
+#mocha-stats {
   position: fixed;
   top: 15px;
   right: 10px;
   font-size: 12px;
   margin: 0;
   color: #888;
+  z-index: 1;
 }
 
-#stats .progress {
+#mocha-stats .progress {
   float: right;
   padding-top: 0;
 }
 
-#stats em {
+#mocha-stats em {
   color: black;
 }
 
-#stats li {
+#mocha-stats a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#mocha-stats a:hover {
+  border-bottom: 1px solid #eee;
+}
+
+#mocha-stats li {
   display: inline-block;
   margin: 0 5px;
   list-style: none;
   padding-top: 11px;
 }
 
-code .comment { color: #ddd }
-code .init { color: #2F6FAD }
-code .string { color: #5890AD }
-code .keyword { color: #8A6343 }
-code .number { color: #2F6FAD }
+#mocha-stats canvas {
+  width: 40px;
+  height: 40px;
+}
+
+#mocha code .comment { color: #ddd }
+#mocha code .init { color: #2F6FAD }
+#mocha code .string { color: #5890AD }
+#mocha code .keyword { color: #8A6343 }
+#mocha code .number { color: #2F6FAD }
+
+@media screen and (max-device-width: 480px) {
+  #mocha  {
+    margin: 60px 0px;
+  }
+
+  #mocha #stats {
+    position: absolute;
+  }
+}
