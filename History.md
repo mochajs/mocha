@@ -1,10 +1,14 @@
-??? / ???
+1.14.0 / ???
 ==================
 
   * add: unified diff (#862)
   * add: set MOCHA_COLORS env var to use colors (#965)
   * add: able to override tests links in html reporters (#776)
   * remove: teamcity reporter (#954)
+  * update: commander dependency to 2.0.0 (#1010)
+  * fix: mocha --ui will try to require the ui if not built in, as --reporter does (#1022)
+  * fix: send cursor commands only if isatty (#184, #1003)
+  * fix: include assertion message in base reporter (#993, #991)
   * fix: consistent return of it, it.only, and describe, describe.only (#840)
 
 1.13.0 / 2013-09-15
