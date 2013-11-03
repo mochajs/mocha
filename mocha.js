@@ -1435,6 +1435,7 @@ function Mocha(options) {
   this.bail(options.bail);
   this.reporter(options.reporter);
   if (null != options.timeout) this.timeout(options.timeout);
+  this.useColors(options.useColors)
   if (options.slow) this.slow(options.slow);
 }
 
@@ -1475,12 +1476,15 @@ Mocha.prototype.reporter = function(reporter){
     this._reporter = reporter;
   } else {
     reporter = reporter || 'dot';
-    try {
-      this._reporter = require('./reporters/' + reporter);
-    } catch (err) {
-      this._reporter = require(reporter);
-    }
-    if (!this._reporter) throw new Error('invalid reporter "' + reporter + '"');
+    var _reporter;
+    try { _reporter = require('./reporters/' + reporter); } catch (err) {};
+    if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
+    if (!_reporter && reporter === 'teamcity')
+      console.warn('The Teamcity reporter was moved to a package named ' +
+        'mocha-teamcity-reporter ' +
+        '(https://npmjs.org/package/mocha-teamcity-reporter).');
+    if (!_reporter) throw new Error('invalid reporter "' + reporter + '"');
+    this._reporter = _reporter;
   }
   return this;
 };
@@ -1495,6 +1499,7 @@ Mocha.prototype.reporter = function(reporter){
 Mocha.prototype.ui = function(name){
   name = name || 'bdd';
   this._ui = exports.interfaces[name];
+  if (!this._ui) try { this._ui = require(name); } catch (err) {};
   if (!this._ui) throw new Error('invalid interface "' + name + '"');
   this._ui = this._ui(this.suite);
   return this;
@@ -1621,6 +1626,21 @@ Mocha.prototype.globals = function(globals){
 };
 
 /**
+ * Emit color output.
+ *
+ * @param {Boolean} colors
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.useColors = function(colors){
+  this.options.useColors = arguments.length && colors != undefined
+    ? colors
+    : true;
+  return this;
+};
+
+/**
  * Set the timeout in milliseconds.
  *
  * @param {Number} timeout
@@ -1677,6 +1697,7 @@ Mocha.prototype.run = function(fn){
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
+  exports.reporters.Base.useColors = options.useColors;
   return runner.run(fn);
 };
 
@@ -1921,24 +1942,28 @@ exports.window = {
 
 exports.cursor = {
   hide: function(){
-    process.stdout.write('\u001b[?25l');
+    isatty && process.stdout.write('\u001b[?25l');
   },
 
   show: function(){
-    process.stdout.write('\u001b[?25h');
+    isatty && process.stdout.write('\u001b[?25h');
   },
 
   deleteLine: function(){
-    process.stdout.write('\u001b[2K');
+    isatty && process.stdout.write('\u001b[2K');
   },
 
   beginningOfLine: function(){
-    process.stdout.write('\u001b[0G');
+    isatty && process.stdout.write('\u001b[0G');
   },
 
   CR: function(){
-    exports.cursor.deleteLine();
-    exports.cursor.beginningOfLine();
+    if (isatty) {
+      exports.cursor.deleteLine();
+      exports.cursor.beginningOfLine();
+    } else {
+      process.stdout.write('\n');
+    }
   }
 };
 
@@ -1982,10 +2007,13 @@ exports.list = function(failures){
     // actual / expected diff
     if ('string' == typeof actual && 'string' == typeof expected) {
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
+      var match = message.match(/^([^:]+): expected/);
+      msg = match ? '\n      ' + color('error message', match[1]) : '';
+
       if (exports.inlineDiffs) {
-        msg = inlineDiff(err, escape);
+        msg += inlineDiff(err, escape);
       } else {
-        msg = unifiedDiff(err, escape);
+        msg += unifiedDiff(err, escape);
       }
     }
 
@@ -2263,6 +2291,8 @@ function sameType(a, b) {
   return a == b;
 }
 
+
+
 }); // module: reporters/base.js
 
 require.register("reporters/doc.js", function(module, exports, require){
@@ -2470,7 +2500,7 @@ var Date = global.Date
   , clearInterval = global.clearInterval;
 
 /**
- * Expose `Doc`.
+ * Expose `HTML`.
  */
 
 exports = module.exports = HTML;
@@ -2487,7 +2517,7 @@ var statsTemplate = '<ul id="mocha-stats">'
   + '</ul>';
 
 /**
- * Initialize a new `Doc` reporter.
+ * Initialize a new `HTML` reporter.
  *
  * @param {Runner} runner
  * @api public
@@ -2552,7 +2582,7 @@ function HTML(runner, root) {
     if (suite.root) return;
 
     // suite
-    var url = '?grep=' + encodeURIComponent(suite.fullTitle());
+    var url = self.suiteURL(suite);
     var el = fragment('<li class="suite"><h1><a href="%s">%s</a></h1></li>', url, escape(suite.title));
 
     // container
@@ -2583,7 +2613,8 @@ function HTML(runner, root) {
 
     // test
     if ('passed' == test.state) {
-      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="?grep=%e" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, encodeURIComponent(test.fullTitle()));
+      var url = self.testURL(test);
+      var el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="%s" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, url);
     } else if (test.pending) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
@@ -2627,6 +2658,26 @@ function HTML(runner, root) {
     if (stack[0]) stack[0].appendChild(el);
   });
 }
+
+/**
+ * Provide suite URL
+ *
+ * @param {Object} [suite]
+ */
+
+HTML.prototype.suiteURL = function(suite){
+  return '?grep=' + encodeURIComponent(suite.fullTitle());
+};
+
+/**
+ * Provide test URL
+ *
+ * @param {Object} [test]
+ */
+
+HTML.prototype.testURL = function(test){
+  return '?grep=' + encodeURIComponent(test.fullTitle());
+};
 
 /**
  * Display error `msg`.
