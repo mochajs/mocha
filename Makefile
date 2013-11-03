@@ -110,6 +110,12 @@ test-async-only:
 	  --async-only \
 	  test/acceptance/misc/asyncOnly
 
+test-flakey-before-each:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  --flakey-before-each \
+	  test/acceptance/misc/flakeyBeforeEach
+
 test-glob:
 	@./test/acceptance/glob/glob.sh
 
