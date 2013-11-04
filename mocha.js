@@ -4420,11 +4420,11 @@ Runner.prototype.globalProps = function() {
  */
 
 Runner.prototype.globals = function(arr){
-  if (0 == arguments.length) return this._globals;
+  if (!arguments.length) return this._globals;
   debug('globals %j', arr);
-  utils.forEach(arr, function(arr){
-    this._globals.push(arr);
-  }, this);
+
+  this._globals = this._globals.concat(arr);
+
   return this;
 };
 
