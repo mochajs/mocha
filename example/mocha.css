@@ -69,11 +69,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  background-color: #C09853;
+  background-color: #c09853;
 }
 
 #mocha .test.pass.slow .duration {
-  background-color: #B94A48;
+  background-color: #b94a48;
 }
 
 #mocha .test.pass::before {
@@ -250,10 +250,10 @@ body {
 }
 
 #mocha code .comment { color: #ddd }
-#mocha code .init { color: #2F6FAD }
-#mocha code .string { color: #5890AD }
-#mocha code .keyword { color: #8A6343 }
-#mocha code .number { color: #2F6FAD }
+#mocha code .init { color: #2f6fad }
+#mocha code .string { color: #5890ad }
+#mocha code .keyword { color: #8a6343 }
+#mocha code .number { color: #2f6fad }
 
 @media screen and (max-device-width: 480px) {
   #mocha  {

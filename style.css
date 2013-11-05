@@ -172,6 +172,12 @@ footer span {
   font-size: 12px;
 }
 
+code .comment { color: #ddd }
+code .init { color: #2f6fad }
+code .string { color: #5890ad }
+code .keyword { color: #8a6343 }
+code .number { color: #2f6fad }
+
 @media all and (max-width: 850px) {
   ul li {
     width: 100%;
@@ -189,9 +195,3 @@ footer span {
     margin-left: 0;
   }
 }
-
-code .comment { color: #ddd }
-code .init { color: #2f6fad }
-code .string { color: #5890ad }
-code .keyword { color: #8a6343 }
-code .number { color: #2f6fad }
