@@ -16,7 +16,7 @@ h1 {
   font-style: normal;
   font-weight: 100;
   text-transform: lowercase;
-  background: #8a6343;
+  background-color: #8a6343;
   color: white;
   display: inline-block;
   padding: 48px 30px;
@@ -33,7 +33,7 @@ h1 {
 }
 
 h1:hover {
-  background: #a07a5c;
+  background-color: #a07a5c;
 }
 
 h1 a {
@@ -158,7 +158,7 @@ img {
 }
 
 footer {
-  background: #eee;
+  background-color: #eee;
   width: 100%;
   padding: 50px 0;
   text-align: right;

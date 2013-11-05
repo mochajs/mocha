@@ -69,11 +69,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  background: #C09853;
+  background-color: #C09853;
 }
 
 #mocha .test.pass.slow .duration {
-  background: #B94A48;
+  background-color: #B94A48;
 }
 
 #mocha .test.pass::before {
@@ -168,7 +168,7 @@ body {
   height: 15px;
   line-height: 15px;
   text-align: center;
-  background: #eee;
+  background-color: #eee;
   font-size: 15px;
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -257,7 +257,7 @@ body {
 
 @media screen and (max-device-width: 480px) {
   #mocha  {
-    margin: 60px 0px;
+    margin: 60px 0;
   }
 
   #mocha #stats {
