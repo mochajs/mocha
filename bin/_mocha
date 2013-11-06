@@ -84,6 +84,7 @@ program
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
 
 program.name = 'mocha';
 
@@ -347,7 +348,7 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.run(process.exit);
+mocha.run(program.exit ? process.exit : function() {});
 
 // enable growl notifications
 
