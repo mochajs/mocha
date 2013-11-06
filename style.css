@@ -16,7 +16,7 @@ h1 {
   font-style: normal;
   font-weight: 100;
   text-transform: lowercase;
-  background: #8a6343;
+  background-color: #8a6343;
   color: white;
   display: inline-block;
   padding: 48px 30px;
@@ -24,14 +24,16 @@ h1 {
   opacity: 0;
   -webkit-border-radius: 100px;
   -moz-border-radius: 100px;
+  -o-border-radius: 100px;
   border-radius: 100px;
   -webkit-transition: opacity 1s, background-color 200ms;
   -moz-transition: opacity 1s, background-color 200ms;
   -o-transition: opacity 1s, background-color 200ms;
+  transition: opacity 1s, background-color 200ms;
 }
 
 h1:hover {
-  background: #a07a5c;
+  background-color: #a07a5c;
 }
 
 h1 a {
@@ -66,6 +68,7 @@ h2 {
   -webkit-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
   -moz-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
   -o-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
+  transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
 }
 
 #tag em {
@@ -133,6 +136,7 @@ pre {
   border-bottom-color: #ddd;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
+  -o-border-radius: 2px;
   border-radius: 2px;
   -webkit-box-shadow: inset 0 0 10px #eee;
   -moz-box-shadow: inset 0 0 10px #eee;
@@ -145,6 +149,7 @@ img {
   padding: 1px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px;
   -webkit-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
   -moz-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
@@ -153,7 +158,7 @@ img {
 }
 
 footer {
-  background: #eee;
+  background-color: #eee;
   width: 100%;
   padding: 50px 0;
   text-align: right;
@@ -166,6 +171,12 @@ footer span {
   color: #888;
   font-size: 12px;
 }
+
+code .comment { color: #ddd }
+code .init { color: #2f6fad }
+code .string { color: #5890ad }
+code .keyword { color: #8a6343 }
+code .number { color: #2f6fad }
 
 @media all and (max-width: 850px) {
   ul li {
@@ -184,9 +195,3 @@ footer span {
     margin-left: 0;
   }
 }
-
-code .comment { color: #ddd }
-code .init { color: #2f6fad }
-code .string { color: #5890ad }
-code .keyword { color: #8a6343 }
-code .number { color: #2f6fad }

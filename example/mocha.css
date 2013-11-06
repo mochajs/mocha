@@ -9,7 +9,8 @@ body {
   margin: 60px 50px;
 }
 
-#mocha ul, #mocha li {
+#mocha ul,
+#mocha li {
   margin: 0;
   padding: 0;
 }
@@ -18,7 +19,8 @@ body {
   list-style: none;
 }
 
-#mocha h1, #mocha h2 {
+#mocha h1,
+#mocha h2 {
   margin: 0;
 }
 
@@ -67,11 +69,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  background: #C09853;
+  background-color: #c09853;
 }
 
 #mocha .test.pass.slow .duration {
-  background: #B94A48;
+  background-color: #b94a48;
 }
 
 #mocha .test.pass::before {
@@ -93,7 +95,6 @@ body {
   box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
 }
@@ -144,10 +145,12 @@ body {
   border: 1px solid #eee;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
-  -webkit-box-shadow: 0 1px 3px #eee;
   -moz-border-radius: 3px;
-  -moz-box-shadow: 0 1px 3px #eee;
+  -o-border-radius: 3px;
   border-radius: 3px;
+  -webkit-box-shadow: 0 1px 3px #eee;
+  -moz-box-shadow: 0 1px 3px #eee;
+  box-shadow: 0 1px 3px #eee;
 }
 
 #mocha .test h2 {
@@ -165,12 +168,15 @@ body {
   height: 15px;
   line-height: 15px;
   text-align: center;
-  background: #eee;
+  background-color: #eee;
   font-size: 15px;
+  -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
+  -o-border-radius: 15px;
   border-radius: 15px;
   -webkit-transition: opacity 200ms;
   -moz-transition: opacity 200ms;
+  -o-transition: opacity 200ms;
   transition: opacity 200ms;
   opacity: 0.3;
   color: #888;
@@ -244,14 +250,14 @@ body {
 }
 
 #mocha code .comment { color: #ddd }
-#mocha code .init { color: #2F6FAD }
-#mocha code .string { color: #5890AD }
-#mocha code .keyword { color: #8A6343 }
-#mocha code .number { color: #2F6FAD }
+#mocha code .init { color: #2f6fad }
+#mocha code .string { color: #5890ad }
+#mocha code .keyword { color: #8a6343 }
+#mocha code .number { color: #2f6fad }
 
 @media screen and (max-device-width: 480px) {
   #mocha  {
-    margin: 60px 0px;
+    margin: 60px 0;
   }
 
   #mocha #stats {
