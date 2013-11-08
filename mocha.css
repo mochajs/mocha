@@ -136,6 +136,11 @@ body {
   overflow: auto;
 }
 
+/**
+ * (1): approximate for browsers not supporting calc
+ * (2): 42 = 2*15 + 2*10 + 2*1 (padding + margin + border)
+ *      ^^ seriously
+ */
 #mocha .test pre {
   display: block;
   float: left;
@@ -144,6 +149,9 @@ body {
   margin: 5px;
   padding: 15px;
   border: 1px solid #eee;
+  max-width: 85%; /*(1)*/
+  max-width: calc(100% - 42px); /*(2)*/
+  word-wrap: break-word;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
