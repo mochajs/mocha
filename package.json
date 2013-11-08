@@ -45,8 +45,9 @@
     "glob": "3.2.3"
   },
   "devDependencies": {
-    "coffee-script": "1.2",
-    "should": "~4.0.0"
+    "rewire": "2.0.0",
+    "should": ">= 2.0.x",
+    "coffee-script": "1.2"
   },
   "files": [
     "bin",
