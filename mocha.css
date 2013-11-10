@@ -9,7 +9,8 @@ body {
   margin: 60px 50px;
 }
 
-#mocha ul, #mocha li {
+#mocha ul,
+#mocha li {
   margin: 0;
   padding: 0;
 }
@@ -18,7 +19,8 @@ body {
   list-style: none;
 }
 
-#mocha h1, #mocha h2 {
+#mocha h1,
+#mocha h2 {
   margin: 0;
 }
 
@@ -67,11 +69,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  background: #C09853;
+  background: #c09853;
 }
 
 #mocha .test.pass.slow .duration {
-  background: #B94A48;
+  background: #b94a48;
 }
 
 #mocha .test.pass::before {
@@ -87,7 +89,7 @@ body {
   font-size: 9px;
   margin-left: 5px;
   padding: 2px 5px;
-  color: white;
+  color: #fff;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
@@ -134,6 +136,11 @@ body {
   overflow: auto;
 }
 
+/**
+ * (1): approximate for browsers not supporting calc
+ * (2): 42 = 2*15 + 2*10 + 2*1 (padding + margin + border)
+ *      ^^ seriously
+ */
 #mocha .test pre {
   display: block;
   float: left;
@@ -142,6 +149,9 @@ body {
   margin: 5px;
   padding: 15px;
   border: 1px solid #eee;
+  max-width: 85%; /*(1)*/
+  max-width: calc(100% - 42px); /*(2)*/
+  word-wrap: break-word;
   border-bottom-color: #ddd;
   -webkit-border-radius: 3px;
   -webkit-box-shadow: 0 1px 3px #eee;
@@ -243,14 +253,14 @@ body {
   height: 40px;
 }
 
-#mocha code .comment { color: #ddd }
-#mocha code .init { color: #2F6FAD }
-#mocha code .string { color: #5890AD }
-#mocha code .keyword { color: #8A6343 }
-#mocha code .number { color: #2F6FAD }
+#mocha code .comment { color: #ddd; }
+#mocha code .init { color: #2f6fad; }
+#mocha code .string { color: #5890ad; }
+#mocha code .keyword { color: #8a6343; }
+#mocha code .number { color: #2f6fad; }
 
 @media screen and (max-device-width: 480px) {
-  #mocha  {
+  #mocha {
     margin: 60px 0px;
   }
 
