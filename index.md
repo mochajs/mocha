@@ -302,7 +302,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="debug-option">-d, --debug</h3>
 
-  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the __debugger__ statement (`mocha debug ...` will fire up node's built-in debug client, `mocha --debug ...` will allow you to use a different client, such as the WebKit Web Inspector).
+  Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the `debugger` statement. Note the difference between `mocha debug` and `mocha --debug`: `mocha debug` will fire up node's built-in debug client, `mocha --debug` will allow you to use a different interface — such as the Blink Developer Tools.
 
 <h3 id="globals-option">--globals &lt;names&gt;</h3>
 
