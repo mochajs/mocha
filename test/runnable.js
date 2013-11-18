@@ -213,11 +213,18 @@ describe('Runnable(title, fn)', function(){
       })
 
       it('should allow updating the timeout', function(done){
+        var callCount = 0;
+        var increment = function() {
+          callCount++;
+        };
         var test = new Runnable('foo', function(done){
-          this.timeout(10);
+          setTimeout(increment, 1);
+          setTimeout(increment, 100);
         });
+        test.timeout(10);
         test.run(function(err){
-          err.message.should.include('timeout');
+          err.should.be.ok;
+          callCount.should.equal(1);
           done();
         });
       })
