@@ -4667,25 +4667,35 @@ Runner.prototype.runTests = function(suite, fn){
     , test;
 
 
-  function hookErr(err, errSuite) {
+  function hookErr(err, errSuite, after) {
     // before/after Each hook for errSuite failed:
     var orig = self.suite;
-    self.suite = errSuite;
-    
-    // call hookUp afterEach starting from errSuite
-    self.hookUp('afterEach', function() {
-      self.suite = orig;
 
-      // report error suite
+    // for failed 'after each' hook start from errSuite parent,
+    // otherwise start from errSuite itself
+    self.suite = after ? errSuite.parent : errSuite;
+    
+    if (self.suite) {
+      // call hookUp afterEach
+      self.hookUp('afterEach', function(err2, errSuite2) {
+        self.suite = orig;
+        // some hooks may fail even now
+        if (err2) return hookErr(err2, errSuite2, true);
+        // report error suite
+        fn(errSuite);
+      });
+    } else {
+      // there is no need calling other 'after each' hooks 
+      self.suite = orig;
       fn(errSuite);
-    });
+    }
   }
 
   function next(err, errSuite) {
     // if we bail after first err
     if (self.failures && suite._bail) return fn();
 
-    if (err) hookErr(err, errSuite);
+    if (err) return hookErr(err, errSuite, true);
 
     // next test
     test = tests.shift();
@@ -4709,7 +4719,7 @@ Runner.prototype.runTests = function(suite, fn){
     self.emit('test', self.test = test);
     self.hookDown('beforeEach', function(err, errSuite){
 
-      if (err) return hookErr(err, errSuite);
+      if (err) return hookErr(err, errSuite, false);
 
       self.currentRunnable = self.test;
       self.runTest(function(err){
