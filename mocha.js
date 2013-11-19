@@ -4480,15 +4480,16 @@ Runner.prototype.fail = function(test, err){
  *
  * Hook failures work in the following pattern:
  * - If bail, then exit
- * - Failed `before` hook skips all tests in a suite 
- *   and jumps to corresponding `after` hook
+ * - Failed `before` hook skips all tests in a suite and subsuites,
+ *   but jumps to corresponding `after` hook
  * - Failed `before each` hook skips remaining tests in a 
  *   suite and jumps to corresponding `after each` hook,
  *   which is run only once
  * - Failed `after` hook does not alter
  *   execution order
  * - Failed `after each` hook skips remaining tests in a 
- *   suite and jumps to corresponding `after` hook
+ *   suite and subsuites, but executes other `after each`
+ *   hooks
  *
  * @param {Hook} hook
  * @param {Error} err
@@ -4553,7 +4554,7 @@ Runner.prototype.hook = function(name, fn){
 
 /**
  * Run hook `name` for the given array of `suites`
- * in order, and callback `fn(err)`.
+ * in order, and callback `fn(err, errSuite)`.
  *
  * @param {String} name
  * @param {Array} suites
@@ -4575,8 +4576,9 @@ Runner.prototype.hooks = function(name, suites, fn){
 
     self.hook(name, function(err){
       if (err) {
+        var errSuite = self.suite;
         self.suite = orig;
-        return fn(err);
+        return fn(err, errSuite);
       }
 
       next(suites.pop());
@@ -4664,9 +4666,26 @@ Runner.prototype.runTests = function(suite, fn){
     , tests = suite.tests.slice()
     , test;
 
-  function next(err) {
+
+  function hookErr(err, errSuite) {
+    // before/after Each hook for errSuite failed:
+    var orig = self.suite;
+    self.suite = errSuite;
+    
+    // call hookUp afterEach starting from errSuite
+    self.hookUp('afterEach', function() {
+      self.suite = orig;
+
+      // report error suite
+      fn(errSuite);
+    });
+  }
+
+  function next(err, errSuite) {
     // if we bail after first err
     if (self.failures && suite._bail) return fn();
+
+    if (err) hookErr(err, errSuite);
 
     // next test
     test = tests.shift();
@@ -4688,7 +4707,10 @@ Runner.prototype.runTests = function(suite, fn){
 
     // execute test and hook(s)
     self.emit('test', self.test = test);
-    self.hookDown('beforeEach', function(){
+    self.hookDown('beforeEach', function(err, errSuite){
+
+      if (err) return hookErr(err, errSuite);
+
       self.currentRunnable = self.test;
       self.runTest(function(err){
         test = self.test;
@@ -4731,22 +4753,35 @@ Runner.prototype.runSuite = function(suite, fn){
 
   this.emit('suite', this.suite = suite);
 
-  function next() {
+  function next(errSuite) {
+    if (errSuite) {
+      // current suite failed on a hook from errSuite
+      if (errSuite == suite) {
+        // if errSuite is current suite
+        // continue to the next sibling suite
+        return done();
+      } else {
+        // errSuite is among the parents of current suite
+        // stop execution of errSuite and all sub-suites
+        return done(errSuite);
+      }
+    }
+
     var curr = suite.suites[i++];
     if (!curr) return done();
     self.runSuite(curr, next);
   }
 
-  function done() {
+  function done(errSuite) {
     self.suite = suite;
     self.hook('afterAll', function(){
       self.emit('suite end', suite);
-      fn();
+      fn(errSuite);
     });
   }
 
   this.hook('beforeAll', function(err){
-    if (err) done();
+    if (err) return done();
     self.runTests(suite, next);
   });
 };
