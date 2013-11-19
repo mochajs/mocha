@@ -160,7 +160,7 @@ describe('Runner', function(){
     })
   })
 
-  describe('.failHook(hoot, err)', function(){
+  describe('.failHook(hook, err)', function(){
     it('should increment .failures', function(){
       runner.failures.should.equal(0);
       runner.failHook({}, {});
@@ -179,10 +179,19 @@ describe('Runner', function(){
       runner.failHook(hook, err);
     })
 
-    it('should emit "end"', function(done){
+    it('should emit "end" if suite bail is true', function(done){
       var hook = {}, err = {};
+      suite.bail(true);
       runner.on('end', done);
       runner.failHook(hook, err);
+    })
+
+    it('should not emit "end" if suite bail is not true', function(done){
+      var hook = {}, err = {};
+      suite.bail(false);
+      runner.on('end', function() { throw new Error('"end" was emit, but the bail is false'); });
+      runner.failHook(hook, err);
+      done();
     })
   })
 })

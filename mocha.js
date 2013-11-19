@@ -4422,9 +4422,7 @@ Runner.prototype.globalProps = function() {
 Runner.prototype.globals = function(arr){
   if (0 == arguments.length) return this._globals;
   debug('globals %j', arr);
-  utils.forEach(arr, function(arr){
-    this._globals.push(arr);
-  }, this);
+  this._globals = this._globals.concat(arr);
   return this;
 };
 
@@ -4480,10 +4478,17 @@ Runner.prototype.fail = function(test, err){
 /**
  * Fail the given `hook` with `err`.
  *
- * Hook failures (currently) hard-end due
- * to that fact that a failing hook will
- * surely cause subsequent tests to fail,
- * causing jumbled reporting.
+ * Hook failures work in the following pattern:
+ * - If bail, then exit
+ * - Failed `before` hook skips all tests in a suite 
+ *   and jumps to corresponding `after` hook
+ * - Failed `before each` hook skips remaining tests in a 
+ *   suite and jumps to corresponding `after each` hook,
+ *   which is run only once
+ * - Failed `after` hook does not alter
+ *   execution order
+ * - Failed `after each` hook skips remaining tests in a 
+ *   suite and jumps to corresponding `after` hook
  *
  * @param {Hook} hook
  * @param {Error} err
@@ -4492,7 +4497,9 @@ Runner.prototype.fail = function(test, err){
 
 Runner.prototype.failHook = function(hook, err){
   this.fail(hook, err);
-  this.emit('end');
+  if (this.suite.bail()) {
+    this.emit('end');
+  }
 };
 
 /**
@@ -4527,7 +4534,12 @@ Runner.prototype.hook = function(name, fn){
       hook.removeAllListeners('error');
       var testError = hook.error();
       if (testError) self.fail(self.test, testError);
-      if (err) return self.failHook(hook, err);
+      if (err) {
+        self.failHook(hook, err); 
+
+        // stop executing hooks, notify callee of hook err
+        return fn(err);
+      }
       self.emit('hook end', hook);
       delete hook.ctx.currentTest;
       next(++i);
@@ -4733,7 +4745,8 @@ Runner.prototype.runSuite = function(suite, fn){
     });
   }
 
-  this.hook('beforeAll', function(){
+  this.hook('beforeAll', function(err){
+    if (err) done();
     self.runTests(suite, next);
   });
 };
