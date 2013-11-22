@@ -71,6 +71,16 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#globals', function(){
+    it('should allow for whitelisting globals', function(done){
+      var test = new Runnable('foo', function(){});
+      test.async.should.be.equal(0);
+      test.sync.should.be.true;
+      test.globals(['foobar']);
+      test.run(done);
+    })
+  })
+
   describe('.run(fn)', function(){
     describe('when .pending', function(){
       it('should not invoke the callback', function(done){
