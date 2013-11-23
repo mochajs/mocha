@@ -104,6 +104,11 @@ test-bail:
 		--bail \
 		test/acceptance/misc/bail
 
+test-hook-fail:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/acceptance/misc/hook.fail
+
 test-async-only:
 	@./bin/mocha \
 	  --reporter $(REPORTER) \
