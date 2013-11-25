@@ -212,7 +212,7 @@ if (~process.argv.indexOf('--colors') ||
 
 // --inline-diffs
 
-if (program.inlineDiffs) Base.inlineDiffs = true;
+if (program.inlineDiffs) mocha.useInlineDiffs(true);
 
 // --slow <ms>
 
