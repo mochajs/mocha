@@ -1,3 +1,10 @@
+1.15.0 / xxx
+
+  * add: --no-exit to prevent process.exit() (#1018)
+  * fix: using inline diffs (#1044)
+  * fix: faster global leak detection (#1024)
+  * fix: yui compression (#1035)
+  * fix: wrapping long lines in test results (#1030, #1031)
 
 1.14.0 / 2013-11-02
 ==================
