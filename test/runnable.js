@@ -218,10 +218,10 @@ describe('Runnable(title, fn)', function(){
           callCount++;
         };
         var test = new Runnable('foo', function(done){
-          setTimeout(increment, 4);
-          setTimeout(increment, 6);
+          setTimeout(increment, 1);
+          setTimeout(increment, 100);
         });
-        test.timeout(5);
+        test.timeout(10);
         test.run(function(err){
           err.should.be.ok;
           callCount.should.equal(1);
