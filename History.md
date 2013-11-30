@@ -2,6 +2,7 @@
 
   * add: --no-exit to prevent process.exit() (#1018)
   * fix: using inline diffs (#1044)
+  * fix: show pending test details in xunit reporter (#1051)
   * fix: faster global leak detection (#1024)
   * fix: yui compression (#1035)
   * fix: wrapping long lines in test results (#1030, #1031)
