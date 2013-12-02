@@ -1,6 +1,8 @@
-1.15.0 / xxx
 
-  * add: --no-exit to prevent process.exit() (#1018)
+1.15.0 / 2013-12-02
+==================
+
+  * add: `--no-exit` to prevent `process.exit()` (#1018)
   * fix: using inline diffs (#1044)
   * fix: show pending test details in xunit reporter (#1051)
   * fix: faster global leak detection (#1024)
