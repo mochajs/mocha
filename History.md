@@ -6,6 +6,7 @@
   * fix: faster global leak detection (#1024)
   * fix: yui compression (#1035)
   * fix: wrapping long lines in test results (#1030, #1031)
+  * fix: handle errors in hooks (#1043)
 
 1.14.0 / 2013-11-02
 ==================
