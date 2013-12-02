@@ -1,0 +1,67 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 5,
+    "passes": 4,
+    "pending": 1,
+    "failures": 1,
+    "start": "2013-09-13T12:41:15.471Z",
+    "end": "2013-09-13T12:41:15.474Z",
+    "duration": 3
+  },
+  "tests": [
+    {
+      "title": "should work",
+      "fullTitle": "one should work",
+      "duration": 0
+    },
+    {
+      "title": "should fail",
+      "fullTitle": "one should fail"
+    },
+    {
+      "title": "should work",
+      "fullTitle": "two should work",
+      "duration": 0
+    },
+    {
+      "title": "should work 1",
+      "fullTitle": "three should work 1",
+      "duration": 0
+    },
+    {
+      "title": "should work 2",
+      "fullTitle": "three should work 2",
+      "duration": 0
+    }
+  ],
+  "failures": [
+    {
+      "title": "\"before each\" hook",
+      "fullTitle": "one \"before each\" hook",
+      "duration": 0
+    }
+  ],
+  "passes": [
+    {
+      "title": "should work",
+      "fullTitle": "one should work",
+      "duration": 0
+    },
+    {
+      "title": "should work",
+      "fullTitle": "two should work",
+      "duration": 0
+    },
+    {
+      "title": "should work 1",
+      "fullTitle": "three should work 1",
+      "duration": 0
+    },
+    {
+      "title": "should work 2",
+      "fullTitle": "three should work 2",
+      "duration": 0
+    }
+  ]
+}

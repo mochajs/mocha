@@ -71,6 +71,37 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('.markPending', function() {
+    describe('when passing', function() {
+      it('should still be passing', function() {
+        var run = new Runnable('foo', function() {});
+        // should needs a not-undefined value
+        run.pending = '';
+        run.state = 'passed';
+        run.markPending();
+        run.pending.should.not.be.true;
+      })
+    });
+
+    describe('when sync', function() {
+      it('should be sync and pending', function() {
+        var run = new Runnable('foo', function() {});
+        run.markPending();
+        run.sync.should.be.true;
+        run.pending.should.be.true;
+      })
+    })
+
+    describe('when async', function() {
+      it('should be sync and pending', function() {
+        var run = new Runnable('foo', function(done) {});
+        run.markPending();
+        run.sync.should.be.true;
+        run.pending.should.be.true;
+      });
+    });
+  });
+
   describe('.run(fn)', function(){
     describe('when .pending', function(){
       it('should not invoke the callback', function(done){
