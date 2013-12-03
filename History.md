@@ -1,3 +1,7 @@
+1.15.1 / 2013-12-03
+==================
+
+  * fix: fix uncaught changes from the last release
 
 1.15.0 / 2013-12-02
 ==================
