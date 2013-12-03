@@ -342,13 +342,10 @@ if (program.watch) {
     loadAndRun();
   });
 
-  return;
+} else {// load
+   mocha.files = files;
+   mocha.run(program.exit ? process.exit : function() {});
 }
-
-// load
-
-mocha.files = files;
-mocha.run(program.exit ? process.exit : function() {});
 
 // enable growl notifications
 
