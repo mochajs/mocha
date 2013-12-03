@@ -85,6 +85,7 @@ program
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--no-tty-animation', "disable terminal animation when watching files")
 
 program.name = 'mocha';
 
@@ -319,7 +320,11 @@ if (program.watch) {
     try {
       mocha.files = files;
       mocha.run(function(){
-        play(frames);
+        if(program.ttyAnimation){
+          play(frames);
+        } else {
+          process.stdout.write('watching...');
+        }
       });
     } catch(e) {
       console.log(e.stack);
@@ -342,13 +347,10 @@ if (program.watch) {
     loadAndRun();
   });
 
-  return;
+} else {// load
+   mocha.files = files;
+   mocha.run(program.exit ? process.exit : function() {});
 }
-
-// load
-
-mocha.files = files;
-mocha.run(program.exit ? process.exit : function() {});
 
 // enable growl notifications
 
