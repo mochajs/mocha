@@ -4,8 +4,8 @@ describe('Base reporter', function () {
 
   it('should show diffs with showDiff property set', function () {
     var err = new Error('test'),
-      stderr = [],
-      stderrWrite = process.stderr.write,
+      stdout = [],
+      stdoutWrite = process.stdout.write,
       errOut;
 
     err.actual = "a1";
@@ -18,15 +18,15 @@ describe('Base reporter', function () {
       }
     };
 
-    process.stderr.write = function (string) {
-      stderr.push(string);
+    process.stdout.write = function (string) {
+      stdout.push(string);
     };
 
     Base.list([test]);
 
-    process.stderr.write = stderrWrite;
+    process.stdout.write = stdoutWrite;
 
-    errOut = stderr.join('\n');
+    errOut = stdout.join('\n');
 
     errOut.should.match(/test/);
     errOut.should.match(/actual/);
@@ -36,8 +36,8 @@ describe('Base reporter', function () {
 
   it('should not show diffs when showDiff property set', function () {
     var err = new Error('test'),
-      stderr = [],
-      stderrWrite = process.stderr.write,
+      stdout = [],
+      stdoutWrite = process.stdout.write,
       errOut;
 
     err.actual = "a1";
@@ -50,15 +50,15 @@ describe('Base reporter', function () {
       }
     };
 
-    process.stderr.write = function (string) {
-      stderr.push(string);
+    process.stdout.write = function (string) {
+      stdout.push(string);
     };
 
     Base.list([test]);
 
-    process.stderr.write = stderrWrite;
+    process.stdout.write = stdoutWrite;
 
-    errOut = stderr.join('\n');
+    errOut = stdout.join('\n');
 
     errOut.should.match(/test/);
     errOut.should.not.match(/actual/);
