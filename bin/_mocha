@@ -338,7 +338,11 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.run(program.exit ? process.exit : function() {});
+mocha.run(program.exit ? process.exit : exitLater);
+
+function exitLater(code) {
+  process.on('exit', function() { process.exit(code) })
+}
 
 // enable growl notifications
 
