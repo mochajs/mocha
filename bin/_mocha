@@ -305,22 +305,12 @@ if (program.watch) {
     process.exit();
   });
 
-  var spinner = 'win32' == process.platform
-    ? ['|','/','-','\\']
-    : ['◜','◠','◝','◞','◡','◟'];
-
-  var frames = spinner.map(function(c) {
-    return sprintf('  \u001b[96m%s \u001b[90mwatching\u001b[0m', c);
-  });
-
   var watchFiles = utils.files(cwd);
 
   function loadAndRun() {
     try {
       mocha.files = files;
-      mocha.run(function(){
-        play(frames);
-      });
+      mocha.run(function(){});
     } catch(e) {
       console.log(e.stack);
     }
