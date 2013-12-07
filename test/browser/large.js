@@ -29,4 +29,21 @@ describe('something', function(){
       done();
     }, 1);
   })
+
+  it('should provide an even better error on phantomjs', function(done){
+    setTimeout(function(){
+      var AssertionError = function(message, actual, expected) {
+        this.message = message;
+        this.actual = actual;
+        this.expected = expected;
+        this.showDiff = true;
+      };
+      AssertionError.prototype = Object.create(Error.prototype);
+      AssertionError.prototype.name = 'AssertionError';
+      AssertionError.prototype.constructor = AssertionError;
+
+      mocha.throwError(new AssertionError('kabooom', 'text with a typo', 'text without a typo'));
+      done();
+    }, 1);
+  })
 })

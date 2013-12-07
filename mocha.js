@@ -5569,13 +5569,18 @@ var process = {};
 process.exit = function(status){};
 process.stdout = {};
 
+var uncaughtExceptionHandlers = [];
+
 /**
  * Remove uncaughtException listener.
  */
 
-process.removeListener = function(e){
+process.removeListener = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function() {};
+
+    var indexOfFn = uncaughtExceptionHandlers.indexOf(fn);
+    if (indexOfFn != -1) { uncaughtExceptionHandlers.splice(indexOfFn, 1); }
   }
 };
 
@@ -5588,6 +5593,7 @@ process.on = function(e, fn){
     global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
     };
+    uncaughtExceptionHandlers.push(fn);
   }
 };
 
@@ -5622,6 +5628,18 @@ Mocha.Runner.immediately = function(callback) {
   if (!immediateTimeout) {
     immediateTimeout = setTimeout(timeslice, 0);
   }
+};
+
+/**
+ * Function to allow assertion libraries to throw errors directly into mocha.
+ * This is useful when running tests in a browser because window.onerror will
+ * only receive the 'message' attribute of the Error.
+ */
+mocha.throwError = function(err) {
+  uncaughtExceptionHandlers.forEach(function (fn) {
+    fn(err);
+  });
+  throw err;
 };
 
 /**
