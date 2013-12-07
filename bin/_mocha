@@ -338,11 +338,13 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.run(program.exit ? process.exit : exitLater);
+var runner = mocha.run(program.exit ? process.exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
 }
+
+process.on('SIGINT', function() { runner.abort(); })
 
 // enable growl notifications
 
