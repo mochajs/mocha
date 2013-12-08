@@ -33,9 +33,8 @@ var uncaughtExceptionHandlers = [];
 process.removeListener = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function() {};
-
-    var indexOfFn = uncaughtExceptionHandlers.indexOf(fn);
-    if (indexOfFn != -1) { uncaughtExceptionHandlers.splice(indexOfFn, 1); }
+    var i = uncaughtExceptionHandlers.indexOf(fn);
+    if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
   }
 };
 
