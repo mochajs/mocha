@@ -222,6 +222,83 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when a function is passed', function(){
+        it('should invoke the function', function(done){
+          var calls = 0;
+          var test = new Runnable('foo', function(done){
+            done(function() {
+              ++calls;
+            });
+          });
+
+          test.run(function(err){
+            calls.should.equal(1);
+            done(err);
+          });
+        })
+
+        describe('when an assertion error is thrown async in the function', function(){
+          it('should fail with given error', function(done){
+            var test = new Runnable('foo', function(done){
+              process.nextTick(function () {
+                done(function () {
+                  throw new Error('fail');
+                });
+              });
+            });
+
+            test.run(function(err){
+              err.message.should.equal('fail');
+              done();
+            });
+          })
+        })
+      })
+
+      describe('when an async callback is passed to dotry', function () {
+        it('should return an wrapped version of the callback', function(done){
+          var callArgs = [];
+
+          var test = new Runnable('foo', function(done, dotry){
+            var callback = dotry(function() {
+              callArgs.push({
+                context: JSON.stringify(this),
+                args: Array.prototype.slice.call(arguments)
+              });
+              done();
+            });
+
+            process.nextTick(function () {
+              callback.call('a context', 'a', 'b', 'c', 'd');
+            });
+          });
+
+          test.run(function(err){
+            callArgs.should.eql([
+              { context: '\"a context\"', args: ['a', 'b', 'c', 'd'] }
+            ]);
+            done(err);
+          });
+        })
+
+        describe('when an assertion error is thrown in the callback', function(){
+          it('should fail with given error', function(done){
+            var test = new Runnable('foo', function(done, dotry){
+              var callback = dotry(function() {
+                throw new Error('fail');
+              });
+
+              process.nextTick(callback);
+            });
+
+            test.run(function(err){
+              err.message.should.equal('fail');
+              done();
+            });
+          })
+        })
+      })
+
       it('should allow updating the timeout', function(done){
         var callCount = 0;
         var increment = function() {
