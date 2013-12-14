@@ -2,6 +2,8 @@ var spawn = require('child_process').spawn;
 
 describe('dry-run', function(done){
   it('should pass each test without running any tests', function(done){
+    this.timeout(300);
+
     var run = spawn('./bin/mocha', [__filename, '--dry-run', '--reporter', 'json']);
     var stdout = '';
     var stderr = '';
