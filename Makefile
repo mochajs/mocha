@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-dry-run test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi
@@ -90,6 +90,11 @@ test-grep:
 	  --reporter $(REPORTER) \
 	  --grep fast \
 	  test/acceptance/misc/grep
+
+test-dry-run:
+	@./bin/mocha \
+	  --reporter $(REPORTER) \
+	  test/acceptance/misc/dry-run
 
 test-invert:
 	@./bin/mocha \
@@ -165,4 +170,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-dry-run tm clean
