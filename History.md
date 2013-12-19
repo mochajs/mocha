@@ -1,3 +1,18 @@
+1.16.0 / 2013-12-19
+==================
+
+  * add: Runnable.globals(arr) for per test global whitelist (#1046)
+  * add: mocha.throwError(err) for assertion libs to call (#985)
+  * remove: --watch's spinner (#806)
+  * fix: duplicate test output for multi-line specs in spec reporter (#1006)
+  * fix: gracefully exit on SIGINT (#1063)
+  * fix expose the specified ui only in the browser (#984)
+  * fix: ensure process exit code is preserved when using --no-exit (#1059)
+  * fix: return true from window.onerror handler (#868)
+  * fix: xunit reporter to use process.stdout.write (#1068)
+  * fix: utils.clean(str) indentation (#761)
+  * fix: xunit reporter returning test duration a NaN (#1039)
+
 1.15.1 / 2013-12-03
 ==================
 
