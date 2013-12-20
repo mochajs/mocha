@@ -1,3 +1,9 @@
+1.16.1 / 2013-12-19
+==================
+
+  * fix: recompiled for missed changes from the last release
+
+
 1.16.0 / 2013-12-19
 ==================
 
