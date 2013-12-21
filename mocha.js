@@ -5670,8 +5670,8 @@ Mocha.Runner.immediately = function(callback) {
  * only receive the 'message' attribute of the Error.
  */
 mocha.throwError = function(err) {
-  uncaughtExceptionHandlers.forEach(function (fn) {
-    fn(err) ;
+  Mocha.utils.forEach(uncaughtExceptionHandlers, function (fn) {
+    fn(err);
   });
   throw err;
 };
