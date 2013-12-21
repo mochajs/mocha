@@ -5607,7 +5607,7 @@ var uncaughtExceptionHandlers = [];
 process.removeListener = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function() {};
-    var i = uncaughtExceptionHandlers.indexOf(fn);
+    var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
     if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
   }
 };
