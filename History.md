@@ -1,3 +1,11 @@
+1.16.2 / 2013-12-23
+==================
+
+  * fix: couple issues with ie 8 (#1082, #1081)
+  * fix: issue running the xunit reporter in browsers (#1068)
+  * fix: issue with firefox < 3.5 (#725)
+
+
 1.16.1 / 2013-12-19
 ==================
 
