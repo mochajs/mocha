@@ -3984,7 +3984,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    process.stdout.write(tag('testsuite', {
+    console.log(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -3995,7 +3995,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    process.stdout.write('</testsuite>');
+    console.log('</testsuite>');
   });
 }
 
@@ -4023,11 +4023,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    process.stdout.write(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
   } else if (test.pending) {
-    process.stdout.write(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    process.stdout.write(tag('testcase', attrs, true) );
+    console.log(tag('testcase', attrs, true) );
   }
 }
 
