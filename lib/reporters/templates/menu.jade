@@ -5,8 +5,8 @@
     li
       span.cov(class=coverageClass(file.coverage)) #{file.coverage | 0}
       a(href='##{file.filename}')
-        segments = file.filename.split('/')
-        basename = segments.pop()
+        - segments = file.filename.split('/')
+        - basename = segments.pop()
         if segments.length
           span.dirname= segments.join('/') + '/'
         span.basename= basename

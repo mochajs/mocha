@@ -2,7 +2,7 @@
 REL_SCRIPT_DIR="`dirname \"$0\"`"
 SCRIPT_DIR="`( cd \"$REL_SCRIPT_DIR\" && pwd )`"
 
-cd $SCRIPT_DIR || {
+cd "$SCRIPT_DIR" || {
     echo Could not cd to $SCRIPT_DIR from `pwd`
     exit 1
 }
