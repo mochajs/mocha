@@ -1840,7 +1840,8 @@ require.register("reporters/base.js", function(module, exports, require){
 
 var tty = require('browser/tty')
   , diff = require('browser/diff')
-  , ms = require('../ms');
+  , ms = require('../ms')
+  , utils = require('../utils');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -2014,8 +2015,8 @@ exports.list = function(failures){
     // explicitly show diff
     if (err.showDiff && sameType(actual, expected)) {
       escape = false;
-      err.actual = actual = stringify(actual);
-      err.expected = expected = stringify(expected);
+      err.actual = actual = stringify(canonicalize(actual));
+      err.expected = expected = stringify(canonicalize(expected));
     }
 
     // actual / expected diff
@@ -2280,7 +2281,7 @@ function colorLines(name, str) {
 /**
  * Stringify `obj`.
  *
- * @param {Mixed} obj
+ * @param {Object} obj
  * @return {String}
  * @api private
  */
@@ -2289,6 +2290,40 @@ function stringify(obj) {
   if (obj instanceof RegExp) return obj.toString();
   return JSON.stringify(obj, null, 2);
 }
+
+/**
+ * Return a new object that has the keys in sorted order.
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+ function canonicalize(obj, stack) {
+   stack = stack || [];
+
+   if (utils.indexOf(stack, obj) !== -1) return obj;
+
+   var canonicalizedObj;
+
+   if ('[object Array]' == {}.toString.call(obj)) {
+     stack.push(obj);
+     canonicalizedObj = utils.map(obj, function(item) {
+       return canonicalize(item, stack);
+     });
+     stack.pop();
+   } else if (typeof obj === 'object' && obj !== null) {
+     stack.push(obj);
+     canonicalizedObj = {};
+     utils.forEach(utils.keys(obj).sort(), function(key) {
+       canonicalizedObj[key] = canonicalize(obj[key], stack);
+     });
+     stack.pop();
+   } else {
+     canonicalizedObj = obj;
+   }
+
+   return canonicalizedObj;
+ }
 
 /**
  * Check that a / b have the same type.
@@ -2304,7 +2339,6 @@ function sameType(a, b) {
   b = Object.prototype.toString.call(b);
   return a == b;
 }
-
 
 
 }); // module: reporters/base.js
@@ -5330,6 +5364,22 @@ exports.escape = function(html){
 exports.forEach = function(arr, fn, scope){
   for (var i = 0, l = arr.length; i < l; i++)
     fn.call(scope, arr[i], i);
+};
+
+/**
+ * Array#map (<=IE8)
+ *
+ * @param {Array} array
+ * @param {Function} fn
+ * @param {Object} scope
+ * @api private
+ */
+
+exports.map = function(arr, fn, scope){
+  var result = [];
+  for (var i = 0, l = arr.length; i < l; i++)
+    result.push(fn.call(scope, arr[i], i));
+  return result;
 };
 
 /**
