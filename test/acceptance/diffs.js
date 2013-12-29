@@ -14,6 +14,13 @@ describe('diffs', function(){
     // expected.should.eql(actual);
   });
 
+  it('should display a diff of canonicalized objects', function(){
+    var actual = { name: 'travis j', age: 23 }
+      , expected = { age: 23, name: 'travis' };
+
+      // actual.should.eql(expected);
+  });
+
   it('should display a diff for medium strings', function(){
     var expected = 'foo bar baz\nfoo bar baz\nfoo bar baz'
       , actual = 'foo bar baz\nfoo rar baz\nfoo bar raz';
