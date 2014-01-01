@@ -85,6 +85,7 @@ program
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--suppress-stack', 'suppress stack trace on error')
 
 program.name = 'mocha';
 
@@ -249,6 +250,10 @@ if (program.asyncOnly) mocha.asyncOnly();
 // --globals
 
 mocha.globals(globals);
+
+// --suppress-stack
+
+if (program.suppressStack) mocha.suppressStack();
 
 // custom compiler support
 
