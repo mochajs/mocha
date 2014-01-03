@@ -410,7 +410,9 @@ function lookupFiles(path, recursive) {
     if (exists(path + '.js')) {
       path += '.js'
     } else {
-      return glob.sync(path);
+      files = glob.sync(path);
+      if (!files.length) throw new Error("cannot resolve path (or pattern) '" + path + "'");
+      return files;
     }
   }
 
