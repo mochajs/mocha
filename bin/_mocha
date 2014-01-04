@@ -328,6 +328,7 @@ if (program.watch) {
     purge();
     stop()
     mocha.suite = mocha.suite.clone();
+    mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
     loadAndRun();
   });
