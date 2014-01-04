@@ -296,6 +296,7 @@ if (program.sort) {
 
 // --watch
 
+var runner;
 if (program.watch) {
   console.log();
   hideCursor();
@@ -310,7 +311,7 @@ if (program.watch) {
   function loadAndRun() {
     try {
       mocha.files = files;
-      mocha.run(function(){});
+      runner = mocha.run(function(){});
     } catch(e) {
       console.log(e.stack);
     }
@@ -327,6 +328,9 @@ if (program.watch) {
   utils.watch(watchFiles, function(){
     purge();
     stop()
+    if (runner) {
+      runner.abort();
+    }
     mocha.suite = mocha.suite.clone();
     mocha.ui(program.ui);
     loadAndRun();
@@ -338,7 +342,7 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-var runner = mocha.run(program.exit ? process.exit : exitLater);
+runner = mocha.run(program.exit ? process.exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
