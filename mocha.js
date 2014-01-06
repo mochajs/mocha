@@ -1977,7 +1977,7 @@ exports.cursor = {
       exports.cursor.deleteLine();
       exports.cursor.beginningOfLine();
     } else {
-      process.stdout.write('\n');
+      process.stdout.write('\r');
     }
   }
 };
@@ -4018,7 +4018,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    console.log(tag('testsuite', {
+    writeLine(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -4029,7 +4029,7 @@ function XUnit(runner) {
     }, false));
 
     tests.forEach(test);
-    console.log('</testsuite>');
+    writeLine('</testsuite>');
   });
 }
 
@@ -4057,11 +4057,11 @@ function test(test) {
   if ('failed' == test.state) {
     var err = test.err;
     attrs.message = escape(err.message);
-    console.log(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
+    writeLine(tag('testcase', attrs, false, tag('failure', attrs, false, cdata(err.stack))));
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    writeLine(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    console.log(tag('testcase', attrs, true) );
+    writeLine(tag('testcase', attrs, true) );
   }
 }
 
@@ -4091,6 +4091,30 @@ function cdata(str) {
   return '<![CDATA[' + escape(str) + ']]>';
 }
 
+/**
+ * Write to standard output if available (through Node.js), or otherwise
+ * to `console.log`.
+ *
+ * NOTE: Beware of the differences between `console.log` and
+ * `process.stdout.write`--most importantly that `console.log`
+ * on some browsers may format its arguments a la `printf`,
+ * whereas `process.stdout.write` expects a string to print
+ * verbatim as its first argument. Fortunately most browsers
+ * (at least Firefox and Chrome) print the first argument
+ * verbatim as long as there are no others, so this is unlikely
+ * to be a problem in practice.
+ */
+
+var writeLine;
+if ((typeof process != 'undefined') && (typeof process.stdout != 'undefined')) {
+  writeLine = function(str) {
+    process.stdout.write(str + '\n');
+  };
+} else {
+  writeLine = function(str) {
+    console.log(str);
+  };
+}
 }); // module: reporters/xunit.js
 
 require.register("runnable.js", function(module, exports, require){
