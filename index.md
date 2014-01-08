@@ -433,6 +433,29 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       ok('foo'.length == 3);
     });
 
+<h3 id="require-interface">Require</h3>
+
+The `require` interface allows you to require the `describe` and friend words
+  directly using `require` and call them whatever you want. This interface
+  is also useful if you want to avoid global variables in your tests.
+
+    var testCase = require('mocha').describe
+    var pre = require('mocha').before
+    var assertions = require('mocha').assertions
+    var assert = require('assert')
+ 
+    testCase('Array', function(){
+      pre(function(){
+        // ...
+      });
+
+      testCase('#indexOf()', function(){
+        assertions('should return -1 when not present', function(){
+          assert.equal([1,2,3].indexOf(4), -1);
+        });
+      });
+    });
+
 <h2 id="reporters">Reporters</h2>
 
   Mocha reporters adjust to the terminal window,
