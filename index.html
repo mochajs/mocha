@@ -117,7 +117,7 @@ $  mocha
 
 <h2 id="assertions">Assertions</h2>
 
-<p>Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as <a href="https://github.com/visionmedia/should.js">should.js</a>, node's <a href="http://nodejs.org/api/assert.html">regular <code>assert</code> module</a>, or others. The following is a list of known assertion libraries for node and/or the browser:</p>
+<p>Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as <a href="https://github.com/visionmedia/should.js">should.js</a>, node's regular <code>assert</code> module, or others. The following is a list of known assertion libraries for node and/or the browser:</p>
 
 <ul>
 <li><a href="https://github.com/visionmedia/should.js">should.js</a> BDD style shown throughout these docs</li>
@@ -346,7 +346,7 @@ Options:
 
 <h3 id="globals-option">--globals &lt;names&gt;</h3>
 
-<p>Accepts a comma-delimited list of accepted global variable names. For example suppose your app deliberately exposes a global named <code>app</code> and <code>YUI</code>, you may want to add <code>--globals app,YUI</code>.</p>
+<p>Accepts a comma-delimited list of accepted global variable names. For example, suppose your app deliberately exposes a global named <code>app</code> and <code>YUI</code>, you may want to add <code>--globals app,YUI</code>. It also accepts wildcards. You could do <code>--globals '*bar'</code> and it would match <code>foobar</code>, <code>barbar</code>, etc. You can also simply pass in <code>'*'</code> to ignore all globals.</p>
 
 <h3 id="ignore-leaks-option">--check-leaks</h3>
 
@@ -414,7 +414,7 @@ describe('app', function(){
 
 <h3 id="tdd-interface">TDD</h3>
 
-<p>The "<strong>TDD</strong>" interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, <code>teardown()</code>, <code>suiteSetup()</code>, and <code>suiteTeardown()</code>.</p>
+<p>The "<strong>TDD</strong>" interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
 
 <pre><code>suite('Array', function(){
   setup(function(){
@@ -475,6 +475,30 @@ suite('String');
 
 test('#length', function(){
   ok('foo'.length == 3);
+});
+</code></pre>
+
+<h3 id="require-interface">Require</h3>
+
+<p>The <code>require</code> interface allows you to require the <code>describe</code> and friend words
+  directly using <code>require</code> and call them whatever you want. This interface
+  is also useful if you want to avoid global variables in your tests.</p>
+
+<pre><code>var testCase = require('mocha').describe
+var pre = require('mocha').before
+var assertions = require('mocha').assertions
+var assert = require('assert')
+
+testCase('Array', function(){
+  pre(function(){
+    // ...
+  });
+
+  testCase('#indexOf()', function(){
+    assertions('should return -1 when not present', function(){
+      assert.equal([1,2,3].indexOf(4), -1);
+    });
+  });
 });
 </code></pre>
 
@@ -555,7 +579,7 @@ test('#length', function(){
 
 <p>The HTMLCov reporter extends the JSONCov reporter. The library being tested should first be instrumented by <a href="https://github.com/visionmedia/node-jscoverage">node-jscoverage</a>, this allows Mocha to capture the coverage information necessary to produce a single-page HTML report.</p>
 
-<p>Click to view the current <a href="coverage.html">Express test coverage</a> report. For an integration example view the mocha test coverage support <a href="https://github.com/visionmedia/express/commit/b6ee5fafd0d6c79cf7df5560cb324ebee4fe3a7f">commit</a> for Express.</p>
+<p>Click to view the current <a href="coverage.html">Express test coverage</a> report. For an integration example view the mcoha test coverage support <a href="https://github.com/visionmedia/express/commit/b6ee5fafd0d6c79cf7df5560cb324ebee4fe3a7f">commit</a> for Express.</p>
 
 <p><img src="images/reporter-htmlcov.png" alt="code coverage reporting" title="" /></p>
 
@@ -728,9 +752,9 @@ test('#length', function(){
  out how to run the tests, add a <code>make test</code> target to your <em>Makefile</em>:</p>
 
 <pre><code>test:
-   ./node_modules/.bin/mocha --reporter list
+    ./node_modules/.bin/mocha --reporter list
 
- .PHONY: test
+.PHONY: test
 </code></pre>
 
 <h2 id="editors">Editors</h2>
