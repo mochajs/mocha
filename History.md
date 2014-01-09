@@ -1,3 +1,14 @@
+1.17.0 / 2014-01-09
+==================
+
+  * add: able to require globals (describe, it, etc.) through mocha (#1077)
+  * fix: abort previous run on --watch change (#1100)
+  * fix: reset context for each --watch triggered run (#1099)
+  * fix: error when cli can't resolve path or pattern (#799)
+  * fix: canonicalize objects before stringifying and diffing them (#1079)
+  * fix: make CR call behave like carriage return for non tty (#1087)
+
+
 1.16.2 / 2013-12-23
 ==================
 
