@@ -139,6 +139,7 @@ test-sort:
 		--reporter $(REPORTER) \
 		--sort \
 		test/acceptance/sort
+
 test-harmony:
 	@mv test/mocha.opts test/mocha.opts.backup && \
 	./bin/mocha \
