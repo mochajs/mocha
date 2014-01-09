@@ -296,6 +296,7 @@ if (program.sort) {
 
 // --watch
 
+var runner;
 if (program.watch) {
   console.log();
   hideCursor();
@@ -306,11 +307,18 @@ if (program.watch) {
   });
 
   var watchFiles = utils.files(cwd);
+  var runAgain = false;
 
   function loadAndRun() {
     try {
       mocha.files = files;
-      mocha.run(function(){});
+      runAgain = false;
+      runner = mocha.run(function(){
+        runner = null;
+        if (runAgain) {
+          rerun();
+        }
+      });
     } catch(e) {
       console.log(e.stack);
     }
@@ -324,13 +332,22 @@ if (program.watch) {
 
   loadAndRun();
 
-  utils.watch(watchFiles, function(){
+  function rerun() {
     purge();
     stop()
     mocha.suite = mocha.suite.clone();
     mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
     loadAndRun();
+  }
+
+  utils.watch(watchFiles, function(){
+    runAgain = true;
+    if (runner) {
+      runner.abort();
+    } else {
+      rerun();
+    }
   });
 
   return;
@@ -339,7 +356,7 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-var runner = mocha.run(program.exit ? process.exit : exitLater);
+runner = mocha.run(program.exit ? process.exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
