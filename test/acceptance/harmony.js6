@@ -1,3 +1,5 @@
+'use strict';
+
 describe('harmony', function(){
   it('should allow let in for statements', function(){
     for (let i = 0; i < 1; i++) {

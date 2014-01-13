@@ -140,16 +140,10 @@ test-sort:
 		--sort \
 		test/acceptance/sort
 
-# The test/mocha.opts requires should.js which is not use_strict compliant,
-# so it is necessary to move it before testing harmony. The harmony file uses
-# extension js6 so that it is not included in the unit tests.
 test-harmony:
-	@mv test/mocha.opts test/mocha.opts.backup && \
-	./bin/mocha \
+	@./bin/mocha \
 		--harmony \
-		--use_strict \
-		test/acceptance/harmony.js6; \
-	mv test/mocha.opts.backup test/mocha.opts
+		test/acceptance/harmony.js6
 
 non-tty:
 	@./bin/mocha \

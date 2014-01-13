@@ -30,7 +30,6 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony-collections':
     case '--harmony-generators':
     case '--prof':
-    case '--use_strict':
       args.unshift(arg);
       break;
     default:
