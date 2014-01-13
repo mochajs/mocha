@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-harmony
 
 test-jsapi:
 	@node test/jsapi
@@ -140,6 +140,11 @@ test-sort:
 		--sort \
 		test/acceptance/sort
 
+test-harmony:
+	@./bin/mocha \
+		--harmony \
+		test/acceptance/harmony.js6
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
@@ -165,4 +170,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-harmony tm clean
