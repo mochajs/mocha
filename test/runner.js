@@ -97,6 +97,21 @@ describe('Runner', function(){
       runner.checkGlobals('im a test');
     })
 
+    it('should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed', function(done) {
+      var doneCalled = false;
+      runner.globals('good');
+      global.bad = 1;
+      runner.on('fail', function(test, err) {
+        delete global.bad;
+        done();
+        doneCalled = true;
+      });
+      runner.checkGlobals('test');
+      if (!doneCalled) {
+        done(Error("Expected test failure did not occur."));
+      }
+    });
+
     it ('should not fail when a new common global is introduced', function(){
       // verify that the prop isn't enumerable
       delete global.XMLHttpRequest;
