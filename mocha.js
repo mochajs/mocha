@@ -2038,7 +2038,7 @@ exports.list = function(failures){
     if ('string' == typeof actual && 'string' == typeof expected) {
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
-      msg = match ? '\n      ' + color('error message', match[1]) : '';
+      msg = '\n      ' + color('error message', match ? match[1] : msg);
 
       if (exports.inlineDiffs) {
         msg += inlineDiff(err, escape);
@@ -4404,7 +4404,6 @@ function Runner(suite) {
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
   this.grep(/.*/);
-  console.log(extraGlobals());
   this.globals(this.globalProps().concat(extraGlobals()));
 }
 
