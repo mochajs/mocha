@@ -1,3 +1,10 @@
+1.17.1 / 2014-01-22
+==================
+
+  * fix: expected messages in should.js (should.js#168)
+  * fix: expect errno global in node versions < v0.9.11 (#1111)
+  * fix: unreliable checkGlobals optimization (#1110)
+
 1.17.0 / 2014-01-09
 ==================
 
