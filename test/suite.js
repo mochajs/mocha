@@ -140,6 +140,16 @@ describe('Suite', function(){
         beforeAllItem.title.should.equal('"before all" hook');
         beforeAllItem.fn.should.equal(fn);
       });
+
+      it('appends title to hook', function(){
+        function fn(){}
+        this.suite.beforeAll('test', fn);
+
+        this.suite._beforeAll.should.have.length(1);
+        var beforeAllItem = this.suite._beforeAll[0];
+        beforeAllItem.title.should.equal('"before all" hook: test');
+        beforeAllItem.fn.should.equal(fn);
+      });
     });
   });
 
@@ -157,6 +167,15 @@ describe('Suite', function(){
         var afterAllItem = this.suite._afterAll[0];
         afterAllItem.title.should.equal('"after all" hook');
         afterAllItem.fn.should.equal(fn);
+      });
+      it('appends title to hook', function(){
+        function fn(){}
+        this.suite.afterAll('test', fn);
+
+        this.suite._afterAll.should.have.length(1);
+        var beforeAllItem = this.suite._afterAll[0];
+        beforeAllItem.title.should.equal('"after all" hook: test');
+        beforeAllItem.fn.should.equal(fn);
       });
     });
   });
@@ -176,6 +195,16 @@ describe('Suite', function(){
         beforeEachItem.title.should.equal('"before each" hook');
         beforeEachItem.fn.should.equal(fn);
       });
+
+      it('appends title to hook', function(){
+        function fn(){}
+        this.suite.beforeEach('test', fn);
+
+        this.suite._beforeEach.should.have.length(1);
+        var beforeAllItem = this.suite._beforeEach[0];
+        beforeAllItem.title.should.equal('"before each" hook: test');
+        beforeAllItem.fn.should.equal(fn);
+      });
     });
   });
 
@@ -193,6 +222,16 @@ describe('Suite', function(){
         var afterEachItem = this.suite._afterEach[0];
         afterEachItem.title.should.equal('"after each" hook');
         afterEachItem.fn.should.equal(fn);
+      });
+
+      it('appends title to hook', function(){
+        function fn(){}
+        this.suite.afterEach('test', fn);
+
+        this.suite._afterEach.should.have.length(1);
+        var beforeAllItem = this.suite._afterEach[0];
+        beforeAllItem.title.should.equal('"after each" hook: test');
+        beforeAllItem.fn.should.equal(fn);
       });
     });
   });
