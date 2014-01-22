@@ -132,7 +132,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _beforeAll', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.beforeAll(fn);
 
         this.suite._beforeAll.should.have.length(1);
@@ -142,13 +142,20 @@ describe('Suite', function(){
       });
 
       it('appends title to hook', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.beforeAll('test', fn);
 
         this.suite._beforeAll.should.have.length(1);
         var beforeAllItem = this.suite._beforeAll[0];
         beforeAllItem.title.should.equal('"before all" hook: test');
         beforeAllItem.fn.should.equal(fn);
+
+        function namedFn(){}
+        this.suite.beforeAll(namedFn);
+        this.suite._beforeAll.should.have.length(2);
+        beforeAllItem = this.suite._beforeAll[1];
+        beforeAllItem.title.should.equal('"before all" hook: namedFn');
+        beforeAllItem.fn.should.equal(namedFn);
       });
     });
   });
@@ -160,7 +167,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _afterAll', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.afterAll(fn);
 
         this.suite._afterAll.should.have.length(1);
@@ -169,13 +176,20 @@ describe('Suite', function(){
         afterAllItem.fn.should.equal(fn);
       });
       it('appends title to hook', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.afterAll('test', fn);
 
         this.suite._afterAll.should.have.length(1);
         var beforeAllItem = this.suite._afterAll[0];
         beforeAllItem.title.should.equal('"after all" hook: test');
         beforeAllItem.fn.should.equal(fn);
+
+        function namedFn(){}
+        this.suite.afterAll(namedFn);
+        this.suite._afterAll.should.have.length(2);
+        beforeAllItem = this.suite._afterAll[1];
+        beforeAllItem.title.should.equal('"after all" hook: namedFn');
+        beforeAllItem.fn.should.equal(namedFn);
       });
     });
   });
@@ -187,7 +201,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _beforeEach', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.beforeEach(fn);
 
         this.suite._beforeEach.should.have.length(1);
@@ -197,13 +211,20 @@ describe('Suite', function(){
       });
 
       it('appends title to hook', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.beforeEach('test', fn);
 
         this.suite._beforeEach.should.have.length(1);
         var beforeAllItem = this.suite._beforeEach[0];
         beforeAllItem.title.should.equal('"before each" hook: test');
         beforeAllItem.fn.should.equal(fn);
+
+        function namedFn(){}
+        this.suite.beforeEach(namedFn);
+        this.suite._beforeEach.should.have.length(2);
+        beforeAllItem = this.suite._beforeEach[1];
+        beforeAllItem.title.should.equal('"before each" hook: namedFn');
+        beforeAllItem.fn.should.equal(namedFn);
       });
     });
   });
@@ -215,7 +236,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _afterEach', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.afterEach(fn);
 
         this.suite._afterEach.should.have.length(1);
@@ -225,13 +246,20 @@ describe('Suite', function(){
       });
 
       it('appends title to hook', function(){
-        function fn(){}
+        var fn = function(){};
         this.suite.afterEach('test', fn);
 
         this.suite._afterEach.should.have.length(1);
         var beforeAllItem = this.suite._afterEach[0];
         beforeAllItem.title.should.equal('"after each" hook: test');
         beforeAllItem.fn.should.equal(fn);
+
+        function namedFn(){}
+        this.suite.afterEach(namedFn);
+        this.suite._afterEach.should.have.length(2);
+        beforeAllItem = this.suite._afterEach[1];
+        beforeAllItem.title.should.equal('"after each" hook: namedFn');
+        beforeAllItem.fn.should.equal(namedFn);
       });
     });
   });
