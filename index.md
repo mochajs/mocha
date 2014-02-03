@@ -294,7 +294,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   coffee-script is no longer supported out of the box. CS and similar transpilers
   may be used by mapping the file extensions (for use with --watch) and the module
-  name. For example `--compilers coffee:coffee-script`.
+  name. For example `--compilers coffee:coffee-script` with CoffeeScript 1.6- or
+  `--compilers coffee:coffee-script/register` with CoffeeScript 1.7+.
 
 <h3 id="bail-option">-b, --bail</h3>
 
@@ -443,7 +444,7 @@ The `require` interface allows you to require the `describe` and friend words
     var pre = require('mocha').before
     var assertions = require('mocha').assertions
     var assert = require('assert')
- 
+
     testCase('Array', function(){
       pre(function(){
         // ...
