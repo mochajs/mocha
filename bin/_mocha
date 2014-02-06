@@ -82,7 +82,7 @@ program
   .option('--check-leaks', 'check for global variable leaks')
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
-  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--compilers <ext>:<module>,... or just <module>', 'use the given module(s) to compile files, or as plugin', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
 
@@ -251,16 +251,16 @@ if (program.asyncOnly) mocha.asyncOnly();
 mocha.globals(globals);
 
 // custom compiler support
-
+// allow a module to be loaded plugin-style and not refer to any extension.
 var extensions = ['js'];
 program.compilers.forEach(function(c) {
-  var compiler = c.split(':')
-    , ext = compiler[0]
-    , mod = compiler[1];
+  var compiler = c.split(':');
+  var ext = compiler.length > 1 ? compiler[0] : null;
+  var mod = compiler.length > 1 ? compiler[1] : compiler[0];
 
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);
-  extensions.push(ext);
+  if (ext) extensions.push(ext);
 });
 
 var re = new RegExp('\\.(' + extensions.join('|') + ')$');
