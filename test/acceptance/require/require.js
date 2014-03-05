@@ -6,5 +6,7 @@ describe('require test', function(){
     req.indexOf('b.coffee').should.equal(1);
     req.indexOf('c.js').should.equal(2);
     req.indexOf('d.coffee').should.equal(3);
+
+    this.hooksAreWorking.should.be.true;
   })
 });
