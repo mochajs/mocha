@@ -1,5 +1,5 @@
 
-var fs = require('fs')
+var fs = require('graceful-fs')
   , cssin = fs.readFileSync('test/acceptance/fixtures/css.in', 'ascii')
   , cssout = fs.readFileSync('test/acceptance/fixtures/css.out', 'ascii');
 
