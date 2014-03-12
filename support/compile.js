@@ -3,7 +3,7 @@
  * Module dependencies.
  */
 
-var fs = require('graceful-fs');
+var fs = require('fs');
 
 /**
  * Arguments.

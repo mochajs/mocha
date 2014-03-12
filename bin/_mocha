@@ -7,7 +7,7 @@
 var program = require('commander')
   , sprintf = require('util').format
   , path = require('path')
-  , fs = require('graceful-fs')
+  , fs = require('fs')
   , glob = require('glob')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
