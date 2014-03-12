@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require('graceful-fs');
 require.extensions['.foo'] = function(module, filename) {
   var content;
   content = fs.readFileSync(filename, 'utf8');

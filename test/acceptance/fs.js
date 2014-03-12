@@ -1,5 +1,5 @@
 
-var fs = require('fs');
+var fs = require('graceful-fs');
 
 describe('fs.readFile()', function(){
   describe('when the file exists', function(){
