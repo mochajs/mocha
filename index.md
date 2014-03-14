@@ -3,7 +3,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
 <h2 id="features">Features</h2>
 
   - browser support
-  - simple async support
+  - simple async support, including promises
   - test coverage reporting
   - string diff support
   - javascript API for running tests
@@ -162,7 +162,23 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-  You may also pick any file and add "root" level hooks, for example add `beforeEach()` outside of `describe()`s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root `Suite` with no name.
+  Alternately, instead of using the `done()` callback, you can return a promise. This is mostly useful if the APIs you are testing return promises instead of taking callbacks:
+
+    beforeEach(function(){
+      return db.clear().then(function() {
+        return db.save([tobi, loki, jane]);
+      });
+    })
+
+    describe('#find()', function(){
+      it('respond with matching records', function(done){
+        return db.find({ type: 'User' }).should.eventually.have.length(3);
+      })
+    })
+
+  (The latter example uses [Chai as Promised](https://github.com/domenic/chai-as-promised/) for fluent promise assertions.)
+
+  Note that you may also pick any file and add "root" level hooks, for example add `beforeEach()` outside of `describe()`s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root `Suite` with no name.
 
     beforeEach(function(){
       console.log('before every test')
