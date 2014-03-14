@@ -28,7 +28,7 @@
 
 <ul>
 <li>browser support</li>
-<li>simple async support</li>
+<li>simple async support, including promises</li>
 <li>test coverage reporting</li>
 <li>string diff support</li>
 <li>javascript API for running tests</li>
@@ -196,7 +196,24 @@ $  mocha
 })
 </code></pre>
 
-<p>You may also pick any file and add "root" level hooks, for example add <code>beforeEach()</code> outside of <code>describe()</code>s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root <code>Suite</code> with no name.</p>
+<p>Alternately, instead of using the <code>done()</code> callback, you can return a promise. This useful if the APIs you are testing return promises instead of taking callbacks:</p>
+
+<pre><code>beforeEach(function(){
+  return db.clear().then(function() {
+    return db.save([tobi, loki, jane]);
+  });
+})
+
+describe('#find()', function(){
+  it('respond with matching records', function(done){
+    return db.find({ type: 'User' }).should.eventually.have.length(3);
+  })
+})
+</code></pre>
+
+<p>(The latter example uses <a href="https://github.com/domenic/chai-as-promised/">Chai as Promised</a> for fluent promise assertions.)</p>
+
+<p>Note that you may also pick any file and add "root" level hooks, for example add <code>beforeEach()</code> outside of <code>describe()</code>s then the callback will run before any test-case regardless of the file its in. This is because Mocha has a root <code>Suite</code> with no name.</p>
 
 <pre><code>beforeEach(function(){
   console.log('before every test')
