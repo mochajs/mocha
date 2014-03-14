@@ -298,6 +298,24 @@ describe('Runnable(title, fn)', function(){
           });
         })
       })
+
+      describe('when the promise takes too long to settle', function(){
+        var foreverPendingPromise = {
+          then: function () { }
+        };
+
+        it('should give the timeout error', function(done){
+          var test = new Runnable('foo', function(){
+            return foreverPendingPromise;
+          });
+
+          test.timeout(10);
+          test.run(function(err){
+            err.should.be.ok;
+            done();
+          });
+        })
+      })
     })
 
     describe('when fn returns a non-promise', function(){
