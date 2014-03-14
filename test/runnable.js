@@ -82,17 +82,6 @@ describe('Runnable(title, fn)', function(){
   })
 
   describe('.run(fn)', function(){
-    describe('when .pending', function(){
-      it('should not invoke the callback', function(done){
-        var test = new Runnable('foo', function(){
-          throw new Error('should not be called');
-        });
-
-        test.pending = true;
-        test.run(done);
-      })
-    })
-
     describe('when sync', function(){
       describe('without error', function(){
         it('should invoke the callback', function(done){
@@ -294,6 +283,24 @@ describe('Runnable(title, fn)', function(){
 
           test.run(function(err){
             err.should.equal(expectedErr);
+            done();
+          });
+        })
+      })
+
+      describe('when the promise takes too long to settle', function(){
+        var foreverPendingPromise = {
+          then: function () { }
+        };
+
+        it('should give the timeout error', function(done){
+          var test = new Runnable('foo', function(){
+            return foreverPendingPromise;
+          });
+
+          test.timeout(10);
+          test.run(function(err){
+            err.should.be.ok;
             done();
           });
         })
