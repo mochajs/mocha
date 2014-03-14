@@ -4283,16 +4283,6 @@ Runnable.prototype.run = function(fn){
 
   if (ctx) ctx.runnable(this);
 
-  // timeout
-  if (this.async) {
-    if (ms) {
-      this.timer = setTimeout(function(){
-        done(new Error('timeout of ' + ms + 'ms exceeded'));
-        self.timedOut = true;
-      }, ms);
-    }
-  }
-
   // called multiple times
   function multiple(err) {
     if (emitted) return;
@@ -4313,8 +4303,10 @@ Runnable.prototype.run = function(fn){
   // for .resetTimeout()
   this.callback = done;
 
-  // async
+  // explicit async with `done` argument
   if (this.async) {
+    this.resetTimeout();
+
     try {
       this.fn.call(ctx, function(err){
         if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
@@ -4331,13 +4323,30 @@ Runnable.prototype.run = function(fn){
     return done(new Error('--async-only option in use without declaring `done()`'));
   }
 
-  // sync
+  // sync or promise-returning
   try {
-    if (!this.pending) this.fn.call(ctx);
-    this.duration = new Date - start;
-    fn();
+    if (!this.pending) {
+      callFn(this.fn);
+    } else {
+      done();
+    }
   } catch (err) {
-    fn(err);
+    done(err);
+  }
+
+  function callFn(fn) {
+    var result = fn.call(ctx);
+    if (result && typeof result.then === 'function') {
+      self.resetTimeout();
+      result.then(
+        function(){
+          done();
+        },
+        done
+      );
+    } else {
+      done();
+    }
   }
 };
 
@@ -5159,9 +5168,15 @@ Suite.prototype.bail = function(bail){
  * @api private
  */
 
-Suite.prototype.beforeAll = function(fn){
+Suite.prototype.beforeAll = function(title, fn){
   if (this.pending) return this;
-  var hook = new Hook('"before all" hook', fn);
+  if ('function' === typeof title) {
+    fn = title;
+    title = fn.name;
+  }
+  title = '"before all" hook' + (title ? ': ' + title : '');
+
+  var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
   hook.slow(this.slow());
@@ -5179,9 +5194,15 @@ Suite.prototype.beforeAll = function(fn){
  * @api private
  */
 
-Suite.prototype.afterAll = function(fn){
+Suite.prototype.afterAll = function(title, fn){
   if (this.pending) return this;
-  var hook = new Hook('"after all" hook', fn);
+  if ('function' === typeof title) {
+    fn = title;
+    title = fn.name;
+  }
+  title = '"after all" hook' + (title ? ': ' + title : '');
+
+  var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
   hook.slow(this.slow());
@@ -5199,9 +5220,15 @@ Suite.prototype.afterAll = function(fn){
  * @api private
  */
 
-Suite.prototype.beforeEach = function(fn){
+Suite.prototype.beforeEach = function(title, fn){
   if (this.pending) return this;
-  var hook = new Hook('"before each" hook', fn);
+  if ('function' === typeof title) {
+    fn = title;
+    title = fn.name;
+  }
+  title = '"before each" hook' + (title ? ': ' + title : '');
+
+  var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
   hook.slow(this.slow());
@@ -5219,9 +5246,15 @@ Suite.prototype.beforeEach = function(fn){
  * @api private
  */
 
-Suite.prototype.afterEach = function(fn){
+Suite.prototype.afterEach = function(title, fn){
   if (this.pending) return this;
-  var hook = new Hook('"after each" hook', fn);
+  if ('function' === typeof title) {
+    fn = title;
+    title = fn.name;
+  }
+  title = '"after each" hook' + (title ? ': ' + title : '');
+
+  var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
   hook.slow(this.slow());
