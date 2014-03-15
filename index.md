@@ -171,7 +171,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     })
 
     describe('#find()', function(){
-      it('respond with matching records', function(done){
+      it('respond with matching records', function(){
         return db.find({ type: 'User' }).should.eventually.have.length(3);
       })
     })
