@@ -83,7 +83,7 @@ test-exports:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
-		test/acceptance/interfaces/exports
+		test/acceptance/interfaces/exports*
 
 test-grep:
 	@./bin/mocha \

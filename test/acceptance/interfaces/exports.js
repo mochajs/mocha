@@ -1,4 +1,3 @@
-
 var calls = [];
 
 exports.Array = {
@@ -27,6 +26,8 @@ exports.Array = {
     afterEach: function(){
       calls.push('after each');
     },
+    
+    timeout: 100, 
 
     'should return -1 when the value is not present': function(){
       calls.push('one');
