@@ -915,32 +915,32 @@ module.exports = function(suite){
      * Execute before running tests.
      */
 
-    context.before = function(fn){
-      suites[0].beforeAll(fn);
+    context.before = function(name, fn){
+      suites[0].beforeAll(name, fn);
     };
 
     /**
      * Execute after running tests.
      */
 
-    context.after = function(fn){
-      suites[0].afterAll(fn);
+    context.after = function(name, fn){
+      suites[0].afterAll(name, fn);
     };
 
     /**
      * Execute before each test case.
      */
 
-    context.beforeEach = function(fn){
-      suites[0].beforeEach(fn);
+    context.beforeEach = function(name, fn){
+      suites[0].beforeEach(name, fn);
     };
 
     /**
      * Execute after each test case.
      */
 
-    context.afterEach = function(fn){
-      suites[0].afterEach(fn);
+    context.afterEach = function(name, fn){
+      suites[0].afterEach(name, fn);
     };
 
     /**
@@ -1137,32 +1137,32 @@ module.exports = function(suite){
      * Execute before running tests.
      */
 
-    context.before = function(fn){
-      suites[0].beforeAll(fn);
+    context.before = function(name, fn){
+      suites[0].beforeAll(name, fn);
     };
 
     /**
      * Execute after running tests.
      */
 
-    context.after = function(fn){
-      suites[0].afterAll(fn);
+    context.after = function(name, fn){
+      suites[0].afterAll(name, fn);
     };
 
     /**
      * Execute before each test case.
      */
 
-    context.beforeEach = function(fn){
-      suites[0].beforeEach(fn);
+    context.beforeEach = function(name, fn){
+      suites[0].beforeEach(name, fn);
     };
 
     /**
      * Execute after each test case.
      */
 
-    context.afterEach = function(fn){
-      suites[0].afterEach(fn);
+    context.afterEach = function(name, fn){
+      suites[0].afterEach(name, fn);
     };
 
     /**
@@ -1263,32 +1263,32 @@ module.exports = function(suite){
      * Execute before each test case.
      */
 
-    context.setup = function(fn){
-      suites[0].beforeEach(fn);
+    context.setup = function(name, fn){
+      suites[0].beforeEach(name, fn);
     };
 
     /**
      * Execute after each test case.
      */
 
-    context.teardown = function(fn){
-      suites[0].afterEach(fn);
+    context.teardown = function(name, fn){
+      suites[0].afterEach(name, fn);
     };
 
     /**
      * Execute before the suite.
      */
 
-    context.suiteSetup = function(fn){
-      suites[0].beforeAll(fn);
+    context.suiteSetup = function(name, fn){
+      suites[0].beforeAll(name, fn);
     };
 
     /**
      * Execute after the suite.
      */
 
-    context.suiteTeardown = function(fn){
-      suites[0].afterAll(fn);
+    context.suiteTeardown = function(name, fn){
+      suites[0].afterAll(name, fn);
     };
 
     /**
@@ -1720,8 +1720,9 @@ Mocha.prototype.run = function(fn){
   if (this.files.length) this.loadFiles();
   var suite = this.suite;
   var options = this.options;
+  options.files = this.files;
   var runner = new exports.Runner(suite);
-  var reporter = new this._reporter(runner);
+  var reporter = new this._reporter(runner, options);
   runner.ignoreLeaks = false !== options.ignoreLeaks;
   runner.asyncOnly = options.asyncOnly;
   if (options.grep) runner.grep(options.grep, options.invert);
@@ -4325,10 +4326,10 @@ Runnable.prototype.run = function(fn){
 
   // sync or promise-returning
   try {
-    if (!this.pending) {
-      callFn(this.fn);
-    } else {
+    if (this.pending) {
       done();
+    } else {
+      callFn(this.fn);
     }
   } catch (err) {
     done(err);
@@ -4338,12 +4339,7 @@ Runnable.prototype.run = function(fn){
     var result = fn.call(ctx);
     if (result && typeof result.then === 'function') {
       self.resetTimeout();
-      result.then(
-        function(){
-          done();
-        },
-        done
-      );
+      result.then(function(){ done() }, done);
     } else {
       done();
     }
