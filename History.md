@@ -1,3 +1,8 @@
+1.18.2 / 2014-03-18
+==================
+
+  * fix: html runner was prevented from using #mocha as the default root el (#1162)
+
 1.18.1 / 2014-03-18
 ==================
 
