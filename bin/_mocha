@@ -335,6 +335,8 @@ if (program.watch) {
   function rerun() {
     purge();
     stop()
+    if (!program.grep)
+      mocha.grep(null);
     mocha.suite = mocha.suite.clone();
     mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
