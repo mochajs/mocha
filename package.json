@@ -44,6 +44,8 @@
     "lib",
     "index.js",
     "mocha.css",
-    "mocha.js"
-  ]
+    "mocha.js",
+    "LICENSE"
+  ],
+  "license": "MIT"
 }
