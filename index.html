@@ -196,7 +196,7 @@ $  mocha
 })
 </code></pre>
 
-<p>Alternately, instead of using the <code>done()</code> callback, you can return a promise. This useful if the APIs you are testing return promises instead of taking callbacks:</p>
+<p>Alternately, instead of using the <code>done()</code> callback, you can return a promise. This is useful if the APIs you are testing return promises instead of taking callbacks:</p>
 
 <pre><code>beforeEach(function(){
   return db.clear().then(function() {
