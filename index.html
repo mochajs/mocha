@@ -66,6 +66,7 @@
 <li><a href="#assertions">Assertions</a></li>
 <li><a href="#synchronous-code">Synchronous code</a></li>
 <li><a href="#asynchronous-code">Asynchronous code</a></li>
+<li><a href="#hooks">Hooks</a></li>
 <li><a href="#pending-tests">Pending tests</a></li>
 <li><a href="#exclusive-tests">Exclusive tests</a></li>
 <li><a href="#inclusive-tests">Inclusive tests</a></li>
@@ -217,6 +218,42 @@ describe('#find()', function(){
 
 <pre><code>beforeEach(function(){
   console.log('before every test')
+})
+</code></pre>
+
+<h2 id="hooks">Hooks</h2>
+
+<p>Mocha provides the hooks <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, <code>afterEach()</code>,
+  that can be used to set up preconditions and clean up your tests.</p>
+
+<pre><code>describe('hooks', function() {
+  before(function() {
+    // runs before all tests in this block
+  })
+  after(function(){
+    // runs after all tests in this block
+  })
+  beforeEach(function(){
+    // runs before each test in this block
+  })
+  afterEach(function(){
+    // runs after each test in this block
+  })
+  // test cases
+})
+</code></pre>
+
+<p>All hooks can be invoked with an optional description, making it easier to pinpoint errors in your tests.
+  If hooks are given named functions those names will be used if no description is supplied.</p>
+
+<pre><code>beforeEach(function(){
+  // beforeEach hook
+})
+beforeEach(function namedFun() {
+  // beforeEach:namedFun
+})
+beforeEach('some description', function(){
+  // beforeEach:some description
 })
 </code></pre>
 

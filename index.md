@@ -39,6 +39,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - [Assertions](#assertions)
   - [Synchronous code](#synchronous-code)
   - [Asynchronous code](#asynchronous-code)
+  - [Hooks](#hooks)
   - [Pending tests](#pending-tests)
   - [Exclusive tests](#exclusive-tests)
   - [Inclusive tests](#inclusive-tests)
@@ -184,9 +185,47 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       console.log('before every test')
     })
 
+<h2 id="hooks">Hooks</h2>
+
+  Mocha provides the hooks `before()`, `after()`, `beforeEach()`, `afterEach()`,
+  that can be used to set up preconditions and clean up your tests.
+
+    describe('hooks', function() {
+      before(function() {
+        // runs before all tests in this block
+      })
+      after(function(){
+        // runs after all tests in this block
+      })
+      beforeEach(function(){
+        // runs before each test in this block
+      })
+      afterEach(function(){
+        // runs after each test in this block
+      })
+      // test cases
+    })
+
+
+
+  All hooks can be invoked with an optional description, making it easier to pinpoint errors in your tests.
+  If hooks are given named functions those names will be used if no description is supplied.
+
+    beforeEach(function(){
+      // beforeEach hook
+    })
+    beforeEach(function namedFun() {
+      // beforeEach:namedFun
+    })
+    beforeEach('some description', function(){
+      // beforeEach:some description
+    })
+
+
+
 <h2 id="pending-tests">Pending tests</h2>
 
- Pending test-cases are simply those without a callback:
+  Pending test-cases are simply those without a callback:
 
     describe('Array', function(){
       describe('#indexOf()', function(){
