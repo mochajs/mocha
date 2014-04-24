@@ -2317,7 +2317,7 @@ function stringify(obj) {
  function canonicalize(obj, stack) {
    stack = stack || [];
 
-   if (utils.indexOf(stack, obj) !== -1) return obj;
+   if (utils.indexOf(stack, obj) !== -1) return '[Circular]';
 
    var canonicalizedObj;
 
