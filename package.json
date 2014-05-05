@@ -15,6 +15,7 @@
     "url": "git://github.com/visionmedia/mocha.git"
   },
   "main": "./index",
+  "browser": "./mocha.js",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
