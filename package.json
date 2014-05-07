@@ -33,7 +33,8 @@
     "diff": "1.0.7",
     "debug": "*",
     "mkdirp": "0.3.5",
-    "glob": "3.2.3"
+    "glob": "3.2.3",
+    "yamljs": "0.1.5"
   },
   "devDependencies": {
     "should": ">= 2.0.x",
