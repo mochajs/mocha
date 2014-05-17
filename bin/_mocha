@@ -64,6 +64,7 @@ program
   .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
+  .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
@@ -190,9 +191,22 @@ program.parse(process.argv);
 
 Error.stackTraceLimit = Infinity; // TODO: config
 
+// reporter options
+
+var reporterOptions = {};
+if (program.reporterOptions !== undefined) {
+    program.reporterOptions.split(",").forEach(function(opt) {
+        var L = opt.split("=");
+        if (L.length != 2) {
+            throw new Error("invalid reporter option '" + opt + "'");
+        }
+        reporterOptions[L[0]] = L[1];
+    });
+}
+
 // reporter
 
-mocha.reporter(program.reporter);
+mocha.reporter(program.reporter, reporterOptions);
 
 // interface
 
