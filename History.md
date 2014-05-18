@@ -1,3 +1,15 @@
+1.19.0 / 2014-05-17
+==================
+  
+  * add: browser script option to package.json
+  * add: export file in Mocha.Test objects (#1174)
+  * add: add docs for wrapped node flags
+  * fix: mocha.run() to return error status in browser (#1216)
+  * fix: clean() to show failure details (#1205)
+  * fix: regex that generates html for new keyword (#1201)
+  * fix: sibling suites have inherited but separate contexts (#1164)
+
+
 1.18.2 / 2014-03-18
 ==================
 
