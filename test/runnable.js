@@ -299,6 +299,28 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when the promise is rejected without a reason', function(){
+        var expectedErr = new Error('Promise rejected with no or falsy reason');
+        var rejectedPromise = {
+          then: function (fulfilled, rejected) {
+            process.nextTick(function () {
+              rejected();
+            });
+          }
+        };
+
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(){
+            return rejectedPromise;
+          });
+
+          test.run(function(err){
+            err.should.eql(expectedErr);
+            done();
+          });
+        })
+      })
+
       describe('when the promise takes too long to settle', function(){
         var foreverPendingPromise = {
           then: function () { }
