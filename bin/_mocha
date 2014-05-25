@@ -17,7 +17,9 @@ var program = require('commander')
   , join = path.join
   , basename = path.basename
   , cwd = process.cwd()
-  , mocha = new Mocha;
+  , mocha = new Mocha
+  , isWindows = process.platform === 'win32'
+  , home = isWindows ? process.env.USERPROFILE : process.env.HOME;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -174,6 +176,20 @@ try {
   process.argv = process.argv
     .slice(0, 2)
     .concat(opts.concat(process.argv.slice(2)));
+} catch (err) {
+  // ignore
+}
+
+// .mocha support
+
+try {
+  var sharedOptions = fs.readFileSync(path.join(home, '.mocha'), 'utf8')
+    .trim()
+    .split(/\s+/);
+
+  process.argv = process.argv
+    .slice(0, 2)
+    .concat(sharedOptions.concat(process.argv.slice(2)));
 } catch (err) {
   // ignore
 }
