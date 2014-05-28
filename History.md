@@ -1,6 +1,11 @@
+1.20.0 / 2014-05-28
+==================
+
+  * add: filenames to suite objects (#1222)
+
 1.19.0 / 2014-05-17
 ==================
-  
+
   * add: browser script option to package.json
   * add: export file in Mocha.Test objects (#1174)
   * add: add docs for wrapped node flags
