@@ -198,10 +198,10 @@ mocha.ui(program.ui);
 // load reporter
 
 try {
-  Reporter = require('../lib/reporters/' + program.reporter);
+  global.Reporter = require('../lib/reporters/' + program.reporter);
 } catch (err) {
   try {
-    Reporter = require(program.reporter);
+    global.Reporter = require(program.reporter);
   } catch (err) {
     throw new Error('reporter "' + program.reporter + '" does not exist');
   }
