@@ -36,8 +36,8 @@
     "glob": "3.2.3"
   },
   "devDependencies": {
-    "should": ">= 2.0.x",
-    "coffee-script": "1.2"
+    "coffee-script": "1.2",
+    "should": "^4.0.0"
   },
   "files": [
     "bin",
@@ -49,9 +49,9 @@
     "LICENSE"
   ],
   "licenses": [
-      {
-        "type": "MIT",
-        "url": "https://raw.github.com/visionmedia/mocha/master/LICENSE"
-      }
-    ]
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/visionmedia/mocha/master/LICENSE"
+    }
+  ]
 }
