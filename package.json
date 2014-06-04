@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "coffee-script": "1.2",
-    "should": "^4.0.0"
+    "should": "~4.0.0"
   },
   "files": [
     "bin",
