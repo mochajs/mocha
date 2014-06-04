@@ -53,12 +53,12 @@ describe('Runner', function(){
   describe('.globalProps()', function(){
     it('should include common non enumerable globals', function() {
       var props = runner.globalProps();
-      props.should.include('setTimeout');
-      props.should.include('clearTimeout');
-      props.should.include('setInterval');
-      props.should.include('clearInterval');
-      props.should.include('Date');
-      props.should.include('XMLHttpRequest');
+      props.should.containEql('setTimeout');
+      props.should.containEql('clearTimeout');
+      props.should.containEql('setInterval');
+      props.should.containEql('clearInterval');
+      props.should.containEql('Date');
+      props.should.containEql('XMLHttpRequest');
     });
   });
 
@@ -69,8 +69,8 @@ describe('Runner', function(){
 
     it('should white-list globals', function(){
       runner.globals(['foo', 'bar']);
-      runner.globals().should.include('foo');
-      runner.globals().should.include('bar');
+      runner.globals().should.containEql('foo');
+      runner.globals().should.containEql('bar');
     })
   })
 
