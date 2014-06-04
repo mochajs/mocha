@@ -1,7 +1,7 @@
 1.20.1 / 2014-06-03
 ==================
 
-  * update: should dependency to ~4.0.0 (#1231)
+  * update: should dev dependency to ~4.0.0 (#1231)
 
 1.20.0 / 2014-05-28
 ==================
