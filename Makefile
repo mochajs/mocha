@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing
 
 test-jsapi:
 	@node test/jsapi
@@ -43,6 +43,17 @@ test-unit:
 		test/acceptance/*.js \
 		--growl \
 		test/*.js
+
+test-failing:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/acceptance/failing/timeout.js > /dev/null 2>&1 ; \
+		failures="$$?" ; \
+		if [ "$$failures" != '2' ] ; then \
+			echo 'test-failing:' ; \
+			echo "  expected 2 failing tests but saw $$failures" ; \
+			exit 1 ; \
+		fi
 
 test-compilers:
 	@./bin/mocha \
@@ -165,4 +176,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-failing tm clean
