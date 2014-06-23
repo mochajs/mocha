@@ -313,7 +313,9 @@ if (program.watch.length) {
     process.exit();
   });
 
-  var watchFiles = utils.files(cwd, program.watch);
+  var defaultExts = [ 'js', 'coffee', 'litcoffee', 'coffee.md' ];
+  var watchedExts = defaultExts.concat(program.watch);
+  var watchFiles = utils.files(cwd, watchedExts);
   var runAgain = false;
 
   function loadAndRun() {
