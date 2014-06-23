@@ -68,7 +68,7 @@ program
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch', 'watch files for changes')
+  .option('-w, --watch [<ext>,...]', 'watch files for changes, (optional: additional extensions to monitor)', list, [])
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -313,7 +313,7 @@ if (program.watch) {
     process.exit();
   });
 
-  var watchFiles = utils.files(cwd);
+  var watchFiles = utils.files(cwd, program.watch);
   var runAgain = false;
 
   function loadAndRun() {
