@@ -61,37 +61,38 @@ var images = {
 program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
-  .option('-r, --require <name>', 'require the given module')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
-  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
-  .option('-i, --invert', 'inverts --grep matches')
-  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch', 'watch files for changes')
-  .option('-c, --colors', 'force enabling of colors')
+  .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
-  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
-  .option('-b, --bail', "bail after first test failure")
-  .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
   .option('-S, --sort', "sort test files")
-  .option('--recursive', 'include sub directories')
+  .option('-b, --bail', "bail after first test failure")
+  .option('-c, --colors', 'force enabling of colors')
+  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
+  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
+  .option('-gc', '--expose-gc', 'expose gc extension')
+  .option('-i, --invert', 'inverts --grep matches')
+  .option('-r, --require <name>', 'require the given module')
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
+  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
+  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-w, --watch', 'watch files for changes')
+  .option('--check-leaks', 'check for global variable leaks')
+  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
-  .option('--harmony-proxies', 'enable harmony proxies')
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
   .option('--harmony-generators', 'enable harmony generators')
-  .option('--prof', 'log statistical profiling information')
-  .option('-gc', '--expose-gc', 'expose gc extension')
-  .option('--trace', 'trace function calls')
-  .option('--check-leaks', 'check for global variable leaks')
-  .option('--interfaces', 'display available interfaces')
-  .option('--reporters', 'display available reporters')
-  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--harmony-proxies', 'enable harmony proxies')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--interfaces', 'display available interfaces')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--prof', 'log statistical profiling information')
+  .option('--recursive', 'include sub directories')
+  .option('--reporters', 'display available reporters')
+  .option('--trace', 'trace function calls')
+  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
 
 program.name = 'mocha';
 
@@ -313,7 +314,8 @@ if (program.watch) {
     process.exit();
   });
 
-  var watchFiles = utils.files(cwd);
+
+  var watchFiles = utils.files(cwd, [ 'js', 'coffee', 'litcoffee', 'coffee.md' ].concat(program.watchExtensions));
   var runAgain = false;
 
   function loadAndRun() {
