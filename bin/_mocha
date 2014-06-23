@@ -68,7 +68,7 @@ program
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch [<ext>,...]', 'watch files for changes, (optional: additional extensions to monitor)', list, [])
+  .option('-w, --watch [ext,...]', 'watch files for changes, (optional: additional extensions to monitor)', list, false)
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -304,7 +304,7 @@ if (program.sort) {
 // --watch
 
 var runner;
-if (program.watch.length) {
+if (program.watch) {
   console.log();
   hideCursor();
   process.on('SIGINT', function(){
@@ -314,9 +314,9 @@ if (program.watch.length) {
   });
 
   var defaultExts = [ 'js', 'coffee', 'litcoffee', 'coffee.md' ];
-  var watchedExts = defaultExts.concat(program.watch);
-  var watchFiles = utils.files(cwd, watchedExts);
-  var runAgain = false;
+  var watchedExts = (program.watch.length) ? defaultExts.concat(program.watch) : defaultExts;
+  var watchFiles  = utils.files(cwd, watchedExts);
+  var runAgain    = false;
 
   function loadAndRun() {
     try {
