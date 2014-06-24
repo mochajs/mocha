@@ -90,6 +90,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
 
@@ -313,8 +314,9 @@ if (program.watch) {
     process.exit();
   });
 
-  var watchFiles = utils.files(cwd);
-  var runAgain = false;
+  var defaultExts = [ 'js', 'coffee', 'litcoffee', 'coffee.md' ];
+  var watchFiles  = utils.files(cwd, defaultExts.concat(program.watchExtensions));
+  var runAgain    = false;
 
   function loadAndRun() {
     try {
