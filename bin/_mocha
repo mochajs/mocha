@@ -68,7 +68,7 @@ program
   .option('-i, --invert', 'inverts --grep matches')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch [ext,...]', 'watch files for changes, (optional: additional extensions to monitor)', list, false)
+  .option('-w, --watch', 'watch files for changes')
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
@@ -90,6 +90,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--reporters', 'display available reporters')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
 
@@ -314,8 +315,7 @@ if (program.watch) {
   });
 
   var defaultExts = [ 'js', 'coffee', 'litcoffee', 'coffee.md' ];
-  var watchedExts = (program.watch.length) ? defaultExts.concat(program.watch) : defaultExts;
-  var watchFiles  = utils.files(cwd, watchedExts);
+  var watchFiles  = utils.files(cwd, defaultExts.concat(program.watchExtensions));
   var runAgain    = false;
 
   function loadAndRun() {
