@@ -501,6 +501,12 @@ test('#length', function(){
 <p>The <code>require</code> interface allows you to require the <code>describe</code> and friend words
   directly using <code>require</code> and call them whatever you want. This interface
   is also useful if you want to avoid global variables in your tests.</p>
+<p>
+  <i>Note:</i> this only works if
+    you execute your file via <code>mocha</code>, instead of using <code>node</code> directly. The reason
+    that you can't use node directly to run your script is that certain mocha methods are exposed
+    at runtime and only when using the <code>mocha</code> binary.
+</p>
 
 <pre><code>var testCase = require('mocha').describe
 var pre = require('mocha').before
