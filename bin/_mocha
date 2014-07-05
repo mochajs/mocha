@@ -92,6 +92,7 @@ program
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
   .option('--trace', 'trace function calls')
+  .option('--use-strict', 'enable javascript strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
 
 program.name = 'mocha';
