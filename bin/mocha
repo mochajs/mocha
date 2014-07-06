@@ -29,6 +29,7 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
+    case '--use-strict':
     case '--prof':
       args.unshift(arg);
       break;

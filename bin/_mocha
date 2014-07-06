@@ -92,6 +92,7 @@ program
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
   .option('--trace', 'trace function calls')
+  .option('--use-strict', 'enable javascript strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
 
 program.name = 'mocha';
@@ -198,10 +199,10 @@ mocha.ui(program.ui);
 // load reporter
 
 try {
-  Reporter = require('../lib/reporters/' + program.reporter);
+  global.Reporter = require('../lib/reporters/' + program.reporter);
 } catch (err) {
   try {
-    Reporter = require(program.reporter);
+    global.Reporter = require(program.reporter);
   } catch (err) {
     throw new Error('reporter "' + program.reporter + '" does not exist');
   }
