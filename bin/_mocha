@@ -87,11 +87,14 @@ program
   .option('--harmony-proxies', 'enable harmony proxies')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
+  .option('--no-deprecation', 'silence deprecation warnings')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
   .option('--prof', 'log statistical profiling information')
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
+  .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
   .option('--trace', 'trace function calls')
+  .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
 
 program.name = 'mocha';
