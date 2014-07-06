@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "commander": "2.0.0",
-    "growl": "1.7.x",
+    "growl": "1.8.x",
     "jade": "0.26.3",
     "diff": "1.0.7",
     "debug": "*",
