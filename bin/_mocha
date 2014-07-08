@@ -168,23 +168,32 @@ program.on('require', function(mod){
   requires.push(mod);
 });
 
+// parse args
+
+program.parse(process.argv);
+
 // mocha.opts support
 
-try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
-    .trim()
-    .split(/\s+/);
+// default files to test/*.{js,coffee}
+var args = program.args;
 
-  process.argv = process.argv
-    .slice(0, 2)
-    .concat(opts.concat(process.argv.slice(2)));
+if (!args.length) args.push('test');
+
+try {
+  args.forEach(function (folder) {
+    var opts = fs.readFileSync(path.join(folder, 'mocha.opts'), 'utf8')
+      .trim()
+      .split(/\s+/);
+
+    process.argv = process.argv
+      .slice(0, 2)
+      .concat(opts.concat(process.argv.slice(2)));
+  });
+  program.parse(process.argv);
 } catch (err) {
   // ignore
 }
 
-// parse args
-
-program.parse(process.argv);
 
 // infinite stack traces
 
@@ -284,12 +293,7 @@ requires.forEach(function(mod) {
 
 // files
 
-var files = []
-  , args = program.args;
-
-// default files to test/*.{js,coffee}
-
-if (!args.length) args.push('test');
+var files = [];
 
 args.forEach(function(arg){
   files = files.concat(lookupFiles(arg, program.recursive));
