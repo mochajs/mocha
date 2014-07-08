@@ -64,7 +64,7 @@ program
   .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
+  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
   .option('-c, --colors', 'force enabling of colors')
