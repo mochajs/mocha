@@ -55,6 +55,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - [Editors](#editors)
   - [Example test suites](#example-test-suites)
   - [Running mocha's tests](#running-mochas-tests)
+  - [Growl Notifications](#growl-notifications)
   - [More information](#more-information)
 
 <h2 id="installation">Installation</h2>
@@ -756,6 +757,14 @@ The `require` interface allows you to require the `describe` and friend words
  Alter the reporter:
 
     $ make test REPORTER=list
+
+<h2 id="growl-notifications">Growl Notifications</h2>
+
+  Depends on the following to be installed:
+
+  - Growl
+  - growl-notify
+  - node-growl
 
 <h2 id="more-information">More information</h2>
 
