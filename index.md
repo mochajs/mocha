@@ -452,9 +452,12 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="require-interface">Require</h3>
 
-The `require` interface allows you to require the `describe` and friend words
+  The `require` interface allows you to require the `describe` and friend words
   directly using `require` and call them whatever you want. This interface
   is also useful if you want to avoid global variables in your tests.
+
+  Note this works when you run your tests via the `mocha` executable only, and not when using the `node` executable directly. The reason is that
+  certain methods are exposed at runtime and when using the `mocha` executable only.
 
     var testCase = require('mocha').describe
     var pre = require('mocha').before
