@@ -55,5 +55,19 @@ describe('lib/utils', function () {
       ].join("\r\n");
       utils.clean(fn).should.equal("if (false) {\n\tvar json = {\n\t\tone : 1\n\t};\n}");
     });
+
+    it("should format es6 arrow functions", function () {
+      var fn = [
+        "() => {",
+        "  var a = 1;",
+        "}"
+      ].join("\n");
+      utils.clean(fn).should.equal("var a = 1;");
+    });
+
+    it("should format es6 arrow functions with implicit return", function () {
+      var fn = "() => foo()";
+      utils.clean(fn).should.equal("foo()");
+    });
   });
 });
