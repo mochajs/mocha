@@ -368,7 +368,20 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-runner = mocha.run(program.exit ? process.exit : exitLater);
+
+runner = mocha.run(function(){
+  var draining = 0;
+  var exit = function(){ if (!(draining--)) program.exit ? process.exit() : exitLater(); };
+  if (process.stdout.bufferSize) {
+    draining += 1;
+    process.stdout.once('drain', exit);
+  }
+  if (process.stderr.bufferSize) {
+    draining += 1;
+    process.stderr.once('drain', exit);
+  }
+  exit();
+});
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
