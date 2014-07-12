@@ -17,7 +17,7 @@ var program = require('commander')
   , join = path.join
   , basename = path.basename
   , cwd = process.cwd()
-  , mocha = new Mocha;
+  , mocha = Mocha.current = new Mocha;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
