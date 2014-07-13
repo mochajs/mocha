@@ -19,26 +19,45 @@ describe('timeouts', function(){
     }, 300);
   })
 
-  describe('when disabled', function(){
+  describe('when disabled from Mocha.Runnable.prototype.disableTimeouts property', function(){
     var Mocha = require('../../lib/mocha');
-    var timeout;
 
     beforeEach(function(){
       Mocha.Runnable.prototype.disableTimeouts = true;
-      timeout = this.timeout();
     })
 
     afterEach(function(){
       Mocha.Runnable.prototype.disableTimeouts = false;
     })
 
+    it('should be ignored for async suites', timeout)
+    it('should be ignored for sync suites', syncTimeout)
+  })
+
+  describe('when disabled from suite.disableTimeouts()', function(){
+    beforeEach(function(){
+      this.disableTimeouts(true);
+    })
+
     it('should be ignored for async suites', function(done){
-      setTimeout(done, timeout + 10);
+      this.disableTimeouts();
+      timeout.call(this, done);
     })
 
     it('should be ignored for sync suites', function(){
-      var start = Date.now();
-      while(Date.now() - start < timeout)continue;
+      this.disableTimeouts();
+      syncTimeout.call(this);
     })
-  });
+  })
+
+  function timeout(fn){
+    this.timeout(5);
+    setTimeout(fn, 15);
+  }
+
+  function syncTimeout(){
+    var start = Date.now();
+    this.timeout(5);
+    while(Date.now() - start < timeout) continue;
+  }
 })
