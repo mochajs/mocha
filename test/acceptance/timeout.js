@@ -25,7 +25,6 @@ describe('timeouts', function(){
 
     beforeEach(function(){
       Mocha.Runnable.prototype.disableTimeouts = true;
-      timeout = this.timeout();
     })
 
     afterEach(function(){
@@ -33,12 +32,14 @@ describe('timeouts', function(){
     })
 
     it('should be ignored for async suites', function(done){
-      setTimeout(done, timeout + 10);
+      this.timeout(5);
+      setTimeout(done, 15);
     })
 
     it('should be ignored for sync suites', function(){
       var start = Date.now();
-      while(Date.now() - start < timeout)continue;
+      this.timeout(5);
+      while(Date.now() - start < 15)continue;
     })
   });
 })
