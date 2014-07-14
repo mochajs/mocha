@@ -241,6 +241,32 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when done() is invoked with a non-Error object', function(){
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(done){
+            done({ error: 'Test error' });
+          });
+
+          test.run(function(err){
+            err.message.should.equal('done() invoked with non-Error: {"error":"Test error"}');
+            done();
+          });
+        })
+      })
+
+      describe('when done() is invoked with a string', function(){
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(done){
+            done('Test error');
+          });
+
+          test.run(function(err){
+            err.message.should.equal('done() invoked with non-Error: Test error');
+            done();
+          });
+        })
+      })
+
       it('should allow updating the timeout', function(done){
         var callCount = 0;
         var increment = function() {
