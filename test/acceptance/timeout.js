@@ -19,26 +19,11 @@ describe('timeouts', function(){
     }, 300);
   })
 
-  describe('when disabled', function(){
-    var Mocha = require('../../lib/mocha');
-    var timeout;
-
-    beforeEach(function(){
-      Mocha.Runnable.prototype.disableTimeouts = true;
-      timeout = this.timeout();
-    })
-
-    afterEach(function(){
-      Mocha.Runnable.prototype.disableTimeouts = false;
-    })
-
-    it('should be ignored for async suites', function(done){
-      setTimeout(done, timeout + 10);
-    })
-
-    it('should be ignored for sync suites', function(){
-      var start = Date.now();
-      while(Date.now() - start < timeout)continue;
-    })
+  describe('disabling', function(){
+    it('should allow overriding per-test', function(done){
+      this.enableTimeouts(false);
+      this.timeout(1);
+      setTimeout(done, 2);
+    });
   });
 })

@@ -41,6 +41,14 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#enableTimeouts(enabled)', function(){
+    it('should set enabled', function(){
+      var run = new Runnable;
+      run.enableTimeouts(false);
+      run.enableTimeouts().should.equal(false);
+    });
+  });
+
   describe('#slow(ms)', function(){
     it('should set the slow threshold', function(){
       var run = new Runnable;
@@ -125,6 +133,17 @@ describe('Runnable(title, fn)', function(){
         })
       })
     })
+
+    describe('when timeouts are disabled', function() {
+      it('should not error with timeout', function(done) {
+        var test = new Runnable('foo', function(done){
+          setTimeout(process.nextTick.bind(undefined, done), 2);
+        });
+        test.timeout(1);
+        test.enableTimeouts(false);
+        test.run(done);
+      });
+    });
 
     describe('when async', function(){
       describe('without error', function(){
