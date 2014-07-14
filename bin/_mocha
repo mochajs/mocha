@@ -89,6 +89,7 @@ program
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
   .option('--prof', 'log statistical profiling information')
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
@@ -228,6 +229,10 @@ if (program.inlineDiffs) mocha.useInlineDiffs(true);
 // --slow <ms>
 
 if (program.slow) mocha.suite.slow(program.slow);
+
+// --no-timeouts
+
+if (!program.timeouts) mocha.enableTimeouts(false);
 
 // --timeout
 
