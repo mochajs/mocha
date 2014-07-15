@@ -1,5 +1,5 @@
 // The global object is "self" in Web Workers.
-global = (function() { return this; })();
+var global = (function() { return this; })();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -26,13 +26,20 @@ process.stdout = {};
 
 var uncaughtExceptionHandlers = [];
 
+var originalOnerrorHandler = global.onerror;
+
 /**
  * Remove uncaughtException listener.
+ * Revert to original onerror handler if previously defined.
  */
 
 process.removeListener = function(e, fn){
   if ('uncaughtException' == e) {
-    global.onerror = function() {};
+    if (originalOnerrorHandler) {
+      global.onerror = originalOnerrorHandler;
+    } else {
+      global.onerror = function() {};
+    }
     var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
     if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
   }
@@ -135,12 +142,12 @@ mocha.run = function(fn){
   if (query.grep) mocha.grep(query.grep);
   if (query.invert) mocha.invert();
 
-  return Mocha.prototype.run.call(mocha, function(){
+  return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
     if (global.document) {
       Mocha.utils.highlightTags('code');
     }
-    if (fn) fn();
+    if (fn) fn(err);
   });
 };
 

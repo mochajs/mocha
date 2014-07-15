@@ -14,11 +14,13 @@ process.argv.slice(2).forEach(function(arg){
   switch (flag) {
     case '-d':
       args.unshift('--debug');
+      args.push('--no-timeouts');
       break;
     case 'debug':
     case '--debug':
     case '--debug-brk':
       args.unshift(arg);
+      args.push('--no-timeouts');
       break;
     case '-gc':
     case '--expose-gc':
@@ -29,7 +31,10 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
+    case '--no-deprecation':
     case '--prof':
+    case '--throw-deprecation':
+    case '--trace-deprecation':
       args.unshift(arg);
       break;
     default:

@@ -41,6 +41,14 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#enableTimeouts(enabled)', function(){
+    it('should set enabled', function(){
+      var run = new Runnable;
+      run.enableTimeouts(false);
+      run.enableTimeouts().should.equal(false);
+    });
+  });
+
   describe('#slow(ms)', function(){
     it('should set the slow threshold', function(){
       var run = new Runnable;
@@ -125,6 +133,17 @@ describe('Runnable(title, fn)', function(){
         })
       })
     })
+
+    describe('when timeouts are disabled', function() {
+      it('should not error with timeout', function(done) {
+        var test = new Runnable('foo', function(done){
+          setTimeout(process.nextTick.bind(undefined, done), 2);
+        });
+        test.timeout(1);
+        test.enableTimeouts(false);
+        test.run(done);
+      });
+    });
 
     describe('when async', function(){
       describe('without error', function(){
@@ -222,6 +241,32 @@ describe('Runnable(title, fn)', function(){
         })
       })
 
+      describe('when done() is invoked with a non-Error object', function(){
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(done){
+            done({ error: 'Test error' });
+          });
+
+          test.run(function(err){
+            err.message.should.equal('done() invoked with non-Error: {"error":"Test error"}');
+            done();
+          });
+        })
+      })
+
+      describe('when done() is invoked with a string', function(){
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(done){
+            done('Test error');
+          });
+
+          test.run(function(err){
+            err.message.should.equal('done() invoked with non-Error: Test error');
+            done();
+          });
+        })
+      })
+
       it('should allow updating the timeout', function(done){
         var callCount = 0;
         var increment = function() {
@@ -242,5 +287,112 @@ describe('Runnable(title, fn)', function(){
       it('should allow a timeout of 0')
     })
 
+    describe('when fn returns a promise', function(){
+      describe('when the promise is fulfilled with no value', function(){
+        var fulfilledPromise = {
+          then: function (fulfilled, rejected) {
+            process.nextTick(fulfilled);
+          }
+        };
+
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(){
+            return fulfilledPromise;
+          });
+
+          test.run(done);
+        })
+      })
+
+      describe('when the promise is fulfilled with a value', function(){
+        var fulfilledPromise = {
+          then: function (fulfilled, rejected) {
+            process.nextTick(function () {
+              fulfilled({});
+            });
+          }
+        };
+
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(){
+            return fulfilledPromise;
+          });
+
+          test.run(done);
+        })
+      })
+
+      describe('when the promise is rejected', function(){
+        var expectedErr = new Error('fail');
+        var rejectedPromise = {
+          then: function (fulfilled, rejected) {
+            process.nextTick(function () {
+              rejected(expectedErr);
+            });
+          }
+        };
+
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(){
+            return rejectedPromise;
+          });
+
+          test.run(function(err){
+            err.should.equal(expectedErr);
+            done();
+          });
+        })
+      })
+
+      describe('when the promise is rejected without a reason', function(){
+        var expectedErr = new Error('Promise rejected with no or falsy reason');
+        var rejectedPromise = {
+          then: function (fulfilled, rejected) {
+            process.nextTick(function () {
+              rejected();
+            });
+          }
+        };
+
+        it('should invoke the callback', function(done){
+          var test = new Runnable('foo', function(){
+            return rejectedPromise;
+          });
+
+          test.run(function(err){
+            err.should.eql(expectedErr);
+            done();
+          });
+        })
+      })
+
+      describe('when the promise takes too long to settle', function(){
+        var foreverPendingPromise = {
+          then: function () { }
+        };
+
+        it('should give the timeout error', function(done){
+          var test = new Runnable('foo', function(){
+            return foreverPendingPromise;
+          });
+
+          test.timeout(10);
+          test.run(function(err){
+            err.should.be.ok;
+            done();
+          });
+        })
+      })
+    })
+
+    describe('when fn returns a non-promise', function(){
+      it('should invoke the callback', function(done){
+        var test = new Runnable('foo', function(){
+          return { then: "i ran my tests" };
+        });
+
+        test.run(done);
+      })
+    })
   })
 })

@@ -1,7 +1,10 @@
 {
   "name": "mocha",
-  "version": "1.16.2",
-  "main": "mocha.js",
+  "version": "1.20.1",
+  "main": [
+    "mocha.js",
+    "mocha.css"
+  ],
   "ignore": [
     "bin",
     "editors",

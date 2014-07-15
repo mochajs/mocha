@@ -1,3 +1,59 @@
+1.20.1 / 2014-06-03
+==================
+
+  * update: should dev dependency to ~4.0.0 (#1231)
+
+1.20.0 / 2014-05-28
+==================
+
+  * add: filenames to suite objects (#1222)
+
+1.19.0 / 2014-05-17
+==================
+
+  * add: browser script option to package.json
+  * add: export file in Mocha.Test objects (#1174)
+  * add: add docs for wrapped node flags
+  * fix: mocha.run() to return error status in browser (#1216)
+  * fix: clean() to show failure details (#1205)
+  * fix: regex that generates html for new keyword (#1201)
+  * fix: sibling suites have inherited but separate contexts (#1164)
+
+
+1.18.2 / 2014-03-18
+==================
+
+  * fix: html runner was prevented from using #mocha as the default root el (#1162)
+
+1.18.1 / 2014-03-18
+==================
+
+  * fix: named before/after hooks in bdd, tdd, qunit interfaces (#1161)
+
+1.18.0 / 2014-03-13
+==================
+
+  * add: promise support (#329)
+  * add: named before/after hooks (#966)
+
+1.17.1 / 2014-01-22
+==================
+
+  * fix: expected messages in should.js (should.js#168)
+  * fix: expect errno global in node versions < v0.9.11 (#1111)
+  * fix: unreliable checkGlobals optimization (#1110)
+
+1.17.0 / 2014-01-09
+==================
+
+  * add: able to require globals (describe, it, etc.) through mocha (#1077)
+  * fix: abort previous run on --watch change (#1100)
+  * fix: reset context for each --watch triggered run (#1099)
+  * fix: error when cli can't resolve path or pattern (#799)
+  * fix: canonicalize objects before stringifying and diffing them (#1079)
+  * fix: make CR call behave like carriage return for non tty (#1087)
+
+
 1.16.2 / 2013-12-23
 ==================
 

@@ -25,7 +25,7 @@ function get(url, body, header) {
   return function(done){
     http.get({ path: url, port: 8889, headers: header }, function(res){
       var buf = '';
-      res.should.have.status(200);
+      res.should.have.property('statusCode', 200);
       res.setEncoding('utf8');
       res.on('data', function(chunk){ buf += chunk });
       res.on('end', function(){
