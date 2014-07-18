@@ -70,4 +70,20 @@ describe('lib/utils', function () {
       utils.clean(fn).should.equal("foo()");
     });
   });
+
+  describe('stringify', function(){
+    it('should canoncalize the object', function(){
+      var travis = { name: 'travis', age: 24 };
+      var travis2 = { age: 24, name: 'travis' };
+
+      utils.stringify(travis).should.equal(utils.stringify(travis2));
+    });
+
+    it('should handle circular structures', function(){
+      var travis = { name: 'travis' };
+      travis.whoami = travis;
+
+      utils.stringify(travis).should.equal('{\n  "name": "travis",\n  "whoami": "[Circular]"\n}');
+    });
+  });
 });
