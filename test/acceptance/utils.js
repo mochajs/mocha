@@ -83,7 +83,7 @@ describe('lib/utils', function () {
       var travis = { name: 'travis' };
       travis.whoami = travis;
 
-      utils.stringify(travis).should.equal('{\n  "name": "travis",\n  "whoami": "[Circular]"\n}');
+      utils.stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": "[Circular]"\n}');
     });
   });
 });

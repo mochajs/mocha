@@ -77,4 +77,11 @@ describe('diffs', function(){
 
     // tobi.should.eql(loki);
   });
+
+  it('should show value diffs and not be affected by commas', function(){
+    var obj1 = { a: 123 };
+    var obj2 = { a: 123, b: 456 };
+
+    // obj1.should.equal(obj2);
+  });
 });
