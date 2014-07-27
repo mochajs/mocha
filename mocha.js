@@ -1396,15 +1396,7 @@ require.register("mocha.js", function(module, exports, require){
  */
 
 var path = require('browser/path')
-  , utils = require('./utils')
-  , join = path.join
-  , cwd = process.cwd();
-
-/**
- * Add node_modules directory to use local modules for ui and reporters.
- */
-
-module.paths.push(cwd, join(cwd, 'node_modules'));
+  , utils = require('./utils');
 
 /**
  * Expose `Mocha`.
