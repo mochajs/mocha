@@ -1,7 +1,18 @@
 1.22.0 / ???
 ==================
 
+1.21.2 / 2014-07-27
+==================
+
   * add: --opts (#1277)
+  * fix: getting timeout from context (#1282)
+  * fix: revert "allow local modules to work as ui and reporters"
+  * fix: reverting "adding node_modules dir to use local modules for ui & reporters" from cleanup
+
+1.21.1 / 2014-07-26
+==================
+
+  * fix: missing build (#1284)
 
 1.21.0 / 2014-07-23
 ==================
