@@ -3111,8 +3111,12 @@ function JSONReporter(runner) {
     passes.push(test);
   });
 
-  runner.on('fail', function(test){
+  runner.on('fail', function(test, err){
     failures.push(test);
+    if (err === Object(err)) {
+      test.errMsg = err.message;
+      test.errStack = err.stack;
+    }
   });
 
   runner.on('end', function(){
@@ -3122,6 +3126,7 @@ function JSONReporter(runner) {
       failures: failures.map(clean),
       passes: passes.map(clean)
     };
+    runner.testResults = obj;
 
     process.stdout.write(JSON.stringify(obj, null, 2));
   });
@@ -3141,7 +3146,9 @@ function clean(test) {
     title: test.title,
     fullTitle: test.fullTitle(),
     duration: test.duration,
-    err: test.err
+    err: test.err,
+    errStack: test.err.stack,
+    errMessage: test.err.message
   }
 }
 
@@ -4314,7 +4321,8 @@ Runnable.prototype.run = function(fn){
     , finished
     , emitted;
 
-  if (ctx) ctx.runnable(this);
+  // Some times the ctx exists but it is not runnable
+  if (ctx && ctx.runnable) ctx.runnable(this);
 
   // called multiple times
   function multiple(err) {
