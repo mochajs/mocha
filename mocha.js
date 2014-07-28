@@ -1405,15 +1405,14 @@ var path = require('browser/path')
 exports = module.exports = Mocha;
 
 /**
- * To require UIs and reporters when running in node.
+ * To require local UIs and reporters when running in node.
  */
 
-if (process && typeof process.cwd === 'function') {
+if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
   var join = path.join
     , cwd = process.cwd();
   module.paths.push(cwd, join(cwd, 'node_modules'));
 }
-
 
 /**
  * Expose internals.
