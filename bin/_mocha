@@ -377,9 +377,9 @@ if (program.watch) {
 
 mocha.files = files;
 
-runner = mocha.run(function(){
+runner = mocha.run(function(failures){
   var draining = 0;
-  var exit = function(){ if (!(draining--)) program.exit ? process.exit() : exitLater(); };
+  var exit = function(){ if (!(draining--)) program.exit ? process.exit(failures) : exitLater(failures); };
   if (process.stdout.bufferSize) {
     draining += 1;
     process.stdout.once('drain', exit);
