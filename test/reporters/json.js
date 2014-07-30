@@ -4,7 +4,7 @@ var Mocha = require('../../')
   , Runner = Mocha.Runner
   , Test = Mocha.Test;
 
-describe('Runner', function(){
+describe('json reporter', function(){
   var suite, runner;
 
   beforeEach(function(){
@@ -18,8 +18,10 @@ describe('Runner', function(){
 
    it('should have 1 test failure', function(done){
      var testTitle = 'json test 1';
+     var error = { message: 'oh shit' };
+
      suite.addTest(new Test(testTitle, function (done) {
-       done(testTitle);
+       done(new Error(error.message));
      }));
 
      runner.run(function(failureCount) {
@@ -28,10 +30,11 @@ describe('Runner', function(){
        runner.testResults.should.have.property('failures');
        runner.testResults.failures.should.be.an.instanceOf(Array);
        runner.testResults.failures.should.have.a.lengthOf(1);
+
        var failure = runner.testResults.failures[0];
        failure.should.have.property('title', testTitle);
-       failure.should.have.properties('err', 'errStack', 'errMessage');
-       failure.errMessage.should.endWith(testTitle);
+       failure.err.message.should.equal(error.message);
+       failure.should.have.properties('err');
 
        done();
      });
