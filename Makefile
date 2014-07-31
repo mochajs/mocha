@@ -58,14 +58,14 @@ test-failing:
 test-compilers:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script,foo:./test/compiler/foo \
+		--compilers coffee:coffee-script/register,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-requires:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script \
+		--compilers coffee:coffee-script/register \
 		--require test/acceptance/require/a.js \
 		--require test/acceptance/require/b.coffee \
 		--require test/acceptance/require/c.js \
