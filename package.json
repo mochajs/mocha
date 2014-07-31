@@ -45,7 +45,7 @@
     "glob": "3.2.3"
   },
   "devDependencies": {
-    "coffee-script": "1.2",
+    "coffee-script": "~1.7.1",
     "should": "~4.0.0"
   },
   "files": [
