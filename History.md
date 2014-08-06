@@ -1,6 +1,11 @@
 1.22.1-3 / 2014-07-27
 ==================
 
+  * fix: disabling timeouts with this.timeout(0) (#1301)
+
+1.22.1-3 / 2014-07-27
+==================
+
   * fix: local uis and reporters (#1288)
   * fix: building 1.21.0's changes in the browser (#1284)
 
