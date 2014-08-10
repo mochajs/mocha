@@ -673,7 +673,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   This will default the reporter to `dot`, require the `should` library,
   and use `bdd` as the interface. With this you may then invoke `mocha(1)`
   with additional arguments, here enabling growl support and changing
-  the reporter to `spec`:
+  the reporter to `list`:
 
     $ mocha --reporter list --growl
 
