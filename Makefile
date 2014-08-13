@@ -32,7 +32,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing test-suppress-stack
 
 test-jsapi:
 	@node test/jsapi
@@ -173,7 +173,18 @@ non-tty:
 	@echo spec:
 	@cat /tmp/spec.out
 
+test-suppress-stack:
+	@output=$$(./bin/mocha \
+		--reporter $(REPORTER) \
+		--suppress-stack \
+		test/acceptance/misc/suppressStack 2>&1 > /tmp/stack.out) ; \
+		if [ $$(echo $$output | grep -Pc "(\s*at\s.*)|%s") -gt 0 ] ; then \
+			echo 'test-suppress-stack:' ; \
+			echo "  expected error output not to contain a stack trace" ; \
+			exit 1 ; \
+		fi
+
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-failing tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-failing test-suppress-stack tm clean
