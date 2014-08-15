@@ -3111,12 +3111,8 @@ function JSONReporter(runner) {
     passes.push(test);
   });
 
-  runner.on('fail', function(test, err){
+  runner.on('fail', function(test){
     failures.push(test);
-    if (err === Object(err)) {
-      test.errMsg = err.message;
-      test.errStack = err.stack;
-    }
   });
 
   runner.on('end', function(){
@@ -3126,6 +3122,7 @@ function JSONReporter(runner) {
       failures: failures.map(clean),
       passes: passes.map(clean)
     };
+
     runner.testResults = obj;
 
     process.stdout.write(JSON.stringify(obj, null, 2));
@@ -3146,10 +3143,22 @@ function clean(test) {
     title: test.title,
     fullTitle: test.fullTitle(),
     duration: test.duration,
-    err: test.err,
-    errStack: test.err.stack,
-    errMessage: test.err.message
+    err: errorJSON(test.err)
   }
+}
+
+/**
+ * Transform `error` into a JSON object.
+ * @param {Error} err
+ * @return {Object}
+ */
+
+function errorJSON(err) {
+  var res = {};
+  Object.getOwnPropertyNames(err).forEach(function(key) {
+    res[key] = err[key];
+  }, err);
+  return res;
 }
 
 }); // module: reporters/json.js
@@ -4203,6 +4212,7 @@ Runnable.prototype.constructor = Runnable;
 
 Runnable.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
+  if (ms === 0) this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = ms;
@@ -5182,6 +5192,7 @@ Suite.prototype.clone = function(){
 
 Suite.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
+  if (ms === 0) this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);

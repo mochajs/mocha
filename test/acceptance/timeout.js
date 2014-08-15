@@ -30,6 +30,31 @@ describe('timeouts', function(){
       this.timeout(0);
       setTimeout(done, 1);
     })
+
+    describe('using beforeEach', function() {
+      beforeEach(function () {
+        this.timeout(0);
+      })
+      
+      it('should work with timeout(0)', function(done) {        
+        setTimeout(done, 1);
+      })
+    })
+
+    describe('suite-level', function() {      
+      this.timeout(0);      
+      
+      it('should work with timeout(0)', function(done) {        
+        setTimeout(done, 1);
+      })
+      
+      describe('nested suite', function () {
+        it('should work with timeout(0)', function(done) {        
+          setTimeout(done, 1);
+        })
+          
+      })
+    })
   });
   
 })
