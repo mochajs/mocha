@@ -1566,6 +1566,9 @@ Mocha.prototype.loadFiles = function(fn){
   var pending = this.files.length;
   this.files.forEach(function(file){
     file = path.resolve(file);
+    if (require.cache[file]){
+      delete require.cache[file];
+    }
     suite.emit('pre-require', global, file, self);
     suite.emit('require', require(file), file, self);
     suite.emit('post-require', global, file, self);
