@@ -2739,7 +2739,8 @@ function HTML(runner) {
  */
 
 HTML.prototype.suiteURL = function(suite){
-  return '?grep=' + encodeURIComponent(suite.fullTitle());
+  var prefix = (window && window.location.search) ? window.location.search + "&" : "?";
+  return prefix + 'grep=' + encodeURIComponent(suite.fullTitle());
 };
 
 /**
@@ -2749,7 +2750,8 @@ HTML.prototype.suiteURL = function(suite){
  */
 
 HTML.prototype.testURL = function(test){
-  return '?grep=' + encodeURIComponent(test.fullTitle());
+  var prefix = (window && window.location.search) ? window.location.search + "&" : "?";
+  return prefix + 'grep=' + encodeURIComponent(test.fullTitle());
 };
 
 /**
