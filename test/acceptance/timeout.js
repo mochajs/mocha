@@ -51,6 +51,16 @@ describe('timeouts', function(){
       })
     })
 
+    describe('using enableTimeouts(false)', function() {
+      this.timeout(4);
+
+      it('should suppress timeout(4)', function(done) {
+        // The test is in the before() call.
+        this.enableTimeouts(false);
+        setTimeout(done, 50);
+      })
+    })
+
     describe('suite-level', function() {
       this.timeout(0);
 
