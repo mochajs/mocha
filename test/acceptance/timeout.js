@@ -55,9 +55,29 @@ describe('timeouts', function(){
       this.timeout(4);
 
       it('should suppress timeout(4)', function(done) {
-        // The test is in the before() call.
         this.enableTimeouts(false);
         setTimeout(done, 50);
+      })
+    })
+
+    describe('using enableTimeouts(false) and enableTimeouts(true)', function() {
+      this.timeout(4);
+
+      it('should error on timeout', function(done) {
+        this.enableTimeouts(false);
+        this.enableTimeouts(true);
+        // uncomment
+        // setTimeout(done, 50);
+        done();
+      })
+
+      it('should suppress timeout(4)', function(done) {
+        this.enableTimeouts(false);
+        var self = this;
+        setTimeout(function() {
+          self.enableTimeouts(true);
+          done();
+        }, 50);
       })
     })
 
