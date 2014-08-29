@@ -23,6 +23,7 @@ mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp
 
 clean:
 	rm -f mocha.js
+	rm -rf test-outputs
 	rm -fr lib-cov
 	rm -f coverage.html
 
@@ -35,7 +36,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing test-regression
 
 test-jsapi:
 	@node test/jsapi
@@ -47,8 +48,17 @@ test-unit:
 		--growl \
 		test/*.js
 
-test-failing:
+test-regression: test-outputs/issue1327/case-out.json
 	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/regression/issue*/control.js
+
+test-outputs/issue1327/case-out.json: test/regression/issue1327/case.js
+	@mkdir -p $(dir $@) || true
+	@./bin/mocha --reporter json $< > $@ || true
+
+test-failing:
+	./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/failing/timeout.js > /dev/null 2>&1 ; \
 		failures="$$?" ; \
