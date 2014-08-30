@@ -1758,6 +1758,16 @@ Mocha.prototype.asyncOnly = function(){
 };
 
 /**
+ * Disable syntax highlighting (in browser).
+ * @returns {Mocha}
+ * @api public
+ */
+Mocha.prototype.noHighlighting = function() {
+  this.options.noHighlighting = true;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
@@ -3143,7 +3153,7 @@ function clean(test) {
     title: test.title,
     fullTitle: test.fullTitle(),
     duration: test.duration,
-    err: errorJSON(test.err)
+    err: errorJSON(test.err || {})
   }
 }
 
@@ -4302,6 +4312,7 @@ Runnable.prototype.resetTimeout = function(){
   if (!this._enableTimeouts) return;
   this.clearTimeout();
   this.timer = setTimeout(function(){
+    if (!self._enableTimeouts) return;
     self.callback(new Error('timeout of ' + ms + 'ms exceeded'));
     self.timedOut = true;
   }, ms);
@@ -5778,7 +5789,7 @@ function highlight(js) {
  */
 
 exports.highlightTags = function(name) {
-  var code = document.getElementsByTagName(name);
+  var code = document.getElementById('mocha').getElementsByTagName(name);
   for (var i = 0, len = code.length; i < len; ++i) {
     code[i].innerHTML = highlight(code[i].innerHTML);
   }
@@ -5979,7 +5990,7 @@ mocha.run = function(fn){
 
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
-    if (global.document) {
+    if (global.document && options.noHighlighting !== false) {
       Mocha.utils.highlightTags('code');
     }
     if (fn) fn(err);
