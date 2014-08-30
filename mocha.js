@@ -5990,7 +5990,7 @@ mocha.run = function(fn){
 
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
-    if (global.document && options.noHighlighting !== false) {
+    if (global.document && options.noHighlighting !== true) {
       Mocha.utils.highlightTags('code');
     }
     if (fn) fn(err);
