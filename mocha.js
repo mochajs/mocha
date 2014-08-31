@@ -5498,6 +5498,9 @@ require.register("utils.js", function(module, exports, require){
 
 var fs = require('browser/fs')
   , path = require('browser/path')
+  , basename = path.basename
+  , exists = fs.existsSync || path.existsSync
+  , glob = require('glob')
   , join = path.join
   , debug = require('browser/debug')('mocha:watch');
 
@@ -5842,6 +5845,52 @@ exports.canonicalize = function(obj, stack) {
 
    return canonicalizedObj;
  }
+
+/**
+ * Lookup file names at the given `path`.
+ */
+exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
+  var files = [];
+  var re = new RegExp('\\.(' + extensions.join('|') + ')$');
+
+  if (!exists(path)) {
+    if (exists(path + '.js')) {
+      path += '.js';
+    } else {
+      files = glob.sync(path);
+      if (!files.length) throw new Error("cannot resolve path (or pattern) '" + path + "'");
+      return files;
+    }
+  }
+
+  try {
+    var stat = fs.statSync(path);
+    if (stat.isFile()) return path;
+  }
+  catch (ignored) {
+    return;
+  }
+
+  fs.readdirSync(path).forEach(function(file){
+    file = join(path, file);
+    try {
+      var stat = fs.statSync(file);
+      if (stat.isDirectory()) {
+        if (recursive) {
+          files = files.concat(lookupFiles(file, recursive));
+        }
+        return;
+      }
+    }
+    catch (ignored) {
+      return;
+    }
+    if (!stat.isFile() || !re.test(file) || basename(file)[0] === '.') return;
+    files.push(file);
+  });
+
+  return files;
+}
 
 }); // module: utils.js
 // The global object is "self" in Web Workers.
