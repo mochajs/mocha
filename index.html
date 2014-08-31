@@ -711,7 +711,34 @@ testCase('Array', function(){
 
 <h3 id="grep-query">grep</h3>
 
-<p>The client-side may utilize <code>--grep</code> as well, however you use the query-string, for example <code>?grep=api</code>.</p>
+<p>The client-side may use <code>--grep</code> as well, however, you must append a query-string to your URL: <code>?grep=api</code>.</p>
+
+<h3 id="browser-setup">Mocha Setup in the Browser</h3>
+
+<p>Mocha options can be set via <code>mocha.setup()</code>.  Examples:</p>
+
+<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface; 
+// any other options must be passed via an object.
+mocha.setup('tdd');
+
+// This is equivalent to the above.
+mocha.setup({
+  ui: 'tdd'
+});
+
+// Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
+mocha.setup({
+  ui: 'tdd',
+  ignoreLeaks: true,
+  asyncOnly: true
+});
+</code></pre>
+
+<h3 id="browser-specific-options">Browser-specific option(s)</h3>
+
+<p>The following option(s) <em>only</em> function in a browser context:</p>
+
+<p><code>noHighlighting</code> : If set to <code>true</code>, do not attempt to use syntax highlighting on output test code.      </p>
 
 <h2 id="mocha.opts">mocha.opts</h2>
 
@@ -790,6 +817,14 @@ testCase('Array', function(){
 
 <pre><code>$ make tm
 </code></pre>
+
+<h3 id="jetbrains-plugin">JetBrains plugin</h3>
+
+<p><a href="http://jetbrains.com">JetBrains</a> provides a <a href="http://www.jetbrains.com/idea/features/nodejs.html">NodeJS plugin</a> for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.</p>
+
+<p><img src="images/jetbrains-plugin.png" alt="JetBrains Mocha Runner Plugin in Action" title="" /></p>
+
+<p>The plugin is titled <strong>NodeJS</strong>, and can be installed via <strong>Preferences</strong> > <strong>Plugins</strong>, or via <a href="http://plugins.jetbrains.com/plugin/6098?pr=phpStorm">direct download</a>.</p>
 
 <h2 id="example-test-suites">Example test suites</h2>
 
