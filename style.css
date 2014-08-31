@@ -172,7 +172,7 @@ footer span {
   font-size: 12px;
 }
 
-code .comment { color: #ddd }
+code .comment { color: #999 }
 code .init { color: #2f6fad }
 code .string { color: #5890ad }
 code .keyword { color: #8a6343 }
