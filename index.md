@@ -162,7 +162,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-  Alternately, instead of using the `done()` callback, you can return a promise. This useful if the APIs you are testing return promises instead of taking callbacks:
+  Alternately, instead of using the `done()` callback, you can return a promise. This is useful if the APIs you are testing return promises instead of taking callbacks:
 
     beforeEach(function(){
       return db.clear().then(function() {
