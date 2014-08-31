@@ -7,7 +7,7 @@ So you wanna build the site?
 There's two:
 
 1.  [make](http://www.gnu.org/software/make/)
-2.  [peg-markdown](https://github.com/jgm/peg-markdown)
+2.  [markdown](http://daringfireball.net/projects/markdown/)
 
 ### Mac OS X
 
@@ -35,20 +35,11 @@ There's two:
   
     *Homebrew will not let you install `make` via the second method if it is already installed via the first method.*
 
-4.  Install `peg-markdown` and symlink it to the `markdown` command:
-  
-    ```sh
-    brew install peg-markdown && \
-      ln -s /usr/local/bin/peg-markdown /usr/local/bin/markdown
-    ```
-
-    If Homebrew complains, you might want to try this instead:
+4.  Install `markdown`:
     
     ```sh
-    brew link xz --overwrite && \
-      brew install peg-markdown && \
-      ln -s /usr/local/bin/peg-markdown /usr/local/bin/markdown
-    ``` 
+    brew install markdown
+    ```
         
 5.  Celebrate with tequila!  Or try to build first.  Probably want to build first.
 
