@@ -440,6 +440,14 @@ function stop() {
 }
 
 /**
+ * Check if a file is a broken symlink
+ */
+
+function isLinkBroken(file) {
+  return fs.existsSync(fs.readlinkSync(file));
+}
+
+/**
  * Lookup file names at the given `path`.
  */
 
@@ -456,17 +464,18 @@ function lookupFiles(path, recursive) {
     }
   }
 
-  var stat = fs.statSync(path);
+  var stat = fs.lstatSync(path);
   if (stat.isFile()) return path;
 
   fs.readdirSync(path).forEach(function(file){
     file = join(path, file);
-    var stat = fs.statSync(file);
+    var stat = fs.lstatSync(file);
     if (stat.isDirectory()) {
       if (recursive) files = files.concat(lookupFiles(file, recursive));
       return
     }
-    if (!stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
+    
+    if ((stat.isSymbolicLink() && isLinkBroken(file)) || !stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
     files.push(file);
   });
 
