@@ -660,7 +660,33 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="grep-query">grep</h3>
 
-  The client-side may utilize `--grep` as well, however you use the query-string, for example `?grep=api`.
+  The client-side may use `--grep` as well, however, you must append a query-string to your URL: `?grep=api`.
+
+<h3 id="browser-setup">Mocha Setup in the Browser</h3>
+
+  Mocha options can be set via `mocha.setup()`.  Examples:
+    
+    // Use "tdd" interface.  This is a shortcut to setting the interface; 
+    // any other options must be passed via an object.
+    mocha.setup('tdd');
+    
+    // This is equivalent to the above.
+    mocha.setup({
+      ui: 'tdd'
+    });
+    
+    // Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
+    mocha.setup({
+      ui: 'tdd',
+      ignoreLeaks: true,
+      asyncOnly: true
+    });   
+
+<h3 id="browser-specific-options">Browser-specific option(s)</h3>
+
+  The following option(s) *only* function in a browser context:
+  
+  `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.      
 
 <h2 id="mocha.opts">mocha.opts</h2>
 
