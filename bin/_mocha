@@ -284,8 +284,6 @@ program.compilers.forEach(function(c) {
   extensions.push(ext);
 });
 
-var re = new RegExp('\\.(' + extensions.join('|') + ')$');
-
 // requires
 
 requires.forEach(function(mod) {
@@ -302,7 +300,7 @@ var files = []
 if (!args.length) args.push('test');
 
 args.forEach(function(arg){
-  files = files.concat(lookupFiles(arg, program.recursive));
+  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
 });
 
 // resolve
@@ -437,40 +435,6 @@ function showCursor(){
 function stop() {
   process.stdout.write('\u001b[2K');
   clearInterval(play.timer);
-}
-
-/**
- * Lookup file names at the given `path`.
- */
-
-function lookupFiles(path, recursive) {
-  var files = [];
-
-  if (!exists(path)) {
-    if (exists(path + '.js')) {
-      path += '.js'
-    } else {
-      files = glob.sync(path);
-      if (!files.length) throw new Error("cannot resolve path (or pattern) '" + path + "'");
-      return files;
-    }
-  }
-
-  var stat = fs.statSync(path);
-  if (stat.isFile()) return path;
-
-  fs.readdirSync(path).forEach(function(file){
-    file = join(path, file);
-    var stat = fs.statSync(file);
-    if (stat.isDirectory()) {
-      if (recursive) files = files.concat(lookupFiles(file, recursive));
-      return
-    }
-    if (!stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
-    files.push(file);
-  });
-
-  return files;
 }
 
 /**
