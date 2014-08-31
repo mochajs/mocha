@@ -40,12 +40,20 @@ There's two:
     ```sh
     brew install markdown
     ```
+    
+    Or download from [here](http://daringfireball.net/projects/markdown/).
         
 5.  Celebrate with tequila!  Or try to build first.  Probably want to build first.
 
 ### Linux
 
-*To be filled in by somebody using Linux*
+#### Ubuntu 14.04
+
+You should have `make`, so you need `markdown`.
+
+1.  `sudo apt-get install markdown`
+
+2.  That seems to do it.  It's just a Perl script, so you can [get it from here](http://daringfireball.net/projects/markdown/) otherwise.
 
 ### Windows
 
