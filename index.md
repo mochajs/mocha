@@ -735,6 +735,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ make tm
 
+<h3 id="jetbrains-plugin">JetBrains plugin</h3>
+
+  [JetBrains](http://jetbrains.com) provides a [NodeJS plugin](http://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
+
+  ![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png)
+
+  The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, or via [direct download](http://plugins.jetbrains.com/plugin/6098?pr=phpStorm).
+
 <h2 id="example-test-suites">Example test suites</h2>
 
   The following test suites are from real projects putting Mocha to use,
