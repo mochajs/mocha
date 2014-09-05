@@ -86,4 +86,30 @@ describe('lib/utils', function () {
       utils.stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": "[Circular]"\n}');
     });
   });
+
+  describe('lookupFiles', function () {
+    var fs = require('fs');
+
+    beforeEach(function () {
+      fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
+      fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
+    });
+
+    it('should not choke on symlinks', function () {
+      utils.lookupFiles('/tmp', ['js'], false).should.eql(['/tmp/mocha-utils-link.js', '/tmp/mocha-utils.js']);
+      fs.existsSync('/tmp/mocha-utils-link.js').should.be.true;
+      fs.rename('/tmp/mocha-utils.js', '/tmp/bob');
+      fs.existsSync('/tmp/mocha-utils-link.js').should.be.true;
+      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
+    });
+
+    afterEach(function () {
+      ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
+        try {
+          fs.unlinkSync(path);
+        }
+        catch (ignored) {}
+      });
+    })
+  });
 });
