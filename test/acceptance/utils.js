@@ -113,6 +113,6 @@ describe('lib/utils', function () {
         }
         catch (ignored) {}
       });
-    })
+    });
   });
 });
