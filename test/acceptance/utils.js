@@ -96,7 +96,10 @@ describe('lib/utils', function () {
     });
 
     it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false).should.eql(['/tmp/mocha-utils-link.js', '/tmp/mocha-utils.js']);
+      utils.lookupFiles('/tmp', ['js'], false)
+        .should.containEql('/tmp/mocha-utils-link.js')
+        .and.containEql('/tmp/mocha-utils.js')
+        .and.have.lengthOf(2);
       fs.existsSync('/tmp/mocha-utils-link.js').should.be.true;
       fs.rename('/tmp/mocha-utils.js', '/tmp/bob');
       fs.existsSync('/tmp/mocha-utils-link.js').should.be.true;
