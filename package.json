@@ -42,7 +42,8 @@
     "diff": "1.0.7",
     "debug": "*",
     "mkdirp": "0.3.5",
-    "glob": "3.2.3"
+    "glob": "3.2.3",
+    "escape-string-regexp": "1.0.1"
   },
   "devDependencies": {
     "coffee-script": "~1.7.1",
