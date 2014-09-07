@@ -9,7 +9,10 @@ all: mocha.js
 lib/browser/diff.js: node_modules/diff/diff.js
 	cp node_modules/diff/diff.js lib/browser/diff.js
 
-mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
+lib/browser/escape-string-regexp.js: node_modules/escape-string-regexp/index.js
+	cp node_modules/escape-string-regexp/index.js lib/browser/escape-string-regexp.js
+
+mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp.js
 	@node support/compile $(SRC)
 	@cat \
 	  support/head.js \

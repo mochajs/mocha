@@ -414,6 +414,21 @@ if (typeof module !== 'undefined') {
 
 }); // module: browser/diff.js
 
+require.register("browser/escape-string-regexp.js", function(module, exports, require){
+'use strict';
+
+var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+
+module.exports = function (str) {
+	if (typeof str !== 'string') {
+		throw new TypeError('Expected a string');
+	}
+
+	return str.replace(matchOperatorsRe,  '\\$&');
+};
+
+}); // module: browser/escape-string-regexp.js
+
 require.register("browser/events.js", function(module, exports, require){
 
 /**
@@ -902,7 +917,8 @@ require.register("interfaces/bdd.js", function(module, exports, require){
 
 var Suite = require('../suite')
   , Test = require('../test')
-  , utils = require('../utils');
+  , utils = require('../utils')
+  , escapeRe = require('escape-string-regexp');
 
 /**
  * BDD-style interface:
@@ -1018,7 +1034,7 @@ module.exports = function(suite){
 
     context.it.only = function(title, fn){
       var test = context.it(title, fn);
-      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      var reString = '^' + escapeRe(test.fullTitle()) + '$';
       mocha.grep(new RegExp(reString));
       return test;
     };
@@ -1120,6 +1136,7 @@ require.register("interfaces/qunit.js", function(module, exports, require){
 
 var Suite = require('../suite')
   , Test = require('../test')
+  , escapeRe = require('escape-string-regexp')
   , utils = require('../utils');
 
 /**
@@ -1224,7 +1241,7 @@ module.exports = function(suite){
 
     context.test.only = function(title, fn){
       var test = context.test(title, fn);
-      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      var reString = '^' + escapeRe(test.fullTitle()) + '$';
       mocha.grep(new RegExp(reString));
     };
 
@@ -1248,6 +1265,7 @@ require.register("interfaces/tdd.js", function(module, exports, require){
 
 var Suite = require('../suite')
   , Test = require('../test')
+  , escapeRe = require('escape-string-regexp')
   , utils = require('../utils');;
 
 /**
@@ -1368,7 +1386,7 @@ module.exports = function(suite){
 
     context.test.only = function(title, fn){
       var test = context.test(title, fn);
-      var reString = '^' + utils.escapeRegexp(test.fullTitle()) + '$';
+      var reString = '^' + escapeRe(test.fullTitle()) + '$';
       mocha.grep(new RegExp(reString));
     };
 
@@ -1396,6 +1414,7 @@ require.register("mocha.js", function(module, exports, require){
  */
 
 var path = require('browser/path')
+  , escapeRe = require('escape-string-regexp')
   , utils = require('./utils');
 
 /**
@@ -1607,7 +1626,7 @@ Mocha.prototype._growl = function(runner, reporter) {
 
 Mocha.prototype.grep = function(re){
   this.options.grep = 'string' == typeof re
-    ? new RegExp(utils.escapeRegexp(re))
+    ? new RegExp(escapeRe(re))
     : re;
   return this;
 };
@@ -5721,18 +5740,6 @@ exports.clean = function(str) {
   str = str.replace(re, '');
 
   return exports.trim(str);
-};
-
-/**
- * Escape regular expression characters in `str`.
- *
- * @param {String} str
- * @return {String}
- * @api private
- */
-
-exports.escapeRegexp = function(str){
-  return str.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
 /**
