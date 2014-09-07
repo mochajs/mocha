@@ -922,7 +922,7 @@ require.register("interfaces/bdd.js", function(module, exports, require){
 var Suite = require('../suite')
   , Test = require('../test')
   , utils = require('../utils')
-  , escapeRe = require('escape-string-regexp');
+  , escapeRe = require('browser/escape-string-regexp');
 
 /**
  * BDD-style interface:
@@ -1140,7 +1140,7 @@ require.register("interfaces/qunit.js", function(module, exports, require){
 
 var Suite = require('../suite')
   , Test = require('../test')
-  , escapeRe = require('escape-string-regexp')
+  , escapeRe = require('browser/escape-string-regexp')
   , utils = require('../utils');
 
 /**
@@ -1269,7 +1269,7 @@ require.register("interfaces/tdd.js", function(module, exports, require){
 
 var Suite = require('../suite')
   , Test = require('../test')
-  , escapeRe = require('escape-string-regexp')
+  , escapeRe = require('browser/escape-string-regexp')
   , utils = require('../utils');;
 
 /**
@@ -1418,7 +1418,7 @@ require.register("mocha.js", function(module, exports, require){
  */
 
 var path = require('browser/path')
-  , escapeRe = require('escape-string-regexp')
+  , escapeRe = require('browser/escape-string-regexp')
   , utils = require('./utils');
 
 /**
