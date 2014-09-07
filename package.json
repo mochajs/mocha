@@ -37,16 +37,16 @@
   },
   "dependencies": {
     "commander": "2.3.0",
-    "debug": "*",
+    "debug": "2.0.0",
     "diff": "1.0.8",
     "escape-string-regexp": "1.0.1",
     "glob": "3.2.3",
-    "growl": "1.8.x",
+    "growl": "1.8.1",
     "jade": "0.26.3",
-    "mkdirp": "0.3.5"
+    "mkdirp": "0.5.0"
   },
   "devDependencies": {
-    "coffee-script": "1.8.0",
+    "coffee-script": "~1.8.0",
     "should": "~4.0.0"
   },
   "files": [
