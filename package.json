@@ -39,7 +39,6 @@
     "commander": "2.3.0",
     "debug": "2.0.0",
     "diff": "1.0.8",
-    "escape-string-regexp": "1.0.1",
     "glob": "3.2.3",
     "growl": "1.8.1",
     "jade": "0.26.3",
