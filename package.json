@@ -46,7 +46,7 @@
     "mkdirp": "0.3.5"
   },
   "devDependencies": {
-    "coffee-script": "~1.7.1",
+    "coffee-script": "1.8.0",
     "should": "~4.0.0"
   },
   "files": [
