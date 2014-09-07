@@ -37,13 +37,13 @@
   },
   "dependencies": {
     "commander": "2.0.0",
+    "debug": "*",
+    "diff": "1.0.7",
+    "escape-string-regexp": "1.0.1",
+    "glob": "3.2.3",
     "growl": "1.8.x",
     "jade": "0.26.3",
-    "diff": "1.0.7",
-    "debug": "*",
-    "mkdirp": "0.3.5",
-    "glob": "3.2.3",
-    "escape-string-regexp": "1.0.1"
+    "mkdirp": "0.3.5"
   },
   "devDependencies": {
     "coffee-script": "~1.7.1",
