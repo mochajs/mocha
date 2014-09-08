@@ -614,6 +614,10 @@ require.register("browser/fs.js", function(module, exports, require){
 
 }); // module: browser/fs.js
 
+require.register("browser/glob.js", function(module, exports, require){
+
+}); // module: browser/glob.js
+
 require.register("browser/path.js", function(module, exports, require){
 
 }); // module: browser/path.js
@@ -5521,7 +5525,7 @@ var fs = require('browser/fs')
   , path = require('browser/path')
   , basename = path.basename
   , exists = fs.existsSync || path.existsSync
-  , glob = require('glob')
+  , glob = require('browser/glob')
   , join = path.join
   , debug = require('browser/debug')('mocha:watch');
 
