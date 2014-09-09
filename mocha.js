@@ -5890,7 +5890,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
       var stat = fs.statSync(file);
       if (stat.isDirectory()) {
         if (recursive) {
-          files = files.concat(lookupFiles(file, recursive));
+          files = files.concat(lookupFiles(file, extensions, recursive));
         }
         return;
       }
