@@ -4395,6 +4395,7 @@ Runnable.prototype.run = function(fn){
     this.resetTimeout();
 
     try {
+      debug("Starting async runnable " + this.title);
       this.fn.call(ctx, function(err){
         if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
         if (null != err) {
@@ -4421,7 +4422,9 @@ Runnable.prototype.run = function(fn){
     if (this.pending) {
       done();
     } else {
+      debug("Starting sync runnable " + this.title);
       callFn(this.fn);
+      debug("Sync runnable " + this.title + " is done, state " + this.state);
     }
   } catch (err) {
     done(err);
@@ -4843,6 +4846,7 @@ Runner.prototype.runTests = function(suite, fn){
     , tests = suite.tests.slice()
     , test;
 
+  debug("runTests: will run " + tests.length + " tests");
 
   function hookErr(err, errSuite, after) {
     // before/after Each hook for errSuite failed:
@@ -4878,6 +4882,8 @@ Runner.prototype.runTests = function(suite, fn){
 
     // next test
     test = tests.shift();
+    debug("next(): " + (test ? "now running " + test.title : "all done") +
+          ", " + tests.length + " tests remaining");
 
     // all done
     if (!test) return fn();
@@ -4993,12 +4999,18 @@ Runner.prototype.uncaught = function(err){
     debug('uncaught undefined exception');
     err = new Error('Catched undefined error, did you throw without specifying what?');
   }
+  err.uncaught = true;
 
   var runnable = this.currentRunnable;
-  if (!runnable || 'failed' == runnable.state) return;
-  runnable.clearTimeout();
-  err.uncaught = true;
+  if (!runnable) return;
+
+  var wasAlreadyDone = runnable.state;
+  debug("Failing " + runnable.title + " on grounds of uncaught exception");
   this.fail(runnable, err);
+
+  runnable.clearTimeout();
+
+  if (wasAlreadyDone) return;
 
   // recover from test
   if ('test' == runnable.type) {
@@ -5032,7 +5044,7 @@ Runner.prototype.run = function(fn){
 
   // callback
   this.on('end', function(){
-    debug('end');
+    debug('end - Removing uncaught exception handler');
     process.removeListener('uncaughtException', uncaught);
     fn(self.failures);
   });
@@ -5045,6 +5057,7 @@ Runner.prototype.run = function(fn){
   });
 
   // uncaught exception
+  debug("Installing uncaught exception handler");
   process.on('uncaughtException', uncaught);
 
   return this;
