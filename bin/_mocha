@@ -98,6 +98,7 @@ program
   .option('--trace', 'trace function calls')
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
+  .option('--suppress-stack', 'suppress stack trace on error')
 
 program.name = 'mocha';
 
@@ -270,6 +271,10 @@ if (program.asyncOnly) mocha.asyncOnly();
 // --globals
 
 mocha.globals(globals);
+
+// --suppress-stack
+
+if (program.suppressStack) mocha.suppressStack();
 
 // custom compiler support
 
