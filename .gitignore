@@ -2,10 +2,10 @@ coverage.html
 lib-cov
 .DS_Store
 node_modules
+test-outputs
 *.sock
 testing
 _mocha.js
-test.js
 my-reporter.js
 *.sw*
 lib/browser/diff.js

@@ -1,5 +1,5 @@
 
-REPORTER ?= dot
+REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
@@ -9,7 +9,10 @@ all: mocha.js
 lib/browser/diff.js: node_modules/diff/diff.js
 	cp node_modules/diff/diff.js lib/browser/diff.js
 
-mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
+lib/browser/escape-string-regexp.js: node_modules/escape-string-regexp/index.js
+	cp node_modules/escape-string-regexp/index.js lib/browser/escape-string-regexp.js
+
+mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp.js
 	@node support/compile $(SRC)
 	@cat \
 	  support/head.js \
@@ -20,6 +23,7 @@ mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js
 
 clean:
 	rm -f mocha.js
+	rm -rf test-outputs
 	rm -fr lib-cov
 	rm -f coverage.html
 
@@ -32,7 +36,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-glob test-requires
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing test-regression
 
 test-jsapi:
 	@node test/jsapi
@@ -44,17 +48,37 @@ test-unit:
 		--growl \
 		test/*.js
 
+test-regression: test-outputs/issue1327/case-out.json
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/regression/issue*/control.js
+
+test-outputs/issue1327/case-out.json: test/regression/issue1327/case.js
+	@mkdir -p $(dir $@) || true
+	@./bin/mocha --reporter json $< > $@ || true
+
+test-failing:
+	./bin/mocha \
+		--reporter $(REPORTER) \
+		test/acceptance/failing/timeout.js > /dev/null 2>&1 ; \
+		failures="$$?" ; \
+		if [ "$$failures" != '2' ] ; then \
+			echo 'test-failing:' ; \
+			echo "  expected 2 failing tests but saw $$failures" ; \
+			exit 1 ; \
+		fi
+
 test-compilers:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script,foo:./test/compiler/foo \
+		--compilers coffee:coffee-script/register,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-requires:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
-		--compilers coffee:coffee-script \
+		--compilers coffee:coffee-script/register \
 		--require test/acceptance/require/a.js \
 		--require test/acceptance/require/b.coffee \
 		--require test/acceptance/require/c.js \
@@ -113,6 +137,33 @@ test-async-only:
 test-glob:
 	./test/acceptance/glob/glob.sh
 
+test-reporters:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/reporters/*.js
+
+test-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/only/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/only/bdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/acceptance/misc/only/qunit
+
+test-sort:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--sort \
+		test/acceptance/sort
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
@@ -138,4 +189,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-failing tm clean

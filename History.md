@@ -1,9 +1,175 @@
+1.22.1-3 / 2014-07-27
+==================
 
-1.12.0 / 2013-07-01 
+  * fix: disabling timeouts with this.timeout(0) (#1301)
+
+1.22.1-3 / 2014-07-27
+==================
+
+  * fix: local uis and reporters (#1288)
+  * fix: building 1.21.0's changes in the browser (#1284)
+
+1.21.0 / 2014-07-23
+==================
+
+  * add: --no-timeouts option (#1262, #1268)
+  * add: --*- deprecation node flags (#1217)
+  * add: --watch-extensions argument (#1247)
+  * change: spec reporter is default (#1228)
+  * fix: diff output showing incorrect +/- (#1182)
+  * fix: diffs of circular structures (#1179)
+  * fix: re-render the progress bar when progress has changed only (#1151)
+  * fix support for environments with global and window (#1159)
+  * fix: reverting to previously defined onerror handler (#1178)
+  * fix: stringify non error objects passed to done() (#1270)
+  * fix: using local ui, reporters (#1267)
+  * fix: cleaning es6 arrows (#1176)
+  * fix: don't include attrs in failure tag for xunit (#1244)
+  * fix: fail tests that return a promise if promise is rejected w/o a reason (#1224)
+  * fix: showing failed tests in doc reporter (#1117)
+  * fix: dot reporter dots being off (#1204)
+  * fix: catch empty throws (#1219)
+  * fix: honoring timeout for sync operations (#1242)
+  * update: growl to 1.8.0
+
+1.20.1 / 2014-06-03
+==================
+
+  * update: should dev dependency to ~4.0.0 (#1231)
+
+1.20.0 / 2014-05-28
+==================
+
+  * add: filenames to suite objects (#1222)
+
+1.19.0 / 2014-05-17
+==================
+
+  * add: browser script option to package.json
+  * add: export file in Mocha.Test objects (#1174)
+  * add: add docs for wrapped node flags
+  * fix: mocha.run() to return error status in browser (#1216)
+  * fix: clean() to show failure details (#1205)
+  * fix: regex that generates html for new keyword (#1201)
+  * fix: sibling suites have inherited but separate contexts (#1164)
+
+
+1.18.2 / 2014-03-18
+==================
+
+  * fix: html runner was prevented from using #mocha as the default root el (#1162)
+
+1.18.1 / 2014-03-18
+==================
+
+  * fix: named before/after hooks in bdd, tdd, qunit interfaces (#1161)
+
+1.18.0 / 2014-03-13
+==================
+
+  * add: promise support (#329)
+  * add: named before/after hooks (#966)
+
+1.17.1 / 2014-01-22
+==================
+
+  * fix: expected messages in should.js (should.js#168)
+  * fix: expect errno global in node versions < v0.9.11 (#1111)
+  * fix: unreliable checkGlobals optimization (#1110)
+
+1.17.0 / 2014-01-09
+==================
+
+  * add: able to require globals (describe, it, etc.) through mocha (#1077)
+  * fix: abort previous run on --watch change (#1100)
+  * fix: reset context for each --watch triggered run (#1099)
+  * fix: error when cli can't resolve path or pattern (#799)
+  * fix: canonicalize objects before stringifying and diffing them (#1079)
+  * fix: make CR call behave like carriage return for non tty (#1087)
+
+
+1.16.2 / 2013-12-23
+==================
+
+  * fix: couple issues with ie 8 (#1082, #1081)
+  * fix: issue running the xunit reporter in browsers (#1068)
+  * fix: issue with firefox < 3.5 (#725)
+
+
+1.16.1 / 2013-12-19
+==================
+
+  * fix: recompiled for missed changes from the last release
+
+
+1.16.0 / 2013-12-19
+==================
+
+  * add: Runnable.globals(arr) for per test global whitelist (#1046)
+  * add: mocha.throwError(err) for assertion libs to call (#985)
+  * remove: --watch's spinner (#806)
+  * fix: duplicate test output for multi-line specs in spec reporter (#1006)
+  * fix: gracefully exit on SIGINT (#1063)
+  * fix expose the specified ui only in the browser (#984)
+  * fix: ensure process exit code is preserved when using --no-exit (#1059)
+  * fix: return true from window.onerror handler (#868)
+  * fix: xunit reporter to use process.stdout.write (#1068)
+  * fix: utils.clean(str) indentation (#761)
+  * fix: xunit reporter returning test duration a NaN (#1039)
+
+1.15.1 / 2013-12-03
+==================
+
+  * fix: recompiled for missed changes from the last release
+
+1.15.0 / 2013-12-02
+==================
+
+  * add: `--no-exit` to prevent `process.exit()` (#1018)
+  * fix: using inline diffs (#1044)
+  * fix: show pending test details in xunit reporter (#1051)
+  * fix: faster global leak detection (#1024)
+  * fix: yui compression (#1035)
+  * fix: wrapping long lines in test results (#1030, #1031)
+  * fix: handle errors in hooks (#1043)
+
+1.14.0 / 2013-11-02
+==================
+
+  * add: unified diff (#862)
+  * add: set MOCHA_COLORS env var to use colors (#965)
+  * add: able to override tests links in html reporters (#776)
+  * remove: teamcity reporter (#954)
+  * update: commander dependency to 2.0.0 (#1010)
+  * fix: mocha --ui will try to require the ui if not built in, as --reporter does (#1022)
+  * fix: send cursor commands only if isatty (#184, #1003)
+  * fix: include assertion message in base reporter (#993, #991)
+  * fix: consistent return of it, it.only, and describe, describe.only (#840)
+
+1.13.0 / 2013-09-15
+==================
+
+  * add: sort test files with --sort (#813)
+  * update: diff depedency to 1.0.7
+  * update: glob dependency to 3.2.3 (#927)
+  * fix: diffs show whitespace differences (#976)
+  * fix: improve global leaks (#783)
+  * fix: firefox window.getInterface leak
+  * fix: accessing iframe via window[iframeIndex] leak
+  * fix: faster global leak checking
+  * fix: reporter pending css selector (#970)
+
+1.12.1 / 2013-08-29
+==================
+
+ * remove test.js from .gitignore
+ * update included version of ms.js
+
+1.12.0 / 2013-07-01
 ==================
 
  * add: prevent diffs for differing types. Closes #900
- * add `Mocha.process` hack for phantomjs 
+ * add `Mocha.process` hack for phantomjs
  * fix: use compilers with requires
  * fix regexps in diffs. Closes #890
  * fix xunit NaN on failure. Closes #894

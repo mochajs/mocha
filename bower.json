@@ -1,0 +1,23 @@
+{
+  "name": "mocha",
+  "version": "1.21.4",
+  "main": [
+    "mocha.js",
+    "mocha.css"
+  ],
+  "ignore": [
+    "bin",
+    "editors",
+    "images",
+    "lib",
+    "support",
+    "test",
+    ".gitignore",
+    ".npmignore",
+    ".travis.yml",
+    "component.json",
+    "index.js",
+    "Makefile",
+    "package.json"
+  ]
+}

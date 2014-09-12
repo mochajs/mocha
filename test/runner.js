@@ -53,12 +53,12 @@ describe('Runner', function(){
   describe('.globalProps()', function(){
     it('should include common non enumerable globals', function() {
       var props = runner.globalProps();
-      props.should.include('setTimeout');
-      props.should.include('clearTimeout');
-      props.should.include('setInterval');
-      props.should.include('clearInterval');
-      props.should.include('Date');
-      props.should.include('XMLHttpRequest');
+      props.should.containEql('setTimeout');
+      props.should.containEql('clearTimeout');
+      props.should.containEql('setInterval');
+      props.should.containEql('clearInterval');
+      props.should.containEql('Date');
+      props.should.containEql('XMLHttpRequest');
     });
   });
 
@@ -69,8 +69,8 @@ describe('Runner', function(){
 
     it('should white-list globals', function(){
       runner.globals(['foo', 'bar']);
-      runner.globals().should.include('foo');
-      runner.globals().should.include('bar');
+      runner.globals().should.containEql('foo');
+      runner.globals().should.containEql('bar');
     })
   })
 
@@ -96,6 +96,21 @@ describe('Runner', function(){
       });
       runner.checkGlobals('im a test');
     })
+
+    it('should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed', function(done) {
+      var doneCalled = false;
+      runner.globals('good');
+      global.bad = 1;
+      runner.on('fail', function(test, err) {
+        delete global.bad;
+        done();
+        doneCalled = true;
+      });
+      runner.checkGlobals('test');
+      if (!doneCalled) {
+        done(Error("Expected test failure did not occur."));
+      }
+    });
 
     it ('should not fail when a new common global is introduced', function(){
       // verify that the prop isn't enumerable
@@ -132,6 +147,39 @@ describe('Runner', function(){
       });
       runner.checkGlobals('im a test');
     })
+
+    it('should respect per test whitelisted globals', function() {
+      var test = new Test('im a test about lions');
+      test.globals(['foo']);
+
+      suite.addTest(test);
+      var runner = new Runner(suite);
+
+      global.foo = 'bar';
+
+      // verify the test hasn't failed.
+      runner.checkGlobals(test);
+      test.should.not.have.key('state');
+
+      delete global.foo;
+    })
+
+    it('should respect per test whitelisted globals but still detect other leaks', function(done) {
+      var test = new Test('im a test about lions');
+      test.globals(['foo']);
+
+      suite.addTest(test);
+
+      global.foo = 'bar';
+      global.bar = 'baz';
+      runner.on('fail', function(test, err){
+        test.title.should.equal('im a test about lions');
+        err.message.should.equal('global leak detected: bar');
+        delete global.foo;
+        done();
+      });
+      runner.checkGlobals(test);
+    })
   })
 
   describe('.fail(test, err)', function(){
@@ -160,7 +208,7 @@ describe('Runner', function(){
     })
   })
 
-  describe('.failHook(hoot, err)', function(){
+  describe('.failHook(hook, err)', function(){
     it('should increment .failures', function(){
       runner.failures.should.equal(0);
       runner.failHook({}, {});
@@ -179,10 +227,19 @@ describe('Runner', function(){
       runner.failHook(hook, err);
     })
 
-    it('should emit "end"', function(done){
+    it('should emit "end" if suite bail is true', function(done){
       var hook = {}, err = {};
+      suite.bail(true);
       runner.on('end', done);
       runner.failHook(hook, err);
+    })
+
+    it('should not emit "end" if suite bail is not true', function(done){
+      var hook = {}, err = {};
+      suite.bail(false);
+      runner.on('end', function() { throw new Error('"end" was emit, but the bail is false'); });
+      runner.failHook(hook, err);
+      done();
     })
   })
 })

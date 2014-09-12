@@ -13,9 +13,7 @@ var program = require('commander')
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , reporters = Mocha.reporters
   , interfaces = Mocha.interfaces
-  , Base = reporters.Base
   , join = path.join
   , basename = path.basename
   , cwd = process.cwd()
@@ -63,27 +61,43 @@ var images = {
 program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
-  .option('-r, --require <name>', 'require the given module')
-  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['dot'])
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
-  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
-  .option('-i, --invert', 'inverts --grep matches')
-  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch', 'watch files for changes')
+  .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
-  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
+  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['spec'])
+  .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
-  .option('-A, --async-only', "force all tests to take a callback (async)")
-  .option('--recursive', 'include sub directories')
+  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
+  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
+  .option('-gc', '--expose-gc', 'expose gc extension')
+  .option('-i, --invert', 'inverts --grep matches')
+  .option('-r, --require <name>', 'require the given module')
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
+  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
+  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-w, --watch', 'watch files for changes')
+  .option('--check-leaks', 'check for global variable leaks')
+  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
-  .option('--check-leaks', 'check for global variable leaks')
+  .option('--harmony', 'enable all harmony features (except typeof)')
+  .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
+  .option('--harmony-generators', 'enable harmony generators')
+  .option('--harmony-proxies', 'enable harmony proxies')
+  .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
+  .option('--no-deprecation', 'silence deprecation warnings')
+  .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
+  .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
+  .option('--prof', 'log statistical profiling information')
+  .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
-  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
+  .option('--trace', 'trace function calls')
+  .option('--trace-deprecation', 'show stack traces on deprecations')
+  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
 
 program.name = 'mocha';
 
@@ -124,7 +138,6 @@ program.on('reporters', function(){
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
   console.log('    xunit - xunit reporter');
-  console.log('    teamcity - teamcity ci support');
   console.log('    html-cov - HTML test coverage');
   console.log('    json-cov - JSON test coverage');
   console.log('    min - minimal reporter (great with --watch)');
@@ -157,10 +170,14 @@ program.on('require', function(mod){
   requires.push(mod);
 });
 
-// mocha.opts support
+// --opts
+
+var optsPath = process.argv.indexOf('--opts') !== -1
+    ? process.argv[process.argv.indexOf('--opts') + 1]
+    : 'test/mocha.opts';
 
 try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
+  var opts = fs.readFileSync(optsPath, 'utf8')
     .trim()
     .split(/\s+/);
 
@@ -189,18 +206,26 @@ mocha.ui(program.ui);
 
 // --no-colors
 
-if (!program.colors) Base.useColors = false;
+if (!program.colors) mocha.useColors(false);
 
 // --colors
 
 if (~process.argv.indexOf('--colors') ||
     ~process.argv.indexOf('-c')) {
-  Base.useColors = true;
+  mocha.useColors(true);
 }
+
+// --inline-diffs
+
+if (program.inlineDiffs) mocha.useInlineDiffs(true);
 
 // --slow <ms>
 
 if (program.slow) mocha.suite.slow(program.slow);
+
+// --no-timeouts
+
+if (!program.timeouts) mocha.enableTimeouts(false);
 
 // --timeout
 
@@ -247,8 +272,6 @@ program.compilers.forEach(function(c) {
   extensions.push(ext);
 });
 
-var re = new RegExp('\\.(' + extensions.join('|') + ')$');
-
 // requires
 
 requires.forEach(function(mod) {
@@ -265,7 +288,7 @@ var files = []
 if (!args.length) args.push('test');
 
 args.forEach(function(arg){
-  files = files.concat(lookupFiles(arg, program.recursive));
+  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
 });
 
 // resolve
@@ -274,8 +297,13 @@ files = files.map(function(path){
   return resolve(path);
 });
 
+if (program.sort) {
+  files.sort();
+}
+
 // --watch
 
+var runner;
 if (program.watch) {
   console.log();
   hideCursor();
@@ -285,21 +313,23 @@ if (program.watch) {
     process.exit();
   });
 
-  var spinner = 'win32' == process.platform
-    ? ['|','/','-','\\']
-    : ['◜','◠','◝','◞','◡','◟'];
 
-  var frames = spinner.map(function(c) {
-    return sprintf('  \u001b[96m%s \u001b[90mwatching\u001b[0m', c);
-  });
-
-  var watchFiles = utils.files(cwd);
+  var watchFiles = utils.files(cwd, [ 'js', 'coffee', 'litcoffee', 'coffee.md' ].concat(program.watchExtensions));
+  var runAgain = false;
 
   function loadAndRun() {
-    mocha.files = files;
-    mocha.run(function(){
-      play(frames);
-    });
+    try {
+      mocha.files = files;
+      runAgain = false;
+      runner = mocha.run(function(){
+        runner = null;
+        if (runAgain) {
+          rerun();
+        }
+      });
+    } catch(e) {
+      console.log(e.stack);
+    }
   }
 
   function purge() {
@@ -310,12 +340,22 @@ if (program.watch) {
 
   loadAndRun();
 
-  utils.watch(watchFiles, function(){
+  function rerun() {
     purge();
     stop()
     mocha.suite = mocha.suite.clone();
+    mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
     loadAndRun();
+  }
+
+  utils.watch(watchFiles, function(){
+    runAgain = true;
+    if (runner) {
+      runner.abort();
+    } else {
+      rerun();
+    }
   });
 
   return;
@@ -324,7 +364,13 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-mocha.run(process.exit);
+runner = mocha.run(program.exit ? process.exit : exitLater);
+
+function exitLater(code) {
+  process.on('exit', function() { process.exit(code) })
+}
+
+process.on('SIGINT', function() { runner.abort(); })
 
 // enable growl notifications
 
@@ -377,38 +423,6 @@ function showCursor(){
 function stop() {
   process.stdout.write('\u001b[2K');
   clearInterval(play.timer);
-}
-
-/**
- * Lookup file names at the given `path`.
- */
-
-function lookupFiles(path, recursive) {
-  var files = [];
-
-  if (!exists(path)) {
-    if (exists(path + '.js')) {
-      path += '.js'
-    } else {
-      return glob.sync(path);
-    }
-  }
-
-  var stat = fs.statSync(path);
-  if (stat.isFile()) return path;
-
-  fs.readdirSync(path).forEach(function(file){
-    file = join(path, file);
-    var stat = fs.statSync(file);
-    if (stat.isDirectory()) {
-      if (recursive) files = files.concat(lookupFiles(file, recursive));
-      return
-    }
-    if (!stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
-    files.push(file);
-  });
-
-  return files;
 }
 
 /**
