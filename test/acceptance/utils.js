@@ -72,18 +72,161 @@ describe('lib/utils', function () {
   });
 
   describe('stringify', function(){
-    it('should canoncalize the object', function(){
+
+    var stringify = utils.stringify;
+
+    it('should canonicalize the object', function(){
       var travis = { name: 'travis', age: 24 };
       var travis2 = { age: 24, name: 'travis' };
 
-      utils.stringify(travis).should.equal(utils.stringify(travis2));
+      stringify(travis).should.equal(stringify(travis2));
     });
 
-    it('should handle circular structures', function(){
+    it('should handle circular structures in objects', function(){
       var travis = { name: 'travis' };
       travis.whoami = travis;
 
-      utils.stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": "[Circular]"\n}');
+      stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": "[Circular]"\n}');
+    });
+
+    it('should handle circular structures in arrays', function(){
+      var travis = ['travis'];
+      travis.push(travis);
+
+      stringify(travis).should.equal('[\n  "travis"\n  "[Circular]"\n]');
+    });
+
+    it('should handle circular structures in functions', function(){
+      var travis = function () {};
+      travis.fn = travis;
+
+      stringify(travis).should.equal('{\n  "fn": "[Circular]"\n}');
+    });
+
+
+    it('should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values', function () {
+      var regexp = new RegExp("(?:)"),
+        regExpObj = { regexp: regexp },
+        regexpString = '/(?:)/';
+
+      stringify(regExpObj).should.equal('{\n  "regexp": "' + regexpString + '"\n}');
+      stringify(regexp).should.equal(regexpString);
+
+      var number = 1,
+        numberObj = { number: number },
+        numberString = '1';
+
+      stringify(numberObj).should.equal('{\n  "number": ' + number + '\n}');
+      stringify(number).should.equal(numberString);
+
+      var boolean = false,
+        booleanObj = { boolean: boolean },
+        booleanString = 'false';
+
+      stringify(booleanObj).should.equal('{\n  "boolean": ' + boolean + '\n}');
+      stringify(boolean).should.equal(booleanString);
+
+      var string = 'sneepy',
+        stringObj = { string: string };
+
+      stringify(stringObj).should.equal('{\n  "string": "' + string + '"\n}');
+      stringify(string).should.equal(string);
+
+      var nullValue = null,
+        nullObj = { 'null': null },
+        nullString = '[null]';
+
+      stringify(nullObj).should.equal('{\n  "null": null\n}');
+      stringify(nullValue).should.equal(nullString);
+
+    });
+
+    it('should handle arrays', function () {
+      var array = ['dave', 'dave', 'dave', 'dave'],
+        arrayObj = {array: array},
+        arrayString = array.map(function () {
+          return '    "dave"';
+        }).join('\n');
+
+      stringify(arrayObj).should.equal('{\n  "array": [\n' + arrayString + '\n  ]\n}');
+      stringify(array).should.equal('[' + arrayString.replace(/\s+/g, '\n  ') + '\n]');
+    });
+
+    it('should handle functions', function () {
+      var fn = function() {},
+        fnObj = {fn: fn},
+        fnString = '[Function]';
+
+      stringify(fnObj).should.equal('{\n  "fn": "' + fnString + '"\n}');
+      stringify(fn).should.equal('[Function]');
+    });
+
+    it('should handle empty objects', function () {
+      stringify({}).should.equal('{}');
+      stringify({foo: {}}).should.equal('{\n  "foo": {}\n}');
+    });
+
+    it('should handle empty arrays', function () {
+      stringify([]).should.equal('[]');
+      stringify({foo: []}).should.equal('{\n  "foo": []\n}');
+    });
+
+    it('should handle non-empty arrays', function () {
+      stringify(['a', 'b', 'c']).should.equal('[\n  "a"\n  "b"\n  "c"\n]')
+    });
+
+    it('should handle empty functions (with no properties)', function () {
+      stringify(function(){}).should.equal('[Function]');
+      stringify({foo: function() {}}).should.equal('{\n  "foo": "[Function]"\n}');
+      stringify({foo: function() {}, bar: 'baz'}).should.equal('{\n  "bar": "baz"\n  "foo": "[Function]"\n}');
+    });
+
+    it('should handle functions w/ properties', function () {
+      var fn = function(){};
+      fn.bar = 'baz';
+      stringify(fn).should.equal('{\n  "bar": "baz"\n}');
+      stringify({foo: fn}).should.equal('{\n  "foo": {\n    "bar": "baz"\n  }\n}');
+    });
+
+    it('should handle undefined values', function () {
+      stringify({foo: undefined}).should.equal('{\n  "foo": "[undefined]"\n}');
+      stringify({foo: 'bar', baz: undefined}).should.equal('{\n  "baz": "[undefined]"\n  "foo": "bar"\n}');
+      stringify().should.equal('[undefined]');
+    });
+
+    it('should recurse', function () {
+stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}}).should.equal('{\n  "foo": {\n    "bar": {\n      "baz": {\n        "quux": {\n          "herp": "derp"\n        }\n      }\n    }\n  }\n}');
+    });
+
+    it('might get confusing', function () {
+      stringify(null).should.equal(stringify('[null]'));
+    });
+
+    it('should not freak out if it sees a primitive twice', function () {
+      stringify({foo: null, bar: null}).should.equal('{\n  "bar": null\n  "foo": null\n}');
+      stringify({foo: 1, bar: 1}).should.equal('{\n  "bar": 1\n  "foo": 1\n}');
+    });
+
+    it.only('should stringify dates', function () {
+      var date = new Date(0);
+      stringify(date).should.equal('[Date: 1970-01-01T00:00:00.000Z]');
+      stringify({date: date}).should.equal('{\n  "date": "[Date: 1970-01-01T00:00:00.000Z]"\n}');
+    });
+  });
+
+  describe('type', function () {
+    var type = utils.type;
+    it('should recognize various types', function () {
+      type({}).should.equal('object');
+      type([]).should.equal('array');
+      type(1).should.equal('number');
+      type(Infinity).should.equal('number');
+      type(null).should.equal('null');
+      type(new Date()).should.equal('date');
+      type(/foo/).should.equal('regexp');
+      type('type').should.equal('string');
+      type(global).should.equal('global');
+      type(true).should.equal('boolean');
     });
   });
 
