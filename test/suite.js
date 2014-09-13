@@ -291,6 +291,21 @@ describe('Suite', function(){
     });
   });
 
+  describe('.sort()', function(){
+    beforeEach(function (){
+      this.suite = new Suite('parent');
+      this.a = new Suite('a');
+      this.b = new Suite('b');
+      this.suite.suites = [this.b, this.a];
+    });
+
+    it('sorts the sub-suites lexicographically by title', function(){
+      this.suite.sort();
+      this.suite.suites[0].should.equal(this.a);
+      this.suite.suites[1].should.equal(this.b);
+    });
+  });
+
   // describe('.addTest()', function(){
   //   beforeEach(function(){
   //     this.suite = new Suite('A Suite', new Context);
