@@ -1,4 +1,2 @@
 
-module.exports = process.env.COV
-  ? require('./lib-cov/mocha')
-  : require('./lib/mocha');
+module.exports = require('./lib/mocha');

@@ -3,6 +3,7 @@ REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
+REQUIRE ?= index
 
 all: mocha.js
 
@@ -15,23 +16,19 @@ lib/browser/escape-string-regexp.js: node_modules/escape-string-regexp/index.js
 mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp.js
 	@node support/compile $(SRC)
 	@cat \
-	  support/head.js \
-	  _mocha.js \
-	  support/tail.js \
-	  support/foot.js \
-	  > mocha.js
+		support/head.js \
+		_mocha.js \
+		support/tail.js \
+		support/foot.js \
+		> mocha.js
 
 clean:
 	rm -f mocha.js
 	rm -fr lib-cov
 	rm -f coverage.html
 
-test-cov: lib-cov
-	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
-
-lib-cov:
-	@rm -fr ./$@
-	@jscoverage lib $@
+test-cov:
+	$(MAKE) test REPORTER=html-cov REQUIRE=blanket > coverage.html
 
 test: test-unit
 
@@ -41,8 +38,9 @@ test-jsapi:
 	@node test/jsapi
 
 test-unit:
-	@./bin/mocha \
+	./bin/mocha \
 		--reporter $(REPORTER) \
+		--require $(REQUIRE) \
 		test/acceptance/*.js \
 		--growl \
 		test/*.js
@@ -101,16 +99,16 @@ test-exports:
 
 test-grep:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep fast \
-	  test/acceptance/misc/grep
+		--reporter $(REPORTER) \
+		--grep fast \
+		test/acceptance/misc/grep
 
 test-invert:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --grep slow \
-	  --invert \
-	  test/acceptance/misc/grep
+		--reporter $(REPORTER) \
+		--grep slow \
+		--invert \
+		test/acceptance/misc/grep
 
 test-bail:
 	@./bin/mocha \
@@ -120,9 +118,9 @@ test-bail:
 
 test-async-only:
 	@./bin/mocha \
-	  --reporter $(REPORTER) \
-	  --async-only \
-	  test/acceptance/misc/asyncOnly
+		--reporter $(REPORTER) \
+		--async-only \
+		test/acceptance/misc/asyncOnly
 
 test-glob:
 	@./test/acceptance/glob/glob.sh
