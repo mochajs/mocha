@@ -4178,7 +4178,8 @@ require.register("runnable.js", function(module, exports, require){
 
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('mocha:runnable')
-  , milliseconds = require('./ms');
+  , milliseconds = require('./ms')
+  , utils = require('./utils');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -4404,7 +4405,7 @@ Runnable.prototype.run = function(fn){
         done();
       });
     } catch (err) {
-      done(err);
+      done(utils.getError(err));
     }
     return;
   }
@@ -4421,7 +4422,7 @@ Runnable.prototype.run = function(fn){
       callFn(this.fn);
     }
   } catch (err) {
-    done(err);
+    done(utils.getError(err));
   }
 
   function callFn(fn) {
@@ -4465,7 +4466,9 @@ var globals = [
   'setInterval',
   'clearInterval',
   'XMLHttpRequest',
-  'Date'
+  'Date',
+  'setImmediate',
+  'clearImmediate'
 ];
 
 /**
@@ -4694,7 +4697,6 @@ Runner.prototype.hook = function(name, fn){
   function next(i) {
     var hook = hooks[i];
     if (!hook) return fn();
-    if (self.failures && suite.bail()) return fn();
     self.currentRunnable = hook;
 
     hook.ctx.currentTest = self.test;
@@ -4988,7 +4990,7 @@ Runner.prototype.uncaught = function(err){
     }.call(err) ? err : ( err.message || err ));
   } else {
     debug('uncaught undefined exception');
-    err = new Error('Caught undefined error, did you throw without specifying what?');
+    err = utils.undefinedError();
   }
   err.uncaught = true;
 
@@ -5811,54 +5813,187 @@ exports.highlightTags = function(name) {
   }
 };
 
-
 /**
- * Stringify `obj`.
+ * If a value could have properties, and has none, this function is called, which returns
+ * a string representation of the empty value.
  *
- * @param {Object} obj
- * @return {String}
- * @api private
+ * Functions w/ no properties return `'[Function]'`
+ * Arrays w/ length === 0 return `'[]'`
+ * Objects w/ no properties return `'{}'`
+ * All else: return result of `value.toString()`
+ *
+ * @param {*} value Value to inspect
+ * @param {string} [type] The type of the value, if known.
+ * @returns {string}
  */
+var emptyRepresentation = function emptyRepresentation(value, type) {
+  type = type || exports.type(value);
 
-exports.stringify = function(obj) {
-  if (obj instanceof RegExp) return obj.toString();
-  return JSON.stringify(exports.canonicalize(obj), null, 2).replace(/,(\n|$)/g, '$1');
+  switch(type) {
+    case 'function':
+      return '[Function]';
+    case 'object':
+      return '{}';
+    case 'array':
+      return '[]';
+    default:
+      return value.toString();
+  }
 };
 
 /**
- * Return a new object that has the keys in sorted order.
- * @param {Object} obj
- * @param {Array} [stack]
- * @return {Object}
+ * Takes some variable and asks `{}.toString()` what it thinks it is.
+ * @param {*} value Anything
+ * @example
+ * type({}) // 'object'
+ * type([]) // 'array'
+ * type(1) // 'number'
+ * type(false) // 'boolean'
+ * type(Infinity) // 'number'
+ * type(null) // 'null'
+ * type(new Date()) // 'date'
+ * type(/foo/) // 'regexp'
+ * type('type') // 'string'
+ * type(global) // 'global'
+ * @api private
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString
+ * @returns {string}
+ */
+exports.type = function type(value) {
+  if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {
+    return 'buffer';
+  }
+  return Object.prototype.toString.call(value)
+    .replace(/^\[.+\s(.+?)\]$/, '$1')
+    .toLowerCase();
+};
+
+/**
+ * @summary Stringify `value`.
+ * @description Different behavior depending on type of value.
+ * - If `value` is undefined or null, return `'[undefined]'` or `'[null]'`, respectively.
+ * - If `value` is not an object, function or array, return result of `value.toString()` wrapped in double-quotes.
+ * - If `value` is an *empty* object, function, or array, return result of function
+ *   {@link emptyRepresentation}.
+ * - If `value` has properties, call {@link exports.canonicalize} on it, then return result of
+ *   JSON.stringify().
+ *
+ * @see exports.type
+ * @param {*} value
+ * @return {string}
  * @api private
  */
 
-exports.canonicalize = function(obj, stack) {
+exports.stringify = function(value) {
+  var prop,
+    type = exports.type(value);
+
+  if (type === 'null' || type === 'undefined') {
+    return '[' + type + ']';
+  }
+  if (!~exports.indexOf(['object', 'array', 'function', 'date'], type)) {
+    return value.toString();
+  }
+
+  for (prop in value) {
+    if (value.hasOwnProperty(prop)) {
+      return JSON.stringify(exports.canonicalize(value), null, 2).replace(/,(\n|$)/g, '$1');
+    }
+  }
+
+  return emptyRepresentation(value, type);
+};
+
+/**
+ * Return if obj is a Buffer
+ * @param {Object} arg
+ * @return {Boolean}
+ * @api private
+ */
+exports.isBuffer = function (arg) {
+  return typeof Buffer !== 'undefined' && Buffer.isBuffer(arg);
+};
+
+/**
+ * @summary Return a new Thing that has the keys in sorted order.  Recursive.
+ * @description If the Thing...
+ * - has already been seen, return string `'[Circular]'`
+ * - is `undefined`, return string `'[undefined]'`
+ * - is `null`, return value `null`
+ * - is some other primitive, return the value
+ * - is not a primitive or an `Array`, `Object`, or `Function`, return the value of the Thing's `toString()` method
+ * - is a non-empty `Array`, `Object`, or `Function`, return the result of calling this function again.
+ * - is an empty `Array`, `Object`, or `Function`, return the result of calling `emptyRepresentation()`
+ *
+ * @param {*} value Thing to inspect.  May or may not have properties.
+ * @param {Array} [stack=[]] Stack of seen values
+ * @return {(Object|Array|Function|string|undefined)}
+ * @see {@link exports.stringify}
+ * @api private
+ */
+
+exports.canonicalize = function(value, stack) {
+  var canonicalizedObj,
+    type = exports.type(value),
+    prop,
+    withStack = function withStack(value, fn) {
+      stack.push(value);
+      fn();
+      stack.pop();
+    };
+
   stack = stack || [];
 
-  if (exports.indexOf(stack, obj) !== -1) return '[Circular]';
+  if (exports.indexOf(stack, value) !== -1) {
+    return '[Circular]';
+  }
 
-  var canonicalizedObj;
-
-  if ({}.toString.call(obj) === '[object Array]') {
-    stack.push(obj);
-    canonicalizedObj = exports.map(obj, function (item) {
-      return exports.canonicalize(item, stack);
-    });
-    stack.pop();
-  } else if (typeof obj === 'object' && obj !== null) {
-    stack.push(obj);
-    canonicalizedObj = {};
-    exports.forEach(exports.keys(obj).sort(), function (key) {
-      canonicalizedObj[key] = exports.canonicalize(obj[key], stack);
-    });
-    stack.pop();
-  } else {
-    canonicalizedObj = obj;
+  switch(type) {
+    case 'undefined':
+      canonicalizedObj = '[undefined]';
+      break;
+    case 'buffer':
+    case 'null':
+      canonicalizedObj = value;
+      break;
+    case 'array':
+      withStack(value, function () {
+        canonicalizedObj = exports.map(value, function (item) {
+          return exports.canonicalize(item, stack);
+        });
+      });
+      break;
+    case 'date':
+      canonicalizedObj = '[Date: ' + value.toISOString() + ']';
+      break;
+    case 'function':
+      for (prop in value) {
+        canonicalizedObj = {};
+        break;
+      }
+      if (!canonicalizedObj) {
+        canonicalizedObj = emptyRepresentation(value, type);
+        break;
+      }
+    /* falls through */
+    case 'object':
+      canonicalizedObj = canonicalizedObj || {};
+      withStack(value, function () {
+        exports.forEach(exports.keys(value).sort(), function (key) {
+          canonicalizedObj[key] = exports.canonicalize(value[key], stack);
+        });
+      });
+      break;
+    case 'number':
+    case 'boolean':
+      canonicalizedObj = value;
+      break;
+    default:
+      canonicalizedObj = value.toString();
   }
 
   return canonicalizedObj;
- };
+};
 
 /**
  * Lookup file names at the given `path`.
@@ -5905,6 +6040,28 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
 
   return files;
 };
+
+/**
+ * Generate an undefined error with a message warning the user.
+ *
+ * @return {Error}
+ */
+
+exports.undefinedError = function(){
+  return new Error('Caught undefined error, did you throw without specifying what?');
+};
+
+/**
+ * Generate an undefined error if `err` is not defined.
+ *
+ * @param {Error} err
+ * @return {Error}
+ */
+
+exports.getError = function(err){
+  return err || exports.undefinedError();
+};
+
 
 }); // module: utils.js
 // The global object is "self" in Web Workers.
