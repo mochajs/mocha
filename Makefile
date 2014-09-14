@@ -135,7 +135,7 @@ test-async-only:
 	  test/acceptance/misc/asyncOnly
 
 test-glob:
-	./test/acceptance/glob/glob.sh
+	@./test/acceptance/glob/glob.sh
 
 test-reporters:
 	@./bin/mocha \
