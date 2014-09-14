@@ -198,7 +198,7 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter
 
-mocha.reporters(program.reporter);
+mocha.reporter(program.reporter);
 
 // interface
 
