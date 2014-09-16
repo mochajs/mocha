@@ -1377,7 +1377,7 @@ module.exports = function(suite){
 
     context.test = function(title, fn){
       var suite = suites[0];
-      if (suite.pending) var fn = null;
+      if (suite.pending) fn = null;
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -5833,35 +5833,36 @@ exports.stringify = function(obj) {
 /**
  * Return a new object that has the keys in sorted order.
  * @param {Object} obj
+ * @param {Array} [stack]
  * @return {Object}
  * @api private
  */
 
 exports.canonicalize = function(obj, stack) {
-   stack = stack || [];
+  stack = stack || [];
 
-   if (exports.indexOf(stack, obj) !== -1) return '[Circular]';
+  if (exports.indexOf(stack, obj) !== -1) return '[Circular]';
 
-   var canonicalizedObj;
+  var canonicalizedObj;
 
-   if ({}.toString.call(obj) === '[object Array]') {
-     stack.push(obj);
-     canonicalizedObj = exports.map(obj, function(item) {
-       return exports.canonicalize(item, stack);
-     });
-     stack.pop();
-   } else if (typeof obj === 'object' && obj !== null) {
-     stack.push(obj);
-     canonicalizedObj = {};
-     exports.forEach(exports.keys(obj).sort(), function(key) {
-       canonicalizedObj[key] = exports.canonicalize(obj[key], stack);
-     });
-     stack.pop();
-   } else {
-     canonicalizedObj = obj;
-   }
+  if ({}.toString.call(obj) === '[object Array]') {
+    stack.push(obj);
+    canonicalizedObj = exports.map(obj, function (item) {
+      return exports.canonicalize(item, stack);
+    });
+    stack.pop();
+  } else if (typeof obj === 'object' && obj !== null) {
+    stack.push(obj);
+    canonicalizedObj = {};
+    exports.forEach(exports.keys(obj).sort(), function (key) {
+      canonicalizedObj[key] = exports.canonicalize(obj[key], stack);
+    });
+    stack.pop();
+  } else {
+    canonicalizedObj = obj;
+  }
 
-   return canonicalizedObj;
+  return canonicalizedObj;
  }
 
 /**
@@ -6057,7 +6058,8 @@ mocha.run = function(fn){
 
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
-    if (global.document && options.noHighlighting !== true) {
+    var document = global.document;
+    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
       Mocha.utils.highlightTags('code');
     }
     if (fn) fn(err);
