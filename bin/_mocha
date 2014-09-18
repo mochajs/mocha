@@ -290,10 +290,9 @@ requires.forEach(function(mod) {
   require(mod);
 });
 
-// files
+//args
 
-var files = []
-  , args = program.args;
+var args = program.args;
 
 // default files to test/*.{js,coffee}
 
