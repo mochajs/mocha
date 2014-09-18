@@ -3518,7 +3518,8 @@ require.register("reporters/nyan.js", function(module, exports, require){
  */
 
 var Base = require('./base')
-  , color = Base.color;
+  , color = Base.color
+  , rainbowColors = generateColors();
 
 /**
  * Expose `Dot`.
@@ -3538,7 +3539,6 @@ function NyanCat(runner) {
   var self = this
     , stats = this.stats
     , width = Base.window.width * .75 | 0
-    , rainbowColors = this.rainbowColors = self.generateColors()
     , colorIndex = this.colorIndex = 0
     , numerOfLines = this.numberOfLines = 4
     , trajectories = this.trajectories = [[], [], [], []]
@@ -3547,6 +3547,57 @@ function NyanCat(runner) {
     , scoreboardWidth = this.scoreboardWidth = 5
     , tick = this.tick = 0
     , n = 0;
+
+  // Bind the drawing functions to this
+  this.appendRainbow = appendRainbow.bind(this);
+  this.drawScoreboard = drawScoreboard.bind(this);
+  this.drawRainbow = drawRainbow.bind(this);
+  this.drawNyanCat = drawNyanCat.bind(this);
+
+
+  /**
+   * Draw nyan cat face.
+   *
+   * @return {String}
+   * @api private
+   */
+  this.face = function() {
+    if (this.stats.failures) {
+      return '( x .x)';
+    } else if (this.stats.pending) {
+      return '( o .o)';
+    } else if(this.stats.passes) {
+      return '( ^ .^)';
+    } else {
+      return '( - .-)';
+    }
+  }
+
+  /**
+   * Apply rainbow to the given `str`.
+   *
+   * @param {String} str
+   * @return {String}
+   * @api private
+   */
+  this.rainbowify = function(str) {
+    var color = rainbowColors[this.colorIndex % rainbowColors.length];
+    this.colorIndex += 1;
+    return '\u001b[38;5;' + color + 'm' + str + '\u001b[0m';
+  };
+
+  /**
+   * Draw the nyan cat
+   *
+   * @api private
+   */
+  self.draw = function(){
+    self.appendRainbow();
+    self.drawScoreboard();
+    self.drawRainbow();
+    self.drawNyanCat();
+    self.tick = !self.tick;
+  };
 
   runner.on('start', function(){
     Base.cursor.hide();
@@ -3572,19 +3623,6 @@ function NyanCat(runner) {
   });
 }
 
-/**
- * Draw the nyan cat
- *
- * @api private
- */
-
-NyanCat.prototype.draw = function(){
-  this.appendRainbow();
-  this.drawScoreboard();
-  this.drawRainbow();
-  this.drawNyanCat();
-  this.tick = !this.tick;
-};
 
 /**
  * Draw the "scoreboard" showing the number
@@ -3593,7 +3631,7 @@ NyanCat.prototype.draw = function(){
  * @api private
  */
 
-NyanCat.prototype.drawScoreboard = function(){
+function drawScoreboard() {
   var stats = this.stats;
   var colors = Base.colors;
 
@@ -3608,7 +3646,7 @@ NyanCat.prototype.drawScoreboard = function(){
   draw(colors.pending, stats.pending);
   write('\n');
 
-  this.cursorUp(this.numberOfLines);
+  cursorUp(this.numberOfLines);
 };
 
 /**
@@ -3617,7 +3655,7 @@ NyanCat.prototype.drawScoreboard = function(){
  * @api private
  */
 
-NyanCat.prototype.appendRainbow = function(){
+function appendRainbow() {
   var segment = this.tick ? '_' : '-';
   var rainbowified = this.rainbowify(segment);
 
@@ -3633,8 +3671,7 @@ NyanCat.prototype.appendRainbow = function(){
  *
  * @api private
  */
-
-NyanCat.prototype.drawRainbow = function(){
+function drawRainbow() {
   var self = this;
 
   this.trajectories.forEach(function(line, index) {
@@ -3643,7 +3680,7 @@ NyanCat.prototype.drawRainbow = function(){
     write('\n');
   });
 
-  this.cursorUp(this.numberOfLines);
+  cursorUp(this.numberOfLines);
 };
 
 /**
@@ -3651,8 +3688,7 @@ NyanCat.prototype.drawRainbow = function(){
  *
  * @api private
  */
-
-NyanCat.prototype.drawNyanCat = function() {
+function drawNyanCat() {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
   var color = '\u001b[' + startWidth + 'C';
@@ -3679,28 +3715,8 @@ NyanCat.prototype.drawNyanCat = function() {
   write(padding + '""  "" ');
   write('\n');
 
-  this.cursorUp(this.numberOfLines);
+  cursorUp(this.numberOfLines);
 };
-
-/**
- * Draw nyan cat face.
- *
- * @return {String}
- * @api private
- */
-
-NyanCat.prototype.face = function() {
-  var stats = this.stats;
-  if (stats.failures) {
-    return '( x .x)';
-  } else if (stats.pending) {
-    return '( o .o)';
-  } else if(stats.passes) {
-    return '( ^ .^)';
-  } else {
-    return '( - .-)';
-  }
-}
 
 /**
  * Move cursor up `n`.
@@ -3708,8 +3724,7 @@ NyanCat.prototype.face = function() {
  * @param {Number} n
  * @api private
  */
-
-NyanCat.prototype.cursorUp = function(n) {
+function cursorUp(n) {
   write('\u001b[' + n + 'A');
 };
 
@@ -3719,8 +3734,7 @@ NyanCat.prototype.cursorUp = function(n) {
  * @param {Number} n
  * @api private
  */
-
-NyanCat.prototype.cursorDown = function(n) {
+function cursorDown(n) {
   write('\u001b[' + n + 'B');
 };
 
@@ -3730,8 +3744,7 @@ NyanCat.prototype.cursorDown = function(n) {
  * @return {Array}
  * @api private
  */
-
-NyanCat.prototype.generateColors = function(){
+function generateColors() {
   var colors = [];
 
   for (var i = 0; i < (6 * 7); i++) {
@@ -3746,24 +3759,10 @@ NyanCat.prototype.generateColors = function(){
   return colors;
 };
 
-/**
- * Apply rainbow to the given `str`.
- *
- * @param {String} str
- * @return {String}
- * @api private
- */
-
-NyanCat.prototype.rainbowify = function(str){
-  var color = this.rainbowColors[this.colorIndex % this.rainbowColors.length];
-  this.colorIndex += 1;
-  return '\u001b[38;5;' + color + 'm' + str + '\u001b[0m';
-};
 
 /**
  * Stdout helper.
  */
-
 function write(string) {
   process.stdout.write(string);
 }
@@ -3771,7 +3770,6 @@ function write(string) {
 /**
  * Inherit from `Base.prototype`.
  */
-
 function F(){};
 F.prototype = Base.prototype;
 NyanCat.prototype = new F;
