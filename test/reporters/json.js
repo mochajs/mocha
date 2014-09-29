@@ -1,4 +1,3 @@
-
 var Mocha = require('../../')
   , Suite = Mocha.Suite
   , Runner = Mocha.Runner

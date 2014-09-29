@@ -1,4 +1,3 @@
-
 describe('uncaught', function(){
   beforeEach(function(done){
     process.nextTick(function(){

@@ -1,4 +1,3 @@
-
 describe('durations', function(){
   describe('when slow', function(){
     it('should highlight in red', function(done){

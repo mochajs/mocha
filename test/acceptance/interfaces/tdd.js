@@ -1,4 +1,3 @@
-
 suite('Array', function(){
   suite('#indexOf()', function(){
     var initialValue = 32;
