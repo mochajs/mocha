@@ -195,7 +195,7 @@ describe('hook error handling', function(){
         after(function(){
           calls.push("1.2 after");
         });
-      });  
+      });
 
       afterEach(function() {
         calls.push('1 after each')
@@ -244,7 +244,7 @@ describe('hook error handling', function(){
         after(function(){
           calls.push("2.2 after");
         });
-      });  
+      });
 
       afterEach(function() {
         calls.push('2 after each')

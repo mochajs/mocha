@@ -1,4 +1,3 @@
-
 var mocha = require('..');
 var utils = mocha.utils;
 var clean = utils.clean;

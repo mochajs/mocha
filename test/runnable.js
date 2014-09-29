@@ -1,4 +1,3 @@
-
 var mocha = require('../')
   , Runnable = mocha.Runnable
   , EventEmitter = require('events').EventEmitter;

@@ -1,4 +1,3 @@
-
 describe('Context', function(){
   beforeEach(function(){
     this.calls = ['before'];

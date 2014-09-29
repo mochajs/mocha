@@ -1,4 +1,3 @@
-
 var calls = [];
 
 exports.Array = {

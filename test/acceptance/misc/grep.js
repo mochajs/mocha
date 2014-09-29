@@ -1,4 +1,3 @@
-
 describe('grep', function(){
   describe('fast', function(){
     it('should run fast', function(){
