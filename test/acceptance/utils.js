@@ -104,6 +104,7 @@ describe('lib/utils', function () {
         .and.have.lengthOf(2);
       existsSync('/tmp/mocha-utils-link.js').should.be.true;
       fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
+      existsSync('/tmp/bob').should.be.true;
       existsSync('/tmp/mocha-utils-link.js').should.be.false;
       utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
     });
