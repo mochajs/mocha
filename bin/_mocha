@@ -207,7 +207,7 @@ mocha.ui(program.ui);
 // load reporter
 
 try {
-  Reporter = require('../lib/reporters/' + program.reporter);
+  var Reporter = require('../lib/reporters/' + program.reporter);
 } catch (err) {
   try {
     Reporter = require(program.reporter);
