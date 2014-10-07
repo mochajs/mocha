@@ -72,6 +72,7 @@ program
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-gc', '--expose-gc', 'expose gc extension')
   .option('-i, --invert', 'inverts --grep matches')
+  .option('-o, --output <file>', 'specify the file to output the JSON results to')
   .option('-r, --require <name>', 'require the given module')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
@@ -270,6 +271,10 @@ if (program.asyncOnly) mocha.asyncOnly();
 // --globals
 
 mocha.globals(globals);
+
+// --output
+
+if (program.output) mocha.output(program.output);
 
 // custom compiler support
 
