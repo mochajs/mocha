@@ -224,7 +224,22 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    return value.split(/^/m);
+    var retLines = [],
+        lines = value.split(/^/m);
+
+    for(var i = 0; i < lines.length; i++) {
+      var line = lines[i],
+          lastLine = lines[i - 1];
+
+      // Merge lines that may contain windows new lines
+      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
+        retLines[retLines.length - 1] += '\n';
+      } else if (line) {
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
   };
 
   return {
@@ -1025,7 +1040,7 @@ module.exports = function(suite){
 
     context.it = context.specify = function(title, fn){
       var suite = suites[0];
-      if (suite.pending) var fn = null;
+      if (suite.pending) fn = null;
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -1112,7 +1127,7 @@ module.exports = function(suite){
             suites[0].addTest(test);
         }
       } else {
-        var suite = Suite.create(suites[0], key);
+        suite = Suite.create(suites[0], key);
         suites.unshift(suite);
         visit(obj[key]);
         suites.shift();
@@ -1270,7 +1285,7 @@ require.register("interfaces/tdd.js", function(module, exports, require){
 var Suite = require('../suite')
   , Test = require('../test')
   , escapeRe = require('browser/escape-string-regexp')
-  , utils = require('../utils');;
+  , utils = require('../utils');
 
 /**
  * TDD-style interface:
@@ -2976,7 +2991,7 @@ function map(cov) {
   }
 
   return ret;
-};
+}
 
 /**
  * Map jscoverage data for a single source file
@@ -3133,6 +3148,7 @@ function JSONReporter(runner) {
   Base.call(this, runner);
 
   var tests = []
+    , pending = []
     , failures = []
     , passes = [];
 
@@ -3148,10 +3164,15 @@ function JSONReporter(runner) {
     failures.push(test);
   });
 
+  runner.on('pending', function(test){
+    pending.push(test);
+  });
+
   runner.on('end', function(){
     var obj = {
       stats: self.stats,
       tests: tests.map(clean),
+      pending: pending.map(clean),
       failures: failures.map(clean),
       passes: passes.map(clean)
     };
@@ -3700,7 +3721,7 @@ NyanCat.prototype.face = function() {
   } else {
     return '( - .-)';
   }
-}
+};
 
 /**
  * Move cursor up `n`.
@@ -5064,7 +5085,7 @@ Runner.prototype.run = function(fn){
 Runner.prototype.abort = function(){
   debug('aborting');
   this._abort = true;
-}
+};
 
 /**
  * Filter leaks with the given globals flagged as `ok`.
@@ -5253,7 +5274,7 @@ Suite.prototype.enableTimeouts = function(enabled){
   debug('enableTimeouts %s', enabled);
   this._enableTimeouts = enabled;
   return this;
-}
+};
 
 /**
  * Set slow `ms` or short-hand such as "2s".
@@ -5828,7 +5849,7 @@ exports.highlightTags = function(name) {
 exports.stringify = function(obj) {
   if (obj instanceof RegExp) return obj.toString();
   return JSON.stringify(exports.canonicalize(obj), null, 2).replace(/,(\n|$)/g, '$1');
-}
+};
 
 /**
  * Return a new object that has the keys in sorted order.
@@ -5863,7 +5884,7 @@ exports.canonicalize = function(obj, stack) {
   }
 
   return canonicalizedObj;
- }
+ };
 
 /**
  * Lookup file names at the given `path`.
@@ -5909,7 +5930,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
   });
 
   return files;
-}
+};
 
 }); // module: utils.js
 // The global object is "self" in Web Workers.

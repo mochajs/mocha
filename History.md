@@ -1,3 +1,26 @@
+
+1.21.5 / 2014-10-11
+==================
+
+ * fix: build for NodeJS v0.6.x
+ * fix: do not attempt to highlight syntax when non-HTML reporter is used
+ * update: escape-string-regexp to 1.0.2.
+ * fix: botched indentation in canonicalize()
+ * fix: .gitignore: ignore .patch and .diff files
+ * fix: changed 'Catched' to 'Caught' in uncaught exception error handler messages
+ * add: `pending` field for json reporter
+ * fix: Runner.prototype.uncaught: don't double-end runnables that already have a state.
+ * fix: --recursive, broken by f0facd2e
+ * update: replaces escapeRegexp with the escape-string-regexp package.
+ * update: commander to 2.3.0.
+ * update: diff to 1.0.8.
+ * fix: ability to disable syntax highlighting (#1329)
+ * fix: added empty object to errorJSON() call to catch when no error is present
+ * fix: never time out after calling enableTimeouts(false)
+ * fix: timeout(0) will work at suite level (#1300) 
+ * Fix for --watch+only() issue (#888 )
+ * fix: respect err.showDiff, add Base reporter test (#810)
+
 1.22.1-3 / 2014-07-27
 ==================
 

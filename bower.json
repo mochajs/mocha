@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "1.21.4",
+  "version": "1.21.5",
   "main": [
     "mocha.js",
     "mocha.css"
