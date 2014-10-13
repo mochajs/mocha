@@ -1,4 +1,3 @@
-
 var fs = require('fs');
 
 describe('fs.readFile()', function(){
