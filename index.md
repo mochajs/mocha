@@ -89,9 +89,9 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
 
 <h2 id="assertions">Assertions</h2>
 
-Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](https://github.com/visionmedia/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
+Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](https://github.com/shouldjs/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
 
-  - [should.js](https://github.com/visionmedia/should.js) BDD style shown throughout these docs
+  - [should.js](https://github.com/shouldjs/should.js) BDD style shown throughout these docs
   - [expect.js](https://github.com/LearnBoost/expect.js) expect() style assertions
   - [chai](http://chaijs.com/) expect(), assert() and should style assertions
   - [better-assert](https://github.com/visionmedia/better-assert) c-style self-documenting assert()
@@ -331,7 +331,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="require-option">-r, --require &lt;name&gt;</h3>
 
-  The `--require` option is useful for libraries such as [should.js](https://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`.
+  The `--require` option is useful for libraries such as [should.js](https://github.com/shouldjs/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`.
 
 <h3 id="ui-option">-u, --ui &lt;name&gt;</h3>
 
