@@ -241,4 +241,15 @@ describe('Runner', function(){
       done();
     })
   })
+
+  describe('.output(file)', function(){
+    it('should update the runner._output with provided value', function(){
+      suite.addTest(new Test('im a test about lions'));
+      suite.addTest(new Test('im another test about lions'));
+      suite.addTest(new Test('im a test about bears'));
+      var newRunner = new Runner(suite);
+      newRunner.output('output.json');
+      newRunner._output.should.equal('output.json');
+    })
+  })
 })
