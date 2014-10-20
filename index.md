@@ -1,4 +1,4 @@
-Mocha is a feature-rich JavaScript test framework running on [node.js](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/visionmedia/mocha).
+Mocha is a feature-rich JavaScript test framework running on [node.js](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
 <h2 id="features">Features</h2>
 
@@ -817,7 +817,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
    - [Connect](https://github.com/senchalabs/connect/tree/master/test)
    - [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
    - [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
-   - [Mocha](https://github.com/visionmedia/mocha/tree/master/test)
+   - [Mocha](https://github.com/mochajs/mocha/tree/master/test)
 
 <h2 id="running-mochas-tests">Running mocha's tests</h2>
 
@@ -835,4 +835,4 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h2 id="more-information">More information</h2>
 
-  For additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/visionmedia/mocha/wiki) on GitHub. For discussions join the [Google Group](http://groups.google.com/group/mochajs). For a running example of mocha view [example/tests.html](example/tests.html). For the JavaScript API view the [source](https://github.com/visionmedia/mocha/blob/master/lib/mocha.js#L51).
+  For additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](http://groups.google.com/group/mochajs). For a running example of mocha view [example/tests.html](example/tests.html). For the JavaScript API view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
