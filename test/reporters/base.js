@@ -34,6 +34,41 @@ describe('Base reporter', function () {
 
   });
 
+  it('should show diffs for node deepEqual', function () {
+    var err,
+      stderr = [],
+      stderrWrite = process.stderr.write,
+      errOut;
+
+    try {
+      require('assert').deepEqual({a: 1}, {b: 2});
+    } catch (ex) {
+      err = ex;
+    }
+
+    var test = {
+      err: err,
+      fullTitle: function () {
+        return 'title';
+      }
+    };
+
+    process.stderr.write = function (string) {
+      stderr.push(string);
+    };
+
+    Base.list([test]);
+
+    process.stderr.write = stderrWrite;
+
+    errOut = stderr.join('\n');
+
+    errOut.should.match(/test/);
+    errOut.should.match(/actual/);
+    errOut.should.match(/expected/);
+
+  });
+
   it('should not show diffs when showDiff property set', function () {
     var err = new Error('test'),
       stderr = [],
