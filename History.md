@@ -1,3 +1,12 @@
+2.0.0 / 2014-10-21
+==================
+
+ * remove: support for node 0.6.x, 0.4.x
+ * fix: landing reporter with non ansi characters (#211)
+ * fix: html reporter - preserve query params when navigating to suites/tests (#1358)
+ * fix: json stream reporter add error message to failed test
+ * fix: fixes for visionmedia -> mochajs
+ * fix: use stdio, fixes node deprecation warnings (#1391)
 
 1.21.5 / 2014-10-11
 ==================
@@ -17,7 +26,7 @@
  * fix: ability to disable syntax highlighting (#1329)
  * fix: added empty object to errorJSON() call to catch when no error is present
  * fix: never time out after calling enableTimeouts(false)
- * fix: timeout(0) will work at suite level (#1300) 
+ * fix: timeout(0) will work at suite level (#1300)
  * Fix for --watch+only() issue (#888 )
  * fix: respect err.showDiff, add Base reporter test (#810)
 

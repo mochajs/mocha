@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "1.21.5",
+  "version": "2.0.0",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -30,7 +30,7 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 0.4.x"
+    "node": ">= 0.8.x"
   },
   "scripts": {
     "test": "make test-all"
