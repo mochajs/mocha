@@ -54,3 +54,10 @@ proc.on('exit', function (code, signal) {
     }
   });
 });
+
+// terminate children.
+process.on('SIGINT', function () {
+  proc.kill('SIGINT'); // calls runner.abort()
+  proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+  process.kill(process.pid, 'SIGINT');
+});
