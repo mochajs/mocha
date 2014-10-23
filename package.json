@@ -17,12 +17,19 @@
     "Christopher Hiller <chiller@badwing.com>",
     "Travis Jeffery <tj@travisjeffery.com>",
     "Johnathan Ong <me@jongleberry.com>",
-    "Guillermo Rauch <rauchg@gmail.com>"
+    "Guillermo Rauch <rauchg@gmail.com>",
+    "Nathan Rajlich <nathan@tootallnate.net>"
   ],
   "repository": {
     "type": "git",
     "url": "git://github.com/mochajs/mocha.git"
   },
+  "maintainers": [
+    "travisjeffery <tj@travisjeffery.com>",
+    "markelog <markelog@gmail.com>",
+    "jbnicolai <joshua@jbna.nl>",
+    "boneskull <chiller@badwing.com>"
+  ],
   "main": "./index",
   "browser": "./mocha.js",
   "bin": {
