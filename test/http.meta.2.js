@@ -52,6 +52,7 @@ function get(url) {
 
         expected = body;
         describe('GET ' + url, function(){
+          this.timeout(500);
           if (fields) {
             describe('when given ' + fields, function(){
               it('should respond with "' + body + '"', request);
