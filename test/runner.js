@@ -181,6 +181,20 @@ describe('Runner', function(){
     })
   })
 
+  describe('.hook(name, fn)', function(){
+    it('should execute hooks after failed test if suite bail is true', function(done){
+      runner.fail({});
+      suite.bail(true);
+      suite.afterEach(function(){
+        suite.afterAll(function() {
+          done();
+        })
+      });
+      runner.hook('afterEach', function(){});
+      runner.hook('afterAll', function(){});
+    })
+  })
+
   describe('.fail(test, err)', function(){
     it('should increment .failures', function(){
       runner.failures.should.equal(0);
