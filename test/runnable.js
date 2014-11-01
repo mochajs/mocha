@@ -225,7 +225,7 @@ describe('Runnable(title, fn)', function(){
           });
         })
 
-        it('should not throw its own exception if passed a non-object', function (done) {
+        it.skip('should not throw its own exception if passed a non-object', function (done) {
           var test = new Runnable('foo', function(done) {
             throw null;
             process.nextTick(done);
