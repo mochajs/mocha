@@ -165,7 +165,7 @@ test-disallow-only:
 		--ui tdd \
 		test/acceptance/misc/only/tdd > /dev/null 2>&1 ; \
 		failures="$$?" ; \
-		if [ "$$failures" == '0' ] ; then \
+		if [ "$$failures" = '0' ] ; then \
 			echo 'test-failing:' ; \
 			echo "  expected tdd interface to disallow only but tests passed" ; \
 			exit 1 ; \
@@ -177,7 +177,7 @@ test-disallow-only:
 		--ui bdd \
 		test/acceptance/misc/only/bdd > /dev/null 2>&1 ; \
 		failures="$$?" ; \
-		if [ "$$failures" == '0' ] ; then \
+		if [ "$$failures" = '0' ] ; then \
 			echo 'test-failing:' ; \
 			echo "  expected bdd interface to disallow only but tests passed" ; \
 			exit 1 ; \
@@ -189,7 +189,7 @@ test-disallow-only:
 		--ui qunit \
 		test/acceptance/misc/only/qunit > /dev/null 2>&1 ; \
 		failures="$$?" ; \
-		if [ "$$failures" == '0' ] ; then \
+		if [ "$$failures" = '0' ] ; then \
 			echo 'test-failing:' ; \
 			echo "  expected qunit interface to disallow only but tests passed" ; \
 			exit 1 ; \
