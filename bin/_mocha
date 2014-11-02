@@ -69,6 +69,7 @@ program
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
+  .option('--disallow-only', "prevent use of '.only' test filters")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-gc', '--expose-gc', 'expose gc extension')
   .option('-i, --invert', 'inverts --grep matches')
@@ -266,6 +267,10 @@ if (program.growl) mocha.growl();
 // --async-only
 
 if (program.asyncOnly) mocha.asyncOnly();
+
+// --disallow-only
+
+if (program.disallowOnly) mocha.disallowOnly();
 
 // --globals
 

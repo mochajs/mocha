@@ -36,7 +36,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing test-regression
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-disallow-only test-failing test-regression
 
 test-jsapi:
 	@node test/jsapi
@@ -158,6 +158,43 @@ test-only:
 		--ui qunit \
 		test/acceptance/misc/only/qunit
 
+test-disallow-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--disallow-only \
+		--ui tdd \
+		test/acceptance/misc/only/tdd > /dev/null 2>&1 ; \
+		failures="$$?" ; \
+		if [ "$$failures" = '0' ] ; then \
+			echo 'test-failing:' ; \
+			echo "  expected tdd interface to disallow only but tests passed" ; \
+			exit 1 ; \
+		fi
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--disallow-only \
+		--ui bdd \
+		test/acceptance/misc/only/bdd > /dev/null 2>&1 ; \
+		failures="$$?" ; \
+		if [ "$$failures" = '0' ] ; then \
+			echo 'test-failing:' ; \
+			echo "  expected bdd interface to disallow only but tests passed" ; \
+			exit 1 ; \
+		fi
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--disallow-only \
+		--ui qunit \
+		test/acceptance/misc/only/qunit > /dev/null 2>&1 ; \
+		failures="$$?" ; \
+		if [ "$$failures" = '0' ] ; then \
+			echo 'test-failing:' ; \
+			echo "  expected qunit interface to disallow only but tests passed" ; \
+			exit 1 ; \
+		fi
+
 test-sort:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
@@ -189,4 +226,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit non-tty test-grep test-failing tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-only test-disallow-only test-unit non-tty test-grep test-failing tm clean
