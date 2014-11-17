@@ -83,4 +83,11 @@ describe('diffs', function(){
 
     // obj1.should.equal(obj2);
   });
+
+  it('should display diff by data and not like an objects', function(){
+    var buf1 = new Buffer([0x01]);
+    var buf2 = new Buffer([0x02]);
+
+//    buf1.should.equal(buf2);
+  });
 });
