@@ -34,7 +34,7 @@ Hi!  We could use your help.  Let us help you help us.  Or something.
 
 6.  Please **add tests for new code**.
 
-7.  **Always run `npm test` before sending a PR.  If you break the tests, your PR will not be accepted until they are fixed.
+7.  **Always run `npm test` before sending a PR.**  If you break the tests, your PR will not be accepted until they are fixed.
 
 ## Source Control
 
