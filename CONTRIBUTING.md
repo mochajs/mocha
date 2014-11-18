@@ -14,7 +14,7 @@ Hi!  We could use your help.  Let us help you help us.  Or something.
 
 1.  When reporting a bug, please **provide steps to reproduce**.  If possible, show code.
   
-2.  Please **show all code in JavaScript**.  We don't all read <insert-language-that-compiles-to-JavaScript-here>.  If you do not, you will be asked to.
+2.  Please **show all code in JavaScript**.  We don't all read `<insert-language-that-compiles-to-JavaScript-here>`.  If you do not, you will be asked to.
 
 3.  Because Mocha works with many third-party libraries and tools, **ensure the bug you are reporting is actually within Mocha**.
 
