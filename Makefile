@@ -142,6 +142,12 @@ test-reporters:
 		--reporter $(REPORTER) \
 		test/reporters/*.js
 
+test-delay:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--delay \
+		test/delay/*.js
+
 test-only:
 	@./bin/mocha \
 		--reporter $(REPORTER) \

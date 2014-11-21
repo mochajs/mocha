@@ -953,38 +953,13 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context, file, mocha){
 
-    /**
-     * Execute before running tests.
-     */
+    var common = require('./common')(suites, context);
 
-    context.before = function(name, fn){
-      suites[0].beforeAll(name, fn);
-    };
-
-    /**
-     * Execute after running tests.
-     */
-
-    context.after = function(name, fn){
-      suites[0].afterAll(name, fn);
-    };
-
-    /**
-     * Execute before each test case.
-     */
-
-    context.beforeEach = function(name, fn){
-      suites[0].beforeEach(name, fn);
-    };
-
-    /**
-     * Execute after each test case.
-     */
-
-    context.afterEach = function(name, fn){
-      suites[0].afterEach(name, fn);
-    };
-
+    context.before = common.before;
+    context.after = common.after;
+    context.beforeEach = common.beforeEach;
+    context.afterEach = common.afterEach;
+    context.run = mocha.options.delay && common.runWithSuite(suite);
     /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
@@ -1059,10 +1034,73 @@ module.exports = function(suite){
     context.it.skip = function(title){
       context.it(title);
     };
+
   });
 };
 
 }); // module: interfaces/bdd.js
+
+require.register("interfaces/common.js", function(module, exports, require){
+/**
+ * Functions common to more than one interface
+ * @module lib/interfaces/common
+ */
+
+'use strict';
+
+module.exports = function (suites, context) {
+
+  return {
+    /**
+     * This is only present if flag --delay is passed into Mocha.  It triggers
+     * root suite execution.  Returns a function which runs the root suite.
+     */
+    runWithSuite: function runWithSuite(suite) {
+      return function run() {
+        suite.run();
+      };
+    },
+
+    /**
+     * Execute before running tests.
+     */
+    before: function (name, fn) {
+      suites[0].beforeAll(name, fn);
+    },
+
+    /**
+     * Execute after running tests.
+     */
+    after: function (name, fn) {
+      suites[0].afterAll(name, fn);
+    },
+
+    /**
+     * Execute before each test case.
+     */
+    beforeEach: function (name, fn) {
+      suites[0].beforeEach(name, fn);
+    },
+
+    /**
+     * Execute after each test case.
+     */
+    afterEach: function (name, fn) {
+      suites[0].afterEach(name, fn);
+    },
+
+    test: {
+      /**
+       * Pending test case.
+       */
+      skip: function (title) {
+        context.test(title);
+      }
+    }
+  }
+};
+
+}); // module: interfaces/common.js
 
 require.register("interfaces/exports.js", function(module, exports, require){
 /**
@@ -1177,38 +1215,13 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context, file, mocha){
 
-    /**
-     * Execute before running tests.
-     */
+    var common = require('./common')(suites, context);
 
-    context.before = function(name, fn){
-      suites[0].beforeAll(name, fn);
-    };
-
-    /**
-     * Execute after running tests.
-     */
-
-    context.after = function(name, fn){
-      suites[0].afterAll(name, fn);
-    };
-
-    /**
-     * Execute before each test case.
-     */
-
-    context.beforeEach = function(name, fn){
-      suites[0].beforeEach(name, fn);
-    };
-
-    /**
-     * Execute after each test case.
-     */
-
-    context.afterEach = function(name, fn){
-      suites[0].afterEach(name, fn);
-    };
-
+    context.before = common.before;
+    context.after = common.after;
+    context.beforeEach = common.beforeEach;
+    context.afterEach = common.afterEach;
+    context.run = mocha.options.delay && common.runWithSuite(suite);
     /**
      * Describe a "suite" with the given `title`.
      */
@@ -1253,13 +1266,8 @@ module.exports = function(suite){
       mocha.grep(new RegExp(reString));
     };
 
-    /**
-     * Pending test case.
-     */
+    context.test.skip = common.test.skip;
 
-    context.test.skip = function(title){
-      context.test(title);
-    };
   });
 };
 
@@ -1305,38 +1313,13 @@ module.exports = function(suite){
 
   suite.on('pre-require', function(context, file, mocha){
 
-    /**
-     * Execute before each test case.
-     */
+    var common = require('./common')(suites, context);
 
-    context.setup = function(name, fn){
-      suites[0].beforeEach(name, fn);
-    };
-
-    /**
-     * Execute after each test case.
-     */
-
-    context.teardown = function(name, fn){
-      suites[0].afterEach(name, fn);
-    };
-
-    /**
-     * Execute before the suite.
-     */
-
-    context.suiteSetup = function(name, fn){
-      suites[0].beforeAll(name, fn);
-    };
-
-    /**
-     * Execute after the suite.
-     */
-
-    context.suiteTeardown = function(name, fn){
-      suites[0].afterAll(name, fn);
-    };
-
+    context.setup = common.beforeEach;
+    context.teardown = common.afterEach;
+    context.suiteSetup = common.before;
+    context.suiteTeardown = common.after;
+    context.run = mocha.options.delay && common.runWithSuite(suite);
     /**
      * Describe a "suite" with the given `title`
      * and callback `fn` containing nested suites
@@ -1397,13 +1380,7 @@ module.exports = function(suite){
       mocha.grep(new RegExp(reString));
     };
 
-    /**
-     * Pending test case.
-     */
-
-    context.test.skip = function(title){
-      context.test(title);
-    };
+    context.test.skip = common.test.skip;
   });
 };
 
@@ -1511,6 +1488,7 @@ function Mocha(options) {
     exports.suite = context.suite || context.describe;
     exports.teardown = context.teardown || context.afterEach;
     exports.test = context.test || context.it;
+    exports.run = context.run;
   });
 }
 
@@ -1795,19 +1773,28 @@ Mocha.prototype.noHighlighting = function() {
 };
 
 /**
+ * Delay root suite execution.
+ * @returns {Mocha}
+ * @api public
+ */
+Mocha.prototype.delay = function delay() {
+  this.options.delay = true;
+  return this;
+};
+
+/**
  * Run tests and invoke `fn()` when complete.
  *
  * @param {Function} fn
  * @return {Runner}
  * @api public
  */
-
 Mocha.prototype.run = function(fn){
   if (this.files.length) this.loadFiles();
   var suite = this.suite;
   var options = this.options;
   options.files = this.files;
-  var runner = new exports.Runner(suite);
+  var runner = new exports.Runner(suite, options.delay);
   var reporter = new this._reporter(runner, options);
   runner.ignoreLeaks = false !== options.ignoreLeaks;
   runner.asyncOnly = options.asyncOnly;
@@ -4596,13 +4583,17 @@ module.exports = Runner;
  *   - `fail`  (test, err) test failed
  *   - `pending`  (test) test pending
  *
+ * @param {Suite} suite Root suite
+ * @param {boolean} [delay] Whether or not to delay execution of root suite
+ *   until ready.
  * @api public
  */
 
-function Runner(suite) {
+function Runner(suite, delay) {
   var self = this;
   this._globals = [];
   this._abort = false;
+  this._delay = delay;
   this.suite = suite;
   this.total = suite.total();
   this.failures = 0;
@@ -5147,11 +5138,21 @@ Runner.prototype.uncaught = function(err){
  */
 
 Runner.prototype.run = function(fn){
-  var self = this;
+  var self = this,
+    rootSuite = this.suite;
+
   fn = fn || function(){};
 
   function uncaught(err){
     self.uncaught(err);
+  }
+
+  function start() {
+    self.emit('start');
+    self.runSuite(rootSuite, function(){
+      debug('finished running');
+      self.emit('end');
+    });
   }
 
   debug('start');
@@ -5163,15 +5164,18 @@ Runner.prototype.run = function(fn){
     fn(self.failures);
   });
 
-  // run suites
-  this.emit('start');
-  this.runSuite(this.suite, function(){
-    debug('finished running');
-    self.emit('end');
-  });
-
   // uncaught exception
   process.on('uncaughtException', uncaught);
+
+  if (this._delay) {
+    // for reporters, I guess.
+    // might be nice to debounce some dots while we wait.
+    this.emit('waiting', rootSuite);
+    rootSuite.once('run', start);
+  }
+  else {
+    start();
+  }
 
   return this;
 };
@@ -5313,6 +5317,7 @@ function Suite(title, parentContext) {
   this._enableTimeouts = true;
   this._slow = 75;
   this._bail = false;
+  this.delayed = false;
 }
 
 /**
@@ -5597,6 +5602,15 @@ Suite.prototype.eachTest = function(fn){
     suite.eachTest(fn);
   });
   return this;
+};
+
+/**
+ * This will run the root suite if we happen to be running in delayed mode.
+ */
+Suite.prototype.run = function run() {
+  if (this.root) {
+    this.emit('run');
+  }
 };
 
 }); // module: suite.js
