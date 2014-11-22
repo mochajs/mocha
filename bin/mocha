@@ -54,3 +54,8 @@ proc.on('exit', function (code, signal) {
     }
   });
 });
+
+process.on('SIGINT', function() {
+  proc.kill('SIGTERM');
+  process.exit(1);
+});
