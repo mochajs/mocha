@@ -31,24 +31,6 @@ describe('Runner', function(){
     })
   })
 
-  describe('.grepTotal()', function(){
-    it('should return the total number of matched tests', function(){
-      suite.addTest(new Test('im a test about lions'));
-      suite.addTest(new Test('im another test about lions'));
-      suite.addTest(new Test('im a test about bears'));
-      runner.grep(/lions/);
-      runner.grepTotal(suite).should.equal(2);
-    })
-
-    it('should return the total number of matched tests when inverted', function(){
-      suite.addTest(new Test('im a test about lions'));
-      suite.addTest(new Test('im another test about lions'));
-      suite.addTest(new Test('im a test about bears'));
-      runner.grep(/lions/, true);
-      runner.grepTotal(suite).should.equal(1);
-    })
-  })
-
   describe('.globalProps()', function(){
     it('should include common non enumerable globals', function() {
       var props = runner.globalProps();

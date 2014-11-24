@@ -23,4 +23,23 @@ describe('utils', function() {
       isBuffer({}).should.equal(false);
     })
   });
+  describe('Array#some', function() {
+    function odd(item) { return item % 2 !== 0; }
+    it('returns false if no items match', function() {
+      utils.some([2, 4, 6], odd).should.eql(false);
+    });
+    it('returns true if any item matches', function() {
+      utils.some([2, 4, 5, 6], odd).should.eql(true);
+    });
+  });
+  describe('Array#indexOf', function() {
+    it('returns the index of the first matching item', function() {
+      utils.indexOf([2, 4, 6], 6).should.eql(2);
+      utils.indexOf([2, 4, 2], 2).should.eql(0);
+      utils.indexOf(['hello', 'world'], 'world').should.eql(1);
+    });
+    it('returns -1 if no item matches', function() {
+      utils.indexOf([2, 4, 6], 3).should.eql(-1);
+    });
+  });
 });
