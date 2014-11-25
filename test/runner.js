@@ -210,6 +210,14 @@ describe('Runner', function(){
       test.state.should.equal('failed');
     })
 
+    it('should set test.wasAlreadyDone', function() {
+      var test = {};
+      runner.fail(test, 'some error');
+      test.wasAlreadyDone.should.be.false;
+      runner.fail(test, 'some other error');
+      test.wasAlreadyDone.should.be.true;
+    })
+
     it('should emit "fail"', function(done){
       var test = {}, err = {};
       runner.on('fail', function(test, err){
