@@ -225,16 +225,14 @@ describe('Runnable(title, fn)', function(){
           });
         })
 
-        it.skip('should not throw its own exception if passed a non-object', function (done) {
+        it('should not throw its own exception if passed a non-object', function (done) {
           var test = new Runnable('foo', function(done) {
             throw null;
             process.nextTick(done);
           });
 
           test.run(function(err) {
-            if (err !== null) {
-              throw new should.AssertionError('err should be null');
-            }
+            err.message.should.equal('Caught undefined error, did you throw without specifying what?');
             done();
           })
         });
