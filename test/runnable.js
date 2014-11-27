@@ -232,9 +232,7 @@ describe('Runnable(title, fn)', function(){
           });
 
           test.run(function(err) {
-            if (err !== null) {
-              throw new should.AssertionError('err should be null');
-            }
+            err.message.should.equal('Caught undefined error, did you throw without specifying what?');
             done();
           })
         });
