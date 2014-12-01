@@ -24,7 +24,12 @@ Hi!  We could use your help.  Let us help you help us.  Or something.
 
 1. Before sending a large PR, it's recommended to **create an issue to propose the change**.  Nobody wants to write a book of code and throw it away.
 
-2.  Because Mocha should be kept as maintainable as possible, its codebase must be kept slim.  Historically, *most PRs for new features are not merged*.  New features inevitably increase the size of the codebase, and thus reduce maintainability.  Only features *deemed essential* are likely to be merged--this is at the discretion of the maintainer(s).  If your PR for a feature is not merged, this doesn't necessarily mean your PR was a bad idea, wouldn't be used, or otherwise sucks.  It just means **only essential PRs for new features are likely to be merged**. 
+2.  Because Mocha should be kept as maintainable as possible, its codebase must be kept slim.  Historically, *most PRs for new features are not merged*.  New features inevitably increase the size of the codebase, and thus reduce maintainability.  Only features *deemed essential* are likely to be merged--this is at the discretion of the maintainer(s).
+
+  If your PR for a feature is not merged, this doesn't necessarily mean your PR was a bad idea, wouldn't be used, or otherwise sucks.
+  It just means **only essential PRs for new features are likely to be merged**.
+
+  If your rejected PR was adding a new feature, try to rewrite it as a Mocha plugin instead.
 
 3.  Due to the above, before creating a PR for a new feature, **create an issue to propose the feature.**
 
