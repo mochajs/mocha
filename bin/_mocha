@@ -282,6 +282,7 @@ program.compilers.forEach(function(c) {
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);
   extensions.push(ext);
+  program.watchExtensions.push(ext);
 });
 
 // requires
@@ -325,7 +326,7 @@ if (program.watch) {
   });
 
 
-  var watchFiles = utils.files(cwd, [ 'js', 'coffee', 'litcoffee', 'coffee.md' ].concat(program.watchExtensions));
+  var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
   var runAgain = false;
 
   function loadAndRun() {
