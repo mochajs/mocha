@@ -5,17 +5,13 @@
  */
 
 var program = require('commander')
-  , sprintf = require('util').format
   , path = require('path')
   , fs = require('fs')
-  , glob = require('glob')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , interfaces = Mocha.interfaces
   , join = path.join
-  , basename = path.basename
   , cwd = process.cwd()
   , mocha = new Mocha;
 
