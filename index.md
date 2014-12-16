@@ -412,7 +412,9 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="bdd-interface">BDD</h3>
 
-  The "__BDD__" interface provides `describe()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`:
+  The "__BDD__" interface provides `describe()`, `context()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`:
+
+  `context()` is just an alias for `describe()`, and behaves the same way; it just provides a way to keep tests easier to read and organized.
 
     describe('Array', function(){
       before(function(){
@@ -420,8 +422,20 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       });
 
       describe('#indexOf()', function(){
-        it('should return -1 when not present', function(){
-          [1,2,3].indexOf(4).should.equal(-1);
+        context('when not present', function(){
+          it('should not throw an error', function(){
+            (function(){
+              [1,2,3].indexOf(4);
+            }).should.not.throw();
+          });
+          it('should return -1', function(){
+            [1,2,3].indexOf(4).should.equal(-1);
+          });
+        });
+        context('when present', function(){
+          it('should return the index where the element first appears in the array', function(){
+            [1,2,3].indexOf(3).should.equal(2);
+          });
         });
       });
     });

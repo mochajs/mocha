@@ -452,7 +452,9 @@ describe('app', function(){
 
 <h3 id="bdd-interface">BDD</h3>
 
-<p>The "<strong>BDD</strong>" interface provides <code>describe()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
+<p>The "<strong>BDD</strong>" interface provides <code>describe()</code>, <code>context()</code>, <code>it()</code>, <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>:</p>
+
+<p><code>context()</code> is just an alias for <code>describe()</code>, and behaves the same way; it just provides a way to keep tests easier to read and organized.</p>
 
 <pre><code>describe('Array', function(){
   before(function(){
@@ -460,8 +462,20 @@ describe('app', function(){
   });
 
   describe('#indexOf()', function(){
-    it('should return -1 when not present', function(){
-      [1,2,3].indexOf(4).should.equal(-1);
+    context('when not present', function(){
+      it('should not throw an error', function(){
+        (function(){
+          [1,2,3].indexOf(4);
+        }).should.not.throw();
+      });
+      it('should return -1', function(){
+        [1,2,3].indexOf(4).should.equal(-1);
+      });
+    });
+    context('when present', function(){
+      it('should return the index where the element first appears in the array', function(){
+        [1,2,3].indexOf(3).should.equal(2);
+      });
     });
   });
 });
@@ -754,7 +768,7 @@ testCase('Array', function(){
 
 <p>Mocha options can be set via <code>mocha.setup()</code>.  Examples:</p>
 
-<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface;
+<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface; 
 // any other options must be passed via an object.
 mocha.setup('tdd');
 
