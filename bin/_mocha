@@ -5,17 +5,13 @@
  */
 
 var program = require('commander')
-  , sprintf = require('util').format
   , path = require('path')
   , fs = require('fs')
-  , glob = require('glob')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , interfaces = Mocha.interfaces
   , join = path.join
-  , basename = path.basename
   , cwd = process.cwd()
   , mocha = new Mocha;
 
@@ -180,7 +176,10 @@ var optsPath = process.argv.indexOf('--opts') !== -1
 try {
   var opts = fs.readFileSync(optsPath, 'utf8')
     .trim()
-    .split(/\s+/);
+    .split(/\s+/)
+    .filter(function(value) {
+      return value ? true : false;
+    });
 
   process.argv = process.argv
     .slice(0, 2)
