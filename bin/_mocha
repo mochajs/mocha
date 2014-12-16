@@ -180,7 +180,10 @@ var optsPath = process.argv.indexOf('--opts') !== -1
 try {
   var opts = fs.readFileSync(optsPath, 'utf8')
     .trim()
-    .split(/\s+/);
+    .split(/\s+/)
+    .filter(function(value) {
+      return value ? true : false;
+    });
 
   process.argv = process.argv
     .slice(0, 2)
