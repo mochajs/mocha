@@ -43,6 +43,7 @@
 <li>file watcher support</li>
 <li>global variable leak detection</li>
 <li>optionally run tests that match a regexp</li>
+<li>optionally tag test suites, and include/exclude certain tags</li>
 <li>auto-exit to prevent "hanging" with an active loop</li>
 <li>easily meta-generate suites &amp; test-cases</li>
 <li>mocha.opts file support</li>
@@ -70,6 +71,7 @@
 <li><a href="#pending-tests">Pending tests</a></li>
 <li><a href="#exclusive-tests">Exclusive tests</a></li>
 <li><a href="#inclusive-tests">Inclusive tests</a></li>
+<li><a href="#filtering-tests">Filtering tests</a></li>
 <li><a href="#test-duration">Test duration</a></li>
 <li><a href="#string-diffs">String diffs</a></li>
 <li><a href="#usage">mocha(1)</a></li>
@@ -327,6 +329,26 @@ beforeEach('some description', function(){
 })
 </code></pre>
 
+<h2 id="filtering-tests">Filtering tests</h2>
+
+<p>Sometimes you will need to only run a subset of your test suite.
+  This could be to skip some integration tests on your build server,
+  or quickly run all the tests relating to a single feature.
+  Mocha provides several mechanisms for filtering which tests to run:</p>
+
+<p><div><a href="#grep-option">Filtering based on text matches</a> with <code>--grep</code> and <code>--invert</code></div></p>
+
+<pre><code>mocha --grep integration
+mocha --grep integration --invert
+</code></pre>
+
+<p><div><a href="#tags-option">Filtering based on optional tags</a> with <code>--tags</code> and <code>--skip-tags</code></div></p>
+
+<pre><code>mocha --tags api
+mocha --tags api,integration
+mocha --tags api,integration --skip-tags slow
+</code></pre>
+
 <h2 id="test-duration">Test duration</h2>
 
 <p>Most of the reporters support some form of displaying
@@ -362,6 +384,8 @@ Options:
   -u, --ui &lt;name&gt;                 specify user-interface (bdd|tdd|exports)
   -g, --grep &lt;pattern&gt;            only run tests matching &lt;pattern&gt;
   -i, --invert                    inverts --grep matches
+  --tags &lt;list&gt;                   only run test suites with any of the given tags
+  --skip-tags &lt;list&gt;              skip any test suite with any of the given tags
   -t, --timeout &lt;ms&gt;              set test-case timeout in milliseconds [2000]
   -s, --slow &lt;ms&gt;                 "slow" test threshold in milliseconds [75]
   -w, --watch                     watch files for changes
@@ -445,6 +469,34 @@ describe('app', function(){
   })
 })
 </code></pre>
+
+<h3 id="tags-option">--tags, --skip-tags</h3>
+
+<p>The <code>--tags</code> and <code>--skip-tags</code> options allow you to include or exclude tests with more granularity than <code>--grep</code>. First, you must tag your test suites with a set of keywords:</p>
+
+<pre><code>describe('api', function(){
+  this.tag('api', 'integration');
+  describe('GET /api/users', function(){
+    this.tag('slow');
+    it('respond with an array of users')
+  })
+})
+</code></pre>
+
+<p>You can then for example:</p>
+
+<pre><code># only run "api" tests
+mocha --tags api
+
+# run both "api" and "app" tests
+mocha --tags api,app
+
+# run run "api" tests, but exclude the slow ones
+mocha --tags api --skip-tags slow
+</code></pre>
+
+<p>Note that tags are inherited down the hierarchy, so the "array of users" test
+  above is tagged with <code>api</code>, <code>integration</code>, <code>slow</code>.</p>
 
 <h2 id="interfaces">Interfaces</h2>
 

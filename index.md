@@ -18,6 +18,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - file watcher support
   - global variable leak detection
   - optionally run tests that match a regexp
+  - optionally tag test suites, and include/exclude certain tags
   - auto-exit to prevent "hanging" with an active loop
   - easily meta-generate suites & test-cases
   - mocha.opts file support
@@ -43,6 +44,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - [Pending tests](#pending-tests)
   - [Exclusive tests](#exclusive-tests)
   - [Inclusive tests](#inclusive-tests)
+  - [Filtering tests](#filtering-tests)
   - [Test duration](#test-duration)
   - [String diffs](#string-diffs)
   - [mocha(1)](#usage)
@@ -288,6 +290,24 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
+<h2 id="filtering-tests">Filtering tests</h2>
+
+  Sometimes you will need to only run a subset of your test suite.
+  This could be to skip some integration tests on your build server,
+  or quickly run all the tests relating to a single feature.
+  Mocha provides several mechanisms for filtering which tests to run:
+
+  <div>[Filtering based on text matches](#grep-option) with `--grep` and `--invert`</div>
+
+    mocha --grep integration
+    mocha --grep integration --invert
+
+  <div>[Filtering based on optional tags](#tags-option) with `--tags` and `--skip-tags`</div>
+
+    mocha --tags api
+    mocha --tags api,integration
+    mocha --tags api,integration --skip-tags slow
+
 <h2 id="test-duration">Test duration</h2>
 
   Most of the reporters support some form of displaying
@@ -324,6 +344,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       -u, --ui <name>                 specify user-interface (bdd|tdd|exports)
       -g, --grep <pattern>            only run tests matching <pattern>
       -i, --invert                    inverts --grep matches
+      --tags <list>                   only run test suites with any of the given tags
+      --skip-tags <list>              skip any test suite with any of the given tags
       -t, --timeout <ms>              set test-case timeout in milliseconds [2000]
       -s, --slow <ms>                 "slow" test threshold in milliseconds [75]
       -w, --watch                     watch files for changes
@@ -405,6 +427,32 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
         it('respond with an array of users')
       })
     })
+
+<h3 id="tags-option">--tags, --skip-tags</h3>
+
+  The `--tags` and `--skip-tags` options allow you to include or exclude tests with more granularity than `--grep`. First, you must tag your test suites with a set of keywords:
+
+    describe('api', function(){
+      this.tag('api', 'integration');
+      describe('GET /api/users', function(){
+        this.tag('slow');
+        it('respond with an array of users')
+      })
+    })
+
+  You can then for example:
+
+    # only run "api" tests
+    mocha --tags api
+
+    # run both "api" and "app" tests
+    mocha --tags api,app
+
+    # run run "api" tests, but exclude the slow ones
+    mocha --tags api --skip-tags slow
+
+  Note that tags are inherited down the hierarchy, so the "array of users" test
+  above is tagged with `api`, `integration`, `slow`.
 
 <h2 id="interfaces">Interfaces</h2>
 
@@ -704,27 +752,27 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="browser-setup">Mocha Setup in the Browser</h3>
 
   Mocha options can be set via `mocha.setup()`.  Examples:
-    
-    // Use "tdd" interface.  This is a shortcut to setting the interface; 
+
+    // Use "tdd" interface.  This is a shortcut to setting the interface;
     // any other options must be passed via an object.
     mocha.setup('tdd');
-    
+
     // This is equivalent to the above.
     mocha.setup({
       ui: 'tdd'
     });
-    
+
     // Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
     mocha.setup({
       ui: 'tdd',
       ignoreLeaks: true,
       asyncOnly: true
-    });   
+    });
 
 <h3 id="browser-specific-options">Browser-specific option(s)</h3>
 
   The following option(s) *only* function in a browser context:
-  
+
   `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.      
 
 <h2 id="mocha.opts">mocha.opts</h2>
