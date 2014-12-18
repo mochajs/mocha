@@ -305,8 +305,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   <div>[Filtering based on optional tags](#tags-option) with `--tags` and `--skip-tags`</div>
 
     mocha --tags api
-    mocha --tags api,integration
-    mocha --tags api,integration --skip-tags slow
+    mocha --tags api+integration
+    mocha --tags api+integration --skip-tags redis,slow
 
 <h2 id="test-duration">Test duration</h2>
 
@@ -440,19 +440,31 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-  You can then for example:
-
-    # only run "api" tests
-    mocha --tags api
-
-    # run both "api" and "app" tests
-    mocha --tags api,app
-
-    # run run "api" tests, but exclude the slow ones
-    mocha --tags api --skip-tags slow
-
-  Note that tags are inherited down the hierarchy, so the "array of users" test
+  Tags are inherited down the hierarchy, so the "array of users" test
   above is tagged with `api`, `integration`, `slow`.
+  You can then use the run-time options to include/exclude certain tests:
+
+    # run tests tagged with <api> and <integration>
+    mocha --tags api+integration
+
+    # run tests tagged with either <app> or <api>
+    # but exclude the <slow> ones
+    mocha --tags app,api --skip-tags slow
+
+  The filtering DSL works as follows:
+
+    a         # matches tests with a given tag
+    a,b,c     # matches tests with either of the three tags
+    a+b+c     # matches tests with all three tags
+    a+b,c+d   # matches tests with either combination
+
+  A test that matches `--skip-tags` will always be excluded,
+  even if it matches `--tags` as well.
+
+  Note that you can also control the filtering programmatically:
+
+    mocha.tags('a,b,c')
+    mocha.skipTags('d+e')
 
 <h2 id="interfaces">Interfaces</h2>
 
@@ -773,7 +785,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The following option(s) *only* function in a browser context:
 
-  `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.      
+  `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 <h2 id="mocha.opts">mocha.opts</h2>
 

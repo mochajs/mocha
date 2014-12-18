@@ -345,8 +345,8 @@ mocha --grep integration --invert
 <p><div><a href="#tags-option">Filtering based on optional tags</a> with <code>--tags</code> and <code>--skip-tags</code></div></p>
 
 <pre><code>mocha --tags api
-mocha --tags api,integration
-mocha --tags api,integration --skip-tags slow
+mocha --tags api+integration
+mocha --tags api+integration --skip-tags redis,slow
 </code></pre>
 
 <h2 id="test-duration">Test duration</h2>
@@ -483,20 +483,34 @@ describe('app', function(){
 })
 </code></pre>
 
-<p>You can then for example:</p>
+<p>Tags are inherited down the hierarchy, so the "array of users" test
+  above is tagged with <code>api</code>, <code>integration</code>, <code>slow</code>.
+  You can then use the run-time options to include/exclude certain tests:</p>
 
-<pre><code># only run "api" tests
-mocha --tags api
+<pre><code># run tests tagged with &lt;api&gt; and &lt;integration&gt;
+mocha --tags api+integration
 
-# run both "api" and "app" tests
-mocha --tags api,app
-
-# run run "api" tests, but exclude the slow ones
-mocha --tags api --skip-tags slow
+# run tests tagged with either &lt;app&gt; or &lt;api&gt;
+# but exclude the &lt;slow&gt; ones
+mocha --tags app,api --skip-tags slow
 </code></pre>
 
-<p>Note that tags are inherited down the hierarchy, so the "array of users" test
-  above is tagged with <code>api</code>, <code>integration</code>, <code>slow</code>.</p>
+<p>The filtering DSL works as follows:</p>
+
+<pre><code>a         # matches tests with a given tag
+a,b,c     # matches tests with either of the three tags
+a+b+c     # matches tests with all three tags
+a+b,c+d   # matches tests with either combination
+</code></pre>
+
+<p>A test that matches <code>--skip-tags</code> will always be excluded,
+  even if it matches <code>--tags</code> as well.</p>
+
+<p>Note that you can also control the filtering programmatically:</p>
+
+<pre><code>mocha.tags('a,b,c')
+mocha.skipTags('d+e')
+</code></pre>
 
 <h2 id="interfaces">Interfaces</h2>
 
@@ -827,7 +841,7 @@ mocha.setup({
 
 <p>The following option(s) <em>only</em> function in a browser context:</p>
 
-<p><code>noHighlighting</code> : If set to <code>true</code>, do not attempt to use syntax highlighting on output test code.      </p>
+<p><code>noHighlighting</code> : If set to <code>true</code>, do not attempt to use syntax highlighting on output test code.</p>
 
 <h2 id="mocha.opts">mocha.opts</h2>
 
