@@ -34,6 +34,74 @@ describe('Base reporter', function () {
 
   });
 
+
+  it('should not stringify strings', function () {
+    var err = new Error('test'),
+      stdout = [],
+      stdoutWrite = process.stdout.write,
+      errOut;
+
+    err.actual = "a1";
+    err.expected = "e2";
+    err.showDiff = true;
+    var test = {
+      err: err,
+      fullTitle: function () {
+        return 'title';
+      }
+    };
+
+    process.stdout.write = function (string) {
+      stdout.push(string);
+    };
+
+    Base.list([test]);
+
+    process.stdout.write = stdoutWrite;
+
+    errOut = stdout.join('\n');
+
+    errOut.should.not.match(/"/);
+    errOut.should.match(/test/);
+    errOut.should.match(/actual/);
+    errOut.should.match(/expected/);
+
+  });
+
+
+  it('should stringify objects', function () {
+    var err = new Error('test'),
+      stdout = [],
+      stdoutWrite = process.stdout.write,
+      errOut;
+
+    err.actual = {key:"a1"};
+    err.expected = {key:"e1"};
+    err.showDiff = true;
+    var test = {
+      err: err,
+      fullTitle: function () {
+        return 'title';
+      }
+    };
+
+    process.stdout.write = function (string) {
+      stdout.push(string);
+    };
+
+    Base.list([test]);
+
+    process.stdout.write = stdoutWrite;
+
+    errOut = stdout.join('\n');
+
+    errOut.should.match(/"key"/);
+    errOut.should.match(/test/);
+    errOut.should.match(/actual/);
+    errOut.should.match(/expected/);
+
+  });
+
   it('should not show diffs when showDiff property set', function () {
     var err = new Error('test'),
       stdout = [],
