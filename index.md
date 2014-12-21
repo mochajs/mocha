@@ -500,7 +500,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     var testCase = require('mocha').describe
     var pre = require('mocha').before
-    var assertions = require('mocha').assertions
+    var assertions = require('mocha').it
     var assert = require('assert')
 
     testCase('Array', function(){
