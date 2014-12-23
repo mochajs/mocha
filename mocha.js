@@ -223,7 +223,22 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    return value.split(/^/m);
+    var retLines = [],
+        lines = value.split(/^/m);
+
+    for(var i = 0; i < lines.length; i++) {
+      var line = lines[i],
+          lastLine = lines[i - 1];
+
+      // Merge lines that may contain windows new lines
+      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
+        retLines[retLines.length - 1] += '\n';
+      } else if (line) {
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
   };
 
   return {
@@ -1480,7 +1495,7 @@ function Mocha(options) {
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
   this.bail(options.bail);
-  this.reporter(options.reporter);
+  this.reporter(options.reporter, options.reporterOptions);
   if (null != options.timeout) this.timeout(options.timeout);
   this.useColors(options.useColors)
   if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
@@ -1531,10 +1546,10 @@ Mocha.prototype.addFile = function(file){
  * Set reporter to `reporter`, defaults to "spec".
  *
  * @param {String|Function} reporter name or constructor
+ * @param {Object} reporterOptions optional options
  * @api public
  */
-
-Mocha.prototype.reporter = function(reporter){
+Mocha.prototype.reporter = function(reporter, reporterOptions){
   if ('function' == typeof reporter) {
     this._reporter = reporter;
   } else {
@@ -1549,6 +1564,7 @@ Mocha.prototype.reporter = function(reporter){
     if (!_reporter) throw new Error('invalid reporter "' + reporter + '"');
     this._reporter = _reporter;
   }
+  this.options.reporterOptions = reporterOptions;
   return this;
 };
 
@@ -1697,9 +1713,9 @@ Mocha.prototype.globals = function(globals){
  */
 
 Mocha.prototype.useColors = function(colors){
-  this.options.useColors = arguments.length && colors != undefined
-    ? colors
-    : true;
+  if (colors !== undefined) {
+    this.options.useColors = colors;
+  }
   return this;
 };
 
@@ -1801,9 +1817,20 @@ Mocha.prototype.run = function(fn){
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
-  exports.reporters.Base.useColors = options.useColors;
+  if (options.useColors !== undefined) {
+    exports.reporters.Base.useColors = options.useColors;
+  }
   exports.reporters.Base.inlineDiffs = options.useInlineDiffs;
-  return runner.run(fn);
+
+  function done(failures) {
+      if (reporter.done) {
+          reporter.done(failures, fn);
+      } else {
+          fn(failures);
+      }
+  }
+
+  return runner.run(done);
 };
 
 }); // module: mocha.js
@@ -2021,7 +2048,7 @@ if ('win32' == process.platform) {
  */
 
 var color = exports.color = function(type, str) {
-  if (!exports.useColors) return str;
+  if (!exports.useColors) return String(str);
   return '\u001b[' + exports.colors[type] + 'm' + str + '\u001b[0m';
 };
 
@@ -2078,7 +2105,7 @@ exports.cursor = {
  */
 
 exports.list = function(failures){
-  console.error();
+  console.log();
   failures.forEach(function(test, i){
     // format
     var fmt = color('error title', '  %s) %s:\n')
@@ -2102,13 +2129,13 @@ exports.list = function(failures){
 
     // explicitly show diff
     if (err.showDiff && sameType(actual, expected)) {
-      escape = false;
-      err.actual = actual = utils.stringify(actual);
-      err.expected = expected = utils.stringify(expected);
-    }
 
-    // actual / expected diff
-    if (err.showDiff && 'string' == typeof actual && 'string' == typeof expected) {
+      if ('string' !== typeof actual) {
+        escape = false;
+        err.actual = actual = utils.stringify(actual);
+        err.expected = expected = utils.stringify(expected);
+      }
+
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
       msg = '\n      ' + color('error message', match ? match[1] : msg);
@@ -2124,7 +2151,7 @@ exports.list = function(failures){
     stack = stack.slice(index ? index + 1 : index)
       .replace(/^/gm, '  ');
 
-    console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
+    console.log(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
 };
 
@@ -2229,11 +2256,10 @@ Base.prototype.epilogue = function(){
   if (stats.failures) {
     fmt = color('fail', '  %d failing');
 
-    console.error(fmt,
-      stats.failures);
+    console.log(fmt, stats.failures);
 
     Base.list(this.failures);
-    console.error();
+    console.log();
   }
 
   console.log();
@@ -2711,7 +2737,7 @@ function HTML(runner) {
     } else if (test.pending) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
-      var el = fragment('<li class="test fail"><h2>%e <a href="?grep=%e" class="replay">‣</a></h2></li>', test.title, encodeURIComponent(test.fullTitle()));
+      var el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">‣</a></h2></li>', test.title, self.testURL(test));
       var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
@@ -2759,7 +2785,7 @@ function HTML(runner) {
  */
 var makeUrl = function makeUrl(s) {
   var search = window.location.search;
-  return (search ? search + '&' : '?' ) + 'grep=' + encodeURIComponent(s);
+  return window.location.pathname + (search ? search + '&' : '?' ) + 'grep=' + encodeURIComponent(s);
 };
 
 /**
@@ -3381,6 +3407,12 @@ var Base = require('./base')
   , utils = require('../utils');
 
 /**
+ * Constants
+ */
+
+var SUITE_PREFIX = '$';
+
+/**
  * Expose `Markdown`.
  */
 
@@ -3410,8 +3442,9 @@ function Markdown(runner) {
   }
 
   function mapTOC(suite, obj) {
-    var ret = obj;
-    obj = obj[suite.title] = obj[suite.title] || { suite: suite };
+    var ret = obj,
+        key = SUITE_PREFIX + suite.title;
+    obj = obj[key] = obj[key] || { suite: suite };
     suite.suites.forEach(function(suite){
       mapTOC(suite, obj);
     });
@@ -3424,11 +3457,13 @@ function Markdown(runner) {
     var link;
     for (var key in obj) {
       if ('suite' == key) continue;
-      if (key) link = ' - [' + key + '](#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
-      if (key) buf += Array(level).join('  ') + link;
+      if (key !== SUITE_PREFIX) {
+        link = ' - [' + key.substring(1) + ']';
+        link += '(#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
+        buf += Array(level).join('  ') + link;
+      }
       buf += stringifyTOC(obj[key], level);
     }
-    --level;
     return buf;
   }
 
@@ -3517,8 +3552,7 @@ require.register("reporters/nyan.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var Base = require('./base')
-  , color = Base.color;
+var Base = require('./base');
 
 /**
  * Expose `Dot`.
@@ -3595,17 +3629,16 @@ NyanCat.prototype.draw = function(){
 
 NyanCat.prototype.drawScoreboard = function(){
   var stats = this.stats;
-  var colors = Base.colors;
 
-  function draw(color, n) {
+  function draw(type, n) {
     write(' ');
-    write('\u001b[' + color + 'm' + n + '\u001b[0m');
+    write(Base.color(type, n));
     write('\n');
   }
 
-  draw(colors.green, stats.passes);
-  draw(colors.fail, stats.failures);
-  draw(colors.pending, stats.pending);
+  draw('green', stats.passes);
+  draw('fail', stats.failures);
+  draw('pending', stats.pending);
   write('\n');
 
   this.cursorUp(this.numberOfLines);
@@ -3655,26 +3688,26 @@ NyanCat.prototype.drawRainbow = function(){
 NyanCat.prototype.drawNyanCat = function() {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
-  var color = '\u001b[' + startWidth + 'C';
+  var dist = '\u001b[' + startWidth + 'C';
   var padding = '';
 
-  write(color);
+  write(dist);
   write('_,------,');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? '  ' : '   ';
   write('_|' + padding + '/\\_/\\ ');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? '_' : '__';
   var tail = self.tick ? '~' : '^';
   var face;
   write(tail + '|' + padding + this.face() + ' ');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? ' ' : '  ';
   write(padding + '""  "" ');
   write('\n');
@@ -3755,6 +3788,8 @@ NyanCat.prototype.generateColors = function(){
  */
 
 NyanCat.prototype.rainbowify = function(str){
+  if (!Base.useColors)
+    return str;
   var color = this.rainbowColors[this.colorIndex % this.rainbowColors.length];
   this.colorIndex += 1;
   return '\u001b[38;5;' + color + 'm' + str + '\u001b[0m';
@@ -4053,6 +4088,7 @@ require.register("reporters/xunit.js", function(module, exports, require){
 
 var Base = require('./base')
   , utils = require('../utils')
+  , fs = require('browser/fs')
   , escape = utils.escape;
 
 /**
@@ -4078,11 +4114,18 @@ exports = module.exports = XUnit;
  * @api public
  */
 
-function XUnit(runner) {
+function XUnit(runner, options) {
   Base.call(this, runner);
   var stats = this.stats
     , tests = []
     , self = this;
+
+  if (options.reporterOptions && options.reporterOptions.output) {
+      if (! fs.createWriteStream) {
+          throw new Error('file output not supported in browser');
+      }
+      self.fileStream = fs.createWriteStream(options.reporterOptions.output);
+  }
 
   runner.on('pending', function(test){
     tests.push(test);
@@ -4097,7 +4140,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    console.log(tag('testsuite', {
+    self.write(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -4107,10 +4150,23 @@ function XUnit(runner) {
       , time: (stats.duration / 1000) || 0
     }, false));
 
-    tests.forEach(test);
-    console.log('</testsuite>');
+    tests.forEach(function(t) { self.test(t); });
+    self.write('</testsuite>');
   });
 }
+
+/**
+ * Override done to close the stream (if it's a file).
+ */
+XUnit.prototype.done = function(failures, fn) {
+    if (this.fileStream) {
+        this.fileStream.end(function() {
+            fn(failures);
+        });
+    } else {
+        fn(failures);
+    }
+};
 
 /**
  * Inherit from `Base.prototype`.
@@ -4123,10 +4179,21 @@ XUnit.prototype.constructor = XUnit;
 
 
 /**
+ * Write out the given line
+ */
+XUnit.prototype.write = function(line) {
+    if (this.fileStream) {
+        this.fileStream.write(line + '\n');
+    } else {
+        console.log(line);
+    }
+};
+
+/**
  * Output tag for the given `test.`
  */
 
-function test(test) {
+XUnit.prototype.test = function(test, ostream) {
   var attrs = {
       classname: test.parent.fullTitle()
     , name: test.title
@@ -4135,13 +4202,13 @@ function test(test) {
 
   if ('failed' == test.state) {
     var err = test.err;
-    console.log(tag('testcase', attrs, false, tag('failure', {}, false, cdata(escape(err.message) + "\n" + err.stack))));
+    this.write(tag('testcase', attrs, false, tag('failure', {}, false, cdata(escape(err.message) + "\n" + err.stack))));
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    this.write(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    console.log(tag('testcase', attrs, true) );
+    this.write(tag('testcase', attrs, true) );
   }
-}
+};
 
 /**
  * HTML tag helper.
@@ -5231,7 +5298,7 @@ Suite.prototype.clone = function(){
 
 Suite.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
-  if (ms === 0) this._enableTimeouts = false;
+  if (ms.toString() === '0') this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);
@@ -5272,7 +5339,7 @@ Suite.prototype.slow = function(ms){
 /**
  * Sets whether to bail after first error.
  *
- * @parma {Boolean} bail
+ * @param {Boolean} bail
  * @return {Suite|Number} for chaining
  * @api private
  */
@@ -5891,7 +5958,12 @@ exports.stringify = function(value) {
   if (type === 'null' || type === 'undefined') {
     return '[' + type + ']';
   }
-  if (!~exports.indexOf(['object', 'array', 'function', 'date'], type)) {
+
+  if (type === 'date') {
+    return '[Date: ' + value.toISOString() + ']';
+  }
+
+  if (!~exports.indexOf(['object', 'array', 'function'], type)) {
     return value.toString();
   }
 

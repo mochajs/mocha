@@ -1,3 +1,46 @@
+
+2.1.0 / 2014-12-23
+==================
+
+ * showDiff: don’t stringify strings
+ * Clean up unused module dependencies.
+ * Filter zero-length strings from mocha.opts
+ * only write to stdout in reporters
+ * Revert "only write to stdout in reporters"
+ * Print colored output only to a tty
+ * update summary in README.md
+ * rename Readme.md/History.md to README.md/HISTORY.md because neurotic
+ * add .mailmap to fix "git shortlog" or "git summary" output
+ * fixes #1461: nyan-reporter now respects Base.useColors, fixed bug where Base.color would not return a string when str wasn't a string.
+ * Use existing test URL builder in failed replay links
+ * modify .travis.yml: use travis_retry; closes #1449
+ * fix -t 0 behavior; closes #1446
+ * fix tests (whoops)
+ * improve diff behavior
+ * Preserve pathname when linking to individual tests
+ * Fix test
+ * Tiny typo in comments fixed
+ * after hooks now being called on failed tests when using bail, fixes #1093
+ * fix throwing undefined/null now makes tests fail, fixes #1395
+ * compiler extensions are added as watched extensions, removed non-standard extensions from watch regex, resolves #1221
+ * prefix/namespace for suite titles in markdown reporter, fixes #554
+ * fix more bad markdown in CONTRIBUTING.md
+ * fix bad markdown in CONTRIBUTING.md
+ * add setImmediate/clearImmediate to globals; closes #1435
+ * Fix buffer diffs (closes #1132, closes #1433)
+ * add a CONTRIBUTING.md.  closes #882
+ * fix intermittent build failures (maybe). closes #1407
+ * add Slack notification to .travis.yml
+ * Fix slack link
+ * Add slack room to readme
+ * Update maintainers
+ * update maintainers and contributors
+ * resolves #1393: kill children with more effort on SIGINT
+ * xunit reporter support for optionally writing to a file
+ * if a reporter has a .done method, call it before exiting
+ * add support for reporter options
+ * only write to stdout in reporters
+
 2.0.0 / 2014-10-21
 ==================
 
