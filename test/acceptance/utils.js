@@ -212,6 +212,13 @@ stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}}).should.equal('{\n  "foo":
       stringify(date).should.equal('[Date: 1970-01-01T00:00:00.000Z]');
       stringify({date: date}).should.equal('{\n  "date": "[Date: 1970-01-01T00:00:00.000Z]"\n}');
     });
+
+    it('should handle object without an Object prototype', function () {
+      var a = Object.create(null);
+      a.foo = 1;
+
+      stringify(a).should.equal('{\n  "foo": 1\n}');
+    });
   });
 
   describe('type', function () {
