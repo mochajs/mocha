@@ -5092,8 +5092,8 @@ Runner.prototype.uncaught = function(err){
  */
 
 Runner.prototype.run = function(fn){
-  var self = this
-    , fn = fn || function(){};
+  var self = this;
+  fn = fn || function(){};
 
   function uncaught(err){
     self.uncaught(err);
@@ -5968,7 +5968,7 @@ exports.stringify = function(value) {
   }
 
   for (prop in value) {
-    if (value.hasOwnProperty(prop)) {
+    if (Object.prototype.hasOwnProperty.call(value, prop)) {
       return JSON.stringify(exports.canonicalize(value), null, 2).replace(/,(\n|$)/g, '$1');
     }
   }
@@ -6277,7 +6277,7 @@ mocha.run = function(fn){
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(query.grep);
+  if (query.grep) mocha.grep(new RegExp(query.grep));
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){

@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="grep.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  <script>
+      (function(window) {
+        var location = window.location;
+        mocha.checkLeaks();
+        var runner = mocha.run();
+        setTimeout(run, 1000);
+
+        function run() {
+          var regex = [
+              '.*',                                // All
+              'm{2}',                              // 'mm...m'
+              '\\d',                               // Contains number
+              '^\\d{2}(?=\\s\\d$)',                // Start with 2 numbers and end with one
+              '^@.*(?=\\(\\)$)',                   // Run @Array and @Function suite, but only function
+              '^@(?!.*\\)$)',                      // Run @Array and @Function suite, but only properties
+              '^co',                               // Start with 'co'
+              'first$',                            // Ends with 'first'
+              '^co.*(?=second$)',                  // Starts with 'co', ends with 'second'
+              '^Date:\\s01\/0(?:[1-4])\/2015$',    // Run all tests between '01/[01-04]/2015'
+              encodeURIComponent('^#'),            // Run encoded => start with '#'
+              encodeURIComponent('^[^a-z|0-9]+$')  // Run encoded => only uppercase suites(include `it` fns), e.g: CONSTANTS
+            ]
+            , qs = location.search.replace('?grep=', '')
+            , re = ~qs.indexOf('%') ? qs : decodeURIComponent(qs)
+            , grep = regex[regex.indexOf(re) + 1];
+
+          return grep
+            ? location.search = 'grep=' + grep
+            : false;
+        }
+      })(window);
+  </script>
+  </body>
+</html>
