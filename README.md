@@ -222,5 +222,3 @@
   - [Google Group](http://groups.google.com/group/mochajs)
   - [Wiki](https://github.com/mochajs/mocha/wiki)
   - Mocha [Extensions and reporters](https://github.com/mochajs/mocha/wiki)
-
-Mocha also has a chat room on [Slack](https://slack.com). If you'd like to join, [shoot us an email](mailto:tj@travisjeffery.com?subject=mocha%20slack%20room%20invite) from the address you want us to invite you under and we'll happily send you an invite!
