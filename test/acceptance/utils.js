@@ -35,8 +35,8 @@ describe('lib/utils', function () {
     it("should format functions saved in windows style - spaces", function () {
       var fn = [
         "function (one) {"
-        , "   do {",
-        , '    "nothing";',
+        , "   do {"
+        , '    "nothing";'
         , "   } while (false);"
         , ' }'
       ].join("\r\n");
@@ -75,6 +75,115 @@ describe('lib/utils', function () {
 
     var stringify = utils.stringify;
 
+    it('should return Buffer with .toJSON representation', function() {
+      stringify(new Buffer([0x01])).should.equal('[\n  1\n]');
+      stringify(new Buffer([0x01, 0x02])).should.equal('[\n  1\n  2\n]');
+
+      stringify(new Buffer('ABCD')).should.equal('[\n  65\n  66\n  67\n  68\n]');
+    });
+
+    it('should return Date object with .toISOString() + string prefix', function() {
+      stringify(new Date(0)).should.equal('[Date: ' + new Date(0).toISOString() + ']');
+
+      var date = new Date(); // now
+      stringify(date).should.equal('[Date: ' + date.toISOString() + ']');
+    });
+
+    describe('#Number', function() {
+      it('should show the handle -0 situations', function() {
+        stringify(-0).should.eql('-0');
+        stringify(0).should.eql('0');
+        stringify('-0').should.eql('"-0"');
+      });
+
+      it('should work well with `NaN` and `Infinity`', function() {
+        stringify(NaN).should.equal('NaN');
+        stringify(Infinity).should.equal('Infinity');
+        stringify(-Infinity).should.equal('-Infinity');
+      });
+
+      it('floats and ints', function() {
+        stringify(1).should.equal('1');
+        stringify(1.2).should.equal('1.2');
+        stringify(1e9).should.equal('1000000000');
+      });
+    });
+
+    describe('canonicalize example', function() {
+      it('should represent the actual full result', function() {
+        var expected = {
+          str: 'string',
+          int: 90,
+          float: 9.99,
+          boolean: false,
+          nil: null,
+          undef: undefined,
+          regex: /^[a-z|A-Z]/,
+          date: new Date(0),
+          func: function() {},
+          infi: Infinity,
+          nan: NaN,
+          zero: -0,
+          buffer: new Buffer([0x01, 0x02]),
+          array: [1,2,3],
+          empArr: [],
+          matrix: [[1], [2,3,4] ],
+          object: { a: 1, b: 2 },
+          canObj: { a: { b: 1, c: 2 }, b: {} },
+          empObj: {}
+        };
+        expected.circular = expected; // Make `Circular` situation
+        var actual = ['{'
+          , '  "array": ['
+          , '    1'
+          , '    2'
+          , '    3'
+          , '  ]'
+          , '  "boolean": false'
+          , '  "buffer": [Buffer: ['
+          , '    1'
+          , '    2'
+          , '  ]]'
+          , '  "canObj": {'
+          , '    "a": {'
+          , '      "b": 1'
+          , '      "c": 2'
+          , '    }'
+          , '    "b": {}'
+          , '  }'
+          , '  "circular": [Circular]'
+          , '  "date": [Date: 1970-01-01T00:00:00.000Z]'
+          , '  "empArr": []'
+          , '  "empObj": {}'
+          , '  "float": 9.99'
+          , '  "func": [Function]'
+          , '  "infi": Infinity'
+          , '  "int": 90'
+          , '  "matrix": ['
+          , '    ['
+          , '      1'
+          , '    ]'
+          , '    ['
+          , '      2'
+          , '      3'
+          , '      4'
+          , '    ]'
+          , '  ]'
+          , '  "nan": NaN'
+          , '  "nil": [null]'
+          , '  "object": {'
+          , '    "a": 1'
+          , '    "b": 2'
+          , '  }'
+          , '  "regex": /^[a-z|A-Z]/'
+          , '  "str": "string"'
+          , '  "undef": [undefined]'
+          , '  "zero": -0'
+          , '}'].join('\n');
+        stringify(expected).should.equal(actual);
+      });
+    });
+
     it('should canonicalize the object', function(){
       var travis = { name: 'travis', age: 24 };
       var travis2 = { age: 24, name: 'travis' };
@@ -86,21 +195,21 @@ describe('lib/utils', function () {
       var travis = { name: 'travis' };
       travis.whoami = travis;
 
-      stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": "[Circular]"\n}');
+      stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": [Circular]\n}');
     });
 
     it('should handle circular structures in arrays', function(){
       var travis = ['travis'];
       travis.push(travis);
 
-      stringify(travis).should.equal('[\n  "travis"\n  "[Circular]"\n]');
+      stringify(travis).should.equal('[\n  "travis"\n  [Circular]\n]');
     });
 
     it('should handle circular structures in functions', function(){
       var travis = function () {};
       travis.fn = travis;
 
-      stringify(travis).should.equal('{\n  "fn": "[Circular]"\n}');
+      stringify(travis).should.equal('{\n  "fn": [Circular]\n}');
     });
 
 
@@ -109,7 +218,7 @@ describe('lib/utils', function () {
         regExpObj = { regexp: regexp },
         regexpString = '/(?:)/';
 
-      stringify(regExpObj).should.equal('{\n  "regexp": "' + regexpString + '"\n}');
+      stringify(regExpObj).should.equal('{\n  "regexp": ' + regexpString + '\n}');
       stringify(regexp).should.equal(regexpString);
 
       var number = 1,
@@ -130,15 +239,14 @@ describe('lib/utils', function () {
         stringObj = { string: string };
 
       stringify(stringObj).should.equal('{\n  "string": "' + string + '"\n}');
-      stringify(string).should.equal(string);
+      stringify(string).should.equal(JSON.stringify(string));
 
       var nullValue = null,
         nullObj = { 'null': null },
         nullString = '[null]';
 
-      stringify(nullObj).should.equal('{\n  "null": null\n}');
+      stringify(nullObj).should.equal('{\n  "null": [null]\n}');
       stringify(nullValue).should.equal(nullString);
-
     });
 
     it('should handle arrays', function () {
@@ -157,7 +265,7 @@ describe('lib/utils', function () {
         fnObj = {fn: fn},
         fnString = '[Function]';
 
-      stringify(fnObj).should.equal('{\n  "fn": "' + fnString + '"\n}');
+      stringify(fnObj).should.equal('{\n  "fn": ' + fnString + '\n}');
       stringify(fn).should.equal('[Function]');
     });
 
@@ -177,8 +285,8 @@ describe('lib/utils', function () {
 
     it('should handle empty functions (with no properties)', function () {
       stringify(function(){}).should.equal('[Function]');
-      stringify({foo: function() {}}).should.equal('{\n  "foo": "[Function]"\n}');
-      stringify({foo: function() {}, bar: 'baz'}).should.equal('{\n  "bar": "baz"\n  "foo": "[Function]"\n}');
+      stringify({foo: function() {}}).should.equal('{\n  "foo": [Function]\n}');
+      stringify({foo: function() {}, bar: 'baz'}).should.equal('{\n  "bar": "baz"\n  "foo": [Function]\n}');
     });
 
     it('should handle functions w/ properties', function () {
@@ -189,28 +297,28 @@ describe('lib/utils', function () {
     });
 
     it('should handle undefined values', function () {
-      stringify({foo: undefined}).should.equal('{\n  "foo": "[undefined]"\n}');
-      stringify({foo: 'bar', baz: undefined}).should.equal('{\n  "baz": "[undefined]"\n  "foo": "bar"\n}');
+      stringify({foo: undefined}).should.equal('{\n  "foo": [undefined]\n}');
+      stringify({foo: 'bar', baz: undefined}).should.equal('{\n  "baz": [undefined]\n  "foo": "bar"\n}');
       stringify().should.equal('[undefined]');
     });
 
     it('should recurse', function () {
-stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}}).should.equal('{\n  "foo": {\n    "bar": {\n      "baz": {\n        "quux": {\n          "herp": "derp"\n        }\n      }\n    }\n  }\n}');
+      stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}}).should.equal('{\n  "foo": {\n    "bar": {\n      "baz": {\n        "quux": {\n          "herp": "derp"\n        }\n      }\n    }\n  }\n}');
     });
 
     it('might get confusing', function () {
-      stringify(null).should.equal(stringify('[null]'));
+      stringify(null).should.equal('[null]');
     });
 
     it('should not freak out if it sees a primitive twice', function () {
-      stringify({foo: null, bar: null}).should.equal('{\n  "bar": null\n  "foo": null\n}');
+      stringify({foo: null, bar: null}).should.equal('{\n  "bar": [null]\n  "foo": [null]\n}');
       stringify({foo: 1, bar: 1}).should.equal('{\n  "bar": 1\n  "foo": 1\n}');
     });
 
     it('should stringify dates', function () {
       var date = new Date(0);
       stringify(date).should.equal('[Date: 1970-01-01T00:00:00.000Z]');
-      stringify({date: date}).should.equal('{\n  "date": "[Date: 1970-01-01T00:00:00.000Z]"\n}');
+      stringify({date: date}).should.equal('{\n  "date": [Date: 1970-01-01T00:00:00.000Z]\n}');
     });
 
     it('should handle object without an Object prototype', function () {
