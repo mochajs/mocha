@@ -220,12 +220,16 @@ body {
   font-size: 12px;
   margin: 0;
   color: #888;
+  background-color: #FFF;
+  border: 1px solid #000;
+  box-shadow: 0 0 10px #333;
   z-index: 1;
 }
 
 #mocha-stats .progress {
   float: right;
   padding-top: 0;
+  height: auto;
 }
 
 #mocha-stats em {
