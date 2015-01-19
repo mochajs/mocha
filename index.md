@@ -428,7 +428,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="tdd-interface">TDD</h3>
 
-  The "__TDD__" interface provides `suite()`, `test()`, `setup()`, and `teardown()`.
+  The "__TDD__" interface provides `suite()`, `test()`, `suiteSetup()`, `suiteTeardown()`, `setup()`, and `teardown()`.
 
     suite('Array', function(){
       setup(function(){
@@ -463,7 +463,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="qunit-interface">QUnit</h3>
 
-  The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases.
+  The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
     function ok(expr, msg) {
       if (!expr) throw new Error(msg);
