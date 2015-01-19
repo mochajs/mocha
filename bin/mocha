@@ -31,6 +31,8 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
+    case '--harmony_shipping':
+    case '--harmony_arrow_functions':
     case '--no-deprecation':
     case '--prof':
     case '--throw-deprecation':

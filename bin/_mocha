@@ -85,6 +85,8 @@ program
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
   .option('--harmony-generators', 'enable harmony generators')
   .option('--harmony-proxies', 'enable harmony proxies')
+  .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
+  .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
