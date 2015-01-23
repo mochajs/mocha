@@ -73,7 +73,7 @@ describe('Runner', function(){
     })
   })
 
-  describe('.checkGlobals(test)', function(){
+  describe.noRandom('.checkGlobals(test)', function(){
     it('should allow variables that match a wildcard', function(done) {
       runner.globals(['foo*', 'giz*']);
       global.foo = 'baz';

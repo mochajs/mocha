@@ -1,4 +1,4 @@
-describe('async', function(){
+describe.noRandom('async', function(){
   var calls = [];
 
   before(function(){
@@ -43,7 +43,7 @@ describe('async', function(){
     calls.push('parent after' );
   })
 
-  describe('hooks', function(){
+  describe.noRandom('hooks', function(){
     before(function(){
       calls.push('before all');
     });

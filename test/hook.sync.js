@@ -1,4 +1,4 @@
-describe('serial', function(){
+describe.noRandom('serial', function(){
   var calls = [];
 
   beforeEach(function(){
@@ -9,7 +9,7 @@ describe('serial', function(){
     calls.push('parent after');
   })
 
-  describe('hooks', function(){
+  describe.noRandom('hooks', function(){
     beforeEach(function(){
       calls.push('before');
       if (this.currentTest) {

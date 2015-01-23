@@ -49,6 +49,7 @@
     "glob": "3.2.3",
     "growl": "1.8.1",
     "jade": "0.26.3",
+    "knuth-shuffle-seeded": "~1.0.5",
     "mkdirp": "0.5.0"
   },
   "devDependencies": {

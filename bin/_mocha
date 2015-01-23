@@ -64,6 +64,7 @@ program
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', "sort test files")
+  .option('-a, --randomize <mode>[:seed]', "randomize tests")
   .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
@@ -267,6 +268,13 @@ if (program.grep) mocha.grep(new RegExp(program.grep));
 // --invert
 
 if (program.invert) mocha.invert();
+
+// --randomize
+
+if (program.randomize) {
+  var matches = program.randomize.split(':');
+  mocha.randomize(matches[0], matches[1]);
+}
 
 // --check-leaks
 
