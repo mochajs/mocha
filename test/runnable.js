@@ -1,4 +1,5 @@
 var mocha = require('../')
+  , utils = mocha.utils
   , Runnable = mocha.Runnable
   , EventEmitter = require('events').EventEmitter;
 
@@ -232,7 +233,7 @@ describe('Runnable(title, fn)', function(){
           });
 
           test.run(function(err) {
-            err.message.should.equal('Caught undefined error, did you throw without specifying what?');
+            err.message.should.equal(utils.undefinedError().message);
             done();
           })
         });
