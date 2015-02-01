@@ -469,7 +469,7 @@ describe('app', function(){
 
 <h3 id="tdd-interface">TDD</h3>
 
-<p>The "<strong>TDD</strong>" interface provides <code>suite()</code>, <code>test()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
+<p>The "<strong>TDD</strong>" interface provides <code>suite()</code>, <code>test()</code>, <code>suiteSetup()</code>, <code>suiteTeardown()</code>, <code>setup()</code>, and <code>teardown()</code>.</p>
 
 <pre><code>suite('Array', function(){
   setup(function(){
@@ -506,7 +506,7 @@ describe('app', function(){
 
 <h3 id="qunit-interface">QUnit</h3>
 
-<p>The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases.</p>
+<p>The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases. Like TDD, it uses <code>suite()</code> and <code>test()</code>, but resembling BDD it also contains <code>before()</code>, <code>after()</code>, <code>beforeEach()</code>, and <code>afterEach()</code>.</p>
 
 <pre><code>function ok(expr, msg) {
   if (!expr) throw new Error(msg);
@@ -544,7 +544,7 @@ test('#length', function(){
 
 <pre><code>var testCase = require('mocha').describe
 var pre = require('mocha').before
-var assertions = require('mocha').assertions
+var assertions = require('mocha').it
 var assert = require('assert')
 
 testCase('Array', function(){
@@ -754,7 +754,7 @@ testCase('Array', function(){
 
 <p>Mocha options can be set via <code>mocha.setup()</code>.  Examples:</p>
 
-<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface;
+<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface; 
 // any other options must be passed via an object.
 mocha.setup('tdd');
 
