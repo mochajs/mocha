@@ -164,6 +164,11 @@ test-sort:
 		--sort \
 		test/acceptance/sort
 
+test-mocha:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		test/mocha
+
 non-tty:
 	@./bin/mocha \
 		--reporter dot \
