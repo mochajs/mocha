@@ -456,7 +456,7 @@ function list(str) {
 
 function hideCursor(){
   process.stdout.write('\u001b[?25l');
-};
+}
 
 /**
  * Show the cursor.
@@ -464,7 +464,7 @@ function hideCursor(){
 
 function showCursor(){
   process.stdout.write('\u001b[?25h');
-};
+}
 
 /**
  * Stop play()ing.
