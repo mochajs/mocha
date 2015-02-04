@@ -1,5 +1,7 @@
 Mocha is a feature-rich JavaScript test framework running on [node.js](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
+<a href="https://gitter.im/mochajs/mocha" alt="Gitter" class="badge"><img src="https://badges.gitter.im/Join%20Chat.svg" /></a>
+
 <h2 id="features">Features</h2>
 
   - browser support
@@ -704,28 +706,28 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 <h3 id="browser-setup">Mocha Setup in the Browser</h3>
 
   Mocha options can be set via `mocha.setup()`.  Examples:
-    
-    // Use "tdd" interface.  This is a shortcut to setting the interface; 
+
+    // Use "tdd" interface.  This is a shortcut to setting the interface;
     // any other options must be passed via an object.
     mocha.setup('tdd');
-    
+
     // This is equivalent to the above.
     mocha.setup({
       ui: 'tdd'
     });
-    
+
     // Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
     mocha.setup({
       ui: 'tdd',
       ignoreLeaks: true,
       asyncOnly: true
-    });   
+    });
 
 <h3 id="browser-specific-options">Browser-specific option(s)</h3>
 
   The following option(s) *only* function in a browser context:
-  
-  `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.      
+
+  `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 <h2 id="mocha.opts">mocha.opts</h2>
 

@@ -157,6 +157,24 @@ img {
   max-width: 100%;
 }
 
+.badge {
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.badge > img {
+  margin: 0px;
+  padding: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -o-border-radius: 0px;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: block;
+}
+
 footer {
   background-color: #eee;
   width: 100%;
