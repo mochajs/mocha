@@ -464,7 +464,7 @@ function isArray(obj) {
  * @api public
  */
 
-function EventEmitter(){};
+function EventEmitter(){}
 
 /**
  * Adds a listener.
@@ -502,7 +502,7 @@ EventEmitter.prototype.once = function (name, fn) {
   function on () {
     self.removeListener(name, on);
     fn.apply(this, arguments);
-  };
+  }
 
   on.listener = fn;
   this.on(name, on);
@@ -898,7 +898,7 @@ function Hook(title, fn) {
  * Inherit from `Runnable.prototype`.
  */
 
-function F(){};
+function F(){}
 F.prototype = Runnable.prototype;
 Hook.prototype = new F;
 Hook.prototype.constructor = Hook;
@@ -1555,8 +1555,8 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
   } else {
     reporter = reporter || 'spec';
     var _reporter;
-    try { _reporter = require('./reporters/' + reporter); } catch (err) {};
-    if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
+    try { _reporter = require('./reporters/' + reporter); } catch (err) {}
+    if (!_reporter) try { _reporter = require(reporter); } catch (err) {}
     if (!_reporter && reporter === 'teamcity')
       console.warn('The Teamcity reporter was moved to a package named ' +
         'mocha-teamcity-reporter ' +
@@ -1578,7 +1578,7 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
 Mocha.prototype.ui = function(name){
   name = name || 'bdd';
   this._ui = exports.interfaces[name];
-  if (!this._ui) try { this._ui = require(name); } catch (err) {};
+  if (!this._ui) try { this._ui = require(name); } catch (err) {}
   if (!this._ui) throw new Error('invalid interface "' + name + '"');
   this._ui = this._ui(this.suite);
   return this;
