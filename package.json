@@ -39,7 +39,8 @@
     "node": ">= 0.8.x"
   },
   "scripts": {
-    "test": "make test-all"
+    "test": "make test-all",
+    "lint": "jshint ."
   },
   "dependencies": {
     "commander": "2.3.0",
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "coffee-script": "~1.8.0",
+    "jshint": "^2.6.0",
     "should": "~4.0.0"
   },
   "files": [
