@@ -1,0 +1,3 @@
+node_modules/*
+# ignored for now, can cleanup after cleaning main code
+test/*
