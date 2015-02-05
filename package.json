@@ -40,7 +40,7 @@
   },
   "scripts": {
     "test": "make test-all",
-    "lint": "jshint ."
+    "lint": "jshint _mocha.js"
   },
   "dependencies": {
     "commander": "2.3.0",
