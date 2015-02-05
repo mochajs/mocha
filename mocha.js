@@ -1435,6 +1435,8 @@ require.register("mocha.js", function(module, exports, require){
  * Module dependencies.
  */
 
+/*jshint laxcomma:true, laxbreak:true */
+
 var path = require('browser/path')
   , escapeRe = require('browser/escape-string-regexp')
   , utils = require('./utils');
@@ -1504,12 +1506,13 @@ function Mocha(options) {
   this.files = [];
   this.options = options;
   this.grep(options.grep);
-  this.suite = new exports.Suite('', new exports.Context);
+  this.suite = new exports.Suite('', new exports.Context());
   this.ui(options.ui);
   this.bail(options.bail);
   this.reporter(options.reporter, options.reporterOptions);
+  /*jshint eqnull:true*/
   if (null != options.timeout) this.timeout(options.timeout);
-  this.useColors(options.useColors)
+  this.useColors(options.useColors);
   if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
   if (options.slow) this.slow(options.slow);
 
@@ -1537,7 +1540,7 @@ function Mocha(options) {
  */
 
 Mocha.prototype.bail = function(bail){
-  if (0 == arguments.length) bail = true;
+  bail = !! arguments.length;
   this.suite.bail(bail);
   return this;
 };
@@ -1611,7 +1614,8 @@ Mocha.prototype.loadFiles = function(fn){
     suite.emit('pre-require', global, file, self);
     suite.emit('require', require(file), file, self);
     suite.emit('post-require', global, file, self);
-    --pending || (fn && fn());
+    /*jshint expr:true */
+    pending || (fn && fn());
   });
 };
 
@@ -1740,7 +1744,8 @@ Mocha.prototype.useColors = function(colors){
  */
 
 Mocha.prototype.useInlineDiffs = function(inlineDiffs) {
-  this.options.useInlineDiffs = arguments.length && inlineDiffs != undefined
+  /*jshint eqnull:true*/
+  this.options.useInlineDiffs = arguments.length && inlineDiffs != null
   ? inlineDiffs
   : false;
   return this;
@@ -1784,7 +1789,7 @@ Mocha.prototype.enableTimeouts = function(enabled) {
   this.suite.enableTimeouts(arguments.length && enabled !== undefined
     ? enabled
     : true);
-  return this
+  return this;
 };
 
 /**
@@ -1835,9 +1840,12 @@ Mocha.prototype.run = function(fn){
   exports.reporters.Base.inlineDiffs = options.useInlineDiffs;
 
   function done(failures) {
+      /*jshint expr:true */
       if (reporter.done) {
           reporter.done(failures, fn);
-      } else fn && fn(failures);
+      } else {
+        fn && fn(failures);
+      }
   }
 
   return runner.run(done);
