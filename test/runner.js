@@ -219,6 +219,42 @@ describe('Runner', function(){
       });
       runner.fail(test, err);
     })
+
+    it('should emit a helpful message when failed with a string', function(done){
+      var test = {}, err = 'string';
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the string "string" was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a the error when failed with an Error', function(done){
+      var test = {}, err = new Error('an error message');
+      runner.on('fail', function(test, err){
+        err.message.should.equal('an error message');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Object', function(done){
+      var test = {}, err = { x: 1 };
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the object {\n  "x": 1\n} was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Array', function(done){
+      var test = {}, err = [1,2];
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the array [\n  1\n  2\n] was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
   })
 
   describe('.failHook(hook, err)', function(){
