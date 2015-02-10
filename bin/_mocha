@@ -67,7 +67,7 @@ program
   .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
-  .option('-gc', '--expose-gc', 'expose gc extension')
+  .option('-gc, --expose-gc', 'expose gc extension')
   .option('-i, --invert', 'inverts --grep matches')
   .option('-r, --require <name>', 'require the given module')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
