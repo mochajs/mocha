@@ -794,7 +794,9 @@ module.exports = Context;
  * @api private
  */
 
-function Context(){}
+function Context(){
+  this._tags = [];
+}
 
 /**
  * Set or get the context `Runnable` to `runnable`.
@@ -867,6 +869,46 @@ Context.prototype.inspect = function(){
 };
 
 }); // module: context.js
+
+require.register("filter.js", function(module, exports, require){
+var utils = require('./utils');
+
+module.exports = Filter;
+
+function Filter() {
+  this.grep = /.*/;
+  this.invertGrep = false;
+  this.tags = [];
+  this.skipTags = [];
+}
+
+Filter.prototype.count = function(suite) {
+  var self = this;
+  var total = 0;
+  suite.eachTest(function(test){
+    if (self.shouldRun(test)) total++;
+  });
+  return total;
+};
+
+Filter.prototype.shouldRun = function(test) {
+  // --grep
+  var grepMatch = this.grep.test(test.fullTitle());
+  if (this.invertGrep) grepMatch = !grepMatch;
+  // --tags --skip-tags
+  var include = (!this.tags.length) || matchTags(test.ctx._tags, this.tags);
+  var exclude = this.skipTags.length && matchTags(test.ctx._tags, this.skipTags);
+  // final decision
+  return grepMatch && include && !exclude;
+};
+
+function matchTags(actualTags, against) {
+  return utils.some(against, function(tag) {
+    return utils.indexOf(actualTags, tag) !== -1;
+  });
+}
+
+}); // module: filter.js
 
 require.register("hook.js", function(module, exports, require){
 /**
@@ -1482,6 +1524,8 @@ function image(name) {
  *   - `slow` milliseconds to wait before considering a test slow
  *   - `ignoreLeaks` ignore global leaks
  *   - `grep` string or regexp to filter tests with
+ *   - `tags` array of tags to be included when filtering
+ *   - `skipTags` array of tags to be excluded when filtering
  *
  * @param {Object} options
  * @api public
@@ -1655,6 +1699,26 @@ Mocha.prototype.invert = function(){
 };
 
 /**
+ * Set a list of tags to include
+ * @returns {Mocha}
+ * @api public
+ */
+Mocha.prototype.tags = function(tags) {
+  this.options.tags = tags;
+  return this;
+};
+
+/**
+ * Set a list of tags to exclude
+ * @returns {Mocha}
+ * @api public
+ */
+Mocha.prototype.skipTags = function(tags) {
+  this.options.skipTags = tags;
+  return this;
+};
+
+/**
  * Ignore global leaks.
  *
  * @param {Boolean} ignore
@@ -1815,6 +1879,8 @@ Mocha.prototype.run = function(fn){
   runner.ignoreLeaks = false !== options.ignoreLeaks;
   runner.asyncOnly = options.asyncOnly;
   if (options.grep) runner.grep(options.grep, options.invert);
+  if (options.tags) runner.tags(options.tags);
+  if (options.skipTags) runner.skipTags(options.skipTags);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
   if (options.useColors !== undefined) {
@@ -4037,8 +4103,7 @@ function TAP(runner) {
     , failures = 0;
 
   runner.on('start', function(){
-    var total = runner.grepTotal(runner.suite);
-    console.log('%d..%d', 1, total);
+    console.log('%d..%d', 1, runner.total);
   });
 
   runner.on('test end', function(){
@@ -4519,6 +4584,7 @@ require.register("runner.js", function(module, exports, require){
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('mocha:runner')
   , Test = require('./test')
+  , Filter = require('./filter')
   , utils = require('./utils')
   , filter = utils.filter
   , keys = utils.keys;
@@ -4568,12 +4634,12 @@ function Runner(suite) {
   var self = this;
   this._globals = [];
   this._abort = false;
+  this._filter = new Filter();
   this.suite = suite;
   this.total = suite.total();
   this.failures = 0;
   this.on('test end', function(test){ self.checkGlobals(test); });
   this.on('hook end', function(hook){ self.checkGlobals(hook); });
-  this.grep(/.*/);
   this.globals(this.globalProps().concat(extraGlobals()));
 }
 
@@ -4606,34 +4672,42 @@ Runner.prototype.constructor = Runner;
  * @api public
  */
 
-Runner.prototype.grep = function(re, invert){
-  debug('grep %s', re);
-  this._grep = re;
-  this._invert = invert;
-  this.total = this.grepTotal(this.suite);
+Runner.prototype.grep = function(re, invert) {
+  debug('grep %s (%s)', re, invert);
+  this._filter.grep = re;
+  this._filter.invertGrep = invert;
+  this.total = this._filter.count(this.suite);
   return this;
 };
 
 /**
- * Returns the number of tests matching the grep search for the
- * given suite.
+ * Only run tests matching the given tags
  *
- * @param {Suite} suite
- * @return {Number}
+ * @param {Array} tags
+ * @return {Runner} for chaining
  * @api public
  */
 
-Runner.prototype.grepTotal = function(suite) {
-  var self = this;
-  var total = 0;
+Runner.prototype.tags = function(tags){
+  debug('include tags: %s', tags);
+  this._filter.tags = tags;
+  this.total = this._filter.count(this.suite);
+  return this;
+};
 
-  suite.eachTest(function(test){
-    var match = self._grep.test(test.fullTitle());
-    if (self._invert) match = !match;
-    if (match) total++;
-  });
+/**
+ * Exclude tests matching the given tags
+ *
+ * @param {Array} tags
+ * @return {Runner} for chaining
+ * @api public
+ */
 
-  return total;
+Runner.prototype.skipTags = function(tags){
+  debug('skip tags: %s', tags);
+  this._filter.skipTags = tags;
+  this.total = this._filter.count(this.suite);
+  return this;
 };
 
 /**
@@ -4948,10 +5022,8 @@ Runner.prototype.runTests = function(suite, fn){
     // all done
     if (!test) return fn();
 
-    // grep
-    var match = self._grep.test(test.fullTitle());
-    if (self._invert) match = !match;
-    if (!match) return next();
+    // filter
+    if (!self._filter.shouldRun(test)) return next();
 
     // pending
     if (test.pending) {
@@ -4998,7 +5070,7 @@ Runner.prototype.runTests = function(suite, fn){
  */
 
 Runner.prototype.runSuite = function(suite, fn){
-  var total = this.grepTotal(suite)
+  var total = this._filter.count(suite)
     , self = this
     , i = 0;
 
@@ -5348,6 +5420,20 @@ Suite.prototype.bail = function(bail){
   if (0 == arguments.length) return this._bail;
   debug('bail %s', bail);
   this._bail = bail;
+  return this;
+};
+
+/*
+ * Sets tags on the suite's context,
+ * inheriting any parent tags
+ *
+ * @param {String...} tags
+ * @return {Suite} for chaining
+ * @api private
+ */
+
+Suite.prototype.tag = function(tags) {
+  this.ctx._tags = Array.prototype.concat.apply(this.parent.ctx._tags, arguments);
   return this;
 };
 
@@ -5703,6 +5789,21 @@ exports.filter = function(arr, fn){
   }
 
   return ret;
+};
+
+/**
+ * Array#some
+ *
+ * @param {Array} array
+ * @param {Function} fn
+ * @api private
+ */
+
+exports.some = function(arr, fn) {
+  for (var i = 0, l = arr.length; i < l; ++i) {
+    if (fn(arr[i], i, arr)) return true;
+  }
+  return false;
 };
 
 /**
