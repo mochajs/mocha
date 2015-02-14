@@ -1,6 +1,6 @@
 Mocha is a feature-rich JavaScript test framework running on [node.js](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
-<a href="https://gitter.im/mochajs/mocha" alt="Gitter" class="badge"><img src="https://badges.gitter.im/Join%20Chat.svg" /></a>
+<a href="https://gitter.im/mochajs/mocha" alt="Gitter" class="badge"><img src="https://img.shields.io/badge/Gitter-join_chat_%E2%86%92-8A6343.svg?style=flat-square" /></a>
 
 <h2 id="features">Features</h2>
 
