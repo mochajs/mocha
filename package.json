@@ -50,7 +50,8 @@
     "growl": "1.8.1",
     "jade": "0.26.3",
     "mkdirp": "0.5.0",
-    "supports-color": "~1.2.0"
+    "supports-color": "~1.2.0",
+    "trayballoon": "^1.0.2"
   },
   "devDependencies": {
     "coffee-script": "~1.8.0",
