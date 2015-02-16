@@ -96,6 +96,7 @@ program
   .option('--trace', 'trace function calls')
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
+  .option('--delay', 'wait for async suite definition')
 
 program.name = 'mocha';
 
@@ -280,6 +281,10 @@ if (program.growl) mocha.growl();
 // --async-only
 
 if (program.asyncOnly) mocha.asyncOnly();
+
+// --delay
+
+if (program.delay) mocha.delay();
 
 // --globals
 
