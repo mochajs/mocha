@@ -1,10 +1,13 @@
 language: node_js
 script: travis_retry npm test
 node_js:
+- '0.12'
 - '0.11'
 - '0.10'
 - '0.8'
 sudo: false
 notifications:
-  slack:
-    secure: Xov4Q/jpmTr6p5E/kYeC0HF1tWm0YqBWvCUbNuJiti3CtFpVmOwXEvxGFcvZNAXApEVrs1uhLZLifuL3oJ/TNdqzM5nT5jDGawPYgf8ly+fTaEiCpsRCdQhFLVqYoN671eyx7QILtre9b51SeaFVVksMrfTmvh4aKJCN01iuJm4=
+  urls:
+    - secure: "EmycFlk48bUvOQ07mxnbcn6T+n3G4wVWuXgrDsUUp6EhJ9866wQK9i+qVhqogWuSEQrGoVaS/vpc/NEYxDP30BD/+nqgvOhVhLVEgtziI85imyV/oUVpArdW3AUmuzCrx7rQCivygjpBmWV9ZcUT5Km4qp1iQhuumy2WbplxrZ4="
+  on_success: change
+  on_failure: always
