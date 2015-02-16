@@ -155,7 +155,7 @@ var JsDiff = (function() {
               this.pushComponent(basePath.components, newString[basePath.newPos], true, undefined);
             }
 
-            var oldPos = this.extractCommon(basePath, newString, oldString, diagonalPath);
+            oldPos = this.extractCommon(basePath, newString, oldString, diagonalPath);
 
             if (basePath.newPos+1 >= newLen && oldPos+1 >= oldLen) {
               return basePath.components;
@@ -223,7 +223,22 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    return value.split(/^/m);
+    var retLines = [],
+        lines = value.split(/^/m);
+
+    for(var i = 0; i < lines.length; i++) {
+      var line = lines[i],
+          lastLine = lines[i - 1];
+
+      // Merge lines that may contain windows new lines
+      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
+        retLines[retLines.length - 1] += '\n';
+      } else if (line) {
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
   };
 
   return {
@@ -322,12 +337,12 @@ var JsDiff = (function() {
     },
 
     applyPatch: function(oldStr, uniDiff) {
-      var diffstr = uniDiff.split('\n');
+      var i, diffstr = uniDiff.split('\n');
       var diff = [];
       var remEOFNL = false,
           addEOFNL = false;
 
-      for (var i = (diffstr[0][0]==='I'?4:0); i < diffstr.length; i++) {
+      for (i = (diffstr[0][0]==='I'?4:0); i < diffstr.length; i++) {
         if(diffstr[i][0] === '@') {
           var meh = diffstr[i].split(/@@ -(\d+),(\d+) \+(\d+),(\d+) @@/);
           diff.unshift({
@@ -354,7 +369,7 @@ var JsDiff = (function() {
       }
 
       var str = oldStr.split('\n');
-      for (var i = diff.length - 1; i >= 0; i--) {
+      for (i = diff.length - 1; i >= 0; i--) {
         var d = diff[i];
         for (var j = 0; j < d.oldlength; j++) {
           if(str[d.start-1+j] !== d.oldlines[j]) {
@@ -790,7 +805,7 @@ function Context(){}
  */
 
 Context.prototype.runnable = function(runnable){
-  if (0 == arguments.length) return this._runnable;
+  if (! arguments.length) return this._runnable;
   this.test = this._runnable = runnable;
   return this;
 };
@@ -804,7 +819,7 @@ Context.prototype.runnable = function(runnable){
  */
 
 Context.prototype.timeout = function(ms){
-  if (arguments.length === 0) return this.runnable().timeout();
+  if (! arguments.length ) return this.runnable().timeout();
   this.runnable().timeout(ms);
   return this;
 };
@@ -910,8 +925,8 @@ Hook.prototype.constructor = Hook;
  */
 
 Hook.prototype.error = function(err){
-  if (0 == arguments.length) {
-    var err = this._error;
+  if (! arguments.length) {
+    err = this._error;
     this._error = null;
     return err;
   }
@@ -1466,12 +1481,13 @@ function Mocha(options) {
   this.files = [];
   this.options = options;
   this.grep(options.grep);
-  this.suite = new exports.Suite('', new exports.Context);
+  this.suite = new exports.Suite('', new exports.Context());
   this.ui(options.ui);
   this.bail(options.bail);
   this.reporter(options.reporter, options.reporterOptions);
+  /*jshint eqnull:true */
   if (null != options.timeout) this.timeout(options.timeout);
-  this.useColors(options.useColors)
+  this.useColors(options.useColors);
   if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
   if (options.slow) this.slow(options.slow);
 
@@ -1500,7 +1516,7 @@ function Mocha(options) {
  */
 
 Mocha.prototype.bail = function(bail){
-  if (0 == arguments.length) bail = true;
+  if (! arguments.length) bail = true;
   this.suite.bail(bail);
   return this;
 };
@@ -1530,8 +1546,8 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
   } else {
     reporter = reporter || 'spec';
     var _reporter;
-    try { _reporter = require('./reporters/' + reporter); } catch (err) {};
-    if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
+    try { _reporter = require('./reporters/' + reporter); } catch (err) {}
+    if (!_reporter) try { _reporter = require(reporter); } catch (err) {}
     if (!_reporter && reporter === 'teamcity')
       console.warn('The Teamcity reporter was moved to a package named ' +
         'mocha-teamcity-reporter ' +
@@ -1553,7 +1569,7 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
 Mocha.prototype.ui = function(name){
   name = name || 'bdd';
   this._ui = exports.interfaces[name];
-  if (!this._ui) try { this._ui = require(name); } catch (err) {};
+  if (!this._ui) try { this._ui = require(name); } catch (err) {}
   if (!this._ui) throw new Error('invalid interface "' + name + '"');
   this._ui = this._ui(this.suite);
   return this;
@@ -1574,6 +1590,7 @@ Mocha.prototype.loadFiles = function(fn){
     suite.emit('pre-require', global, file, self);
     suite.emit('require', require(file), file, self);
     suite.emit('post-require', global, file, self);
+    /*jshint -W030 */
     --pending || (fn && fn());
   });
 };
@@ -1703,7 +1720,7 @@ Mocha.prototype.useColors = function(colors){
  */
 
 Mocha.prototype.useInlineDiffs = function(inlineDiffs) {
-  this.options.useInlineDiffs = arguments.length && inlineDiffs != undefined
+  this.options.useInlineDiffs = arguments.length && inlineDiffs !== undefined
   ? inlineDiffs
   : false;
   return this;
@@ -1747,7 +1764,7 @@ Mocha.prototype.enableTimeouts = function(enabled) {
   this.suite.enableTimeouts(arguments.length && enabled !== undefined
     ? enabled
     : true);
-  return this
+  return this;
 };
 
 /**
@@ -1809,7 +1826,10 @@ Mocha.prototype.run = function(fn){
   function done(failures) {
       if (reporter.done) {
           reporter.done(failures, fn);
-      } else fn && fn(failures);
+      } else {
+        /*jshint -W030 */
+        fn && fn(failures);
+      }
   }
 
   return runner.run(done);
@@ -1844,6 +1864,7 @@ var y = d * 365.25;
 module.exports = function(val, options){
   options = options || {};
   if ('string' == typeof val) return parse(val);
+  /*jshint -W069 */
   return options['long'] ? longFormat(val) : shortFormat(val);
 };
 
@@ -4296,7 +4317,7 @@ function Runnable(title, fn) {
   this._slow = 75;
   this._enableTimeouts = true;
   this.timedOut = false;
-  this._trace = new Error('done() called multiple times')
+  this._trace = new Error('done() called multiple times');
 }
 
 /**
@@ -4318,7 +4339,7 @@ Runnable.prototype.constructor = Runnable;
  */
 
 Runnable.prototype.timeout = function(ms){
-  if (0 == arguments.length) return this._timeout;
+  if (! arguments.length) return this._timeout;
   if (ms === 0) this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
@@ -4336,7 +4357,7 @@ Runnable.prototype.timeout = function(ms){
  */
 
 Runnable.prototype.slow = function(ms){
-  if (0 === arguments.length) return this._slow;
+  if (! arguments.length) return this._slow;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._slow = ms;
@@ -4352,7 +4373,7 @@ Runnable.prototype.slow = function(ms){
  */
 
 Runnable.prototype.enableTimeouts = function(enabled){
-  if (arguments.length === 0) return this._enableTimeouts;
+  if (! arguments.length ) return this._enableTimeouts;
   debug('enableTimeouts %s', enabled);
   this._enableTimeouts = enabled;
   return this;
@@ -4444,7 +4465,7 @@ Runnable.prototype.globals = function(arr){
 
 Runnable.prototype.run = function(fn){
   var self = this
-    , start = new Date
+    , start = new Date()
     , ctx = this.ctx
     , finished
     , emitted;
@@ -4465,7 +4486,7 @@ Runnable.prototype.run = function(fn){
     if (self.timedOut) return;
     if (finished) return multiple(err || self._trace);
     self.clearTimeout();
-    self.duration = new Date - start;
+    self.duration = new Date() - start;
     finished = true;
     if (!err && self.duration > ms && self._enableTimeouts) err = new Error('timeout of ' + ms + 'ms exceeded. Ensure the done() callback is being called in this test.');
     fn(err);
@@ -4481,6 +4502,7 @@ Runnable.prototype.run = function(fn){
     try {
       this.fn.call(ctx, function(err){
         if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
+        /*jshint eqnull:true */
         if (null != err) {
           if (Object.prototype.toString.call(err) === '[object Object]') {
             return done(new Error('done() invoked with non-Error: ' + JSON.stringify(err)));
@@ -4517,10 +4539,10 @@ Runnable.prototype.run = function(fn){
       self.resetTimeout();
       result
         .then(function() {
-          done()
+          done();
         },
         function(reason) {
-          done(reason || new Error('Promise rejected with no or falsy reason'))
+          done(reason || new Error('Promise rejected with no or falsy reason'));
         });
     } else {
       done();
@@ -4690,7 +4712,7 @@ Runner.prototype.globalProps = function() {
  */
 
 Runner.prototype.globals = function(arr){
-  if (0 == arguments.length) return this._globals;
+  if (! arguments.length) return this._globals;
   debug('globals %j', arr);
   this._globals = this._globals.concat(arr);
   return this;
@@ -5218,10 +5240,10 @@ function filterLeaks(ok, globals) {
     if (/^mocha-/.test(key)) return false;
 
     var matched = filter(ok, function(ok){
-      if (~ok.indexOf('*')) return 0 == key.indexOf(ok.split('*')[0]);
+      if (~ok.indexOf('*')) return 0 === key.indexOf(ok.split('*')[0]);
       return key == ok;
     });
-    return matched.length == 0 && (!global.navigator || 'onerror' !== key);
+    return ! matched.length && (!global.navigator || 'onerror' !== key);
   });
 }
 
@@ -5357,7 +5379,7 @@ Suite.prototype.clone = function(){
  */
 
 Suite.prototype.timeout = function(ms){
-  if (0 == arguments.length) return this._timeout;
+  if (! arguments.length) return this._timeout;
   if (ms.toString() === '0') this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
@@ -5389,7 +5411,7 @@ Suite.prototype.enableTimeouts = function(enabled){
  */
 
 Suite.prototype.slow = function(ms){
-  if (0 === arguments.length) return this._slow;
+  if (! arguments.length) return this._slow;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('slow %d', ms);
   this._slow = ms;
@@ -5405,7 +5427,7 @@ Suite.prototype.slow = function(ms){
  */
 
 Suite.prototype.bail = function(bail){
-  if (0 == arguments.length) return this._bail;
+  if (! arguments.length) return this._bail;
   debug('bail %s', bail);
   this._bail = bail;
   return this;
@@ -5952,7 +5974,7 @@ function highlight(js) {
     .replace(/(\d+\.\d+)/gm, '<span class="number">$1</span>')
     .replace(/(\d+)/gm, '<span class="number">$1</span>')
     .replace(/\bnew[ \t]+(\w+)/gm, '<span class="keyword">new</span> <span class="init">$1</span>')
-    .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>')
+    .replace(/\b(function|new|throw|return|var|if|else)\b/gm, '<span class="keyword">$1</span>');
 }
 
 /**
@@ -6244,8 +6266,9 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
 
   fs.readdirSync(path).forEach(function(file){
     file = join(path, file);
+    var stat;
     try {
-      var stat = fs.statSync(file);
+      stat = fs.statSync(file);
       if (stat.isDirectory()) {
         if (recursive) {
           files = files.concat(lookupFiles(file, extensions, recursive));
