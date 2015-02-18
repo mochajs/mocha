@@ -223,7 +223,22 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    return value.split(/^/m);
+    var retLines = [],
+        lines = value.split(/^/m);
+
+    for(var i = 0; i < lines.length; i++) {
+      var line = lines[i],
+          lastLine = lines[i - 1];
+
+      // Merge lines that may contain windows new lines
+      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
+        retLines[retLines.length - 1] += '\n';
+      } else if (line) {
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
   };
 
   return {
@@ -5830,9 +5845,11 @@ var isArray = Array.isArray || function (obj) {
  * Buffer.prototype.toJSON polyfill
  * @type {Function}
  */
-Buffer.prototype.toJSON = Buffer.prototype.toJSON || function () {
-  return Array.prototype.slice.call(this, 0);
-};
+if(Buffer && Buffer.prototype) {
+  Buffer.prototype.toJSON = Buffer.prototype.toJSON || function () {
+    return Array.prototype.slice.call(this, 0);
+  };
+}
 
 /**
  * Ignored files.
@@ -6242,7 +6259,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
     return;
   }
 
-  fs.readdirSync(path).forEach(function(file){
+  fs.readdirSync(path).forEach(function(file) {
     file = join(path, file);
     try {
       var stat = fs.statSync(file);
@@ -6269,7 +6286,7 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
  * @return {Error}
  */
 
-exports.undefinedError = function(){
+exports.undefinedError = function() {
   return new Error('Caught undefined error, did you throw without specifying what?');
 };
 
@@ -6280,7 +6297,7 @@ exports.undefinedError = function(){
  * @return {Error}
  */
 
-exports.getError = function(err){
+exports.getError = function(err) {
   return err || exports.undefinedError();
 };
 
