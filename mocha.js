@@ -1974,7 +1974,7 @@ var tty = require('browser/tty')
   , diff = require('browser/diff')
   , ms = require('../ms')
   , utils = require('../utils')
-  , supportsColor = require('supports-color');
+  , supportsColor = process.env ? require('supports-color') : null;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -1999,10 +1999,12 @@ var isatty = tty.isatty(1) && tty.isatty(2);
 exports = module.exports = Base;
 
 /**
- * Enable coloring by default.
+ * Enable coloring by default, except in the browser interface.
  */
 
-exports.useColors = supportsColor || (process.env.MOCHA_COLORS !== undefined);
+exports.useColors = process.env
+  ? (supportsColor || (process.env.MOCHA_COLORS !== undefined))
+  : false;
 
 /**
  * Inline diffs instead of +/-
@@ -5845,7 +5847,7 @@ var isArray = Array.isArray || function (obj) {
  * Buffer.prototype.toJSON polyfill
  * @type {Function}
  */
-if(Buffer && Buffer.prototype) {
+if(typeof Buffer !== 'undefined' && Buffer.prototype) {
   Buffer.prototype.toJSON = Buffer.prototype.toJSON || function () {
     return Array.prototype.slice.call(this, 0);
   };
