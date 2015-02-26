@@ -1,4 +1,3 @@
-
 describe('should only run .only test in this bdd suite', function() {
   it('should not run this test', function() {
     var zero = 0;

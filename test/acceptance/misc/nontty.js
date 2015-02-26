@@ -1,4 +1,3 @@
-
 describe('tests for non-tty', function(){
   it('should pass', function(){
 

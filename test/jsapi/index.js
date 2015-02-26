@@ -1,4 +1,3 @@
-
 var Mocha = require('../../')
   , path = require('path');
 

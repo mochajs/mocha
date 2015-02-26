@@ -1,4 +1,3 @@
-
 describe('Context', function(){
   beforeEach(function(){
     this.calls = ['before'];
@@ -65,3 +64,9 @@ describe('Context Siblings', function(){
   })
 
 })
+
+describe('timeout()', function(){
+  it('should return the timeout', function(){
+    this.timeout().should.equal(200);
+  });
+});

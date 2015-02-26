@@ -1,4 +1,3 @@
-
 var mocha = require('../')
   , Suite = mocha.Suite
   , Runner = mocha.Runner
@@ -53,12 +52,12 @@ describe('Runner', function(){
   describe('.globalProps()', function(){
     it('should include common non enumerable globals', function() {
       var props = runner.globalProps();
-      props.should.include('setTimeout');
-      props.should.include('clearTimeout');
-      props.should.include('setInterval');
-      props.should.include('clearInterval');
-      props.should.include('Date');
-      props.should.include('XMLHttpRequest');
+      props.should.containEql('setTimeout');
+      props.should.containEql('clearTimeout');
+      props.should.containEql('setInterval');
+      props.should.containEql('clearInterval');
+      props.should.containEql('Date');
+      props.should.containEql('XMLHttpRequest');
     });
   });
 
@@ -69,8 +68,8 @@ describe('Runner', function(){
 
     it('should white-list globals', function(){
       runner.globals(['foo', 'bar']);
-      runner.globals().should.include('foo');
-      runner.globals().should.include('bar');
+      runner.globals().should.containEql('foo');
+      runner.globals().should.containEql('bar');
     })
   })
 
@@ -182,6 +181,20 @@ describe('Runner', function(){
     })
   })
 
+  describe('.hook(name, fn)', function(){
+    it('should execute hooks after failed test if suite bail is true', function(done){
+      runner.fail({});
+      suite.bail(true);
+      suite.afterEach(function(){
+        suite.afterAll(function() {
+          done();
+        })
+      });
+      runner.hook('afterEach', function(){});
+      runner.hook('afterAll', function(){});
+    })
+  })
+
   describe('.fail(test, err)', function(){
     it('should increment .failures', function(){
       runner.failures.should.equal(0);
@@ -202,6 +215,42 @@ describe('Runner', function(){
       runner.on('fail', function(test, err){
         test.should.equal(test);
         err.should.equal(err);
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with a string', function(done){
+      var test = {}, err = 'string';
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the string "string" was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a the error when failed with an Error', function(done){
+      var test = {}, err = new Error('an error message');
+      runner.on('fail', function(test, err){
+        err.message.should.equal('an error message');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Object', function(done){
+      var test = {}, err = { x: 1 };
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the object {\n  "x": 1\n} was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Array', function(done){
+      var test = {}, err = [1,2];
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the array [\n  1\n  2\n] was thrown, throw an Error :)');
         done();
       });
       runner.fail(test, err);

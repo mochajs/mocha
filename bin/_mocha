@@ -1,21 +1,15 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 
 var program = require('commander')
-  , sprintf = require('util').format
   , path = require('path')
   , fs = require('fs')
-  , glob = require('glob')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , interfaces = Mocha.interfaces
   , join = path.join
-  , basename = path.basename
   , cwd = process.cwd()
   , mocha = new Mocha;
 
@@ -61,37 +55,48 @@ var images = {
 program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
-  .option('-r, --require <name>', 'require the given module')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'dot')
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
-  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
-  .option('-i, --invert', 'inverts --grep matches')
-  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-w, --watch', 'watch files for changes')
+  .option('-A, --async-only', "force all tests to take a callback (async)")
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
-  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
-  .option('-b, --bail', "bail after first test failure")
-  .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
+  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', "sort test files")
-  .option('--recursive', 'include sub directories')
+  .option('-b, --bail', "bail after first test failure")
+  .option('-d, --debug', "enable node's debugger, synonym for node --debug")
+  .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
+  .option('-gc, --expose-gc', 'expose gc extension')
+  .option('-i, --invert', 'inverts --grep matches')
+  .option('-r, --require <name>', 'require the given module')
+  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
+  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
+  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-w, --watch', 'watch files for changes')
+  .option('--check-leaks', 'check for global variable leaks')
+  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
-  .option('--harmony-proxies', 'enable harmony proxies')
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
   .option('--harmony-generators', 'enable harmony generators')
-  .option('--prof', 'log statistical profiling information')
-  .option('-gc', '--expose-gc', 'expose gc extension')
-  .option('--trace', 'trace function calls')
-  .option('--check-leaks', 'check for global variable leaks')
-  .option('--interfaces', 'display available interfaces')
-  .option('--reporters', 'display available reporters')
-  .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
+  .option('--harmony-proxies', 'enable harmony proxies')
+  .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
+  .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
+  .option('--harmony_proxies', 'enable "harmony proxies" (iojs)')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--interfaces', 'display available interfaces')
+  .option('--no-deprecation', 'silence deprecation warnings')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
+  .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
+  .option('--prof', 'log statistical profiling information')
+  .option('--recursive', 'include sub directories')
+  .option('--reporters', 'display available reporters')
+  .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
+  .option('--trace', 'trace function calls')
+  .option('--trace-deprecation', 'show stack traces on deprecations')
+  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
+  .option('--delay', 'wait for async suite definition')
 
 program.name = 'mocha';
 
@@ -164,12 +169,19 @@ program.on('require', function(mod){
   requires.push(mod);
 });
 
-// mocha.opts support
+// --opts
+
+var optsPath = process.argv.indexOf('--opts') !== -1
+    ? process.argv[process.argv.indexOf('--opts') + 1]
+    : 'test/mocha.opts';
 
 try {
-  var opts = fs.readFileSync('test/mocha.opts', 'utf8')
+  var opts = fs.readFileSync(optsPath, 'utf8')
     .trim()
-    .split(/\s+/);
+    .split(/\s+/)
+    .filter(function(value) {
+      return value ? true : false;
+    });
 
   process.argv = process.argv
     .slice(0, 2)
@@ -186,9 +198,22 @@ program.parse(process.argv);
 
 Error.stackTraceLimit = Infinity; // TODO: config
 
+// reporter options
+
+var reporterOptions = {};
+if (program.reporterOptions !== undefined) {
+    program.reporterOptions.split(",").forEach(function(opt) {
+        var L = opt.split("=");
+        if (L.length != 2) {
+            throw new Error("invalid reporter option '" + opt + "'");
+        }
+        reporterOptions[L[0]] = L[1];
+    });
+}
+
 // reporter
 
-mocha.reporter(program.reporter);
+mocha.reporter(program.reporter, reporterOptions);
 
 // interface
 
@@ -225,6 +250,10 @@ if (program.inlineDiffs) mocha.useInlineDiffs(true);
 
 if (program.slow) mocha.suite.slow(program.slow);
 
+// --no-timeouts
+
+if (!program.timeouts) mocha.enableTimeouts(false);
+
 // --timeout
 
 if (program.timeout) mocha.suite.timeout(program.timeout);
@@ -253,6 +282,10 @@ if (program.growl) mocha.growl();
 
 if (program.asyncOnly) mocha.asyncOnly();
 
+// --delay
+
+if (program.delay) mocha.delay();
+
 // --globals
 
 mocha.globals(globals);
@@ -268,9 +301,8 @@ program.compilers.forEach(function(c) {
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);
   extensions.push(ext);
+  program.watchExtensions.push(ext);
 });
-
-var re = new RegExp('\\.(' + extensions.join('|') + ')$');
 
 // requires
 
@@ -278,17 +310,16 @@ requires.forEach(function(mod) {
   require(mod);
 });
 
-// files
+//args
 
-var files = []
-  , args = program.args;
+var args = program.args;
 
 // default files to test/*.{js,coffee}
 
 if (!args.length) args.push('test');
 
 args.forEach(function(arg){
-  files = files.concat(lookupFiles(arg, program.recursive));
+  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
 });
 
 // resolve
@@ -313,7 +344,8 @@ if (program.watch) {
     process.exit();
   });
 
-  var watchFiles = utils.files(cwd);
+
+  var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
   var runAgain = false;
 
   function loadAndRun() {
@@ -342,6 +374,8 @@ if (program.watch) {
   function rerun() {
     purge();
     stop()
+    if (!program.grep)
+      mocha.grep(null);
     mocha.suite = mocha.suite.clone();
     mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
@@ -363,10 +397,30 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-runner = mocha.run(program.exit ? process.exit : exitLater);
+runner = mocha.run(program.exit ? exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
+}
+
+function exit(code) {
+  // flush output for Node.js Windows pipe bug
+  // https://github.com/joyent/node/issues/6247 is just one bug example
+  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
+  function done() {
+    if (!(draining--)) process.exit(code);
+  }
+
+  var draining = 0;
+  var streams = [process.stdout, process.stderr];
+
+  streams.forEach(function(stream){
+    // submit empty write request and wait for completion
+    draining += 1;
+    stream.write('', done);
+  });
+
+  done();
 }
 
 process.on('SIGINT', function() { runner.abort(); })
@@ -405,7 +459,7 @@ function list(str) {
 
 function hideCursor(){
   process.stdout.write('\u001b[?25l');
-};
+}
 
 /**
  * Show the cursor.
@@ -413,7 +467,7 @@ function hideCursor(){
 
 function showCursor(){
   process.stdout.write('\u001b[?25h');
-};
+}
 
 /**
  * Stop play()ing.
@@ -422,40 +476,6 @@ function showCursor(){
 function stop() {
   process.stdout.write('\u001b[2K');
   clearInterval(play.timer);
-}
-
-/**
- * Lookup file names at the given `path`.
- */
-
-function lookupFiles(path, recursive) {
-  var files = [];
-
-  if (!exists(path)) {
-    if (exists(path + '.js')) {
-      path += '.js'
-    } else {
-      files = glob.sync(path);
-      if (!files.length) throw new Error("cannot resolve path (or pattern) '" + path + "'");
-      return files;
-    }
-  }
-
-  var stat = fs.statSync(path);
-  if (stat.isFile()) return path;
-
-  fs.readdirSync(path).forEach(function(file){
-    file = join(path, file);
-    var stat = fs.statSync(file);
-    if (stat.isDirectory()) {
-      if (recursive) files = files.concat(lookupFiles(file, recursive));
-      return
-    }
-    if (!stat.isFile() || !re.test(file) || basename(file)[0] == '.') return;
-    files.push(file);
-  });
-
-  return files;
 }
 
 /**

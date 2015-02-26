@@ -1,7 +1,7 @@
 {
   "name": "mocha",
-  "version": "1.20.0",
-  "repo": "visionmedia/mocha",
+  "version": "2.1.0",
+  "repo": "mochajs/mocha",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -11,6 +11,10 @@
     "tap"
   ],
   "main": "mocha.js",
-  "scripts": ["mocha.js"],
-  "styles": ["mocha.css"]
+  "scripts": [
+    "mocha.js"
+  ],
+  "styles": [
+    "mocha.css"
+  ]
 }
