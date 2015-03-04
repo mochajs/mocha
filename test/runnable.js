@@ -1,7 +1,8 @@
 var mocha = require('../')
   , utils = mocha.utils
   , Runnable = mocha.Runnable
-  , EventEmitter = require('events').EventEmitter;
+  , EventEmitter = require('events').EventEmitter
+  , should = require('should');
 
 describe('Runnable(title, fn)', function(){
   // For every test we poison the global time-related methods.
@@ -406,5 +407,69 @@ describe('Runnable(title, fn)', function(){
         test.run(done);
       })
     })
+
+    describe('when fn is a Promise', function() {
+      it('should invoke the callback', function(done) {
+        var invoked = false;
+        var test = new Runnable('foo', {
+          then: function(resolve, reject) {
+            var cb = function() {
+              invoked = true;
+              resolve();
+            };
+            process.nextTick(cb);
+          },
+          catch: function() {}
+        });
+
+        test.run(function(err) {
+          should(!err).ok;
+          invoked.should.equal(true);
+          done();
+        });
+      });
+
+      it('should pass any errors to the callback', function(done) {
+        var expectedErr = new Error('Promise test');
+        var test = new Runnable('foo', {
+          then: function(resolve, reject) {
+            process.nextTick(function() {
+              reject(expectedErr);
+            });
+          },
+          catch: function() {}
+        });
+
+        test.run(function(err) {
+          err.should.equal(expectedErr);
+          done();
+        });
+      });
+
+      it('should throw if no error was passed to reject', function(done) {
+        var test = new Runnable('foo', {
+          then: function(resolve, reject) {
+            process.nextTick(function() {
+              reject();
+            });
+          },
+          catch: function() {}
+        });
+
+        test.run(function(err) {
+          err.message.should.equal('Promise.reject called without error');
+          done();
+        });
+      });
+    });
+
+    // The remaining specs will only be ran in environments supporting
+    // harmony generators
+    try {
+      eval('(function* (){})');
+      require('./harmony/runnable.generators.js')();
+    } catch(err) {
+      // Generators are unavailable
+    }
   })
 })

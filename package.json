@@ -42,6 +42,7 @@
     "test": "make test-all"
   },
   "dependencies": {
+    "co": "~4.4.0",
     "commander": "2.3.0",
     "debug": "2.0.0",
     "diff": "1.0.8",
