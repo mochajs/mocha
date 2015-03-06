@@ -60,11 +60,11 @@ test-outputs/issue1327/case-out.json: test/regression/issue1327/case.js
 test-failing:
 	./bin/mocha \
 		--reporter $(REPORTER) \
-		test/acceptance/failing/timeout.js > /dev/null 2>&1 ; \
+		test/acceptance/failing > /dev/null 2>&1 ; \
 		failures="$$?" ; \
-		if [ "$$failures" != '2' ] ; then \
+		if [ "$$failures" != '4' ] ; then \
 			echo 'test-failing:' ; \
-			echo "  expected 2 failing tests but saw $$failures" ; \
+			echo "  expected 4 failing tests but saw $$failures" ; \
 			exit 1 ; \
 		fi
 
