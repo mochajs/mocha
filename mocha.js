@@ -1480,7 +1480,8 @@ function Mocha(options) {
   options = options || {};
   this.files = [];
   this.options = options;
-  this.grep(options.grep);
+  if (options.grep) this.grep(new RegExp(options.grep));
+  if (options.fgrep) this.grep(options.fgrep);
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
   this.bail(options.bail);
@@ -4481,6 +4482,10 @@ Runnable.prototype.run = function(fn){
     var ms = self.timeout();
     if (self.timedOut) return;
     if (finished) return multiple(err || self._trace);
+
+    // Discard the resolution if this test has already failed asynchronously
+    if (self.state) return;
+
     self.clearTimeout();
     self.duration = new Date - start;
     finished = true;
@@ -5127,12 +5132,11 @@ Runner.prototype.uncaught = function(err){
   var runnable = this.currentRunnable;
   if (!runnable) return;
 
-  var wasAlreadyDone = runnable.state;
-  this.fail(runnable, err);
-
   runnable.clearTimeout();
 
-  if (wasAlreadyDone) return;
+  // Ignore errors if complete
+  if (runnable.state) return;
+  this.fail(runnable, err);
 
   // recover from test
   if ('test' == runnable.type) {
@@ -6447,6 +6451,7 @@ mocha.run = function(fn){
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
   if (query.grep) mocha.grep(new RegExp(query.grep));
+  if (query.fgrep) mocha.grep(query.fgrep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){
