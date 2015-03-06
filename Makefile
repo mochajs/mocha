@@ -62,9 +62,9 @@ test-failing:
 		--reporter $(REPORTER) \
 		test/acceptance/failing > /dev/null 2>&1 ; \
 		failures="$$?" ; \
-		if [ "$$failures" != '3' ] ; then \
+		if [ "$$failures" != '4' ] ; then \
 			echo 'test-failing:' ; \
-			echo "  expected 3 failing tests but saw $$failures" ; \
+			echo "  expected 4 failing tests but saw $$failures" ; \
 			exit 1 ; \
 		fi
 
