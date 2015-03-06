@@ -11,49 +11,23 @@ There's two:
 
 ### Mac OS X
 
-1.  Get [Homebrew](http://brew.sh).  Install it.  Great.  Command at the time of writing was:
+Install `markdown` via Homebrew:
 
-    ```sh
-    ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
-    ```
-
-2.  Assert `make` exists by executing:
-
-    ```sh
-    which make
-    ```
-
-3.  If `which` did not return a path to the `make` executable, choose your own adventure:  
-  
-      - Download & install "Command Line Tools for Xcode" which is [buried somewhere in here](https://developer.apple.com/downloads/index.action#), and requires an Apple ID, or
-      
-      - Install `make` via Homebrew:
+```sh
+brew install markdown
+```
     
-        ```sh
-        brew install make
-        ```
-  
-    *Homebrew will not let you install `make` via the second method if it is already installed via the first method.*
-
-4.  Install `markdown`:
-    
-    ```sh
-    brew install markdown
-    ```
-    
-    Or download from [here](http://daringfireball.net/projects/markdown/).
+Or download from [here](http://daringfireball.net/projects/markdown/).
         
-5.  Celebrate with tequila!  Or try to build first.  Probably want to build first.
+Celebrate with tequila!  Or try to build first.  Probably want to build first.
 
 ### Linux
 
 #### Ubuntu 14.04
 
-You should have `make`, so you need `markdown`.
-
-1.  `sudo apt-get install markdown`
-
-2.  That seems to do it.  It's just a Perl script, so you can [get it from here](http://daringfireball.net/projects/markdown/) otherwise.
+1.  `sudo apt-get install build-essential` to install make.
+2.  `sudo apt-get install markdown` to install markdown.
+3.  That seems to do it.  It's just a Perl script, so you can [get it from here](http://daringfireball.net/projects/markdown/) otherwise.
 
 ### Windows
 
