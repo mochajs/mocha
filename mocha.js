@@ -1486,7 +1486,7 @@ function Mocha(options) {
   this.bail(options.bail);
   this.reporter(options.reporter, options.reporterOptions);
   if (null != options.timeout) this.timeout(options.timeout);
-  this.useColors(options.useColors)
+  this.useColors(options.useColors);
   if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
   if (options.slow) this.slow(options.slow);
 
@@ -1545,8 +1545,8 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
   } else {
     reporter = reporter || 'spec';
     var _reporter;
-    try { _reporter = require('./reporters/' + reporter); } catch (err) {};
-    if (!_reporter) try { _reporter = require(reporter); } catch (err) {};
+    try { _reporter = require('./reporters/' + reporter); } catch (err) {}
+    if (!_reporter) try { _reporter = require(reporter); } catch (err) {}
     if (!_reporter && reporter === 'teamcity')
       console.warn('The Teamcity reporter was moved to a package named ' +
         'mocha-teamcity-reporter ' +
@@ -1568,7 +1568,7 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
 Mocha.prototype.ui = function(name){
   name = name || 'bdd';
   this._ui = exports.interfaces[name];
-  if (!this._ui) try { this._ui = require(name); } catch (err) {};
+  if (!this._ui) try { this._ui = require(name); } catch (err) {}
   if (!this._ui) throw new Error('invalid interface "' + name + '"');
   this._ui = this._ui(this.suite);
   return this;
@@ -5249,23 +5249,23 @@ function filterLeaks(ok, globals) {
  * @api private
  */
 
- function extraGlobals() {
-  if (typeof(process) === 'object' &&
-      typeof(process.version) === 'string') {
+function extraGlobals() {
+ if (typeof(process) === 'object' &&
+     typeof(process.version) === 'string') {
 
-    var nodeVersion = process.version.split('.').reduce(function(a, v) {
-      return a << 8 | v;
-    });
+   var nodeVersion = process.version.split('.').reduce(function(a, v) {
+     return a << 8 | v;
+   });
 
-    // 'errno' was renamed to process._errno in v0.9.11.
+   // 'errno' was renamed to process._errno in v0.9.11.
 
-    if (nodeVersion < 0x00090B) {
-      return ['errno'];
-    }
-  }
-
-  return [];
+   if (nodeVersion < 0x00090B) {
+     return ['errno'];
+   }
  }
+
+ return [];
+}
 
 }); // module: runner.js
 
