@@ -1,3 +1,37 @@
+2.2.0 / 2015-03-06
+==================
+
+  * Update mocha.js
+  * Add --fgrep. Use grep for RegExp, fgrep for str
+  * Ignore async global errors after spec resolution
+  * Fixing errors that prevent mocha.js from loading in the browser - fixes #1558
+  * fix(utils): issue #1558 + make
+  * add ability to delay root suite; closes #362, closes #1124
+  * fix insanity in http tests
+  * update travis: add node 0.12, add gitter, remove slack
+  * building
+  * resolve #1548: ensure the environment's "node" executable is used
+  * reporters/base: use supports-color to detect colorable term
+  * travis: use docker containers
+  * small fix: commander option for --expose-gc
+  * Ignore asynchronous errors after global failure
+  * Improve error output when a test fails with a non-error
+  * updated travis badge, uses svg instead of img
+  * Allow skip from test context for #332
+  * [JSHINT] Unnecessary semicolon fixed in bin/_mocha
+  * Added a reminder about the done() callback to test timeout error messages
+  * fixes #1496, in Mocha.run(fn), check if fn exists before executing it, added tests too
+  * Add Harmony Proxy flag for iojs
+  * test(utils|ms|*): test existing units
+  * add support for some iojs flags
+  * fix(utils.stringify): issue #1229, diff viewer
+  * Remove slack link
+  * Prevent multiple 'grep=' querystring params in html reporter
+  * Use grep as regexp (close #1381)
+  * utils.stringify should handle objects without an Object prototype
+  * in runnable test, comparing to undefined error's message rather than a literal
+  * Fix test running output truncation on async STDIO
+  * ammended for deprecated customFds option in child_process
 
 2.1.0 / 2014-12-23
 ==================
