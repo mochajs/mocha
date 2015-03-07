@@ -319,29 +319,44 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     Options:
 
-      -h, --help                      output usage information
-      -V, --version                   output the version number
-      -r, --require <name>            require the given module
-      -R, --reporter <name>           specify the reporter to use
-      -u, --ui <name>                 specify user-interface (bdd|tdd|exports)
-      -g, --grep <pattern>            only run tests matching <pattern>
-      -i, --invert                    inverts --grep matches
-      -t, --timeout <ms>              set test-case timeout in milliseconds [2000]
-      -s, --slow <ms>                 "slow" test threshold in milliseconds [75]
-      -w, --watch                     watch files for changes
-      -c, --colors                    force enabling of colors
-      -C, --no-colors                 force disabling of colors
-      -G, --growl                     enable growl notification support
-      -d, --debug                     enable node's debugger, synonym for node --debug
-      -b, --bail                      bail after first test failure
-      -A, --async-only                force all tests to take a callback (async)
-      --recursive                     include sub directories
-      --debug-brk                     enable node's debugger breaking on the first line
-      --globals <names>               allow the given comma-delimited global [names]
-      --check-leaks                   check for global variable leaks
-      --interfaces                    display available interfaces
-      --reporters                     display available reporters
-      --compilers <ext>:<module>,...  use the given module(s) to compile files
+     -h, --help                              output usage information
+     -V, --version                           output the version number
+     -A, --async-only                        force all tests to take a callback (async)
+     -c, --colors                            force enabling of colors
+     -C, --no-colors                         force disabling of colors
+     -G, --growl                             enable growl notification support
+     -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
+     -R, --reporter <name>                   specify the reporter to use
+     -S, --sort                              sort test files
+     -b, --bail                              bail after first test failure
+     -d, --debug                             enable node's debugger, synonym for node --debug
+     -g, --grep <pattern>                    only run tests matching <pattern>
+     -f, --fgrep <string>                    only run tests containing <string>
+     -gc, --expose-gc                        expose gc extension
+     -i, --invert                            inverts --grep and --fgrep matches
+     -r, --require <name>                    require the given module
+     -s, --slow <ms>                         "slow" test threshold in milliseconds [75]
+     -t, --timeout <ms>                      set test-case timeout in milliseconds [2000]
+     -u, --ui <name>                         specify user-interface (bdd|tdd|exports)
+     -w, --watch                             watch files for changes
+     --check-leaks                           check for global variable leaks
+     --compilers <ext>:<module>,...          use the given module(s) to compile files
+     --debug-brk                             enable node's debugger breaking on the first line
+     --globals <names>                       allow the given comma-delimited global [names]
+     --inline-diffs                          display actual/expected differences inline within each string
+     --interfaces                            display available interfaces
+     --no-deprecation                        silence deprecation warnings
+     --no-exit                               require a clean shutdown of the event loop: mocha will exit
+     --no-timeouts                           disables timeouts, given implicitly with --debug
+     --opts <path>                           specify opts path
+     --prof                                  log statistical profiling information
+     --recursive                             include sub directories
+     --reporters                             display available reporters
+     --throw-deprecation                     throw an exception anytime a deprecated function is used
+     --trace                                 trace function calls
+     --trace-deprecation                     show stack traces on deprecations
+     --watch-extensions <ext>,...            additional extensions to monitor with --watch
+     --delay                                 wait for async suite definition
 
 <h3 id="watch-option">-w, --watch</h3>
 
