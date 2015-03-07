@@ -1470,6 +1470,7 @@ function image(name) {
  *   - `bail` bail on the first test failure
  *   - `slow` milliseconds to wait before considering a test slow
  *   - `ignoreLeaks` ignore global leaks
+ *   - `fullTrace` display the full stack-trace on failing
  *   - `grep` string or regexp to filter tests with
  *
  * @param {Object} options
@@ -1670,6 +1671,18 @@ Mocha.prototype.checkLeaks = function(){
 };
 
 /**
+ * Display long stack-trace on failing
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.fullTrace = function() {
+  this.options.fullStackTrace = true;
+  return this;
+};
+
+/**
  * Enable growl support.
  *
  * @return {Mocha}
@@ -1812,6 +1825,7 @@ Mocha.prototype.run = function(fn){
   var runner = new exports.Runner(suite, options.delay);
   var reporter = new this._reporter(runner, options);
   runner.ignoreLeaks = false !== options.ignoreLeaks;
+  runner.fullStackTrace = options.fullStackTrace;
   runner.asyncOnly = options.asyncOnly;
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
@@ -4560,7 +4574,8 @@ var EventEmitter = require('browser/events').EventEmitter
   , filter = utils.filter
   , keys = utils.keys
   , type = utils.type
-  , stringify = utils.stringify;
+  , stringify = utils.stringify
+  , stackFilter = utils.stackTraceFilter();
 
 /**
  * Non-enumerable globals.
@@ -4751,15 +4766,17 @@ Runner.prototype.checkGlobals = function(test){
  * @api private
  */
 
-Runner.prototype.fail = function(test, err){
+Runner.prototype.fail = function(test, err) {
   ++this.failures;
   test.state = 'failed';
 
-  if ('string' == typeof err) {
-    err = new Error('the string "' + err + '" was thrown, throw an Error :)');
-  } else if (!(err instanceof Error)) {
+  if (!(err instanceof Error)) {
     err = new Error('the ' + type(err) + ' ' + stringify(err) + ' was thrown, throw an Error :)');
   }
+
+  err.stack = this.fullStackTrace
+    ? err.stack
+    : stackFilter(err.stack);
 
   this.emit('fail', test, err);
 };
@@ -6304,6 +6321,70 @@ exports.getError = function(err) {
 };
 
 
+/**
+ * @summary
+ * This Filter based on `mocha-clean` module.(see: `github.com/rstacruz/mocha-clean`)
+ * @description
+ * When invoking this function you get a filter function that get the Error.stack as an input,
+ * and return a prettify output.
+ * (i.e: strip Mocha, node_modules, bower and componentJS from stack trace).
+ * @returns {Function}
+ */
+
+exports.stackTraceFilter = function() {
+  var slash = '/'
+    , is = typeof document === 'undefined'
+      ? { node: true }
+      : { browser: true }
+    , cwd = is.node
+      ? process.cwd() + slash
+      : location.href.replace(/\/[^\/]*$/, '/');
+
+  function isNodeModule (line) {
+    return (~line.indexOf('node_modules'));
+  }
+
+  function isMochaInternal (line) {
+    return (~line.indexOf('node_modules' + slash + 'mocha'))  ||
+      (~line.indexOf('components' + slash + 'mochajs'))       ||
+      (~line.indexOf('components' + slash + 'mocha'));
+  }
+
+  // node_modules, bower, componentJS
+  function isBrowserModule(line) {
+    return (~line.indexOf('node_modules')) ||
+      (~line.indexOf('components'));
+  }
+
+  function isNodeInternal (line) {
+    return (~line.indexOf('(timers.js:')) ||
+      (~line.indexOf('(events.js:'))      ||
+      (~line.indexOf('(node.js:'))        ||
+      (~line.indexOf('(module.js:'))      ||
+      (~line.indexOf('GeneratorFunctionPrototype.next (native)')) ||
+      false
+  }
+
+  return function(stack) {
+    stack = stack.split('\n');
+
+    stack = stack.reduce(function (list, line) {
+      if (is.node && (isNodeModule(line) ||
+        isMochaInternal(line) ||
+        isNodeInternal(line)))
+        return list;
+
+      if (is.browser && (isBrowserModule(line)))
+        return list;
+
+      // Clean up cwd(absolute)
+      list.push(line.replace(cwd, ''));
+      return list;
+    }, []);
+
+    return stack.join('\n');
+  }
+};
 }); // module: utils.js
 // The global object is "self" in Web Workers.
 var global = (function() { return this; })();
