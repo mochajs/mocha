@@ -1010,7 +1010,8 @@ module.exports = function(suite){
 
     context.describe.only = function(title, fn){
       var suite = context.describe(title, fn);
-      mocha.grep(suite.fullTitle());
+      var reString = '^' + escapeRe(suite.fullTitle()) + '$';
+      mocha.grep(new RegExp(reString));
       return suite;
     };
 
