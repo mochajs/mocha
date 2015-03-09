@@ -74,6 +74,7 @@ program
   .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
   .option('-w, --watch', 'watch files for changes')
   .option('--check-leaks', 'check for global variable leaks')
+  .option('--full-trace', 'display the full stack trace')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -257,6 +258,10 @@ if (program.invert) mocha.invert();
 // --check-leaks
 
 if (program.checkLeaks) mocha.checkLeaks();
+
+// --stack-trace
+
+if(program.fullTrace) mocha.fullTrace();
 
 // --growl
 
