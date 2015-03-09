@@ -7,7 +7,7 @@
 
 var spawn = require('child_process').spawn,
   path = require('path'),
-  args = [process.execPath, path.join(__dirname, '_mocha')];
+  args = [path.join(__dirname, '_mocha')];
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];
@@ -48,7 +48,7 @@ process.argv.slice(2).forEach(function(arg){
   }
 });
 
-var proc = spawn(args[0], args.slice(1), { stdio: 'inherit' });
+var proc = spawn(process.execPath, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
   process.on('exit', function(){
     if (signal) {
