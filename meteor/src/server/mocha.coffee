@@ -1,11 +1,10 @@
 Mocha = Npm.require('mocha')
 Future = Npm.require('fibers/future')
 
-
 options =
   ui: 'bdd'
   ignoreLeaks: true
-  reporter: practical.mocha.JsonStreamReporter
+  reporter: practical.mocha.MeteorPublishReporter
 
 global.mocha = new Mocha(options)
 

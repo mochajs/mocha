@@ -26,9 +26,9 @@ Package.onUse(function (api) {
   // we'll need all of this.
   api.use(['blaze', 'templating', 'spacebars', 'tracker'], 'client');
 
-  api.use(['practicalmeteor:loglevel@1.1.0_3', 'practicalmeteor:chai@1.9.2_3']);
+  api.use(['practicalmeteor:loglevel@1.2.0_1', 'practicalmeteor:chai@1.9.2_3']);
 
-  api.imply(['practicalmeteor:chai@1.9.2_3']);
+  api.imply(['practicalmeteor:loglevel@1.2.0_1', 'practicalmeteor:chai@1.9.2_3']);
 
   // So meteor-web-driver will be available from the command line
   // api.imply(['practicalmeteor:mocha-web-driver@0.9.0-rc0']);
@@ -47,12 +47,13 @@ Package.onUse(function (api) {
     'meteor/src/client/mocha.html',
     'mocha.css',
     'mocha.js',
-    'meteor/src/client/mocha-setup.coffee',
+    'meteor/src/client/mocha-setup.coffee'
     ],
     'client');
 
   api.addFiles('meteor/src/lib/BaseReporter.coffee', 'server');
   api.addFiles('meteor/src/lib/JsonStreamReporter.coffee', 'server');
+  api.addFiles('meteor/src/server/MeteorPublishReporter.coffee', 'server');
 
   api.addFiles('meteor/src/server/mocha.coffee', 'server');
 

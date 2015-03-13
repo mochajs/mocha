@@ -14,8 +14,9 @@ practical.mocha ?= {}
 
 class practical.mocha.BaseReporter
 
-  constructor: (@runner)->
+  constructor: (@runner, @options)->
     expect(@runner).to.be.an 'object'
+    expect(@options).to.be.an 'object'
     @stats = { total: @runner.total, suites: 0, tests: 0, passes: 0, pending: 0, failures: 0 }
     @failures = []
 

@@ -1,7 +1,7 @@
 class practical.mocha.JsonStreamReporter extends practical.mocha.BaseReporter
 
-  constructor: (@runner)->
-    super(@runner)
+  constructor: (runner, options)->
+    super(runner, options)
 
     @runner.on 'start', (total)=>
       console.log(JSON.stringify(['start', { total: @stats.total }]))
