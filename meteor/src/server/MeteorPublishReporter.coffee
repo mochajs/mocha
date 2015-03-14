@@ -1,4 +1,4 @@
-log = new ObjectLogger('MeteorPublishReporter', 'debug')
+log = new ObjectLogger('MeteorPublishReporter', 'info')
 
 
 class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
@@ -20,10 +20,10 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @stopped = false
       @sequence = 0
 
-      @runner.on 'start', (total)=>
+      @runner.on 'start', =>
         try
-          log.enter 'onStart', total, arguments
-          @added 'start', {total: total}
+          log.enter 'onStart', arguments
+          @added 'start', {total: @stats.total}
           @publisher.ready()
         finally
           log.return()
@@ -31,42 +31,51 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @runner.on 'suite', (suite)=>
         try
           log.enter 'onSuite', arguments
-          @added 'suite', {suite: suite}
+          return if suite.root
+          @added 'suite', {title: suite.title, _fullTitle: suite.fullTitle()}
+        finally
+          log.return()
+
+      @runner.on 'suite end', (suite)=>
+        try
+          log.enter 'onSuiteEnd', arguments
+          return if suite.root
+          @added 'suite end', {title: suite.title, _fullTitle: suite.fullTitle()}
         finally
           log.return()
 
       @runner.on 'test end', (test)=>
         try
           log.enter 'onTestEnd', arguments
-          @added 'test end', {test: test}
+          @added 'test end', @clean(test)
         finally
           log.return()
 
       @runner.on 'pass', (test)=>
         try
           log.enter 'onPass', arguments
-          @added 'pass', {test: test}
+          @added 'pass', @clean(test)
         finally
           log.return()
 
       @runner.on 'fail', (test, error)=>
         try
           log.enter 'onFail', arguments
-          @added 'fail', {test: test, error: error}
+          @added 'fail', @clean(test)
         finally
           log.return()
 
       @runner.on 'end', =>
         try
           log.enter 'onEnd', arguments
-          @added 'end', {}
+          @added 'end', @stats
         finally
           log.return()
 
       @runner.on 'pending', (test)=>
         try
           log.enter 'onPending', arguments
-          @added 'pending', {test: test}
+          @added 'pending', @clean(test)
         finally
           log.return()
     finally
@@ -76,11 +85,51 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
   added: (event, data)=>
     try
       log.enter 'added', arguments
+      log.info event, data
       return if @stopped is true
+      @sequence++
       doc =
-        _id: "#{++@sequence}"
+        _id: "#{@sequence}"
         event: event
         data: data
       @publisher.added('mochaServerRunEvents', doc._id, doc)
     finally
       log.return()
+
+
+  ###*
+  # Return a plain-object representation of `test`
+  # free of cyclic properties etc.
+  #
+  # @param {Object} test
+  # @return {Object}
+  # @api private
+  ###
+
+  clean: (test) =>
+    {
+    title: test.title
+    _fullTitle: test.fullTitle()
+    type: test.type
+    state: test.state
+    duration: test.duration
+    async: test.async
+    sync: test.sync
+    _timeout: test._timeout
+    _slow: test._slow
+    err: @errorJSON(test.err or {})
+    }
+
+  ###*
+  # Transform `error` into a JSON object.
+  # @param {Error} err
+  # @return {Object}
+  ###
+
+  errorJSON: (err) =>
+    res = {}
+    Object.getOwnPropertyNames(err).forEach (key) ->
+      res[key] = err[key]
+      return
+    , err
+    res

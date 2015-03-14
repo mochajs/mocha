@@ -7,6 +7,12 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.versionsFrom('1.0');
+
+  api.use([
+    'coffeescript',
+    'practicalmeteor:loglevel@1.1.0_3',
+    'practicalmeteor:chai@1.9.2_3'
+  ]);
 });
 
 

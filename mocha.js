@@ -466,6 +466,8 @@ function isArray(obj) {
 
 function EventEmitter(){};
 
+  window.practical.mocha.EventEmitter = EventEmitter;
+
 /**
  * Adds a listener.
  *
@@ -2741,18 +2743,18 @@ function HTML(runner) {
       var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
-      if (!~str.indexOf(test.err.message)) {
-        str = test.err.message + '\n' + str;
-      }
-
-      // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
-      // check for the result of the stringifying.
-      if ('[object Error]' == str) str = test.err.message;
-
-      // Safari doesn't give you a stack. Let's at least provide a source line.
-      if (!test.err.stack && test.err.sourceURL && test.err.line !== undefined) {
-        str += "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
-      }
+      //if (!~str.indexOf(test.err.message)) {
+      //  str = test.err.message + '\n' + str;
+      //}
+      //
+      //// <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
+      //// check for the result of the stringifying.
+      //if ('[object Error]' == str) str = test.err.message;
+      //
+      //// Safari doesn't give you a stack. Let's at least provide a source line.
+      //if (!test.err.stack && test.err.sourceURL && test.err.line !== undefined) {
+      //  str += "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
+      //}
 
       el.appendChild(fragment('<pre class="error">%e</pre>', str));
     }
@@ -2778,6 +2780,7 @@ function HTML(runner) {
   });
 }
 
+  window.practical.mocha.reporters.HTML = HTML;
 /**
  * Makes a URL, preserving querystring ("search") parameters.
  * @param {string} s

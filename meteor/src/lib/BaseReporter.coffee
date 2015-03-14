@@ -22,7 +22,7 @@ class practical.mocha.BaseReporter
 
     @runner.stats = @stats
 
-    @runner.on 'start', (total)=>
+    @runner.on 'start', =>
       @stats.start = new Date
 
     @runner.on 'suite', (suite)=>

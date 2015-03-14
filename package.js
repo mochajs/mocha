@@ -21,6 +21,7 @@ Package.onUse(function (api) {
   api.use('reload');
   api.use('ddp');
   api.use('random');
+  api.use('mongo');
 
   // If we use a reactive reporter such as meteor's test-in-browser one,
   // we'll need all of this.
@@ -35,6 +36,8 @@ Package.onUse(function (api) {
 
   // Uncomment once we upgrade to loglevel v2
   //api.addFiles('src/lib/log.js');
+
+  api.addFiles(['meteor/src/lib/namespaces.coffee']);
 
   api.addFiles([
     'meteor/src/server/autoupdate.js',
@@ -56,6 +59,8 @@ Package.onUse(function (api) {
   api.addFiles('meteor/src/server/MeteorPublishReporter.coffee', 'server');
 
   api.addFiles('meteor/src/server/mocha.coffee', 'server');
+
+  api.addFiles('meteor/src/client/ServerRunnerProxy.coffee', 'client');
 
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
 });
