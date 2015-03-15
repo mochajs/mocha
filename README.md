@@ -16,9 +16,9 @@ Install `markdown` via Homebrew:
 ```sh
 brew install markdown
 ```
-    
+
 Or download from [here](http://daringfireball.net/projects/markdown/).
-        
+
 Celebrate with tequila!  Or try to build first.  Probably want to build first.
 
 ### Linux
