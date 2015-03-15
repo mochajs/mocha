@@ -387,7 +387,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 <h3 id="require-option">-r, --require &lt;name&gt;</h3>
 
-  The `--require` option is useful for libraries such as [should.js](https://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`.
+  The `--require` option is useful for libraries such as [should.js](https://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`. Furthermore, it can be used with relative paths, e.g. `--require ./test/helper.js`
 
 <h3 id="ui-option">-u, --ui &lt;name&gt;</h3>
 
