@@ -72,6 +72,7 @@
 <li><a href="#pending-tests">Pending tests</a></li>
 <li><a href="#exclusive-tests">Exclusive tests</a></li>
 <li><a href="#inclusive-tests">Inclusive tests</a></li>
+<li><a href="#meta-generated-test">Meta-Generated tests</a></li>
 <li><a href="#test-duration">Test duration</a></li>
 <li><a href="#string-diffs">String diffs</a></li>
 <li><a href="#usage">mocha(1)</a></li>
@@ -327,6 +328,46 @@ beforeEach('some description', function(){
     })
   })
 })
+</code></pre>
+
+<h2 id="meta-generated-test">Meta-Generated tests</h2>
+
+<p>Given mocha's use of call statements and function expressions to define
+ suites and specs, it's rather straightforward to generate your tests. No
+ special syntax is required - plain JavaScript can be used to achieve
+ similar functionality as parameterized tests in other test frameworks.
+ Take the following example:</p>
+
+<pre><code>var assert = require('assert');
+
+function add() {
+  return Array.prototype.slice.call(arguments).reduce(function(prev, curr) {
+    return prev + curr;
+  }, 0);
+}
+
+describe('add()', function() {
+  var tests = [
+    {args: [1, 2],       expected: 3},
+    {args: [1, 2, 3],    expected: 6},
+    {args: [1, 2, 3, 4], expected: 10}
+  ];
+
+  tests.forEach(function(test) {
+    it('correctly adds ' + test.args.length + ' args', function() {
+      var res = add.apply(null, test.args);
+      assert.equal(res, test.expected);
+    });
+  });
+});
+</code></pre>
+
+<p>The code above will output a suite with three specs:</p>
+
+<pre><code>add()
+  ✓ correctly adds 2 args
+  ✓ correctly adds 3 args
+  ✓ correctly adds 4 args
 </code></pre>
 
 <h2 id="test-duration">Test duration</h2>
@@ -785,7 +826,7 @@ testCase('Array', function(){
 
 <p>Mocha options can be set via <code>mocha.setup()</code>.  Examples:</p>
 
-<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface; 
+<pre><code>// Use "tdd" interface.  This is a shortcut to setting the interface;
 // any other options must be passed via an object.
 mocha.setup('tdd');
 

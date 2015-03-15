@@ -45,6 +45,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - [Pending tests](#pending-tests)
   - [Exclusive tests](#exclusive-tests)
   - [Inclusive tests](#inclusive-tests)
+  - [Meta-Generated tests](#meta-generated-test)
   - [Test duration](#test-duration)
   - [String diffs](#string-diffs)
   - [mocha(1)](#usage)
@@ -289,6 +290,44 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
         })
       })
     })
+
+<h2 id="meta-generated-test">Meta-Generated tests</h2>
+
+ Given mocha's use of call statements and function expressions to define
+ suites and specs, it's rather straightforward to generate your tests. No
+ special syntax is required - plain JavaScript can be used to achieve
+ similar functionality as parameterized tests in other test frameworks.
+ Take the following example:
+
+    var assert = require('assert');
+
+    function add() {
+      return Array.prototype.slice.call(arguments).reduce(function(prev, curr) {
+        return prev + curr;
+      }, 0);
+    }
+
+    describe('add()', function() {
+      var tests = [
+        {args: [1, 2],       expected: 3},
+        {args: [1, 2, 3],    expected: 6},
+        {args: [1, 2, 3, 4], expected: 10}
+      ];
+
+      tests.forEach(function(test) {
+        it('correctly adds ' + test.args.length + ' args', function() {
+          var res = add.apply(null, test.args);
+          assert.equal(res, test.expected);
+        });
+      });
+    });
+
+ The code above will output a suite with three specs:
+
+    add()
+      ✓ correctly adds 2 args
+      ✓ correctly adds 3 args
+      ✓ correctly adds 4 args
 
 <h2 id="test-duration">Test duration</h2>
 
