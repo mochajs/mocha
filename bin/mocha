@@ -51,6 +51,7 @@ process.argv.slice(2).forEach(function(arg){
       break;
     case '--gc-global':
     case '--harmony':
+    case '--es_staging':
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
