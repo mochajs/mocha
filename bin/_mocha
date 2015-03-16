@@ -79,6 +79,7 @@ program
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--harmony', 'enable all harmony features (except typeof)')
+  .option('--es_staging', 'enable all staged features')
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
   .option('--harmony-generators', 'enable harmony generators')
   .option('--harmony-proxies', 'enable harmony proxies')
