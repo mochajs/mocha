@@ -86,6 +86,7 @@ program
   .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
   .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
   .option('--harmony_proxies', 'enable "harmony proxies" (iojs)')
+  .option('--harmony_classes', 'enable "harmony classes" (iojs)')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
