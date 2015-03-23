@@ -4779,7 +4779,7 @@ Runner.prototype.fail = function(test, err) {
     err = new Error('the ' + type(err) + ' ' + stringify(err) + ' was thrown, throw an Error :)');
   }
 
-  err.stack = this.fullStackTrace
+  err.stack = (this.fullStackTrace || !err.stack)
     ? err.stack
     : stackFilter(err.stack);
 
@@ -6372,7 +6372,7 @@ exports.stackTraceFilter = function() {
   return function(stack) {
     stack = stack.split('\n');
 
-    stack = stack.reduce(function (list, line) {
+    stack = exports.reduce(stack, function(list, line) {
       if (is.node && (isNodeModule(line) ||
         isMochaInternal(line) ||
         isNodeInternal(line)))
