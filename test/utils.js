@@ -8,6 +8,10 @@ describe('utils', function() {
       clean('function  (one, two, three)  {\n//code\n}').should.equal('//code');
     });
 
+    it('should handle newlines in the function declaration', function() {
+      clean('function  (one, two, three)\n  {\n//code\n}').should.equal('//code');
+    });
+
     it('should remove space character indentation from the function body', function() {
       clean('  //line1\n    //line2').should.equal('//line1\n  //line2');
     });
