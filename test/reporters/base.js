@@ -110,4 +110,32 @@ describe('Base reporter', function () {
     errOut.should.match(/expected/);
   });
 
+  it('should remove message from stack', function () {
+    var err = {
+      message: 'Error',
+      stack: 'Error\nfoo\nbar',
+      showDiff: false
+    };
+    var test = makeTest(err);
+
+    Base.list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
+  });
+
+  it('should not modify stack if it does not contain message', function () {
+    var err = {
+      message: 'Error',
+      stack: 'foo\nbar',
+      showDiff: false
+    };
+    var test = makeTest(err);
+
+    Base.list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
+  });
+
 });
