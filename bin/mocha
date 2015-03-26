@@ -53,8 +53,11 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony':
     case '--es_staging':
     case '--harmony-proxies':
+    case '--harmony_proxies':
     case '--harmony-collections':
+    case '--harmony_collections':
     case '--harmony-generators':
+    case '--harmony_generators':
     case '--harmony_shipping':
     case '--harmony_arrow_functions':
     case '--harmony_proxies':
