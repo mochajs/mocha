@@ -40,8 +40,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/actual/);
-      errOut.should.match(/expected/);
+      errOut.should.match(/\- actual/);
+      errOut.should.match(/\+ expected/);
     });
 
     it('should show diffs if property set to `true`', function () {
@@ -55,8 +55,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/actual/);
-      errOut.should.match(/expected/);
+      errOut.should.match(/\- actual/);
+      errOut.should.match(/\+ expected/);
     });
 
     it('should not show diffs when showDiff property set to `false`', function () {
@@ -69,9 +69,23 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/actual/);
-      errOut.should.not.match(/expected/);
+      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/\+ expected/);
     });
+
+    it('should not show diffs when expected is not defined', function () {
+      var err = new Error('ouch')
+        , errOut;
+
+      var test = makeTest(err);
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/\+ expected/);
+    });
+
   });
 
   it('should not stringify strings', function () {
@@ -88,8 +102,8 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     errOut.should.not.match(/"/);
     errOut.should.match(/test/);
-    errOut.should.match(/actual/);
-    errOut.should.match(/expected/);
+    errOut.should.match(/\- actual/);
+    errOut.should.match(/\+ expected/);
   });
 
   it('should stringify objects', function () {
@@ -106,8 +120,8 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     errOut.should.match(/"key"/);
     errOut.should.match(/test/);
-    errOut.should.match(/actual/);
-    errOut.should.match(/expected/);
+    errOut.should.match(/\- actual/);
+    errOut.should.match(/\+ expected/);
   });
 
   it('should remove message from stack', function () {
