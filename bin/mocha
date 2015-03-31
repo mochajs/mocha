@@ -63,6 +63,7 @@ process.argv.slice(2).forEach(function(arg){
     case '--prof':
     case '--throw-deprecation':
     case '--trace-deprecation':
+    case '--allow-natives-syntax':
       args.unshift(arg);
       break;
     default:
