@@ -88,22 +88,24 @@ describe('Base reporter', function () {
 
   });
 
-  it('should not stringify strings', function () {
+  it('should show string diff as raw data', function () {
     var err = new Error('test'),
       errOut;
 
-    err.actual = "a1";
-    err.expected = "e2";
+    err.actual = 'foo\nbar';
+    err.expected = 'foo\nbaz';
     err.showDiff = true;
     var test = makeTest(err);
 
     Base.list([test]);
 
     errOut = stdout.join('\n');
-    errOut.should.not.match(/"/);
+
+    errOut.should.match(/"foo\\nbar"/);
+    errOut.should.match(/"foo\\nbaz"/);
     errOut.should.match(/test/);
-    errOut.should.match(/\- actual/);
-    errOut.should.match(/\+ expected/);
+    errOut.should.match(/actual/);
+    errOut.should.match(/expected/);
   });
 
   it('should stringify objects', function () {
