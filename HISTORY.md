@@ -1,3 +1,31 @@
+
+2.2.3 / 2015-04-07
+==================
+
+  * fix(reporter/base): string diff - issue #1241
+  * fix(reporter/base): string diff - issue #1241 
+  * fix(reporter/base): don't show diffs for errors without expectation 
+  * fix(reporter/base): don't assume error message is first line of stack 
+  * improve: dry up reporter/base test 
+  * fix(reporter/base): explicitly ignore showDiff #1614 
+  * Add iojs to travis build 
+  * Pass `--allow-natives-syntax` flag to node. 
+  * Support --harmony_classes flag for io.js 
+  * Fix 1556: Update utils.clean to handle newlines in func declarations 
+  * Fix 1606: fix err handling in IE <= 8 and non-ES5 browsers 
+  * Fix 1585: make _mocha executable again 
+  * chore(package.json): add a8m as a contributor 
+  * Fixed broken link on html-cov reporter 
+  * support --es_staging flag 
+  * fix issue where menu overlaps content. 
+  * update contributors in package.json 
+  * Remove trailing whitespace from reporter output 
+  * Remove contributors list from readme 
+  * log third-party reporter errors 
+  * [Fix] Exclude not own properties when looping on options 
+  * fix: support node args in mocha.opts (close #1573) 
+  * fix(reporter/base): string diff - issue #1241
+
 2.2.1 / 2015-03-09
 ==================
 
