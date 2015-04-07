@@ -1548,7 +1548,11 @@ Mocha.prototype.reporter = function(reporter, reporterOptions){
     reporter = reporter || 'spec';
     var _reporter;
     try { _reporter = require('./reporters/' + reporter); } catch (err) {}
-    if (!_reporter) try { _reporter = require(reporter); } catch (err) {}
+    if (!_reporter) try { _reporter = require(reporter); } catch (err) {
+      err.message.indexOf('Cannot find module') !== -1
+        ? console.warn('"' + reporter + '" reporter not found')
+        : console.warn('"' + reporter + '" reporter blew up with error:\n' + err.stack);
+    }
     if (!_reporter && reporter === 'teamcity')
       console.warn('The Teamcity reporter was moved to a package named ' +
         'mocha-teamcity-reporter ' +
@@ -2151,18 +2155,26 @@ exports.list = function(failures){
     var err = test.err
       , message = err.message || ''
       , stack = err.stack || message
-      , index = stack.indexOf(message) + message.length
-      , msg = stack.slice(0, index)
+      , index = stack.indexOf(message)
       , actual = err.actual
       , expected = err.expected
       , escape = true;
+    if (index === -1) {
+      msg = message;
+    } else {
+      index += message.length;
+      msg = stack.slice(0, index);
+      // remove msg from stack
+      stack = stack.slice(index + 1);
+    }
 
     // uncaught
     if (err.uncaught) {
       msg = 'Uncaught ' + msg;
     }
     // explicitly show diff
-    if (err.showDiff && sameType(actual, expected)) {
+    if (err.showDiff !== false && sameType(actual, expected)
+        && expected !== undefined) {
 
       if ('string' !== typeof actual) {
         escape = false;
@@ -2181,9 +2193,8 @@ exports.list = function(failures){
       }
     }
 
-    // indent stack trace without msg
-    stack = stack.slice(index ? index + 1 : index)
-      .replace(/^/gm, '  ');
+    // indent stack trace
+    stack = stack.replace(/^/gm, '  ');
 
     console.log(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
@@ -2539,7 +2550,7 @@ function Dot(runner) {
     , n = -1;
 
   runner.on('start', function(){
-    process.stdout.write('\n  ');
+    process.stdout.write('\n');
   });
 
   runner.on('pending', function(test){
@@ -4012,14 +4023,14 @@ function Spec(runner) {
     if ('fast' == test.speed) {
       var fmt = indent()
         + color('checkmark', '  ' + Base.symbols.ok)
-        + color('pass', ' %s ');
+        + color('pass', ' %s');
       cursor.CR();
       console.log(fmt, test.title);
     } else {
       var fmt = indent()
         + color('checkmark', '  ' + Base.symbols.ok)
-        + color('pass', ' %s ')
-        + color(test.speed, '(%dms)');
+        + color('pass', ' %s')
+        + color(test.speed, ' (%dms)');
       cursor.CR();
       console.log(fmt, test.title, test.duration);
     }
@@ -6518,11 +6529,7 @@ mocha.ui = function(ui){
 
 mocha.setup = function(opts){
   if ('string' == typeof opts) opts = { ui: opts };
-  for (var opt in opts) {
-    if (opts.hasOwnProperty(opt)) {
-        this[opt](opts[opt]);
-    }
-  }
+  for (var opt in opts) this[opt](opts[opt]);
   return this;
 };
 
