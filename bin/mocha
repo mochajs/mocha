@@ -8,28 +8,12 @@
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
-  args = [path.join(__dirname, '_mocha')];
+  args = [path.join(__dirname, '_mocha')],
+  getOptions = require('./options');
 
-// --opts
+// load mocha.opts into process.argv
 
-var optsPath = process.argv.indexOf('--opts') !== -1
-      ? process.argv[process.argv.indexOf('--opts') + 1]
-      : 'test/mocha.opts';
-
-try {
-  var opts = fs.readFileSync(optsPath, 'utf8')
-        .trim()
-        .split(/\s+/)
-        .filter(function(value) {
-          return value ? true : false;
-        });
-
-  process.argv = process.argv
-    .slice(0, 2)
-    .concat(opts.concat(process.argv.slice(2)));
-} catch (err) {
-  // ignore
-}
+getOptions();
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];

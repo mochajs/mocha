@@ -4,16 +4,17 @@
  * Module dependencies.
  */
 
-var program = require('commander')
-  , path = require('path')
-  , fs = require('fs')
-  , resolve = path.resolve
-  , exists = fs.existsSync || path.existsSync
-  , Mocha = require('../')
-  , utils = Mocha.utils
-  , join = path.join
-  , cwd = process.cwd()
-  , mocha = new Mocha;
+var program = require('commander'),
+  path = require('path'),
+  fs = require('fs'),
+  resolve = path.resolve,
+  exists = fs.existsSync || path.existsSync,
+  Mocha = require('../'),
+  utils = Mocha.utils,
+  join = path.join,
+  cwd = process.cwd(),
+  getOptions = require('./options'),
+  mocha = new Mocha;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -174,6 +175,10 @@ program.on('require', function(mod){
   if (abs) mod = resolve(mod);
   requires.push(mod);
 });
+
+// load mocha.opts into process.argv
+
+getOptions();
 
 // parse args
 
