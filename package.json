@@ -1,0 +1,22 @@
+{
+  "name": "mochajs.org",
+  "version": "1.0.0",
+  "description": "Mocha's gh-pages branch",
+  "private": true,
+  "scripts": {
+    "install": "bundle install",
+    "build": "toc index.md && bundle exec jekyll build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mochajs/mocha.git#gh-pages"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mochajs/mocha/issues"
+  },
+  "homepage": "http://mochajs.org",
+  "devDependencies": {
+    "marked-toc": "^0.3.0"
+  }
+}

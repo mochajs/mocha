@@ -1,0 +1,10 @@
+url: http://mochajs.org
+markdown: redcarpet
+highlighter: pygments
+exclude:
+  - node_modules
+  - README.md
+  - Gemfile*
+  - package.json
+  - CNAME
+

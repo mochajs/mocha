@@ -8,7 +8,11 @@ body {
 }
 
 #content {
-  padding: 140px 110px 60px 110px;
+  padding: 0 110px 60px 110px;
+}
+
+header {
+  padding: 140px 110px 0 110px;
 }
 
 h1 {
@@ -53,7 +57,14 @@ h2 {
   margin-top: 80px;
   font-weight: 100;
   letter-spacing: 1px;
+  border-bottom: 1px solid #ddd;
+}
+
+h3 {
+  font-weight: 200;
+  letter-spacing: 1px;
   border-bottom: 1px solid #eee;
+  margin-top: 40px;
 }
 
 #tag {
@@ -80,7 +91,7 @@ h2 {
   margin-left: 170px;
 }
 
-#tag + p {
+#content > p:first-child {
   font-size: 22px;
   font-weight: 100;
   letter-spacing: 1px;
@@ -130,17 +141,18 @@ code {
 }
 
 pre {
-  margin: 30px;
-  padding: 30px;
-  border: 1px solid #eee;
-  border-bottom-color: #ddd;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -o-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-box-shadow: inset 0 0 10px #eee;
-  -moz-box-shadow: inset 0 0 10px #eee;
-  box-shadow: inset 0 0 10px #eee;
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-bottom-color: #ccc;
+  background-color: #f3f3f3;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 0 10px #ddd;
+  -moz-box-shadow: inset 0 0 10px #ddd;
+  box-shadow: inset 0 0 10px #ddd;
   overflow-x: auto;
 }
 
@@ -190,12 +202,6 @@ footer span {
   font-size: 12px;
 }
 
-code .comment { color: #999 }
-code .init { color: #2f6fad }
-code .string { color: #5890ad }
-code .keyword { color: #8a6343 }
-code .number { color: #2f6fad }
-
 @media all and (max-width: 850px) {
   ul li {
     width: 100%;
@@ -212,4 +218,9 @@ code .number { color: #2f6fad }
   .onload #tag {
     margin-left: 0;
   }
+}
+
+blockquote {
+  padding: 10px;
+  border-left: 1px solid #eee;
 }
