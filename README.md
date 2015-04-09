@@ -1,45 +1,25 @@
-# mocha: How to Build the Site
+# [mochajs.org](http://mochajs.org): How to Build the Site
 
-So you wanna build the site?
+*So you wanna build the site?*
 
-## Requirements
+[mochajs.org](http://mochajs.org) is now built using [Jekyll](http://jekyllrb.com), the popular static site generator.
 
-There's two:
+## Prerequisites
 
-1.  [make](http://www.gnu.org/software/make/)
-2.  [markdown](http://daringfireball.net/projects/markdown/)
+1.  Some recent version of Ruby
+2.  Some version of [RubyGems](https://rubygems.org)
+3.  Some recent version of Node.JS
 
-### Mac OS X
+## Installation
 
-Install `markdown` via Homebrew:
+1.  Execute `npm install`.  This will install [Bundler](http://bundler.io), Jekyll, and [markdown-toc-index](https://www.npmjs.com/package/markdown-toc-index).
+2.  To build, execute `npm run-script build`.
 
-```sh
-brew install markdown
-```
+For more information, refer to the [Jekyll Docs](http://jekyllrb.com/docs/home/) and [GitHub's Tutorial](https://help.github.com/articles/using-jekyll-with-pages/) on the subject. 
 
-Or download from [here](http://daringfireball.net/projects/markdown/).
+## Notes
 
-Celebrate with tequila!  Or try to build first.  Probably want to build first.
-
-### Linux
-
-#### Ubuntu 14.04
-
-1.  `sudo apt-get install build-essential` to install make.
-2.  `sudo apt-get install markdown` to install markdown.
-3.  That seems to do it.  It's just a Perl script, so you can [get it from here](http://daringfireball.net/projects/markdown/) otherwise.
-
-### Windows
-
-*To be filled in by somebody using Windows*
-
-## Building
-
-Execute:
-
-```
-make clean && make
-```
-
-You should now have an updated `index.html`.  Open it in your browser and proceed to tweak it until it's correct, because the compiler seem a little wonky.
+- To update `index.md` with the TOC, execute: `node_modules/.bin/toc-idx -i index.md --max-depth 1 --bullet "\- " index.md`
+- `bundle exec jekyll build` rebuilds the site without updating the TOC
+- The `_site` directory is where the generated site lives.  It is *not* under version control, because GitHub Pages generates it for us.
 
