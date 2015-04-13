@@ -10,4 +10,9 @@ describe('exit', function(){
       console.log('all done');
     }, 2500)
   })
+
+  it('should kill all processes when SIGINT received', function () {
+    // uncomment to test
+    //while (true) {}
+  });
 })

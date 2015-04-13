@@ -1,5 +1,7 @@
 var http = require('http');
 
+var PORT = 8889;
+
 var server = http.createServer(function(req, res){
   var accept = req.headers.accept || ''
     , json = ~accept.indexOf('json');
@@ -16,13 +18,12 @@ var server = http.createServer(function(req, res){
       }
       break;
   }
-})
+});
 
-server.listen(8889);
 
 function get(url, body, header) {
   return function(done){
-    http.get({ path: url, port: 8889, headers: header }, function(res){
+    http.get({ path: url, port: PORT, headers: header || {}}, function(res){
       var buf = '';
       res.should.have.property('statusCode', 200);
       res.setEncoding('utf8');
@@ -35,8 +36,17 @@ function get(url, body, header) {
   }
 }
 
-describe('http requests', function(){
-  describe('GET /', function(){
+describe('http requests', function () {
+
+  before(function(done) {
+    server.listen(PORT, done);
+  });
+
+  after(function() {
+    server.close();
+  });
+
+  describe('GET /', function () {
     it('should respond with hello',
       get('/', 'hello'))
   })

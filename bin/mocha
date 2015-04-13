@@ -5,8 +5,31 @@
  * when found, before invoking the "real" _mocha(1) executable.
  */
 
-var spawn = require('child_process').spawn
-  , args = [ __dirname + '/_mocha' ];
+var spawn = require('child_process').spawn,
+  path = require('path'),
+  fs = require('fs'),
+  args = [path.join(__dirname, '_mocha')];
+
+// --opts
+
+var optsPath = process.argv.indexOf('--opts') !== -1
+      ? process.argv[process.argv.indexOf('--opts') + 1]
+      : 'test/mocha.opts';
+
+try {
+  var opts = fs.readFileSync(optsPath, 'utf8')
+        .trim()
+        .split(/\s+/)
+        .filter(function(value) {
+          return value ? true : false;
+        });
+
+  process.argv = process.argv
+    .slice(0, 2)
+    .concat(opts.concat(process.argv.slice(2)));
+} catch (err) {
+  // ignore
+}
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];
@@ -28,9 +51,14 @@ process.argv.slice(2).forEach(function(arg){
       break;
     case '--gc-global':
     case '--harmony':
+    case '--es_staging':
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
+    case '--harmony_shipping':
+    case '--harmony_arrow_functions':
+    case '--harmony_proxies':
+    case '--harmony_classes':
     case '--no-deprecation':
     case '--prof':
     case '--throw-deprecation':
@@ -44,7 +72,7 @@ process.argv.slice(2).forEach(function(arg){
   }
 });
 
-var proc = spawn(process.argv[0], args, { stdio: 'inherit' });
+var proc = spawn(process.execPath, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
   process.on('exit', function(){
     if (signal) {
@@ -53,4 +81,11 @@ proc.on('exit', function (code, signal) {
       process.exit(code);
     }
   });
+});
+
+// terminate children.
+process.on('SIGINT', function () {
+  proc.kill('SIGINT'); // calls runner.abort()
+  proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+  process.kill(process.pid, 'SIGINT');
 });

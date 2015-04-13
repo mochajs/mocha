@@ -1,5 +1,7 @@
 var http = require('http');
 
+var PORT = 8899;
+
 var server = http.createServer(function(req, res){
   var accept = req.headers.accept || ''
     , json = ~accept.indexOf('json');
@@ -18,15 +20,13 @@ var server = http.createServer(function(req, res){
   }
 })
 
-server.listen(8899);
-
 function get(url) {
   var fields
     , expected
     , header = {};
 
   function request(done) {
-    http.get({ path: url, port: 8899, headers: header }, function(res){
+    http.get({ path: url, port: PORT, headers: header }, function(res){
       var buf = '';
       res.should.have.property('statusCode', 200);
       res.setEncoding('utf8');
@@ -52,6 +52,7 @@ function get(url) {
 
         expected = body;
         describe('GET ' + url, function(){
+          this.timeout(500);
           if (fields) {
             describe('when given ' + fields, function(){
               it('should respond with "' + body + '"', request);
@@ -66,6 +67,15 @@ function get(url) {
 }
 
 describe('http server', function(){
+
+  before(function(done) {
+    server.listen(PORT, done);
+  });
+
+  after(function() {
+    server.close();
+  });
+
   get('/')
     .should
     .respond('hello')

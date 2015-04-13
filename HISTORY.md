@@ -1,3 +1,85 @@
+2.2.1 / 2015-03-09
+==================
+
+  * Fix passing of args intended for node/iojs.
+
+2.2.0 / 2015-03-06
+==================
+
+  * Update mocha.js
+  * Add --fgrep. Use grep for RegExp, fgrep for str
+  * Ignore async global errors after spec resolution
+  * Fixing errors that prevent mocha.js from loading in the browser - fixes #1558
+  * fix(utils): issue #1558 + make
+  * add ability to delay root suite; closes #362, closes #1124
+  * fix insanity in http tests
+  * update travis: add node 0.12, add gitter, remove slack
+  * building
+  * resolve #1548: ensure the environment's "node" executable is used
+  * reporters/base: use supports-color to detect colorable term
+  * travis: use docker containers
+  * small fix: commander option for --expose-gc
+  * Ignore asynchronous errors after global failure
+  * Improve error output when a test fails with a non-error
+  * updated travis badge, uses svg instead of img
+  * Allow skip from test context for #332
+  * [JSHINT] Unnecessary semicolon fixed in bin/_mocha
+  * Added a reminder about the done() callback to test timeout error messages
+  * fixes #1496, in Mocha.run(fn), check if fn exists before executing it, added tests too
+  * Add Harmony Proxy flag for iojs
+  * test(utils|ms|*): test existing units
+  * add support for some iojs flags
+  * fix(utils.stringify): issue #1229, diff viewer
+  * Remove slack link
+  * Prevent multiple 'grep=' querystring params in html reporter
+  * Use grep as regexp (close #1381)
+  * utils.stringify should handle objects without an Object prototype
+  * in runnable test, comparing to undefined error's message rather than a literal
+  * Fix test running output truncation on async STDIO
+  * ammended for deprecated customFds option in child_process
+
+2.1.0 / 2014-12-23
+==================
+
+ * showDiff: don’t stringify strings
+ * Clean up unused module dependencies.
+ * Filter zero-length strings from mocha.opts
+ * only write to stdout in reporters
+ * Revert "only write to stdout in reporters"
+ * Print colored output only to a tty
+ * update summary in README.md
+ * rename Readme.md/History.md to README.md/HISTORY.md because neurotic
+ * add .mailmap to fix "git shortlog" or "git summary" output
+ * fixes #1461: nyan-reporter now respects Base.useColors, fixed bug where Base.color would not return a string when str wasn't a string.
+ * Use existing test URL builder in failed replay links
+ * modify .travis.yml: use travis_retry; closes #1449
+ * fix -t 0 behavior; closes #1446
+ * fix tests (whoops)
+ * improve diff behavior
+ * Preserve pathname when linking to individual tests
+ * Fix test
+ * Tiny typo in comments fixed
+ * after hooks now being called on failed tests when using bail, fixes #1093
+ * fix throwing undefined/null now makes tests fail, fixes #1395
+ * compiler extensions are added as watched extensions, removed non-standard extensions from watch regex, resolves #1221
+ * prefix/namespace for suite titles in markdown reporter, fixes #554
+ * fix more bad markdown in CONTRIBUTING.md
+ * fix bad markdown in CONTRIBUTING.md
+ * add setImmediate/clearImmediate to globals; closes #1435
+ * Fix buffer diffs (closes #1132, closes #1433)
+ * add a CONTRIBUTING.md.  closes #882
+ * fix intermittent build failures (maybe). closes #1407
+ * add Slack notification to .travis.yml
+ * Fix slack link
+ * Add slack room to readme
+ * Update maintainers
+ * update maintainers and contributors
+ * resolves #1393: kill children with more effort on SIGINT
+ * xunit reporter support for optionally writing to a file
+ * if a reporter has a .done method, call it before exiting
+ * add support for reporter options
+ * only write to stdout in reporters
+
 2.0.0 / 2014-10-21
 ==================
 

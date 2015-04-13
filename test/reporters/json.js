@@ -13,7 +13,7 @@ describe('json reporter', function(){
     suite = new Suite('JSON suite', 'root');
     runner = new Runner(suite);
     var mochaReporter = new mocha._reporter(runner);
-  })
+  });
 
    it('should have 1 test failure', function(done){
      var testTitle = 'json test 1';
@@ -37,7 +37,7 @@ describe('json reporter', function(){
 
        done();
      });
-  })
+  });
 
   it('should have 1 test pending', function(done) {
     var testTitle = 'json test 1';
@@ -58,4 +58,4 @@ describe('json reporter', function(){
      });
   })
 
-})
+});
