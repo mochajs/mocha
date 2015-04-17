@@ -1806,6 +1806,18 @@ Mocha.prototype.noHighlighting = function() {
 };
 
 /**
+ * Enable uncaught errors to propagate (in browser).
+ *
+ * @return {Mocha}
+ * @api public
+ */
+
+Mocha.prototype.allowUncaught = function(){
+  this.options.allowUncaught = global.mocha.allowUncaught = true;
+  return this;
+};
+
+/**
  * Delay root suite execution.
  * @returns {Mocha}
  * @api public
@@ -1832,6 +1844,7 @@ Mocha.prototype.run = function(fn){
   runner.ignoreLeaks = false !== options.ignoreLeaks;
   runner.fullStackTrace = options.fullStackTrace;
   runner.asyncOnly = options.asyncOnly;
+  runner.allowUncaught = options.allowUncaught;
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
@@ -4525,18 +4538,10 @@ Runnable.prototype.run = function(fn){
   if (this.async) {
     this.resetTimeout();
 
-    try {
-      this.fn.call(ctx, function(err){
-        if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
-        if (null != err) {
-          if (Object.prototype.toString.call(err) === '[object Object]') {
-            return done(new Error('done() invoked with non-Error: ' + JSON.stringify(err)));
-          } else {
-            return done(new Error('done() invoked with non-Error: ' + err));
-          }
-        }
-        done();
-      });
+    if (this.allowUncaught) {
+      callFnAsync(this.fn);
+    } else try {
+      callFnAsync(this.fn);
     } catch (err) {
       done(utils.getError(err));
     }
@@ -4545,6 +4550,12 @@ Runnable.prototype.run = function(fn){
 
   if (this.asyncOnly) {
     return done(new Error('--async-only option in use without declaring `done()`'));
+  }
+
+  if (this.allowUncaught) {
+    callFn(this.fn);
+    done();
+    return;
   }
 
   // sync or promise-returning
@@ -4572,6 +4583,20 @@ Runnable.prototype.run = function(fn){
     } else {
       done();
     }
+  }
+
+  function callFnAsync(fn) {
+    fn.call(ctx, function(err){
+      if (err instanceof Error || toString.call(err) === "[object Error]") return done(err);
+      if (null != err) {
+        if (Object.prototype.toString.call(err) === '[object Object]') {
+          return done(new Error('done() invoked with non-Error: ' + JSON.stringify(err)));
+        } else {
+          return done(new Error('done() invoked with non-Error: ' + err));
+        }
+      }
+      done();
+    });
   }
 };
 
@@ -4967,7 +4992,10 @@ Runner.prototype.runTest = function(fn){
 
   if (this.asyncOnly) test.asyncOnly = true;
 
-  try {
+  if (this.allowUncaught) {
+    test.allowUncaught = true;
+    test.run(fn);
+  } else try {
     test.on('error', function(err){
       self.fail(test, err);
     });
@@ -6456,7 +6484,7 @@ process.on = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
-      return true;
+      return !mocha.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
   }
