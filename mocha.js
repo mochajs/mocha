@@ -2189,11 +2189,9 @@ exports.list = function(failures){
     if (err.showDiff !== false && sameType(actual, expected)
         && expected !== undefined) {
 
-      if ('string' !== typeof actual) {
-        escape = false;
-        err.actual = actual = utils.stringify(actual);
-        err.expected = expected = utils.stringify(expected);
-      }
+      escape = false;
+      err.actual = actual = utils.stringify(actual);
+      err.expected = expected = utils.stringify(expected);
 
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
@@ -4581,6 +4579,10 @@ Runnable.prototype.run = function(fn){
           done(reason || new Error('Promise rejected with no or falsy reason'))
         });
     } else {
+      if (self.asyncOnly) {
+        return done(new Error('--async-only option in use without declaring `done()` or returning a promise'));
+      }
+
       done();
     }
   }
@@ -6189,7 +6191,7 @@ function jsonStringify(object, spaces, depth) {
       default:
         val = (val == '[Function]' || val == '[Circular]')
           ? val
-          : '"' + val + '"'; //string
+          : JSON.stringify(val); //string
     }
     return val;
   }
