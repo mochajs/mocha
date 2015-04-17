@@ -1,0 +1,28 @@
+<footer>
+  <span>&copy; 2011-2015 TJ Holowaychuk. All rights reserved.  Licensed <a href="http://opensource.org/licenses/MIT" target="_blank">MIT</a></span>
+  <script>
+    setTimeout(function () {
+      // cause the header to animate
+      document.body.className = 'onload';
+    });
+
+    // associate h# tags with id's based on text content.
+    function setIds() {
+      var elements = Array.prototype.slice.call(document.getElementsByTagName('h1'))
+              .concat(Array.prototype.slice.call(document.getElementsByTagName('h2')))
+              .concat(Array.prototype.slice.call(document.getElementsByTagName('h3'))),
+          element, slug;
+
+      for (var i = 0; i < elements.length; i++) {
+        element = elements[i];
+        slug = element.textContent.toLowerCase()
+            .replace(/[^A-Za-z0-9]/g, '-')
+            .replace(/--/g, '-');
+        element.setAttribute('id', slug);
+      }
+    }
+
+    setIds();
+
+  </script>
+</footer>
