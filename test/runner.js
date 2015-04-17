@@ -314,6 +314,21 @@ describe('Runner', function(){
     })
   });
 
+  describe('allowUncaught', function() {
+    it('should allow unhandled errors to propagate through', function(done) {
+      var newRunner = new Runner(suite);
+      newRunner.allowUncaught = true;
+      newRunner.test = new Test('failing test', function() {
+        throw new Error('allow unhandled errors');
+      });
+      function fail() {
+        newRunner.runTest();
+      }
+      fail.should.throw('allow unhandled errors');
+      done();
+    });
+  });
+
   describe('stackTrace', function() {
     var stack = [ 'AssertionError: foo bar'
       , 'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)'
