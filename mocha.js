@@ -6270,7 +6270,7 @@ exports.getError = function(err) {
 
 exports.stackTraceFilter = function() {
   var slash = '/'
-    , is = typeof document === 'undefined'
+    , is = typeof document === 'undefined' && typeof self === 'undefined'
       ? { node: true }
       : { browser: true }
     , cwd = is.node
@@ -6322,6 +6322,7 @@ exports.stackTraceFilter = function() {
     return stack.join('\n');
   }
 };
+
 }); // module: utils.js
 // The global object is "self" in Web Workers.
 var global = (function() { return this; })();
