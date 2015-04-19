@@ -22,7 +22,7 @@ var clearInterval = global.clearInterval;
 
 var process = {};
 process.exit = function(status){};
-process.stdout = {};
+process.stdout = { write: function () {} };
 
 var uncaughtExceptionHandlers = [];
 
