@@ -4605,7 +4605,9 @@ var globals = [
   'XMLHttpRequest',
   'Date',
   'setImmediate',
-  'clearImmediate'
+  'clearImmediate',
+  'requestAnimationFrame',
+  'cancelAnimationFrame'
 ];
 
 /**
