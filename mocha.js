@@ -4607,7 +4607,9 @@ var globals = [
   'setImmediate',
   'clearImmediate',
   'requestAnimationFrame',
-  'cancelAnimationFrame'
+  'cancelAnimationFrame',
+  'webkitRequestAnimationFrame',
+  'webkitCancelRequestAnimationFrame'
 ];
 
 /**
