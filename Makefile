@@ -36,7 +36,7 @@ lib-cov:
 
 test: test-unit
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-only test-failing test-regression
+test-all: test-bdd test-tdd test-qunit test-exports test-unit test-grep test-jsapi test-compilers test-sort test-glob test-requires test-reporters test-global-only test-only test-failing test-regression
 
 test-jsapi:
 	@node test/jsapi
@@ -163,6 +163,22 @@ test-only:
 		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/misc/only/qunit
+
+test-global-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/global-only/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/global-only/bdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/acceptance/misc/global-only/qunit
 
 test-sort:
 	@./bin/mocha \
