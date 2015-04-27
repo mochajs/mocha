@@ -223,22 +223,7 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    var retLines = [],
-        lines = value.split(/^/m);
-
-    for(var i = 0; i < lines.length; i++) {
-      var line = lines[i],
-          lastLine = lines[i - 1];
-
-      // Merge lines that may contain windows new lines
-      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
-        retLines[retLines.length - 1] += '\n';
-      } else if (line) {
-        retLines.push(line);
-      }
-    }
-
-    return retLines;
+    return value.split(/^/m);
   };
 
   return {
@@ -2176,8 +2161,8 @@ exports.list = function(failures){
     if (err.showDiff !== false && sameType(actual, expected)
         && expected !== undefined) {
 
-      if ('string' !== typeof actual) {
-        escape = false;
+      escape = false;
+      if (!(utils.isString(actual) && utils.isString(expected))) {
         err.actual = actual = utils.stringify(actual);
         err.expected = expected = utils.stringify(expected);
       }
@@ -2783,23 +2768,34 @@ function HTML(runner) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
       var el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">‣</a></h2></li>', test.title, self.testURL(test));
-      var str = test.err.stack || test.err.toString();
-
-      // FF / Opera do not add the message
-      if (!~str.indexOf(test.err.message)) {
-        str = test.err.message + '\n' + str;
-      }
+      var stackString, // Note: Includes leading newline
+          message = test.err.toString();
 
       // <=IE7 stringifies to [Object Error]. Since it can be overloaded, we
       // check for the result of the stringifying.
-      if ('[object Error]' == str) str = test.err.message;
+      if ('[object Error]' === message) message = test.err.message;
 
-      // Safari doesn't give you a stack. Let's at least provide a source line.
-      if (!test.err.stack && test.err.sourceURL && test.err.line !== undefined) {
-        str += "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
+      if (test.err.stack) {
+        var indexOfMessage = test.err.stack.indexOf(test.err.message);
+        if (indexOfMessage === -1) {
+          stackString = test.err.stack;
+        } else {
+          stackString = test.err.stack.substr(test.err.message.length + indexOfMessage);
+        }
+      } else if (test.err.sourceURL && test.err.line !== undefined) {
+        // Safari doesn't give you a stack. Let's at least provide a source line.
+        stackString = "\n(" + test.err.sourceURL + ":" + test.err.line + ")";
       }
 
-      el.appendChild(fragment('<pre class="error">%e</pre>', str));
+      stackString = stackString || '';
+
+      if (test.err.htmlMessage && stackString) {
+        el.appendChild(fragment('<div class="html-error">%s\n<pre class="error">%e</pre></div>', test.err.htmlMessage, stackString));
+      } else if (test.err.htmlMessage) {
+        el.appendChild(fragment('<div class="html-error">%s</div>', test.err.htmlMessage));
+      } else {
+        el.appendChild(fragment('<pre class="error">%e%e</pre>', message, stackString));
+      }
     }
 
     // toggle code
@@ -3112,72 +3108,6 @@ function clean(test) {
 
 }); // module: reporters/json-cov.js
 
-require.register("reporters/json-stream.js", function(module, exports, require){
-/**
- * Module dependencies.
- */
-
-var Base = require('./base')
-  , color = Base.color;
-
-/**
- * Expose `List`.
- */
-
-exports = module.exports = List;
-
-/**
- * Initialize a new `List` test reporter.
- *
- * @param {Runner} runner
- * @api public
- */
-
-function List(runner) {
-  Base.call(this, runner);
-
-  var self = this
-    , stats = this.stats
-    , total = runner.total;
-
-  runner.on('start', function(){
-    console.log(JSON.stringify(['start', { total: total }]));
-  });
-
-  runner.on('pass', function(test){
-    console.log(JSON.stringify(['pass', clean(test)]));
-  });
-
-  runner.on('fail', function(test, err){
-    test = clean(test);
-    test.err = err.message;
-    console.log(JSON.stringify(['fail', test]));
-  });
-
-  runner.on('end', function(){
-    process.stdout.write(JSON.stringify(['end', self.stats]));
-  });
-}
-
-/**
- * Return a plain-object representation of `test`
- * free of cyclic properties etc.
- *
- * @param {Object} test
- * @return {Object}
- * @api private
- */
-
-function clean(test) {
-  return {
-      title: test.title
-    , fullTitle: test.fullTitle()
-    , duration: test.duration
-  }
-}
-
-}); // module: reporters/json-stream.js
-
 require.register("reporters/json.js", function(module, exports, require){
 /**
  * Module dependencies.
@@ -3273,6 +3203,72 @@ function errorJSON(err) {
 }
 
 }); // module: reporters/json.js
+
+require.register("reporters/json-stream.js", function(module, exports, require){
+/**
+ * Module dependencies.
+ */
+
+var Base = require('./base')
+  , color = Base.color;
+
+/**
+ * Expose `List`.
+ */
+
+exports = module.exports = List;
+
+/**
+ * Initialize a new `List` test reporter.
+ *
+ * @param {Runner} runner
+ * @api public
+ */
+
+function List(runner) {
+  Base.call(this, runner);
+
+  var self = this
+    , stats = this.stats
+    , total = runner.total;
+
+  runner.on('start', function(){
+    console.log(JSON.stringify(['start', { total: total }]));
+  });
+
+  runner.on('pass', function(test){
+    console.log(JSON.stringify(['pass', clean(test)]));
+  });
+
+  runner.on('fail', function(test, err){
+    test = clean(test);
+    test.err = err.message;
+    console.log(JSON.stringify(['fail', test]));
+  });
+
+  runner.on('end', function(){
+    process.stdout.write(JSON.stringify(['end', self.stats]));
+  });
+}
+
+/**
+ * Return a plain-object representation of `test`
+ * free of cyclic properties etc.
+ *
+ * @param {Object} test
+ * @return {Object}
+ * @api private
+ */
+
+function clean(test) {
+  return {
+      title: test.title
+    , fullTitle: test.fullTitle()
+    , duration: test.duration
+  }
+}
+
+}); // module: reporters/json-stream.js
 
 require.register("reporters/landing.js", function(module, exports, require){
 /**
@@ -5753,6 +5749,17 @@ exports.forEach = function(arr, fn, scope){
 };
 
 /**
+ * Test if the given obj is type of string
+ *
+ * @param {Object} obj
+ * @returns Boolean
+ */
+
+exports.isString = function(obj) {
+  return 'string' === typeof obj;
+};
+
+/**
  * Array#map (<=IE8)
  *
  * @param {Array} array
@@ -6150,7 +6157,10 @@ function jsonStringify(object, spaces, depth) {
           : val.toString();
         break;
       case 'date':
-        val = '[Date: ' + val.toISOString() + ']';
+        var sDate = isNaN(val.getTime())        // Invalid date
+          ? val.toString()
+          : val.toISOString();
+        val = '[Date: ' + sDate + ']';
         break;
       case 'buffer':
         var json = val.toJSON();
@@ -6161,7 +6171,7 @@ function jsonStringify(object, spaces, depth) {
       default:
         val = (val == '[Function]' || val == '[Circular]')
           ? val
-          : '"' + val + '"'; //string
+          : JSON.stringify(val); //string
     }
     return val;
   }
