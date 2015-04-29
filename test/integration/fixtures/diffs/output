@@ -1,0 +1,91 @@
+// DIFF
+      +foo bar baz
+      -foo rar baz
+
+// DIFF
+       {
+         "age": 23
+      +  "name": "travis"
+      -  "name": "travis j"
+       }
+
+// DIFF
+       foo bar baz
+      +foo bar baz
+      +foo bar baz
+      -foo rar baz
+      -foo bar raz
+
+// DIFF
+       {
+         "address": {
+           "city": "new york"
+      +    "country": "us"
+      -    "country": "usa"
+         }
+         "age": 30
+      +  "name": "joe"
+      -  "name": "joel"
+       }
+
+// DIFF
+       one two three
+      +four five six
+      -four zzzz six
+       seven eight nine
+
+// DIFF
+       {
+         "address": {
+           "city": "new york"
+      +    "country": "us"
+      -    "country": "usa"
+         }
+         "age": 30
+      +  "name": "joe"
+      -  "name": "joel"
+       }
+
+// DIFF
+       one	tab
+      +two		tabs
+      -two			tabs
+
+// DIFF
+       body {
+         font: "Helvetica Neue", Helvetica, arial, sans-serif;
+         background: black;
+      +  color: #fff;
+      -  color: white;
+       }
+       
+       a {
+      +  color: blue;
+      -  color: blue
+       }
+      +
+      +foo {
+      +  bar: 'baz';
+      +}
+
+// DIFF
+       {
+         "age": 2
+      +  "color": "brown"
+      +  "name": "loki"
+      -  "color": "white"
+      -  "name": "tobi"
+         "species": "ferret"
+       }
+
+// DIFF
+       {
+         "a": 123
+      +  "b": 456
+       }
+
+// DIFF
+       [
+      +  2
+      -  1
+       ]
