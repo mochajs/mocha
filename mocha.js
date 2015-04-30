@@ -2176,8 +2176,8 @@ exports.list = function(failures){
     if (err.showDiff !== false && sameType(actual, expected)
         && expected !== undefined) {
 
-      if ('string' !== typeof actual) {
-        escape = false;
+      escape = false;
+      if (!(utils.isString(actual) && utils.isString(expected))) {
         err.actual = actual = utils.stringify(actual);
         err.expected = expected = utils.stringify(expected);
       }
@@ -4590,6 +4590,7 @@ var EventEmitter = require('browser/events').EventEmitter
   , filter = utils.filter
   , keys = utils.keys
   , type = utils.type
+  , isString = utils.isString
   , stringify = utils.stringify
   , stackFilter = utils.stackTraceFilter();
 
@@ -4786,10 +4787,13 @@ Runner.prototype.fail = function(test, err) {
   ++this.failures;
   test.state = 'failed';
 
-  if (!(err instanceof Error)) {
+  var isError = err instanceof Error;
+  var isErrorLike = err && isString(err.message) && isString(err.name);
+  if (!(isError || isErrorLike)) {
     err = new Error('the ' + type(err) + ' ' + stringify(err) + ' was thrown, throw an Error :)');
   }
 
+  err = new ErrorProxy(err);
   err.stack = (this.fullStackTrace || !err.stack)
     ? err.stack
     : stackFilter(err.stack);
@@ -5299,6 +5303,22 @@ function extraGlobals() {
  return [];
 }
 
+/**
+ * Error-like object which always has a writable "stack" property.
+ *
+ * @param {Error|*} e
+ * @constructor
+ */
+function ErrorProxy(e) {
+  this.message = e.message;
+  this.name = e.name;
+  if (e.line) this.line = e.line;
+  if (e.sourceId) this.sourceId = e.sourceId;
+  if (e.stack) this.stack = e.stack;
+  if (e.stackArray) this.stackArray = e.stackArray;
+}
+ErrorProxy.prototype.toString = Error.prototype.toString;
+
 }); // module: runner.js
 
 require.register("suite.js", function(module, exports, require){
@@ -5753,6 +5773,17 @@ exports.forEach = function(arr, fn, scope){
 };
 
 /**
+ * Test if the given obj is type of string
+ *
+ * @param {Object} obj
+ * @returns Boolean
+ */
+
+exports.isString = function(obj) {
+  return 'string' === typeof obj;
+};
+
+/**
  * Array#map (<=IE8)
  *
  * @param {Array} array
@@ -6150,7 +6181,10 @@ function jsonStringify(object, spaces, depth) {
           : val.toString();
         break;
       case 'date':
-        val = '[Date: ' + val.toISOString() + ']';
+        var sDate = isNaN(val.getTime())        // Invalid date
+          ? val.toString()
+          : val.toISOString();
+        val = '[Date: ' + sDate + ']';
         break;
       case 'buffer':
         var json = val.toJSON();
@@ -6161,7 +6195,7 @@ function jsonStringify(object, spaces, depth) {
       default:
         val = (val == '[Function]' || val == '[Circular]')
           ? val
-          : '"' + val + '"'; //string
+          : JSON.stringify(val); //string
     }
     return val;
   }
