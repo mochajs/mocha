@@ -3,13 +3,20 @@ var Mocha = require('../');
 describe('Mocha', function(){
   describe('"grep" option', function(){
     it('should add a RegExp to the mocha.options object', function(){
-      var mocha = new Mocha({ grep: /foo/ });
-      mocha.options.grep.toString().should.equal('/foo/');
+      var mocha = new Mocha({ grep: /foo.*/ });
+      mocha.options.grep.toString().should.equal('/foo.*/');
     })
 
-    it('should convert grep string to a RegExp', function(){
-      var mocha = new Mocha({ grep: 'foo' });
-      mocha.options.grep.toString().should.equal('/foo/');
+    it('should convert string to a RegExp', function(){
+      var mocha = new Mocha({ grep: 'foo.*' });
+      mocha.options.grep.toString().should.equal('/foo.*/');
+    })
+  })
+
+  describe('"fgrep" option', function(){
+    it('should escape and convert string to a RegExp', function(){
+      var mocha = new Mocha({ fgrep: 'foo.*' });
+      mocha.options.grep.toString().should.equal('/foo\\.\\*/');
     })
   })
 

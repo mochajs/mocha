@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+        function assert(expr, err) {
+            if (!expr) throw err;
+        }
+    </script>
+    <script src="stack-trace.js"></script>
+    <script>
+        onload = function() {
+            mocha.run();
+        };
+    </script>
+</head>
+<body>
+<div id="mocha"></div>
+</body>
+</html>

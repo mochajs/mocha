@@ -27,4 +27,4 @@ describe('nyan face', function () {
     nyanCat.face.call(nyanCat).should.equal('( - .-)');
     done();
   });
-})
+});

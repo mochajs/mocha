@@ -219,6 +219,42 @@ describe('Runner', function(){
       });
       runner.fail(test, err);
     })
+
+    it('should emit a helpful message when failed with a string', function(done){
+      var test = {}, err = 'string';
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the string "string" was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a the error when failed with an Error', function(done){
+      var test = {}, err = new Error('an error message');
+      runner.on('fail', function(test, err){
+        err.message.should.equal('an error message');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Object', function(done){
+      var test = {}, err = { x: 1 };
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the object {\n  "x": 1\n} was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit a helpful message when failed with an Array', function(done){
+      var test = {}, err = [1,2];
+      runner.on('fail', function(test, err){
+        err.message.should.equal('the array [\n  1\n  2\n] was thrown, throw an Error :)');
+        done();
+      });
+      runner.fail(test, err);
+    })
   })
 
   describe('.failHook(hook, err)', function(){
@@ -254,5 +290,51 @@ describe('Runner', function(){
       runner.failHook(hook, err);
       done();
     })
-  })
-})
+  });
+
+  describe('stackTrace', function() {
+    var stack = [ 'AssertionError: foo bar'
+      , 'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)'
+      , 'at Context.<anonymous> (/usr/local/dev/test.js:19:5)'
+      , 'Test.Runnable.run (/usr/local/lib/node_modules/mocha/lib/runnable.js:244:7)'
+      , 'Runner.runTest (/usr/local/lib/node_modules/mocha/lib/runner.js:374:10)'
+      , '/usr/local/lib/node_modules/mocha/lib/runner.js:452:12'
+      , 'next (/usr/local/lib/node_modules/mocha/lib/runner.js:299:14)'
+      , '/usr/local/lib/node_modules/mocha/lib/runner.js:309:7'
+      , 'next (/usr/local/lib/node_modules/mocha/lib/runner.js:248:23)'
+      , 'Immediate._onImmediate (/usr/local/lib/node_modules/mocha/lib/runner.js:276:5)'
+      , 'at processImmediate [as _immediateCallback] (timers.js:321:17)'];
+
+    describe('shortStackTrace', function() {
+      it('should prettify the stack-trace', function(done) {
+        var hook = {},
+            err = new Error();
+        // Fake stack-trace
+        err.stack = stack.join('\n');
+
+        runner.on('fail', function(hook, err){
+          err.stack.should.equal(stack.slice(0,3).join('\n'));
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+    });
+
+    describe('longStackTrace', function() {
+      it('should display the full stack-trace', function(done) {
+        var hook = {},
+            err = new Error();
+        // Fake stack-trace
+        err.stack = stack.join('\n');
+        // Add --stack-trace option
+        runner.fullStackTrace = true;
+
+        runner.on('fail', function(hook, err){
+          err.stack.should.equal(stack.join('\n'));
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+    });
+  });
+});

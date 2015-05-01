@@ -140,6 +140,7 @@ mocha.run = function(fn){
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
   if (query.grep) mocha.grep(new RegExp(query.grep));
+  if (query.fgrep) mocha.grep(query.fgrep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){

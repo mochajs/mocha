@@ -1,136 +1,160 @@
-var Base = require('../../lib/reporters/base');
+var Base   = require('../../lib/reporters/base')
+  , Assert = require('assert').AssertionError;
+
+function makeTest(err) {
+  return {
+    err: err,
+    fullTitle: function () {
+      return 'test title';
+    }
+  };
+}
 
 describe('Base reporter', function () {
+  var stdout
+    , stdoutWrite
+    , useColors;
 
-  it('should show diffs with showDiff property set', function () {
-    var err = new Error('test'),
-      stdout = [],
-      stdoutWrite = process.stdout.write,
-      errOut;
-
-    err.actual = "a1";
-    err.expected = "e1";
-    err.showDiff = true;
-    var test = {
-      err: err,
-      fullTitle: function () {
-        return 'title';
-      }
-    };
-
+  beforeEach(function () {
+    stdout = [];
+    stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
     };
+    useColors = Base.useColors;
+    Base.useColors = false;
+  });
 
-    Base.list([test]);
-
+  afterEach(function () {
     process.stdout.write = stdoutWrite;
+    Base.useColors = useColors;
+  });
 
-    errOut = stdout.join('\n');
+  describe('showDiff', function() {
+    it('should show diffs by default', function () {
+      var err = new Assert({ actual: 'foo', expected: 'bar' })
+        , errOut;
 
-    errOut.should.match(/test/);
-    errOut.should.match(/actual/);
-    errOut.should.match(/expected/);
+      var test = makeTest(err);
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.match(/\- actual/);
+      errOut.should.match(/\+ expected/);
+    });
+
+    it('should show diffs if property set to `true`', function () {
+      var err = new Assert({ actual: 'foo', expected: 'bar' })
+        , errOut;
+
+      err.showDiff = true;
+      var test = makeTest(err);
+
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.match(/\- actual/);
+      errOut.should.match(/\+ expected/);
+    });
+
+    it('should not show diffs when showDiff property set to `false`', function () {
+      var err = new Assert({ actual: 'foo', expected: 'bar' })
+        , errOut;
+
+      err.showDiff = false;
+      var test = makeTest(err);
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/\+ expected/);
+    });
+
+    it('should not show diffs when expected is not defined', function () {
+      var err = new Error('ouch')
+        , errOut;
+
+      var test = makeTest(err);
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/\+ expected/);
+    });
 
   });
 
+  describe('Getting two strings', function() {
+    // Fix regression V1.2.1(see: issue #1241)
+    it('should show strings diff as is', function () {
+      var err = new Error('test'),
+        errOut;
 
-  it('should not stringify strings', function () {
-    var err = new Error('test'),
-      stdout = [],
-      stdoutWrite = process.stdout.write,
-      errOut;
+      err.actual = 'foo\nbar';
+      err.expected = 'foo\nbaz';
+      err.showDiff = true;
+      var test = makeTest(err);
 
-    err.actual = "a1";
-    err.expected = "e2";
-    err.showDiff = true;
-    var test = {
-      err: err,
-      fullTitle: function () {
-        return 'title';
-      }
-    };
+      Base.list([test]);
 
-    process.stdout.write = function (string) {
-      stdout.push(string);
-    };
+      errOut = stdout.join('\n');
 
-    Base.list([test]);
-
-    process.stdout.write = stdoutWrite;
-
-    errOut = stdout.join('\n');
-
-    errOut.should.not.match(/"/);
-    errOut.should.match(/test/);
-    errOut.should.match(/actual/);
-    errOut.should.match(/expected/);
-
+      errOut.should.not.match(/"foo\\nbar"/);
+      errOut.should.match(/foo/).and.match(/bar/);
+      errOut.should.match(/test/);
+      errOut.should.match(/actual/);
+      errOut.should.match(/expected/);
+    });
   });
-
 
   it('should stringify objects', function () {
     var err = new Error('test'),
-      stdout = [],
-      stdoutWrite = process.stdout.write,
       errOut;
 
     err.actual = {key:"a1"};
     err.expected = {key:"e1"};
     err.showDiff = true;
-    var test = {
-      err: err,
-      fullTitle: function () {
-        return 'title';
-      }
-    };
-
-    process.stdout.write = function (string) {
-      stdout.push(string);
-    };
+    var test = makeTest(err);
 
     Base.list([test]);
 
-    process.stdout.write = stdoutWrite;
-
     errOut = stdout.join('\n');
-
     errOut.should.match(/"key"/);
     errOut.should.match(/test/);
-    errOut.should.match(/actual/);
-    errOut.should.match(/expected/);
-
+    errOut.should.match(/\- actual/);
+    errOut.should.match(/\+ expected/);
   });
 
-  it('should not show diffs when showDiff property set', function () {
-    var err = new Error('test'),
-      stdout = [],
-      stdoutWrite = process.stdout.write,
-      errOut;
-
-    err.actual = "a1";
-    err.expected = "e1";
-    err.showDiff = false;
-    var test = {
-      err: err,
-      fullTitle: function () {
-        return 'title';
-      }
+  it('should remove message from stack', function () {
+    var err = {
+      message: 'Error',
+      stack: 'Error\nfoo\nbar',
+      showDiff: false
     };
-
-    process.stdout.write = function (string) {
-      stdout.push(string);
-    };
+    var test = makeTest(err);
 
     Base.list([test]);
 
-    process.stdout.write = stdoutWrite;
-
-    errOut = stdout.join('\n');
-
-    errOut.should.match(/test/);
-    errOut.should.not.match(/actual/);
-    errOut.should.not.match(/expected/);
-
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
   });
+
+  it('should not modify stack if it does not contain message', function () {
+    var err = {
+      message: 'Error',
+      stack: 'foo\nbar',
+      showDiff: false
+    };
+    var test = makeTest(err);
+
+    Base.list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
+  });
+
 });

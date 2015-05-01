@@ -1,4 +1,76 @@
 
+2.2.4 / 2015-04-08
+==================
+
+  * Load mocha.opts in _mocha for now (close #1645)
+
+2.2.3 / 2015-04-07
+==================
+
+  * fix(reporter/base): string diff - issue #1241
+  * fix(reporter/base): string diff - issue #1241 
+  * fix(reporter/base): don't show diffs for errors without expectation 
+  * fix(reporter/base): don't assume error message is first line of stack 
+  * improve: dry up reporter/base test 
+  * fix(reporter/base): explicitly ignore showDiff #1614 
+  * Add iojs to travis build 
+  * Pass `--allow-natives-syntax` flag to node. 
+  * Support --harmony_classes flag for io.js 
+  * Fix 1556: Update utils.clean to handle newlines in func declarations 
+  * Fix 1606: fix err handling in IE <= 8 and non-ES5 browsers 
+  * Fix 1585: make _mocha executable again 
+  * chore(package.json): add a8m as a contributor 
+  * Fixed broken link on html-cov reporter 
+  * support --es_staging flag 
+  * fix issue where menu overlaps content. 
+  * update contributors in package.json 
+  * Remove trailing whitespace from reporter output 
+  * Remove contributors list from readme 
+  * log third-party reporter errors 
+  * [Fix] Exclude not own properties when looping on options 
+  * fix: support node args in mocha.opts (close #1573) 
+  * fix(reporter/base): string diff - issue #1241
+
+2.2.1 / 2015-03-09
+==================
+
+  * Fix passing of args intended for node/iojs.
+
+2.2.0 / 2015-03-06
+==================
+
+  * Update mocha.js
+  * Add --fgrep. Use grep for RegExp, fgrep for str
+  * Ignore async global errors after spec resolution
+  * Fixing errors that prevent mocha.js from loading in the browser - fixes #1558
+  * fix(utils): issue #1558 + make
+  * add ability to delay root suite; closes #362, closes #1124
+  * fix insanity in http tests
+  * update travis: add node 0.12, add gitter, remove slack
+  * building
+  * resolve #1548: ensure the environment's "node" executable is used
+  * reporters/base: use supports-color to detect colorable term
+  * travis: use docker containers
+  * small fix: commander option for --expose-gc
+  * Ignore asynchronous errors after global failure
+  * Improve error output when a test fails with a non-error
+  * updated travis badge, uses svg instead of img
+  * Allow skip from test context for #332
+  * [JSHINT] Unnecessary semicolon fixed in bin/_mocha
+  * Added a reminder about the done() callback to test timeout error messages
+  * fixes #1496, in Mocha.run(fn), check if fn exists before executing it, added tests too
+  * Add Harmony Proxy flag for iojs
+  * test(utils|ms|*): test existing units
+  * add support for some iojs flags
+  * fix(utils.stringify): issue #1229, diff viewer
+  * Remove slack link
+  * Prevent multiple 'grep=' querystring params in html reporter
+  * Use grep as regexp (close #1381)
+  * utils.stringify should handle objects without an Object prototype
+  * in runnable test, comparing to undefined error's message rather than a literal
+  * Fix test running output truncation on async STDIO
+  * ammended for deprecated customFds option in child_process
+
 2.1.0 / 2014-12-23
 ==================
 
