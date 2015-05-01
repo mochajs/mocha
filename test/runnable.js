@@ -1,5 +1,5 @@
-
 var mocha = require('../')
+  , utils = mocha.utils
   , Runnable = mocha.Runnable
   , EventEmitter = require('events').EventEmitter;
 
@@ -233,9 +233,7 @@ describe('Runnable(title, fn)', function(){
           });
 
           test.run(function(err) {
-            if (err !== null) {
-              throw new should.AssertionError('err should be null');
-            }
+            err.message.should.equal(utils.undefinedError().message);
             done();
           })
         });

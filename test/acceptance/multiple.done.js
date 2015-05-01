@@ -1,4 +1,3 @@
-
 describe('multiple calls to done()', function(){
   beforeEach(function(done){
     done()
@@ -13,4 +12,12 @@ describe('multiple calls to done()', function(){
       // done();
     });
   })
+
+  it('should produce a reasonable trace', function (done) {
+    process.nextTick(function() {
+      done();
+      // uncomment
+      // done()
+    })
+  });
 })

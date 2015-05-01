@@ -31,6 +31,9 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony-proxies':
     case '--harmony-collections':
     case '--harmony-generators':
+    case '--harmony_shipping':
+    case '--harmony_arrow_functions':
+    case '--harmony_proxies':
     case '--no-deprecation':
     case '--prof':
     case '--throw-deprecation':
@@ -44,7 +47,7 @@ process.argv.slice(2).forEach(function(arg){
   }
 });
 
-var proc = spawn(process.argv[0], args, { customFds: [0,1,2] });
+var proc = spawn(process.argv[0], args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
   process.on('exit', function(){
     if (signal) {
@@ -53,4 +56,11 @@ proc.on('exit', function (code, signal) {
       process.exit(code);
     }
   });
+});
+
+// terminate children.
+process.on('SIGINT', function () {
+  proc.kill('SIGINT'); // calls runner.abort()
+  proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+  process.kill(process.pid, 'SIGINT');
 });

@@ -139,12 +139,13 @@ mocha.run = function(fn){
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(query.grep);
+  if (query.grep) mocha.grep(new RegExp(query.grep));
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
-    if (global.document && options.noHighlighting !== true) {
+    var document = global.document;
+    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
       Mocha.utils.highlightTags('code');
     }
     if (fn) fn(err);

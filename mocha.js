@@ -48,7 +48,6 @@ require.relative = function (parent) {
 
 
 require.register("browser/debug.js", function(module, exports, require){
-
 module.exports = function(type){
   return function(){
   }
@@ -224,7 +223,22 @@ var JsDiff = (function() {
 
   var LineDiff = new Diff();
   LineDiff.tokenize = function(value) {
-    return value.split(/^/m);
+    var retLines = [],
+        lines = value.split(/^/m);
+
+    for(var i = 0; i < lines.length; i++) {
+      var line = lines[i],
+          lastLine = lines[i - 1];
+
+      // Merge lines that may contain windows new lines
+      if (line == '\n' && lastLine && lastLine[lastLine.length - 1] === '\r') {
+        retLines[retLines.length - 1] += '\n';
+      } else if (line) {
+        retLines.push(line);
+      }
+    }
+
+    return retLines;
   };
 
   return {
@@ -420,17 +434,16 @@ require.register("browser/escape-string-regexp.js", function(module, exports, re
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
 
 module.exports = function (str) {
-	if (typeof str !== 'string') {
-		throw new TypeError('Expected a string');
-	}
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
+  }
 
-	return str.replace(matchOperatorsRe,  '\\$&');
+  return str.replace(matchOperatorsRe,  '\\$&');
 };
 
 }); // module: browser/escape-string-regexp.js
 
 require.register("browser/events.js", function(module, exports, require){
-
 /**
  * Module exports.
  */
@@ -608,6 +621,7 @@ EventEmitter.prototype.emit = function (name) {
 
   return true;
 };
+
 }); // module: browser/events.js
 
 require.register("browser/fs.js", function(module, exports, require){
@@ -719,28 +733,28 @@ Progress.prototype.draw = function(ctx){
       , y = half
       , rad = half - 1
       , fontSize = this._fontSize;
-  
+
     ctx.font = fontSize + 'px ' + this._font;
-  
+
     var angle = Math.PI * 2 * (percent / 100);
     ctx.clearRect(0, 0, size, size);
-  
+
     // outer circle
     ctx.strokeStyle = '#9f9f9f';
     ctx.beginPath();
     ctx.arc(x, y, rad, 0, angle, false);
     ctx.stroke();
-  
+
     // inner circle
     ctx.strokeStyle = '#eee';
     ctx.beginPath();
     ctx.arc(x, y, rad - 1, 0, angle, true);
     ctx.stroke();
-  
+
     // text
     var text = this._text || (percent | 0) + '%'
       , w = ctx.measureText(text).width;
-  
+
     ctx.fillText(
         text
       , x - w / 2 + 1
@@ -752,7 +766,6 @@ Progress.prototype.draw = function(ctx){
 }); // module: browser/progress.js
 
 require.register("browser/tty.js", function(module, exports, require){
-
 exports.isatty = function(){
   return true;
 };
@@ -769,7 +782,6 @@ exports.getWindowSize = function(){
 }); // module: browser/tty.js
 
 require.register("context.js", function(module, exports, require){
-
 /**
  * Expose `Context`.
  */
@@ -857,7 +869,6 @@ Context.prototype.inspect = function(){
 }); // module: context.js
 
 require.register("hook.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -914,7 +925,6 @@ Hook.prototype.error = function(err){
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -1025,7 +1035,7 @@ module.exports = function(suite){
 
     context.it = context.specify = function(title, fn){
       var suite = suites[0];
-      if (suite.pending) var fn = null;
+      if (suite.pending) fn = null;
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -1058,7 +1068,6 @@ module.exports = function(suite){
 }); // module: interfaces/bdd.js
 
 require.register("interfaces/exports.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -1112,7 +1121,7 @@ module.exports = function(suite){
             suites[0].addTest(test);
         }
       } else {
-        var suite = Suite.create(suites[0], key);
+        suite = Suite.create(suites[0], key);
         suites.unshift(suite);
         visit(obj[key]);
         suites.shift();
@@ -1124,7 +1133,6 @@ module.exports = function(suite){
 }); // module: interfaces/exports.js
 
 require.register("interfaces/index.js", function(module, exports, require){
-
 exports.bdd = require('./bdd');
 exports.tdd = require('./tdd');
 exports.qunit = require('./qunit');
@@ -1133,7 +1141,6 @@ exports.exports = require('./exports');
 }); // module: interfaces/index.js
 
 require.register("interfaces/qunit.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -1262,7 +1269,6 @@ module.exports = function(suite){
 }); // module: interfaces/qunit.js
 
 require.register("interfaces/tdd.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -1270,7 +1276,7 @@ require.register("interfaces/tdd.js", function(module, exports, require){
 var Suite = require('../suite')
   , Test = require('../test')
   , escapeRe = require('browser/escape-string-regexp')
-  , utils = require('../utils');;
+  , utils = require('../utils');
 
 /**
  * TDD-style interface:
@@ -1377,7 +1383,7 @@ module.exports = function(suite){
 
     context.test = function(title, fn){
       var suite = suites[0];
-      if (suite.pending) var fn = null;
+      if (suite.pending) fn = null;
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -1489,7 +1495,7 @@ function Mocha(options) {
   this.suite = new exports.Suite('', new exports.Context);
   this.ui(options.ui);
   this.bail(options.bail);
-  this.reporter(options.reporter);
+  this.reporter(options.reporter, options.reporterOptions);
   if (null != options.timeout) this.timeout(options.timeout);
   this.useColors(options.useColors)
   if (options.enableTimeouts !== null) this.enableTimeouts(options.enableTimeouts);
@@ -1540,10 +1546,10 @@ Mocha.prototype.addFile = function(file){
  * Set reporter to `reporter`, defaults to "spec".
  *
  * @param {String|Function} reporter name or constructor
+ * @param {Object} reporterOptions optional options
  * @api public
  */
-
-Mocha.prototype.reporter = function(reporter){
+Mocha.prototype.reporter = function(reporter, reporterOptions){
   if ('function' == typeof reporter) {
     this._reporter = reporter;
   } else {
@@ -1558,6 +1564,7 @@ Mocha.prototype.reporter = function(reporter){
     if (!_reporter) throw new Error('invalid reporter "' + reporter + '"');
     this._reporter = _reporter;
   }
+  this.options.reporterOptions = reporterOptions;
   return this;
 };
 
@@ -1706,9 +1713,9 @@ Mocha.prototype.globals = function(globals){
  */
 
 Mocha.prototype.useColors = function(colors){
-  this.options.useColors = arguments.length && colors != undefined
-    ? colors
-    : true;
+  if (colors !== undefined) {
+    this.options.useColors = colors;
+  }
   return this;
 };
 
@@ -1810,9 +1817,20 @@ Mocha.prototype.run = function(fn){
   if (options.grep) runner.grep(options.grep, options.invert);
   if (options.globals) runner.globals(options.globals);
   if (options.growl) this._growl(runner, reporter);
-  exports.reporters.Base.useColors = options.useColors;
+  if (options.useColors !== undefined) {
+    exports.reporters.Base.useColors = options.useColors;
+  }
   exports.reporters.Base.inlineDiffs = options.useInlineDiffs;
-  return runner.run(fn);
+
+  function done(failures) {
+      if (reporter.done) {
+          reporter.done(failures, fn);
+      } else {
+          fn(failures);
+      }
+  }
+
+  return runner.run(done);
 };
 
 }); // module: mocha.js
@@ -1931,7 +1949,6 @@ function plural(ms, n, name) {
 }); // module: ms.js
 
 require.register("reporters/base.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2031,7 +2048,7 @@ if ('win32' == process.platform) {
  */
 
 var color = exports.color = function(type, str) {
-  if (!exports.useColors) return str;
+  if (!exports.useColors) return String(str);
   return '\u001b[' + exports.colors[type] + 'm' + str + '\u001b[0m';
 };
 
@@ -2088,7 +2105,7 @@ exports.cursor = {
  */
 
 exports.list = function(failures){
-  console.error();
+  console.log();
   failures.forEach(function(test, i){
     // format
     var fmt = color('error title', '  %s) %s:\n')
@@ -2112,13 +2129,13 @@ exports.list = function(failures){
 
     // explicitly show diff
     if (err.showDiff && sameType(actual, expected)) {
-      escape = false;
-      err.actual = actual = utils.stringify(actual);
-      err.expected = expected = utils.stringify(expected);
-    }
 
-    // actual / expected diff
-    if ('string' == typeof actual && 'string' == typeof expected) {
+      if ('string' !== typeof actual) {
+        escape = false;
+        err.actual = actual = utils.stringify(actual);
+        err.expected = expected = utils.stringify(expected);
+      }
+
       fmt = color('error title', '  %s) %s:\n%s') + color('error stack', '\n%s\n');
       var match = message.match(/^([^:]+): expected/);
       msg = '\n      ' + color('error message', match ? match[1] : msg);
@@ -2134,7 +2151,7 @@ exports.list = function(failures){
     stack = stack.slice(index ? index + 1 : index)
       .replace(/^/gm, '  ');
 
-    console.error(fmt, (i + 1), test.fullTitle(), msg, stack);
+    console.log(fmt, (i + 1), test.fullTitle(), msg, stack);
   });
 };
 
@@ -2239,11 +2256,10 @@ Base.prototype.epilogue = function(){
   if (stats.failures) {
     fmt = color('fail', '  %d failing');
 
-    console.error(fmt,
-      stats.failures);
+    console.log(fmt, stats.failures);
 
     Base.list(this.failures);
-    console.error();
+    console.log();
   }
 
   console.log();
@@ -2394,7 +2410,6 @@ function sameType(a, b) {
 }); // module: reporters/base.js
 
 require.register("reporters/doc.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2461,7 +2476,6 @@ function Doc(runner) {
 }); // module: reporters/doc.js
 
 require.register("reporters/dot.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2532,7 +2546,6 @@ Dot.prototype.constructor = Dot;
 }); // module: reporters/dot.js
 
 require.register("reporters/html-cov.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2583,10 +2596,10 @@ function coverageClass(n) {
   if (n >= 25) return 'low';
   return 'terrible';
 }
+
 }); // module: reporters/html-cov.js
 
 require.register("reporters/html.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2724,7 +2737,7 @@ function HTML(runner) {
     } else if (test.pending) {
       var el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
     } else {
-      var el = fragment('<li class="test fail"><h2>%e <a href="?grep=%e" class="replay">‣</a></h2></li>', test.title, encodeURIComponent(test.fullTitle()));
+      var el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">‣</a></h2></li>', test.title, self.testURL(test));
       var str = test.err.stack || test.err.toString();
 
       // FF / Opera do not add the message
@@ -2766,13 +2779,22 @@ function HTML(runner) {
 }
 
 /**
+ * Makes a URL, preserving querystring ("search") parameters.
+ * @param {string} s
+ * @returns {string} your new URL
+ */
+var makeUrl = function makeUrl(s) {
+  var search = window.location.search;
+  return window.location.pathname + (search ? search + '&' : '?' ) + 'grep=' + encodeURIComponent(s);
+};
+
+/**
  * Provide suite URL
  *
  * @param {Object} [suite]
  */
-
 HTML.prototype.suiteURL = function(suite){
-  return '?grep=' + encodeURIComponent(suite.fullTitle());
+  return makeUrl(suite.fullTitle());
 };
 
 /**
@@ -2782,7 +2804,7 @@ HTML.prototype.suiteURL = function(suite){
  */
 
 HTML.prototype.testURL = function(test){
-  return '?grep=' + encodeURIComponent(test.fullTitle());
+  return makeUrl(test.fullTitle());
 };
 
 /**
@@ -2863,7 +2885,6 @@ function on(el, event, fn) {
 }); // module: reporters/html.js
 
 require.register("reporters/index.js", function(module, exports, require){
-
 exports.Base = require('./base');
 exports.Dot = require('./dot');
 exports.Doc = require('./doc');
@@ -2885,7 +2906,6 @@ exports.JSONStream = require('./json-stream');
 }); // module: reporters/index.js
 
 require.register("reporters/json-cov.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -2976,7 +2996,7 @@ function map(cov) {
   }
 
   return ret;
-};
+}
 
 /**
  * Map jscoverage data for a single source file
@@ -3042,7 +3062,6 @@ function clean(test) {
 }); // module: reporters/json-cov.js
 
 require.register("reporters/json-stream.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3079,7 +3098,9 @@ function List(runner) {
   });
 
   runner.on('fail', function(test, err){
-    console.log(JSON.stringify(['fail', clean(test)]));
+    test = clean(test);
+    test.err = err.message;
+    console.log(JSON.stringify(['fail', test]));
   });
 
   runner.on('end', function(){
@@ -3103,10 +3124,10 @@ function clean(test) {
     , duration: test.duration
   }
 }
+
 }); // module: reporters/json-stream.js
 
 require.register("reporters/json.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3133,6 +3154,7 @@ function JSONReporter(runner) {
   Base.call(this, runner);
 
   var tests = []
+    , pending = []
     , failures = []
     , passes = [];
 
@@ -3148,10 +3170,15 @@ function JSONReporter(runner) {
     failures.push(test);
   });
 
+  runner.on('pending', function(test){
+    pending.push(test);
+  });
+
   runner.on('end', function(){
     var obj = {
       stats: self.stats,
       tests: tests.map(clean),
+      pending: pending.map(clean),
       failures: failures.map(clean),
       passes: passes.map(clean)
     };
@@ -3197,7 +3224,6 @@ function errorJSON(err) {
 }); // module: reporters/json.js
 
 require.register("reporters/landing.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3255,7 +3281,7 @@ function Landing(runner) {
   }
 
   runner.on('start', function(){
-    stream.write('\n  ');
+    stream.write('\n\n\n  ');
     cursor.hide();
   });
 
@@ -3272,7 +3298,7 @@ function Landing(runner) {
     }
 
     // render landing strip
-    stream.write('\u001b[4F\n\n');
+    stream.write('\u001b['+(width+1)+'D\u001b[2A');
     stream.write(runway());
     stream.write('\n  ');
     stream.write(color('runway', Array(col).join('⋅')));
@@ -3298,10 +3324,10 @@ F.prototype = Base.prototype;
 Landing.prototype = new F;
 Landing.prototype.constructor = Landing;
 
+
 }); // module: reporters/landing.js
 
 require.register("reporters/list.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3381,6 +3407,12 @@ var Base = require('./base')
   , utils = require('../utils');
 
 /**
+ * Constants
+ */
+
+var SUITE_PREFIX = '$';
+
+/**
  * Expose `Markdown`.
  */
 
@@ -3410,8 +3442,9 @@ function Markdown(runner) {
   }
 
   function mapTOC(suite, obj) {
-    var ret = obj;
-    obj = obj[suite.title] = obj[suite.title] || { suite: suite };
+    var ret = obj,
+        key = SUITE_PREFIX + suite.title;
+    obj = obj[key] = obj[key] || { suite: suite };
     suite.suites.forEach(function(suite){
       mapTOC(suite, obj);
     });
@@ -3424,11 +3457,13 @@ function Markdown(runner) {
     var link;
     for (var key in obj) {
       if ('suite' == key) continue;
-      if (key) link = ' - [' + key + '](#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
-      if (key) buf += Array(level).join('  ') + link;
+      if (key !== SUITE_PREFIX) {
+        link = ' - [' + key.substring(1) + ']';
+        link += '(#' + utils.slug(obj[key].suite.fullTitle()) + ')\n';
+        buf += Array(level).join('  ') + link;
+      }
       buf += stringifyTOC(obj[key], level);
     }
-    --level;
     return buf;
   }
 
@@ -3464,10 +3499,10 @@ function Markdown(runner) {
     process.stdout.write(buf);
   });
 }
+
 }); // module: reporters/markdown.js
 
 require.register("reporters/min.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3517,8 +3552,7 @@ require.register("reporters/nyan.js", function(module, exports, require){
  * Module dependencies.
  */
 
-var Base = require('./base')
-  , color = Base.color;
+var Base = require('./base');
 
 /**
  * Expose `Dot`.
@@ -3595,17 +3629,16 @@ NyanCat.prototype.draw = function(){
 
 NyanCat.prototype.drawScoreboard = function(){
   var stats = this.stats;
-  var colors = Base.colors;
 
-  function draw(color, n) {
+  function draw(type, n) {
     write(' ');
-    write('\u001b[' + color + 'm' + n + '\u001b[0m');
+    write(Base.color(type, n));
     write('\n');
   }
 
-  draw(colors.green, stats.passes);
-  draw(colors.fail, stats.failures);
-  draw(colors.pending, stats.pending);
+  draw('green', stats.passes);
+  draw('fail', stats.failures);
+  draw('pending', stats.pending);
   write('\n');
 
   this.cursorUp(this.numberOfLines);
@@ -3655,26 +3688,26 @@ NyanCat.prototype.drawRainbow = function(){
 NyanCat.prototype.drawNyanCat = function() {
   var self = this;
   var startWidth = this.scoreboardWidth + this.trajectories[0].length;
-  var color = '\u001b[' + startWidth + 'C';
+  var dist = '\u001b[' + startWidth + 'C';
   var padding = '';
 
-  write(color);
+  write(dist);
   write('_,------,');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? '  ' : '   ';
   write('_|' + padding + '/\\_/\\ ');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? '_' : '__';
   var tail = self.tick ? '~' : '^';
   var face;
   write(tail + '|' + padding + this.face() + ' ');
   write('\n');
 
-  write(color);
+  write(dist);
   padding = self.tick ? ' ' : '  ';
   write(padding + '""  "" ');
   write('\n');
@@ -3700,7 +3733,7 @@ NyanCat.prototype.face = function() {
   } else {
     return '( - .-)';
   }
-}
+};
 
 /**
  * Move cursor up `n`.
@@ -3755,6 +3788,8 @@ NyanCat.prototype.generateColors = function(){
  */
 
 NyanCat.prototype.rainbowify = function(str){
+  if (!Base.useColors)
+    return str;
   var color = this.rainbowColors[this.colorIndex % this.rainbowColors.length];
   this.colorIndex += 1;
   return '\u001b[38;5;' + color + 'm' + str + '\u001b[0m';
@@ -3881,7 +3916,6 @@ Progress.prototype.constructor = Progress;
 }); // module: reporters/progress.js
 
 require.register("reporters/spec.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -3972,7 +4006,6 @@ Spec.prototype.constructor = Spec;
 }); // module: reporters/spec.js
 
 require.register("reporters/tap.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -4049,13 +4082,13 @@ function title(test) {
 }); // module: reporters/tap.js
 
 require.register("reporters/xunit.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
 
 var Base = require('./base')
   , utils = require('../utils')
+  , fs = require('browser/fs')
   , escape = utils.escape;
 
 /**
@@ -4081,11 +4114,18 @@ exports = module.exports = XUnit;
  * @api public
  */
 
-function XUnit(runner) {
+function XUnit(runner, options) {
   Base.call(this, runner);
   var stats = this.stats
     , tests = []
     , self = this;
+
+  if (options.reporterOptions && options.reporterOptions.output) {
+      if (! fs.createWriteStream) {
+          throw new Error('file output not supported in browser');
+      }
+      self.fileStream = fs.createWriteStream(options.reporterOptions.output);
+  }
 
   runner.on('pending', function(test){
     tests.push(test);
@@ -4100,7 +4140,7 @@ function XUnit(runner) {
   });
 
   runner.on('end', function(){
-    console.log(tag('testsuite', {
+    self.write(tag('testsuite', {
         name: 'Mocha Tests'
       , tests: stats.tests
       , failures: stats.failures
@@ -4110,10 +4150,23 @@ function XUnit(runner) {
       , time: (stats.duration / 1000) || 0
     }, false));
 
-    tests.forEach(test);
-    console.log('</testsuite>');
+    tests.forEach(function(t) { self.test(t); });
+    self.write('</testsuite>');
   });
 }
+
+/**
+ * Override done to close the stream (if it's a file).
+ */
+XUnit.prototype.done = function(failures, fn) {
+    if (this.fileStream) {
+        this.fileStream.end(function() {
+            fn(failures);
+        });
+    } else {
+        fn(failures);
+    }
+};
 
 /**
  * Inherit from `Base.prototype`.
@@ -4126,10 +4179,21 @@ XUnit.prototype.constructor = XUnit;
 
 
 /**
+ * Write out the given line
+ */
+XUnit.prototype.write = function(line) {
+    if (this.fileStream) {
+        this.fileStream.write(line + '\n');
+    } else {
+        console.log(line);
+    }
+};
+
+/**
  * Output tag for the given `test.`
  */
 
-function test(test) {
+XUnit.prototype.test = function(test, ostream) {
   var attrs = {
       classname: test.parent.fullTitle()
     , name: test.title
@@ -4138,13 +4202,13 @@ function test(test) {
 
   if ('failed' == test.state) {
     var err = test.err;
-    console.log(tag('testcase', attrs, false, tag('failure', {}, false, cdata(escape(err.message) + "\n" + err.stack))));
+    this.write(tag('testcase', attrs, false, tag('failure', {}, false, cdata(escape(err.message) + "\n" + err.stack))));
   } else if (test.pending) {
-    console.log(tag('testcase', attrs, false, tag('skipped', {}, true)));
+    this.write(tag('testcase', attrs, false, tag('skipped', {}, true)));
   } else {
-    console.log(tag('testcase', attrs, true) );
+    this.write(tag('testcase', attrs, true) );
   }
-}
+};
 
 /**
  * HTML tag helper.
@@ -4175,14 +4239,14 @@ function cdata(str) {
 }); // module: reporters/xunit.js
 
 require.register("runnable.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
 
 var EventEmitter = require('browser/events').EventEmitter
   , debug = require('browser/debug')('mocha:runnable')
-  , milliseconds = require('./ms');
+  , milliseconds = require('./ms')
+  , utils = require('./utils');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -4223,6 +4287,7 @@ function Runnable(title, fn) {
   this._slow = 75;
   this._enableTimeouts = true;
   this.timedOut = false;
+  this._trace = new Error('done() called multiple times')
 }
 
 /**
@@ -4372,14 +4437,14 @@ Runnable.prototype.run = function(fn){
   function multiple(err) {
     if (emitted) return;
     emitted = true;
-    self.emit('error', err || new Error('done() called multiple times'));
+    self.emit('error', err || new Error('done() called multiple times; stacktrace may be inaccurate'));
   }
 
   // finished
   function done(err) {
     var ms = self.timeout();
     if (self.timedOut) return;
-    if (finished) return multiple(err);
+    if (finished) return multiple(err || self._trace);
     self.clearTimeout();
     self.duration = new Date - start;
     finished = true;
@@ -4407,7 +4472,7 @@ Runnable.prototype.run = function(fn){
         done();
       });
     } catch (err) {
-      done(err);
+      done(utils.getError(err));
     }
     return;
   }
@@ -4424,7 +4489,7 @@ Runnable.prototype.run = function(fn){
       callFn(this.fn);
     }
   } catch (err) {
-    done(err);
+    done(utils.getError(err));
   }
 
   function callFn(fn) {
@@ -4468,7 +4533,9 @@ var globals = [
   'setInterval',
   'clearInterval',
   'XMLHttpRequest',
-  'Date'
+  'Date',
+  'setImmediate',
+  'clearImmediate'
 ];
 
 /**
@@ -4697,7 +4764,6 @@ Runner.prototype.hook = function(name, fn){
   function next(i) {
     var hook = hooks[i];
     if (!hook) return fn();
-    if (self.failures && suite.bail()) return fn();
     self.currentRunnable = hook;
 
     hook.ctx.currentTest = self.test;
@@ -4991,7 +5057,7 @@ Runner.prototype.uncaught = function(err){
     }.call(err) ? err : ( err.message || err ));
   } else {
     debug('uncaught undefined exception');
-    err = new Error('Catched undefined error, did you throw without specifying what?');
+    err = utils.undefinedError();
   }
   err.uncaught = true;
 
@@ -5026,8 +5092,8 @@ Runner.prototype.uncaught = function(err){
  */
 
 Runner.prototype.run = function(fn){
-  var self = this
-    , fn = fn || function(){};
+  var self = this;
+  fn = fn || function(){};
 
   function uncaught(err){
     self.uncaught(err);
@@ -5064,7 +5130,7 @@ Runner.prototype.run = function(fn){
 Runner.prototype.abort = function(){
   debug('aborting');
   this._abort = true;
-}
+};
 
 /**
  * Filter leaks with the given globals flagged as `ok`.
@@ -5128,7 +5194,6 @@ function filterLeaks(ok, globals) {
 }); // module: runner.js
 
 require.register("suite.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -5233,7 +5298,7 @@ Suite.prototype.clone = function(){
 
 Suite.prototype.timeout = function(ms){
   if (0 == arguments.length) return this._timeout;
-  if (ms === 0) this._enableTimeouts = false;
+  if (ms.toString() === '0') this._enableTimeouts = false;
   if ('string' == typeof ms) ms = milliseconds(ms);
   debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);
@@ -5253,7 +5318,7 @@ Suite.prototype.enableTimeouts = function(enabled){
   debug('enableTimeouts %s', enabled);
   this._enableTimeouts = enabled;
   return this;
-}
+};
 
 /**
  * Set slow `ms` or short-hand such as "2s".
@@ -5274,7 +5339,7 @@ Suite.prototype.slow = function(ms){
 /**
  * Sets whether to bail after first error.
  *
- * @parma {Boolean} bail
+ * @param {Boolean} bail
  * @return {Suite|Number} for chaining
  * @api private
  */
@@ -5482,7 +5547,6 @@ Suite.prototype.eachTest = function(fn){
 }); // module: suite.js
 
 require.register("test.js", function(module, exports, require){
-
 /**
  * Module dependencies.
  */
@@ -5816,53 +5880,192 @@ exports.highlightTags = function(name) {
   }
 };
 
-
 /**
- * Stringify `obj`.
+ * If a value could have properties, and has none, this function is called, which returns
+ * a string representation of the empty value.
  *
- * @param {Object} obj
- * @return {String}
- * @api private
+ * Functions w/ no properties return `'[Function]'`
+ * Arrays w/ length === 0 return `'[]'`
+ * Objects w/ no properties return `'{}'`
+ * All else: return result of `value.toString()`
+ *
+ * @param {*} value Value to inspect
+ * @param {string} [type] The type of the value, if known.
+ * @returns {string}
  */
+var emptyRepresentation = function emptyRepresentation(value, type) {
+  type = type || exports.type(value);
 
-exports.stringify = function(obj) {
-  if (obj instanceof RegExp) return obj.toString();
-  return JSON.stringify(exports.canonicalize(obj), null, 2).replace(/,(\n|$)/g, '$1');
-}
+  switch(type) {
+    case 'function':
+      return '[Function]';
+    case 'object':
+      return '{}';
+    case 'array':
+      return '[]';
+    default:
+      return value.toString();
+  }
+};
 
 /**
- * Return a new object that has the keys in sorted order.
- * @param {Object} obj
- * @return {Object}
+ * Takes some variable and asks `{}.toString()` what it thinks it is.
+ * @param {*} value Anything
+ * @example
+ * type({}) // 'object'
+ * type([]) // 'array'
+ * type(1) // 'number'
+ * type(false) // 'boolean'
+ * type(Infinity) // 'number'
+ * type(null) // 'null'
+ * type(new Date()) // 'date'
+ * type(/foo/) // 'regexp'
+ * type('type') // 'string'
+ * type(global) // 'global'
+ * @api private
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString
+ * @returns {string}
+ */
+exports.type = function type(value) {
+  if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {
+    return 'buffer';
+  }
+  return Object.prototype.toString.call(value)
+    .replace(/^\[.+\s(.+?)\]$/, '$1')
+    .toLowerCase();
+};
+
+/**
+ * @summary Stringify `value`.
+ * @description Different behavior depending on type of value.
+ * - If `value` is undefined or null, return `'[undefined]'` or `'[null]'`, respectively.
+ * - If `value` is not an object, function or array, return result of `value.toString()` wrapped in double-quotes.
+ * - If `value` is an *empty* object, function, or array, return result of function
+ *   {@link emptyRepresentation}.
+ * - If `value` has properties, call {@link exports.canonicalize} on it, then return result of
+ *   JSON.stringify().
+ *
+ * @see exports.type
+ * @param {*} value
+ * @return {string}
  * @api private
  */
 
-exports.canonicalize = function(obj, stack) {
-   stack = stack || [];
+exports.stringify = function(value) {
+  var prop,
+    type = exports.type(value);
 
-   if (exports.indexOf(stack, obj) !== -1) return '[Circular]';
+  if (type === 'null' || type === 'undefined') {
+    return '[' + type + ']';
+  }
 
-   var canonicalizedObj;
+  if (type === 'date') {
+    return '[Date: ' + value.toISOString() + ']';
+  }
 
-   if ({}.toString.call(obj) === '[object Array]') {
-     stack.push(obj);
-     canonicalizedObj = exports.map(obj, function(item) {
-       return exports.canonicalize(item, stack);
-     });
-     stack.pop();
-   } else if (typeof obj === 'object' && obj !== null) {
-     stack.push(obj);
-     canonicalizedObj = {};
-     exports.forEach(exports.keys(obj).sort(), function(key) {
-       canonicalizedObj[key] = exports.canonicalize(obj[key], stack);
-     });
-     stack.pop();
-   } else {
-     canonicalizedObj = obj;
-   }
+  if (!~exports.indexOf(['object', 'array', 'function'], type)) {
+    return value.toString();
+  }
 
-   return canonicalizedObj;
- }
+  for (prop in value) {
+    if (Object.prototype.hasOwnProperty.call(value, prop)) {
+      return JSON.stringify(exports.canonicalize(value), null, 2).replace(/,(\n|$)/g, '$1');
+    }
+  }
+
+  return emptyRepresentation(value, type);
+};
+
+/**
+ * Return if obj is a Buffer
+ * @param {Object} arg
+ * @return {Boolean}
+ * @api private
+ */
+exports.isBuffer = function (arg) {
+  return typeof Buffer !== 'undefined' && Buffer.isBuffer(arg);
+};
+
+/**
+ * @summary Return a new Thing that has the keys in sorted order.  Recursive.
+ * @description If the Thing...
+ * - has already been seen, return string `'[Circular]'`
+ * - is `undefined`, return string `'[undefined]'`
+ * - is `null`, return value `null`
+ * - is some other primitive, return the value
+ * - is not a primitive or an `Array`, `Object`, or `Function`, return the value of the Thing's `toString()` method
+ * - is a non-empty `Array`, `Object`, or `Function`, return the result of calling this function again.
+ * - is an empty `Array`, `Object`, or `Function`, return the result of calling `emptyRepresentation()`
+ *
+ * @param {*} value Thing to inspect.  May or may not have properties.
+ * @param {Array} [stack=[]] Stack of seen values
+ * @return {(Object|Array|Function|string|undefined)}
+ * @see {@link exports.stringify}
+ * @api private
+ */
+
+exports.canonicalize = function(value, stack) {
+  var canonicalizedObj,
+    type = exports.type(value),
+    prop,
+    withStack = function withStack(value, fn) {
+      stack.push(value);
+      fn();
+      stack.pop();
+    };
+
+  stack = stack || [];
+
+  if (exports.indexOf(stack, value) !== -1) {
+    return '[Circular]';
+  }
+
+  switch(type) {
+    case 'undefined':
+      canonicalizedObj = '[undefined]';
+      break;
+    case 'buffer':
+    case 'null':
+      canonicalizedObj = value;
+      break;
+    case 'array':
+      withStack(value, function () {
+        canonicalizedObj = exports.map(value, function (item) {
+          return exports.canonicalize(item, stack);
+        });
+      });
+      break;
+    case 'date':
+      canonicalizedObj = '[Date: ' + value.toISOString() + ']';
+      break;
+    case 'function':
+      for (prop in value) {
+        canonicalizedObj = {};
+        break;
+      }
+      if (!canonicalizedObj) {
+        canonicalizedObj = emptyRepresentation(value, type);
+        break;
+      }
+    /* falls through */
+    case 'object':
+      canonicalizedObj = canonicalizedObj || {};
+      withStack(value, function () {
+        exports.forEach(exports.keys(value).sort(), function (key) {
+          canonicalizedObj[key] = exports.canonicalize(value[key], stack);
+        });
+      });
+      break;
+    case 'number':
+    case 'boolean':
+      canonicalizedObj = value;
+      break;
+    default:
+      canonicalizedObj = value.toString();
+  }
+
+  return canonicalizedObj;
+};
 
 /**
  * Lookup file names at the given `path`.
@@ -5908,7 +6111,29 @@ exports.lookupFiles = function lookupFiles(path, extensions, recursive) {
   });
 
   return files;
-}
+};
+
+/**
+ * Generate an undefined error with a message warning the user.
+ *
+ * @return {Error}
+ */
+
+exports.undefinedError = function(){
+  return new Error('Caught undefined error, did you throw without specifying what?');
+};
+
+/**
+ * Generate an undefined error if `err` is not defined.
+ *
+ * @param {Error} err
+ * @return {Error}
+ */
+
+exports.getError = function(err){
+  return err || exports.undefinedError();
+};
+
 
 }); // module: utils.js
 // The global object is "self" in Web Workers.
@@ -6052,12 +6277,13 @@ mocha.run = function(fn){
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(query.grep);
+  if (query.grep) mocha.grep(new RegExp(query.grep));
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
-    if (global.document && options.noHighlighting !== true) {
+    var document = global.document;
+    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
       Mocha.utils.highlightTags('code');
     }
     if (fn) fn(err);

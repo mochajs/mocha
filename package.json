@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "1.21.4",
+  "version": "2.1.0",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -17,12 +17,18 @@
     "Christopher Hiller <chiller@badwing.com>",
     "Travis Jeffery <tj@travisjeffery.com>",
     "Johnathan Ong <me@jongleberry.com>",
-    "Guillermo Rauch <rauchg@gmail.com>"
+    "Guillermo Rauch <rauchg@gmail.com>",
+    "Nathan Rajlich <nathan@tootallnate.net>"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/visionmedia/mocha.git"
+    "url": "git://github.com/mochajs/mocha.git"
   },
+  "maintainers": [
+    "travisjeffery <tj@travisjeffery.com>",
+    "jbnicolai <joshua@jbna.nl>",
+    "boneskull <chiller@badwing.com>"
+  ],
   "main": "./index",
   "browser": "./mocha.js",
   "bin": {
@@ -30,7 +36,7 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 0.4.x"
+    "node": ">= 0.8.x"
   },
   "scripts": {
     "test": "make test-all"
@@ -39,7 +45,7 @@
     "commander": "2.3.0",
     "debug": "2.0.0",
     "diff": "1.0.8",
-    "escape-string-regexp": "1.0.1",
+    "escape-string-regexp": "1.0.2",
     "glob": "3.2.3",
     "growl": "1.8.1",
     "jade": "0.26.3",
@@ -61,7 +67,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/visionmedia/mocha/master/LICENSE"
+      "url": "https://raw.github.com/mochajs/mocha/master/LICENSE"
     }
   ]
 }

@@ -1,4 +1,3 @@
-
 var mocha = require('../')
   , Suite = mocha.Suite
   , Runner = mocha.Runner
@@ -179,6 +178,20 @@ describe('Runner', function(){
         done();
       });
       runner.checkGlobals(test);
+    })
+  })
+
+  describe('.hook(name, fn)', function(){
+    it('should execute hooks after failed test if suite bail is true', function(done){
+      runner.fail({});
+      suite.bail(true);
+      suite.afterEach(function(){
+        suite.afterAll(function() {
+          done();
+        })
+      });
+      runner.hook('afterEach', function(){});
+      runner.hook('afterAll', function(){});
     })
   })
 

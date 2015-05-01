@@ -5,17 +5,13 @@
  */
 
 var program = require('commander')
-  , sprintf = require('util').format
   , path = require('path')
   , fs = require('fs')
-  , glob = require('glob')
   , resolve = path.resolve
   , exists = fs.existsSync || path.existsSync
   , Mocha = require('../')
   , utils = Mocha.utils
-  , interfaces = Mocha.interfaces
   , join = path.join
-  , basename = path.basename
   , cwd = process.cwd()
   , mocha = new Mocha;
 
@@ -65,6 +61,7 @@ program
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
+  .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
   .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['spec'])
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
@@ -85,6 +82,9 @@ program
   .option('--harmony-collections', 'enable harmony collections (sets, maps, and weak maps)')
   .option('--harmony-generators', 'enable harmony generators')
   .option('--harmony-proxies', 'enable harmony proxies')
+  .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
+  .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
+  .option('--harmony_proxies', 'enable "harmony proxies" (iojs)')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
@@ -179,7 +179,10 @@ var optsPath = process.argv.indexOf('--opts') !== -1
 try {
   var opts = fs.readFileSync(optsPath, 'utf8')
     .trim()
-    .split(/\s+/);
+    .split(/\s+/)
+    .filter(function(value) {
+      return value ? true : false;
+    });
 
   process.argv = process.argv
     .slice(0, 2)
@@ -196,9 +199,22 @@ program.parse(process.argv);
 
 Error.stackTraceLimit = Infinity; // TODO: config
 
+// reporter options
+
+var reporterOptions = {};
+if (program.reporterOptions !== undefined) {
+    program.reporterOptions.split(",").forEach(function(opt) {
+        var L = opt.split("=");
+        if (L.length != 2) {
+            throw new Error("invalid reporter option '" + opt + "'");
+        }
+        reporterOptions[L[0]] = L[1];
+    });
+}
+
 // reporter
 
-mocha.reporter(program.reporter);
+mocha.reporter(program.reporter, reporterOptions);
 
 // interface
 
@@ -270,6 +286,7 @@ program.compilers.forEach(function(c) {
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);
   extensions.push(ext);
+  program.watchExtensions.push(ext);
 });
 
 // requires
@@ -278,10 +295,9 @@ requires.forEach(function(mod) {
   require(mod);
 });
 
-// files
+//args
 
-var files = []
-  , args = program.args;
+var args = program.args;
 
 // default files to test/*.{js,coffee}
 
@@ -314,7 +330,7 @@ if (program.watch) {
   });
 
 
-  var watchFiles = utils.files(cwd, [ 'js', 'coffee', 'litcoffee', 'coffee.md' ].concat(program.watchExtensions));
+  var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
   var runAgain = false;
 
   function loadAndRun() {
@@ -343,6 +359,8 @@ if (program.watch) {
   function rerun() {
     purge();
     stop()
+    if (!program.grep)
+      mocha.grep(null);
     mocha.suite = mocha.suite.clone();
     mocha.suite.ctx = new Mocha.Context;
     mocha.ui(program.ui);
@@ -364,10 +382,30 @@ if (program.watch) {
 // load
 
 mocha.files = files;
-runner = mocha.run(program.exit ? process.exit : exitLater);
+runner = mocha.run(program.exit ? exit : exitLater);
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
+}
+
+function exit(code) {
+  // flush output for Node.js Windows pipe bug
+  // https://github.com/joyent/node/issues/6247 is just one bug example
+  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
+  function done() {
+    if (!(draining--)) process.exit(code);
+  }
+
+  var draining = 0;
+  var streams = [process.stdout, process.stderr];
+
+  streams.forEach(function(stream){
+    // submit empty write request and wait for completion
+    draining += 1;
+    stream.write('', done);
+  });
+
+  done();
 }
 
 process.on('SIGINT', function() { runner.abort(); })

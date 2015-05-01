@@ -1,4 +1,3 @@
-
 var Mocha = require('../../')
   , Suite = Mocha.Suite
   , Runner = Mocha.Runner
@@ -35,6 +34,25 @@ describe('json reporter', function(){
        failure.should.have.property('title', testTitle);
        failure.err.message.should.equal(error.message);
        failure.should.have.properties('err');
+
+       done();
+     });
+  })
+
+  it('should have 1 test pending', function(done) {
+    var testTitle = 'json test 1';
+
+     suite.addTest(new Test(testTitle));
+
+     runner.run(function(failureCount) {
+       failureCount.should.be.exactly(0);
+       runner.should.have.property('testResults');
+       runner.testResults.should.have.property('pending');
+       runner.testResults.pending.should.be.an.instanceOf(Array);
+       runner.testResults.pending.should.have.a.lengthOf(1);
+
+       var pending = runner.testResults.pending[0];
+       pending.should.have.property('title', testTitle);
 
        done();
      });
