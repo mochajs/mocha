@@ -12,7 +12,7 @@ describe('json reporter', function(){
     });
     suite = new Suite('JSON suite', 'root');
     runner = new Runner(suite);
-    var mochaReporter = new mocha._reporter(runner);
+    var mochaReporter = new mocha._reporters[0](runner);
   });
 
    it('should have 1 test failure', function(done){

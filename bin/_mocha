@@ -63,7 +63,7 @@ program
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
+  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['spec'])
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
@@ -211,15 +211,17 @@ mocha.ui(program.ui);
 
 // load reporter
 
-try {
-  Reporter = require('../lib/reporters/' + program.reporter);
-} catch (err) {
+program.reporter.forEach(function (reporter) {
   try {
-    Reporter = require(program.reporter);
+    Reporter = require('../lib/reporters/' + reporter);
   } catch (err) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
+    try {
+      Reporter = require(reporter);
+    } catch (err) {
+      throw new Error('reporter "' + reporter + '" does not exist');
+    }
   }
-}
+});
 
 // --no-colors
 
