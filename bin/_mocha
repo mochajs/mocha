@@ -209,6 +209,20 @@ mocha.reporter(program.reporter, reporterOptions);
 
 mocha.ui(program.ui);
 
+// load reporter
+
+program.reporter.forEach(function (reporter) {
+  try {
+    Reporter = require('../lib/reporters/' + reporter);
+  } catch (err) {
+    try {
+      Reporter = require(reporter);
+    } catch (err) {
+      throw new Error('reporter "' + reporter + '" does not exist');
+    }
+  }
+});
+
 // --no-colors
 
 if (!program.colors) mocha.useColors(false);
