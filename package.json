@@ -20,6 +20,7 @@
     "Ariel Mashraki <ariel@mashraki.co.il>",
     "Pawel Kozlowski <pkozlowski.opensource@gmail.com>"
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/mochajs/mocha.git"
