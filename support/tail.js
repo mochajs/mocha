@@ -63,8 +63,9 @@ process.on = function(e, fn){
  * Expose mocha.
  */
 
-var Mocha = global.Mocha = require('mocha'),
-    mocha = global.mocha = new Mocha({ reporter: 'html' });
+var Mocha = global.Mocha = require('mocha')
+  , mocha = global.mocha = new Mocha({ reporter: 'html' })
+  , escapeRe = require('browser/escape-string-regexp');
 
 // The BDD UI is registered by default, but no UI will be functional in the
 // browser without an explicit call to the overridden `mocha.ui` (see below).
@@ -139,7 +140,7 @@ mocha.run = function(fn){
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(new RegExp(query.grep));
+  if (query.grep) mocha.grep(new RegExp(escapeRe(query.grep)));
   if (query.fgrep) mocha.grep(query.fgrep);
   if (query.invert) mocha.invert();
 
