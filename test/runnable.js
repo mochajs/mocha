@@ -1,7 +1,8 @@
 var mocha = require('../')
   , utils = mocha.utils
   , Runnable = mocha.Runnable
-  , EventEmitter = require('events').EventEmitter;
+  , EventEmitter = require('events').EventEmitter
+  , domain = require('domain');
 
 describe('Runnable(title, fn)', function(){
   // For every test we poison the global time-related methods.
@@ -278,6 +279,30 @@ describe('Runnable(title, fn)', function(){
           });
         })
       })
+      
+      it("should exit a domain even when nested", function(done) {
+        var test = new Runnable('foo', function(done) {
+          var d = domain.create();
+          
+          d.run(function() {
+            setImmediate(function() {
+              var d2 = domain.create();
+              
+              d2.run(function() {
+                setImmediate(function() {
+                  done();
+                });
+              });
+            });
+          });
+        });
+        
+        test.run(function(err) {
+          (domain.active === undefined).should.be.true;
+          
+          done();
+        });
+      });
 
       it('should allow updating the timeout', function(done){
         var callCount = 0;
