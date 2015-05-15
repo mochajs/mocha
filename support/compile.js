@@ -49,7 +49,8 @@ function parseRequires(js) {
     .replace(/require\('tty'\)/g                  , "require('browser/tty')")
     .replace(/require\('escape-string-regexp'\)/g , "require('browser/escape-string-regexp')")
     .replace(/require\('glob'\)/g                 , "require('browser/glob')")
-    .replace(/require\('fs'\)/g                   , "require('browser/fs')");
+    .replace(/require\('fs'\)/g                   , "require('browser/fs')")
+    .replace(/require\('domain'\)/g               , "require('browser/domain')");
 }
 
 /**
