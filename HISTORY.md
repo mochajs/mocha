@@ -1,4 +1,22 @@
 
+2.2.5 / 2015-05-14
+==================
+
+  * Merge pull request #1699 from nylen/upgrade/jsdiff
+  * Upgrade jsdiff to v1.4.0
+  * Merge pull request #1648 from nylen/fix/diff-colors
+  * Merge pull request #1686 from danielstjules/1327-regression
+  * Sanity check: update fixtures/regression/issue-1327.js to be closer to orig test
+  * Fix diff colors
+  * Merge pull request #1675 from danielstjules/integration-tests
+  * Merge pull request #1682 from kemitchell/spdx-license
+  * use a valid SPDX license identifier
+  * Add integration tests
+  * Merge pull request #1655 from a8m/fix-issue-1241
+  * Merge pull request #1661 from a8m/fix-issue-1660
+  * fix(utils/stringify): fix issue #1660
+  * fix(reporter/base): issue #1241
+
 2.2.4 / 2015-04-08
 ==================
 

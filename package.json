@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -20,6 +20,7 @@
     "Ariel Mashraki <ariel@mashraki.co.il>",
     "Pawel Kozlowski <pkozlowski.opensource@gmail.com>"
   ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/mochajs/mocha.git"
@@ -44,7 +45,7 @@
   "dependencies": {
     "commander": "2.3.0",
     "debug": "2.0.0",
-    "diff": "1.0.8",
+    "diff": "1.4.0",
     "escape-string-regexp": "1.0.2",
     "glob": "3.2.3",
     "growl": "1.8.1",
