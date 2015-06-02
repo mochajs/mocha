@@ -501,11 +501,22 @@ Options:
  --check-leaks                           check for global variable leaks
  --compilers <ext>:<module>,...          use the given module(s) to compile files
  --debug-brk                             enable node's debugger breaking on the first line
+ --delay                                 wait for async suite definition
+ --es_staging                            enable all staged features
+ --full-trace                            display the full stack trace
  --globals <names>                       allow the given comma-delimited global [names]
+ --harmony                               enable all harmony features (except typeof)
+ --harmony-collections                   enable harmony collections (sets, maps, and weak maps)
+ --harmony-generators                    enable harmony generators
+ --harmony-proxies                       enable harmony proxies
+ --harmony_arrow_functions               enable "harmony arrow functions" (iojs)
+ --harmony_classes                       enable "harmony classes" (iojs)
+ --harmony_proxies                       enable "harmony proxies" (iojs)
+ --harmony_shipping                      enable all shipped harmony fetaures (iojs)
  --inline-diffs                          display actual/expected differences inline within each string
  --interfaces                            display available interfaces
  --no-deprecation                        silence deprecation warnings
- --no-exit                               require a clean shutdown of the event loop: mocha will exit
+ --no-exit                               require a clean shutdown of the event loop: mocha will not call process.exit
  --no-timeouts                           disables timeouts, given implicitly with --debug
  --opts <path>                           specify opts path
  --prof                                  log statistical profiling information
@@ -515,7 +526,6 @@ Options:
  --trace                                 trace function calls
  --trace-deprecation                     show stack traces on deprecations
  --watch-extensions <ext>,...            additional extensions to monitor with --watch
- --delay                                 wait for async suite definition
 ```
 
 ### `-w, --watch`
