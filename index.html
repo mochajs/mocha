@@ -419,13 +419,23 @@ Options:
  -u, --ui &lt;name&gt;                         specify user-interface (bdd|tdd|exports)
  -w, --watch                             watch files for changes
  --check-leaks                           check for global variable leaks
+ --full-trace                            display the full stack trace
  --compilers &lt;ext&gt;:&lt;module&gt;,...          use the given module(s) to compile files
  --debug-brk                             enable node's debugger breaking on the first line
  --globals &lt;names&gt;                       allow the given comma-delimited global [names]
+ --harmony                               enable all harmony features (except typeof)
+ --es_staging                            enable all staged features
+ --harmony-collections                   enable harmony collections (sets, maps, and weak maps)
+ --harmony-generators                    enable harmony generators
+ --harmony-proxies                       enable harmony proxies
+ --harmony_shipping                      enable all shipped harmony fetaures (iojs)
+ --harmony_arrow_functions               enable "harmony arrow functions" (iojs)
+ --harmony_proxies                       enable "harmony proxies" (iojs)
+ --harmony_classes                       enable "harmony classes" (iojs)
  --inline-diffs                          display actual/expected differences inline within each string
  --interfaces                            display available interfaces
  --no-deprecation                        silence deprecation warnings
- --no-exit                               require a clean shutdown of the event loop: mocha will exit
+ --no-exit                               require a clean shutdown of the event loop: mocha will not call process.exit
  --no-timeouts                           disables timeouts, given implicitly with --debug
  --opts &lt;path&gt;                           specify opts path
  --prof                                  log statistical profiling information
