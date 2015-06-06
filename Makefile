@@ -1,4 +1,6 @@
+BROWSERIFY := node_modules/.bin/browserify
 ESLINT := node_modules/.bin/eslint
+
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -6,20 +8,15 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
-lib/browser/diff.js: node_modules/diff/diff.js
-	cp node_modules/diff/diff.js lib/browser/diff.js
-
-lib/browser/escape-string-regexp.js: node_modules/escape-string-regexp/index.js
-	cp node_modules/escape-string-regexp/index.js lib/browser/escape-string-regexp.js
-
-mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp.js
-	@node support/compile $(SRC)
-	@cat \
-	  support/head.js \
-	  _mocha.js \
-	  support/tail.js \
-	  support/foot.js \
-	  > mocha.js
+# TODO: Remove filesize echos, just for comparison during browserify transition
+mocha.js: $(SRC) $(SUPPORT)
+	@$(BROWSERIFY) ./support/browser-entry \
+		--ignore 'fs' \
+		--ignore 'glob' \
+		--ignore 'jade' \
+		--ignore 'path' \
+		--ignore 'supports-color' \
+		--exclude './lib-cov/mocha' > $@
 
 clean:
 	rm -f mocha.js

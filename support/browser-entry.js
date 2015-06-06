@@ -1,5 +1,12 @@
-// The global object is "self" in Web Workers.
-var global = (function() { return this; })();
+var Mocha = require('../');
+
+/**
+ * Create a Mocha instance.
+ *
+ * @return {undefined}
+ */
+
+var mocha = new Mocha({ reporter: 'html' });
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -10,19 +17,6 @@ var setTimeout = global.setTimeout;
 var setInterval = global.setInterval;
 var clearTimeout = global.clearTimeout;
 var clearInterval = global.clearInterval;
-
-/**
- * Node shims.
- *
- * These are meant only to allow
- * mocha.js to run untouched, not
- * to allow running node code in
- * the browser.
- */
-
-var process = {};
-process.exit = function(status){};
-process.stdout = {};
 
 var uncaughtExceptionHandlers = [];
 
@@ -58,13 +52,6 @@ process.on = function(e, fn){
     uncaughtExceptionHandlers.push(fn);
   }
 };
-
-/**
- * Expose mocha.
- */
-
-var Mocha = global.Mocha = require('mocha'),
-    mocha = global.mocha = new Mocha({ reporter: 'html' });
 
 // The BDD UI is registered by default, but no UI will be functional in the
 // browser without an explicit call to the overridden `mocha.ui` (see below).
@@ -154,7 +141,21 @@ mocha.run = function(fn){
 };
 
 /**
+ * Shim process.stdout.
+ */
+
+process.stdout = require('browser-stdout')();
+
+/**
  * Expose the process shim.
+ * https://github.com/mochajs/mocha/pull/916
  */
 
 Mocha.process = process;
+
+/**
+ * Expose mocha.
+ */
+
+window.Mocha = Mocha;
+window.mocha = mocha;

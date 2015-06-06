@@ -263,7 +263,6 @@
     "boneskull <chiller@badwing.com>"
   ],
   "main": "./index",
-  "browser": "./mocha.js",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
@@ -287,9 +286,12 @@
     "supports-color": "1.2.0"
   },
   "devDependencies": {
+    "browser-stdout": "^1.2.0",
+    "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
     "eslint": "~0.23.0",
-    "should": "~4.0.0"
+    "should": "~4.0.0",
+    "through2": "~0.6.5"
   },
   "files": [
     "bin",
@@ -300,6 +302,11 @@
     "mocha.js",
     "LICENSE"
   ],
+  "browser": {
+    "debug": "./lib/browser/debug.js",
+    "events": "./lib/browser/events.js",
+    "tty": "./lib/browser/tty.js"
+  },
   "licenses": [
     {
       "type": "MIT",
