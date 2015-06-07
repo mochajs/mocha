@@ -1,8 +1,11 @@
+---
+layout: default
+---
 Mocha is a feature-rich JavaScript test framework running on [node.js](http://nodejs.org) and the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
 <a href="https://gitter.im/mochajs/mocha" alt="Gitter" class="badge"><img src="https://badges.gitter.im/Join%20Chat.svg" /></a>
 
-<h2 id="features">Features</h2>
+## Features
 
   - browser support
   - simple async support, including promises
@@ -34,7 +37,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
   - TextMate bundle
   - and more!
 
-<h2 id="table-of-contents">Table of contents</h2>
+## Table of contents
 
   - [Installation](#installation)
   - [1\. 2\. 3\. Mocha!](#getting-started)
@@ -67,8 +70,8 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
 
     $ npm install -g mocha
 
-<h2 id="getting-started">1. 2. 3. Mocha!</h2>
-
+## 1. 2. 3. Mocha!
+{:#getting-started}
 
     $ npm install -g mocha
     $ mkdir test
@@ -91,7 +94,7 @@ Mocha is a feature-rich JavaScript test framework running on [node.js](http://no
       ✔ 1 test complete (1ms)
 
 
-<h2 id="assertions">Assertions</h2>
+## Assertions
 
 Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](https://github.com/visionmedia/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
 
@@ -100,7 +103,7 @@ Mocha allows you to use any assertion library you want, if it throws an error, i
   - [chai](http://chaijs.com/) expect(), assert() and should style assertions
   - [better-assert](https://github.com/visionmedia/better-assert) c-style self-documenting assert()
 
-<h2 id="synchronous-code">Synchronous code</h2>
+## Synchronous code
 
  When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
 
@@ -113,7 +116,7 @@ Mocha allows you to use any assertion library you want, if it throws an error, i
       })
     })
 
-<h2 id="asynchronous-code">Asynchronous code</h2>
+## Asynchronous code
 
 Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()` Mocha will know that it should wait for completion.
 
@@ -188,7 +191,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       console.log('before every test')
     })
 
-<h2 id="hooks">Hooks</h2>
+## Hooks
 
   Mocha provides the hooks `before()`, `after()`, `beforeEach()`, `afterEach()`,
   that can be used to set up preconditions and clean up your tests.
@@ -226,7 +229,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
 
 
-<h2 id="pending-tests">Pending tests</h2>
+## Pending tests
 
   Pending test-cases are simply those without a callback:
 
@@ -236,7 +239,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-<h2 id="exclusive-tests">Exclusive tests</h2>
+## Exclusive tests
 
  The exclusivity feature allows you to run only the specified suite or test-case
  by appending `.only()` to the call as shown here:
@@ -264,7 +267,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   Note that currently only one `.only()` call is respected, this
   effectively turns into a `--grep`.
 
-<h2 id="inclusive-tests">Inclusive tests</h2>
+## Inclusive tests
 
  This feature is similar to `.only()`, however by appending `.skip()`
  you may tell Mocha to simply ignore these suite(s) and test-case(s). This
@@ -291,7 +294,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-<h2 id="meta-generated-test">Meta-Generated tests</h2>
+## Meta-Generated tests
+{:#meta-generated-test}
 
  Given mocha's use of call statements and function expressions to define
  suites and specs, it's rather straightforward to generate your tests. No
@@ -329,7 +333,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       ✓ correctly adds 3 args
       ✓ correctly adds 4 args
 
-<h2 id="test-duration">Test duration</h2>
+## Test duration
 
   Most of the reporters support some form of displaying
   test duration, as well as flagging tests that are slow,
@@ -337,7 +341,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
    ![test duration](images/reporter-spec-duration.png)
 
-<h2 id="string-diffs">String diffs</h2>
+## String diffs
 
   Mocha supports the `err.expected`, and `err.actual` properties
   when available to present expectations to the developer. Currently
@@ -346,7 +350,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![string diffs](images/reporter-string-diffs.png)
 
-<h2 id="usage">mocha(1)</h2>
+## mocha(1)
+{:#usage}
 
 
     Usage: mocha [debug] [options] [files]
@@ -407,54 +412,66 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
      --trace-deprecation                     show stack traces on deprecations
      --watch-extensions <ext>,...            additional extensions to monitor with --watch
 
-<h3 id="watch-option">-w, --watch</h3>
+### -w, --watch
+{:#watch-option}
 
   Executes tests on changes to JavaScript in the CWD, and once initially.
 
-<h3 id="compilers-option">--compilers</h3>
+### --compilers
+{:#copmilers-option}
 
   coffee-script is no longer supported out of the box. CS and similar transpilers
   may be used by mapping the file extensions (for use with --watch) and the module
   name. For example `--compilers coffee:coffee-script` with CoffeeScript 1.6- or
   `--compilers coffee:coffee-script/register` with CoffeeScript 1.7+.
 
-<h3 id="bail-option">-b, --bail</h3>
+### -b, --bail
+{:#bail-option}
 
   Only interested in the first exception? use `--bail` !
 
-<h3 id="debug-option">-d, --debug</h3>
+### -d, --debug
+{:#debug-option}
 
   Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the `debugger` statement. Note the difference between `mocha debug` and `mocha --debug`: `mocha debug` will fire up node's built-in debug client, `mocha --debug` will allow you to use a different interface — such as the Blink Developer Tools.
 
-<h3 id="globals-option">--globals &lt;names&gt;</h3>
+### --globals &lt;names&gt;
+{:#globals-option}
 
   Accepts a comma-delimited list of accepted global variable names. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`. It also accepts wildcards. You could do `--globals '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
 
-<h3 id="ignore-leaks-option">--check-leaks</h3>
+### --check-leaks
+{:#ignore-leaks-option}
 
   By default Mocha will not check for global variables leaked while running tests, to enable this pass `--check-leaks`, to specify globals that are acceptable use `--globals`, for example `--globals jQuery,MyLib`.
 
-<h3 id="require-option">-r, --require &lt;name&gt;</h3>
+### -r, --require &lt;name&gt;
+{:#require-option}
 
   The `--require` option is useful for libraries such as [should.js](https://github.com/visionmedia/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`. Furthermore, it can be used with relative paths, e.g. `--require ./test/helper.js`
 
-<h3 id="ui-option">-u, --ui &lt;name&gt;</h3>
+### -u, --ui &lt;name&gt;
+{:#ui-option}
 
   The `--ui` option lets you specify the interface to use, defaulting to "bdd".
 
-<h3 id="reporter-option">-R, --reporter &lt;name&gt;</h3>
+### -R, --reporter &lt;name&gt;
+{:#reporter-option}
 
   The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
 
-<h3 id="timeout-option">-t, --timeout &lt;ms&gt;</h3>
+### -t, --timeout &lt;ms&gt;
+{:#timeout-option}
 
   Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the `s` suffix, ex: `--timeout 2s` or `--timeout 2000` would be equivalent.
 
-<h3 id="slow-option">-s, --slow &lt;ms&gt;</h3>
+### -s, --slow &lt;ms&gt;
+{:#slow-option}
 
   Specify the "slow" test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.
 
-<h3 id="grep-option">-g, --grep &lt;pattern&gt;</h3>
+### -g, --grep &lt;pattern&gt;
+{:#grep-option}
 
   The `--grep` option when specified will trigger mocha to only run tests matching the given `pattern` which is internally compiled to a `RegExp`.
 
@@ -472,11 +489,12 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       })
     })
 
-<h2 id="interfaces">Interfaces</h2>
+## Interfaces
 
   Mocha "interface" system allows developers to choose their style of DSL. Shipping with __BDD__, __TDD__, and __exports__ flavoured interfaces.
 
-<h3 id="bdd-interface">BDD</h3>
+## BDD
+{:#bdd-interface}
 
   The "__BDD__" interface provides `describe()`, `context()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`:
 
@@ -506,7 +524,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       });
     });
 
-<h3 id="tdd-interface">TDD</h3>
+### TDD
+{:#tdd-interface}
 
   The "__TDD__" interface provides `suite()`, `test()`, `suiteSetup()`, `suiteTeardown()`, `setup()`, and `teardown()`.
 
@@ -522,7 +541,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       });
     });
 
-<h3 id="exports-interface">Exports</h3>
+### Exports
+{:#exports-interface}
 
   The "__exports__" interface is much like Mocha's predecessor [expresso](https://github.com/visionmedia/expresso). The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values
   are suites, and function values are test-cases.
@@ -541,7 +561,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       }
     };
 
-<h3 id="qunit-interface">QUnit</h3>
+### QUnit
+{:#qunit-interface}
 
   The qunit-inspired interface matches the "flat" look of QUnit where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
@@ -569,7 +590,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       ok('foo'.length == 3);
     });
 
-<h3 id="require-interface">Require</h3>
+### Require
+{:#require-interface}
 
   The `require` interface allows you to require the `describe` and friend words
   directly using `require` and call them whatever you want. This interface
@@ -595,13 +617,14 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       });
     });
 
-<h2 id="reporters">Reporters</h2>
+## Reporters
 
   Mocha reporters adjust to the terminal window,
   and always disable ansi-escape colouring when
   the stdio streams are not associated with a tty.
 
-<h3 id="dot-matrix-reporter">Dot Matrix</h3>
+### Dot Matrix
+{:#dot-matrix-reporter}
 
   The "dot" matrix reporter is simply a series of dots
   that represent test cases, failures highlight in red,
@@ -609,7 +632,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
    ![dot matrix reporter](images/reporter-dot.png)
 
-<h3 id="spec-reporter">Spec</h3>
+### Spec
+{:#spec-reporter}
 
   The "spec" reporter outputs a hierarchical view
   nested just as the test cases are.
@@ -617,19 +641,22 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
    ![spec reporter](images/reporter-spec.png)
    ![spec reporter with failure](images/reporter-spec-fail.png)
 
-<h3 id="nyan-reporter">Nyan</h3>
+### Nyan
+{:#nyan-reporter}
 
   The "nyan" reporter is exactly what you might expect:
 
   ![js nyan cat reporter](images/reporter-nyan.png)
 
-<h3 id="tap-reporter">TAP</h3>
+### TAP
+{:#tap-reporter}
 
   The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
   ![test anything protocol](images/reporter-tap.png)
 
-<h3 id="landing-strip-reporter">Landing Strip</h3>
+### Landing Strip
+{:#landing-strip-reporter}
 
   The Landing Strip reporter is a gimmicky test reporter simulating
   a plane landing :) unicode ftw
@@ -637,7 +664,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
   ![landing strip plane reporter](images/reporter-landing.png)
   ![landing strip with failure](images/reporter-landing-fail.png)
 
-<h3 id="list-reporter">List</h3>
+### List
+{:#list-reporter}
 
   The "List" reporter outputs a simple specifications list as
   test cases pass or fail, outputting the failure details at
@@ -645,30 +673,35 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![list reporter](images/reporter-list.png)
 
-<h3 id="progress-reporter">Progress</h3>
+### Progress
+{:#progress-reporter}
 
   The progress reporter implements a simple progress-bar:
 
   ![progress bar](images/reporter-progress.png)
 
-<h3 id="json-reporter">JSON</h3>
+### JSON
+{:#json-reporter}
 
   The JSON reporter outputs a single large JSON object when
   the tests have completed (failures or not).
 
   ![json reporter](images/reporter-json.png)
 
-<h3 id="json-stream-reporter">JSON Stream</h3>
+### JSON Stream
+{:#json-stream-reporter}
 
   The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
   ![json stream reporter](images/reporter-json-stream.png)
 
-<h3 id="jsoncov-reporter">JSONCov</h3>
+### JSONCov
+{:#jsoncov-reporter}
 
   The JSONCov reporter is similar to the JSON reporter, however when run against a library instrumented by [node-jscoverage](https://github.com/visionmedia/node-jscoverage) it will produce coverage output.
 
-<h3 id="htmlcov-reporter">HTMLCov</h3>
+### HTMLCov
+{:#htmlcov-reporter}
 
   The HTMLCov reporter extends the JSONCov reporter. The library being tested should first be instrumented by [node-jscoverage](https://github.com/visionmedia/node-jscoverage), this allows Mocha to capture the coverage information necessary to produce a single-page HTML report.
 
@@ -676,7 +709,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![code coverage reporting](images/reporter-htmlcov.png)
 
-<h3 id="min-reporter">Min</h3>
+### Min
+{:#min-reporter}
 
   The "min" reporter displays the summary only, while still outputting errors
   on failure. This reporter works great with `--watch` as it clears the terminal
@@ -684,7 +718,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   ![min reporter](images/reporter-min.png)
 
-<h3 id="doc-reporter">Doc</h3>
+### Doc
+{:#doc-reporter}
 
  The "doc" reporter outputs a hierarchical HTML body representation
  of your tests, wrap it with a header, footer, some styling and you
@@ -728,29 +763,33 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
 
-<h3 id="xunit-reporter">XUnit</h3>
+### XUnit
+{:#xunit-reporter}
 
    Documentation needed.
 
-<h3 id="teamcity-reporter">TeamCity</h3>
+### TeamCity
+{:#teamcity-reporter}
 
    Documentation needed.
 
-<h3 id="markdown-reporter">Markdown</h3>
+### Markdown
+{:#markdown-reporter}
 
   The "markdown" reporter generates a markdown TOC and body for your
   test suite. This is great if you want to use the tests as documentation
   within a Github wiki page, or a markdown file in the repository that
   Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
 
-<h3 id="html-reporter">HTML</h3>
+### HTML
+{:#html-reporter}
 
  The __HTML__ reporter is currently the only browser reporter
  supported by Mocha, and it looks like this:
 
  ![HTML test reporter](images/reporter-html.png)
 
-<h2 id="browser-support">Browser support</h2>
+## Browser support
 
  Mocha runs in the browser. Every release of Mocha will have new builds of _./mocha.js_ and _./mocha.css_ for use in the browser. To setup Mocha for browser use all you have to do is include the script, stylesheet, tell Mocha which interface you wish to use, and then run the tests. A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the __BDD__ interface before loading the test scripts, running them `onload` with `mocha.run()`.
 
@@ -777,11 +816,13 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     </body>
     </html>
 
-<h3 id="grep-query">grep</h3>
+### grep
+{:#grep-query}
 
   The client-side may use `--grep` as well, however, you must append a query-string to your URL: `?grep=api`.
 
-<h3 id="browser-setup">Mocha Setup in the Browser</h3>
+### Mocha Setup in the Browser
+{:#browser-setup}
 
   Mocha options can be set via `mocha.setup()`.  Examples:
 
@@ -801,13 +842,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       asyncOnly: true
     });
 
-<h3 id="browser-specific-options">Browser-specific option(s)</h3>
+### Browser-specific option(s)
+{:#browser-specific-options}
 
   The following option(s) *only* function in a browser context:
 
   `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.
 
-<h2 id="mocha.opts">mocha.opts</h2>
+### mocha.opts
+{:#mocha.opts}
 
  Mocha will attempt to load `./test/mocha.opts`, these are concatenated with `process.argv`, though command-line args will take precedence. For example suppose you have the following _mocha.opts_ file:
 
@@ -822,7 +865,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ mocha --reporter list --growl
 
-<h2 id="suite-specific-timeouts">Suite specific timeouts</h2>
+## Suite specific timeouts
 
   Suite-level timeouts may be applied to entire test "suites", or disabled
   via `this.timeout(0)`. This will be inherited by all nested suites and test-cases
@@ -841,7 +884,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
     })
 
 
-<h2 id="test-specific-timeouts">Test specific timeouts</h2>
+## Test specific timeouts
 
   Test-specific timeouts may also be applied, or the use of `this.timeout(0)`
   to disable timeouts all together:
@@ -851,14 +894,15 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
       setTimeout(done, 300);
     })
 
-<h2 id="best-practices">Best practices</h2>
+## Best practices
 
-<h3 id="test-directory">test/*</h3>
+### test/*
+{:#test-directory}
 
  By default `mocha(1)` will use the pattern `./test/*.js`, so
  it's usually a good place to put your tests.
 
-<h3 id="makefiles">Makefiles</h3>
+### Makefiles
 
  Be kind and don't make developers hunt around in your docs to figure
  out how to run the tests, add a `make test` target to your _Makefile_:
@@ -868,11 +912,11 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     .PHONY: test
 
-<h2 id="editors">Editors</h2>
+## Editors
 
   The following editor-related packages are available:
 
-<h3 id="textmate-bundle">TextMate bundle</h3>
+### TextMate bundle
 
   The Mocha TextMate bundle includes snippets to
   make writing tests quicker and more enjoyable.
@@ -880,7 +924,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ make tm
 
-<h3 id="jetbrains-plugin">JetBrains plugin</h3>
+### JetBrains plugin
 
   [JetBrains](http://jetbrains.com) provides a [NodeJS plugin](http://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
@@ -888,7 +932,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, or via [direct download](http://plugins.jetbrains.com/plugin/6098?pr=phpStorm).
 
-<h2 id="example-test-suites">Example test suites</h2>
+### Example test suites
 
   The following test suites are from real projects putting Mocha to use,
   so they serve as good examples:
@@ -899,7 +943,8 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
    - [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
    - [Mocha](https://github.com/mochajs/mocha/tree/master/test)
 
-<h2 id="running-mochas-tests">Running mocha's tests</h2>
+### Running mocha's tests
+{:#running-mochas-tests}
 
  Run the tests:
 
@@ -913,6 +958,7 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
     $ make test REPORTER=list
 
-<h2 id="more-information">More information</h2>
+## More information
+{:#more-information}
 
   For additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](http://groups.google.com/group/mochajs). For a running example of mocha view [example/tests.html](example/tests.html). For the JavaScript API view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).

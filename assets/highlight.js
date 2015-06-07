@@ -1,9 +1,20 @@
-
-$(function(){
-  $('code').each(function(){
-    $(this).html(highlight($(this).text()));
-  });
+ready(function () {
+  var codes = document.querySelectorAll('code');
+  for (var i = 0, len = codes.length; i < len; i++) {
+    var code = codes[i];
+    code.innerHTML = highlight(code.textContent || innerText);
+  }
 });
+
+function ready (fn) {
+  if (document.addEventListener) {
+    document.addEventListener('DOMContentLoaded', fn);
+  } else {
+    document.attachEvent('onreadystatechange', function() {
+      if (document.readyState === 'interactive') fn();
+    });
+  }
+}
 
 function highlight(js) {
   return js

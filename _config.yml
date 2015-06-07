@@ -1,0 +1,11 @@
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+exclude:
+  - Makefile
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - CNAME
