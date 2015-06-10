@@ -1,6 +1,5 @@
 {
   "name": "mocha",
-  "version": "2.2.5",
   "homepage": "http://mocha.github.io/mocha",
   "description": "simple, flexible, fun test framework",
   "authors": [
