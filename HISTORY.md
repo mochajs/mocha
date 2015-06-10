@@ -2,20 +2,28 @@
 2.2.5 / 2015-05-14
 ==================
 
-  * Merge pull request #1699 from nylen/upgrade/jsdiff
-  * Upgrade jsdiff to v1.4.0
-  * Merge pull request #1648 from nylen/fix/diff-colors
-  * Merge pull request #1686 from danielstjules/1327-regression
-  * Sanity check: update fixtures/regression/issue-1327.js to be closer to orig test
-  * Fix diff colors
-  * Merge pull request #1675 from danielstjules/integration-tests
-  * Merge pull request #1682 from kemitchell/spdx-license
-  * use a valid SPDX license identifier
-  * Add integration tests
-  * Merge pull request #1655 from a8m/fix-issue-1241
-  * Merge pull request #1661 from a8m/fix-issue-1660
-  * fix(utils/stringify): fix issue #1660
-  * fix(reporter/base): issue #1241
+  * [#1699] - Upgrade jsdiff to v1.4.0 ([@nylen])
+  * [#1648] - fix diff background colors in the console ([@nylen])
+  * [#1327] - fix tests running twice, a regression issue. ([#1686], [@danielstjules])
+  * [#1675] - add integration tests ([@danielstjules])
+  * [#1682] - use a valid SPDX license identifier in package.json ([@kemitchell])
+  * [#1660] - fix assertion of invalid dates ([#1661], [@a8m])
+  * [#1241] - fix issue with multiline diffs appearing as single line ([#1655], [@a8m])
+
+[#1699]: https://github.com/mochajs/mocha/issues/1699
+[#1648]: https://github.com/mochajs/mocha/issues/1648
+[#1327]: https://github.com/mochajs/mocha/issues/1327
+[#1686]: https://github.com/mochajs/mocha/issues/1686
+[#1675]: https://github.com/mochajs/mocha/issues/1675
+[#1682]: https://github.com/mochajs/mocha/issues/1682
+[#1660]: https://github.com/mochajs/mocha/issues/1660
+[#1661]: https://github.com/mochajs/mocha/issues/1661
+[#1241]: https://github.com/mochajs/mocha/issues/1241
+[#1655]: https://github.com/mochajs/mocha/issues/1655
+[@nylen]: https://github.com/nylen
+[@danielstjules]: https://github.com/danielstjules
+[@kemitchell]: https://github.com/kemitchell
+[@a8m]: https://github.com/a8m
 
 2.2.4 / 2015-04-08
 ==================
