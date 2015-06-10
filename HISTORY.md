@@ -6,7 +6,7 @@
   * [#1648] - fix diff background colors in the console ([@nylen])
   * [#1327] - fix tests running twice, a regression issue. ([#1686], [@danielstjules])
   * [#1675] - add integration tests ([@danielstjules])
-  * [#1682] - use a valid SPDX license identifier in package.jsn ([@kemitchell])
+  * [#1682] - use a valid SPDX license identifier in package.json ([@kemitchell])
   * [#1660] - fix assertion of invalid dates ([#1661], [@a8m])
   * [#1241] - fix issue with multiline diffs appearing as single line ([#1655], [@a8m])
 
