@@ -872,9 +872,13 @@ The "XUnit" and "TeamCity" reporters are also available, but someone needs to wr
 
 ## Running Mocha in the Browser
 
-Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser. 
+Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.
 
-To configure Mocha for use in the browser, you must include the relevant files, tell Mocha which interface you would like to use, and then tell it to begin the tests.
+### Browser-specific methods
+
+  The following method(s) *only* function in a browser context:
+
+  `mocha.allowUncaught()` : If called, uncaught errors will not be absorbed by the error handler.
 
 A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the **BDD** interface before loading the test scripts, running them `onload` with `mocha.run()`.
 
