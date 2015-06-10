@@ -859,6 +859,12 @@ mocha.setup({
 
 <p><code>noHighlighting</code> : If set to <code>true</code>, do not attempt to use syntax highlighting on output test code.</p>
 
+<h3 id="browser-specific-methods">Browser-specific method(s)</h3>
+
+<p>The following method(s) <em>only</em> function in a browser context:</p>
+
+<p><code>mocha.allowUncaught()</code> : If called, uncaught errors will not be absorbed by the error handler.</p>
+
 <h2 id="mocha.opts">mocha.opts</h2>
 
 <p>Mocha will attempt to load <code>./test/mocha.opts</code>, these are concatenated with <code>process.argv</code>, though command-line args will take precedence. For example suppose you have the following <em>mocha.opts</em> file:</p>
