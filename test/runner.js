@@ -229,10 +229,33 @@ describe('Runner', function(){
       runner.fail(test, err);
     })
 
-    it('should emit a the error when failed with an Error', function(done){
+    it('should emit the error when failed with an Error', function(done){
       var test = {}, err = new Error('an error message');
       runner.on('fail', function(test, err){
         err.message.should.equal('an error message');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should wrap error in a proxy object', function(done){
+      var test = {}, err = new Error('an error message');
+      runner.on('fail', function(test, errProxy){
+        errProxy.should.not.be.an.instanceof(Error).and.should.not.equal(err);
+        errProxy.message.should.equal(err.message);
+        errProxy.name.should.equal(err.name);
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit the error when failed with an Error-like object', function (done) {
+      var test = {}, err = {};
+      err.message = 'an error message';
+      err.name = 'ErrorLike';
+      runner.on('fail', function (test, err){
+        err.message.should.equal('an error message');
+        err.name.should.equal('ErrorLike');
         done();
       });
       runner.fail(test, err);
