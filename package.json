@@ -42,6 +42,7 @@
   "scripts": {
     "test": "make test-all"
   },
+  "style": "mocha.css",
   "dependencies": {
     "commander": "2.3.0",
     "debug": "2.0.0",
