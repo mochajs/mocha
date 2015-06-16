@@ -288,6 +288,7 @@
   },
   "devDependencies": {
     "coffee-script": "~1.8.0",
+    "eslint": "~0.23.0",
     "should": "~4.0.0"
   },
   "files": [
