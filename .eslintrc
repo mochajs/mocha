@@ -14,7 +14,7 @@ rules:
   curly: [2, all]
   default-case: 2
   dot-location: [2, property]
-  dot-notation: [2, { allowKeywords: true }]
+  dot-notation: [2, { allowKeywords: true, allowPattern: "^long$" }]
   eol-last: 2
   eqeqeq: 2
   func-style: [2, declaration]
