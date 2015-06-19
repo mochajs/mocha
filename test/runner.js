@@ -229,8 +229,17 @@ describe('Runner', function(){
       runner.fail(test, err);
     })
 
-    it('should emit a the error when failed with an Error', function(done){
+    it('should emit a the error when failed with an Error instance', function(done){
       var test = {}, err = new Error('an error message');
+      runner.on('fail', function(test, err){
+        err.message.should.equal('an error message');
+        done();
+      });
+      runner.fail(test, err);
+    })
+
+    it('should emit the error when failed with an Error-like object', function(done){
+      var test = {}, err = {message: 'an error message'};
       runner.on('fail', function(test, err){
         err.message.should.equal('an error message');
         done();
