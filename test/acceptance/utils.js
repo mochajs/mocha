@@ -348,6 +348,26 @@ describe('lib/utils', function () {
       type(global).should.equal('global');
       type(true).should.equal('boolean');
     });
+
+    describe('when toString on null or undefined stringifies window', function () {
+      var toString = Object.prototype.toString;
+
+      beforeEach(function () {
+        // some JS engines such as PhantomJS 1.x exhibit this behavior
+        Object.prototype.toString = function () {
+          return '[object DOMWindow]';
+        };
+      });
+
+      it('should recognize null and undefined', function () {
+        type(null).should.equal('null');
+        type(undefined).should.equal('undefined');
+      });
+
+      afterEach(function () {
+        Object.prototype.toString = toString;
+      });
+    });
   });
 
   describe('lookupFiles', function () {
