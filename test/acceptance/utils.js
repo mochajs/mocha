@@ -341,6 +341,7 @@ describe('lib/utils', function () {
       type(1).should.equal('number');
       type(Infinity).should.equal('number');
       type(null).should.equal('null');
+      type(undefined).should.equal('undefined');
       type(new Date()).should.equal('date');
       type(/foo/).should.equal('regexp');
       type('type').should.equal('string');
