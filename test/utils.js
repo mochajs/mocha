@@ -121,7 +121,7 @@ describe('utils', function() {
     describe('on browser', function() {
       var filter;
       before(function() {
-        global.document = true;
+        global.window = true;
         global.location = { href: 'localhost:3000/foo/bar/index.html' };
         filter = utils.stackTraceFilter();
       });
