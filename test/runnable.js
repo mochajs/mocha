@@ -406,5 +406,18 @@ describe('Runnable(title, fn)', function(){
         test.run(done);
       })
     })
+
+    describe('when fn had a done argument and returns a promise', function(){
+      it('should consider this an error', function(done){
+        var test = new Runnable('foo', function(done){
+          return { then: function(){} };
+        });
+
+        test.run(function(err) {
+          err.should.be.ok;
+          done();
+        });
+      })
+    })
   })
 })
