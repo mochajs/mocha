@@ -270,8 +270,7 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 0.8.x",
-    "npm": ">= 1.3.7"
+    "node": ">= 0.8.x"
   },
   "scripts": {
     "test": "make test-all"
