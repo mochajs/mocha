@@ -97,7 +97,8 @@ describe('utils', function() {
           , 'next (/usr/local/lib/node_modules/mocha/lib/runner.js:248:23)'
           , 'Immediate._onImmediate (/usr/local/lib/node_modules/mocha/lib/runner.js:276:5)'
           , 'at processImmediate [as _immediateCallback] (timers.js:321:17)'];
-        filter(stack.join('\n')).should.equal(stack.slice(0,2).concat(stack.slice(5,7)).join('\n'));
+
+        filter(stack.join('\n')).should.equal(stack.slice(0,7).join('\n'));
       });
 
       it('should ignore bower and components files', function() {

@@ -98,7 +98,7 @@ module.exports = {
 
     // Ignore empty lines before/after diff
     return diffs.map(function(diff) {
-      return diff.slice(1, -1).join('\n');
+      return diff.slice(1, -2).join('\n');
     });
   }
 };
