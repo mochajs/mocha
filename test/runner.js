@@ -346,4 +346,39 @@ describe('Runner', function(){
       });
     });
   });
+
+  describe('.run', function(){
+    it('should emit "pending" for each pending test', function(done){
+      var pendingCount = 0;
+
+      var pendingTest = new Test('a pending test', function (){});
+      pendingTest.pending = true;
+
+      var skippedTest = new Test('a test that will be skipped', function(){
+        this.skip();
+      });
+
+      var otherPendingTest = new Test('a test that will be marked as pending',
+      function(){});
+
+      suite.addTest(pendingTest);
+      suite.addTest(skippedTest);
+      suite.addTest(otherPendingTest);
+
+      runner.on('test', function (test) {
+        if (test === otherPendingTest)
+          otherPendingTest.pending = true;
+      });
+
+      runner.on('pending', function () {
+        pendingCount++;
+      });
+
+      runner.run(function (){
+        pendingCount.should.equal(3);
+        done();
+      });
+    })
+  })
+
 });
