@@ -89,6 +89,10 @@ describe('lib/utils', function () {
       stringify(date).should.equal('[Date: ' + date.toISOString() + ']');
     });
 
+    it('should return invalid Date object with .toString() + string prefix', function() {
+      stringify(new Date('')).should.equal('[Date: ' + new Date('').toString() + ']');
+    });
+
     describe('#Number', function() {
       it('should show the handle -0 situations', function() {
         stringify(-0).should.eql('-0');

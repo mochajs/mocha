@@ -20,7 +20,6 @@ mocha.addFile('test/hook.async.js');
 mocha.addFile('test/acceptance/duration.js');
 mocha.addFile('test/acceptance/fs.js');
 mocha.addFile('test/acceptance/globals.js');
-mocha.addFile('test/acceptance/pending.js');
 mocha.addFile('test/acceptance/timeout.js');
 
 mocha.run(function(){

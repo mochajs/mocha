@@ -1,3 +1,62 @@
+
+2.2.5 / 2015-05-14
+==================
+
+  * [#1699] - Upgrade jsdiff to v1.4.0 ([@nylen])
+  * [#1648] - fix diff background colors in the console ([@nylen])
+  * [#1327] - fix tests running twice, a regression issue. ([#1686], [@danielstjules])
+  * [#1675] - add integration tests ([@danielstjules])
+  * [#1682] - use a valid SPDX license identifier in package.json ([@kemitchell])
+  * [#1660] - fix assertion of invalid dates ([#1661], [@a8m])
+  * [#1241] - fix issue with multiline diffs appearing as single line ([#1655], [@a8m])
+
+[#1699]: https://github.com/mochajs/mocha/issues/1699
+[#1648]: https://github.com/mochajs/mocha/issues/1648
+[#1327]: https://github.com/mochajs/mocha/issues/1327
+[#1686]: https://github.com/mochajs/mocha/issues/1686
+[#1675]: https://github.com/mochajs/mocha/issues/1675
+[#1682]: https://github.com/mochajs/mocha/issues/1682
+[#1660]: https://github.com/mochajs/mocha/issues/1660
+[#1661]: https://github.com/mochajs/mocha/issues/1661
+[#1241]: https://github.com/mochajs/mocha/issues/1241
+[#1655]: https://github.com/mochajs/mocha/issues/1655
+[@nylen]: https://github.com/nylen
+[@danielstjules]: https://github.com/danielstjules
+[@kemitchell]: https://github.com/kemitchell
+[@a8m]: https://github.com/a8m
+
+2.2.4 / 2015-04-08
+==================
+
+  * Load mocha.opts in _mocha for now (close #1645)
+
+2.2.3 / 2015-04-07
+==================
+
+  * fix(reporter/base): string diff - issue #1241
+  * fix(reporter/base): string diff - issue #1241 
+  * fix(reporter/base): don't show diffs for errors without expectation 
+  * fix(reporter/base): don't assume error message is first line of stack 
+  * improve: dry up reporter/base test 
+  * fix(reporter/base): explicitly ignore showDiff #1614 
+  * Add iojs to travis build 
+  * Pass `--allow-natives-syntax` flag to node. 
+  * Support --harmony_classes flag for io.js 
+  * Fix 1556: Update utils.clean to handle newlines in func declarations 
+  * Fix 1606: fix err handling in IE <= 8 and non-ES5 browsers 
+  * Fix 1585: make _mocha executable again 
+  * chore(package.json): add a8m as a contributor 
+  * Fixed broken link on html-cov reporter 
+  * support --es_staging flag 
+  * fix issue where menu overlaps content. 
+  * update contributors in package.json 
+  * Remove trailing whitespace from reporter output 
+  * Remove contributors list from readme 
+  * log third-party reporter errors 
+  * [Fix] Exclude not own properties when looping on options 
+  * fix: support node args in mocha.opts (close #1573) 
+  * fix(reporter/base): string diff - issue #1241
+
 2.2.1 / 2015-03-09
 ==================
 

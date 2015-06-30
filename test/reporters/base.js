@@ -88,22 +88,27 @@ describe('Base reporter', function () {
 
   });
 
-  it('should not stringify strings', function () {
-    var err = new Error('test'),
-      errOut;
+  describe('Getting two strings', function() {
+    // Fix regression V1.2.1(see: issue #1241)
+    it('should show strings diff as is', function () {
+      var err = new Error('test'),
+        errOut;
 
-    err.actual = "a1";
-    err.expected = "e2";
-    err.showDiff = true;
-    var test = makeTest(err);
+      err.actual = 'foo\nbar';
+      err.expected = 'foo\nbaz';
+      err.showDiff = true;
+      var test = makeTest(err);
 
-    Base.list([test]);
+      Base.list([test]);
 
-    errOut = stdout.join('\n');
-    errOut.should.not.match(/"/);
-    errOut.should.match(/test/);
-    errOut.should.match(/\- actual/);
-    errOut.should.match(/\+ expected/);
+      errOut = stdout.join('\n');
+
+      errOut.should.not.match(/"foo\\nbar"/);
+      errOut.should.match(/foo/).and.match(/bar/);
+      errOut.should.match(/test/);
+      errOut.should.match(/actual/);
+      errOut.should.match(/expected/);
+    });
   });
 
   it('should stringify objects', function () {

@@ -4,16 +4,17 @@
  * Module dependencies.
  */
 
-var program = require('commander')
-  , path = require('path')
-  , fs = require('fs')
-  , resolve = path.resolve
-  , exists = fs.existsSync || path.existsSync
-  , Mocha = require('../')
-  , utils = Mocha.utils
-  , join = path.join
-  , cwd = process.cwd()
-  , mocha = new Mocha;
+var program = require('commander'),
+  path = require('path'),
+  fs = require('fs'),
+  resolve = path.resolve,
+  exists = fs.existsSync || path.existsSync,
+  Mocha = require('../'),
+  utils = Mocha.utils,
+  join = path.join,
+  cwd = process.cwd(),
+  getOptions = require('./options'),
+  mocha = new Mocha;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -87,6 +88,7 @@ program
   .option('--harmony-proxies', 'enable harmony proxies')
   .option('--harmony_shipping', 'enable all shipped harmony fetaures (iojs)')
   .option('--harmony_arrow_functions', 'enable "harmony arrow functions" (iojs)')
+  .option('--harmony_rest_parameters', 'enable "harmony rest parameters" (iojs)')
   .option('--harmony_proxies', 'enable "harmony proxies" (iojs)')
   .option('--harmony_classes', 'enable "harmony classes" (iojs)')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
@@ -174,6 +176,10 @@ program.on('require', function(mod){
   if (abs) mod = resolve(mod);
   requires.push(mod);
 });
+
+// load mocha.opts into process.argv
+
+getOptions();
 
 // parse args
 
