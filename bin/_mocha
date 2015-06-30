@@ -63,7 +63,7 @@ program
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
+  .option('-R, --reporter <name>,...', 'specify the reporters to use', list, ['spec'])
   .option('-S, --sort', "sort test files")
   .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
@@ -193,13 +193,44 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 var reporterOptions = {};
 if (program.reporterOptions !== undefined) {
-    program.reporterOptions.split(",").forEach(function(opt) {
-        var L = opt.split("=");
-        if (L.length != 2) {
-            throw new Error("invalid reporter option '" + opt + "'");
+
+   program.reporterOptions.split(",").forEach(
+
+    // Two possible formats ...
+     /\w+{(\w+:\w+)+}/.test(program.reporterOptions) ?
+
+     // per-reporter config:
+     //   spec{a:1,b:2},dot{c:3,d:4}
+     function(opt) {
+       var m = opt.match(/(\w+){(\w+:\w+)+}/);
+       if (m.length !== 3) {
+         throw new("invalid reporter option '" + opt + "'");
+       }
+
+       var reporterName = m[1]
+        , reporterOptStr = m[2];
+
+      reporterOptStr.split(",").forEach(function (reporterOpt) {
+        var L = reporterOpt.split(':');
+        if (L.length !== 2) {
+          throw new Error("invalid reporter option '" + opt + "'");
         }
-        reporterOptions[L[0]] = L[1];
-    });
+        reporterOptions[reporterName] = reporterOptions[reporterName] || {};
+        reporterOptions[reporterName][L[0]] = L[1];
+      });
+     } :
+
+     // single reporter config:
+     //   a=1,b=2
+     function(opt) {
+       var L = opt.split("=");
+       if (L.length != 2) {
+         throw new Error("invalid reporter option '" + opt + "'");
+       }
+       reporterOptions._default = reporterOptions._default || {};
+       reporterOptions._default[L[0]] = L[1];
+     }
+   );
 }
 
 // reporter
@@ -212,15 +243,19 @@ mocha.ui(program.ui);
 
 // load reporter
 
-try {
-  Reporter = require('../lib/reporters/' + program.reporter);
-} catch (err) {
+program.reporter.forEach(function (reporterConfig) {
+  var reporterName;
   try {
-    Reporter = require(program.reporter);
+    reporterName = reporterConfig.split(':')[0];
+    Reporter = require('../lib/reporters/' + reporterName);
   } catch (err) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
+    try {
+      Reporter = require(reporterName);
+    } catch (err) {
+      throw new Error('reporter "' + reporterName + '" does not exist');
+    }
   }
-}
+});
 
 // --no-colors
 
