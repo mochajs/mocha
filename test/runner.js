@@ -1,7 +1,8 @@
-var mocha = require('../')
-  , Suite = mocha.Suite
-  , Runner = mocha.Runner
-  , Test = mocha.Test;
+var mocha = require('../'),
+  vm = require('vm'),
+  Suite = mocha.Suite,
+  Runner = mocha.Runner,
+  Test = mocha.Test;
 
 describe('Runner', function(){
   var suite, runner;
@@ -238,14 +239,15 @@ describe('Runner', function(){
       runner.fail(test, err);
     })
 
-    it('should emit the error when failed with an Error-like object', function(done){
-      var test = {}, err = {message: 'an error message'};
-      runner.on('fail', function(test, err){
-        err.message.should.equal('an error message');
-        done();
+    it('should emit the error when failed with an Error returned from a vm',
+      function (done) {
+        var test = {}, err = vm.runInNewContext('new TypeError("an error message")');
+        runner.on('fail', function (test, err) {
+          err.message.should.equal('an error message');
+          done();
+        });
+        runner.fail(test, err);
       });
-      runner.fail(test, err);
-    })
 
     it('should emit a helpful message when failed with an Object', function(done){
       var test = {}, err = { x: 1 };
