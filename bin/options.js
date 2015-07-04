@@ -21,7 +21,7 @@ function getOptions() {
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
-          .split(/\s+/)
+          .split(/\s/)
           .filter(Boolean);
 
     process.argv = process.argv
