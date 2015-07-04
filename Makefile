@@ -1,4 +1,3 @@
-
 ESLINT := node_modules/.bin/eslint
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
