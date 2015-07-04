@@ -807,6 +807,12 @@ Testing asynchronous code with Mocha could not be simpler! Simply invoke the cal
 
   `noHighlighting` : If set to `true`, do not attempt to use syntax highlighting on output test code.
 
+<h3 id="browser-specific-methods">Browser-specific method(s)</h3>
+
+  The following method(s) <em>only</em> function in a browser context:
+
+  `mocha.allowUncaught()` : If called, uncaught errors will not be absorbed by the error handler.
+
 <h2 id="mocha.opts">mocha.opts</h2>
 
  Mocha will attempt to load `./test/mocha.opts`, these are concatenated with `process.argv`, though command-line args will take precedence. For example suppose you have the following _mocha.opts_ file:
