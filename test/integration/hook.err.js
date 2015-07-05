@@ -1,296 +1,360 @@
-describe('hook error handling', function(){
-  // Lines in this test should be uncommented to see actual behavior
-  // You will also see errors in hooks
+var assert = require('assert');
+var runMochaFunction = require('./helpers').runMochaFunction;
+
+describe('hook error handling', function() {
+  this.timeout(1000);
+
+  var lines;
+
   describe('before hook error', function() {
-    var calls = [];
-    describe('spec 1', function () {
-      describe('spec 1 nested', function () {
-        it('should not be called, because hook error was in a parent suite', function() {
-          calls.push('test nested');
-        })
-      })
-      before(function(){
-        calls.push('before');
-        // throw new Error('before hook error');
-      })
-      after(function(){
-        calls.push('after');
-      })
-      it('should not be called because of error in before hook', function() {
-        calls.push('test');
-      })
-    })
-    describe('spec 2', function () {
-      before(function(){
-        calls.push('before 2');
-      })
-      after(function(){
-        calls.push('after 2');
-      })
-      it('should be called, because hook error was in a sibling suite', function() {
-        calls.push('test 2');
-      })
-    })
-    after(function () {
-      // calls.should.eql(['before', 'after', 'before 2', 'test 2', 'after 2']);
-    })
-  })
+    before(run(function beforeHookError() {
+      describe('spec 1', function() {
+        describe('spec 1 nested', function() {
+          it('should not be called, because hook error was in a parent suite', function() {
+            console.log('test nested');
+          });
+        });
+        before(function() {
+          console.log('before');
+          throw new Error('before hook error');
+        });
+        after(function() {
+          console.log('after');
+        });
+        it('should not be called because of error in before hook', function() {
+          console.log('test');
+        });
+      });
+      describe('spec 2', function() {
+        before(function() {
+          console.log('before 2');
+        });
+        after(function() {
+          console.log('after 2');
+        });
+        it('should be called, because hook error was in a sibling suite', function() {
+          console.log('test 2');
+        });
+      });
+    }));
+
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['before', 'after', 'before 2', 'test 2', 'after 2']
+      );
+    });
+  });
 
   describe('before each hook error', function() {
-    var calls = [];
-    describe('spec 1', function () {
-      describe('spec 1 nested', function () {
-        it('should not be called, because hook error was in a parent suite', function() {
-          calls.push('test nested');
-        })
-      })
-      beforeEach(function(){
-        calls.push('before');
-        // throw new Error('before each hook error');
-      })
-      afterEach(function(){
-        calls.push('after');
-      })
-      it('should not be called because of error in before each hook', function() {
-        calls.push('test');
-      })
-    })
-    describe('spec 2', function () {
-      before(function(){
-        calls.push('before 2');
-      })
-      after(function(){
-        calls.push('after 2');
-      })
-      it('should be called, because hook error was in a sibling suite', function() {
-        calls.push('test 2');
-      })
-    })
-    after(function () {
-      // This should be called !
-      // calls.should.eql(['before', 'after', 'before 2', 'test 2', 'after 2']);
-    })
-  })
+    before(run(function beforeEachHookError() {
+      describe('spec 1', function() {
+        describe('spec 1 nested', function() {
+          it('should not be called, because hook error was in a parent suite', function() {
+            console.log('test nested');
+          });
+        });
+        beforeEach(function() {
+          console.log('before');
+          throw new Error('before each hook error');
+        });
+        afterEach(function() {
+          console.log('after');
+        });
+        it('should not be called because of error in before each hook', function() {
+          console.log('test');
+        });
+      });
+      describe('spec 2', function() {
+        before(function() {
+          console.log('before 2');
+        });
+        after(function() {
+          console.log('after 2');
+        });
+        it('should be called, because hook error was in a sibling suite', function() {
+          console.log('test 2');
+        });
+      });
+    }));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['before', 'after', 'before 2', 'test 2', 'after 2']
+      );
+    });
+  });
 
   describe('after hook error', function() {
-    var calls = [];
-    describe('spec 1', function () {
-      describe('spec 1 nested', function () {
-        it('should be called, because hook error will happen after parent suite', function() {
-          calls.push('test nested');
-        })
-      })
-      before(function(){
-        calls.push('before');
-      })
-      after(function(){
-        calls.push('after');
-        // throw new Error('after hook error');
-      })
-      it('should be called because error is in after hook', function() {
-        calls.push('test');
-      })
-    })
-    describe('spec 2', function () {
-      before(function(){
-        calls.push('before 2');
-      })
-      after(function(){
-        calls.push('after 2');
-      })
-      it('should be called, because hook error was in a sibling suite', function() {
-        calls.push('test 2');
-      })
-    })
-    after(function () {
-      // Even this should be called !
-      // calls.should.eql(['before', 'test', 'test nested', 'after', 'before 2', 'test 2', 'after 2']);
-    })
-  })
+    before(run(function afterHookError() {
+      describe('spec 1', function() {
+        describe('spec 1 nested', function() {
+          it('should be called, because hook error will happen after parent suite', function() {
+            console.log('test nested');
+          });
+        });
+        before(function() {
+          console.log('before');
+        });
+        after(function() {
+          console.log('after');
+          throw new Error('after hook error');
+        });
+        it('should be called because error is in after hook', function() {
+          console.log('test');
+        });
+      });
+      describe('spec 2', function() {
+        before(function() {
+          console.log('before 2');
+        });
+        after(function() {
+          console.log('after 2');
+        });
+        it('should be called, because hook error was in a sibling suite', function() {
+          console.log('test 2');
+        });
+      });
+    }));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['before', 'test', 'test nested', 'after', 'before 2', 'test 2', 'after 2']
+      );
+    });
+  });
 
   describe('after each hook error', function() {
-    var calls = [];
-    describe('spec 1', function () {
-      describe('spec 1 nested', function () {
-        it('should not be called, because hook error has already happened in parent suite', function() {
-          calls.push('test nested');
-        })
-      })
-      beforeEach(function(){
-        calls.push('before');
-      })
-      afterEach(function(){
-        calls.push('after');
-        // throw new Error('after each hook error');
-      })
-      it('should be called because error is in after each hook, and this is the first test', function() {
-        calls.push('test');
-      })
-      it('should not be called because error is in after each hook, and this is the second test', function() {
-        calls.push('another test');
-      })
-    })
-    describe('spec 2', function () {
-      before(function(){
-        calls.push('before 2');
-      })
-      after(function(){
-        calls.push('after 2');
-      })
-      it('should be called, because hook error was in a sibling suite', function() {
-        calls.push('test 2');
-      })
-    })
-    after(function () {
-      // This should be called !
-      // calls.should.eql(['before', 'test', 'after', 'before 2', 'test 2', 'after 2']);
-    })
-  })
+    before(run(function afterEachHookError() {
+      describe('spec 1', function() {
+        describe('spec 1 nested', function() {
+          it('should be called, because hook error will happen after parent suite', function() {
+            console.log('test nested');
+          });
+        });
+        before(function() {
+          console.log('before');
+        });
+        after(function() {
+          console.log('after');
+          throw new Error('after hook error');
+        });
+        it('should be called because error is in after hook', function() {
+          console.log('test');
+        });
+      });
+      describe('spec 2', function() {
+        before(function() {
+          console.log('before 2');
+        });
+        after(function() {
+          console.log('after 2');
+        });
+        it('should be called, because hook error was in a sibling suite', function() {
+          console.log('test 2');
+        });
+      });
+    }));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['before', 'test', 'test nested', 'after', 'before 2', 'test 2', 'after 2']
+      );
+    });
+  });
 
   describe('multiple hook errors', function() {
-    var calls = [];
-    before(function(){
-      calls.push("root before");
-    });
-    beforeEach(function(){
-      calls.push("root before each");
-    });
-    describe('1', function(){
+    before(run(function multipleHookErrors() {
+      before(function() {
+        console.log('root before');
+      });
       beforeEach(function() {
-        calls.push('1 before each')
-      })
-
-      describe('1.1', function(){
-        before(function() {
-          calls.push('1.1 before');
-        });
+        console.log('root before each');
+      });
+      describe('1', function() {
         beforeEach(function() {
-          calls.push('1.1 before each')
-          // throw new Error('1.1 before each hook failed')
+          console.log('1 before each');
         });
-        it('1.1 test 1', function () {calls.push('1.1 test 1')});
-        it('1.1 test 2', function () {calls.push('1.1 test 2')});
+
+        describe('1.1', function() {
+          before(function() {
+            console.log('1.1 before');
+          });
+          beforeEach(function() {
+            console.log('1.1 before each');
+            throw new Error('1.1 before each hook failed');
+          });
+          it('1.1 test 1', function() {
+            console.log('1.1 test 1');
+          });
+          it('1.1 test 2', function() {
+            console.log('1.1 test 2');
+          });
+          afterEach(function() {
+            console.log('1.1 after each');
+          });
+          after(function() {
+            console.log('1.1 after');
+            throw new Error('1.1 after hook failed');
+          });
+        });
+
+        describe('1.2', function() {
+          before(function() {
+            console.log('1.2 before');
+          });
+          beforeEach(function() {
+            console.log('1.2 before each');
+          });
+          it('1.2 test 1', function() {
+            console.log('1.2 test 1');
+          });
+          it('1.2 test 2', function() {
+            console.log('1.2 test 2');
+          });
+          afterEach(function() {
+            console.log('1.2 after each');
+            throw new Error('1.2 after each hook failed');
+          });
+          after(function() {
+            console.log('1.2 after');
+          });
+        });
+
         afterEach(function() {
-          calls.push("1.1 after each");
+          console.log('1 after each');
         });
-        after(function(){
-          calls.push("1.1 after");
-          // throw new Error('1.1 after hook failed')
+
+        after(function() {
+          console.log('1 after');
         });
       });
 
-      describe('1.2', function(){
-        before(function() {
-          calls.push('1.2 before');
-        });
+      describe('2', function() {
         beforeEach(function() {
-          calls.push('1.2 before each')
+          console.log('2 before each');
+          throw new Error('2 before each hook failed');
         });
-        it('1.2 test 1', function () {calls.push('1.2 test 1')});
-        it('1.2 test 2', function () {calls.push('1.2 test 2')});
+
+        describe('2.1', function() {
+          before(function() {
+            console.log('2.1 before');
+          });
+          beforeEach(function() {
+            console.log('2.1 before each');
+          });
+          it('2.1 test 1', function() {
+            console.log('2.1 test 1');
+          });
+          it('2.1 test 2', function() {
+            console.log('2.1 test 2');
+          });
+          afterEach(function() {
+            console.log('2.1 after each');
+          });
+          after(function() {
+            console.log('2.1 after');
+          });
+        });
+
+        describe('2.2', function() {
+          before(function() {
+            console.log('2.2 before');
+          });
+          beforeEach(function() {
+            console.log('2.2 before each');
+          });
+          it('2.2 test 1', function() {
+            console.log('2.2 test 1');
+          });
+          it('2.2 test 2', function() {
+            console.log('2.2 test 2');
+          });
+          afterEach(function() {
+            console.log('2.2 after each');
+          });
+          after(function() {
+            console.log('2.2 after');
+          });
+        });
+
         afterEach(function() {
-          calls.push("1.2 after each");
-          // throw new Error('1.2 after each hook failed')
+          console.log('2 after each');
+          throw new Error('2 after each hook failed');
         });
-        after(function(){
-          calls.push("1.2 after");
+
+        after(function() {
+          console.log('2 after');
         });
       });
 
+      after(function() {
+        console.log('root after');
+      });
       afterEach(function() {
-        calls.push('1 after each')
-      })
-
-      after(function(){
-        calls.push("1 after");
+        console.log('root after each');
       });
-    })
-
-    describe('2', function(){
-      beforeEach(function() {
-        calls.push('2 before each')
-        // throw new Error('2 before each hook failed')
-      })
-
-      describe('2.1', function(){
-        before(function() {
-          calls.push('2.1 before');
-        });
-        beforeEach(function() {
-          calls.push('2.1 before each')
-        });
-        it('2.1 test 1', function () {calls.push('2.1 test 1')});
-        it('2.1 test 2', function () {calls.push('2.1 test 2')});
-        afterEach(function() {
-          calls.push("2.1 after each");
-        });
-        after(function(){
-          calls.push("2.1 after");
-        });
-      });
-
-      describe('2.2', function(){
-        before(function() {
-          calls.push('2.2 before');
-        });
-        beforeEach(function() {
-          calls.push('2.2 before each')
-        });
-        it('2.2 test 1', function () {calls.push('2.2 test 1')});
-        it('2.2 test 2', function () {calls.push('2.2 test 2')});
-        afterEach(function() {
-          calls.push("2.2 after each");
-        });
-        after(function(){
-          calls.push("2.2 after");
-        });
-      });
-
-      afterEach(function() {
-        calls.push('2 after each')
-        // throw new Error('2 after each hook failed')
-      })
-
-      after(function(){
-        calls.push("2 after");
-      });
-    })
-
-    after(function(){
-      calls.push("root after");
-      /* calls.should.eql([
-        "root before",
-        "1.1 before",
-        "root before each",
-        "1 before each",
-        "1.1 before each",
-        "1.1 after each",
-        "1 after each",
-        "root after each",
-        "1.1 after",
-        "1.2 before",
-        "root before each",
-        "1 before each",
-        "1.2 before each",
-        "1.2 test 1",
-        "1.2 after each",
-        "1 after each",
-        "root after each",
-        "1.2 after",
-        "1 after",
-        "2.1 before",
-        "root before each",
-        "2 before each",
-        "2 after each",
-        "root after each",
-        "2.1 after",
-        "2 after",
-        "root after"
-      ]); */
+    }));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        [
+          'root before',
+          '1.1 before',
+          'root before each',
+          '1 before each',
+          '1.1 before each',
+          '1.1 after each',
+          '1 after each',
+          'root after each',
+          '1.1 after',
+          '1.2 before',
+          'root before each',
+          '1 before each',
+          '1.2 before each',
+          '1.2 test 1',
+          '1.2 after each',
+          '1 after each',
+          'root after each',
+          '1.2 after',
+          '1 after',
+          '2.1 before',
+          'root before each',
+          '2 before each',
+          '2 after each',
+          'root after each',
+          '2.1 after',
+          '2 after',
+          'root after'
+        ]
+      );
     });
-    afterEach(function(){
-      calls.push("root after each");
-    });
-  })
+  });
 
-})
+  function run(fn) {
+    return function(done) {
+      runMochaFunction(fn, [], function(err, res) {
+        assert.ifError(err);
+
+        lines = res.output
+          .split(/[\n․]+/)
+          .map(function(line) {
+            return line.trim();
+          })
+          .filter(onlyConsoleOutput());
+
+        done();
+      });
+    };
+  }
+});
+
+function onlyConsoleOutput() {
+  var foundSummary = false;
+  return function(line) {
+    if (!foundSummary) {
+      foundSummary = !!(/\(\d+ms\)/).exec(line);
+    }
+    return !foundSummary && line.length > 0;
+  };
+}
