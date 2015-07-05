@@ -33,7 +33,7 @@ args.forEach(function(file){
  */
 
 function parse(js) {
-  return parseRequires(parseInheritance(js));
+  return parseRequires(js);
 }
 
 /**
@@ -50,20 +50,6 @@ function parseRequires(js) {
     .replace(/require\('escape-string-regexp'\)/g , "require('browser/escape-string-regexp')")
     .replace(/require\('glob'\)/g                 , "require('browser/glob')")
     .replace(/require\('fs'\)/g                   , "require('browser/fs')");
-}
-
-/**
- * Parse __proto__.
- */
-
-function parseInheritance(js) {
-  return js
-    .replace(/^ *(\w+)\.prototype\.__proto__ * = *(\w+)\.prototype *;?/gm, function(_, child, parent){
-      return 'function F(){};\n'
-        + 'F.prototype = ' + parent + '.prototype;\n'
-        + child + '.prototype = new F;\n'
-        + child + '.prototype.constructor = '+ child + ';\n';
-    });
 }
 
 /**
