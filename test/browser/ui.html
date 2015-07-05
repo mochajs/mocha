@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="ui.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  <script>
+      (function(window) {
+        var location = window.location;
+        mocha.checkLeaks();
+        var runner = mocha.run();
+        var count = 0;
+        setTimeout(run, 1000);
+
+        function run() {
+          var regex = [
+              '',                                  // All
+              '%5C%24%5C.jQuery',                  // $.jQuery
+              '%5C%24%5C.jQuery%20%5C.on%5C(%5C)', // $.jQuery .on()
+            ]
+            , qs = location.search.replace('?grep=', '')
+            , re = ~qs.indexOf('%') ? qs : decodeURIComponent(qs)
+            , grep = regex[regex.indexOf(re) + 1]
+            , anchors = document.getElementsByTagName('a');
+
+          // Locate first 'a' element w/ matching grep param; click it
+          for (var i = 0; i < anchors.length; i++) {
+            if (anchors[i].href && anchors[i].href.indexOf(grep) > -1)
+              return void anchors[i].click();
+          }
+        }
+      })(window);
+  </script>
+  </body>
+</html>

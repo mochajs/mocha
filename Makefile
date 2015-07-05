@@ -1,4 +1,4 @@
-
+ESLINT := node_modules/.bin/eslint
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -34,9 +34,12 @@ lib-cov:
 	@rm -fr ./$@
 	@jscoverage lib $@
 
-test: test-unit
+lint:
+	@$(ESLINT) --reset $(SRC)
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test: lint test-unit
+
+test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi

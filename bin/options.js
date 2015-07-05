@@ -21,11 +21,12 @@ function getOptions() {
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
-          .trim()
-          .split(/\s+/)
-          .filter(function(value) {
-            return value ? true : false;
-          });
+      .replace(/\\\s/g, '%20')
+      .split(/\s/)
+      .filter(Boolean)
+      .map(function(value) {
+        return value.replace(/%20/g, ' ');
+      });
 
     process.argv = process.argv
       .slice(0, 2)
