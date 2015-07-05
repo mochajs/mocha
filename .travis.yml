@@ -1,4 +1,6 @@
 language: node_js
+before_install:
+- ./scripts/ensure-compatible-npm.sh
 script: travis_retry npm test
 node_js:
 - 'iojs'
