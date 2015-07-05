@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "prepublish": "gem install bundler && bundle install",
-    "build": "toc-idx -i index.md --max-depth 1 --bullet \"\\- \" index.md && bundle exec jekyll build"
+    "build": "make build"
   },
   "repository": {
     "type": "git",
