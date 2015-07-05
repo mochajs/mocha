@@ -1,10 +1,15 @@
+PORT ?= 3000
+bundle := bundle
 
-index.html: head.html foot.html index.md
-	@markdown < index.md \
-		| cat head.html - foot.html \
-		> $@ 
+start: toc bundle
+	${bundle} exec jekyll serve --safe --drafts --watch --port ${PORT}
 
-clean:
-	rm -f index.html
 
-.PHONY: clean
+build: toc bundle
+	${bundle} exec jekyll build --safe
+
+toc:
+	./node_modules/.bin/toc-idx -i index.md --max-depth 1 --bullet "\- " index.md
+
+bundle:
+	${bundle}

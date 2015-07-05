@@ -1,0 +1,12 @@
+url: http://mochajs.org
+markdown: redcarpet
+redcarpet:
+  extensions: ["with_toc_data"]
+highlighter: pygments
+exclude:
+  - node_modules
+  - README.md
+  - Gemfile*
+  - package.json
+  - CNAME
+
