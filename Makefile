@@ -8,7 +8,6 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
-# TODO: Remove filesize echos, just for comparison during browserify transition
 mocha.js: $(SRC) $(SUPPORT)
 	@$(BROWSERIFY) ./support/browser-entry \
 		--ignore 'fs' \
