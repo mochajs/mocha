@@ -13,9 +13,13 @@
 ## Installation
 
 1.  Execute `npm install`.  This will install [Bundler](http://bundler.io), Jekyll, and [markdown-toc-index](https://www.npmjs.com/package/markdown-toc-index).
-2.  To build, execute `npm run-script build`.
+2.  To build, execute `npm run build` or `make build`
 
-For more information, refer to the [Jekyll Docs](http://jekyllrb.com/docs/home/) and [GitHub's Tutorial](https://help.github.com/articles/using-jekyll-with-pages/) on the subject. 
+## Local development
+
+1.  Run `make` to build the project and start a development server that auto-watches for changes on http://localhost:3000
+
+For more information, refer to the [Jekyll Docs](http://jekyllrb.com/docs/home/) and [GitHub's Tutorial](https://help.github.com/articles/using-jekyll-with-pages/) on the subject.
 
 ## Notes
 
