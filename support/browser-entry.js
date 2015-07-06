@@ -1,3 +1,9 @@
+/**
+ * Shim process.stdout.
+ */
+
+process.stdout = require('browser-stdout')();
+
 var Mocha = require('../');
 
 /**
@@ -139,12 +145,6 @@ mocha.run = function(fn){
     if (fn) fn(err);
   });
 };
-
-/**
- * Shim process.stdout.
- */
-
-process.stdout = require('browser-stdout')();
 
 /**
  * Expose the process shim.
