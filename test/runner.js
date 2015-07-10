@@ -275,6 +275,19 @@ describe('Runner', function(){
       runner.failures.should.equal(2);
     })
 
+    it('should augment hook title with current test title', function(){
+      var hook = {
+        title: '"before each" hook',
+        ctx: { currentTest: new Test('should behave') }
+      };
+      runner.failHook(hook, {});
+      hook.title.should.equal('"before each" hook for "should behave"');
+
+      hook.ctx.currentTest = new Test('should obey');
+      runner.failHook(hook, {});
+      hook.title.should.equal('"before each" hook for "should obey"');
+    })
+
     it('should emit "fail"', function(done){
       var hook = {}, err = {};
       runner.on('fail', function(hook, err){
