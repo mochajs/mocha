@@ -565,7 +565,7 @@ The `--ui` option lets you specify the interface to use, defaulting to "bdd".
 
 ### `-R, --reporter <name>`
 
-The `--reporter` option allows you to specify the reporter that will be used, defaulting to "dot". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
+The `--reporter` option allows you to specify the reporter that will be used, defaulting to "spec". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
 
 ### `-t, --timeout <ms>`
 
