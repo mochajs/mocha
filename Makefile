@@ -1,3 +1,5 @@
+BROWSERIFY := node_modules/.bin/browserify
+ESLINT := node_modules/.bin/eslint
 
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
@@ -6,20 +8,14 @@ SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
-lib/browser/diff.js: node_modules/diff/diff.js
-	cp node_modules/diff/diff.js lib/browser/diff.js
-
-lib/browser/escape-string-regexp.js: node_modules/escape-string-regexp/index.js
-	cp node_modules/escape-string-regexp/index.js lib/browser/escape-string-regexp.js
-
-mocha.js: $(SRC) $(SUPPORT) lib/browser/diff.js lib/browser/escape-string-regexp.js
-	@node support/compile $(SRC)
-	@cat \
-	  support/head.js \
-	  _mocha.js \
-	  support/tail.js \
-	  support/foot.js \
-	  > mocha.js
+mocha.js: $(SRC) $(SUPPORT)
+	@$(BROWSERIFY) ./support/browser-entry \
+		--ignore 'fs' \
+		--ignore 'glob' \
+		--ignore 'jade' \
+		--ignore 'path' \
+		--ignore 'supports-color' \
+		--exclude './lib-cov/mocha' > $@
 
 clean:
 	rm -f mocha.js
@@ -34,9 +30,12 @@ lib-cov:
 	@rm -fr ./$@
 	@jscoverage lib $@
 
-test: test-unit
+lint:
+	@$(ESLINT) --reset $(SRC)
 
-test-all: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test: lint test-unit
+
+test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
 
 test-jsapi:
 	@node test/jsapi

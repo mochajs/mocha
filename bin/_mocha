@@ -195,10 +195,13 @@ var reporterOptions = {};
 if (program.reporterOptions !== undefined) {
     program.reporterOptions.split(",").forEach(function(opt) {
         var L = opt.split("=");
-        if (L.length != 2) {
+        if (L.length > 2 || L.length === 0) {
             throw new Error("invalid reporter option '" + opt + "'");
+        } else if (L.length === 2) {
+            reporterOptions[L[0]] = L[1];
+        } else {
+            reporterOptions[L[0]] = true;
         }
-        reporterOptions[L[0]] = L[1];
     });
 }
 

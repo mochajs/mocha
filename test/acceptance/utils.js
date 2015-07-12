@@ -341,11 +341,32 @@ describe('lib/utils', function () {
       type(1).should.equal('number');
       type(Infinity).should.equal('number');
       type(null).should.equal('null');
+      type(undefined).should.equal('undefined');
       type(new Date()).should.equal('date');
       type(/foo/).should.equal('regexp');
       type('type').should.equal('string');
       type(global).should.equal('global');
       type(true).should.equal('boolean');
+    });
+
+    describe('when toString on null or undefined stringifies window', function () {
+      var toString = Object.prototype.toString;
+
+      beforeEach(function () {
+        // some JS engines such as PhantomJS 1.x exhibit this behavior
+        Object.prototype.toString = function () {
+          return '[object DOMWindow]';
+        };
+      });
+
+      it('should recognize null and undefined', function () {
+        type(null).should.equal('null');
+        type(undefined).should.equal('undefined');
+      });
+
+      afterEach(function () {
+        Object.prototype.toString = toString;
+      });
     });
   });
 
