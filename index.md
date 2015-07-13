@@ -60,7 +60,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
-- [`mocha.opts`](#mochaopts)
+- [`mocha.opts`](#mocha-opts)
 - [The `test/` Directory](#the-test-directory)
 - [Editor Plugins](#editor-plugins)
 - [Examples](#examples)
