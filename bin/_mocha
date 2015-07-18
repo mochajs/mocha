@@ -254,11 +254,11 @@ mocha.suite.bail(program.bail);
 
 // --grep
 
-if (program.grep) mocha.grep(new RegExp(program.grep));
+if (program.grep) mocha.grep(program.grep);
 
 // --fgrep
 
-if (program.fgrep) mocha.grep(program.fgrep);
+if (program.fgrep) mocha.fgrep(program.fgrep);
 
 // --invert
 
