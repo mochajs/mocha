@@ -58,7 +58,7 @@ var images = {
 program
   .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
   .usage('[debug] [options] [files]')
-  .option('-A, --async-only', "force all tests to take a callback (async)")
+  .option('-A, --async-only', "force all tests to take a callback (async) or return a promise")
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
