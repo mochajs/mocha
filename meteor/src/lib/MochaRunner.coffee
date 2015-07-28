@@ -15,6 +15,7 @@ class practical.MochaRunner
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
+        # TODO: Subscribe with the mocha html reporter query string identifiying a subset of the tests, so only those tests will run server side too.
         Meteor.publish 'mochaServerRunEvents', ->
           try
             log.enter 'Meteor.publish.mochaServerRunEvents'
@@ -36,6 +37,7 @@ class practical.MochaRunner
   runEverywhere: ->
     try
       log.enter 'runEverywhere'
+      expect(Meteor.isClient).to.be.true
       mocha.run()
 
       @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', {
@@ -63,7 +65,9 @@ class practical.MochaRunner
 
 
 if Meteor.isClient
+# Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
     practical.MochaRunner.get().runEverywhere()
 else
+# Run the ctor, so publication will be published
   practical.MochaRunner.get()

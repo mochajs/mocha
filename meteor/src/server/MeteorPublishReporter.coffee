@@ -1,6 +1,5 @@
 log = new ObjectLogger('MeteorPublishReporter', 'info')
 
-
 class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
 
   # TODO: Change this to use Meteor.bindEnvironment
@@ -106,6 +105,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
   # @api private
   ###
 
+# TODO: Add test.server = true so we know it's a server test
   clean: (test) =>
     {
     title: test.title
