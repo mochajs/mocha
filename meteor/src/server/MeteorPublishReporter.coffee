@@ -108,7 +108,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
 # TODO: Add test.server = true so we know it's a server test
   clean: (test) =>
     {
-    title: test.title
+    title: "[server] " + test.title
     _fullTitle: test.fullTitle()
     type: test.type
     state: test.state
@@ -117,6 +117,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
     sync: test.sync
     _timeout: test._timeout
     _slow: test._slow
+    fn: test.fn.toString()
     err: @errorJSON(test.err or {})
     }
 

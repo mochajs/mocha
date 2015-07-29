@@ -2722,6 +2722,7 @@ function HTML(runner) {
   });
 
   runner.on('test end', function(test){
+    console.log("test", test)
     // TODO: add to stats
     var percent = stats.tests / this.total * 100 | 0;
     if (progress) progress.update(percent).draw(ctx);
@@ -6275,23 +6276,24 @@ mocha.setup = function(opts){
  * Run mocha, returning the Runner.
  */
 
-mocha.run = function(fn){
-  var options = mocha.options;
-  mocha.globals('location');
-
-  var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(query.grep);
-  if (query.invert) mocha.invert();
-
-  return Mocha.prototype.run.call(mocha, function(err){
-    // The DOM Document is not available in Web Workers.
-    var document = global.document;
-    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
-      Mocha.utils.highlightTags('code');
-    }
-    if (fn) fn(err);
-  });
-};
+//mocha.run = function(fn){
+//  console.log("asdasd")
+//  var options = mocha.options;
+//  mocha.globals('location');
+//
+//  var query = Mocha.utils.parseQuery(global.location.search || '');
+//  if (query.grep) mocha.grep(query.grep);
+//  if (query.invert) mocha.invert();
+//
+//  return Mocha.prototype.run.call(mocha, function(err){
+//    // The DOM Document is not available in Web Workers.
+//    var document = global.document;
+//    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
+//      Mocha.utils.highlightTags('code');
+//    }
+//    if (fn) fn(err);
+//  });
+//};
 
 /**
  * Expose the process shim.

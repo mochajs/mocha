@@ -10,8 +10,8 @@ Package.onUse(function (api) {
 
   api.use([
     'coffeescript',
-    'practicalmeteor:loglevel@1.1.0_3',
-    'practicalmeteor:chai@1.9.2_3'
+    'practicalmeteor:loglevel',
+    'practicalmeteor:chai'
   ]);
 });
 
@@ -19,9 +19,9 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
-    'practicalmeteor:loglevel@1.1.0_3',
-    'practicalmeteor:chai@1.9.2_3',
-    'practicalmeteor:mocha@2.1.0-rc0'
+    'practicalmeteor:loglevel',
+    'practicalmeteor:chai',
+    'practicalmeteor:mocha'
   ]);
 
   api.addFiles('mocha-tests.coffee');
