@@ -16,13 +16,15 @@ class practical.MochaRunner
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
         self = @
-        Meteor.publish 'mochaServerRunEvents', (query)->
+        Meteor.publish 'mochaServerRunEvents', (grep)->
           try
             log.enter 'Meteor.publish.mochaServerRunEvents'
             expect(@ready).to.be.a('function')
 
+            #  self is our MochaRunner
+            # @ is publication's this
             mocha.reporter(practical.mocha.MeteorPublishReporter, {
-              grep: self.scapeGrep(query.grep)
+              grep: self.escapeGrep(grep)
               publisher: @
             })
 #            practical.mocha.MeteorPublishReporter.publisher = self
@@ -39,9 +41,9 @@ class practical.MochaRunner
 
 
 
-  scapeGrep: (grep = '')->
+  escapeGrep: (grep = '')->
     try
-      log.enter("scapeGrep", grep)
+      log.enter("escapeGrep", grep)
       matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
       grep.replace(matchOperatorsRe,  '\\$&')
       return new RegExp(grep)
@@ -58,7 +60,7 @@ class practical.MochaRunner
 
       query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
 
-      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', query, {
+      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', query.grep, {
         onReady: _.bind(@onServerRunSubscriptionReady, @)
         onError: _.bind(@onServerRunSubscriptionError, @)
       }
