@@ -33,7 +33,12 @@ class practical.mocha.BaseReporter
 
     @runner.on 'pass', (test)=>
       medium = test.slow() / 2
-      test.speed = test.duration > test.slow() ? 'slow' : test.duration > medium ? 'medium' : 'fast'
+      if test.duration > test.slow()
+        test.speed = 'slow'
+      else if test.duration > medium
+        test.speed = 'medium'
+      else
+        test.speed = 'fast'
       @stats.passes++
 
     @runner.on 'fail', (test, err)=>
@@ -46,4 +51,4 @@ class practical.mocha.BaseReporter
       @stats.duration = @stats.end - @stats.start
 
     @runner.on 'pending', =>
-      @pending++
+      @stats.pending++
