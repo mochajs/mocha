@@ -10,45 +10,85 @@ class practical.mocha.ClientServerReporter
     try
       log.enter('constructor')
       serverRunEvents.find().observe( {
-        added: _.bind(@added, @)
+        added: _.bind(@onServerRunnerEvent, @)
       } )
 
       expect(practical.mocha.reporters.HTML).to.be.a('function')
 
-      @clientRunnerProxy= new practical.mocha.EventEmitter()
-      @clientRunnerProxy.stats = @clientRunner.stats
-      @reporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, @options)
-      @registerRunnerEvents()
+      @serverRunnerProxy = new practical.mocha.EventEmitter()
+
+      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
+#      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
+#        elementIdPrefix: 'server-'
+#      })
+#      @registerRunnerEvents()
     finally
       log.return()
 
   registerRunnerEvents:->
-    @clientRunner.on 'start', =>
 
-      @clientRunnerProxy.emit("start")
+    @clientRunner.on 'start', =>
+      try
+        log.enter 'onStart', arguments
+        @serverRunnerProxy.emit 'start'
+      finally
+        log.return()
 
     @clientRunner.on 'suite', (suite)=>
-      log.info("suite", suite)
-      @clientRunnerProxy.emit('suite', suite)
+      try
+        log.enter 'onSuite', arguments
+#        return if suite.root
+        @serverRunnerProxy.emit 'suite', suite
+      finally
+        log.return()
+
+    @clientRunner.on 'suite end', (suite)=>
+      try
+        log.enter 'onSuiteEnd', arguments
+#        return if suite.root
+        @serverRunnerProxy.emit 'suite end', suite
+      finally
+        log.return()
 
     @clientRunner.on 'test end', (test)=>
-      log.info("test end", test)
-      @clientRunnerProxy.emit('test end', test)
+      try
+        log.enter 'onTestEnd', arguments
+        @serverRunnerProxy.emit 'test end', test
+      finally
+        log.return()
 
     @clientRunner.on 'pass', (test)=>
-      @clientRunnerProxy.emit('pass', test)
+      try
+        log.enter 'onPass', arguments
+        @serverRunnerProxy.emit 'pass', test
+      finally
+        log.return()
 
-    @clientRunner.on 'fail', (test, err)=>
-      @clientRunnerProxy.emit('fail', test, err)
+    @clientRunner.on 'fail', (test, error)=>
+      try
+        log.enter 'onFail', arguments
+        @serverRunnerProxy.emit 'fail', test, error
+      finally
+        log.return()
 
     @clientRunner.on 'end', =>
-      @clientRunnerProxy.emit('end')
-    @clientRunner.on 'pending', =>
-      @clientRunnerProxy.emit('pending')
+      try
+        log.enter 'onEnd', arguments
+        @serverRunnerProxy.emit 'end'
+      finally
+        log.return()
 
-  added: (doc)->
+    @clientRunner.on 'pending', (test)=>
+      try
+        log.enter 'onPending', arguments
+        @serverRunnerProxy.emit 'pending', test
+      finally
+        log.return()
+
+
+  onServerRunnerEvent: (doc)->
     try
-      log.enter('added')
+      log.enter('onServerRunnerEvent')
       expect(doc).to.be.an('object')
       expect(doc.event).to.be.a('string')
       expect(doc.data).to.be.an('object')
@@ -63,10 +103,15 @@ class practical.mocha.ClientServerReporter
       if doc.event is 'start'
         log.info "total:", doc.data
         log.info "HTML:", @reporter
-        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
+        @serverRunnerProxy.stats = doc.data
+        @serverRunnerProxy.total = doc.data.total
+        @serverReporter = new practical.mocha.reporters.HTML(@serverRunnerProxy, {
+          elementIdPrefix: 'server-'
+        })
+#        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
 
 
-      @clientRunnerProxy.emit(doc.event, doc.data)
+      @serverRunnerProxy.emit(doc.event, doc.data)
 #      if doc.event is 'start'
 #        @total = doc.data.total
 #        @reporter = new practical.mocha.reporters.HTML(@)

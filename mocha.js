@@ -2628,25 +2628,28 @@ var Date = global.Date
 exports = module.exports = HTML;
 
 /**
- * Stats template.
- */
-
-var statsTemplate = '<ul id="mocha-stats">'
-  + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
-  + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
-  + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
-  + '<li class="duration">duration: <em>0</em>s</li>'
-  + '</ul>';
-
-/**
  * Initialize a new `HTML` reporter.
  *
  * @param {Runner} runner
  * @api public
  */
 
-function HTML(runner) {
+function HTML(runner, options) {
   Base.call(this, runner);
+  options = options || {};
+  options.elementIdPrefix = options.elementIdPrefix || "";
+
+  /**
+   * Stats template.
+   */
+  var statsTemplate = '<ul id="'+options.elementIdPrefix+'mocha-stats"' +
+    ' class="mocha-stats">'
+    + '<li class="progress"><canvas width="40" height="40"></canvas></li>'
+    + '<li class="passes"><a href="#">passes:</a> <em>0</em></li>'
+    + '<li class="failures"><a href="#">failures:</a> <em>0</em></li>'
+    + '<li class="duration">duration: <em>0</em>s</li>'
+    + '</ul>';
+
 
   var self = this
     , stats = this.stats
@@ -2659,11 +2662,12 @@ function HTML(runner) {
     , failuresLink = items[2].getElementsByTagName('a')[0]
     , duration = items[3].getElementsByTagName('em')[0]
     , canvas = stat.getElementsByTagName('canvas')[0]
-    , report = fragment('<ul id="mocha-report"></ul>')
+    , report = fragment('<ul id="'+options.elementIdPrefix+'mocha-report"' +
+      ' class="mocha-report"></ul>')
     , stack = [report]
     , progress
     , ctx
-    , root = document.getElementById('mocha');
+    , root = document.getElementById(options.elementIdPrefix+'mocha');
 
   if (canvas.getContext) {
     var ratio = window.devicePixelRatio || 1;
@@ -2722,7 +2726,7 @@ function HTML(runner) {
   });
 
   runner.on('test end', function(test){
-    console.log("test", test)
+    //console.log("test", test)
     // TODO: add to stats
     var percent = stats.tests / this.total * 100 | 0;
     if (progress) progress.update(percent).draw(ctx);
@@ -2781,6 +2785,8 @@ function HTML(runner) {
   });
 }
 
+  // Wee need to expose the client side HTML report to the world,
+  // so we can use it in our ClientServerReporterProxy
   window.practical.mocha.reporters.HTML = HTML;
 /**
  * Makes a URL, preserving querystring ("search") parameters.
@@ -6276,24 +6282,23 @@ mocha.setup = function(opts){
  * Run mocha, returning the Runner.
  */
 
-//mocha.run = function(fn){
-//  console.log("asdasd")
-//  var options = mocha.options;
-//  mocha.globals('location');
-//
-//  var query = Mocha.utils.parseQuery(global.location.search || '');
-//  if (query.grep) mocha.grep(query.grep);
-//  if (query.invert) mocha.invert();
-//
-//  return Mocha.prototype.run.call(mocha, function(err){
-//    // The DOM Document is not available in Web Workers.
-//    var document = global.document;
-//    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
-//      Mocha.utils.highlightTags('code');
-//    }
-//    if (fn) fn(err);
-//  });
-//};
+mocha.run = function(fn){
+  var options = mocha.options;
+  mocha.globals('location');
+
+  var query = Mocha.utils.parseQuery(global.location.search || '');
+  if (query.grep) mocha.grep(query.grep);
+  if (query.invert) mocha.invert();
+
+  return Mocha.prototype.run.call(mocha, function(err){
+    // The DOM Document is not available in Web Workers.
+    var document = global.document;
+    if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
+      Mocha.utils.highlightTags('code');
+    }
+    if (fn) fn(err);
+  });
+};
 
 /**
  * Expose the process shim.
