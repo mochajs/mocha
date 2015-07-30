@@ -12,16 +12,18 @@ mochaGlobals = {}
 mocha.suite.emit("pre-require", mochaGlobals, undefined, mocha)
 
 global.describe = mochaGlobals.describe
-
+# No need wrap skip an only with bindEnvironment. Nested functions are enough (it, before, etc...)
 #for fnName in ['skip', 'only']
 #  log.info fnName
 #  global.describe[fnName] = mochaGlobals.describe[fnName]
 
-# For some reason, coffee for takes last element always here, so we use forEach
+# For some reason, coffee's for takes last element always here,
+# so we use forEach
 ['before', 'beforeEach', 'it', 'afterEach', 'after'].forEach (fnName)->
   global[fnName] = (args...)=>
     fn = args[args.length - 1]
 
+#   If function has arguments, it's a done function and function is async
     if fn.length > 0
       rethrow = (err)->
         throw err
@@ -30,7 +32,9 @@ global.describe = mochaGlobals.describe
     mochaGlobals[fnName].apply(@, args)
 
 
-['skip', 'only'].forEach (fnName)->
+# Skip won't run any test function use global
+global.it.skip = mochaGlobals.it.skip
+['only'].forEach (fnName)->
   global.it[fnName] = (args...)=>
     fn = args[args.length - 1]
 
