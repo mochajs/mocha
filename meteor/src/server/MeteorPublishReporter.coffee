@@ -22,7 +22,8 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @runner.on 'start', =>
         try
           log.enter 'onStart', arguments
-          @added 'start', {total: @stats.total}
+#          @added 'start', {total: @stats.total}
+          @added 'start', @stats
           @publisher.ready()
         finally
           log.return()
@@ -30,37 +31,37 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @runner.on 'suite', (suite)=>
         try
           log.enter 'onSuite', arguments
-          return if suite.root
-          @added 'suite', {title: suite.title, _fullTitle: suite.fullTitle()}
+          log.info "suite:", suite.title
+#          @added 'suite', {title: suite.title, _fullTitle: suite.fullTitle(), root: suite.root}
+          @added 'suite', @cleanSuite(suite)
         finally
           log.return()
 
       @runner.on 'suite end', (suite)=>
         try
           log.enter 'onSuiteEnd', arguments
-          return if suite.root
-          @added 'suite end', {title: suite.title, _fullTitle: suite.fullTitle()}
+          @added 'suite end', @cleanSuite(suite)
         finally
           log.return()
 
       @runner.on 'test end', (test)=>
         try
           log.enter 'onTestEnd', arguments
-          @added 'test end', @clean(test)
+          @added 'test end', @cleanTest(test)
         finally
           log.return()
 
       @runner.on 'pass', (test)=>
         try
           log.enter 'onPass', arguments
-          @added 'pass', @clean(test)
+          @added 'pass', @cleanTest(test)
         finally
           log.return()
 
       @runner.on 'fail', (test, error)=>
         try
           log.enter 'onFail', arguments
-          @added 'fail', @clean(test)
+          @added 'fail', @cleanTest(test)
         finally
           log.return()
 
@@ -74,7 +75,8 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @runner.on 'pending', (test)=>
         try
           log.enter 'onPending', arguments
-          @added 'pending', @clean(test)
+          log.info "test", test
+          @added 'pending', @cleanTest(test)
         finally
           log.return()
     finally
@@ -84,7 +86,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
   added: (event, data)=>
     try
       log.enter 'added', arguments
-      log.info event, data
+#      log.info event, data
       return if @stopped is true
       @sequence++
       doc =
@@ -106,20 +108,46 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
   ###
 
 # TODO: Add test.server = true so we know it's a server test
-  clean: (test) =>
-    {
-    title: "[server] " + test.title
-    _fullTitle: test.fullTitle()
-    type: test.type
-    state: test.state
-    duration: test.duration
-    async: test.async
-    sync: test.sync
-    _timeout: test._timeout
-    _slow: test._slow
-    fn: test.fn.toString()
-    err: @errorJSON(test.err or {})
-    }
+  cleanTest: (test)->
+    try
+      log.enter("cleanTest", arguments)
+#      cleanTest = @clean(test)
+#      cleanTest._fullTitle =  test.fullTitle()
+      # So we can show the server side test code in the reporter
+      return {
+        title: test.title
+        _fullTitle: test.fullTitle()
+        type: test.type
+        state: test.state
+        speed: test.speed
+        pending: test.pending
+        duration: test.duration
+        async: test.async
+        sync: test.sync
+        _timeout: test._timeout
+        _slow: test._slow
+        fn: test.fn.toString()
+        err: @errorJSON(test.err or {})
+      }
+      return cleanTest
+    finally
+      log.return()
+
+
+  cleanSuite: (suite)->
+    try
+      log.enter("cleanSuite", arguments)
+#      cleanSuite = @clean(suite)
+#      cleanSuite._fullTitle =  suite.fullTitle()
+#      console.log(cleanSuite)
+      return {
+      title: suite.title
+      _fullTitle: suite.fullTitle()
+      root: suite.root
+      pending: suite.pending
+      }
+    finally
+      log.return()
 
   ###*
   # Transform `error` into a JSON object.
