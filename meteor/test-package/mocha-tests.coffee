@@ -1,16 +1,16 @@
-log = loglevel.createPackageLogger('mocha:test', 'debug')
+log = loglevel.createPackageLogger('mocha:test', 'info')
 
-describe 'Array', ->
-  describe '#indexOf()', ->
+describe '1 - Array', ->
+  describe '1.1 - #indexOf()', ->
     it 'should return -1 when the value is not present', ->
       expect([1,2,3].indexOf(5)).to.equal -1
       expect([1,2,3].indexOf(0)).to.equal -1
 
-  describe 'length', ->
+  describe '1.2 - length', ->
     it 'should return length of array', ->
       expect([1,2,3].length).to.equal 3
 
-describe 'Async test', ()->
+describe '2 - Async test', ()->
   it 'should pass', (done)->
     Meteor.setTimeout =>
       done()
@@ -20,19 +20,21 @@ describe 'Async test', ()->
       done("I'm throwing")
     , 1000
 
-describe.skip 'Skipped suite', ()->
-  it 'should pass', (done)->
-    Meteor.setTimeout =>
-      done()
-    , 1000
+#describe '3 - Skipped test', ()->
+#  it.skip 'should pass', (done)->
+#    Meteor.setTimeout =>
+#      done()
+#    , 1000
+#
+#describe.skip '4 - Skipped suite', ()->
+#  it 'should pass', (done)->
+#    Meteor.setTimeout =>
+#      done()
+#    , 1000
 
-describe 'Skipped test', ()->
-  it.skip 'should pass', (done)->
-    Meteor.setTimeout =>
-      done()
-    , 1000
 
-describe 'All sync test suite', ->
+
+describe '5 - All sync test suite', ->
   before ->
     log.debug 'before'
   after ->
@@ -46,7 +48,7 @@ describe 'All sync test suite', ->
   it 'throwing', ->
     expect(false).to.be.true
 
-describe 'All async test suite', ->
+describe '6 - All async test suite', ->
   before (done)->
     log.debug 'before'
     Meteor.defer -> done()
