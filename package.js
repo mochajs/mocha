@@ -3,7 +3,7 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Work in progress. Test packages with mocha.js",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0-rc0'
+  version: '2.1.0-rc1'
 });
 
 
