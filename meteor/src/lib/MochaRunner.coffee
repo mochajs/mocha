@@ -38,7 +38,7 @@ class practical.MochaRunner
     try
       log.enter 'runEverywhere'
       expect(Meteor.isClient).to.be.true
-      mocha.reporter(practical.mocha.ServerRunnerProxy)
+      mocha.reporter(practical.mocha.ClientServerReporter)
       mocha.run(->)
 
       @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', {

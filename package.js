@@ -60,7 +60,7 @@ Package.onUse(function (api) {
 
   api.addFiles('meteor/src/server/mocha.coffee', 'server');
 
-  api.addFiles('meteor/src/client/ServerRunnerProxy.coffee', 'client');
+  api.addFiles('meteor/src/client/ClientServerReporter.coffee', 'client');
 
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
 });
