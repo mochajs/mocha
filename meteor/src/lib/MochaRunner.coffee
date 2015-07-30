@@ -15,13 +15,17 @@ class practical.MochaRunner
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
-        # TODO: Subscribe with the mocha html reporter query string identifiying a subset of the tests, so only those tests will run server side too.
-        Meteor.publish 'mochaServerRunEvents', ->
+        self = @
+        Meteor.publish 'mochaServerRunEvents', (query)->
           try
             log.enter 'Meteor.publish.mochaServerRunEvents'
-            self = @
-            expect(self.ready).to.be.a('function')
-            practical.mocha.MeteorPublishReporter.publisher = self
+            expect(@ready).to.be.a('function')
+
+            mocha.reporter(practical.mocha.MeteorPublishReporter, {
+              grep: self.scapeGrep(query.grep)
+              publisher: @
+            })
+#            practical.mocha.MeteorPublishReporter.publisher = self
             mocha.run (failures)=>
               log.warn 'failures:', failures
             return
@@ -34,6 +38,17 @@ class practical.MochaRunner
       log.return()
 
 
+
+  scapeGrep: (grep = '')->
+    try
+      log.enter("scapeGrep", grep)
+      matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
+      grep.replace(matchOperatorsRe,  '\\$&')
+      return new RegExp(grep)
+    finally
+      log.return()
+
+
   runEverywhere: ->
     try
       log.enter 'runEverywhere'
@@ -41,7 +56,9 @@ class practical.MochaRunner
       mocha.reporter(practical.mocha.ClientServerReporter)
       mocha.run(->)
 
-      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', {
+      query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
+
+      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', query, {
         onReady: _.bind(@onServerRunSubscriptionReady, @)
         onError: _.bind(@onServerRunSubscriptionError, @)
       }

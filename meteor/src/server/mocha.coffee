@@ -4,7 +4,7 @@ Future = Npm.require('fibers/future')
 options =
   ui: 'bdd'
   ignoreLeaks: true
-  reporter: practical.mocha.MeteorPublishReporter
+#  reporter: practical.mocha.MeteorPublishReporter
 
 global.mocha = new Mocha(options)
 

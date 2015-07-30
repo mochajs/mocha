@@ -6305,4 +6305,7 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
+
+//  Exposes Mocha class
+practical.mocha.Mocha = Mocha;
 })();

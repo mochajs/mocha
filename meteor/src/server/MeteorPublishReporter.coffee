@@ -8,12 +8,20 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
   constructor: (runner, options)->
     try
       log.enter 'constructor', arguments
+      expect(options.reporterOptions, 'options.reporterOptions').to.be.an('object')
+
+      # Update runner tests
+      runner.grep(options.reporterOptions.grep)
+
       super(runner, options)
-      @publisher = practical.mocha.MeteorPublishReporter.publisher
+
+#      @publisher = practical.mocha.MeteorPublishReporter.publisher
+      @publisher = options.reporterOptions.publisher
       expect(@publisher, '@publisher').to.be.an('object')
       expect(@publisher.ready, '@publisher.ready').to.be.a('function')
       expect(@publisher.added, '@publisher.added').to.be.a('function')
       expect(@publisher.onStop, '@publisher.onStop').to.be.a('function')
+
       @publisher.onStop =>
         @stopped = true
       @stopped = false

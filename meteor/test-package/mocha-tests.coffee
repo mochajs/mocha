@@ -19,7 +19,7 @@ describe '2 - Async test', ()->
     Meteor.setTimeout =>
       done("I'm throwing")
     , 1000
-
+#
 #describe '3 - Skipped test', ()->
 #  it.skip 'should pass', (done)->
 #    Meteor.setTimeout =>
