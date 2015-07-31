@@ -66,3 +66,7 @@ describe '6 - All async test suite', ->
     Meteor.defer -> done()
   it 'throwing', (done)->
     Meteor.defer -> done(new Error('failing'))
+
+describe '7 - implicit wait', ->
+  it 'during findOne', ->
+    doc = practical.TestCollection.findOne (_id: 'xxx')

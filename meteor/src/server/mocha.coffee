@@ -11,9 +11,19 @@ global.mocha = new Mocha(options)
 mochaGlobals = {}
 mocha.suite.emit("pre-require", mochaGlobals, undefined, mocha)
 
-global.describe = mochaGlobals.describe
-# No need wrap skip an only with bindEnvironment. Nested functions are enough (it, before, etc...)
-#for fnName in ['skip', 'only']
+expect(mochaGlobals.describe).to.be.ok
+
+onError = (err)->
+  throw err
+
+wrapDescribe = (func)->
+  ->
+    Meteor.bindEnvironment(_.bind(func, @), onError)()
+
+global.describe = (name, func)->
+  return mochaGlobals.describe(name, wrapDescribe(func) )
+# No need to wrap skip and only with bindEnvironment. Nested functions are enough (it, before, etc...)
+# for fnName in ['skip', 'only']
 #  log.info fnName
 #  global.describe[fnName] = mochaGlobals.describe[fnName]
 
@@ -32,8 +42,9 @@ global.describe = mochaGlobals.describe
     mochaGlobals[fnName].apply(@, args)
 
 
-# Skip won't run any test function use global
+# Skip won't run the test, so no need to wrap it.
 global.it.skip = mochaGlobals.it.skip
+# only will run. Need to wrap it.
 ['only'].forEach (fnName)->
   global.it[fnName] = (args...)=>
     fn = args[args.length - 1]

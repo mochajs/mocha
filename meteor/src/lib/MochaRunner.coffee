@@ -1,3 +1,6 @@
+if Meteor.isServer
+  Fiber = Npm.require('fibers')
+
 log = new ObjectLogger('MochaRunner', 'debug')
 
 @practical ?= {}
@@ -21,6 +24,8 @@ class practical.MochaRunner
             log.enter 'Meteor.publish.mochaServerRunEvents'
             expect(@ready).to.be.a('function')
 
+            log.info 'Fiber.current:', Fiber.current
+
             #  self is our MochaRunner
             # @ is publication's this
             mocha.reporter(practical.mocha.MeteorPublishReporter, {
@@ -28,8 +33,17 @@ class practical.MochaRunner
               publisher: @
             })
 #            practical.mocha.MeteorPublishReporter.publisher = self
-            mocha.run (failures)=>
+            onEnd = (failures)=>
               log.warn 'failures:', failures
+
+            boundOnEnd = Meteor.bindEnvironment onEnd
+
+            run = =>
+              mocha.run boundOnEnd
+
+            boundRun = Meteor.bindEnvironment run
+
+            boundRun()
             return
           catch ex
             log.error ex.stack if ex.stack?
