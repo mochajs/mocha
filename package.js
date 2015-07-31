@@ -28,6 +28,7 @@ Package.onUse(function (api) {
   api.use(['blaze', 'templating', 'spacebars', 'tracker'], 'client');
 
   api.use(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
+  api.use(['practicalmeteor:mocha-core', 'practicalmeteor:chai']);
 
   api.imply(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
 
@@ -46,6 +47,8 @@ Package.onUse(function (api) {
 
   api.addFiles(['meteor/src/lib/log.js']);
 
+  api.addFiles('meteor/src/server/mocha.coffee', 'server');
+
   api.addFiles([
     'meteor/src/client/mocha.html',
     'mocha.css',
@@ -58,7 +61,6 @@ Package.onUse(function (api) {
   api.addFiles('meteor/src/lib/JsonStreamReporter.coffee', 'server');
   api.addFiles('meteor/src/server/MeteorPublishReporter.coffee', 'server');
 
-  api.addFiles('meteor/src/server/mocha.coffee', 'server');
 
   api.addFiles('meteor/src/client/ClientServerReporter.coffee', 'client');
 
