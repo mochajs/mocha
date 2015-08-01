@@ -1,4 +1,4 @@
-log = new ObjectLogger('ClientServerReporter', 'info')
+log = new ObjectLogger('SpacejamReporter', 'info')
 
 practical.mocha ?= {}
 
@@ -9,6 +9,9 @@ class practical.mocha.SpacejamReporter
     try
       log.enter('constructor')
       @registerRunnerEvents()
+      @serverStats = null
+      @clientStats = null
+      @clientTests =  []
     finally
       log.return()
 
@@ -16,40 +19,100 @@ class practical.mocha.SpacejamReporter
     try
       log.enter("registerRunnerEvents")
 
-      clientOrServerEnd = false
-      clientRunner = @clientRunner
-      finish = (stats)->
-        if not @stats
-          @stats = stats
-          return
-        console.log("--------------------------------------------------")
-        console.log("---------------------RESULTS----------------------")
-        console.log("PASSED:", @stats.passes + stats.passes)
-        console.log("FAILED:", @stats.failures + stats.failures)
-        console.log("TOTAL:", @stats.total + stats.total)
-        console.log("--------------------------------------------------")
-        console.log("--------------------------------------------------")
-        window.TEST_STATUS = {FAILURES: @stats.failures, DONE: true}
-        window.DONE = true
-        window.FAILURES = @stats.failures
+      @serverRunner.on "start", => @printReporterHeader("Server")
+      @serverRunner.on 'test end', @onServerTestEnd
+      @serverRunner.on "end", @onServerTestFinish
 
-      @clientRunner.on 'test end', (test)=>
-        console.log("client - " +test.parent.fullTitle() + " " + test.fullTitle() + " : " + test.state)
-        if test.state is "failed"
-          console.log(test.err.stack || test.err)
+      @clientRunner.on 'test end', @onClientTestEnd
+      @clientRunner.on "end", @onClientTestFinish
 
-      @clientRunner.on "end", =>
-        stats = @clientRunner.stats
-        stats.total = @clientRunner.total
-        finish(@clientRunner.stats)
+    finally
+      log.return()
 
-      @serverRunner.on 'test end', (test)=>
-        console.log("server - " +test.parent.fullTitle() + " " + test.fullTitle() + " : " + test.state)
-        if test.state is "failed"
-          console.log(test.err.stack || test.err)
+  printReporterHeader: (where)=>
+    try
+      log.enter("printReporterHeader[#{where}]")
+      console.log("\n--------------------------------------------------")
+      console.log("------------------ #{where} tests ------------------")
+      console.log("--------------------------------------------------\n")
+    finally
+      log.return()
 
-      @serverRunner.on "end", (stats)=>
-        finish(stats)
+  onServerTestEnd: (test)=>
+    try
+      log.enter("onServerTestEnd", test)
+      @printTest(test, "server")
+    finally
+      log.return()
 
+  onServerTestFinish: (stats)=>
+    try
+      log.enter("onServerTestFinish", stats)
+      @serverStats = stats
+      @printClientTests()
+
+    finally
+      log.return()
+
+  onClientTestEnd: (test)=>
+    try
+      log.enter("onClientTestEnd", test)
+      @clientTests.push(test)
+
+    finally
+      log.return()
+
+  onClientTestFinish: ()=>
+    try
+      log.enter("onClientTestFinish")
+      @clientStats = @clientRunner.stats
+
+      # total property is missing in clientRunner.stats
+      @clientStats.total = @clientRunner.total
+      @printClientTests()
+
+    finally
+      log.return()
+
+  printTest: (test, where)->
+    try
+      log.enter("prinTest", test)
+      console.log("#{test.fullTitle()} : #{test.state}")
+      if test.state is "failed"
+        console.log("  " + (test.err.stack || test.err))
+      console.log(" ")
+    finally
+      log.return()
+
+  printClientTests: ()=>
+    try
+      log.enter("printClientTests")
+      return if not @clientStats?.total? or not @serverStats?.total?
+
+      @printReporterHeader("Client")
+
+      for test in @clientTests
+        @printTest(test, "client")
+
+      @finishAndPrintTestsSummary()
+    finally
+      log.return()
+
+  finishAndPrintTestsSummary: ()=>
+    try
+      log.enter("finishAndPrintTestsSummary")
+      if not @clientStats and not @serverStats
+        throw new Error("Missing client or server stats to print tests summary")
+
+      console.log("\n--------------------------------------------------")
+      console.log("---------------------RESULTS----------------------")
+      console.log("PASSED:", @serverStats.passes + @clientStats.passes)
+      console.log("FAILED:", @serverStats.failures + @clientStats.failures)
+      console.log("TOTAL:", @serverStats.total + @clientStats.total)
+      console.log("--------------------------------------------------")
+      console.log("--------------------------------------------------\n")
+      window.TEST_STATUS = {FAILURES: @serverStats.failures + @clientStats.failures, DONE: true}
+      window.DONE = true
+      window.FAILURES = @serverStats.failures + @clientStats.failures
     finally
       log.return()

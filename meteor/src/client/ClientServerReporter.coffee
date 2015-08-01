@@ -18,7 +18,6 @@ class practical.mocha.ClientServerReporter
       @serverRunnerProxy = new practical.mocha.EventEmitter()
 
       @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-      @reporter = new practical.mocha.reporters.Spec(@clientRunner)
       @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
 #      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
 #        elementIdPrefix: 'server-'
