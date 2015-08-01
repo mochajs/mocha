@@ -1,4 +1,4 @@
-log = new ObjectLogger('MochaRunner', 'debug')
+log = new ObjectLogger('MochaRunner', 'info')
 
 @practical ?= {}
 

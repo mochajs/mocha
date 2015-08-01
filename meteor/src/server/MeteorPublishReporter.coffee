@@ -39,7 +39,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @runner.on 'suite', (suite)=>
         try
           log.enter 'onSuite', arguments
-          log.info "suite:", suite.title
+#          log.info "suite:", suite.title
 #          @added 'suite', {title: suite.title, _fullTitle: suite.fullTitle(), root: suite.root}
           @added 'suite', @cleanSuite(suite)
         finally
@@ -127,6 +127,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
         _fullTitle: test.fullTitle()
         type: test.type
         state: test.state
+        parent: @cleanSuite(test.parent)
         speed: test.speed
         pending: test.pending
         duration: test.duration
