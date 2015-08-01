@@ -3966,7 +3966,6 @@ function Spec(runner) {
   runner.on('suite', function(suite){
     ++indents;
     console.log(color('suite', '%s%s'), indent(), suite.title);
-    console.log('suite %s%s', indent(), suite.title);
   });
 
   runner.on('suite end', function(suite){
@@ -3975,16 +3974,15 @@ function Spec(runner) {
   });
 
   runner.on('pending', function(test){
-    //var fmt = indent() + color('pending', '  - %s');
-    var fmt = indent() + 'pending  - %s';
+    var fmt = indent() + color('pending', '  - %s');
     console.log(fmt, test.title);
   });
 
   runner.on('pass', function(test){
     if ('fast' == test.speed) {
       var fmt = indent()
-        + 'checkmark' + Base.symbols.ok
-        + 'pass %s ';
+        + color('checkmark', '  ' + Base.symbols.ok)
+        + color('pass', ' %s ');
       cursor.CR();
       console.log(fmt, test.title);
     } else {
@@ -4014,7 +4012,7 @@ F.prototype = Base.prototype;
 Spec.prototype = new F;
 Spec.prototype.constructor = Spec;
 
-window.practical.mocha.reporters.Spec = Spec;
+
 }); // module: reporters/spec.js
 
 require.register("reporters/tap.js", function(module, exports, require){
