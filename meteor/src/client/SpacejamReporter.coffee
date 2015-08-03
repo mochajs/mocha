@@ -21,10 +21,10 @@ class practical.mocha.SpacejamReporter
 
       @serverRunner.on "start", => @printReporterHeader("Server")
       @serverRunner.on 'test end', @onServerTestEnd
-      @serverRunner.on "end", @onServerTestFinish
+      @serverRunner.on "end", @onServerRunEnd
 
       @clientRunner.on 'test end', @onClientTestEnd
-      @clientRunner.on "end", @onClientTestFinish
+      @clientRunner.on "end", @onClientRunEnd
 
     finally
       log.return()
@@ -45,9 +45,9 @@ class practical.mocha.SpacejamReporter
     finally
       log.return()
 
-  onServerTestFinish: (stats)=>
+  onServerRunEnd: (stats)=>
     try
-      log.enter("onServerTestFinish", stats)
+      log.enter("onServerRunEnd", stats)
       @serverStats = stats
       @printClientTests()
 
@@ -62,9 +62,9 @@ class practical.mocha.SpacejamReporter
     finally
       log.return()
 
-  onClientTestFinish: ()=>
+  onClientRunEnd: ()=>
     try
-      log.enter("onClientTestFinish")
+      log.enter("onClientRunEnd")
       @clientStats = @clientRunner.stats
 
       # total property is missing in clientRunner.stats
