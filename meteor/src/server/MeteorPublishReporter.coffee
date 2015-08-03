@@ -135,7 +135,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
         sync: test.sync
         _timeout: test._timeout
         _slow: test._slow
-        fn: test.fn.toString()
+        fn: test.fn?.toString() # If the test or suite if skipped the fn is null
         err: @errorJSON(test.err or {})
       }
       return cleanTest

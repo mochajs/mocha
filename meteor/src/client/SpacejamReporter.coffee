@@ -77,7 +77,8 @@ class practical.mocha.SpacejamReporter
   printTest: (test, where)->
     try
       log.enter("prinTest", test)
-      console.log("#{test.fullTitle()} : #{test.state}")
+      state = test.state or (if test.pending then "pending")
+      console.log("#{test.fullTitle()} : #{state}")
       if test.state is "failed"
         console.log("  " + (test.err.stack || test.err))
       console.log(" ")
