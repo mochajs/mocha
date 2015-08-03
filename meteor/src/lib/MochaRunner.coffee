@@ -44,7 +44,6 @@ class practical.MochaRunner
       log.return()
 
 
-
   escapeGrep: (grep = '')->
     try
       log.enter("escapeGrep", grep)

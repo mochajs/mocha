@@ -50,13 +50,12 @@ class practical.mocha.ClientServerReporter
         })
 #        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
 
-
-      @serverRunnerProxy.emit(doc.event, doc.data)
+      @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)
 #      if doc.event is 'start'
 #        @total = doc.data.total
 #        @reporter = new practical.mocha.reporters.HTML(@)
 #      @emit doc.event, doc.data
     catch ex
-      console.error ex.stack
+      console.error ex
     finally
       log.return()

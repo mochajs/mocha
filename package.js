@@ -22,6 +22,7 @@ Package.onUse(function (api) {
   api.use('ddp');
   api.use('random');
   api.use('mongo');
+  api.use('autoupdate');
 
   // If we use a reactive reporter such as meteor's test-in-browser one,
   // we'll need all of this.
