@@ -70,3 +70,7 @@ describe '6 - All async test suite', ->
 describe '7 - implicit wait', ->
   it 'during findOne', ->
     doc = practical.TestCollection.findOne (_id: 'xxx')
+
+describe.skip '8 - skip suite', ->
+  it "this won't run", ->
+    throw new Error("This is an error")
