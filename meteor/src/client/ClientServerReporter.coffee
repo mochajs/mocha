@@ -18,7 +18,6 @@ class practical.mocha.ClientServerReporter
       @serverRunnerProxy = new practical.mocha.EventEmitter()
 
       @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-      @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
 #      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
 #        elementIdPrefix: 'server-'
 #      })
@@ -31,6 +30,11 @@ class practical.mocha.ClientServerReporter
       log.enter('onServerRunnerEvent')
       expect(doc).to.be.an('object')
       expect(doc.event).to.be.a('string')
+
+      if doc.event is "spacejam" and doc.data?
+        @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
+        return
+
       expect(doc.data).to.be.an('object')
 
       # Required by the standard mocha reporters

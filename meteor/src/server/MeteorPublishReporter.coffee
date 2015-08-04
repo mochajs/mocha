@@ -22,10 +22,13 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       expect(@publisher.added, '@publisher.added').to.be.a('function')
       expect(@publisher.onStop, '@publisher.onStop').to.be.a('function')
 
+
       @publisher.onStop =>
         @stopped = true
       @stopped = false
       @sequence = 0
+
+      @added("spacejam", process.env.SPACEJAM?)
 
       @runner.on 'start', =>
         try

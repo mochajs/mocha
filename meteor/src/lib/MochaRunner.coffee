@@ -87,10 +87,9 @@ class practical.MochaRunner
       log.return()
 
 
+@MochaRunner = practical.MochaRunner.get()
+
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
-    practical.MochaRunner.get().runEverywhere()
-else
-# Run the ctor, so publication will be published
-  practical.MochaRunner.get()
+      MochaRunner.runEverywhere()
