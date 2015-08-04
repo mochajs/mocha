@@ -3,7 +3,7 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Work in progress. Test packages with mocha.js",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0-rc1'
+  version: '2.1.0_1'
 });
 
 
@@ -22,13 +22,14 @@ Package.onUse(function (api) {
   api.use('ddp');
   api.use('random');
   api.use('mongo');
+  api.use('autoupdate');
 
   // If we use a reactive reporter such as meteor's test-in-browser one,
   // we'll need all of this.
   api.use(['blaze', 'templating', 'spacebars', 'tracker'], 'client');
 
   api.use(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
-  api.use(['practicalmeteor:mocha-core', 'practicalmeteor:chai']);
+  api.use(['practicalmeteor:mocha-core@0.1.1', 'practicalmeteor:chai']);
 
   api.imply(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
 
@@ -63,6 +64,7 @@ Package.onUse(function (api) {
 
 
   api.addFiles('meteor/src/client/ClientServerReporter.coffee', 'client');
+  api.addFiles('meteor/src/client/SpacejamReporter.coffee', 'client');
 
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
 });

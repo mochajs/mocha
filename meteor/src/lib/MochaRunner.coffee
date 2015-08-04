@@ -1,4 +1,4 @@
-log = new ObjectLogger('MochaRunner', 'debug')
+log = new ObjectLogger('MochaRunner', 'info')
 
 @practical ?= {}
 
@@ -42,7 +42,6 @@ class practical.MochaRunner
             log.return()
     finally
       log.return()
-
 
 
   escapeGrep: (grep = '')->
