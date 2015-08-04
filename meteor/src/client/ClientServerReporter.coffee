@@ -6,18 +6,21 @@ class practical.mocha.ClientServerReporter
 
   serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
 
-  constructor: (@clientRunner, @options)->
+  constructor: (@clientRunner, @options = {})->
     try
       log.enter('constructor')
       serverRunEvents.find().observe( {
         added: _.bind(@onServerRunnerEvent, @)
       } )
 
-      expect(practical.mocha.reporters.HTML).to.be.a('function')
+#      expect(practical.mocha.reporters.HTML).to.be.a('function')
+      expect(MochaRunner.reporter).to.be.a('function')
 
       @serverRunnerProxy = new practical.mocha.EventEmitter()
 
-      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
+#      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
+
+      @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
 #      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
 #        elementIdPrefix: 'server-'
 #      })
@@ -32,7 +35,8 @@ class practical.mocha.ClientServerReporter
       expect(doc.event).to.be.a('string')
 
       if doc.event is "spacejam" and doc.data?
-        @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
+#        @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
+#        practical.MochaRunner.get().startTests()
         return
 
       expect(doc.data).to.be.an('object')
@@ -49,9 +53,9 @@ class practical.mocha.ClientServerReporter
       if doc.event is 'start'
         @serverRunnerProxy.stats = doc.data
         @serverRunnerProxy.total = doc.data.total
-        @serverReporter = new practical.mocha.reporters.HTML(@serverRunnerProxy, {
-          elementIdPrefix: 'server-'
-        })
+#        @serverReporter = new practical.mocha.reporters.HTML(@serverRunnerProxy, {
+#          elementIdPrefix: 'server-'
+#        })
 #        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
 
       @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)

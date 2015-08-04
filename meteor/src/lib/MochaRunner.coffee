@@ -12,6 +12,10 @@ class practical.MochaRunner
   constructor: ->
     try
       log.enter 'constructor'
+
+#      if Meteor.isClient
+#        @reporter = practical.mocha.reporters.HTML
+
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
@@ -72,6 +76,8 @@ class practical.MochaRunner
       log.return()
 
 
+  setReporter: (@reporter)->
+
   onServerRunSubscriptionReady: ->
     try
       log.enter 'onServerRunSubscriptionReady'
@@ -92,4 +98,5 @@ class practical.MochaRunner
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
+    Meteor.defer ->
       MochaRunner.runEverywhere()
