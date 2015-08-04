@@ -1,4 +1,4 @@
- [![Build Status](https://secure.travis-ci.org/mochajs/mocha.png)](http://travis-ci.org/mochajs/mocha)
+ [![Build Status](https://travis-ci.org/practicalmeteor/mocha.svg?branch=meteor)](https://travis-ci.org/practicalmeteor/mocha)
 
   [![Mocha test framework](http://f.cl.ly/items/3l1k0n2A1U3M1I1L210p/Screen%20Shot%202012-02-24%20at%202.21.43%20PM.png)](http://mochajs.org)
 
