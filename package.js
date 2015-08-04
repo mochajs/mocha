@@ -3,7 +3,7 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Work in progress. Test packages with mocha.js",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0-rc1'
+  version: '2.1.0_1'
 });
 
 
@@ -29,7 +29,7 @@ Package.onUse(function (api) {
   api.use(['blaze', 'templating', 'spacebars', 'tracker'], 'client');
 
   api.use(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
-  api.use(['practicalmeteor:mocha-core', 'practicalmeteor:chai']);
+  api.use(['practicalmeteor:mocha-core@0.1.1', 'practicalmeteor:chai']);
 
   api.imply(['practicalmeteor:loglevel', 'practicalmeteor:chai']);
 
