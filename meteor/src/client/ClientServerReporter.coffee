@@ -13,17 +13,11 @@ class practical.mocha.ClientServerReporter
         added: _.bind(@onServerRunnerEvent, @)
       } )
 
-#      expect(practical.mocha.reporters.HTML).to.be.a('function')
       expect(MochaRunner.reporter).to.be.a('function')
 
       @serverRunnerProxy = new practical.mocha.EventEmitter()
 
-#      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-
       @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
-#      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
-#        elementIdPrefix: 'server-'
-#      })
     finally
       log.return()
 
@@ -33,11 +27,6 @@ class practical.mocha.ClientServerReporter
       log.enter('onServerRunnerEvent')
       expect(doc).to.be.an('object')
       expect(doc.event).to.be.a('string')
-
-      if doc.event is "spacejam" and doc.data?
-#        @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
-#        practical.MochaRunner.get().startTests()
-        return
 
       expect(doc.data).to.be.an('object')
 
@@ -53,16 +42,9 @@ class practical.mocha.ClientServerReporter
       if doc.event is 'start'
         @serverRunnerProxy.stats = doc.data
         @serverRunnerProxy.total = doc.data.total
-#        @serverReporter = new practical.mocha.reporters.HTML(@serverRunnerProxy, {
-#          elementIdPrefix: 'server-'
-#        })
-#        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
 
       @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)
-#      if doc.event is 'start'
-#        @total = doc.data.total
-#        @reporter = new practical.mocha.reporters.HTML(@)
-#      @emit doc.event, doc.data
+
     catch ex
       console.error ex
     finally

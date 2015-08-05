@@ -76,7 +76,6 @@ Package.onUse(function (api) {
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
   api.addFiles('meteor/src/client/HtmlReporter.coffee', 'client');
 
-  //api.addFiles('meteor/src/client/SpacejamReporter.coffee', 'client');
 });
 
 

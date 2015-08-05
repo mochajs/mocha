@@ -13,9 +13,6 @@ class practical.MochaRunner
     try
       log.enter 'constructor'
 
-#      if Meteor.isClient
-#        @reporter = practical.mocha.reporters.HTML
-
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
@@ -32,7 +29,6 @@ class practical.MochaRunner
               grep: self.escapeGrep(grep)
               publisher: @
             })
-#            practical.mocha.MeteorPublishReporter.publisher = self
             boundRun = Meteor.bindEnvironment ->
               mocha.run Meteor.bindEnvironment (failures)->
                 log.warn 'failures:', failures
@@ -71,7 +67,6 @@ class practical.MochaRunner
         onReady: _.bind(@onServerRunSubscriptionReady, @)
         onError: _.bind(@onServerRunSubscriptionError, @)
       }
-#      @serverRunnerProxy = new practical.mocha.ServerRunnerProxy(@serverRunSubscriptionHandle)
     finally
       log.return()
 
@@ -98,5 +93,6 @@ class practical.MochaRunner
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
+    # Defer to wait for custom reporter setup
     Meteor.defer ->
       MochaRunner.runEverywhere()

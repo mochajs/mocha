@@ -7,26 +7,41 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
   constructor: (@clientRunner, @serverRunner, @options = {})->
     try
       log.enter('constructor')
+      @addReporterHtml()
 
       @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-      @registerRunnerServerEvents()
+      @serverReporter = new practical.mocha.reporters.HTML(@serverRunner, {
+        elementIdPrefix: 'server-'
+      })
     finally
       log.return()
 
 
-  registerRunnerServerEvents: (doc)->
+  addReporterHtml: ()=>
     try
-      log.enter('onServerRunnerEvent')
+      log.enter("addReporterHtml")
+      div = document.createElement('div')
 
-      @serverRunner.on "start", =>
-        @serverReporter = new practical.mocha.reporters.HTML(@serverRunner, {
-          elementIdPrefix: 'server-'
-        })
+      div.innerHTML = '<div class="content">
+        <div class="test-wrapper">
+          <h1 class="title">Client tests</h1>
 
-    catch ex
-      console.error ex
+          <div id="mocha" class="mocha"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="test-wrapper">
+          <h1 class="title">Server tests</h1>
+
+          <div id="server-mocha" class="mocha"></div>
+        </div>
+      </div>'
+
+      document.body.appendChild(div)
     finally
       log.return()
+
 
 Meteor.startup ->
   MochaRunner.setReporter(practical.mocha.HtmlReporter)
