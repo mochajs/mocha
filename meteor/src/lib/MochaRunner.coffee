@@ -93,6 +93,7 @@ class practical.MochaRunner
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
-    # Defer to wait for custom reporter setup
+    # We defer because if another package sets a different reporter on Meteor.startup,
+    # that's the reporter that we want to be used.
     Meteor.defer ->
       MochaRunner.runEverywhere()

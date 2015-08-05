@@ -16,7 +16,12 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
     finally
       log.return()
 
-
+  ###
+    Adds the html required by the mocha HTML reporter to the body of the html
+    document. We modified the mocha HTML reporter to be able to display 2 reporters
+    at the same time, one for client tests and one for server tests.
+    TODO: Create a single meteor reactive reporter.
+  ###
   addReporterHtml: ()=>
     try
       log.enter("addReporterHtml")
