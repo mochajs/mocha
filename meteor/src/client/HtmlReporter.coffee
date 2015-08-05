@@ -28,5 +28,5 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
     finally
       log.return()
 
-#Meteor.startup ->
-#  MochaRunner.setReporter(practical.mocha.HtmlReporter)
+Meteor.startup ->
+  MochaRunner.setReporter(practical.mocha.HtmlReporter)
