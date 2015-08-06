@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/practicalmeteor/meteor-mocha.svg?branch=meteor)](https://travis-ci.org/practicalmeteor/meteor-mocha)
+
 ## practicalmeteor:mocha
 
 A package for writing and running your package tests with [mocha](http://mochajs.org/). Supports running you mocha package tests in the browser or from the command line with [spacejam](https://www.npmjs.com/package/spacejam).

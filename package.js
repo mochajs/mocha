@@ -3,7 +3,7 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Write package tests with mocha and run them in the browser or from the command line with spacejam.",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0_2'
+  version: '2.1.0_3'
 });
 
 
@@ -82,7 +82,7 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
-    'practicalmeteor:mocha@2.1.0_2',
+    'practicalmeteor:mocha@2.1.0_3',
     'tinytest']);
 
   api.addFiles('meteor/tests/mocha-globals-test.coffee');
