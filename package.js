@@ -1,9 +1,9 @@
 // Using the "wrapper package" version format
 Package.describe({
   name: "practicalmeteor:mocha",
-  summary: "Work in progress. Test packages with mocha.js",
+  summary: "Write package tests with mocha and run them in the browser or from the command line with spacejam.",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0_1'
+  version: '2.1.0_2'
 });
 
 
@@ -82,7 +82,7 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
-    'practicalmeteor:mocha@2.1.0_1',
+    'practicalmeteor:mocha@2.1.0_2',
     'tinytest']);
 
   api.addFiles('meteor/tests/mocha-globals-test.coffee');
