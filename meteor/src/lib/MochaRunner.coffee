@@ -12,6 +12,7 @@ class practical.MochaRunner
   constructor: ->
     try
       log.enter 'constructor'
+
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
@@ -28,7 +29,6 @@ class practical.MochaRunner
               grep: self.escapeGrep(grep)
               publisher: @
             })
-#            practical.mocha.MeteorPublishReporter.publisher = self
             boundRun = Meteor.bindEnvironment ->
               mocha.run Meteor.bindEnvironment (failures)->
                 log.warn 'failures:', failures
@@ -67,10 +67,11 @@ class practical.MochaRunner
         onReady: _.bind(@onServerRunSubscriptionReady, @)
         onError: _.bind(@onServerRunSubscriptionError, @)
       }
-#      @serverRunnerProxy = new practical.mocha.ServerRunnerProxy(@serverRunSubscriptionHandle)
     finally
       log.return()
 
+
+  setReporter: (@reporter)->
 
   onServerRunSubscriptionReady: ->
     try
@@ -87,10 +88,12 @@ class practical.MochaRunner
       log.return()
 
 
+@MochaRunner = practical.MochaRunner.get()
+
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
   Meteor.startup ->
-    practical.MochaRunner.get().runEverywhere()
-else
-# Run the ctor, so publication will be published
-  practical.MochaRunner.get()
+    # We defer because if another package sets a different reporter on Meteor.startup,
+    # that's the reporter that we want to be used.
+    Meteor.defer ->
+      MochaRunner.runEverywhere()

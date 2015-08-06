@@ -6,22 +6,18 @@ class practical.mocha.ClientServerReporter
 
   serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
 
-  constructor: (@clientRunner, @options)->
+  constructor: (@clientRunner, @options = {})->
     try
       log.enter('constructor')
       serverRunEvents.find().observe( {
         added: _.bind(@onServerRunnerEvent, @)
       } )
 
-      expect(practical.mocha.reporters.HTML).to.be.a('function')
+      expect(MochaRunner.reporter).to.be.a('function')
 
       @serverRunnerProxy = new practical.mocha.EventEmitter()
 
-      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-      @spacejamReporter = new practical.mocha.SpacejamReporter(@clientRunner, @serverRunnerProxy)
-#      @serverReporter = new practical.mocha.reporters.HTML(@clientRunnerProxy, {
-#        elementIdPrefix: 'server-'
-#      })
+      @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
     finally
       log.return()
 
@@ -31,6 +27,7 @@ class practical.mocha.ClientServerReporter
       log.enter('onServerRunnerEvent')
       expect(doc).to.be.an('object')
       expect(doc.event).to.be.a('string')
+
       expect(doc.data).to.be.an('object')
 
       # Required by the standard mocha reporters
@@ -45,16 +42,9 @@ class practical.mocha.ClientServerReporter
       if doc.event is 'start'
         @serverRunnerProxy.stats = doc.data
         @serverRunnerProxy.total = doc.data.total
-        @serverReporter = new practical.mocha.reporters.HTML(@serverRunnerProxy, {
-          elementIdPrefix: 'server-'
-        })
-#        @clientRunnerProxy.total = @clientRunner.total + doc.data.total
 
       @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)
-#      if doc.event is 'start'
-#        @total = doc.data.total
-#        @reporter = new practical.mocha.reporters.HTML(@)
-#      @emit doc.event, doc.data
+
     catch ex
       console.error ex
     finally
