@@ -28,6 +28,11 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
       @stopped = false
       @sequence = 0
 
+      # Specify how to run tests 'serial' or 'parallel'
+      # Running 'serial' will run 'server' tests first and then 'client' tests
+      # By default is 'parallel'
+      @added 'run order', process.env.MOCHA_RUN_ORDER || 'server'
+
 
       @runner.on 'start', =>
         try

@@ -66,12 +66,15 @@ Package.onUse(function (api) {
     'meteor/src/client/mocha-setup.coffee'
     ], 'client');
 
+  api.addFiles('meteor/src/lib/coll.coffee');
   api.addFiles('meteor/src/lib/BaseReporter.coffee');
   api.addFiles('meteor/src/lib/JsonStreamReporter.coffee', 'server');
   api.addFiles('meteor/src/server/MeteorPublishReporter.coffee', 'server');
 
 
   api.addFiles('meteor/src/client/ClientServerReporter.coffee', 'client');
+  api.addFiles('meteor/src/client/ClientFirstReporter.coffee', 'client');
+  api.addFiles('meteor/src/client/ServerFirstReporter.coffee', 'client');
 
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
   api.addFiles('meteor/src/client/HtmlReporter.coffee', 'client');

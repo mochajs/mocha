@@ -474,6 +474,17 @@ function EventEmitter(){};
  * @api public
  */
 
+EventEmitter.prototype.any = function (fn) {
+  this.on("any.event", fn);
+  return this;
+};
+
+/**
+ * Adds a listener.
+ *
+ * @api public
+ */
+
 EventEmitter.prototype.on = function (name, fn) {
   if (!this.$events) {
     this.$events = {};
@@ -602,12 +613,15 @@ EventEmitter.prototype.emit = function (name) {
   }
 
   var handler = this.$events[name];
+  var args = [].slice.call(arguments, 1);
+
+  if (name !== 'any.event')
+    this.emit("any.event", name, args);
 
   if (!handler) {
     return false;
   }
 
-  var args = [].slice.call(arguments, 1);
 
   if ('function' == typeof handler) {
     handler.apply(this, args);

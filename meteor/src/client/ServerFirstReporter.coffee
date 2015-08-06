@@ -2,7 +2,7 @@ log = new ObjectLogger('ClientServerReporter', 'info')
 
 practical.mocha ?= {}
 
-class practical.mocha.ClientServerReporter extends practical.mocha.BaseReporter
+class practical.mocha.ServerFirstReporter
 
 
 
@@ -27,25 +27,6 @@ class practical.mocha.ClientServerReporter extends practical.mocha.BaseReporter
   @runServerTestsFirst: ()=>
     try
       log.enter("runServerTestsFirst",)
-      log.info("")
-      clientRunner = new practical.mocha.EventEmitter()
-      reporter = new ClientServerReporter(clientRunner, {})
-      class Dummy extends practical.mocha.BaseReporter
-
-        constructor: (runner, options)->
-          clientRunner.total = runner.total
-          super(clientRunner, options)
-          runner.any (event, eventArgs)->
-            args = eventArgs.slice()
-            args.unshift(event)
-            console.log("any",event, eventArgs, args)
-            clientRunner.emit.apply(clientRunner,args )
-
-      reporter.serverRunnerProxy.on "end", ->
-        mocha.reporter(Dummy)
-        mocha.run(->)
-
-
 
     finally
       log.return()

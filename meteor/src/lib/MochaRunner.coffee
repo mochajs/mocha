@@ -9,10 +9,13 @@ class practical.MochaRunner
   @get: ->
     practical.MochaRunner.instance ?= new practical.MochaRunner()
 
+  serverRunEvents: null
+
   constructor: ->
     try
       log.enter 'constructor'
 
+      @serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
       if Meteor.isServer
         # We cannot bind an instance method, since we need the this provided by meteor
         # inside the publish function to control the published documents manually
@@ -58,8 +61,7 @@ class practical.MochaRunner
     try
       log.enter 'runEverywhere'
       expect(Meteor.isClient).to.be.true
-      mocha.reporter(practical.mocha.ClientServerReporter)
-      mocha.run(->)
+
 
       query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
 
@@ -73,11 +75,45 @@ class practical.MochaRunner
 
   setReporter: (@reporter)->
 
-  onServerRunSubscriptionReady: ->
+  onServerRunSubscriptionReady: =>
     try
       log.enter 'onServerRunSubscriptionReady'
+      runOrder = @serverRunEvents.findOne({event: "run order"})
+      if runOrder.data is "server"
+        @runServerTestsFirst()
+      else if runOrder.data is "client"
+        @runClientTestsFirst()
+      else
+        @runTestsInParallel()
+
+      console.log "coll", runOrder
+
+      console.log()
     finally
       log.return()
+
+  runTestsInParallel: ()=>
+    try
+      log.enter("runTestsInParallel",)
+      mocha.reporter(practical.mocha.ClientServerReporter)
+      mocha.run(->)
+    finally
+      log.return()
+
+  runServerTestsFirst: ()=>
+    try
+      log.enter("runServerTestsFirst",)
+      practical.mocha.ClientServerReporter.runServerTestsFirst()
+    finally
+      log.return()
+
+  runClientTestsFirst: ()=>
+    try
+      log.enter("runClientTestsFirst",)
+
+    finally
+      log.return()
+
 
 
   onServerRunSubscriptionError: (meteorError)->
