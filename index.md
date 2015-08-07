@@ -981,6 +981,12 @@ $ make tm
 
 The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, assuming your license allows it.
 
+### Wallaby.js
+
+[Wallaby.js](http://wallabyjs.com) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.) and Visual Studio for both browser and node.js projects.
+  
+![Wallaby.js in Action](images/wallaby.png)
+
 
 ## Examples
 
