@@ -261,6 +261,15 @@ body {
 #mocha-stats .progress {
   float: right;
   padding-top: 0;
+  
+  /**
+   * Set safe initial values, so mochas .progress does not inherit these
+   * properties from Bootstrap .progress (which causes .progress height to
+   * equal line height set in Bootstrap).
+   */
+  height: auto;
+  box-shadow: none;
+  background-color: initial;
 }
 
 #mocha-stats em {
