@@ -89,7 +89,7 @@ $ $EDITOR test/test.js
 In your editor:
 
 ```js
-var assert = require("assert")
+var assert = require("assert");
 describe('Array', function() {
   describe('#indexOf()', function () {
     it('should return -1 when the value is not present', function () {
@@ -441,11 +441,11 @@ describe('a suite of tests', function() {
 
   it('should take less than 500ms', function(done){
     setTimeout(done, 300);
-  })
+  });
 
   it('should take less than 500ms as well', function(done){
     setTimeout(done, 200);
-  })
+  });
 })
 ```
 
@@ -595,8 +595,8 @@ describe('app', function() {
     it('respond with an array of users', function() {
       // ...
     });
-  })
-})
+  });
+});
 ```
 
 ## Interfaces
@@ -712,10 +712,10 @@ The `require` interface allows you to require the `describe` and friend words di
 *Note*: The `require` interface cannot be run via the `node` executable, and must be run via `mocha`.
 
 ```js
-var testCase = require('mocha').describe
-var pre = require('mocha').before
-var assertions = require('mocha').it
-var assert = require('assert')
+var testCase = require('mocha').describe;
+var pre = require('mocha').before;
+var assertions = require('mocha').it;
+var assert = require('assert');
 
 testCase('Array', function() {
   pre(function() {
@@ -816,7 +816,7 @@ The "doc" reporter outputs a hierarchical HTML body representation of your tests
 
 For example, suppose you have the following JavaScript:
 
-```
+```js
 describe('Array', function() {
   describe('#indexOf()', function() {
     it('should return -1 when the value is not present', function() {
@@ -1014,7 +1014,7 @@ $ make test-all
 
 Alter the reporter:
 
-```
+```sh
 $ make test REPORTER=list
 ```
 
