@@ -79,42 +79,13 @@ class practical.MochaRunner
     try
       log.enter 'onServerRunSubscriptionReady'
       runOrder = @serverRunEvents.findOne({event: "run order"})
-      if runOrder.data is "server"
-        @runServerTestsFirst()
-      else if runOrder.data is "client"
-        @runClientTestsFirst()
+      if runOrder.data is "serial"
+        reporter = new practical.mocha.ClientServerReporter(null, {runOrder: "serial"})
       else
-        @runTestsInParallel()
-
-      console.log "coll", runOrder
-
-      console.log()
+        mocha.reporter(practical.mocha.ClientServerReporter)
+        mocha.run(->)
     finally
       log.return()
-
-  runTestsInParallel: ()=>
-    try
-      log.enter("runTestsInParallel",)
-      mocha.reporter(practical.mocha.ClientServerReporter)
-      mocha.run(->)
-    finally
-      log.return()
-
-  runServerTestsFirst: ()=>
-    try
-      log.enter("runServerTestsFirst",)
-      practical.mocha.ClientServerReporter.runServerTestsFirst()
-    finally
-      log.return()
-
-  runClientTestsFirst: ()=>
-    try
-      log.enter("runClientTestsFirst",)
-
-    finally
-      log.return()
-
-
 
   onServerRunSubscriptionError: (meteorError)->
     try

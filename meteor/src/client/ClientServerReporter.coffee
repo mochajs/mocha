@@ -10,52 +10,43 @@ class practical.mocha.ClientServerReporter extends practical.mocha.BaseReporter
     try
       log.enter('constructor')
       @serverRunnerProxy = new practical.mocha.EventEmitter()
-      super(@serverRunnerProxy, @options)
-#      super(@serverRunnerProxy, @options)
-      MochaRunner.serverRunEvents.find().observe( {
-        added: _.bind(@onServerRunnerEvent, @)
-      } )
+
+      if @options.runOrder is "serial"
+        @clientRunner = new practical.mocha.EventEmitter()
+        @runTestsInSerial(@clientRunner)
 
       expect(MochaRunner.reporter).to.be.a('function')
 
-
       @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
+
+      MochaRunner.serverRunEvents.find().observe( {
+        added: _.bind(@onServerRunnerEvent, @)
+      })
     finally
       log.return()
 
 
-  @runServerTestsFirst: ()=>
+  runTestsInSerial: (clientRunner)=>
     try
-      log.enter("runServerTestsFirst",)
-      log.info("")
-      clientRunner = new practical.mocha.EventEmitter()
-      reporter = new ClientServerReporter(clientRunner, {})
-      class Dummy extends practical.mocha.BaseReporter
+      log.enter("runTestsInSerial",)
 
-        constructor: (runner, options)->
-          clientRunner.total = runner.total
-          super(clientRunner, options)
-          runner.any (event, eventArgs)->
+      # Mirror every event from mocha's runner to our clientRunner
+      class MirrorReporter
+
+        constructor: (mochaClientRunner, options)->
+          clientRunner.total = mochaClientRunner.total
+          mochaClientRunner.any (event, eventArgs)->
             args = eventArgs.slice()
             args.unshift(event)
-            console.log("any",event, eventArgs, args)
-            clientRunner.emit.apply(clientRunner,args )
+            clientRunner.emit.apply(clientRunner, args)
 
-      reporter.serverRunnerProxy.on "end", ->
-        mocha.reporter(Dummy)
+      @serverRunnerProxy.on "end", =>
+        mocha.reporter(MirrorReporter)
         mocha.run(->)
 
-
-
     finally
       log.return()
 
-  @runClientTestsFirst: ()=>
-    try
-      log.enter("runClientTestsFirst",)
-
-    finally
-      log.return()
 
   onServerRunnerEvent: (doc)->
     try
