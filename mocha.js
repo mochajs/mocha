@@ -468,16 +468,18 @@ function EventEmitter(){};
 
   window.practical.mocha.EventEmitter = EventEmitter;
 
+/*Practical Meteor changes*/
 /**
- * Adds a listener.
+ * Register a listener to 'any event' event.
  *
  * @api public
  */
-
 EventEmitter.prototype.any = function (fn) {
-  this.on("any.event", fn);
+  this.on("any event", fn);
   return this;
 };
+/*Practical Meteor changes*/
+
 
 /**
  * Adds a listener.
@@ -615,8 +617,10 @@ EventEmitter.prototype.emit = function (name) {
   var handler = this.$events[name];
   var args = [].slice.call(arguments, 1);
 
-  if (name !== 'any.event')
-    this.emit("any.event", name, args);
+  /* Practical Meteor changes*/
+  if (name !== 'any event')
+    this.emit("any event", name, args);
+  /* Practical Meteor changes*/
 
   if (!handler) {
     return false;
