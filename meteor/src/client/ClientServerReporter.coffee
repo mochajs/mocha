@@ -2,8 +2,7 @@ log = new ObjectLogger('ClientServerReporter', 'info')
 
 practical.mocha ?= {}
 
-class practical.mocha.ClientServerReporter extends practical.mocha.BaseReporter
-
+class practical.mocha.ClientServerReporter
 
 
   constructor: (@clientRunner, @options = {})->
@@ -74,6 +73,6 @@ class practical.mocha.ClientServerReporter extends practical.mocha.BaseReporter
       @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)
 
     catch ex
-      console.log (ex.stack || ex)
+      console.error ex
     finally
       log.return()

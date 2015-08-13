@@ -61,8 +61,9 @@ describe '6 - All async test suite', ->
   afterEach (done)->
     log.debug 'afterEach'
     Meteor.setTimeout( (-> done()), 1000)
+
+  @timeout(5000)
   it 'passing', (done)->
-    @timeout(5000)
 
     expect(true).to.be.true
     Meteor.setTimeout( (-> done()), 3000)
