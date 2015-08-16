@@ -393,13 +393,14 @@ if (program.watch) {
     }
   });
 
-  return;
-}
+} else {
 
 // load
 
-mocha.files = files;
-runner = mocha.run(program.exit ? exit : exitLater);
+  mocha.files = files;
+  runner = mocha.run(program.exit ? exit : exitLater);
+
+}
 
 function exitLater(code) {
   process.on('exit', function() { process.exit(code) })
