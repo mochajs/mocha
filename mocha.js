@@ -618,6 +618,8 @@ EventEmitter.prototype.emit = function (name) {
   var args = [].slice.call(arguments, 1);
 
   /* Practical Meteor changes*/
+  //Emit 'any event' with current event name (other than "any event") as an event
+  // with the name "any event"
   if (name !== 'any event')
     this.emit("any event", name, args);
   /* Practical Meteor changes*/

@@ -12,7 +12,7 @@ class practical.mocha.ClientServerReporter
 
       if @options.runOrder is "serial"
         @clientRunner = new practical.mocha.EventEmitter()
-        @runTestsInSerial(@clientRunner)
+        @runTestsSerially(@clientRunner, @serverRunnerProxy)
 
       expect(MochaRunner.reporter).to.be.a('function')
 
@@ -25,21 +25,22 @@ class practical.mocha.ClientServerReporter
       log.return()
 
 
-  runTestsInSerial: (clientRunner)=>
+  runTestsSerially: (clientRunner, serverRunnerProxy)=>
     try
-      log.enter("runTestsInSerial",)
+      log.enter("runTestsSerially",)
 
       # Mirror every event from mocha's runner to our clientRunner
       class MirrorReporter
 
         constructor: (mochaClientRunner, options)->
           clientRunner.total = mochaClientRunner.total
+          # Listen to every event sent from mochaClientRunner
           mochaClientRunner.any (event, eventArgs)->
             args = eventArgs.slice()
             args.unshift(event)
             clientRunner.emit.apply(clientRunner, args)
 
-      @serverRunnerProxy.on "end", =>
+      serverRunnerProxy.on "end", =>
         mocha.reporter(MirrorReporter)
         mocha.run(->)
 
