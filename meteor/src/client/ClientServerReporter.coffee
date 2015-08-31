@@ -4,20 +4,46 @@ practical.mocha ?= {}
 
 class practical.mocha.ClientServerReporter
 
-  serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
 
   constructor: (@clientRunner, @options = {})->
     try
       log.enter('constructor')
-      serverRunEvents.find().observe( {
-        added: _.bind(@onServerRunnerEvent, @)
-      } )
+      @serverRunnerProxy = new practical.mocha.EventEmitter()
+
+      if @options.runOrder is "serial"
+        @clientRunner = new practical.mocha.EventEmitter()
+        @runTestsSerially(@clientRunner, @serverRunnerProxy)
 
       expect(MochaRunner.reporter).to.be.a('function')
 
-      @serverRunnerProxy = new practical.mocha.EventEmitter()
-
       @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
+
+      MochaRunner.serverRunEvents.find().observe( {
+        added: _.bind(@onServerRunnerEvent, @)
+      })
+    finally
+      log.return()
+
+
+  runTestsSerially: (clientRunner, serverRunnerProxy)=>
+    try
+      log.enter("runTestsSerially",)
+
+      # Mirror every event from mocha's runner to our clientRunner
+      class MirrorReporter
+
+        constructor: (mochaClientRunner, options)->
+          clientRunner.total = mochaClientRunner.total
+          # Listen to every event sent from mochaClientRunner
+          mochaClientRunner.any (event, eventArgs)->
+            args = eventArgs.slice()
+            args.unshift(event)
+            clientRunner.emit.apply(clientRunner, args)
+
+      serverRunnerProxy.on "end", =>
+        mocha.reporter(MirrorReporter)
+        mocha.run(->)
+
     finally
       log.return()
 
@@ -28,6 +54,8 @@ class practical.mocha.ClientServerReporter
       expect(doc).to.be.an('object')
       expect(doc.event).to.be.a('string')
 
+      if doc.event is "run order"
+        return
       expect(doc.data).to.be.an('object')
 
       # Required by the standard mocha reporters

@@ -54,16 +54,19 @@ describe '6 - All async test suite', ->
     Meteor.defer -> done()
   after (done)->
     log.debug 'after'
-    Meteor.defer -> done()
+    Meteor.setTimeout( (-> done()), 1000)
   beforeEach (done)->
     log.debug 'beforeEach'
-    Meteor.defer -> done()
+    Meteor.setTimeout( (-> done()), 1000)
   afterEach (done)->
     log.debug 'afterEach'
-    Meteor.defer -> done()
+    Meteor.setTimeout( (-> done()), 1000)
+
+  @timeout(5000)
   it 'passing', (done)->
+
     expect(true).to.be.true
-    Meteor.defer -> done()
+    Meteor.setTimeout( (-> done()), 3000)
   it 'throwing', (done)->
     Meteor.defer -> done(new Error('failing'))
 
