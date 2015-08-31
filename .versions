@@ -27,8 +27,8 @@ observe-sequence@1.0.6
 ordered-dict@1.0.3
 practicalmeteor:chai@2.1.0_1
 practicalmeteor:loglevel@1.2.0_2
-practicalmeteor:mocha@2.1.0_2
-practicalmeteor:mocha-core@0.1.1
+practicalmeteor:mocha@2.1.0_4
+practicalmeteor:mocha-core@0.1.2
 practicalmeteor:sinon@1.14.1_2
 random@1.0.3
 reactive-dict@1.1.0
