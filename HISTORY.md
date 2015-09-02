@@ -1,3 +1,56 @@
+2.3.0 / 2015-07-05
+==================
+
+  * [#1727] - Build client-side Mocha using Browserify ([@ndhoule])
+  * [#1753] - Replace `__proto__` with lodash.create ([@ndhoule])
+  * [#1781] - Rework hook error tests to actually assert ([@glenjamin])
+  * [#1750] - Added consistent codestyle and linter to enfore it ([@ndhoule])
+  * [#1766] - Remove 3rd party function calls from stack trace only when earlier than user code ([@danielstjules])
+  * [#1752] - Stop runner sending SIGINT to itself from within SIGINT handler ([@gsilk])
+  * [#1761] - Fix for older JS engines incorrectly returning `window` ([@chromakode])
+  * [#1774] - support escaped spaces in cli options ([@adamgruber])
+  * [#1698] - Escape test/suite title for re in html reporter ([@benvinegar])
+  * [#1758] - Add cross-frame compatible Error checking ([@outdooricon])
+  * [#1730] - Added support for ioJS flags ([@ryedog])
+  * [#1349] - HTML reporter: Allow the error to contain a formatted HTML error message ([@papandreou])
+  * [#1572] - Prevent default browser behavior for failure/pass links ([@jschilli])
+  * [#1630] - Add support for underscored harmony flags ([@domonicbarnjs])
+  * [#1689] - Add stack to json-stream reporter ([@jonathandelgado])
+  * [#1718] - Add support of `--harmony_arrow_functions` V8 option ([@slyg])
+  * [#1654] - fix 'location is not defined' error ([@jakemmarsh])
+
+[#1727]: https://github.com/git@github.com:mochajs/mocha/issues/1727
+[#1753]: https://github.com/git@github.com:mochajs/mocha/issues/1753
+[#1781]: https://github.com/git@github.com:mochajs/mocha/issues/1781
+[#1750]: https://github.com/git@github.com:mochajs/mocha/issues/1750
+[#1766]: https://github.com/git@github.com:mochajs/mocha/issues/1766
+[#1752]: https://github.com/git@github.com:mochajs/mocha/issues/1752
+[#1761]: https://github.com/git@github.com:mochajs/mocha/issues/1761
+[#1774]: https://github.com/git@github.com:mochajs/mocha/issues/1774
+[#1698]: https://github.com/git@github.com:mochajs/mocha/issues/1698
+[#1758]: https://github.com/git@github.com:mochajs/mocha/issues/1758
+[#1730]: https://github.com/git@github.com:mochajs/mocha/issues/1730
+[#1349]: https://github.com/git@github.com:mochajs/mocha/issues/1349
+[#1572]: https://github.com/git@github.com:mochajs/mocha/issues/1572
+[#1630]: https://github.com/git@github.com:mochajs/mocha/issues/1630
+[#1689]: https://github.com/git@github.com:mochajs/mocha/issues/1689
+[#1718]: https://github.com/git@github.com:mochajs/mocha/issues/1718
+[#1654]: https://github.com/git@github.com:mochajs/mocha/issues/1654
+[@ndhoule]: https://github.com/ndhoule
+[@glenjamin]: https://github.com/glenjamin
+[@danielstjules]: https://github.com/danielstjules
+[@gsilk]: https://github.com/gsilk
+[@chromakode]: https://github.com/chromakode
+[@adamgruber]: https://github.com/adamgruber
+[@benvinegar]: https://github.com/benvinegar
+[@outdooricon]: https://github.com/outdooricon
+[@ryedog]: https://github.com/ryedog
+[@papandreou]: https://github.com/papandreou
+[@jschilli]: https://github.com/jschilli
+[@domonicbarnjs]: https://github.com/domonicbarnjs
+[@jonathandelgado]: https://github.com/jonathandelgado
+[@slyg]: https://github.com/slyg
+[@jakemmarsh]: https://github.com/jakemmarsh
 
 2.3.0 / 2015-08-30
 ==================
