@@ -1,3 +1,12 @@
+2.3.1 / 2015-09-06
+==================
+
+  * [#1867] - Fix compatibility with older versions of NPM ([@boneskull])
+  * [#1812] - Fix: Bail flag causes before() hooks to be run even after a failure ([@aaroncrows])
+
+  [#1867]: https://github.com/mochajs/mocha/issues/1867
+  [#1812]: https://github.com/mochajs/mocha/issues/1812
+  [aaroncrows]: https://github.com/aaroncrows
 
 2.3.0 / 2015-08-30
 ==================
