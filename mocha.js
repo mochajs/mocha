@@ -526,6 +526,9 @@ module.exports = function(suite) {
      */
 
     context.describe = context.context = function(title, fn) {
+      if (!fn) {
+        throw new TypeError('a callback is not supplied for the "' + title + '" suite');
+      }
       var suite = Suite.create(suites[0], title);
       suite.file = file;
       suites.unshift(suite);
@@ -542,7 +545,9 @@ module.exports = function(suite) {
       var suite = Suite.create(suites[0], title);
       suite.pending = true;
       suites.unshift(suite);
-      fn.call(suite);
+      if (fn) {
+        fn.call(suite);
+      }
       suites.shift();
     };
 
@@ -6309,11 +6314,14 @@ var rootParent = {}
  * get the Object implementation, which is slower but will work correctly.
  */
 Buffer.TYPED_ARRAY_SUPPORT = (function () {
+  function Foo () {}
   try {
     var buf = new ArrayBuffer(0)
     var arr = new Uint8Array(buf)
     arr.foo = function () { return 42 }
+    arr.constructor = Foo
     return arr.foo() === 42 && // typed array instances can be augmented
+        arr.constructor === Foo && // constructor can be set
         typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
         new Uint8Array(1).subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
   } catch (e) {
