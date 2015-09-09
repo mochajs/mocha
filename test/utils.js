@@ -101,7 +101,7 @@ describe('utils', function() {
         filter(stack.join('\n')).should.equal(stack.slice(0,7).join('\n'));
       });
 
-      it('should ignore bower and components files', function() {
+      it('does not ignore other bower_components and components', function() {
         var stack = ['Error: failed'
           , 'at assert (index.html:11:26)'
           , 'at Context.<anonymous> (test.js:17:18)'
@@ -126,18 +126,18 @@ describe('utils', function() {
         global.location = { href: 'localhost:3000/foo/bar/index.html' };
         filter = utils.stackTraceFilter();
       });
-      it('should strip out bower and components too', function() {
+      it('does not strip out other bower_components and components', function() {
         var stack = ['Error: failed'
           , 'at assert (index.html:11:26)'
           , 'at Context.<anonymous> (test.js:17:18)'
           , 'at bower_components/should/should.js:4827:7'
-          , 'at next (localhost:3000/foo/bar/bower_components/should/should.js:4766:23)'
+          , 'at next (bower_components/should/should.js:4766:23)'
           , 'at components/should/5.0.0/should.js:4827:7'
-          , 'at next (localhost:3000/foo/bar/components/should/5.0.0/should.js:4766:23)'
-          , 'at Runner.require.register.Runner.runTest (localhost:3000/foo/bar/node_modules/mocha.js:4892:10)'
+          , 'at next (components/should/5.0.0/should.js:4766:23)'
+          , 'at Runner.require.register.Runner.runTest (node_modules/mocha.js:4892:10)'
           , 'at localhost:3000/foo/bar/node_modules/mocha.js:4970:12'
-          , 'at next (localhost:3000/foo/bar/node_modules/mocha.js:4817:14)'];
-        filter(stack.join('\n')).should.equal(stack.slice(0,3).join('\n'));
+          , 'at next (node_modules/mocha.js:4817:14)'];
+        filter(stack.join('\n')).should.equal(stack.slice(0,7).join('\n'));
       });
 
       after(function() {
