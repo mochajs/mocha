@@ -14,6 +14,7 @@ mocha.js: $(SRC) $(SUPPORT)
 		--ignore 'glob' \
 		--ignore 'jade' \
 		--ignore 'path' \
+		--ignore 'buffer' \
 		--ignore 'supports-color' \
 		--exclude './lib-cov/mocha' > $@
 
