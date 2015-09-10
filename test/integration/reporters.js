@@ -41,10 +41,10 @@ describe('reporters', function() {
 
       var args = ['--reporter=xunit', '--reporter-options', 'output=' + tmpFile];
       var expectedOutput = [
-        '<testcase classname="suite" name="test1" time="0"/>',
-        '<testcase classname="suite" name="test2" time="0"/>',
+        '<testcase classname="suite" name="test1" time="',
+        '<testcase classname="suite" name="test2" time="',
         '</testsuite>'
-      ].join('\n');
+      ];
 
       run('passing.js', args, function(err, result) {
         if (err) return done(err);
@@ -52,7 +52,10 @@ describe('reporters', function() {
         var xml = fs.readFileSync(tmpFile, 'utf8');
         fs.unlinkSync(tmpFile);
 
-        assert(xml.indexOf(expectedOutput) !== -1, 'Did not output all xml');
+        expectedOutput.forEach(function(line) {
+          assert(xml.indexOf(line) !== -1, 'XML did not contain ' + line);
+        });
+
         done(err);
       });
     });
