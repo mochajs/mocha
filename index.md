@@ -49,6 +49,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 - [Assertions](#assertions)
 - [Synchronous Code](#synchronous-code)
 - [Asynchronous Code](#asynchronous-code)
+- [Arrow Functions](#arrow-functions)
 - [Hooks](#hooks)
 - [Pending Tests](#pending-tests)
 - [Exclusive Tests](#exclusive-tests)
@@ -186,6 +187,10 @@ describe('#find()', function() {
 ```
 
 (The latter example uses [Chai as Promised](https://www.npmjs.com/package/chai-as-promised) for fluent promise assertions.)
+
+## Arrow functions
+
+Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) to Mocha is discouraged. Their lexical binding of the `this` value makes them unable to access the Mocha context, and statements like `this.timeout(1000);` will not work inside an arrow function.
 
 ## Hooks
 
