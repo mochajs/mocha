@@ -39,19 +39,25 @@ process.argv.slice(2).forEach(function(arg){
     case '--harmony_arrays':
     case '--harmony_array_includes':
     case '--harmony_arrow_functions':
+    case '--harmony_atomics':
     case '--harmony_classes':
     case '--harmony-collections':
     case '--harmony_collections':
+    case '--harmony_destructuring':
     case '--harmony-generators':
     case '--harmony_generators':
+    case '--harmony_new_target':
     case '--harmony_modules':
     case '--harmony-proxies':
     case '--harmony_proxies':
+    case '--harmony_reflect':
     case '--harmony_regexps':
+    case '--harmony_sharedarraybuffer':
     case '--harmony_shipping':
     case '--harmony_sloppy':
     case '--harmony_rest_parameters':
     case '--harmony_unicode':
+    case '--harmony_unicode_regexps':
     case '--no-deprecation':
     case '--prof':
     case '--throw-deprecation':
