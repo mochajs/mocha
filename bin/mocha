@@ -34,24 +34,7 @@ process.argv.slice(2).forEach(function(arg){
       args.unshift('--expose-gc');
       break;
     case '--gc-global':
-    case '--harmony':
     case '--es_staging':
-    case '--harmony_arrays':
-    case '--harmony_array_includes':
-    case '--harmony_arrow_functions':
-    case '--harmony_classes':
-    case '--harmony-collections':
-    case '--harmony_collections':
-    case '--harmony-generators':
-    case '--harmony_generators':
-    case '--harmony_modules':
-    case '--harmony-proxies':
-    case '--harmony_proxies':
-    case '--harmony_regexps':
-    case '--harmony_shipping':
-    case '--harmony_sloppy':
-    case '--harmony_rest_parameters':
-    case '--harmony_unicode':
     case '--no-deprecation':
     case '--prof':
     case '--throw-deprecation':
@@ -60,7 +43,8 @@ process.argv.slice(2).forEach(function(arg){
       args.unshift(arg);
       break;
     default:
-      if (0 == arg.indexOf('--trace')) args.unshift(arg);
+      if (0 == arg.indexOf('--harmony')) args.unshift(arg);
+      else if (0 == arg.indexOf('--trace')) args.unshift(arg);
       else if (0 == arg.indexOf('--max-old-space-size')) args.unshift(arg);
       else args.push(arg);
       break;
