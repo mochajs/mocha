@@ -140,7 +140,18 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar');
+  });
+
+  it('should use the inspect() property if `message` is not set', function () {
+    var err = {
+      showDiff: false,
+      inspect: function() { return 'an error happened'; },
+    };
+    var test = makeTest(err);
+    Base.list([test]);
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     an error happened');
   });
 
   it('should not modify stack if it does not contain message', function () {
@@ -154,7 +165,7 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar')
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar');
   });
 
 });
