@@ -17,7 +17,7 @@ html
         .misses= cov.misses
 
       #files
-        each file in cov.files
+        for file in cov.files
           .file
             h2(id=file.filename)= file.filename
             #stats(class=coverageClass(file.coverage))
@@ -33,7 +33,7 @@ html
                   th Hits
                   th Source
               tbody
-                each line, number in file.source
+                for line, number in file.source
                   if line.coverage > 0
                     tr.hit
                       td.line= number
