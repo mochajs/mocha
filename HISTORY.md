@@ -3,7 +3,7 @@
  * [#1868] - Fix compatibility with older versions of NPM ([@boneskull])
 
   [#1868]: https://github.com/mochajs/mocha/issues/1868
-  
+
 2.3.1 / 2015-09-06
 ==================
 
@@ -23,7 +23,7 @@
   * [#1230] - More descriptive beforeEach/afterEach messages ([@duncanbeevers])
   * [#1787] - Scope loading behaviour instead of using early return ([@aryeguy])
   * [#1789] - Fix: html-runner crashing ([@sunesimonsen])
-  * [#1749] - Fix maximum call stack error on large amount of tests ([@tinganho])  
+  * [#1749] - Fix maximum call stack error on large amount of tests ([@tinganho])
   * [#1230] - Decorate failed hook titles with test title ([@duncanbeevers])
   * [#1260] - Build using Browserify ([@ndhoule])
   * [#1728] - Don't use `__proto__` ([@ndhoule])
@@ -32,7 +32,7 @@
   * [#1766] - Fix overly aggressive stack suppression ([@moll])
   * [#1752] - Avoid potential infinite loop ([@gsilk])
   * [#1761] - Fix problems running under PhantomJS ([@chromakode])
-  * [#1700] - Fix more problems running under PhantomJS ([@jbnicolai])  
+  * [#1700] - Fix more problems running under PhantomJS ([@jbnicolai])
   * [#1774] - Support escaped spaces in CLI options ([@adamgruber])
   * [#1687] - Fix HTML reporter links with special chars ([@benvinegar])
   * [#1359] - Adopt code style and enforce it using ESLint ([@ndhoule] w/ assist from [@jbnicolai] & [@boneskull])
