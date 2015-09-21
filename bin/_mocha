@@ -97,6 +97,7 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
+  .option('--nolazy', 'Disable lazy compilation (v8)')
 
 program.name = 'mocha';
 
