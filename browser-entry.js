@@ -136,6 +136,10 @@ mocha.run = function(fn){
   if (query.fgrep) mocha.grep(query.fgrep);
   if (query.invert) mocha.invert();
 
+  // require/post-require events usually emitted in Mocha.prototype.loadFiles
+  this.suite.emit('require', global, null, this);
+  this.suite.emit('post-require', global, null, this);
+
   return Mocha.prototype.run.call(mocha, function(err){
     // The DOM Document is not available in Web Workers.
     var document = global.document;
