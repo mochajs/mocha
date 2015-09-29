@@ -1,4 +1,6 @@
 var assert = require('assert');
+var fs     = require('fs');
+var path   = require('path');
 var run    = require('./helpers').runMocha;
 
 describe('regressions', function() {
@@ -20,5 +22,12 @@ describe('regressions', function() {
       assert.equal(res.code, 1);
       done();
     });
+  });
+
+  it('should not duplicate mocha.opts args in process.argv', function() {
+    var processArgv = process.argv.join('');
+    var mochaOpts = fs.readFileSync(path.join(__dirname, '..', 'mocha.opts'), 'utf-8').split(/[\s]+/).join('');
+    assert.notEqual(processArgv.indexOf(mochaOpts), -1, 'process.argv missing mocha.opts');
+    assert.equal(processArgv.indexOf(mochaOpts), processArgv.lastIndexOf(mochaOpts), 'process.argv contains duplicated mocha.opts');
   });
 });
