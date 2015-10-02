@@ -2,7 +2,7 @@
 
 ## practicalmeteor:mocha
 
-A package for writing and running your package tests with [mocha](http://mochajs.org/). Supports running you mocha package tests in the browser or from the command line with [spacejam](https://www.npmjs.com/package/spacejam).
+A package for writing and running your package tests with [mocha](http://mochajs.org/). Supports running your mocha package tests in the browser or from the command line with [spacejam](https://www.npmjs.com/package/spacejam).
 
 ## Using
 
@@ -34,7 +34,7 @@ spacejam test-packages --driver-package=practicalmeteor:mocha-console-reporter <
 
 ## Differences with [mike:mocha](https://atmospherejs.com/mike/mocha)
 
-First, a big thanks to [mike](https://atmospherejs.com/mike) for figuring out and writting all the complex server side fibers aware [wrapping code](https://atmospherejs.com/mike/mocha-core) that was required to make mocha work server side. We use a [fork](https://atmospherejs.com/practicalmeteor/mocha-core) of it as the basis of our package.
+First, a big thanks to [mike](https://atmospherejs.com/mike) for figuring out and writing all the complex server side fibers aware [wrapping code](https://atmospherejs.com/mike/mocha-core) that was required to make mocha work server side. We use a [fork](https://atmospherejs.com/practicalmeteor/mocha-core) of it as the basis of our package.
 
 Second, thanks to us for letting mike know how to use his package for writing package tests with mocha :-)
 
