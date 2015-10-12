@@ -21,4 +21,10 @@ describe('regressions', function() {
       done();
     });
   });
+
+  it('issue-1417: errors should be propagated properly', function () {
+    run('regression/issue-1417.js', [], function(err, res) {
+      assert(res.output.indexOf('This error should not be masked') > -1, 'Expected error was not displayed');
+    });
+  });
 });
