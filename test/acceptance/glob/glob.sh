@@ -52,4 +52,14 @@ cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
     exit 1
 }
 
+../../../bin/mocha -R json-stream './*.js' --ignore './*' 2> /tmp/mocha-glob.txt && {
+    echo Globbing './*.js' with specified ignore pattern './*' in `pwd` failed.
+    exit 1
+}
+
+cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+    echo Globbing './*.js' with specified ignore pattern './*' in `pwd` should match no files and run no tests.
+    exit 1
+}
+
 echo Glob-test passed.

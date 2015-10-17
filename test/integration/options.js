@@ -151,4 +151,34 @@ describe('options', function() {
       });
     });
   });
+
+  describe('--ignore', function() {
+    context('when single ignore pattern is specified', function() {
+      it('runs specs that match a passed pattern and do not match an ignore pattern', function(done) {
+        args = ['--ignore', '**/*.ignored.js']
+        run('options/ignore-*.js', args, function(err, res) {
+          assert(!err);
+          assert.equal(res.stats.pending, 0);
+          assert.equal(res.stats.passes, 2);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          done();
+        });
+      });
+    });
+
+    context('when few ignore patterns are specified', function() {
+      it('runs specs that match a passed pattern and do not match any of ignore patterns', function(done) {
+        args = ['--ignore', '**/*3.ignored.js,**/*4.ignored.js']
+        run('options/ignore-*.js', args, function(err, res) {
+          assert(!err);
+          assert.equal(res.stats.pending, 0);
+          assert.equal(res.stats.passes, 2);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          done();
+        });
+      });
+    });
+  });
 });
