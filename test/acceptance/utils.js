@@ -381,14 +381,14 @@ describe('lib/utils', function () {
     });
 
     it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false)
+      utils.lookupFiles('/tmp', {extensions: ['js'], recursive: false})
         .should.containEql('/tmp/mocha-utils-link.js')
         .and.containEql('/tmp/mocha-utils.js')
         .and.have.lengthOf(2);
       existsSync('/tmp/mocha-utils-link.js').should.be.true;
       fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
       existsSync('/tmp/mocha-utils-link.js').should.be.false;
-      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
+      utils.lookupFiles('/tmp', {extensions: ['js'], recursive: false}).should.eql([]);
     });
 
     afterEach(function () {

@@ -313,7 +313,10 @@ var args = program.args;
 if (!args.length) args.push('test');
 
 args.forEach(function(arg){
-  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
+  files = files.concat(utils.lookupFiles(arg, {
+    extensions: extensions,
+    recursive: program.recursive
+  }));
 });
 
 // resolve
