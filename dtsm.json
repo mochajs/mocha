@@ -13,8 +13,8 @@
     }
   },
   "dependencies": {
-    "node/node.d.ts": {
-      "ref": "b70895565dd5bd5de71c31e573d781409554bbf1"
+    "mocha/mocha.d.ts": {
+      "ref": "68548c2daab053869f323d475419c693478bbb73"
     }
   }
 }

@@ -5,8 +5,6 @@
     "noEmit": true
   },
   "files": [
-    "index.d.ts",
-    "test/typings.ts",
-    "test/typings-node.ts"
+    "index.d.ts"
   ]
 }
