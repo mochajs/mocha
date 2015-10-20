@@ -288,14 +288,18 @@
     "browser-stdout": "^1.2.0",
     "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
+    "dtsm": "^0.11.0",
     "eslint": "^1.2.1",
     "should": "~4.0.0",
-    "through2": "~0.6.5"
+    "through2": "~0.6.5",
+    "typescript": "^1.6.2"
   },
   "files": [
     "bin",
     "images",
     "lib",
+    "typings",
+    "index.d.ts",
     "index.js",
     "mocha.css",
     "mocha.js",

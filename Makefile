@@ -35,7 +35,7 @@ lint:
 
 test: lint test-unit
 
-test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-typings
 
 test-jsapi:
 	@node test/jsapi
@@ -121,6 +121,10 @@ test-mocha:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/mocha
+
+test-typings:
+	node node_modules/typescript/lib/tsc.js \
+		--project ./
 
 non-tty:
 	@./bin/mocha \
