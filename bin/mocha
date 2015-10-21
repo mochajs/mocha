@@ -8,12 +8,7 @@
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
-  args = [path.join(__dirname, '_mocha')],
-  getOptions = require('./options');
-
-// load mocha.opts into process.argv
-
-getOptions();
+  args = [path.join(__dirname, '_mocha')];
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];
