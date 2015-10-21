@@ -561,7 +561,7 @@ module.exports = function(suite) {
 
     context.it = context.specify = function(title, fn) {
       var suite = suites[0];
-      if (parentPending(suite)) {
+      if (suite.pending) {
         fn = null;
       }
       var test = new Test(title, fn);
@@ -590,22 +590,6 @@ module.exports = function(suite) {
     };
   });
 };
-
-/**
- * Check if a parent is set to pending
- * @param {Object} [suite]
- * @return {Boolean} contains
- */
-function parentPending(parent) {
-  if (parent.pending) {
-    return true;
-  }
-
-  if (parent.parent) {
-    return parentPending(parent.parent);
-  }
-  return false;
-}
 
 },{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],9:[function(require,module,exports){
 'use strict';
@@ -4223,13 +4207,24 @@ Runnable.prototype.run = function(fn) {
 
   // sync or promise-returning
   try {
-    if (this.pending) {
+    if (this.pending || parentPending(this.parent)) {
       done();
     } else {
       callFn(this.fn);
     }
   } catch (err) {
     done(utils.getError(err));
+  }
+
+  function parentPending(parent) {
+    if (parent.pending) {
+      return true;
+    }
+
+    if (parent.parent) {
+      return parentPending(parent.parent);
+    }
+    return false;
   }
 
   function callFn(fn) {
