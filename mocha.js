@@ -2421,8 +2421,6 @@ function HTML(runner) {
       el = fragment('<li class="test pass %e"><h2>%e<span class="duration">%ems</span> <a href="%s" class="replay">‣</a></h2></li>', test.speed, test.title, test.duration, url);
     } else if (test.pending) {
       el = fragment('<li class="test pass pending"><h2>%e</h2></li>', test.title);
-    } else if (parentPending(test.parent)) {
-      return;
     } else {
       el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">‣</a></h2></li>', test.title, self.testURL(test));
       var stackString; // Note: Includes leading newline
@@ -2476,22 +2474,6 @@ function HTML(runner) {
       stack[0].appendChild(el);
     }
   });
-}
-
-/**
- * Check if a parent is set to pending
- * @param {Object} [suite]
- * @return {Boolean} contains
- */
-function parentPending(parent) {
-  if (parent.pending) {
-    return true;
-  }
-
-  if (parent.parent) {
-    return parentPending(parent.parent);
-  }
-  return false;
 }
 
 /**
@@ -4183,7 +4165,10 @@ Runnable.prototype.run = function(fn) {
 
   // for .resetTimeout()
   this.callback = done;
-
+  if (parentPending(this.parent)) {
+    // throw new Pending();
+    this.pending = true;
+  }
   // explicit async with `done` argument
   if (this.async) {
     this.resetTimeout();
@@ -4207,11 +4192,11 @@ Runnable.prototype.run = function(fn) {
 
   // sync or promise-returning
   try {
-    if (this.pending || parentPending(this.parent)) {
-      done();
-    } else {
+    // if (this.pending) {
+    //   done();
+    // } else {
       callFn(this.fn);
-    }
+    // }
   } catch (err) {
     done(utils.getError(err));
   }
