@@ -375,28 +375,80 @@ describe('lib/utils', function () {
       path = require('path'),
       existsSync = fs.existsSync || path.existsSync;
 
-    beforeEach(function () {
-      fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
-      fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
+    context('when specified path contains symlinks', function () {
+      beforeEach(function () {
+        fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
+        fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
+      });
+
+      it('should not choke on symlinks', function () {
+        utils.lookupFiles('/tmp', {extensions: ['js'], recursive: false})
+          .should.containEql('/tmp/mocha-utils-link.js')
+          .and.containEql('/tmp/mocha-utils.js')
+          .and.have.lengthOf(2);
+        existsSync('/tmp/mocha-utils-link.js').should.be.true;
+        fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
+        existsSync('/tmp/mocha-utils-link.js').should.be.false;
+        utils.lookupFiles('/tmp', {extensions: ['js'], recursive: false}).should.eql([]);
+      });
+
+      afterEach(function () {
+        ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
+          try {
+            fs.unlinkSync(path);
+          }
+          catch (ignored) {}
+        });
+      });
     });
 
-    it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false)
-        .should.containEql('/tmp/mocha-utils-link.js')
-        .and.containEql('/tmp/mocha-utils.js')
-        .and.have.lengthOf(2);
-      existsSync('/tmp/mocha-utils-link.js').should.be.true;
-      fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-      existsSync('/tmp/mocha-utils-link.js').should.be.false;
-      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
-    });
+    context('when ignore patterns are specified', function () {
+      var rmrf = require('rimraf');
 
-    afterEach(function () {
-      ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
-        try {
-          fs.unlinkSync(path);
-        }
-        catch (ignored) {}
+      var dirs = [
+        '/tmp/mocha_ignore',
+        '/tmp/mocha_ignore/nested_dir',
+        '/tmp/mocha_ignore/node_modules',
+        '/tmp/mocha_ignore/node_modules/nested_dir',
+        '/tmp/mocha_ignore/tmp'
+        ],
+        files = [
+          '/tmp/mocha_ignore/test.js',
+          '/tmp/mocha_ignore/nested_dir/test.js',
+          '/tmp/mocha_ignore/node_modules/test.js',
+          '/tmp/mocha_ignore/node_modules/nested_dir/test.js',
+          '/tmp/mocha_ignore/tmp/test.js'
+        ];
+
+      beforeEach(function (done) {
+        rmrf('/tmp/mocha_ignore', function () {
+          dirs.forEach(function (dir) {
+            fs.mkdirSync(dir);
+          });
+          files.forEach(function (file) {
+            fs.writeFileSync(file, '');
+          });
+          done();
+        });
+      });
+
+      it('ignores files matched by specified pattern if they also matches one of ignore patterns', function () {
+        var result = utils.lookupFiles('/tmp/mocha_ignore/**/test.js', {
+          extensions: ['js'],
+          recursive: false,
+          ignore: [
+            '/tmp/mocha_ignore/node_modules/**/*',
+            '/tmp/mocha_ignore/tmp/**/*'
+          ]
+        });
+        result.should.eql([
+          '/tmp/mocha_ignore/nested_dir/test.js',
+          '/tmp/mocha_ignore/test.js'
+        ]);
+      });
+
+      afterEach(function (done) {
+        rmrf('/tmp/mocha_ignore', done);
       });
     });
   });

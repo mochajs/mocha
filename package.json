@@ -278,7 +278,7 @@
     "debug": "2.0.0",
     "diff": "1.4.0",
     "escape-string-regexp": "1.0.2",
-    "glob": "3.2.3",
+    "glob": "~5.0.15",
     "growl": "1.8.1",
     "jade": "0.26.3",
     "mkdirp": "0.5.0",
@@ -289,6 +289,7 @@
     "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
+    "rimraf": "^2.4.3",
     "should": "~4.0.0",
     "through2": "~0.6.5"
   },

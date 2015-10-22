@@ -97,6 +97,7 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
+  .option('--ignore <pattern>,...', 'ignore patterns', list, []);
 
 program.name = 'mocha';
 
@@ -313,7 +314,11 @@ var args = program.args;
 if (!args.length) args.push('test');
 
 args.forEach(function(arg){
-  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
+  files = files.concat(utils.lookupFiles(arg, {
+    extensions: extensions,
+    recursive: program.recursive,
+    ignore: program.ignore
+  }));
 });
 
 // resolve
