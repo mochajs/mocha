@@ -16,7 +16,7 @@ describe('multiple calls to done()', function() {
 
     it('results in failures', function() {
       assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 1);
+      assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
       assert.equal(res.code, 1);
     });
