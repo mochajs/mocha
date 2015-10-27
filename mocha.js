@@ -5,7 +5,7 @@ module.exports = process.env.COV
   : require('./lib/mocha');
 
 }).call(this,require('_process'))
-},{"./lib-cov/mocha":undefined,"./lib/mocha":14,"_process":50}],2:[function(require,module,exports){
+},{"./lib-cov/mocha":undefined,"./lib/mocha":14,"_process":52}],2:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 module.exports = function(type) {
   return function() {};
@@ -482,7 +482,7 @@ Hook.prototype.error = function(err) {
   this._error = err;
 };
 
-},{"./runnable":35,"lodash.create":70}],8:[function(require,module,exports){
+},{"./runnable":35,"lodash.create":71}],8:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -594,7 +594,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],9:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -836,7 +836,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],13:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -943,7 +943,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],14:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],14:[function(require,module,exports){
 (function (process,global,__dirname){
 /*!
  * mocha
@@ -1026,7 +1026,7 @@ function Mocha(options) {
     this.grep(new RegExp(options.grep));
   }
   if (options.fgrep) {
-    this.grep(options.fgrep);
+    this.fgrep(options.fgrep);
   }
   this.suite = new exports.Suite('', new exports.Context());
   this.ui(options.ui);
@@ -1188,6 +1188,17 @@ Mocha.prototype._growl = function(runner, reporter) {
 };
 
 /**
+ * Escape string and add it to grep as a regexp.
+ *
+ * @api public
+ * @param str
+ * @returns {Mocha}
+ */
+Mocha.prototype.fgrep = function(str) {
+  return this.grep(new RegExp(escapeRe(str)));
+};
+
+/**
  * Add regexp to grep, if `re` is a string it is escaped.
  *
  * @api public
@@ -1195,10 +1206,15 @@ Mocha.prototype._growl = function(runner, reporter) {
  * @return {Mocha}
  */
 Mocha.prototype.grep = function(re) {
-  this.options.grep = typeof re === 'string' ? new RegExp(escapeRe(re)) : re;
+  if (utils.isString(re)) {
+    // extract args if it's regex-like, i.e: [string, pattern, flag]
+    var arg = re.match(/^\/(.*)\/(g|i|)$|.*/);
+    this.options.grep = new RegExp(arg[1] || arg[0], arg[2]);
+  } else {
+    this.options.grep = re;
+  }
   return this;
 };
-
 /**
  * Invert `.grep()` matches.
  *
@@ -1407,7 +1423,7 @@ Mocha.prototype.run = function(fn) {
 };
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},"/lib")
-},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":50,"escape-string-regexp":67,"growl":68,"path":41}],15:[function(require,module,exports){
+},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":52,"escape-string-regexp":69,"growl":70,"path":41}],15:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -2038,7 +2054,7 @@ function sameType(a, b) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../ms":15,"../utils":39,"_process":50,"diff":66,"supports-color":41,"tty":5}],18:[function(require,module,exports){
+},{"../ms":15,"../utils":39,"_process":52,"diff":68,"supports-color":41,"tty":5}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -2175,7 +2191,7 @@ Dot.prototype = create(Base.prototype, {
 });
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],20:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],20:[function(require,module,exports){
 (function (process,__dirname){
 /**
  * Module dependencies.
@@ -2235,7 +2251,7 @@ function coverageClass(coveragePctg) {
 }
 
 }).call(this,require('_process'),"/lib/reporters")
-},{"./json-cov":23,"_process":50,"fs":41,"jade":41,"path":41}],21:[function(require,module,exports){
+},{"./json-cov":23,"_process":52,"fs":41,"jade":41,"path":41}],21:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
 
@@ -2565,7 +2581,7 @@ function on(el, event, fn) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":67}],22:[function(require,module,exports){
+},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":69}],22:[function(require,module,exports){
 // Alias exports to a their normalized format Mocha#reporter to prevent a need
 // for dynamic (try/catch) requires, which Browserify doesn't handle.
 exports.Base = exports.base = require('./base');
@@ -2740,7 +2756,7 @@ function clean(test) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base":17,"_process":50}],24:[function(require,module,exports){
+},{"./base":17,"_process":52}],24:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2803,7 +2819,7 @@ function clean(test) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50}],25:[function(require,module,exports){
+},{"./base":17,"_process":52}],25:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2896,7 +2912,7 @@ function errorJSON(err) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50}],26:[function(require,module,exports){
+},{"./base":17,"_process":52}],26:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2995,7 +3011,7 @@ Landing.prototype = create(Base.prototype, {
 });
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],27:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],27:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3063,7 +3079,7 @@ List.prototype = create(Base.prototype, {
 });
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],28:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],28:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3164,7 +3180,7 @@ function Markdown(runner) {
 }
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":50}],29:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":52}],29:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3207,7 +3223,7 @@ Min.prototype = create(Base.prototype, {
 });
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],30:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],30:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3475,7 +3491,7 @@ function write(string) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],31:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],31:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3571,7 +3587,7 @@ Progress.prototype = create(Base.prototype, {
 });
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],32:[function(require,module,exports){
+},{"./base":17,"_process":52,"lodash.create":71}],32:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3659,7 +3675,7 @@ Spec.prototype = create(Base.prototype, {
   constructor: Spec
 });
 
-},{"./base":17,"lodash.create":70}],33:[function(require,module,exports){
+},{"./base":17,"lodash.create":71}],33:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3904,7 +3920,7 @@ function cdata(str) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils":39,"./base":17,"fs":41,"lodash.create":70}],35:[function(require,module,exports){
+},{"../utils":39,"./base":17,"fs":41,"lodash.create":71}],35:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -3981,6 +3997,9 @@ Runnable.prototype.timeout = function(ms) {
   }
   if (ms === 0) {
     this._enableTimeouts = false;
+  }
+  if (ms > Math.pow(2, 31)) {
+    throw new RangeError('Timeout too large, must be less than 2^31');
   }
   if (typeof ms === 'string') {
     ms = milliseconds(ms);
@@ -4122,6 +4141,7 @@ Runnable.prototype.run = function(fn) {
   var ctx = this.ctx;
   var finished;
   var emitted;
+  var result;
 
   // Sometimes the ctx exists, but it is not runnable
   if (ctx && ctx.runnable) {
@@ -4164,7 +4184,7 @@ Runnable.prototype.run = function(fn) {
     this.resetTimeout();
 
     try {
-      this.fn.call(ctx, function(err) {
+      result = this.fn.call(ctx, function(err) {
         if (err instanceof Error || toString.call(err) === '[object Error]') {
           return done(err);
         }
@@ -4176,14 +4196,14 @@ Runnable.prototype.run = function(fn) {
         }
         done();
       });
+
+      if (result && typeof result.then === 'function') {
+        return done(new Error('Asynchronous resolution method is overspecified. Specify a callback *or* return a Promise, not both.'));
+      }
     } catch (err) {
       done(utils.getError(err));
     }
     return;
-  }
-
-  if (this.asyncOnly) {
-    return done(new Error('--async-only option in use without declaring `done()`'));
   }
 
   // sync or promise-returning
@@ -4209,13 +4229,17 @@ Runnable.prototype.run = function(fn) {
           done(reason || new Error('Promise rejected with no or falsy reason'));
         });
     } else {
+      if (self.asyncOnly) {
+        return done(new Error('--async-only option in use without declaring `done()` or returning a promise'));
+      }
+
       done();
     }
   }
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ms":15,"./pending":16,"./utils":39,"debug":2,"events":3,"lodash.create":70}],36:[function(require,module,exports){
+},{"./ms":15,"./pending":16,"./utils":39,"debug":2,"events":3,"lodash.create":71}],36:[function(require,module,exports){
 (function (process,global){
 /**
  * Module dependencies.
@@ -4290,7 +4314,8 @@ function Runner(suite, delay) {
   this.on('hook end', function(hook) {
     self.checkGlobals(hook);
   });
-  this.grep(/.*/);
+  this._defaultGrep = /.*/;
+  this.grep(this._defaultGrep);
   this.globals(this.globalProps().concat(extraGlobals()));
 }
 
@@ -4464,6 +4489,11 @@ Runner.prototype.fail = function(test, err) {
  * @param {Error} err
  */
 Runner.prototype.failHook = function(hook, err) {
+  if (hook.ctx && hook.ctx.currentTest) {
+    hook.originalTitle = hook.originalTitle || hook.title;
+    hook.title = hook.originalTitle + ' for "' + hook.ctx.currentTest.title + '"';
+  }
+
   this.fail(hook, err);
   if (this.suite.bail()) {
     this.emit('end');
@@ -4689,7 +4719,20 @@ Runner.prototype.runTests = function(suite, fn) {
       match = !match;
     }
     if (!match) {
-      return next();
+      // Run immediately only if we have defined a grep. When we
+      // define a grep — It can cause maximum callstack error if
+      // the grep is doing a large recursive loop by neglecting
+      // all tests. The run immediately function also comes with
+      // a performance cost. So we don't want to run immediately
+      // if we run the whole test suite, because running the whole
+      // test suite don't do any immediate recursive loops. Thus,
+      // allowing a JS runtime to breathe.
+      if (self._grep !== self._defaultGrep) {
+        Runner.immediately(next);
+      } else {
+        next();
+      }
+      return;
     }
 
     // pending
@@ -4738,6 +4781,7 @@ Runner.prototype.runTests = function(suite, fn) {
   }
 
   this.next = next;
+  this.hookErr = hookErr;
   next();
 };
 
@@ -4752,6 +4796,7 @@ Runner.prototype.runSuite = function(suite, fn) {
   var i = 0;
   var self = this;
   var total = this.grepTotal(suite);
+  var afterAllHookCalled = false;
 
   debug('run suite %s', suite.fullTitle());
 
@@ -4782,16 +4827,37 @@ Runner.prototype.runSuite = function(suite, fn) {
     if (!curr) {
       return done();
     }
-    self.runSuite(curr, next);
+
+    // Avoid grep neglecting large number of tests causing a
+    // huge recursive loop and thus a maximum call stack error.
+    // See comment in `this.runTests()` for more information.
+    if (self._grep !== self._defaultGrep) {
+      Runner.immediately(function() {
+        self.runSuite(curr, next);
+      });
+    } else {
+      self.runSuite(curr, next);
+    }
   }
 
   function done(errSuite) {
     self.suite = suite;
-    self.hook('afterAll', function() {
-      self.emit('suite end', suite);
+    self.nextSuite = next;
+
+    if (afterAllHookCalled) {
       fn(errSuite);
-    });
+    } else {
+      // mark that the afterAll block has been called once
+      // and so can be skipped if there is an error in it.
+      afterAllHookCalled = true;
+      self.hook('afterAll', function() {
+        self.emit('suite end', suite);
+        fn(errSuite);
+      });
+    }
   }
+
+  this.nextSuite = next;
 
   this.hook('beforeAll', function(err) {
     if (err) {
@@ -4838,7 +4904,22 @@ Runner.prototype.uncaught = function(err) {
     return;
   }
 
-  // bail on hooks
+ // recover from hooks
+  if (runnable.type === 'hook') {
+    var errSuite = this.suite;
+    // if hook failure is in afterEach block
+    if (runnable.fullTitle().indexOf('after each') > -1) {
+      return this.hookErr(err, errSuite, true);
+    }
+    // if hook failure is in beforeEach block
+    if (runnable.fullTitle().indexOf('before each') > -1) {
+      return this.hookErr(err, errSuite, false);
+    }
+    // if hook failure is in after or before blocks
+    return this.nextSuite(errSuite);
+  }
+
+  // bail
   this.emit('end');
 };
 
@@ -4971,7 +5052,7 @@ function extraGlobals() {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./pending":16,"./utils":39,"_process":50,"debug":2,"events":3,"lodash.create":70}],37:[function(require,module,exports){
+},{"./pending":16,"./utils":39,"_process":52,"debug":2,"events":3,"lodash.create":71}],37:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5341,7 +5422,7 @@ Suite.prototype.run = function run() {
   }
 };
 
-},{"./hook":7,"./ms":15,"./utils":39,"debug":2,"events":3,"lodash.create":70}],38:[function(require,module,exports){
+},{"./hook":7,"./ms":15,"./utils":39,"debug":2,"events":3,"lodash.create":71}],38:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5376,7 +5457,7 @@ Test.prototype = create(Runnable.prototype, {
   constructor: Test
 });
 
-},{"./runnable":35,"lodash.create":70}],39:[function(require,module,exports){
+},{"./runnable":35,"lodash.create":71}],39:[function(require,module,exports){
 (function (process,Buffer){
 /* eslint-env browser */
 
@@ -6120,7 +6201,7 @@ exports.stackTraceFilter = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":50,"buffer":43,"debug":2,"fs":41,"glob":41,"path":41}],40:[function(require,module,exports){
+},{"_process":52,"buffer":43,"debug":2,"fs":41,"glob":41,"path":41}],40:[function(require,module,exports){
 (function (process){
 var WritableStream = require('stream').Writable
 var inherits = require('util').inherits
@@ -6140,21 +6221,28 @@ function BrowserStdout(opts) {
 
 BrowserStdout.prototype._write = function(chunks, encoding, cb) {
   var output = chunks.toString ? chunks.toString() : chunks
-  console.log(this.label+':', output)
+  if (this.label === false) {
+    console.log(output)
+  } else {
+    console.log(this.label+':', output)
+  }
   process.nextTick(cb)
 }
+
 }).call(this,require('_process'))
-},{"_process":50,"stream":62,"util":65}],41:[function(require,module,exports){
+},{"_process":52,"stream":64,"util":67}],41:[function(require,module,exports){
 
 },{}],42:[function(require,module,exports){
 arguments[4][41][0].apply(exports,arguments)
 },{"dup":41}],43:[function(require,module,exports){
+(function (global){
 /*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
  * @license  MIT
  */
+/* eslint-disable no-proto */
 
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
@@ -6175,32 +6263,43 @@ var rootParent = {}
  * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
  * Opera 11.6+, iOS 4.2+.
  *
+ * Due to various browser bugs, sometimes the Object implementation will be used even
+ * when the browser supports typed arrays.
+ *
  * Note:
  *
- * - Implementation must support adding new properties to `Uint8Array` instances.
- *   Firefox 4-29 lacked support, fixed in Firefox 30+.
- *   See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+ *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
  *
- *  - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *   - Safari 5-7 lacks support for changing the `Object.prototype.constructor` property
+ *     on objects.
  *
- *  - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
- *    incorrect length in some situations.
+ *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
  *
- * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they will
- * get the Object implementation, which is slower but will work correctly.
+ *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *     incorrect length in some situations.
+
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+ * get the Object implementation, which is slower but behaves correctly.
  */
-Buffer.TYPED_ARRAY_SUPPORT = (function () {
+Buffer.TYPED_ARRAY_SUPPORT = global.TYPED_ARRAY_SUPPORT !== undefined
+  ? global.TYPED_ARRAY_SUPPORT
+  : typedArraySupport()
+
+function typedArraySupport () {
+  function Bar () {}
   try {
-    var buf = new ArrayBuffer(0)
-    var arr = new Uint8Array(buf)
+    var arr = new Uint8Array(1)
     arr.foo = function () { return 42 }
+    arr.constructor = Bar
     return arr.foo() === 42 && // typed array instances can be augmented
+        arr.constructor === Bar && // constructor can be set
         typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-        new Uint8Array(1).subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
   } catch (e) {
     return false
   }
-})()
+}
 
 function kMaxLength () {
   return Buffer.TYPED_ARRAY_SUPPORT
@@ -6274,8 +6373,13 @@ function fromObject (that, object) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
-  if (typeof ArrayBuffer !== 'undefined' && object.buffer instanceof ArrayBuffer) {
-    return fromTypedArray(that, object)
+  if (typeof ArrayBuffer !== 'undefined') {
+    if (object.buffer instanceof ArrayBuffer) {
+      return fromTypedArray(that, object)
+    }
+    if (object instanceof ArrayBuffer) {
+      return fromArrayBuffer(that, object)
+    }
   }
 
   if (object.length) return fromArrayLike(that, object)
@@ -6312,6 +6416,18 @@ function fromTypedArray (that, array) {
   return that
 }
 
+function fromArrayBuffer (that, array) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    array.byteLength
+    that = Buffer._augment(new Uint8Array(array))
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    that = fromTypedArray(that, new Uint8Array(array))
+  }
+  return that
+}
+
 function fromArrayLike (that, array) {
   var length = checked(array.length) | 0
   that = allocate(that, length)
@@ -6339,10 +6455,16 @@ function fromJsonObject (that, object) {
   return that
 }
 
+if (Buffer.TYPED_ARRAY_SUPPORT) {
+  Buffer.prototype.__proto__ = Uint8Array.prototype
+  Buffer.__proto__ = Uint8Array
+}
+
 function allocate (that, length) {
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     // Return an augmented `Uint8Array` instance, for best performance
     that = Buffer._augment(new Uint8Array(length))
+    that.__proto__ = Buffer.prototype
   } else {
     // Fallback: Return an object instance of the Buffer class
     that.length = length
@@ -6429,8 +6551,6 @@ Buffer.concat = function concat (list, length) {
 
   if (list.length === 0) {
     return new Buffer(0)
-  } else if (list.length === 1) {
-    return list[0]
   }
 
   var i
@@ -6605,13 +6725,13 @@ Buffer.prototype.indexOf = function indexOf (val, byteOffset) {
   throw new TypeError('val must be string, number or Buffer')
 }
 
-// `get` will be removed in Node 0.13+
+// `get` is deprecated
 Buffer.prototype.get = function get (offset) {
   console.log('.get() is deprecated. Access using array indexes instead.')
   return this.readUInt8(offset)
 }
 
-// `set` will be removed in Node 0.13+
+// `set` is deprecated
 Buffer.prototype.set = function set (v, offset) {
   console.log('.set() is deprecated. Access using array indexes instead.')
   return this.writeUInt8(v, offset)
@@ -6752,20 +6872,99 @@ function base64Slice (buf, start, end) {
 }
 
 function utf8Slice (buf, start, end) {
-  var res = ''
-  var tmp = ''
   end = Math.min(buf.length, end)
+  var res = []
 
-  for (var i = start; i < end; i++) {
-    if (buf[i] <= 0x7F) {
-      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
-      tmp = ''
-    } else {
-      tmp += '%' + buf[i].toString(16)
+  var i = start
+  while (i < end) {
+    var firstByte = buf[i]
+    var codePoint = null
+    var bytesPerSequence = (firstByte > 0xEF) ? 4
+      : (firstByte > 0xDF) ? 3
+      : (firstByte > 0xBF) ? 2
+      : 1
+
+    if (i + bytesPerSequence <= end) {
+      var secondByte, thirdByte, fourthByte, tempCodePoint
+
+      switch (bytesPerSequence) {
+        case 1:
+          if (firstByte < 0x80) {
+            codePoint = firstByte
+          }
+          break
+        case 2:
+          secondByte = buf[i + 1]
+          if ((secondByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F)
+            if (tempCodePoint > 0x7F) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 3:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F)
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 4:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          fourthByte = buf[i + 3]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F)
+            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+              codePoint = tempCodePoint
+            }
+          }
+      }
     }
+
+    if (codePoint === null) {
+      // we did not generate a valid codePoint so insert a
+      // replacement char (U+FFFD) and advance only 1 byte
+      codePoint = 0xFFFD
+      bytesPerSequence = 1
+    } else if (codePoint > 0xFFFF) {
+      // encode to utf16 (surrogate pair dance)
+      codePoint -= 0x10000
+      res.push(codePoint >>> 10 & 0x3FF | 0xD800)
+      codePoint = 0xDC00 | codePoint & 0x3FF
+    }
+
+    res.push(codePoint)
+    i += bytesPerSequence
   }
 
-  return res + decodeUtf8Char(tmp)
+  return decodeCodePointsArray(res)
+}
+
+// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+// the lowest limit is Chrome, with 0x10000 args.
+// We go 1 magnitude less, for safety
+var MAX_ARGUMENTS_LENGTH = 0x1000
+
+function decodeCodePointsArray (codePoints) {
+  var len = codePoints.length
+  if (len <= MAX_ARGUMENTS_LENGTH) {
+    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+  }
+
+  // Decode in chunks to avoid "call stack size exceeded".
+  var res = ''
+  var i = 0
+  while (i < len) {
+    res += String.fromCharCode.apply(
+      String,
+      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+    )
+  }
+  return res
 }
 
 function asciiSlice (buf, start, end) {
@@ -7054,7 +7253,7 @@ Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
-  this[offset] = value
+  this[offset] = (value & 0xff)
   return offset + 1
 }
 
@@ -7071,7 +7270,7 @@ Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -7085,7 +7284,7 @@ Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert
   if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = value
+    this[offset + 1] = (value & 0xff)
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -7107,7 +7306,7 @@ Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert
     this[offset + 3] = (value >>> 24)
     this[offset + 2] = (value >>> 16)
     this[offset + 1] = (value >>> 8)
-    this[offset] = value
+    this[offset] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, true)
   }
@@ -7122,7 +7321,7 @@ Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = value
+    this[offset + 3] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -7175,7 +7374,7 @@ Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
   if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80)
   if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value)
   if (value < 0) value = 0xff + value + 1
-  this[offset] = value
+  this[offset] = (value & 0xff)
   return offset + 1
 }
 
@@ -7184,7 +7383,7 @@ Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
   } else {
     objectWriteUInt16(this, value, offset, true)
@@ -7198,7 +7397,7 @@ Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) 
   if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
     this[offset] = (value >>> 8)
-    this[offset + 1] = value
+    this[offset + 1] = (value & 0xff)
   } else {
     objectWriteUInt16(this, value, offset, false)
   }
@@ -7210,7 +7409,7 @@ Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) 
   offset = offset | 0
   if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000)
   if (Buffer.TYPED_ARRAY_SUPPORT) {
-    this[offset] = value
+    this[offset] = (value & 0xff)
     this[offset + 1] = (value >>> 8)
     this[offset + 2] = (value >>> 16)
     this[offset + 3] = (value >>> 24)
@@ -7229,7 +7428,7 @@ Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) 
     this[offset] = (value >>> 24)
     this[offset + 1] = (value >>> 16)
     this[offset + 2] = (value >>> 8)
-    this[offset + 3] = value
+    this[offset + 3] = (value & 0xff)
   } else {
     objectWriteUInt32(this, value, offset, false)
   }
@@ -7300,9 +7499,16 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   }
 
   var len = end - start
+  var i
 
-  if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < len; i++) {
+  if (this === target && start < targetStart && targetStart < end) {
+    // descending copy from end
+    for (i = len - 1; i >= 0; i--) {
+      target[i + targetStart] = this[i + start]
+    }
+  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+    // ascending copy from start
+    for (i = 0; i < len; i++) {
       target[i + targetStart] = this[i + start]
     }
   } else {
@@ -7378,7 +7584,7 @@ Buffer._augment = function _augment (arr) {
   // save reference to original Uint8Array set method before overwriting
   arr._set = arr.set
 
-  // deprecated, will be removed in node 0.13+
+  // deprecated
   arr.get = BP.get
   arr.set = BP.set
 
@@ -7434,7 +7640,7 @@ Buffer._augment = function _augment (arr) {
   return arr
 }
 
-var INVALID_BASE64_RE = /[^+\/0-9A-z\-]/g
+var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
 
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
@@ -7464,28 +7670,15 @@ function utf8ToBytes (string, units) {
   var length = string.length
   var leadSurrogate = null
   var bytes = []
-  var i = 0
 
-  for (; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     codePoint = string.charCodeAt(i)
 
     // is surrogate component
     if (codePoint > 0xD7FF && codePoint < 0xE000) {
       // last char was a lead
-      if (leadSurrogate) {
-        // 2 leads in a row
-        if (codePoint < 0xDC00) {
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          leadSurrogate = codePoint
-          continue
-        } else {
-          // valid surrogate pair
-          codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
-          leadSurrogate = null
-        }
-      } else {
+      if (!leadSurrogate) {
         // no lead yet
-
         if (codePoint > 0xDBFF) {
           // unexpected trail
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -7494,17 +7687,29 @@ function utf8ToBytes (string, units) {
           // unpaired lead
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
           continue
-        } else {
-          // valid lead
-          leadSurrogate = codePoint
-          continue
         }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
       }
+
+      // 2 leads in a row
+      if (codePoint < 0xDC00) {
+        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-      leadSurrogate = null
     }
+
+    leadSurrogate = null
 
     // encode utf8
     if (codePoint < 0x80) {
@@ -7523,7 +7728,7 @@ function utf8ToBytes (string, units) {
         codePoint >> 0x6 & 0x3F | 0x80,
         codePoint & 0x3F | 0x80
       )
-    } else if (codePoint < 0x200000) {
+    } else if (codePoint < 0x110000) {
       if ((units -= 4) < 0) break
       bytes.push(
         codePoint >> 0x12 | 0xF0,
@@ -7576,14 +7781,7 @@ function blitBuffer (src, dst, offset, length) {
   return i
 }
 
-function decodeUtf8Char (str) {
-  try {
-    return decodeURIComponent(str)
-  } catch (err) {
-    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
-  }
-}
-
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"base64-js":44,"ieee754":45,"is-array":46}],44:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -8135,11 +8333,55 @@ function isUndefined(arg) {
 }
 
 },{}],48:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],49:[function(require,module,exports){
+/**
+ * Determine if an object is Buffer
+ *
+ * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * License:  MIT
+ *
+ * `npm install is-buffer`
+ */
+
+module.exports = function (obj) {
+  return !!(obj != null &&
+    (obj._isBuffer || // For Safari 5-7 (missing Object.prototype.constructor)
+      (obj.constructor &&
+      typeof obj.constructor.isBuffer === 'function' &&
+      obj.constructor.isBuffer(obj))
+    ))
+}
+
+},{}],50:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 exports.endianness = function () { return 'LE' };
 
 exports.hostname = function () {
@@ -8186,7 +8428,7 @@ exports.tmpdir = exports.tmpDir = function () {
 
 exports.EOL = '\n';
 
-},{}],50:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -8219,7 +8461,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -8271,17 +8515,16 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
 
-},{}],51:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":52}],52:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":54}],54:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -8374,7 +8617,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":54,"./_stream_writable":56,"_process":50,"core-util-is":57,"inherits":69}],53:[function(require,module,exports){
+},{"./_stream_readable":56,"./_stream_writable":58,"_process":52,"core-util-is":59,"inherits":48}],55:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8422,7 +8665,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":55,"core-util-is":57,"inherits":69}],54:[function(require,module,exports){
+},{"./_stream_transform":57,"core-util-is":59,"inherits":48}],56:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9377,7 +9620,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":52,"_process":50,"buffer":43,"core-util-is":57,"events":47,"inherits":69,"isarray":48,"stream":62,"string_decoder/":63,"util":42}],55:[function(require,module,exports){
+},{"./_stream_duplex":54,"_process":52,"buffer":43,"core-util-is":59,"events":47,"inherits":48,"isarray":50,"stream":64,"string_decoder/":65,"util":42}],57:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9588,7 +9831,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":52,"core-util-is":57,"inherits":69}],56:[function(require,module,exports){
+},{"./_stream_duplex":54,"core-util-is":59,"inherits":48}],58:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10069,7 +10312,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":52,"_process":50,"buffer":43,"core-util-is":57,"inherits":69,"stream":62}],57:[function(require,module,exports){
+},{"./_stream_duplex":54,"_process":52,"buffer":43,"core-util-is":59,"inherits":48,"stream":64}],59:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10178,11 +10421,11 @@ exports.isBuffer = isBuffer;
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
-}).call(this,require("buffer").Buffer)
-},{"buffer":43}],58:[function(require,module,exports){
+}).call(this,{"isBuffer":require("../../../../insert-module-globals/node_modules/is-buffer/index.js")})
+},{"../../../../insert-module-globals/node_modules/is-buffer/index.js":49}],60:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":53}],59:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":55}],61:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = require('stream');
 exports.Readable = exports;
@@ -10191,13 +10434,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":52,"./lib/_stream_passthrough.js":53,"./lib/_stream_readable.js":54,"./lib/_stream_transform.js":55,"./lib/_stream_writable.js":56,"stream":62}],60:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":54,"./lib/_stream_passthrough.js":55,"./lib/_stream_readable.js":56,"./lib/_stream_transform.js":57,"./lib/_stream_writable.js":58,"stream":64}],62:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":55}],61:[function(require,module,exports){
+},{"./lib/_stream_transform.js":57}],63:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":56}],62:[function(require,module,exports){
+},{"./lib/_stream_writable.js":58}],64:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10326,7 +10569,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":47,"inherits":69,"readable-stream/duplex.js":51,"readable-stream/passthrough.js":58,"readable-stream/readable.js":59,"readable-stream/transform.js":60,"readable-stream/writable.js":61}],63:[function(require,module,exports){
+},{"events":47,"inherits":48,"readable-stream/duplex.js":53,"readable-stream/passthrough.js":60,"readable-stream/readable.js":61,"readable-stream/transform.js":62,"readable-stream/writable.js":63}],65:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10549,14 +10792,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":43}],64:[function(require,module,exports){
+},{"buffer":43}],66:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],65:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11146,7 +11389,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":64,"_process":50,"inherits":69}],66:[function(require,module,exports){
+},{"./support/isBuffer":66,"_process":52,"inherits":48}],68:[function(require,module,exports){
 /* See LICENSE file for terms of use */
 
 /*
@@ -11767,7 +12010,7 @@ function hasOwnProperty(obj, prop) {
   }
 }(this));
 
-},{}],67:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 'use strict';
 
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -11780,7 +12023,7 @@ module.exports = function (str) {
 	return str.replace(matchOperatorsRe,  '\\$&');
 };
 
-},{}],68:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 (function (process){
 // Growl - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
@@ -12018,32 +12261,7 @@ function growl(msg, options, fn) {
 };
 
 }).call(this,require('_process'))
-},{"_process":50,"child_process":41,"fs":41,"os":49,"path":41}],69:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],70:[function(require,module,exports){
+},{"_process":52,"child_process":41,"fs":41,"os":51,"path":41}],71:[function(require,module,exports){
 /**
  * lodash 3.1.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12100,7 +12318,7 @@ function create(prototype, properties, guard) {
 
 module.exports = create;
 
-},{"lodash._baseassign":71,"lodash._basecreate":77,"lodash._isiterateecall":78}],71:[function(require,module,exports){
+},{"lodash._baseassign":72,"lodash._basecreate":78,"lodash._isiterateecall":79}],72:[function(require,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12129,7 +12347,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"lodash._basecopy":72,"lodash.keys":73}],72:[function(require,module,exports){
+},{"lodash._basecopy":73,"lodash.keys":74}],73:[function(require,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12163,7 +12381,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],73:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 /**
  * lodash 3.1.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12401,7 +12619,7 @@ function keysIn(object) {
 
 module.exports = keys;
 
-},{"lodash._getnative":74,"lodash.isarguments":75,"lodash.isarray":76}],74:[function(require,module,exports){
+},{"lodash._getnative":75,"lodash.isarguments":76,"lodash.isarray":77}],75:[function(require,module,exports){
 /**
  * lodash 3.9.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12540,7 +12758,7 @@ function isNative(value) {
 
 module.exports = getNative;
 
-},{}],75:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12648,7 +12866,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12830,7 +13048,7 @@ function isNative(value) {
 
 module.exports = isArray;
 
-},{}],77:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 /**
  * lodash 3.0.3 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -12889,7 +13107,7 @@ function isObject(value) {
 
 module.exports = baseCreate;
 
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 /**
  * lodash 3.0.9 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -13023,8 +13241,14 @@ function isObject(value) {
 
 module.exports = isIterateeCall;
 
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function (process,global){
+/**
+ * Shim process.stdout.
+ */
+
+process.stdout = require('browser-stdout')();
+
 var Mocha = require('../');
 
 /**
@@ -13153,8 +13377,8 @@ mocha.run = function(fn){
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(new RegExp(query.grep));
-  if (query.fgrep) mocha.grep(query.fgrep);
+  if (query.grep) mocha.grep(query.grep);
+  if (query.fgrep) mocha.fgrep(query.fgrep);
   if (query.invert) mocha.invert();
 
   return Mocha.prototype.run.call(mocha, function(err){
@@ -13166,12 +13390,6 @@ mocha.run = function(fn){
     if (fn) fn(err);
   });
 };
-
-/**
- * Shim process.stdout.
- */
-
-process.stdout = require('browser-stdout')();
 
 /**
  * Expose the process shim.
@@ -13188,4 +13406,4 @@ window.Mocha = Mocha;
 window.mocha = mocha;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../":1,"_process":50,"browser-stdout":40}]},{},[79]);
+},{"../":1,"_process":52,"browser-stdout":40}]},{},[80]);
