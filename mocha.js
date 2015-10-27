@@ -5,7 +5,7 @@ module.exports = process.env.COV
   : require('./lib/mocha');
 
 }).call(this,require('_process'))
-},{"./lib-cov/mocha":undefined,"./lib/mocha":14,"_process":50}],2:[function(require,module,exports){
+},{"./lib-cov/mocha":undefined,"./lib/mocha":14,"_process":51}],2:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 module.exports = function(type) {
   return function() {};
@@ -437,7 +437,7 @@ Context.prototype.inspect = function() {
  */
 
 var Runnable = require('./runnable');
-var create = require('lodash.create');
+var inherits = require('./utils').inherits;
 
 /**
  * Expose `Hook`.
@@ -460,10 +460,7 @@ function Hook(title, fn) {
 /**
  * Inherit from `Runnable.prototype`.
  */
-
-Hook.prototype = create(Runnable.prototype, {
-  constructor: Hook
-});
+inherits(Hook, Runnable);
 
 /**
  * Get or set the test `err`.
@@ -482,7 +479,7 @@ Hook.prototype.error = function(err) {
   this._error = err;
 };
 
-},{"./runnable":35,"lodash.create":70}],8:[function(require,module,exports){
+},{"./runnable":35,"./utils":39}],8:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -594,7 +591,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],9:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -836,7 +833,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],13:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -943,7 +940,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":67}],14:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],14:[function(require,module,exports){
 (function (process,global,__dirname){
 /*!
  * mocha
@@ -1015,8 +1012,8 @@ function image(name) {
  *   - `fullTrace` display the full stack-trace on failing
  *   - `grep` string or regexp to filter tests with
  *
- * @api public
  * @param {Object} options
+ * @api public
  */
 function Mocha(options) {
   options = options || {};
@@ -1032,7 +1029,7 @@ function Mocha(options) {
   this.ui(options.ui);
   this.bail(options.bail);
   this.reporter(options.reporter, options.reporterOptions);
-  if (options.timeout != null) {
+  if (typeof options.timeout !== 'undefined' && options.timeout !== null) {
     this.timeout(options.timeout);
   }
   this.useColors(options.useColors);
@@ -1088,6 +1085,8 @@ Mocha.prototype.addFile = function(file) {
 /**
  * Set reporter to `reporter`, defaults to "spec".
  *
+ * @param {String|Function} reporter name or constructor
+ * @param {Object} reporterOptions optional options
  * @api public
  * @param {string|Function} reporter name or constructor
  * @param {Object} reporterOptions optional options
@@ -1190,6 +1189,8 @@ Mocha.prototype._growl = function(runner, reporter) {
 /**
  * Add regexp to grep, if `re` is a string it is escaped.
  *
+ * @param {RegExp|String} re
+ * @return {Mocha}
  * @api public
  * @param {RegExp|string} re
  * @return {Mocha}
@@ -1202,8 +1203,8 @@ Mocha.prototype.grep = function(re) {
 /**
  * Invert `.grep()` matches.
  *
- * @api public
  * @return {Mocha}
+ * @api public
  */
 Mocha.prototype.invert = function() {
   this.options.invert = true;
@@ -1213,6 +1214,8 @@ Mocha.prototype.invert = function() {
 /**
  * Ignore global leaks.
  *
+ * @param {Boolean} ignore
+ * @return {Mocha}
  * @api public
  * @param {boolean} ignore
  * @return {Mocha}
@@ -1225,8 +1228,8 @@ Mocha.prototype.ignoreLeaks = function(ignore) {
 /**
  * Enable global leak checking.
  *
- * @api public
  * @return {Mocha}
+ * @api public
  */
 Mocha.prototype.checkLeaks = function() {
   this.options.ignoreLeaks = false;
@@ -1236,8 +1239,8 @@ Mocha.prototype.checkLeaks = function() {
 /**
  * Display long stack-trace on failing
  *
- * @api public
  * @return {Mocha}
+ * @api public
  */
 Mocha.prototype.fullTrace = function() {
   this.options.fullStackTrace = true;
@@ -1247,8 +1250,8 @@ Mocha.prototype.fullTrace = function() {
 /**
  * Enable growl support.
  *
- * @api public
  * @return {Mocha}
+ * @api public
  */
 Mocha.prototype.growl = function() {
   this.options.growl = true;
@@ -1258,6 +1261,8 @@ Mocha.prototype.growl = function() {
 /**
  * Ignore `globals` array or string.
  *
+ * @param {Array|String} globals
+ * @return {Mocha}
  * @api public
  * @param {Array|string} globals
  * @return {Mocha}
@@ -1270,6 +1275,8 @@ Mocha.prototype.globals = function(globals) {
 /**
  * Emit color output.
  *
+ * @param {Boolean} colors
+ * @return {Mocha}
  * @api public
  * @param {boolean} colors
  * @return {Mocha}
@@ -1284,6 +1291,8 @@ Mocha.prototype.useColors = function(colors) {
 /**
  * Use inline diffs rather than +/-.
  *
+ * @param {Boolean} inlineDiffs
+ * @return {Mocha}
  * @api public
  * @param {boolean} inlineDiffs
  * @return {Mocha}
@@ -1296,6 +1305,8 @@ Mocha.prototype.useInlineDiffs = function(inlineDiffs) {
 /**
  * Set the timeout in milliseconds.
  *
+ * @param {Number} timeout
+ * @return {Mocha}
  * @api public
  * @param {number} timeout
  * @return {Mocha}
@@ -1308,6 +1319,8 @@ Mocha.prototype.timeout = function(timeout) {
 /**
  * Set slowness threshold in milliseconds.
  *
+ * @param {Number} slow
+ * @return {Mocha}
  * @api public
  * @param {number} slow
  * @return {Mocha}
@@ -1320,6 +1333,8 @@ Mocha.prototype.slow = function(slow) {
 /**
  * Enable timeouts.
  *
+ * @param {Boolean} enabled
+ * @return {Mocha}
  * @api public
  * @param {boolean} enabled
  * @return {Mocha}
@@ -1332,8 +1347,8 @@ Mocha.prototype.enableTimeouts = function(enabled) {
 /**
  * Makes all tests async (accepting a callback)
  *
- * @api public
  * @return {Mocha}
+ * @api public
  */
 Mocha.prototype.asyncOnly = function() {
   this.options.asyncOnly = true;
@@ -1344,7 +1359,6 @@ Mocha.prototype.asyncOnly = function() {
  * Disable syntax highlighting (in browser).
  *
  * @api public
- * @returns {Mocha}
  */
 Mocha.prototype.noHighlighting = function() {
   this.options.noHighlighting = true;
@@ -1352,9 +1366,18 @@ Mocha.prototype.noHighlighting = function() {
 };
 
 /**
- * Delay root suite execution.
+ * Enable uncaught errors to propagate (in browser).
  *
+ * @return {Mocha}
  * @api public
+ */
+Mocha.prototype.allowUncaught = function() {
+  this.options.allowUncaught = true;
+  return this;
+};
+
+/**
+ * Delay root suite execution.
  * @returns {Mocha}
  */
 Mocha.prototype.delay = function delay() {
@@ -1381,6 +1404,7 @@ Mocha.prototype.run = function(fn) {
   runner.ignoreLeaks = options.ignoreLeaks !== false;
   runner.fullStackTrace = options.fullStackTrace;
   runner.asyncOnly = options.asyncOnly;
+  runner.allowUncaught = options.allowUncaught;
   if (options.grep) {
     runner.grep(options.grep, options.invert);
   }
@@ -1407,7 +1431,7 @@ Mocha.prototype.run = function(fn) {
 };
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},"/lib")
-},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":50,"escape-string-regexp":67,"growl":68,"path":41}],15:[function(require,module,exports){
+},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":51,"escape-string-regexp":68,"growl":69,"path":41}],15:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -1727,7 +1751,14 @@ exports.list = function(failures) {
     // msg
     var msg;
     var err = test.err;
-    var message = err.message || '';
+    var message;
+    if (err.message) {
+      message = err.message;
+    } else if (typeof err.inspect === 'function') {
+      message = err.inspect() + '';
+    } else {
+      message = '';
+    }
     var stack = err.stack || message;
     var index = stack.indexOf(message);
     var actual = err.actual;
@@ -1959,7 +1990,7 @@ function unifiedDiff(err, escape) {
     return indent + line;
   }
   function notBlank(line) {
-    return line != null;
+    return typeof line !== 'undefined' && line !== null;
   }
   var msg = diff.createPatch('string', err.actual, err.expected);
   var lines = msg.split('\n').splice(4);
@@ -2038,7 +2069,7 @@ function sameType(a, b) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../ms":15,"../utils":39,"_process":50,"diff":66,"supports-color":41,"tty":5}],18:[function(require,module,exports){
+},{"../ms":15,"../utils":39,"_process":51,"diff":67,"supports-color":41,"tty":5}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -2109,7 +2140,7 @@ function Doc(runner) {
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 var color = Base.color;
 
 /**
@@ -2169,13 +2200,10 @@ function Dot(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-Dot.prototype = create(Base.prototype, {
-  constructor: Dot
-});
+inherits(Dot, Base);
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],20:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],20:[function(require,module,exports){
 (function (process,__dirname){
 /**
  * Module dependencies.
@@ -2200,9 +2228,9 @@ exports = module.exports = HTMLCov;
 function HTMLCov(runner) {
   var jade = require('jade');
   var file = join(__dirname, '/templates/coverage.jade');
+  var str = readFileSync(file, 'utf8');
   var fn = jade.compile(str, { filename: file });
   var self = this;
-  var str = readFileSync(file, 'utf8');
 
   JSONCov.call(this, runner, false);
 
@@ -2235,7 +2263,7 @@ function coverageClass(coveragePctg) {
 }
 
 }).call(this,require('_process'),"/lib/reporters")
-},{"./json-cov":23,"_process":50,"fs":41,"jade":41,"path":41}],21:[function(require,module,exports){
+},{"./json-cov":23,"_process":51,"fs":41,"jade":41,"path":41}],21:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
 
@@ -2565,7 +2593,7 @@ function on(el, event, fn) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":67}],22:[function(require,module,exports){
+},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":68}],22:[function(require,module,exports){
 // Alias exports to a their normalized format Mocha#reporter to prevent a need
 // for dynamic (try/catch) requires, which Browserify doesn't handle.
 exports.Base = exports.base = require('./base');
@@ -2740,7 +2768,7 @@ function clean(test) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./base":17,"_process":50}],24:[function(require,module,exports){
+},{"./base":17,"_process":51}],24:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2803,7 +2831,7 @@ function clean(test) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50}],25:[function(require,module,exports){
+},{"./base":17,"_process":51}],25:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2896,14 +2924,14 @@ function errorJSON(err) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50}],26:[function(require,module,exports){
+},{"./base":17,"_process":51}],26:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 var cursor = Base.cursor;
 var color = Base.color;
 
@@ -2989,20 +3017,17 @@ function Landing(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-Landing.prototype = create(Base.prototype, {
-  constructor: Landing
-});
+inherits(Landing, Base);
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],27:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],27:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 var color = Base.color;
 var cursor = Base.cursor;
 
@@ -3057,13 +3082,10 @@ function List(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-List.prototype = create(Base.prototype, {
-  constructor: List
-});
+inherits(List, Base);
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],28:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],28:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3105,7 +3127,7 @@ function Markdown(runner) {
     var key = SUITE_PREFIX + suite.title;
 
     obj = obj[key] = obj[key] || { suite: suite };
-    suite.suites.forEach(function() {
+    suite.suites.forEach(function(suite) {
       mapTOC(suite, obj);
     });
 
@@ -3164,14 +3186,14 @@ function Markdown(runner) {
 }
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":50}],29:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],29:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 
 /**
  * Expose `Min`.
@@ -3201,20 +3223,17 @@ function Min(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-Min.prototype = create(Base.prototype, {
-  constructor: Min
-});
+inherits(Min, Base);
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],30:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],30:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 
 /**
  * Expose `Dot`.
@@ -3273,10 +3292,7 @@ function NyanCat(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-NyanCat.prototype = create(Base.prototype, {
-  constructor: NyanCat
-});
+inherits(NyanCat, Base);
 
 /**
  * Draw the nyan cat
@@ -3475,14 +3491,14 @@ function write(string) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],31:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],31:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 var color = Base.color;
 var cursor = Base.cursor;
 
@@ -3565,19 +3581,16 @@ function Progress(runner, options) {
 /**
  * Inherit from `Base.prototype`.
  */
-
-Progress.prototype = create(Base.prototype, {
-  constructor: Progress
-});
+inherits(Progress, Base);
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":50,"lodash.create":70}],32:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51}],32:[function(require,module,exports){
 /**
  * Module dependencies.
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var inherits = require('../utils').inherits;
 var color = Base.color;
 var cursor = Base.cursor;
 
@@ -3654,12 +3667,9 @@ function Spec(runner) {
 /**
  * Inherit from `Base.prototype`.
  */
+inherits(Spec, Base);
 
-Spec.prototype = create(Base.prototype, {
-  constructor: Spec
-});
-
-},{"./base":17,"lodash.create":70}],33:[function(require,module,exports){
+},{"../utils":39,"./base":17}],33:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3736,9 +3746,10 @@ function title(test) {
  */
 
 var Base = require('./base');
-var create = require('lodash.create');
+var utils = require('../utils');
+var inherits = utils.inherits;
 var fs = require('fs');
-var escape = require('../utils').escape;
+var escape = utils.escape;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -3810,6 +3821,11 @@ function XUnit(runner, options) {
 }
 
 /**
+ * Inherit from `Base.prototype`.
+ */
+inherits(XUnit, Base);
+
+/**
  * Override done to close the stream (if it's a file).
  *
  * @param failures
@@ -3824,14 +3840,6 @@ XUnit.prototype.done = function(failures, fn) {
     fn(failures);
   }
 };
-
-/**
- * Inherit from `Base.prototype`.
- */
-
-XUnit.prototype = create(Base.prototype, {
-  constructor: XUnit
-});
 
 /**
  * Write out the given line.
@@ -3904,7 +3912,7 @@ function cdata(str) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils":39,"./base":17,"fs":41,"lodash.create":70}],35:[function(require,module,exports){
+},{"../utils":39,"./base":17,"fs":41}],35:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -3912,10 +3920,10 @@ function cdata(str) {
 
 var EventEmitter = require('events').EventEmitter;
 var Pending = require('./pending');
-var create = require('lodash.create');
 var debug = require('debug')('mocha:runnable');
 var milliseconds = require('./ms');
 var utils = require('./utils');
+var inherits = utils.inherits;
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -3944,6 +3952,8 @@ module.exports = Runnable;
 /**
  * Initialize a new `Runnable` with the given `title` and callback `fn`.
  *
+ * @param {String} title
+ * @param {Function} fn
  * @api private
  * @param {string} title
  * @param {Function} fn
@@ -3963,10 +3973,7 @@ function Runnable(title, fn) {
 /**
  * Inherit from `EventEmitter.prototype`.
  */
-
-Runnable.prototype = create(EventEmitter.prototype, {
-  constructor: Runnable
-});
+inherits(Runnable, EventEmitter);
 
 /**
  * Set & get timeout `ms`.
@@ -4113,8 +4120,8 @@ Runnable.prototype.globals = function(globals) {
 /**
  * Run the test and invoke `fn(err)`.
  *
- * @api private
  * @param {Function} fn
+ * @api private
  */
 Runnable.prototype.run = function(fn) {
   var self = this;
@@ -4163,27 +4170,21 @@ Runnable.prototype.run = function(fn) {
   if (this.async) {
     this.resetTimeout();
 
+    if (this.allowUncaught) {
+      return callFnAsync(this.fn);
+    }
     try {
-      this.fn.call(ctx, function(err) {
-        if (err instanceof Error || toString.call(err) === '[object Error]') {
-          return done(err);
-        }
-        if (err != null) {
-          if (Object.prototype.toString.call(err) === '[object Object]') {
-            return done(new Error('done() invoked with non-Error: ' + JSON.stringify(err)));
-          }
-          return done(new Error('done() invoked with non-Error: ' + err));
-        }
-        done();
-      });
+      callFnAsync(this.fn);
     } catch (err) {
       done(utils.getError(err));
     }
     return;
   }
 
-  if (this.asyncOnly) {
-    return done(new Error('--async-only option in use without declaring `done()`'));
+  if (this.allowUncaught) {
+    callFn(this.fn);
+    done();
+    return;
   }
 
   // sync or promise-returning
@@ -4209,13 +4210,33 @@ Runnable.prototype.run = function(fn) {
           done(reason || new Error('Promise rejected with no or falsy reason'));
         });
     } else {
+      if (self.asyncOnly) {
+        return done(new Error('--async-only option in use without declaring `done()` or returning a promise'));
+      }
+
       done();
     }
+  }
+
+  function callFnAsync(fn) {
+    fn.call(ctx, function(err) {
+      if (err instanceof Error || toString.call(err) === '[object Error]') {
+        return done(err);
+      }
+      if (err) {
+        if (Object.prototype.toString.call(err) === '[object Object]') {
+          return done(new Error('done() invoked with non-Error: '
+            + JSON.stringify(err)));
+        }
+        return done(new Error('done() invoked with non-Error: ' + err));
+      }
+      done();
+    });
   }
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ms":15,"./pending":16,"./utils":39,"debug":2,"events":3,"lodash.create":70}],36:[function(require,module,exports){
+},{"./ms":15,"./pending":16,"./utils":39,"debug":2,"events":3}],36:[function(require,module,exports){
 (function (process,global){
 /**
  * Module dependencies.
@@ -4223,15 +4244,17 @@ Runnable.prototype.run = function(fn) {
 
 var EventEmitter = require('events').EventEmitter;
 var Pending = require('./pending');
-var create = require('lodash.create');
+var utils = require('./utils');
+var inherits = utils.inherits;
 var debug = require('debug')('mocha:runner');
-var filter = require('./utils').filter;
-var indexOf = require('./utils').indexOf;
-var keys = require('./utils').keys;
-var stackFilter = require('./utils').stackTraceFilter();
-var stringify = require('./utils').stringify;
-var type = require('./utils').type;
-var undefinedError = require('./utils').undefinedError;
+var Runnable = require('./runnable');
+var filter = utils.filter;
+var indexOf = utils.indexOf;
+var keys = utils.keys;
+var stackFilter = utils.stackTraceFilter();
+var stringify = utils.stringify;
+var type = utils.type;
+var undefinedError = utils.undefinedError;
 
 /**
  * Non-enumerable globals.
@@ -4282,6 +4305,7 @@ function Runner(suite, delay) {
   this._abort = false;
   this._delay = delay;
   this.suite = suite;
+  this.started = false;
   this.total = suite.total();
   this.failures = 0;
   this.on('test end', function(test) {
@@ -4290,30 +4314,31 @@ function Runner(suite, delay) {
   this.on('hook end', function(hook) {
     self.checkGlobals(hook);
   });
-  this.grep(/.*/);
+  this._defaultGrep = /.*/;
+  this.grep(this._defaultGrep);
   this.globals(this.globalProps().concat(extraGlobals()));
 }
 
 /**
  * Wrapper for setImmediate, process.nextTick, or browser polyfill.
  *
- * @api private
  * @param {Function} fn
+ * @api private
  */
 Runner.immediately = global.setImmediate || process.nextTick;
 
 /**
  * Inherit from `EventEmitter.prototype`.
  */
-
-Runner.prototype = create(EventEmitter.prototype, {
-  constructor: Runner
-});
+inherits(Runner, EventEmitter);
 
 /**
  * Run tests with full titles matching `re`. Updates runner.total
  * with number of tests matched.
  *
+ * @param {RegExp} re
+ * @param {Boolean} invert
+ * @return {Runner} for chaining
  * @api public
  * @param {RegExp} re
  * @param {boolean} invert
@@ -4331,6 +4356,8 @@ Runner.prototype.grep = function(re, invert) {
  * Returns the number of tests matching the grep search for the
  * given suite.
  *
+ * @param {Suite} suite
+ * @return {Number}
  * @api public
  * @param {Suite} suite
  * @return {number}
@@ -4355,8 +4382,8 @@ Runner.prototype.grepTotal = function(suite) {
 /**
  * Return a list of global properties.
  *
- * @api private
  * @return {Array}
+ * @api private
  */
 Runner.prototype.globalProps = function() {
   var props = keys(global);
@@ -4375,6 +4402,8 @@ Runner.prototype.globalProps = function() {
 /**
  * Allow the given `arr` of globals.
  *
+ * @param {Array} arr
+ * @return {Runner} for chaining
  * @api public
  * @param {Array} arr
  * @return {Runner} Runner instance.
@@ -4464,6 +4493,11 @@ Runner.prototype.fail = function(test, err) {
  * @param {Error} err
  */
 Runner.prototype.failHook = function(hook, err) {
+  if (hook.ctx && hook.ctx.currentTest) {
+    hook.originalTitle = hook.originalTitle || hook.title;
+    hook.title = hook.originalTitle + ' for "' + hook.ctx.currentTest.title + '"';
+  }
+
   this.fail(hook, err);
   if (this.suite.bail()) {
     this.emit('end');
@@ -4477,6 +4511,7 @@ Runner.prototype.failHook = function(hook, err) {
  * @param {string} name
  * @param {Function} fn
  */
+
 Runner.prototype.hook = function(name, fn) {
   var suite = this.suite;
   var hooks = suite['_' + name];
@@ -4493,12 +4528,13 @@ Runner.prototype.hook = function(name, fn) {
 
     self.emit('hook', hook);
 
-    hook.on('error', function(err) {
-      self.failHook(hook, err);
-    });
+    if (!hook.listeners('error').length) {
+      hook.on('error', function(err) {
+        self.failHook(hook, err);
+      });
+    }
 
     hook.run(function(err) {
-      hook.removeAllListeners('error');
       var testError = hook.error();
       if (testError) {
         self.fail(self.test, testError);
@@ -4562,9 +4598,9 @@ Runner.prototype.hooks = function(name, suites, fn) {
 /**
  * Run hooks from the top level down.
  *
- * @api private
- * @param {string} name
+ * @param {String} name
  * @param {Function} fn
+ * @api private
  */
 Runner.prototype.hookUp = function(name, fn) {
   var suites = [this.suite].concat(this.parents()).reverse();
@@ -4574,9 +4610,9 @@ Runner.prototype.hookUp = function(name, fn) {
 /**
  * Run hooks from the bottom up.
  *
- * @api private
- * @param {string} name
+ * @param {String} name
  * @param {Function} fn
+ * @api private
  */
 Runner.prototype.hookDown = function(name, fn) {
   var suites = [this.suite].concat(this.parents());
@@ -4587,13 +4623,14 @@ Runner.prototype.hookDown = function(name, fn) {
  * Return an array of parent Suites from
  * closest to furthest.
  *
- * @api private
  * @return {Array}
+ * @api private
  */
 Runner.prototype.parents = function() {
   var suite = this.suite;
   var suites = [];
-  while (suite = suite.parent) {
+  while (suite.parent) {
+    suite = suite.parent;
     suites.push(suite);
   }
   return suites;
@@ -4602,8 +4639,8 @@ Runner.prototype.parents = function() {
 /**
  * Run the current test and callback `fn(err)`.
  *
- * @api private
  * @param {Function} fn
+ * @api private
  */
 Runner.prototype.runTest = function(fn) {
   var self = this;
@@ -4613,6 +4650,10 @@ Runner.prototype.runTest = function(fn) {
     test.asyncOnly = true;
   }
 
+  if (this.allowUncaught) {
+    test.allowUncaught = true;
+    return test.run(fn);
+  }
   try {
     test.on('error', function(err) {
       self.fail(test, err);
@@ -4689,7 +4730,20 @@ Runner.prototype.runTests = function(suite, fn) {
       match = !match;
     }
     if (!match) {
-      return next();
+      // Run immediately only if we have defined a grep. When we
+      // define a grep — It can cause maximum callstack error if
+      // the grep is doing a large recursive loop by neglecting
+      // all tests. The run immediately function also comes with
+      // a performance cost. So we don't want to run immediately
+      // if we run the whole test suite, because running the whole
+      // test suite don't do any immediate recursive loops. Thus,
+      // allowing a JS runtime to breathe.
+      if (self._grep !== self._defaultGrep) {
+        Runner.immediately(next);
+      } else {
+        next();
+      }
+      return;
     }
 
     // pending
@@ -4738,6 +4792,7 @@ Runner.prototype.runTests = function(suite, fn) {
   }
 
   this.next = next;
+  this.hookErr = hookErr;
   next();
 };
 
@@ -4752,10 +4807,11 @@ Runner.prototype.runSuite = function(suite, fn) {
   var i = 0;
   var self = this;
   var total = this.grepTotal(suite);
+  var afterAllHookCalled = false;
 
   debug('run suite %s', suite.fullTitle());
 
-  if (!total) {
+  if (!total || (self.failures && suite._bail)) {
     return fn();
   }
 
@@ -4782,16 +4838,37 @@ Runner.prototype.runSuite = function(suite, fn) {
     if (!curr) {
       return done();
     }
-    self.runSuite(curr, next);
+
+    // Avoid grep neglecting large number of tests causing a
+    // huge recursive loop and thus a maximum call stack error.
+    // See comment in `this.runTests()` for more information.
+    if (self._grep !== self._defaultGrep) {
+      Runner.immediately(function() {
+        self.runSuite(curr, next);
+      });
+    } else {
+      self.runSuite(curr, next);
+    }
   }
 
   function done(errSuite) {
     self.suite = suite;
-    self.hook('afterAll', function() {
-      self.emit('suite end', suite);
+    self.nextSuite = next;
+
+    if (afterAllHookCalled) {
       fn(errSuite);
-    });
+    } else {
+      // mark that the afterAll block has been called once
+      // and so can be skipped if there is an error in it.
+      afterAllHookCalled = true;
+      self.hook('afterAll', function() {
+        self.emit('suite end', suite);
+        fn(errSuite);
+      });
+    }
   }
+
+  this.nextSuite = next;
 
   this.hook('beforeAll', function(err) {
     if (err) {
@@ -4804,8 +4881,8 @@ Runner.prototype.runSuite = function(suite, fn) {
 /**
  * Handle uncaught exceptions.
  *
- * @api private
  * @param {Error} err
+ * @api private
  */
 Runner.prototype.uncaught = function(err) {
   if (err) {
@@ -4819,7 +4896,20 @@ Runner.prototype.uncaught = function(err) {
   err.uncaught = true;
 
   var runnable = this.currentRunnable;
+
   if (!runnable) {
+    runnable = new Runnable('Uncaught error outside test suite');
+    runnable.parent = this.suite;
+
+    if (this.started) {
+      this.fail(runnable, err);
+    } else {
+      // Can't recover from this failure
+      this.emit('start');
+      this.fail(runnable, err);
+      this.emit('end');
+    }
+
     return;
   }
 
@@ -4838,7 +4928,22 @@ Runner.prototype.uncaught = function(err) {
     return;
   }
 
-  // bail on hooks
+ // recover from hooks
+  if (runnable.type === 'hook') {
+    var errSuite = this.suite;
+    // if hook failure is in afterEach block
+    if (runnable.fullTitle().indexOf('after each') > -1) {
+      return this.hookErr(err, errSuite, true);
+    }
+    // if hook failure is in beforeEach block
+    if (runnable.fullTitle().indexOf('before each') > -1) {
+      return this.hookErr(err, errSuite, false);
+    }
+    // if hook failure is in after or before blocks
+    return this.nextSuite(errSuite);
+  }
+
+  // bail
   this.emit('end');
 };
 
@@ -4846,6 +4951,8 @@ Runner.prototype.uncaught = function(err) {
  * Run the root suite and invoke `fn(failures)`
  * on completion.
  *
+ * @param {Function} fn
+ * @return {Runner} for chaining
  * @api public
  * @param {Function} fn
  * @return {Runner} Runner instance.
@@ -4861,6 +4968,7 @@ Runner.prototype.run = function(fn) {
   }
 
   function start() {
+    self.started = true;
     self.emit('start');
     self.runSuite(rootSuite, function() {
       debug('finished running');
@@ -4951,12 +5059,13 @@ function filterLeaks(ok, globals) {
 /**
  * Array of globals dependent on the environment.
  *
- * @api private
  * @return {Array}
+ * @api private
  */
 function extraGlobals() {
-  if (!process.browser) {
-    var nodeVersion = process.version.split('.').reduce(function(a, v) {
+  if (typeof process === 'object' && typeof process.version === 'string') {
+    var parts = process.version.split('.');
+    var nodeVersion = utils.reduce(parts, function(a, v) {
       return a << 8 | v;
     });
 
@@ -4971,17 +5080,17 @@ function extraGlobals() {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./pending":16,"./utils":39,"_process":50,"debug":2,"events":3,"lodash.create":70}],37:[function(require,module,exports){
+},{"./pending":16,"./runnable":35,"./utils":39,"_process":51,"debug":2,"events":3}],37:[function(require,module,exports){
 /**
  * Module dependencies.
  */
 
 var EventEmitter = require('events').EventEmitter;
 var Hook = require('./hook');
-var create = require('lodash.create');
+var utils = require('./utils');
+var inherits = utils.inherits;
 var debug = require('debug')('mocha:suite');
 var milliseconds = require('./ms');
-var utils = require('./utils');
 
 /**
  * Expose `Suite`.
@@ -5040,10 +5149,7 @@ function Suite(title, parentContext) {
 /**
  * Inherit from `EventEmitter.prototype`.
  */
-
-Suite.prototype = create(EventEmitter.prototype, {
-  constructor: Suite
-});
+inherits(Suite, EventEmitter);
 
 /**
  * Return a clone of this `Suite`.
@@ -5341,13 +5447,13 @@ Suite.prototype.run = function run() {
   }
 };
 
-},{"./hook":7,"./ms":15,"./utils":39,"debug":2,"events":3,"lodash.create":70}],38:[function(require,module,exports){
+},{"./hook":7,"./ms":15,"./utils":39,"debug":2,"events":3}],38:[function(require,module,exports){
 /**
  * Module dependencies.
  */
 
 var Runnable = require('./runnable');
-var create = require('lodash.create');
+var inherits = require('./utils').inherits;
 
 /**
  * Expose `Test`.
@@ -5371,12 +5477,9 @@ function Test(title, fn) {
 /**
  * Inherit from `Runnable.prototype`.
  */
+inherits(Test, Runnable);
 
-Test.prototype = create(Runnable.prototype, {
-  constructor: Test
-});
-
-},{"./runnable":35,"lodash.create":70}],39:[function(require,module,exports){
+},{"./runnable":35,"./utils":39}],39:[function(require,module,exports){
 (function (process,Buffer){
 /* eslint-env browser */
 
@@ -5398,6 +5501,8 @@ var watchFile = require('fs').watchFile;
  */
 
 var ignore = ['node_modules', '.git'];
+
+exports.inherits = require('util').inherits;
 
 /**
  * Escape special characters in the given string of html.
@@ -6067,7 +6172,7 @@ exports.getError = function(err) {
  * @description
  * When invoking this function you get a filter function that get the Error.stack as an input,
  * and return a prettify output.
- * (i.e: strip Mocha, node_modules, bower and componentJS from stack trace).
+ * (i.e: strip Mocha and internal node functions from stack trace).
  * @returns {Function}
  */
 exports.stackTraceFilter = function() {
@@ -6079,14 +6184,10 @@ exports.stackTraceFilter = function() {
       : (typeof location === 'undefined' ? window.location : location).href.replace(/\/[^\/]*$/, '/');
 
   function isMochaInternal(line) {
-    return (~line.indexOf('node_modules' + slash + 'mocha'))
-      || (~line.indexOf('components' + slash + 'mochajs'))
-      || (~line.indexOf('components' + slash + 'mocha'));
-  }
-
-  // node_modules, bower, componentJS
-  function isBrowserModule(line) {
-    return (~line.indexOf('node_modules')) || (~line.indexOf('components'));
+    return (~line.indexOf('node_modules' + slash + 'mocha' + slash))
+      || (~line.indexOf('components' + slash + 'mochajs' + slash))
+      || (~line.indexOf('components' + slash + 'mocha' + slash))
+      || (~line.indexOf(slash + 'mocha.js'));
   }
 
   function isNodeInternal(line) {
@@ -6102,11 +6203,11 @@ exports.stackTraceFilter = function() {
     stack = stack.split('\n');
 
     stack = exports.reduce(stack, function(list, line) {
-      if (is.node && (isMochaInternal(line) || isNodeInternal(line))) {
+      if (isMochaInternal(line)) {
         return list;
       }
 
-      if (is.browser && (isBrowserModule(line))) {
+      if (is.node && isNodeInternal(line)) {
         return list;
       }
 
@@ -6120,7 +6221,7 @@ exports.stackTraceFilter = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":50,"buffer":43,"debug":2,"fs":41,"glob":41,"path":41}],40:[function(require,module,exports){
+},{"_process":51,"buffer":43,"debug":2,"fs":41,"glob":41,"path":41,"util":66}],40:[function(require,module,exports){
 (function (process){
 var WritableStream = require('stream').Writable
 var inherits = require('util').inherits
@@ -6140,11 +6241,16 @@ function BrowserStdout(opts) {
 
 BrowserStdout.prototype._write = function(chunks, encoding, cb) {
   var output = chunks.toString ? chunks.toString() : chunks
-  console.log(this.label+':', output)
+  if (this.label === false) {
+    console.log(output)
+  } else {
+    console.log(this.label+':', output)
+  }
   process.nextTick(cb)
 }
+
 }).call(this,require('_process'))
-},{"_process":50,"stream":62,"util":65}],41:[function(require,module,exports){
+},{"_process":51,"stream":63,"util":66}],41:[function(require,module,exports){
 
 },{}],42:[function(require,module,exports){
 arguments[4][41][0].apply(exports,arguments)
@@ -6175,28 +6281,35 @@ var rootParent = {}
  * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
  * Opera 11.6+, iOS 4.2+.
  *
+ * Due to various browser bugs, sometimes the Object implementation will be used even
+ * when the browser supports typed arrays.
+ *
  * Note:
  *
- * - Implementation must support adding new properties to `Uint8Array` instances.
- *   Firefox 4-29 lacked support, fixed in Firefox 30+.
- *   See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
+ *   - Firefox 4-29 lacks support for adding new properties to `Uint8Array` instances,
+ *     See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438.
  *
- *  - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
+ *   - Safari 5-7 lacks support for changing the `Object.prototype.constructor` property
+ *     on objects.
  *
- *  - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
- *    incorrect length in some situations.
+ *   - Chrome 9-10 is missing the `TypedArray.prototype.subarray` function.
  *
- * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they will
- * get the Object implementation, which is slower but will work correctly.
+ *   - IE10 has a broken `TypedArray.prototype.subarray` function which returns arrays of
+ *     incorrect length in some situations.
+
+ * We detect these buggy browsers and set `Buffer.TYPED_ARRAY_SUPPORT` to `false` so they
+ * get the Object implementation, which is slower but behaves correctly.
  */
 Buffer.TYPED_ARRAY_SUPPORT = (function () {
+  function Bar () {}
   try {
-    var buf = new ArrayBuffer(0)
-    var arr = new Uint8Array(buf)
+    var arr = new Uint8Array(1)
     arr.foo = function () { return 42 }
+    arr.constructor = Bar
     return arr.foo() === 42 && // typed array instances can be augmented
+        arr.constructor === Bar && // constructor can be set
         typeof arr.subarray === 'function' && // chrome 9-10 lack `subarray`
-        new Uint8Array(1).subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
+        arr.subarray(1, 1).byteLength === 0 // ie10 has broken `subarray`
   } catch (e) {
     return false
   }
@@ -6274,8 +6387,13 @@ function fromObject (that, object) {
     throw new TypeError('must start with number, buffer, array or string')
   }
 
-  if (typeof ArrayBuffer !== 'undefined' && object.buffer instanceof ArrayBuffer) {
-    return fromTypedArray(that, object)
+  if (typeof ArrayBuffer !== 'undefined') {
+    if (object.buffer instanceof ArrayBuffer) {
+      return fromTypedArray(that, object)
+    }
+    if (object instanceof ArrayBuffer) {
+      return fromArrayBuffer(that, object)
+    }
   }
 
   if (object.length) return fromArrayLike(that, object)
@@ -6308,6 +6426,18 @@ function fromTypedArray (that, array) {
   // of the old Buffer constructor.
   for (var i = 0; i < length; i += 1) {
     that[i] = array[i] & 255
+  }
+  return that
+}
+
+function fromArrayBuffer (that, array) {
+  if (Buffer.TYPED_ARRAY_SUPPORT) {
+    // Return an augmented `Uint8Array` instance, for best performance
+    array.byteLength
+    that = Buffer._augment(new Uint8Array(array))
+  } else {
+    // Fallback: Return an object instance of the Buffer class
+    that = fromTypedArray(that, new Uint8Array(array))
   }
   return that
 }
@@ -6429,8 +6559,6 @@ Buffer.concat = function concat (list, length) {
 
   if (list.length === 0) {
     return new Buffer(0)
-  } else if (list.length === 1) {
-    return list[0]
   }
 
   var i
@@ -6605,13 +6733,13 @@ Buffer.prototype.indexOf = function indexOf (val, byteOffset) {
   throw new TypeError('val must be string, number or Buffer')
 }
 
-// `get` will be removed in Node 0.13+
+// `get` is deprecated
 Buffer.prototype.get = function get (offset) {
   console.log('.get() is deprecated. Access using array indexes instead.')
   return this.readUInt8(offset)
 }
 
-// `set` will be removed in Node 0.13+
+// `set` is deprecated
 Buffer.prototype.set = function set (v, offset) {
   console.log('.set() is deprecated. Access using array indexes instead.')
   return this.writeUInt8(v, offset)
@@ -6752,20 +6880,99 @@ function base64Slice (buf, start, end) {
 }
 
 function utf8Slice (buf, start, end) {
-  var res = ''
-  var tmp = ''
   end = Math.min(buf.length, end)
+  var res = []
 
-  for (var i = start; i < end; i++) {
-    if (buf[i] <= 0x7F) {
-      res += decodeUtf8Char(tmp) + String.fromCharCode(buf[i])
-      tmp = ''
-    } else {
-      tmp += '%' + buf[i].toString(16)
+  var i = start
+  while (i < end) {
+    var firstByte = buf[i]
+    var codePoint = null
+    var bytesPerSequence = (firstByte > 0xEF) ? 4
+      : (firstByte > 0xDF) ? 3
+      : (firstByte > 0xBF) ? 2
+      : 1
+
+    if (i + bytesPerSequence <= end) {
+      var secondByte, thirdByte, fourthByte, tempCodePoint
+
+      switch (bytesPerSequence) {
+        case 1:
+          if (firstByte < 0x80) {
+            codePoint = firstByte
+          }
+          break
+        case 2:
+          secondByte = buf[i + 1]
+          if ((secondByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F)
+            if (tempCodePoint > 0x7F) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 3:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F)
+            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+              codePoint = tempCodePoint
+            }
+          }
+          break
+        case 4:
+          secondByte = buf[i + 1]
+          thirdByte = buf[i + 2]
+          fourthByte = buf[i + 3]
+          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F)
+            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+              codePoint = tempCodePoint
+            }
+          }
+      }
     }
+
+    if (codePoint === null) {
+      // we did not generate a valid codePoint so insert a
+      // replacement char (U+FFFD) and advance only 1 byte
+      codePoint = 0xFFFD
+      bytesPerSequence = 1
+    } else if (codePoint > 0xFFFF) {
+      // encode to utf16 (surrogate pair dance)
+      codePoint -= 0x10000
+      res.push(codePoint >>> 10 & 0x3FF | 0xD800)
+      codePoint = 0xDC00 | codePoint & 0x3FF
+    }
+
+    res.push(codePoint)
+    i += bytesPerSequence
   }
 
-  return res + decodeUtf8Char(tmp)
+  return decodeCodePointsArray(res)
+}
+
+// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+// the lowest limit is Chrome, with 0x10000 args.
+// We go 1 magnitude less, for safety
+var MAX_ARGUMENTS_LENGTH = 0x1000
+
+function decodeCodePointsArray (codePoints) {
+  var len = codePoints.length
+  if (len <= MAX_ARGUMENTS_LENGTH) {
+    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+  }
+
+  // Decode in chunks to avoid "call stack size exceeded".
+  var res = ''
+  var i = 0
+  while (i < len) {
+    res += String.fromCharCode.apply(
+      String,
+      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+    )
+  }
+  return res
 }
 
 function asciiSlice (buf, start, end) {
@@ -7300,9 +7507,16 @@ Buffer.prototype.copy = function copy (target, targetStart, start, end) {
   }
 
   var len = end - start
+  var i
 
-  if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
-    for (var i = 0; i < len; i++) {
+  if (this === target && start < targetStart && targetStart < end) {
+    // descending copy from end
+    for (i = len - 1; i >= 0; i--) {
+      target[i + targetStart] = this[i + start]
+    }
+  } else if (len < 1000 || !Buffer.TYPED_ARRAY_SUPPORT) {
+    // ascending copy from start
+    for (i = 0; i < len; i++) {
       target[i + targetStart] = this[i + start]
     }
   } else {
@@ -7378,7 +7592,7 @@ Buffer._augment = function _augment (arr) {
   // save reference to original Uint8Array set method before overwriting
   arr._set = arr.set
 
-  // deprecated, will be removed in node 0.13+
+  // deprecated
   arr.get = BP.get
   arr.set = BP.set
 
@@ -7434,7 +7648,7 @@ Buffer._augment = function _augment (arr) {
   return arr
 }
 
-var INVALID_BASE64_RE = /[^+\/0-9A-z\-]/g
+var INVALID_BASE64_RE = /[^+\/0-9A-Za-z-_]/g
 
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
@@ -7464,28 +7678,15 @@ function utf8ToBytes (string, units) {
   var length = string.length
   var leadSurrogate = null
   var bytes = []
-  var i = 0
 
-  for (; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     codePoint = string.charCodeAt(i)
 
     // is surrogate component
     if (codePoint > 0xD7FF && codePoint < 0xE000) {
       // last char was a lead
-      if (leadSurrogate) {
-        // 2 leads in a row
-        if (codePoint < 0xDC00) {
-          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-          leadSurrogate = codePoint
-          continue
-        } else {
-          // valid surrogate pair
-          codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
-          leadSurrogate = null
-        }
-      } else {
+      if (!leadSurrogate) {
         // no lead yet
-
         if (codePoint > 0xDBFF) {
           // unexpected trail
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -7494,17 +7695,29 @@ function utf8ToBytes (string, units) {
           // unpaired lead
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
           continue
-        } else {
-          // valid lead
-          leadSurrogate = codePoint
-          continue
         }
+
+        // valid lead
+        leadSurrogate = codePoint
+
+        continue
       }
+
+      // 2 leads in a row
+      if (codePoint < 0xDC00) {
+        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
+        leadSurrogate = codePoint
+        continue
+      }
+
+      // valid surrogate pair
+      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
-      leadSurrogate = null
     }
+
+    leadSurrogate = null
 
     // encode utf8
     if (codePoint < 0x80) {
@@ -7523,7 +7736,7 @@ function utf8ToBytes (string, units) {
         codePoint >> 0x6 & 0x3F | 0x80,
         codePoint & 0x3F | 0x80
       )
-    } else if (codePoint < 0x200000) {
+    } else if (codePoint < 0x110000) {
       if ((units -= 4) < 0) break
       bytes.push(
         codePoint >> 0x12 | 0xF0,
@@ -7574,14 +7787,6 @@ function blitBuffer (src, dst, offset, length) {
     dst[i + offset] = src[i]
   }
   return i
-}
-
-function decodeUtf8Char (str) {
-  try {
-    return decodeURIComponent(str)
-  } catch (err) {
-    return String.fromCharCode(0xFFFD) // UTF 8 invalid char
-  }
 }
 
 },{"base64-js":44,"ieee754":45,"is-array":46}],44:[function(require,module,exports){
@@ -8135,11 +8340,36 @@ function isUndefined(arg) {
 }
 
 },{}],48:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],49:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 exports.endianness = function () { return 'LE' };
 
 exports.hostname = function () {
@@ -8186,7 +8416,7 @@ exports.tmpdir = exports.tmpDir = function () {
 
 exports.EOL = '\n';
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -8219,7 +8449,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -8271,17 +8503,16 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":52}],52:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":53}],53:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -8374,7 +8605,7 @@ function forEach (xs, f) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_readable":54,"./_stream_writable":56,"_process":50,"core-util-is":57,"inherits":69}],53:[function(require,module,exports){
+},{"./_stream_readable":55,"./_stream_writable":57,"_process":51,"core-util-is":58,"inherits":48}],54:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8422,7 +8653,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":55,"core-util-is":57,"inherits":69}],54:[function(require,module,exports){
+},{"./_stream_transform":56,"core-util-is":58,"inherits":48}],55:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9377,7 +9608,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":52,"_process":50,"buffer":43,"core-util-is":57,"events":47,"inherits":69,"isarray":48,"stream":62,"string_decoder/":63,"util":42}],55:[function(require,module,exports){
+},{"./_stream_duplex":53,"_process":51,"buffer":43,"core-util-is":58,"events":47,"inherits":48,"isarray":49,"stream":63,"string_decoder/":64,"util":42}],56:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9588,7 +9819,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":52,"core-util-is":57,"inherits":69}],56:[function(require,module,exports){
+},{"./_stream_duplex":53,"core-util-is":58,"inherits":48}],57:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10069,7 +10300,7 @@ function endWritable(stream, state, cb) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":52,"_process":50,"buffer":43,"core-util-is":57,"inherits":69,"stream":62}],57:[function(require,module,exports){
+},{"./_stream_duplex":53,"_process":51,"buffer":43,"core-util-is":58,"inherits":48,"stream":63}],58:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -10179,10 +10410,10 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 }).call(this,require("buffer").Buffer)
-},{"buffer":43}],58:[function(require,module,exports){
+},{"buffer":43}],59:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":53}],59:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":54}],60:[function(require,module,exports){
 exports = module.exports = require('./lib/_stream_readable.js');
 exports.Stream = require('stream');
 exports.Readable = exports;
@@ -10191,13 +10422,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":52,"./lib/_stream_passthrough.js":53,"./lib/_stream_readable.js":54,"./lib/_stream_transform.js":55,"./lib/_stream_writable.js":56,"stream":62}],60:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":53,"./lib/_stream_passthrough.js":54,"./lib/_stream_readable.js":55,"./lib/_stream_transform.js":56,"./lib/_stream_writable.js":57,"stream":63}],61:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":55}],61:[function(require,module,exports){
+},{"./lib/_stream_transform.js":56}],62:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":56}],62:[function(require,module,exports){
+},{"./lib/_stream_writable.js":57}],63:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10326,7 +10557,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":47,"inherits":69,"readable-stream/duplex.js":51,"readable-stream/passthrough.js":58,"readable-stream/readable.js":59,"readable-stream/transform.js":60,"readable-stream/writable.js":61}],63:[function(require,module,exports){
+},{"events":47,"inherits":48,"readable-stream/duplex.js":52,"readable-stream/passthrough.js":59,"readable-stream/readable.js":60,"readable-stream/transform.js":61,"readable-stream/writable.js":62}],64:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10549,14 +10780,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":43}],64:[function(require,module,exports){
+},{"buffer":43}],65:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -11146,7 +11377,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":64,"_process":50,"inherits":69}],66:[function(require,module,exports){
+},{"./support/isBuffer":65,"_process":51,"inherits":48}],67:[function(require,module,exports){
 /* See LICENSE file for terms of use */
 
 /*
@@ -11767,7 +11998,7 @@ function hasOwnProperty(obj, prop) {
   }
 }(this));
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -11780,7 +12011,7 @@ module.exports = function (str) {
 	return str.replace(matchOperatorsRe,  '\\$&');
 };
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 (function (process){
 // Growl - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
@@ -12018,1013 +12249,14 @@ function growl(msg, options, fn) {
 };
 
 }).call(this,require('_process'))
-},{"_process":50,"child_process":41,"fs":41,"os":49,"path":41}],69:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],70:[function(require,module,exports){
-/**
- * lodash 3.1.1 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-var baseAssign = require('lodash._baseassign'),
-    baseCreate = require('lodash._basecreate'),
-    isIterateeCall = require('lodash._isiterateecall');
-
-/**
- * Creates an object that inherits from the given `prototype` object. If a
- * `properties` object is provided its own enumerable properties are assigned
- * to the created object.
- *
- * @static
- * @memberOf _
- * @category Object
- * @param {Object} prototype The object to inherit from.
- * @param {Object} [properties] The properties to assign to the object.
- * @param- {Object} [guard] Enables use as a callback for functions like `_.map`.
- * @returns {Object} Returns the new object.
- * @example
- *
- * function Shape() {
- *   this.x = 0;
- *   this.y = 0;
- * }
- *
- * function Circle() {
- *   Shape.call(this);
- * }
- *
- * Circle.prototype = _.create(Shape.prototype, {
- *   'constructor': Circle
- * });
- *
- * var circle = new Circle;
- * circle instanceof Circle;
- * // => true
- *
- * circle instanceof Shape;
- * // => true
- */
-function create(prototype, properties, guard) {
-  var result = baseCreate(prototype);
-  if (guard && isIterateeCall(prototype, properties, guard)) {
-    properties = undefined;
-  }
-  return properties ? baseAssign(result, properties) : result;
-}
-
-module.exports = create;
-
-},{"lodash._baseassign":71,"lodash._basecreate":77,"lodash._isiterateecall":78}],71:[function(require,module,exports){
-/**
- * lodash 3.2.0 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-var baseCopy = require('lodash._basecopy'),
-    keys = require('lodash.keys');
-
-/**
- * The base implementation of `_.assign` without support for argument juggling,
- * multiple sources, and `customizer` functions.
- *
- * @private
- * @param {Object} object The destination object.
- * @param {Object} source The source object.
- * @returns {Object} Returns `object`.
- */
-function baseAssign(object, source) {
-  return source == null
-    ? object
-    : baseCopy(source, keys(source), object);
-}
-
-module.exports = baseAssign;
-
-},{"lodash._basecopy":72,"lodash.keys":73}],72:[function(require,module,exports){
-/**
- * lodash 3.0.1 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/**
- * Copies properties of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy properties from.
- * @param {Array} props The property names to copy.
- * @param {Object} [object={}] The object to copy properties to.
- * @returns {Object} Returns `object`.
- */
-function baseCopy(source, props, object) {
-  object || (object = {});
-
-  var index = -1,
-      length = props.length;
-
-  while (++index < length) {
-    var key = props[index];
-    object[key] = source[key];
-  }
-  return object;
-}
-
-module.exports = baseCopy;
-
-},{}],73:[function(require,module,exports){
-/**
- * lodash 3.1.2 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-var getNative = require('lodash._getnative'),
-    isArguments = require('lodash.isarguments'),
-    isArray = require('lodash.isarray');
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^\d+$/;
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/* Native method references for those with the same name as other `lodash` methods. */
-var nativeKeys = getNative(Object, 'keys');
-
-/**
- * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
- * of an array-like value.
- */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/**
- * The base implementation of `_.property` without support for deep paths.
- *
- * @private
- * @param {string} key The key of the property to get.
- * @returns {Function} Returns the new function.
- */
-function baseProperty(key) {
-  return function(object) {
-    return object == null ? undefined : object[key];
-  };
-}
-
-/**
- * Gets the "length" property value of `object`.
- *
- * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
- * that affects Safari on at least iOS 8.1-8.3 ARM64.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {*} Returns the "length" value.
- */
-var getLength = baseProperty('length');
-
-/**
- * Checks if `value` is array-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
- */
-function isArrayLike(value) {
-  return value != null && isLength(getLength(value));
-}
-
-/**
- * Checks if `value` is a valid array-like index.
- *
- * @private
- * @param {*} value The value to check.
- * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
- * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
- */
-function isIndex(value, length) {
-  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
-  length = length == null ? MAX_SAFE_INTEGER : length;
-  return value > -1 && value % 1 == 0 && value < length;
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- */
-function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * A fallback implementation of `Object.keys` which creates an array of the
- * own enumerable property names of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- */
-function shimKeys(object) {
-  var props = keysIn(object),
-      propsLength = props.length,
-      length = propsLength && object.length;
-
-  var allowIndexes = !!length && isLength(length) &&
-    (isArray(object) || isArguments(object));
-
-  var index = -1,
-      result = [];
-
-  while (++index < propsLength) {
-    var key = props[index];
-    if ((allowIndexes && isIndex(key, length)) || hasOwnProperty.call(object, key)) {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-/**
- * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
- * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(1);
- * // => false
- */
-function isObject(value) {
-  // Avoid a V8 JIT bug in Chrome 19-20.
-  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Creates an array of the own enumerable property names of `object`.
- *
- * **Note:** Non-object values are coerced to objects. See the
- * [ES spec](http://ecma-international.org/ecma-262/6.0/#sec-object.keys)
- * for more details.
- *
- * @static
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- *   this.b = 2;
- * }
- *
- * Foo.prototype.c = 3;
- *
- * _.keys(new Foo);
- * // => ['a', 'b'] (iteration order is not guaranteed)
- *
- * _.keys('hi');
- * // => ['0', '1']
- */
-var keys = !nativeKeys ? shimKeys : function(object) {
-  var Ctor = object == null ? undefined : object.constructor;
-  if ((typeof Ctor == 'function' && Ctor.prototype === object) ||
-      (typeof object != 'function' && isArrayLike(object))) {
-    return shimKeys(object);
-  }
-  return isObject(object) ? nativeKeys(object) : [];
-};
-
-/**
- * Creates an array of the own and inherited enumerable property names of `object`.
- *
- * **Note:** Non-object values are coerced to objects.
- *
- * @static
- * @memberOf _
- * @category Object
- * @param {Object} object The object to query.
- * @returns {Array} Returns the array of property names.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- *   this.b = 2;
- * }
- *
- * Foo.prototype.c = 3;
- *
- * _.keysIn(new Foo);
- * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
- */
-function keysIn(object) {
-  if (object == null) {
-    return [];
-  }
-  if (!isObject(object)) {
-    object = Object(object);
-  }
-  var length = object.length;
-  length = (length && isLength(length) &&
-    (isArray(object) || isArguments(object)) && length) || 0;
-
-  var Ctor = object.constructor,
-      index = -1,
-      isProto = typeof Ctor == 'function' && Ctor.prototype === object,
-      result = Array(length),
-      skipIndexes = length > 0;
-
-  while (++index < length) {
-    result[index] = (index + '');
-  }
-  for (var key in object) {
-    if (!(skipIndexes && isIndex(key, length)) &&
-        !(key == 'constructor' && (isProto || !hasOwnProperty.call(object, key)))) {
-      result.push(key);
-    }
-  }
-  return result;
-}
-
-module.exports = keys;
-
-},{"lodash._getnative":74,"lodash.isarguments":75,"lodash.isarray":76}],74:[function(require,module,exports){
-/**
- * lodash 3.9.1 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/** `Object#toString` result references. */
-var funcTag = '[object Function]';
-
-/** Used to detect host constructors (Safari > 5). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/**
- * Checks if `value` is object-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var fnToString = Function.prototype.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objToString = objectProto.toString;
-
-/** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-);
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = object == null ? undefined : object[key];
-  return isNative(value) ? value : undefined;
-}
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in older versions of Chrome and Safari which return 'function' for regexes
-  // and Safari 8 equivalents which return 'object' for typed array constructors.
-  return isObject(value) && objToString.call(value) == funcTag;
-}
-
-/**
- * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
- * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(1);
- * // => false
- */
-function isObject(value) {
-  // Avoid a V8 JIT bug in Chrome 19-20.
-  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is a native function.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
- * @example
- *
- * _.isNative(Array.prototype.push);
- * // => true
- *
- * _.isNative(_);
- * // => false
- */
-function isNative(value) {
-  if (value == null) {
-    return false;
-  }
-  if (isFunction(value)) {
-    return reIsNative.test(fnToString.call(value));
-  }
-  return isObjectLike(value) && reIsHostCtor.test(value);
-}
-
-module.exports = getNative;
-
-},{}],75:[function(require,module,exports){
-/**
- * lodash 3.0.4 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/**
- * Checks if `value` is object-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/** Native method references. */
-var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-
-/**
- * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
- * of an array-like value.
- */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/**
- * The base implementation of `_.property` without support for deep paths.
- *
- * @private
- * @param {string} key The key of the property to get.
- * @returns {Function} Returns the new function.
- */
-function baseProperty(key) {
-  return function(object) {
-    return object == null ? undefined : object[key];
-  };
-}
-
-/**
- * Gets the "length" property value of `object`.
- *
- * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
- * that affects Safari on at least iOS 8.1-8.3 ARM64.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {*} Returns the "length" value.
- */
-var getLength = baseProperty('length');
-
-/**
- * Checks if `value` is array-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
- */
-function isArrayLike(value) {
-  return value != null && isLength(getLength(value));
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- */
-function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * Checks if `value` is classified as an `arguments` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isArguments(function() { return arguments; }());
- * // => true
- *
- * _.isArguments([1, 2, 3]);
- * // => false
- */
-function isArguments(value) {
-  return isObjectLike(value) && isArrayLike(value) &&
-    hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
-}
-
-module.exports = isArguments;
-
-},{}],76:[function(require,module,exports){
-/**
- * lodash 3.0.4 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/** `Object#toString` result references. */
-var arrayTag = '[object Array]',
-    funcTag = '[object Function]';
-
-/** Used to detect host constructors (Safari > 5). */
-var reIsHostCtor = /^\[object .+?Constructor\]$/;
-
-/**
- * Checks if `value` is object-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- */
-function isObjectLike(value) {
-  return !!value && typeof value == 'object';
-}
-
-/** Used for native method references. */
-var objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var fnToString = Function.prototype.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/**
- * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
- * of values.
- */
-var objToString = objectProto.toString;
-
-/** Used to detect if a method is native. */
-var reIsNative = RegExp('^' +
-  fnToString.call(hasOwnProperty).replace(/[\\^$.*+?()[\]{}|]/g, '\\$&')
-  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
-);
-
-/* Native method references for those with the same name as other `lodash` methods. */
-var nativeIsArray = getNative(Array, 'isArray');
-
-/**
- * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
- * of an array-like value.
- */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/**
- * Gets the native function at `key` of `object`.
- *
- * @private
- * @param {Object} object The object to query.
- * @param {string} key The key of the method to get.
- * @returns {*} Returns the function if it's native, else `undefined`.
- */
-function getNative(object, key) {
-  var value = object == null ? undefined : object[key];
-  return isNative(value) ? value : undefined;
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- */
-function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * Checks if `value` is classified as an `Array` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isArray([1, 2, 3]);
- * // => true
- *
- * _.isArray(function() { return arguments; }());
- * // => false
- */
-var isArray = nativeIsArray || function(value) {
-  return isObjectLike(value) && isLength(value.length) && objToString.call(value) == arrayTag;
-};
-
-/**
- * Checks if `value` is classified as a `Function` object.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
- * @example
- *
- * _.isFunction(_);
- * // => true
- *
- * _.isFunction(/abc/);
- * // => false
- */
-function isFunction(value) {
-  // The use of `Object#toString` avoids issues with the `typeof` operator
-  // in older versions of Chrome and Safari which return 'function' for regexes
-  // and Safari 8 equivalents which return 'object' for typed array constructors.
-  return isObject(value) && objToString.call(value) == funcTag;
-}
-
-/**
- * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
- * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(1);
- * // => false
- */
-function isObject(value) {
-  // Avoid a V8 JIT bug in Chrome 19-20.
-  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-/**
- * Checks if `value` is a native function.
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a native function, else `false`.
- * @example
- *
- * _.isNative(Array.prototype.push);
- * // => true
- *
- * _.isNative(_);
- * // => false
- */
-function isNative(value) {
-  if (value == null) {
-    return false;
-  }
-  if (isFunction(value)) {
-    return reIsNative.test(fnToString.call(value));
-  }
-  return isObjectLike(value) && reIsHostCtor.test(value);
-}
-
-module.exports = isArray;
-
-},{}],77:[function(require,module,exports){
-/**
- * lodash 3.0.3 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/**
- * The base implementation of `_.create` without support for assigning
- * properties to the created object.
- *
- * @private
- * @param {Object} prototype The object to inherit from.
- * @returns {Object} Returns the new object.
- */
-var baseCreate = (function() {
-  function object() {}
-  return function(prototype) {
-    if (isObject(prototype)) {
-      object.prototype = prototype;
-      var result = new object;
-      object.prototype = undefined;
-    }
-    return result || {};
-  };
-}());
-
-/**
- * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
- * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(1);
- * // => false
- */
-function isObject(value) {
-  // Avoid a V8 JIT bug in Chrome 19-20.
-  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-module.exports = baseCreate;
-
-},{}],78:[function(require,module,exports){
-/**
- * lodash 3.0.9 (Custom Build) <https://lodash.com/>
- * Build: `lodash modern modularize exports="npm" -o ./`
- * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
- * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
- * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
- * Available under MIT license <https://lodash.com/license>
- */
-
-/** Used to detect unsigned integer values. */
-var reIsUint = /^\d+$/;
-
-/**
- * Used as the [maximum length](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
- * of an array-like value.
- */
-var MAX_SAFE_INTEGER = 9007199254740991;
-
-/**
- * The base implementation of `_.property` without support for deep paths.
- *
- * @private
- * @param {string} key The key of the property to get.
- * @returns {Function} Returns the new function.
- */
-function baseProperty(key) {
-  return function(object) {
-    return object == null ? undefined : object[key];
-  };
-}
-
-/**
- * Gets the "length" property value of `object`.
- *
- * **Note:** This function is used to avoid a [JIT bug](https://bugs.webkit.org/show_bug.cgi?id=142792)
- * that affects Safari on at least iOS 8.1-8.3 ARM64.
- *
- * @private
- * @param {Object} object The object to query.
- * @returns {*} Returns the "length" value.
- */
-var getLength = baseProperty('length');
-
-/**
- * Checks if `value` is array-like.
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
- */
-function isArrayLike(value) {
-  return value != null && isLength(getLength(value));
-}
-
-/**
- * Checks if `value` is a valid array-like index.
- *
- * @private
- * @param {*} value The value to check.
- * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
- * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
- */
-function isIndex(value, length) {
-  value = (typeof value == 'number' || reIsUint.test(value)) ? +value : -1;
-  length = length == null ? MAX_SAFE_INTEGER : length;
-  return value > -1 && value % 1 == 0 && value < length;
-}
-
-/**
- * Checks if the provided arguments are from an iteratee call.
- *
- * @private
- * @param {*} value The potential iteratee value argument.
- * @param {*} index The potential iteratee index or key argument.
- * @param {*} object The potential iteratee object argument.
- * @returns {boolean} Returns `true` if the arguments are from an iteratee call, else `false`.
- */
-function isIterateeCall(value, index, object) {
-  if (!isObject(object)) {
-    return false;
-  }
-  var type = typeof index;
-  if (type == 'number'
-      ? (isArrayLike(object) && isIndex(index, object.length))
-      : (type == 'string' && index in object)) {
-    var other = object[index];
-    return value === value ? (value === other) : (other !== other);
-  }
-  return false;
-}
-
-/**
- * Checks if `value` is a valid array-like length.
- *
- * **Note:** This function is based on [`ToLength`](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength).
- *
- * @private
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
- */
-function isLength(value) {
-  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-}
-
-/**
- * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
- * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
- *
- * @static
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is an object, else `false`.
- * @example
- *
- * _.isObject({});
- * // => true
- *
- * _.isObject([1, 2, 3]);
- * // => true
- *
- * _.isObject(1);
- * // => false
- */
-function isObject(value) {
-  // Avoid a V8 JIT bug in Chrome 19-20.
-  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
-  var type = typeof value;
-  return !!value && (type == 'object' || type == 'function');
-}
-
-module.exports = isIterateeCall;
-
-},{}],79:[function(require,module,exports){
+},{"_process":51,"child_process":41,"fs":41,"os":50,"path":41}],70:[function(require,module,exports){
 (function (process,global){
+/**
+ * Shim process.stdout.
+ */
+
+process.stdout = require('browser-stdout')();
+
 var Mocha = require('../');
 
 /**
@@ -13074,7 +12306,7 @@ process.on = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
-      return true;
+      return !mocha.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
   }
@@ -13168,12 +12400,6 @@ mocha.run = function(fn){
 };
 
 /**
- * Shim process.stdout.
- */
-
-process.stdout = require('browser-stdout')();
-
-/**
  * Expose the process shim.
  * https://github.com/mochajs/mocha/pull/916
  */
@@ -13188,4 +12414,4 @@ window.Mocha = Mocha;
 window.mocha = mocha;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../":1,"_process":50,"browser-stdout":40}]},{},[79]);
+},{"../":1,"_process":51,"browser-stdout":40}]},{},[70]);
