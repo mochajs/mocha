@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "2.2.5",
+  "version": "2.3.3",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -281,7 +281,6 @@
     "glob": "3.2.3",
     "growl": "1.8.1",
     "jade": "0.26.3",
-    "lodash.create": "^3.1.1",
     "mkdirp": "0.5.0",
     "supports-color": "1.2.0"
   },
@@ -289,7 +288,7 @@
     "browser-stdout": "^1.2.0",
     "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
-    "eslint": "~0.23.0",
+    "eslint": "^1.2.1",
     "should": "~4.0.0",
     "through2": "~0.6.5"
   },

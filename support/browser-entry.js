@@ -53,7 +53,7 @@ process.on = function(e, fn){
   if ('uncaughtException' == e) {
     global.onerror = function(err, url, line){
       fn(new Error(err + ' (' + url + ':' + line + ')'));
-      return true;
+      return !mocha.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
   }

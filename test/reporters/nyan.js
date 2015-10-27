@@ -9,7 +9,7 @@ describe('nyan face', function () {
     nyanCat.face.call(nyanCat).should.equal('( x .x)');
   });
 
-  it('expected nyan face:(x .x) when "peinding" at least one and no failing', function () {
+  it('expected nyan face:(x .x) when "pending" at least one and no failing', function () {
     var nyanCat = new NyanCat({on: function(){}});
     nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
     nyanCat.face.call(nyanCat).should.equal('( o .o)');

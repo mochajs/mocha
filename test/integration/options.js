@@ -96,6 +96,20 @@ describe('options', function() {
         done();
       });
     });
+
+    it('should throw an error if the test suite failed to run', function(done) {
+      run('options/delay-fail.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.failures, 1);
+
+        assert.equal(res.failures[0].title,
+          'Uncaught error outside test suite');
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
   });
 
   describe('--grep', function() {
