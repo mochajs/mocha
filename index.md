@@ -481,7 +481,7 @@ Options:
 
  -h, --help                              output usage information
  -V, --version                           output the version number
- -A, --async-only                        force all tests to take a callback (async)
+ -A, --async-only                        force all tests to take a callback (async) or return a promise
  -c, --colors                            force enabling of colors
  -C, --no-colors                         force disabling of colors
  -G, --growl                             enable growl notification support
