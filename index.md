@@ -112,7 +112,7 @@ $  mocha
 
 ## Assertions
 
-Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as [should.js](https://github.com/shouldjs/should.js), node's regular `assert` module, or others. The following is a list of known assertion libraries for node and/or the browser:
+Mocha allows you to use any assertion library you want, if it throws an error, it will work! This means you can utilize libraries such as:
 
 - [should.js](https://github.com/shouldjs/should.js) BDD style shown throughout these docs
 - [expect.js](https://github.com/LearnBoost/expect.js) expect() style assertions
