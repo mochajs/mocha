@@ -35,6 +35,7 @@ process.argv.slice(2).forEach(function(arg){
     case '--throw-deprecation':
     case '--trace-deprecation':
     case '--allow-natives-syntax':
+    case '--perf-basic-prof':
       args.unshift(arg);
       break;
     default:
