@@ -7,7 +7,7 @@ describe('Runner', function(){
   var suite, runner;
 
   beforeEach(function(){
-    suite = new Suite(null, 'root');
+    suite = new Suite('Suite', 'root');
     runner = new Runner(suite);
   })
 
