@@ -1,3 +1,11 @@
+
+2.3.4 / 2015-11-15
+==================
+
+  * Update debug dependency to 2.2.0
+  * remove duplication of mocha.opts on process.argv
+  * Fix typo in test/reporters/nyan.js
+
 2.3.3 / 2015-09-19
 ==================
 

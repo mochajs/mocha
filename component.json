@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "repo": "mochajs/mocha",
   "description": "simple, flexible, fun test framework",
   "keywords": [
