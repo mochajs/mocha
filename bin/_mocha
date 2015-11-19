@@ -201,10 +201,6 @@ if (program.reporterOptions !== undefined) {
 
 mocha.reporter(program.reporter, reporterOptions);
 
-// interface
-
-mocha.ui(program.ui);
-
 // load reporter
 
 try {
@@ -303,6 +299,10 @@ program.compilers.forEach(function(c) {
 requires.forEach(function(mod) {
   require(mod);
 });
+
+// interface
+
+mocha.ui(program.ui);
 
 //args
 
