@@ -32,6 +32,7 @@ process.argv.slice(2).forEach(function(arg){
     case '--es_staging':
     case '--no-deprecation':
     case '--prof':
+    case '--log-timer-events':
     case '--throw-deprecation':
     case '--trace-deprecation':
     case '--allow-natives-syntax':

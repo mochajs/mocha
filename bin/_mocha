@@ -90,6 +90,7 @@ program
   .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--prof', 'log statistical profiling information')
+  .option('--log-timer-events', 'Time events including external callbacks')
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
   .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
