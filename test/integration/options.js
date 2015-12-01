@@ -151,4 +151,20 @@ describe('options', function() {
       });
     });
   });
+
+  describe('--retries', function() {
+    it('retries after a certain threshold', function (done) {
+      args = ['--retries', '3'];
+      run('options/retries.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.tests, 1);
+        assert.equal(res.tests[0].currentRetry, 3);
+        assert.equal(res.stats.failures, 1);
+        assert.equal(res.code, 1);
+        done();
+      });
+    })
+  });
 });
