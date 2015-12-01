@@ -89,6 +89,14 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#retries(n)', function(){
+    it('should set the number of retries', function(){
+      var run = new Runnable;
+      run.retries(1);
+      run.retries().should.equal(1);
+    })
+  })
+
   describe('.run(fn)', function(){
     describe('when .pending', function(){
       it('should not invoke the callback', function(done){

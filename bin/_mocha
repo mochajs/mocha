@@ -92,6 +92,7 @@ program
   .option('--prof', 'log statistical profiling information')
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
+  .option('--retries <times>', 'set numbers of time to retry a failed test case')
   .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
   .option('--trace', 'trace function calls')
   .option('--trace-deprecation', 'show stack traces on deprecations')
@@ -283,6 +284,10 @@ if (program.delay) mocha.delay();
 // --globals
 
 mocha.globals(globals);
+
+// --retries
+
+if (program.retries) mocha.suite.retries(program.retries);
 
 // custom compiler support
 
