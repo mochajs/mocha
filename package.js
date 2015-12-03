@@ -27,7 +27,7 @@ Package.onUse(function (api) {
     'practicalmeteor:loglevel@1.2.0_2',
     'practicalmeteor:chai@2.1.0_1',
     'practicalmeteor:sinon@1.14.1_2',
-    'practicalmeteor:mocha-core@0.1.3'
+    'practicalmeteor:mocha-core@0.1.4'
   ]);
 
   api.imply([
@@ -78,7 +78,7 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
-    'practicalmeteor:mocha@2.1.0_5',
+    'practicalmeteor:mocha',
     'tinytest']);
 
   api.addFiles('meteor/tests/mocha-globals-test.coffee');
