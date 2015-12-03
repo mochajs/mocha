@@ -1,5 +1,4 @@
 ;(function(){
-
 // CommonJS require()
 
 function require(p){
@@ -466,7 +465,7 @@ function isArray(obj) {
 
 function EventEmitter(){};
 
-  window.practical.mocha.EventEmitter = EventEmitter;
+global.practical.mocha.EventEmitter = EventEmitter;
 
 /*Practical Meteor changes*/
 /**
@@ -2805,9 +2804,9 @@ function HTML(runner, options) {
   });
 }
 
-  // Wee need to expose the client side HTML report to the world,
-  // so we can use it in our ClientServerReporterProxy
-  window.practical.mocha.reporters.HTML = HTML;
+// Wee need to expose the client side HTML report to the world,
+// so we can use it in our ClientServerReporterProxy
+global.practical.mocha.reporters.HTML = HTML;
 /**
  * Makes a URL, preserving querystring ("search") parameters.
  * @param {string} s
@@ -6327,5 +6326,5 @@ mocha.run = function(fn){
 Mocha.process = process;
 
 //  Exposes Mocha class
-practical.mocha.Mocha = Mocha;
+global.practical.mocha.Mocha = Mocha;
 })();
