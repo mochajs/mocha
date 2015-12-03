@@ -34,7 +34,7 @@ Package.onUse(function (api) {
     'practicalmeteor:loglevel@1.2.0_2',
     'practicalmeteor:chai@2.1.0_1',
     'practicalmeteor:sinon@1.14.1_2',
-    'practicalmeteor:mocha-core@0.1.3'
+    'practicalmeteor:mocha-core@0.1.4'
   ]);
 
   // So meteor-web-driver will be available from the command line

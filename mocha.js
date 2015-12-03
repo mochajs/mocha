@@ -2050,7 +2050,7 @@ exports.symbols = {
 };
 
 // With node.js on Windows: use symbols available in terminal default fonts
-if ('win32' == process) {
+if ('win32' == process.platform) {
   exports.symbols.ok = '\u221A';
   exports.symbols.err = '\u00D7';
   exports.symbols.dot = '.';
