@@ -28,9 +28,10 @@ describe '3 - Skipped test', ()->
 
   it '3.2 - should skip test'
 
-describe.skip '4 - Skipped suite', ()->
+describe '4 - Skipped suite', ()->
   it 'should pass', (done)->
-    Meteor.setTimeout =>
+    setTimeout =>
+      throw new Error("Skipped suite")
       done()
     , 1000
 

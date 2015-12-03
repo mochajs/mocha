@@ -1461,7 +1461,7 @@ exports = module.exports = Mocha;
 if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
   var join = path.join
     , cwd = process.cwd();
-  module.paths.push(cwd, join(cwd, 'node_modules'));
+  //module.paths.push(cwd, join(cwd, 'node_modules'));
 }
 
 /**
@@ -5080,6 +5080,8 @@ Runner.prototype.runSuite = function(suite, fn){
  */
 
 Runner.prototype.uncaught = function(err){
+  console.log("Runner.prototype.uncaught", err)
+  console.log("Runner.prototype.uncaught", err.stack)
   if (err) {
     debug('uncaught exception %s', err !== function () {
       return this;
@@ -5124,9 +5126,10 @@ Runner.prototype.run = function(fn){
   var self = this
     , fn = fn || function(){};
 
-  function uncaught(err){
+  var uncaught = Meteor.bindEnvironment(function uncaught(err){
+    console.log("uncaughtcb")
     self.uncaught(err);
-  }
+  });
 
   debug('start');
 
@@ -6186,30 +6189,30 @@ var clearInterval = global.clearInterval;
  * to allow running node code in
  * the browser.
  */
+var process = (global && global.process) || {};
+if (Meteor.isClient){
+  process.exit = function(status){};
+  process.stdout = {};
 
-var process = {};
-process.exit = function(status){};
-process.stdout = {};
+  var uncaughtExceptionHandlers = [];
 
-var uncaughtExceptionHandlers = [];
+  var originalOnerrorHandler = global.onerror;
 
-var originalOnerrorHandler = global.onerror;
+  /**
+   * Remove uncaughtException listener.
+   * Revert to original onerror handler if previously defined.
+   */
 
-/**
- * Remove uncaughtException listener.
- * Revert to original onerror handler if previously defined.
- */
-
-process.removeListener = function(e, fn){
-  if ('uncaughtException' == e) {
-    if (originalOnerrorHandler) {
-      global.onerror = originalOnerrorHandler;
-    } else {
-      global.onerror = function() {};
+  process.removeListener = function(e, fn){
+    if ('uncaughtException' == e) {
+      if (originalOnerrorHandler) {
+        global.onerror = originalOnerrorHandler;
+      } else {
+        global.onerror = function() {};
+      }
+      var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
+      if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
     }
-    var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
-    if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
-  }
 };
 
 /**
@@ -6225,7 +6228,7 @@ process.on = function(e, fn){
     uncaughtExceptionHandlers.push(fn);
   }
 };
-
+  }
 /**
  * Expose mocha.
  */
