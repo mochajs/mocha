@@ -26,10 +26,10 @@ meteor test-packages --driver-package=practicalmeteor:mocha <package(s)>
 
 ### With [spacejam](https://www.npmjs.com/package/spacejam) from the command line
 
-With spacejam, you'll use our [practicalmeteor:mocha-console-reporter](https://atmospherejs.com/practicalmeteor/mocha-console-reporter) as the driver-package to print the test results to the console.
+With spacejam, you'll use our [practicalmeteor:mocha-console-runner](https://atmospherejs.com/practicalmeteor/mocha-console-runner) as the driver-package to print the test results to the console.
 
 ```
-spacejam test-packages --driver-package=practicalmeteor:mocha-console-reporter <package(s)>
+spacejam test-packages --driver-package=practicalmeteor:mocha-console-runner <package(s)>
 ```
 
 ## Differences with [mike:mocha](https://atmospherejs.com/mike/mocha)
