@@ -5099,8 +5099,7 @@ Runner.prototype.uncaught = function(err){
   runnable.clearTimeout();
 
   if (wasAlreadyDone) return;
-
-
+  
   // recover from test
   if ('test' == runnable.type) {
     this.emit('test end', runnable);
@@ -5125,9 +5124,9 @@ Runner.prototype.run = function(fn){
   var self = this
     , fn = fn || function(){};
 
-  var uncaught = Meteor.bindEnvironment(function uncaught(err){
+  var uncaught = function uncaught(err){
     self.uncaught(err);
-  });
+  };
 
   debug('start');
 
