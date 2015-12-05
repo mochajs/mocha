@@ -1461,7 +1461,7 @@ exports = module.exports = Mocha;
 if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
   var join = path.join
     , cwd = process.cwd();
-  //module.paths.push(cwd, join(cwd, 'node_modules'));
+  module && module.paths && module.paths.push(cwd, join(cwd, 'node_modules'));
 }
 
 /**
@@ -5080,8 +5080,6 @@ Runner.prototype.runSuite = function(suite, fn){
  */
 
 Runner.prototype.uncaught = function(err){
-  console.log("Runner.prototype.uncaught", err)
-  console.log("Runner.prototype.uncaught", err.stack)
   if (err) {
     debug('uncaught exception %s', err !== function () {
       return this;
@@ -5101,6 +5099,7 @@ Runner.prototype.uncaught = function(err){
   runnable.clearTimeout();
 
   if (wasAlreadyDone) return;
+
 
   // recover from test
   if ('test' == runnable.type) {
@@ -5127,7 +5126,6 @@ Runner.prototype.run = function(fn){
     , fn = fn || function(){};
 
   var uncaught = Meteor.bindEnvironment(function uncaught(err){
-    console.log("uncaughtcb")
     self.uncaught(err);
   });
 
