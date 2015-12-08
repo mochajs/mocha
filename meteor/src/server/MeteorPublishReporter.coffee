@@ -38,7 +38,7 @@ class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
           log.enter 'onStart', arguments
 #          @added 'start', {total: @stats.total}
           @added 'start', @stats
-          @publisher.ready()
+#          @publisher.ready()
         finally
           log.return()
 
