@@ -17,14 +17,13 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-../../../bin/mocha -R json-stream ./*-none.js 2> /tmp/mocha-glob.txt && {
+../../../bin/mocha -R json-stream ./*-none.js 1> /tmp/mocha-glob.txt || {
     echo Globbing './*-none.js' in `pwd` failed.
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":0,"tests":0,"passes":0,"pending":0,"failures":0,' && {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
-    exit 1
 }
 
 # Globbing in windows command-shell differs completely from unix-style globbing.
@@ -42,14 +41,14 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-../../../bin/mocha -R json-stream  './*-none.js' 2> /tmp/mocha-glob.txt && {
+../../../bin/mocha -R json-stream  './*-none.js' 1> /tmp/mocha-glob.txt || {
     echo Globbing './*-none.js' in `pwd` failed.
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":0,"tests":0,"passes":0,"pending":0,"failures":0,' && {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
-    exit 1
+    exit 0
 }
 
 echo Glob-test passed.
