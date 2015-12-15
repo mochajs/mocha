@@ -16,6 +16,16 @@ describe('hook error handling', function() {
     });
   });
 
+  describe('before hook error tip', function() {
+    before(run('hooks/before.hook.error.tip.js', onlyErrorTitle));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['1) spec 2 "before all" hook:']
+      );
+    });
+  });
+
   describe('before each hook error', function() {
     before(run('hooks/beforeEach.hook.error.js'));
     it('should verify results', function() {
@@ -94,6 +104,16 @@ describe('hook error handling', function() {
     });
   });
 
+  describe('async - before hook error tip', function() {
+    before(run('hooks/before.hook.async.error.tip.js', onlyErrorTitle));
+    it('should verify results', function() {
+      assert.deepEqual(
+        lines,
+        ['1) spec 2 "before all" hook:']
+      );
+    });
+  });
+
   describe('async - before each hook error', function() {
     before(run('hooks/beforeEach.hook.async.error.js'));
     it('should verify results', function() {
@@ -162,7 +182,7 @@ describe('hook error handling', function() {
     });
   });
 
-  function run(fnPath) {
+  function run(fnPath, outputFilter) {
     return function(done) {
       runMocha(fnPath, [], function(err, res) {
         assert.ifError(err);
@@ -172,7 +192,7 @@ describe('hook error handling', function() {
           .map(function(line) {
             return line.trim();
           })
-          .filter(onlyConsoleOutput());
+          .filter(outputFilter || onlyConsoleOutput());
 
         done();
       });
@@ -188,4 +208,8 @@ function onlyConsoleOutput() {
     }
     return !foundSummary && line.length > 0;
   };
+}
+
+function onlyErrorTitle(line) {
+  return !!(/^1\)/).exec(line);
 }
