@@ -1,6 +1,6 @@
-log = new ObjectLogger('MochaRunner', 'debug')
+log = new ObjectLogger('MochaRunner', 'info')
 
-@practical ?= {}
+practical = @practical || {}
 
 publisher = {}
 
@@ -24,16 +24,13 @@ class practical.MochaRunner
           "mocha/run": @runServer.bind(@)
         })
 
-        # We cannot bind an instance method, since we need the this provided by meteor
-        # inside the publish function to control the published documents manually
-        self = @
         Meteor.publish 'mochaServerRunEvents', (runId)->
           try
             log.enter 'Meteor.publish.mochaServerRunEvents'
-            log.info("")
             expect(@ready).to.be.a('function')
             publisher[runId] ?= @
             @ready()
+            # You return any other value but a Cursor it will throw an exception
             return undefined
           catch ex
             log.error ex.stack if ex.stack?
@@ -42,7 +39,6 @@ class practical.MochaRunner
             log.return()
     finally
       log.return()
-
 
 
   escapeGrep: (grep = '')->
@@ -58,18 +54,48 @@ class practical.MochaRunner
   runServer: (runId, grep)=>
     try
       log.enter("runServer", runId)
-      log.info("publisher[runId]", publisher[runId]?)
       expect(runId).to.be.a("string")
       expect(publisher[runId], "publisher").to.be.an("object")
-      mocha.reporter(practical.mocha.MeteorPublishReporter, {
+
+      mochaRunner = new practical.mocha.Mocha()
+      @_addTestsToMochaRunner(mocha.suite, mochaRunner.suite)
+
+      mochaRunner.reporter(practical.mocha.MeteorPublishReporter, {
         grep: @escapeGrep(grep)
         publisher: publisher[runId]
       })
-      boundRun = Meteor.bindEnvironment ->
-        mocha.run Meteor.bindEnvironment (failures)->
-          log.warn 'failures:', failures
 
-      boundRun()
+      mochaRunner.run (failures)->
+        log.warn 'failures:', failures
+
+    finally
+      log.return()
+
+
+  _addTestsToMochaRunner: (fromSuite, toSuite)->
+    try
+      log.enter("_addTestToMochaRunner")
+
+      addHooks = (hookName)->
+        for hook in fromSuite["_#{hookName}"]
+          toSuite[hookName](hook.title, hook.fn)
+        log.debug("Hook #{hookName} for '#{fromSuite.fullTitle()}' added.")
+
+      addHooks("beforeAll")
+      addHooks("afterAll")
+      addHooks("beforeEach")
+      addHooks("afterEach")
+
+      for test in fromSuite.tests
+        test = new practical.mocha.Test(test.title, test.fn)
+        toSuite.addTest(test)
+        log.debug("Tests for '#{fromSuite.fullTitle()}' added.")
+
+      for suite in fromSuite.suites
+        newSuite = practical.mocha.Suite.create(toSuite, suite.title)
+        newSuite.timeout(suite.timeout())
+        log.debug("Suite #{newSuite.fullTitle()}  added to '#{fromSuite.fullTitle()}'.")
+        @_addTestsToMochaRunner(suite, newSuite)
 
     finally
       log.return()
@@ -92,18 +118,17 @@ class practical.MochaRunner
 
   setReporter: (@reporter)->
 
+
   onServerRunSubscriptionReady: =>
     try
       log.enter 'onServerRunSubscriptionReady'
       query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
 
       Meteor.call "mocha/run", @runId,  query.grep, (err)->
-        log.info "tests started"
+        log.debug "tests started"
         log.error(err) if err
 
-
       Tracker.autorun =>
-        log.info "running"
         runOrder = @serverRunEvents.findOne({event: "run order"})
         if runOrder?.data is "serial"
           reporter = new practical.mocha.ClientServerReporter(null, {runOrder: "serial"})
@@ -111,10 +136,9 @@ class practical.MochaRunner
           mocha.reporter(practical.mocha.ClientServerReporter)
           mocha.run(->)
 
-
-
     finally
       log.return()
+
 
   onServerRunSubscriptionError: (meteorError)->
     try

@@ -1,5 +1,8 @@
 log = loglevel.createPackageLogger('mocha:test', 'info')
 
+describe "1- test", ->
+
+
 describe '1 - Array', ->
   describe '1.1 - #indexOf()', ->
     it 'should return -1 when the value is not present', ->
@@ -52,24 +55,33 @@ describe '5 - All sync test suite', ->
     expect(false).to.be.true
 
 describe '6 - All async test suite', ->
+
   before (done)->
+    @keepContext = true
     log.debug 'before'
     Meteor.defer -> done()
+
   after (done)->
     log.debug 'after'
-    Meteor.setTimeout( (-> done()), 1000)
+    Meteor.setTimeout( (-> done()), 500)
+
   beforeEach (done)->
     log.debug 'beforeEach'
-    Meteor.setTimeout( (-> done()), 1000)
+    Meteor.setTimeout( (-> done()), 500)
+
   afterEach (done)->
     log.debug 'afterEach'
-    Meteor.setTimeout( (-> done()), 1000)
+    @timeout(1000)
+    Meteor.setTimeout( (-> done()), 500)
 
   @timeout(5000)
-  it 'passing', (done)->
 
-    expect(true).to.be.true
-    Meteor.setTimeout( (-> done()), 3000)
+
+
+  it 'passing', (done)->
+    expect(@keepContext).to.be.true
+    Meteor.setTimeout( (-> done()), 2500)
+
   it 'throwing', (done)->
     Meteor.defer -> done(new Error('failing'))
 

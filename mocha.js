@@ -943,6 +943,7 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
+global.practical.mocha.Hook = Hook;
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
@@ -5574,6 +5575,7 @@ Suite.prototype.eachTest = function(fn){
   return this;
 };
 
+global.practical.mocha.Suite = Suite
 }); // module: suite.js
 
 require.register("test.js", function(module, exports, require){
@@ -5612,7 +5614,7 @@ F.prototype = Runnable.prototype;
 Test.prototype = new F;
 Test.prototype.constructor = Test;
 
-
+global.practical.mocha.Test = Test;
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){

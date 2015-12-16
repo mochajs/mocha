@@ -1,6 +1,6 @@
 log = new ObjectLogger('MeteorPublishReporter', 'info')
 
-class practical.mocha.MeteorPublishReporter extends practical.mocha.BaseReporter
+class @practical.mocha.MeteorPublishReporter extends @practical.mocha.BaseReporter
 
   # TODO: Change this to use Meteor.bindEnvironment
   @publisher: null
