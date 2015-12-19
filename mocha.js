@@ -1461,6 +1461,7 @@ exports = module.exports = Mocha;
 if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
   var join = path.join
     , cwd = process.cwd();
+  // practicalmeteor change - make sure module.path is defined
   module && module.paths && module.paths.push(cwd, join(cwd, 'node_modules'));
 }
 
@@ -5099,7 +5100,7 @@ Runner.prototype.uncaught = function(err){
   runnable.clearTimeout();
 
   if (wasAlreadyDone) return;
-  
+
   // recover from test
   if ('test' == runnable.type) {
     this.emit('test end', runnable);
@@ -6186,30 +6187,31 @@ var clearInterval = global.clearInterval;
  * to allow running node code in
  * the browser.
  */
+// practicalmeteor change - use real node api process in server side code
 var process = (global && global.process) || {};
 if (Meteor.isClient){
-  process.exit = function(status){};
-  process.stdout = {};
+process.exit = function(status){};
+process.stdout = {};
 
-  var uncaughtExceptionHandlers = [];
+var uncaughtExceptionHandlers = [];
 
-  var originalOnerrorHandler = global.onerror;
+var originalOnerrorHandler = global.onerror;
 
-  /**
-   * Remove uncaughtException listener.
-   * Revert to original onerror handler if previously defined.
-   */
+/**
+ * Remove uncaughtException listener.
+ * Revert to original onerror handler if previously defined.
+ */
 
-  process.removeListener = function(e, fn){
-    if ('uncaughtException' == e) {
-      if (originalOnerrorHandler) {
-        global.onerror = originalOnerrorHandler;
-      } else {
-        global.onerror = function() {};
-      }
-      var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
-      if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
+process.removeListener = function(e, fn){
+  if ('uncaughtException' == e) {
+    if (originalOnerrorHandler) {
+      global.onerror = originalOnerrorHandler;
+    } else {
+      global.onerror = function() {};
     }
+    var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
+    if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
+  }
 };
 
 /**
@@ -6225,7 +6227,7 @@ process.on = function(e, fn){
     uncaughtExceptionHandlers.push(fn);
   }
 };
-  }
+}
 /**
  * Expose mocha.
  */
