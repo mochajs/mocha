@@ -1,8 +1,5 @@
 log = loglevel.createPackageLogger('mocha:test', 'info')
 
-describe "1- test", ->
-
-
 describe '1 - Array', ->
   describe '1.1 - #indexOf()', ->
     it 'should return -1 when the value is not present', ->
@@ -12,6 +9,7 @@ describe '1 - Array', ->
   describe '1.2 - length', ->
     it 'should return length of array', ->
       expect([1,2,3].length).to.equal 3
+
 
 describe '2 - Async test', ()->
   it 'should pass', (done)->
