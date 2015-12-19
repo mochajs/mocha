@@ -5126,9 +5126,9 @@ Runner.prototype.run = function(fn){
   var self = this
     , fn = fn || function(){};
 
-  var uncaught = function uncaught(err){
+  function uncaught(err){
     self.uncaught(err);
-  };
+  }
 
   debug('start');
 
