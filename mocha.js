@@ -465,6 +465,7 @@ function isArray(obj) {
 
 function EventEmitter(){};
 
+// practicalmeteor change
 global.practical.mocha.EventEmitter = EventEmitter;
 
 /*Practical Meteor changes*/
@@ -943,6 +944,7 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
 global.practical.mocha.Hook = Hook;
 }); // module: hook.js
 
@@ -2805,7 +2807,7 @@ function HTML(runner, options) {
     if (stack[0]) stack[0].appendChild(el);
   });
 }
-
+// practicalmeteor changes
 // Wee need to expose the client side HTML report to the world,
 // so we can use it in our ClientServerReporterProxy
 global.practical.mocha.reporters.HTML = HTML;
@@ -5574,7 +5576,7 @@ Suite.prototype.eachTest = function(fn){
   });
   return this;
 };
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
 global.practical.mocha.Suite = Suite
 }); // module: suite.js
 
@@ -5613,7 +5615,7 @@ function F(){};
 F.prototype = Runnable.prototype;
 Test.prototype = new F;
 Test.prototype.constructor = Test;
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
 global.practical.mocha.Test = Test;
 }); // module: test.js
 
@@ -6328,7 +6330,7 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
 //  Exposes Mocha class
 global.practical.mocha.Mocha = Mocha;
 })();

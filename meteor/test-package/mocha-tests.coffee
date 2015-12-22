@@ -29,10 +29,10 @@ describe '3 - Skipped test', ()->
 
   it '3.2 - should skip test'
 
-describe '4 - Skipped suite', ()->
-  it 'should pass', (done)->
+describe '4 - Uncaugth exception', ()->
+  it 'should fail due to an uncaught exception', (done)->
     setTimeout =>
-      throw new Error("Skipped suite")
+      throw new Error("Uncaught exception")
       done()
     , 1000
 
