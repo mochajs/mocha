@@ -115,6 +115,11 @@ test-only:
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
+		test/acceptance/misc/only/bdd-require
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
 		test/acceptance/misc/only/qunit
 
 test-mocha:
