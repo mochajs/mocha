@@ -1,13 +1,14 @@
-var Mocha = require('mocha');
-    Suite = require('mocha/lib/suite'),
-    Test  = require('mocha/lib/test');
+var path  = '../../../../../lib/',
+    Mocha = require(path + 'mocha');
+    Suite = require(path + 'suite'),
+    Test  = require(path + 'test');
 
 /**
  * A simple UI that only exposes a single function: test
  */
 module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
   suite.on('pre-require', function(context, file, mocha) {
-    var common = require('mocha/lib/interfaces/common')([suite], context);
+    var common = require(path + 'interfaces/common')([suite], context);
 
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
