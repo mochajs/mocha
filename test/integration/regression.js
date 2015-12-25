@@ -30,4 +30,13 @@ describe('regressions', function() {
     assert.notEqual(processArgv.indexOf(mochaOpts), -1, 'process.argv missing mocha.opts');
     assert.equal(processArgv.indexOf(mochaOpts), processArgv.lastIndexOf(mochaOpts), 'process.argv contains duplicated mocha.opts');
   });
+
+  it('issue-1794: Can\'t --require custom UI and use it', function(done) {
+    var simpleUiPath = path.join(__dirname, 'fixtures', 'regression', '1794', 'simple-ui.js');
+    var args = ['--require', simpleUiPath, '--ui', 'simple-ui'];
+    run('regression/1794/issue-1794.js', args, function(err, res) {
+      assert.equal(res.code, 0, 'Custom UI should be loaded');
+      done();
+    });
+  });
 });
