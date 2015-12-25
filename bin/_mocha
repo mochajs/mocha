@@ -95,6 +95,7 @@ program
   .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
   .option('--trace', 'trace function calls')
   .option('--trace-deprecation', 'show stack traces on deprecations')
+  .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
 
@@ -207,6 +208,7 @@ mocha.ui(program.ui);
 
 // load reporter
 
+var Reporter = null;
 try {
   Reporter = require('../lib/reporters/' + program.reporter);
 } catch (err) {
