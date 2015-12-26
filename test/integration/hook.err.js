@@ -168,7 +168,7 @@ describe('hook error handling', function() {
         assert.ifError(err);
 
         lines = res.output
-          .split(/[\n․]+/)
+          .split(/[\n․,!]+/)
           .map(function(line) {
             return line.trim();
           })
