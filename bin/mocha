@@ -8,7 +8,12 @@
 var spawn = require('child_process').spawn,
   path = require('path'),
   fs = require('fs'),
+  getOptions = require('./options'),
   args = [path.join(__dirname, '_mocha')];
+
+// Load mocha.opts into process.argv
+// Must be loaded here to handle node-specific options
+getOptions();
 
 process.argv.slice(2).forEach(function(arg){
   var flag = arg.split('=')[0];

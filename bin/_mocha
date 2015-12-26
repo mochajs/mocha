@@ -171,9 +171,10 @@ program.on('require', function(mod){
   requires.push(mod);
 });
 
-// load mocha.opts into process.argv
-
-getOptions();
+// If not already done, load mocha.opts
+if (!process.env.LOADED_MOCHA_OPTS) {
+  getOptions();
+}
 
 // parse args
 

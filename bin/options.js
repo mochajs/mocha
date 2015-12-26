@@ -34,4 +34,6 @@ function getOptions() {
   } catch (err) {
     // ignore
   }
+
+  process.env.LOADED_MOCHA_OPTS = true;
 }
