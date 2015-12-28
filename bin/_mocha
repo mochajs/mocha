@@ -91,6 +91,7 @@ program
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--perf-basic-prof', 'enable perf linux profiler (basic support)')
   .option('--prof', 'log statistical profiling information')
+  .option('--log-timer-events', 'Time events including external callbacks')
   .option('--recursive', 'include sub directories')
   .option('--reporters', 'display available reporters')
   .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
