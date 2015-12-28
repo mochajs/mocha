@@ -151,4 +151,29 @@ describe('options', function() {
       });
     });
   });
+
+  describe('--production', function() {
+    before(function() {
+      args = ['--production'];
+    });
+    it('fails skipped tests, pending tests, and duplicate titles', function(done) {
+      run('options/production.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 3);
+        assert.equal(res.stats.failures, 3);
+        done();
+      });
+    });
+
+    it('fails tests marked only', function(done) {
+      run('options/production-only.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.failures, 1);
+        done();
+      });
+    });
+  });
 });

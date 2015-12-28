@@ -100,6 +100,7 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
+  .option('--production', 'causes pending tests, tests marked only, and tests with duplicate names to fail')
 
 program.name = 'mocha';
 
@@ -284,6 +285,9 @@ if (program.delay) mocha.delay();
 // --globals
 
 mocha.globals(globals);
+
+// --production
+if (program.production) mocha.productionMode();
 
 // custom compiler support
 
