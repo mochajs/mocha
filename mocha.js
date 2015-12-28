@@ -6081,12 +6081,7 @@ exports.canonicalize = function(value, stack) {
       canonicalizedObj = value;
       break;
     default:
-      try {
-        canonicalizedObj = value.toString();
-      } catch (e) {
-        debug("Error invoking `toString()` on value: '%s'", value);
-        canonicalizedObj = value + '';
-      }
+      canonicalizedObj = value.toString();
   }
 
   return canonicalizedObj;
