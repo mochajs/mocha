@@ -435,5 +435,13 @@ describe('Runnable(title, fn)', function(){
         test.run(done);
       })
     })
+
+    try {
+      eval('(function* (){})');
+      require('./harmony/runnable.generators.js')();
+    } catch(err) {
+      // Generators are unavailable
+    }
+
   })
 })
