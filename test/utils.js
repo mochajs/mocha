@@ -56,9 +56,9 @@ describe('utils', function() {
     var parseQuery = utils.parseQuery;
     it('should get queryString and return key-value object', function() {
       parseQuery('?foo=1&bar=2&baz=3').should.eql({
-        foo: 1,
-        bar: 2,
-        baz: 3
+        foo: '1',
+        bar: '2',
+        baz: '3'
       });
 
       parseQuery('?r1=^@(?!.*\\)$)&r2=m{2}&r3=^co.*').should.eql({
