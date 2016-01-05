@@ -1,8 +1,13 @@
 language: node_js
+env:
+  global:
+   - CXX=g++-4.8
 before_install:
 - ./scripts/ensure-compatible-npm.sh
 script: travis_retry npm test
 node_js:
+- '5'
+- '4'
 - 'iojs'
 - '0.12'
 - '0.11'
