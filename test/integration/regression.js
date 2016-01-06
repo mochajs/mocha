@@ -39,4 +39,15 @@ describe('regressions', function() {
       done();
     });
   });
+
+  it('issue-1991: Declarations do not get cleaned up unless you set them to `null` - Memory Leak', function(done) {
+    // on a modern MBP takes ±5 seconds on node 4.0, but on older laptops with node 0.12 ±40 seconds.
+    // Could easily take longer on even weaker machines (Travis-CI containers for example).
+    this.timeout(120000);
+    run('regression/issue-1991.js', [], function(err, res) {
+      assert.equal(/process out of memory/.test(res.output), false, 'fixture\'s process out of memory!');
+      assert.equal(res.code, 0, 'Runnable fn (it/before[Each]/after[Each]) references should be deleted to avoid memory leaks');
+      done();
+    });
+  })
 });
