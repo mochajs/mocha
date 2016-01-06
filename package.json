@@ -290,7 +290,7 @@
     "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
-    "should": "~4.0.0",
+    "should": "~8.0.0",
     "through2": "~0.6.5"
   },
   "files": [
