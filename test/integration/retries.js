@@ -5,44 +5,47 @@ var args   = [];
 describe('retries', function() {
   this.timeout(1000);
 
-  it('are ran in correct order', function(done) {
-    helpers.runMocha('retries/hooks.js', args, function(err, res) {
-      var lines, expected;
+  ['sync', 'async'].forEach(function (type) {
+    it('are ran in correct order', function(done) {
+      helpers.runMocha('retries/hooks-'+type+'.js', args, function(err, res) {
+        var lines, expected;
 
-      assert(!err);
+        assert(!err);
 
-      lines = res.output.split(/[\n․]+/).map(function(line) {
-        return line.trim();
-      }).filter(function(line) {
-        return line.length;
-      }).slice(0, -1);
+        lines = res.output.split(/[\n․]+/).map(function(line) {
+          return line.trim();
+        }).filter(function(line) {
+          return line.length;
+        }).slice(0, -1);
 
-      expected = [
-        'before',
-        'before each 0',
-        'TEST 0',
-        'after each 1',
-        'before each 1',
-        'TEST 1',
-        'after each 2',
-        'before each 2',
-        'TEST 2',
-        'after each 3',
-        'before each 3',
-        'TEST 3',
-        'after each 4',
-        'before each 4',
-        'TEST 4',
-        'after each 5',
-        'after'
-      ];
+        expected = [
+          'before',
+          'before each 0',
+          'TEST 0',
+          'after each 1',
+          'before each 1',
+          'TEST 1',
+          'after each 2',
+          'before each 2',
+          'TEST 2',
+          'after each 3',
+          'before each 3',
+          'TEST 3',
+          'after each 4',
+          'before each 4',
+          'TEST 4',
+          'after each 5',
+          'after'
+        ];
 
-      expected.forEach(function(line, i) {
-        assert.equal(lines[i], line);
+        console.log(lines);
+        expected.forEach(function(line, i) {
+          assert.equal(lines[i], line);
+        });
+
+        assert.equal(res.code, 1);
+        done();
       });
-
-      assert.equal(res.code, 1);
-      done();
     });
   });
 
