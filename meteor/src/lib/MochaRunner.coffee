@@ -1,6 +1,8 @@
 log = new ObjectLogger('MochaRunner', 'info')
 
-@practical ?= {}
+practical = @practical || {}
+
+
 
 class practical.MochaRunner
 
@@ -10,6 +12,7 @@ class practical.MochaRunner
     practical.MochaRunner.instance ?= new practical.MochaRunner()
 
   serverRunEvents: null
+  publishers: {}
 
   constructor: ->
     try
@@ -17,35 +20,106 @@ class practical.MochaRunner
 
       @serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
       if Meteor.isServer
-        # We cannot bind an instance method, since we need the this provided by meteor
-        # inside the publish function to control the published documents manually
-        self = @
-        Meteor.publish 'mochaServerRunEvents', (grep)->
-          try
-            log.enter 'Meteor.publish.mochaServerRunEvents'
-            expect(@ready).to.be.a('function')
+        Meteor.methods({
+          "mocha/runServerTests": @runServerTests.bind(@)
+        })
+        @publish()
 
-
-            #  self is our MochaRunner
-            # @ is publication's this
-            mocha.reporter(practical.mocha.MeteorPublishReporter, {
-              grep: self.escapeGrep(grep)
-              publisher: @
-            })
-            boundRun = Meteor.bindEnvironment ->
-              mocha.run Meteor.bindEnvironment (failures)->
-                log.warn 'failures:', failures
-
-            boundRun()
-            return
-          catch ex
-            log.error ex.stack if ex.stack?
-            throw new Meteor.Error('unknown-error', (if ex.message? then ex.message else undefined), (if ex.stack? then ex.stack else undefined))
-          finally
-            log.return()
     finally
       log.return()
 
+
+
+  publish: ->
+    try
+      log.enter("publish")
+      self = @
+      Meteor.publish 'mochaServerRunEvents', (runId)->
+        try
+          log.enter 'publish.mochaServerRunEvents'
+          expect(@ready).to.be.a('function')
+          self.publishers[runId] ?= @
+          @ready()
+          # You can't return any other value but a Cursor, otherwise it will throw an exception
+          return undefined
+        catch ex
+          log.error ex.stack if ex.stack?
+          throw new Meteor.Error('unknown-error', (if ex.message? then ex.message else undefined), (if ex.stack? then ex.stack else undefined))
+        finally
+          log.return()
+    finally
+      log.return()
+
+
+  runServerTests: (runId, grep)=>
+    try
+      log.enter("runServerTests", runId)
+      expect(runId).to.be.a("string")
+      expect(@publishers[runId], "publisher").to.be.an("object")
+      expect(Meteor.isServer).to.be.true
+
+      mochaRunner = new practical.mocha.Mocha()
+      @_addTestsToMochaRunner(mocha.suite, mochaRunner.suite)
+
+      mochaRunner.reporter(practical.mocha.MeteorPublishReporter, {
+        grep: @escapeGrep(grep)
+        publisher: @publishers[runId]
+      })
+
+      log.info "Starting server side tests with run id #{runId}"
+      mochaRunner.run (failures)->
+        log.warn 'failures:', failures
+
+    finally
+      log.return()
+
+
+  # Recursive function that starts with global suites and adds all sub suites within each global suite
+  _addTestsToMochaRunner: (fromSuite, toSuite)->
+    try
+      log.enter("_addTestToMochaRunner")
+
+      addHooks = (hookName)->
+        for hook in fromSuite["_#{hookName}"]
+          toSuite[hookName](hook.title, hook.fn)
+        log.debug("Hook #{hookName} for '#{fromSuite.fullTitle()}' added.")
+
+      addHooks("beforeAll")
+      addHooks("afterAll")
+      addHooks("beforeEach")
+      addHooks("afterEach")
+
+      for test in fromSuite.tests
+        test = new practical.mocha.Test(test.title, test.fn)
+        toSuite.addTest(test)
+        log.debug("Tests for '#{fromSuite.fullTitle()}' added.")
+
+      for suite in fromSuite.suites
+        newSuite = practical.mocha.Suite.create(toSuite, suite.title)
+        newSuite.timeout(suite.timeout())
+        log.debug("Suite #{newSuite.fullTitle()}  added to '#{fromSuite.fullTitle()}'.")
+        @_addTestsToMochaRunner(suite, newSuite)
+
+    finally
+      log.return()
+
+
+  runEverywhere: ->
+    try
+      log.enter 'runEverywhere'
+      expect(Meteor.isClient).to.be.true
+
+      @runId = Random.id()
+      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', @runId, {
+        onReady: _.bind(@onServerRunSubscriptionReady, @)
+        onError: _.bind(@onServerRunSubscriptionError, @)
+      }
+
+    finally
+      log.return()
+
+
+  setReporter: (@reporter)->
 
   escapeGrep: (grep = '')->
     try
@@ -56,36 +130,26 @@ class practical.MochaRunner
     finally
       log.return()
 
-
-  runEverywhere: ->
-    try
-      log.enter 'runEverywhere'
-      expect(Meteor.isClient).to.be.true
-
-
-      query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
-
-      @serverRunSubscriptionHandle = Meteor.subscribe 'mochaServerRunEvents', query.grep, {
-        onReady: _.bind(@onServerRunSubscriptionReady, @)
-        onError: _.bind(@onServerRunSubscriptionError, @)
-      }
-    finally
-      log.return()
-
-
-  setReporter: (@reporter)->
-
   onServerRunSubscriptionReady: =>
     try
       log.enter 'onServerRunSubscriptionReady'
-      runOrder = @serverRunEvents.findOne({event: "run order"})
-      if runOrder.data is "serial"
-        reporter = new practical.mocha.ClientServerReporter(null, {runOrder: "serial"})
-      else
-        mocha.reporter(practical.mocha.ClientServerReporter)
-        mocha.run(->)
+      query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
+
+      Meteor.call "mocha/runServerTests", @runId,  query.grep, (err)->
+        log.debug "tests started"
+        log.error(err) if err
+
+      Tracker.autorun =>
+        runOrder = @serverRunEvents.findOne({event: "run order"})
+        if runOrder?.data is "serial"
+          reporter = new practical.mocha.ClientServerReporter(null, {runOrder: "serial"})
+        else if runOrder?.data is "parallel"
+          mocha.reporter(practical.mocha.ClientServerReporter)
+          mocha.run(->)
+
     finally
       log.return()
+
 
   onServerRunSubscriptionError: (meteorError)->
     try

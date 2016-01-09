@@ -12,7 +12,7 @@
 
 practical.mocha ?= {}
 
-class practical.mocha.BaseReporter
+class @practical.mocha.BaseReporter
 
   constructor: (@runner, @options)->
     expect(@runner).to.be.an 'object'

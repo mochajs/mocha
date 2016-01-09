@@ -10,6 +10,7 @@ describe '1 - Array', ->
     it 'should return length of array', ->
       expect([1,2,3].length).to.equal 3
 
+
 describe '2 - Async test', ()->
   it 'should pass', (done)->
     Meteor.setTimeout =>
@@ -28,9 +29,10 @@ describe '3 - Skipped test', ()->
 
   it '3.2 - should skip test'
 
-describe.skip '4 - Skipped suite', ()->
-  it 'should pass', (done)->
-    Meteor.setTimeout =>
+describe '4 - Uncaught exception suite', ()->
+  it 'should fail due to an uncaught exception', (done)->
+    setTimeout =>
+      throw new Error("I'm an uncaught exception")
       done()
     , 1000
 
@@ -51,24 +53,33 @@ describe '5 - All sync test suite', ->
     expect(false).to.be.true
 
 describe '6 - All async test suite', ->
+
   before (done)->
+    @keepContext = true
     log.debug 'before'
     Meteor.defer -> done()
+
   after (done)->
     log.debug 'after'
-    Meteor.setTimeout( (-> done()), 1000)
+    Meteor.setTimeout( (-> done()), 500)
+
   beforeEach (done)->
     log.debug 'beforeEach'
-    Meteor.setTimeout( (-> done()), 1000)
+    Meteor.setTimeout( (-> done()), 500)
+
   afterEach (done)->
     log.debug 'afterEach'
-    Meteor.setTimeout( (-> done()), 1000)
+    @timeout(1000)
+    Meteor.setTimeout( (-> done()), 500)
 
   @timeout(5000)
-  it 'passing', (done)->
 
-    expect(true).to.be.true
-    Meteor.setTimeout( (-> done()), 3000)
+
+
+  it 'passing', (done)->
+    expect(@keepContext).to.be.true
+    Meteor.setTimeout( (-> done()), 2500)
+
   it 'throwing', (done)->
     Meteor.defer -> done(new Error('failing'))
 

@@ -465,6 +465,7 @@ function isArray(obj) {
 
 function EventEmitter(){};
 
+// practicalmeteor change
 global.practical.mocha.EventEmitter = EventEmitter;
 
 /*Practical Meteor changes*/
@@ -943,6 +944,8 @@ Hook.prototype.error = function(err){
   this._error = err;
 };
 
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
+global.practical.mocha.Hook = Hook;
 }); // module: hook.js
 
 require.register("interfaces/bdd.js", function(module, exports, require){
@@ -1461,7 +1464,8 @@ exports = module.exports = Mocha;
 if (typeof process !== 'undefined' && typeof process.cwd === 'function') {
   var join = path.join
     , cwd = process.cwd();
-  module.paths.push(cwd, join(cwd, 'node_modules'));
+  // practicalmeteor change - make sure module.path is defined
+  module && module.paths && module.paths.push(cwd, join(cwd, 'node_modules'));
 }
 
 /**
@@ -2803,7 +2807,7 @@ function HTML(runner, options) {
     if (stack[0]) stack[0].appendChild(el);
   });
 }
-
+// practicalmeteor changes
 // Wee need to expose the client side HTML report to the world,
 // so we can use it in our ClientServerReporterProxy
 global.practical.mocha.reporters.HTML = HTML;
@@ -5572,7 +5576,8 @@ Suite.prototype.eachTest = function(fn){
   });
   return this;
 };
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
+global.practical.mocha.Suite = Suite
 }); // module: suite.js
 
 require.register("test.js", function(module, exports, require){
@@ -5610,8 +5615,8 @@ function F(){};
 F.prototype = Runnable.prototype;
 Test.prototype = new F;
 Test.prototype.constructor = Test;
-
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
+global.practical.mocha.Test = Test;
 }); // module: test.js
 
 require.register("utils.js", function(module, exports, require){
@@ -6186,8 +6191,9 @@ var clearInterval = global.clearInterval;
  * to allow running node code in
  * the browser.
  */
-
-var process = {};
+// practicalmeteor change - use real node api process in server side code
+var process = (global && global.process) || {};
+if (Meteor.isClient){
 process.exit = function(status){};
 process.stdout = {};
 
@@ -6225,7 +6231,7 @@ process.on = function(e, fn){
     uncaughtExceptionHandlers.push(fn);
   }
 };
-
+}
 /**
  * Expose mocha.
  */
@@ -6324,7 +6330,7 @@ mocha.run = function(fn){
  */
 
 Mocha.process = process;
-
+// practicalmeteor changes - we put this in global scope so we can instantiate mocha classes for each run
 //  Exposes Mocha class
 global.practical.mocha.Mocha = Mocha;
 })();

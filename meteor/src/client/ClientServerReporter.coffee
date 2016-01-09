@@ -21,6 +21,16 @@ class practical.mocha.ClientServerReporter
       MochaRunner.serverRunEvents.find().observe( {
         added: _.bind(@onServerRunnerEvent, @)
       })
+
+      # Exposes global states of tests
+      @clientRunner.on "start", ->
+        window.mochaIsRunning = true
+
+      @clientRunner.on "end", ->
+        window.mochaIsRunning = false
+        window.mochaIsDone = true
+
+
     finally
       log.return()
 

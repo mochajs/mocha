@@ -1,4 +1,4 @@
-class practical.mocha.JsonStreamReporter extends practical.mocha.BaseReporter
+class @practical.mocha.JsonStreamReporter extends @practical.mocha.BaseReporter
 
   constructor: (runner, options)->
     super(runner, options)
