@@ -68,5 +68,40 @@ describe('retries', function() {
       assert.equal(res.code, 1);
       done();
     });
-  })
+  });
+
+  it.only('should not hang w/ async test', function (done) {
+    helpers.runMocha('retries/async.js', args, function(err, res) {
+      var lines, expected;
+
+      assert(!err);
+
+      lines = res.output.split(/[\n․]+/).map(function(line) {
+        return line.trim();
+      }).filter(function(line) {
+        return line.length;
+      }).slice(0, -1);
+
+      expected = [
+        'before',
+        'before each 0',
+        'TEST 0',
+        'after each 1',
+        'before each 1',
+        'TEST 1',
+        'after each 2',
+        'before each 2',
+        'TEST 2',
+        'after each 3',
+        'after'
+      ];
+
+      expected.forEach(function(line, i) {
+        assert.equal(lines[i], line);
+      });
+
+      assert.equal(res.code, 0);
+      done();
+    });
+  });
 });
