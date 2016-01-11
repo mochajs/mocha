@@ -70,7 +70,7 @@ describe('retries', function() {
     });
   });
 
-  it.only('should not hang w/ async test', function (done) {
+  it('should not hang w/ async test', function (done) {
     helpers.runMocha('retries/async.js', args, function(err, res) {
       var lines, expected;
 
