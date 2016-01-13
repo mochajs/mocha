@@ -26,7 +26,7 @@ htmljs@1.0.5
 http@1.1.1
 id-map@1.0.4
 jquery@1.11.4
-local-test:practicalmeteor:mocha@2.1.0_6
+local-test:practicalmeteor:mocha@2.1.0_7
 logging@1.0.8
 meteor@1.1.10
 minifiers@1.1.7
@@ -38,7 +38,7 @@ observe-sequence@1.0.7
 ordered-dict@1.0.4
 practicalmeteor:chai@2.1.0_1
 practicalmeteor:loglevel@1.2.0_2
-practicalmeteor:mocha@2.1.0_6
+practicalmeteor:mocha@2.1.0_7
 practicalmeteor:mocha-core@0.1.4
 practicalmeteor:sinon@1.14.1_2
 promise@0.5.1
