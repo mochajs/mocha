@@ -39,6 +39,14 @@ describe('Runnable(title, fn)', function(){
       run.timeout(1000)
       run.timeout().should.equal(1000);
     })
+
+    it('should enable timeouts if > 0', function(){
+      var run = new Runnable;
+      run.enableTimeouts(false);
+      run.enableTimeouts().should.equal(false);
+      run.timeout(1000)
+      run.enableTimeouts().should.equal(true);
+    })
   })
 
   describe('#enableTimeouts(enabled)', function(){
