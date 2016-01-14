@@ -157,5 +157,5 @@ Mocha.process = process;
  * Expose mocha.
  */
 
-window.Mocha = Mocha;
-window.mocha = mocha;
+global.Mocha = Mocha;
+global.mocha = mocha;
