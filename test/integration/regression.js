@@ -2,6 +2,7 @@ var assert = require('assert');
 var fs     = require('fs');
 var path   = require('path');
 var run    = require('./helpers').runMocha;
+var runJSON    = require('./helpers').runMochaJSON;
 
 describe('regressions', function() {
   this.timeout(1000);
@@ -50,4 +51,22 @@ describe('regressions', function() {
       done();
     });
   })
+
+  it('issue-1417 uncaught exceptions from async specs', function(done) {
+    runJSON('regression/issue-1417.js', [], function(err, res) {
+      assert(!err);
+      assert.equal(res.stats.pending, 0);
+      assert.equal(res.stats.passes, 0);
+      assert.equal(res.stats.failures, 2);
+
+      assert.equal(res.failures[0].title,
+        'fails exactly once when a global error is thrown synchronously and done errors');
+      assert.equal(res.failures[0].err.message, 'sync error');
+      assert.equal(res.failures[1].title,
+        'fails exactly once when a global error is thrown synchronously and done completes');
+      assert.equal(res.failures[1].err.message, 'sync error');
+      assert.equal(res.code, 2);
+      done();
+    });
+  });
 });
