@@ -3,7 +3,7 @@ var helpers = require('./helpers');
 var args   = [];
 
 describe('retries', function() {
-  this.timeout(1000);
+  this.timeout(2000);
 
   it('are ran in correct order', function(done) {
     helpers.runMocha('retries/hooks.js', args, function(err, res) {
