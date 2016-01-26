@@ -1,3 +1,72 @@
+2.4.0 / 2016-01-25
+==================
+
+* [#1945] - Correctly skip tests when skipping in suite's before() ([@ryanshawty])
+* [#2056] - chore(license): update license year to 2016 ([@pra85])
+* [#2048] - Fix `this.skip` from spec with HTML reporter ([@mislav])
+* [#2033] - Update tests for newer versions of should.js ([@tomhughes])
+* [#2037] - Fix for memory leak caused by referenced to deferred test ([@bd82])
+* [#2038] - Also run Travis-CI on node.js 4 & 5 ([@bd82])
+* [#2028] - Remove reference to test before afterAll hook runs ([@stonelgh])
+* Bump mkdirp to 0.5.1 to support strict mode ([@danielstjules])
+* [#1977] - safely stringify PhantomJS undefined value ([@ahamid])
+* Add the ability to retry tests ([@@longlho])
+* [#1982] - Enable --log-timer-events option [@Alaneor]
+* Fix #1980: Load mocha.opts from bin/mocha and bin/_mocha ([@danielstjules])
+* [#1976] - Simplify function call ([@iclanzan])
+* [#1963] - Add support --perf-basic-prof ([@robraux])
+* [#1981] - Fix HTML reporter handling of done and exceptions ([@Standard8])
+* [#1993] - propagate "file" property for "exports" interface ([@segrey])
+* [#1999] - Add support for strict mode ([@tmont])
+* [#2005] - XUnit Reporter Writes to stdout, falls back to console.log ([@jonnyreeves])
+* [#2021] - Fix non ES5 compliant regexp ([@zetaben])
+* [#1965] - Don't double install BDD UI ([@cowboyd])
+* [#1995] - Make sure the xunit output dir exists before writing to it ([@ianwremmel])
+* Use chalk for the base reporter colors; closes #1200 ([@boneskull])
+* Fix requiring custom interfaces ([@jgkim])
+* [#1967] Silence Bluebird js warnings ([@krisr])
+
+[#1945]: https://github.com/mochajs/mocha/pull/1945
+[#2056]: https://github.com/mochajs/mocha/pull/2056
+[#2048]: https://github.com/mochajs/mocha/pull/2048
+[#2033]: https://github.com/mochajs/mocha/pull/2033
+[#2037]: https://github.com/mochajs/mocha/pull/2037
+[#2038]: https://github.com/mochajs/mocha/pull/2038
+[#2028]: https://github.com/mochajs/mocha/pull/2028
+[#1977]: https://github.com/mochajs/mocha/pull/1977
+[#1982]: https://github.com/mochajs/mocha/pull/1982
+[#1976]: https://github.com/mochajs/mocha/pull/1976
+[#1963]: https://github.com/mochajs/mocha/pull/1963
+[#1981]: https://github.com/mochajs/mocha/pull/1981
+[#1993]: https://github.com/mochajs/mocha/pull/1993
+[#1999]: https://github.com/mochajs/mocha/pull/1999
+[#2005]: https://github.com/mochajs/mocha/pull/2005
+[#2021]: https://github.com/mochajs/mocha/pull/2021
+[1965#]: https://github.com/mochajs/mocha/pull/1965
+[#1995]: https://github.com/mochajs/mocha/pull/1995
+[#1967]: https://github.com/mochajs/mocha/pull/1967
+[@ryanshawty]: https://github.com/ryanshawty
+[@pra85]: https://github.com/pra85
+[@mislav]: https://github.com/mislav
+[@tomhughes]: https://github.com/tomhughes
+[@bd82]: https://github.com/bd82
+[@stonelgh]: https://github.com/stonelgh
+[@danielstjules]: https://github.com/danielstjules
+[@ahamid]: https://github.com/ahamid
+[@longlho]: https://github.com/longlho
+[@Alaneor]: https://github.com/Alaneor
+[@iclanzan]: https://github.com/iclanzan
+[@robraux]: https://github.com/robraux
+[@Standard8]: https://github.com/Standard8
+[@segrey]: https://github.com/segrey
+[@tmont]: https://github.com/tmont
+[@jonnyreeves]: https://github.com/jonnyreeves
+[@zetaben]: https://github.com/zetaben
+[@cowboyd]: https://github.com/cowboyd
+[@ianwremmel]: https://github.com/ianwremmel
+[@boneskull]: https://github.com/boneskull
+[@jgkim]: https://github.com/jgkim
+[@krisr]: https://github.com/krisr
 
 2.3.4 / 2015-11-15
 ==================

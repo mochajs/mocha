@@ -420,6 +420,21 @@ Context.prototype.skip = function() {
 };
 
 /**
+ * Allow a number of retries on failed tests
+ *
+ * @api private
+ * @param {number} n
+ * @return {Context} self
+ */
+Context.prototype.retries = function(n) {
+  if (!arguments.length) {
+    return this.runnable().retries();
+  }
+  this.runnable().retries(n);
+  return this;
+};
+
+/**
  * Inspect the context void of `._runnable`.
  *
  * @api private
@@ -559,7 +574,7 @@ module.exports = function(suite) {
      * acting as a thunk.
      */
 
-    context.it = context.specify = function(title, fn) {
+    var it = context.it = context.specify = function(title, fn) {
       var suite = suites[0];
       if (suite.pending) {
         fn = null;
@@ -575,7 +590,7 @@ module.exports = function(suite) {
      */
 
     context.it.only = function(title, fn) {
-      var test = context.it(title, fn);
+      var test = it(title, fn);
       var reString = '^' + escapeRe(test.fullTitle()) + '$';
       mocha.grep(new RegExp(reString));
       return test;
@@ -588,10 +603,17 @@ module.exports = function(suite) {
     context.xit = context.xspecify = context.it.skip = function(title) {
       context.it(title);
     };
+
+    /**
+     * Number of attempts to retry.
+     */
+    context.it.retries = function(n) {
+      context.retries(n);
+    };
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],9:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":73}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -664,6 +686,15 @@ module.exports = function(suites, context) {
        */
       skip: function(title) {
         context.test(title);
+      },
+
+      /**
+       * Number of retry attempts
+       *
+       * @param {string} n
+       */
+      retries: function(n) {
+        context.retries(n);
       }
     }
   };
@@ -725,7 +756,7 @@ module.exports = function(suite) {
       } else {
         suite = Suite.create(suites[0], key);
         suites.unshift(suite);
-        visit(obj[key]);
+        visit(obj[key], file);
         suites.shift();
       }
     }
@@ -830,10 +861,11 @@ module.exports = function(suite) {
     };
 
     context.test.skip = common.test.skip;
+    context.test.retries = common.test.retries;
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],13:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":73}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -937,10 +969,11 @@ module.exports = function(suite) {
     };
 
     context.test.skip = common.test.skip;
+    context.test.retries = common.test.retries;
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":69}],14:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":73}],14:[function(require,module,exports){
 (function (process,global,__dirname){
 /*!
  * mocha
@@ -1006,6 +1039,7 @@ function image(name) {
  *   - `reporter` reporter instance, defaults to `mocha.reporters.spec`
  *   - `globals` array of accepted globals
  *   - `timeout` timeout in milliseconds
+ *   - `retries` number of times to retry failed tests
  *   - `bail` bail on the first test failure
  *   - `slow` milliseconds to wait before considering a test slow
  *   - `ignoreLeaks` ignore global leaks
@@ -1031,6 +1065,9 @@ function Mocha(options) {
   this.reporter(options.reporter, options.reporterOptions);
   if (typeof options.timeout !== 'undefined' && options.timeout !== null) {
     this.timeout(options.timeout);
+  }
+  if (typeof options.retries !== 'undefined' && options.retries !== null) {
+    this.retries(options.retries);
   }
   this.useColors(options.useColors);
   if (options.enableTimeouts !== null) {
@@ -1153,14 +1190,13 @@ Mocha.prototype.ui = function(name) {
 Mocha.prototype.loadFiles = function(fn) {
   var self = this;
   var suite = this.suite;
-  var pending = this.files.length;
   this.files.forEach(function(file) {
     file = path.resolve(file);
     suite.emit('pre-require', global, file, self);
     suite.emit('require', require(file), file, self);
     suite.emit('post-require', global, file, self);
-    --pending || (fn && fn());
   });
+  fn && fn();
 };
 
 /**
@@ -1317,6 +1353,18 @@ Mocha.prototype.timeout = function(timeout) {
 };
 
 /**
+ * Set the number of times to retry failed tests.
+ *
+ * @param {Number} retry times
+ * @return {Mocha}
+ * @api public
+ */
+Mocha.prototype.retries = function(n) {
+  this.suite.retries(n);
+  return this;
+};
+
+/**
  * Set slowness threshold in milliseconds.
  *
  * @param {Number} slow
@@ -1431,7 +1479,7 @@ Mocha.prototype.run = function(fn) {
 };
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},"/lib")
-},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":52,"escape-string-regexp":69,"growl":70,"path":41}],15:[function(require,module,exports){
+},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":52,"escape-string-regexp":73,"growl":74,"path":41}],15:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -1589,6 +1637,8 @@ var diff = require('diff');
 var ms = require('../ms');
 var utils = require('../utils');
 var supportsColor = process.browser ? null : require('supports-color');
+var chalk = require('chalk');
+chalk.enabled = supportsColor;
 
 /**
  * Expose `Base`.
@@ -1632,25 +1682,25 @@ exports.inlineDiffs = false;
  */
 
 exports.colors = {
-  pass: 90,
-  fail: 31,
-  'bright pass': 92,
-  'bright fail': 91,
-  'bright yellow': 93,
-  pending: 36,
-  suite: 0,
-  'error title': 0,
-  'error message': 31,
-  'error stack': 90,
-  checkmark: 32,
-  fast: 90,
-  medium: 33,
-  slow: 31,
-  green: 32,
-  light: 90,
-  'diff gutter': 90,
-  'diff added': 32,
-  'diff removed': 31
+  pass: chalk.gray,
+  fail: chalk.red,
+  'bright pass': chalk.green.bold,
+  'bright fail': chalk.red.bold,
+  'bright yellow': chalk.yellow.bold,
+  pending: chalk.cyan,
+  suite: chalk.white,
+  'error title': chalk.gray,
+  'error message': chalk.red,
+  'error stack': chalk.white,
+  checkmark: chalk.green,
+  fast: chalk.gray,
+  medium: chalk.yellow,
+  slow: chalk.red,
+  green: chalk.green,
+  light: chalk.white.bold,
+  'diff gutter': chalk.gray,
+  'diff added': chalk.green,
+  'diff removed': chalk.red
 };
 
 /**
@@ -1685,7 +1735,7 @@ var color = exports.color = function(type, str) {
   if (!exports.useColors) {
     return String(str);
   }
-  return '\u001b[' + exports.colors[type] + 'm' + str + '\u001b[0m';
+  return '\u001b[' + exports.colors[type](str) + '\u001b[0m';
 };
 
 /**
@@ -2069,7 +2119,7 @@ function sameType(a, b) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../ms":15,"../utils":39,"_process":52,"diff":68,"supports-color":41,"tty":5}],18:[function(require,module,exports){
+},{"../ms":15,"../utils":39,"_process":52,"chalk":68,"diff":72,"supports-color":41,"tty":5}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -2396,7 +2446,10 @@ function HTML(runner) {
   });
 
   runner.on('fail', function(test) {
-    if (test.type === 'hook') {
+    // For type = 'test' its possible that the test failed due to multiple
+    // done() calls. So report the issue here.
+    if (test.type === 'hook'
+      || test.type === 'test') {
       runner.emit('test end', test);
     }
   });
@@ -2593,7 +2646,7 @@ function on(el, event, fn) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":69}],22:[function(require,module,exports){
+},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":73}],22:[function(require,module,exports){
 // Alias exports to a their normalized format Mocha#reporter to prevent a need
 // for dynamic (try/catch) requires, which Browserify doesn't handle.
 exports.Base = exports.base = require('./base');
@@ -2762,6 +2815,7 @@ function coverage(filename, data) {
 function clean(test) {
   return {
     duration: test.duration,
+    currentRetry: test.currentRetry(),
     fullTitle: test.fullTitle(),
     title: test.title
   };
@@ -2826,7 +2880,8 @@ function clean(test) {
   return {
     title: test.title,
     fullTitle: test.fullTitle(),
-    duration: test.duration
+    duration: test.duration,
+    currentRetry: test.currentRetry()
   };
 }
 
@@ -2904,6 +2959,7 @@ function clean(test) {
     title: test.title,
     fullTitle: test.fullTitle(),
     duration: test.duration,
+    currentRetry: test.currentRetry(),
     err: errorJSON(test.err || {})
   };
 }
@@ -3740,7 +3796,7 @@ function title(test) {
 }
 
 },{"./base":17}],34:[function(require,module,exports){
-(function (global){
+(function (process,global){
 /**
  * Module dependencies.
  */
@@ -3750,6 +3806,8 @@ var utils = require('../utils');
 var inherits = utils.inherits;
 var fs = require('fs');
 var escape = utils.escape;
+var mkdirp = require('mkdirp');
+var path = require('path');
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -3786,6 +3844,7 @@ function XUnit(runner, options) {
     if (!fs.createWriteStream) {
       throw new Error('file output not supported in browser');
     }
+    mkdirp.sync(path.dirname(options.reporterOptions.output));
     self.fileStream = fs.createWriteStream(options.reporterOptions.output);
   }
 
@@ -3849,6 +3908,8 @@ XUnit.prototype.done = function(failures, fn) {
 XUnit.prototype.write = function(line) {
   if (this.fileStream) {
     this.fileStream.write(line + '\n');
+  } else if (typeof process === 'object' && process.stdout) {
+    process.stdout.write(line + '\n');
   } else {
     console.log(line);
   }
@@ -3911,8 +3972,8 @@ function cdata(str) {
   return '<![CDATA[' + escape(str) + ']]>';
 }
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils":39,"./base":17,"fs":41}],35:[function(require,module,exports){
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"../utils":39,"./base":17,"_process":52,"fs":41,"mkdirp":75,"path":41}],35:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -3968,6 +4029,8 @@ function Runnable(title, fn) {
   this._enableTimeouts = true;
   this.timedOut = false;
   this._trace = new Error('done() called multiple times');
+  this._retries = -1;
+  this._currentRetry = 0;
 }
 
 /**
@@ -4045,6 +4108,30 @@ Runnable.prototype.skip = function() {
 };
 
 /**
+ * Set number of retries.
+ *
+ * @api private
+ */
+Runnable.prototype.retries = function(n) {
+  if (!arguments.length) {
+    return this._retries;
+  }
+  this._retries = n;
+};
+
+/**
+ * Get current retry
+ *
+ * @api private
+ */
+Runnable.prototype.currentRetry = function(n) {
+  if (!arguments.length) {
+    return this._currentRetry;
+  }
+  this._currentRetry = n;
+};
+
+/**
  * Return the full title generated by recursively concatenating the parent's
  * full title.
  *
@@ -4114,6 +4201,9 @@ Runnable.prototype.resetTimeout = function() {
  * @param {string[]} globals
  */
 Runnable.prototype.globals = function(globals) {
+  if (!arguments.length) {
+    return this._allowedGlobals;
+  }
   this._allowedGlobals = globals;
 };
 
@@ -4205,6 +4295,9 @@ Runnable.prototype.run = function(fn) {
       result
         .then(function() {
           done();
+          // Return null so libraries like bluebird do not warn about
+          // subsequently constructed Promises.
+          return null;
         },
         function(reason) {
           done(reason || new Error('Promise rejected with no or falsy reason'));
@@ -4255,6 +4348,7 @@ var stackFilter = utils.stackTraceFilter();
 var stringify = utils.stringify;
 var type = utils.type;
 var undefinedError = utils.undefinedError;
+var isArray = utils.isArray;
 
 /**
  * Non-enumerable globals.
@@ -4746,8 +4840,12 @@ Runner.prototype.runTests = function(suite, fn) {
       return;
     }
 
+    function parentPending(suite) {
+      return suite.pending || (suite.parent && parentPending(suite.parent));
+    }
+
     // pending
-    if (test.pending) {
+    if (test.pending || parentPending(test.parent)) {
       self.emit('pending', test);
       self.emit('test end', test);
       return next();
@@ -4767,10 +4865,19 @@ Runner.prototype.runTests = function(suite, fn) {
       self.currentRunnable = self.test;
       self.runTest(function(err) {
         test = self.test;
-
         if (err) {
+          var retry = test.currentRetry();
           if (err instanceof Pending) {
+            test.pending = true;
             self.emit('pending', test);
+          } else if (retry < test.retries()) {
+            var clonedTest = test.clone();
+            clonedTest.currentRetry(retry + 1);
+            tests.unshift(clonedTest);
+
+            // Early return + hook trigger so that it doesn't
+            // increment the count wrong
+            return self.hookUp('afterEach', next);
           } else {
             self.fail(test, err);
           }
@@ -4861,6 +4968,10 @@ Runner.prototype.runSuite = function(suite, fn) {
       // mark that the afterAll block has been called once
       // and so can be skipped if there is an error in it.
       afterAllHookCalled = true;
+
+      // remove reference to test
+      delete self.test;
+
       self.hook('afterAll', function() {
         self.emit('suite end', suite);
         fn(errSuite);
@@ -4948,6 +5059,49 @@ Runner.prototype.uncaught = function(err) {
 };
 
 /**
+ * Cleans up the reference to the test's deferred function.
+ * @see cleanSuiteReferences for details.
+ * @param {Test} test
+ */
+function cleanTestReferences(test) {
+  delete test.fn;
+}
+
+/**
+ * Cleans up the references to all the deferred functions
+ * (before/after/beforeEach/afterEach) of a Suite.
+ * These must be deleted otherwise a memory leak can happen,
+ * as those functions may reference variables from closures,
+ * thus those variables can never be garbage collected as long
+ * as the deferred functions exist.
+ *
+ * @param {Suite} suite
+ */
+function cleanSuiteReferences(suite) {
+  function cleanArrReferences(arr) {
+    for (var i = 0; i < arr.length; i++) {
+      delete arr[i].fn;
+    }
+  }
+
+  if (isArray(suite._beforeAll)) {
+    cleanArrReferences(suite._beforeAll);
+  }
+
+  if (isArray(suite._beforeEach)) {
+    cleanArrReferences(suite._beforeEach);
+  }
+
+  if (isArray(suite._afterAll)) {
+    cleanArrReferences(suite._afterAll);
+  }
+
+  if (isArray(suite._afterEach)) {
+    cleanArrReferences(suite._afterEach);
+  }
+}
+
+/**
  * Run the root suite and invoke `fn(failures)`
  * on completion.
  *
@@ -4977,6 +5131,10 @@ Runner.prototype.run = function(fn) {
   }
 
   debug('start');
+
+  // references cleanup to avoid memory leaks
+  this.on('test end', cleanTestReferences);
+  this.on('suite end', cleanSuiteReferences);
 
   // callback
   this.on('end', function() {
@@ -5143,6 +5301,7 @@ function Suite(title, parentContext) {
   this._enableTimeouts = true;
   this._slow = 75;
   this._bail = false;
+  this._retries = -1;
   this.delayed = false;
 }
 
@@ -5162,6 +5321,7 @@ Suite.prototype.clone = function() {
   debug('clone');
   suite.ctx = this.ctx;
   suite.timeout(this.timeout());
+  suite.retries(this.retries());
   suite.enableTimeouts(this.enableTimeouts());
   suite.slow(this.slow());
   suite.bail(this.bail());
@@ -5187,6 +5347,22 @@ Suite.prototype.timeout = function(ms) {
   }
   debug('timeout %d', ms);
   this._timeout = parseInt(ms, 10);
+  return this;
+};
+
+/**
+ * Set number of times to retry a failed test.
+ *
+ * @api private
+ * @param {number|string} n
+ * @return {Suite|number} for chaining
+ */
+Suite.prototype.retries = function(n) {
+  if (!arguments.length) {
+    return this._retries;
+  }
+  debug('retries %d', n);
+  this._retries = parseInt(n, 10) || 0;
   return this;
 };
 
@@ -5262,6 +5438,7 @@ Suite.prototype.beforeAll = function(title, fn) {
   var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.retries(this.retries());
   hook.enableTimeouts(this.enableTimeouts());
   hook.slow(this.slow());
   hook.ctx = this.ctx;
@@ -5291,6 +5468,7 @@ Suite.prototype.afterAll = function(title, fn) {
   var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.retries(this.retries());
   hook.enableTimeouts(this.enableTimeouts());
   hook.slow(this.slow());
   hook.ctx = this.ctx;
@@ -5320,6 +5498,7 @@ Suite.prototype.beforeEach = function(title, fn) {
   var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.retries(this.retries());
   hook.enableTimeouts(this.enableTimeouts());
   hook.slow(this.slow());
   hook.ctx = this.ctx;
@@ -5349,6 +5528,7 @@ Suite.prototype.afterEach = function(title, fn) {
   var hook = new Hook(title, fn);
   hook.parent = this;
   hook.timeout(this.timeout());
+  hook.retries(this.retries());
   hook.enableTimeouts(this.enableTimeouts());
   hook.slow(this.slow());
   hook.ctx = this.ctx;
@@ -5367,6 +5547,7 @@ Suite.prototype.afterEach = function(title, fn) {
 Suite.prototype.addSuite = function(suite) {
   suite.parent = this;
   suite.timeout(this.timeout());
+  suite.retries(this.retries());
   suite.enableTimeouts(this.enableTimeouts());
   suite.slow(this.slow());
   suite.bail(this.bail());
@@ -5385,6 +5566,7 @@ Suite.prototype.addSuite = function(suite) {
 Suite.prototype.addTest = function(test) {
   test.parent = this;
   test.timeout(this.timeout());
+  test.retries(this.retries());
   test.enableTimeouts(this.enableTimeouts());
   test.slow(this.slow());
   test.ctx = this.ctx;
@@ -5478,6 +5660,20 @@ function Test(title, fn) {
  * Inherit from `Runnable.prototype`.
  */
 inherits(Test, Runnable);
+
+Test.prototype.clone = function() {
+  var test = new Test(this.title, this.fn);
+  test.timeout(this.timeout());
+  test.slow(this.slow());
+  test.enableTimeouts(this.enableTimeouts());
+  test.retries(this.retries());
+  test.currentRetry(this.currentRetry());
+  test.globals(this.globals());
+  test.parent = this.parent;
+  test.file = this.file;
+  test.ctx = this.ctx;
+  return test;
+};
 
 },{"./runnable":35,"./utils":39}],39:[function(require,module,exports){
 (function (process,Buffer){
@@ -5670,6 +5866,8 @@ var isArray = typeof Array.isArray === 'function' ? Array.isArray : function(obj
   return Object.prototype.toString.call(obj) === '[object Array]';
 };
 
+exports.isArray = isArray;
+
 /**
  * Buffer.prototype.toJSON polyfill.
  *
@@ -5744,7 +5942,7 @@ exports.slug = function(str) {
 exports.clean = function(str) {
   str = str
     .replace(/\r\n?|[\n\u2028\u2029]/g, '\n').replace(/^\uFEFF/, '')
-    .replace(/^function *\(.*\)\s*{|\(.*\) *=> *{?/, '')
+    .replace(/^function *\(.*\)\s*\{|\(.*\) *=> *\{?/, '')
     .replace(/\s+\}$/, '');
 
   var spaces = str.match(/^\n?( *)/)[1].length;
@@ -6081,7 +6279,7 @@ exports.canonicalize = function(value, stack) {
       canonicalizedObj = value;
       break;
     default:
-      canonicalizedObj = value.toString();
+      canonicalizedObj = value + '';
   }
 
   return canonicalizedObj;
@@ -6264,9 +6462,11 @@ arguments[4][41][0].apply(exports,arguments)
  */
 /* eslint-disable no-proto */
 
+'use strict'
+
 var base64 = require('base64-js')
 var ieee754 = require('ieee754')
-var isArray = require('is-array')
+var isArray = require('isarray')
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -6346,8 +6546,10 @@ function Buffer (arg) {
     return new Buffer(arg)
   }
 
-  this.length = 0
-  this.parent = undefined
+  if (!Buffer.TYPED_ARRAY_SUPPORT) {
+    this.length = 0
+    this.parent = undefined
+  }
 
   // Common case.
   if (typeof arg === 'number') {
@@ -6478,6 +6680,10 @@ function fromJsonObject (that, object) {
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype
   Buffer.__proto__ = Uint8Array
+} else {
+  // pre-set for values that may exist in the future
+  Buffer.prototype.length = undefined
+  Buffer.prototype.parent = undefined
 }
 
 function allocate (that, length) {
@@ -6627,10 +6833,6 @@ function byteLength (string, encoding) {
   }
 }
 Buffer.byteLength = byteLength
-
-// pre-set for values that may exist in the future
-Buffer.prototype.length = undefined
-Buffer.prototype.parent = undefined
 
 function slowToString (encoding, start, end) {
   var loweredCase = false
@@ -7723,7 +7925,7 @@ function utf8ToBytes (string, units) {
       }
 
       // valid surrogate pair
-      codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -7802,7 +8004,7 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":44,"ieee754":45,"is-array":46}],44:[function(require,module,exports){
+},{"base64-js":44,"ieee754":45,"isarray":46}],44:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -8015,38 +8217,10 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }
 
 },{}],46:[function(require,module,exports){
+var toString = {}.toString;
 
-/**
- * isArray
- */
-
-var isArray = Array.isArray;
-
-/**
- * toString
- */
-
-var str = Object.prototype.toString;
-
-/**
- * Whether or not the given `val`
- * is an array.
- *
- * example:
- *
- *        isArray([]);
- *        // > true
- *        isArray(arguments);
- *        // > false
- *        isArray('');
- *        // > false
- *
- * @param {mixed} val
- * @return {bool}
- */
-
-module.exports = isArray || function (val) {
-  return !! val && '[object Array]' == str.call(val);
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
 };
 
 },{}],47:[function(require,module,exports){
@@ -10357,8 +10531,12 @@ function endWritable(stream, state, cb) {
 
 // NOTE: These type checking functions intentionally don't use `instanceof`
 // because it is fragile and can be easily faked with `Object.create()`.
-function isArray(ar) {
-  return Array.isArray(ar);
+
+function isArray(arg) {
+  if (Array.isArray) {
+    return Array.isArray(arg);
+  }
+  return objectToString(arg) === '[object Array]';
 }
 exports.isArray = isArray;
 
@@ -10398,7 +10576,7 @@ function isUndefined(arg) {
 exports.isUndefined = isUndefined;
 
 function isRegExp(re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]';
+  return objectToString(re) === '[object RegExp]';
 }
 exports.isRegExp = isRegExp;
 
@@ -10408,13 +10586,12 @@ function isObject(arg) {
 exports.isObject = isObject;
 
 function isDate(d) {
-  return isObject(d) && objectToString(d) === '[object Date]';
+  return objectToString(d) === '[object Date]';
 }
 exports.isDate = isDate;
 
 function isError(e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
+  return (objectToString(e) === '[object Error]' || e instanceof Error);
 }
 exports.isError = isError;
 
@@ -10433,14 +10610,12 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-function isBuffer(arg) {
-  return Buffer.isBuffer(arg);
-}
-exports.isBuffer = isBuffer;
+exports.isBuffer = Buffer.isBuffer;
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
+
 }).call(this,{"isBuffer":require("../../../../insert-module-globals/node_modules/is-buffer/index.js")})
 },{"../../../../insert-module-globals/node_modules/is-buffer/index.js":49}],60:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
@@ -11410,6 +11585,153 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":66,"_process":52,"inherits":48}],68:[function(require,module,exports){
+'use strict';
+var ansi = require('ansi-styles');
+var stripAnsi = require('strip-ansi');
+var hasColor = require('has-color');
+var defineProps = Object.defineProperties;
+var chalk = module.exports;
+
+var styles = (function () {
+	var ret = {};
+
+	ansi.grey = ansi.gray;
+
+	Object.keys(ansi).forEach(function (key) {
+		ret[key] = {
+			get: function () {
+				this._styles.push(key);
+				return this;
+			}
+		};
+	});
+
+	return ret;
+})();
+
+function init() {
+	var ret = {};
+
+	Object.keys(styles).forEach(function (name) {
+		ret[name] = {
+			get: function () {
+				var obj = defineProps(function self() {
+					var str = [].slice.call(arguments).join(' ');
+
+					if (!chalk.enabled) {
+						return str;
+					}
+
+					return self._styles.reduce(function (str, name) {
+						var code = ansi[name];
+						return str ? code.open + str + code.close : '';
+					}, str);
+				}, styles);
+
+				obj._styles = [];
+
+				return obj[name];
+			}
+		}
+	});
+
+	return ret;
+}
+
+defineProps(chalk, init());
+
+chalk.styles = ansi;
+chalk.stripColor = stripAnsi;
+chalk.supportsColor = hasColor;
+
+// detect mode if not set manually
+if (chalk.enabled === undefined) {
+	chalk.enabled = chalk.supportsColor;
+}
+
+},{"ansi-styles":69,"has-color":70,"strip-ansi":71}],69:[function(require,module,exports){
+'use strict';
+var styles = module.exports;
+
+var codes = {
+	reset: [0, 0],
+
+	bold: [1, 22],
+	italic: [3, 23],
+	underline: [4, 24],
+	inverse: [7, 27],
+	strikethrough: [9, 29],
+
+	black: [30, 39],
+	red: [31, 39],
+	green: [32, 39],
+	yellow: [33, 39],
+	blue: [34, 39],
+	magenta: [35, 39],
+	cyan: [36, 39],
+	white: [37, 39],
+	gray: [90, 39],
+
+	bgBlack: [40, 49],
+	bgRed: [41, 49],
+	bgGreen: [42, 49],
+	bgYellow: [43, 49],
+	bgBlue: [44, 49],
+	bgMagenta: [45, 49],
+	bgCyan: [46, 49],
+	bgWhite: [47, 49]
+};
+
+Object.keys(codes).forEach(function (key) {
+	var val = codes[key];
+	var style = styles[key] = {};
+	style.open = '\x1b[' + val[0] + 'm';
+	style.close = '\x1b[' + val[1] + 'm';
+});
+
+},{}],70:[function(require,module,exports){
+(function (process){
+'use strict';
+module.exports = (function () {
+	if (process.argv.indexOf('--no-color') !== -1) {
+		return false;
+	}
+
+	if (process.argv.indexOf('--color') !== -1) {
+		return true;
+	}
+
+	if (process.stdout && !process.stdout.isTTY) {
+		return false;
+	}
+
+	if (process.platform === 'win32') {
+		return true;
+	}
+
+	if ('COLORTERM' in process.env) {
+		return true;
+	}
+
+	if (process.env.TERM === 'dumb') {
+		return false;
+	}
+
+	if (/^screen|^xterm|^vt100|color|ansi|cygwin|linux/i.test(process.env.TERM)) {
+		return true;
+	}
+
+	return false;
+})();
+
+}).call(this,require('_process'))
+},{"_process":52}],71:[function(require,module,exports){
+'use strict';
+module.exports = function (str) {
+	return typeof str === 'string' ? str.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') : str;
+};
+
+},{}],72:[function(require,module,exports){
 /* See LICENSE file for terms of use */
 
 /*
@@ -12030,7 +12352,7 @@ function hasOwnProperty(obj, prop) {
   }
 }(this));
 
-},{}],69:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 'use strict';
 
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -12043,7 +12365,7 @@ module.exports = function (str) {
 	return str.replace(matchOperatorsRe,  '\\$&');
 };
 
-},{}],70:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 (function (process){
 // Growl - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
@@ -12281,7 +12603,109 @@ function growl(msg, options, fn) {
 };
 
 }).call(this,require('_process'))
-},{"_process":52,"child_process":41,"fs":41,"os":51,"path":41}],71:[function(require,module,exports){
+},{"_process":52,"child_process":41,"fs":41,"os":51,"path":41}],75:[function(require,module,exports){
+(function (process){
+var path = require('path');
+var fs = require('fs');
+var _0777 = parseInt('0777', 8);
+
+module.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
+
+function mkdirP (p, opts, f, made) {
+    if (typeof opts === 'function') {
+        f = opts;
+        opts = {};
+    }
+    else if (!opts || typeof opts !== 'object') {
+        opts = { mode: opts };
+    }
+    
+    var mode = opts.mode;
+    var xfs = opts.fs || fs;
+    
+    if (mode === undefined) {
+        mode = _0777 & (~process.umask());
+    }
+    if (!made) made = null;
+    
+    var cb = f || function () {};
+    p = path.resolve(p);
+    
+    xfs.mkdir(p, mode, function (er) {
+        if (!er) {
+            made = made || p;
+            return cb(null, made);
+        }
+        switch (er.code) {
+            case 'ENOENT':
+                mkdirP(path.dirname(p), opts, function (er, made) {
+                    if (er) cb(er, made);
+                    else mkdirP(p, opts, cb, made);
+                });
+                break;
+
+            // In the case of any other error, just see if there's a dir
+            // there already.  If so, then hooray!  If not, then something
+            // is borked.
+            default:
+                xfs.stat(p, function (er2, stat) {
+                    // if the stat fails, then that's super weird.
+                    // let the original error be the failure reason.
+                    if (er2 || !stat.isDirectory()) cb(er, made)
+                    else cb(null, made);
+                });
+                break;
+        }
+    });
+}
+
+mkdirP.sync = function sync (p, opts, made) {
+    if (!opts || typeof opts !== 'object') {
+        opts = { mode: opts };
+    }
+    
+    var mode = opts.mode;
+    var xfs = opts.fs || fs;
+    
+    if (mode === undefined) {
+        mode = _0777 & (~process.umask());
+    }
+    if (!made) made = null;
+
+    p = path.resolve(p);
+
+    try {
+        xfs.mkdirSync(p, mode);
+        made = made || p;
+    }
+    catch (err0) {
+        switch (err0.code) {
+            case 'ENOENT' :
+                made = sync(path.dirname(p), opts, made);
+                sync(p, opts, made);
+                break;
+
+            // In the case of any other error, just see if there's a dir
+            // there already.  If so, then hooray!  If not, then something
+            // is borked.
+            default:
+                var stat;
+                try {
+                    stat = xfs.statSync(p);
+                }
+                catch (err1) {
+                    throw err0;
+                }
+                if (!stat.isDirectory()) throw err0;
+                break;
+        }
+    }
+
+    return made;
+};
+
+}).call(this,require('_process'))
+},{"_process":52,"fs":41,"path":41}],76:[function(require,module,exports){
 (function (process,global){
 /**
  * Shim process.stdout.
@@ -12446,4 +12870,4 @@ window.Mocha = Mocha;
 window.mocha = mocha;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../":1,"_process":52,"browser-stdout":40}]},{},[71]);
+},{"../":1,"_process":52,"browser-stdout":40}]},{},[76]);
