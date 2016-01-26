@@ -1,3 +1,10 @@
+2.4.1 / 2016-01-26
+==================
+
+* [#2067] - Fix HTML/doc reporter regressions ([@danielstjules])
+
+[#2067]: https://github.com/mochajs/mocha/pull/2067
+
 2.4.0 / 2016-01-25
 ==================
 
