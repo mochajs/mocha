@@ -5059,17 +5059,8 @@ Runner.prototype.uncaught = function(err) {
 };
 
 /**
- * Cleans up the reference to the test's deferred function.
- * @see cleanSuiteReferences for details.
- * @param {Test} test
- */
-function cleanTestReferences(test) {
-  delete test.fn;
-}
-
-/**
  * Cleans up the references to all the deferred functions
- * (before/after/beforeEach/afterEach) of a Suite.
+ * (before/after/beforeEach/afterEach) and tests of a Suite.
  * These must be deleted otherwise a memory leak can happen,
  * as those functions may reference variables from closures,
  * thus those variables can never be garbage collected as long
@@ -5098,6 +5089,10 @@ function cleanSuiteReferences(suite) {
 
   if (isArray(suite._afterEach)) {
     cleanArrReferences(suite._afterEach);
+  }
+
+  for (var i = 0; i < suite.tests.length; i++) {
+    delete suite.tests[i].fn;
   }
 }
 
@@ -5133,7 +5128,6 @@ Runner.prototype.run = function(fn) {
   debug('start');
 
   // references cleanup to avoid memory leaks
-  this.on('test end', cleanTestReferences);
   this.on('suite end', cleanSuiteReferences);
 
   // callback
