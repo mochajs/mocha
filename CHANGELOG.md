@@ -1,3 +1,15 @@
+2.4.2 / 2016-01-26
+
+* [#2053] - Fix web worker compatibility ([@mislav])
+* [#2072] - Fix Windows color output ([@thedark1337])
+* [#2073] - Fix colors in `progress` and `landing` reporters ([@gyandeeps])
+
+[#2053]: https://github.com/mochajs/mocha/pull/2053
+[#2072]: https://github.com/mochajs/mocha/pull/2072
+[#2073]: https://github.com/mochajs/mocha/pull/2073
+[@gyandeeps]: https://github.com/gyandeeps
+[@thedark1337]: https://github.com/thedark1337
+
 2.4.1 / 2016-01-26
 ==================
 
