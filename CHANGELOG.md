@@ -1,4 +1,5 @@
 2.4.2 / 2016-01-26
+==================
 
 * [#2053] - Fix web worker compatibility ([@mislav])
 * [#2072] - Fix Windows color output ([@thedark1337])
