@@ -15,6 +15,7 @@ mocha.js: $(SRC) $(SUPPORT)
 		--ignore 'jade' \
 		--ignore 'path' \
 		--ignore 'supports-color' \
+		--require ./lib/browser/chalk.js:chalk \
 		--exclude './lib-cov/mocha' > $@
 
 clean:

@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (process){
 module.exports = process.env.COV
   ? require('./lib-cov/mocha')
@@ -613,7 +613,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":72}],9:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],9:[function(require,module,exports){
 'use strict';
 
 /**
@@ -865,7 +865,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":72}],13:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -973,7 +973,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":72}],14:[function(require,module,exports){
+},{"../suite":37,"../test":38,"./common":9,"escape-string-regexp":68}],14:[function(require,module,exports){
 (function (process,global,__dirname){
 /*!
  * mocha
@@ -1479,7 +1479,7 @@ Mocha.prototype.run = function(fn) {
 };
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},"/lib")
-},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":51,"escape-string-regexp":72,"growl":73,"path":41}],15:[function(require,module,exports){
+},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":22,"./runnable":35,"./runner":36,"./suite":37,"./test":38,"./utils":39,"_process":51,"escape-string-regexp":68,"growl":69,"path":41}],15:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -2119,7 +2119,7 @@ function sameType(a, b) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../ms":15,"../utils":39,"_process":51,"chalk":67,"diff":71,"supports-color":41,"tty":5}],18:[function(require,module,exports){
+},{"../ms":15,"../utils":39,"_process":51,"chalk":"chalk","diff":67,"supports-color":41,"tty":5}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -2646,7 +2646,7 @@ function on(el, event, fn) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":72}],22:[function(require,module,exports){
+},{"../browser/progress":4,"../utils":39,"./base":17,"escape-string-regexp":68}],22:[function(require,module,exports){
 // Alias exports to a their normalized format Mocha#reporter to prevent a need
 // for dynamic (try/catch) requires, which Browserify doesn't handle.
 exports.Base = exports.base = require('./base');
@@ -3077,7 +3077,7 @@ function Landing(runner) {
 inherits(Landing, Base);
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":51,"chalk":67}],27:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51,"chalk":"chalk"}],27:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3642,7 +3642,7 @@ function Progress(runner, options) {
 inherits(Progress, Base);
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":51,"chalk":67}],32:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51,"chalk":"chalk"}],32:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3975,7 +3975,7 @@ function cdata(str) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils":39,"./base":17,"_process":51,"fs":41,"mkdirp":74,"path":41}],35:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51,"fs":41,"mkdirp":70,"path":41}],35:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -11573,153 +11573,6 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":65,"_process":51,"inherits":48}],67:[function(require,module,exports){
-'use strict';
-var ansi = require('ansi-styles');
-var stripAnsi = require('strip-ansi');
-var hasColor = require('has-color');
-var defineProps = Object.defineProperties;
-var chalk = module.exports;
-
-var styles = (function () {
-	var ret = {};
-
-	ansi.grey = ansi.gray;
-
-	Object.keys(ansi).forEach(function (key) {
-		ret[key] = {
-			get: function () {
-				this._styles.push(key);
-				return this;
-			}
-		};
-	});
-
-	return ret;
-})();
-
-function init() {
-	var ret = {};
-
-	Object.keys(styles).forEach(function (name) {
-		ret[name] = {
-			get: function () {
-				var obj = defineProps(function self() {
-					var str = [].slice.call(arguments).join(' ');
-
-					if (!chalk.enabled) {
-						return str;
-					}
-
-					return self._styles.reduce(function (str, name) {
-						var code = ansi[name];
-						return str ? code.open + str + code.close : '';
-					}, str);
-				}, styles);
-
-				obj._styles = [];
-
-				return obj[name];
-			}
-		}
-	});
-
-	return ret;
-}
-
-defineProps(chalk, init());
-
-chalk.styles = ansi;
-chalk.stripColor = stripAnsi;
-chalk.supportsColor = hasColor;
-
-// detect mode if not set manually
-if (chalk.enabled === undefined) {
-	chalk.enabled = chalk.supportsColor;
-}
-
-},{"ansi-styles":68,"has-color":69,"strip-ansi":70}],68:[function(require,module,exports){
-'use strict';
-var styles = module.exports;
-
-var codes = {
-	reset: [0, 0],
-
-	bold: [1, 22],
-	italic: [3, 23],
-	underline: [4, 24],
-	inverse: [7, 27],
-	strikethrough: [9, 29],
-
-	black: [30, 39],
-	red: [31, 39],
-	green: [32, 39],
-	yellow: [33, 39],
-	blue: [34, 39],
-	magenta: [35, 39],
-	cyan: [36, 39],
-	white: [37, 39],
-	gray: [90, 39],
-
-	bgBlack: [40, 49],
-	bgRed: [41, 49],
-	bgGreen: [42, 49],
-	bgYellow: [43, 49],
-	bgBlue: [44, 49],
-	bgMagenta: [45, 49],
-	bgCyan: [46, 49],
-	bgWhite: [47, 49]
-};
-
-Object.keys(codes).forEach(function (key) {
-	var val = codes[key];
-	var style = styles[key] = {};
-	style.open = '\x1b[' + val[0] + 'm';
-	style.close = '\x1b[' + val[1] + 'm';
-});
-
-},{}],69:[function(require,module,exports){
-(function (process){
-'use strict';
-module.exports = (function () {
-	if (process.argv.indexOf('--no-color') !== -1) {
-		return false;
-	}
-
-	if (process.argv.indexOf('--color') !== -1) {
-		return true;
-	}
-
-	if (process.stdout && !process.stdout.isTTY) {
-		return false;
-	}
-
-	if (process.platform === 'win32') {
-		return true;
-	}
-
-	if ('COLORTERM' in process.env) {
-		return true;
-	}
-
-	if (process.env.TERM === 'dumb') {
-		return false;
-	}
-
-	if (/^screen|^xterm|^vt100|color|ansi|cygwin|linux/i.test(process.env.TERM)) {
-		return true;
-	}
-
-	return false;
-})();
-
-}).call(this,require('_process'))
-},{"_process":51}],70:[function(require,module,exports){
-'use strict';
-module.exports = function (str) {
-	return typeof str === 'string' ? str.replace(/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]/g, '') : str;
-};
-
-},{}],71:[function(require,module,exports){
 /* See LICENSE file for terms of use */
 
 /*
@@ -12340,7 +12193,7 @@ module.exports = function (str) {
   }
 }(this));
 
-},{}],72:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 'use strict';
 
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -12353,7 +12206,7 @@ module.exports = function (str) {
 	return str.replace(matchOperatorsRe,  '\\$&');
 };
 
-},{}],73:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 (function (process){
 // Growl - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
@@ -12591,7 +12444,7 @@ function growl(msg, options, fn) {
 };
 
 }).call(this,require('_process'))
-},{"_process":51,"child_process":41,"fs":41,"os":50,"path":41}],74:[function(require,module,exports){
+},{"_process":51,"child_process":41,"fs":41,"os":50,"path":41}],70:[function(require,module,exports){
 (function (process){
 var path = require('path');
 var fs = require('fs');
@@ -12693,7 +12546,7 @@ mkdirP.sync = function sync (p, opts, made) {
 };
 
 }).call(this,require('_process'))
-},{"_process":51,"fs":41,"path":41}],75:[function(require,module,exports){
+},{"_process":51,"fs":41,"path":41}],71:[function(require,module,exports){
 (function (process,global){
 /**
  * Shim process.stdout.
@@ -12858,4 +12711,43 @@ global.Mocha = Mocha;
 global.mocha = mocha;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../":1,"_process":51,"browser-stdout":40}]},{},[75]);
+},{"../":1,"_process":51,"browser-stdout":40}],"chalk":[function(require,module,exports){
+'use strict';
+
+// nasty stub
+
+var chalk = {};
+var colors = [
+  'reset',
+  'bold',
+  'italic',
+  'underline',
+  'inverse',
+  'strikethrough',
+  'black',
+  'red',
+  'green',
+  'yellow',
+  'blue',
+  'magenta',
+  'cyan',
+  'white',
+  'gray',
+  'bgBlack',
+  'bgRed',
+  'bgGreen',
+  'bgYellow',
+  'bgBlue',
+  'bgMagenta',
+  'bgCyan',
+  'bgWhite'
+];
+
+var i = colors.length;
+while (i--) {
+  chalk[colors[i]] = chalk;
+}
+
+module.exports = chalk;
+
+},{}]},{},[71]);
