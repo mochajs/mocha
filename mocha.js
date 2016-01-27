@@ -1735,7 +1735,7 @@ var color = exports.color = function(type, str) {
   if (!exports.useColors) {
     return String(str);
   }
-  return '\u001b[' + exports.colors[type](str) + '\u001b[0m';
+  return exports.colors[type](str);
 };
 
 /**
@@ -2990,6 +2990,7 @@ var Base = require('./base');
 var inherits = require('../utils').inherits;
 var cursor = Base.cursor;
 var color = Base.color;
+var chalk = require('chalk');
 
 /**
  * Expose `Landing`.
@@ -3001,19 +3002,19 @@ exports = module.exports = Landing;
  * Airplane color.
  */
 
-Base.colors.plane = 0;
+Base.colors.plane = chalk.white;
 
 /**
  * Airplane crash color.
  */
 
-Base.colors['plane crash'] = 31;
+Base.colors['plane crash'] = chalk.red;
 
 /**
  * Runway color.
  */
 
-Base.colors.runway = 90;
+Base.colors.runway = chalk.gray;
 
 /**
  * Initialize a new `Landing` reporter.
@@ -3076,7 +3077,7 @@ function Landing(runner) {
 inherits(Landing, Base);
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":51}],27:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51,"chalk":67}],27:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3557,6 +3558,7 @@ var Base = require('./base');
 var inherits = require('../utils').inherits;
 var color = Base.color;
 var cursor = Base.cursor;
+var chalk = require('chalk');
 
 /**
  * Expose `Progress`.
@@ -3568,7 +3570,7 @@ exports = module.exports = Progress;
  * General progress bar color.
  */
 
-Base.colors.progress = 90;
+Base.colors.progress = chalk.gray;
 
 /**
  * Initialize a new `Progress` bar test reporter.
@@ -3640,7 +3642,7 @@ function Progress(runner, options) {
 inherits(Progress, Base);
 
 }).call(this,require('_process'))
-},{"../utils":39,"./base":17,"_process":51}],32:[function(require,module,exports){
+},{"../utils":39,"./base":17,"_process":51,"chalk":67}],32:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -12852,8 +12854,8 @@ Mocha.process = process;
  * Expose mocha.
  */
 
-window.Mocha = Mocha;
-window.mocha = mocha;
+global.Mocha = Mocha;
+global.mocha = mocha;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../":1,"_process":51,"browser-stdout":40}]},{},[75]);
