@@ -1,3 +1,17 @@
+2.4.4 / 2016-01-27
+==================
+
+* [#2080] - Fix broken RequireJS compatibility ([@boneskull])
+
+[#2080]: https://github.com/mochajs/mocha/issues/2080
+
+2.4.3 / 2016-01-27
+==================
+
+* [#2078] - Fix broken IE8 ([@boneskull])
+
+[#2078]: https://github.com/mochajs/mocha/issues/2078
+
 2.4.2 / 2016-01-26
 ==================
 
