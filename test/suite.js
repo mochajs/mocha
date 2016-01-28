@@ -288,6 +288,11 @@ describe('Suite', function(){
       this.first.suites.should.have.length(1);
       this.first.suites[0].should.equal(this.second);
     });
+
+    it('treats suite as pending if its parent is pending', function(){
+      this.first.pending = true
+      this.second.isPending.should.be.true
+    });
   });
 
   // describe('.addTest()', function(){

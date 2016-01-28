@@ -1,4 +1,5 @@
 var mocha = require('../')
+  , should = require('should')
   , Context = mocha.Context
   , Test = mocha.Test;
 
@@ -50,6 +51,26 @@ describe('Test', function(){
 
     it('should copy the file value', function(){
       this._test.clone().file.should.equal('bar');
+    });
+  });
+
+  describe('.isPending()', function(){
+    beforeEach(function(){
+      this._test = new Test('Is it skipped', function () {});
+    });
+
+    it('should not be pending by default', function(){
+      should(this._test.isPending()).not.be.ok();
+    });
+
+    it('should be pending when marked as such', function(){
+      this._test.pending = true;
+      should(this._test.isPending()).be.ok();
+    });
+
+    it('should be pending when its parent is pending', function(){
+      this._test.parent = { isPending: function(){ return true } };
+      should(this._test.isPending()).be.ok();
     });
   });
 });
