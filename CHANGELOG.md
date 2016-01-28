@@ -1,3 +1,12 @@
+2.4.5 / 2016-01-28
+==================
+
+* [#2080], [#2078], [#2072], [#2073], [#1200] - Revert changes to console colors in changeset [1192914](https://github.com/mochajs/mocha/commit/119291449cd03a11cdeda9e37cf718a69a012896) and subsequent related changes thereafter.  Restores compatibility with IE8 & PhantomJS.  See also [mantoni/mochify.js#129](https://github.com/mantoni/mochify.js/issues/129) and [openlayers/ol3#4746](https://github.com/openlayers/ol3/pull/4746) ([@boneskull])
+* [#2082] - Fix several test assertions ([@mislav])
+
+[#1200]: https://github.com/mochajs/mocha/issues/1200
+[#2082]: https://github.com/mochajs/mocha/pull/2082
+
 2.4.4 / 2016-01-27
 ==================
 
