@@ -1,0 +1,40 @@
+<body>
+  <div id="mocha"></div>
+<link href="../../mocha.css" rel="stylesheet">
+<script src="../../mocha.js"></script>
+<script src="https://npmcdn.com/regenerator/runtime.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<script type="text/babel">
+mocha.setup('bdd');
+
+function assert(expr, msg) {
+  if (!expr) throw new Error(msg || 'failed');
+}
+
+// test('passing', function *() {
+//   var foo = yield new Promise(function(accept) {
+//     setTimeout(function() {
+//       accept(1);
+//     }, 1000)
+//   });
+//   assert(foo === 1, 'should be one');
+// });
+
+// test('assertion failure', function *() {
+//   var foo = yield new Promise(function(accept) {
+//     setTimeout(function() {
+//       accept(1);
+//     }, 1000)
+//   });
+//   assert(foo === 2, 'should be one');
+// });
+
+describe('stuff', function() {
+  it('assertion failure', function () {
+    assert(1 == 2, 'should be one');
+  });
+});
+
+mocha.run();
+</script>
+</body>
