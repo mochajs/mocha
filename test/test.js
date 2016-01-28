@@ -29,7 +29,7 @@ describe('Test', function(){
     });
 
     it('should copy the enableTimeouts value', function(){
-      this._test.clone().enableTimeouts().should.be.true;
+      this._test.clone().enableTimeouts().should.be.true();
     });
 
     it('should copy the retries value', function(){
@@ -41,7 +41,7 @@ describe('Test', function(){
     });
 
     it('should copy the globals value', function(){
-      this._test.clone().globals().should.not.be.empty;
+      this._test.clone().globals().should.not.be.empty();
     });
 
     it('should copy the parent value', function(){

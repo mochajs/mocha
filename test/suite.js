@@ -31,31 +31,31 @@ describe('Suite', function(){
     });
 
     it('should copy the bail value', function(){
-      this.suite.clone().bail().should.be.true;
+      this.suite.clone().bail().should.be.true();
     });
 
     it('should not copy the values from the suites array', function(){
-      this.suite.clone().suites.should.be.empty;
+      this.suite.clone().suites.should.be.empty();
     });
 
     it('should not copy the values from the tests array', function(){
-      this.suite.clone().tests.should.be.empty;
+      this.suite.clone().tests.should.be.empty();
     });
 
     it('should not copy the values from the _beforeEach array', function(){
-      this.suite.clone()._beforeEach.should.be.empty;
+      this.suite.clone()._beforeEach.should.be.empty();
     });
 
     it('should not copy the values from the _beforeAll array', function(){
-      this.suite.clone()._beforeAll.should.be.empty;
+      this.suite.clone()._beforeAll.should.be.empty();
     });
 
     it('should not copy the values from the _afterEach array', function(){
-      this.suite.clone()._afterEach.should.be.empty;
+      this.suite.clone()._afterEach.should.be.empty();
     });
 
     it('should not copy the values from the _afterAll array', function(){
-      this.suite.clone()._afterAll.should.be.empty;
+      this.suite.clone()._afterAll.should.be.empty();
     });
   });
 
@@ -112,14 +112,14 @@ describe('Suite', function(){
 
     describe('when no argument is passed', function(){
       it('should return the bail value', function(){
-        this.suite.bail().should.be.true;
+        this.suite.bail().should.be.true();
       });
     });
 
     describe('when argument is passed', function(){
       it('should return the Suite object', function(){
         var newSuite = this.suite.bail(false);
-        newSuite.bail().should.be.false;
+        newSuite.bail().should.be.false();
       });
     });
   });
