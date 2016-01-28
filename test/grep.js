@@ -42,7 +42,7 @@ describe('Mocha', function(){
   describe('"invert" option', function(){
     it('should add a Boolean to the mocha.options object', function(){
       var mocha = new Mocha({ invert: true });
-      mocha.options.invert.should.be.ok;
+      mocha.options.invert.should.be.ok();
     })
   })
 })

@@ -114,7 +114,7 @@ describe('Runner', function(){
     it ('should not fail when a new common global is introduced', function(){
       // verify that the prop isn't enumerable
       delete global.XMLHttpRequest;
-      global.propertyIsEnumerable('XMLHttpRequest').should.not.be.ok;
+      global.propertyIsEnumerable('XMLHttpRequest').should.not.be.ok();
 
       // create a new runner and keep a reference to the test.
       var test = new Test('im a test about bears');
@@ -123,7 +123,7 @@ describe('Runner', function(){
 
       // make the prop enumerable again.
       global.XMLHttpRequest = function() {};
-      global.propertyIsEnumerable('XMLHttpRequest').should.be.ok;
+      global.propertyIsEnumerable('XMLHttpRequest').should.be.ok();
 
       // verify the test hasn't failed.
       newRunner.checkGlobals(test);

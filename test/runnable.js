@@ -67,7 +67,7 @@ describe('Runnable(title, fn)', function(){
     it('should be .async', function(){
       var run = new Runnable('foo', function(done){});
       run.async.should.equal(1);
-      run.sync.should.be.false;
+      run.sync.should.be.false();
     })
   })
 
@@ -75,7 +75,7 @@ describe('Runnable(title, fn)', function(){
     it('should be .sync', function(){
       var run = new Runnable('foo', function(){});
       run.async.should.be.equal(0);
-      run.sync.should.be.true;
+      run.sync.should.be.true();
     })
   })
 
@@ -83,7 +83,7 @@ describe('Runnable(title, fn)', function(){
     it('should allow for whitelisting globals', function(done){
       var test = new Runnable('foo', function(){});
       test.async.should.be.equal(0);
-      test.sync.should.be.true;
+      test.sync.should.be.true();
       test.globals(['foobar']);
       test.run(done);
     })
@@ -327,7 +327,7 @@ describe('Runnable(title, fn)', function(){
         });
         test.timeout(10);
         test.run(function(err){
-          err.should.be.ok;
+          err.should.be.ok();
           callCount.should.equal(1);
           done();
         });
@@ -427,7 +427,7 @@ describe('Runnable(title, fn)', function(){
 
           test.timeout(10);
           test.run(function(err){
-            err.should.be.ok;
+            err.should.be.ok();
             done();
           });
         })
