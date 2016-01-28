@@ -274,7 +274,6 @@
     "test": "make test-all"
   },
   "dependencies": {
-    "chalk": "0.4.0",
     "commander": "2.3.0",
     "debug": "2.2.0",
     "diff": "1.4.0",
@@ -305,8 +304,7 @@
   "browser": {
     "debug": "./lib/browser/debug.js",
     "events": "./lib/browser/events.js",
-    "tty": "./lib/browser/tty.js",
-    "chalk": "./lib/browser/chalk.js"
+    "tty": "./lib/browser/tty.js"
   },
   "licenses": [
     {
