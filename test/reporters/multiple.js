@@ -1,4 +1,6 @@
-
+var fs = require('fs');
+var os = require('os');
+var path = require('path');
 var Mocha = require('../../');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
@@ -37,6 +39,31 @@ describe('multiple reporters', function() {
       jsonReporter.failures.should.be.an.instanceOf(Array);
       jsonReporter.failures.should.have.a.lengthOf(1);
       done();
+    });
+  });
+
+  it('should write result to its output path', function(done) {
+    var outputFile = path.join(os.tmpDir(), 'mocha-multiple.json');
+    var mocha = new Mocha({
+      reporter: ['json:' + outputFile]
+    });
+    var testTitle = 'json output test 1';
+    var error = { message: 'oh shit' };
+
+    mocha.suite.addTest(new Test(testTitle, function(done) {
+      done(new Error(error.message));
+    }));
+
+    mocha.run(function() {
+      var content = fs.readFileSync(outputFile, 'UTF-8');
+      try {
+        JSON.parse(content);
+        done();
+      } catch (e) {
+        done(e);
+      } finally {
+        fs.unlinkSync(outputFile);
+      }
     });
   });
 
