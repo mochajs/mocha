@@ -49,5 +49,14 @@ describe('regressions', function() {
       assert.equal(res.code, 0, 'Runnable fn (it/before[Each]/after[Each]) references should be deleted to avoid memory leaks');
       done();
     });
-  })
+  });
+
+  it('issue-2089: should stop capturing errors after the run is over', function(done) {
+    run('regression/issue-2089.js', ['-R', 'spec'], function(err, res) {
+      assert.ifError(err);
+      assert.equal(/error caused on purpose/.test(res.output), true, 'Expected to see the error in output: \n' + res.output);
+      assert.notEqual(res.code, 0, 'Expected test run to fail');
+      done();
+    });
+  });
 });
