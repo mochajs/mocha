@@ -331,6 +331,15 @@ describe('lib/utils', function () {
 
       stringify(a).should.equal('{\n  "foo": 1\n}');
     });
+
+    // In old version node.js, Symbol is not available by default.
+    if (typeof global.Symbol === 'function') {
+      it('should handle Symbol', function () {
+        var symbol = Symbol('value');
+        stringify(symbol).should.equal('Symbol(value)');
+        stringify({symbol: symbol}).should.equal('{\n  "symbol": Symbol(value)\n}')
+      });
+    }
   });
 
   describe('type', function () {
