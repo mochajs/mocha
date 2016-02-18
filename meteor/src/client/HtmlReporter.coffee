@@ -46,7 +46,3 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
       document.body.appendChild(div)
     finally
       log.return()
-
-
-Meteor.startup ->
-  MochaRunner.setReporter(practical.mocha.HtmlReporter)
