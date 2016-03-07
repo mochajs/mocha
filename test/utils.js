@@ -119,11 +119,11 @@ describe('utils', function() {
       });
 
       it('should replace absolute with relative paths', function() {
-        var stack = ['Error: failed'
+        var stack = ['Error: ' + process.cwd() + '/bla.js has a problem'
           , 'at foo (' + process.cwd() + '/foo/index.js:13:226)'
           , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
 
-        var expected = ['Error: failed'
+        var expected = ['Error: ' + process.cwd() + '/bla.js has a problem'
           , 'at foo (foo/index.js:13:226)'
           , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
 
