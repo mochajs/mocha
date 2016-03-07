@@ -117,6 +117,18 @@ describe('utils', function() {
           , 'at next (file:///.../components/mochajs/mocha/2.1.0/mocha.js:4817:14)'];
         filter(stack.join('\n')).should.equal(stack.slice(0,7).join('\n'));
       });
+
+      it('should replace absolute with relative paths', function() {
+        var stack = ['Error: failed'
+          , 'at foo (' + process.cwd() + '/foo/index.js:13:226)'
+          , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
+
+        var expected = ['Error: failed'
+          , 'at foo (foo/index.js:13:226)'
+          , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
+
+        filter(stack.join('\n')).should.equal(expected.join('\n'));
+      });
     });
 
     describe('on browser', function() {
