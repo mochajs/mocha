@@ -40,7 +40,7 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	@$(ESLINT) $(SRC)
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
 test-browser: test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -154,10 +154,21 @@ test-only:
 		--ui qunit \
 		test/acceptance/misc/only/bdd-require
 
+test-global-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/only/global/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/only/global/bdd
+
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
-		test/acceptance/misc/only/qunit
+		test/acceptance/misc/only/global/qunit
 
 test-mocha:
 	@printf "==> [Test :: Mocha]\n"
