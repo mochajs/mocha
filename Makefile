@@ -35,7 +35,7 @@ lint:
 
 test: lint test-unit
 
-test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
 test-jsapi:
 	@node test/jsapi
@@ -116,6 +116,22 @@ test-only:
 		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/misc/only/qunit
+
+test-global-only:
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui tdd \
+		test/acceptance/misc/only/global/tdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui bdd \
+		test/acceptance/misc/only/global/bdd
+
+	@./bin/mocha \
+		--reporter $(REPORTER) \
+		--ui qunit \
+		test/acceptance/misc/only/global/qunit
 
 test-mocha:
 	@./bin/mocha \
