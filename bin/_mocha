@@ -430,26 +430,6 @@ function exit(code) {
 
 process.on('SIGINT', function() { runner.abort(); })
 
-// enable growl notifications
-
-function growl(runner, reporter) {
-  var notify = require('growl');
-
-  runner.on('end', function(){
-    var stats = reporter.stats;
-    if (stats.failures) {
-      var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { name: 'mocha', title: 'Failed', image: images.fail });
-    } else {
-      notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-          name: 'mocha'
-        , title: 'Passed'
-        , image: images.pass
-      });
-    }
-  });
-}
-
 /**
  * Parse list.
  */
