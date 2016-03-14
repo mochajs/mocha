@@ -1,6 +1,6 @@
 import {expect} from "meteor/practicalmeteor:chai"
 
-describe("Client Test", function(){
+describe("Fuel app: Client Test", function(){
 
   it("this test is client side only", function(){
     expect(Meteor.isClient).to.be.true
