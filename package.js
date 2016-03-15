@@ -89,6 +89,7 @@ Package.onTest(function (api) {
   api.use([
     'coffeescript',
     'ecmascript',
+    'practicalmeteor:chai',
     'practicalmeteor:mocha',
     'tinytest']);
 
