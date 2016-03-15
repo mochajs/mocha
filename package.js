@@ -3,7 +3,7 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Write package tests with mocha and run them in the browser or from the command line with spacejam.",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0-meteor-1.3-beta.16.1',
+  version: '2.1.0-meteor-1.3-rc.1',
   testOnly: true
 });
 
@@ -14,7 +14,7 @@ Npm.depends({
 
 
 Package.onUse(function (api) {
-  api.versionsFrom("1.3-beta.16");
+  api.versionsFrom("1.3-rc.1");
 
   api.use('tmeasday:test-reporter-helpers@0.2.1');
   api.use('coffeescript');
@@ -88,6 +88,7 @@ Package.onUse(function (api) {
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
+    'ecmascript',
     'practicalmeteor:mocha',
     'tinytest']);
 
