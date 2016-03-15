@@ -24,7 +24,7 @@ Package.onTest(function (api) {
     'coffeescript',
     'practicalmeteor:loglevel',
     'practicalmeteor:chai',
-    'practicalmeteor:mocha@2.1.0-meteor-1.3-rc.1',
+    'practicalmeteor:mocha@2.1.1-rc.1',
     'test-package'
   ]);
 

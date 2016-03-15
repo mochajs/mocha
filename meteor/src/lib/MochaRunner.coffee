@@ -6,6 +6,7 @@ practical = @practical || {}
 
 class practical.MochaRunner
 
+  VERSION: "2.1.1-rc.1"
   @instance: null
 
   @get: ->
