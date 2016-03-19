@@ -518,7 +518,7 @@ Options:
  --harmony_arrow_functions               enable "harmony arrow functions" (iojs)
  --harmony_classes                       enable "harmony classes" (iojs)
  --harmony_proxies                       enable "harmony proxies" (iojs)
- --harmony_shipping                      enable all shipped harmony fetaures (iojs)
+ --harmony_shipping                      enable all shipped harmony features (iojs)
  --inline-diffs                          display actual/expected differences inline within each string
  --interfaces                            display available interfaces
  --no-deprecation                        silence deprecation warnings
