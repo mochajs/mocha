@@ -340,6 +340,10 @@ describe('lib/utils', function () {
         stringify({symbol: symbol}).should.equal('{\n  "symbol": Symbol(value)\n}')
       });
     }
+
+    it('should handle length properties that cannot be coerced to a number', function () {
+      stringify({length: {toString: 0}}).should.equal('{\n  "length": {\n    "toString": 0\n  }\n}');
+    });
   });
 
   describe('type', function () {
