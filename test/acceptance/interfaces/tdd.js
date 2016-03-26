@@ -38,4 +38,24 @@ suite('Array', function(){
       done();
     });
   });
+
+  suite('tear down should be executed', function () {
+    var shouldBeChangeInTearDown;
+
+    setup(function () {
+      shouldBeChangeInTearDown = 5;
+    });
+
+    test('spec2', function () {
+      this.skip();
+    });
+
+    teardown(function () {
+      shouldBeChangeInTearDown = 10;
+    });
+
+    suiteTeardown(function () {
+      shouldBeChangeInTearDown.should.eql(10);
+    });
+  });
 });
