@@ -101,7 +101,6 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
-  .option('--ignore-file <ignore-file-path>', 'specifies ignore file', './default.mochaignore')
 
 program.name = 'mocha';
 
@@ -278,10 +277,6 @@ if (program.growl) mocha.growl();
 // --async-only
 
 if (program.asyncOnly) mocha.asyncOnly();
-
-// --ignore-file
-
-if (program.ignoreFile) mocha.ignoreFile(program.ignoreFile);
 
 // --delay
 
