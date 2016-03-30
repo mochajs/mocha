@@ -1,6 +1,6 @@
 import {expect} from "meteor/practicalmeteor:chai"
 
-describe("Fuell app: Server Test", function(){
+describe("Full app: Server Test", function(){
 
   it("this test is server side only", function(){
     expect(Meteor.isServer).to.be.true

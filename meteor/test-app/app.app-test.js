@@ -2,7 +2,7 @@ import {expect} from "meteor/practicalmeteor:chai"
 import TestCollection from "./import/collections/TestCollection"
 
 
-describe('Fuell app: 1 - Array', function() {
+describe('Full app: 1 - Array', function() {
   describe('1.1 - #indexOf()', function() {
     return it('should return -1 when the value is not present', function() {
       expect([1, 2, 3].indexOf(5)).to.equal(-1);
@@ -16,7 +16,7 @@ describe('Fuell app: 1 - Array', function() {
   });
 });
 
-describe('Fuell app: 2 - Async test', function() {
+describe('Full app: 2 - Async test', function() {
   it('should pass', function(done) {
     return Meteor.setTimeout((function(_this) {
       return function() {
@@ -33,7 +33,7 @@ describe('Fuell app: 2 - Async test', function() {
   });
 });
 
-describe('Fuell app: 3 - Skipped test', function() {
+describe('Full app: 3 - Skipped test', function() {
   it.skip('3.1 - should skip test', function(done) {
     return Meteor.setTimeout((function(_this) {
       return function() {
@@ -44,7 +44,7 @@ describe('Fuell app: 3 - Skipped test', function() {
   return it('3.2 - should skip test');
 });
 
-describe('Fuell app: 4 - Uncaught exception suite', function() {
+describe('Full app: 4 - Uncaught exception suite', function() {
   return it('should fail due to an uncaught exception', function(done) {
     return setTimeout((function(_this) {
       return function() {
@@ -55,7 +55,7 @@ describe('Fuell app: 4 - Uncaught exception suite', function() {
   });
 });
 
-describe('Fuell app: 5 - All sync test suite', function() {
+describe('Full app: 5 - All sync test suite', function() {
   before(function() {
     return console.log('before');
   });
@@ -76,7 +76,7 @@ describe('Fuell app: 5 - All sync test suite', function() {
   });
 });
 
-describe('Fuell app: 6 - All async test suite', function() {
+describe('Full app: 6 - All async test suite', function() {
   before(function(done) {
     this.keepContext = true;
     console.log('before');
@@ -117,7 +117,7 @@ describe('Fuell app: 6 - All async test suite', function() {
   });
 });
 
-describe('Fuell app: 7 - implicit wait', function() {
+describe('Full app: 7 - implicit wait', function() {
   return it('during findOne', function() {
     var doc;
     return doc = TestCollection.findOne({
@@ -126,7 +126,7 @@ describe('Fuell app: 7 - implicit wait', function() {
   });
 });
 
-describe.skip('Fuell app: 8 - skip suite', function() {
+describe.skip('Full app: 8 - skip suite', function() {
   return it("this won't run", function() {
     throw new Error("This is an error");
   });
