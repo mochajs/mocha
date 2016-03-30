@@ -6,7 +6,7 @@ A package for writing and running your meteor app and package tests with [mocha]
 
 This package is now the recommended way of testing your meteor code, as mentioned in [meteor's official guide](http://guide.meteor.com/testing.html#mocha).
 
-## App testing with `meteor test`
+## App testing with meteor test
 
 1) Create your mocha tests in files following the `*.test[s].*` naming convention anywhere in your app folder.
 
