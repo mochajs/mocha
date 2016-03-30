@@ -8,11 +8,6 @@ Package.describe({
 });
 
 
-Npm.depends({
-  mocha: "2.1.0"
-});
-
-
 Package.onUse(function (api) {
   api.versionsFrom("1.3-rc.1");
 
