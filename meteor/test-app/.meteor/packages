@@ -19,7 +19,6 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 autopublish             # Publish all data to the clients (for prototyping)
 insecure                # Allow all DB writes from clients (for prototyping)
-practicalmeteor:mocha@2.1.1-rc.2
+practicalmeteor:mocha@2.1.0_8
 practicalmeteor:chai
 practicalmeteor:loglevel
-practicalmeteor:mocha-console-runner@0.2.0-rc.2
