@@ -55,6 +55,10 @@ Package.onTest(function (api) {
 meteor test-packages --driver-package practicalmeteor:mocha <package(s)>
 ```
 
+## Known Issues
+
+- When running meteor test and meteor test-packages you will get some "Unable to resolve some modules:" warnings, those are usually safe to ignore. We're working on a fix to eliminate those warnings. See [this issue](https://github.com/practicalmeteor/meteor-mocha/issues/19) for more info.
+
 ## Package testing with [spacejam](https://www.npmjs.com/package/spacejam) from the command line
 
 Note: Support for meteor 1.3 app and package testing in spacejam is coming soon.
