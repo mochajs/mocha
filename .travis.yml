@@ -3,7 +3,11 @@ sudo: false
 language: node_js
 
 node_js:
-  - "0.10.36"
+  - "0.10.41"
+
+notifications:
+  slack:
+    secure: Sp0XScJQvQJmAD842c3+NRfcz/kmY3t01vyqcqywGBp+AtpYrTCT8ZXWzxSsS5+0Zyxbw5qHo+cApjvaP3pWKRYYoCz8OQ41cJ5m7CauvRXhLNlGph9fzSk5f1s6Ut1efXlFRY/DQhFPuHw8OdsrahIrgoLSYoJvPU3oc2aBszo=
 
 before_install:
   - "curl https://install.meteor.com | /bin/sh"

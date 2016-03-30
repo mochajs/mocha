@@ -6,7 +6,7 @@ Package.describe({
 
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.2.1');
+  api.versionsFrom('1.3');
 
   api.use([
     'meteor',
@@ -24,7 +24,7 @@ Package.onTest(function (api) {
     'coffeescript',
     'practicalmeteor:loglevel',
     'practicalmeteor:chai',
-    'practicalmeteor:mocha',
+    'practicalmeteor:mocha@2.1.0_8',
     'test-package'
   ]);
 

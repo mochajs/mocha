@@ -3,13 +3,15 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Write package tests with mocha and run them in the browser or from the command line with spacejam.",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0_7'
+  version: '2.1.0_8',
+  testOnly: true
 });
 
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.0');
+  api.versionsFrom("1.3");
 
+  api.use('tmeasday:test-reporter-helpers@0.2.1');
   api.use('coffeescript');
   api.use('underscore');
   api.use('session');
@@ -18,6 +20,7 @@ Package.onUse(function (api) {
   api.use('random');
   api.use('mongo');
   api.use('autoupdate');
+  api.use('ecmascript');
 
   // If we use a reactive reporter such as meteor's test-in-browser one,
   // we'll need all of this.
@@ -72,12 +75,16 @@ Package.onUse(function (api) {
   api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
   api.addFiles('meteor/src/client/HtmlReporter.coffee', 'client');
 
+  api.mainModule('runTests.js');
+  api.export('runTests');
 });
 
 
 Package.onTest(function (api) {
   api.use([
     'coffeescript',
+    'ecmascript',
+    'practicalmeteor:chai',
     'practicalmeteor:mocha',
     'tinytest']);
 

@@ -26,6 +26,7 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
     try
       log.enter("addReporterHtml")
       div = document.createElement('div')
+      div.className = 'mocha-wrapper'
 
       div.innerHTML = '<div class="content">
         <div class="test-wrapper">
@@ -46,7 +47,3 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
       document.body.appendChild(div)
     finally
       log.return()
-
-
-Meteor.startup ->
-  MochaRunner.setReporter(practical.mocha.HtmlReporter)
