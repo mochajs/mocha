@@ -16,7 +16,9 @@ class ClientServerReporter
         @clientRunner = new EventEmitter()
         @runTestsSerially(@clientRunner, @serverRunnerProxy)
 
-      expect(MochaRunner.reporter).to.be.a('function')
+      if not MochaRunner.reporter
+        log.error("Missing reporter to run tests. Use MochaRunner.setReporter(reporter) to set one.")
+        return
 
       @reporter = new MochaRunner.reporter(@clientRunner, @serverRunnerProxy, @options)
 
