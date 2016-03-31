@@ -1,6 +1,9 @@
+BaseReporter    = require("BaseReporter")
+{ObjectLogger}  = require("meteor/practicalmeteor:loglevel")
+
 log = new ObjectLogger('MeteorPublishReporter', 'info')
 
-class @practical.mocha.MeteorPublishReporter extends @practical.mocha.BaseReporter
+class MeteorPublishReporter extends BaseReporter
 
   # TODO: Change this to use Meteor.bindEnvironment
   @publisher: null
@@ -176,3 +179,7 @@ class @practical.mocha.MeteorPublishReporter extends @practical.mocha.BaseReport
       return
     , err
     res
+
+
+
+module.exports = MeteorPublishReporter

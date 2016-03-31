@@ -1,18 +1,21 @@
+BaseReporter    = require("BaseReporter")
+MochaHtmlReporter    = require("../../../lib/reporters/html")
+{ObjectLogger}  = require("meteor/practicalmeteor:loglevel")
+{EventEmitter}  = require("events")
+
 log = new ObjectLogger('HtmlReporter', 'info')
 
-practical.mocha ?= {}
-
-class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
+class HtmlReporter extends BaseReporter
 
   constructor: (@clientRunner, @serverRunner, @options = {})->
     try
       log.enter('constructor')
       @addReporterHtml()
 
-      @reporter = new practical.mocha.reporters.HTML(@clientRunner)
-      @serverReporter = new practical.mocha.reporters.HTML(@serverRunner, {
-        elementIdPrefix: 'server-'
-      })
+      @reporter = new MochaHtmlReporter(@clientRunner)
+#      @serverReporter = new MochaHtmlReporter(@serverRunner, {
+#        elementIdPrefix: 'server-'
+#      })
     finally
       log.return()
 
@@ -47,3 +50,7 @@ class practical.mocha.HtmlReporter extends practical.mocha.BaseReporter
       document.body.appendChild(div)
     finally
       log.return()
+
+
+
+module.exports = HtmlReporter
