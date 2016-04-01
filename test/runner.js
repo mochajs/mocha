@@ -179,6 +179,15 @@ describe('Runner', function(){
       });
       runner.checkGlobals(test);
     })
+
+    it('should emit "fail" when a global beginning with d is introduced', function(done) {
+      global.derp = 'bar';
+      runner.on('fail', function(test, err){
+        delete global.derp;
+        done();
+      });
+      runner.checkGlobals('im a test');
+    });
   })
 
   describe('.hook(name, fn)', function(){
