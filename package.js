@@ -41,8 +41,7 @@ Package.onUse(function (api) {
   api.use([
     'practicalmeteor:loglevel@1.2.0_2',
     'practicalmeteor:chai@2.1.0_1',
-    'practicalmeteor:sinon@1.14.1_2',
-    'practicalmeteor:mocha-core@0.1.4'
+    'practicalmeteor:sinon@1.14.1_2'
   ]);
 
   api.imply([
