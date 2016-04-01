@@ -119,6 +119,9 @@ mocha.ui = function(ui){
 
 mocha.setup = function(opts){
   if ('string' == typeof opts) opts = { ui: opts };
+  if ('delay' in opts) {
+    this.delay(opts.delay);
+  }
   for (var opt in opts) this[opt](opts[opt]);
   return this;
 };
