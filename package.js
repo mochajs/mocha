@@ -3,10 +3,23 @@ Package.describe({
   name: "practicalmeteor:mocha",
   summary: "Write package tests with mocha and run them in the browser or from the command line with spacejam.",
   git: "https://github.com/practicalmeteor/meteor-mocha.git",
-  version: '2.1.0_8',
+  version: '2.4.5-rc.1',
   testOnly: true
 });
 
+// This will remove 'Unable to resolve some modules' warnings. See https://goo.gl/YB44Km
+Npm.depends({
+  "diff": "1.4.0",
+  "debug": "2.2.0",
+  "glob": "3.2.3",
+  "growl": "1.8.1",
+  "util": "0.10.3",
+  "events":"1.1.0",
+  "assert":"1.3.0",
+  "escape-string-regexp": "1.0.2",
+  "supports-color": "1.2.0",
+  "path": "0.12.7"
+});
 
 Package.onUse(function (api) {
   api.versionsFrom("1.3");
