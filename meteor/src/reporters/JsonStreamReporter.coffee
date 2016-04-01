@@ -1,4 +1,6 @@
-class @practical.mocha.JsonStreamReporter extends @practical.mocha.BaseReporter
+BaseReporter    = require("./BaseReporter")
+
+class JsonStreamReporter extends BaseReporter
 
   constructor: (runner, options)->
     super(runner, options)
@@ -32,3 +34,5 @@ class @practical.mocha.JsonStreamReporter extends @practical.mocha.BaseReporter
       fullTitle: test.fullTitle()
       duration: test.duration
     }
+
+module.exports = JsonStreamReporter

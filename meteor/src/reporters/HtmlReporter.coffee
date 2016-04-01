@@ -1,6 +1,6 @@
-BaseReporter    = require("./BaseReporter")
-MochaHtmlReporter    = require("./html")
-{ObjectLogger}  = require("meteor/practicalmeteor:loglevel")
+BaseReporter      = require("./BaseReporter")
+{ObjectLogger}    = require("meteor/practicalmeteor:loglevel")
+MochaHtmlReporter = require("./html")
 
 log = new ObjectLogger('HtmlReporter', 'info')
 

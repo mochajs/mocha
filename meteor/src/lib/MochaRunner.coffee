@@ -1,16 +1,19 @@
+utils                 = require("../../../lib/utils")
+Mocha                 = require("../../../lib/mocha")
+{Mongo}               = require("meteor/mongo")
+{Test, Suite}         = require("../../../lib/mocha")
+{ObjectLogger}        = require("meteor/practicalmeteor:loglevel")
+MeteorPublishReporter = require("./../reporters/MeteorPublishReporter")
+
 log = new ObjectLogger('MochaRunner', 'info')
 
-practical = @practical || {}
+class MochaRunner
 
-
-
-class practical.MochaRunner
-
-  VERSION: "2.1.0_8"
+  VERSION: "2.4.5-rc.1"
   @instance: null
 
   @get: ->
-    practical.MochaRunner.instance ?= new practical.MochaRunner()
+    MochaRunner.instance ?= new MochaRunner()
 
   serverRunEvents: null
   publishers: {}
@@ -18,7 +21,7 @@ class practical.MochaRunner
   constructor: ->
     try
       log.enter 'constructor'
-
+      @utils = utils;
       @serverRunEvents = new Mongo.Collection('mochaServerRunEvents')
       if Meteor.isServer
         Meteor.methods({
@@ -59,10 +62,10 @@ class practical.MochaRunner
       expect(@publishers[runId], "publisher").to.be.an("object")
       expect(Meteor.isServer).to.be.true
 
-      mochaRunner = new practical.mocha.Mocha()
+      mochaRunner = new Mocha()
       @_addTestsToMochaRunner(mocha.suite, mochaRunner.suite)
 
-      mochaRunner.reporter(practical.mocha.MeteorPublishReporter, {
+      mochaRunner.reporter(MeteorPublishReporter, {
         grep: @escapeGrep(grep)
         publisher: @publishers[runId]
       })
@@ -91,12 +94,12 @@ class practical.MochaRunner
       addHooks("afterEach")
 
       for test in fromSuite.tests
-        test = new practical.mocha.Test(test.title, test.fn)
+        test = new Test(test.title, test.fn)
         toSuite.addTest(test)
         log.debug("Tests for '#{fromSuite.fullTitle()}' added.")
 
       for suite in fromSuite.suites
-        newSuite = practical.mocha.Suite.create(toSuite, suite.title)
+        newSuite = Suite.create(toSuite, suite.title)
         newSuite.timeout(suite.timeout())
         log.debug("Suite #{newSuite.fullTitle()}  added to '#{fromSuite.fullTitle()}'.")
         @_addTestsToMochaRunner(suite, newSuite)
@@ -134,7 +137,8 @@ class practical.MochaRunner
   onServerRunSubscriptionReady: =>
     try
       log.enter 'onServerRunSubscriptionReady'
-      query = practical.mocha.Mocha.utils.parseQuery(location.search || '');
+      ClientServerReporter = require("./../reporters/ClientServerReporter")
+      query = utils.parseQuery(location.search || '');
 
       Meteor.call "mocha/runServerTests", @runId,  query.grep, (err)->
         log.debug "tests started"
@@ -143,9 +147,9 @@ class practical.MochaRunner
       Tracker.autorun =>
         runOrder = @serverRunEvents.findOne({event: "run order"})
         if runOrder?.data is "serial"
-          reporter = new practical.mocha.ClientServerReporter(null, {runOrder: "serial"})
+          reporter = new ClientServerReporter(null, {runOrder: "serial"})
         else if runOrder?.data is "parallel"
-          mocha.reporter(practical.mocha.ClientServerReporter)
+          mocha.reporter(ClientServerReporter)
           mocha.run(->)
 
     finally
@@ -160,7 +164,7 @@ class practical.MochaRunner
       log.return()
 
 
-@MochaRunner = practical.MochaRunner.get()
+module.exports = MochaRunner.get()
 
 if Meteor.isClient
 # Run the tests on Meteor.startup, after all code is loaded and ready
@@ -168,4 +172,4 @@ if Meteor.isClient
     # We defer because if another package sets a different reporter on Meteor.startup,
     # that's the reporter that we want to be used.
     Meteor.defer ->
-      MochaRunner.runEverywhere()
+      MochaRunner.get().runEverywhere()
