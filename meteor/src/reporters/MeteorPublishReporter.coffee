@@ -11,39 +11,55 @@ class MeteorPublishReporter extends BaseReporter
   constructor: (runner, options)->
     try
       log.enter 'constructor', arguments
-      expect(options.reporterOptions, 'options.reporterOptions').to.be.an('object')
+      expect(options.reporterOptions, 'options.reporterOptions').to.be.an('object');
 
-      # Update runner tests
-      runner.grep(options.reporterOptions.grep)
+      // Update runner tests
+      runner.grep(options.reporterOptions.grep);
 
-      super(runner, options)
+      super(runner, options);
 
-#      @publisher = practical.mocha.MeteorPublishReporter.publisher
-      @publisher = options.reporterOptions.publisher
-      expect(@publisher, '@publisher').to.be.an('object')
-      expect(@publisher.ready, '@publisher.ready').to.be.a('function')
-      expect(@publisher.added, '@publisher.added').to.be.a('function')
-      expect(@publisher.onStop, '@publisher.onStop').to.be.a('function')
+      //@publisher = practical.mocha.MeteorPublishReporter.publisher
+      self = this;
+      this.publisher = options.reporterOptions.publisher;
+      this.stopped = false;
+      this.sequence = 0;
 
-
-      @publisher.onStop =>
-        @stopped = true
-      @stopped = false
-      @sequence = 0
-
-      # Specify how to run tests 'serial' or 'parallel'
-      # Running in 'serial' will start server tests first and then client tests
-      @added 'run order', process.env.MOCHA_RUN_ORDER || 'parallel'
+      expect(this.publisher, 'this.publisher').to.be.an('object');
+      expect(this.publisher.ready, 'this.publisher.ready').to.be.a('function');
+      expect(this.publisher.added, 'this.publisher.added').to.be.a('function');
+      expect(this.publisher.onStop, 'this.publisher.onStop').to.be.a('function');
 
 
-      @runner.on 'start', =>
-        try
-          log.enter 'onStart', arguments
-#          @added 'start', {total: @stats.total}
-          @added 'start', @stats
-        finally
-          log.return()
+      this.publisher.onStop(()=> {
+        self.stopped = true
+      });
 
+      // Specify how to run tests 'serial' or 'parallel'
+      // Running in 'serial' will start server tests first and then client tests
+      @added('run order', process.env.MOCHA_RUN_ORDER || 'parallel');
+
+
+      this.runner.on('start', ()=>{
+        try {
+          log.enter('onStart', arguments);
+          //@added('start', {total: @stats.total}
+          @added('start', self.stats);
+        }
+        finally {
+          log.return();
+        }
+      });
+
+      this.runner.on('suite', ()=> {
+          try {
+            log.enter('onSuite', arguments);
+            return self.added('suite', self.cleanSuite(suite));
+          } finally {
+            log["return")();
+          }
+        };
+      });
+      
       @runner.on 'suite', (suite)=>
         try
           log.enter 'onSuite', arguments
@@ -144,9 +160,9 @@ class MeteorPublishReporter extends BaseReporter
         _timeout: test._timeout
         _slow: test._slow
         fn: test.fn?.toString() # If the test or suite if skipped the fn is null
-        err: @errorJSON(test.err or {})
+        body: test.body # If the test or suite if skipped the fn is null
+        err: @errorJSON(test.err)
       }
-      return cleanTest
     finally
       log.return()
 
@@ -173,6 +189,7 @@ class MeteorPublishReporter extends BaseReporter
   ###
 
   errorJSON: (err) =>
+    return if not err
     res = {}
     Object.getOwnPropertyNames(err).forEach (key) ->
       res[key] = err[key]

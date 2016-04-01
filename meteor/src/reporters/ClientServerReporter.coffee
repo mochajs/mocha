@@ -1,17 +1,19 @@
+MochaRunner  = require("./../lib/MochaRunner")
+{ObjectLogger}  = require("meteor/practicalmeteor:loglevel")
+{EventEmitter}  = require("events")
+
 log = new ObjectLogger('ClientServerReporter', 'info')
 
-practical.mocha ?= {}
-
-class practical.mocha.ClientServerReporter
+class ClientServerReporter
 
 
   constructor: (@clientRunner, @options = {})->
     try
       log.enter('constructor')
-      @serverRunnerProxy = new practical.mocha.EventEmitter()
+      @serverRunnerProxy = new EventEmitter()
 
       if @options.runOrder is "serial"
-        @clientRunner = new practical.mocha.EventEmitter()
+        @clientRunner = new EventEmitter()
         @runTestsSerially(@clientRunner, @serverRunnerProxy)
 
       expect(MochaRunner.reporter).to.be.a('function')
@@ -71,6 +73,7 @@ class practical.mocha.ClientServerReporter
       # Required by the standard mocha reporters
       doc.data.fullTitle = -> return doc.data._fullTitle
       doc.data.slow = -> return doc.data._slow
+      doc.data.err?.toString = -> "Error: " + @message
 
       if doc.data.parent
         doc.data.parent.fullTitle = -> return doc.data.parent._fullTitle
@@ -84,6 +87,9 @@ class practical.mocha.ClientServerReporter
       @serverRunnerProxy.emit(doc.event, doc.data,  doc.data.err)
 
     catch ex
-      console.error ex
+      log.error ex
     finally
       log.return()
+
+
+module.exports = ClientServerReporter

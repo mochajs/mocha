@@ -1,7 +1,6 @@
-BaseReporter    = require("BaseReporter")
-MochaHtmlReporter    = require("../../../lib/reporters/html")
+BaseReporter    = require("./BaseReporter")
+MochaHtmlReporter    = require("./html")
 {ObjectLogger}  = require("meteor/practicalmeteor:loglevel")
-{EventEmitter}  = require("events")
 
 log = new ObjectLogger('HtmlReporter', 'info')
 
@@ -13,9 +12,9 @@ class HtmlReporter extends BaseReporter
       @addReporterHtml()
 
       @reporter = new MochaHtmlReporter(@clientRunner)
-#      @serverReporter = new MochaHtmlReporter(@serverRunner, {
-#        elementIdPrefix: 'server-'
-#      })
+      @serverReporter = new MochaHtmlReporter(@serverRunner, {
+        elementIdPrefix: 'server-'
+      })
     finally
       log.return()
 

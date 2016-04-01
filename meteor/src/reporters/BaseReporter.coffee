@@ -10,9 +10,7 @@
 #* @api public
 #*/
 
-practical.mocha ?= {}
-
-class @practical.mocha.BaseReporter
+class BaseReporter
 
   constructor: (@runner, @options)->
     expect(@runner).to.be.an 'object'
@@ -52,3 +50,6 @@ class @practical.mocha.BaseReporter
 
     @runner.on 'pending', =>
       @stats.pending++
+
+
+module.exports = BaseReporter

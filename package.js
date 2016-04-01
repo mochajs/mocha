@@ -14,7 +14,6 @@ Package.onUse(function (api) {
   api.use('tmeasday:test-reporter-helpers@0.2.1');
   api.use('coffeescript');
   api.use('underscore');
-  api.use('session');
   api.use('reload');
   api.use('ddp');
   api.use('random');
@@ -46,36 +45,18 @@ Package.onUse(function (api) {
   // Uncomment once we upgrade to loglevel v2
   //api.addFiles('src/lib/log.js');
 
-  api.addFiles(['meteor/src/lib/namespaces.coffee']);
-
   api.addFiles([
-    'meteor/src/server/autoupdate.js',
-    'meteor/src/server/MochaBindEnvironment.js'
+    'meteor/src/server/autoupdate.js'
   ], 'server');
 
-  api.addFiles(['meteor/src/lib/log.js']);
-
-  api.addFiles('mocha.js');
-
-  api.addFiles('meteor/src/server/mocha.coffee', 'server');
 
   api.addFiles([
     'meteor/src/client/mocha.html',
-    'mocha.css',
-    'meteor/src/client/mocha-setup.coffee'
+    'mocha.css'
     ], 'client');
 
-  api.addFiles('meteor/src/lib/BaseReporter.coffee');
-  api.addFiles('meteor/src/lib/JsonStreamReporter.coffee', 'server');
-  api.addFiles('meteor/src/server/MeteorPublishReporter.coffee', 'server');
 
-
-  api.addFiles('meteor/src/client/ClientServerReporter.coffee', 'client');
-
-  api.addFiles(['meteor/src/lib/MochaRunner.coffee']);
-  api.addFiles('meteor/src/client/HtmlReporter.coffee', 'client');
-
-  api.mainModule('runTests.js');
+  api.mainModule('meteor/src/index.js');
   api.export('runTests');
 });
 
