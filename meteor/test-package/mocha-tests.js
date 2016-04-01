@@ -1,9 +1,9 @@
 import {describe, it, before, after, beforeEach, afterEach, xdescribe, xit, specify, xspecify, context, xcontext} from "meteor/practicalmeteor:mocha"
 import {expect} from "meteor/practicalmeteor:chai"
-import TestCollection from "./import/collections/TestCollection"
+import TestCollection from "./TestCollection"
 
 
-describe('Full app: 1 - Array', function() {
+describe('1 - Array', function() {
   describe('1.1 - #indexOf()', function() {
     return it('should return -1 when the value is not present', function() {
       expect([1, 2, 3].indexOf(5)).to.equal(-1);
@@ -43,7 +43,7 @@ describe('Full app: 1 - Array', function() {
 
 });
 
-describe('Full app: 2 - Async test', function() {
+describe('2 - Async test', function() {
   it('should pass', function(done) {
     return Meteor.setTimeout((function(_this) {
       return function() {
@@ -60,7 +60,7 @@ describe('Full app: 2 - Async test', function() {
   });
 });
 
-describe('Full app: 3 - Skipped test', function() {
+describe('3 - Skipped test', function() {
   it.skip('3.1 - should skip test', function(done) {
     return Meteor.setTimeout((function(_this) {
       return function() {
@@ -71,7 +71,7 @@ describe('Full app: 3 - Skipped test', function() {
   return it('3.2 - should skip test');
 });
 
-describe('Full app: 4 - Uncaught exception suite', function() {
+describe('4 - Uncaught exception suite', function() {
   return it('should fail due to an uncaught exception', function(done) {
     return setTimeout((function(_this) {
       return function() {
@@ -82,7 +82,7 @@ describe('Full app: 4 - Uncaught exception suite', function() {
   });
 });
 
-describe('Full app: 5 - All sync test suite', function() {
+describe('5 - All sync test suite', function() {
   before(function() {
     return console.log('before');
   });
@@ -103,7 +103,7 @@ describe('Full app: 5 - All sync test suite', function() {
   });
 });
 
-describe('Full app: 6 - All async test suite', function() {
+describe('6 - All async test suite', function() {
   before(function(done) {
     this.keepContext = true;
     console.log('before');
@@ -144,7 +144,7 @@ describe('Full app: 6 - All async test suite', function() {
   });
 });
 
-describe('Full app: 7 - implicit wait', function() {
+describe('7 - implicit wait', function() {
   return it('during findOne', function() {
     var doc;
     return doc = TestCollection.findOne({
@@ -153,7 +153,7 @@ describe('Full app: 7 - implicit wait', function() {
   });
 });
 
-describe.skip('Full app: 8 - skip suite', function() {
+describe.skip('8 - skip suite', function() {
   return it("this won't run", function() {
     throw new Error("This is an error");
   });

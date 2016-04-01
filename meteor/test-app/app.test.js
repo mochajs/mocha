@@ -1,3 +1,4 @@
+import {describe, it, before, after, beforeEach, afterEach, xdescribe, xit, specify, xspecify, context, xcontext} from "meteor/practicalmeteor:mocha"
 import {expect} from "meteor/practicalmeteor:chai"
 import TestCollection from "./import/collections/TestCollection"
 
@@ -9,11 +10,37 @@ describe('1 - Array', function() {
       return expect([1, 2, 3].indexOf(0)).to.equal(-1);
     });
   });
-  return describe('1.2 - length', function() {
+
+  describe('1.2 - length', function() {
     return it('should return length of array', function() {
       return expect([1, 2, 3].length).to.equal(3);
     });
   });
+
+  describe("Specify", function () {
+
+    specify("it works", function () {
+      expect(true).to.be.true;
+    });
+
+    xspecify("Skip: This won't run", function () {
+      throw new Error("This won't run")
+    })
+  })
+
+  context("Context test", function () {
+    it("it works", function () {
+      expect(true).to.be.true;
+    });
+  });
+
+  xcontext("Skip suite (xcontext)", function () {
+
+    it("This won't run", function () {
+      throw new Error("This won't run")
+    })
+  })
+
 });
 
 describe('2 - Async test', function() {

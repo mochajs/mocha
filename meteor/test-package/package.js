@@ -13,10 +13,10 @@ Package.onUse(function (api) {
     'mongo',
     'coffeescript',
     'practicalmeteor:loglevel',
-    'practicalmeteor:chai'
+    'practicalmeteor:chai',
+    "ecmascript"
   ]);
 
-  api.addFiles('TestCollection.coffee');
 });
 
 Package.onTest(function (api) {
@@ -25,8 +25,10 @@ Package.onTest(function (api) {
     'practicalmeteor:loglevel',
     'practicalmeteor:chai',
     'practicalmeteor:mocha@2.1.0_8',
+    'ecmascript',
     'test-package'
   ]);
 
-  api.addFiles('mocha-tests.coffee');
+  api.addFiles('mocha-tests.js');
+  api.addFiles('mocha-globals-tests.js');
 });

@@ -1,3 +1,5 @@
+import {describe, it} from "meteor/practicalmeteor:mocha"
+
 import {expect} from "meteor/practicalmeteor:chai"
 
 describe("Fuel app: Client Test", function(){

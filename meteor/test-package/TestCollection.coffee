@@ -1,6 +1,7 @@
-@practical ?= {}
+{Mongo} = require("meteor/mongo")
 
-practical.TestCollection = new Mongo.Collection('test.collection')
+TestCollection = new Mongo.Collection('test.collection')
+module.exports = TestCollection
 
 #if Meteor.isClient
 #  throw new Error 'Uncaught client side error before tests.'

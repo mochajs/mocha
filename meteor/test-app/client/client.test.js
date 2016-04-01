@@ -1,3 +1,4 @@
+import {describe, it} from "meteor/practicalmeteor:mocha"
 import {expect} from "meteor/practicalmeteor:chai"
 
 describe("Client Test", function(){
