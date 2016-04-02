@@ -60,4 +60,46 @@ describe('reporters', function () {
       });
     });
   });
+
+  describe('json', function () {
+    it('prints test cases with --reporter-options output', function (done) {
+      var randomStr = crypto.randomBytes(8).toString('hex');
+      var tmpDir = os.tmpDir().replace(new RegExp(path.sep + '$'), '');
+      var tmpFile = tmpDir + path.sep + 'test-json-reporter-options-' + randomStr + '.json';
+
+      var args = ['--reporter=json', '--reporter-options', 'output=' + tmpFile];
+      run('passing.fixture.js', args, function (err, result) {
+        if (err) return done(err);
+
+        var json = fs.readFileSync(tmpFile, 'utf8');
+        fs.unlinkSync(tmpFile);
+        var results = JSON.parse(json);
+        assert(results.passes, 'JSON did not contain the expected passes array.');
+        assert(results.passes.length === 2, 'JSON did not contain the expected number of results.');
+        done(err);
+      });
+    });
+  });
+
+  describe('multiple', function () {
+    it('supports multiple reporters and reporter options', function (done) {
+      var randomStr = crypto.randomBytes(8).toString('hex');
+      var tmpDir = os.tmpDir().replace(new RegExp(path.sep + '$'), '');
+      var tmpJsonFile = tmpDir + path.sep + 'test-multiple-reporters-' + randomStr + '.json';
+      var tmpXmlFile = tmpDir + path.sep + 'test-multiple-reporters-' + randomStr + '.xml';
+
+      var args = ['--reporter=json,xunit', '--reporter-options', 'xunit:{output=' + tmpXmlFile + '},json:{output=' + tmpJsonFile + '}'];
+      run('passing.fixture.js', args, function (err, result) {
+        if (err) return done(err);
+
+        var json = fs.readFileSync(tmpJsonFile, 'utf8');
+        fs.unlinkSync(tmpJsonFile);
+        var xml = fs.readFileSync(tmpXmlFile, 'utf8');
+        fs.unlinkSync(tmpXmlFile);
+        assert(json.length > 0, 'JSON file is empty.');
+        assert(xml.length > 0, 'XML file is empty');
+        done(err);
+      });
+    });
+  });
 });

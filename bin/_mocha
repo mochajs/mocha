@@ -66,10 +66,10 @@ program
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
-  .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
-  .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
-  .option('-S, --sort', 'sort test files')
-  .option('-b, --bail', 'bail after first test failure')
+  .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options, use name1:{k=v,k2=v2,...},name2:{...} for multiple reporters')
+  .option('-R, --reporter <name>', 'specify the reporter to use, or <name1>,<name2>,... for multiple reporters.', list, ['spec'])
+  .option('-S, --sort', "sort test files")
+  .option('-b, --bail', "bail after first test failure")
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-f, --fgrep <string>', 'only run tests containing <string>')
@@ -196,16 +196,45 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 var reporterOptions = {};
 if (program.reporterOptions !== undefined) {
-  program.reporterOptions.split(',').forEach(function (opt) {
-    var L = opt.split('=');
-    if (L.length > 2 || L.length === 0) {
-      throw new Error("invalid reporter option '" + opt + "'");
-    } else if (L.length === 2) {
-      reporterOptions[L[0]] = L[1];
-    } else {
-      reporterOptions[L[0]] = true;
+  var reporterOptionsParser;
+  var multipleReporterFormat = /([^,:]+):{([^}]+)}/g;
+
+  var parseOptions = function (optionsStr) {
+    var options = {};
+    optionsStr.split(',').forEach(function (opt) {
+      var split = opt.split('=');
+      if (split.length > 2 || split.length === 0) {
+        throw new Error("invalid reporter option '" + opt + "'");
+      }
+
+      if (split.length === 2) {
+        options[split[0]] = split[1];
+      } else {
+        options[split[0]] = true;
+      }
+    });
+
+    return options;
+  };
+
+  if (program.reporterOptions.match(multipleReporterFormat)) {
+    // multiple reporter config:
+    //   spec:{a=1,b=2},dot:{c=3,d=4}
+    var match;
+    while ((match = multipleReporterFormat.exec(program.reporterOptions))) {
+      if (match.length !== 3) {
+        throw new Error("invalid multiple reporter options format '" + program.reporterOptions + "'");
+      }
+
+      var reporterName = match[1];
+      var reporterOptionStr = match[2];
+      reporterOptions[reporterName] = parseOptions(reporterOptionStr);
     }
-  });
+  } else {
+    // single reporter config:
+    //   a=1,b=2
+    reporterOptions._default = parseOptions(program.reporterOptions);
+  }
 }
 
 // reporter
@@ -214,16 +243,17 @@ mocha.reporter(program.reporter, reporterOptions);
 
 // load reporter
 
-var Reporter = null;
-try {
-  Reporter = require('../lib/reporters/' + program.reporter);
-} catch (err) {
+program.reporter.forEach(function (reporterName) {
   try {
-    Reporter = require(program.reporter);
-  } catch (err2) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
+    require('../lib/reporters/' + reporterName);
+  } catch (err) {
+    try {
+      require(reporterName);
+    } catch (err2) {
+      throw new Error('reporter "' + reporterName + '" does not exist');
+    }
   }
-}
+});
 
 // --no-colors
 
