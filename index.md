@@ -90,7 +90,7 @@ $ $EDITOR test/test.js
 In your editor:
 
 ```js
-var assert = require('assert');
+var assert = require('chai').assert;
 describe('Array', function() {
   describe('#indexOf()', function () {
     it('should return -1 when the value is not present', function () {
@@ -381,7 +381,7 @@ Given Mocha's use of `Function.prototype.call` and function expressions to defin
 Take the following example:
 
 ```js
-var assert = require('assert');
+var assert = require('chai').assert;
 
 function add() {
   return Array.prototype.slice.call(arguments).reduce(function(prev, curr) {
@@ -721,7 +721,7 @@ The `require` interface allows you to require the `describe` and friend words di
 var testCase = require('mocha').describe;
 var pre = require('mocha').before;
 var assertions = require('mocha').it;
-var assert = require('assert');
+var assert = require('chai').assert;
 
 testCase('Array', function() {
   pre(function() {
