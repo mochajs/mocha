@@ -611,9 +611,9 @@ Mocha's "interface" system allows developers to choose their style of DSL.  Moch
 
 ### BDD
 
-The **BDD** interface provides `describe()`, `context()`, `it()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+The **BDD** interface provides `describe()`, `context()`, `it()`, `specify()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
-`context()` is just an alias for `describe()`, and behaves the same way; it just provides a way to keep tests easier to read and organized.
+`context()` is just an alias for `describe()`, and behaves the same way; it just provides a way to keep tests easier to read and organized. Similarly, `specify()` is an alias for `it()`.
 
 > All of the previous examples were written using the **BDD** interface.
 
