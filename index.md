@@ -993,6 +993,10 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
   
 ![Wallaby.js in Action](images/wallaby.png)
 
+### Emacs
+[Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
+
+![Emacs Mocha Runner in Action](images/emacs.png)
 
 ## Examples
 
