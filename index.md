@@ -202,19 +202,19 @@ describe('hooks', function() {
   before(function() {
     // runs before all tests in this block
   });
-  
+
   after(function() {
     // runs after all tests in this block
   });
-  
+
   beforeEach(function() {
     // runs before each test in this block
   });
-  
+
   afterEach(function() {
     // runs after each test in this block
   });
-  
+
   // test cases
 });
 ```
@@ -243,9 +243,9 @@ All "hooks" (`before()`, `after()`, `beforeEach()`, `afterEach()`) may be sync o
 
 ```js
 describe('Connection', function() {
-  var db = new Connection, 
-    tobi = new User('tobi'), 
-    loki = new User('loki'), 
+  var db = new Connection,
+    tobi = new User('tobi'),
+    loki = new User('loki'),
     jane = new User('jane');
 
   beforeEach(function(done) {
@@ -285,11 +285,11 @@ If you need to perform asynchronous operations before any of your suites are run
 ```js
 setTimeout(function() {
   // do some setup
-    
+
   describe('my suite', function() {
     // ...
   });
-  
+
   run();
 }, 5000);
 ```
@@ -323,7 +323,7 @@ describe('Array', function() {
 ```
 
 *Note*: All nested suites will still be executed.
- 
+
 Here's an example of executing a particular test case:
 
 ```js
@@ -342,7 +342,7 @@ describe('Array', function() {
 
 *Note*: Hooks, if present, will still be executed.
 
-*Warning*: Having more than one call to `.only()` in your tests or suites may result in unexpected behavior. 
+*Warning*: Having more than one call to `.only()` in your tests or suites may result in unexpected behavior.
 
 ## Inclusive Tests
 
@@ -427,7 +427,7 @@ To tweak what's considered "slow", you can use the `slow()` method:
 ```js
 describe('something slow', function() {
   this.slow(10000);
-  
+
   it('should take long enough for me to go make a sandwich', function() {
     // ...
   });
@@ -450,7 +450,7 @@ describe('a suite of tests', function() {
   });
 
   it('should take less than 500ms as well', function(done){
-    setTimeout(done, 200);
+    setTimeout(done, 250);
   });
 })
 ```
@@ -654,7 +654,7 @@ suite('Array', function() {
   });
 
   suite('#indexOf()', function() {
-    test('should return -1 when not present', function() { 
+    test('should return -1 when not present', function() {
       assert.equal(-1, [1,2,3].indexOf(4));
     });
   });
@@ -990,7 +990,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 ### Wallaby.js
 
 [Wallaby.js](http://wallabyjs.com) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.) and Visual Studio for both browser and node.js projects.
-  
+
 ![Wallaby.js in Action](images/wallaby.png)
 
 ### Emacs
