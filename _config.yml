@@ -1,12 +1,11 @@
-url: http://mochajs.org
-markdown: kramdown
-redcarpet:
-  extensions: ["with_toc_data"]
-highlighter: rouge
+url: https://mochajs.org
 exclude:
   - node_modules
   - README.md
   - Gemfile*
   - package.json
   - CNAME
+  - Makefile
+  - npm-debug.log*
+
 

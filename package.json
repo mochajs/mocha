@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Mocha's gh-pages branch",
   "private": true,
-  "maintainers": [
-    "travisjeffery <tj@travisjeffery.com>",
-    "jbnicolai <joshua@jbna.nl>",
-    "boneskull <chiller@badwing.com>"
+  "authors": [
+    "David da Silva Contín <dasilvacontin@gmail.com>",
+    "Christopher Hiller <boneskull@boneskull.com>",
+    "Travis Jeffery <tj@travisjeffery.com>"
   ],
   "scripts": {
     "prepublish": "gem install bundler && bundle install",
@@ -14,13 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mochajs/mocha.git#gh-pages"
+    "url": "https://github.com/mochajs/mochajs.github.io.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mochajs/mocha/issues"
+    "url": "https://github.com/mochajs/mochajs.github.io/issues"
   },
-  "homepage": "http://mochajs.org",
+  "homepage": "https://mochajs.org",
   "devDependencies": {
     "markdown-toc-index": "^0.2.0"
   }

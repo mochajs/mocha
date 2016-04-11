@@ -61,7 +61,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
-- [`mocha.opts`](#mocha-opts)
+- [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
 - [Editor Plugins](#editor-plugins)
 - [Examples](#examples)
@@ -188,7 +188,7 @@ describe('#find()', function() {
 
 (The latter example uses [Chai as Promised](https://www.npmjs.com/package/chai-as-promised) for fluent promise assertions.)
 
-## Arrow functions
+## Arrow Functions
 
 Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) to Mocha is discouraged. Their lexical binding of the `this` value makes them unable to access the Mocha context, and statements like `this.timeout(1000);` will not work inside an arrow function.
 
@@ -663,7 +663,7 @@ suite('Array', function() {
 
 ### Exports
 
-The **Exports** interface is much like Mocha's predecessor [expresso](https://github.com/visionmedia/expresso). The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
+The **Exports** interface is much like Mocha's predecessor [expresso](https://github.com/tj/expresso). The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
 ```js
 module.exports = {
