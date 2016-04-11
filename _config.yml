@@ -1,8 +1,8 @@
 url: http://mochajs.org
-markdown: redcarpet
+markdown: kramdown
 redcarpet:
   extensions: ["with_toc_data"]
-highlighter: pygments
+highlighter: rouge
 exclude:
   - node_modules
   - README.md

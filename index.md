@@ -541,7 +541,7 @@ Executes tests on changes to JavaScript in the CWD, and once initially.
 ### `--compilers`
 
 CoffeeScript is no longer supported out of the box. CS and similar transpilers
-may be used by mapping the file extensions (for use with --watch) and the module
+may be used by mapping the file extensions (for use with `--watch`) and the module
 name. For example `--compilers coffee:coffee-script` with CoffeeScript 1.6- or
 `--compilers coffee:coffee-script/register` with CoffeeScript 1.7+.
 
@@ -854,10 +854,10 @@ The command `mocha --reporter doc array` would yield:
 The SuperAgent request library [test documentation](http://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
 
 ```makefile
-  test-docs:
-    make test REPORTER=doc \
-      | cat docs/head.html - docs/tail.html \
-      > docs/test.html
+test-docs:
+	$(MAKE) test REPORTER=doc \
+		| cat docs/head.html - docs/tail.html \
+		> docs/test.html
 ```
 
 View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
