@@ -126,6 +126,9 @@ ul li {
   border-bottom: 1px solid #eee;
   padding: 5px 0;
   font-size: 12px;
+  -webkit-column-break-inside: avoid;
+  -moz-column-break-inside: avoid;
+  column-break-inside: avoid;
 }
 
 ul::after {
