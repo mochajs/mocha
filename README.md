@@ -54,7 +54,7 @@ Become a backer and show your support to our open source project. [[Become a bac
 
 ## Sponsors
 
-Is your company using Mocha? Ask your boss to support us. It will help us dedicate more time to maintain this project and to make it even better for all our users. Also your company logo will show up on here and on our website :-) [[Become a sponsor](https://opencollective.com/mochajs#sponsor)]
+Is your company using Mocha? Ask your manager or ask your marketing/recruiting department for some budget to support us. It will help us dedicate more time to maintain this project and to make it even better for all our users. Also, your company logo will show up on here and on our website :-) [[Become a sponsor](https://opencollective.com/mochajs#sponsor)]
 
 <a href="https://opencollective.com/mochajs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/0/avatar"></a>
 <a href="https://opencollective.com/mochajs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/1/avatar"></a>
