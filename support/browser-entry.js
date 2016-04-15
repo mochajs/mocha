@@ -119,7 +119,10 @@ mocha.ui = function(ui){
 
 mocha.setup = function(opts){
   if ('string' == typeof opts) opts = { ui: opts };
-  for (var opt in opts) this[opt](opts[opt]);
+  for (var opt in opts) {
+    if (opts.hasOwnProperty(opt)) {
+      this[opt](opts[opt]);
+    }
   return this;
 };
 
