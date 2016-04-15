@@ -18,7 +18,7 @@
 
 ## Backers
 
-Become a backer and show your support to our open source project. [[Become a backer](https://opencollective.com/mochajs#backer)]
+[Become a backer]((https://opencollective.com/mochajs#backer)) and show your support to our open source project.
 
 <a href="https://opencollective.com/mochajs/backer/0/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/0/avatar"></a>
 <a href="https://opencollective.com/mochajs/backer/1/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/1/avatar"></a>
@@ -54,7 +54,7 @@ Become a backer and show your support to our open source project. [[Become a bac
 
 ## Sponsors
 
-Is your company using Mocha? Ask your manager or ask your marketing/recruiting department for some budget to support us. It will help us dedicate more time to maintain this project and to make it even better for all our users. Also, your company logo will show up on here and on our website :-) [[Become a sponsor](https://opencollective.com/mochajs#sponsor)]
+Does your company use Mocha?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.  Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org)--who doesn't want a little extra exposure?  [Here's the info](https://opencollective.com/mochajs#sponsor).
 
 <a href="https://opencollective.com/mochajs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/0/avatar"></a>
 <a href="https://opencollective.com/mochajs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/1/avatar"></a>
@@ -76,3 +76,7 @@ Is your company using Mocha? Ask your manager or ask your marketing/recruiting d
 <a href="https://opencollective.com/mochajs/sponsor/17/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/17/avatar"></a>
 <a href="https://opencollective.com/mochajs/sponsor/18/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/18/avatar"></a>
 <a href="https://opencollective.com/mochajs/sponsor/19/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/19/avatar"></a>
+
+## License
+
+MIT
