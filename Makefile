@@ -1,4 +1,5 @@
 BROWSERIFY := node_modules/.bin/browserify
+DEREQUIRE := node_modules/.bin/derequire
 ESLINT := node_modules/.bin/eslint
 
 REPORTER ?= spec
@@ -15,7 +16,7 @@ mocha.js: $(SRC) $(SUPPORT)
 		--ignore 'jade' \
 		--ignore 'path' \
 		--ignore 'supports-color' \
-		--exclude './lib-cov/mocha' > $@
+		--exclude './lib-cov/mocha' | @${DEREQUIRE} > $@
 
 clean:
 	rm -f mocha.js
