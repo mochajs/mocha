@@ -172,6 +172,11 @@ img {
   max-width: 100%;
 }
 
+img[src*="opencollective.com/mochajs"], img[src*=badges] {
+    margin: 0;
+    box-shadow: none;
+}
+
 .badge {
   margin-right: 8px;
   display: inline-block;
