@@ -10,6 +10,7 @@ describe('Suite', function(){
       this.suite._timeout = 3043;
       this.suite._slow = 101;
       this.suite._bail = true;
+      this.suite._bailSuite = true;
       this.suite.suites.push(1);
       this.suite.tests.push('hello');
       this.suite._beforeEach.push(2);
@@ -32,6 +33,10 @@ describe('Suite', function(){
 
     it('should copy the bail value', function(){
       this.suite.clone().bail().should.be.true();
+    });
+
+    it('should copy the bailSuite value', function(){
+      this.suite.clone().bailSuite().should.be.true();
     });
 
     it('should not copy the values from the suites array', function(){
@@ -120,6 +125,26 @@ describe('Suite', function(){
       it('should return the Suite object', function(){
         var newSuite = this.suite.bail(false);
         newSuite.bail().should.be.false();
+      });
+    });
+  });
+
+  describe('.bailSuite()', function(){
+    beforeEach(function(){
+      this.suite = new Suite('A Suite');
+      this.suite._bailSuite = true
+    });
+
+    describe('when no argument is passed', function(){
+      it('should return the bailSuite value', function(){
+        this.suite.bailSuite().should.be.true();
+      });
+    });
+
+    describe('when argument is passed', function(){
+      it('should return the Suite object', function(){
+        var newSuite = this.suite.bailSuite(false);
+        newSuite.bailSuite().should.be.false();
       });
     });
   });

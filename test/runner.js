@@ -193,6 +193,18 @@ describe('Runner', function(){
       runner.hook('afterEach', function(){});
       runner.hook('afterAll', function(){});
     })
+
+    it('should execute hooks after failed test if bailSuite is true', function(done){
+      runner.fail({});
+      suite.bailSuite(true);
+      suite.afterEach(function(){
+        suite.afterAll(function() {
+          done();
+        })
+      });
+      runner.hook('afterEach', function(){});
+      runner.hook('afterAll', function(){});
+    })
   })
 
   describe('.fail(test, err)', function(){
@@ -309,6 +321,14 @@ describe('Runner', function(){
       var hook = {}, err = {};
       suite.bail(false);
       runner.on('end', function() { throw new Error('"end" was emit, but the bail is false'); });
+      runner.failHook(hook, err);
+      done();
+    })
+
+    it('should not emit "end" if bailSuite is true', function(done){
+      var hook = {}, err = {};
+      suite.bailSuite(true);
+      runner.on('end', function() { throw new Error('"end" was emit, even though only bailSuite is true'); });
       runner.failHook(hook, err);
       done();
     })
