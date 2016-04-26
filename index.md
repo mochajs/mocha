@@ -21,6 +21,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 - auto-detects and disables coloring for non-ttys
 - maps uncaught exceptions to the correct test case
 - async test timeout support
+- test retry support
 - test-specific timeouts
 - growl notification support
 - reports test durations
@@ -56,6 +57,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 - [Pending Tests](#pending-tests)
 - [Exclusive Tests](#exclusive-tests)
 - [Inclusive Tests](#inclusive-tests)
+- [Retry Tests](#retry-tests)
 - [Dynamically Generating Tests](#dynamically-generating-tests)
 - [Timeouts](#timeouts)
 - [Diffs](#diffs)
@@ -378,6 +380,32 @@ describe('Array', function() {
 });
 ```
 
+## Retry Tests
+
+You can choose to retry failed tests up to a certain number of times. This feature is designed to handle end-to-end tests (functional tests/Selenium...) where resources cannot be easily mocked/stubbed. **It's not recommended to use this feature for unit tests**.
+
+This feature does re-run `beforeEach/afterEach` hooks but not `before/after` hooks.
+
+**NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks](https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js) for `Promise` chain).
+
+```js
+describe('retries', function() {
+  // Retry all tests in this suite up to 4 times
+  this.retries(4);
+  
+  beforeEach(function () {
+    browser.get('http://www.yahoo.com');
+  });
+  
+  it('should succeed on the 3rd try', function () {
+    // Specify this test to only retry up to 2 times
+    this.retries(2);
+    expect($('.foo').isDisplayed()).to.eventually.be.true;
+  });
+});
+
+```
+
 ## Dynamically Generating Tests
 
 Given Mocha's use of `Function.prototype.call` and function expressions to define suites and test cases, it's straightforward to generate your tests dynamically.  No special syntax is required &mdash; plain ol' JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
@@ -532,6 +560,7 @@ Options:
  --prof                                  log statistical profiling information
  --recursive                             include sub directories
  --reporters                             display available reporters
+ --retries                               set number of times to retry failed test cases
  --throw-deprecation                     throw an exception anytime a deprecated function is used
  --trace                                 trace function calls
  --trace-deprecation                     show stack traces on deprecations
