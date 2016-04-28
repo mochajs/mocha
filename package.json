@@ -286,7 +286,7 @@
   },
   "devDependencies": {
     "browser-stdout": "^1.2.0",
-    "browserify": "10.2.4",
+    "browserify": "^13.0.0",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
     "should": "~8.0.0",
