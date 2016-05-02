@@ -451,6 +451,20 @@ describe('Array', function() {
 });
 ```
 
+You can also defer skipping a test until it's running. This can be useful if a test relies on some particular environment or configuration that can't be detected ahead of time. For example:
+
+```js
+it('should only test in the right environment', function() {
+  if (/* check test environment */) {
+    // test the things
+  } else {
+    this.skip();
+  }
+});
+```
+
+The difference between calling `this.skip()` and simply not making any assertions is that `this.skip()` will cause the test to be reported as [pending](#pending-tests), while not making any assertions will cause the test to be reported as passed.
+
 ## Retry Tests
 
 You can choose to retry failed tests up to a certain number of times. This feature is designed to handle end-to-end tests (functional tests/Selenium...) where resources cannot be easily mocked/stubbed. **It's not recommended to use this feature for unit tests**.
