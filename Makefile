@@ -9,7 +9,7 @@ build: toc bundle
 	${bundle} exec jekyll build --safe
 
 toc:
-	./node_modules/.bin/toc-idx -i index.md --max-depth 1 --bullet "\- " index.md
+	./node_modules/.bin/toc-idx -i index.md --max-depth 1 --omit 'Backers' 'Sponsors' --bullet "\- " index.md
 
 bundle:
 	${bundle}

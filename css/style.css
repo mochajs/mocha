@@ -16,37 +16,12 @@ header {
 }
 
 h1 {
-  position: relative;
-  font-style: normal;
-  font-weight: 100;
-  text-transform: lowercase;
-  background-color: #8a6343;
-  color: white;
-  display: inline-block;
-  padding: 48px 30px;
-  font-size: 2em;
+  margin-left: -19px;
   opacity: 0;
-  -webkit-border-radius: 100px;
-  -moz-border-radius: 100px;
-  -o-border-radius: 100px;
-  border-radius: 100px;
-  -webkit-transition: opacity 1s, background-color 200ms;
-  -moz-transition: opacity 1s, background-color 200ms;
-  -o-transition: opacity 1s, background-color 200ms;
-  transition: opacity 1s, background-color 200ms;
-}
-
-h1:hover {
-  background-color: #a07a5c;
-}
-
-h1 a {
-  color: inherit;
-  font-weight: inherit;
-}
-
-h1 a:hover {
-  text-decoration: none;
+  -webkit-transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  transition: opacity 1s;
 }
 
 .onload h1 {
@@ -72,9 +47,9 @@ h3 {
   color: #c29d7f;
   font-weight: 100;
   font-size: 30px;
-  margin-top: -110px;
+  margin-top: -155px;
   margin-left: 140px;
-  margin-bottom: 100px;
+  margin-bottom: 125px;
   letter-spacing: 2px;
   -webkit-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
   -moz-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
@@ -88,7 +63,7 @@ h3 {
 
 .onload #tag {
   opacity: 1;
-  margin-left: 170px;
+  margin-left: 185px;
 }
 
 #content > p:first-child {
@@ -172,7 +147,7 @@ img {
   max-width: 100%;
 }
 
-img[src*="opencollective.com/mochajs"], img[src*=badges] {
+img[src*="opencollective.com/mochajs"], img[src*=badges], img[src*=".svg"] {
     margin: 0;
     box-shadow: none;
 }
