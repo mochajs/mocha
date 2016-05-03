@@ -278,9 +278,9 @@
     "debug": "2.2.0",
     "diff": "1.4.0",
     "escape-string-regexp": "1.0.2",
-    "glob": "^7.0.3",
+    "glob": "7.0.3",
     "growl": "1.9.2",
-    "pug": "^1.11.0",
+    "pug": "1.11.0",
     "mkdirp": "0.5.1",
     "supports-color": "1.2.0"
   },
