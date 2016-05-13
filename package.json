@@ -257,11 +257,6 @@
     "type": "git",
     "url": "git://github.com/mochajs/mocha.git"
   },
-  "maintainers": [
-    "travisjeffery <tj@travisjeffery.com>",
-    "jbnicolai <joshua@jbna.nl>",
-    "boneskull <chiller@badwing.com>"
-  ],
   "main": "./index",
   "bin": {
     "mocha": "./bin/mocha",
