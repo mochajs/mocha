@@ -404,6 +404,17 @@ describe('lib/utils', function () {
       utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
     });
 
+    it('should accept a glob "path" value', function () {
+      utils.lookupFiles('/tmp/mocha-utils*', ['js'], false)
+        .should
+        .containEql('/tmp/mocha-utils-link.js')
+        .and
+        .containEql('/tmp/mocha-utils.js')
+        .and
+        .have
+        .lengthOf(2);
+    });
+
     afterEach(function () {
       ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
         try {

@@ -1,21 +1,33 @@
+# in order to use 'trusty' dist, need this.
+# see https://docs.travis-ci.com/user/trusty-ci-environment/
+sudo: required
+
+# trust dist provides a modern build chain (as opposed to 'precise' dist)
+# which absolves us from having to install compilers and stuff
+dist: trusty
+
 language: node_js
-env:
-  global:
-   - CXX=g++-4.8
-before_install:
-- ./scripts/ensure-compatible-npm.sh
-script: travis_retry npm test
+
 node_js:
-- '5'
-- '4'
-- 'iojs'
-- '0.12'
-- '0.11'
-- '0.10'
-- '0.8'
-sudo: false
+  - '6'
+  - '5'
+  - '4'
+  - 'iojs'
+  - '0.12'
+  - '0.11'
+  - '0.10'
+  - '0.8'
+
+before_install:
+  # node 0.8 won't install our dev deps with an out-of-box npm;
+  # this upgrades it
+  - ./scripts/ensure-compatible-npm.sh
+
+script: travis_retry npm test
+
 notifications:
   urls:
+    # for gitter
     - secure: "EmycFlk48bUvOQ07mxnbcn6T+n3G4wVWuXgrDsUUp6EhJ9866wQK9i+qVhqogWuSEQrGoVaS/vpc/NEYxDP30BD/+nqgvOhVhLVEgtziI85imyV/oUVpArdW3AUmuzCrx7rQCivygjpBmWV9ZcUT5Km4qp1iQhuumy2WbplxrZ4="
   on_success: change
   on_failure: always
