@@ -348,6 +348,18 @@ describe('lib/utils', function () {
 
   describe('type', function () {
     var type = utils.type;
+    var toString = Object.prototype.toString;
+
+    beforeEach(function() {
+      // some JS engines such as PhantomJS 1.x exhibit this behavior
+      Object.prototype.toString = function() {
+        if (this === global) {
+          return '[object DOMWindow]';
+        }
+        return toString.call(this);
+      };
+    });
+
     it('should recognize various types', function () {
       type({}).should.equal('object');
       type([]).should.equal('array');
@@ -358,70 +370,19 @@ describe('lib/utils', function () {
       type(new Date()).should.equal('date');
       type(/foo/).should.equal('regexp');
       type('type').should.equal('string');
-      type(global).should.equal('global');
+      type(global).should.equal('domwindow');
       type(true).should.equal('boolean');
     });
 
     describe('when toString on null or undefined stringifies window', function () {
-      var toString = Object.prototype.toString;
-
-      beforeEach(function () {
-        // some JS engines such as PhantomJS 1.x exhibit this behavior
-        Object.prototype.toString = function () {
-          return '[object DOMWindow]';
-        };
-      });
-
       it('should recognize null and undefined', function () {
         type(null).should.equal('null');
         type(undefined).should.equal('undefined');
       });
-
-      afterEach(function () {
-        Object.prototype.toString = toString;
-      });
-    });
-  });
-
-  describe('lookupFiles', function () {
-    var fs = require('fs'),
-      path = require('path'),
-      existsSync = fs.existsSync || path.existsSync;
-
-    beforeEach(function () {
-      fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
-      fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
-    });
-
-    it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false)
-        .should.containEql('/tmp/mocha-utils-link.js')
-        .and.containEql('/tmp/mocha-utils.js')
-        .and.have.lengthOf(2);
-      existsSync('/tmp/mocha-utils-link.js').should.be.true();
-      fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-      existsSync('/tmp/mocha-utils-link.js').should.be.false();
-      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
-    });
-
-    it('should accept a glob "path" value', function () {
-      utils.lookupFiles('/tmp/mocha-utils*', ['js'], false)
-        .should
-        .containEql('/tmp/mocha-utils-link.js')
-        .and
-        .containEql('/tmp/mocha-utils.js')
-        .and
-        .have
-        .lengthOf(2);
     });
 
     afterEach(function () {
-      ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
-        try {
-          fs.unlinkSync(path);
-        }
-        catch (ignored) {}
-      });
+      Object.prototype.toString = toString;
     });
   });
 });

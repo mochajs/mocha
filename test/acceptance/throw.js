@@ -1,7 +1,6 @@
-var mocha = require('../../')
-  , Suite = mocha.Suite
-  , Runner = mocha.Runner
-  , Test = mocha.Test;
+var Suite = require('../../lib/suite');
+var Test = require('../../lib/test');
+var Runner = require('../../lib/runner');
 
 describe('a test that throws', function () {
   var suite, runner;

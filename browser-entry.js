@@ -4,7 +4,7 @@
 
 process.stdout = require('browser-stdout')();
 
-var Mocha = require('../');
+var Mocha = require('./lib/mocha');
 
 /**
  * Create a Mocha instance.
@@ -159,3 +159,5 @@ Mocha.process = process;
 
 global.Mocha = Mocha;
 global.mocha = mocha;
+
+module.exports = global;

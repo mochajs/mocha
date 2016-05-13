@@ -266,7 +266,8 @@
     "node": ">= 0.8.x"
   },
   "scripts": {
-    "test": "make test-all"
+    "preinstall": "node scripts/fake-karma-mocha-peer-dep.js",
+    "test": "make test"
   },
   "dependencies": {
     "commander": "2.3.0",
@@ -284,8 +285,17 @@
     "browserify": "^13.0.0",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
+    "karma": "^0.13.22",
+    "karma-browserify": "^5.0.5",
+    "karma-mocha": "^1.0.1",
+    "karma-mocha-clean-reporter": "0.0.1",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-sauce-launcher": "^1.0.0",
+    "karma-should": "^1.0.0",
+    "phantomjs": "1.9.8",
     "should": "~8.0.0",
-    "through2": "~0.6.5"
+    "through2": "~0.6.5",
+    "watchify": "^3.7.0"
   },
   "files": [
     "bin",
@@ -299,7 +309,8 @@
   "browser": {
     "debug": "./lib/browser/debug.js",
     "events": "./lib/browser/events.js",
-    "tty": "./lib/browser/tty.js"
+    "tty": "./lib/browser/tty.js",
+    "./index.js": "./browser-entry.js"
   },
   "licenses": [
     {
