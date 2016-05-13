@@ -266,6 +266,7 @@
     "node": ">= 0.8.x"
   },
   "scripts": {
+    "preinstall": "node scripts/fake-karma-mocha-peer-dep.js",
     "test": "make test-all"
   },
   "dependencies": {
@@ -284,7 +285,10 @@
     "browserify": "^13.0.0",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
-    "mocha-phantomjs": "^4.0.2",
+    "karma": "^0.13.22",
+    "karma-mocha": "^1.0.1",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-sauce-launcher": "^1.0.0",
     "phantomjs": "^1.9.20",
     "should": "~8.0.0",
     "through2": "~0.6.5"

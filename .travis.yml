@@ -21,7 +21,7 @@ node_js:
 before_install:
   # node 0.8 won't install our dev deps with an out-of-box npm;
   # this upgrades it
-  - ./scripts/ensure-compatible-npm.sh
+  - node ./scripts/upgrade-npm.js
 
 script: travis_retry npm test
 
