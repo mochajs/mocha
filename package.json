@@ -285,6 +285,7 @@
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
     "mocha-phantomjs": "^4.0.2",
+    "phantomjs": "^1.9.20",
     "should": "~8.0.0",
     "through2": "~0.6.5"
   },
