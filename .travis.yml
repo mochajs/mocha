@@ -21,9 +21,15 @@ node_js:
 before_install:
   # node 0.8 won't install our dev deps with an out-of-box npm;
   # this upgrades it
-  - ./scripts/ensure-compatible-npm.sh
+  - node ./scripts/upgrade-npm.js
 
 script: travis_retry npm test
+
+addons:
+  sauce_connect:
+    username: mochajs
+    access_key:
+      secure: R0HXKtR6F2iDEnItv57BTRyL64XfyIlyyluPLK8G33O/InaQjT3KxGuxevz3nVYIqqnI1MPjYodXcQaqrBOLUVmA2vhBeMHB2OwGc9GAL+HBtB1fh+bQJelkl/XMcTTbC5LIZ6nZjmFnkmjqT3AmUhdDRISgieIFeVY4x48LfiU=
 
 notifications:
   urls:

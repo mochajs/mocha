@@ -4,28 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../mocha.css" />
-    <script src="../../mocha.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script>
-      function assert(expr, msg) {
-        if (!expr) throw new Error(msg || 'failed');
-      }
-    </script>
-    <script src="array.js"></script>
-    <script src="../acceptance/duration.js"></script>
-    <script src="../acceptance/timeout.js"></script>
-    <script src="multiple-done.js"></script>
-    <script>
-      onload = function(){
-        mocha.checkLeaks();
-        mocha.globals(['foo']);
-        var runner = mocha.run();
-
-        // runner.on('test end', function(test){
-        //   console.log(test.fullTitle());
-        // });
-      };
-    </script>
+    <script src="../../phantomjs-bundle.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
