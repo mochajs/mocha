@@ -283,7 +283,9 @@
     "browser-stdout": "^1.2.0",
     "browserify": "10.2.4",
     "coffee-script": "~1.8.0",
+    "cross-spawn": "^2.1.5",
     "eslint": "^1.2.1",
+    "os-tmpdir": "^1.0.1",
     "should": "~8.0.0",
     "through2": "~0.6.5"
   },

@@ -11,7 +11,7 @@ describe('retries', function() {
 
       assert(!err);
 
-      lines = res.output.split(/[\n․]+/).map(function(line) {
+      lines = res.output.split(helpers.splitRegExp).map(function(line) {
         return line.trim();
       }).filter(function(line) {
         return line.length;
@@ -76,7 +76,7 @@ describe('retries', function() {
 
       assert(!err);
 
-      lines = res.output.split(/[\n․]+/).map(function(line) {
+      lines = res.output.split(helpers.splitRegExp).map(function(line) {
         return line.trim();
       }).filter(function(line) {
         return line.length;

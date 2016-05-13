@@ -386,22 +386,27 @@ describe('lib/utils', function () {
   describe('lookupFiles', function () {
     var fs = require('fs'),
       path = require('path'),
-      existsSync = fs.existsSync || path.existsSync;
+      osTmpDir = require('os-tmpdir'),
+      tmpDir = osTmpDir(),
+      existsSync = fs.existsSync || path.existsSync,
+      tmpFile = function (fileName) {
+        return path.join(tmpDir, fileName);
+      };
 
     beforeEach(function () {
-      fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
-      fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
+      fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
+      fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
     });
 
     it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false)
-        .should.containEql('/tmp/mocha-utils-link.js')
-        .and.containEql('/tmp/mocha-utils.js')
+      utils.lookupFiles(tmpDir, ['js'], false)
+        .should.containEql(tmpFile('mocha-utils-link.js'))
+        .and.containEql(tmpFile('mocha-utils.js'))
         .and.have.lengthOf(2);
-      existsSync('/tmp/mocha-utils-link.js').should.be.true();
-      fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-      existsSync('/tmp/mocha-utils-link.js').should.be.false();
-      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
+      existsSync(tmpFile('mocha-utils-link.js')).should.be.true();
+      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
+      existsSync(tmpFile('mocha-utils-link.js')).should.be.false();
+      utils.lookupFiles(tmpDir, ['js'], false).should.eql([]);
     });
 
     it('should accept a glob "path" value', function () {
@@ -416,7 +421,7 @@ describe('lib/utils', function () {
     });
 
     afterEach(function () {
-      ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
+      [tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'), tmpFile('bob')].forEach(function (path) {
         try {
           fs.unlinkSync(path);
         }

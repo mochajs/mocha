@@ -1,9 +1,11 @@
 var fs = require('fs');
+var path = require('path');
+var osTmpDir = require('os-tmpdir');
 
 describe('fs.readFile()', function(){
   describe('when the file exists', function(){
     it('should succeed', function(done){
-      fs.writeFile('/tmp/mocha', 'wahoo', done)
+      fs.writeFile(path.join(osTmpDir(), 'mocha'), 'wahoo', done)
     })
   })
 
