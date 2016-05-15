@@ -1,0 +1,5 @@
+####NOTE: Mocha is currently awaiting a release, pending further testing, and there are several unreleased fixes already in place. Before creating an issue, you may wish to try testing your problem against the current GitHub master branch and see if that resolves the issue. If your problem occurs in Node, simply use `npm i mochajs/mocha` to install the current in-progress version from GitHub. If it only occurs in the browser, you'll have to check out the source from GitHub and build the mocha.js file for the browser, as this file is only updated with each release. It might also be a good idea to skim through recent issues, both open and closed, to check for any that look like the same problem.
+
+####NOTE: the glob/graceful-fs deprecation has been resolved in master and will be fixed in the next release.
+
+**If you still have an issue to submit after following the above instructions, please delete all this text.** We apologize for the clutter; the delay in the current release has caused a lot of duplicate issue reports recently and we're hoping to avoid losing sight of the forest for the trees.
