@@ -6098,11 +6098,7 @@ exports.stringify = function(value) {
       .replace(/,(\n|$)/g, '$1');
   }
 
-  for (var prop in value) {
-    if (Object.prototype.hasOwnProperty.call(value, prop)) {
-      return jsonStringify(exports.canonicalize(value), 2).replace(/,(\n|$)/g, '$1');
-    }
-  }
+  JSON.stringify(value, 2);
 
   return emptyRepresentation(value, type);
 };
