@@ -6098,7 +6098,7 @@ exports.stringify = function(value) {
       .replace(/,(\n|$)/g, '$1');
   }
 
-  JSON.stringify(value, 2);
+  return JSON.stringify(value, 2);
 
   return emptyRepresentation(value, type);
 };
