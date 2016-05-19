@@ -10,37 +10,35 @@ describe('lookupFiles', function() {
   });
 
   it('should not choke on symlinks', function() {
-    utils.lookupFiles('/tmp', ['js'], false)
-      .should
-      .containEql('/tmp/mocha-utils-link.js')
+    expect(utils.lookupFiles('/tmp', ['js'], false))
+      .to
+      .contain('/tmp/mocha-utils-link.js')
       .and
-      .containEql('/tmp/mocha-utils.js')
+      .contain('/tmp/mocha-utils.js')
       .and
       .have
-      .lengthOf(2);
-    existsSync('/tmp/mocha-utils-link.js')
-      .should
-      .be
-      .true();
+      .length(2);
+    expect(existsSync('/tmp/mocha-utils-link.js'))
+      .to
+      .be(true);
     fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-    existsSync('/tmp/mocha-utils-link.js')
-      .should
-      .be
-      .false();
-    utils.lookupFiles('/tmp', ['js'], false)
-      .should
+    expect(existsSync('/tmp/mocha-utils-link.js'))
+      .to
+      .be(false);
+    expect(utils.lookupFiles('/tmp', ['js'], false))
+      .to
       .eql([]);
   });
 
   it('should accept a glob "path" value', function() {
-    utils.lookupFiles('/tmp/mocha-utils*', ['js'], false)
-      .should
-      .containEql('/tmp/mocha-utils-link.js')
+    expect(utils.lookupFiles('/tmp/mocha-utils*', ['js'], false))
+      .to
+      .contain('/tmp/mocha-utils-link.js')
       .and
-      .containEql('/tmp/mocha-utils.js')
+      .contain('/tmp/mocha-utils.js')
       .and
       .have
-      .lengthOf(2);
+      .length(2);
   });
 
   afterEach(function() {

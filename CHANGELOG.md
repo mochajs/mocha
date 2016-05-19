@@ -1,3 +1,11 @@
+Unreleased
+==================
+
+* [#2079], [#2231] - Add browser to CI
+
+[#2079]: https://github.com/mochajs/mocha/issues/2079
+[#2231]: https://github.com/mochajs/mocha/pull/2231
+
 2.4.5 / 2016-01-28
 ==================
 

@@ -2,7 +2,7 @@ function getConfig() {
   var cfg = {
     frameworks: [
       'browserify',
-      'should',
+      'expect',
       'mocha'
     ],
     files: [

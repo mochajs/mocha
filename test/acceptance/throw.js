@@ -20,8 +20,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -35,8 +35,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -52,8 +52,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -68,8 +68,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -83,8 +83,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -100,8 +100,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();

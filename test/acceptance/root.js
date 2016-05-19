@@ -6,6 +6,6 @@ before(function(){
 
 describe('root', function(){
   it('should be a valid suite', function(){
-    calls.should.eql(['before']);
+    expect(calls).to.eql(['before']);
   })
 })
