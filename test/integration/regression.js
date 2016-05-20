@@ -9,17 +9,17 @@ describe('regressions', function() {
   it('issue-1327: should run all 3 specs exactly once', function(done) {
     var args = [];
     run('regression/issue-1327.js', args, function(err, res) {
-      var occurences = function(str) {
+      var occurrences = function(str) {
         var pattern = new RegExp(str, 'g');
         return (res.output.match(pattern) || []).length;
       };
 
       assert(!err);
-      assert.equal(occurences('testbody1'), 1);
-      assert.equal(occurences('testbody2'), 1);
-      assert.equal(occurences('testbody3'), 1);
+      assert.equal(occurrences('testbody1'), 1);
+      assert.equal(occurrences('testbody2'), 1);
+      assert.equal(occurrences('testbody3'), 1);
 
-      assert.equal(res.code, 1);
+      assert.equal(res.code, 2);
       done();
     });
   });
