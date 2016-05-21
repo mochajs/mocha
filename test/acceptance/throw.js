@@ -9,9 +9,7 @@ describe('a test that throws', function () {
     suite = new Suite(null, 'root');
     runner = new Runner(suite);
   })
-
-  this.timeout(50);
-
+  
   describe('undefined', function (){
     it('should not pass if throwing sync and test is sync', function(done) {
       var test = new Test('im sync and throw undefined sync', function(){
