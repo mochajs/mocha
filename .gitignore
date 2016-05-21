@@ -1,3 +1,7 @@
+# The browser bundle is only rebuilt for releases by the maintainers
+mocha.js
+
+# Other stuff
 coverage.html
 lib-cov
 .DS_Store

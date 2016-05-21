@@ -6,16 +6,8 @@ TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
 
-all: mocha.js
-
-mocha.js: $(SRC) $(SUPPORT)
-	@$(BROWSERIFY) ./support/browser-entry \
-		--ignore 'fs' \
-		--ignore 'glob' \
-		--ignore 'jade' \
-		--ignore 'path' \
-		--ignore 'supports-color' \
-		--exclude './lib-cov/mocha' > $@
+all:
+	npm run build
 
 clean:
 	rm -f mocha.js
@@ -152,4 +144,4 @@ non-tty:
 tm:
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean
+.PHONY: all test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean
