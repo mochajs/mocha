@@ -1,6 +1,6 @@
-BROWSERIFY := node_modules/.bin/browserify
-ESLINT := node_modules/.bin/eslint
-KARMA := node_modules/.bin/karma
+BROWSERIFY := "node_modules/.bin/browserify"
+ESLINT := "node_modules/.bin/eslint"
+KARMA := "node_modules/.bin/karma"
 
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle

@@ -1,5 +1,6 @@
 var assert = require('assert');
 var run    = require('./helpers').runMocha;
+var splitRegExp = require('./helpers').splitRegExp;
 var args   = [];
 
 describe('hooks', function() {
@@ -11,7 +12,7 @@ describe('hooks', function() {
 
       assert(!err);
 
-      lines = res.output.split(/[\n․]+/).map(function(line) {
+      lines = res.output.split(splitRegExp).map(function(line) {
         return line.trim();
       }).filter(function(line) {
         return line.length;

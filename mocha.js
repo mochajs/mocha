@@ -2474,7 +2474,7 @@ function coverageClass(coveragePctg) {
   return 'terrible';
 }
 
-}).call(this,require('_process'),"/lib/reporters")
+}).call(this,require('_process'),"/lib\\reporters")
 },{"./json-cov":23,"_process":58,"fs":43,"jade":43,"path":43}],21:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
@@ -4814,7 +4814,13 @@ Runner.prototype.hook = function(name, fn) {
       }
       if (err) {
         if (err instanceof Pending) {
-          suite.pending = true;
+          if (name === 'beforeEach' || name === 'afterEach') {
+            self.test.pending = true;
+          } else {
+            suite.tests.forEach(function(test) {
+              test.pending = true;
+            });
+          }
         } else {
           self.failHook(hook, err);
 
@@ -5028,7 +5034,7 @@ Runner.prototype.runTests = function(suite, fn) {
     // execute test and hook(s)
     self.emit('test', self.test = test);
     self.hookDown('beforeEach', function(err, errSuite) {
-      if (suite.isPending()) {
+      if (test.isPending()) {
         self.emit('pending', test);
         self.emit('test end', test);
         return next();
@@ -5355,8 +5361,8 @@ function filterLeaks(ok, globals) {
     }
 
     // in firefox
-    // if runner runs in an iframe, this iframe's window.getInterface method not init at first
-    // it is assigned in some seconds
+    // if runner runs in an iframe, this iframe's window.getInterface method
+    // not init at first it is assigned in some seconds
     if (global.navigator && (/^getInterface/).test(key)) {
       return false;
     }
@@ -6117,8 +6123,8 @@ exports.slug = function(str) {
 exports.clean = function(str) {
   str = str
     .replace(/\r\n?|[\n\u2028\u2029]/g, '\n').replace(/^\uFEFF/, '')
-    .replace(/^function *\(.*\)\s*\{|\(.*\) *=> *\{?/, '')
-    .replace(/\s+\}$/, '');
+    // (traditional)->  space/name     parameters    body     (lambda)-> parameters       body   multi-statement/single          keep body content
+    .replace(/^function(?:\s*|\s+[^(]*)\([^)]*\)\s*\{((?:.|\n)*?)\s*\}$|^\([^)]*\)\s*=>\s*(?:\{((?:.|\n)*?)\s*\}|((?:.|\n)*))$/, '$1$2$3');
 
   var spaces = str.match(/^\n?( *)/)[1].length;
   var tabs = str.match(/^\n?(\t*)/)[1].length;

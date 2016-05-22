@@ -1,5 +1,6 @@
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
+var splitRegExp = require('./helpers').splitRegExp;
 
 describe('hook error handling', function() {
   this.timeout(1000);
@@ -63,30 +64,30 @@ describe('hook error handling', function() {
         lines,
         [
           'root before',
-          '1.1 before',
+          '1-1 before',
           'root before each',
           '1 before each',
-          '1.1 before each',
-          '1.1 after each',
+          '1-1 before each',
+          '1-1 after each',
           '1 after each',
           'root after each',
-          '1.1 after',
-          '1.2 before',
+          '1-1 after',
+          '1-2 before',
           'root before each',
           '1 before each',
-          '1.2 before each',
-          '1.2 test 1',
-          '1.2 after each',
+          '1-2 before each',
+          '1-2 test 1',
+          '1-2 after each',
           '1 after each',
           'root after each',
-          '1.2 after',
+          '1-2 after',
           '1 after',
-          '2.1 before',
+          '2-1 before',
           'root before each',
           '2 before each',
           '2 after each',
           'root after each',
-          '2.1 after',
+          '2-1 after',
           '2 after',
           'root after'
         ]
@@ -151,30 +152,30 @@ describe('hook error handling', function() {
         lines,
         [
           'root before',
-          '1.1 before',
+          '1-1 before',
           'root before each',
           '1 before each',
-          '1.1 before each',
-          '1.1 after each',
+          '1-1 before each',
+          '1-1 after each',
           '1 after each',
           'root after each',
-          '1.1 after',
-          '1.2 before',
+          '1-1 after',
+          '1-2 before',
           'root before each',
           '1 before each',
-          '1.2 before each',
-          '1.2 test 1',
-          '1.2 after each',
+          '1-2 before each',
+          '1-2 test 1',
+          '1-2 after each',
           '1 after each',
           'root after each',
-          '1.2 after',
+          '1-2 after',
           '1 after',
-          '2.1 before',
+          '2-1 before',
           'root before each',
           '2 before each',
           '2 after each',
           'root after each',
-          '2.1 after',
+          '2-1 after',
           '2 after',
           'root after'
         ]
@@ -188,7 +189,7 @@ describe('hook error handling', function() {
         assert.ifError(err);
 
         lines = res.output
-          .split(/[\n․]+/)
+          .split(splitRegExp)
           .map(function(line) {
             return line.trim();
           })
