@@ -41,7 +41,8 @@ module.exports = function(config) {
   // TO RUN LOCALLY:
   // Execute `CI=1 make test-browser`, once you've set the SAUCE_USERNAME and
   // SAUCE_ACCESS_KEY env vars.
-  if (process.env.CI) {
+  // also, we can't run SauceLabs tests on PRs from forks.
+  if (process.env.CI && !process.env.TRAVIS_PULL_REQUEST) {
     if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
       throw new Error('Must set SAUCE_USERNAME and SAUCE_ACCESS_KEY '
         + 'environment variables!');
