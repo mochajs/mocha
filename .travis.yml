@@ -34,12 +34,6 @@ before_install:
 
 script: travis_retry make $TARGET
 
-addons:
-  sauce_connect:
-    username: mochajs
-    access_key:
-      secure: R0HXKtR6F2iDEnItv57BTRyL64XfyIlyyluPLK8G33O/InaQjT3KxGuxevz3nVYIqqnI1MPjYodXcQaqrBOLUVmA2vhBeMHB2OwGc9GAL+HBtB1fh+bQJelkl/XMcTTbC5LIZ6nZjmFnkmjqT3AmUhdDRISgieIFeVY4x48LfiU=
-
 notifications:
   urls:
     # for gitter
