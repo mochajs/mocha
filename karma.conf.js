@@ -42,7 +42,7 @@ module.exports = function(config) {
   // Execute `CI=1 make test-browser`, once you've set the SAUCE_USERNAME and
   // SAUCE_ACCESS_KEY env vars.
   // also, we can't run SauceLabs tests on PRs from forks.
-  if (process.env.CI && !process.env.TRAVIS_PULL_REQUEST) {
+  if (process.env.CI) {
     if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
       throw new Error('Must set SAUCE_USERNAME and SAUCE_ACCESS_KEY '
         + 'environment variables!');
@@ -88,11 +88,14 @@ module.exports = function(config) {
     };
 
     if (process.env.TRAVIS) {
-      // correlate build/tunnel with Travis
-      cfg.sauceLabs.build = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER
-        + ' (' + process.env.TRAVIS_BUILD_ID + ')';
-      cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-      cfg.sauceLabs.startConnect = false;
+      if (process.env.TRAVIS_REPO_SLUG === 'mochajs/mocha'
+        && process.env.TRAVIS_PULL_REQUEST === 'false') {
+        // correlate build/tunnel with Travis
+        cfg.sauceLabs.build = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER
+          + ' (' + process.env.TRAVIS_BUILD_ID + ')';
+        cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
+        cfg.sauceLabs.startConnect = false;
+      }
     } else {
       // otherwise just make something up
       cfg.sauceLabs.build = require('os').hostname() + ' (' + Date.now() + ')';
