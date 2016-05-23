@@ -8,22 +8,37 @@ dist: trusty
 
 language: node_js
 
-node_js:
-  - '6'
-  - '5'
-  - '4'
-  - 'iojs'
-  - '0.12'
-  - '0.11'
-  - '0.10'
-  - '0.8'
+matrix:
+  include:
+    - node_js: '6'
+      env: TARGET="clean lint test-node test-browser"
+    - node_js: '5'
+      env: TARGET=test-node
+    - node_js: '4'
+      env: TARGET=test-node
+    - node_js: 'iojs'
+      env: TARGET=test-node
+    - node_js: '0.12'
+      env: TARGET=test-node
+    - node_js: '0.11'
+      env: TARGET=test-node
+    - node_js: '0.10'
+      env: TARGET=test-node
+    - node_js: '0.8'
+      env: TARGET=test-node
 
 before_install:
   # node 0.8 won't install our dev deps with an out-of-box npm;
   # this upgrades it
-  - ./scripts/ensure-compatible-npm.sh
+  - node ./scripts/upgrade-npm.js
 
-script: travis_retry npm test
+script: travis_retry make $TARGET
+
+addons:
+  sauce_connect:
+    username: mochajs
+    access_key:
+      secure: R0HXKtR6F2iDEnItv57BTRyL64XfyIlyyluPLK8G33O/InaQjT3KxGuxevz3nVYIqqnI1MPjYodXcQaqrBOLUVmA2vhBeMHB2OwGc9GAL+HBtB1fh+bQJelkl/XMcTTbC5LIZ6nZjmFnkmjqT3AmUhdDRISgieIFeVY4x48LfiU=
 
 notifications:
   urls:

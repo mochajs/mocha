@@ -4,7 +4,7 @@
 
 process.stdout = require('browser-stdout')();
 
-var Mocha = require('../');
+var Mocha = require('./lib/mocha');
 
 /**
  * Create a Mocha instance.
@@ -159,3 +159,8 @@ Mocha.process = process;
 
 global.Mocha = Mocha;
 global.mocha = mocha;
+
+// this allows test/acceptance/required-tokens.js to pass; thus,
+// you can now do `const describe = require('mocha').describe` in a
+// browser context (assuming browserification).  should fix #880
+module.exports = global;

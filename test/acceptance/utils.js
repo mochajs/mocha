@@ -1,4 +1,5 @@
 var utils = require('../../lib/utils');
+var toISOString = require('to-iso-string');
 
 describe('lib/utils', function () {
   describe('clean', function () {
@@ -8,7 +9,7 @@ describe('lib/utils', function () {
         , "  var a = 1;"
         , "}"
       ].join("\n");
-      utils.clean(fn).should.equal("var a = 1;");
+      expect(utils.clean(fn)).to.equal("var a = 1;");
     });
 
     it("should format a multi line test indented with spaces", function () {
@@ -18,7 +19,7 @@ describe('lib/utils', function () {
         , "    var b = 2;" // this one has more spaces
         , "  var c = 3;  }"
       ].join("\n");
-      utils.clean(fn).should.equal("var a = 1;\n  var b = 2;\nvar c = 3;");
+      expect(utils.clean(fn)).to.equal("var a = 1;\n  var b = 2;\nvar c = 3;");
     });
 
     it("should format a multi line test indented with tabs", function () {
@@ -29,7 +30,7 @@ describe('lib/utils', function () {
         , "\t}"
         , "}"
       ].join("\n");
-      utils.clean(fn).should.equal("if (true) {\n\tvar a = 1;\n}");
+      expect(utils.clean(fn)).to.equal("if (true) {\n\tvar a = 1;\n}");
     });
 
     it("should format functions saved in windows style - spaces", function () {
@@ -40,7 +41,7 @@ describe('lib/utils', function () {
         , "   } while (false);"
         , ' }'
       ].join("\r\n");
-      utils.clean(fn).should.equal('do {\n "nothing";\n} while (false);');
+      expect(utils.clean(fn)).to.equal('do {\n "nothing";\n} while (false);');
     });
 
     it("should format functions saved in windows style - tabs", function () {
@@ -53,7 +54,7 @@ describe('lib/utils', function () {
         , "\t}"
         , "}"
       ].join("\r\n");
-      utils.clean(fn).should.equal("if (false) {\n\tvar json = {\n\t\tone : 1\n\t};\n}");
+      expect(utils.clean(fn)).to.equal("if (false) {\n\tvar json = {\n\t\tone : 1\n\t};\n}");
     });
 
     it("should format es6 arrow functions", function () {
@@ -62,12 +63,12 @@ describe('lib/utils', function () {
         "  var a = 1;",
         "}"
       ].join("\n");
-      utils.clean(fn).should.equal("var a = 1;");
+      expect(utils.clean(fn)).to.equal("var a = 1;");
     });
 
     it("should format es6 arrow functions with implicit return", function () {
       var fn = "() => foo()";
-      utils.clean(fn).should.equal("foo()");
+      expect(utils.clean(fn)).to.equal("foo()");
     });
   });
 
@@ -76,40 +77,48 @@ describe('lib/utils', function () {
     var stringify = utils.stringify;
 
     it('should return Buffer with .toJSON representation', function() {
-      stringify(new Buffer([0x01])).should.equal('[\n  1\n]');
-      stringify(new Buffer([0x01, 0x02])).should.equal('[\n  1\n  2\n]');
+      expect(stringify(new Buffer([0x01]))).to.equal('[\n  1\n]');
+      expect(stringify(new Buffer([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
 
-      stringify(new Buffer('ABCD')).should.equal('[\n  65\n  66\n  67\n  68\n]');
+      expect(stringify(new Buffer('ABCD'))).to.equal('[\n  65\n  66\n  67\n  68\n]');
     });
 
     it('should return Date object with .toISOString() + string prefix', function() {
-      stringify(new Date(0)).should.equal('[Date: ' + new Date(0).toISOString() + ']');
+      expect(stringify(new Date(0))).to.equal('[Date: ' + shimToISOString(new Date(0)) + ']');
 
       var date = new Date(); // now
-      stringify(date).should.equal('[Date: ' + date.toISOString() + ']');
+      expect(stringify(date)).to.equal('[Date: ' + shimToISOString(date) + ']');
+
+      function shimToISOString(date) {
+        if (date.toISOString) {
+          return date.toISOString();
+        } else {
+          return toISOString(date);
+        }
+      }
     });
 
     it('should return invalid Date object with .toString() + string prefix', function() {
-      stringify(new Date('')).should.equal('[Date: ' + new Date('').toString() + ']');
+      expect(stringify(new Date(''))).to.equal('[Date: ' + new Date('').toString() + ']');
     });
 
     describe('#Number', function() {
       it('should show the handle -0 situations', function() {
-        stringify(-0).should.eql('-0');
-        stringify(0).should.eql('0');
-        stringify('-0').should.eql('"-0"');
+        expect(stringify(-0)).to.eql('-0');
+        expect(stringify(0)).to.eql('0');
+        expect(stringify('-0')).to.eql('"-0"');
       });
 
       it('should work well with `NaN` and `Infinity`', function() {
-        stringify(NaN).should.equal('NaN');
-        stringify(Infinity).should.equal('Infinity');
-        stringify(-Infinity).should.equal('-Infinity');
+        expect(stringify(NaN)).to.equal('NaN');
+        expect(stringify(Infinity)).to.equal('Infinity');
+        expect(stringify(-Infinity)).to.equal('-Infinity');
       });
 
       it('floats and ints', function() {
-        stringify(1).should.equal('1');
-        stringify(1.2).should.equal('1.2');
-        stringify(1e9).should.equal('1000000000');
+        expect(stringify(1)).to.equal('1');
+        expect(stringify(1.2)).to.equal('1.2');
+        expect(stringify(1e9)).to.equal('1000000000');
       });
     });
 
@@ -184,7 +193,7 @@ describe('lib/utils', function () {
           , '  "undef": [undefined]'
           , '  "zero": -0'
           , '}'].join('\n');
-        stringify(expected).should.equal(actual);
+        expect(stringify(expected)).to.equal(actual);
       });
     });
 
@@ -192,28 +201,28 @@ describe('lib/utils', function () {
       var travis = { name: 'travis', age: 24 };
       var travis2 = { age: 24, name: 'travis' };
 
-      stringify(travis).should.equal(stringify(travis2));
+      expect(stringify(travis)).to.equal(stringify(travis2));
     });
 
     it('should handle circular structures in objects', function(){
       var travis = { name: 'travis' };
       travis.whoami = travis;
 
-      stringify(travis).should.equal('{\n  "name": "travis"\n  "whoami": [Circular]\n}');
+      expect(stringify(travis)).to.equal('{\n  "name": "travis"\n  "whoami": [Circular]\n}');
     });
 
     it('should handle circular structures in arrays', function(){
       var travis = ['travis'];
       travis.push(travis);
 
-      stringify(travis).should.equal('[\n  "travis"\n  [Circular]\n]');
+      expect(stringify(travis)).to.equal('[\n  "travis"\n  [Circular]\n]');
     });
 
     it('should handle circular structures in functions', function(){
       var travis = function () {};
       travis.fn = travis;
 
-      stringify(travis).should.equal('{\n  "fn": [Circular]\n}');
+      expect(stringify(travis)).to.equal('{\n  "fn": [Circular]\n}');
     });
 
 
@@ -222,46 +231,44 @@ describe('lib/utils', function () {
         regExpObj = { regexp: regexp },
         regexpString = '/(?:)/';
 
-      stringify(regExpObj).should.equal('{\n  "regexp": ' + regexpString + '\n}');
-      stringify(regexp).should.equal(regexpString);
+      expect(stringify(regExpObj)).to.equal('{\n  "regexp": ' + regexpString + '\n}');
+      expect(stringify(regexp)).to.equal(regexpString);
 
       var number = 1,
         numberObj = { number: number },
         numberString = '1';
 
-      stringify(numberObj).should.equal('{\n  "number": ' + number + '\n}');
-      stringify(number).should.equal(numberString);
+      expect(stringify(numberObj)).to.equal('{\n  "number": ' + number + '\n}');
+      expect(stringify(number)).to.equal(numberString);
 
       var boolean = false,
         booleanObj = { boolean: boolean },
         booleanString = 'false';
 
-      stringify(booleanObj).should.equal('{\n  "boolean": ' + boolean + '\n}');
-      stringify(boolean).should.equal(booleanString);
+      expect(stringify(booleanObj)).to.equal('{\n  "boolean": ' + boolean + '\n}');
+      expect(stringify(boolean)).to.equal(booleanString);
 
       var string = 'sneepy',
         stringObj = { string: string };
 
-      stringify(stringObj).should.equal('{\n  "string": "' + string + '"\n}');
-      stringify(string).should.equal(JSON.stringify(string));
+      expect(stringify(stringObj)).to.equal('{\n  "string": "' + string + '"\n}');
+      expect(stringify(string)).to.equal(JSON.stringify(string));
 
       var nullValue = null,
         nullObj = { 'null': null },
         nullString = '[null]';
 
-      stringify(nullObj).should.equal('{\n  "null": [null]\n}');
-      stringify(nullValue).should.equal(nullString);
+      expect(stringify(nullObj)).to.equal('{\n  "null": [null]\n}');
+      expect(stringify(nullValue)).to.equal(nullString);
     });
 
     it('should handle arrays', function () {
       var array = ['dave', 'dave', 'dave', 'dave'],
         arrayObj = {array: array},
-        arrayString = array.map(function () {
-          return '    "dave"';
-        }).join('\n');
+        arrayString = '    "dave"\n    "dave"\n    "dave"\n    "dave"'
 
-      stringify(arrayObj).should.equal('{\n  "array": [\n' + arrayString + '\n  ]\n}');
-      stringify(array).should.equal('[' + arrayString.replace(/\s+/g, '\n  ') + '\n]');
+      expect(stringify(arrayObj)).to.equal('{\n  "array": [\n' + arrayString + '\n  ]\n}');
+      expect(stringify(array)).to.equal('[' + arrayString.replace(/\s+/g, '\n  ') + '\n]');
     });
 
     it('should handle functions', function () {
@@ -269,159 +276,126 @@ describe('lib/utils', function () {
         fnObj = {fn: fn},
         fnString = '[Function]';
 
-      stringify(fnObj).should.equal('{\n  "fn": ' + fnString + '\n}');
-      stringify(fn).should.equal('[Function]');
+      expect(stringify(fnObj)).to.equal('{\n  "fn": ' + fnString + '\n}');
+      expect(stringify(fn)).to.equal('[Function]');
     });
 
     it('should handle empty objects', function () {
-      stringify({}).should.equal('{}');
-      stringify({foo: {}}).should.equal('{\n  "foo": {}\n}');
+      expect(stringify({})).to.equal('{}');
+      expect(stringify({foo: {}})).to.equal('{\n  "foo": {}\n}');
     });
 
     it('should handle empty arrays', function () {
-      stringify([]).should.equal('[]');
-      stringify({foo: []}).should.equal('{\n  "foo": []\n}');
+      expect(stringify([])).to.equal('[]');
+      expect(stringify({foo: []})).to.equal('{\n  "foo": []\n}');
     });
 
     it('should handle non-empty arrays', function () {
-      stringify(['a', 'b', 'c']).should.equal('[\n  "a"\n  "b"\n  "c"\n]')
+      expect(stringify(['a', 'b', 'c'])).to.equal('[\n  "a"\n  "b"\n  "c"\n]')
     });
 
     it('should handle empty functions (with no properties)', function () {
-      stringify(function(){}).should.equal('[Function]');
-      stringify({foo: function() {}}).should.equal('{\n  "foo": [Function]\n}');
-      stringify({foo: function() {}, bar: 'baz'}).should.equal('{\n  "bar": "baz"\n  "foo": [Function]\n}');
+      expect(stringify(function(){})).to.equal('[Function]');
+      expect(stringify({foo: function() {}})).to.equal('{\n  "foo": [Function]\n}');
+      expect(stringify({foo: function() {}, bar: 'baz'})).to.equal('{\n  "bar": "baz"\n  "foo": [Function]\n}');
     });
 
     it('should handle functions w/ properties', function () {
       var fn = function(){};
       fn.bar = 'baz';
-      stringify(fn).should.equal('{\n  "bar": "baz"\n}');
-      stringify({foo: fn}).should.equal('{\n  "foo": {\n    "bar": "baz"\n  }\n}');
+      expect(stringify(fn)).to.equal('{\n  "bar": "baz"\n}');
+      expect(stringify({foo: fn})).to.equal('{\n  "foo": {\n    "bar": "baz"\n  }\n}');
     });
 
     it('should handle undefined values', function () {
-      stringify({foo: undefined}).should.equal('{\n  "foo": [undefined]\n}');
-      stringify({foo: 'bar', baz: undefined}).should.equal('{\n  "baz": [undefined]\n  "foo": "bar"\n}');
-      stringify().should.equal('[undefined]');
+      expect(stringify({foo: undefined})).to.equal('{\n  "foo": [undefined]\n}');
+      expect(stringify({foo: 'bar', baz: undefined})).to.equal('{\n  "baz": [undefined]\n  "foo": "bar"\n}');
+      expect(stringify()).to.equal('[undefined]');
     });
 
     it('should recurse', function () {
-      stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}}).should.equal('{\n  "foo": {\n    "bar": {\n      "baz": {\n        "quux": {\n          "herp": "derp"\n        }\n      }\n    }\n  }\n}');
+      expect(stringify({foo: {bar: {baz: {quux: {herp: 'derp'}}}}})).to.equal('{\n  "foo": {\n    "bar": {\n      "baz": {\n        "quux": {\n          "herp": "derp"\n        }\n      }\n    }\n  }\n}');
     });
 
     it('might get confusing', function () {
-      stringify(null).should.equal('[null]');
+      expect(stringify(null)).to.equal('[null]');
     });
 
     it('should not freak out if it sees a primitive twice', function () {
-      stringify({foo: null, bar: null}).should.equal('{\n  "bar": [null]\n  "foo": [null]\n}');
-      stringify({foo: 1, bar: 1}).should.equal('{\n  "bar": 1\n  "foo": 1\n}');
+      expect(stringify({foo: null, bar: null})).to.equal('{\n  "bar": [null]\n  "foo": [null]\n}');
+      expect(stringify({foo: 1, bar: 1})).to.equal('{\n  "bar": 1\n  "foo": 1\n}');
     });
 
     it('should stringify dates', function () {
       var date = new Date(0);
-      stringify(date).should.equal('[Date: 1970-01-01T00:00:00.000Z]');
-      stringify({date: date}).should.equal('{\n  "date": [Date: 1970-01-01T00:00:00.000Z]\n}');
+      expect(stringify(date)).to.equal('[Date: 1970-01-01T00:00:00.000Z]');
+      expect(stringify({date: date})).to.equal('{\n  "date": [Date: 1970-01-01T00:00:00.000Z]\n}');
     });
 
     it('should handle object without an Object prototype', function () {
-      var a = Object.create(null);
+      var a;
+      if (Object.create) {
+        a = Object.create(null);
+      } else {
+        a = {};
+      }
       a.foo = 1;
 
-      stringify(a).should.equal('{\n  "foo": 1\n}');
+      expect(stringify(a)).to.equal('{\n  "foo": 1\n}');
     });
 
     // In old version node.js, Symbol is not available by default.
     if (typeof global.Symbol === 'function') {
       it('should handle Symbol', function () {
         var symbol = Symbol('value');
-        stringify(symbol).should.equal('Symbol(value)');
-        stringify({symbol: symbol}).should.equal('{\n  "symbol": Symbol(value)\n}')
+        expect(stringify(symbol)).to.equal('Symbol(value)');
+        expect(stringify({symbol: symbol})).to.equal('{\n  "symbol": Symbol(value)\n}')
       });
     }
 
     it('should handle length properties that cannot be coerced to a number', function () {
-      stringify({length: {toString: 0}}).should.equal('{\n  "length": {\n    "toString": 0\n  }\n}');
+      expect(stringify({length: {nonBuiltinProperty: 0}})).to.equal('{\n  "length": {\n    "nonBuiltinProperty": 0\n  }\n}');
+      expect(stringify({length: "a string where length should be"})).to.equal('{\n  "length": "a string where length should be"\n}');
     });
   });
 
   describe('type', function () {
     var type = utils.type;
+    var toString = Object.prototype.toString;
+
+    beforeEach(function() {
+      // some JS engines such as PhantomJS 1.x exhibit this behavior
+      Object.prototype.toString = function() {
+        if (this === global) {
+          return '[object DOMWindow]';
+        }
+        return toString.call(this);
+      };
+    });
+
     it('should recognize various types', function () {
-      type({}).should.equal('object');
-      type([]).should.equal('array');
-      type(1).should.equal('number');
-      type(Infinity).should.equal('number');
-      type(null).should.equal('null');
-      type(undefined).should.equal('undefined');
-      type(new Date()).should.equal('date');
-      type(/foo/).should.equal('regexp');
-      type('type').should.equal('string');
-      type(global).should.equal('global');
-      type(true).should.equal('boolean');
+      expect(type({})).to.equal('object');
+      expect(type([])).to.equal('array');
+      expect(type(1)).to.equal('number');
+      expect(type(Infinity)).to.equal('number');
+      expect(type(null)).to.equal('null');
+      expect(type(undefined)).to.equal('undefined');
+      expect(type(new Date())).to.equal('date');
+      expect(type(/foo/)).to.equal('regexp');
+      expect(type('type')).to.equal('string');
+      expect(type(global)).to.equal('domwindow');
+      expect(type(true)).to.equal('boolean');
     });
 
     describe('when toString on null or undefined stringifies window', function () {
-      var toString = Object.prototype.toString;
-
-      beforeEach(function () {
-        // some JS engines such as PhantomJS 1.x exhibit this behavior
-        Object.prototype.toString = function () {
-          return '[object DOMWindow]';
-        };
-      });
-
       it('should recognize null and undefined', function () {
-        type(null).should.equal('null');
-        type(undefined).should.equal('undefined');
+        expect(type(null)).to.equal('null');
+        expect(type(undefined)).to.equal('undefined');
       });
-
-      afterEach(function () {
-        Object.prototype.toString = toString;
-      });
-    });
-  });
-
-  describe('lookupFiles', function () {
-    var fs = require('fs'),
-      path = require('path'),
-      existsSync = fs.existsSync || path.existsSync;
-
-    beforeEach(function () {
-      fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
-      fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
-    });
-
-    it('should not choke on symlinks', function () {
-      utils.lookupFiles('/tmp', ['js'], false)
-        .should.containEql('/tmp/mocha-utils-link.js')
-        .and.containEql('/tmp/mocha-utils.js')
-        .and.have.lengthOf(2);
-      existsSync('/tmp/mocha-utils-link.js').should.be.true();
-      fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-      existsSync('/tmp/mocha-utils-link.js').should.be.false();
-      utils.lookupFiles('/tmp', ['js'], false).should.eql([]);
-    });
-
-    it('should accept a glob "path" value', function () {
-      utils.lookupFiles('/tmp/mocha-utils*', ['js'], false)
-        .should
-        .containEql('/tmp/mocha-utils-link.js')
-        .and
-        .containEql('/tmp/mocha-utils.js')
-        .and
-        .have
-        .lengthOf(2);
     });
 
     afterEach(function () {
-      ['/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js', '/tmp/bob'].forEach(function (path) {
-        try {
-          fs.unlinkSync(path);
-        }
-        catch (ignored) {}
-      });
+      Object.prototype.toString = toString;
     });
   });
 });

@@ -9,18 +9,18 @@ describe('Context', function(){
     })
 
     it('should work', function(){
-      this.calls.should.eql(['before', 'before two']);
+      expect(this.calls).to.eql(['before', 'before two']);
       this.calls.push('test');
     })
 
     after(function(){
-      this.calls.should.eql(['before', 'before two', 'test']);
+      expect(this.calls).to.eql(['before', 'before two', 'test']);
       this.calls.push('after two');
     })
   })
 
   after(function(){
-    this.calls.should.eql(['before', 'before two', 'test', 'after two']);
+    expect(this.calls).to.eql(['before', 'before two', 'test', 'after two']);
   })
 })
 
@@ -36,7 +36,7 @@ describe('Context Siblings', function(){
     })
 
     it('should work', function(){
-      this.hiddenFromSibling.should.eql('This should be hidden')
+      expect(this.hiddenFromSibling).to.eql('This should be hidden')
     })
   })
 
@@ -46,27 +46,27 @@ describe('Context Siblings', function(){
     })
 
     it('should not have value set within a sibling describe', function(){
-      'This should be hidden'.should.not.eql(this.hiddenFromSibling);
+      expect('This should be hidden').not.to.eql(this.hiddenFromSibling);
       this.visibleFromTestSibling = 'Visible from test sibling';
     })
 
     it('should allow test siblings to modify shared context', function(){
-      'Visible from test sibling'.should.eql(this.visibleFromTestSibling);
+      expect('Visible from test sibling').to.eql(this.visibleFromTestSibling);
     })
 
     it('should have reset this.calls before describe', function(){
-      this.calls.should.eql(['before', 'before sibling']);
+      expect(this.calls).to.eql(['before', 'before sibling']);
     })
   })
 
   after(function(){
-    this.calls.should.eql(['before', 'before sibling']);
+    expect(this.calls).to.eql(['before', 'before sibling']);
   })
 
 })
 
 describe('timeout()', function(){
   it('should return the timeout', function(){
-    this.timeout().should.equal(200);
+    expect(this.timeout()).to.equal(200);
   });
 });

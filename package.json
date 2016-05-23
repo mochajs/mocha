@@ -250,7 +250,8 @@
     "Jordan Sexton <jordan@jordansexton.com>",
     "Jussi Virtanen <jussi.k.virtanen@gmail.com>",
     "Katie Gengler <katiegengler@gmail.com>",
-    "Kazuhito Hokamura <k.hokamura@gmail.com>"
+    "Kazuhito Hokamura <k.hokamura@gmail.com>",
+    "Scott Santucci <ScottFreeCode@gmail.com>"
   ],
   "license": "MIT",
   "repository": {
@@ -266,7 +267,7 @@
     "node": ">= 0.8.x"
   },
   "scripts": {
-    "test": "make test-all"
+    "test": "make test"
   },
   "dependencies": {
     "commander": "2.3.0",
@@ -281,11 +282,22 @@
   },
   "devDependencies": {
     "browser-stdout": "^1.2.0",
-    "browserify": "10.2.4",
+    "browserify": "^13.0.0",
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
+    "expect.js": "^0.3.1",
+    "karma": "^0.13.22",
+    "karma-browserify": "^5.0.5",
+    "karma-expect": "^1.1.2",
+    "karma-no-mocha": "^2.0.0",
+    "karma-phantomjs-launcher": "^0.2.3",
+    "karma-sauce-launcher": "^1.0.0",
+    "karma-spec-reporter": "0.0.26",
+    "phantomjs": "1.9.8",
     "should": "~8.0.0",
-    "through2": "~0.6.5"
+    "through2": "~0.6.5",
+    "to-iso-string": "0.0.2",
+    "watchify": "^3.7.0"
   },
   "files": [
     "bin",
@@ -299,7 +311,8 @@
   "browser": {
     "debug": "./lib/browser/debug.js",
     "events": "./lib/browser/events.js",
-    "tty": "./lib/browser/tty.js"
+    "tty": "./lib/browser/tty.js",
+    "./index.js": "./browser-entry.js"
   },
   "licenses": [
     {

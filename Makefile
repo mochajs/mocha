@@ -1,15 +1,18 @@
 BROWSERIFY := node_modules/.bin/browserify
 ESLINT := node_modules/.bin/eslint
+KARMA := node_modules/.bin/karma
 
 REPORTER ?= spec
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
+TESTS = $(shell find test -name "*.js" -type f | sort)
 SUPPORT = $(wildcard support/*.js)
 
 all: mocha.js
 
 mocha.js: $(SRC) $(SUPPORT)
-	@$(BROWSERIFY) ./support/browser-entry \
+	@printf "==> [Browser :: build]\n"
+	@$(BROWSERIFY) ./browser-entry \
 		--ignore 'fs' \
 		--ignore 'glob' \
 		--ignore 'jade' \
@@ -18,29 +21,53 @@ mocha.js: $(SRC) $(SUPPORT)
 		--exclude './lib-cov/mocha' > $@
 
 clean:
+	@printf "==> [Clean]\n"
 	rm -f mocha.js
 	rm -rf test-outputs
-	rm -fr lib-cov
+	rm -rf lib-cov
 	rm -f coverage.html
 
 test-cov: lib-cov
+	@printf "==> [Test :: Coverage]\n"
 	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
 
 lib-cov:
+	@printf "==> [Coverage]\n"
 	@rm -fr ./$@
 	@jscoverage lib $@
 
 lint:
+	@printf "==> [Test :: Lint]\n"
 	@$(ESLINT) $(SRC)
 
-test: lint test-unit
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
 
-test-all: lint test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only
+test-browser: test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
+
+test: lint test-node test-browser
+
+test-browser-unit: mocha.js
+	@printf "==> [Test :: Browser]\n"
+	@NODE_PATH=. $(KARMA) start
+
+test-browser-bdd:
+	@printf "==> [Test :: Browser :: BDD]\n"
+	@MOCHA_UI=bdd $(MAKE) test-browser-unit
+
+test-browser-qunit:
+	@printf "==> [Test :: Browser :: QUnit]\n"
+	@MOCHA_UI=qunit $(MAKE) test-browser-unit
+
+test-browser-tdd:
+	@printf "==> [Test :: Browser :: TDD]\n"
+	@MOCHA_UI=tdd $(MAKE) test-browser-unit
 
 test-jsapi:
+	@printf "==> [Test :: JS API]\n"
 	@node test/jsapi
 
 test-unit:
+	@printf "==> [Test :: Unit]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/acceptance/*.js \
@@ -48,11 +75,13 @@ test-unit:
 		test/*.js
 
 test-integration:
+	@printf "==> [Test :: Integrations]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/integration/*.js
 
 test-compilers:
+	@printf "==> [Test :: Compilers]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--compilers coffee:coffee-script/register,foo:./test/compiler/foo \
@@ -60,6 +89,7 @@ test-compilers:
 		test/acceptance/test.foo
 
 test-requires:
+	@printf "==> [Test :: Requires]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--compilers coffee:coffee-script/register \
@@ -70,38 +100,45 @@ test-requires:
 		test/acceptance/require/require.js
 
 test-bdd:
+	@printf "==> [Test :: BDD]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui bdd \
 		test/acceptance/interfaces/bdd
 
 test-tdd:
+	@printf "==> [Test :: TDD]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
 		test/acceptance/interfaces/tdd
 
 test-qunit:
+	@printf "==> [Test :: QUnit]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui qunit \
 		test/acceptance/interfaces/qunit
 
 test-exports:
+	@printf "==> [Test :: Exports]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui exports \
 		test/acceptance/interfaces/exports
 
 test-glob:
+	@printf "==> [Test :: Glob]\n"
 	@./test/acceptance/glob/glob.sh
 
 test-reporters:
+	@printf "==> [Test :: Reporters]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/reporters/*.js
 
 test-only:
+	@printf "==> [Test :: Only]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		--ui tdd \
@@ -123,11 +160,13 @@ test-only:
 		test/acceptance/misc/only/qunit
 
 test-mocha:
+	@printf "==> [Test :: Mocha]\n"
 	@./bin/mocha \
 		--reporter $(REPORTER) \
 		test/mocha
 
 non-tty:
+	@printf "==> [Test :: Non-TTY]\n"
 	@./bin/mocha \
 		--reporter dot \
 		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
@@ -150,6 +189,7 @@ non-tty:
 	@cat /tmp/spec.out
 
 tm:
+	@printf "==> [TM]\n"
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-all test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean
+.PHONY: test-cov test-jsapi test-compilers watch test test-node test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean test-browser test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports lint
