@@ -258,7 +258,6 @@
     "type": "git",
     "url": "git://github.com/mochajs/mocha.git"
   },
-  "main": "./index",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
@@ -312,7 +311,12 @@
     "debug": "./lib/browser/debug.js",
     "events": "./lib/browser/events.js",
     "tty": "./lib/browser/tty.js",
-    "./index.js": "./browser-entry.js"
+    "./index.js": "./browser-entry.js",
+    "jade": false,
+    "fs": false,
+    "glob": false,
+    "path": false,
+    "supports-color": false
   },
   "licenses": [
     {
