@@ -1,3 +1,9 @@
+# 2.5.1 / 2016-05-23
+
+- Fix [to-iso-string](https://npmjs.com/package/to-iso-string) dependency ([@boneskull] via bd9450b)
+
+Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
+
 # 2.5.0 / 2016-05-23
 
 > This has been awhile coming!  We needed to feel confident that the next release wouldn't break browser compatibility (e.g. the last few patch releases).
