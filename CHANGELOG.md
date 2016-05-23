@@ -1,10 +1,87 @@
-Unreleased
-==================
+# 2.5.0 / 2016-05-23
 
-* [#2079], [#2231] - Add browser to CI
+> This has been awhile coming!  We needed to feel confident that the next release wouldn't break browser compatibility (e.g. the last few patch releases).
+>
+> ### Browser Tests in CI
+>
+> We now run unit tests against PhantomJS v1.x and an assortment of browsers on [SauceLabs](https://saucelabs.com), including:
+> - Internet Explorer v8.0
+> - Chrome (latest)
+> - Firefox (latest)
+> - Safari (latest)
+> - Microsoft Edge (latest)
+>
+> To accomplish this, we now run Mocha's unit tests (and a handful of integration tests) via [Karma](https://npmjs.com/package/karma) and a modified [karma-mocha](https://npmjs.com/package/karma-mocha).  Along the way, we had to solve issue [#880] (apologies to @mderijcke and @sukima who had PRs addressing this), as well as replace most usages of [should](https://npmjs.com/package/should) with [expect.js](https://npmjs.com/package/expect.js) for IE8.
+>
+> Going forward, when sending PRs, your code will *only* run against PhantomJS v1.x (and not hit SauceLabs) [because security](https://docs.travis-ci.com/user/pull-requests/#Security-Restrictions-when-testing-Pull-Requests).
+>
+> ### Node.js 6.x
+> Node.js 6.x "just worked" before, but now it's in the CI matrix, so it's "officially" supported.  Mocha *still retains support* for Node.js 0.8.x.
+>
+> ### "Minor" Release
+> You'll see mostly bug fixes below, but also a couple features--as such, it's a "minor" release.
+>
+> ### TYVM
+>
+> Thanks to everyone who contributed, and our fabulous [sponsors and backers](https://opencollective.com/mochajs)!
 
+- [#2079] - Add browser checks to CI; update [browserify](https://npmjs.com/package/browserify) to v13.0.0 ([@dasilvacontin], [@ScottFreeCode], [@boneskull] via c04c1d7, 0b1e9b3, 0dde0fa, f8a3d86, 9e8cbaa)
+- [#880] - Make Mocha browserifyable ([@boneskull] via 524862b)
+- [#2121] - Update [glob](https://npmjs.com/package/glob) to v3.2.11 ([@astorije] via 7920fc4)
+- [#2126] - Fix dupe error messages in stack trace filter ([@Turbo87] via 4301caa)
+- [#2109] - Fix certain diffs when objects cannot be coerced into primitives ([@joshlory] via 61fbb7f)
+- [#1827] - Fix TWBS/`mocha.css` collisions ([@irnc] via 0543798)
+- [#1760], [#1936] - Fix `this.skip()` in HTML reporter ([@mislav] via cb4248b)
+- [#2115] - Fix exceptions thrown from hooks in HTML reporter ([@danielstjules] via e290bc0)
+- [#2089] - Handle Symbol values in `util.stringify()` ([@ryym] via ea61d05)
+- [#2097] - Fix diff for objects overriding `Object.prototype.hasOwnProperty` ([@mantoni] via b20fdfe)
+- [#2101] - Properly handle non-string "messages" thrown from assertion libraries ([@jkimbo] via 9c41051)
+- [#2124] - Update [growl](https://npmjs.com/package/growl) ([@benjamine] via 9ae6a85)
+- [#2162], [#2205] - JSDoc fixes ([@OlegTsyba] via 8031f20, [@ScottFreeCode] via f83b1d9)
+- [#2132] - Remove Growl-related cruft ([@julienw] via 00d6469)
+- [#2172] - Add [OpenCollective](https://opencollective.com) badge, sponsors & backers ([@xdamman], [@boneskull] via caee94f)
+- [#1841] - Add new logo, banner assets ([@dasilvacontin] via 00fd0e1)
+- [#2214] - Update `README.md` header ([@dasilvacontin] via c0f9be2)
+- [#2236] - Better checks for Node.js v0.8 compatibility in CI ([@dasilvacontin] via ba5637d)
+- [#2239] - Add Node.js v6.x to CI matrix ([@boneskull] via 3904da4)
+
+[#880]: https://github.com/mochajs/mocha/issues/880
+[#1841]: https://github.com/mochajs/mocha/pull/1841
+[#2239]: https://github.com/mochajs/mocha/issues/2239
+[#2153]: https://github.com/mochajs/mocha/pull/2153
+[#2214]: https://github.com/mochajs/mocha/pull/2214
+[#2236]: https://github.com/mochajs/mocha/pull/2236
 [#2079]: https://github.com/mochajs/mocha/issues/2079
 [#2231]: https://github.com/mochajs/mocha/pull/2231
+[#2089]: https://github.com/mochajs/mocha/issues/2089
+[#2097]: https://github.com/mochajs/mocha/pull/2097
+[#1760]: https://github.com/mochajs/mocha/issues/1760
+[#1936]: https://github.com/mochajs/mocha/issues/1936
+[#2115]: https://github.com/mochajs/mocha/pull/2115
+[#1827]: https://github.com/mochajs/mocha/pull/1827
+[#2101]: https://github.com/mochajs/mocha/pull/2101
+[#2124]: https://github.com/mochajs/mocha/pull/2124
+[#2109]: https://github.com/mochajs/mocha/issues/2109
+[#2162]: https://github.com/mochajs/mocha/pull/2162
+[#2132]: https://github.com/mochajs/mocha/issues/2132
+[#2126]: https://github.com/mochajs/mocha/issues/2126
+[#2121]: https://github.com/mochajs/mocha/issues/2121
+[#2205]: https://github.com/mochajs/mocha/pull/2205
+[#2172]: https://github.com/mochajs/mocha/pull/2172
+[@xdamman]: https://github.com/xdamman
+[@Turbo87]: https://github.com/Turbo87
+[@OlegTsyba]: https://github.com/OlegTsyba
+[@ryym]: https://github.com/ryym
+[@mantoni]: https://github.com/mantoni
+[@mislav]: https://github.com/mislav
+[@irnc]: https://github.com/irnc
+[@jkimbo]: https://github.com/jkimbo
+[@benjamine]: https://github.com/benjamine
+[@joshlory]: https://github.com/joshlory
+[@julienw]: https://github.com/julienw
+[@ScottFreeCode]: https://github.com/ScottFreeCode
+[@astorije]: https://github.com/astorije
+[@dasilvacontin]: https://github.com/dasilvacontin
 
 2.4.5 / 2016-01-28
 ==================
