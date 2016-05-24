@@ -1,3 +1,10 @@
+# 2.5.2 / 2016-05-24
+
+- [#2178] - Avoid double and triple xUnit XML escaping ([@graingert] via 49b5ff1)
+
+[@graingert]: https://github.com/graingert
+[#2178]: https://github.com/mochajs/mocha/pull/2178
+
 # 2.5.1 / 2016-05-23
 
 - Fix [to-iso-string](https://npmjs.com/package/to-iso-string) dependency ([@boneskull] via bd9450b)
