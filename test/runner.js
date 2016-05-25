@@ -1,3 +1,4 @@
+var assert = require('assert');
 var mocha = require('../')
   , Suite = mocha.Suite
   , Runner = mocha.Runner
@@ -326,6 +327,77 @@ describe('Runner', function(){
       }
       fail.should.throw('allow unhandled errors');
       done();
+    });
+  });
+
+  describe('events', function() {
+    var events;
+    beforeEach(function() {
+      events = [];
+    });
+    function noop() {
+      // empty function to use in fake tests below
+    }
+    function fail() {
+      // fake test which fails
+      throw new Error('Failed!');
+    }
+    function recordRunnerEvents(r) {
+      recordEvent('start');
+      recordEvent('suite');
+      recordEvent('test');
+      recordEvent('pass');
+      recordEvent('fail');
+      recordEvent('test end');
+      recordEvent('suite end');
+      recordEvent('end');
+      function recordEvent(event) {
+        r.on(event, function() {
+          events.push(event);
+        });
+      }
+    }
+    it('should emit events for a successful run', function(done) {
+      suite.addTest(new Test('im a test about lions', noop));
+      suite.addTest(new Test('im a test about bears', noop));
+      var newRunner = new Runner(suite);
+      recordRunnerEvents(newRunner);
+      newRunner.run(function() {
+        assert.deepEqual(events, [
+          'start',
+          'suite',
+          'test',
+          'pass',
+          'test end',
+          'test',
+          'pass',
+          'test end',
+          'suite end',
+          'end'
+        ]);
+        done();
+      });
+    });
+    it('should emit events for a failed run', function(done) {
+      suite.addTest(new Test('im a test about lions', noop));
+      suite.addTest(new Test('im a test about bears', fail));
+      var newRunner = new Runner(suite);
+      recordRunnerEvents(newRunner);
+      newRunner.run(function() {
+        assert.deepEqual(events, [
+          'start',
+          'suite',
+          'test',
+          'pass',
+          'test end',
+          'test',
+          'fail',
+          'test end',
+          'suite end',
+          'end'
+        ]);
+        done();
+      });
     });
   });
 
