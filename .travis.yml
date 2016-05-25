@@ -8,10 +8,13 @@ dist: trusty
 
 language: node_js
 
+env:
+  global: PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+
 matrix:
   include:
     - node_js: '6'
-      env: TARGET="clean lint test-node test-browser"
+      env: TARGET='clean lint test-node test-browser'
     - node_js: '5'
       env: TARGET=test-node
     - node_js: '4'
