@@ -1,3 +1,13 @@
+# 2.5.3 / 2016-05-25
+
+- [#2112] - Fix HTML reporter regression causing duplicate error output ([@danielstjules] via 6d24063)
+- [#2119] - Make HTML reporter failure/passed links preventDefault to avoid SPA's hash navigation ([@jimenglish81] via 9e93efc)
+
+[@danielstjules]: https://github.com/danielstjules
+[@jimenglish81]: https://github.com/jimenglish81
+[#2112]: https://github.com/mochajs/mocha/pull/2112
+[#2119]: https://github.com/mochajs/mocha/pull/2119
+
 # 2.5.2 / 2016-05-24
 
 - [#2178] - Avoid double and triple xUnit XML escaping ([@graingert] via 49b5ff1)
