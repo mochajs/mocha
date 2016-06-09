@@ -68,7 +68,6 @@ program
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', 'sort test files')
-  .option('-a, --randomize <mode>[:seed]', "randomize tests")
   .option('-b, --bail', 'bail after first test failure')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
@@ -107,6 +106,8 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition');
+  .option('--generate-seed', 'generate a random seed and exit')
+  .option('--random [seed]', 'randomize order of tests (with optional random seed)', false);
 
 program._name = 'mocha';
 

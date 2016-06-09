@@ -1,5 +1,5 @@
-describe.noRandom('serial', function(){
-  describe.noRandom('nested', function(){
+describe.inOrder('serial', function(){
+  describe.inOrder('nested', function(){
     var calls = [];
 
     beforeEach(function(){
@@ -34,7 +34,7 @@ describe.noRandom('serial', function(){
         , 'parent before test bar']);
     })
 
-    describe.noRandom('hooks', function(){
+    describe.inOrder('hooks', function(){
       beforeEach(function(){
         calls.push('before');
         if (this.currentTest) {
