@@ -1,4 +1,4 @@
-var assert = require('assert');
+﻿var assert = require('assert');
 var fs     = require('fs');
 var path   = require('path');
 var run    = require('./helpers').runMocha;
@@ -51,17 +51,15 @@ describe('regressions', function() {
     });
   })
 
-  it('issue-2286: after doesn\'t execute if test was skipped in beforeEach', function(done) {
-    var args = [];
-    run('regression/issue-2286.js', args, function(err, res) {
-      var occurences = function(str) {
-        var pattern = new RegExp(str, 'g');
-        return (res.output.match(pattern) || []).length;
-      };
-
-      assert(!err);
-      assert.equal(occurences('after in suite'), 1);
-      done();
+  describe('issue-2286: after doesn\'t execute if test was skipped in beforeEach', function () {
+    var afterWasRun = false;
+    describe('suite with skipped test for meta test', function () {
+      beforeEach(function () { this.skip(); });
+      after(function () { afterWasRun = true; });
+      it('should be pending', function () {});
+    })
+    after('meta test', function () {
+      afterWasRun.should.be.ok();
     });
-  })
+  });
 });
