@@ -19,6 +19,30 @@ describe('utils', function() {
     it('should remove tab character indentation from the function body', function() {
       clean('\t//line1\n\t\t//line2').should.equal('//line1\n\t//line2');
     });
+
+    it('should handle functions with tabs in their declarations', function() {
+      clean('function\t(\t)\t{\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle named functions without space after name', function() {
+      clean('function withName() {\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle named functions with space after name', function() {
+      clean('function withName () {\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle functions with no space between the end and the closing brace', function() {
+      clean('function() {/*code*/}').should.equal('/*code*/');
+    });
+
+    it('should handle functions with parentheses in the same line', function() {
+      clean('function() { if (true) { /* code */ } }').should.equal('if (true) { /* code */ }');
+    });
+
+    it('should handle empty functions', function() {
+      clean('function() {}').should.equal('');
+    });
   });
 
   describe('.isBuffer()', function() {
