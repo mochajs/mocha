@@ -40,6 +40,6 @@ script: travis_retry make $TARGET
 notifications:
   urls:
     # for gitter
-    - secure: "EmycFlk48bUvOQ07mxnbcn6T+n3G4wVWuXgrDsUUp6EhJ9866wQK9i+qVhqogWuSEQrGoVaS/vpc/NEYxDP30BD/+nqgvOhVhLVEgtziI85imyV/oUVpArdW3AUmuzCrx7rQCivygjpBmWV9ZcUT5Km4qp1iQhuumy2WbplxrZ4="
+    - secure: "dSItHgvzzd9hQUUdeGo6juPiLFj03ODuoZ/eC3Q3B8F6pRs6hkgCVfATa9++m/buasdWp2OCf6unWVDdcE5MNxVqXjNmr5VEaiV3WjcT254pDDs1VVV9IlaiMjtKu6NQsaHT5oJGdFYQUdiwtUK2rL7+cdYMqndb99SLkIeXtqA="
   on_success: change
   on_failure: always
