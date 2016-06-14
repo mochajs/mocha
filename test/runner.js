@@ -315,6 +315,17 @@ describe('Runner', function(){
   });
 
   describe('allowUncaught', function() {
+    var immediately;
+
+    before(function() {
+      immediately = Runner.immediately;
+      Runner.immediately = function(fn) { fn(); };
+    });
+
+    after(function() {
+      Runner.immediately = immediately;
+    });
+
     it('should allow unhandled errors to propagate through', function(done) {
       var newRunner = new Runner(suite);
       newRunner.allowUncaught = true;
@@ -325,6 +336,19 @@ describe('Runner', function(){
         newRunner.runTest();
       }
       fail.should.throw('allow unhandled errors');
+      done();
+    });
+
+    it('should allow unhandled errors in hooks to propagate through', function(done) {
+      var runner = new Runner(suite);
+      runner.allowUncaught = true;
+      suite.beforeEach(function(){
+        throw new Error('allow unhandled errors in hooks');
+      });
+      function fail() {
+        runner.hook('beforeEach', function() {});
+      }
+      fail.should.throw('allow unhandled errors in hooks');
       done();
     });
   });
