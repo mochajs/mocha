@@ -1,40 +1,39 @@
-suite('Array', function(){
-  suite('#indexOf()', function(){
-    var initialValue = 32;
+suite('integer primitives', function(){
+  suite('arithmetic', function(){
+    var initialValue = 41;
 
     suiteSetup(function(done){
-      initialValue.should.eql(32);
-      initialValue = 42;
+      expect(initialValue).to.eql(41);
+      initialValue += 1;
       done();
     });
 
-    test('should return -1 when the value is not present', function(){
-      initialValue.should.eql(42);
-      [1,2,3].indexOf(5).should.equal(-1);
-      [1,2,3].indexOf(0).should.equal(-1);
+    test('should add', function(){
+      expect(initialValue).to.eql(42);
+      expect(1 + 1).to.equal(2);
+      expect(2 + 2).to.equal(4);
     });
 
-    test('should return the correct index when the value is present', function(){
-      initialValue.should.eql(42);
-      [1,2,3].indexOf(1).should.equal(0);
-      [1,2,3].indexOf(2).should.equal(1);
-      [1,2,3].indexOf(3).should.equal(2);
+    test('should subtract', function(){
+      expect(initialValue).to.eql(42);
+      expect(1 - 1).to.equal(0);
+      expect(2 - 1).to.equal(1);
     });
 
     test.skip('should skip this test', function(){
       var zero = 0;
-      zero.should.equal(1, 'this test should have been skipped');
+      expect(zero).to.equal(1, 'this test should have been skipped');
     });
 
     suite.skip('should skip this suite', function(){
       test('should skip this test', function(){
         var zero = 0;
-        zero.should.equal(1, 'this test should have been skipped');
+        expect(zero).to.equal(1, 'this test should have been skipped');
       });
     });
 
     suiteTeardown(function(done){
-      initialValue.should.eql(42);
+      expect(initialValue).to.eql(42);
       done();
     });
   });

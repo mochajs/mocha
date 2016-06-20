@@ -19,6 +19,30 @@ describe('utils', function() {
     it('should remove tab character indentation from the function body', function() {
       clean('\t//line1\n\t\t//line2').should.equal('//line1\n\t//line2');
     });
+
+    it('should handle functions with tabs in their declarations', function() {
+      clean('function\t(\t)\t{\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle named functions without space after name', function() {
+      clean('function withName() {\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle named functions with space after name', function() {
+      clean('function withName () {\n//code\n}').should.equal('//code');
+    });
+
+    it('should handle functions with no space between the end and the closing brace', function() {
+      clean('function() {/*code*/}').should.equal('/*code*/');
+    });
+
+    it('should handle functions with parentheses in the same line', function() {
+      clean('function() { if (true) { /* code */ } }').should.equal('if (true) { /* code */ }');
+    });
+
+    it('should handle empty functions', function() {
+      clean('function() {}').should.equal('');
+    });
   });
 
   describe('.isBuffer()', function() {
@@ -116,6 +140,18 @@ describe('utils', function() {
           , 'at file:///.../components/mochajs/mocha/2.1.0/mocha.js:4970:12'
           , 'at next (file:///.../components/mochajs/mocha/2.1.0/mocha.js:4817:14)'];
         filter(stack.join('\n')).should.equal(stack.slice(0,7).join('\n'));
+      });
+
+      it('should replace absolute with relative paths', function() {
+        var stack = ['Error: ' + process.cwd() + '/bla.js has a problem'
+          , 'at foo (' + process.cwd() + '/foo/index.js:13:226)'
+          , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
+
+        var expected = ['Error: ' + process.cwd() + '/bla.js has a problem'
+          , 'at foo (foo/index.js:13:226)'
+          , 'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'];
+
+        filter(stack.join('\n')).should.equal(expected.join('\n'));
       });
     });
 

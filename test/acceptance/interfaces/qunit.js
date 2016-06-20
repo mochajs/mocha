@@ -2,18 +2,18 @@ function ok(expr, msg) {
   if (!expr) throw new Error(msg);
 }
 
-suite('Array');
+suite('integer primitives');
 
-test('#length', function(){
-  var arr = [1,2,3];
-  ok(arr.length == 3);
+test('should add', function(){
+  var number = 2 + 2;
+  ok(number == 4);
 });
 
-test('#indexOf()', function(){
-  var arr = [1,2,3];
-  ok(arr.indexOf(1) == 0);
-  ok(arr.indexOf(2) == 1);
-  ok(arr.indexOf(3) == 2);
+test('should decrement', function(){
+  var number = 3;
+  ok(--number == 2);
+  ok(--number == 1);
+  ok(--number == 0);
 });
 
 suite('String');

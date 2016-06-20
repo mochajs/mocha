@@ -1,34 +1,32 @@
-describe('Array', function(){
-  describe('#indexOf()', function(){
-    it('should return -1 when the value is not present', function(){
-      [1,2,3].indexOf(5).should.equal(-1);
-      [1,2,3].indexOf(0).should.equal(-1);
+describe('integer primitives', function(){
+  describe('arithmetic', function(){
+    it('should add', function(){
+      expect(1 + 1).to.equal(2);
+      expect(2 + 2).to.equal(4);
     })
 
-    it('should return the correct index when the value is present', function(){
-      [1,2,3].indexOf(1).should.equal(0);
-      [1,2,3].indexOf(2).should.equal(1);
-      [1,2,3].indexOf(3).should.equal(2);
-    })
-  })
-})
-
-describe('Array', function(){
-  describe('#pop()', function(){
-    it('should remove and return the last value', function(){
-      var arr = [1,2,3];
-      arr.pop().should.equal(3);
-      arr.should.eql([1,2]);
+    it('should subtract', function(){
+      expect(1 - 1).to.equal(0);
+      expect(2 - 1).to.equal(1);
     })
   })
 })
 
-context('Array', function(){
+describe('integer primitives', function(){
+  describe('arithmetic is not', function(){
+    it('should add', function(){
+      expect(1 + 1).not.to.equal(3);
+      expect(2 + 2).not.to.equal(5);
+    })
+  })
+})
+
+context('test suite', function(){
   beforeEach(function(){
-    this.arr = [1,2,3];
+    this.number = 5;
   })
 
-  specify('has a length property', function(){
-    this.arr.length.should.equal(3);
+  specify('share a property', function(){
+    expect(this.number).to.equal(5);
   })
 })

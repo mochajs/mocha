@@ -1,4 +1,4 @@
-var assert = require('assert');
+﻿var assert = require('assert');
 var fs     = require('fs');
 var path   = require('path');
 var run    = require('./helpers').runMocha;
@@ -50,4 +50,16 @@ describe('regressions', function() {
       done();
     });
   })
+
+  describe('issue-2286: after doesn\'t execute if test was skipped in beforeEach', function () {
+    var afterWasRun = false;
+    describe('suite with skipped test for meta test', function () {
+      beforeEach(function () { this.skip(); });
+      after(function () { afterWasRun = true; });
+      it('should be pending', function () {});
+    })
+    after('meta test', function () {
+      afterWasRun.should.be.ok();
+    });
+  });
 });

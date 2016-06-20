@@ -1,7 +1,6 @@
-var mocha = require('../../')
-  , Suite = mocha.Suite
-  , Runner = mocha.Runner
-  , Test = mocha.Test;
+var Suite = require('../../lib/suite');
+var Test = require('../../lib/test');
+var Runner = require('../../lib/runner');
 
 describe('a test that throws', function () {
   var suite, runner;
@@ -10,9 +9,7 @@ describe('a test that throws', function () {
     suite = new Suite(null, 'root');
     runner = new Runner(suite);
   })
-
-  this.timeout(50);
-
+  
   describe('undefined', function (){
     it('should not pass if throwing sync and test is sync', function(done) {
       var test = new Test('im sync and throw undefined sync', function(){
@@ -21,8 +18,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -36,8 +33,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -53,8 +50,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -69,8 +66,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -84,8 +81,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();
@@ -101,8 +98,8 @@ describe('a test that throws', function () {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function(){
-        runner.failures.should.equal(1);
-        test.state.should.equal('failed');
+        expect(runner.failures).to.equal(1);
+        expect(test.state).to.equal('failed');
         done();
       });
       runner.run();

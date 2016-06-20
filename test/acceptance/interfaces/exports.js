@@ -7,7 +7,7 @@ exports.Array = {
 
   after: function(){
     calls.push('after');
-    calls.should.eql([
+    expect(calls).to.eql([
         'before'
       , 'before each'
       , 'one'
@@ -29,15 +29,15 @@ exports.Array = {
 
     'should return -1 when the value is not present': function(){
       calls.push('one');
-      [1,2,3].indexOf(5).should.equal(-1);
-      [1,2,3].indexOf(0).should.equal(-1);
+      expect([1,2,3].indexOf(5)).to.equal(-1);
+      expect([1,2,3].indexOf(0)).to.equal(-1);
     },
 
     'should return the correct index when the value is present': function(){
       calls.push('two');
-      [1,2,3].indexOf(1).should.equal(0);
-      [1,2,3].indexOf(2).should.equal(1);
-      [1,2,3].indexOf(3).should.equal(2);
+      expect([1,2,3].indexOf(1)).to.equal(0);
+      expect([1,2,3].indexOf(2)).to.equal(1);
+      expect([1,2,3].indexOf(3)).to.equal(2);
     }
   }
 };

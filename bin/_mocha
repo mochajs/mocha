@@ -83,6 +83,7 @@ program
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--es_staging', 'enable all staged features')
   .option('--harmony<_classes,_generators,...>', 'all node --harmony* flags are available')
+  .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
@@ -429,26 +430,6 @@ function exit(code) {
 }
 
 process.on('SIGINT', function() { runner.abort(); })
-
-// enable growl notifications
-
-function growl(runner, reporter) {
-  var notify = require('growl');
-
-  runner.on('end', function(){
-    var stats = reporter.stats;
-    if (stats.failures) {
-      var msg = stats.failures + ' of ' + runner.total + ' tests failed';
-      notify(msg, { name: 'mocha', title: 'Failed', image: images.fail });
-    } else {
-      notify(stats.passes + ' tests passed in ' + stats.duration + 'ms', {
-          name: 'mocha'
-        , title: 'Passed'
-        , image: images.pass
-      });
-    }
-  });
-}
 
 /**
  * Parse list.
