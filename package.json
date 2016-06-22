@@ -352,6 +352,7 @@
     "index.js",
     "mocha.css",
     "mocha.js",
+    "browser-entry.js",
     "LICENSE"
   ],
   "browser": {
