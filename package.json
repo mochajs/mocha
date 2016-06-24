@@ -298,7 +298,8 @@
     "Jonathan Creamer <matrixhasyou2k4@gmail.com>",
     "Jonathan Delgado <jdelgado@rewip.com>",
     "Jonathan Kim <jkimbo@gmail.com>",
-    "Jonathan Park <jpark@daptiv.com>"
+    "Jonathan Park <jpark@daptiv.com>",
+    "Marc d'Entremont <cramhead@gmail.com>"
   ],
   "license": "MIT",
   "repository": {
@@ -320,7 +321,7 @@
     "debug": "2.2.0",
     "diff": "1.4.0",
     "escape-string-regexp": "1.0.2",
-    "glob": "3.2.11",
+    "glob": "7.0.5",
     "growl": "1.9.2",
     "jade": "0.26.3",
     "mkdirp": "0.5.1",
