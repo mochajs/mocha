@@ -295,9 +295,9 @@ if (program.retries) mocha.suite.retries(program.retries);
 
 var extensions = ['js'];
 program.compilers.forEach(function(c) {
-  var compiler = c.split(':')
-    , ext = compiler[0]
-    , mod = compiler[1];
+  var compiler = c.match(/([a-z.]+):(([A-Z]:)?\S*)+/)
+    , ext = compiler[1]
+    , mod = compiler[2];
 
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);
