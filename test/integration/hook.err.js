@@ -3,7 +3,7 @@ var runMocha = require('./helpers').runMocha;
 var splitRegExp = require('./helpers').splitRegExp;
 
 describe('hook error handling', function() {
-  this.timeout(1000);
+  this.timeout(2000);
 
   var lines;
 

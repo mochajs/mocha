@@ -41,7 +41,7 @@ module.exports = function(config) {
   // TO RUN LOCALLY:
   // Execute `CI=1 make test-browser`, once you've set the SAUCE_USERNAME and
   // SAUCE_ACCESS_KEY env vars.
-  if (process.env.CI) {
+  if (process.env.CI && !process.env.APPVEYOR) {
     // we can't run SauceLabs tests on PRs from forks on Travis cuz security.
     if (process.env.TRAVIS) {
       if (process.env.TRAVIS_REPO_SLUG === 'mochajs/mocha'
