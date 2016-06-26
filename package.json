@@ -322,7 +322,7 @@
     "escape-string-regexp": "1.0.2",
     "glob": "3.2.11",
     "growl": "1.9.2",
-    "jade": "0.26.3",
+    "jade": "1.11.0",
     "mkdirp": "0.5.1",
     "supports-color": "1.2.0",
     "to-iso-string": "0.0.2"
