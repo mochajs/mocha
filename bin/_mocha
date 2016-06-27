@@ -107,7 +107,7 @@ program
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition');
   .option('--generate-seed', 'generate a random seed and exit')
-  .option('--random [seed]', 'randomize order of tests (with optional random seed)', false);
+  .option('--random <seed>', 'randomize order of tests (with required random seed)');
 
 program._name = 'mocha';
 
@@ -187,6 +187,11 @@ if (!process.env.LOADED_MOCHA_OPTS) {
 // parse args
 
 program.parse(process.argv);
+
+if (program.generateSeed) {
+  console.log(Mocha.seed());
+  process.exit(0);
+}
 
 // infinite stack traces
 
