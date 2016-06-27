@@ -184,6 +184,50 @@ describe('utils', function() {
     });
   });
 
+  describe('.isSafeUnsignedInteger', function() {
+    it('should return `false` if the value is not a number', function() {
+      utils.isSafeUnsignedInteger('boo-boo butt').should.be.false;
+    });
+
+    it('should return `false` if the value is negative', function() {
+      utils.isSafeUnsignedInteger(-1).should.be.false;
+    });
+
+    it('should return `false` if the value is greater than Number.MAX_SAFE_INTEGER', function() {
+      utils.isSafeUnsignedInteger(utils.MAX_SAFE_INTEGER + 1).should.be.false;
+    });
+
+    it('should return `false` if the value is not an integer', function() {
+      utils.isSafeUnsignedInteger(1.5).should.be.false;
+    });
+
+    it('should return `true` if the value is a positive integer lteq MAX_SAFE_INTEGER', function() {
+      utils.isSafeUnsignedInteger(10).should.be.true;
+    });
+  });
+
+  describe('.toSafeUnsignedInteger()', function() {
+    it('should return NaN if isSafeUnsignedInteger() would return false', function() {
+      utils.toSafeUnsignedInteger(Infinity).should.be.NaN;
+    });
+
+    it('should return NaN if a string representation of a float value', function() {
+      utils.toSafeUnsignedInteger('10.5').should.be.NaN;
+    });
+
+    it('should return an integer if a safe hex string value', function() {
+      utils.toSafeUnsignedInteger('0xDEADBEEF').should.equal(0xDEADBEEF);
+    });
+
+    it('should return an integer if a safe integer string value', function() {
+      utils.toSafeUnsignedInteger('10').should.equal(10);
+    });
+
+    it('should return an integer if a safe octal string value', function() {
+      utils.toSafeUnsignedInteger('01234').should.equal(01234);
+    });
+  });
+
   describe('.isPromise', function() {
     it('should return true if the value is Promise-ish', function() {
       utils.isPromise({then: function() {}}).should.be.true;
@@ -197,4 +241,5 @@ describe('utils', function() {
       utils.isPromise({}).should.be.false;
     });
   });
+
 });
