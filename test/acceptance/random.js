@@ -3,20 +3,18 @@
 var mocha = require('../..');
 // yuk
 var Mocha = mocha.Mocha || mocha;
+var utils = require('../../lib/utils');
 
 describe('random option', function() {
   describe('seed', function() {
-    it('should return a number', function() {
+    it('should return a hex string', function() {
       expect(Mocha.seed())
         .to
-        .be
-        .a('number');
+        .match(/^0x[0-9A-F]+/);
     });
 
-    it('should return a positive number', function() {
-      expect(Mocha.seed() > 0)
-        .to
-        .be(true);
+    it('should be a valid seed', function() {
+      expect(utils.toSafeUnsignedInteger(Mocha.seed())).to.be.a('number');
     });
 
     it('should return a finite number', function() {

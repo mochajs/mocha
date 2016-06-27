@@ -228,6 +228,12 @@ describe('utils', function() {
     });
   });
 
+  describe('.toHex', function() {
+    it('should convert an integer to hex', function() {
+      utils.toHex(0xDEADBEEF).should.equal('0xDEADBEEF');
+    });
+  });
+
   describe('.isPromise', function() {
     it('should return true if the value is Promise-ish', function() {
       utils.isPromise({then: function() {}}).should.be.true;
