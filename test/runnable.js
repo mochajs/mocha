@@ -49,12 +49,27 @@ describe('Runnable(title, fn)', function(){
     });
   });
 
-  describe('#slow(ms)', function(){
-    it('should set the slow threshold', function(){
-      var run = new Runnable;
-      run.slow(100)
+  describe('#slow(ms)', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable();
+    });
+
+    it('should set the slow threshold', function() {
+      run.slow(100);
       run.slow().should.equal(100);
-    })
+    });
+
+    it('should not set the slow threshold if the parameter is not passed', function() {
+      run.slow();
+      run.slow().should.equal(75);
+    });
+
+    it('should not set the slow threshold if the parameter is undefined', function() {
+      run.slow(undefined);
+      run.slow().should.equal(75);
+    });
   })
 
   describe('.title', function(){
