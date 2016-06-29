@@ -1,50 +1,5 @@
 'use strict';
 
-function addSauceTests(cfg) {
-  cfg.reporters.push('saucelabs');
-  cfg.customLaunchers = {
-    ie8: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 7',
-      version: '8.0'
-    },
-    chrome: {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      platform: 'Windows 8',
-      version: 'latest'
-    },
-    edge: {
-      base: 'SauceLabs',
-      browserName: 'MicrosoftEdge',
-      platform: 'Windows 10',
-      version: 'latest'
-    },
-    firefox: {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      platform: 'Windows 8.1',
-      version: 'latest'
-    },
-    safari: {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.11',
-      version: 'latest'
-    }
-  };
-
-  cfg.browsers = cfg.browsers.concat(Object.keys(cfg.customLaunchers));
-
-  cfg.sauceLabs = {
-    public: 'public'
-  };
-
-  // for slow browser booting, ostensibly
-  cfg.captureTimeout = 120000;
-}
-
 module.exports = function(config) {
   var cfg = {
     frameworks: [
@@ -96,7 +51,6 @@ module.exports = function(config) {
         cfg.sauceLabs.build = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER
           + ' (' + process.env.TRAVIS_BUILD_ID + ')';
         cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-        cfg.sauceLabs.startConnect = true;
       }
     } else {
       if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
@@ -129,3 +83,51 @@ module.exports = function(config) {
 
   config.set(cfg);
 };
+
+function addSauceTests(cfg) {
+  cfg.reporters.push('saucelabs');
+
+  cfg.customLaunchers = {
+    ie8: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 7',
+      version: '8.0'
+    },
+    chrome: {
+      base: 'SauceLabs',
+      browserName: 'chrome',
+      platform: 'Windows 8',
+      version: 'latest'
+    },
+    edge: {
+      base: 'SauceLabs',
+      browserName: 'MicrosoftEdge',
+      platform: 'Windows 10',
+      version: 'latest'
+    },
+    firefox: {
+      base: 'SauceLabs',
+      browserName: 'firefox',
+      platform: 'Windows 8.1',
+      version: 'latest'
+    },
+    safari: {
+      base: 'SauceLabs',
+      browserName: 'safari',
+      platform: 'OS X 10.11',
+      version: 'latest'
+    }
+  };
+
+  cfg.browsers = cfg.browsers.concat(Object.keys(cfg.customLaunchers));
+
+  cfg.sauceLabs = {
+    public: 'public',
+    startConnect: true
+  };
+
+  // for slow browser booting, ostensibly
+  cfg.captureTimeout = 120000;
+  cfg.browserNoActivityTimeout = 20000;
+}

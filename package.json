@@ -333,7 +333,7 @@
     "coffee-script": "~1.8.0",
     "eslint": "^1.2.1",
     "expect.js": "^0.3.1",
-    "karma": "^0.13.22",
+    "karma": "^1.1.0",
     "karma-browserify": "^5.0.5",
     "karma-expect": "^1.1.2",
     "karma-no-mocha": "^2.0.0",
