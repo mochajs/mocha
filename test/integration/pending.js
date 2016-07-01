@@ -62,7 +62,7 @@ describe('pending', function() {
   });
 
   describe('asynchronous skip()', function() {
-    this.timeout(1000);
+    this.timeout(2000);
 
     describe('in spec', function() {
       it('should immediately skip the spec and run all others', function(done) {
