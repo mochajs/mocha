@@ -11,6 +11,7 @@ var program = require('commander'),
   exists = fs.existsSync || path.existsSync,
   Mocha = require('../'),
   utils = Mocha.utils,
+  interfaceNames = Object.keys(Mocha.interfaces),
   join = path.join,
   cwd = process.cwd(),
   getOptions = require('./options'),
@@ -74,7 +75,7 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-u, --ui <name>', 'specify user-interface (' + interfaceNames.join('|') + ')', 'bdd')
   .option('-w, --watch', 'watch files for changes')
   .option('--check-leaks', 'check for global variable leaks')
   .option('--full-trace', 'display the full stack trace')
@@ -156,10 +157,9 @@ program.on('reporters', function(){
 
 program.on('interfaces', function(){
   console.log('');
-  console.log('    bdd');
-  console.log('    tdd');
-  console.log('    qunit');
-  console.log('    exports');
+  interfaceNames.forEach(function(interfaceName) {
+    console.log('    ' + interfaceName);
+  });
   console.log('');
   process.exit();
 });
