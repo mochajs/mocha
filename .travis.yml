@@ -27,13 +27,6 @@ matrix:
       env: TARGET=test-node
     - node_js: '0.10'
       env: TARGET=test-node
-    - node_js: '0.8'
-      env: TARGET=test-node
-
-before_install:
-  # node 0.8 won't install our dev deps with an out-of-box npm;
-  # this upgrades it
-  - node ./scripts/upgrade-npm.js
 
 script: travis_retry make $TARGET
 
