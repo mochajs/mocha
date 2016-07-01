@@ -41,10 +41,11 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
-  describe('#timeout(ms) when ms>2^31', function(){
-    it('should throw an error', function () {
-      var run = new Runnable;
-      run.timeout.bind(run, 1e10).should.throw(/Timeout too large/);
+  describe('#timeout(ms) when ms>2^31', function() {
+    it('should set disabled', function() {
+      var run = new Runnable();
+      run.timeout(1e10);
+      run.enableTimeouts().should.be.false;
     });
   });
 
