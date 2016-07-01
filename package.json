@@ -331,6 +331,7 @@
     "browser-stdout": "^1.2.0",
     "browserify": "^13.0.0",
     "coffee-script": "~1.8.0",
+    "derequire": "2.0.3",
     "eslint": "^1.2.1",
     "expect.js": "^0.3.1",
     "karma": "^1.1.0",
