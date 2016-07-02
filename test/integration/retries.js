@@ -1,6 +1,7 @@
 var assert = require('assert');
 var helpers = require('./helpers');
 var args   = [];
+var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function() {
   this.timeout(2000);
@@ -33,7 +34,7 @@ describe('retries', function() {
         'after each 4',
         'before each 4',
         'TEST 4',
-        'after each 5',
+        bang + 'after each 5',
         'after'
       ];
 
