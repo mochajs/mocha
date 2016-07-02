@@ -12,6 +12,7 @@ env:
   global: PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
 
 matrix:
+  fast_finish: true
   include:
     - node_js: '6'
       env: TARGET='clean lint test-node test-browser'
@@ -36,4 +37,10 @@ notifications:
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
   on_success: change
   on_failure: always
-  on_start: never
+
+cache:
+  directories:
+    - node_modules/phantomjs/lib/phantom
+
+addons:
+  artifacts: true
