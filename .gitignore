@@ -15,3 +15,4 @@ lib/browser/diff.js
 *.diff
 npm-debug.log*
 .envrc
+.karma/
