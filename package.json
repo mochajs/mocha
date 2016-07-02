@@ -324,6 +324,7 @@
     "growl": "1.9.2",
     "jade": "0.26.3",
     "mkdirp": "0.5.1",
+    "os-tmpdir": "1.0.1",
     "supports-color": "1.2.0",
     "to-iso-string": "0.0.2"
   },

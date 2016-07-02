@@ -1,12 +1,13 @@
 var assert = require('assert');
 var child_process = require('child_process');
+var path = require('path');
 
 describe('Mocha', function() {
   this.timeout(1000);
 
   it('should not output colors to pipe', function(cb) {
-    var command = 'bin/mocha --grep missing-test';
-    child_process.exec(command, function(err, stdout, stderr) {
+    var command = [path.join('bin', 'mocha'), '--grep', 'missing-test'];
+    child_process.execFile(process.execPath, command, function(err, stdout, stderr) {
       if (err) return cb(err);
 
       assert(stdout.indexOf('[90m') === -1);

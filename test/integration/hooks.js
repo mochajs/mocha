@@ -1,9 +1,10 @@
 var assert = require('assert');
 var run    = require('./helpers').runMocha;
+var splitRegExp = require('./helpers').splitRegExp;
 var args   = [];
 
 describe('hooks', function() {
-  this.timeout(1000);
+  this.timeout(2000);
 
   it('are ran in correct order', function(done) {
     run('cascade.js', args, function(err, res) {
@@ -11,7 +12,7 @@ describe('hooks', function() {
 
       assert(!err);
 
-      lines = res.output.split(/[\n․]+/).map(function(line) {
+      lines = res.output.split(splitRegExp).map(function(line) {
         return line.trim();
       }).filter(function(line) {
         return line.length;

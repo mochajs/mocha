@@ -39,7 +39,7 @@ for (var i = 0; i < numOfTests; i += 1) {
 
     it('access a variable via a closure', function () {
       // slow performance on older node.js versions
-      this.timeout(1000);
+      this.timeout(2000);
       closureVar = new MemoryLeak();
     });
 
