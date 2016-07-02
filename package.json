@@ -310,32 +310,32 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 0.8.x",
-    "npm": ">=1.4.3"
+    "node": ">= 0.10.x",
+    "npm": ">= 1.4.x"
   },
   "engineStrict": true,
   "scripts": {
     "test": "make test"
   },
   "dependencies": {
-    "commander": "2.3.0",
+    "commander": "2.9.0",
     "debug": "2.2.0",
-    "diff": "1.4.0",
-    "escape-string-regexp": "1.0.2",
-    "glob": "4.0.6",
+    "diff": "2.2.3",
+    "escape-string-regexp": "1.0.5",
+    "glob": "7.0.5",
     "growl": "1.9.2",
-    "jade": "0.26.3",
     "json3": "3.3.2",
     "mkdirp": "0.5.1",
     "os-tmpdir": "1.0.1",
-    "supports-color": "1.2.0",
+    "pug": "2.0.0-beta3",
+    "supports-color": "3.1.2",
     "to-iso-string": "0.0.2"
   },
   "devDependencies": {
     "browser-stdout": "^1.2.0",
     "browserify": "^13.0.0",
-    "coffee-script": "~1.8.0",
-    "eslint": "^1.2.1",
+    "coffee-script": "^1.10.0",
+    "eslint": "^1.10.3",
     "expect.js": "^0.3.1",
     "karma": "^1.1.0",
     "karma-browserify": "^5.0.5",
@@ -345,8 +345,8 @@
     "karma-sauce-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.26",
     "phantomjs": "1.9.8",
-    "should": "~8.0.0",
-    "through2": "~0.6.5",
+    "should": "^9.0.2",
+    "through2": "^2.0.1",
     "watchify": "^3.7.0"
   },
   "files": [
@@ -364,7 +364,7 @@
     "events": "./lib/browser/events.js",
     "tty": "./lib/browser/tty.js",
     "./index.js": "./browser-entry.js",
-    "jade": false,
+    "pug": false,
     "fs": false,
     "glob": false,
     "path": false,
