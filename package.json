@@ -325,6 +325,7 @@
     "glob": "7.0.5",
     "growl": "1.9.2",
     "json3": "3.3.2",
+    "lodash.create": "4.0.4",
     "mkdirp": "0.5.1",
     "pug": "2.0.0-beta3",
     "supports-color": "3.1.2",
