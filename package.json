@@ -326,7 +326,6 @@
     "growl": "1.9.2",
     "json3": "3.3.2",
     "mkdirp": "0.5.1",
-    "os-tmpdir": "1.0.1",
     "pug": "2.0.0-beta3",
     "supports-color": "3.1.2",
     "to-iso-string": "0.0.2"
