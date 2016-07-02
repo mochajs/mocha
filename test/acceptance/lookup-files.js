@@ -4,7 +4,7 @@ describe('lookupFiles', function() {
   var fs = require('fs'),
     path = require('path'),
     existsSync = fs.existsSync || path.existsSync,
-    tmpDir = require('os-tmpdir')(),
+    tmpDir = require('os').tmpDir(),
     tmpFile = path.join.bind(path, tmpDir),
     symlinkSupported = false;
 
