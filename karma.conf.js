@@ -1,6 +1,13 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+var mkdirp = require('mkdirp');
+var bundleDirpath = path.join(__dirname, '.karma');
+
 module.exports = function(config) {
+  mkdirp.sync(bundleDirpath);
+
   var cfg = {
     frameworks: [
       'browserify',
@@ -25,9 +32,20 @@ module.exports = function(config) {
       debug: true,
       configure: function configure(b) {
         b.ignore('glob')
-          .ignore('jade')
+          .ignore('pug')
           .ignore('supports-color')
-          .exclude('./lib-cov/mocha');
+          .exclude('./lib-cov/mocha')
+          .on('bundled', function (err, content) {
+            var filepath = path.join(bundleDirpath,
+              'bundle.' + Date.now() + '.js');
+            if (!err) {
+              fs.writeFile(filepath, content, function (err) {
+                if (!err) {
+                  console.error('Wrote test bundle to ' + filepath);
+                }
+              });
+            }
+          });
       }
     },
     reporters: ['spec'],
