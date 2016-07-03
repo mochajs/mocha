@@ -3,11 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var bundleDirpath = path.join(__dirname, '.karma');
+var baseBundleDirpath = path.join(__dirname, '.karma');
 
 module.exports = function(config) {
-  mkdirp.sync(bundleDirpath);
-
+  var bundleDirpath;
   var cfg = {
     frameworks: [
       'browserify',
@@ -35,15 +34,11 @@ module.exports = function(config) {
           .ignore('pug')
           .ignore('supports-color')
           .exclude('./lib-cov/mocha')
-          .on('bundled', function (err, content) {
-            var filepath = path.join(bundleDirpath,
-              'bundle.' + Date.now() + '.js');
+          .on('bundled', function(err, content) {
             if (!err) {
-              fs.writeFile(filepath, content, function (err) {
-                if (!err) {
-                  console.error('Wrote test bundle to ' + filepath);
-                }
-              });
+              // write bundle to directory for debugging
+              fs.writeFileSync(path.join(bundleDirpath,
+                'bundle.' + Date.now() + '.js'), content);
             }
           });
       }

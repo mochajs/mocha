@@ -9,13 +9,19 @@ dist: trusty
 language: node_js
 
 env:
-  global: PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+  global:
+    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
+    # rate-limiting.  pull it from this sketchy site in China instead.
+    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+    # we're going to use s3 to temporarily store Karma test bundles for debugging
+    - AWS_ACCESS_KEY_ID=AKIAJ3QQTLQXWXYJ6PTA
+    - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
 
 matrix:
   fast_finish: true
   include:
     - node_js: '6'
-      env: TARGET='clean lint test-node test-browser'
+      env: TARGET='clean lint test-node test-browser' S3=1
     - node_js: '5'
       env: TARGET=test-node
     - node_js: '4'
@@ -29,7 +35,11 @@ matrix:
     - node_js: '0.10'
       env: TARGET=test-node
 
-script: travis_retry make $TARGET
+before_script: scripts/travis-before-script.sh
+
+script: make $TARGET
+
+after_script: scripts/travis-after-script.sh
 
 notifications:
   urls:
@@ -38,9 +48,7 @@ notifications:
   on_success: change
   on_failure: always
 
+# attempt to cache phantom binaries
 cache:
   directories:
     - node_modules/phantomjs/lib/phantom
-
-addons:
-  artifacts: true
