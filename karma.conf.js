@@ -3,11 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var bundleDirpath = path.join(__dirname, '.karma');
+var baseBundleDirpath = path.join(__dirname, '.karma');
 
 module.exports = function(config) {
-  mkdirp.sync(bundleDirpath);
-
+  var bundleDirpath;
   var cfg = {
     frameworks: [
       'browserify',
@@ -35,15 +34,11 @@ module.exports = function(config) {
           .ignore('pug')
           .ignore('supports-color')
           .exclude('./lib-cov/mocha')
-          .on('bundled', function (err, content) {
-            var filepath = path.join(bundleDirpath,
-              'bundle.' + Date.now() + '.js');
+          .on('bundled', function(err, content) {
             if (!err) {
-              fs.writeFile(filepath, content, function (err) {
-                if (!err) {
-                  console.error('Wrote test bundle to ' + filepath);
-                }
-              });
+              // write bundle to directory for debugging
+              fs.writeFileSync(path.join(bundleDirpath,
+                'bundle.' + Date.now() + '.js'), content);
             }
           });
       }
@@ -62,6 +57,7 @@ module.exports = function(config) {
   if (process.env.CI && !process.env.APPVEYOR) {
     // we can't run SauceLabs tests on PRs from forks on Travis cuz security.
     if (process.env.TRAVIS) {
+      bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
       if (process.env.TRAVIS_REPO_SLUG === 'mochajs/mocha'
         && process.env.TRAVIS_PULL_REQUEST === 'false') {
         addSauceTests(cfg);
@@ -71,6 +67,7 @@ module.exports = function(config) {
         cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
       }
     } else {
+      bundleDirpath = path.join(baseBundleDirpath, 'local');
       if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
         throw new Error('Must set SAUCE_USERNAME and SAUCE_ACCESS_KEY '
           + 'environment variables!');
@@ -80,6 +77,7 @@ module.exports = function(config) {
       addSauceTests(cfg);
       cfg.sauceLabs.build = require('os').hostname() + ' (' + Date.now() + ')';
     }
+    mkdirp.sync(bundleDirpath);
   }
 
   // the MOCHA_UI env var will determine if we're running interface-specific
