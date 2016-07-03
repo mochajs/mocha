@@ -21,7 +21,7 @@ matrix:
   fast_finish: true
   include:
     - node_js: '6'
-      env: TARGET='clean lint test-node test-browser' S3=1
+      env: TARGET=test-node
     - node_js: '5'
       env: TARGET=test-node
     - node_js: '4'
@@ -34,6 +34,10 @@ matrix:
       env: TARGET=test-node
     - node_js: '0.10'
       env: TARGET=test-node
+    - node_js: '6'
+      env: TARGET=lint
+    - node_js: '6'
+      env: TARGET=test-browser S3=1
 
 before_script: scripts/travis-before-script.sh
 
