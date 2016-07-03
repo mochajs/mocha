@@ -35,7 +35,7 @@ module.exports = function(config) {
           .ignore('supports-color')
           .exclude('./lib-cov/mocha')
           .on('bundled', function(err, content) {
-            if (!err) {
+            if (!err && bundleDirpath) {
               // write bundle to directory for debugging
               fs.writeFileSync(path.join(bundleDirpath,
                 'bundle.' + Date.now() + '.js'), content);
