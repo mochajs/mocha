@@ -51,8 +51,3 @@ notifications:
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
   on_success: change
   on_failure: always
-
-# attempt to cache phantom binaries
-cache:
-  directories:
-    - node_modules/phantomjs/lib/phantom
