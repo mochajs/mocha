@@ -3,8 +3,6 @@ var run    = require('./helpers').runMochaJSON;
 var args   = [];
 
 describe('options', function() {
-  this.timeout(2000);
-
   describe('--async-only', function() {
 
     before(function() {

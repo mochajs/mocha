@@ -3,8 +3,6 @@ var run    = require('./helpers').runMochaJSON;
 var args   = [];
 
 describe('uncaught exceptions', function() {
-  this.timeout(2000);
-
   it('handles uncaught exceptions from hooks', function(done) {
     run('uncaught.hook.js', args, function(err, res) {
       assert(!err);

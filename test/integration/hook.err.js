@@ -4,8 +4,6 @@ var splitRegExp = require('./helpers').splitRegExp;
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('hook error handling', function() {
-  this.timeout(2000);
-
   var lines;
 
   describe('before hook error', function() {

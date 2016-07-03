@@ -77,6 +77,7 @@ test-unit:
 test-integration:
 	@printf "==> [Test :: Integrations]\n"
 	@./bin/mocha \
+		--timeout 5000 \
 		--reporter $(REPORTER) \
 		test/integration/*.js
 

@@ -4,8 +4,6 @@ var path   = require('path');
 var run    = require('./helpers').runMocha;
 
 describe('regressions', function() {
-  this.timeout(2000);
-
   it('issue-1327: should run all 3 specs exactly once', function(done) {
     var args = [];
     run('regression/issue-1327.js', args, function(err, res) {

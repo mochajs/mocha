@@ -4,8 +4,6 @@ var args   = [];
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function() {
-  this.timeout(2000);
-
   it('are ran in correct order', function(done) {
     helpers.runMocha('retries/hooks.js', args, function(err, res) {
       var lines, expected;

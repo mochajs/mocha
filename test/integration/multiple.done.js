@@ -4,8 +4,6 @@ var args   = [];
 
 describe('multiple calls to done()', function() {
   var res;
-  this.timeout(2000);
-
   describe('from a spec', function() {
     before(function(done) {
       run('multiple.done.js', args, function(err, result) {
