@@ -42,11 +42,11 @@ lint:
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
-test-browser: test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
+test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
 test: lint test-node test-browser
 
-test-browser-unit: mocha.js
+test-browser-unit:
 	@printf "==> [Test :: Browser]\n"
 	@NODE_PATH=. $(KARMA) start
 
