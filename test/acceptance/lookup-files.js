@@ -1,23 +1,35 @@
+'use strict';
+
 var utils = require('../../lib/utils');
+var fs = require('fs');
+var path = require('path');
+var os = require('os');
+var mkdirp = require('mkdirp');
+var rimraf = require('rimraf');
 
 describe('lookupFiles', function() {
-  var fs = require('fs'),
-    path = require('path'),
-    existsSync = fs.existsSync || path.existsSync,
-    tmpDir = require('os').tmpDir(),
-    tmpFile = path.join.bind(path, tmpDir),
-    symlinkSupported = false;
+  var tmpDir = path.join(os.tmpDir(), 'mocha-lookup-files');
+  var existsSync = fs.existsSync;
+  var tmpFile = path.join.bind(path, tmpDir);
+  var symlinkSupported = false;
 
-  fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
-  try {
-    fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
-    symlinkSupported = true;
-  } catch (ignored) {
-  }
+  (function testSymlinkSupport() {
+    makeTempDir();
 
-  cleanup();
+    fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
+    try {
+      fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
+      symlinkSupported = true;
+    } catch (ignored) {
+      // ignored
+    } finally {
+      removeTempDir();
+    }
+  }());
 
   beforeEach(function() {
+    makeTempDir();
+
     fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
     if (symlinkSupported) {
       fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
@@ -66,18 +78,13 @@ describe('lookupFiles', function() {
       .length(expectedLength);
   });
 
-  afterEach(cleanup);
+  afterEach(removeTempDir);
 
-  function cleanup() {
-    [
-      'mocha-utils.js',
-      'mocha-utils-link.js',
-      'bob'
-    ].forEach(function(path) {
-      try {
-        fs.unlinkSync(tmpFile(path));
-      } catch (ignored) {
-      }
-    });
+  function makeTempDir() {
+    mkdirp.sync(tmpDir);
+  }
+
+  function removeTempDir() {
+    rimraf.sync(tmpDir);
   }
 });

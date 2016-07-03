@@ -345,6 +345,7 @@
     "karma-sauce-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.26",
     "phantomjs": "1.9.8",
+    "rimraf": "^2.5.2",
     "should": "^9.0.2",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
