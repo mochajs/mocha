@@ -4,8 +4,6 @@ var args   = [];
 
 describe('pending', function() {
   describe('pending specs', function() {
-    this.timeout(2000);
-
     it('should be created by omitting a function', function(done) {
       run('pending/spec.js', args, function(err, res) {
         assert(!err);
@@ -19,8 +17,6 @@ describe('pending', function() {
   });
 
   describe('synchronous skip()', function() {
-    this.timeout(2000);
-
     describe('in spec', function() {
       it('should immediately skip the spec and run all others', function(done) {
         run('pending/skip.sync.spec.js', args, function(err, res) {
@@ -62,8 +58,6 @@ describe('pending', function() {
   });
 
   describe('asynchronous skip()', function() {
-    this.timeout(2000);
-
     describe('in spec', function() {
       it('should immediately skip the spec and run all others', function(done) {
         run('pending/skip.async.spec.js', args, function(err, res) {

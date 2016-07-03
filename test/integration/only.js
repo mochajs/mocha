@@ -2,8 +2,6 @@ var run = require('./helpers').runMochaJSON;
 var assert = require('assert');
 
 describe('.only()', function() {
-  this.timeout(2000);
-
   it('should run only tests that marked as `only`', function(done) {
     run('options/only/bdd.js', ['--ui', 'bdd'], function(err, res) {
       assert(!err);

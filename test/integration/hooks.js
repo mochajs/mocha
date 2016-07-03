@@ -4,8 +4,6 @@ var splitRegExp = require('./helpers').splitRegExp;
 var args   = [];
 
 describe('hooks', function() {
-  this.timeout(2000);
-
   it('are ran in correct order', function(done) {
     run('cascade.js', args, function(err, res) {
       var lines, expected;

@@ -15,7 +15,6 @@ function getExpectedOutput() {
 
 describe('diffs', function() {
   var diffs, expected;
-  this.timeout(2000);
 
   before(function(done) {
     run('diffs/diffs.js', ['-C'], function(err, res) {
