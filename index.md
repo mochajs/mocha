@@ -433,8 +433,6 @@ describe('Array', function() {
 });
 ```
 
-> *Best practice*: Use `.skip()` instead of commenting tests out.
-
 Or a specific test-case:
 
 ```js
@@ -451,19 +449,51 @@ describe('Array', function() {
 });
 ```
 
-You can also defer skipping a test until it's running. This can be useful if a test relies on some particular environment or configuration that can't be detected ahead of time. For example:
+> *Best practice*: Use `.skip()` instead of commenting tests out.
+
+You may also skip *at runtime* using `this.skip()`.  If a test needs an environment or configuration which cannot be detected beforehand, a runtime skip is appropriate. For example:
 
 ```js
-it('should only test in the right environment', function() {
+it('should only test in the correct environment', function() {
   if (/* check test environment */) {
-    // test the things
+    // make assertions
   } else {
     this.skip();
   }
 });
 ```
 
-The difference between calling `this.skip()` and simply not making any assertions is that `this.skip()` will cause the test to be reported as [pending](#pending-tests), while not making any assertions will cause the test to be reported as passed.
+The above test will be reported as [pending](#pending-tests).  It's also important to note that calling `this.skip()` will effectively *abort* the test.  
+
+> *Best practice*: To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.  
+
+Contrast the above test with the following code:
+
+```js
+it('should only test in the correct environment', function() {
+  if (/* check test environment */) {
+    // make assertions
+  } else {
+    // do nothing
+  }
+});
+```
+
+Because this test *does nothing*, it will be reported as *passing*.
+
+> *Best practice*: Don't do nothing!  A test should make an assertion or use `this.skip()`.
+
+To skip *multiple* tests in this manner, use `this.skip()` in a "before" hook:
+
+```js
+before(function() {
+  if (/* check test environment */) {
+    // setup code
+  } else {
+    this.skip();
+  }
+});
+```
 
 ## Retry Tests
 
