@@ -613,6 +613,19 @@ it('should take less than 500ms', function(done){
 });
 ```
 
+### Hook-level
+
+Hook-level timeouts may also be applied, or the use of `this.timeout(0)` to disable timeout for a hook:
+
+```js
+describe('a suite of tests', function() {
+  beforeEach(function(done) {
+    this.timeout(3000); // A very long evironment setup.
+    setTimeout(done, 2500);
+  });
+});
+```
+
 ## Diffs
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library.  Mocha will attempt to display the difference between what was expected, and what the assertion actually saw.  Here's an example of a "string" diff:
