@@ -615,16 +615,18 @@ it('should take less than 500ms', function(done){
 
 ### Hook-level
 
-Hook-level timeouts may also be applied, or the use of `this.timeout(0)` to disable timeout for a hook:
+Hook-level timeouts may also be applied:
 
 ```js
 describe('a suite of tests', function() {
   beforeEach(function(done) {
-    this.timeout(3000); // A very long evironment setup.
+    this.timeout(3000); // A very long environment setup.
     setTimeout(done, 2500);
   });
 });
 ```
+
+Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 ## Diffs
 
