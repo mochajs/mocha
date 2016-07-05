@@ -39,6 +39,8 @@ matrix:
     - node_js: '6'
       env: TARGET=test-browser S3=1
 
+before_install: scripts/travis-before-install.sh
+
 before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
