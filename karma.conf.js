@@ -31,9 +31,7 @@ module.exports = function(config) {
       debug: true,
       configure: function configure(b) {
         b.ignore('glob')
-          .ignore('pug')
           .ignore('supports-color')
-          .exclude('./lib-cov/mocha')
           .on('bundled', function(err, content) {
             if (!err && bundleDirpath) {
               // write bundle to directory for debugging

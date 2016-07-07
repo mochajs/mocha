@@ -1,3 +1,3 @@
-module.exports = process.env.COV
-  ? require('./lib-cov/mocha')
-  : require('./lib/mocha');
+'use strict';
+
+module.exports = require('./lib/mocha');
