@@ -318,7 +318,7 @@
   "dependencies": {
     "commander": "2.3.0",
     "debug": "2.2.0",
-    "diff": "1.4.0",
+    "diff": "2.2.3",
     "escape-string-regexp": "1.0.2",
     "glob": "3.2.11",
     "growl": "1.9.2",
