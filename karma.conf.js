@@ -31,6 +31,8 @@ module.exports = function(config) {
       debug: true,
       configure: function configure(b) {
         b.ignore('glob')
+          .ignore('fs')
+          .ignore('path')
           .ignore('supports-color')
           .on('bundled', function(err, content) {
             if (!err && bundleDirpath) {
