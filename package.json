@@ -297,7 +297,6 @@
     "node": ">= 0.10.x",
     "npm": ">= 1.4.x"
   },
-  "engineStrict": true,
   "scripts": {
     "test": "make test"
   },
@@ -352,11 +351,5 @@
     "glob": false,
     "path": false,
     "supports-color": false
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/mochajs/mocha/master/LICENSE"
-    }
-  ]
+  }
 }
