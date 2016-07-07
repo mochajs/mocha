@@ -15,26 +15,13 @@ mocha.js: $(SRC) $(SUPPORT)
 	@$(BROWSERIFY) ./browser-entry \
 		--ignore 'fs' \
 		--ignore 'glob' \
-		--ignore 'jade' \
 		--ignore 'path' \
-		--ignore 'supports-color' \
-		--exclude './lib-cov/mocha' > $@
+		--ignore 'supports-color' > $@
 
 clean:
 	@printf "==> [Clean]\n"
 	rm -f mocha.js
 	rm -rf test-outputs
-	rm -rf lib-cov
-	rm -f coverage.html
-
-test-cov: lib-cov
-	@printf "==> [Test :: Coverage]\n"
-	@COV=1 $(MAKE) test REPORTER=html-cov > coverage.html
-
-lib-cov:
-	@printf "==> [Coverage]\n"
-	@rm -fr ./$@
-	@jscoverage lib $@
 
 lint:
 	@printf "==> [Test :: Lint]\n"
@@ -204,4 +191,4 @@ tm:
 	@printf "==> [TM]\n"
 	@open editors/$(TM_BUNDLE)
 
-.PHONY: test-cov test-jsapi test-compilers watch test test-node test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean test-browser test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports lint test-only test-global-only
+.PHONY: test-jsapi test-compilers watch test test-node test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean test-browser test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports lint test-only test-global-only

@@ -311,7 +311,6 @@
     "json3": "3.3.2",
     "lodash.create": "3.1.1",
     "mkdirp": "0.5.1",
-    "pug": "2.0.0-beta3",
     "supports-color": "3.1.2",
     "to-iso-string": "0.0.2"
   },
@@ -349,7 +348,6 @@
     "events": "./lib/browser/events.js",
     "tty": "./lib/browser/tty.js",
     "./index.js": "./browser-entry.js",
-    "pug": false,
     "fs": false,
     "glob": false,
     "path": false,
