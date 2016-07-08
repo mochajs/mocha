@@ -351,5 +351,6 @@
     "glob": false,
     "path": false,
     "supports-color": false
-  }
+  },
+  "homepage": "https://mochajs.org"
 }
