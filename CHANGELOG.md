@@ -1,3 +1,21 @@
+# 3.0.0 / 2016-xx-xx
+
+## Breaking Changes
+
+- **Mocha no longer supports Node.js v0.8** due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0.
+- **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.**  Previously, this requirement only affected Mocha's development dependencies.  In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
+
+## Enhancements
+
+- [#2305] Improve ES3 compatibility ([@ndhoule], [@boneskull])
+- TODO
+
+## Bug Fixes
+
+- TODO
+
+[#2305]: https://github.com/mochajs/mocha/pull/2305
+
 # 2.5.3 / 2016-05-25
 
 - [#2112] - Fix HTML reporter regression causing duplicate error output ([@danielstjules] via 6d24063)
