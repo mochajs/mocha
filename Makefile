@@ -21,7 +21,6 @@ mocha.js: $(SRC) $(SUPPORT)
 clean:
 	@printf "==> [Clean]\n"
 	rm -f mocha.js
-	rm -rf test-outputs
 
 lint:
 	@printf "==> [Test :: Lint]\n"
