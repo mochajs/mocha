@@ -84,6 +84,7 @@ program
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--es_staging', 'enable all staged features')
   .option('--harmony<_classes,_generators,...>', 'all node --harmony* flags are available')
+  .option('--preserve-symlinks', 'Instructs the module loader to preserve symbolic links when resolving and caching modules')
   .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
