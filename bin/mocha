@@ -50,6 +50,7 @@ process.argv.slice(2).forEach(function(arg){
       else if (0 == arg.indexOf('--trace')) args.unshift(arg);
       else if (0 == arg.indexOf('--icu-data-dir')) args.unshift(arg);
       else if (0 == arg.indexOf('--max-old-space-size')) args.unshift(arg);
+      else if (0 == arg.indexOf('--preserve-symlinks')) args.unshift(arg);
       else args.push(arg);
       break;
   }

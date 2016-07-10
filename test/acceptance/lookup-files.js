@@ -1,56 +1,83 @@
 var utils = require('../../lib/utils');
 
 describe('lookupFiles', function() {
-  var fs = require('fs'), path = require('path'), existsSync = fs.existsSync ||
-    path.existsSync;
+  var fs = require('fs'),
+    path = require('path'),
+    existsSync = fs.existsSync || path.existsSync,
+    tmpDir = require('os-tmpdir')(),
+    tmpFile = path.join.bind(path, tmpDir),
+    symlinkSupported = false;
+
+  fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
+  try {
+    fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
+    symlinkSupported = true;
+  } catch (ignored) {
+  }
+
+  cleanup();
 
   beforeEach(function() {
-    fs.writeFileSync('/tmp/mocha-utils.js', 'yippy skippy ying yang yow');
-    fs.symlinkSync('/tmp/mocha-utils.js', '/tmp/mocha-utils-link.js');
+    fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
+    if (symlinkSupported) {
+      fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
+    }
   });
 
-  it('should not choke on symlinks', function() {
-    expect(utils.lookupFiles('/tmp', ['js'], false))
+  (symlinkSupported ? it : it.skip)('should not choke on symlinks', function() {
+    expect(utils.lookupFiles(tmpDir, ['js'], false))
       .to
-      .contain('/tmp/mocha-utils-link.js')
+      .contain(tmpFile('mocha-utils-link.js'))
       .and
-      .contain('/tmp/mocha-utils.js')
+      .contain(tmpFile('mocha-utils.js'))
       .and
       .have
       .length(2);
-    expect(existsSync('/tmp/mocha-utils-link.js'))
+    expect(existsSync(tmpFile('mocha-utils-link.js')))
       .to
       .be(true);
-    fs.renameSync('/tmp/mocha-utils.js', '/tmp/bob');
-    expect(existsSync('/tmp/mocha-utils-link.js'))
+    fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
+    expect(existsSync(tmpFile('mocha-utils-link.js')))
       .to
       .be(false);
-    expect(utils.lookupFiles('/tmp', ['js'], false))
+    expect(utils.lookupFiles(tmpDir, ['js'], false))
       .to
       .eql([]);
   });
 
   it('should accept a glob "path" value', function() {
-    expect(utils.lookupFiles('/tmp/mocha-utils*', ['js'], false))
+    var res = utils.lookupFiles(tmpFile('mocha-utils*'), ['js'], false)
+      .map(path.normalize.bind(path));
+
+    var expectedLength = 0;
+    var ex = expect(res)
       .to
-      .contain('/tmp/mocha-utils-link.js')
-      .and
-      .contain('/tmp/mocha-utils.js')
-      .and
+      .contain(tmpFile('mocha-utils.js'));
+    expectedLength++;
+
+    if (symlinkSupported) {
+      ex = ex.and
+        .contain(tmpFile('mocha-utils-link.js'));
+      expectedLength++;
+    }
+
+    ex.and
       .have
-      .length(2);
+      .length(expectedLength);
   });
 
-  afterEach(function() {
+  afterEach(cleanup);
+
+  function cleanup() {
     [
-      '/tmp/mocha-utils.js',
-      '/tmp/mocha-utils-link.js',
-      '/tmp/bob'
+      'mocha-utils.js',
+      'mocha-utils-link.js',
+      'bob'
     ].forEach(function(path) {
       try {
-        fs.unlinkSync(path);
+        fs.unlinkSync(tmpFile(path));
       } catch (ignored) {
       }
     });
-  });
+  }
 });

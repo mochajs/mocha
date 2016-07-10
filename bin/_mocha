@@ -11,6 +11,7 @@ var program = require('commander'),
   exists = fs.existsSync || path.existsSync,
   Mocha = require('../'),
   utils = Mocha.utils,
+  interfaceNames = Object.keys(Mocha.interfaces),
   join = path.join,
   cwd = process.cwd(),
   getOptions = require('./options'),
@@ -74,7 +75,7 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-u, --ui <name>', 'specify user-interface (bdd|tdd|exports)', 'bdd')
+  .option('-u, --ui <name>', 'specify user-interface (' + interfaceNames.join('|') + ')', 'bdd')
   .option('-w, --watch', 'watch files for changes')
   .option('--check-leaks', 'check for global variable leaks')
   .option('--full-trace', 'display the full stack trace')
@@ -83,6 +84,7 @@ program
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
   .option('--es_staging', 'enable all staged features')
   .option('--harmony<_classes,_generators,...>', 'all node --harmony* flags are available')
+  .option('--preserve-symlinks', 'Instructs the module loader to preserve symbolic links when resolving and caching modules')
   .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--interfaces', 'display available interfaces')
@@ -156,10 +158,9 @@ program.on('reporters', function(){
 
 program.on('interfaces', function(){
   console.log('');
-  console.log('    bdd');
-  console.log('    tdd');
-  console.log('    qunit');
-  console.log('    exports');
+  interfaceNames.forEach(function(interfaceName) {
+    console.log('    ' + interfaceName);
+  });
   console.log('');
   process.exit();
 });
@@ -295,9 +296,9 @@ if (program.retries) mocha.suite.retries(program.retries);
 
 var extensions = ['js'];
 program.compilers.forEach(function(c) {
-  var compiler = c.split(':')
-    , ext = compiler[0]
-    , mod = compiler[1];
+  var idx = c.indexOf(':')
+    , ext = c.slice(0, idx)
+    , mod = c.slice(idx + 1);
 
   if (mod[0] == '.') mod = join(process.cwd(), mod);
   require(mod);

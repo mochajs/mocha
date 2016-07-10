@@ -1,0 +1,26 @@
+environment:
+  matrix:
+    - nodejs_version: '6'
+    - nodejs_version: '4'
+    - nodejs_version: '0.12'
+    - nodejs_version: '0.10'
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - set CI=true
+  - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
+  - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
+  - npm install
+  - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
+matrix:
+  fast_finish: true
+build: off
+version: '{build}'
+shallow_clone: true
+clone_depth: 1
+test_script:
+  - node --version
+  - npm --version
+  - npm test
+skip_commits:
+  message: /\[ci\s+skip\]/
+
