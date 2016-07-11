@@ -91,13 +91,13 @@ body {
   padding: 2px 5px;
   color: #fff;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-     -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-          box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
+  -box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   -webkit-border-radius: 5px;
-     -moz-border-radius: 5px;
-      -ms-border-radius: 5px;
-       -o-border-radius: 5px;
-          border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 
 #mocha .test.pass.fast .duration {
@@ -155,21 +155,21 @@ body {
   word-wrap: break-word;
   border-bottom-color: #ddd;
   -webkit-box-shadow: 0 1px 3px #eee;
-     -moz-box-shadow: 0 1px 3px #eee;
-          box-shadow: 0 1px 3px #eee;
+  -moz-box-shadow: 0 1px 3px #eee;
+  box-shadow: 0 1px 3px #eee;
   -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 #mocha .test .html-error pre.error {
   border: none;
   -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-          border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
   -webkit-box-shadow: 0;
-     -moz-box-shadow: 0;
-          box-shadow: 0;
+  -moz-box-shadow: 0;
+  box-shadow: 0;
   padding: 0;
   margin: 0;
   margin-top: 18px;
@@ -196,11 +196,11 @@ body {
   word-wrap: break-word;
   border-bottom-color: #ddd;
   -webkit-box-shadow: 0 1px 3px #eee;
-     -moz-box-shadow: 0 1px 3px #eee;
-          box-shadow: 0 1px 3px #eee;
+  -moz-box-shadow: 0 1px 3px #eee;
+  box-shadow: 0 1px 3px #eee;
   -webkit-border-radius: 3px;
-     -moz-border-radius: 3px;
-          border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 #mocha .test h2 {
@@ -221,8 +221,8 @@ body {
   background: #eee;
   font-size: 15px;
   -webkit-border-radius: 15px;
-     -moz-border-radius: 15px;
-          border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
   -webkit-transition:opacity 200ms;
   -moz-transition:opacity 200ms;
   -o-transition:opacity 200ms;
@@ -279,8 +279,8 @@ body {
    */
   height: auto;
   -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   background-color: initial;
 }
 
