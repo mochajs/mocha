@@ -1,20 +1,96 @@
 # 3.0.0 / 2016-xx-xx
 
-## Breaking Changes
+## :boom: Breaking Changes
 
-- **Mocha no longer supports Node.js v0.8** due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0.
-- **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.**  Previously, this requirement only affected Mocha's development dependencies.  In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
+- :warning: Due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0, **Mocha no longer supports Node.js v0.8**
+- :warning: **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.**  Previously, this requirement only affected Mocha's development dependencies.  In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
+- `.only()` is no longer "fuzzy", can be used multiple times, and generally just works like you think it should. :joy:
+- To avoid common bugs, when a test injects a callback function (suggesting asynchronous execution), calls it, *and* returns a `Promise`, Mocha will now throw an exception:
 
-## Enhancements
+  ```js
+  const assert = require('assert');
 
-- [#2305] Improve ES3 compatibility ([@ndhoule], [@boneskull])
-- TODO
+  it('should complete this test', function (done) {
+    return new Promise(function (resolve) {
+      assert.ok(true);
+      resolve();
+    })
+      .then(done);
+  });
+  ```
 
-## Bug Fixes
+  The above test will fail with `Error: Resolution method is overspecified. Specify a callback *or* return a Promise; not both.`.
+- When a test timeout value *greater than* `2147483648` is specified in any context (`--timeout`, `mocha.setup()`, per-suite, per-test, etc.), the timeout will be *disabled* and the test(s) will be allowed to run indefinitely.  This is equivalent to specifying a timeout value of `0`.  See [MDN](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) for reasoning.
+- The `dot` reporter now uses more visually distinctive characters when indicating "pending" and "failed" tests.
+- Mocha no longer supports [component](https://www.npmjs.com/package/component).
+- The long-forsaken `HTMLCov` and `JSONCov` reporters--and any relationship to the "node-jscoverage" project--have been removed.
 
-- TODO
+## :tada: Enhancements
 
-[#2305]: https://github.com/mochajs/mocha/pull/2305
+- [#808]: Allow regular-expression-like strings in `--grep` and browser's `grep` querystring; enables flags such as `i` for case-insensitive matches and `u` for unicode. ([@a8m])
+- [#2000]: Use distinctive characters in `dot` reporter; `,` will denote a "pending" test and `!` will denote a "failing" test. ([@ELLIOTTCABLE])
+- [#1632]: Throw a useful exception when a suite or test lacks a title. ([@a8m])
+- [#1481]: Better `.only()` behavior. ([@a8m])
+- [#946]: Allow `this.skip()` in async tests and hooks. ([@boneskull])
+- [#1320]: Throw a useful exception when test resolution method is overspecified. ([@jugglinmike])
+- [#2364]: Support `--preserve-symlinks`. ([@rosswarren])
+
+## :bug: Bug Fixes
+
+- [#2259]: Restore ES3 compatibility.  Specifically, support an environment lacking `Date.prototype.toISOString()`, `JSON`, or has a non-standard implementation of `JSON`. ([@ndhoule], [@boneskull])
+- [#2286]: Fix `after()` failing to execute if test skipped using `this.skip()` in `beforeEach()`; no longer marks the entire suite as "pending". ([@dasilvacontin], [@boneskull])
+- [#2208]: Fix function name display in `markdown` and `html` (browser) reporters. ([@ScottFreeCode])
+- [#2299]: Fix progress bar in `html` (browser) reporter. ([@AviVahl])
+- [#2307]: Fix `doc` reporter crashing when test fails. ([@jleyba])
+- [#2323]: Ensure browser entry point (`browser-entry.js`) is published to npm (for use with bundlers).  ([@boneskull])
+- [#2310]: Ensure custom reporter with an absolute path works in Windows. ([@silentcloud])
+- [#2311]: Fix problem wherein calling `this.slow()` without a value would blast any previously set value. ([@boneskull])
+- [#1813]: Ensure Mocha's own test suite will run in Windows. ([@tswaters], [@TimothyGu], [@boneskull])
+- [#2317]: Ensure all interfaces are displayed in `--help` on CLI.  ([@ScottFreeCode])
+- [#1644]: Don't exhibit undefined behavior when calling `this.timeout()` with very large values ([@callumacrae], [@boneskull])
+- [#2361]: Don't truncate name of thrown anonymous exception. ([@boneskull])
+- [#2367]: Fix invalid CSS. ([@bensontrent])
+
+## :nut_and_bolt: Other
+
+- Upgrade production dependencies to address security advisories (and because now we can): `glob`, `commander`, `escape-string-regexp`,
+and `supports-color`. ([@boneskull], [@RobLoach])
+- Add Windows to CI. ([@boneskull], [@TimothyGu])
+- Ensure appropriate `engines` field in `package.json`. ([@shinnn], [@boneskull])
+
+We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
+
+:shipit:
+
+[#2361]: https://github.com/mochajs/mocha/pull/2361
+[#2367]: https://github.com/mochajs/mocha/pull/2367
+[#2364]: https://github.com/mochajs/mocha/pull/2364
+[#1320]: https://github.com/mochajs/mocha/pull/1320
+[#2307]: https://github.com/mochajs/mocha/pull/2307
+[#2259]: https://github.com/mochajs/mocha/pull/2259
+[#2208]: https://github.com/mochajs/mocha/pull/2208
+[#2299]: https://github.com/mochajs/mocha/pull/2299
+[#2286]: https://github.com/mochajs/mocha/issue/2286
+[#1644]: https://github.com/mochajs/mocha/issue/1644
+[#2310]: https://github.com/mochajs/mocha/issue/2310
+[#2311]: https://github.com/mochajs/mocha/issue/2311
+[#2323]: https://github.com/mochajs/mocha/issue/2323
+[#2000]: https://github.com/mochajs/mocha/pull/2000
+[#1632]: https://github.com/mochajs/mocha/issue/1632
+[#1813]: https://github.com/mochajs/mocha/issue/1813
+[#946]: https://github.com/mochajs/mocha/issue/946
+[#2317]: https://github.com/mochajs/mocha/issue/2317
+[#1481]: https://github.com/mochajs/mocha/issue/1481
+[@ELLIOTCABLE]: https://github.com/elliottcable
+[@RobLoach]: https://github.com/robloach
+[@AviVahl]: https://github.com/avivahl
+[@silentcloud]: https://github.com/silentcloud
+[@tswaters]: https://github.com/tswaters
+[@jleyba]: https://github.com/jleyba
+[@TimothyGu]: https://github.com/timothygu
+[@callumacrae]: https://github.com/callumacrae
+[@shinnn]: https://github.com/shinnn
+[@bensontrent]: https://github.com/bensontrent
 
 # 2.5.3 / 2016-05-25
 
