@@ -3,25 +3,78 @@
   "version": "1.0.0",
   "description": "Mocha's gh-pages branch",
   "private": true,
-  "authors": [
-    "David da Silva Contín <dasilvacontin@gmail.com>",
-    "Christopher Hiller <boneskull@boneskull.com>",
-    "Travis Jeffery <tj@travisjeffery.com>"
-  ],
   "scripts": {
-    "prepublish": "gem install bundler && bundle install",
-    "build": "make build"
+    "prepublish": "npm start postinstall",
+    "start": "package-scripts --silent --config ./scripts/package-scripts.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/mochajs/mochajs.github.io.git"
   },
-  "license": "MIT",
+  "license": "CC-BY-4.0 AND MIT",
   "bugs": {
     "url": "https://github.com/mochajs/mochajs.github.io/issues"
   },
   "homepage": "https://mochajs.org",
   "devDependencies": {
-    "markdown-toc-index": "^0.2.0"
-  }
+    "chalk": "^1.1.3",
+    "markdown-toc": "^0.12.14",
+    "p-s": "^1.0.4",
+    "shx": "^0.1.2"
+  },
+  "engines": {
+    "node": ">=4.0.0",
+    "npm": ">=2.0.0"
+  },
+  "author": "TJ Holowaychuk <tj@vision-media.ca> (https://github.com/tj)",
+  "contributors": [
+    "Alexander Shepelin (https://github.com/44px)",
+    "Al Scott <me@thisis.al> (https://github.com/scottaj)",
+    "amsul (https://github.com/amsul)",
+    "Anders Olsen Sandvik (https://github.com/Andersos)",
+    "Andy Matthews <andy@commadelimited.com> (https://github.com/commadelimited)",
+    "Ariel Mashraki <ariel@mashraki.co.il> (https://github.com/a8m)",
+    "Artem Govorov (https://github.com/ArtemGovorov)",
+    "Bernard Kobos <bkobos@extensa.pl> (https://github.com/bernii)",
+    "Christoffer Hallas (https://github.com/hallas)",
+    "Christopher Hiller <boneskull@boneskull.com> (https://github.com/boneskull)",
+    "Daniel St. Jules <danielst.jules@gmail.com> (https://github.com/danielstjules)",
+    "Dan Oved <stangogh@gmail.com> (https://github.com/oveddan)",
+    "David da Silva <yo@dasilvacont.in> (https://github.com/dasilvacontin)",
+    "David Henderson (https://github.com/dhendo)",
+    "Dmitriy Simushev (https://github.com/JustBlackBird)",
+    "Domenic Denicola <d@domenic.me> (https://github.com/domenic)",
+    "Erik Eng (https://github.com/ptz0n)",
+    "Fabio M. Costa <fabiomcosta@gmail.com> (https://github.com/fabiomcosta)",
+    "Fagner Brack <github@fagnermartins.com> (https://github.com/FagnerMartinsBrack)",
+    "Guillermo Rauch <rauchg@gmail.com> (https://github.com/rauchg)",
+    "Hugo Giraudel (https://github.com/HugoGiraudel)",
+    "Jacob Wejendorp (https://github.com/wejendorp)",
+    "Jake Verbaten <raynos2@gmail.com> (https://github.com/Raynos)",
+    "James Carr <james.r.carr@gmail.com> (https://github.com/jamescarr)",
+    "Jan Lehnardt <jan@apache.org> (https://github.com/janl)",
+    "Joel Kemp <joel@mrjoelkemp.com> (https://github.com/mrjoelkemp)",
+    "Jo Liss <joliss42@gmail.com> (https://github.com/joliss)",
+    "Jonathan Rajavuori <jrajav@gmail.com> (https://github.com/jrajav)",
+    "Kelong Wang (https://github.com/wkl)",
+    "Kevin Reed (https://github.com/kavun)",
+    "Long Ho <holevietlong@gmail.com> (https://github.com/longlho)",
+    "Michiel de Jong (https://github.com/michielbdejong)",
+    "Nik Nyby (https://github.com/nikolas)",
+    "Oscar Godson <oscargodson@outlook.com> (https://github.com/OscarGodson)",
+    "Peter Rust (https://github.com/prust)",
+    "PoppinL <poppinlp@gmail.com> (https://github.com/poppinlp)",
+    "Rich Trott (https://github.com/Trott)",
+    "Rico Sta. Cruz <hi@ricostacruz.com> (https://github.com/rstacruz)",
+    "Roman Shtylman (https://github.com/defunctzombie)",
+    "Ryan Tablada (https://github.com/rtablada)",
+    "Ryunosuke Sato <tricknotes.rs@gmail.com> (https://github.com/tricknotes)",
+    "sarehag (https://github.com/sarehag)",
+    "Sune Simonsen <sune@we-knowhow.dk> (https://github.com/sunesimonsen)",
+    "Timothy Gu <timothygu99@gmail.com> (https://github.com/TimothyGu)",
+    "Travis Jeffery <tj@travisjeffery.com> (https://github.com/travisjeffery)",
+    "Will Langstroth (https://github.com/wlangstroth)",
+    "Xavier Damman <xdamman@gmail.com> (https://github.com/xdamman)",
+    "XhmikosR <xhmikosr@gmail.com> (https://github.com/XhmikosR)"
+  ]
 }

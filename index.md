@@ -3,85 +3,14 @@ layout: default
 title: "Mocha - the fun, simple, flexible JavaScript test framework"
 
 ---
+Mocha is a feature-rich JavaScript test framework running on [Node.js](http://nodejs.org) and in the browser, making asynchronous testing *simple* and *fun*. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
-Mocha is a feature-rich JavaScript test framework running on [Node.js](http://nodejs.org) and in the browser, making asynchronous testing simple and fun. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
+  [![Gitter](//badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha)
+  [![OpenCollective](//opencollective.com/mochajs/backers/badge.svg)](#backers)
+  [![OpenCollective](//opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
 
-[![Gitter](//badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha)
-[![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
-
-
-## Backers
-
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/mochajs#backer)]
-
-<a href="https://opencollective.com/mochajs/backer/0/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/0/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/1/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/1/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/2/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/2/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/3/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/3/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/4/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/4/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/5/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/5/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/6/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/6/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/7/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/7/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/8/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/8/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/9/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/9/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/10/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/10/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/11/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/11/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/12/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/12/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/13/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/13/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/14/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/14/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/15/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/15/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/16/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/16/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/17/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/17/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/18/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/18/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/19/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/19/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/20/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/20/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/21/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/21/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/22/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/22/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/23/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/23/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/24/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/24/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/25/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/25/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/26/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/26/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/27/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/27/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/28/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/28/avatar"></a>
-<a href="https://opencollective.com/mochajs/backer/29/website" target="_blank"><img src="https://opencollective.com/mochajs/backer/29/avatar"></a>
-
-
-## Sponsors
-
-Is your company using Mocha? Ask your manager to support us. Your company logo will show up here and on our [Github page](https://github.com/mochajs/mocha#sponsors). [[Become a sponsor](https://opencollective.com/mochajs#sponsor)]
-
-<a href="https://opencollective.com/mochajs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/0/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/1/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/2/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/2/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/3/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/3/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/4/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/4/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/5/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/5/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/6/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/6/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/7/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/7/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/8/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/8/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/9/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/9/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/10/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/10/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/11/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/11/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/12/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/12/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/13/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/13/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/14/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/14/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/15/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/15/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/16/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/16/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/17/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/17/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/18/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/18/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/19/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/19/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/20/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/20/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/21/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/21/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/22/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/22/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/23/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/23/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/24/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/24/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/25/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/25/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/26/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/26/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/27/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/27/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/28/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/28/avatar"></a>
-<a href="https://opencollective.com/mochajs/sponsor/29/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/29/avatar"></a>
-
+{% include backers.md %}
+{% include sponsors.md %}
 
 ## Features
 
@@ -118,8 +47,8 @@ Is your company using Mocha? Ask your manager to support us. Your company logo w
 
 ## Table of Contents
 
-<!-- INDEX -->
-- [Features](#features)
+<!-- toc -->
+
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Assertions](#assertions)
@@ -145,11 +74,11 @@ Is your company using Mocha? Ask your manager to support us. Your company logo w
 - [Testing Mocha](#testing-mocha)
 - [More Information](#more-information)
 
-<!-- /INDEX -->
+<!-- tocstop -->
 
 ## Installation
 
-Install with [npm](http://npmjs.org):
+Install with [npm](https://npmjs.org):
 
 ```sh
 $ npm install -g mocha
