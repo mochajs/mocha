@@ -5,7 +5,8 @@ exclude:
   - Gemfile*
   - package.json
   - CNAME
-  - Makefile
   - npm-debug.log*
+  - scripts
+  - .*
 
 

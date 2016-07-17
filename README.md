@@ -1,49 +1,32 @@
-# [mochajs.org](http://mochajs.org): How to Build the Site
+# mochajs.org
 
 *So you wanna build the site?*
 
-[mochajs.org](http://mochajs.org) is now built using [Jekyll](http://jekyllrb.com), the popular static site generator.
+[mochajs.org](https://mochajs.org) is built using [Jekyll](http://jekyllrb.com), the popular static site generator.
 
 ## Prerequisites
 
-1.  Some recent version of Ruby
-2.  Some version of [RubyGems](https://rubygems.org)
-3.  Some recent version of Node.JS
+- Ruby
+- RubyGems
+- Bundler
+- (Optional) Node.js v4.0.0 or greater
 
-## Installation
+## Development
 
-1.  Execute `npm install`.  This will install [Bundler](http://bundler.io), Jekyll, and [markdown-toc-index](https://www.npmjs.com/package/markdown-toc-index).
-2.  To build, execute `npm run build` or `make build`
+1.  Clone this repo
+2.  Execute `npm install` and follow the directions.
 
-### Problems?
+> Mac users: You may need to install Xcode command line tools if `bundle install` fails.  Execute `xcode-select --install` if so.
 
-#### Permissions-Related
+### Notes
 
-If `npm install` fails due to an `EACCESS` problem, try this:
+- Node.js is only necessary if you need to rebuild the table of contents.
+- To serve the site and rebuild as changes are made, execute `npm start serve`.
+- To rebuild the site *once*, execute `npm start build`.
+- To update the table of contents, execute: `npm start toc`.  This will only alter `index.md`; it will not rebuild the site unless `npm start serve` is running in another process.
+- The `_site` directory is where the generated static site lives (and is what you see at [mochajs.org](https://mochajs.org)).  It is *not* under version control.
+- `Gemfile.lock` is ignored as to always get the latest `github-pages` gem.
 
-```shell
-$ sudo gem install bundler
-$ npm install --ignore-scripts
-$ bundle install
-```
+## License
 
-#### Ruby-Related on OS X
-
-You may need to install the Xcode command line tools if `bundle install` fails somewhere.  Execute this:
-
-```shell
-$ xcode-select --install
-```
-
-## Local development
-
-1.  Run `make` to build the project and start a development server that auto-watches for changes on http://localhost:3000
-
-For more information, refer to the [Jekyll Docs](http://jekyllrb.com/docs/home/) and [GitHub's Tutorial](https://help.github.com/articles/using-jekyll-with-pages/) on the subject.
-
-## Notes
-
-- To update `index.md` with the TOC, execute: `node_modules/.bin/toc-idx -i index.md --max-depth 1 --bullet "\- " index.md`
-- `bundle exec jekyll build` rebuilds the site without updating the TOC
-- The `_site` directory is where the generated site lives.  It is *not* under version control, because GitHub Pages generates it for us.
-
+:copyright: 2016 mochajs.org contributors.  Content licensed CC-BY-4.0; code licensed MIT.

@@ -24,15 +24,24 @@ h1 {
   transition: opacity 1s;
 }
 
-.onload h1 {
+#_backers a, #_sponsors a {
+  opacity: 0;
+  -webkit-transition: opacity .3s;
+  -moz-transition: opacity .3s;
+  -o-transition: opacity .3s;
+  transition: opacity .3s;
+}
+
+.onload h1, #_backers.onload a, #_sponsors.onload a {
   opacity: 1;
 }
 
 h2 {
   margin-top: 80px;
-  font-weight: 100;
+  font-weight: 400;
   letter-spacing: 1px;
   border-bottom: 1px solid #ddd;
+  text-transform: uppercase;
 }
 
 h3 {
@@ -40,6 +49,7 @@ h3 {
   letter-spacing: 1px;
   border-bottom: 1px solid #eee;
   margin-top: 40px;
+  text-transform: uppercase;
 }
 
 #tag {
@@ -67,19 +77,17 @@ h3 {
 }
 
 #content > p:first-child {
-  font-size: 22px;
-  font-weight: 100;
+  font-size: 20px;
+  font-weight: 200;
   letter-spacing: 1px;
 }
 
 a {
-  color: #8a6343;
-  font-weight: bold;
-  text-decoration: none;
+  color: #8D6748;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #717171;
 }
 
 ul {
@@ -100,7 +108,6 @@ ul li {
   list-style: none;
   border-bottom: 1px solid #eee;
   padding: 5px 0;
-  font-size: 12px;
   -webkit-column-break-inside: avoid;
   -moz-column-break-inside: avoid;
   column-break-inside: avoid;
@@ -150,24 +157,6 @@ img {
 img[src*="opencollective.com/mochajs"], img[src*=badges], img[src*=".svg"] {
     margin: 0;
     box-shadow: none;
-}
-
-.badge {
-  margin-right: 8px;
-  display: inline-block;
-}
-
-.badge > img {
-  margin: 0;
-  padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  display: block;
 }
 
 footer {
