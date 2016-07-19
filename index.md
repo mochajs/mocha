@@ -966,7 +966,11 @@ The "HTML" reporter is currently the only browser reporter supported by Mocha, a
 
 ### Undocumented Reporters
 
-The "XUnit" and "TeamCity" reporters are also available, but someone needs to write the documentation.
+The "XUnit" reporter is also available, but someone needs to write the documentation.
+
+### Third party reporters
+
+Mocha allows you to define custom third-party reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter](https://github.com/travisjeffery/mocha-teamcity-reporter).
 
 ## Running Mocha in the Browser
 
