@@ -310,8 +310,7 @@
     "json3": "3.3.2",
     "lodash.create": "3.1.1",
     "mkdirp": "0.5.1",
-    "supports-color": "3.1.2",
-    "to-iso-string": "0.0.2"
+    "supports-color": "3.1.2"
   },
   "devDependencies": {
     "browser-stdout": "^1.2.0",
