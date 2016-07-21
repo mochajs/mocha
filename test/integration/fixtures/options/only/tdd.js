@@ -21,3 +21,15 @@ suite('should not run this suite', function() {
     (true).should.equal(false);
   });
 });
+
+suite.only('should run this suite too', function() {
+  suite('should run this nested suite', function () {
+    test('should run this test', function() {});
+
+    test('should run this test', function() {});
+
+    test('should run this test', function() {});
+
+    test('should run this test', function() {});
+  });
+});
