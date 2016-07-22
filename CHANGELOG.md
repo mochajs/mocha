@@ -2,7 +2,7 @@
 
 ## :boom: Breaking Changes
 
-- :warning: Due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0, **Mocha no longer supports Node.js v0.8**
+- :warning: Due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0, **Mocha no longer supports Node.js v0.8**.
 - :warning: **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.**  Previously, this requirement only affected Mocha's development dependencies.  In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
 - `.only()` is no longer "fuzzy", can be used multiple times, and generally just works like you think it should. :joy:
 - To avoid common bugs, when a test injects a callback function (suggesting asynchronous execution), calls it, *and* returns a `Promise`, Mocha will now throw an exception:
@@ -28,7 +28,7 @@
 ## :tada: Enhancements
 
 - [#808]: Allow regular-expression-like strings in `--grep` and browser's `grep` querystring; enables flags such as `i` for case-insensitive matches and `u` for unicode. ([@a8m])
-- [#2000]: Use distinctive characters in `dot` reporter; `,` will denote a "pending" test and `!` will denote a "failing" test. ([@ELLIOTTCABLE])
+- [#2000]: Use distinctive characters in `dot` reporter; `,` will denote a "pending" test and `!` will denote a "failing" test. ([@elliottcable])
 - [#1632]: Throw a useful exception when a suite or test lacks a title. ([@a8m])
 - [#1481]: Better `.only()` behavior. ([@a8m])
 - [#946]: Allow `this.skip()` in async tests and hooks. ([@boneskull])
@@ -62,6 +62,7 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 
 :shipit:
 
+[#808]: https://github.com/mochajs/mocha/issue/808
 [#2361]: https://github.com/mochajs/mocha/pull/2361
 [#2367]: https://github.com/mochajs/mocha/pull/2367
 [#2364]: https://github.com/mochajs/mocha/pull/2364
@@ -81,7 +82,7 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 [#946]: https://github.com/mochajs/mocha/issue/946
 [#2317]: https://github.com/mochajs/mocha/issue/2317
 [#1481]: https://github.com/mochajs/mocha/issue/1481
-[@ELLIOTCABLE]: https://github.com/elliottcable
+[@elliottcable]: https://github.com/elliottcable
 [@RobLoach]: https://github.com/robloach
 [@AviVahl]: https://github.com/avivahl
 [@silentcloud]: https://github.com/silentcloud
@@ -91,6 +92,8 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 [@callumacrae]: https://github.com/callumacrae
 [@shinnn]: https://github.com/shinnn
 [@bensontrent]: https://github.com/bensontrent
+[@jugglinmike]: https://github.com/jugglinmike
+[@rosswarren]: https://github.com/rosswarren
 
 # 2.5.3 / 2016-05-25
 
