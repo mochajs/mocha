@@ -25,7 +25,7 @@ module.exports = function(config) {
       debug: true,
       configure: function configure(b) {
         b.ignore('glob')
-          .ignore('jade')
+          .ignore('pug')
           .ignore('supports-color')
           .exclude('./lib-cov/mocha');
       }

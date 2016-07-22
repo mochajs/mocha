@@ -15,7 +15,7 @@ mocha.js: $(SRC) $(SUPPORT)
 	@$(BROWSERIFY) ./browser-entry \
 		--ignore 'fs' \
 		--ignore 'glob' \
-		--ignore 'jade' \
+		--ignore 'pug' \
 		--ignore 'path' \
 		--ignore 'supports-color' \
 		--exclude './lib-cov/mocha' > $@

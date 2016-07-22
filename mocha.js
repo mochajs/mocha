@@ -2438,10 +2438,10 @@ exports = module.exports = HTMLCov;
  * @param {Runner} runner
  */
 function HTMLCov(runner) {
-  var jade = require('jade');
-  var file = join(__dirname, '/templates/coverage.jade');
+  var pug = require('pug');
+  var file = join(__dirname, '/templates/coverage.pug');
   var str = readFileSync(file, 'utf8');
-  var fn = jade.compile(str, { filename: file });
+  var fn = pug.compile(str, { filename: file });
   var self = this;
 
   JSONCov.call(this, runner, false);
@@ -2475,7 +2475,7 @@ function coverageClass(coveragePctg) {
 }
 
 }).call(this,require('_process'),"/lib\\reporters")
-},{"./json-cov":23,"_process":58,"fs":43,"jade":43,"path":43}],21:[function(require,module,exports){
+},{"./json-cov":23,"_process":58,"fs":43,"pug":43,"path":43}],21:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
 

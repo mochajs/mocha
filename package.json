@@ -323,9 +323,9 @@
     "escape-string-regexp": "1.0.2",
     "glob": "3.2.11",
     "growl": "1.9.2",
-    "jade": "0.26.3",
     "mkdirp": "0.5.1",
     "os-tmpdir": "1.0.1",
+    "pug": "^2.0.0-beta4",
     "supports-color": "1.2.0"
   },
   "devDependencies": {
@@ -361,7 +361,7 @@
     "events": "./lib/browser/events.js",
     "tty": "./lib/browser/tty.js",
     "./index.js": "./browser-entry.js",
-    "jade": false,
+    "pug": false,
     "fs": false,
     "glob": false,
     "path": false,
