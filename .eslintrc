@@ -112,12 +112,11 @@ rules:
   radix: 2
   semi: [2, always]
   semi-spacing: [2, { before: false, after: true }]
-  space-after-keywords: [2, always]
   space-before-blocks: [2, always]
   space-before-function-paren: [2, never]
   space-in-parens: [2, never]
   space-infix-ops: 2
-  space-return-throw-case: 2
+  keyword-spacing: 2
   space-unary-ops: [2, { words: true, nonwords: false }]
   spaced-comment: [2, always, { exceptions: ['!'] }]
   strict: [0, global]                                                      # TODO: Change to error
