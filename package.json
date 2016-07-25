@@ -323,6 +323,7 @@
     "glob": "3.2.11",
     "growl": "1.9.2",
     "jade": "0.26.3",
+    "json3": "3.3.2",
     "mkdirp": "0.5.1",
     "os-tmpdir": "1.0.1",
     "supports-color": "1.2.0",

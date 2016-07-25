@@ -1,5 +1,6 @@
 var mocha = require('..');
 var utils = mocha.utils;
+var JSON = require('json3');
 
 describe('utils', function() {
   describe('.clean()', function() {
