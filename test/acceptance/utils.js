@@ -1,5 +1,5 @@
 var utils = require('../../lib/utils');
-var toISOString = require('to-iso-string');
+var toISOString = require('@segment/to-iso-string');
 
 describe('lib/utils', function () {
   describe('clean', function () {

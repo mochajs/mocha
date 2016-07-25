@@ -2438,10 +2438,10 @@ exports = module.exports = HTMLCov;
  * @param {Runner} runner
  */
 function HTMLCov(runner) {
-  var jade = require('jade');
-  var file = join(__dirname, '/templates/coverage.jade');
+  var pug = require('pug');
+  var file = join(__dirname, '/templates/coverage.pug');
   var str = readFileSync(file, 'utf8');
-  var fn = jade.compile(str, { filename: file });
+  var fn = pug.compile(str, { filename: file });
   var self = this;
 
   JSONCov.call(this, runner, false);
@@ -2475,7 +2475,7 @@ function coverageClass(coveragePctg) {
 }
 
 }).call(this,require('_process'),"/lib\\reporters")
-},{"./json-cov":23,"_process":58,"fs":43,"jade":43,"path":43}],21:[function(require,module,exports){
+},{"./json-cov":23,"_process":58,"fs":43,"pug":43,"path":43}],21:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
 
@@ -5871,7 +5871,7 @@ var join = require('path').join;
 var readdirSync = require('fs').readdirSync;
 var statSync = require('fs').statSync;
 var watchFile = require('fs').watchFile;
-var toISOString = require('to-iso-string');
+var toISOString = require('@segment/to-iso-string');
 
 /**
  * Ignored directories.
@@ -6609,7 +6609,7 @@ exports.stackTraceFilter = function() {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":58,"buffer":45,"debug":2,"fs":43,"glob":43,"path":43,"to-iso-string":72,"util":75}],40:[function(require,module,exports){
+},{"_process":58,"buffer":45,"debug":2,"fs":43,"glob":43,"path":43,"@segment/to-iso-string":72,"util":75}],40:[function(require,module,exports){
 'use strict'
 
 exports.toByteArray = toByteArray
@@ -10072,18 +10072,18 @@ function mkdirP (p, opts, f, made) {
     else if (!opts || typeof opts !== 'object') {
         opts = { mode: opts };
     }
-    
+
     var mode = opts.mode;
     var xfs = opts.fs || fs;
-    
+
     if (mode === undefined) {
         mode = _0777 & (~process.umask());
     }
     if (!made) made = null;
-    
+
     var cb = f || function () {};
     p = path.resolve(p);
-    
+
     xfs.mkdir(p, mode, function (er) {
         if (!er) {
             made = made || p;
@@ -10116,10 +10116,10 @@ mkdirP.sync = function sync (p, opts, made) {
     if (!opts || typeof opts !== 'object') {
         opts = { mode: opts };
     }
-    
+
     var mode = opts.mode;
     var xfs = opts.fs || fs;
-    
+
     if (mode === undefined) {
         mode = _0777 & (~process.umask());
     }
