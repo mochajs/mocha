@@ -24,7 +24,7 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       configure: function configure(b) {
-        b.ignore('glob')
+        b.ignore('glob-mocha')
           .ignore('jade')
           .ignore('supports-color')
           .exclude('./lib-cov/mocha');
