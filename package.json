@@ -315,6 +315,7 @@
   "scripts": {
     "test": "make test"
   },
+  "style": "mocha.css",
   "dependencies": {
     "commander": "2.3.0",
     "debug": "2.2.0",
