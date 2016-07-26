@@ -168,7 +168,7 @@ global.mocha = mocha;
 module.exports = global;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lib/mocha":14,"_process":66,"browser-stdout":40}],2:[function(require,module,exports){
+},{"./lib/mocha":14,"_process":67,"browser-stdout":41}],2:[function(require,module,exports){
 /* eslint-disable no-unused-vars */
 module.exports = function(type) {
   return function() {};
@@ -615,7 +615,7 @@ Context.prototype.inspect = function() {
   }, 2);
 };
 
-},{"json3":53}],7:[function(require,module,exports){
+},{"json3":54}],7:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -663,12 +663,11 @@ Hook.prototype.error = function(err) {
   this._error = err;
 };
 
-},{"./runnable":33,"./utils":37}],8:[function(require,module,exports){
+},{"./runnable":33,"./utils":38}],8:[function(require,module,exports){
 /**
  * Module dependencies.
  */
 
-var Suite = require('../suite');
 var Test = require('../test');
 
 /**
@@ -692,7 +691,7 @@ module.exports = function(suite) {
   var suites = [suite];
 
   suite.on('pre-require', function(context, file, mocha) {
-    var common = require('./common')(suites, context);
+    var common = require('./common')(suites, context, mocha);
 
     context.before = common.before;
     context.after = common.after;
@@ -706,12 +705,11 @@ module.exports = function(suite) {
      */
 
     context.describe = context.context = function(title, fn) {
-      var suite = Suite.create(suites[0], title);
-      suite.file = file;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
-      return suite;
+      return common.suite.create({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
@@ -719,11 +717,11 @@ module.exports = function(suite) {
      */
 
     context.xdescribe = context.xcontext = context.describe.skip = function(title, fn) {
-      var suite = Suite.create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
+      return common.suite.skip({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
@@ -731,7 +729,11 @@ module.exports = function(suite) {
      */
 
     context.describe.only = function(title, fn) {
-      return common.suite.only(mocha, context.describe(title, fn));
+      return common.suite.only({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
@@ -776,17 +778,20 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":35,"../test":36,"./common":9}],9:[function(require,module,exports){
+},{"../test":36,"./common":9}],9:[function(require,module,exports){
 'use strict';
+
+var Suite = require('../suite');
 
 /**
  * Functions common to more than one interface.
  *
  * @param {Suite[]} suites
  * @param {Context} context
+ * @param {Mocha} mocha
  * @return {Object} An object containing common functions.
  */
-module.exports = function(suites, context) {
+module.exports = function(suites, context, mocha) {
   return {
     /**
      * This is only present if flag --delay is passed into Mocha. It triggers
@@ -843,15 +848,60 @@ module.exports = function(suites, context) {
 
     suite: {
       /**
-       * Exclusive suite.
+       * Create an exclusive Suite; convenience function
+       * See docstring for create() below.
        *
-       * @param {Object} mocha
-       * @param {Function} suite
+       * @param {Object} opts
+       * @returns {Suite}
        */
-
-      only: function(mocha, suite) {
-        suite.isOnly = true;
+      only: function only(opts) {
         mocha.options.hasOnly = true;
+        opts.isOnly = true;
+        return this.create(opts);
+      },
+
+      /**
+       * Create a Suite, but skip it; convenience function
+       * See docstring for create() below.
+       *
+       * @param {Object} opts
+       * @returns {Suite}
+       */
+      skip: function skip(opts) {
+        opts.pending = true;
+        return this.create(opts);
+      },
+
+      /**
+       * Creates a suite.
+       * @param {Object} opts Options
+       * @param {string} opts.title Title of Suite
+       * @param {Function} [opts.fn] Suite Function (not always applicable)
+       * @param {boolean} [opts.pending] Is Suite pending?
+       * @param {string} [opts.file] Filepath where this Suite resides
+       * @param {boolean} [opts.isOnly] Is Suite exclusive?
+       * @returns {Suite}
+       */
+      create: function create(opts) {
+        var suite = Suite.create(suites[0], opts.title);
+        suite.pending = Boolean(opts.pending);
+        suite.file = opts.file;
+        suites.unshift(suite);
+        // I should be pilloried for the following.
+        if (opts.isOnly) {
+          if (suite.parent && suite.parent.onlyTests) {
+            suite.onlyTests = suite.parent.onlyTests === suite.parent.tests ? suite.tests : [];
+          } else {
+            suite.onlyTests = suite.tests;
+          }
+        } else {
+          suite.onlyTests = suite.parent && suite.parent.onlyTests === suite.parent.tests ? suite.tests : [];
+        }
+        if (typeof opts.fn === 'function') {
+          opts.fn.call(suite);
+          suites.shift();
+        }
+
         return suite;
       }
     },
@@ -867,8 +917,11 @@ module.exports = function(suites, context) {
        */
       only: function(mocha, test) {
         var suite = test.parent;
-        suite.isOnly = true;
-        suite.onlyTests = (suite.onlyTests || []).concat(test);
+        if (suite.onlyTests === suite.tests) {
+          suite.onlyTests = [test];
+        } else {
+          suite.onlyTests = (suite.onlyTests || []).concat(test);
+        }
         mocha.options.hasOnly = true;
         return test;
       },
@@ -894,7 +947,7 @@ module.exports = function(suites, context) {
   };
 };
 
-},{}],10:[function(require,module,exports){
+},{"../suite":35}],10:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -968,7 +1021,6 @@ exports.exports = require('./exports');
  * Module dependencies.
  */
 
-var Suite = require('../suite');
 var Test = require('../test');
 
 /**
@@ -1000,7 +1052,7 @@ module.exports = function(suite) {
   var suites = [suite];
 
   suite.on('pre-require', function(context, file, mocha) {
-    var common = require('./common')(suites, context);
+    var common = require('./common')(suites, context, mocha);
 
     context.before = common.before;
     context.after = common.after;
@@ -1015,18 +1067,24 @@ module.exports = function(suite) {
       if (suites.length > 1) {
         suites.shift();
       }
-      var suite = Suite.create(suites[0], title);
-      suite.file = file;
-      suites.unshift(suite);
-      return suite;
+      return common.suite.create({
+        title: title,
+        file: file
+      });
     };
 
     /**
-     * Exclusive test-case.
+     * Exclusive Suite.
      */
 
-    context.suite.only = function(title, fn) {
-      return common.suite.only(mocha, context.suite(title, fn));
+    context.suite.only = function(title) {
+      if (suites.length > 1) {
+        suites.shift();
+      }
+      return common.suite.only({
+        title: title,
+        file: file
+      });
     };
 
     /**
@@ -1055,12 +1113,11 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":35,"../test":36,"./common":9}],13:[function(require,module,exports){
+},{"../test":36,"./common":9}],13:[function(require,module,exports){
 /**
  * Module dependencies.
  */
 
-var Suite = require('../suite');
 var Test = require('../test');
 
 /**
@@ -1092,7 +1149,7 @@ module.exports = function(suite) {
   var suites = [suite];
 
   suite.on('pre-require', function(context, file, mocha) {
-    var common = require('./common')(suites, context);
+    var common = require('./common')(suites, context, mocha);
 
     context.setup = common.beforeEach;
     context.teardown = common.afterEach;
@@ -1105,30 +1162,33 @@ module.exports = function(suite) {
      * nested suites and/or tests.
      */
     context.suite = function(title, fn) {
-      var suite = Suite.create(suites[0], title);
-      suite.file = file;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
-      return suite;
+      return common.suite.create({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
      * Pending suite.
      */
     context.suite.skip = function(title, fn) {
-      var suite = Suite.create(suites[0], title);
-      suite.pending = true;
-      suites.unshift(suite);
-      fn.call(suite);
-      suites.shift();
+      return common.suite.skip({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
      * Exclusive test-case.
      */
     context.suite.only = function(title, fn) {
-      return common.suite.only(mocha, context.suite(title, fn));
+      return common.suite.only({
+        title: title,
+        file: file,
+        fn: fn
+      });
     };
 
     /**
@@ -1159,7 +1219,7 @@ module.exports = function(suite) {
   });
 };
 
-},{"../suite":35,"../test":36,"./common":9}],14:[function(require,module,exports){
+},{"../test":36,"./common":9}],14:[function(require,module,exports){
 (function (process,global,__dirname){
 /*!
  * mocha
@@ -1683,7 +1743,7 @@ Mocha.prototype.run = function(fn) {
 };
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},"/lib")
-},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":21,"./runnable":33,"./runner":34,"./suite":35,"./test":36,"./utils":37,"_process":66,"escape-string-regexp":46,"growl":48,"path":41}],15:[function(require,module,exports){
+},{"./context":6,"./hook":7,"./interfaces":11,"./reporters":21,"./runnable":33,"./runner":34,"./suite":35,"./test":36,"./utils":38,"_process":67,"escape-string-regexp":47,"growl":49,"path":42}],15:[function(require,module,exports){
 /**
  * Helpers.
  */
@@ -2014,7 +2074,7 @@ exports.list = function(failures) {
       message = '';
     }
     var stack = err.stack || message;
-    var index = stack.indexOf(message);
+    var index = message ? stack.indexOf(message) : -1;
     var actual = err.actual;
     var expected = err.expected;
     var escape = true;
@@ -2323,7 +2383,7 @@ function sameType(a, b) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../ms":15,"../utils":37,"_process":66,"diff":45,"supports-color":41,"tty":5}],18:[function(require,module,exports){
+},{"../ms":15,"../utils":38,"_process":67,"diff":46,"supports-color":42,"tty":5}],18:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -2387,7 +2447,7 @@ function Doc(runner) {
   });
 }
 
-},{"../utils":37,"./base":17}],19:[function(require,module,exports){
+},{"../utils":38,"./base":17}],19:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2457,7 +2517,7 @@ function Dot(runner) {
 inherits(Dot, Base);
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],20:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],20:[function(require,module,exports){
 (function (global){
 /* eslint-env browser */
 
@@ -2805,7 +2865,7 @@ function on(el, event, fn) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../browser/progress":4,"../utils":37,"./base":17,"escape-string-regexp":46}],21:[function(require,module,exports){
+},{"../browser/progress":4,"../utils":38,"./base":17,"escape-string-regexp":47}],21:[function(require,module,exports){
 // Alias exports to a their normalized format Mocha#reporter to prevent a need
 // for dynamic (try/catch) requires, which Browserify doesn't handle.
 exports.Base = exports.base = require('./base');
@@ -2889,7 +2949,7 @@ function clean(test) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":66,"json3":53}],23:[function(require,module,exports){
+},{"./base":17,"_process":67,"json3":54}],23:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -2983,7 +3043,7 @@ function errorJSON(err) {
 }
 
 }).call(this,require('_process'))
-},{"./base":17,"_process":66}],24:[function(require,module,exports){
+},{"./base":17,"_process":67}],24:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3079,7 +3139,7 @@ function Landing(runner) {
 inherits(Landing, Base);
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],25:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],25:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3144,7 +3204,7 @@ function List(runner) {
 inherits(List, Base);
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],26:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],26:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3245,7 +3305,7 @@ function Markdown(runner) {
 }
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],27:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],27:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3285,7 +3345,7 @@ function Min(runner) {
 inherits(Min, Base);
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],28:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],28:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3550,7 +3610,7 @@ function write(string) {
 }
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],29:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],29:[function(require,module,exports){
 (function (process){
 /**
  * Module dependencies.
@@ -3643,7 +3703,7 @@ function Progress(runner, options) {
 inherits(Progress, Base);
 
 }).call(this,require('_process'))
-},{"../utils":37,"./base":17,"_process":66}],30:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67}],30:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3728,7 +3788,7 @@ function Spec(runner) {
  */
 inherits(Spec, Base);
 
-},{"../utils":37,"./base":17}],31:[function(require,module,exports){
+},{"../utils":38,"./base":17}],31:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3968,7 +4028,7 @@ function tag(name, attrs, close, content) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../utils":37,"./base":17,"_process":66,"fs":41,"mkdirp":63,"path":41}],33:[function(require,module,exports){
+},{"../utils":38,"./base":17,"_process":67,"fs":42,"mkdirp":64,"path":42}],33:[function(require,module,exports){
 (function (global){
 /**
  * Module dependencies.
@@ -4338,7 +4398,7 @@ Runnable.prototype.run = function(fn) {
         return done(new Error('done() invoked with non-Error: ' + err));
       }
       if (result && utils.isPromise(result)) {
-        return done(new Error('Asynchronous resolution method is overspecified. Specify a callback *or* return a Promise, not both.'));
+        return done(new Error('Resolution method is overspecified. Specify a callback *or* return a Promise; not both.'));
       }
 
       done();
@@ -4347,7 +4407,7 @@ Runnable.prototype.run = function(fn) {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ms":15,"./pending":16,"./utils":37,"debug":2,"events":3,"json3":53,"lodash.create":59}],34:[function(require,module,exports){
+},{"./ms":15,"./pending":16,"./utils":38,"debug":2,"events":3,"json3":54,"lodash.create":60}],34:[function(require,module,exports){
 (function (process,global){
 /**
  * Module dependencies.
@@ -5198,13 +5258,9 @@ Runner.prototype.abort = function() {
  */
 function filterOnly(suite) {
   // If it has `only` tests, run only those
-  if (suite.onlyTests) {
-    suite.tests = suite.onlyTests;
-  }
+  suite.tests = suite.onlyTests ? suite.onlyTests : [];
   // Filter the nested suites
   suite.suites = filter(suite.suites, filterOnly);
-  // Don't run tests from suites that are not marked as `only`
-  suite.tests = suite.isOnly ? suite.tests : [];
   // Keep the suite only if there is something to run
   return suite.suites.length || suite.tests.length;
 }
@@ -5276,7 +5332,7 @@ function extraGlobals() {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./pending":16,"./runnable":33,"./utils":37,"_process":66,"debug":2,"events":3}],35:[function(require,module,exports){
+},{"./pending":16,"./runnable":33,"./utils":38,"_process":67,"debug":2,"events":3}],35:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5676,7 +5732,7 @@ Suite.prototype.run = function run() {
   }
 };
 
-},{"./hook":7,"./ms":15,"./utils":37,"debug":2,"events":3}],36:[function(require,module,exports){
+},{"./hook":7,"./ms":15,"./utils":38,"debug":2,"events":3}],36:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -5728,7 +5784,46 @@ Test.prototype.clone = function() {
   return test;
 };
 
-},{"./runnable":33,"./utils":37,"lodash.create":59}],37:[function(require,module,exports){
+},{"./runnable":33,"./utils":38,"lodash.create":60}],37:[function(require,module,exports){
+'use strict';
+
+/**
+ * Pad a `number` with a ten's place zero.
+ *
+ * @param {number} number
+ * @return {string}
+ */
+function pad(number) {
+  var n = number.toString();
+  return n.length === 1 ? '0' + n : n;
+}
+
+/**
+ * Turn a `date` into an ISO string.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+ *
+ * @param {Date} date
+ * @return {string}
+ */
+function toISOString(date) {
+  return date.getUTCFullYear()
+    + '-' + pad(date.getUTCMonth() + 1)
+    + '-' + pad(date.getUTCDate())
+    + 'T' + pad(date.getUTCHours())
+    + ':' + pad(date.getUTCMinutes())
+    + ':' + pad(date.getUTCSeconds())
+    + '.' + String((date.getUTCMilliseconds()/1000).toFixed(3)).slice(2, 5)
+    + 'Z';
+}
+
+/*
+ * Exports.
+ */
+
+module.exports = toISOString;
+
+},{}],38:[function(require,module,exports){
 (function (process,Buffer){
 /* eslint-env browser */
 
@@ -5745,7 +5840,7 @@ var join = require('path').join;
 var readdirSync = require('fs').readdirSync;
 var statSync = require('fs').statSync;
 var watchFile = require('fs').watchFile;
-var toISOString = require('to-iso-string');
+var toISOString = require('./to-iso-string');
 
 /**
  * Ignored directories.
@@ -6493,7 +6588,7 @@ exports.isPromise = function isPromise(value) {
 };
 
 }).call(this,require('_process'),require("buffer").Buffer)
-},{"_process":66,"buffer":43,"debug":2,"fs":41,"glob":41,"json3":53,"path":41,"to-iso-string":79,"util":82}],38:[function(require,module,exports){
+},{"./to-iso-string":37,"_process":67,"buffer":44,"debug":2,"fs":42,"glob":42,"json3":54,"path":42,"util":82}],39:[function(require,module,exports){
 'use strict'
 
 exports.toByteArray = toByteArray
@@ -6604,9 +6699,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],39:[function(require,module,exports){
-
 },{}],40:[function(require,module,exports){
+
+},{}],41:[function(require,module,exports){
 (function (process){
 var WritableStream = require('stream').Writable
 var inherits = require('util').inherits
@@ -6635,9 +6730,9 @@ BrowserStdout.prototype._write = function(chunks, encoding, cb) {
 }
 
 }).call(this,require('_process'))
-},{"_process":66,"stream":77,"util":82}],41:[function(require,module,exports){
-arguments[4][39][0].apply(exports,arguments)
-},{"dup":39}],42:[function(require,module,exports){
+},{"_process":67,"stream":78,"util":82}],42:[function(require,module,exports){
+arguments[4][40][0].apply(exports,arguments)
+},{"dup":40}],43:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -6749,7 +6844,7 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"buffer":43}],43:[function(require,module,exports){
+},{"buffer":44}],44:[function(require,module,exports){
 (function (global){
 /*!
  * The buffer module from node.js, for the browser.
@@ -8464,7 +8559,7 @@ function isnan (val) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":38,"ieee754":49,"isarray":52}],44:[function(require,module,exports){
+},{"base64-js":39,"ieee754":50,"isarray":53}],45:[function(require,module,exports){
 (function (Buffer){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -8575,7 +8670,7 @@ function objectToString(o) {
 }
 
 }).call(this,{"isBuffer":require("../../is-buffer/index.js")})
-},{"../../is-buffer/index.js":51}],45:[function(require,module,exports){
+},{"../../is-buffer/index.js":52}],46:[function(require,module,exports){
 /* See LICENSE file for terms of use */
 
 /*
@@ -9196,7 +9291,7 @@ function objectToString(o) {
   }
 }(this));
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -9209,7 +9304,7 @@ module.exports = function (str) {
 	return str.replace(matchOperatorsRe, '\\$&');
 };
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -9513,7 +9608,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (process){
 // Growl - Copyright TJ Holowaychuk <tj@vision-media.ca> (MIT Licensed)
 
@@ -9807,7 +9902,7 @@ function growl(msg, options, fn) {
 };
 
 }).call(this,require('_process'))
-},{"_process":66,"child_process":41,"fs":41,"os":64,"path":41}],49:[function(require,module,exports){
+},{"_process":67,"child_process":42,"fs":42,"os":65,"path":42}],50:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -9893,7 +9988,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -9918,7 +10013,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 /**
  * Determine if an object is Buffer
  *
@@ -9937,14 +10032,14 @@ module.exports = function (obj) {
     ))
 }
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 var toString = {}.toString;
 
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function (global){
 /*! JSON v3.3.2 | http://bestiejs.github.io/json3 | Copyright 2012-2014, Kit Cambridge | http://kit.mit-license.org */
 ;(function () {
@@ -10850,7 +10945,7 @@ module.exports = Array.isArray || function (arr) {
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 /**
  * lodash 3.2.0 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10879,7 +10974,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"lodash._basecopy":55,"lodash.keys":62}],55:[function(require,module,exports){
+},{"lodash._basecopy":56,"lodash.keys":63}],56:[function(require,module,exports){
 /**
  * lodash 3.0.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10913,7 +11008,7 @@ function baseCopy(source, props, object) {
 
 module.exports = baseCopy;
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 /**
  * lodash 3.0.3 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -10972,7 +11067,7 @@ function isObject(value) {
 
 module.exports = baseCreate;
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 /**
  * lodash 3.9.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11111,7 +11206,7 @@ function isNative(value) {
 
 module.exports = getNative;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 /**
  * lodash 3.0.9 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11245,7 +11340,7 @@ function isObject(value) {
 
 module.exports = isIterateeCall;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 /**
  * lodash 3.1.1 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11302,7 +11397,7 @@ function create(prototype, properties, guard) {
 
 module.exports = create;
 
-},{"lodash._baseassign":54,"lodash._basecreate":56,"lodash._isiterateecall":58}],60:[function(require,module,exports){
+},{"lodash._baseassign":55,"lodash._basecreate":57,"lodash._isiterateecall":59}],61:[function(require,module,exports){
 /**
  * lodash 3.0.8 (Custom Build) <https://lodash.com/>
  * Build: `lodash modularize exports="npm" -o ./`
@@ -11547,7 +11642,7 @@ function isObjectLike(value) {
 
 module.exports = isArguments;
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /**
  * lodash 3.0.4 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11729,7 +11824,7 @@ function isNative(value) {
 
 module.exports = isArray;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 /**
  * lodash 3.1.2 (Custom Build) <https://lodash.com/>
  * Build: `lodash modern modularize exports="npm" -o ./`
@@ -11967,7 +12062,7 @@ function keysIn(object) {
 
 module.exports = keys;
 
-},{"lodash._getnative":57,"lodash.isarguments":60,"lodash.isarray":61}],63:[function(require,module,exports){
+},{"lodash._getnative":58,"lodash.isarguments":61,"lodash.isarray":62}],64:[function(require,module,exports){
 (function (process){
 var path = require('path');
 var fs = require('fs');
@@ -12069,7 +12164,7 @@ mkdirP.sync = function sync (p, opts, made) {
 };
 
 }).call(this,require('_process'))
-},{"_process":66,"fs":41,"path":41}],64:[function(require,module,exports){
+},{"_process":67,"fs":42,"path":42}],65:[function(require,module,exports){
 exports.endianness = function () { return 'LE' };
 
 exports.hostname = function () {
@@ -12116,7 +12211,7 @@ exports.tmpdir = exports.tmpDir = function () {
 
 exports.EOL = '\n';
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -12163,7 +12258,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 }
 
 }).call(this,require('_process'))
-},{"_process":66}],66:[function(require,module,exports){
+},{"_process":67}],67:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -12284,10 +12379,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":68}],68:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":69}],69:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -12363,7 +12458,7 @@ function forEach(xs, f) {
     f(xs[i], i);
   }
 }
-},{"./_stream_readable":70,"./_stream_writable":72,"core-util-is":44,"inherits":50,"process-nextick-args":65}],69:[function(require,module,exports){
+},{"./_stream_readable":71,"./_stream_writable":73,"core-util-is":45,"inherits":51,"process-nextick-args":66}],70:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -12390,7 +12485,7 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
-},{"./_stream_transform":71,"core-util-is":44,"inherits":50}],70:[function(require,module,exports){
+},{"./_stream_transform":72,"core-util-is":45,"inherits":51}],71:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -13286,7 +13381,7 @@ function indexOf(xs, x) {
   return -1;
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":68,"_process":66,"buffer":43,"buffer-shims":42,"core-util-is":44,"events":47,"inherits":50,"isarray":52,"process-nextick-args":65,"string_decoder/":78,"util":39}],71:[function(require,module,exports){
+},{"./_stream_duplex":69,"_process":67,"buffer":44,"buffer-shims":43,"core-util-is":45,"events":48,"inherits":51,"isarray":53,"process-nextick-args":66,"string_decoder/":79,"util":40}],72:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -13467,7 +13562,7 @@ function done(stream, er) {
 
   return stream.push(null);
 }
-},{"./_stream_duplex":68,"core-util-is":44,"inherits":50}],72:[function(require,module,exports){
+},{"./_stream_duplex":69,"core-util-is":45,"inherits":51}],73:[function(require,module,exports){
 (function (process){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, encoding, cb), and it'll handle all
@@ -13996,10 +14091,10 @@ function CorkedRequest(state) {
   };
 }
 }).call(this,require('_process'))
-},{"./_stream_duplex":68,"_process":66,"buffer":43,"buffer-shims":42,"core-util-is":44,"events":47,"inherits":50,"process-nextick-args":65,"util-deprecate":80}],73:[function(require,module,exports){
+},{"./_stream_duplex":69,"_process":67,"buffer":44,"buffer-shims":43,"core-util-is":45,"events":48,"inherits":51,"process-nextick-args":66,"util-deprecate":80}],74:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":69}],74:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":70}],75:[function(require,module,exports){
 (function (process){
 var Stream = (function (){
   try {
@@ -14019,13 +14114,13 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 }
 
 }).call(this,require('_process'))
-},{"./lib/_stream_duplex.js":68,"./lib/_stream_passthrough.js":69,"./lib/_stream_readable.js":70,"./lib/_stream_transform.js":71,"./lib/_stream_writable.js":72,"_process":66}],75:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":69,"./lib/_stream_passthrough.js":70,"./lib/_stream_readable.js":71,"./lib/_stream_transform.js":72,"./lib/_stream_writable.js":73,"_process":67}],76:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":71}],76:[function(require,module,exports){
+},{"./lib/_stream_transform.js":72}],77:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":72}],77:[function(require,module,exports){
+},{"./lib/_stream_writable.js":73}],78:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14154,7 +14249,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":47,"inherits":50,"readable-stream/duplex.js":67,"readable-stream/passthrough.js":73,"readable-stream/readable.js":74,"readable-stream/transform.js":75,"readable-stream/writable.js":76}],78:[function(require,module,exports){
+},{"events":48,"inherits":51,"readable-stream/duplex.js":68,"readable-stream/passthrough.js":74,"readable-stream/readable.js":75,"readable-stream/transform.js":76,"readable-stream/writable.js":77}],79:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -14377,48 +14472,7 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":43}],79:[function(require,module,exports){
-
-/**
- * Expose `toIsoString`.
- */
-
-module.exports = toIsoString;
-
-
-/**
- * Turn a `date` into an ISO string.
- *
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
- *
- * @param {Date} date
- * @return {String}
- */
-
-function toIsoString (date) {
-  return date.getUTCFullYear()
-    + '-' + pad(date.getUTCMonth() + 1)
-    + '-' + pad(date.getUTCDate())
-    + 'T' + pad(date.getUTCHours())
-    + ':' + pad(date.getUTCMinutes())
-    + ':' + pad(date.getUTCSeconds())
-    + '.' + String((date.getUTCMilliseconds()/1000).toFixed(3)).slice(2, 5)
-    + 'Z';
-}
-
-
-/**
- * Pad a `number` with a ten's place zero.
- *
- * @param {Number} number
- * @return {String}
- */
-
-function pad (number) {
-  var n = number.toString();
-  return n.length === 1 ? '0' + n : n;
-}
-},{}],80:[function(require,module,exports){
+},{"buffer":44}],80:[function(require,module,exports){
 (function (global){
 
 /**
@@ -15086,4 +15140,4 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":81,"_process":66,"inherits":50}]},{},[1]);
+},{"./support/isBuffer":81,"_process":67,"inherits":51}]},{},[1]);
