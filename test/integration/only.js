@@ -6,7 +6,7 @@ describe('.only()', function() {
     run('options/only/bdd.js', ['--ui', 'bdd'], function(err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 3);
+      assert.equal(res.stats.passes, 11);
       assert.equal(res.stats.failures, 0);
       assert.equal(res.code, 0);
       done();
@@ -17,7 +17,7 @@ describe('.only()', function() {
     run('options/only/tdd.js', ['--ui', 'tdd'], function(err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 4);
+      assert.equal(res.stats.passes, 8);
       assert.equal(res.stats.failures, 0);
       assert.equal(res.code, 0);
       done();
