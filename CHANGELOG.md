@@ -57,11 +57,13 @@
 and `supports-color`. ([@boneskull], [@RobLoach])
 - Add Windows to CI. ([@boneskull], [@TimothyGu])
 - Ensure appropriate `engines` field in `package.json`. ([@shinnn], [@boneskull])
+- [#2348]: Upgrade ESLint to v2 ([@anthony-redfox])
 
 We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 
 :shipit:
 
+[#2348]: https://github.com/mochajs/mocha/issue/2348
 [#808]: https://github.com/mochajs/mocha/issue/808
 [#2361]: https://github.com/mochajs/mocha/pull/2361
 [#2367]: https://github.com/mochajs/mocha/pull/2367
@@ -94,6 +96,7 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 [@bensontrent]: https://github.com/bensontrent
 [@jugglinmike]: https://github.com/jugglinmike
 [@rosswarren]: https://github.com/rosswarren
+[@anthony-redfox]: https://github.com/anthony-redfox
 
 # 2.5.3 / 2016-05-25
 
