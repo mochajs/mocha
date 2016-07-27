@@ -339,7 +339,8 @@
     "mocha.css",
     "mocha.js",
     "browser-entry.js",
-    "LICENSE"
+    "LICENSE",
+    "bower.json"
   ],
   "browser": {
     "debug": "./lib/browser/debug.js",
