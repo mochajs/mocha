@@ -3,8 +3,6 @@ var run    = require('./helpers').runMochaJSON;
 var args   = [];
 
 describe('this.timeout()', function() {
-  this.timeout(2000);
-
   it('is respected by sync and async suites', function(done) {
     run('timeout.js', args, function(err, res) {
       assert(!err);

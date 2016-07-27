@@ -6,8 +6,6 @@ var path   = require('path');
 var run    = require('./helpers').runMocha;
 
 describe('reporters', function() {
-  this.timeout(3000);
-
   describe('markdown', function() {
     var res;
 

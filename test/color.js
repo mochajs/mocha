@@ -3,7 +3,7 @@ var child_process = require('child_process');
 var path = require('path');
 
 describe('Mocha', function() {
-  this.timeout(1000);
+  this.timeout(2000);
 
   it('should not output colors to pipe', function(cb) {
     var command = [path.join('bin', 'mocha'), '--grep', 'missing-test'];

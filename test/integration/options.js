@@ -3,8 +3,6 @@ var run    = require('./helpers').runMochaJSON;
 var args   = [];
 
 describe('options', function() {
-  this.timeout(2000);
-
   describe('--async-only', function() {
 
     before(function() {
@@ -125,15 +123,29 @@ describe('options', function() {
       });
     });
 
-    it('runs specs matching a RegExp', function(done) {
-      args = ['--grep', '.*'];
-      run('options/grep.js', args, function(err, res) {
-        assert(!err);
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 1);
-        assert.equal(res.code, 1);
-        done();
+    describe('runs specs matching a RegExp', function() {
+      it('with RegExp like strings(pattern follow by flag)', function(done) {
+        args = ['--grep', '/match/i'];
+        run('options/grep.js', args, function(err, res) {
+          assert(!err);
+          assert.equal(res.stats.pending, 0);
+          assert.equal(res.stats.passes, 4);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          done();
+        });
+      });
+
+      it('string as pattern', function(done) {
+        args = ['--grep', '.*'];
+        run('options/grep.js', args, function(err, res) {
+          assert(!err);
+          assert.equal(res.stats.pending, 0);
+          assert.equal(res.stats.passes, 4);
+          assert.equal(res.stats.failures, 1);
+          assert.equal(res.code, 1);
+          done();
+        });
       });
     });
 
@@ -143,7 +155,7 @@ describe('options', function() {
         run('options/grep.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 2);
+          assert.equal(res.stats.passes, 4);
           assert.equal(res.stats.failures, 0);
           assert.equal(res.code, 0);
           done();

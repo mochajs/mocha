@@ -1,10 +1,9 @@
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
 var splitRegExp = require('./helpers').splitRegExp;
+var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('hook error handling', function() {
-  this.timeout(2000);
-
   var lines;
 
   describe('before hook error', function() {
@@ -12,7 +11,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['before', 'test 3']
+        ['before', bang + 'test 3']
       );
     });
   });
@@ -32,7 +31,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['before', 'test 3']
+        ['before', bang + 'test 3']
       );
     });
   });
@@ -42,7 +41,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['test 1', 'test 2', 'after', 'test 3']
+        ['test 1', 'test 2', 'after', bang + 'test 3']
       );
     });
   });
@@ -52,7 +51,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['test 1', 'after', 'test 3']
+        ['test 1', 'after', bang + 'test 3']
       );
     });
   });
@@ -68,25 +67,25 @@ describe('hook error handling', function() {
           'root before each',
           '1 before each',
           '1-1 before each',
-          '1-1 after each',
+          bang + '1-1 after each',
           '1 after each',
           'root after each',
           '1-1 after',
-          '1-2 before',
+          bang + '1-2 before',
           'root before each',
           '1 before each',
           '1-2 before each',
           '1-2 test 1',
           '1-2 after each',
-          '1 after each',
+          bang + '1 after each',
           'root after each',
           '1-2 after',
           '1 after',
           '2-1 before',
           'root before each',
           '2 before each',
-          '2 after each',
-          'root after each',
+          bang + '2 after each',
+          bang + 'root after each',
           '2-1 after',
           '2 after',
           'root after'
@@ -100,7 +99,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['before', 'test 3']
+        ['before', bang + 'test 3']
       );
     });
   });
@@ -120,7 +119,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['before', 'test 3']
+        ['before', bang + 'test 3']
       );
     });
   });
@@ -130,7 +129,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['test 1', 'test 2', 'after', 'test 3']
+        ['test 1', 'test 2', 'after', bang + 'test 3']
       );
     });
   });
@@ -140,7 +139,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       assert.deepEqual(
         lines,
-        ['test 1', 'after', 'test 3']
+        ['test 1', 'after', bang + 'test 3']
       );
     });
   });
@@ -156,25 +155,25 @@ describe('hook error handling', function() {
           'root before each',
           '1 before each',
           '1-1 before each',
-          '1-1 after each',
+          bang + '1-1 after each',
           '1 after each',
           'root after each',
           '1-1 after',
-          '1-2 before',
+          bang + '1-2 before',
           'root before each',
           '1 before each',
           '1-2 before each',
           '1-2 test 1',
           '1-2 after each',
-          '1 after each',
+          bang + '1 after each',
           'root after each',
           '1-2 after',
           '1 after',
           '2-1 before',
           'root before each',
           '2 before each',
-          '2 after each',
-          'root after each',
+          bang + '2 after each',
+          bang + 'root after each',
           '2-1 after',
           '2 after',
           'root after'

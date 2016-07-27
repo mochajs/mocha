@@ -41,6 +41,14 @@ describe('Runnable(title, fn)', function(){
     })
   })
 
+  describe('#timeout(ms) when ms>2^31', function() {
+    it('should set disabled', function() {
+      var run = new Runnable();
+      run.timeout(1e10);
+      run.enableTimeouts().should.be.false;
+    });
+  });
+
   describe('#enableTimeouts(enabled)', function(){
     it('should set enabled', function(){
       var run = new Runnable;

@@ -398,4 +398,42 @@ describe('Suite', function(){
     });
 
   });
+
+  describe('initialization', function() {
+    it('should throw an error if the title isn\'t a string', function() {
+      (function() {
+        new Suite(undefined, 'root');
+      }).should.throw();
+
+      (function() {
+        new Suite(function(){}, 'root');
+      }).should.throw();
+    });
+
+    it('should not throw if the title is a string', function() {
+      (function() {
+        new Suite('Bdd suite', 'root');
+      }).should.not.throw();
+    });
+  });
+});
+
+describe('Test', function() {
+  describe('initialization', function() {
+    it('should throw an error if the title isn\'t a string', function() {
+      (function() {
+        new Test(function(){});
+      }).should.throw();
+
+      (function() {
+        new Test(undefined, function(){});
+      }).should.throw();
+    });
+
+    it('should not throw if the title is a string', function() {
+      (function() {
+        new Test('test-case',  function(){});
+      }).should.not.throw();
+    });
+  });
 });

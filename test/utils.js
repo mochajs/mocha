@@ -1,5 +1,6 @@
 var mocha = require('..');
 var utils = mocha.utils;
+var JSON = require('json3');
 
 describe('utils', function() {
   describe('.clean()', function() {
@@ -180,6 +181,20 @@ describe('utils', function() {
         delete global.document;
         delete global.location;
       });
+    });
+  });
+
+  describe('.isPromise', function() {
+    it('should return true if the value is Promise-ish', function() {
+      utils.isPromise({then: function() {}}).should.be.true;
+    });
+
+    it('should return false if the value is not an object', function() {
+      utils.isPromise(1).should.be.false;
+    });
+
+    it('should return false if the value is an object w/o a "then" function', function() {
+      utils.isPromise({}).should.be.false;
     });
   });
 });

@@ -1,6 +1,12 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
+var mkdirp = require('mkdirp');
+var baseBundleDirpath = path.join(__dirname, '.karma');
+
 module.exports = function(config) {
+  var bundleDirpath;
   var cfg = {
     frameworks: [
       'browserify',
@@ -25,9 +31,16 @@ module.exports = function(config) {
       debug: true,
       configure: function configure(b) {
         b.ignore('glob')
-          .ignore('jade')
+          .ignore('fs')
+          .ignore('path')
           .ignore('supports-color')
-          .exclude('./lib-cov/mocha');
+          .on('bundled', function(err, content) {
+            if (!err && bundleDirpath) {
+              // write bundle to directory for debugging
+              fs.writeFileSync(path.join(bundleDirpath,
+                'bundle.' + Date.now() + '.js'), content);
+            }
+          });
       }
     },
     reporters: ['spec'],
@@ -44,6 +57,7 @@ module.exports = function(config) {
   if (process.env.CI && !process.env.APPVEYOR) {
     // we can't run SauceLabs tests on PRs from forks on Travis cuz security.
     if (process.env.TRAVIS) {
+      bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
       if (process.env.TRAVIS_REPO_SLUG === 'mochajs/mocha'
         && process.env.TRAVIS_PULL_REQUEST === 'false') {
         addSauceTests(cfg);
@@ -53,6 +67,7 @@ module.exports = function(config) {
         cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
       }
     } else {
+      bundleDirpath = path.join(baseBundleDirpath, 'local');
       if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
         throw new Error('Must set SAUCE_USERNAME and SAUCE_ACCESS_KEY '
           + 'environment variables!');
@@ -62,6 +77,7 @@ module.exports = function(config) {
       addSauceTests(cfg);
       cfg.sauceLabs.build = require('os').hostname() + ' (' + Date.now() + ')';
     }
+    mkdirp.sync(bundleDirpath);
   }
 
   // the MOCHA_UI env var will determine if we're running interface-specific
@@ -93,6 +109,12 @@ function addSauceTests(cfg) {
       browserName: 'internet explorer',
       platform: 'Windows 7',
       version: '8.0'
+    },
+    ie7: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows XP',
+      version: '7.0'
     },
     chrome: {
       base: 'SauceLabs',
