@@ -105,7 +105,7 @@ program
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
 
-program.name = 'mocha';
+program._name = 'mocha';
 
 // init command
 
