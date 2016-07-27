@@ -31,7 +31,7 @@
 - [#2000]: Use distinctive characters in `dot` reporter; `,` will denote a "pending" test and `!` will denote a "failing" test. ([@elliottcable])
 - [#1632]: Throw a useful exception when a suite or test lacks a title. ([@a8m])
 - [#1481]: Better `.only()` behavior. ([@a8m])
-- [#946]: Allow `this.skip()` in async tests and hooks. ([@boneskull])
+- [#2334]: Allow `this.skip()` in async tests and hooks. ([@boneskull])
 - [#1320]: Throw a useful exception when test resolution method is overspecified. ([@jugglinmike])
 - [#2364]: Support `--preserve-symlinks`. ([@rosswarren])
 
@@ -63,8 +63,8 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 
 :shipit:
 
-[#2348]: https://github.com/mochajs/mocha/issue/2348
-[#808]: https://github.com/mochajs/mocha/issue/808
+[#2348]: https://github.com/mochajs/mocha/issues/2348
+[#808]: https://github.com/mochajs/mocha/issues/808
 [#2361]: https://github.com/mochajs/mocha/pull/2361
 [#2367]: https://github.com/mochajs/mocha/pull/2367
 [#2364]: https://github.com/mochajs/mocha/pull/2364
@@ -73,17 +73,17 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 [#2259]: https://github.com/mochajs/mocha/pull/2259
 [#2208]: https://github.com/mochajs/mocha/pull/2208
 [#2299]: https://github.com/mochajs/mocha/pull/2299
-[#2286]: https://github.com/mochajs/mocha/issue/2286
-[#1644]: https://github.com/mochajs/mocha/issue/1644
-[#2310]: https://github.com/mochajs/mocha/issue/2310
-[#2311]: https://github.com/mochajs/mocha/issue/2311
-[#2323]: https://github.com/mochajs/mocha/issue/2323
+[#2286]: https://github.com/mochajs/mocha/issues/2286
+[#1644]: https://github.com/mochajs/mocha/issues/1644
+[#2310]: https://github.com/mochajs/mocha/issues/2310
+[#2311]: https://github.com/mochajs/mocha/issues/2311
+[#2323]: https://github.com/mochajs/mocha/issues/2323
 [#2000]: https://github.com/mochajs/mocha/pull/2000
-[#1632]: https://github.com/mochajs/mocha/issue/1632
-[#1813]: https://github.com/mochajs/mocha/issue/1813
-[#946]: https://github.com/mochajs/mocha/issue/946
-[#2317]: https://github.com/mochajs/mocha/issue/2317
-[#1481]: https://github.com/mochajs/mocha/issue/1481
+[#1632]: https://github.com/mochajs/mocha/issues/1632
+[#1813]: https://github.com/mochajs/mocha/issues/1813
+[#2334]: https://github.com/mochajs/mocha/issues/2334
+[#2317]: https://github.com/mochajs/mocha/issues/2317
+[#1481]: https://github.com/mochajs/mocha/issues/1481
 [@elliottcable]: https://github.com/elliottcable
 [@RobLoach]: https://github.com/robloach
 [@AviVahl]: https://github.com/avivahl
