@@ -352,5 +352,6 @@
     "path": false,
     "supports-color": false
   },
-  "homepage": "https://mochajs.org"
+  "homepage": "https://mochajs.org",
+  "logo": "https://cldup.com/S9uQ-cOLYz.svg"
 }
