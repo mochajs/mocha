@@ -38,37 +38,54 @@ module.exports = function(config) {
   };
 
   // see https://github.com/saucelabs/karma-sauce-example
-  // TO RUN LOCALLY:
-  // Execute `CI=1 make test-browser`, once you've set the SAUCE_USERNAME and
-  // SAUCE_ACCESS_KEY env vars.
-  if (process.env.CI && !process.env.APPVEYOR) {
-    // we can't run SauceLabs tests on PRs from forks on Travis cuz security.
-    if (process.env.TRAVIS) {
-      if (process.env.TRAVIS_REPO_SLUG === 'mochajs/mocha'
-        && process.env.TRAVIS_PULL_REQUEST === 'false') {
-        addSauceTests(cfg);
-        // correlate build/tunnel with Travis
-        cfg.sauceLabs.build = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER
-          + ' (' + process.env.TRAVIS_BUILD_ID + ')';
-        cfg.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
-      }
-    } else {
-      if (!(process.env.SAUCE_USERNAME || process.env.SAUCE_ACCESS_KEY)) {
-        throw new Error('Must set SAUCE_USERNAME and SAUCE_ACCESS_KEY '
-          + 'environment variables!');
-      }
+  // TO RUN LOCALLY, execute:
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
+  var env = process.env;
+  var sauceConfig;
 
-      // remember, this is for a local run.
-      addSauceTests(cfg);
-      cfg.sauceLabs.build = require('os').hostname() + ' (' + Date.now() + ')';
+  if (env.CI) {
+    console.err('CI mode enabled');
+    if (env.TRAVIS) {
+      console.err('Travis-CI detected');
+      if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
+        // correlate build/tunnel with Travis
+        sauceConfig = {
+          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER
+          + ' (' + env.TRAVIS_BUILD_ID + ')',
+          tunnelIdentifier: env.TRAVIS_JOB_NUMBER
+        };
+        console.err('Configured SauceLabs')
+      } else {
+        console.err('No SauceLabs credentials present');
+      }
+    } else if (env.APPVEYOR) {
+      console.error('AppVeyor detected');
+    } else {
+      console.err('Local/unknown environment detected')
+      // don't need to run sauce from appveyor b/c travis does it.
+      if (!(env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY)) {
+        console.err('No SauceLabs credentials present');
+      } else {
+        sauceConfig = {
+          build: require('os').hostname() + ' (' + Date.now() + ')'
+        };
+        console.err('Configured SauceLabs');
+      }
     }
+  } else {
+    console.err('CI mode disabled');
+  }
+
+  if (sauceConfig) {
+    cfg.sauceLabs = sauceConfig;
+    addSauceTests(cfg);
   }
 
   // the MOCHA_UI env var will determine if we're running interface-specific
   // tets.  since you can only load one at a time, each must be run separately.
   // each has its own set of acceptance tests and a fixture.
   // the "bdd" fixture is used by default.
-  var ui = process.env.MOCHA_UI;
+  var ui = env.MOCHA_UI;
   if (ui) {
     if (cfg.sauceLabs) {
       cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
