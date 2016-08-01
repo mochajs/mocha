@@ -60,6 +60,7 @@ module.exports = function(config) {
     console.error('CI mode enabled');
     if (env.TRAVIS) {
       console.error('Travis-CI detected');
+      bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
       if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
         // correlate build/tunnel with Travis
         sauceConfig = {
@@ -67,14 +68,16 @@ module.exports = function(config) {
           + ' (' + env.TRAVIS_BUILD_ID + ')',
           tunnelIdentifier: env.TRAVIS_JOB_NUMBER
         };
-        console.error('Configured SauceLabs')
+        console.error('Configured SauceLabs');
       } else {
         console.error('No SauceLabs credentials present');
       }
     } else if (env.APPVEYOR) {
       console.error('AppVeyor detected');
+      bundleDirpath = path.join(baseBundleDirpath, process.env.APPVEYOR_BUILD_ID);
     } else {
-      console.error('Local/unknown environment detected')
+      console.error('Local/unknown environment detected');
+      bundleDirpath = path.join(baseBundleDirpath, 'local');
       // don't need to run sauce from appveyor b/c travis does it.
       if (!(env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY)) {
         console.error('No SauceLabs credentials present');
@@ -85,6 +88,7 @@ module.exports = function(config) {
         console.error('Configured SauceLabs');
       }
     }
+    mkdirp.sync(bundleDirpath);
   } else {
     console.error('CI mode disabled');
   }
