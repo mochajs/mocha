@@ -92,7 +92,7 @@ body {
   color: #fff;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-  -box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
