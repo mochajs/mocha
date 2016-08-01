@@ -1,4 +1,4 @@
-# 3.0.0 / 2016-xx-xx
+# 3.0.0 / 2016-07-31
 
 ## :boom: Breaking Changes
 
