@@ -24,6 +24,7 @@
 - The `dot` reporter now uses more visually distinctive characters when indicating "pending" and "failed" tests.
 - Mocha no longer supports [component](https://www.npmjs.com/package/component).
 - The long-forsaken `HTMLCov` and `JSONCov` reporters--and any relationship to the "node-jscoverage" project--have been removed.
+- `spec` reporter now omits leading carriage returns (`\r`) in non-TTY environment.
 
 ## :tada: Enhancements
 
@@ -50,6 +51,7 @@
 - [#1644]: Don't exhibit undefined behavior when calling `this.timeout()` with very large values ([@callumacrae], [@boneskull])
 - [#2361]: Don't truncate name of thrown anonymous exception. ([@boneskull])
 - [#2367]: Fix invalid CSS. ([@bensontrent])
+- [#2401]: Remove carriage return before each test line in spec reporter. ([@Munter])
 
 ## :nut_and_bolt: Other
 
@@ -63,6 +65,7 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 
 :shipit:
 
+[#2401]: https://github.com/mochajs/mocha/pull/2401
 [#2348]: https://github.com/mochajs/mocha/issues/2348
 [#808]: https://github.com/mochajs/mocha/issues/808
 [#2361]: https://github.com/mochajs/mocha/pull/2361
@@ -97,6 +100,7 @@ We :heart: our [backers and sponsors](https://opencollective.com/mochajs)!
 [@jugglinmike]: https://github.com/jugglinmike
 [@rosswarren]: https://github.com/rosswarren
 [@anthony-redfox]: https://github.com/anthony-redfox
+[@Munter]: https://github.com/munter
 
 # 2.5.3 / 2016-05-25
 
