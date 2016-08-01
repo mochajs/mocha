@@ -124,6 +124,27 @@ describe('Suite', function(){
     });
   });
 
+  describe('.tag()', function() {
+    it('starts with no tags', function() {
+      var suite = new Suite('A', new Context());
+      suite.ctx._tags.should.eql([]);
+    });
+    it('can add tags', function() {
+      var suite = new Suite('A', new Context());
+      suite.tag('unit', 'fast');
+      suite.ctx._tags.should.eql(['unit', 'fast']);
+    });
+    it('returns itself for easy chaining', function() {
+      var suite = new Suite('A', new Context());
+      suite.tag('unit').should.eql(suite);
+    });
+    it('inherits tags from the parent context', function() {
+      var parent = new Suite('parent', new Context()).tag('unit', 'fast');
+      var child = Suite.create(parent, 'child').tag('regression');
+      child.ctx._tags.should.eql(['unit', 'fast', 'regression']);
+    });
+  });
+
   describe('.beforeAll()', function(){
     beforeEach(function(){
       this.suite = new Suite('A Suite');

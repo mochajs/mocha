@@ -104,6 +104,8 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
+  .option('--tags <tags>', 'only include tests with the given tags', list, [])
+  .option('--skip-tags <tags>', 'exclude all tests with the given tags', list, [])
 
 program._name = 'mocha';
 
@@ -263,6 +265,14 @@ if (program.fgrep) mocha.fgrep(program.fgrep);
 // --invert
 
 if (program.invert) mocha.invert();
+
+// --tags
+
+if (program.tags) mocha.tags(program.tags);
+
+// --skip-tags
+
+if (program.skipTags) mocha.skipTags(program.skipTags);
 
 // --check-leaks
 
