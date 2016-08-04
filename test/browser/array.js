@@ -26,7 +26,7 @@ describe('Array', function(){
       var arr = [1,2,3];
       assert(arr.pop() == 3);
       assert(arr.pop() == 2);
-      assert(arr.pop() == -1);
+      assert(arr.pop() == 1);
     })
 
     it('should adjust .length', function(){
