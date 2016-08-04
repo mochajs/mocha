@@ -1,3 +1,12 @@
+# 3.0.1 / 2016-08-03
+
+## :bug: Bug Fix
+
+- [#2406]: Restore execution of nested `describe.only()` suites ([@not-an-aardvark])
+
+[#2406]: https://github.com/mochajs/mocha/issues/2406
+[@not-an-aardvark]: https://github.com/not-an-aardvark
+
 # 3.0.0 / 2016-07-31
 
 ## :boom: Breaking Changes

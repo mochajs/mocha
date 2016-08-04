@@ -887,15 +887,9 @@ module.exports = function(suites, context, mocha) {
         suite.pending = Boolean(opts.pending);
         suite.file = opts.file;
         suites.unshift(suite);
-        // I should be pilloried for the following.
         if (opts.isOnly) {
-          if (suite.parent && suite.parent.onlyTests) {
-            suite.onlyTests = suite.parent.onlyTests === suite.parent.tests ? suite.tests : [];
-          } else {
-            suite.onlyTests = suite.tests;
-          }
-        } else {
-          suite.onlyTests = suite.parent && suite.parent.onlyTests === suite.parent.tests ? suite.tests : [];
+          suite.parent._onlySuites = suite.parent._onlySuites.concat(suite);
+          mocha.options.hasOnly = true;
         }
         if (typeof opts.fn === 'function') {
           opts.fn.call(suite);
@@ -916,12 +910,7 @@ module.exports = function(suites, context, mocha) {
        * @returns {*}
        */
       only: function(mocha, test) {
-        var suite = test.parent;
-        if (suite.onlyTests === suite.tests) {
-          suite.onlyTests = [test];
-        } else {
-          suite.onlyTests = (suite.onlyTests || []).concat(test);
-        }
+        test.parent._onlyTests = test.parent._onlyTests.concat(test);
         mocha.options.hasOnly = true;
         return test;
       },
@@ -4417,6 +4406,7 @@ var debug = require('debug')('mocha:runner');
 var Runnable = require('./runnable');
 var filter = utils.filter;
 var indexOf = utils.indexOf;
+var some = utils.some;
 var keys = utils.keys;
 var stackFilter = utils.stackTraceFilter();
 var stringify = utils.stringify;
@@ -5253,12 +5243,38 @@ Runner.prototype.abort = function() {
  * @api private
  */
 function filterOnly(suite) {
-  // If it has `only` tests, run only those
-  suite.tests = suite.onlyTests ? suite.onlyTests : [];
-  // Filter the nested suites
-  suite.suites = filter(suite.suites, filterOnly);
+  if (suite._onlyTests.length) {
+    // If the suite contains `only` tests, run those and ignore any nested suites.
+    suite.tests = suite._onlyTests;
+    suite.suites = [];
+  } else {
+    // Otherwise, do not run any of the tests in this suite.
+    suite.tests = [];
+    suite._onlySuites.forEach(function(onlySuite) {
+      // If there are other `only` tests/suites nested in the current `only` suite, then filter the current suite.
+      // Otherwise, all of the tests on this `only` suite should be run, so don't filter it.
+      if (hasOnly(onlySuite)) {
+        filterOnly(suite);
+      }
+    });
+    // Run the `only` suites, as well as any other suites that have `only` tests/suites as descendants.
+    suite.suites = filter(suite.suites, function(childSuite) {
+      return indexOf(suite._onlySuites, childSuite) !== -1 || filterOnly(childSuite);
+    });
+  }
   // Keep the suite only if there is something to run
-  return suite.suites.length || suite.tests.length;
+  return suite.tests.length || suite.suites.length;
+}
+
+/**
+ * Determines whether a suite has an `only` test or suite as a descendant.
+ *
+ * @param {Array} suite
+ * @returns {Boolean}
+ * @api private
+ */
+function hasOnly(suite) {
+  return suite._onlyTests.length || suite._onlySuites.length || some(suite.suites, hasOnly);
 }
 
 /**
@@ -5392,6 +5408,8 @@ function Suite(title, parentContext) {
   this._slow = 75;
   this._bail = false;
   this._retries = -1;
+  this._onlyTests = [];
+  this._onlySuites = [];
   this.delayed = false;
 }
 
@@ -5959,6 +5977,23 @@ exports.filter = function(arr, fn) {
   }
 
   return ret;
+};
+
+/**
+ * Array#some (<=IE8)
+ *
+ * @api private
+ * @param {Array} arr
+ * @param {Function} fn
+ * @return {Array}
+ */
+exports.some = function(arr, fn) {
+  for (var i = 0, l = arr.length; i < l; i++) {
+    if (fn(arr[i])) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
