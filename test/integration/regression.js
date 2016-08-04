@@ -1,7 +1,8 @@
-﻿var assert = require('assert');
-var fs     = require('fs');
-var path   = require('path');
-var run    = require('./helpers').runMocha;
+﻿var assert  = require('assert');
+var fs      = require('fs');
+var path    = require('path');
+var run     = require('./helpers').runMocha;
+var runJSON = require('./helpers').runMochaJSON;
 
 describe('regressions', function() {
   it('issue-1327: should run all 3 specs exactly once', function(done) {
@@ -58,6 +59,18 @@ describe('regressions', function() {
     })
     after('meta test', function () {
       afterWasRun.should.be.ok();
+    });
+  });
+
+  it('issue-2406: should run nested describe.only suites', function(done) {
+    this.timeout(2000);
+    runJSON('regression/issue-2406.js', [], function(err, res) {
+      assert(!err);
+      assert.equal(res.stats.pending, 0);
+      assert.equal(res.stats.passes, 2);
+      assert.equal(res.stats.failures, 0);
+      assert.equal(res.code, 0);
+      done();
     });
   });
 });
