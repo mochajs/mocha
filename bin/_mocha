@@ -144,8 +144,6 @@ program.on('reporters', function(){
   console.log('    tap - test-anything-protocol');
   console.log('    landing - unicode landing strip');
   console.log('    xunit - xunit reporter');
-  console.log('    html-cov - HTML test coverage');
-  console.log('    json-cov - JSON test coverage');
   console.log('    min - minimal reporter (great with --watch)');
   console.log('    json-stream - newline delimited json events');
   console.log('    markdown - markdown documentation (github flavour)');
