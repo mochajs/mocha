@@ -1,3 +1,14 @@
+# 3.0.2 / 2016-08-08
+
+## :bug: Bug Fix
+
+- [#2424]: Fix error loading Mocha via Require.js ([@boneskull])
+- [#2417]: Fix execution of *deeply* nested `describe.only()` suites ([@not-an-aardvark])
+- Remove references to `json-cov` and `html-cov` reporters in CLI ([@boneskull]) 
+
+[#2417]: https://github.com/mochajs/mocha/issues/2417
+[#2424]: https://github.com/mochajs/mocha/issues/2424
+
 # 3.0.1 / 2016-08-03
 
 ## :bug: Bug Fix
