@@ -13,6 +13,7 @@ all: mocha.js
 mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: build]\n"
 	$(BROWSERIFY) ./browser-entry \
+		--plugin ./scripts/dedefine \
 		--ignore 'fs' \
 		--ignore 'glob' \
 		--ignore 'path' \

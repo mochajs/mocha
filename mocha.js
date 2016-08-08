@@ -9314,7 +9314,7 @@ function objectToString(o) {
   /*global module */
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = JsDiff;
-  } else if (typeof define === 'function' && define.amd) {
+  } else if (false) {
     /*global define */
     define([], function() { return JsDiff; });
   } else if (typeof global.JsDiff === 'undefined') {
@@ -10076,7 +10076,7 @@ module.exports = Array.isArray || function (arr) {
 ;(function () {
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = typeof define === "function" && define.amd;
+  var isLoader = false;
 
   // A set of types used to distinguish objects from primitives.
   var objectTypes = {
