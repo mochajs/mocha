@@ -73,4 +73,14 @@ describe('regressions', function() {
       done();
     });
   });
+
+  it('issue-2417: should not recurse infinitely with .only suites nested within each other', function() {
+    runJSON('regression/issue-2417.js', [], function(err, res) {
+      assert(!err);
+      assert.equal(res.stats.pending, 0);
+      assert.equal(res.stats.passes, 1);
+      assert.equal(res.stats.failures, 0);
+      assert.equal(res.code, 0);
+    });
+  });
 });
