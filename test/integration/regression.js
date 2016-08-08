@@ -73,4 +73,28 @@ describe('regressions', function() {
       done();
     });
   });
+
+  it.only('issue-2407: should fail gracefully when overspecified but done() never called', function(done) {
+    if (!global.Promise) {
+      return this.skip();
+    }
+
+    this.timeout(2000);
+    runJSON('regression/issue-2407.js', [], function(err, res) {
+      assert(!err);
+      expect(res.tests[0].err).not.to.eql({});
+      expect(res.tests[0].err.message).not.to.match(/timeout/i);
+      expect(res.tests[0].err.message).to.match(/overspecified/i);
+      expect(res.tests[0].err.message).to.match(/additionally/i);
+      expect(res.tests[1].err).not.to.eql({});
+      expect(res.tests[1].err.message).not.to.match(/timeout/i);
+      expect(res.tests[1].err.message).to.match(/overspecified/i);
+      expect(res.tests[1].err.message).not.to.match(/additionally/i);
+      expect(res.tests[2].err).not.to.eql({});
+      expect(res.tests[2].err.message).not.to.match(/timeout/i);
+      expect(res.tests[2].err.message).to.match(/overspecified/i);
+      expect(res.tests[2].err.message).not.to.match(/additionally/i);
+      done();
+    });
+  });
 });
