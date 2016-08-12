@@ -968,7 +968,7 @@ The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.
 
 ### Landing Strip
 
-The Landing Strip (or "landing") reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
+The Landing Strip (`landing`) reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
 ![landing strip plane reporter](images/reporter-landing.png)
 ![landing strip with failure](images/reporter-landing-fail.png)
