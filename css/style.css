@@ -52,6 +52,11 @@ h3 {
   text-transform: uppercase;
 }
 
+h3 > code {
+  text-transform: none;
+  font-size: 14px;
+}
+
 #tag {
   opacity: 0;
   color: #c29d7f;
