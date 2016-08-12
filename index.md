@@ -1063,7 +1063,7 @@ The "HTML" reporter is currently the only browser reporter supported by Mocha, a
 
 ### Undocumented Reporters
 
-The "XUnit" reporter is also available, but someone needs to write the documentation.
+The "XUnit" reporter is also available.  By default, it will output to the console.  To write directly to a file, use `--reporter-options output=filename.xml`.
 
 ### Third party reporters
 
