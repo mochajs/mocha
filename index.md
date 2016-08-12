@@ -145,8 +145,8 @@ describe('User', function() {
     it('should save without error', function(done) {
       var user = new User('Luna');
       user.save(function(err) {
-        if (err) throw err;
-        done();
+        if (err) done(err);
+        else done();
       });
     });
   });
