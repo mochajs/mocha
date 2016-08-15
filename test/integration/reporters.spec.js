@@ -10,7 +10,7 @@ describe('reporters', function() {
     var res;
 
     before(function(done) {
-      run('passing.js', ['--reporter', 'markdown'], function(err, result) {
+      run('passing.fixture.js', ['--reporter', 'markdown'], function(err, result) {
         res = result;
         done(err);
       });
@@ -44,7 +44,7 @@ describe('reporters', function() {
         '</testsuite>'
       ];
 
-      run('passing.js', args, function(err, result) {
+      run('passing.fixture.js', args, function(err, result) {
         if (err) return done(err);
 
         var xml = fs.readFileSync(tmpFile, 'utf8');

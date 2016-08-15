@@ -18,9 +18,9 @@ module.exports = function(config) {
       'test/acceptance/*.js'
     ],
     exclude: [
-      'test/acceptance/http.js',
-      'test/acceptance/fs.js',
-      'test/acceptance/lookup-files.js',
+      'test/acceptance/http.spec.js',
+      'test/acceptance/fs.spec.js',
+      'test/acceptance/lookup-files.spec.js',
       'test/acceptance/require/**/*.js',
       'test/acceptance/misc/**/*.js'
     ],
@@ -109,7 +109,7 @@ module.exports = function(config) {
     }
     cfg.files = [
       'test/browser-fixtures/' + ui + '.js',
-      'test/acceptance/interfaces/' + ui + '.js'
+      'test/acceptance/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';

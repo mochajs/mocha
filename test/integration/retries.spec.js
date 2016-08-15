@@ -5,7 +5,7 @@ var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function() {
   it('are ran in correct order', function(done) {
-    helpers.runMocha('retries/hooks.js', args, function(err, res) {
+    helpers.runMocha('retries/hooks.fixture.js', args, function(err, res) {
       var lines, expected;
 
       assert(!err);
@@ -46,7 +46,7 @@ describe('retries', function() {
   });
 
   it('should exit early if test passes', function (done) {
-    helpers.runMochaJSON('retries/early-pass.js', args, function(err, res) {
+    helpers.runMochaJSON('retries/early-pass.fixture.js', args, function(err, res) {
       assert(!err);
       assert.equal(res.stats.passes, 1);
       assert.equal(res.stats.failures, 0);
@@ -58,7 +58,7 @@ describe('retries', function() {
   });
 
   it('should let test override', function (done) {
-    helpers.runMochaJSON('retries/nested.js', args, function(err, res) {
+    helpers.runMochaJSON('retries/nested.fixture.js', args, function(err, res) {
       assert(!err);
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
@@ -70,7 +70,7 @@ describe('retries', function() {
   });
 
   it('should not hang w/ async test', function (done) {
-    helpers.runMocha('retries/async.js', args, function(err, res) {
+    helpers.runMocha('retries/async.fixture.js', args, function(err, res) {
       var lines, expected;
 
       assert(!err);
