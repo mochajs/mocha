@@ -442,7 +442,7 @@ if (program.watch) {
 
 function exitLater(code) {
   process.on('exit', function() {
-    process.exit(code);
+    process.exit(Math.min(code, 255));
   });
 }
 
@@ -452,7 +452,7 @@ function exit(code) {
   // https://github.com/visionmedia/mocha/issues/333 has a good discussion
   function done() {
     if (!(draining--)) {
-      process.exit(code);
+      process.exit(Math.min(code, 255));
     }
   }
 
