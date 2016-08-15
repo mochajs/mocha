@@ -384,7 +384,7 @@ if (program.watch) {
   process.on('SIGINT', function() {
     showCursor();
     console.log('\n');
-    process.exit();
+    process.exit(130);
   });
 
   var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
@@ -470,6 +470,11 @@ function exit(code) {
 
 process.on('SIGINT', function() {
   runner.abort();
+
+  // This is a hack:
+  // Instead of `process.exit(130)`, set runner.failures to 130 (exit code for SIGINT)
+  // The amount of failures will be emitted as error code later
+  runner.failures = 130;
 });
 
 /**
