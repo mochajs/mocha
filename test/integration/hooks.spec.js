@@ -5,7 +5,7 @@ var args   = [];
 
 describe('hooks', function() {
   it('are ran in correct order', function(done) {
-    run('cascade.js', args, function(err, res) {
+    run('cascade.fixture.js', args, function(err, res) {
       var lines, expected;
 
       assert(!err);

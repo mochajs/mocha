@@ -6,7 +6,7 @@ describe('multiple calls to done()', function() {
   var res;
   describe('from a spec', function() {
     before(function(done) {
-      run('multiple.done.js', args, function(err, result) {
+      run('multiple-done.fixture.js', args, function(err, result) {
         res = result;
         done(err);
       });
@@ -27,7 +27,7 @@ describe('multiple calls to done()', function() {
 
   describe('with multiple specs', function() {
     before(function(done) {
-      run('multiple.done.specs.js', args, function(err, result) {
+      run('multiple-done-specs.fixture.js', args, function(err, result) {
         res = result;
         done(err);
       });
@@ -49,7 +49,7 @@ describe('multiple calls to done()', function() {
 
   describe('from a before hook', function() {
     before(function(done) {
-      run('multiple.done.before.js', args, function(err, result) {
+      run('multiple-done-before.fixture.js', args, function(err, result) {
         res = result;
         done(err);
       });
@@ -71,7 +71,7 @@ describe('multiple calls to done()', function() {
 
   describe('from a beforeEach hook', function() {
     before(function(done) {
-      run('multiple.done.beforeEach.js', args, function(err, result) {
+      run('multiple-done-beforeEach.fixture.js', args, function(err, result) {
         res = result;
         done(err);
       });
