@@ -22,8 +22,19 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F 'Could not find any test files matching pattern' || {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
+    exit 1
+}
+
+../../../bin/mocha -R json-stream  ./*.js ./*-none.js >& /tmp/mocha-glob.txt || {
+    echo Globbing ./*.js ./*-none.js in `pwd` failed.
+    exit 1
+}
+
+cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,' &&
+cat /tmp/mocha-glob.txt | grep -q -F 'Could not find any test files matching pattern' || {
+    echo Globbing ./*.js ./*-none.js in `pwd` should match glob.js with one test inside and display one warning for the non-existing file.
     exit 1
 }
 
@@ -47,7 +58,7 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F 'Could not find any test files matching pattern' || {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
     exit 1
 }
