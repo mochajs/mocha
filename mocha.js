@@ -4247,10 +4247,10 @@ Runnable.prototype.resetTimeout = function() {
     }
 
     var errorMsg = 'timeout of ' + ms + 'ms exceeded.';
-    if (this.async) {
+    if (self.async) {
       errorMsg += ' Expected done() callback to be executed but it never was.';
-      if (this._returnedPromise) {
-        errorMsg += '\n\n A Promise was returned, but ignored because done() '
+      if (self._returnedPromise) {
+        errorMsg += ' A Promise was returned, but ignored because done() '
                   + 'was requested. Remove done() from your test arguments '
                   + 'to use the promise instead.';
       }
@@ -4365,7 +4365,6 @@ Runnable.prototype.run = function(fn) {
     var result = fn.call(ctx);
     if (result && typeof result.then === 'function') {
       // for resetTimeout's error message
-      this._returnedPromise = true;
       self.resetTimeout();
       result
         .then(function() {
@@ -4387,7 +4386,7 @@ Runnable.prototype.run = function(fn) {
   }
 
   function callFnAsync(fn) {
-    fn.call(ctx, function(err) {
+    var result = fn.call(ctx, function(err) {
       if (err instanceof Error || toString.call(err) === '[object Error]') {
         return done(err);
       }
@@ -4401,6 +4400,7 @@ Runnable.prototype.run = function(fn) {
 
       done();
     });
+    self._returnedPromise = result && typeof result.then === 'function';
   }
 };
 
