@@ -4364,7 +4364,6 @@ Runnable.prototype.run = function(fn) {
   function callFn(fn) {
     var result = fn.call(ctx);
     if (result && typeof result.then === 'function') {
-      // for resetTimeout's error message
       self.resetTimeout();
       result
         .then(function() {
