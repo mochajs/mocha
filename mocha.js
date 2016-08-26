@@ -4399,6 +4399,8 @@ Runnable.prototype.run = function(fn) {
 
       done();
     });
+
+    // Used by resetTimeout() for determining it's error message
     self._returnedPromise = result && typeof result.then === 'function';
   }
 };
