@@ -382,6 +382,7 @@ if (program.watch) {
       mocha.grep(null);
     mocha.suite = mocha.suite.clone();
     mocha.suite.ctx = new Mocha.Context;
+    mocha.suite._mocha = mocha;
     mocha.ui(program.ui);
     loadAndRun();
   }
