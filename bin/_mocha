@@ -1,31 +1,33 @@
 #!/usr/bin/env node
 
+/* eslint no-unused-vars: off */
+
 /**
  * Module dependencies.
  */
 
-var program = require('commander'),
-  path = require('path'),
-  fs = require('fs'),
-  resolve = path.resolve,
-  exists = fs.existsSync || path.existsSync,
-  Mocha = require('../'),
-  utils = Mocha.utils,
-  interfaceNames = Object.keys(Mocha.interfaces),
-  join = path.join,
-  cwd = process.cwd(),
-  getOptions = require('./options'),
-  mocha = new Mocha;
+var program = require('commander');
+var path = require('path');
+var fs = require('fs');
+var resolve = path.resolve;
+var exists = fs.existsSync || path.existsSync;
+var Mocha = require('../');
+var utils = Mocha.utils;
+var interfaceNames = Object.keys(Mocha.interfaces);
+var join = path.join;
+var cwd = process.cwd();
+var getOptions = require('./options');
+var mocha = new Mocha();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = global.Date
-  , setTimeout = global.setTimeout
-  , setInterval = global.setInterval
-  , clearTimeout = global.clearTimeout
-  , clearInterval = global.clearInterval;
+var Date = global.Date;
+var setTimeout = global.setTimeout;
+var setInterval = global.setInterval;
+var clearTimeout = global.clearTimeout;
+var clearInterval = global.clearInterval;
 
 /**
  * Files.
@@ -50,23 +52,23 @@ var requires = [];
  */
 
 var images = {
-    fail: __dirname + '/../images/error.png'
-  , pass: __dirname + '/../images/ok.png'
+  fail: path.join(__dirname, '..', 'images', 'error.png'),
+  pass: path.join(__dirname, '..', 'images', 'ok.png')
 };
 
 // options
 
 program
-  .version(JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version)
+  .version(JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')).version)
   .usage('[debug] [options] [files]')
-  .option('-A, --async-only', "force all tests to take a callback (async) or return a promise")
+  .option('-A, --async-only', 'force all tests to take a callback (async) or return a promise')
   .option('-c, --colors', 'force enabling of colors')
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
-  .option('-S, --sort', "sort test files")
-  .option('-b, --bail', "bail after first test failure")
+  .option('-S, --sort', 'sort test files')
+  .option('-b, --bail', 'bail after first test failure')
   .option('-d, --debug', "enable node's debugger, synonym for node --debug")
   .option('-g, --grep <pattern>', 'only run tests matching <pattern>')
   .option('-f, --fgrep <string>', 'only run tests containing <string>')
@@ -103,7 +105,7 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
-  .option('--delay', 'wait for async suite definition')
+  .option('--delay', 'wait for async suite definition');
 
 program._name = 'mocha';
 
@@ -112,7 +114,7 @@ program._name = 'mocha';
 program
   .command('init <path>')
   .description('initialize a client-side mocha setup at <path>')
-  .action(function(path){
+  .action(function(path) {
     var mkdir = require('mkdirp');
     mkdir.sync(path);
     var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
@@ -127,13 +129,13 @@ program
 
 // --globals
 
-program.on('globals', function(val){
+program.on('globals', function(val) {
   globals = globals.concat(list(val));
 });
 
 // --reporters
 
-program.on('reporters', function(){
+program.on('reporters', function() {
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -154,7 +156,7 @@ program.on('reporters', function(){
 
 // --interfaces
 
-program.on('interfaces', function(){
+program.on('interfaces', function() {
   console.log('');
   interfaceNames.forEach(function(interfaceName) {
     console.log('    ' + interfaceName);
@@ -167,9 +169,11 @@ program.on('interfaces', function(){
 
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
-program.on('require', function(mod){
+program.on('require', function(mod) {
   var abs = exists(mod) || exists(mod + '.js');
-  if (abs) mod = resolve(mod);
+  if (abs) {
+    mod = resolve(mod);
+  }
   requires.push(mod);
 });
 
@@ -190,16 +194,16 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 var reporterOptions = {};
 if (program.reporterOptions !== undefined) {
-    program.reporterOptions.split(",").forEach(function(opt) {
-        var L = opt.split("=");
-        if (L.length > 2 || L.length === 0) {
-            throw new Error("invalid reporter option '" + opt + "'");
-        } else if (L.length === 2) {
-            reporterOptions[L[0]] = L[1];
-        } else {
-            reporterOptions[L[0]] = true;
-        }
-    });
+  program.reporterOptions.split(',').forEach(function(opt) {
+    var L = opt.split('=');
+    if (L.length > 2 || L.length === 0) {
+      throw new Error("invalid reporter option '" + opt + "'");
+    } else if (L.length === 2) {
+      reporterOptions[L[0]] = L[1];
+    } else {
+      reporterOptions[L[0]] = true;
+    }
+  });
 }
 
 // reporter
@@ -214,37 +218,46 @@ try {
 } catch (err) {
   try {
     Reporter = require(program.reporter);
-  } catch (err) {
+  } catch (err2) {
     throw new Error('reporter "' + program.reporter + '" does not exist');
   }
 }
 
 // --no-colors
 
-if (!program.colors) mocha.useColors(false);
+if (!program.colors) {
+  mocha.useColors(false);
+}
 
 // --colors
 
-if (~process.argv.indexOf('--colors') ||
-    ~process.argv.indexOf('-c')) {
+if (~process.argv.indexOf('--colors') || ~process.argv.indexOf('-c')) {
   mocha.useColors(true);
 }
 
 // --inline-diffs
 
-if (program.inlineDiffs) mocha.useInlineDiffs(true);
+if (program.inlineDiffs) {
+  mocha.useInlineDiffs(true);
+}
 
 // --slow <ms>
 
-if (program.slow) mocha.suite.slow(program.slow);
+if (program.slow) {
+  mocha.suite.slow(program.slow);
+}
 
 // --no-timeouts
 
-if (!program.timeouts) mocha.enableTimeouts(false);
+if (!program.timeouts) {
+  mocha.enableTimeouts(false);
+}
 
 // --timeout
 
-if (program.timeout) mocha.suite.timeout(program.timeout);
+if (program.timeout) {
+  mocha.suite.timeout(program.timeout);
+}
 
 // --bail
 
@@ -252,35 +265,51 @@ mocha.suite.bail(program.bail);
 
 // --grep
 
-if (program.grep) mocha.grep(program.grep);
+if (program.grep) {
+  mocha.grep(program.grep);
+}
 
 // --fgrep
 
-if (program.fgrep) mocha.fgrep(program.fgrep);
+if (program.fgrep) {
+  mocha.fgrep(program.fgrep);
+}
 
 // --invert
 
-if (program.invert) mocha.invert();
+if (program.invert) {
+  mocha.invert();
+}
 
 // --check-leaks
 
-if (program.checkLeaks) mocha.checkLeaks();
+if (program.checkLeaks) {
+  mocha.checkLeaks();
+}
 
 // --stack-trace
 
-if(program.fullTrace) mocha.fullTrace();
+if (program.fullTrace) {
+  mocha.fullTrace();
+}
 
 // --growl
 
-if (program.growl) mocha.growl();
+if (program.growl) {
+  mocha.growl();
+}
 
 // --async-only
 
-if (program.asyncOnly) mocha.asyncOnly();
+if (program.asyncOnly) {
+  mocha.asyncOnly();
+}
 
 // --delay
 
-if (program.delay) mocha.delay();
+if (program.delay) {
+  mocha.delay();
+}
 
 // --globals
 
@@ -288,17 +317,21 @@ mocha.globals(globals);
 
 // --retries
 
-if (program.retries) mocha.suite.retries(program.retries);
+if (program.retries) {
+  mocha.suite.retries(program.retries);
+}
 
 // custom compiler support
 
 var extensions = ['js'];
 program.compilers.forEach(function(c) {
-  var idx = c.indexOf(':')
-    , ext = c.slice(0, idx)
-    , mod = c.slice(idx + 1);
+  var idx = c.indexOf(':');
+  var ext = c.slice(0, idx);
+  var mod = c.slice(idx + 1);
 
-  if (mod[0] == '.') mod = join(process.cwd(), mod);
+  if (mod[0] === '.') {
+    mod = join(process.cwd(), mod);
+  }
   require(mod);
   extensions.push(ext);
   program.watchExtensions.push(ext);
@@ -314,21 +347,23 @@ requires.forEach(function(mod) {
 
 mocha.ui(program.ui);
 
-//args
+// args
 
 var args = program.args;
 
 // default files to test/*.{js,coffee}
 
-if (!args.length) args.push('test');
+if (!args.length) {
+  args.push('test');
+}
 
-args.forEach(function(arg){
+args.forEach(function(arg) {
   files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
 });
 
 // resolve
 
-files = files.map(function(path){
+files = files.map(function(path) {
   return resolve(path);
 });
 
@@ -339,54 +374,58 @@ if (program.sort) {
 // --watch
 
 var runner;
+var loadAndRun;
+var purge;
+var rerun;
+
 if (program.watch) {
   console.log();
   hideCursor();
-  process.on('SIGINT', function(){
+  process.on('SIGINT', function() {
     showCursor();
     console.log('\n');
     process.exit();
   });
 
-
   var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
   var runAgain = false;
 
-  function loadAndRun() {
+  loadAndRun = function loadAndRun() {
     try {
       mocha.files = files;
       runAgain = false;
-      runner = mocha.run(function(){
+      runner = mocha.run(function() {
         runner = null;
         if (runAgain) {
           rerun();
         }
       });
-    } catch(e) {
+    } catch (e) {
       console.log(e.stack);
     }
-  }
+  };
 
-  function purge() {
-    watchFiles.forEach(function(file){
+  purge = function purge() {
+    watchFiles.forEach(function(file) {
       delete require.cache[file];
     });
-  }
+  };
 
   loadAndRun();
 
-  function rerun() {
+  rerun = function rerun() {
     purge();
-    stop()
-    if (!program.grep)
+    stop();
+    if (!program.grep) {
       mocha.grep(null);
+    }
     mocha.suite = mocha.suite.clone();
-    mocha.suite.ctx = new Mocha.Context;
+    mocha.suite.ctx = new Mocha.Context();
     mocha.ui(program.ui);
     loadAndRun();
-  }
+  };
 
-  utils.watch(watchFiles, function(){
+  utils.watch(watchFiles, function() {
     runAgain = true;
     if (runner) {
       runner.abort();
@@ -394,18 +433,17 @@ if (program.watch) {
       rerun();
     }
   });
-
 } else {
-
 // load
 
   mocha.files = files;
   runner = mocha.run(program.exit ? exit : exitLater);
-
 }
 
 function exitLater(code) {
-  process.on('exit', function() { process.exit(code) })
+  process.on('exit', function() {
+    process.exit(code);
+  });
 }
 
 function exit(code) {
@@ -413,13 +451,15 @@ function exit(code) {
   // https://github.com/joyent/node/issues/6247 is just one bug example
   // https://github.com/visionmedia/mocha/issues/333 has a good discussion
   function done() {
-    if (!(draining--)) process.exit(code);
+    if (!(draining--)) {
+      process.exit(code);
+    }
   }
 
   var draining = 0;
   var streams = [process.stdout, process.stderr];
 
-  streams.forEach(function(stream){
+  streams.forEach(function(stream) {
     // submit empty write request and wait for completion
     draining += 1;
     stream.write('', done);
@@ -428,7 +468,9 @@ function exit(code) {
   done();
 }
 
-process.on('SIGINT', function() { runner.abort(); })
+process.on('SIGINT', function() {
+  runner.abort();
+});
 
 /**
  * Parse list.
@@ -442,7 +484,7 @@ function list(str) {
  * Hide the cursor.
  */
 
-function hideCursor(){
+function hideCursor() {
   process.stdout.write('\u001b[?25l');
 }
 
@@ -450,7 +492,7 @@ function hideCursor(){
  * Show the cursor.
  */
 
-function showCursor(){
+function showCursor() {
   process.stdout.write('\u001b[?25h');
 }
 
@@ -468,11 +510,11 @@ function stop() {
  */
 
 function play(arr, interval) {
-  var len = arr.length
-    , interval = interval || 100
-    , i = 0;
+  var len = arr.length;
+  interval = interval || 100;
+  var i = 0;
 
-  play.timer = setInterval(function(){
+  play.timer = setInterval(function() {
     var str = arr[i++ % len];
     process.stdout.write('\u001b[0G' + str);
   }, interval);

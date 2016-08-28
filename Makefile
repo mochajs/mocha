@@ -25,7 +25,7 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) "lib/**/*.js"
+	$(ESLINT) browser-entry.js index.js karma.conf.js bin/mocha bin/_mocha "lib/**/*.js" "scripts/**/*.js"
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
