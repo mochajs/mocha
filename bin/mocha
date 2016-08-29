@@ -26,6 +26,7 @@ process.argv.slice(2).forEach(function(arg){
     case 'debug':
     case '--debug':
     case '--debug-brk':
+    case '--inspect':
       args.unshift(arg);
       args.push('--no-timeouts');
       break;
