@@ -131,7 +131,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _beforeAll', function(){
-        var fn = function(){};
+        var fn = (function(){return function(){};})();
         this.suite.beforeAll(fn);
 
         this.suite._beforeAll.should.have.length(1);
@@ -166,7 +166,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _afterAll', function(){
-        var fn = function(){};
+        var fn = (function(){return function(){};})();
         this.suite.afterAll(fn);
 
         this.suite._afterAll.should.have.length(1);
@@ -200,7 +200,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _beforeEach', function(){
-        var fn = function(){};
+        var fn = (function(){return function(){};})();
         this.suite.beforeEach(fn);
 
         this.suite._beforeEach.should.have.length(1);
@@ -235,7 +235,7 @@ describe('Suite', function(){
 
     describe('wraps the passed in function in a Hook', function(){
       it('adds it to _afterEach', function(){
-        var fn = function(){};
+        var fn = (function(){return function(){};})();
         this.suite.afterEach(fn);
 
         this.suite._afterEach.should.have.length(1);
