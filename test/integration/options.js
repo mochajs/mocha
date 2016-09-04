@@ -85,11 +85,11 @@ describe('options', function() {
       run('options/delay.js', args, function(err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.passes, 1);
         assert.equal(res.stats.failures, 0);
 
         assert.equal(res.passes[0].title,
-          'should have waited 500ms to run this suite');
+          'should have no effect if attempted twice in the same suite');
         assert.equal(res.code, 0);
         done();
       });
