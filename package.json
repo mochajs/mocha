@@ -290,8 +290,8 @@
     "url": "https://github.com/mochajs/mocha.git"
   },
   "bin": {
-    "mocha": "./bin/mocha.js",
-    "_mocha": "./bin/_mocha.js"
+    "mocha": "./bin/mocha",
+    "_mocha": "./bin/_mocha"
   },
   "engines": {
     "node": ">= 0.10.x",
