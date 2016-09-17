@@ -365,15 +365,16 @@ args.forEach(function(arg) {
     if (err.message.indexOf('cannot resolve path') === 0) {
       console.error('Warning: Could not find any test files matching pattern: ' + arg);
       return;
-    } else {
-      throw err;
     }
+
+    throw err;
   }
 
   files = files.concat(newFiles);
 });
 
-if (files.length === 0) {
+if (!files.length) {
+  console.error('No test files found');
   process.exit(1);
 }
 
