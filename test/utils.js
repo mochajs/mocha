@@ -197,4 +197,54 @@ describe('utils', function() {
       utils.isPromise({}).should.be.false;
     });
   });
+
+  describe('.lookupFiles()', function() {
+    describe('when no test files are found', function() {
+      var originalProcessExit, originalConsoleError, pattern;
+
+      beforeEach(function() {
+        originalConsoleError = console.error;
+        console.error = createStub();
+
+        originalProcessExit = process.exit;
+        process.exit = createStub();
+
+        pattern = '/something/that/does/not/exist/*.js';
+        utils.lookupFiles(pattern, ['js'], false);
+      });
+
+      it('prints an explanatory message to STDERR', function() {
+        console.error.called.should.be.true('the message was printed to STDERR');
+
+        var message = console.error.args[0];
+        message.should.containEql('Test files not found');
+        message.should.containEql(pattern);
+      });
+
+      it('exits with the exit status of 1', function() {
+        process.exit.called.should.be.true('the process exits');
+
+        var exitStatus = process.exit.args[0];
+        exitStatus.should.equal(1);
+      });
+
+      afterEach(function() {
+        console.error = originalConsoleError;
+        process.exit = originalProcessExit;
+      });
+
+      function createStub() {
+        var stub = function() {
+          stub.called = true;
+          stub.args = [].slice.call(arguments);
+        };
+
+        stub.called = false;
+        stub.args = [];
+
+        return stub;
+      }
+
+    });
+  });
 });

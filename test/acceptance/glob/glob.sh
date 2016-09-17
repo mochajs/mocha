@@ -22,7 +22,7 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F 'Test files not found' || {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
     exit 1
 }
@@ -47,7 +47,7 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-cat /tmp/mocha-glob.txt | grep -q -F 'cannot resolve path' || {
+cat /tmp/mocha-glob.txt | grep -q -F 'Test files not found' || {
     echo Globbing './*-none.js' in `pwd` should match no files and run no tests.
     exit 1
 }
