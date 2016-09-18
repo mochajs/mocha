@@ -17,10 +17,12 @@ describe('json reporter', function(){
 
    it('should have 1 test failure', function(done){
      var testTitle = 'json test 1';
-     var error = { message: 'oh shit' };
+     var errorMessage = 'Something bad happened';
+     var error = new Error(errorMessage);
+     error.circular = { reference: error };
 
      suite.addTest(new Test(testTitle, function (done) {
-       done(new Error(error.message));
+       done(error);
      }));
 
      runner.run(function(failureCount) {
@@ -32,7 +34,7 @@ describe('json reporter', function(){
 
        var failure = runner.testResults.failures[0];
        failure.should.have.property('title', testTitle);
-       failure.err.message.should.equal(error.message);
+       failure.err.message.should.equal(errorMessage);
        failure.should.have.properties('err');
 
        done();
