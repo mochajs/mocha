@@ -40,4 +40,21 @@ describe('hooks', function() {
       done();
     });
   });
+
+  describe('afterEach sets tests to fail', function() {
+    var res;
+    before(function(done) {
+      run('hooks/afterEach.hook.failure.js', args, function(err, result) {
+        res = result;
+        done(err);
+      });
+    });
+
+    it('afterEach can set a test to fail', function() {
+      assert.equal(res.pending, 0);
+      assert.equal(res.passing, 1);
+      assert.equal(res.failing, 2);
+      assert.equal(res.code, 2);
+    });
+  });
 });
