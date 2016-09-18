@@ -197,6 +197,21 @@ describe('Base reporter', function () {
     errOut.should.equal('1) test title:\n     an error happened');
   });
 
+  it('should append the cause() property to stack trace when set', function () {
+    var err = {
+      message: 'Error',
+      stack: 'Error\nfoo\nbar',
+      showDiff: false,
+      cause: function() { return { stack: 'Cause Stack' }; }
+    };
+    var test = makeTest(err);
+
+    Base.list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause Stack');
+  });
+
   it('should not modify stack if it does not contain message', function () {
     var err = {
       message: 'Error',
