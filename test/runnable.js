@@ -1,5 +1,6 @@
 var mocha = require('../')
   , utils = mocha.utils
+  , Suite = mocha.Suite
   , Runnable = mocha.Runnable
   , EventEmitter = require('events').EventEmitter;
 
@@ -84,6 +85,24 @@ describe('Runnable(title, fn)', function(){
     it('should be present', function(){
       new Runnable('foo').title.should.equal('foo');
     })
+  })
+
+  describe('.fullTitle', function(){
+    it('includes parent’s full title', function(){
+      var runnable = new Runnable('works as expected');
+      runnable.parent = new Suite('A feature');
+
+      runnable.fullTitle().should.equal('A feature works as expected');
+    })
+
+    describe('when parent’s full title is empty', function() {
+      it('skips it and the connecting space', function() {
+        var runnable = new Runnable('works as expected');
+        runnable.parent = new Suite('');
+
+        runnable.fullTitle().should.equal('works as expected');
+      });
+    });
   })
 
   describe('when arity >= 1', function(){
