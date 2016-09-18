@@ -358,8 +358,25 @@ if (!args.length) {
 }
 
 args.forEach(function(arg) {
-  files = files.concat(utils.lookupFiles(arg, extensions, program.recursive));
+  var newFiles;
+  try {
+    newFiles = utils.lookupFiles(arg, extensions, program.recursive);
+  } catch (err) {
+    if (err.message.indexOf('cannot resolve path') === 0) {
+      console.error('Warning: Could not find any test files matching pattern: ' + arg);
+      return;
+    }
+
+    throw err;
+  }
+
+  files = files.concat(newFiles);
 });
+
+if (!files.length) {
+  console.error('No test files found');
+  process.exit(1);
+}
 
 // resolve
 
