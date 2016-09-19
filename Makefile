@@ -21,7 +21,7 @@ mocha.js: $(SRC) browser-entry.js
 
 clean:
 	@printf "==> [Clean]\n"
-	rm -f mocha.js
+	git checkout -f -- mocha.js
 
 lint:
 	@printf "==> [Test :: Lint]\n"
@@ -29,7 +29,7 @@ lint:
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
-test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
+test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports clean
 
 test: lint test-node test-browser
 
