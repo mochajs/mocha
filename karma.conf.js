@@ -14,8 +14,10 @@ module.exports = function(config) {
       'mocha'
     ],
     files: [
-      'test/browser-fixtures/bdd.js',
-      'test/acceptance/*.js'
+      // we use the BDD interface for all of the tests that
+      // aren't interface-specific.
+      'test/browser-fixtures/bdd.fixture.js',
+      'test/acceptance/*.spec.js'
     ],
     exclude: [
       'test/acceptance/http.spec.js',
@@ -108,7 +110,7 @@ module.exports = function(config) {
       cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
     }
     cfg.files = [
-      'test/browser-fixtures/' + ui + '.js',
+      'test/browser-fixtures/' + ui + '.fixture.js',
       'test/acceptance/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
