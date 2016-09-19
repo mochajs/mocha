@@ -7,7 +7,7 @@ describe('hook error handling', function() {
   var lines;
 
   describe('before hook error', function() {
-    before(run('hooks/before.hook.error.js'));
+    before(run('hooks/before-hook-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -17,7 +17,7 @@ describe('hook error handling', function() {
   });
 
   describe('before hook error tip', function() {
-    before(run('hooks/before.hook.error.tip.js', onlyErrorTitle));
+    before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -27,7 +27,7 @@ describe('hook error handling', function() {
   });
 
   describe('before each hook error', function() {
-    before(run('hooks/beforeEach.hook.error.js'));
+    before(run('hooks/beforeEach-hook-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -37,7 +37,7 @@ describe('hook error handling', function() {
   });
 
   describe('after hook error', function() {
-    before(run('hooks/after.hook.error.js'));
+    before(run('hooks/after-hook-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -47,7 +47,7 @@ describe('hook error handling', function() {
   });
 
   describe('after each hook error', function() {
-    before(run('hooks/afterEach.hook.error.js'));
+    before(run('hooks/afterEach-hook-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -57,7 +57,7 @@ describe('hook error handling', function() {
   });
 
   describe('multiple hook errors', function() {
-    before(run('hooks/multiple.hook.error.js'));
+    before(run('hooks/multiple-hook-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -95,7 +95,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - before hook error', function() {
-    before(run('hooks/before.hook.async.error.js'));
+    before(run('hooks/before-hook-async-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -105,7 +105,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - before hook error tip', function() {
-    before(run('hooks/before.hook.async.error.tip.js', onlyErrorTitle));
+    before(run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -115,7 +115,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - before each hook error', function() {
-    before(run('hooks/beforeEach.hook.async.error.js'));
+    before(run('hooks/beforeEach-hook-async-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -125,7 +125,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - after hook error', function() {
-    before(run('hooks/after.hook.async.error.js'));
+    before(run('hooks/after-hook-async-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -135,7 +135,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - after each hook error', function() {
-    before(run('hooks/afterEach.hook.async.error.js'));
+    before(run('hooks/afterEach-hook-async-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,
@@ -145,7 +145,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - multiple hook errors', function() {
-    before(run('hooks/multiple.hook.async.error.js'));
+    before(run('hooks/multiple-hook-async-error.fixture.js'));
     it('should verify results', function() {
       assert.deepEqual(
         lines,

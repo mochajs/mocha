@@ -17,7 +17,7 @@ describe('diffs', function() {
   var diffs, expected;
 
   before(function(done) {
-    run('diffs/diffs.js', ['-C'], function(err, res) {
+    run('diffs/diffs.fixture.js', ['-C'], function(err, res) {
       expected = getExpectedOutput();
       diffs = getDiffs(res.output);
       done(err);

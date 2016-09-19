@@ -5,7 +5,7 @@ var args   = [];
 describe('pending', function() {
   describe('pending specs', function() {
     it('should be created by omitting a function', function(done) {
-      run('pending/spec.js', args, function(err, res) {
+      run('pending/spec.fixture.js', args, function(err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 1);
         assert.equal(res.stats.passes, 0);
@@ -19,7 +19,7 @@ describe('pending', function() {
   describe('synchronous skip()', function() {
     describe('in spec', function() {
       it('should immediately skip the spec and run all others', function(done) {
-        run('pending/skip.sync.spec.js', args, function(err, res) {
+        run('pending/skip-sync-spec.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 1);
           assert.equal(res.stats.passes, 1);
@@ -32,7 +32,7 @@ describe('pending', function() {
 
     describe('in before', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip.sync.before.js', args, function(err, res) {
+        run('pending/skip-sync-before.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 2);
           assert.equal(res.stats.passes, 0);
@@ -45,7 +45,7 @@ describe('pending', function() {
 
     describe('in beforeEach', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip.sync.beforeEach.js', args, function(err, res) {
+        run('pending/skip-sync-beforeEach.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 2);
           assert.equal(res.stats.passes, 0);
@@ -60,7 +60,7 @@ describe('pending', function() {
   describe('asynchronous skip()', function() {
     describe('in spec', function() {
       it('should immediately skip the spec and run all others', function(done) {
-        run('pending/skip.async.spec.js', args, function(err, res) {
+        run('pending/skip-async-spec.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 1);
           assert.equal(res.stats.passes, 1);
@@ -73,7 +73,7 @@ describe('pending', function() {
 
     describe('in before', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip.async.before.js', args, function(err, res) {
+        run('pending/skip-async-before.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 2);
           assert.equal(res.stats.passes, 0);
@@ -86,7 +86,7 @@ describe('pending', function() {
 
     describe('in beforeEach', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip.sync.beforeEach.js', args, function(err, res) {
+        run('pending/skip-sync-beforeEach.fixture.js', args, function(err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 2);
           assert.equal(res.stats.passes, 0);
