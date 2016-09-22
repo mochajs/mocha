@@ -1,4 +1,4 @@
-﻿var assert  = require('assert');
+var assert  = require('assert');
 var fs      = require('fs');
 var path    = require('path');
 var run     = require('./helpers').runMocha;
@@ -59,6 +59,17 @@ describe('regressions', function() {
     })
     after('meta test', function () {
       afterWasRun.should.be.ok();
+    });
+  });
+
+  it('issue-2315: cannot read property currentRetry of undefined', function (done) {
+    runJSON('regression/issue-2315.js', [], function(err, res) {
+      assert(!err);
+      assert.equal(res.stats.pending, 0);
+      assert.equal(res.stats.passes, 0);
+      assert.equal(res.stats.failures, 1);
+      assert.equal(res.code, 1);
+      done();
     });
   });
 
