@@ -13,3 +13,5 @@ lib/browser/diff.js
 npm-debug.log*
 .envrc
 .karma/
+*.orig
+

@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: off */
+
 /**
  * Shim process.stdout.
  */
@@ -33,15 +35,17 @@ var originalOnerrorHandler = global.onerror;
  * Revert to original onerror handler if previously defined.
  */
 
-process.removeListener = function(e, fn){
-  if ('uncaughtException' == e) {
+process.removeListener = function(e, fn) {
+  if (e === 'uncaughtException') {
     if (originalOnerrorHandler) {
       global.onerror = originalOnerrorHandler;
     } else {
       global.onerror = function() {};
     }
     var i = Mocha.utils.indexOf(uncaughtExceptionHandlers, fn);
-    if (i != -1) { uncaughtExceptionHandlers.splice(i, 1); }
+    if (i !== -1) {
+      uncaughtExceptionHandlers.splice(i, 1);
+    }
   }
 };
 
@@ -49,9 +53,9 @@ process.removeListener = function(e, fn){
  * Implements uncaughtException listener.
  */
 
-process.on = function(e, fn){
-  if ('uncaughtException' == e) {
-    global.onerror = function(err, url, line){
+process.on = function(e, fn) {
+  if (e === 'uncaughtException') {
+    global.onerror = function(err, url, line) {
       fn(new Error(err + ' (' + url + ':' + line + ')'));
       return !mocha.allowUncaught;
     };
@@ -64,8 +68,8 @@ process.on = function(e, fn){
 // Ensure that this default UI does not expose its methods to the global scope.
 mocha.suite.removeAllListeners('pre-require');
 
-var immediateQueue = []
-  , immediateTimeout;
+var immediateQueue = [];
+var immediateTimeout;
 
 function timeslice() {
   var immediateStart = new Date().getTime();
@@ -96,7 +100,7 @@ Mocha.Runner.immediately = function(callback) {
  * only receive the 'message' attribute of the Error.
  */
 mocha.throwError = function(err) {
-  Mocha.utils.forEach(uncaughtExceptionHandlers, function (fn) {
+  Mocha.utils.forEach(uncaughtExceptionHandlers, function(fn) {
     fn(err);
   });
   throw err;
@@ -107,7 +111,7 @@ mocha.throwError = function(err) {
  * Normally this would happen in Mocha.prototype.loadFiles.
  */
 
-mocha.ui = function(ui){
+mocha.ui = function(ui) {
   Mocha.prototype.ui.call(this, ui);
   this.suite.emit('pre-require', global, null, this);
   return this;
@@ -117,9 +121,15 @@ mocha.ui = function(ui){
  * Setup mocha with the given setting options.
  */
 
-mocha.setup = function(opts){
-  if ('string' == typeof opts) opts = { ui: opts };
-  for (var opt in opts) this[opt](opts[opt]);
+mocha.setup = function(opts) {
+  if (typeof opts === 'string') {
+    opts = { ui: opts };
+  }
+  for (var opt in opts) {
+    if (opts.hasOwnProperty(opt)) {
+      this[opt](opts[opt]);
+    }
+  }
   return this;
 };
 
@@ -127,22 +137,30 @@ mocha.setup = function(opts){
  * Run mocha, returning the Runner.
  */
 
-mocha.run = function(fn){
+mocha.run = function(fn) {
   var options = mocha.options;
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
-  if (query.grep) mocha.grep(query.grep);
-  if (query.fgrep) mocha.fgrep(query.fgrep);
-  if (query.invert) mocha.invert();
+  if (query.grep) {
+    mocha.grep(query.grep);
+  }
+  if (query.fgrep) {
+    mocha.fgrep(query.fgrep);
+  }
+  if (query.invert) {
+    mocha.invert();
+  }
 
-  return Mocha.prototype.run.call(mocha, function(err){
+  return Mocha.prototype.run.call(mocha, function(err) {
     // The DOM Document is not available in Web Workers.
     var document = global.document;
     if (document && document.getElementById('mocha') && options.noHighlighting !== true) {
       Mocha.utils.highlightTags('code');
     }
-    if (fn) fn(err);
+    if (fn) {
+      fn(err);
+    }
   });
 };
 

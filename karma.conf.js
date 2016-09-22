@@ -14,13 +14,15 @@ module.exports = function(config) {
       'mocha'
     ],
     files: [
-      'test/browser-fixtures/bdd.js',
-      'test/acceptance/*.js'
+      // we use the BDD interface for all of the tests that
+      // aren't interface-specific.
+      'test/browser-fixtures/bdd.fixture.js',
+      'test/acceptance/*.spec.js'
     ],
     exclude: [
-      'test/acceptance/http.js',
-      'test/acceptance/fs.js',
-      'test/acceptance/lookup-files.js',
+      'test/acceptance/http.spec.js',
+      'test/acceptance/fs.spec.js',
+      'test/acceptance/lookup-files.spec.js',
       'test/acceptance/require/**/*.js',
       'test/acceptance/misc/**/*.js'
     ],
@@ -108,8 +110,8 @@ module.exports = function(config) {
       cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
     }
     cfg.files = [
-      'test/browser-fixtures/' + ui + '.js',
-      'test/acceptance/interfaces/' + ui + '.js'
+      'test/browser-fixtures/' + ui + '.fixture.js',
+      'test/acceptance/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';

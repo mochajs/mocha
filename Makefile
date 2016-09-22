@@ -25,7 +25,7 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) "lib/**/*.js"
+	$(ESLINT) browser-entry.js index.js karma.conf.js bin/mocha bin/_mocha "lib/**/*.js" "scripts/**/*.js" test
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
@@ -82,31 +82,31 @@ test-requires:
 		--require test/acceptance/require/b.coffee \
 		--require test/acceptance/require/c.js \
 		--require test/acceptance/require/d.coffee \
-		test/acceptance/require/require.js
+		test/acceptance/require/require.spec.js
 
 test-bdd:
 	@printf "==> [Test :: BDD]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui bdd \
-		test/acceptance/interfaces/bdd
+		test/acceptance/interfaces/bdd.spec
 
 test-tdd:
 	@printf "==> [Test :: TDD]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui tdd \
-		test/acceptance/interfaces/tdd
+		test/acceptance/interfaces/tdd.spec
 
 test-qunit:
 	@printf "==> [Test :: QUnit]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui qunit \
-		test/acceptance/interfaces/qunit
+		test/acceptance/interfaces/qunit.spec
 
 test-exports:
 	@printf "==> [Test :: Exports]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui exports \
-		test/acceptance/interfaces/exports
+		test/acceptance/interfaces/exports.spec
 
 test-glob:
 	@printf "==> [Test :: Glob]\n"
@@ -121,29 +121,29 @@ test-only:
 	@printf "==> [Test :: Only]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui tdd \
-		test/acceptance/misc/only/tdd
+		test/acceptance/misc/only/tdd.spec
 
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui bdd \
-		test/acceptance/misc/only/bdd
+		test/acceptance/misc/only/bdd.spec
 
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui qunit \
-		test/acceptance/misc/only/bdd-require
+		test/acceptance/misc/only/bdd-require.spec
 
 test-global-only:
 	@printf "==> [Test :: Global Only]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui tdd \
-		test/acceptance/misc/only/global/tdd
+		test/acceptance/misc/only/global/tdd.spec
 
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui bdd \
-		test/acceptance/misc/only/global/bdd
+		test/acceptance/misc/only/global/bdd.spec
 
 	$(MOCHA) --reporter $(REPORTER) \
 		--ui qunit \
-		test/acceptance/misc/only/global/qunit
+		test/acceptance/misc/only/global/qunit.spec
 
 test-mocha:
 	@printf "==> [Test :: Mocha]\n"
@@ -153,19 +153,19 @@ test-mocha:
 non-tty:
 	@printf "==> [Test :: Non-TTY]\n"
 	$(MOCHA) --reporter dot \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/dot.out
+		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
 	$(MOCHA) --reporter list \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/list.out
+		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
 	$(MOCHA) --reporter spec \
-		test/acceptance/interfaces/bdd 2>&1 > /tmp/spec.out
+		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/spec.out
 
 	@echo spec:
 	@cat /tmp/spec.out

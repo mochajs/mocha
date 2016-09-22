@@ -136,7 +136,7 @@ describe('Suite', function(){
 
         this.suite._beforeAll.should.have.length(1);
         var beforeAllItem = this.suite._beforeAll[0];
-        beforeAllItem.title.should.equal('"before all" hook');
+        beforeAllItem.title.should.match(/^"before all" hook/);
         beforeAllItem.fn.should.equal(fn);
       });
 
@@ -171,7 +171,7 @@ describe('Suite', function(){
 
         this.suite._afterAll.should.have.length(1);
         var afterAllItem = this.suite._afterAll[0];
-        afterAllItem.title.should.equal('"after all" hook');
+        afterAllItem.title.should.match(/^"after all" hook/);
         afterAllItem.fn.should.equal(fn);
       });
       it('appends title to hook', function(){
@@ -205,7 +205,7 @@ describe('Suite', function(){
 
         this.suite._beforeEach.should.have.length(1);
         var beforeEachItem = this.suite._beforeEach[0];
-        beforeEachItem.title.should.equal('"before each" hook');
+        beforeEachItem.title.should.match(/^"before each" hook/);
         beforeEachItem.fn.should.equal(fn);
       });
 
@@ -240,7 +240,7 @@ describe('Suite', function(){
 
         this.suite._afterEach.should.have.length(1);
         var afterEachItem = this.suite._afterEach[0];
-        afterEachItem.title.should.equal('"after each" hook');
+        afterEachItem.title.should.match(/^"after each" hook/);
         afterEachItem.fn.should.equal(fn);
       });
 
