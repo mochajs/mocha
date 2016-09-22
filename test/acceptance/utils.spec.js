@@ -77,6 +77,10 @@ describe('lib/utils', function () {
 
     var stringify = utils.stringify;
 
+    it('should return an object representation of a string created with a String constructor', function() {
+      expect(stringify(new String('foo'))).to.equal('{\n  "0": "f"\n  "1": "o"\n  "2": "o"\n}');
+    });
+
     it('should return Buffer with .toJSON representation', function() {
       expect(stringify(new Buffer([0x01]))).to.equal('[\n  1\n]');
       expect(stringify(new Buffer([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
