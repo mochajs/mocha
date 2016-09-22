@@ -15,6 +15,6 @@ set1.run(function () {
   assert.strictEqual(global[includeFile], 1, 'JSAPI test #1 didn\'t run');
 
   set2.run(function () {
-    assert.strictEqual(global[includeFile], 2, 'JSAPI test #2 didn\'t run');
+    assert.strictEqual(global[includeFile], 1, 'JSAPI test has probably been executed');
   });
 });

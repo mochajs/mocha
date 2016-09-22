@@ -52,7 +52,8 @@ test-browser-tdd:
 test-jsapi:
 	@printf "==> [Test :: JS API]\n"
 	node test/jsapi/index.js
-	node test/jsapi/cache/index.js
+	node test/jsapi/cache/index.simple.js
+	node test/jsapi/cache/index.drop-require-cache.js
 
 test-unit:
 	@printf "==> [Test :: Unit]\n"
