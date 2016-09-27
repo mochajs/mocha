@@ -3,6 +3,7 @@ var Suite = mocha.Suite;
 var Runner = mocha.Runner;
 var Test = mocha.Test;
 var Hook = mocha.Hook;
+var path = require('path');
 
 function noop() {}
 
@@ -373,6 +374,12 @@ describe('Runner', function() {
     ];
 
     describe('shortStackTrace', function() {
+      beforeEach(function() {
+        if (path.sep !== '/') {
+          this.skip();
+        }
+      });
+
       it('should prettify the stack-trace', function(done) {
         var hook = new Hook();
         var err = new Error();
@@ -388,6 +395,12 @@ describe('Runner', function() {
     });
 
     describe('longStackTrace', function() {
+      beforeEach(function() {
+        if (path.sep !== '/') {
+          this.skip();
+        }
+      });
+
       it('should display the full stack-trace', function(done) {
         var hook = new Hook();
         var err = new Error();
