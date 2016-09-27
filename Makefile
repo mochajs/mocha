@@ -35,7 +35,7 @@ test: lint test-node test-browser
 
 test-browser-unit:
 	@printf "==> [Test :: Browser]\n"
-	NODE_PATH=. $(KARMA) start
+	NODE_PATH=. $(KARMA) start --single-run
 
 test-browser-bdd:
 	@printf "==> [Test :: Browser :: BDD]\n"
