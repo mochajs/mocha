@@ -1,3 +1,35 @@
+# 3.1.0 / 2016-09-27
+
+## :tada: Enhancement
+
+- [#2357]: Support `--inspect` on command-line ([@simov])
+- [#2194]: Human-friendly error if no files are matched on command-line ([@Munter])
+- [#1744]: Human-friendly error if a Suite has no callback (BDD/TDD only) ([@anton])
+
+## :bug: Bug Fix
+
+- [#2488]: Fix case in which *variables beginning with lowercase "D"* may not have been reported properly as global leaks ([@JustATrick]) :laughing:
+- [#2465]: Always halt execution in async function when `this.skip()` is called ([@boneskull])
+- [#2445]: Exits with expected code 130 when `SIGINT` encountered; exit code can no longer rollover at 256 ([@Munter])
+- [#2315]: Fix uncaught TypeError thrown from callback stack ([@1999])
+- Fix broken `only()`/`skip()` in IE7/IE8 ([@boneskull])
+- [#2502]: Fix broken stack trace filter on Node.js under Windows ([@boneskull]) 
+- [#2496]: Fix diff output for objects instantiated with `String` constructor ([more](https://youtrack.jetbrains.com/issue/WEB-23383)) ([@boneskull])
+
+[#2496]: https://github.com/mochajs/mocha/issues/2496
+[#2502]: https://github.com/mochajs/mocha/issues/2502
+[#2315]: https://github.com/mochajs/mocha/issues/2315
+[#2445]: https://github.com/mochajs/mocha/pull/2445
+[#2465]: https://github.com/mochajs/mocha/issues/2465
+[#2488]: https://github.com/mochajs/mocha/issues/2488
+[#1744]: https://github.com/mochajs/mocha/issues/1744
+[#2194]: https://github.com/mochajs/mocha/issues/2194
+[#2357]: https://github.com/mochajs/mocha/issues/2357
+[@1999]: https://github.com/1999
+[@JustATrick]: https://github.com/JustATrick
+[@anton]: https://github.com/anton
+[@simov]: https://github.com/simov
+
 # 3.0.2 / 2016-08-08
 
 ## :bug: Bug Fix
