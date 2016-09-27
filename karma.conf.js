@@ -49,7 +49,11 @@ module.exports = function(config) {
     colors: true,
     browsers: ['PhantomJS'],
     logLevel: config.LOG_INFO,
-    singleRun: true
+    client: {
+      mocha: {
+        reporter: 'html'
+      }
+    }
   };
 
   // see https://github.com/saucelabs/karma-sauce-example
