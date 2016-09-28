@@ -321,8 +321,6 @@ beforeEach(function() {
 });
 ```
 
-> This is typically done in Node by placing your hook(s) in a `.js` module, and using the `--require /path/to/module` option on the command-line.
-
 ### Delayed Root Suite
 
 If you need to perform asynchronous operations before any of your suites are run, you may delay the root suite.  Run `mocha` with the `--delay` flag.  This will attach a special callback function, `run()`, to the global context:
