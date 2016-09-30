@@ -114,7 +114,7 @@ program._name = 'mocha';
 program
   .command('init <path>')
   .description('initialize a client-side mocha setup at <path>')
-  .action(function(path) {
+  .action(function (path) {
     var mkdir = require('mkdirp');
     mkdir.sync(path);
     var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
@@ -129,13 +129,13 @@ program
 
 // --globals
 
-program.on('globals', function(val) {
+program.on('globals', function (val) {
   globals = globals.concat(list(val));
 });
 
 // --reporters
 
-program.on('reporters', function() {
+program.on('reporters', function () {
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -156,9 +156,9 @@ program.on('reporters', function() {
 
 // --interfaces
 
-program.on('interfaces', function() {
+program.on('interfaces', function () {
   console.log('');
-  interfaceNames.forEach(function(interfaceName) {
+  interfaceNames.forEach(function (interfaceName) {
     console.log('    ' + interfaceName);
   });
   console.log('');
@@ -169,7 +169,7 @@ program.on('interfaces', function() {
 
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
-program.on('require', function(mod) {
+program.on('require', function (mod) {
   var abs = exists(mod) || exists(mod + '.js');
   if (abs) {
     mod = resolve(mod);
@@ -194,7 +194,7 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 var reporterOptions = {};
 if (program.reporterOptions !== undefined) {
-  program.reporterOptions.split(',').forEach(function(opt) {
+  program.reporterOptions.split(',').forEach(function (opt) {
     var L = opt.split('=');
     if (L.length > 2 || L.length === 0) {
       throw new Error("invalid reporter option '" + opt + "'");
@@ -324,7 +324,7 @@ if (program.retries) {
 // custom compiler support
 
 var extensions = ['js'];
-program.compilers.forEach(function(c) {
+program.compilers.forEach(function (c) {
   var idx = c.indexOf(':');
   var ext = c.slice(0, idx);
   var mod = c.slice(idx + 1);
@@ -339,7 +339,7 @@ program.compilers.forEach(function(c) {
 
 // requires
 
-requires.forEach(function(mod) {
+requires.forEach(function (mod) {
   require(mod);
 });
 
@@ -357,7 +357,7 @@ if (!args.length) {
   args.push('test');
 }
 
-args.forEach(function(arg) {
+args.forEach(function (arg) {
   var newFiles;
   try {
     newFiles = utils.lookupFiles(arg, extensions, program.recursive);
@@ -380,7 +380,7 @@ if (!files.length) {
 
 // resolve
 
-files = files.map(function(path) {
+files = files.map(function (path) {
   return resolve(path);
 });
 
@@ -398,7 +398,7 @@ var rerun;
 if (program.watch) {
   console.log();
   hideCursor();
-  process.on('SIGINT', function() {
+  process.on('SIGINT', function () {
     showCursor();
     console.log('\n');
     process.exit(130);
@@ -407,11 +407,11 @@ if (program.watch) {
   var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
   var runAgain = false;
 
-  loadAndRun = function loadAndRun() {
+  loadAndRun = function loadAndRun () {
     try {
       mocha.files = files;
       runAgain = false;
-      runner = mocha.run(function() {
+      runner = mocha.run(function () {
         runner = null;
         if (runAgain) {
           rerun();
@@ -422,15 +422,15 @@ if (program.watch) {
     }
   };
 
-  purge = function purge() {
-    watchFiles.forEach(function(file) {
+  purge = function purge () {
+    watchFiles.forEach(function (file) {
       delete require.cache[file];
     });
   };
 
   loadAndRun();
 
-  rerun = function rerun() {
+  rerun = function rerun () {
     purge();
     stop();
     if (!program.grep) {
@@ -442,7 +442,7 @@ if (program.watch) {
     loadAndRun();
   };
 
-  utils.watch(watchFiles, function() {
+  utils.watch(watchFiles, function () {
     runAgain = true;
     if (runner) {
       runner.abort();
@@ -457,17 +457,17 @@ if (program.watch) {
   runner = mocha.run(program.exit ? exit : exitLater);
 }
 
-function exitLater(code) {
-  process.on('exit', function() {
+function exitLater (code) {
+  process.on('exit', function () {
     process.exit(Math.min(code, 255));
   });
 }
 
-function exit(code) {
+function exit (code) {
   // flush output for Node.js Windows pipe bug
   // https://github.com/joyent/node/issues/6247 is just one bug example
   // https://github.com/visionmedia/mocha/issues/333 has a good discussion
-  function done() {
+  function done () {
     if (!(draining--)) {
       process.exit(Math.min(code, 255));
     }
@@ -476,7 +476,7 @@ function exit(code) {
   var draining = 0;
   var streams = [process.stdout, process.stderr];
 
-  streams.forEach(function(stream) {
+  streams.forEach(function (stream) {
     // submit empty write request and wait for completion
     draining += 1;
     stream.write('', done);
@@ -485,7 +485,7 @@ function exit(code) {
   done();
 }
 
-process.on('SIGINT', function() {
+process.on('SIGINT', function () {
   runner.abort();
 
   // This is a hack:
@@ -498,7 +498,7 @@ process.on('SIGINT', function() {
  * Parse list.
  */
 
-function list(str) {
+function list (str) {
   return str.split(/ *, */);
 }
 
@@ -506,7 +506,7 @@ function list(str) {
  * Hide the cursor.
  */
 
-function hideCursor() {
+function hideCursor () {
   process.stdout.write('\u001b[?25l');
 }
 
@@ -514,7 +514,7 @@ function hideCursor() {
  * Show the cursor.
  */
 
-function showCursor() {
+function showCursor () {
   process.stdout.write('\u001b[?25h');
 }
 
@@ -522,7 +522,7 @@ function showCursor() {
  * Stop play()ing.
  */
 
-function stop() {
+function stop () {
   process.stdout.write('\u001b[2K');
   clearInterval(play.timer);
 }
@@ -531,12 +531,12 @@ function stop() {
  * Play the given array of strings.
  */
 
-function play(arr, interval) {
+function play (arr, interval) {
   var len = arr.length;
   interval = interval || 100;
   var i = 0;
 
-  play.timer = setInterval(function() {
+  play.timer = setInterval(function () {
     var str = arr[i++ % len];
     process.stdout.write('\u001b[0G' + str);
   }, interval);
