@@ -5,7 +5,7 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
 
-module.exports = function(config) {
+module.exports = function (config) {
   var bundleDirpath;
   var cfg = {
     frameworks: [
@@ -31,12 +31,12 @@ module.exports = function(config) {
     },
     browserify: {
       debug: true,
-      configure: function configure(b) {
+      configure: function configure (b) {
         b.ignore('glob')
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
-          .on('bundled', function(err, content) {
+          .on('bundled', function (err, content) {
             if (!err && bundleDirpath) {
               // write bundle to directory for debugging
               fs.writeFileSync(path.join(bundleDirpath,
@@ -70,8 +70,8 @@ module.exports = function(config) {
       if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
         // correlate build/tunnel with Travis
         sauceConfig = {
-          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER
-          + ' (' + env.TRAVIS_BUILD_ID + ')',
+          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
+          ' (' + env.TRAVIS_BUILD_ID + ')',
           tunnelIdentifier: env.TRAVIS_JOB_NUMBER
         };
         console.error('Configured SauceLabs');
@@ -124,7 +124,7 @@ module.exports = function(config) {
   config.set(cfg);
 };
 
-function addSauceTests(cfg) {
+function addSauceTests (cfg) {
   cfg.reporters.push('saucelabs');
 
   cfg.customLaunchers = {

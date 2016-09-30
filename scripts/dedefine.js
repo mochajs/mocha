@@ -8,16 +8,16 @@
 var through = require('through2');
 var defineRx = /typeof define === ['"]function['"] && define\.amd/g;
 
-function createStream() {
-  return through.obj(function(chunk, enc, next) {
+function createStream () {
+  return through.obj(function (chunk, enc, next) {
     this.push(String(chunk)
       .replace(defineRx, 'false'));
     next();
   });
 }
 
-module.exports = function(b) {
-  function wrap() {
+module.exports = function (b) {
+  function wrap () {
     b.pipeline.get('wrap').push(createStream());
   }
 
