@@ -1,4 +1,7 @@
+'use strict';
+
 /* eslint no-unused-vars: off */
+/* eslint-env commonjs */
 
 /**
  * Shim process.stdout.

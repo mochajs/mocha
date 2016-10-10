@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Dependencies.
  */
@@ -14,17 +16,17 @@ module.exports = getOptions;
  * Get options.
  */
 
-function getOptions() {
-  var optsPath = process.argv.indexOf('--opts') !== -1
-        ? process.argv[process.argv.indexOf('--opts') + 1]
-        : 'test/mocha.opts';
+function getOptions () {
+  var optsPath = process.argv.indexOf('--opts') === -1
+    ? 'test/mocha.opts'
+    : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
-      .map(function(value) {
+      .map(function (value) {
         return value.replace(/%20/g, ' ');
       });
 

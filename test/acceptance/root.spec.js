@@ -1,11 +1,13 @@
+'use strict';
+
 var calls = [];
 
-before(function(){
+before(function () {
   calls.push('before');
-})
+});
 
-describe('root', function(){
-  it('should be a valid suite', function(){
+describe('root', function () {
+  it('should be a valid suite', function () {
     expect(calls).to.eql(['before']);
-  })
-})
+  });
+});

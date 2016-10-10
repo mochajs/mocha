@@ -1,1 +1,3 @@
-it('throws an error', function() {});
+'use strict';
+
+it('throws an error', function () {});

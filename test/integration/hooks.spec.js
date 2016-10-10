@@ -1,18 +1,20 @@
-var assert = require('assert');
-var run    = require('./helpers').runMocha;
-var splitRegExp = require('./helpers').splitRegExp;
-var args   = [];
+'use strict';
 
-describe('hooks', function() {
-  it('are ran in correct order', function(done) {
-    run('cascade.fixture.js', args, function(err, res) {
+var assert = require('assert');
+var run = require('./helpers').runMocha;
+var splitRegExp = require('./helpers').splitRegExp;
+var args = [];
+
+describe('hooks', function () {
+  it('are ran in correct order', function (done) {
+    run('cascade.fixture.js', args, function (err, res) {
       var lines, expected;
 
       assert(!err);
 
-      lines = res.output.split(splitRegExp).map(function(line) {
+      lines = res.output.split(splitRegExp).map(function (line) {
         return line.trim();
-      }).filter(function(line) {
+      }).filter(function (line) {
         return line.length;
       }).slice(0, -1);
 
@@ -32,7 +34,7 @@ describe('hooks', function() {
         'after one'
       ];
 
-      expected.forEach(function(line, i) {
+      expected.forEach(function (line, i) {
         assert.equal(lines[i], line);
       });
 

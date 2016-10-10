@@ -1,10 +1,12 @@
-var assert = require('assert');
-var run    = require('./helpers').runMochaJSON;
-var args   = [];
+'use strict';
 
-describe('uncaught exceptions', function() {
-  it('handles uncaught exceptions from hooks', function(done) {
-    run('uncaught-hook.fixture.js', args, function(err, res) {
+var assert = require('assert');
+var run = require('./helpers').runMochaJSON;
+var args = [];
+
+describe('uncaught exceptions', function () {
+  it('handles uncaught exceptions from hooks', function (done) {
+    run('uncaught-hook.fixture.js', args, function (err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
@@ -17,8 +19,8 @@ describe('uncaught exceptions', function() {
     });
   });
 
-  it('handles uncaught exceptions from async specs', function(done) {
-    run('uncaught.fixture.js', args, function(err, res) {
+  it('handles uncaught exceptions from async specs', function (done) {
+    run('uncaught.fixture.js', args, function (err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);

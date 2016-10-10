@@ -1,4 +1,6 @@
-describe('retries', function() {
+'use strict';
+
+describe('retries', function () {
   var times = 0;
   before(function () {
     console.log('before');
@@ -8,7 +10,7 @@ describe('retries', function() {
     console.log('after');
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     console.log('before each', times);
   });
 

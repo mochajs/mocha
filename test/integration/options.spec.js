@@ -1,16 +1,17 @@
+'use strict';
+
 var assert = require('assert');
-var run    = require('./helpers').runMochaJSON;
-var args   = [];
+var run = require('./helpers').runMochaJSON;
+var args = [];
 
-describe('options', function() {
-  describe('--async-only', function() {
-
-    before(function() {
+describe('options', function () {
+  describe('--async-only', function () {
+    before(function () {
       args = ['--async-only'];
     });
 
-    it('should fail synchronous specs', function(done) {
-      run('options/async-only-sync.fixture.js', args, function(err, res) {
+    it('should fail synchronous specs', function (done) {
+      run('options/async-only-sync.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 0);
@@ -22,8 +23,8 @@ describe('options', function() {
       });
     });
 
-    it('should allow asynchronous specs', function(done) {
-      run('options/async-only-async.fixture.js', args, function(err, res) {
+    it('should allow asynchronous specs', function (done) {
+      run('options/async-only-async.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 1);
@@ -36,13 +37,13 @@ describe('options', function() {
     });
   });
 
-  describe('--bail', function() {
-    before(function() {
+  describe('--bail', function () {
+    before(function () {
       args = ['--bail'];
     });
 
-    it('should stop after the first error', function(done) {
-      run('options/bail.fixture.js', args, function(err, res) {
+    it('should stop after the first error', function (done) {
+      run('options/bail.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 1);
@@ -56,13 +57,13 @@ describe('options', function() {
     });
   });
 
-  describe('--sort', function() {
-    before(function() {
+  describe('--sort', function () {
+    before(function () {
       args = ['--sort'];
     });
 
-    it('should sort tests in alphabetical order', function(done) {
-      run('options/sort*', args, function(err, res) {
+    it('should sort tests in alphabetical order', function (done) {
+      run('options/sort*', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 2);
@@ -76,13 +77,13 @@ describe('options', function() {
     });
   });
 
-  describe('--delay', function() {
-    before(function() {
+  describe('--delay', function () {
+    before(function () {
       args = ['--delay'];
     });
 
-    it('should run the generated test suite', function(done) {
-      run('options/delay.fixture.js', args, function(err, res) {
+    it('should run the generated test suite', function (done) {
+      run('options/delay.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 1);
@@ -95,8 +96,8 @@ describe('options', function() {
       });
     });
 
-    it('should throw an error if the test suite failed to run', function(done) {
-      run('options/delay-fail.fixture.js', args, function(err, res) {
+    it('should throw an error if the test suite failed to run', function (done) {
+      run('options/delay-fail.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 0);
@@ -110,10 +111,10 @@ describe('options', function() {
     });
   });
 
-  describe('--grep', function() {
-    it('runs specs matching a string', function(done) {
+  describe('--grep', function () {
+    it('runs specs matching a string', function (done) {
       args = ['--grep', 'match'];
-      run('options/grep.fixture.js', args, function(err, res) {
+      run('options/grep.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 2);
@@ -123,10 +124,10 @@ describe('options', function() {
       });
     });
 
-    describe('runs specs matching a RegExp', function() {
-      it('with RegExp like strings(pattern follow by flag)', function(done) {
+    describe('runs specs matching a RegExp', function () {
+      it('with RegExp like strings(pattern follow by flag)', function (done) {
         args = ['--grep', '/match/i'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        run('options/grep.fixture.js', args, function (err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 0);
           assert.equal(res.stats.passes, 4);
@@ -136,9 +137,9 @@ describe('options', function() {
         });
       });
 
-      it('string as pattern', function(done) {
+      it('string as pattern', function (done) {
         args = ['--grep', '.*'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        run('options/grep.fixture.js', args, function (err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 0);
           assert.equal(res.stats.passes, 4);
@@ -149,10 +150,10 @@ describe('options', function() {
       });
     });
 
-    describe('with --invert', function() {
-      it('runs specs that do not match the pattern', function(done) {
+    describe('with --invert', function () {
+      it('runs specs that do not match the pattern', function (done) {
         args = ['--grep', 'fail', '--invert'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        run('options/grep.fixture.js', args, function (err, res) {
           assert(!err);
           assert.equal(res.stats.pending, 0);
           assert.equal(res.stats.passes, 4);
@@ -164,10 +165,10 @@ describe('options', function() {
     });
   });
 
-  describe('--retries', function() {
+  describe('--retries', function () {
     it('retries after a certain threshold', function (done) {
       args = ['--retries', '3'];
-      run('options/retries.fixture.js', args, function(err, res) {
+      run('options/retries.fixture.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 0);
@@ -177,6 +178,6 @@ describe('options', function() {
         assert.equal(res.code, 1);
         done();
       });
-    })
+    });
   });
 });

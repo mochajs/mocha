@@ -1,3 +1,5 @@
+'use strict';
+
 before(function () {
   console.log('root before');
 });

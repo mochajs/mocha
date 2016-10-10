@@ -1,16 +1,18 @@
-describe('skip in before', function() {
-  before(function(done) {
+'use strict';
+
+describe('skip in before', function () {
+  before(function (done) {
     var self = this;
-    setTimeout(function() {
+    setTimeout(function () {
       self.skip();
     }, 50);
   });
 
-  it('should never run this test', function() {
+  it('should never run this test', function () {
     throw new Error('never thrown');
   });
 
-  it('should never run this test', function() {
+  it('should never run this test', function () {
     throw new Error('never thrown');
   });
 });
