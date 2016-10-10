@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
+var osName = require('os-name');
 
 module.exports = function (config) {
   var bundleDirpath;
@@ -47,7 +48,7 @@ module.exports = function (config) {
     },
     reporters: ['spec'],
     colors: true,
-    browsers: ['PhantomJS'],
+    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'],
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
