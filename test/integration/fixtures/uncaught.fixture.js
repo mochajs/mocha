@@ -5,22 +5,18 @@
  * Mocha is capable of detecting two distinct exceptions during test execution.
  */
 
-it('fails exactly once when a global error is thrown first', function(done) {
-  setTimeout(function() {
+it('fails exactly once when a global error is thrown first', function (done) {
+  setTimeout(function () {
     throw new Error('global error');
-
-    setTimeout(function() {
-      done(new Error('test error'));
-    }, 0);
   }, 0);
 });
 
-it('fails exactly once when a global error is thrown second', function(done) {
-  setTimeout(function() {
+it('fails exactly once when a global error is thrown second', function (done) {
+  setTimeout(function () {
     done(new Error('test error'));
   }, 0);
 
-  setTimeout(function() {
+  setTimeout(function () {
     throw new Error('global error');
   }, 0);
 });

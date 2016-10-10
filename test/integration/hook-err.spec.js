@@ -1,14 +1,16 @@
+'use strict';
+
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
 var splitRegExp = require('./helpers').splitRegExp;
 var bang = require('../../lib/reporters/base').symbols.bang;
 
-describe('hook error handling', function() {
+describe('hook error handling', function () {
   var lines;
 
-  describe('before hook error', function() {
+  describe('before hook error', function () {
     before(run('hooks/before-hook-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['before', bang + 'test 3']
@@ -16,9 +18,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('before hook error tip', function() {
+  describe('before hook error tip', function () {
     before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['1) spec 2 "before all" hook:']
@@ -26,9 +28,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('before each hook error', function() {
+  describe('before each hook error', function () {
     before(run('hooks/beforeEach-hook-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['before', bang + 'test 3']
@@ -36,9 +38,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('after hook error', function() {
+  describe('after hook error', function () {
     before(run('hooks/after-hook-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['test 1', 'test 2', 'after', bang + 'test 3']
@@ -46,9 +48,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('after each hook error', function() {
+  describe('after each hook error', function () {
     before(run('hooks/afterEach-hook-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['test 1', 'after', bang + 'test 3']
@@ -56,9 +58,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('multiple hook errors', function() {
+  describe('multiple hook errors', function () {
     before(run('hooks/multiple-hook-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         [
@@ -94,9 +96,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - before hook error', function() {
+  describe('async - before hook error', function () {
     before(run('hooks/before-hook-async-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['before', bang + 'test 3']
@@ -104,9 +106,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - before hook error tip', function() {
+  describe('async - before hook error tip', function () {
     before(run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['1) spec 2 "before all" hook:']
@@ -114,9 +116,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - before each hook error', function() {
+  describe('async - before each hook error', function () {
     before(run('hooks/beforeEach-hook-async-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['before', bang + 'test 3']
@@ -124,9 +126,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - after hook error', function() {
+  describe('async - after hook error', function () {
     before(run('hooks/after-hook-async-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['test 1', 'test 2', 'after', bang + 'test 3']
@@ -134,9 +136,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - after each hook error', function() {
+  describe('async - after each hook error', function () {
     before(run('hooks/afterEach-hook-async-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         ['test 1', 'after', bang + 'test 3']
@@ -144,9 +146,9 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - multiple hook errors', function() {
+  describe('async - multiple hook errors', function () {
     before(run('hooks/multiple-hook-async-error.fixture.js'));
-    it('should verify results', function() {
+    it('should verify results', function () {
       assert.deepEqual(
         lines,
         [
@@ -182,14 +184,14 @@ describe('hook error handling', function() {
     });
   });
 
-  function run(fnPath, outputFilter) {
-    return function(done) {
-      runMocha(fnPath, [], function(err, res) {
+  function run (fnPath, outputFilter) {
+    return function (done) {
+      runMocha(fnPath, [], function (err, res) {
         assert.ifError(err);
 
         lines = res.output
           .split(splitRegExp)
-          .map(function(line) {
+          .map(function (line) {
             return line.trim();
           })
           .filter(outputFilter || onlyConsoleOutput());
@@ -200,9 +202,9 @@ describe('hook error handling', function() {
   }
 });
 
-function onlyConsoleOutput() {
+function onlyConsoleOutput () {
   var foundSummary = false;
-  return function(line) {
+  return function (line) {
     if (!foundSummary) {
       foundSummary = !!(/\(\d+ms\)/).exec(line);
     }
@@ -210,6 +212,6 @@ function onlyConsoleOutput() {
   };
 }
 
-function onlyErrorTitle(line) {
+function onlyErrorTitle (line) {
   return !!(/^1\)/).exec(line);
 }

@@ -1,5 +1,6 @@
-var Mocha = require('../../')
-  , path = require('path');
+'use strict';
+
+var Mocha = require('../../');
 
 var mocha = new Mocha({
   ui: 'bdd',
@@ -22,8 +23,8 @@ mocha.addFile('test/acceptance/fs.spec.js');
 mocha.addFile('test/acceptance/globals.spec.js');
 mocha.addFile('test/acceptance/timeout.spec.js');
 
-mocha.run(function(){
+mocha.run(function () {
   console.log('done');
-}).on('pass', function(test){
+}).on('pass', function (test) {
   // console.log('... %s', test.title);
 });

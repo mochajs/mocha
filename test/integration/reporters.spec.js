@@ -1,26 +1,28 @@
-var assert = require('assert');
-var os     = require('os');
-var fs     = require('fs');
-var crypto = require('crypto');
-var path   = require('path');
-var run    = require('./helpers').runMocha;
+'use strict';
 
-describe('reporters', function() {
-  describe('markdown', function() {
+var assert = require('assert');
+var os = require('os');
+var fs = require('fs');
+var crypto = require('crypto');
+var path = require('path');
+var run = require('./helpers').runMocha;
+
+describe('reporters', function () {
+  describe('markdown', function () {
     var res;
 
-    before(function(done) {
-      run('passing.fixture.js', ['--reporter', 'markdown'], function(err, result) {
+    before(function (done) {
+      run('passing.fixture.js', ['--reporter', 'markdown'], function (err, result) {
         res = result;
         done(err);
       });
     });
 
-    it('does not exceed maximum callstack (issue: 1875)', function() {
+    it('does not exceed maximum callstack (issue: 1875)', function () {
       assert(res.output.indexOf('RangeError') === -1, 'Threw RangeError');
     });
 
-    it('contains spec src', function() {
+    it('contains spec src', function () {
       var src = [
         '```js',
         'assert(true);',
@@ -31,8 +33,8 @@ describe('reporters', function() {
     });
   });
 
-  describe('xunit', function() {
-    it('prints test cases with --reporter-options output (issue: 1864)', function(done) {
+  describe('xunit', function () {
+    it('prints test cases with --reporter-options output (issue: 1864)', function (done) {
       var randomStr = crypto.randomBytes(8).toString('hex');
       var tmpDir = os.tmpDir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
@@ -44,13 +46,13 @@ describe('reporters', function() {
         '</testsuite>'
       ];
 
-      run('passing.fixture.js', args, function(err, result) {
+      run('passing.fixture.js', args, function (err, result) {
         if (err) return done(err);
 
         var xml = fs.readFileSync(tmpFile, 'utf8');
         fs.unlinkSync(tmpFile);
 
-        expectedOutput.forEach(function(line) {
+        expectedOutput.forEach(function (line) {
           assert(xml.indexOf(line) !== -1, 'XML did not contain ' + line);
         });
 

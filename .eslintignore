@@ -1,3 +1,2 @@
-lib/to-iso-string/
-test/**/*
-!test/runner.js
+lib/to-iso-string/**/*.js
+mocha.js

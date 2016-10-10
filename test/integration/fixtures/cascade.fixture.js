@@ -1,55 +1,57 @@
-describe('one', function() {
-  before(function() {
+'use strict';
+
+describe('one', function () {
+  before(function () {
     console.log('before one');
   });
 
-  after(function() {
+  after(function () {
     console.log('after one');
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     console.log('  before each one');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     console.log('  after each one');
   });
 
-  describe('two', function() {
-    before(function() {
+  describe('two', function () {
+    before(function () {
       console.log('  before two');
     });
 
-    after(function() {
+    after(function () {
       console.log('  after two');
     });
 
-    beforeEach(function() {
+    beforeEach(function () {
       console.log('    before each two');
     });
 
-    afterEach(function() {
+    afterEach(function () {
       console.log('    after each two');
     });
 
-    describe('three', function() {
-      before(function() {
+    describe('three', function () {
+      before(function () {
         console.log('    before three');
       });
 
-      after(function() {
+      after(function () {
         console.log('    after three');
       });
 
-      beforeEach(function() {
+      beforeEach(function () {
         console.log('    before each three');
       });
 
-      afterEach(function() {
+      afterEach(function () {
         console.log('    after each three');
       });
 
-      it('should three', function() {
+      it('should three', function () {
         console.log('      TEST three');
       });
     });

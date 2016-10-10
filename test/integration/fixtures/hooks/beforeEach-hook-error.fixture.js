@@ -1,3 +1,5 @@
+'use strict';
+
 describe('spec 1', function () {
   beforeEach(function () {
     console.log('before');

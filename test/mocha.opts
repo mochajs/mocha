@@ -1,5 +1,5 @@
 --require should
---require ./test/fixture-expect.js
+--require ./test/setup
 --reporter dot
 --ui bdd
 --globals okGlobalA,okGlobalB
