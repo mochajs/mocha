@@ -1,3 +1,22 @@
+# 3.1.1 / 2016-10-09
+
+## :bug: Bug Fix
+
+- [#1417]: Don't report `done()` was called multiple times when it wasn't ([@frankleonrose])
+ 
+## :nut_and_bolt: Other
+
+- [#2490]: Lint with [semistandard](https://npmjs.com/package/semistandard) config ([@makepanic])
+- [#2525]: Lint all `.js` files ([@boneskull])
+- [#2524]: Provide workaround for developers unable to run browser tests on macOS Sierra ([@boneskull])
+
+[#1417]: https://github.com/mochajs/mocha/issues/1417
+[#2490]: https://github.com/mochajs/mocha/issues/2490
+[#2525]: https://github.com/mochajs/mocha/issues/2525
+[#2524]: https://github.com/mochajs/mocha/issues/2524
+[@makepanic]: https://github.com/makepanic
+[@frankleonrose]: https://github.com/frankleonrose
+
 # 3.1.0 / 2016-09-27
 
 ## :tada: Enhancement
