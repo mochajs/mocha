@@ -94,4 +94,22 @@ describe('regressions', function() {
       assert.equal(res.code, 0);
     });
   });
+
+  it('issue-1417 uncaught exceptions from async specs', function(done) {
+    runJSON('regression/issue-1417.js', [], function(err, res) {
+      assert(!err);
+      assert.equal(res.stats.pending, 0);
+      assert.equal(res.stats.passes, 0);
+      assert.equal(res.stats.failures, 2);
+
+      assert.equal(res.failures[0].title,
+        'fails exactly once when a global error is thrown synchronously and done errors');
+      assert.equal(res.failures[0].err.message, 'sync error');
+      assert.equal(res.failures[1].title,
+        'fails exactly once when a global error is thrown synchronously and done completes');
+      assert.equal(res.failures[1].err.message, 'sync error');
+      assert.equal(res.code, 2);
+      done();
+    });
+  });
 });
