@@ -5036,6 +5036,7 @@ Runner.prototype.runTests = function (suite, fn) {
       self.runTest(function (err) {
         test = self.test;
         if (err) {
+          test.err = err;
           var retry = test.currentRetry();
           if (err instanceof Pending) {
             test.pending = true;
