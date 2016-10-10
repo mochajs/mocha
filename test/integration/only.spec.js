@@ -31,8 +31,6 @@ describe('.only()', function() {
   describe('qunit', function() {
     it('should run only tests that marked as `only`', function(done) {
       run('options/only/qunit.fixture.js', ['--ui', 'qunit'], function(err, res) {
-        console.log(err);
-
         assert(!err);
         assert.equal(res.stats.pending, 0);
         assert.equal(res.stats.passes, 5);
