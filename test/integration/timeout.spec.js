@@ -1,10 +1,12 @@
-var assert = require('assert');
-var run    = require('./helpers').runMochaJSON;
-var args   = [];
+'use strict';
 
-describe('this.timeout()', function() {
-  it('is respected by sync and async suites', function(done) {
-    run('timeout.fixture.js', args, function(err, res) {
+var assert = require('assert');
+var run = require('./helpers').runMochaJSON;
+var args = [];
+
+describe('this.timeout()', function () {
+  it('is respected by sync and async suites', function (done) {
+    run('timeout.fixture.js', args, function (err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);

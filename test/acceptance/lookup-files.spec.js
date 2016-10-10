@@ -7,13 +7,13 @@ var os = require('os');
 var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 
-describe('lookupFiles', function() {
+describe('lookupFiles', function () {
   var tmpDir = path.join(os.tmpDir(), 'mocha-lookup-files');
   var existsSync = fs.existsSync;
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;
 
-  (function testSymlinkSupport() {
+  (function testSymlinkSupport () {
     makeTempDir();
 
     fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
@@ -27,7 +27,7 @@ describe('lookupFiles', function() {
     }
   }());
 
-  beforeEach(function() {
+  beforeEach(function () {
     makeTempDir();
 
     fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
@@ -36,7 +36,7 @@ describe('lookupFiles', function() {
     }
   });
 
-  (symlinkSupported ? it : it.skip)('should not choke on symlinks', function() {
+  (symlinkSupported ? it : it.skip)('should not choke on symlinks', function () {
     expect(utils.lookupFiles(tmpDir, ['js'], false))
       .to
       .contain(tmpFile('mocha-utils-link.js'))
@@ -57,7 +57,7 @@ describe('lookupFiles', function() {
       .eql([]);
   });
 
-  it('should accept a glob "path" value', function() {
+  it('should accept a glob "path" value', function () {
     var res = utils.lookupFiles(tmpFile('mocha-utils*'), ['js'], false)
       .map(path.normalize.bind(path));
 
@@ -80,11 +80,11 @@ describe('lookupFiles', function() {
 
   afterEach(removeTempDir);
 
-  function makeTempDir() {
+  function makeTempDir () {
     mkdirp.sync(tmpDir);
   }
 
-  function removeTempDir() {
+  function removeTempDir () {
     rimraf.sync(tmpDir);
   }
 });

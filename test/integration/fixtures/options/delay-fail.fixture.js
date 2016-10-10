@@ -1,5 +1,8 @@
-setTimeout(function() {
+'use strict';
+
+setTimeout(function () {
   throw new Error('oops');
-  it('test', function() {});
+  /* eslint no-unreachable: off */
+  it('test', function () {});
   run();
 }, 100);

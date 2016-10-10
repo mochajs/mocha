@@ -1,3 +1,5 @@
+'use strict';
+
 describe('spec 1', function () {
   after(function (done) {
     console.log('after');

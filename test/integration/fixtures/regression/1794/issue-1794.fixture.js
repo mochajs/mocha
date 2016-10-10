@@ -1,3 +1,5 @@
-test('pass', function() {
+'use strict';
+
+test('pass', function () {
   // pass
 });

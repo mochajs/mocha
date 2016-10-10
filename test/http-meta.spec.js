@@ -1,10 +1,12 @@
+'use strict';
+
 var http = require('http');
 
 var PORT = 8889;
 
-var server = http.createServer(function(req, res){
-  var accept = req.headers.accept || ''
-    , json = ~accept.indexOf('json');
+var server = http.createServer(function (req, res) {
+  var accept = req.headers.accept || '';
+  var json = ~accept.indexOf('json');
 
   switch (req.url) {
     case '/':
@@ -20,42 +22,44 @@ var server = http.createServer(function(req, res){
   }
 });
 
-
-function get(url, body, header) {
-  return function(done){
-    http.get({ path: url, port: PORT, headers: header || {}}, function(res){
+function get (url, body, header) {
+  return function (done) {
+    http.get({
+      path: url,
+      port: PORT,
+      headers: header || {}
+    }, function (res) {
       var buf = '';
       res.should.have.property('statusCode', 200);
       res.setEncoding('utf8');
-      res.on('data', function(chunk){ buf += chunk });
-      res.on('end', function(){
+      res.on('data', function (chunk) { buf += chunk; });
+      res.on('end', function () {
         buf.should.equal(body);
         done();
       });
-    })
-  }
+    });
+  };
 }
 
 describe('http requests', function () {
-
-  before(function(done) {
+  before(function (done) {
     server.listen(PORT, done);
   });
 
-  after(function() {
+  after(function () {
     server.close();
   });
 
   describe('GET /', function () {
     it('should respond with hello',
-      get('/', 'hello'))
-  })
+      get('/', 'hello'));
+  });
 
-  describe('GET /users', function(){
+  describe('GET /users', function () {
     it('should respond with users',
-      get('/users', 'tobi, loki, jane'))
+      get('/users', 'tobi, loki, jane'));
 
     it('should respond with users',
-      get('/users', '["tobi","loki","jane"]', { Accept: 'application/json' }))
-  })
-})
+      get('/users', '["tobi","loki","jane"]', { Accept: 'application/json' }));
+  });
+});

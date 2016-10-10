@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict';
+
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _mocha(1) executable.

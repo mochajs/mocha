@@ -1,3 +1,5 @@
-it('should pass', function(done){
+'use strict';
+
+it('should pass', function (done) {
   done();
 });

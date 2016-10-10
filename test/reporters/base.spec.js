@@ -1,9 +1,11 @@
+'use strict';
+
 var assert = require('assert');
 
-var Base   = require('../../lib/reporters/base')
-  , Assert = require('assert').AssertionError;
+var Base = require('../../lib/reporters/base');
+var Assert = require('assert').AssertionError;
 
-function makeTest(err) {
+function makeTest (err) {
   return {
     err: err,
     fullTitle: function () {
@@ -13,9 +15,9 @@ function makeTest(err) {
 }
 
 describe('Base reporter', function () {
-  var stdout
-    , stdoutWrite
-    , useColors;
+  var stdout;
+  var stdoutWrite;
+  var useColors;
 
   beforeEach(function () {
     stdout = [];
@@ -32,10 +34,10 @@ describe('Base reporter', function () {
     Base.useColors = useColors;
   });
 
-  describe('showDiff', function() {
+  describe('showDiff', function () {
     it('should show diffs by default', function () {
-      var err = new Assert({ actual: 'foo', expected: 'bar' })
-        , errOut;
+      var err = new Assert({ actual: 'foo', expected: 'bar' });
+      var errOut;
 
       var test = makeTest(err);
 
@@ -47,12 +49,11 @@ describe('Base reporter', function () {
     });
 
     it('should show diffs if property set to `true`', function () {
-      var err = new Assert({ actual: 'foo', expected: 'bar' })
-        , errOut;
+      var err = new Assert({ actual: 'foo', expected: 'bar' });
+      var errOut;
 
       err.showDiff = true;
       var test = makeTest(err);
-
 
       Base.list([test]);
 
@@ -62,8 +63,8 @@ describe('Base reporter', function () {
     });
 
     it('should not show diffs when showDiff property set to `false`', function () {
-      var err = new Assert({ actual: 'foo', expected: 'bar' })
-        , errOut;
+      var err = new Assert({ actual: 'foo', expected: 'bar' });
+      var errOut;
 
       err.showDiff = false;
       var test = makeTest(err);
@@ -76,8 +77,8 @@ describe('Base reporter', function () {
     });
 
     it('should not show diffs when expected is not defined', function () {
-      var err = new Error('ouch')
-        , errOut;
+      var err = new Error('ouch');
+      var errOut;
 
       var test = makeTest(err);
 
@@ -87,14 +88,13 @@ describe('Base reporter', function () {
       errOut.should.not.match(/\- actual/);
       errOut.should.not.match(/\+ expected/);
     });
-
   });
 
-  describe('Getting two strings', function() {
+  describe('Getting two strings', function () {
     // Fix regression V1.2.1(see: issue #1241)
     it('should show strings diff as is', function () {
-      var err = new Error('test'),
-        errOut;
+      var err = new Error('test');
+      var errOut;
 
       err.actual = 'foo\nbar';
       err.expected = 'foo\nbaz';
@@ -114,11 +114,11 @@ describe('Base reporter', function () {
   });
 
   it('should stringify objects', function () {
-    var err = new Error('test'),
-      errOut;
+    var err = new Error('test');
+    var errOut;
 
-    err.actual = {key:"a1"};
-    err.expected = {key:"e1"};
+    err.actual = {key: 'a1'};
+    err.expected = {key: 'e1'};
     err.showDiff = true;
     var test = makeTest(err);
 
@@ -132,8 +132,8 @@ describe('Base reporter', function () {
   });
 
   it('should stringify Object.create(null)', function () {
-    var err = new Error('test'),
-      errOut;
+    var err = new Error('test');
+    var errOut;
 
     err.actual = Object.create(null);
     err.actual.hasOwnProperty = 1;
@@ -189,7 +189,7 @@ describe('Base reporter', function () {
   it('should use the inspect() property if `message` is not set', function () {
     var err = {
       showDiff: false,
-      inspect: function() { return 'an error happened'; },
+      inspect: function () { return 'an error happened'; }
     };
     var test = makeTest(err);
     Base.list([test]);
@@ -210,5 +210,4 @@ describe('Base reporter', function () {
     var errOut = stdout.join('\n').trim();
     errOut.should.equal('1) test title:\n     Error\n  foo\n  bar');
   });
-
 });
