@@ -4723,9 +4723,13 @@ Runner.prototype.fail = function (test, err) {
     err = new Error('the ' + type(err) + ' ' + stringify(err) + ' was thrown, throw an Error :)');
   }
 
-  err.stack = (this.fullStackTrace || !err.stack)
-    ? err.stack
-    : stackFilter(err.stack);
+  try {
+    err.stack = (this.fullStackTrace || !err.stack)
+      ? err.stack
+      : stackFilter(err.stack);
+  } catch (ignored) {
+    // some environments do not take kindly to monkeying with the stack
+  }
 
   this.emit('fail', test, err);
 };
@@ -6744,6 +6748,12 @@ exports.stackTraceFilter = function () {
 exports.isPromise = function isPromise (value) {
   return typeof value === 'object' && typeof value.then === 'function';
 };
+
+/**
+ * It's a noop.
+ * @api
+ */
+exports.noop = function () {};
 
 }).call(this,require('_process'),require("buffer").Buffer)
 },{"./to-iso-string":37,"_process":67,"buffer":44,"debug":2,"fs":42,"glob":42,"json3":54,"path":42,"util":84}],39:[function(require,module,exports){
