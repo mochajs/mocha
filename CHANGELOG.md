@@ -1,3 +1,11 @@
+# 3.1.2 / 2016-10-10
+
+## :bug: Bug Fix
+
+- [#2528]: Recovery gracefully if an `Error`'s `stack` property isn't writable ([@boneskull])
+
+[#2528]: https://github.com/mochajs/mocha/issues/2528
+
 # 3.1.1 / 2016-10-09
 
 ## :bug: Bug Fix
