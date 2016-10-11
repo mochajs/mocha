@@ -6,8 +6,7 @@ var Runner = mocha.Runner;
 var Test = mocha.Test;
 var Hook = mocha.Hook;
 var path = require('path');
-
-function noop () {}
+var noop = mocha.utils.noop;
 
 describe('Runner', function () {
   var suite;
@@ -289,6 +288,21 @@ describe('Runner', function () {
         err.message.should.equal('the array [\n  1\n  2\n] was thrown, throw an Error :)');
         done();
       });
+      runner.fail(test, err);
+    });
+
+    it('should recover if the error stack is not writable', function (done) {
+      var err = new Error('not evil');
+      Object.defineProperty(err, 'stack', {
+        value: err.stack
+      });
+      var test = new Test('a test', noop);
+
+      runner.on('fail', function (test, err) {
+        err.message.should.equal('not evil');
+        done();
+      });
+
       runner.fail(test, err);
     });
   });
