@@ -90,6 +90,7 @@ program
   .option('--preserve-symlinks', 'Instructs the module loader to preserve symbolic links when resolving and caching modules')
   .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--no-diff', 'do not show a diff on failure')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
@@ -240,6 +241,12 @@ if (~process.argv.indexOf('--colors') || ~process.argv.indexOf('-c')) {
 
 if (program.inlineDiffs) {
   mocha.useInlineDiffs(true);
+}
+
+// --no-diff
+
+if (process.argv.indexOf('--no-diff') !== -1) {
+  mocha.hideDiff(true);
 }
 
 // --slow <ms>

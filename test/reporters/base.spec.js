@@ -88,6 +88,21 @@ describe('Base reporter', function () {
       errOut.should.not.match(/\- actual/);
       errOut.should.not.match(/\+ expected/);
     });
+
+    it('should not show diffs when hideDiff is set', function () {
+      var err = new Assert({ actual: 'foo', expected: 'bar' });
+      var errOut;
+
+      var test = makeTest(err);
+
+      Base.hideDiff = true;
+      Base.list([test]);
+      Base.hideDiff = false; // Revert to original value
+
+      errOut = stdout.join('\n');
+      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/\+ expected/);
+    });
   });
 
   describe('Getting two strings', function () {
