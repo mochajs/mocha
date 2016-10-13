@@ -90,6 +90,7 @@ program
   .option('--preserve-symlinks', 'Instructs the module loader to preserve symbolic links when resolving and caching modules')
   .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
+  .option('--no-diff', 'do not show a diff on failure')
   .option('--inspect', 'activate devtools in chrome')
   .option('--inspect-brk', 'activate devtools in chrome and break on the first line')
   .option('--interfaces', 'display available interfaces')
@@ -248,6 +249,12 @@ if (~process.argv.indexOf('--colors') || ~process.argv.indexOf('-c')) {
 
 if (program.inlineDiffs) {
   mocha.useInlineDiffs(true);
+}
+
+// --no-diff
+
+if (process.argv.indexOf('--no-diff') !== -1) {
+  mocha.hideDiff(true);
 }
 
 // --slow <ms>
