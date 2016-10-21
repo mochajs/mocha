@@ -14,7 +14,6 @@ var mocha = new Mocha();
 var cli = Cli.makeCommand();
 var program = cli.program;
 var requires = cli.requires;
-var globals = cli.globals;
 
 // actions
 
@@ -28,8 +27,7 @@ program.parse(process.argv);
 Cli.setMochaOptions(
   mocha,
   program.opts(),
-  requires,
-  globals
+  requires
 );
 
 // requires
