@@ -9,13 +9,13 @@
 
 var spawn = require('child_process').spawn;
 var path = require('path');
-var options = require('../lib/cli/options');
+var parser = require('../lib/cli/parser');
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
-options.getOptions();
+parser.expandOpts(process.argv);
 
-var args = [path.join(__dirname, '_mocha')].concat(options.getArgs());
+var args = [path.join(__dirname, '_mocha')].concat(parser.expandArgs(process.argv.slice(2)));
 
 var proc = spawn(process.execPath, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
