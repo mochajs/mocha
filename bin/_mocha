@@ -7,35 +7,34 @@
  * Module dependencies.
  */
 
-var Cli = require('../lib/cli/cli');
+var cli = require('../lib/cli/cli');
 var Mocha = require('../');
 var mocha = new Mocha();
 
-var cli = Cli.makeCommand();
-var program = cli.program;
-var requires = cli.requires;
+var program = cli.makeCommand();
 
 // actions
 
-Cli.addActions(program);
+cli.addActions(program);
 
 // parse args (since we override parse it will handle --opts correctly)
 
 program.parse(process.argv);
 
 // set options in mocha
-Cli.setMochaOptions(
+cli.setMochaOptions(
   mocha,
-  program.opts(),
-  requires
+  program.opts()
 );
 
 // requires
 
-requires.forEach(function (mod) {
+program.require.forEach(function (mod) {
+  // if this needs to be called in the correct context add another function
+  // cli.require(module, requires) then module.require.call(module, requires)...
   require(mod);
 });
 
-var files = Cli.resolveFiles(program.args, program.opts());
+var files = cli.resolveFiles(program.args, program.opts());
 
-Cli.run(mocha, program, files);
+cli.run(mocha, program, files);
