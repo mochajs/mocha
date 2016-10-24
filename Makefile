@@ -27,7 +27,7 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	$(ESLINT) .
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-cli test-only test-global-only
 
 test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -115,6 +115,11 @@ test-reporters:
 	@printf "==> [Test :: Reporters]\n"
 	$(MOCHA) --reporter $(REPORTER) \
 		test/reporters/*.js
+
+test-cli:
+	@printf "==> [Test :: Cli]\n"
+	$(MOCHA) --reporter $(REPORTER) \
+		test/cli/*.js
 
 test-only:
 	@printf "==> [Test :: Only]\n"
