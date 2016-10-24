@@ -77,8 +77,31 @@ describe('Cli', function () {
   });
 
   describe('.resolveFiles()', function () {
-    it('should', function () {
+    it('should resolve a single file', function () {
+      var files = cli.resolveFiles(['test/cli/cli.spec.js']);
 
+      files.should.have.length(1);
+      files[0].should.be.eql(path.resolve('test/cli/cli.spec.js'));
+    });
+
+    it('should recursively resolve and sort files', function () {
+      var files = cli.resolveFiles(['test/cli'], {
+        recursive: true,
+        sort: true
+      });
+
+      files.should.have.length(2);
+      files[0].should.be.eql(path.resolve('test/cli/cli.spec.js'));
+      files[1].should.be.eql(path.resolve('test/cli/parser.spec.js'));
+    });
+
+    it('should resolve test.opts', function () {
+      var files = cli.resolveFiles(['test/cli/test.opts'], {
+        watchExtensions: 'opts'
+      });
+
+      files.should.have.length(1);
+      files[0].should.be.eql(path.resolve('test/cli/test.opts'));
     });
   });
 });
