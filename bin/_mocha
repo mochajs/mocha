@@ -27,14 +27,11 @@ cli.setMochaOptions(
   program.opts()
 );
 
-// requires
-
-program.require.forEach(function (mod) {
-  // if this needs to be called in the correct context add another function
-  // cli.require(module, requires) then module.require.call(module, requires)...
-  require(mod);
-});
-
 var files = cli.resolveFiles(program.args, program.opts());
+
+if (!files.length) {
+  console.error('No test files found');
+  process.exit(1);
+}
 
 cli.run(mocha, program, files);
