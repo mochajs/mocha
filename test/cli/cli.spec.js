@@ -5,12 +5,20 @@ var Command = Commander.Command;
 var Option = Commander.Option;
 var cli = require('../../lib/cli/cli');
 var path = require('path');
+var Mocha = require('../../');
 
-var testArgs = [
+var testArgs1 = [
   '/usr/bin/nodejs',
   '/random/path/mocha/bin/_mocha',
   '--opts', 'test/cli/test.opts',
   'test/cli/cli.spec.js'
+];
+
+var testArgs2 = [
+  '/usr/bin/nodejs',
+  '/random/path/mocha/bin/_mocha',
+  '--opts', 'test/cli/test.opts',
+  'test/cli/parser.spec.js'
 ];
 
 describe('Cli', function () {
@@ -26,7 +34,7 @@ describe('Cli', function () {
     });
 
     it('should have these properties after parsing', function () {
-      program.parse(testArgs);
+      program.parse(testArgs1);
 
       // ensure its correctly set after parsing
       program.opts.should.be.a.Function;
@@ -64,15 +72,28 @@ describe('Cli', function () {
     });
   });
 
-  describe('.setMochaOptions()', function () {
-    it('should', function () {
+  xdescribe('.setMochaOptions()', function () {
+    var program = cli.makeCommand();
+    program.parse(testArgs1);
 
+    it('should set options on mocha', function () {
+      var mocha = new Mocha();
+      cli.setMochaOptions(mocha, program.opts());
+
+      // how to test this?
     });
   });
 
-  describe('.run()', function () {
-    it('should', function () {
+  xdescribe('.run()', function () {
+    var program = cli.makeCommand();
+    program.parse(testArgs2);
 
+    it('should run mocha ', function () {
+      var mocha = new Mocha();
+      cli.setMochaOptions(mocha, program.opts());
+      // how to test this?
+
+      cli.run(mocha, program.opts(), cli.resolveFiles(program.args, program.opts()));
     });
   });
 
