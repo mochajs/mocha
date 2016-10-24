@@ -29,9 +29,9 @@ cli.setMochaOptions(
 
 var files = cli.resolveFiles(program.args, program.opts());
 
-if (!files.length) {
-  console.error('No test files found');
+try {
+  cli.run(mocha, program, files);
+} catch (e) {
+  console.error(e.message);
   process.exit(1);
 }
-
-cli.run(mocha, program, files);
