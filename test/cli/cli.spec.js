@@ -186,20 +186,20 @@ describe('Cli', function () {
       var mocha = new Mocha();
       cli.setMochaOptions(mocha, program.opts());
 
-      // how to test this?
+      // how to test this? we should test as many options being set as possible
     });
   });
 
   xdescribe('.run()', function () {
-    var program = cli.makeCommand();
-    program.parse(testArgs2);
+    var program1 = cli.makeCommand();
+    program1.parse(testArgs2);
 
     it('should run mocha ', function () {
       var mocha = new Mocha();
-      cli.setMochaOptions(mocha, program.opts());
+      cli.setMochaOptions(mocha, program1.opts());
       // how to test this?
 
-      cli.run(mocha, program.opts(), cli.resolveFiles(program.args, program.opts()));
+      cli.run(mocha, program1.opts(), cli.resolveFiles(program1.args, program1.opts()));
     });
   });
 
@@ -229,6 +229,15 @@ describe('Cli', function () {
 
       files.should.have.length(1);
       files[0].should.be.eql(path.resolve('test/cli/test.opts'));
+    });
+  });
+
+  xdescribe('.loadOptsFile()', function () {
+    it('should configure mocha from opts file', function () {
+      var mocha = new Mocha();
+      cli.loadOptsFile('test/cli/test.opts', mocha);
+
+      // how to test this? is reliant on setMochaOptions
     });
   });
 });

@@ -20,6 +20,7 @@ cli.addActions(program);
 // parse args (since we override parseOptions it will handle --opts correctly)
 
 program.parse(process.argv);
+process.argv = program.rawArgs; // for regressions
 
 var opts = program.opts();
 
