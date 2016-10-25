@@ -20,6 +20,8 @@ env:
 matrix:
   fast_finish: true
   include:
+    - node_js: '7'
+      env: TARGET=test-node
     - node_js: '6'
       env: TARGET=test-node
     - node_js: '5'
@@ -34,9 +36,9 @@ matrix:
       env: TARGET=test-node
     - node_js: '0.10'
       env: TARGET=test-node
-    - node_js: '6'
+    - node_js: '7'
       env: TARGET=lint
-    - node_js: '6'
+    - node_js: '7'
       env: TARGET=test-browser S3=1
 
 before_install: scripts/travis-before-install.sh
