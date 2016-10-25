@@ -77,20 +77,12 @@ describe('parser', function () {
 
   describe('.expandOpts()', function () {
     it('should expand --opts into args', function () {
-      var _args = [
-        '/usr/bin/nodejs',
-        '/random/path/mocha/bin/_mocha',
+      var args = [
         '--opts', 'test/cli/test.opts',
         'test/cli/parser.spec.js'
       ];
-      var args = _args.slice();
-      var argc = _args
-        .slice(0, 2)
-        .concat(testOpts) // test opts is added in the middle here
-        .concat(_args.slice(2));
 
-      parser.expandOpts(args).should.deepEqual(argc);
-      args.should.deepEqual(argc);
+      parser.expandOpts(args).should.deepEqual(testOpts.concat(args));
     });
   });
 });

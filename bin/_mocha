@@ -17,17 +17,19 @@ var program = cli.makeCommand();
 
 cli.addActions(program);
 
-// parse args (since we override parse it will handle --opts correctly)
+// parse args (since we override parseOptions it will handle --opts correctly)
 
 program.parse(process.argv);
+
+var opts = program.opts();
 
 // set options in mocha
 cli.setMochaOptions(
   mocha,
-  program.opts()
+  opts
 );
 
-var files = cli.resolveFiles(program.args, program.opts());
+var files = cli.resolveFiles(program.args, opts);
 
 try {
   cli.run(mocha, program, files);

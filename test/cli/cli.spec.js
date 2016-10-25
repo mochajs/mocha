@@ -21,6 +21,17 @@ var testArgs2 = [
   'test/cli/parser.spec.js'
 ];
 
+var testOpts = [
+  '--require', 'should',
+  '--require', './test/setup',
+  '--reporter', 'dot',
+  '--ui', 'bdd',
+  '--globals', 'okGlobalA,okGlobalB',
+  '--globals', 'okGlobalC',
+  '--globals', 'callback*',
+  '--timeout', '200'
+];
+
 describe('Cli', function () {
   describe('.makeCommand()', function () {
     var program = cli.makeCommand();
@@ -28,9 +39,96 @@ describe('Cli', function () {
     it('should have these properties before parsing', function () {
       program.should.be.an.instanceOf(Command);
       program.should.have.property('_makeCommand', true);
-      program.parse.should.be.a.Function;
+      program.parseOptions.should.be.a.Function;
       // ensure its correctly set before parsing
       program.opts.should.be.a.Function;
+    });
+
+    it('should not mutate arguments', function () {
+      // this is to make sure using multiple instances doesn't break
+      var program1 = cli.makeCommand();
+      var program2 = cli.makeCommand();
+      var program3 = cli.makeCommand();
+
+      program1.parseOptions(testArgs1);
+      program2.parseOptions(testArgs1);
+      program3.parseOptions(testArgs1);
+
+      program1.globals.should.be.an.Array;
+      program1.globals.should.deepEqual([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      program1.require.should.be.an.Array;
+      program1.require.should.deepEqual([
+        'should',
+        path.resolve('./test/setup')
+      ]);
+
+      program2.globals.should.be.an.Array;
+      program2.globals.should.deepEqual([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      program2.require.should.be.an.Array;
+      program2.require.should.deepEqual([
+        'should',
+        path.resolve('./test/setup')
+      ]);
+
+      program3.globals.should.be.an.Array;
+      program3.globals.should.deepEqual([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      program3.require.should.be.an.Array;
+      program3.require.should.deepEqual([
+        'should',
+        path.resolve('./test/setup')
+      ]);
+    });
+
+    it('should have these properties after only option parsing', function () {
+      var program1 = cli.makeCommand();
+
+      var parsed = program1.parseOptions(testArgs1);
+      parsed.should.be.an.Object;
+      parsed.should.deepEqual({
+        args: [
+          '/usr/bin/nodejs',
+          '/random/path/mocha/bin/_mocha',
+          'test/cli/cli.spec.js'
+        ],
+        unknown: []
+      });
+
+      // ensure its correctly set after parsing
+      program1.opts.should.be.a.Function;
+      program1.globals.should.be.an.Array;
+      program1.globals.should.deepEqual([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      program1.require.should.be.an.Array;
+      program1.require.should.deepEqual([
+        'should',
+        path.resolve('./test/setup')
+      ]);
+
+      program1.timeout.should.eql('200');
+      program1.ui.should.eql('bdd');
+      program1.reporter.should.eql('dot');
+
+      // rawArgs should not be set, since parseOptions doesn't set it by default
+      expect(program1.rawArgs).to.not.be.ok;
     });
 
     it('should have these properties after parsing', function () {
@@ -54,6 +152,14 @@ describe('Cli', function () {
       program.timeout.should.eql('200');
       program.ui.should.eql('bdd');
       program.reporter.should.eql('dot');
+
+      // make sure rawArgs is set to the updated args
+      program.rawArgs.should.deepEqual(
+        testArgs1
+          .slice(0, 2)
+          .concat(testOpts)
+          .concat(testArgs1.slice(2))
+      );
     });
   });
 
