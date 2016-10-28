@@ -4331,7 +4331,8 @@ Runnable.prototype.resetTimeout = function () {
     if (!self._enableTimeouts) {
       return;
     }
-    self.callback(new Error('timeout of ' + ms + 'ms exceeded. Ensure the done() callback is being called in this test.'));
+    self.callback(new Error('timeout! Test didn\'t complete within ' + ms +
+      '. For async tests, make sure you are calling \'done\' or that the returned Promise eventually resolves.'));
     self.timedOut = true;
   }, ms);
 };
@@ -4390,7 +4391,8 @@ Runnable.prototype.run = function (fn) {
     self.duration = new Date() - start;
     finished = true;
     if (!err && self.duration > ms && self._enableTimeouts) {
-      err = new Error('timeout of ' + ms + 'ms exceeded. Ensure the done() callback is being called in this test.');
+      err = new Error('timeout! Test didn\'t complete within ' + ms +
+        '. For async tests, make sure you are calling \'done\' or that the returned Promise eventually resolves.');
     }
     fn(err);
   }
