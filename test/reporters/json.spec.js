@@ -60,4 +60,31 @@ describe('json reporter', function () {
       done();
     });
   });
+
+  it('should handle circular objects in errors', function (done) {
+    var testTitle = 'json test 1';
+    function CircleError () {
+      this.message = 'oh shit';
+      this.circular = this;
+    }
+    var error = new CircleError();
+
+    suite.addTest(new Test(testTitle, function (done) {
+      throw error;
+    }));
+
+    runner.run(function (failureCount) {
+      failureCount.should.be.exactly(1);
+      runner.should.have.property('testResults');
+      runner.testResults.should.have.property('failures');
+      runner.testResults.failures.should.be.an.instanceOf(Array);
+      runner.testResults.failures.should.have.a.lengthOf(1);
+
+      var failure = runner.testResults.failures[0];
+      failure.should.have.property('title', testTitle);
+      failure.should.have.properties('err');
+
+      done();
+    });
+  });
 });

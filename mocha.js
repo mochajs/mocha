@@ -3061,7 +3061,18 @@ function JSONReporter (runner) {
 
     runner.testResults = obj;
 
-    process.stdout.write(JSON.stringify(obj, null, 2));
+    var cache = [];
+    process.stdout.write(JSON.stringify(obj, function (key, value) {
+      if (typeof value === 'object' && value !== null) {
+        if (cache.indexOf(value) !== -1) {
+          // Instead of going in a circle, we'll print [object Object]
+          return '' + value;
+        }
+        cache.push(value);
+      }
+
+      return value;
+    }, 2));
   });
 }
 
