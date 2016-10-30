@@ -331,6 +331,9 @@ program.compilers.forEach(function (c) {
   var ext = c.slice(0, idx);
   var mod = c.slice(idx + 1);
 
+  if (idx === -1) { 
+    throw new Error('Invalid compiler "' + c + '". Compiler options should take the form:  extension:compiler.');
+  }
   if (mod[0] === '.') {
     mod = join(process.cwd(), mod);
   }
