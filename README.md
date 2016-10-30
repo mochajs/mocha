@@ -29,4 +29,8 @@
 
 ## License
 
-:copyright: 2016 mochajs.org contributors.  Content licensed CC-BY-4.0; code licensed MIT.
+:copyright: 2016 [JS Foundation](https://js.foundation) and contributors.
+
+Content licensed [CC-BY-4.0](https://raw.githubusercontent.com/mochajs/mochajs.github.io/master/LICENSE-CC-BY-4.0).
+
+Code licensed [MIT](https://raw.githubusercontent.com/mochajs/mochajs.github.io/master/LICENSE-MIT).
