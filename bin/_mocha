@@ -183,6 +183,14 @@ if (!process.env.LOADED_MOCHA_OPTS) {
   getOptions();
 }
 
+// Avoid output truncation in node 5.12.1-6.2.0
+var streams = [process.stdout, process.stderr];
+streams.forEach(function (stream) {
+  if (stream._handle && stream._handle.setBlocking) {
+    stream._handle.setBlocking(true);
+  }
+});
+
 // parse args
 
 program.parse(process.argv);
