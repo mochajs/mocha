@@ -4,8 +4,8 @@
   "description": "Mocha's gh-pages branch",
   "private": true,
   "scripts": {
-    "prepublish": "npm start postinstall",
-    "start": "package-scripts --silent --config ./scripts/package-scripts.js"
+    "postinstall": "npm start postinstall",
+    "start": "nps --silent --config ./scripts/package-scripts.js"
   },
   "repository": {
     "type": "git",
@@ -18,9 +18,9 @@
   "homepage": "https://mochajs.org",
   "devDependencies": {
     "chalk": "^1.1.3",
-    "markdown-toc": "^0.12.14",
+    "markdown-toc": "^0.13.0",
     "p-s": "^3.0.1",
-    "shx": "^0.1.2"
+    "shx": "^0.1.4"
   },
   "engines": {
     "node": ">=4.0.0",
