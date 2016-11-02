@@ -84,7 +84,7 @@ $ npm install --global mocha
 ```
 
 or as a development dependency for your project:
- 
+
 ```sh
 $ npm install --save-dev mocha
 ```
@@ -117,12 +117,28 @@ describe('Array', function() {
 Back in the terminal:
 
 ```sh
+$ ./node_modules/mocha/bin/mocha
+
   Array
     #indexOf()
       ✓ should return -1 when the value is not present
 
 
   1 passing (9ms)
+```
+
+Set up a test script in package.json:
+
+```json
+"scripts": {
+    "test": "mocha"
+  }
+```
+
+Then run tests with:
+
+```sh
+$ npm test
 ```
 
 ## Assertions
@@ -395,7 +411,7 @@ describe('Array', function() {
     it.only('should return the index when present', function() {
       // this test will also be run
     });
-    
+
     it('should return -1 if called with a non-Array context', function() {
       // this test will not be run
     });
@@ -416,13 +432,13 @@ describe('Array', function() {
       // this test will also be run
     });
   });
-  
+
   describe.only('#concat()', function () {
     it('should return a new Array', function () {
       // this test will also be run
     });
   });
-  
+
   describe('#slice()', function () {
     it('should return a new Array', function () {
       // this test will not be run
@@ -539,11 +555,11 @@ This feature does re-run `beforeEach/afterEach` hooks but not `before/after` hoo
 describe('retries', function() {
   // Retry all tests in this suite up to 4 times
   this.retries(4);
-  
+
   beforeEach(function () {
     browser.get('http://www.yahoo.com');
   });
-  
+
   it('should succeed on the 3rd try', function () {
     // Specify this test to only retry up to 2 times
     this.retries(2);
@@ -660,7 +676,7 @@ describe('a suite of tests', function() {
 
 Again, use `this.timeout(0)` to disable the timeout for a hook.
 
-> In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) will cause the timeout to be disabled. 
+> In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) will cause the timeout to be disabled.
 
 ## Diffs
 
@@ -742,7 +758,7 @@ name. For example `--compilers coffee:coffee-script` with CoffeeScript 1.6- or
 
 #### About Babel
 
-If your ES6 modules have extension `.js`, you can `npm install --save-dev babel-register` and use `mocha --require babel-register`; `--compilers` is only necessary if you need to specify a file extension. 
+If your ES6 modules have extension `.js`, you can `npm install --save-dev babel-register` and use `mocha --require babel-register`; `--compilers` is only necessary if you need to specify a file extension.
 
 ### `-b, --bail`
 
