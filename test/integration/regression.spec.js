@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
+var map = require('../../lib/utils').map;
 
 describe('regressions', function () {
   it('issue-1327: should run all 3 specs exactly once', function (done) {
@@ -54,17 +55,175 @@ describe('regressions', function () {
     });
   });
 
-  describe('issue-2286: after doesn\'t execute if test was skipped in beforeEach', function () {
-    var afterWasRun = false;
-    describe('suite with skipped test for meta test', function () {
-      beforeEach(function () { this.skip(); });
-      after(function () { afterWasRun = true; });
-      it('should be pending', function () {});
+  describe(
+    "issue-2286: after doesn't execute if test was skipped in beforeEach",
+    function () {
+      /**
+       * Generates tests for behavior of `this.skip()`
+       * @param {string} name - Name of Runnable abort via `this.skip()`
+       * @param {Array.<boolean>} expected - For each of the Runnable types,
+       *   whether or not the Runnable should have been run.  The order is
+       *   "beforeAll" x 2, "beforeEach" x 2, "test" x 2, "afterEach" x 2, then
+       *   "afterAll" x 2.  There should be 10 items in this array.
+       * @param {string} [mode=always] - One of 'always' or 'once'
+       */
+      function testPendingRunnables (name, expected, mode) {
+        mode = mode || 'always';
+        var spies = [];
+
+        function spy (skip) {
+          function wrapped () {
+            if ((!wrapped.runCount++ || mode === 'always') && skip) {
+              this.skip();
+            }
+          }
+
+          wrapped.runCount = 0;
+          spies.push(wrapped);
+          return wrapped;
+        }
+
+        describe(name, function () {
+          describe('meta', function () {
+            before(spy(name === 'beforeAll'));
+            before(spy(name === 'beforeAll'));
+            beforeEach(spy(name === 'beforeEach'));
+            beforeEach(spy(name === 'beforeEach'));
+            it('might be pending', spy(name === 'test'));
+            it('might be pending', spy(name === 'test'));
+            afterEach(spy(name === 'afterEach'));
+            afterEach(spy(name === 'afterEach'));
+            after(spy(name === 'afterAll'));
+            after(spy(name === 'afterAll'));
+          });
+
+          after(name + ' - ' + mode, function () {
+            map(spies, function (spy) {
+              return Boolean(spy.runCount);
+            })
+              .should
+              .deepEqual(expected);
+          });
+        });
+      }
+
+      testPendingRunnables('beforeAll', [
+        true, // beforeAll
+        true,
+        false, // beforeEach
+        false,
+        false, // test
+        false,
+        false, // afterEach
+        false,
+        true, // afterAll
+        true
+      ]);
+
+      testPendingRunnables('beforeAll', [
+        true, // beforeAll
+        true,
+        false, // beforeEach
+        false,
+        false, // test
+        false,
+        false, // afterEach
+        false,
+        true, // afterAll
+        true
+      ], 'once');
+
+      testPendingRunnables('beforeEach', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        false, // test
+        false,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ]);
+
+      testPendingRunnables('beforeEach', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        false, // test
+        true,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ], 'once');
+
+      testPendingRunnables('test', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        true, // test
+        true,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ]);
+
+      testPendingRunnables('test', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        true, // test
+        true,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ], 'once');
+
+      testPendingRunnables('afterEach', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        true, // test
+        false,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ], 'once');
+
+      testPendingRunnables('afterAll', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        true, // test
+        true,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ]);
+
+      testPendingRunnables('afterAll', [
+        true, // beforeAll
+        true,
+        true, // beforeEach
+        true,
+        true, // test
+        true,
+        true, // afterEach
+        true,
+        true, // afterAll
+        true
+      ], 'once');
     });
-    after('meta test', function () {
-      afterWasRun.should.be.ok();
-    });
-  });
 
   it('issue-2315: cannot read property currentRetry of undefined', function (done) {
     runJSON('regression/issue-2315.fixture.js', [], function (err, res) {
