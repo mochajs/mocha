@@ -67,7 +67,7 @@ describe('regressions', function () {
   });
 
   it('issue-2315: cannot read property currentRetry of undefined', function (done) {
-    runJSON('regression/issue-2315.js', [], function (err, res) {
+    runJSON('regression/issue-2315.fixture.js', [], function (err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
@@ -100,7 +100,7 @@ describe('regressions', function () {
   });
 
   it('issue-1417 uncaught exceptions from async specs', function (done) {
-    runJSON('regression/issue-1417.js', [], function (err, res) {
+    runJSON('regression/issue-1417.fixture.js', [], function (err, res) {
       assert(!err);
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
