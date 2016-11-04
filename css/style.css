@@ -1,5 +1,5 @@
 html {
-  font: 14px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -127,7 +127,8 @@ ul::after {
 }
 
 code {
-  font: 12px monaco, monospace;
+  font: 14px monaco, monospace;
+  line-height: 2.0;
 }
 
 pre {
