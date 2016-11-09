@@ -1,16 +1,24 @@
 'use strict';
 
 const chalk = require('chalk');
-const pkg = require('../package.json');
+const join = require('path').join;
 
-module.exports = {
-  scripts: {
-    postinstall: `shx echo "\uD83D\uDC49   ${chalk.yellow(pkg.name)} installation:
-    1. Follow directions for your platform at ${chalk.underline('https://git.io/vKcdH')} to install prereqs.
-    2. Execute ${chalk.bold('bundle install')} in this directory.
-    3. Execute ${chalk.bold('npm start serve')} to serve the site locally."`,
-    serve: 'bundle exec jekyll serve --safe --drafts --watch',
-    build: 'bundle exec jekyll build --safe --drafts',
-    toc: require.resolve('./toc')
+exports.scripts = {
+  serve: {
+    script: 'bundle exec jekyll serve --safe --drafts --watch',
+    description: `Build site via Jekyll, watch for changes, serve at ${chalk.underline(
+      'http://localhost:4000/')}`
+  },
+  build: {
+    script: 'bundle exec jekyll build --safe --drafts',
+    description: 'Build site via Jekyll'
+  },
+  toc: {
+    script: join(__dirname, 'toc.js'),
+    description: `Rebuild table of contents; mutates ${chalk.bold('index.md')}`
+  },
+  postinstall: {
+    script: join(__dirname, 'postinstall.js'),
+    description: 'Displays help after installing'
   }
 };

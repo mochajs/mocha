@@ -19,8 +19,7 @@
   "devDependencies": {
     "chalk": "^1.1.3",
     "markdown-toc": "^0.13.0",
-    "p-s": "^3.0.1",
-    "shx": "^0.2.0"
+    "p-s": "^3.0.1"
   },
   "engines": {
     "node": ">=4.0.0",
