@@ -7,8 +7,8 @@ var os = require('os');
 var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 
-describe('lookupFiles', function () {
-  var tmpDir = path.join(os.tmpDir(), 'mocha-lookup-files');
+describe('file utils', function () {
+  var tmpDir = path.join(os.tmpDir(), 'mocha-file-test-folder');
   var existsSync = fs.existsSync;
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;
@@ -36,46 +36,68 @@ describe('lookupFiles', function () {
     }
   });
 
-  (symlinkSupported ? it : it.skip)('should not choke on symlinks', function () {
-    expect(utils.lookupFiles(tmpDir, ['js'], false))
-      .to
-      .contain(tmpFile('mocha-utils-link.js'))
-      .and
-      .contain(tmpFile('mocha-utils.js'))
-      .and
-      .have
-      .length(2);
-    expect(existsSync(tmpFile('mocha-utils-link.js')))
-      .to
-      .be(true);
-    fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
-    expect(existsSync(tmpFile('mocha-utils-link.js')))
-      .to
-      .be(false);
-    expect(utils.lookupFiles(tmpDir, ['js'], false))
-      .to
-      .eql([]);
+  describe('.lookupFiles', function () {
+    (symlinkSupported ? it : it.skip)('lookupFiles should not choke on broken symlinks', function () {
+      expect(utils.lookupFiles(tmpDir, ['js'], false))
+        .to
+        .contain(tmpFile('mocha-utils-link.js'))
+        .and
+        .contain(tmpFile('mocha-utils.js'))
+        .and
+        .have
+        .length(2);
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to
+        .be(true);
+      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to
+        .be(false);
+      expect(utils.lookupFiles(tmpDir, ['js'], false))
+        .to
+        .eql([]);
+    });
+
+    it('should accept a glob "path" value', function () {
+      var res = utils.lookupFiles(tmpFile('mocha-utils*'), ['js'], false)
+        .map(path.normalize.bind(path));
+
+      var expectedLength = 0;
+      var ex = expect(res)
+        .to
+        .contain(tmpFile('mocha-utils.js'));
+      expectedLength++;
+
+      if (symlinkSupported) {
+        ex = ex.and
+          .contain(tmpFile('mocha-utils-link.js'));
+        expectedLength++;
+      }
+
+      ex.and
+        .have
+        .length(expectedLength);
+    });
   });
 
-  it('should accept a glob "path" value', function () {
-    var res = utils.lookupFiles(tmpFile('mocha-utils*'), ['js'], false)
-      .map(path.normalize.bind(path));
+  describe('.files', function () {
+    (symlinkSupported ? it : it.skip)('should not choke on broken symlinks', function () {
+      expect(utils.files(tmpDir, ['js']))
+        .to.contain(tmpFile('mocha-utils-link.js'))
+        .and.contain(tmpFile('mocha-utils.js'))
+        .and.have.length(2);
 
-    var expectedLength = 0;
-    var ex = expect(res)
-      .to
-      .contain(tmpFile('mocha-utils.js'));
-    expectedLength++;
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to.be(true);
 
-    if (symlinkSupported) {
-      ex = ex.and
-        .contain(tmpFile('mocha-utils-link.js'));
-      expectedLength++;
-    }
+      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
 
-    ex.and
-      .have
-      .length(expectedLength);
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to.be(false);
+
+      expect(utils.files(tmpDir, ['js']))
+        .to.eql([]);
+    });
   });
 
   afterEach(removeTempDir);
