@@ -81,4 +81,4 @@ Does your company use Mocha?  Ask your manager or marketing team if your company
 
 ## License
 
-[MIT](https://raw.githubusercontent.com/mochajs/mocha/master/LICENSE)
+[MIT](LICENSE)
