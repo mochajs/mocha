@@ -179,14 +179,18 @@ describe('Cli', function () {
   });
 
   xdescribe('.setMochaOptions()', function () {
-    var program = cli.makeCommand();
-    program.parse(testArgs1);
-
-    it('should set options on mocha', function () {
+    xit('should set options on mocha', function () {
+      var program = cli.makeCommand();
+      program.parse(testArgs1);
       var mocha = new Mocha();
       cli.setMochaOptions(mocha, program.opts());
 
       // how to test this? we should test as many options being set as possible
+    });
+
+    xit('should separate global scope per instance', function () {
+      var program = cli.makeCommand();
+      program.parse(testArgs1);
     });
   });
 
