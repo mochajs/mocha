@@ -32,6 +32,10 @@ h1 {
   transition: opacity .3s;
 }
 
+#_backers a img, #_sponsors a img {
+  max-height: 64px;
+}
+
 .onload h1, #_backers.onload a, #_sponsors.onload a {
   opacity: 1;
 }
