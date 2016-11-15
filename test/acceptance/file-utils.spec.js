@@ -8,7 +8,7 @@ var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 
 describe('file utils', function () {
-  var tmpDir = path.join(os.tmpDir(), 'mocha-file-test-folder');
+  var tmpDir = path.join(os.tmpDir(), 'mocha-file-lookup');
   var existsSync = fs.existsSync;
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;
@@ -37,7 +37,7 @@ describe('file utils', function () {
   });
 
   describe('.lookupFiles', function () {
-    (symlinkSupported ? it : it.skip)('lookupFiles should not choke on broken symlinks', function () {
+    (symlinkSupported ? it : it.skip)('should not return broken symlink file path', function () {
       expect(utils.lookupFiles(tmpDir, ['js'], false))
         .to
         .contain(tmpFile('mocha-utils-link.js'))
@@ -81,7 +81,7 @@ describe('file utils', function () {
   });
 
   describe('.files', function () {
-    (symlinkSupported ? it : it.skip)('should not choke on broken symlinks', function () {
+    (symlinkSupported ? it : it.skip)('should return broken symlink file path', function () {
       expect(utils.files(tmpDir, ['js']))
         .to.contain(tmpFile('mocha-utils-link.js'))
         .and.contain(tmpFile('mocha-utils.js'))
@@ -96,7 +96,7 @@ describe('file utils', function () {
         .to.be(false);
 
       expect(utils.files(tmpDir, ['js']))
-        .to.eql([]);
+        .to.eql([tmpFile('mocha-utils-link.js')]);
     });
   });
 
