@@ -9,10 +9,15 @@
 
 var spawn = require('child_process').spawn;
 var path = require('path');
+var parser = require('../lib/cli/parser');
 
 // all argv expanding and manipulation has been shifted to the cli module
 // so its no longer needed here.
-var args = [path.join(__dirname, '_mocha')].concat(process.argv.slice(2));
+var args = [path.join(__dirname, '_mocha')].concat(
+  parser.expandArgs(parser.expandOpts(process.argv.slice(2)))
+);
+
+process.env.LOADED_MOCHA_OPTS = true;
 
 var proc = spawn(process.execPath, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {

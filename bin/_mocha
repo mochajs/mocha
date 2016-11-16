@@ -18,11 +18,11 @@ var program = cli.makeCommand();
 cli.addActions(program);
 
 // parse args (since we override parseOptions it will handle --opts correctly)
+cli.parseArgv(program, process.argv);
 
-program.parse(process.argv);
 process.argv = program.rawArgs; // for regressions
 
-var opts = program.opts();
+var opts = program._opts(); // commander bug https://github.com/tj/commander.js/issues/584
 
 // set options in mocha
 cli.setMochaOptions(
