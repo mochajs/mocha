@@ -2,7 +2,6 @@
 <p align="center">
   <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
 </p>
-<br><br>
 
 [![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
