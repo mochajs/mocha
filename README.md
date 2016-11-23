@@ -8,7 +8,7 @@
 [![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
 
-<img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" style="max-width: 354px">
+<img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" style="width: 354px">
 
   Mocha is a simple, flexible, fun JavaScript test framework for node.js and the browser. For more information view the [documentation](http://mochajs.org).
 
