@@ -1,3 +1,47 @@
+# 3.2.0 / 2016-11-24
+
+## :newspaper: News
+
+### Mocha is now a JS Foundation Project!
+
+Mocha is proud to have joined the [JS Foundation](https://js.foundation).  For more information, [read the announcement](https://js.foundation/announcements/2016/10/17/Linux-Foundation-Unites-JavaScript-Community-Open-Web-Development/).
+
+### Contributor License Agreement
+
+Under the foundation, all contributors to Mocha must sign the [JS Foundation CLA](https://js.foundation/CLA/) before their code can be merged.  When sending a PR--if you have not already signed the CLA--a friendly bot will ask you to do so.
+
+Mocha remains licensed under the [MIT license](https://github.com/mochajs/mocha/blob/master/LICENSE).
+
+## :bug: Bug Fix
+
+- [#2535]: Fix crash when `--watch` encounters broken symlinks ([@villesau])
+- [#2593]: Fix (old) regression; incorrect symbol shown in `list` reporter ([@Aldaviva])
+- [#2584]: Fix potential error when running XUnit reporter ([@vobujs])
+
+## :tada: Enhancement
+
+- [#2294]: Improve timeout error messaging ([@jeversmann], [@boneskull])
+- [#2520]: Add info about `--inspect` flag to CLI help ([@ughitsaaron])
+
+## :nut_and_bolt: Other
+
+- [#2570]: Use [karma-mocha](https://npmjs.com/package/karma-mocha) proper ([@boneskull])
+- Licenses updated to reflect new copyright, add link to license and browser matrix to `README.md` ([@boneskull], [@ScottFreeCode], [@dasilvacontin])
+
+[#2294]: https://github.com/mochajs/mocha/issues/2294
+[#2535]: https://github.com/mochajs/mocha/issues/2535
+[#2520]: https://github.com/mochajs/mocha/pull/2520
+[#2593]: https://github.com/mochajs/mocha/pull/2593
+[#2584]: https://github.com/mochajs/mocha/issues/2584
+[#2570]: https://github.com/mochajs/mocha/issues/2570
+[@Aldaviva]: https://github.com/Aldaviva
+[@jeversmann]: https://github.com/jeversmann
+[@ughitsaaron]: https://github.com/ughitsaaron
+[@villesau]: https://github.com/villesau
+[@vobujs]: https://github.com/vobujs
+
+Thanks to all our contributors, sponsors and backers!  Keep on the lookout for a public roadmap and new contribution guide coming soon.
+
 # 3.1.2 / 2016-10-10
 
 ## :bug: Bug Fix
