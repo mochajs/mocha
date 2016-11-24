@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 var helpers = require('./helpers');
-var args = [];
+var args = ['--reporter', 'dot'];
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function () {

@@ -22,20 +22,22 @@ module.exports = {
    *   output:  '...'
    * }
    *
-   * @param {string}   fixturePath
-   * @param {array}    args
-   * @param {function} fn
+   * @param {string} fixturePath - Path to fixture .js file
+   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {Function} done - Callback
    */
-  runMocha: function (fixturePath, args, fn) {
+  runMocha: function (fixturePath, args, done) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
     invokeMocha(args.concat(['-C', path]), function (err, res) {
-      if (err) return fn(err);
+      if (err) {
+        return done(err);
+      }
 
-      fn(null, getSummary(res));
+      done(null, getSummary(res));
     });
   },
 
