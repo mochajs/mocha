@@ -23,7 +23,7 @@ module.exports = function (config) {
     exclude: [
       'test/acceptance/http.spec.js',
       'test/acceptance/fs.spec.js',
-      'test/acceptance/lookup-files.spec.js',
+      'test/acceptance/file-utils.spec.js',
       'test/acceptance/require/**/*.js',
       'test/acceptance/misc/**/*.js'
     ],
