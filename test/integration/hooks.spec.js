@@ -1,13 +1,13 @@
 'use strict';
 
 var assert = require('assert');
-var run = require('./helpers').runMocha;
+var runMocha = require('./helpers').runMocha;
 var splitRegExp = require('./helpers').splitRegExp;
-var args = [];
+var args = ['--reporter', 'dot'];
 
 describe('hooks', function () {
   it('are ran in correct order', function (done) {
-    run('cascade.fixture.js', args, function (err, res) {
+    runMocha('cascade.fixture.js', args, function (err, res) {
       var lines, expected;
 
       assert(!err);
