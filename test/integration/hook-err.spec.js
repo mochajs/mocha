@@ -186,7 +186,7 @@ describe('hook error handling', function () {
 
   function run (fnPath, outputFilter) {
     return function (done) {
-      runMocha(fnPath, [], function (err, res) {
+      runMocha(fnPath, ['--reporter', 'dot'], function (err, res) {
         assert.ifError(err);
 
         lines = res.output
