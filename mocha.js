@@ -833,7 +833,7 @@ module.exports = function (suites, context, mocha) {
      * This is only present if flag --delay is passed into Mocha. It triggers
      * root suite execution.
      *
-     * @param {Suite} suite The root wuite.
+     * @param {Suite} suite The root suite.
      * @return {Function} A function which runs the root suite
      */
     runWithSuite: function runWithSuite (suite) {
@@ -3243,7 +3243,7 @@ function List (runner) {
   });
 
   runner.on('pass', function (test) {
-    var fmt = color('checkmark', '  ' + Base.symbols.dot) +
+    var fmt = color('checkmark', '  ' + Base.symbols.ok) +
       color('pass', ' %s: ') +
       color(test.speed, '%dms');
     cursor.CR();
@@ -3973,7 +3973,7 @@ function XUnit (runner, options) {
   var tests = [];
   var self = this;
 
-  if (options.reporterOptions && options.reporterOptions.output) {
+  if (options && options.reporterOptions && options.reporterOptions.output) {
     if (!fs.createWriteStream) {
       throw new Error('file output not supported in browser');
     }
@@ -4331,8 +4331,8 @@ Runnable.prototype.resetTimeout = function () {
     if (!self._enableTimeouts) {
       return;
     }
-    self.callback(new Error('timeout! Test didn\'t complete within ' + ms +
-      '. For async tests, make sure you are calling \'done\' or that the returned Promise eventually resolves.'));
+    self.callback(new Error('Timeout of ' + ms +
+      'ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.'));
     self.timedOut = true;
   }, ms);
 };
@@ -4391,8 +4391,8 @@ Runnable.prototype.run = function (fn) {
     self.duration = new Date() - start;
     finished = true;
     if (!err && self.duration > ms && self._enableTimeouts) {
-      err = new Error('timeout! Test didn\'t complete within ' + ms +
-        '. For async tests, make sure you are calling \'done\' or that the returned Promise eventually resolves.');
+      err = new Error('Timeout of ' + ms +
+      'ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.');
     }
     fn(err);
   }
@@ -5972,6 +5972,7 @@ var join = path.join;
 var readdirSync = require('fs').readdirSync;
 var statSync = require('fs').statSync;
 var watchFile = require('fs').watchFile;
+var lstatSync = require('fs').lstatSync;
 var toISOString = require('./to-iso-string');
 
 /**
@@ -6208,7 +6209,7 @@ exports.files = function (dir, ext, ret) {
     .filter(ignored)
     .forEach(function (path) {
       path = join(dir, path);
-      if (statSync(path).isDirectory()) {
+      if (lstatSync(path).isDirectory()) {
         exports.files(path, ext, ret);
       } else if (path.match(re)) {
         ret.push(path);
