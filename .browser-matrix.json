@@ -1,0 +1,72 @@
+{
+  "ie7": {
+    "base": "SauceLabs",
+    "browserName": "internet explorer",
+    "platform": "Windows XP",
+    "version": "7.0"
+  },
+  "ie8": {
+    "base": "SauceLabs",
+    "browserName": "internet explorer",
+    "platform": "Windows 7",
+    "version": "8.0"
+  },
+  "ie9": {
+    "base": "SauceLabs",
+    "browserName": "internet explorer",
+    "platform": "Windows 7",
+    "version": "9.0"
+  },
+  "ie10": {
+    "base": "SauceLabs",
+    "browserName": "internet explorer",
+    "platform": "Windows 8"
+  },
+  "ie11": {
+    "base": "SauceLabs",
+    "browserName": "internet explorer",
+    "platform": "Windows 10",
+    "version": "11.0"
+  },
+  "chrome": {
+    "base": "SauceLabs",
+    "browserName": "chrome",
+    "platform": "Windows 10",
+    "version": "latest"
+  },
+  "edge": {
+    "base": "SauceLabs",
+    "browserName": "MicrosoftEdge",
+    "platform": "Windows 10",
+    "version": "latest"
+  },
+  "firefox": {
+    "base": "SauceLabs",
+    "browserName": "firefox",
+    "platform": "Windows 10",
+    "version": "latest"
+  },
+  "safari8": {
+    "base": "SauceLabs",
+    "browserName": "safari",
+    "platform": "OS X 10.10"
+  },
+  "safari9": {
+    "base": "SauceLabs",
+    "browserName": "safari",
+    "platform": "OS X 10.11",
+    "version": "9.0"
+  },
+  "safari10": {
+    "base": "SauceLabs",
+    "browserName": "safari",
+    "platform": "OS X 10.11",
+    "version": "10.0"
+  },
+  "opera": {
+    "base": "SauceLabs",
+    "browserName": "opera",
+    "platform": "Linux",
+    "version": "latest"
+  }
+}

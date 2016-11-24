@@ -5,10 +5,39 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
 var osName = require('os-name');
+var browserMatrix = require('./.browser-matrix.json');
+
+/**
+ * Relevant environment variables:
+ *
+ * - CI: If present, will attempt to run tests on SauceLabs.  If neither TRAVIS
+ * nor APPVEYOR are present, then we configure for local execution.
+ * - TRAVIS: If present, configure for Travis-CI
+ * - APPVEYOR: If present, abort; Travis-CI runs browser tests
+ * - SAUCE_ACCESS_KEY, SAUCE_USERNAME: Must be present to run tests on
+ * SauceLabs.  Specify these with CI=1 to run against SauceLabs locally.
+ * - MOCHA_BROWSER: The browser (singular) to run against.  Can be one of
+ * "Chrome", "PhantomJS" (launchers installed by default) any key present in
+ * `.browser-matrix.json`, or any custom Karma launcher you've installed
+ * locally.  Note that PhantomJS 1.9.x is incompatible with macOS Sierra, and
+ * we default to Safari in that case.
+ * - MOCHA_UI: If present, will run integration tests for the particular interface.  One of "tdd", "bdd", or "qunit".  These tests are mutually exclusive with any others.
+ * - S3: If present, upload build artifacts to S3.  This requires AWS credentials; see scripts/travis-after-script.sh for details.  The folder in S3 will correspond to the Travis build number, or simply "local" if not running on Travis.
+ *
+ * Example of running tests against sauce locally:
+ * $ CI=1 SAUCE_ACCESS_KEY=<key> SAUCE_USERNAME=mochajs make test-browser
+ *
+ * Example of running Karma against multiple browsers (whose launchers must be installed) a single time:
+ * $ karma start --browsers Chrome,PhantomJS --single-run
+ *
+ * Example of running Karma on SauceLabs against IE8 in "watch" mode:
+ * $ CI=1 SAUCE_ACCESS_KEY=<key> SAUCE_USERNAME=mochajs MOCHA_BROWSER=ie8 karma start
+ */
 
 module.exports = function (config) {
-  var bundleDirpath;
+  var env = process.env;
   var cfg = {
+    artifactDirpath: path.join(baseBundleDirpath, 'local'),
     frameworks: [
       'browserify',
       'expect',
@@ -38,9 +67,9 @@ module.exports = function (config) {
           .ignore('path')
           .ignore('supports-color')
           .on('bundled', function (err, content) {
-            if (!err && bundleDirpath) {
+            if (!err) {
               // write bundle to directory for debugging
-              fs.writeFileSync(path.join(bundleDirpath,
+              fs.writeFileSync(path.join(cfg.artifactDirpath,
                 'bundle.' + Date.now() + '.js'), content);
             }
           });
@@ -48,8 +77,8 @@ module.exports = function (config) {
     },
     reporters: ['spec'],
     colors: true,
-    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'],
-    logLevel: config.LOG_INFO,
+    browsers: defaultBrowsers(),
+    logLevel: config.LOG_INFO, // use HTML reporter for better debugging
     client: {
       mocha: {
         reporter: 'html'
@@ -57,59 +86,101 @@ module.exports = function (config) {
     }
   };
 
-  // see https://github.com/saucelabs/karma-sauce-example
-  // TO RUN LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
-  var env = process.env;
-  var sauceConfig;
-
   if (env.CI) {
     console.error('CI mode enabled');
-    if (env.TRAVIS) {
-      console.error('Travis-CI detected');
-      bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
-      if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
-        // correlate build/tunnel with Travis
-        sauceConfig = {
-          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
-          ' (' + env.TRAVIS_BUILD_ID + ')',
-          tunnelIdentifier: env.TRAVIS_JOB_NUMBER
-        };
-        console.error('Configured SauceLabs');
-      } else {
-        console.error('No SauceLabs credentials present');
-      }
-    } else if (env.APPVEYOR) {
-      console.error('AppVeyor detected');
-      bundleDirpath = path.join(baseBundleDirpath, process.env.APPVEYOR_BUILD_ID);
-    } else {
-      console.error('Local/unknown environment detected');
-      bundleDirpath = path.join(baseBundleDirpath, 'local');
-      // don't need to run sauce from appveyor b/c travis does it.
-      if (!(env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY)) {
-        console.error('No SauceLabs credentials present');
-      } else {
-        sauceConfig = {
-          build: require('os').hostname() + ' (' + Date.now() + ')'
-        };
-        console.error('Configured SauceLabs');
-      }
-    }
-    mkdirp.sync(bundleDirpath);
+    configureCI(cfg);
   } else {
     console.error('CI mode disabled');
+    if (env.MOCHA_BROWSER) {
+      cfg.browsers = [env.MOCHA_BROWSER];
+    } else {
+      cfg.browsers = defaultBrowsers();
+    }
   }
 
-  if (sauceConfig) {
-    cfg.sauceLabs = sauceConfig;
-    addSauceTests(cfg);
-  }
+  // create dir for build artifacts
+  mkdirp.sync(cfg.artifactDirpath);
 
+  // if MOCHA_UI is present, this will choose the appropriate tests.
+  configureInterface(cfg);
+
+  config.set(cfg);
+};
+
+function addSauceTests (cfg, browser) {
+  var browserName = String(browser)
+    .toLowerCase();
+  var browserConfig = browserMatrix[browserName];
+  if (browserConfig) {
+    cfg.customLaunchers = {};
+    cfg.customLaunchers[browserName] = browserConfig;
+    cfg.reporters.push('saucelabs');
+    cfg.browsers = Object.keys(cfg.customLaunchers);
+    Object.assign(cfg.sauceLabs, {
+      public: 'public',
+      startConnect: true
+    });
+    // for slow browser booting, ostensibly
+    cfg.captureTimeout = 120000;
+    cfg.browserNoActivityTimeout = 20000;
+  } else {
+    console.error('Unknown browser "' + browser + '"; using defaults');
+  }
+}
+
+function configureSauce (cfg, sauceLabs) {
+  var env = process.env;
+  if (isPhantom()) {
+    console.error('Skipping SauceLabs config for PhantomJS');
+  } else {
+    if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
+      cfg.sauceLabs = sauceLabs;
+      addSauceTests(cfg, env.MOCHA_BROWSER);
+      console.error('Configured SauceLabs');
+    } else {
+      console.error('No SauceLabs credentials present; using defaults');
+    }
+  }
+}
+
+function defaultBrowsers () {
+  return [osName() === 'macOS Sierra' ? 'Safari' : 'PhantomJS'];
+}
+
+function isPhantom () {
+  return /phantomjs/i.test(process.env.MOCHA_BROWSER);
+}
+
+function configureCI (cfg) {
+  var env = process.env;
+
+  // we don't run browser tests in AppVeyor; Travis does it instead
+  if (env.APPVEYOR) {
+    console.error('AppVeyor detected; nothing to do');
+    process.exit();
+  } else if (env.TRAVIS) {
+    console.error('Travis-CI detected');
+    cfg.artifactDirpath = path.join(baseBundleDirpath, env.TRAVIS_BUILD_ID);
+    configureSauce(cfg, {
+      build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER + ' (' + env.TRAVIS_BUILD_ID +
+      ')',
+      tunnelIdentifier: env.TRAVIS_JOB_NUMBER
+    });
+  } else {
+    console.error('Local/unknown CI environment detected');
+    configureSauce(cfg, {
+      build: require('os')
+        .hostname() + ' (' + Date.now() + ')'
+    });
+  }
+}
+
+function configureInterface (cfg) {
   // the MOCHA_UI env var will determine if we're running interface-specific
   // tets.  since you can only load one at a time, each must be run separately.
   // each has its own set of acceptance tests and a fixture.
   // the "bdd" fixture is used by default.
-  var ui = env.MOCHA_UI;
+  var ui = process.env.MOCHA_UI;
   if (ui) {
     if (cfg.sauceLabs) {
       cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
@@ -119,62 +190,6 @@ module.exports = function (config) {
       'test/acceptance/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
-    cfg.sauceLabs.testName = 'Unit Tests';
+    cfg.sauceLabs.testName = 'Tests';
   }
-
-  config.set(cfg);
-};
-
-function addSauceTests (cfg) {
-  cfg.reporters.push('saucelabs');
-
-  cfg.customLaunchers = {
-    ie8: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 7',
-      version: '8.0'
-    },
-    ie7: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows XP',
-      version: '7.0'
-    },
-    chrome: {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      platform: 'Windows 8',
-      version: 'latest'
-    },
-    edge: {
-      base: 'SauceLabs',
-      browserName: 'MicrosoftEdge',
-      platform: 'Windows 10',
-      version: 'latest'
-    },
-    firefox: {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      platform: 'Windows 8.1',
-      version: 'latest'
-    },
-    safari: {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.11',
-      version: 'latest'
-    }
-  };
-
-  cfg.browsers = cfg.browsers.concat(Object.keys(cfg.customLaunchers));
-
-  cfg.sauceLabs = {
-    public: 'public',
-    startConnect: true
-  };
-
-  // for slow browser booting, ostensibly
-  cfg.captureTimeout = 120000;
-  cfg.browserNoActivityTimeout = 20000;
 }
