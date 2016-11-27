@@ -10,6 +10,7 @@ language: node_js
 
 env:
   global:
+    - SAUCE_USERNAME=mochajs
     # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
     # rate-limiting.  pull it from this sketchy site in China instead.
     - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
