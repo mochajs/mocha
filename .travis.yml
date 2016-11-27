@@ -71,9 +71,7 @@ before_install: scripts/travis-before-install.sh
 # install awscli for uploading artifacts to S3 if TARGET=test-browser.
 # this script ignores failures.
 before_script: scripts/travis-before-script.sh
-# retry if we encounter SauceLabs flake
-# TODO: only retry for browser tests
-script: travis_retry make $TARGET
+script: make $TARGET
 # upload artifacts to S3, if appropriate
 after_script: scripts/travis-after-script.sh
 notifications:
