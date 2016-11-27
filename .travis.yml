@@ -63,6 +63,8 @@ matrix:
     env: TARGET=test-browser MOCHA_BROWSER=safari10
   - node_js: '7'
     env: TARGET=test-browser MOCHA_BROWSER=opera
+  - node_js: '7'
+    env: TARGET=test-browser # phantomjs
 # this runs the sanity test and ensures Mocha works if installed by a user;
 # e.g. `npm install mocha`
 before_install: scripts/travis-before-install.sh
