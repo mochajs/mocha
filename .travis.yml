@@ -1,79 +1,95 @@
 # in order to use 'trusty' dist, need this.
 # see https://docs.travis-ci.com/user/trusty-ci-environment/
 sudo: required
-
-# trust dist provides a modern build chain (as opposed to 'precise' dist)
+# trusty dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
 dist: trusty
-
 language: node_js
-
 cache:
   directories:
-    - node_modules
-
+  - node_modules
 env:
   global:
-    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-    # rate-limiting.  pull it from this sketchy site in China instead.
-    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-    # we're going to use s3 to temporarily store Karma test bundles for debugging
-    - AWS_ACCESS_KEY_ID=AKIAJ3QQTLQXWXYJ6PTA
-    - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
-
+  # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
+  # rate-limiting.  pull it from this sketchy site in China instead.
+  - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+  # API keys for super secret pizza party
+  - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
+  - secure: fLauwn0Q/S60+r4MUXWZD4qFK5zYRJk+RSNuTVDvKvMoFicrQ8nRhN9Ya4rgW963xprOse0mDGKbKNoVBTT+v+kADYaYIXFBpXNoj/+9c24TERWpKjdWMrbIU0FIBE54GAg9/I7u18Nkah7P0I57Zuv2fcRvs7pOrA4Ac06YEJc=
+  - secure: E1Vleb5KDtfeN1O2XLjr5MpStBIQFElczdqd3RkCNrgJLtLZlhRIr6/dlBe5rrFuR6GKG8tozQJMojaIGISyz++uyC75TbGg1rhnopdPNFIouaWJ1MGsHDmEKutiIGUseVTON3zWxt5U/COMcN5arg383MrDTfkn+5dMDIeyXFM=
+  - secure: XgTC70pdoSBHuC5nuyzac2GGaU3SD7INWfCi5P6B39yTWAbqTNF6Bb7W/LqwVXJRPQrFyCESxAMm4AANXLwW5Q1te0LBSckclsoJTABsDROd4u+BPTq7ULVXgma3HbRzyCTRkmztcfNout3D1BjUsHc8goe0EtlR185LI++F0ps=
+# our matrix is split between node and browser versions.
+# if anyone knows a more concise way to describe this matrix,
+# please update it!
 matrix:
-  fast_finish: true
   include:
-    - node_js: '7'
-      env: TARGET=test-node
-    - node_js: '6'
-      env: TARGET=test-node
-    - node_js: '5'
-      env: TARGET=test-node
-    - node_js: '4'
-      env: TARGET=test-node
-    - node_js: 'iojs'
-      env: TARGET=test-node
-    - node_js: '0.12'
-      env: TARGET=test-node
-    - node_js: '0.11'
-      env: TARGET=test-node
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=ie7 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=ie8 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=ie9 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=ie10 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=ie11 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=chrome S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=edge S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=firefox S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=safari8 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=safari9 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=safari10 S3=1
-    - node_js: '7'
-      env: TARGET=test-browser MOCHA_BROWSER=opera S3=1
-
+  - node_js: '7'
+    env: TARGET=test-node
+  - node_js: '6'
+    env: TARGET=test-node
+  - node_js: '5'
+    env: TARGET=test-node
+  - node_js: '4'
+    env: TARGET=test-node
+  - node_js: iojs
+    env: TARGET=test-node
+  - node_js: '0.12'
+    env: TARGET=test-node
+  - node_js: '0.11'
+    env: TARGET=test-node
+  - node_js: '0.10'
+    env: TARGET=test-node
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=ie7
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=ie8
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=ie9
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=ie10
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=ie11
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=chrome
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=edge
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=firefox
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=safari8
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=safari9
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=safari10
+  - node_js: '7'
+    env: TARGET=test-browser MOCHA_BROWSER=opera
+# this runs the sanity test and ensures Mocha works if installed by a user;
+# e.g. `npm install mocha`
 before_install: scripts/travis-before-install.sh
-
+# install awscli for uploading artifacts to S3 if TARGET=test-browser.
+# this script ignores failures.
 before_script: scripts/travis-before-script.sh
-
+# retry if we encounter SauceLabs flake
+# TODO: only retry for browser tests
 script: travis_retry make $TARGET
-
+# upload artifacts to S3, if appropriate
 after_script: scripts/travis-after-script.sh
-
 notifications:
-  urls:
-    # for gitter
-    - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
-  on_success: change
-  on_failure: always
+  # if you want email, add yourself here. I don't.
+  email: false
+  webhooks:
+    urls:
+    # private Gitter room
+    - secure: RLQSQzbNlJx7n1iIlu7/KpGUk47KYANMLCDuQMLtwxu3NqmeeTLA5NRcKMWyMG2IBYcskZuYyxTjCe890UJsukChe8K4SWdqlk26KtZRX7FqDfD/4uN8w+Hjya3o8ihrUkQ30xMEO1nAb+D7WxRc0Zs3w2G7JvsBV976Y9jKTho=
+    on_success: change
+    on_failure: always
+    on_start: never
+  pushover:
+    # boneskull's pushover
+    users:
+      secure: NfIXOmc6vJtaVAHaaqu2MDYSbQSG6Y7/jWviYNADtQBynXOT2mTnnhUjQtoQ35smTaBj0pIxqiNde/Xb+U1GTm5dv2sayghG7zFPi2Z3MI3g/JaQAJvLB4sLJoI0uwtNgzbM8I2qZ17zra5cfe0W6I6xXtxK87HYFjQ4f4X+i+k=
+    api_key:
+      secure: srxq13iKjeJquhDZ+O597wIU3NybNoqhFwJ65G3QGc44RNHuV1AyDXuy1v4usQ/OjspRRU91NdzrjwgyUzcfVjMyPFhmqFLPAm3NQGr9Wvfq5eqSSc4eEBcljiz+xv9A+YyDDBdGGXNM/0byzu9WV8KNJIuods96YHTUXmJWyY0=
+    on_success: change
+    on_failure: always
+    on_start: never
