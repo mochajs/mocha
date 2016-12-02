@@ -310,7 +310,7 @@
     "glob": "7.1.1",
     "growl": "1.9.2",
     "json3": "3.3.2",
-    "lodash.create": "4.2.0",
+    "lodash.create": "3.1.1",
     "mkdirp": "0.5.1",
     "supports-color": "3.1.2"
   },
@@ -333,7 +333,7 @@
     "karma-sauce-launcher": "^1.0.0",
     "karma-spec-reporter": "0.0.26",
     "os-name": "^2.0.1",
-    "phantomjs": "2.1.7",
+    "phantomjs": "1.9.8",
     "rimraf": "^2.5.2",
     "should": "^11.1.1",
     "through2": "^2.0.1",
@@ -361,5 +361,11 @@
     "supports-color": false
   },
   "homepage": "https://mochajs.org",
-  "logo": "https://cldup.com/S9uQ-cOLYz.svg"
+  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
+  "greenkeeper": {
+    "ignore": [
+      "phantomjs",
+      "lodash.create"
+    ]
+  }
 }
