@@ -44,7 +44,7 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/\- actual/);
+      errOut.should.match(/- actual/);
       errOut.should.match(/\+ expected/);
     });
 
@@ -58,7 +58,7 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/\- actual/);
+      errOut.should.match(/- actual/);
       errOut.should.match(/\+ expected/);
     });
 
@@ -72,7 +72,7 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/- actual/);
       errOut.should.not.match(/\+ expected/);
     });
 
@@ -85,7 +85,7 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/\- actual/);
+      errOut.should.not.match(/- actual/);
       errOut.should.not.match(/\+ expected/);
     });
   });
@@ -127,7 +127,7 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     errOut.should.match(/"key"/);
     errOut.should.match(/test/);
-    errOut.should.match(/\- actual/);
+    errOut.should.match(/- actual/);
     errOut.should.match(/\+ expected/);
   });
 
@@ -147,7 +147,7 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     errOut.should.match(/"hasOwnProperty"/);
     errOut.should.match(/test/);
-    errOut.should.match(/\- actual/);
+    errOut.should.match(/- actual/);
     errOut.should.match(/\+ expected/);
   });
 
@@ -166,8 +166,8 @@ describe('Base reporter', function () {
 
       errOut = stdout.join('\n');
       errOut.should.match(/\+true/);
-      errOut.should.match(/\-false/);
-      errOut.should.match(/\- actual/);
+      errOut.should.match(/-false/);
+      errOut.should.match(/- actual/);
       errOut.should.match(/\+ expected/);
     }
   });
