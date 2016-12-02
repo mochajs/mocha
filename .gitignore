@@ -10,4 +10,4 @@ npm-debug.log*
 .envrc
 .karma/
 *.orig
-
+.nyc_output/
