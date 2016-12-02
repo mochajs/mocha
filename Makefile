@@ -24,7 +24,7 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) .
+	$(ESLINT) . bin/*
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
