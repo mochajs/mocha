@@ -6,6 +6,8 @@ dist: trusty
 
 language: node_js
 
+cache: yarn
+
 env:
   global:
     # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
