@@ -1,12 +1,14 @@
 # in order to use 'trusty' dist, need this.
 # see https://docs.travis-ci.com/user/trusty-ci-environment/
-sudo: required
+sudo: false
 
 # trust dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
 dist: trusty
 
 language: node_js
+
+cache: yarn
 
 env:
   global:
