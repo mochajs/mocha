@@ -1,6 +1,4 @@
-# in order to use 'trusty' dist, need this.
-# see https://docs.travis-ci.com/user/trusty-ci-environment/
-sudo: required
+sudo: false
 
 # trust dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
@@ -47,11 +45,15 @@ before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
 
-after_script: scripts/travis-after-script.sh
-
 notifications:
   urls:
     # for gitter
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
   on_success: change
   on_failure: always
+
+addons:
+  artifacts:
+    paths:
+      - .karma/
+      - ./mocha.js
