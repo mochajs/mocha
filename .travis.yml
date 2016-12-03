@@ -1,70 +1,53 @@
-# in order to use 'trusty' dist, need this.
-# see https://docs.travis-ci.com/user/trusty-ci-environment/
-sudo: required
 # trusty dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
 dist: trusty
+sudo: false
 language: node_js
 cache:
+  yarn: true
   directories:
-  - node_modules
+    - node_modules
 env:
   global:
-  # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-  # rate-limiting.  pull it from this sketchy site in China instead.
-  - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-  # API keys for super secret pizza party
-  - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
-  - secure: fLauwn0Q/S60+r4MUXWZD4qFK5zYRJk+RSNuTVDvKvMoFicrQ8nRhN9Ya4rgW963xprOse0mDGKbKNoVBTT+v+kADYaYIXFBpXNoj/+9c24TERWpKjdWMrbIU0FIBE54GAg9/I7u18Nkah7P0I57Zuv2fcRvs7pOrA4Ac06YEJc=
-  - secure: E1Vleb5KDtfeN1O2XLjr5MpStBIQFElczdqd3RkCNrgJLtLZlhRIr6/dlBe5rrFuR6GKG8tozQJMojaIGISyz++uyC75TbGg1rhnopdPNFIouaWJ1MGsHDmEKutiIGUseVTON3zWxt5U/COMcN5arg383MrDTfkn+5dMDIeyXFM=
-  - secure: XgTC70pdoSBHuC5nuyzac2GGaU3SD7INWfCi5P6B39yTWAbqTNF6Bb7W/LqwVXJRPQrFyCESxAMm4AANXLwW5Q1te0LBSckclsoJTABsDROd4u+BPTq7ULVXgma3HbRzyCTRkmztcfNout3D1BjUsHc8goe0EtlR185LI++F0ps=
+    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
+    # rate-limiting.  pull it from this sketchy site in China instead.
+    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+    # API keys for super secret pizza party
+    - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
+    - secure: fLauwn0Q/S60+r4MUXWZD4qFK5zYRJk+RSNuTVDvKvMoFicrQ8nRhN9Ya4rgW963xprOse0mDGKbKNoVBTT+v+kADYaYIXFBpXNoj/+9c24TERWpKjdWMrbIU0FIBE54GAg9/I7u18Nkah7P0I57Zuv2fcRvs7pOrA4Ac06YEJc=
+    - secure: E1Vleb5KDtfeN1O2XLjr5MpStBIQFElczdqd3RkCNrgJLtLZlhRIr6/dlBe5rrFuR6GKG8tozQJMojaIGISyz++uyC75TbGg1rhnopdPNFIouaWJ1MGsHDmEKutiIGUseVTON3zWxt5U/COMcN5arg383MrDTfkn+5dMDIeyXFM=
+    - secure: XgTC70pdoSBHuC5nuyzac2GGaU3SD7INWfCi5P6B39yTWAbqTNF6Bb7W/LqwVXJRPQrFyCESxAMm4AANXLwW5Q1te0LBSckclsoJTABsDROd4u+BPTq7ULVXgma3HbRzyCTRkmztcfNout3D1BjUsHc8goe0EtlR185LI++F0ps=
 # our matrix is split between node and browser versions.
 # if anyone knows a more concise way to describe this matrix,
 # please update it!
 matrix:
   include:
-  - node_js: '7'
-    env: TARGET=test-node
-  - node_js: '6'
-    env: TARGET=test-node
-  - node_js: '5'
-    env: TARGET=test-node
-  - node_js: '4'
-    env: TARGET=test-node
-  - node_js: iojs
-    env: TARGET=test-node
-  - node_js: '0.12'
-    env: TARGET=test-node
-  - node_js: '0.11'
-    env: TARGET=test-node
-  - node_js: '0.10'
-    env: TARGET=test-node
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=ie7
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=ie8
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=ie9
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=ie10
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=ie11
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=chrome
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=edge
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=firefox
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=safari8
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=safari9
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=safari10
-  - node_js: '7'
-    env: TARGET=test-browser MOCHA_BROWSER=opera
-  - node_js: '7'
-    env: TARGET=test-browser # phantomjs
+    - env: TARGET=test-node
+      node_js:
+        - '7'
+        - '6'
+        - '5'
+        - '4'
+        - 'iojs'
+        - '0.12'
+        - '0.10'
+
+    - node_js: 'node'
+      env:
+        - TARGET=lint
+        - TARGET=test-browser MOCHA_BROWSER=ie7
+        - TARGET=test-browser MOCHA_BROWSER=ie8
+        - TARGET=test-browser MOCHA_BROWSER=ie9
+        - TARGET=test-browser MOCHA_BROWSER=ie10
+        - TARGET=test-browser MOCHA_BROWSER=ie11
+        - TARGET=test-browser MOCHA_BROWSER=chrome
+        - TARGET=test-browser MOCHA_BROWSER=edge
+        - TARGET=test-browser MOCHA_BROWSER=firefox
+        - TARGET=test-browser MOCHA_BROWSER=safari8
+        - TARGET=test-browser MOCHA_BROWSER=safari9
+        - TARGET=test-browser MOCHA_BROWSER=safari10
+        - TARGET=test-browser MOCHA_BROWSER=opera
+        - TARGET=test-browser
 # this runs the sanity test and ensures Mocha works if installed by a user;
 # e.g. `npm install mocha`
 before_install: scripts/travis-before-install.sh
@@ -79,8 +62,8 @@ notifications:
   email: false
   webhooks:
     urls:
-    # private Gitter room
-    - secure: RLQSQzbNlJx7n1iIlu7/KpGUk47KYANMLCDuQMLtwxu3NqmeeTLA5NRcKMWyMG2IBYcskZuYyxTjCe890UJsukChe8K4SWdqlk26KtZRX7FqDfD/4uN8w+Hjya3o8ihrUkQ30xMEO1nAb+D7WxRc0Zs3w2G7JvsBV976Y9jKTho=
+      # private Gitter room
+      - secure: RLQSQzbNlJx7n1iIlu7/KpGUk47KYANMLCDuQMLtwxu3NqmeeTLA5NRcKMWyMG2IBYcskZuYyxTjCe890UJsukChe8K4SWdqlk26KtZRX7FqDfD/4uN8w+Hjya3o8ihrUkQ30xMEO1nAb+D7WxRc0Zs3w2G7JvsBV976Y9jKTho=
     on_success: change
     on_failure: always
     on_start: never
