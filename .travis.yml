@@ -1,6 +1,4 @@
-# in order to use 'trusty' dist, need this.
-# see https://docs.travis-ci.com/user/trusty-ci-environment/
-sudo: required
+sudo: false
 
 # trust dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
@@ -13,9 +11,6 @@ env:
     # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
     # rate-limiting.  pull it from this sketchy site in China instead.
     - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-    # we're going to use s3 to temporarily store Karma test bundles for debugging
-    - AWS_ACCESS_KEY_ID=AKIAJ3QQTLQXWXYJ6PTA
-    - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
 
 matrix:
   fast_finish: true
@@ -47,11 +42,15 @@ before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
 
-after_script: scripts/travis-after-script.sh
-
 notifications:
   urls:
     # for gitter
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
   on_success: change
   on_failure: always
+
+addons:
+  artifacts:
+    paths:
+      - .karma/
+      - ./mocha.js
