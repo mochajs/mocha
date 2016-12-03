@@ -14,6 +14,7 @@ describe('a load of tests', function () {
     for (var i = 0; i < iterations; ++i) {
       a += i;
     }
+    return a;
   }
 
   function addTest () {
