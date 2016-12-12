@@ -194,14 +194,23 @@ describe('Cli', function () {
     });
   });
 
-  xdescribe('.setMochaOptions()', function () {
-    xit('should set options on mocha', function () {
+  describe('.setMochaOptions()', function () {
+    it('should set options on mocha', function () {
       var program = cli.makeCommand();
       cli.parseArgv(program, testArgs1);
       var mocha = new Mocha();
       cli.setMochaOptions(mocha, program._opts());
 
-      // how to test this? we should test as many options being set as possible
+      mocha.options.globals.should.eql([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      mocha.suite._timeout.should.equal(200);
+      mocha._reporter.name.should.equal('Dot');
+
+      // as many options being set as possible
     });
 
     xit('should separate global scope per instance', function () {
@@ -265,12 +274,20 @@ describe('Cli', function () {
     });
   });
 
-  xdescribe('.loadOptsFile()', function () {
+  describe('.loadOptsFile()', function () {
     it('should configure mocha from opts file', function () {
       var mocha = new Mocha();
       cli.loadOptsFile('test/cli/test.opts', mocha);
+      //  is reliant on setMochaOptions
 
-      // how to test this? is reliant on setMochaOptions
+      mocha.options.globals.should.eql([
+        'okGlobalA',
+        'okGlobalB',
+        'okGlobalC',
+        'callback*'
+      ]);
+      mocha.suite._timeout.should.equal(200);
+      mocha._reporter.name.should.equal('Dot');
     });
   });
 });
