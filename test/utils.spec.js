@@ -95,6 +95,10 @@ describe('utils', function () {
         r3: '^co.*'
       });
     });
+
+    it('should parse "+" as a space', function () {
+      parseQuery('?grep=foo+bar').should.eql({grep: 'foo bar'});
+    });
   });
 
   describe('.stackTraceFilter()', function () {
