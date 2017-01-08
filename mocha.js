@@ -2705,7 +2705,7 @@ function HTML (runner) {
   runner.on('pass', function (test) {
     var url = self.testURL(test);
     var markup = '<li class="test pass %e"><h2>%e<span class="duration">%ems</span> ' +
-      '<a href="%s" class="replay">‣</a></h2></li>';
+      '<a href="%s" class="replay">&#x2023;</a></h2></li>';
     var el = fragment(markup, test.speed, test.title, test.duration, url);
     self.addCodeToggle(el, test.body);
     appendToStack(el);
@@ -2713,7 +2713,7 @@ function HTML (runner) {
   });
 
   runner.on('fail', function (test) {
-    var el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">‣</a></h2></li>',
+    var el = fragment('<li class="test fail"><h2>%e <a href="%e" class="replay">&#x2023;</a></h2></li>',
       test.title, self.testURL(test));
     var stackString; // Note: Includes leading newline
     var message = test.err.toString();
