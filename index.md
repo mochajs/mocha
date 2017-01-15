@@ -726,6 +726,7 @@ Options:
   --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
   --icu-data-dir                          include ICU data
   --inline-diffs                          display actual/expected differences inline within each string
+  --inspect                               activate devtools in chrome
   --interfaces                            display available interfaces
   --no-deprecation                        silence deprecation warnings
   --no-exit                               require a clean shutdown of the event loop: mocha will not call process.exit
