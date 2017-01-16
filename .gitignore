@@ -12,3 +12,4 @@ npm-debug.log*
 *.orig
 .nyc_output/
 coverage/
+BUILDTMP/
