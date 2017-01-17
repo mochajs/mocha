@@ -48,7 +48,7 @@ module.exports = function (config) {
     },
     reporters: ['spec'],
     colors: true,
-    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'],
+    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'], // This is the default browser to run, locally
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
@@ -58,8 +58,17 @@ module.exports = function (config) {
   };
 
   // see https://github.com/saucelabs/karma-sauce-example
+
+  // We define the browser to run on the Saucelabs Infrastructure
+  // via the environment variables BROWSER and PLATFORM.
+  // PLATFORM is e.g. "Windows"
+  // BROWSER is expected to be in the format "<name>@<version>",
+  // e.g. "MicrosoftEdge@latest"
+  // See https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
+  // for available browsers.
+
   // TO RUN LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> BROWSER=<browser> PLATFORM=<platform> make test-browser`
   var env = process.env;
   var sauceConfig;
 
@@ -68,16 +77,18 @@ module.exports = function (config) {
     if (env.TRAVIS) {
       console.error('Travis-CI detected');
       bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
-      if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
-        // correlate build/tunnel with Travis
-        sauceConfig = {
-          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
-          ' (' + env.TRAVIS_BUILD_ID + ')',
-          tunnelIdentifier: env.TRAVIS_JOB_NUMBER
-        };
-        console.error('Configured SauceLabs');
-      } else {
-        console.error('No SauceLabs credentials present');
+      if (env.BROWSER && env.PLATFORM) {
+        if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
+          // correlate build/tunnel with Travis
+          sauceConfig = {
+            build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
+            ' (' + env.TRAVIS_BUILD_ID + ')',
+            tunnelIdentifier: env.TRAVIS_JOB_NUMBER
+          };
+          console.error('Configured SauceLabs');
+        } else {
+          console.error('No SauceLabs credentials present');
+        }
       }
     } else if (env.APPVEYOR) {
       console.error('AppVeyor detected');
@@ -126,55 +137,31 @@ module.exports = function (config) {
 };
 
 function addSauceTests (cfg) {
+  var env = process.env;
   cfg.reporters.push('saucelabs');
+  cfg.customLaunchers = {};
+  cfg.customLaunchers[env.BROWSER] = {
+    base: 'SauceLabs',
+    browserName: env.BROWSER.split('@')[0],
+    version: env.BROWSER.split('@')[1],
+    platform: env.PLATFORM
+  };
+  cfg.browsers = [env.BROWSER];
 
-  cfg.customLaunchers = {
-    ie8: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 7',
-      version: '8.0'
-    },
-    ie7: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows XP',
-      version: '7.0'
-    },
-    chrome: {
-      base: 'SauceLabs',
-      browserName: 'chrome',
-      platform: 'Windows 8',
-      version: 'latest'
-    },
-    edge: {
-      base: 'SauceLabs',
-      browserName: 'MicrosoftEdge',
-      platform: 'Windows 10',
-      version: 'latest'
-    },
-    firefox: {
-      base: 'SauceLabs',
-      browserName: 'firefox',
-      platform: 'Windows 8.1',
-      version: 'latest'
-    },
-    safari: {
-      base: 'SauceLabs',
-      browserName: 'safari',
-      platform: 'OS X 10.11',
-      version: 'latest'
+  // See https://github.com/karma-runner/karma-sauce-launcher
+  // See https://github.com/bermi/sauce-connect-launcher#advanced-usage
+  cfg.sauceLabs = {
+    public: 'public',
+    startConnect: true,
+    connectOptions: {
+      connectRetries: 10,
+      connectRetryTimeout: 60000
     }
   };
 
-  cfg.browsers = cfg.browsers.concat(Object.keys(cfg.customLaunchers));
-
-  cfg.sauceLabs = {
-    public: 'public',
-    startConnect: true
-  };
-
   cfg.concurrency = 5;
+
+  cfg.retryLimit = 5;
 
   // for slow browser booting, ostensibly
   cfg.captureTimeout = 120000;
