@@ -6,7 +6,7 @@ NYC := "node_modules/.bin/nyc"
 
 ifdef COVERAGE
 define test_node
-	$(NYC) --report-dir coverage/reports/$(1) --reporter json --exclude browser $(MOCHA)
+	$(NYC) --report-dir coverage/reports/$(1) $(MOCHA)
 endef
 else
 	test_node := $(MOCHA)
