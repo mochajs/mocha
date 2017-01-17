@@ -3,12 +3,14 @@ ESLINT := "node_modules/.bin/eslint"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
 NYC := "node_modules/.bin/nyc"
-ISTANBUL_COMBINE := "node_modules/.bin/istanbul-combine"
-COVERAGE_DIR := "coverage/"
 
+ifdef COVERAGE
 define test_node
-	$(NYC) --report-dir coverage/$(1) --reporter json --exclude browser $(MOCHA)
+	$(NYC) --report-dir coverage/reports/$(1) --reporter json --exclude browser $(MOCHA)
 endef
+else
+	test_node := $(MOCHA)
+endif
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -33,17 +35,11 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	$(ESLINT) . bin/*
 
-COVERAGE_TMP_DIR:=$(shell mktemp -d)
-generate-coverage-report:
-	$(ISTANBUL_COMBINE) -d $(COVERAGE_TMP_DIR) -r lcov -r html $(COVERAGE_DIR)/*/*.json
-	rm -rf $(COVERAGE_DIR)
-	mv $(COVERAGE_TMP_DIR) $(COVERAGE_DIR)
-
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
 test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
-test: lint test-node test-browser generate-coverage-report
+test: lint test-node test-browser
 
 test-browser-unit:
 	@printf "==> [Test :: Browser]\n"
