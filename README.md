@@ -3,7 +3,9 @@
   <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
 </p>
 
-[![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha)
+[![Coverage Status](https://coveralls.io/repos/github/mochajs/mocha/badge.svg)](https://coveralls.io/github/mochajs/mocha)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
 <br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354">
