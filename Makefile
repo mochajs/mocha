@@ -2,6 +2,13 @@ BROWSERIFY := "node_modules/.bin/browserify"
 ESLINT := "node_modules/.bin/eslint"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
+NYC := "node_modules/.bin/nyc"
+ISTANBUL_COMBINE := "node_modules/.bin/istanbul-combine"
+COVERAGE_DIR := "coverage/"
+
+define test_node
+	$(NYC) --report-dir coverage/$(1) --reporter json --exclude browser $(MOCHA)
+endef
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | sort)
@@ -26,11 +33,17 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	$(ESLINT) . bin/*
 
+COVERAGE_TMP_DIR:=$(shell mktemp -d)
+generate-coverage-report:
+	$(ISTANBUL_COMBINE) -d $(COVERAGE_TMP_DIR) -r lcov -r html $(COVERAGE_DIR)/*/*.json
+	rm -rf $(COVERAGE_DIR)
+	mv $(COVERAGE_TMP_DIR) $(COVERAGE_DIR)
+
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
 test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
-test: lint test-node test-browser
+test: lint test-node test-browser generate-coverage-report
 
 test-browser-unit:
 	@printf "==> [Test :: Browser]\n"
@@ -54,24 +67,24 @@ test-jsapi:
 
 test-unit:
 	@printf "==> [Test :: Unit]\n"
-	$(MOCHA) test/acceptance/*.js \
+	$(call test_node,unit) test/acceptance/*.js \
 		--growl \
 		test/*.js
 
 test-integration:
 	@printf "==> [Test :: Integrations]\n"
-	$(MOCHA) --timeout 5000 \
+	$(call test_node,integration) --timeout 5000 \
 		test/integration/*.js
 
 test-compilers:
 	@printf "==> [Test :: Compilers]\n"
-	$(MOCHA) --compilers coffee:coffee-script/register,foo:./test/compiler/foo \
+	$(call test_node,compilers) --compilers coffee:coffee-script/register,foo:./test/compiler/foo \
 		test/acceptance/test.coffee \
 		test/acceptance/test.foo
 
 test-requires:
 	@printf "==> [Test :: Requires]\n"
-	$(MOCHA) --compilers coffee:coffee-script/register \
+	$(call test_node,requires) --compilers coffee:coffee-script/register \
 		--require test/acceptance/require/a.js \
 		--require test/acceptance/require/b.coffee \
 		--require test/acceptance/require/c.js \
@@ -80,22 +93,22 @@ test-requires:
 
 test-bdd:
 	@printf "==> [Test :: BDD]\n"
-	$(MOCHA) --ui bdd \
+	$(call test_node,bdd) --ui bdd \
 		test/acceptance/interfaces/bdd.spec
 
 test-tdd:
 	@printf "==> [Test :: TDD]\n"
-	$(MOCHA) --ui tdd \
+	$(call test_node,tdd) --ui tdd \
 		test/acceptance/interfaces/tdd.spec
 
 test-qunit:
 	@printf "==> [Test :: QUnit]\n"
-	$(MOCHA) --ui qunit \
+	$(call test_node,qunit) --ui qunit \
 		test/acceptance/interfaces/qunit.spec
 
 test-exports:
 	@printf "==> [Test :: Exports]\n"
-	$(MOCHA) --ui exports \
+	$(call test_node,exports) --ui exports \
 		test/acceptance/interfaces/exports.spec
 
 test-glob:
@@ -104,49 +117,49 @@ test-glob:
 
 test-reporters:
 	@printf "==> [Test :: Reporters]\n"
-	$(MOCHA) test/reporters/*.js
+	$(call test_node,reporters) test/reporters/*.js
 
 test-only:
 	@printf "==> [Test :: Only]\n"
-	$(MOCHA) --ui tdd \
+	$(call test_node,only-tdd) --ui tdd \
 		test/acceptance/misc/only/tdd.spec
 
-	$(MOCHA) --ui bdd \
+	$(call test_node,only-bdd) --ui bdd \
 		test/acceptance/misc/only/bdd.spec
 
-	$(MOCHA) --ui qunit \
+	$(call test_node,only-bdd-require) --ui qunit \
 		test/acceptance/misc/only/bdd-require.spec
 
 test-global-only:
 	@printf "==> [Test :: Global Only]\n"
-	$(MOCHA) --ui tdd \
+	$(call test_node,global-only-tdd) --ui tdd \
 		test/acceptance/misc/only/global/tdd.spec
 
-	$(MOCHA) --ui bdd \
+	$(call test_node,global-only-bdd) --ui bdd \
 		test/acceptance/misc/only/global/bdd.spec
 
-	$(MOCHA) --ui qunit \
+	$(call test_node,global-only-qunit) --ui qunit \
 		test/acceptance/misc/only/global/qunit.spec
 
 test-mocha:
 	@printf "==> [Test :: Mocha]\n"
-	$(MOCHA) test/mocha
+	$(call test_node,mocha) test/mocha
 
 non-tty:
 	@printf "==> [Test :: Non-TTY]\n"
-	$(MOCHA) --reporter dot \
+	$(call test_node,non-tty-dot) --reporter dot \
 		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
-	$(MOCHA) --reporter list \
+	$(call test_node,non-tty-list) --reporter list \
 		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
-	$(MOCHA) --reporter spec \
+	$(call test_node,non-tty-spec) --reporter spec \
 		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/spec.out
 
 	@echo spec:
