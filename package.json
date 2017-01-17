@@ -321,6 +321,7 @@
     "assert": "^1.4.1",
     "browserify": "^13.0.0",
     "coffee-script": "^1.10.0",
+    "coveralls": "^2.11.15",
     "eslint": "^3.11.1",
     "eslint-config-semistandard": "^7.0.0",
     "eslint-config-standard": "^6.2.1",
