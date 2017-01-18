@@ -174,6 +174,8 @@ function addSauceTests (cfg) {
     startConnect: true
   };
 
+  cfg.concurrency = 5;
+
   // for slow browser booting, ostensibly
   cfg.captureTimeout = 120000;
   cfg.browserNoActivityTimeout = 20000;
