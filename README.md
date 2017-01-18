@@ -1,3 +1,37 @@
+# Mocha needs YOU!
+
+*Did you know* Mocha [is a dependency of over 100,000 projects](https://libraries.io/npm/mocha) published to npm alone?
+
+**Despite this, we're currently unable to merge most pull requests due to lack of maintenance resources.**
+
+**Are you interested in triaging issues or reviewing open PRs?  Have some time to hack on its codebase?**  If you would like to help maintain Mocha, please contact `@boneskull` on [Gitter](https://gitter.im/mochajs/mocha).
+
+*Thank you* :kissing_heart: to all of you interested in helping.  These are Mocha's immediate needs:
+
+1. Increase test coverage on Node.js and browser
+  - Increase integration coverage for all reporters
+    - `html` reporter must be tested in browser
+    - Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters
+    - Filesystem-based reporters must be tested in Node.js context
+  - Increase coverage against all interfaces (`exports` in particular).  Ideally this becomes a "matrix" where we repeat sets of integration tests across all interfaces.
+  - Refactor non-Node.js-specific tests to allow them to run in a browser context.  Node.js-specific tests include those which *require* the CLI or filesystem.  Most everything else is fair game.
+2.  Review current open pull requests
+  - We need individuals familiar with Mocha's codebase. Got questions?  Ask them in [our chat room](https://gitter.im/mochajs/mocha).
+  - Pull requests **must** have supporting tests.  The only exceptions are pure cosmetic or non-functional changes.
+  - Pull request contributors must sign the CLA.
+3. Close old, inactive issues and pull requests
+  - A bot should do this.  We need a bot. Got a bot?
+4. Triage issues
+  - If we run into "critical" bugs, they need fixing.
+  - "Critical" means Mocha is broken w/o workarounds for a *large percentage* of users
+  - Otherwise: respond to issues, close new dupe issues, confirm bugs, ask for more info, etc.
+
+Once we gain ground on the above items, we can work together formalize our contribution guidelines and governance.  For further info & ideas, please see our [projects](https://github.com/orgs/mochajs/projects).
+
+*You needn't be a maintainer to submit a pull request for test coverage!*
+
+-- @boneskull, *Jan 17 2016*
+
 <br><br>
 <p align="center">
   <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
