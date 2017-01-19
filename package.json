@@ -299,10 +299,11 @@
     "npm": ">= 1.4.x"
   },
   "scripts": {
-    "test": "make test",
+    "test": "make test && make clean",
     "precoverage": "rm -rf coverage",
     "coverage": "COVERAGE=true npm run test",
-    "postcoverage": "istanbul-combine -d coverage -r lcov -r html coverage/reports/*/*.json"
+    "postcoverage": "istanbul-combine -d coverage -r lcov -r html coverage/reports/*/*.json",
+    "preversion": "make test && make mocha.js && git add mocha.js"
   },
   "dependencies": {
     "browser-stdout": "1.3.0",
