@@ -113,6 +113,53 @@ describe('Base reporter', function () {
     });
   });
 
+  describe('Inline strings diff', function () {
+    it('should show single line diff if property set to `true`', function () {
+      var err = new Error('test');
+      var errOut;
+
+      err.actual = 'a foo inline diff';
+      err.expected = 'a bar inline diff';
+      err.showDiff = true;
+      var test = makeTest(err);
+
+      Base.inlineDiffs = true;
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+
+      errOut.should.match(/a foobar inline diff/);
+      errOut.should.match(/test/);
+      errOut.should.match(/actual/);
+      errOut.should.match(/expected/);
+    });
+
+    it('should split lines when string has more than 4 line breaks', function () {
+      var err = new Error('test');
+      var errOut;
+
+      err.actual = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
+      err.expected = 'a\nbar\ninline\ndiff\nwith\nmultiple lines';
+      err.showDiff = true;
+      var test = makeTest(err);
+
+      Base.inlineDiffs = true;
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+
+      errOut.should.match(/1 \| a/);
+      errOut.should.match(/2 \| foobar/);
+      errOut.should.match(/3 \| inline/);
+      errOut.should.match(/4 \| diff/);
+      errOut.should.match(/5 \| with/);
+      errOut.should.match(/6 \| multiple lines/);
+      errOut.should.match(/test/);
+      errOut.should.match(/actual/);
+      errOut.should.match(/expected/);
+    });
+  });
+
   it('should stringify objects', function () {
     var err = new Error('test');
     var errOut;
@@ -172,6 +219,30 @@ describe('Base reporter', function () {
     }
   });
 
+  it('should interpret chaijs custom error messages', function () {
+    var errOut;
+
+    try {
+      // expect(43, 'custom error message').to.equal(42);
+      // AssertionError: custom error message: expected 43 to equal 42.
+      assert.equal(43, 42, 'custom error message: expected 43 to equal 42.');
+    } catch (err) {
+      err.actual = 43;
+      err.expected = 42;
+      err.showDiff = true;
+      var test = makeTest(err);
+
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+      errOut.should.match(/custom error message\n/);
+      errOut.should.match(/\+42/);
+      errOut.should.match(/-43/);
+      errOut.should.match(/- actual/);
+      errOut.should.match(/\+ expected/);
+    }
+  });
+
   it('should remove message from stack', function () {
     var err = {
       message: 'Error',
@@ -195,6 +266,16 @@ describe('Base reporter', function () {
     Base.list([test]);
     var errOut = stdout.join('\n').trim();
     errOut.should.equal('1) test title:\n     an error happened');
+  });
+
+  it('should set an empty message if `message` and `inspect()` are not set', function () {
+    var err = {
+      showDiff: false
+    };
+    var test = makeTest(err);
+    Base.list([test]);
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal('1) test title:');
   });
 
   it('should not modify stack if it does not contain message', function () {
