@@ -40,6 +40,13 @@ function givenConsoleLogStub (loggedText) {
   };
 }
 
+function arrayFill (array, repeatedContent) {
+  for (var index = 0; index < array.length; index += 1) {
+    array[index] = repeatedContent;
+  }
+  return array;
+}
+
 describe('Step reporter', function () {
   describe('Exposure via index', function () {
     it('should be exposed as step', function () {
@@ -90,7 +97,7 @@ describe('Step reporter', function () {
     });
     before('given number of suites with titles', function () {
       suiteDepth = getRandomInteger(10);
-      suites = Array(suiteDepth).fill().map(function (unused, index) {
+      suites = arrayFill(Array(suiteDepth)).map(function (unused, index) {
         return {
           title: 'Suite Title ' + index
         };
@@ -125,7 +132,7 @@ describe('Step reporter', function () {
 
       assert.equal(loggedText.length, suiteDepth);
       for (var index = 0; index < suiteDepth; index += 1) {
-        expectedIndent = Array((index + 1)).fill(expectedIndentation).join('');
+        expectedIndent = arrayFill(Array(index + 1), expectedIndentation).join('');
         expectedTitle = expectedIndent + 'Suite Title ' + index;
 
         assert.deepEqual(loggedText[index], [expectedTitle]);
@@ -218,7 +225,7 @@ describe('Step reporter', function () {
       var hookEvents = runner.getEvents('hook');
 
       hookCount = getRandomInteger(10);
-      hooks = Array(hookCount).fill().map(function (unused, index) {
+      hooks = arrayFill(Array(hookCount)).map(function (unused, index) {
         return {
           title: 'Hook ' + index
         };
@@ -236,7 +243,7 @@ describe('Step reporter', function () {
     it('should render hooks with an extra indent', function () {
       var lastLoggedOutput = loggedText.slice(-hookCount);
       var expectedOutput;
-      var expectedIndent = Array(suiteDepth + 1).fill('  ').join('');
+      var expectedIndent = arrayFill(Array(suiteDepth + 1), '  ').join('');
 
       for (var currentIndex = 0; currentIndex < hookCount; currentIndex += 1) {
         expectedOutput = [expectedIndent + 'Hook ' + currentIndex];
