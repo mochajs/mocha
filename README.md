@@ -26,7 +26,7 @@
   - "Critical" means Mocha is broken w/o workarounds for a *large percentage* of users
   - Otherwise: respond to issues, close new dupe issues, confirm bugs, ask for more info, etc.
 
-Once we gain ground on the above items, we can work together formalize our contribution guidelines and governance.  For further info & ideas, please see our [projects](https://github.com/orgs/mochajs/projects).
+Once we gain ground on the above items, we can work together formalize our contribution guidelines and governance.  For further info & ideas, please see our [projects](https://github.com/mochajs/mocha/projects/).
 
 *You needn't be a maintainer to submit a pull request for test coverage!*
 
