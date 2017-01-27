@@ -22,7 +22,7 @@ describe('Doc reporter', function () {
         root: false,
         title: expectedTitle
       }
-      it('should log html with expected header', function () {
+      it('should log html with expected title', function () {
         runner.on = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
@@ -103,7 +103,7 @@ describe('Doc reporter', function () {
         return '';
       }
     }
-    it('should log expected html', function () {
+    it('should log html with expected title and body', function () {
       runner.on = function (event, callback) {
         if (event === 'pass') {
           callback(test);
@@ -129,7 +129,7 @@ describe('Doc reporter', function () {
         return '';
       }
     }
-    it('should log expected html', function () {
+    it('should log html with expected title and body', function () {
       runner.on = function (event, callback) {
         if (event === 'fail') {
           callback(test);
