@@ -14,6 +14,7 @@ then
   runSanityTest
   rm -rf node_modules/
 else
-  npm install --production
+  npm install -g yarn
+  yarn install --production
   runSanityTest
 fi
