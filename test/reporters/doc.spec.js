@@ -28,7 +28,7 @@ describe('Doc reporter', function () {
             callback(suite);
           }
         };
-        Doc(runner);
+        Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
           '    <section class="suite">\n',
@@ -48,7 +48,7 @@ describe('Doc reporter', function () {
             callback(suite);
           }
         };
-        Doc(runner);
+        Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         stdout.should.be.empty();
       });
@@ -66,7 +66,7 @@ describe('Doc reporter', function () {
             callback(suite);
           }
         };
-        Doc(runner);
+        Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
           '  </dl>\n', '</section>\n'
@@ -84,7 +84,7 @@ describe('Doc reporter', function () {
             callback(suite);
           }
         };
-        Doc(runner);
+        Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         stdout.should.be.empty();
       });
@@ -107,7 +107,7 @@ describe('Doc reporter', function () {
           callback(test);
         }
       };
-      Doc(runner);
+      Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
         '    <dt>' + expectedTitle + '</dt>\n',
@@ -133,7 +133,7 @@ describe('Doc reporter', function () {
           callback(test);
         }
       };
-      Doc(runner);
+      Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
         '    <dt class="error">' + expectedTitle + '</dt>\n',
