@@ -18,11 +18,32 @@ describe('Doc reporter', function () {
   describe('on suite', function () {
     describe('if suite root does not exist', function () {
       var expectedTitle = 'expectedTitle';
+      var unescapedTitle = '<div>' + expectedTitle + '</div>';
       var suite = {
         root: false,
         title: expectedTitle
       };
-      it('should log html with expected title', function () {
+      it('should log html with indents and expected title', function () {
+        runner.on = function (event, callback) {
+          if (event === 'suite') {
+            callback(suite);
+          }
+        };
+        Doc.call(this, runner);
+        process.stdout.write = stdoutWrite;
+        var expectedArray = [
+          '    <section class="suite">\n',
+          '      <h1>' + expectedTitle + '</h1>\n',
+          '      <dl>\n'
+        ];
+        stdout.should.deepEqual(expectedArray);
+      });
+      it('should escape title where necessary', function () {
+        var suite = {
+          root: false,
+          title: unescapedTitle
+        };
+        expectedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
         runner.on = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
@@ -60,7 +81,7 @@ describe('Doc reporter', function () {
       var suite = {
         root: false
       };
-      it('should log expected html', function () {
+      it('should log expected html with indents', function () {
         runner.on = function (event, callback) {
           if (event === 'suite end') {
             callback(suite);
@@ -101,7 +122,7 @@ describe('Doc reporter', function () {
         return '';
       }
     };
-    it('should log html with expected title and body', function () {
+    it('should log html with indents and expected title and body', function () {
       runner.on = function (event, callback) {
         if (event === 'pass') {
           callback(test);
@@ -115,11 +136,33 @@ describe('Doc reporter', function () {
       ];
       stdout.should.deepEqual(expectedArray);
     });
+    it('should escape title and body where necessary', function () {
+      var unescapedTitle = '<div>' + expectedTitle + '</div>';
+      var unescapedBody = '<div>' + expectedBody + '</div>';
+      test.title = unescapedTitle;
+      test.body = unescapedBody;
+
+      var expectedEscapedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
+      var expectedEscapedBody = '&lt;div&gt;' + expectedBody + '&lt;/div&gt;';
+      runner.on = function (event, callback) {
+        if (event === 'pass') {
+          callback(test);
+        }
+      };
+      Doc.call(this, runner);
+      process.stdout.write = stdoutWrite;
+      var expectedArray = [
+        '    <dt>' + expectedEscapedTitle + '</dt>\n',
+        '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
+      ];
+      stdout.should.deepEqual(expectedArray);
+    });
   });
 
   describe('on fail', function () {
     var expectedTitle = 'some tite';
     var expectedBody = 'some body';
+    var expectedError = 'some error';
     var test = {
       title: expectedTitle,
       body: expectedBody,
@@ -127,10 +170,10 @@ describe('Doc reporter', function () {
         return '';
       }
     };
-    it('should log html with expected title and body', function () {
+    it('should log html with indents and expected title, body and error', function () {
       runner.on = function (event, callback) {
         if (event === 'fail') {
-          callback(test);
+          callback(test, expectedError);
         }
       };
       Doc.call(this, runner);
@@ -138,7 +181,31 @@ describe('Doc reporter', function () {
       var expectedArray = [
         '    <dt class="error">' + expectedTitle + '</dt>\n',
         '    <dd class="error"><pre><code>' + expectedBody + '</code></pre></dd>\n',
-        '    <dd class="error">undefined</dd>\n'
+        '    <dd class="error">' + expectedError + '</dd>\n'
+      ];
+      stdout.should.deepEqual(expectedArray);
+    });
+    it('should escape title, body and error where necessary', function () {
+      var unescapedTitle = '<div>' + expectedTitle + '</div>';
+      var unescapedBody = '<div>' + expectedBody + '</div>';
+      var unescapedError = '<div>' + expectedError + '</div>';
+      test.title = unescapedTitle;
+      test.body = unescapedBody;
+
+      var expectedEscapedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
+      var expectedEscapedBody = '&lt;div&gt;' + expectedBody + '&lt;/div&gt;';
+      var expectedEscapedError = '&lt;div&gt;' + expectedError + '&lt;/div&gt;';
+      runner.on = function (event, callback) {
+        if (event === 'fail') {
+          callback(test, unescapedError);
+        }
+      };
+      Doc.call(this, runner);
+      process.stdout.write = stdoutWrite;
+      var expectedArray = [
+        '    <dt class="error">' + expectedEscapedTitle + '</dt>\n',
+        '    <dd class="error"><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n',
+        '    <dd class="error">' + expectedEscapedError + '</dd>\n'
       ];
       stdout.should.deepEqual(expectedArray);
     });
