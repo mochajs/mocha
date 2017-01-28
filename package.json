@@ -336,7 +336,7 @@
     "karma-expect": "^1.1.2",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.2",
-    "karma-sauce-launcher": "^1.0.0",
+    "karma-sauce-launcher": "coderbyheart/karma-sauce-launcher",
     "karma-spec-reporter": "0.0.26",
     "nyc": "^10.0.0",
     "os-name": "^2.0.1",
