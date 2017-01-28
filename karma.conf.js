@@ -129,18 +129,6 @@ function addSauceTests (cfg) {
   cfg.reporters.push('saucelabs');
 
   cfg.customLaunchers = {
-    ie8: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows 7',
-      version: '8.0'
-    },
-    ie7: {
-      base: 'SauceLabs',
-      browserName: 'internet explorer',
-      platform: 'Windows XP',
-      version: '7.0'
-    },
     chrome: {
       base: 'SauceLabs',
       browserName: 'chrome',
@@ -152,6 +140,36 @@ function addSauceTests (cfg) {
       browserName: 'MicrosoftEdge',
       platform: 'Windows 10',
       version: 'latest'
+    },
+    ie11: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 8.1',
+      version: '11.0'
+    },
+    ie10: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 8',
+      version: '10.0'
+    },
+    ie9: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 7',
+      version: '9.0'
+    },
+    ie8: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 7',
+      version: '8.0'
+    },
+    ie7: {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows XP',
+      version: '7.0'
     },
     firefox: {
       base: 'SauceLabs',
