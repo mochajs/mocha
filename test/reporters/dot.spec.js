@@ -2,16 +2,13 @@
 
 var reporters = require('../../').reporters;
 var Dot = reporters.Dot;
+var Base = reporters.Base;
 
 describe('Dot reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
-  var ansiColorCodeReset = '\u001b[0m';
-  var ansiColorCodeCyan = '\u001b[36m';
-  var ansiColorCodeGrey = '\u001b[90m';
-  var ansiColorCodeBrightYellow = '\u001b[93m';
-  var ansiColorCodeRed = '\u001b[31m';
+  var useColors;
 
   beforeEach(function () {
     stdout = [];
@@ -20,6 +17,12 @@ describe('Dot reporter', function () {
     process.stdout.write = function (string) {
       stdout.push(string);
     };
+    useColors = Base.useColors;
+    Base.useColors = false;
+  });
+
+  afterEach(function () {
+    Base.useColors = useColors;
   });
 
   describe('on start', function () {
@@ -38,7 +41,7 @@ describe('Dot reporter', function () {
     });
   });
   describe('on pending', function () {
-    it('should return a new line and a coma in the color cyan', function () {
+    it('should return a new line and a coma', function () {
       runner.on = function (event, callback) {
         if (event === 'pending') {
           callback();
@@ -48,14 +51,14 @@ describe('Dot reporter', function () {
       process.stdout.write = stdoutWrite;
       var expectedArray = [
         '\n  ',
-        ansiColorCodeCyan + ',' + ansiColorCodeReset
+        Base.symbols.comma
       ];
       stdout.should.deepEqual(expectedArray);
     });
   });
   describe('on pass', function () {
     describe('if test speed is fast', function () {
-      it('should return a new line and a dot in the color grey', function () {
+      it('should return a new line and a dot', function () {
         var test = {
           duration: 1,
           slow: function () { return 2; }
@@ -69,13 +72,13 @@ describe('Dot reporter', function () {
         process.stdout.write = stdoutWrite;
         var expectedArray = [
           '\n  ',
-          ansiColorCodeGrey + '․' + ansiColorCodeReset
+          Base.symbols.dot
         ];
         stdout.should.deepEqual(expectedArray);
       });
     });
     describe('if test speed is slow', function () {
-      it('should return a new line and a dot in the color bright yellow', function () {
+      it('should return a new line and a dot', function () {
         var test = {
           duration: 2,
           slow: function () { return 1; }
@@ -89,14 +92,14 @@ describe('Dot reporter', function () {
         process.stdout.write = stdoutWrite;
         var expectedArray = [
           '\n  ',
-          ansiColorCodeBrightYellow + '․' + ansiColorCodeReset
+          Base.symbols.dot
         ];
         stdout.should.deepEqual(expectedArray);
       });
     });
   });
   describe('on fail', function () {
-    it('should return a new line and a exclamation mark in the color red', function () {
+    it('should return a new line and a exclamation mark', function () {
       var test = {
         test: {
           err: 'some error'
@@ -111,7 +114,7 @@ describe('Dot reporter', function () {
       process.stdout.write = stdoutWrite;
       var expectedArray = [
         '\n  ',
-        ansiColorCodeRed + '!' + ansiColorCodeReset
+        Base.symbols.bang
       ];
       stdout.should.deepEqual(expectedArray);
     });

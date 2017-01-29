@@ -2,16 +2,13 @@
 
 var reporters = require('../../').reporters;
 var Spec = reporters.Spec;
+var Base = reporters.Base;
 
 describe('Spec reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
-  var ansiColorCodeReset = '\u001b[0m';
-  var ansiColorCodeCyan = '\u001b[36m';
-  var ansiColorCodeRed = '\u001b[31m';
-  var ansiColorCodeGreen = '\u001b[32m';
-  var ansiColorCodeGrey = '\u001b[90m';
+  var useColors;
 
   beforeEach(function () {
     stdout = [];
@@ -20,10 +17,16 @@ describe('Spec reporter', function () {
     process.stdout.write = function (string) {
       stdout.push(string);
     };
+    useColors = Base.useColors;
+    Base.useColors = false;
+  });
+
+  afterEach(function () {
+    Base.useColors = useColors;
   });
 
   describe('on suite', function () {
-    it('should log title indented in color', function () {
+    it('should return title', function () {
       var expectedTitle = 'expectedTitle';
       var suite = {
         title: expectedTitle
@@ -36,13 +39,13 @@ describe('Spec reporter', function () {
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
-        ansiColorCodeReset + expectedTitle + ansiColorCodeReset + '\n'
+        expectedTitle + '\n'
       ];
       stdout.should.deepEqual(expectedArray);
     });
   });
   describe('on pending', function () {
-    it('should log title indented in the color cyan', function () {
+    it('should return title', function () {
       var expectedTitle = 'expectedTitle';
       var suite = {
         title: expectedTitle
@@ -55,14 +58,14 @@ describe('Spec reporter', function () {
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
-        ansiColorCodeCyan + '  - ' + expectedTitle + ansiColorCodeReset + '\n'
+        '  - ' + expectedTitle + '\n'
       ];
       stdout.should.deepEqual(expectedArray);
     });
   });
   describe('on pass', function () {
     describe('if test speed is slow', function () {
-      it('should return expected green tick, grey title and with duration colored in red', function () {
+      it('should return expected tick, title and duration', function () {
         var expectedTitle = 'expectedTitle';
         var expectedDuration = 2;
         var test = {
@@ -77,12 +80,12 @@ describe('Spec reporter', function () {
         };
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
-        var expectedString = ansiColorCodeGreen + '  ✓' + ansiColorCodeReset + ansiColorCodeGrey + ' ' + expectedTitle + ansiColorCodeReset + ansiColorCodeRed + ' (' + expectedDuration + 'ms)' + ansiColorCodeReset + '\n';
+        var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + ' (' + expectedDuration + 'ms)' + '\n';
         stdout[0].should.equal(expectedString);
       });
     });
     describe('if test speed is fast', function () {
-      it('should return expected green tick, grey title and without a duration', function () {
+      it('should return expected tick, title and without a duration', function () {
         var expectedTitle = 'expectedTitle';
         var expectedDuration = 1;
         var test = {
@@ -97,14 +100,15 @@ describe('Spec reporter', function () {
         };
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
-        var expectedString = ansiColorCodeGreen + '  ✓' + ansiColorCodeReset + ansiColorCodeGrey + ' ' + expectedTitle + ansiColorCodeReset + '\n';
+        var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
         stdout[0].should.equal(expectedString);
       });
     });
   });
   describe('on fail', function () {
-    it('should log title indented in the color red', function () {
+    it('should return title and function count', function () {
       var expectedTitle = 'expectedTitle';
+      var functionCount = 1;
       var test = {
         title: expectedTitle
       };
@@ -116,7 +120,7 @@ describe('Spec reporter', function () {
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
-        ansiColorCodeRed + '  1) ' + expectedTitle + ansiColorCodeReset + '\n'
+        '  ' + functionCount + ') ' + expectedTitle + '\n'
       ];
       stdout.should.deepEqual(expectedArray);
     });
