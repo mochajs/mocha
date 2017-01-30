@@ -171,56 +171,43 @@ describe('Nyon reporter', function () {
     });
 
     describe('if tick is false', function () {
-      it('should draw scoreboard, rainbox and face', function () {
+      it('should draw face with expected spaces, _ and ^', function () {
         var nyanCat = new NyanCat({on: function () {}});
         nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
-        nyanCat.draw();
+        nyanCat.draw.call({
+          tick: false,
+          appendRainbow: function () {},
+          rainbowify: function () {},
+          drawScoreboard: function () {},
+          drawRainbow: function () {},
+          drawNyanCat: NyanCat.prototype.drawNyanCat,
+          scoreboardWidth: 0,
+          trajectories: [[]],
+          face: function () {},
+          cursorUp: function () {}
+        });
+
         process.stdout.write = stdoutWrite;
         var expectedArray = [
-          ' ',
-          '\u001b[32m2\u001b[0m',
-          '\n',
-          ' ',
-          '\u001b[31m0\u001b[0m',
-          '\n',
-          ' ',
-          '\u001b[36m1\u001b[0m',
-          '\n',
-          '\n',
-          '\u001b[4A',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[4A',
-          '\u001b[6C',
+          '\u001b[0C',
           '_,------,',
           '\n',
-          '\u001b[6C',
+          '\u001b[0C',
           '_|   /\\_/\\ ',
           '\n',
-          '\u001b[6C',
-          '^|__( o .o) ',
+          '\u001b[0C',
+          '^|__undefined ',
           '\n',
-          '\u001b[6C',
+          '\u001b[0C',
           '  ""  "" ',
-          '\n',
-          '\u001b[4A'
+          '\n'
         ];
         stdout.should.deepEqual(expectedArray);
       });
     });
     describe('if tick is true', function () {
-      it('should draw scoreboard, rainbox and face', function () {
+      it('should draw face with expected spaces, _ and ~', function () {
         var nyanCat = new NyanCat({on: function () {}});
         nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
@@ -269,7 +256,7 @@ describe('Nyon reporter', function () {
       };
     });
 
-    it('should write cursor down interaction with expected number ', function () {
+    it('should write cursor down interaction with expected number', function () {
       var nyanCat = new NyanCat({on: function () {}});
       var expectedNumber = 25;
 
