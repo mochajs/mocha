@@ -1,5 +1,5 @@
 BROWSERIFY := "node_modules/.bin/browserify"
-ESLINT := "node_modules/.bin/eslint"
+SEMISTANDARD:= "node_modules/.bin/semistandard"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
 NYC := "node_modules/.bin/nyc"
@@ -34,7 +34,9 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) . bin/*
+	$(SEMISTANDARD) $(SRC)
+	$(SEMISTANDARD) --env mocha --global assert --global expect --global run $(TESTS)
+	$(SEMISTANDARD) bin/* scripts/*.js *.js
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
