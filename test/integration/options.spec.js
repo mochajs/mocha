@@ -180,4 +180,34 @@ describe('options', function () {
       });
     });
   });
+
+  describe('--production', function() {
+    before(function() {
+      args = ['--production'];
+    });
+
+    it('fails skipped tests', function(done) {
+      run('options/production/skipped.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.code, 1)
+        done();
+      });
+    });
+
+    it('fails pending tests', function(done) {
+      run('options/production/pending.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.code, 1)
+        done();
+      });
+    });
+
+    it('fails tests marked only', function(done) {
+      run('options/production/only.js', args, function(err, res) {
+        assert(!err);
+        assert.equal(res.code, 1)
+        done();
+      });
+    });
+  });
 });

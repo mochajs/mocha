@@ -107,7 +107,8 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
-  .option('--delay', 'wait for async suite definition');
+  .option('--delay', 'wait for async suite definition')
+  .option('--production', 'causes only, pending, and skipped tests to fail the suite');
 
 program._name = 'mocha';
 
@@ -322,6 +323,10 @@ mocha.globals(globals);
 if (program.retries) {
   mocha.suite.retries(program.retries);
 }
+
+// --production
+
+if (program.production) mocha.productionMode();
 
 // custom compiler support
 
