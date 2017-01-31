@@ -181,7 +181,7 @@ describe('options', function () {
     });
   });
 
-  describe.only('--production', function () {
+  describe('--production', function () {
     before(function () {
       args = ['--production'];
     });
