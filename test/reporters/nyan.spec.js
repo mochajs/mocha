@@ -331,7 +331,7 @@ describe('Nyon reporter', function () {
       afterEach(function () {
         Base.useColors = useColors;
       });
-      it('should return rainbowify string from preset color codes', function () {
+      it('should return rainbowified string from the given string and predefined codes', function () {
         var startCode = '\u001b[38;5;';
         var endCode = '\u001b[0m';
         var nyanCat = new NyanCat({on: function () {}});
@@ -410,7 +410,7 @@ describe('Nyon reporter', function () {
   });
 
   describe('drawScoreboard', function () {
-    it('should write scoreboard with color set next to each stat', function () {
+    it('should write scoreboard with color set with each stat', function () {
       var cachedColor = Base.color;
       Base.color = function (type, n) {
         return type + n;
@@ -446,7 +446,7 @@ describe('Nyon reporter', function () {
       process.stdout.write = stdoutWrite;
       Base.color = cachedColor;
     });
-    it('should call cursorUp with numberOfLines', function () {
+    it('should call cursorUp with given numberOfLines', function () {
       var stdout = [];
       var stdoutWrite = process.stdout.write;
       process.stdout.write = function (string) {
@@ -498,7 +498,7 @@ describe('Nyon reporter', function () {
       stdout.should.deepEqual(expectedArray);
     });
 
-    it('should call cursorUp with numberOfLines', function () {
+    it('should call cursorUp with given numberOfLines', function () {
       var stdout = [];
       var stdoutWrite = process.stdout.write;
       process.stdout.write = function (string) {
