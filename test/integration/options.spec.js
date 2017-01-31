@@ -181,12 +181,28 @@ describe('options', function () {
     });
   });
 
-  describe('--production', function () {
+  describe.only('--production', function () {
     before(function () {
       args = ['--production'];
     });
 
-    it('fails skipped tests', function (done) {
+    it('succeeds if there are only passed tests', function (done) {
+      run('options/production/passed.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
+    it('fails if there are failed tests', function (done) {
+      run('options/production/failed.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
+
+    it('fails if there are skipped tests', function (done) {
       run('options/production/skipped.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
@@ -194,7 +210,7 @@ describe('options', function () {
       });
     });
 
-    it('fails pending tests', function (done) {
+    it('fails if there are pending tests', function (done) {
       run('options/production/pending.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
@@ -202,7 +218,7 @@ describe('options', function () {
       });
     });
 
-    it('fails tests marked only', function (done) {
+    it('fails if there are tests marked only', function (done) {
       run('options/production/only.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
