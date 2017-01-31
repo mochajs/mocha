@@ -180,46 +180,33 @@ describe('Nyon reporter', function () {
         var nyanCat = new NyanCat({on: function () {}});
         nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
-        nyanCat.draw();
+        nyanCat.draw.call({
+          tick: false,
+          appendRainbow: function () {},
+          rainbowify: function () {},
+          drawScoreboard: function () {},
+          drawRainbow: function () {},
+          drawNyanCat: NyanCat.prototype.drawNyanCat,
+          scoreboardWidth: 0,
+          trajectories: [[]],
+          face: function () {},
+          cursorUp: function () {}
+        });
+
         process.stdout.write = stdoutWrite;
         var expectedArray = [
-          ' ',
-          '\u001b[32m2\u001b[0m',
-          '\n',
-          ' ',
-          '\u001b[31m0\u001b[0m',
-          '\n',
-          ' ',
-          '\u001b[36m1\u001b[0m',
-          '\n',
-          '\n',
-          '\u001b[4A',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[5C',
-          '\u001b[38;5;154m-\u001b[0m',
-          '\n',
-          '\u001b[4A',
-          '\u001b[6C',
+          '\u001b[0C',
           '_,------,',
           '\n',
-          '\u001b[6C',
+          '\u001b[0C',
           '_|   /\\_/\\ ',
           '\n',
-          '\u001b[6C',
-          '^|__( o .o) ',
+          '\u001b[0C',
+          '^|__undefined ',
           '\n',
-          '\u001b[6C',
+          '\u001b[0C',
           '  ""  "" ',
-          '\n',
-          '\u001b[4A'
+          '\n'
         ];
         stdout.should.deepEqual(expectedArray);
       });
@@ -287,28 +274,101 @@ describe('Nyon reporter', function () {
     });
   });
 
-  describe('rainbowify', function () {
-    var useColors;
+  describe('cursorUp', function () {
+    var stdout;
+    var stdoutWrite;
 
     beforeEach(function () {
-      Base.useColors = false;
+      stdout = [];
+      stdoutWrite = process.stdout.write;
+      process.stdout.write = function (string) {
+        stdout.push(string);
+      };
     });
 
-    afterEach(function () {
-      Base.useColors = useColors;
-    });
-
-    it('should return argument string if useColors is false', function () {
+    it('should write cursor up interaction with expected number', function () {
       var nyanCat = new NyanCat({on: function () {}});
-      var expectedString = 'hello';
-      var outputString = nyanCat.rainbowify(expectedString);
+      var expectedNumber = 25;
 
-      outputString.should.equal(expectedString);
+      nyanCat.cursorUp(expectedNumber);
+      process.stdout.write = stdoutWrite;
+      var expectedArray = [
+        '\u001b[' + expectedNumber + 'A'
+      ];
+      stdout.should.deepEqual(expectedArray);
+    });
+  });
+
+  describe('rainbowify', function () {
+    describe('useColors is false', function () {
+      var useColors;
+
+      beforeEach(function () {
+        useColors = Base.useColors;
+        Base.useColors = false;
+      });
+
+      afterEach(function () {
+        Base.useColors = useColors;
+      });
+
+      it('should return argument string', function () {
+        var nyanCat = new NyanCat({on: function () {}});
+        var expectedString = 'hello';
+        var outputString = nyanCat.rainbowify(expectedString);
+
+        outputString.should.equal(expectedString);
+      });
+    });
+    describe('useColors is true', function () {
+      var useColors;
+
+      beforeEach(function () {
+        useColors = Base.useColors;
+        Base.useColors = true;
+      });
+
+      afterEach(function () {
+        Base.useColors = useColors;
+      });
+      it('should return rainbowify string from preset color codes', function () {
+        var startCode = '\u001b[38;5;';
+        var endCode = '\u001b[0m';
+        var nyanCat = new NyanCat({on: function () {}});
+        var expectedString = 'hello';
+        var colorCode = 'somecode';
+        var expectedRainbowifyString = startCode + colorCode + 'm' + expectedString + endCode;
+        var outputString = nyanCat.rainbowify.call(
+          {
+            rainbowColors: [colorCode],
+            colorIndex: 0
+          },
+          expectedString);
+
+        outputString.should.equal(expectedRainbowifyString);
+      });
     });
   });
 
   describe('appendRainbow', function () {
     describe('if tick is true', function () {
+      it('should set an _ segment', function () {
+        var nyanCat = new NyanCat({on: function () {}});
+        var expectedSegment;
+        var inputArray = [];
+        var trajectories = [inputArray, inputArray, inputArray, inputArray];
+        nyanCat.appendRainbow.call({
+          tick: true,
+          rainbowify: function (segment) {
+            expectedSegment = segment;
+          },
+          numberOfLines: 4,
+          trajectoryWidthMax: 0,
+          trajectories: trajectories
+        });
+
+        expectedSegment.should.deepEqual('_');
+      });
       it('should shift each trajectory item, if its length is greater of equal to its max width', function () {
         var nyanCat = new NyanCat({on: function () {}});
 
@@ -328,8 +388,139 @@ describe('Nyon reporter', function () {
         trajectories.should.deepEqual(expectedTrajectories);
       });
     });
+    describe('if tick is false', function () {
+      it('should set an - segment', function () {
+        var nyanCat = new NyanCat({on: function () {}});
+        var expectedSegment;
+        var inputArray = [];
+        var trajectories = [inputArray, inputArray, inputArray, inputArray];
+        nyanCat.appendRainbow.call({
+          tick: false,
+          rainbowify: function (segment) {
+            expectedSegment = segment;
+          },
+          numberOfLines: 4,
+          trajectoryWidthMax: 5,
+          trajectories: trajectories
+        });
+
+        expectedSegment.should.deepEqual('-');
+      });
+    });
   });
 
+  describe('drawScoreboard', function () {
+    it('should write scoreboard with color set next to each stat', function () {
+      var cachedColor = Base.color;
+      Base.color = function (type, n) {
+        return type + n;
+      };
+      var stdout = [];
+      var stdoutWrite = process.stdout.write;
+      process.stdout.write = function (string) {
+        stdout.push(string);
+      };
+
+      var passes = 2;
+      var pending = 1;
+      var failures = 1;
+      var nyanCat = new NyanCat({on: function () {}});
+      nyanCat.drawScoreboard.call({
+        cursorUp: function () {},
+        stats: { passes: passes, pending: pending, failures: failures },
+        numberOfLines: 4
+      });
+      var expectedArray = [
+        ' ',
+        'green' + passes,
+        '\n',
+        ' ',
+        'fail' + failures,
+        '\n',
+        ' ',
+        'pending' + pending,
+        '\n',
+        '\n'
+      ];
+      stdout.should.deepEqual(expectedArray);
+      process.stdout.write = stdoutWrite;
+      Base.color = cachedColor;
+    });
+    it('should call cursorUp with numberOfLines', function () {
+      var stdout = [];
+      var stdoutWrite = process.stdout.write;
+      process.stdout.write = function (string) {
+        stdout.push(string);
+      };
+      var expectedCursorArgument = null;
+      var expectedNumberOfLines = 1000;
+
+      var nyanCat = new NyanCat({on: function () {}});
+      nyanCat.drawScoreboard.call({
+        cursorUp: function (lines) {
+          expectedCursorArgument = lines;
+        },
+        stats: { passes: 0, pending: 0, failures: 0 },
+        numberOfLines: expectedNumberOfLines
+      });
+
+      expectedCursorArgument.should.equal(expectedNumberOfLines);
+      process.stdout.write = stdoutWrite;
+    });
+  });
+
+  describe('drawRainbow', function () {
+    it('should write width, contents and newline for each trajectory', function () {
+      var stdout = [];
+      var stdoutWrite = process.stdout.write;
+      process.stdout.write = function (string) {
+        stdout.push(string);
+      };
+      var expectedWidth = 444;
+
+      var expectedContents = 'input';
+      var inputArray = [expectedContents];
+      var trajectories = [inputArray];
+      var nyanCat = new NyanCat({on: function () {}});
+      nyanCat.drawRainbow.call({
+        cursorUp: function () {},
+        trajectories: trajectories,
+        scoreboardWidth: expectedWidth,
+        numberOfLines: 1
+      });
+
+      process.stdout.write = stdoutWrite;
+      var expectedArray = [
+        '\u001b[' + expectedWidth + 'C',
+        expectedContents,
+        '\n'
+      ];
+      stdout.should.deepEqual(expectedArray);
+    });
+
+    it('should call cursorUp with numberOfLines', function () {
+      var stdout = [];
+      var stdoutWrite = process.stdout.write;
+      process.stdout.write = function (string) {
+        stdout.push(string);
+      };
+      var expectedCursorArgument = null;
+      var expectedNumberOfLines = 1000;
+
+      var nyanCat = new NyanCat({on: function () {}});
+      nyanCat.drawRainbow.call({
+        cursorUp: function (lines) {
+          expectedCursorArgument = lines;
+        },
+        trajectories: [['input']],
+        scoreboardWidth: 1,
+        numberOfLines: expectedNumberOfLines
+      });
+
+      expectedCursorArgument.should.equal(expectedNumberOfLines);
+      process.stdout.write = stdoutWrite;
+    });
+  });
   describe('face', function () {
     it('expected face:(x .x) when "failures" at least one', function () {
       var nyanCat = new NyanCat({on: function () {}});
