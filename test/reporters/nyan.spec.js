@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
 
-describe('Nyon reporter', function () {
+describe('Nyan reporter', function () {
   describe('events', function () {
     var runner;
     var stdout;
