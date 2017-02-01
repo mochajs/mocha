@@ -108,7 +108,8 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
-  .option('--delay', 'wait for async suite definition');
+  .option('--delay', 'wait for async suite definition')
+  .option('--allow-uncaught', 'enable uncaught errors to propagate');
 
 program._name = 'mocha';
 
@@ -312,6 +313,12 @@ if (program.asyncOnly) {
 
 if (program.delay) {
   mocha.delay();
+}
+
+// --allow-uncaught
+
+if (program.allowUncaught) {
+  mocha.allowUncaught();
 }
 
 // --globals
