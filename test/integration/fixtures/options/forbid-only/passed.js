@@ -1,4 +1,4 @@
-describe('production mode - passed', function () {
+describe('forbid only - all test pass', function () {
   it('test1', function () {});
   it('test2', function () {});
   it('test3', function () {});

@@ -108,7 +108,8 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
-  .option('--production', 'causes only, pending, and skipped tests to fail the suite');
+  .option('--forbid-only', 'causes test marked with only to fail the suite')
+  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite');
 
 program._name = 'mocha';
 
@@ -324,9 +325,13 @@ if (program.retries) {
   mocha.suite.retries(program.retries);
 }
 
-// --production
+// --forbid-only
 
-if (program.production) mocha.productionMode();
+if (program.forbidOnly) mocha.forbidOnly();
+
+// --forbid-pending
+
+if (program.forbidPending) mocha.forbidPending();
 
 // custom compiler support
 

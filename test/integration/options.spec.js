@@ -181,29 +181,43 @@ describe('options', function () {
     });
   });
 
-  describe('--production', function () {
+  describe.only('--forbid-only', function () {
     before(function () {
-      args = ['--production'];
+      args = ['--forbid-only'];
     });
 
     it('succeeds if there are only passed tests', function (done) {
-      run('options/production/passed.js', args, function (err, res) {
+      run('options/forbid-only/passed.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 0);
         done();
       });
     });
 
-    it('fails if there are failed tests', function (done) {
-      run('options/production/failed.js', args, function (err, res) {
+    it('fails if there are tests marked only', function (done) {
+      run('options/forbid-only/only.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
         done();
       });
     });
+  });
 
-    it('fails if there are skipped tests', function (done) {
-      run('options/production/skipped.js', args, function (err, res) {
+  describe.only('--forbid-pending', function () {
+    before(function () {
+      args = ['--forbid-pending'];
+    });
+
+    it('succeeds if there are only passed tests', function (done) {
+      run('options/forbid-pending/passed.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
+    it('fails if there are tests marked skip', function (done) {
+      run('options/forbid-pending/skip.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
         done();
@@ -211,15 +225,7 @@ describe('options', function () {
     });
 
     it('fails if there are pending tests', function (done) {
-      run('options/production/pending.js', args, function (err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        done();
-      });
-    });
-
-    it('fails if there are tests marked only', function (done) {
-      run('options/production/only.js', args, function (err, res) {
+      run('options/forbid-pending/pending.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
         done();
