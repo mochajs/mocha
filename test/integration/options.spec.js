@@ -181,7 +181,7 @@ describe('options', function () {
     });
   });
 
-  describe.only('--forbid-only', function () {
+  describe('--forbid-only', function () {
     before(function () {
       args = ['--forbid-only'];
     });
@@ -203,7 +203,7 @@ describe('options', function () {
     });
   });
 
-  describe.only('--forbid-pending', function () {
+  describe('--forbid-pending', function () {
     before(function () {
       args = ['--forbid-pending'];
     });
