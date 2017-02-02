@@ -107,7 +107,7 @@ describe('XUnit reporter', function () {
   });
 
   describe('done', function () {
-    describe('if fileStream is truthly', () => {
+    describe('if fileStream is truthly', function () {
       it('should run callback with failure inside streams end', function () {
         var xunit = new XUnit({on: function () {}});
         var callbackArgument = null;
@@ -214,7 +214,7 @@ describe('XUnit reporter', function () {
 
   describe('test', function () {
     describe('on test failure', function () {
-      it('should write expected tag', function () {
+      it('should write expected tag with error details', function () {
         var xunit = new XUnit({on: function () {}});
 
         var expectedWrite = null;
