@@ -40,48 +40,79 @@ describe('Progrss reporter', function () {
   });
 
   describe('on test end', function () {
-    it('should write expected progress of open and close options', function () {
-      var calledCursorCR = false;
-      var cachedCursor = Base.cursor;
-      var useColors = Base.useColors;
-      Base.useColors = false;
-      Base.cursor.CR = function () {
-        calledCursorCR = true;
-      };
-      var windowWidth = Base.window.width;
-      Base.window.width = 0;
+    describe('if line has not changed', () => {
+      it('should return and not write anything', function () {
+        var cachedCursor = Base.cursor;
+        var useColors = Base.useColors;
+        Base.useColors = false;
+        Base.cursor.CR = function () {};
+        var windowWidth = Base.window.width;
+        Base.window.width = -3;
 
-      var expectedTotal = 12;
-      var expectedOpen = 'OpEn';
-      var expectedClose = 'cLoSe';
-      var expectedOptions = {
-        open: expectedOpen,
-        complete: 'cOmPlEtE',
-        incomplete: 'iNcOmPlEtE',
-        close: expectedClose
-      };
-      runner.total = expectedTotal;
-      runner.on = function (event, callback) {
-        if (event === 'test end') {
-          callback();
-        }
-      };
-      Progress.call({}, runner, expectedOptions);
+        var expectedTotal = 1;
+        var expectedOptions = {};
+        runner.total = expectedTotal;
+        runner.on = function (event, callback) {
+          if (event === 'test end') {
+            callback();
+          }
+        };
+        Progress.call({}, runner, expectedOptions);
 
-      process.stdout.write = stdoutWrite;
-      var expectedArray = [
-        '\u001b[J',
-        '  ' + expectedOpen,
-        '',
-        '',
-        expectedClose
-      ];
-      calledCursorCR.should.be.true();
-      stdout.should.deepEqual(expectedArray);
+        process.stdout.write = stdoutWrite;
 
-      Base.cursor = cachedCursor;
-      Base.useColors = useColors;
-      Base.window.width = windowWidth;
+        stdout.should.deepEqual([]);
+
+        Base.cursor = cachedCursor;
+        Base.useColors = useColors;
+        Base.window.width = windowWidth;
+      });
+    });
+    describe('if line has changed', () => {
+      it('should write expected progress of open and close options', function () {
+        var calledCursorCR = false;
+        var cachedCursor = Base.cursor;
+        var useColors = Base.useColors;
+        Base.useColors = false;
+        Base.cursor.CR = function () {
+          calledCursorCR = true;
+        };
+        var windowWidth = Base.window.width;
+        Base.window.width = 5;
+
+        var expectedTotal = 12;
+        var expectedOpen = 'OpEn';
+        var expectedClose = 'cLoSe';
+        var expectedIncomplete = 'iNcOmPlEtE';
+        var expectedOptions = {
+          open: expectedOpen,
+          complete: 'cOmPlEtE',
+          incomplete: expectedIncomplete,
+          close: expectedClose
+        };
+        runner.total = expectedTotal;
+        runner.on = function (event, callback) {
+          if (event === 'test end') {
+            callback();
+          }
+        };
+        Progress.call({}, runner, expectedOptions);
+
+        process.stdout.write = stdoutWrite;
+        var expectedArray = [
+          '\u001b[J',
+          '  ' + expectedOpen,
+          '',
+          expectedIncomplete,
+          expectedClose
+        ];
+        calledCursorCR.should.be.true();
+        stdout.should.deepEqual(expectedArray);
+
+        Base.cursor = cachedCursor;
+        Base.useColors = useColors;
+        Base.window.width = windowWidth;
+      });
     });
   });
 
