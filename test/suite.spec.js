@@ -141,6 +141,17 @@ describe('Suite', function () {
         beforeAllItem.fn.should.equal(fn);
       });
 
+      it('prepends it to _beforeAll', function () {
+        var fn = function () {};
+        this.suite.beforeAll(fn);
+        this.suite.beforeAll('prepend', fn, true);
+
+        this.suite._beforeAll.should.have.length(2);
+        var beforeAllItem = this.suite._beforeAll[0];
+        beforeAllItem.title.should.match(/^"before all" hook/);
+        beforeAllItem.fn.should.equal(fn);
+      });
+
       it('appends title to hook', function () {
         var fn = function () {};
         this.suite.beforeAll('test', fn);
@@ -175,6 +186,18 @@ describe('Suite', function () {
         afterAllItem.title.should.match(/^"after all" hook/);
         afterAllItem.fn.should.equal(fn);
       });
+
+      it('prepends it to _afterAll', function () {
+        var fn = function () {};
+        this.suite.afterAll(fn);
+        this.suite.afterAll('prepend', fn, true);
+
+        this.suite._afterAll.should.have.length(2);
+        var afterAllItem = this.suite._afterAll[0];
+        afterAllItem.title.should.match(/^"after all" hook/);
+        afterAllItem.fn.should.equal(fn);
+      });
+
       it('appends title to hook', function () {
         var fn = function () {};
         this.suite.afterAll('test', fn);
@@ -210,6 +233,17 @@ describe('Suite', function () {
         beforeEachItem.fn.should.equal(fn);
       });
 
+      it('prepends it to _beforeEach', function () {
+        var fn = function () {};
+        this.suite.beforeEach(fn);
+        this.suite.beforeEach('prepend', fn, true);
+
+        this.suite._beforeEach.should.have.length(2);
+        var beforeEachItem = this.suite._beforeEach[0];
+        beforeEachItem.title.should.match(/^"before each" hook/);
+        beforeEachItem.fn.should.equal(fn);
+      });
+
       it('appends title to hook', function () {
         var fn = function () {};
         this.suite.beforeEach('test', fn);
@@ -240,6 +274,17 @@ describe('Suite', function () {
         this.suite.afterEach(fn);
 
         this.suite._afterEach.should.have.length(1);
+        var afterEachItem = this.suite._afterEach[0];
+        afterEachItem.title.should.match(/^"after each" hook/);
+        afterEachItem.fn.should.equal(fn);
+      });
+
+      it('prepends it to _afterEach', function () {
+        var fn = function () {};
+        this.suite.afterEach(fn);
+        this.suite.afterEach('prepend', fn, true);
+
+        this.suite._afterEach.should.have.length(2);
         var afterEachItem = this.suite._afterEach[0];
         afterEachItem.title.should.match(/^"after each" hook/);
         afterEachItem.fn.should.equal(fn);
