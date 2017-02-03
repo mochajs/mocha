@@ -1,3 +1,5 @@
+'use strict';
+
 var reporters = require('../../').reporters;
 var JSONStream = reporters.JSONStream;
 
