@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var Progress = reporters.Progress;
 var Base = reporters.Base;
 
-describe('Progrss reporter', function () {
+describe('Progress reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
