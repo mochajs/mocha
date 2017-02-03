@@ -40,7 +40,7 @@ describe('Progress reporter', function () {
   });
 
   describe('on test end', function () {
-    describe('if line has not changed', () => {
+    describe('if line has not changed', function () {
       it('should return and not write anything', function () {
         var cachedCursor = Base.cursor;
         var useColors = Base.useColors;
@@ -68,7 +68,7 @@ describe('Progress reporter', function () {
         Base.window.width = windowWidth;
       });
     });
-    describe('if line has changed', () => {
+    describe('if line has changed', function () {
       it('should write expected progress of open and close options', function () {
         var calledCursorCR = false;
         var cachedCursor = Base.cursor;
