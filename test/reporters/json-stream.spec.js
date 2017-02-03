@@ -28,7 +28,7 @@ describe('Json Stream reporter', function () {
 
       process.stdout.write = stdoutWrite;
 
-      stdout[0].should.deepEqual('[\"start\",{\"total\":' + expectedTotal + '}]\n');
+      stdout[0].should.deepEqual('["start",{"total":' + expectedTotal + '}]\n');
     });
   });
 
@@ -77,7 +77,7 @@ describe('Json Stream reporter', function () {
         var expectedError = {
           message: expectedErrorMessage,
           stack: expectedErrorStack
-        }
+        };
         runner.on = function (event, callback) {
           if (event === 'fail') {
             callback(expectedTest, expectedError);
@@ -106,7 +106,7 @@ describe('Json Stream reporter', function () {
         var expectedErrorMessage = 'error message';
         var expectedError = {
           message: expectedErrorMessage
-        }
+        };
         runner.on = function (event, callback) {
           if (event === 'fail') {
             callback(expectedTest, expectedError);
