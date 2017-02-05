@@ -35,7 +35,7 @@ describe('TAP reporter', function () {
       TAP.call({}, runner);
 
       var expectedArray = [
-        '1..10\n'
+        '1..' + expectedTotal+ '\n'
       ];
       process.stdout.write = stdoutWrite;
 
