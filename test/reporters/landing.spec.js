@@ -10,6 +10,7 @@ describe('Landing reporter', function () {
   var runner;
   var useColors;
   var windowWidth;
+  var resetCode = '\u001b[0m';
 
   beforeEach(function () {
     stdout = [];
@@ -82,14 +83,15 @@ describe('Landing reporter', function () {
 
         process.stdout.write = stdoutWrite;
 
-        var expectedArray = [ '\u001b[1D\u001b[2A',
+        var expectedArray = [
+          '\u001b[1D\u001b[2A',
           '  ',
           '\n  ',
           '',
           '✈',
           '\n',
           '  ',
-          '\u001b[0m'
+          resetCode
         ];
         stdout.should.deepEqual(expectedArray);
       });
@@ -109,14 +111,15 @@ describe('Landing reporter', function () {
 
         process.stdout.write = stdoutWrite;
 
-        var expectedArray = [ '\u001b[1D\u001b[2A',
+        var expectedArray = [
+          '\u001b[1D\u001b[2A',
           '  ',
           '\n  ',
           '',
           '✈',
           '\n',
           '  ',
-          '\u001b[0m'
+          resetCode
         ];
         stdout.should.deepEqual(expectedArray);
       });
