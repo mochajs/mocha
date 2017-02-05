@@ -103,6 +103,9 @@ describe('List reporter', function () {
       Base.cursor = cachedCursor;
     });
     it('should write expected symbol, title and duration to the console', function () {
+      var cachedSymbols = Base.symbols;
+      var expectedOkSymbol = 'OK';
+      Base.symbols.ok = expectedOkSymbol;
       var cachedCursor = Base.cursor;
       Base.cursor.CR = function () {};
       var expectedTitle = 'some title';
@@ -123,9 +126,10 @@ describe('List reporter', function () {
 
       process.stdout.write = stdoutWrite;
 
-      stdout[0].should.equal('  ✓ ' + expectedTitle + ': ' + expectedDuration + 'ms\n');
+      stdout[0].should.equal('  ' + expectedOkSymbol + ' ' + expectedTitle + ': ' + expectedDuration + 'ms\n');
 
       Base.cursor = cachedCursor;
+      Base.symbols = cachedSymbols;
     });
   });
   describe('on fail', function () {
