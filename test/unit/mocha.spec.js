@@ -161,5 +161,4 @@ describe('Mocha', function () {
       mocha.options.delay.should.equal(true);
     });
   });
-
 });
