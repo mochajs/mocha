@@ -49,8 +49,8 @@ process.argv.slice(2).forEach(function (arg) {
       args.unshift(arg);
       break;
     case '--gdb':
-        gdb = true;
-        break;
+      gdb = true;
+      break;
     default:
       if (arg.indexOf('--harmony') === 0) {
         args.unshift(arg);
@@ -70,10 +70,10 @@ process.argv.slice(2).forEach(function (arg) {
 });
 
 var binary = process.execPath;
-if(gdb){
+if (gdb) {
   args.unshift(binary);
   args.unshift('--args');
-  binary = '/usr/bin/gdb'
+  binary = '/usr/bin/gdb';
 }
 
 var proc = spawn(binary, args, { stdio: 'inherit' });
