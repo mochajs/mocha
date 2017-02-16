@@ -17,9 +17,13 @@ module.exports = getOptions;
  */
 
 function getOptions () {
-  var optsPath = process.argv.indexOf('--opts') === -1
-    ? 'test/mocha.opts'
-    : process.argv[process.argv.indexOf('--opts') + 1];
+  var defaultPath = 'test/mocha.opts';
+
+  var optsIndex = process.argv.indexOf('--opts');
+  var optsPath = optsIndex === -1
+    ? defaultPath
+    : process.argv[optsIndex + 1];
+  var shouldThrowError = optsIndex !== -1;
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
@@ -34,7 +38,9 @@ function getOptions () {
       .slice(0, 2)
       .concat(opts.concat(process.argv.slice(2)));
   } catch (err) {
-    // ignore
+    if (shouldThrowError) {
+      throw new Error(err);
+    }
   }
 
   process.env.LOADED_MOCHA_OPTS = true;
