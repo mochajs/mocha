@@ -315,7 +315,7 @@ describe('XUnit reporter', function () {
     });
   });
 
-  describe('custom suite name', function() {
+  describe('custom suite name', function () {
     // capture the events that the reporter subscribes to
     var events;
 
