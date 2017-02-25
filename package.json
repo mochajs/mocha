@@ -316,7 +316,8 @@
     "json3": "3.3.2",
     "lodash.create": "3.1.1",
     "mkdirp": "0.5.1",
-    "supports-color": "3.1.2"
+    "supports-color": "3.1.2",
+    "symbol-observable": "^1.0.4"
   },
   "devDependencies": {
     "assert": "^1.4.1",

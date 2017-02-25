@@ -1,5 +1,6 @@
 'use strict';
 
+var $$observable = require('symbol-observable').default;
 var mocha = require('../');
 var utils = mocha.utils;
 var Runnable = mocha.Runnable;
@@ -442,6 +443,100 @@ describe('Runnable(title, fn)', function () {
         it('should give the timeout error', function (done) {
           var test = new Runnable('foo', function () {
             return foreverPendingPromise;
+          });
+
+          test.timeout(10);
+          test.run(function (err) {
+            err.should.be.ok();
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when fn returns an observable', function () {
+      describe('when the observable ends', function () {
+        var endedObservable = {};
+        endedObservable[$$observable] = function () {
+          return {
+            subscribe: function (observer) {
+              process.nextTick(observer.complete);
+            }
+          };
+        };
+
+        it('should invoke the callback', function (done) {
+          var test = new Runnable('foo', function () {
+            return endedObservable;
+          });
+
+          test.run(done);
+        });
+      });
+
+      describe('when the observable emits an error', function () {
+        var expectedErr = new Error('fail');
+        var erroredObservable = {};
+        erroredObservable[$$observable] = function () {
+          return {
+            subscribe: function (observer) {
+              process.nextTick(function () {
+                observer.error(expectedErr);
+                observer.complete();
+              });
+            }
+          };
+        };
+
+        it('should invoke the callback', function (done) {
+          var test = new Runnable('foo', function () {
+            return erroredObservable;
+          });
+
+          test.run(function (err) {
+            err.should.equal(expectedErr);
+            done();
+          });
+        });
+      });
+
+      describe('when the observable emits an error with no value', function () {
+        var expectedErr = new Error('Observable errored with no or falsy reason');
+        var erroredObservable = {};
+        erroredObservable[$$observable] = function () {
+          return {
+            subscribe: function (observer) {
+              process.nextTick(function () {
+                observer.error();
+                observer.complete();
+              });
+            }
+          };
+        };
+
+        it('should invoke the callback', function (done) {
+          var test = new Runnable('foo', function () {
+            return erroredObservable;
+          });
+
+          test.run(function (err) {
+            err.should.eql(expectedErr);
+            done();
+          });
+        });
+      });
+
+      describe('when the bbservable takes too long to end', function () {
+        var foreverOpenObservable = {};
+        foreverOpenObservable[$$observable] = function () {
+          return {
+            subscribe: function () { }
+          };
+        };
+
+        it('should give the timeout error', function (done) {
+          var test = new Runnable('foo', function () {
+            return foreverOpenObservable;
           });
 
           test.timeout(10);
