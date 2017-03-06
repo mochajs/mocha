@@ -337,7 +337,7 @@
     "os-name": "^2.0.1",
     "phantomjs": "1.9.8",
     "rimraf": "^2.5.2",
-    "semistandard": "^9.2.1",
+    "semistandard": "^10.0.0",
     "should": "^11.1.1",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
