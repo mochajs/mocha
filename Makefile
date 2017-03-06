@@ -38,7 +38,7 @@ lint:
 	$(SEMISTANDARD) --env mocha --global assert --global expect --global run $(TESTS)
 	$(SEMISTANDARD) bin/* scripts/*.js *.js
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-cli test-only test-global-only
 
 test-browser: clean BUILDTMP/mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -117,6 +117,11 @@ test-glob:
 test-reporters:
 	@printf "==> [Test :: Reporters]\n"
 	$(call test_node,reporters) test/reporters/*.js
+
+test-cli:
+	@printf "==> [Test :: Cli]\n"
+	$(MOCHA) --reporter $(REPORTER) \
+		test/cli/*.js
 
 test-only:
 	@printf "==> [Test :: Only]\n"

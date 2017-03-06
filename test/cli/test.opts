@@ -1,0 +1,8 @@
+--require should
+--require ./test/setup
+--reporter dot
+--ui bdd
+--globals okGlobalA,okGlobalB
+--globals okGlobalC
+--globals callback*
+--timeout 200
