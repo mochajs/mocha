@@ -13,7 +13,7 @@ else
 endif
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
-SRC = $(shell find lib -name "*.js" -type f | sort)
+SRC = $(shell find lib -name "*.js" -type f | LC_ALL=C sort)
 TESTS = $(shell find test -name "*.js" -type f | sort)
 
 all: mocha.js
