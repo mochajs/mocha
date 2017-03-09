@@ -96,6 +96,7 @@ program
   .option('--no-deprecation', 'silence deprecation warnings')
   .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
   .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
+  .option('--no-warnings', 'silence all node process warnings')
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--perf-basic-prof', 'enable perf linux profiler (basic support)')
   .option('--prof', 'log statistical profiling information')
