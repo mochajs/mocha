@@ -169,6 +169,15 @@ program.on('interfaces', function () {
 
 // -r, --require
 
+// make sure coffee files are required properly
+
+try {
+  require('coffee-script');
+}
+catch (err) {
+  // no coffee
+}
+
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
 program.on('require', function (mod) {
@@ -224,6 +233,7 @@ try {
     throw new Error('reporter "' + program.reporter + '" does not exist');
   }
 }
+
 
 // --no-colors
 
