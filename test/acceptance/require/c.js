@@ -1,2 +1,4 @@
-global.required = (global.required || [])
-global.required.push('c.js')
+'use strict';
+
+global.required = (global.required || []);
+global.required.push('c.js');

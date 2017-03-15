@@ -1,5 +1,6 @@
-var Mocha = require('../../')
-  , path = require('path');
+'use strict';
+
+var Mocha = require('../../');
 
 var mocha = new Mocha({
   ui: 'bdd',
@@ -11,19 +12,19 @@ var mocha = new Mocha({
 // mocha.reporter('spec');
 require('should');
 
-mocha.addFile('test/suite.js');
-mocha.addFile('test/runner.js');
-mocha.addFile('test/runnable.js');
-mocha.addFile('test/hook.sync.js');
-mocha.addFile('test/hook.sync.nested.js');
-mocha.addFile('test/hook.async.js');
-mocha.addFile('test/acceptance/duration.js');
-mocha.addFile('test/acceptance/fs.js');
-mocha.addFile('test/acceptance/globals.js');
-mocha.addFile('test/acceptance/timeout.js');
+mocha.addFile('test/suite.spec.js');
+mocha.addFile('test/runner.spec.js');
+mocha.addFile('test/runnable.spec.js');
+mocha.addFile('test/hook-sync.spec.js');
+mocha.addFile('test/hook-sync-nested.spec.js');
+mocha.addFile('test/hook-async.spec.js');
+mocha.addFile('test/acceptance/duration.spec.js');
+mocha.addFile('test/acceptance/fs.spec.js');
+mocha.addFile('test/acceptance/globals.spec.js');
+mocha.addFile('test/acceptance/timeout.spec.js');
 
-mocha.run(function(){
+mocha.run(function () {
   console.log('done');
-}).on('pass', function(test){
+}).on('pass', function (test) {
   // console.log('... %s', test.title);
 });

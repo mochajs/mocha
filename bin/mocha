@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
+'use strict';
+
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _mocha(1) executable.
  */
 
-var spawn = require('child_process').spawn,
-  path = require('path'),
-  fs = require('fs'),
-  getOptions = require('./options'),
-  args = [path.join(__dirname, '_mocha')];
+var spawn = require('child_process').spawn;
+var path = require('path');
+var getOptions = require('./options');
+var args = [path.join(__dirname, '_mocha')];
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
 getOptions();
 
-process.argv.slice(2).forEach(function(arg){
+process.argv.slice(2).forEach(function (arg) {
   var flag = arg.split('=')[0];
 
   switch (flag) {
@@ -26,6 +27,7 @@ process.argv.slice(2).forEach(function(arg){
     case 'debug':
     case '--debug':
     case '--debug-brk':
+    case '--inspect':
       args.unshift(arg);
       args.push('--no-timeouts');
       break;
@@ -46,17 +48,26 @@ process.argv.slice(2).forEach(function(arg){
       args.unshift(arg);
       break;
     default:
-      if (0 == arg.indexOf('--harmony')) args.unshift(arg);
-      else if (0 == arg.indexOf('--trace')) args.unshift(arg);
-      else if (0 == arg.indexOf('--max-old-space-size')) args.unshift(arg);
-      else args.push(arg);
+      if (arg.indexOf('--harmony') === 0) {
+        args.unshift(arg);
+      } else if (arg.indexOf('--trace') === 0) {
+        args.unshift(arg);
+      } else if (arg.indexOf('--icu-data-dir') === 0) {
+        args.unshift(arg);
+      } else if (arg.indexOf('--max-old-space-size') === 0) {
+        args.unshift(arg);
+      } else if (arg.indexOf('--preserve-symlinks') === 0) {
+        args.unshift(arg);
+      } else {
+        args.push(arg);
+      }
       break;
   }
 });
 
 var proc = spawn(process.execPath, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
-  process.on('exit', function(){
+  process.on('exit', function () {
     if (signal) {
       process.kill(process.pid, signal);
     } else {

@@ -1,6 +1,9 @@
+'use strict';
+
 var spawn = require('child_process').spawn;
-var path  = require('path');
+var path = require('path');
 var fs = require('fs');
+var baseReporter = require('../../lib/reporters/base');
 
 module.exports = {
   /**
@@ -19,20 +22,22 @@ module.exports = {
    *   output:  '...'
    * }
    *
-   * @param {string}   fixturePath
-   * @param {array}    args
-   * @param {function} fn
+   * @param {string} fixturePath - Path to fixture .js file
+   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {Function} done - Callback
    */
-  runMocha: function(fixturePath, args, fn) {
+  runMocha: function (fixturePath, args, done) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['-C', path]), function(err, res) {
-      if (err) return fn(err);
+    invokeMocha(args.concat(['-C', path]), function (err, res) {
+      if (err) {
+        return done(err);
+      }
 
-      fn(null, getSummary(res));
+      done(null, getSummary(res));
     });
   },
 
@@ -56,19 +61,19 @@ module.exports = {
    * @param {array}    args
    * @param {function} fn
    */
-  runMochaFunction: function(fixture, args, fn) {
+  runMochaFunction: function (fixture, args, fn) {
     var path = resolveFixturePath(fixture.name + '.js' || 'tempfile.js');
     args = args || [];
 
     var fixtureContent = 'var fn = ' + fixture.toString() + '; fn()';
     fs.writeFileSync(path, fixtureContent, 'utf8');
 
-    function cleanup() {
+    function cleanup () {
       fs.unlink(path);
       fn.apply(this, arguments);
     }
 
-    invokeMocha(args.concat(['-C', path]), function(err, res) {
+    invokeMocha(args.concat(['-C', path]), function (err, res) {
       if (err) {
         return cleanup(err);
       }
@@ -85,13 +90,13 @@ module.exports = {
    * @param {array}    args
    * @param {function} fn
    */
-  runMochaJSON: function(fixturePath, args, fn) {
+  runMochaJSON: function (fixturePath, args, fn) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['--reporter', 'json', path]), function(err, res) {
+    invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
       if (err) return fn(err);
 
       try {
@@ -112,12 +117,12 @@ module.exports = {
    * @param  {string}   output
    * returns {string[]}
    */
-  getDiffs: function(output) {
+  getDiffs: function (output) {
     var diffs, i, inDiff, inStackTrace;
 
     diffs = [];
-    output.split('\n').forEach(function(line) {
-      if (line.match(/^  \d+\)/)) {
+    output.split('\n').forEach(function (line) {
+      if (line.match(/^\s{2}\d+\)/)) {
         // New spec, e.g. "1) spec title"
         diffs.push([]);
         i = diffs.length - 1;
@@ -139,19 +144,25 @@ module.exports = {
     });
 
     // Ignore empty lines before/after diff
-    return diffs.map(function(diff) {
+    return diffs.map(function (diff) {
       return diff.slice(1, -3).join('\n');
     });
-  }
+  },
+
+  /**
+   * regular expression used for splitting lines based on new line / dot symbol.
+   */
+  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+')
 };
 
-function invokeMocha(args, fn) {
+function invokeMocha (args, fn) {
   var output, mocha, listener;
 
   output = '';
-  mocha = spawn('./bin/mocha', args);
+  args = [path.join('bin', 'mocha')].concat(args);
+  mocha = spawn(process.execPath, args);
 
-  listener = function(data) {
+  listener = function (data) {
     output += data;
   };
 
@@ -159,7 +170,7 @@ function invokeMocha(args, fn) {
   mocha.stderr.on('data', listener);
   mocha.on('error', fn);
 
-  mocha.on('close', function(code) {
+  mocha.on('close', function (code) {
     fn(null, {
       output: output.split('\n').join('\n'),
       code: code
@@ -167,12 +178,12 @@ function invokeMocha(args, fn) {
   });
 }
 
-function resolveFixturePath(fixture) {
+function resolveFixturePath (fixture) {
   return path.join('./test/integration/fixtures', fixture);
 }
 
-function getSummary(res) {
-  return ['passing', 'pending', 'failing'].reduce(function(summary, type) {
+function getSummary (res) {
+  return ['passing', 'pending', 'failing'].reduce(function (summary, type) {
     var pattern, match;
 
     pattern = new RegExp('  (\\d+) ' + type + '\\s');

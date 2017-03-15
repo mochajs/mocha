@@ -1,3 +1,0 @@
-test('pass', function() {
-  // pass
-});

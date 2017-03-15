@@ -1,21 +1,90 @@
+sudo: false
+
+# trust dist provides a modern build chain (as opposed to 'precise' dist)
+# which absolves us from having to install compilers and stuff
+dist: trusty
+
 language: node_js
+
 env:
   global:
-   - CXX=g++-4.8
-before_install:
-- ./scripts/ensure-compatible-npm.sh
-script: travis_retry npm test
-node_js:
-- '5'
-- '4'
-- 'iojs'
-- '0.12'
-- '0.11'
-- '0.10'
-- '0.8'
-sudo: false
+    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
+    # rate-limiting.  pull it from this sketchy site in China instead.
+    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+
+matrix:
+  fast_finish: true
+  include:
+    - node_js: '7'
+      env: TARGET=test-node COVERAGE=true
+    - node_js: '6'
+      env: TARGET=test-node
+    - node_js: '5'
+      env: TARGET=test-node
+    - node_js: '4'
+      env: TARGET=test-node
+    - node_js: 'iojs'
+      env: TARGET=test-node
+    - node_js: '0.12'
+      env: TARGET=test-node
+    - node_js: '0.11'
+      env: TARGET=test-node
+    - node_js: '0.10'
+      env: TARGET=test-node
+    - node_js: '7'
+      env: TARGET=lint
+    # phantomjs
+    - node_js: '7'
+      env: TARGET=test-browser
+    # chrome
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
+    # edge
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
+    # ie11
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
+    # ie10
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
+    # ie9
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
+    # ie8
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
+    # ie7
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
+    # firefox
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
+    # safari
+    - node_js: '7'
+      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
+
+before_install: scripts/travis-before-install.sh
+
+install:
+ - npm install
+ - cd node_modules && ln -nsf @coderbyheart/karma-sauce-launcher karma-sauce-launcher && cd ../
+
+before_script: scripts/travis-before-script.sh
+
+script: make $TARGET
+
+after_success: "npm run postcoverage && <coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
+
 notifications:
   urls:
-    - secure: "EmycFlk48bUvOQ07mxnbcn6T+n3G4wVWuXgrDsUUp6EhJ9866wQK9i+qVhqogWuSEQrGoVaS/vpc/NEYxDP30BD/+nqgvOhVhLVEgtziI85imyV/oUVpArdW3AUmuzCrx7rQCivygjpBmWV9ZcUT5Km4qp1iQhuumy2WbplxrZ4="
+    # for gitter
+    - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
   on_success: change
   on_failure: always
+
+addons:
+  artifacts:
+    paths:
+      - .karma/
+      - ./mocha.js
