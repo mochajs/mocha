@@ -254,7 +254,7 @@ describe('Array', function() {
 
 ## Arrow Functions
 
-Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) ("lambdas") to Mocha is discouraged.  Due to the lexical binding of `this`, such functions are unable to access the Mocha context.  For example, the following code will fail due to the nature of lambdas:
+Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) ("lambdas") to Mocha is discouraged.  Lambdas lexically bind `this` and cannot access the Mocha context.  For example, the following code will fail:
 
 ```js
 describe('my suite', () => {
