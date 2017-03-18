@@ -1,0 +1,31 @@
+
+html {
+    background-image: url("images/forest.jpg");
+    background-size: cover;
+}
+
+h1 {
+    color: #BFBFBF;
+}
+
+h2 {
+    color: #ffffff;
+}
+
+pre {
+    background-color: rgba(255, 255, 255, 0.66);
+}
+
+#mocha-stats, #mocha-stats em {
+    color: white;
+}
+
+canvas {
+    background-color: rgba(255, 255, 255, 0.50);
+    border-radius: 50%;
+}
+
+#mocha .test pre.error {
+    color: #082200;
+    font-size: small;
+}
