@@ -144,6 +144,8 @@ mocha.setup = function (opts) {
 
 mocha.run = function (fn) {
   var options = mocha.options;
+  var scheme = mocha.initColorScheme('mocha-light');
+  mocha.uiChangeColorScheme(scheme);
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
@@ -168,6 +170,68 @@ mocha.run = function (fn) {
     }
   });
 };
+
+mocha.setColorScheme = function (scheme) {
+  var cookieValue, maxAgeInSeconds = (60*60*24*365);
+
+  try {
+    document.body.className = document.body.className.replace(/\bmocha-[a-z]+\b/g, '');
+    if (scheme) {
+      scheme = scheme.trim();
+      document.body.className += ' ' + scheme;
+      cookieValue = scheme;
+    }
+    else {
+      cookieValue = 'mocha-light';
+    }
+    document.body.className = document.body.className.trim();
+    document.cookie = 'mocha-scheme=' + cookieValue + ';max-age=' + maxAgeInSeconds;
+  }
+  finally {};
+};
+
+
+mocha.initColorScheme = function (scheme) {
+  try {
+    var mochaScheme = document.cookie.replace(/(?:(?:^|.*;\s*)mocha-scheme\s*\=\s*([^;]*).*$)|^.*$/, "$1").trim();
+    if (mochaScheme) {
+      mocha.setColorScheme(mochaScheme);
+    }
+    else {
+      mochaScheme = scheme;
+      mocha.setColorScheme(scheme);
+    }
+  }
+  finally {};
+  return mochaScheme;
+};
+
+
+mocha.uiChangeColorScheme = function (scheme) {
+  var otherScheme = scheme == 'mocha-light' ? 'mocha-dark' : 'mocha-light';
+  var toolTip = 'toggle color scheme between '
+    + scheme + ' and ' + otherScheme
+  var html = '<div data-scheme="' + otherScheme
+    + '" title="' + toolTip
+    + '" id="mocha-change-scheme" class="mocha-change-scheme"></div>';
+
+  if (typeof jQuery == 'function') {
+    var div = jQuery('#mocha-change-scheme');
+    if (!div.length) {
+      jQuery('body').append(html).click(function (event) {
+        otherScheme = $(event.target).attr('data-scheme');
+        mocha.setColorScheme(otherScheme);
+        mocha.uiChangeColorScheme(otherScheme);
+      });
+    }
+    else {
+      div
+        .attr('data-scheme', otherScheme)
+        .attr('title', toolTip);
+    }
+  }
+}
+
 
 /**
  * Expose the process shim.
@@ -508,6 +572,13 @@ Progress.prototype.draw = function (ctx) {
     // text
     var text = this._text || (percent | 0) + '%';
     var w = ctx.measureText(text).width;
+
+    try {
+      if (document.getElementsByClassName('mocha-dark').length) {
+        ctx.fillStyle = "yellow";
+      }
+    }
+    finally {}
 
     ctx.fillText(text, x - w / 2 + 1, y + fontSize / 2 - 1);
   } catch (err) {
@@ -9551,11 +9622,11 @@ function objectToString(o) {
 var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
 
 module.exports = function (str) {
-	if (typeof str !== 'string') {
-		throw new TypeError('Expected a string');
-	}
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
+  }
 
-	return str.replace(matchOperatorsRe, '\\$&');
+  return str.replace(matchOperatorsRe, '\\$&');
 };
 
 },{}],48:[function(require,module,exports){
