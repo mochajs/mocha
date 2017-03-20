@@ -142,6 +142,7 @@ mocha.setup = function (opts) {
 
 mocha.run = function (fn) {
   var options = mocha.options;
+  mocha.initColorScheme('mocha-light');
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
@@ -165,6 +166,49 @@ mocha.run = function (fn) {
       fn(err);
     }
   });
+};
+
+mocha.setColorScheme = function (scheme) {
+  var cookieValue;
+  var maxAgeInSeconds = (60 * 60 * 24 * 365);
+
+  try {
+    document.body.className = document.body.className
+      .replace(/\bmocha-[a-z]+\b/g, '');
+    if (scheme) {
+      scheme = scheme.trim();
+      document.body.className += ' ' + scheme;
+      cookieValue = scheme;
+    } else {
+      cookieValue = 'mocha-light';
+    }
+    document.body.className = document.body.className.trim();
+    document.cookie = 'mocha-scheme=' + cookieValue +
+      ';max-age=' + maxAgeInSeconds;
+  } finally {}
+};
+
+mocha.initColorScheme = function (scheme) {
+  try {
+    var mochaScheme = document.cookie
+      .replace(/(?:(?:^|.*;\s*)mocha-scheme\s*=\s*([^;]*).*$)|^.*$/, '$1')
+      .trim();
+    if (mochaScheme) {
+      mocha.setColorScheme(mochaScheme);
+    } else {
+      mochaScheme = mocha.getColorScheme(scheme);
+      mocha.setColorScheme(mochaScheme);
+    }
+  } finally {}
+  return mochaScheme;
+};
+
+mocha.getColorScheme = function (scheme) {
+  try {
+    var match = document.body.className.match(/\b(mocha-[a-z]+)\b/);
+    scheme = match ? match[0] : scheme;
+  } finally {}
+  return scheme;
 };
 
 /**
