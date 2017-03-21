@@ -274,7 +274,7 @@ body.mocha-dark {
 }
 
 .mocha-dark #mocha .test a.replay {
-  background: black;
+  background: #5e5e5e;
   color: yellow;
 }
 
@@ -389,61 +389,6 @@ body.mocha-dark {
 #mocha code .number { color: #2f6fad; }
 
 .mocha-dark #mocha code .comment { color: #888; }
-
-
-.mocha-change-scheme {
-  margin-left: 64px;
-  width: 16px;
-  cursor: pointer;
-  -webkit-transition: opacity 200ms;
-  -moz-transition: opacity 200ms;
-  -o-transition: opacity 200ms;
-  transition: opacity 200ms;
-  opacity: 0.3;
-  -webkit-transition: transform 200ms;
-  -moz-transition: transform 200ms;
-  -o-transition: transform 200ms;
-  transition: transform 200ms;
-}
-.mocha-change-scheme:hover {
-  opacity: 1;
-}
-
-/* BSAC yin yang icon*/
-.mocha-change-scheme::before {
-  content: "☯";
-}
-.mocha-change-scheme {
-  -wekbit-transform: rotate(-90deg);
-  -moz-transform: rotate(-90deg);
-  -o-transform: rotate(-90deg);
-  transform: rotate(-90deg);
-}
-.mocha-change-scheme:hover {
-  -webkit-transform: scale(1.2) rotate(90deg) translateY(2px);
-  -moz-transform: scale(1.2) rotate(90deg) translateY(2px);
-  -o-transform: scale(1.2) rotate(90deg) translateY(2px);
-  transform: scale(1.2) rotate(90deg) translateY(2px);
-}
-
-/* BSAC or a more traditional icon */
-/*
-.mocha-change-scheme::before {
-  content: "◑";
-}
-.mocha-change-scheme {
-  -wekbit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
-  transform: rotate(0deg);
-}
-.mocha-change-scheme:hover {
-  -webkit-transform: rotate(-90deg) translateY(-4px) scale(1.2);
-  -moz-transform: rotate(-90deg) translateY(-4px) scale(1.2);
-  -o-transform: rotate(-90deg) translateY(-4px) scale(1.2);
-  transform: rotate(-90deg) translateY(-4px) scale(1.2);
-}
-*/
 
 @media screen and (max-device-width: 480px) {
   #mocha {

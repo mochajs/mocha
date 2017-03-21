@@ -168,26 +168,6 @@ mocha.run = function (fn) {
   });
 };
 
-mocha.setColorScheme = function (scheme) {
-  var cookieValue;
-  var maxAgeInSeconds = (60 * 60 * 24 * 365);
-
-  try {
-    document.body.className = document.body.className
-      .replace(/\bmocha-[a-z]+\b/g, '');
-    if (scheme) {
-      scheme = scheme.trim();
-      document.body.className += ' ' + scheme;
-      cookieValue = scheme;
-    } else {
-      cookieValue = 'mocha-light';
-    }
-    document.body.className = document.body.className.trim();
-    document.cookie = 'mocha-scheme=' + cookieValue +
-      ';max-age=' + maxAgeInSeconds;
-  } finally {}
-};
-
 mocha.initColorScheme = function (scheme) {
   try {
     var mochaScheme = document.cookie
@@ -201,6 +181,28 @@ mocha.initColorScheme = function (scheme) {
     }
   } finally {}
   return mochaScheme;
+};
+
+mocha.setColorScheme = function (scheme, cookieOnly) {
+  var cookieValue;
+  var maxAgeInSeconds = (60 * 60 * 24 * 365);
+
+  try {
+    if (scheme) {
+      scheme = scheme.trim();
+      cookieValue = scheme;
+    } else {
+      cookieValue = 'mocha-light';
+    }
+    if (!cookieOnly) {
+      document.body.className = document.body.className
+        .replace(/\bmocha-[a-z]+\b/g, '');
+      document.body.className += ' ' + cookieValue;
+      document.body.className = document.body.className.trim();
+    }
+    document.cookie = 'mocha-scheme=' + cookieValue +
+      ';max-age=' + maxAgeInSeconds;
+  } finally {}
 };
 
 mocha.getColorScheme = function (scheme) {
