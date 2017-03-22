@@ -142,7 +142,6 @@ mocha.setup = function (opts) {
 
 mocha.run = function (fn) {
   var options = mocha.options;
-  mocha.initColorScheme('mocha-light');
   mocha.globals('location');
 
   var query = Mocha.utils.parseQuery(global.location.search || '');
@@ -166,51 +165,6 @@ mocha.run = function (fn) {
       fn(err);
     }
   });
-};
-
-mocha.initColorScheme = function (scheme) {
-  try {
-    var mochaScheme = document.cookie
-      .replace(/(?:(?:^|.*;\s*)mocha-scheme\s*=\s*([^;]*).*$)|^.*$/, '$1')
-      .trim();
-    if (mochaScheme) {
-      mocha.setColorScheme(mochaScheme);
-    } else {
-      mochaScheme = mocha.getColorScheme(scheme);
-      mocha.setColorScheme(mochaScheme);
-    }
-  } finally {}
-  return mochaScheme;
-};
-
-mocha.setColorScheme = function (scheme, cookieOnly) {
-  var cookieValue;
-  var maxAgeInSeconds = (60 * 60 * 24 * 365);
-
-  try {
-    if (scheme) {
-      scheme = scheme.trim();
-      cookieValue = scheme;
-    } else {
-      cookieValue = 'mocha-light';
-    }
-    if (!cookieOnly) {
-      document.body.className = document.body.className
-        .replace(/\bmocha-[a-z]+\b/g, '');
-      document.body.className += ' ' + cookieValue;
-      document.body.className = document.body.className.trim();
-    }
-    document.cookie = 'mocha-scheme=' + cookieValue +
-      ';max-age=' + maxAgeInSeconds;
-  } finally {}
-};
-
-mocha.getColorScheme = function (scheme) {
-  try {
-    var match = document.body.className.match(/\b(mocha-[a-z]+)\b/);
-    scheme = match ? match[0] : scheme;
-  } finally {}
-  return scheme;
 };
 
 /**
