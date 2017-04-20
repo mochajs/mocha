@@ -69,18 +69,20 @@ describe('reporters', function () {
 
       run('passing.fixture.js', args, function (err, result) {
         assert(!err);
+        assert.equal(result.code, 0);
         done();
       });
     });
 
     it('loads a reporter from an absolute path', function (done) {
       // Generates an absolute path string
-      var reporterAtAnAbsolutePath = process.cwd() + 'test/integration/fixtures/simple-reporter.js';
+      var reporterAtAnAbsolutePath = process.cwd() + '/test/integration/fixtures/simple-reporter.js';
 
       var args = ['--reporter=' + reporterAtAnAbsolutePath];
 
       run('passing.fixture.js', args, function (err, result) {
         assert(!err);
+        assert.equal(result.code, 0);
         done();
       });
     });

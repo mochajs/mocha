@@ -1,8 +1,8 @@
-const mocha = require('mocha');
+var baseReporter = require('../../../lib/reporters/base');
 module.exports = simplereporter;
 
 function simplereporter (runner) {
-  mocha.reporters.Base.call(this, runner);
+  baseReporter.call(this, runner);
 
   runner.on('suite', function (suite) {
     console.log('on(\'suite\') called');
