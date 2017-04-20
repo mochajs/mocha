@@ -60,4 +60,29 @@ describe('reporters', function () {
       });
     });
   });
+
+  describe('loader', function () {
+    it('loads a reporter from a path relative to the current working directory', function (done) {
+      var reporterAtARelativePath = 'test/integration/fixtures/simple-reporter.js';
+
+      var args = ['--reporter=' + reporterAtARelativePath];
+
+      run('passing.fixture.js', args, function (err, result) {
+        assert(!err);
+        done();
+      });
+    });
+
+    it('loads a reporter from an absolute path', function (done) {
+      // Generates an absolute path string
+      var reporterAtAnAbsolutePath = process.cwd() + 'test/integration/fixtures/simple-reporter.js';
+
+      var args = ['--reporter=' + reporterAtAnAbsolutePath];
+
+      run('passing.fixture.js', args, function (err, result) {
+        assert(!err);
+        done();
+      });
+    });
+  });
 });
