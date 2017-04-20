@@ -1,3 +1,91 @@
+# 3.3.0 / 2017-04-24
+
+Thanks to all our contributors, maintainers, sponsors, and users! ❤️
+
+As highlights:
+
+- We've got coverage now!
+- Testing is looking less flaky \o/.
+- No more nitpicking about "mocha.js" build on PRs.
+
+## :tada: Enhancements
+
+- [#2659]: Adds support for loading reporter from an absolute or relative path ([@sul4bh])
+- [#2769]: Support `--inspect-brk` on command-line ([@igwejk])
+
+## :bug: Fixes
+
+- [#2662]: Replace unicode chars w/ hex codes in HTML reporter ([@rotemdan])
+
+## :mag: Coverage
+
+- [#2672]: Add coverage for node tests ([@c089], [@Munter])
+- [#2680]: Increase tests coverage for base reporter ([@epallerols])
+- [#2690]: Increase tests coverage for doc reporter ([@craigtaub])
+- [#2701]: Increase tests coverage for landing, min, tap and list reporters ([@craigtaub])
+- [#2691]: Increase tests coverage for spec + dot reporters ([@craigtaub])
+- [#2698]: Increase tests coverage for xunit reporter ([@craigtaub])
+- [#2699]: Increase tests coverage for json-stream, markdown and progress reporters ([@craigtaub])
+- [#2703]: Cover .some() function in utils.js with tests ([@seppevs])
+- [#2773]: Add tests for loading reporters w/ relative/absolute paths ([@sul4bh])
+
+## :nut_and_bolt: Other
+
+- Remove bin/.eslintrc; ensure execs are linted ([@boneskull])
+- [#2542]: Expand CONTRIBUTING.md ([@boneskull])
+- [#2660]: Double timeouts on integration tests ([@Munter])
+- [#2653]: Update copyright year ([@Scottkao85], [@Munter])
+- [#2621]: Update dependencies to enable Greenkeeper ([@boneskull], [@greenkeeper])
+- [#2625]: Use trusty container in travis-ci; use "artifacts" addon ([@boneskull])
+- [#2670]: doc(CONTRIBUTING): fix link to org members ([@coderbyheart])
+- Add Mocha propaganda to README.md ([@boneskull])
+- [#2470]: Avoid test flake in "delay" test ([@boneskull])
+- [#2675]: Limit browser concurrency on sauce ([@boneskull])
+- [#2669]: Use temporary test-only build of mocha.js for browsers tests ([@Munter])
+- Fix "projects" link in README.md ([@boneskull])
+- [#2678]: Chore(Saucelabs): test on IE9, IE10 and IE11 ([@coderbyheart])
+- [#2648]: Use `semistandard` directly ([@kt3k])
+- [#2727]: Make the build reproducible ([@lamby])
+
+[@boneskull]: https://github.com/boneskull
+[@c089]: https://github.com/c089
+[@coderbyheart]: https://github.com/coderbyheart
+[@craigtaub]: https://github.com/craigtaub
+[@epallerols]: https://github.com/epallerols
+[@greenkeeper]: https://github.com/greenkeeper
+[@igwejk]: https://github.com/igwejk
+[@kt3k]: https://github.com/kt3k
+[@lamby]: https://github.com/lamby
+[@Munter]: https://github.com/Munter
+[@rotemdan]: https://github.com/rotemdan
+[@seppevs]: https://github.com/seppevs
+[@sul4bh]: https://github.com/sul4bh
+
+[#2470]: https://github.com/mochajs/mocha/pull/2470
+[#2542]: https://github.com/mochajs/mocha/issues/2542
+[#2621]: https://github.com/mochajs/mocha/pull/2621
+[#2625]: https://github.com/mochajs/mocha/pull/2625
+[#2648]: https://github.com/mochajs/mocha/pull/2648
+[#2653]: https://github.com/mochajs/mocha/pull/2653
+[#2659]: https://github.com/mochajs/mocha/pull/2659
+[#2660]: https://github.com/mochajs/mocha/pull/2660
+[#2662]: https://github.com/mochajs/mocha/pull/2662
+[#2669]: https://github.com/mochajs/mocha/pull/2669
+[#2670]: https://github.com/mochajs/mocha/pull/2670
+[#2672]: https://github.com/mochajs/mocha/pull/2672
+[#2675]: https://github.com/mochajs/mocha/pull/2675
+[#2678]: https://github.com/mochajs/mocha/pull/2678
+[#2680]: https://github.com/mochajs/mocha/pull/2680
+[#2690]: https://github.com/mochajs/mocha/pull/2690
+[#2691]: https://github.com/mochajs/mocha/pull/2691
+[#2698]: https://github.com/mochajs/mocha/pull/2698
+[#2699]: https://github.com/mochajs/mocha/pull/2699
+[#2701]: https://github.com/mochajs/mocha/pull/2701
+[#2703]: https://github.com/mochajs/mocha/pull/2703
+[#2727]: https://github.com/mochajs/mocha/pull/2727
+[#2769]: https://github.com/mochajs/mocha/pull/2769
+[#2773]: https://github.com/mochajs/mocha/pull/2773
+
 # 3.2.0 / 2016-11-24
 
 ## :newspaper: News
