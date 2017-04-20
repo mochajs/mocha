@@ -117,7 +117,7 @@ module.exports = function (config) {
   }
 
   // the MOCHA_UI env var will determine if we're running interface-specific
-  // tets.  since you can only load one at a time, each must be run separately.
+  // tests.  since you can only load one at a time, each must be run separately.
   // each has its own set of acceptance tests and a fixture.
   // the "bdd" fixture is used by default.
   var ui = env.MOCHA_UI;
