@@ -76,7 +76,7 @@ describe('reporters', function () {
 
     it('loads a reporter from an absolute path', function (done) {
       // Generates an absolute path string
-      var reporterAtAnAbsolutePath = process.cwd() + '/test/integration/fixtures/simple-reporter.js';
+      var reporterAtAnAbsolutePath = path.join(process.cwd(), 'test/integration/fixtures/simple-reporter.js');
 
       var args = ['--reporter=' + reporterAtAnAbsolutePath];
 
