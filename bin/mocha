@@ -11,6 +11,7 @@ var spawn = require('child_process').spawn;
 var path = require('path');
 var getOptions = require('./options');
 var args = [path.join(__dirname, '_mocha')];
+var gdb = false;
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
@@ -48,6 +49,9 @@ process.argv.slice(2).forEach(function (arg) {
     case '--perf-basic-prof':
       args.unshift(arg);
       break;
+    case '--gdb':
+      gdb = true;
+      break;
     default:
       if (arg.indexOf('--harmony') === 0) {
         args.unshift(arg);
@@ -66,7 +70,14 @@ process.argv.slice(2).forEach(function (arg) {
   }
 });
 
-var proc = spawn(process.execPath, args, { stdio: 'inherit' });
+var binary = process.execPath;
+if (gdb) {
+  args.unshift(binary);
+  args.unshift('--args');
+  binary = '/usr/bin/gdb';
+}
+
+var proc = spawn(binary, args, { stdio: 'inherit' });
 proc.on('exit', function (code, signal) {
   process.on('exit', function () {
     if (signal) {

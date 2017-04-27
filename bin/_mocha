@@ -108,7 +108,8 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
-  .option('--delay', 'wait for async suite definition');
+  .option('--delay', 'wait for async suite definition')
+  .option('--gdb', 'start with gdb attached');
 
 program._name = 'mocha';
 
