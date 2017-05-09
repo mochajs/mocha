@@ -48,7 +48,7 @@ module.exports = function (config) {
     },
     reporters: ['spec'],
     colors: true,
-    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'], // This is the default browser to run, locally
+    browsers: [osName() === 'macOS Sierra' ? getBrowserInMacOS() : 'PhantomJS'], // This is the default browser to run, locally
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
@@ -166,4 +166,27 @@ function addSauceTests (cfg) {
   // for slow browser booting, ostensibly
   cfg.captureTimeout = 120000;
   cfg.browserNoActivityTimeout = 20000;
+}
+
+function getBrowserInMacOS () {
+  var browsers = ['Chrome', 'ChromeCanary', 'Chromium'];
+  var paths = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium'
+  ];
+  var browserPath;
+
+  for (var i = 0; i < browsers.length; i++) {
+    browserPath = paths[i];
+
+    try {
+      fs.accessSync(browserPath);
+      return browsers[i];
+    } catch (e) {
+      // nothing
+    }
+  }
+
+  return 'PhantomJS';
 }
