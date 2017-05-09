@@ -334,7 +334,6 @@
     "karma-sauce-launcher": "coderbyheart/karma-sauce-launcher",
     "karma-spec-reporter": "0.0.26",
     "nyc": "^10.0.0",
-    "os-name": "^2.0.1",
     "phantomjs": "1.9.8",
     "rimraf": "^2.5.2",
     "semistandard": "^9.2.1",
