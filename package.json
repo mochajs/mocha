@@ -323,6 +323,11 @@
     "browserify": "^13.0.0",
     "coffee-script": "^1.10.0",
     "coveralls": "^2.11.15",
+    "eslint": "^3.11.1",
+    "eslint-config-semistandard": "^7.0.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "2.0.1",
     "expect.js": "^0.3.1",
     "istanbul-combine": "^0.3.0",
     "karma": "1.3.0",
@@ -336,7 +341,6 @@
     "nyc": "^10.0.0",
     "phantomjs": "1.9.8",
     "rimraf": "^2.5.2",
-    "semistandard": "^9.2.1",
     "should": "^11.1.1",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
@@ -368,12 +372,6 @@
     "ignore": [
       "phantomjs",
       "lodash.create"
-    ]
-  },
-  "semistandard": {
-    "ignore": [
-      "/mocha.js",
-      "/lib/to-iso-string/**/*.js"
     ]
   }
 }
