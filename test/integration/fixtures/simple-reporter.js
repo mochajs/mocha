@@ -1,3 +1,5 @@
+'use strict';
+
 var baseReporter = require('../../../lib/reporters/base');
 module.exports = simplereporter;
 
