@@ -1,6 +1,9 @@
 'use strict';
 
 var assert = require('assert');
+var childProcess = require('child_process');
+var fs = require('fs');
+var path = require('path');
 var run = require('./helpers').runMochaJSON;
 var args = [];
 
@@ -384,6 +387,30 @@ describe('options', function () {
 
     describe('with exit disabled', function () {
       it('should not force exit after root suite completion', runExit(false, 'disabled'));
+    });
+  });
+
+  describe('--help', function () {
+    it('works despite the presence of mocha.opts', function (done) {
+      var output = '';
+      try {
+        fs.mkdirSync(path.resolve(__dirname, 'test-env'));
+        fs.mkdirSync(path.resolve(__dirname, 'test-env/test'));
+        fs.writeFileSync(path.resolve(__dirname, 'test-env/test/mocha.opts'), 'foo');
+        var mochaLoc = path.resolve(__dirname, '../../bin/mocha');
+        output = '' + childProcess.execSync(mochaLoc + ' -h', {cwd: path.resolve(__dirname, 'test-env')});
+      } catch (e) {}
+      try {
+        fs.unlinkSync(path.resolve(__dirname, 'test-env/test/mocha.opts'));
+      } catch (e) {}
+      try {
+        fs.rmdirSync(path.resolve(__dirname, 'test-env/test'));
+      } catch (e) {}
+      try {
+        fs.rmdirSync(path.resolve(__dirname, 'test-env'));
+      } catch (e) {}
+      assert(output.indexOf('Usage:') >= 0);
+      done();
     });
   });
 });
