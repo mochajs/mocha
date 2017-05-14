@@ -303,7 +303,7 @@
     "precoverage": "rm -rf coverage",
     "coverage": "COVERAGE=true npm run test",
     "postcoverage": "istanbul-combine -d coverage -r lcov -r html coverage/reports/*/*.json",
-    "preversion": "make test && make mocha.js && git add mocha.js"
+    "preversion": "make test && rm mocha.js && make mocha.js && git add mocha.js"
   },
   "dependencies": {
     "browser-stdout": "1.3.0",
