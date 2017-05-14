@@ -1,3 +1,7 @@
+# 3.4.1 / 2017-05-14
+
+Fixed a publishing mishap with git's autocrlf settings.
+
 # 3.4.0 / 2017-05-14
 
 Mocha is now moving to a quicker release schedule: when non-breaking changes are merged, a release should happen that week.
