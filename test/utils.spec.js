@@ -80,6 +80,24 @@ describe('utils', function () {
     });
   });
 
+  describe('.some()', function () {
+    var some = utils.some;
+
+    it('should return true when some array elements pass the check of the fn parameter', function () {
+      var result = some(['a', 'b', 'c'], function (e) {
+        return e === 'b';
+      });
+      result.should.eql(true);
+    });
+
+    it('should return false when none of the array elements pass the check of the fn parameter', function () {
+      var result = some(['a', 'b', 'c'], function (e) {
+        return e === 'd';
+      });
+      result.should.eql(false);
+    });
+  });
+
   describe('.parseQuery()', function () {
     var parseQuery = utils.parseQuery;
     it('should get queryString and return key-value object', function () {

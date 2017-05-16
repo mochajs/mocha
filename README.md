@@ -39,6 +39,7 @@ Once we gain ground on the above items, we can work together formalize our contr
 
 [![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha)
 [![Coverage Status](https://coveralls.io/repos/github/mochajs/mocha/badge.svg)](https://coveralls.io/github/mochajs/mocha)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
@@ -118,3 +119,5 @@ Does your company use Mocha?  Ask your manager or marketing team if your company
 ## License
 
 [MIT](LICENSE)
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
