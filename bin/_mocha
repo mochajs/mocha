@@ -111,7 +111,7 @@ program
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
-  .option('--allow-uncaught', 'enable uncaught errors to propagate');
+  .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
   .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite');
 
