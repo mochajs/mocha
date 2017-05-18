@@ -55,6 +55,37 @@ describe('Test', function () {
     });
   });
 
+  describe('initialization', function () {
+    /* eslint no-new: off */
+    it('should throw an error if the title can\'t convert into a nice string', function () {
+      (function () {
+        new Test(undefined, 'root');
+      }).should.throw();
+
+      (function () {
+        new Test(function () {}, 'root');
+      }).should.throw();
+    });
+
+    it('should not throw if the title is a string', function () {
+      (function () {
+        new Test('Bdd suite', 'root');
+      }).should.not.throw();
+    });
+
+    it('should not throw if the title is a function with a name', function () {
+      function bddSuite () {}
+      (function () {
+        new Test(bddSuite, 'root');
+      }).should.not.throw();
+
+      var variableBddSuite = function () {};
+      (function () {
+        new Test(variableBddSuite, 'root');
+      }).should.not.throw();
+    });
+  });
+
   describe('.isPending()', function () {
     beforeEach(function () {
       this._test = new Test('Is it skipped', function () {});
