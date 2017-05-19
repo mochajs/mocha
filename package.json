@@ -299,6 +299,7 @@
     "npm": ">= 1.4.x"
   },
   "scripts": {
+    "lint": "eslint . bin/*",
     "test": "make test && make clean",
     "precoverage": "rm -rf coverage",
     "coverage": "COVERAGE=true npm run test",
