@@ -1,5 +1,4 @@
 BROWSERIFY := "node_modules/.bin/browserify"
-ESLINT := "node_modules/.bin/eslint"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
 NYC := "node_modules/.bin/nyc"
@@ -34,7 +33,7 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) . "bin/*"
+	npm run lint
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 
