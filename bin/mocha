@@ -48,6 +48,7 @@ process.argv.slice(2).forEach(function (arg) {
     case '--use_strict':
     case '--allow-natives-syntax':
     case '--perf-basic-prof':
+    case '--napi-modules':
       args.unshift(arg);
       break;
     default:
