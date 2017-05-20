@@ -99,6 +99,7 @@ program
   .option('--no-warnings', 'silence all node process warnings')
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--perf-basic-prof', 'enable perf linux profiler (basic support)')
+  .option('--napi-modules', 'enable experimental NAPI modules')
   .option('--prof', 'log statistical profiling information')
   .option('--log-timer-events', 'Time events including external callbacks')
   .option('--recursive', 'include sub directories')
