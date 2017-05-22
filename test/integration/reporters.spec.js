@@ -36,7 +36,7 @@ describe('reporters', function () {
   describe('xunit', function () {
     it('prints test cases with --reporter-options output (issue: 1864)', function (done) {
       var randomStr = crypto.randomBytes(8).toString('hex');
-      var tmpDir = os.tmpDir().replace(new RegExp(path.sep + '$'), '');
+      var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
 
       var args = ['--reporter=xunit', '--reporter-options', 'output=' + tmpFile];
