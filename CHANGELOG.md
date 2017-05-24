@@ -13,6 +13,7 @@
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
+[#2778]: https://github.com/mochajs/mocha/pulls/2778
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 
