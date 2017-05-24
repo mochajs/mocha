@@ -368,11 +368,5 @@
     "supports-color": false
   },
   "homepage": "https://mochajs.org",
-  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
-  "greenkeeper": {
-    "ignore": [
-      "phantomjs",
-      "lodash.create"
-    ]
-  }
+  "logo": "https://cldup.com/S9uQ-cOLYz.svg"
 }
