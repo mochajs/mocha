@@ -11,8 +11,9 @@
 1. Increase test coverage on Node.js and browser
   - Increase integration coverage for all reporters
     - `html` reporter must be tested in browser
-    - Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters
-    - Filesystem-based reporters must be tested in Node.js context
+    - ~~Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters~~
+    - ~~Filesystem-based reporters must be tested in Node.js context~~
+    - **UPDATE - May 24 2017**: Thanks to [community contributions](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#mag-coverage), the coverage on most reporters has increased dramatically!  The `html` reporter is still in [dire need of coverage](https://coveralls.io/builds/11674428/source?filename=lib%2Freporters%2Fhtml.js).
   - Increase coverage against all interfaces (`exports` in particular).  Ideally this becomes a "matrix" where we repeat sets of integration tests across all interfaces.
   - Refactor non-Node.js-specific tests to allow them to run in a browser context.  Node.js-specific tests include those which *require* the CLI or filesystem.  Most everything else is fair game.
 2.  Review current open pull requests
@@ -20,7 +21,7 @@
   - Pull requests **must** have supporting tests.  The only exceptions are pure cosmetic or non-functional changes.
   - Pull request contributors must sign the CLA.
 3. Close old, inactive issues and pull requests
-  - A bot should do this.  We need a bot. Got a bot?
+  - ~~A bot should do this.  We need a bot. Got a bot?~~ We now use GitHub's own [probot-stale](https://www.npmjs.com/package/probot-stale).
 4. Triage issues
   - If we run into "critical" bugs, they need fixing.
   - "Critical" means Mocha is broken w/o workarounds for a *large percentage* of users
