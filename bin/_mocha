@@ -476,12 +476,18 @@ function exitLater (code) {
 }
 
 function exit (code) {
+  var clampedCode = Math.min(code, 255);
+
+  // Eagerly set the process's exit code in case stream.write doesn't
+  // execute its callback before the process terminates.
+  process.exitCode = clampedCode;
+
   // flush output for Node.js Windows pipe bug
   // https://github.com/joyent/node/issues/6247 is just one bug example
   // https://github.com/visionmedia/mocha/issues/333 has a good discussion
   function done () {
     if (!(draining--)) {
-      process.exit(Math.min(code, 255));
+      process.exit(clampedCode);
     }
   }
 
