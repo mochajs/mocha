@@ -3,5 +3,3 @@ env:
 globals:
   expect: false
   assert: false
-  # https://github.com/sindresorhus/globals/pull/102
-  run: false
