@@ -1,3 +1,21 @@
+# 3.4.2 / 2017-05-24
+
+## :bug: Fixes
+
+- [#2802]: Remove call to deprecated os.tmpDir ([@makepanic])
+- [#2820]: Eagerly set process.exitCode ([@chrisleck])
+
+## :nut_and_bolt: Other
+
+- [#2778]: Move linting into an npm script ([@Munter])
+
+[@chrisleck]: https://github.com/chrisleck
+[@makepanic]: https://github.com/makepanic
+[@Munter]: https://github.com/Munter
+
+[#2802]: https://github.com/mochajs/mocha/issues/2802
+[#2820]: https://github.com/mochajs/mocha/pull/2820
+
 # 3.4.1 / 2017-05-14
 
 Fixed a publishing mishap with git's autocrlf settings.
