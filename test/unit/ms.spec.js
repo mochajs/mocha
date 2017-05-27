@@ -1,5 +1,5 @@
 'use strict';
-var ms = require('../lib/ms');
+var ms = require('../../lib/ms');
 
 describe('.ms()', function () {
   // Helpers

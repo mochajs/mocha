@@ -2,7 +2,7 @@
 
 /* jshint node: true */
 
-var mocha = require('../../../../lib/mocha');
+var mocha = require('../../../lib/mocha');
 
 var beforeEach = mocha.beforeEach;
 var it = mocha.it;
