@@ -32,3 +32,33 @@ context('test suite', function () {
     expect(this.number).to.equal(5);
   });
 });
+
+describe('a suite skipped by "before" hook', function () {
+  before(function () {
+    this.skip();
+  });
+
+  it('should skip this test', function () {
+    expect(2).to.equal(1);
+  });
+
+  it('should skip this test too', function () {
+    expect(2).to.equal(1);
+  });
+});
+
+describe('a parent suite with "skip" in "before" hook', function () {
+  before(function () {
+    this.skip();
+  });
+
+  describe('a suite skipped by parent\'s "before" hook', function () {
+    it('should skip this test', function () {
+      expect(2).to.equal(1);
+    });
+
+    it('should skip this test too', function () {
+      expect(2).to.equal(1);
+    });
+  });
+});
