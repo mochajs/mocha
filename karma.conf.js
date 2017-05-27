@@ -18,14 +18,7 @@ module.exports = function (config) {
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
       'test/browser-fixtures/bdd.fixture.js',
-      'test/acceptance/*.spec.js'
-    ],
-    exclude: [
-      'test/acceptance/http.spec.js',
-      'test/acceptance/fs.spec.js',
-      'test/acceptance/file-utils.spec.js',
-      'test/acceptance/require/**/*.js',
-      'test/acceptance/misc/**/*.js'
+      'test/unit/*.spec.js'
     ],
     preprocessors: {
       'test/**/*.js': ['browserify']
@@ -128,7 +121,7 @@ module.exports = function (config) {
     }
     cfg.files = [
       'test/browser-fixtures/' + ui + '.fixture.js',
-      'test/acceptance/interfaces/' + ui + '.spec.js'
+      'test/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';
