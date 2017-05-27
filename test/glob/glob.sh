@@ -7,7 +7,7 @@ cd $SCRIPT_DIR || {
     exit 1
 }
 
-../../../bin/mocha -R json-stream  ./*.js > /tmp/mocha-glob.txt || {
+../../bin/mocha -R json-stream  ./*.js > /tmp/mocha-glob.txt || {
     echo Globbing ./*.js in `pwd` failed.
     exit 1
 }
@@ -17,7 +17,7 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-../../../bin/mocha -R json-stream ./*-none.js 2> /tmp/mocha-glob.txt && {
+../../bin/mocha -R json-stream ./*-none.js 2> /tmp/mocha-glob.txt && {
     echo Globbing './*-none.js' in `pwd` failed.
     exit 1
 }
@@ -27,7 +27,7 @@ cat /tmp/mocha-glob.txt | grep -q -F 'Could not find any test files matching pat
     exit 1
 }
 
-../../../bin/mocha -R json-stream  ./*.js ./*-none.js >& /tmp/mocha-glob.txt || {
+../../bin/mocha -R json-stream  ./*.js ./*-none.js >& /tmp/mocha-glob.txt || {
     echo Globbing ./*.js ./*-none.js in `pwd` failed.
     exit 1
 }
@@ -43,7 +43,7 @@ cat /tmp/mocha-glob.txt | grep -q -F 'Could not find any test files matching pat
 # In windows, the shell passes globs unexpanded, executables do expansion if they support it.
 # Adding single-quotes around the glob below makes bash pass glob unexpanded,
 #     allowing us to test windows-style globbing in bash.
-../../../bin/mocha -R json-stream  './*.js' > /tmp/mocha-glob.txt || {
+../../bin/mocha -R json-stream  './*.js' > /tmp/mocha-glob.txt || {
     echo Globbing './*.js' in `pwd` failed.
     exit 1
 }
@@ -53,7 +53,7 @@ cat /tmp/mocha-glob.txt | grep -q -F '["end",{"suites":1,"tests":1,"passes":1,"p
     exit 1
 }
 
-../../../bin/mocha -R json-stream  './*-none.js' 2> /tmp/mocha-glob.txt && {
+../../bin/mocha -R json-stream  './*-none.js' 2> /tmp/mocha-glob.txt && {
     echo Globbing './*-none.js' in `pwd` failed.
     exit 1
 }

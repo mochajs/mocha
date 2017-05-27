@@ -1,6 +1,6 @@
 'use strict';
 
-var mocha = require('../');
+var mocha = require('../../lib/mocha');
 var should = require('should');
 var Test = mocha.Test;
 

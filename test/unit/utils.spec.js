@@ -6,13 +6,80 @@ var JSON = require('json3');
 
 describe('lib/utils', function () {
   describe('clean', function () {
+    it('should remove the wrapping function declaration', function () {
+      utils.clean('function  (one, two, three)  {\n//code\n}')
+        .should
+        .equal('//code');
+    });
+
+    it('should handle newlines in the function declaration', function () {
+      utils.clean('function  (one, two, three)\n  {\n//code\n}')
+        .should
+        .equal('//code');
+    });
+
+    it('should remove space character indentation from the function body',
+      function () {
+        utils.clean('  //line1\n    //line2')
+          .should
+          .equal('//line1\n  //line2');
+      });
+
+    it('should remove tab character indentation from the function body',
+      function () {
+        utils.clean('\t//line1\n\t\t//line2')
+          .should
+          .equal('//line1\n\t//line2');
+      });
+
+    it('should handle functions with tabs in their declarations', function () {
+      utils.clean('function\t(\t)\t{\n//code\n}')
+        .should
+        .equal('//code');
+    });
+
+    it('should handle named functions without space after name', function () {
+      utils.clean('function withName() {\n//code\n}')
+        .should
+        .equal('//code');
+    });
+
+    it('should handle named functions with space after name', function () {
+      utils.clean('function withName () {\n//code\n}')
+        .should
+        .equal('//code');
+    });
+
+    it(
+      'should handle functions with no space between the end and the closing brace',
+      function () {
+        utils.clean('function() {/*code*/}')
+          .should
+          .equal('/*code*/');
+      });
+
+    it('should handle functions with parentheses in the same line',
+      function () {
+        utils.clean('function() { if (true) { /* code */ } }')
+          .should
+          .equal('if (true) { /* code */ }');
+      });
+
+    it('should handle empty functions', function () {
+      utils.clean('function() {}')
+        .should
+        .equal('');
+    });
+
     it('should format a single line test function', function () {
       var fn = [
         'function () {',
         '  var a = 1;',
         '}'
       ].join('\n');
-      expect(utils.clean(fn)).to.equal('var a = 1;');
+      expect(utils.clean(fn))
+        .to
+        .equal('var a = 1;');
     });
 
     it('should format a multi line test indented with spaces', function () {
@@ -23,7 +90,9 @@ describe('lib/utils', function () {
         '    var b = 2;',
         '  var c = 3;  }'
       ].join('\n');
-      expect(utils.clean(fn)).to.equal('var a = 1;\n  var b = 2;\nvar c = 3;');
+      expect(utils.clean(fn))
+        .to
+        .equal('var a = 1;\n  var b = 2;\nvar c = 3;');
     });
 
     it('should format a multi line test indented with tabs', function () {
@@ -34,7 +103,9 @@ describe('lib/utils', function () {
         '\t}',
         '}'
       ].join('\n');
-      expect(utils.clean(fn)).to.equal('if (true) {\n\tvar a = 1;\n}');
+      expect(utils.clean(fn))
+        .to
+        .equal('if (true) {\n\tvar a = 1;\n}');
     });
 
     it('should format functions saved in windows style - spaces', function () {
@@ -45,7 +116,9 @@ describe('lib/utils', function () {
         '   } while (false);',
         ' }'
       ].join('\r\n');
-      expect(utils.clean(fn)).to.equal('do {\n "nothing";\n} while (false);');
+      expect(utils.clean(fn))
+        .to
+        .equal('do {\n "nothing";\n} while (false);');
     });
 
     it('should format functions saved in windows style - tabs', function () {
@@ -58,7 +131,9 @@ describe('lib/utils', function () {
         '\t}',
         '}'
       ].join('\r\n');
-      expect(utils.clean(fn)).to.equal('if (false) {\n\tvar json = {\n\t\tone : 1\n\t};\n}');
+      expect(utils.clean(fn))
+        .to
+        .equal('if (false) {\n\tvar json = {\n\t\tone : 1\n\t};\n}');
     });
 
     it('should format es6 arrow functions', function () {
@@ -67,12 +142,16 @@ describe('lib/utils', function () {
         '  var a = 1;',
         '}'
       ].join('\n');
-      expect(utils.clean(fn)).to.equal('var a = 1;');
+      expect(utils.clean(fn))
+        .to
+        .equal('var a = 1;');
     });
 
     it('should format es6 arrow functions with implicit return', function () {
       var fn = '() => foo()';
-      expect(utils.clean(fn)).to.equal('foo()');
+      expect(utils.clean(fn))
+        .to
+        .equal('foo()');
     });
   });
 
@@ -414,5 +493,130 @@ describe('lib/utils', function () {
     afterEach(function () {
       Object.prototype.toString = toString;
     });
+  });
+
+  describe('isBuffer()', function () {
+    var isBuffer = utils.isBuffer;
+    it('should test if object is a Buffer', function () {
+      isBuffer(new Buffer([0x01]))
+        .should
+        .equal(true);
+      isBuffer({})
+        .should
+        .equal(false);
+    });
+  });
+
+  describe('map()', function () {
+    var map = utils.map;
+    it('should behave same as Array.prototype.map', function () {
+      var arr = [
+        1,
+        2,
+        3
+      ];
+      map(arr, JSON.stringify)
+        .should
+        .eql(arr.map(JSON.stringify));
+    });
+
+    it('should call the callback with 3 arguments[currentValue, index, array]',
+      function () {
+        var index = 0;
+        map([
+          1,
+          2,
+          3
+        ], function (e, i, arr) {
+          e.should.equal(arr[index]);
+          i.should.equal(index++);
+        });
+      });
+
+    it('should apply with the given scope', function () {
+      var scope = {};
+      map([
+        'a',
+        'b',
+        'c'
+      ], function () {
+        this.should.equal(scope);
+      }, scope);
+    });
+  });
+
+  describe('some()', function () {
+    var some = utils.some;
+
+    it(
+      'should return true when some array elements pass the check of the fn parameter',
+      function () {
+        var result = some([
+          'a',
+          'b',
+          'c'
+        ], function (e) {
+          return e === 'b';
+        });
+        result.should.eql(true);
+      });
+
+    it(
+      'should return false when none of the array elements pass the check of the fn parameter',
+      function () {
+        var result = some([
+          'a',
+          'b',
+          'c'
+        ], function (e) {
+          return e === 'd';
+        });
+        result.should.eql(false);
+      });
+  });
+
+  describe('parseQuery()', function () {
+    var parseQuery = utils.parseQuery;
+    it('should get queryString and return key-value object', function () {
+      parseQuery('?foo=1&bar=2&baz=3')
+        .should
+        .eql({
+          foo: '1',
+          bar: '2',
+          baz: '3'
+        });
+
+      parseQuery('?r1=^@(?!.*\\)$)&r2=m{2}&r3=^co.*')
+        .should
+        .eql({
+          r1: '^@(?!.*\\)$)',
+          r2: 'm{2}',
+          r3: '^co.*'
+        });
+    });
+
+    it('should parse "+" as a space', function () {
+      parseQuery('?grep=foo+bar')
+        .should
+        .eql({grep: 'foo bar'});
+    });
+  });
+
+  describe('isPromise', function () {
+    it('should return true if the value is Promise-ish', function () {
+      utils.isPromise({
+        then: function () {
+        }
+      }).should.be.true;
+    });
+
+    it('should return false if the value is not an object', function () {
+      utils.isPromise(1).should.be.false;
+    });
+
+    it('should return false if the value is an object w/o a "then" function',
+      function () {
+        utils.isPromise({}).should.be.false;
+      });
   });
 });
