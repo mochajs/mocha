@@ -15,7 +15,7 @@ install:
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
   - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
-  - "%install_command%" install
+  - "%install_command% install"
   - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
 matrix:
   fast_finish: true
