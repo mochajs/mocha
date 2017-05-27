@@ -1,16 +1,21 @@
 environment:
   matrix:
     - nodejs_version: '7'
+      install_command: yarn
     - nodejs_version: '6'
+      install_command: yarn
     - nodejs_version: '4'
+      install_command: yarn
     - nodejs_version: '0.12'
+      install_command: npm
     - nodejs_version: '0.10'
+      install_command: npm
 install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
   - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
-  - npm install
+  - %install_command% install
   - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
 matrix:
   fast_finish: true
@@ -21,7 +26,9 @@ clone_depth: 1
 test_script:
   - node --version
   - npm --version
+  - yarn --version
   - make test-node
 skip_commits:
   message: /\[ci\s+skip\]/
-
+cache:
+ - "%LOCALAPPDATA%\\Yarn"
