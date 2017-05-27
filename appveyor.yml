@@ -31,4 +31,4 @@ test_script:
 skip_commits:
   message: /\[ci\s+skip\]/
 cache:
- - "%LOCALAPPDATA%\\Yarn"
+ - %LOCALAPPDATA%\Yarn
