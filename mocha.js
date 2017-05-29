@@ -3914,7 +3914,7 @@ function TAP (runner) {
     failures++;
     console.log('not ok %d %s', n, title(test));
     if (err.stack) {
-      console.log(err.stack.replace(/^/gm, '  '));
+      console.log(err.stack.replace(/^/gm, '#  '));
     }
   });
 
