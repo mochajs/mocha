@@ -25,8 +25,7 @@ shallow_clone: true
 clone_depth: 1
 test_script:
   - node --version
-  - npm --version
-  - yarn --version
+  - yarn --version || npm --version
   - make test-node
 skip_commits:
   message: /\[ci\s+skip\]/
