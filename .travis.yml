@@ -15,8 +15,10 @@ env:
 matrix:
   fast_finish: true
   include:
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-node COVERAGE=true
+    - node_js: '7'
+      env: TARGET=test-node
     - node_js: '6'
       env: TARGET=test-node
     - node_js: '5'
@@ -31,37 +33,37 @@ matrix:
       env: TARGET=test-node
     - node_js: '0.10'
       env: TARGET=test-node
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=lint
     # phantomjs
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser
     # chrome
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
     # edge
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
     # ie11
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
     # ie10
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
     # ie9
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
     # ie8
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
     # ie7
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
     # firefox
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
     # safari
-    - node_js: '7'
+    - node_js: '8'
       env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
 
 before_install: scripts/travis-before-install.sh
