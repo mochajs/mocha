@@ -14,6 +14,14 @@ function makeTest (err) {
   };
 }
 
+function createElements (argObj) {
+  var res = [];
+  for (var i = argObj.from; i <= argObj.to; i += 1) {
+    res.push('element ' + i);
+  }
+  return res;
+}
+
 describe('Base reporter', function () {
   var stdout;
   var stdoutWrite;
@@ -157,6 +165,46 @@ describe('Base reporter', function () {
       errOut.should.match(/test/);
       errOut.should.match(/actual/);
       errOut.should.match(/expected/);
+    });
+  });
+
+  describe('unified diff reporter', function () {
+    it('should separate diff hunks by two dashes', function () {
+      var err = new Error('test');
+      var errOut;
+
+      err.actual = createElements({ from: 2, to: 11 });
+      err.expected = createElements({ from: 1, to: 10 });
+      err.showDiff = true;
+      var test = makeTest(err);
+
+      Base.inlineDiffs = false;
+      Base.list([test]);
+
+      errOut = stdout.join('\n');
+
+      var regexesToMatch = [
+        /\[/,
+        /\+ {2}"element 1"/,
+        /"element 2"/,
+        /"element 3"/,
+        /"element 4"/,
+        /"element 5"/,
+        /--/,
+        /"element 7"/,
+        /"element 8"/,
+        /"element 9"/,
+        /"element 10"/,
+        /- {2}"element 11"/,
+        /]/,
+        /test/,
+        /expected/,
+        /actual/
+      ];
+
+      regexesToMatch.forEach(function (aRegex) {
+        errOut.should.match(aRegex);
+      });
     });
   });
 
