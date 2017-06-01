@@ -44,13 +44,13 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 1.  Install [GNU Make](https://www.gnu.org/software/make/) or equivalent.
 1.  Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
 1.  Create a new branch in your working copy.  Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
-1.  Execute `npm install` to install the development dependencies.
+1.  Execute `yarn install` to install the development dependencies.
 1.  Make your changes and add them via `git add`.
   - **Do not modify** the root `mocha.js` file directly; it is automatically generated.
   - Your changes will likely be somewhere in `lib/`, `bin/` or `browser-entry.js` if your changes are browser-specific.
   - Please add unit and/or integration tests (depending on the nature of your changes).
   - Keep your PR focused.  Don't fix two things at once, or make formatting changes alongside bug fixes.
-1.  Before committing, run `npm test`.
+1.  Before committing, run `yarn test`.
   - This will run unit tests, Node.js and browser integration tests, and lint the source code.
   - The "browser" tests use Mocha to test itself; it will rebuild the root `mocha.js` file with your changes.
   - **Please avoid committing changes to `mocha.js`**.

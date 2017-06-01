@@ -16,58 +16,58 @@ matrix:
   fast_finish: true
   include:
     - node_js: '7'
-      env: TARGET=test-node COVERAGE=true
+      env: TARGET=test-node COVERAGE=true INSTALL_COMMAND=yarn
     - node_js: '6'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=yarn
     - node_js: '5'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=yarn
     - node_js: '4'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=yarn
     - node_js: 'iojs'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=npm
     - node_js: '0.12'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=npm
     - node_js: '0.11'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=npm
     - node_js: '0.10'
-      env: TARGET=test-node
+      env: TARGET=test-node INSTALL_COMMAND=npm
     - node_js: '7'
-      env: TARGET=lint
+      env: TARGET=lint INSTALL_COMMAND=yarn
     # phantomjs
     - node_js: '7'
-      env: TARGET=test-browser
+      env: TARGET=test-browser INSTALL_COMMAND=yarn
     # chrome
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
+      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8" INSTALL_COMMAND=yarn
     # edge
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
+      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10" INSTALL_COMMAND=yarn
     # ie11
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
+      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1" INSTALL_COMMAND=yarn
     # ie10
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
+      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8" INSTALL_COMMAND=yarn
     # ie9
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
+      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7" INSTALL_COMMAND=yarn
     # ie8
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
+      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7" INSTALL_COMMAND=yarn
     # ie7
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
+      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP" INSTALL_COMMAND=yarn
     # firefox
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
+      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1" INSTALL_COMMAND=yarn
     # safari
     - node_js: '7'
-      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
+      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11" INSTALL_COMMAND=yarn
 
 before_install: scripts/travis-before-install.sh
 
 install:
- - npm install
+ - $INSTALL_COMMAND install
  - cd node_modules && ln -nsf @coderbyheart/karma-sauce-launcher karma-sauce-launcher && cd ../
 
 before_script: scripts/travis-before-script.sh
@@ -75,6 +75,8 @@ before_script: scripts/travis-before-script.sh
 script: make $TARGET
 
 after_success: "npm run postcoverage && <coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
+
+cache: yarn
 
 notifications:
   urls:
