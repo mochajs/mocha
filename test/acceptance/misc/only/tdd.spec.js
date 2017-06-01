@@ -98,7 +98,7 @@ suite.only('should run only tests that marked as `only`', function () {
 });
 
 suite.only('Should run only test cases that mark as only', function () {
-  test.only('should runt his test', function () {
+  test.only('should run this test', function () {
     (true).should.equal(true);
   });
 

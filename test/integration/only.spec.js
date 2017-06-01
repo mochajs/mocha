@@ -9,7 +9,7 @@ describe('.only()', function () {
       run('options/only/bdd.fixture.js', ['--ui', 'bdd'], function (err, res) {
         assert(!err);
         assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 11);
+        assert.equal(res.stats.passes, 17);
         assert.equal(res.stats.failures, 0);
         assert.equal(res.code, 0);
         done();
