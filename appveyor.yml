@@ -10,7 +10,8 @@ install:
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
   - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
-  - npm install
+  - npm install -g yarn
+  - yarn install
   - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
 matrix:
   fast_finish: true
@@ -21,7 +22,7 @@ clone_depth: 1
 test_script:
   - node --version
   - npm --version
+  - yarn --version
   - make test-node
 skip_commits:
   message: /\[ci\s+skip\]/
-
