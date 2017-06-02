@@ -11,8 +11,9 @@
 1. Increase test coverage on Node.js and browser
   - Increase integration coverage for all reporters
     - `html` reporter must be tested in browser
-    - Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters
-    - Filesystem-based reporters must be tested in Node.js context
+    - ~~Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters~~
+    - ~~Filesystem-based reporters must be tested in Node.js context~~
+    - **UPDATE - May 24 2017**: Thanks to [community contributions](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#mag-coverage), the coverage on most reporters has increased dramatically!  The `html` reporter is still in [dire need of coverage](https://coveralls.io/builds/11674428/source?filename=lib%2Freporters%2Fhtml.js).
   - Increase coverage against all interfaces (`exports` in particular).  Ideally this becomes a "matrix" where we repeat sets of integration tests across all interfaces.
   - Refactor non-Node.js-specific tests to allow them to run in a browser context.  Node.js-specific tests include those which *require* the CLI or filesystem.  Most everything else is fair game.
 2.  Review current open pull requests
@@ -20,7 +21,7 @@
   - Pull requests **must** have supporting tests.  The only exceptions are pure cosmetic or non-functional changes.
   - Pull request contributors must sign the CLA.
 3. Close old, inactive issues and pull requests
-  - A bot should do this.  We need a bot. Got a bot?
+  - ~~A bot should do this.  We need a bot. Got a bot?~~ We now use GitHub's own [probot-stale](https://www.npmjs.com/package/probot-stale).
 4. Triage issues
   - If we run into "critical" bugs, they need fixing.
   - "Critical" means Mocha is broken w/o workarounds for a *large percentage* of users
@@ -39,6 +40,7 @@ Once we gain ground on the above items, we can work together formalize our contr
 
 [![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha)
 [![Coverage Status](https://coveralls.io/repos/github/mochajs/mocha/badge.svg)](https://coveralls.io/github/mochajs/mocha)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
@@ -118,3 +120,5 @@ Does your company use Mocha?  Ask your manager or marketing team if your company
 ## License
 
 [MIT](LICENSE)
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)

@@ -97,13 +97,14 @@ module.exports = function (config) {
       console.error('Local/unknown environment detected');
       bundleDirpath = path.join(baseBundleDirpath, 'local');
       // don't need to run sauce from appveyor b/c travis does it.
-      if (!(env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY)) {
-        console.error('No SauceLabs credentials present');
-      } else {
+      if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
         sauceConfig = {
-          build: require('os').hostname() + ' (' + Date.now() + ')'
+          build: require('os')
+            .hostname() + ' (' + Date.now() + ')'
         };
         console.error('Configured SauceLabs');
+      } else {
+        console.error('No SauceLabs credentials present');
       }
     }
     mkdirp.sync(bundleDirpath);
@@ -117,7 +118,7 @@ module.exports = function (config) {
   }
 
   // the MOCHA_UI env var will determine if we're running interface-specific
-  // tets.  since you can only load one at a time, each must be run separately.
+  // tests.  since you can only load one at a time, each must be run separately.
   // each has its own set of acceptance tests and a fixture.
   // the "bdd" fixture is used by default.
   var ui = env.MOCHA_UI;

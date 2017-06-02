@@ -8,7 +8,7 @@ var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 
 describe('file utils', function () {
-  var tmpDir = path.join(os.tmpDir(), 'mocha-file-lookup');
+  var tmpDir = path.join(os.tmpdir(), 'mocha-file-lookup');
   var existsSync = fs.existsSync;
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;

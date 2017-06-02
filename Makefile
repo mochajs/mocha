@@ -1,5 +1,4 @@
 BROWSERIFY := "node_modules/.bin/browserify"
-SEMISTANDARD:= "node_modules/.bin/semistandard"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
 NYC := "node_modules/.bin/nyc"
@@ -13,7 +12,7 @@ else
 endif
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
-SRC = $(shell find lib -name "*.js" -type f | sort)
+SRC = $(shell find lib -name "*.js" -type f | LC_ALL=C sort)
 TESTS = $(shell find test -name "*.js" -type f | sort)
 
 all: mocha.js
@@ -34,9 +33,7 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(SEMISTANDARD) $(SRC)
-	$(SEMISTANDARD) --env mocha --global assert --global expect --global run $(TESTS)
-	$(SEMISTANDARD) bin/* scripts/*.js *.js
+	npm run lint
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
 

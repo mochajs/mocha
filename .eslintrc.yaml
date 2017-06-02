@@ -1,0 +1,11 @@
+env:
+  node: true
+  browser: true
+parserOptions:
+  ecmaVersion: 5
+  sourceType: script
+extends: semistandard
+rules:
+  strict:
+    - error
+    - safe
