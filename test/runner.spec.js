@@ -433,4 +433,92 @@ describe('Runner', function () {
       });
     });
   });
+
+  describe('.run', function () {
+    describe('"test end" event', function () {
+      it('should emit "test end" event for each test', function (done) {
+        var finishedTestTitles = [];
+
+        suite.addTest(new Test('first test', noop));
+        suite.addTest(new Test('second (failed) test', function () {
+          var falseValue = false;
+          falseValue.should.be.equal(true);
+        }));
+        suite.addTest(new Test('third (failed because of an exception) test', function () {
+          throw new Error('FAIL TEST');
+        }));
+        suite.addTest(new Test('fourth test', noop));
+
+        runner.on('test end', function (test) {
+          finishedTestTitles.push(test.title);
+        });
+
+        runner.run(function () {
+          finishedTestTitles.should.deepEqual([
+            'first test',
+            'second (failed) test',
+            'third (failed because of an exception) test',
+            'fourth test'
+          ]);
+          done();
+        });
+      });
+
+      it('should have a proper duration field', function (done) {
+        var finishedTestDuration = [];
+
+        function waitForSomeTime (timeInMs) {
+          var endTestTime = new Date().getTime() + timeInMs;
+
+          while (new Date().getTime() < endTestTime) {
+            //
+          }
+        }
+
+        function doSomethingForSeveralMilliseconds () {
+          waitForSomeTime(10);
+        }
+
+        function doneAfterTimeout (done) {
+          setTimeout(done, 10);
+        }
+
+        function failAfterSeveralMilliseconds () {
+          waitForSomeTime(10);
+
+          var falseValue = false;
+          falseValue.should.be.equal(true);
+        }
+
+        function failAfterSeveralMillisecondsBecauseOfException () {
+          waitForSomeTime(10);
+
+          throw new Error('FAIL TEST');
+        }
+
+        function failAfterTimeout (done) {}
+
+        suite.addTest(new Test('synchronous test', doSomethingForSeveralMilliseconds));
+        suite.addTest(new Test('successful asynchronous test', doneAfterTimeout));
+        suite.addTest(new Test('failed synchronous test', failAfterSeveralMilliseconds));
+        suite.addTest(new Test('failed (because of an exception) synchronous test', failAfterSeveralMillisecondsBecauseOfException));
+
+        var failedAsynchronousTest = new Test('failed asynchronous test', failAfterTimeout);
+        suite.addTest(failedAsynchronousTest);
+        failedAsynchronousTest.timeout(20);
+
+        runner.on('test end', function (test) {
+          finishedTestDuration.push(test.duration);
+        });
+
+        runner.run(function () {
+          finishedTestDuration.forEach(function (duration) {
+            duration.should.be.above(0);
+          });
+
+          done();
+        });
+      });
+    });
+  });
 });
