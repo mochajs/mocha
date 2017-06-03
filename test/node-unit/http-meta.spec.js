@@ -1,8 +1,7 @@
 'use strict';
 
 var http = require('http');
-
-var PORT = 8889;
+var getPort = require('get-port');
 
 var server = http.createServer(function (req, res) {
   var accept = req.headers.accept || '';
@@ -22,28 +21,36 @@ var server = http.createServer(function (req, res) {
   }
 });
 
-function get (url, body, header) {
-  return function (done) {
-    http.get({
-      path: url,
-      port: PORT,
-      headers: header || {}
-    }, function (res) {
-      var buf = '';
-      res.should.have.property('statusCode', 200);
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) { buf += chunk; });
-      res.on('end', function () {
-        buf.should.equal(body);
-        done();
-      });
-    });
-  };
-}
-
 describe('http requests', function () {
+  var port;
+
+  function get (url, body, header) {
+    return function (done) {
+      http.get({
+        path: url,
+        port: port,
+        headers: header || {}
+      }, function (res) {
+        var buf = '';
+        res.should.have.property('statusCode', 200);
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) { buf += chunk; });
+        res.on('end', function () {
+          buf.should.equal(body);
+          done();
+        });
+      });
+    };
+  }
+
   before(function (done) {
-    server.listen(PORT, done);
+    getPort(function (err, portNo) {
+      if (err) {
+        return done(err);
+      }
+      port = portNo;
+      server.listen(port, done);
+    });
   });
 
   beforeEach(function () {

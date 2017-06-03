@@ -1,8 +1,7 @@
 'use strict';
 
 var http = require('http');
-
-var PORT = 8899;
+var getPort = require('get-port');
 
 var server = http.createServer(function (req, res) {
   var accept = req.headers.accept || '';
@@ -22,55 +21,71 @@ var server = http.createServer(function (req, res) {
   }
 });
 
-function get (url) {
-  var fields;
-  var expected;
-  var header = {};
+describe('http server', function () {
+  var port;
 
-  function request (done) {
-    http.get({ path: url, port: PORT, headers: header }, function (res) {
-      var buf = '';
-      res.should.have.property('statusCode', 200);
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) { buf += chunk; });
-      res.on('end', function () {
-        buf.should.equal(expected);
-        done();
+  function get (url) {
+    var fields;
+    var expected;
+    var header = {};
+
+    function request (done) {
+      http.get({
+        path: url,
+        port: port,
+        headers: header
+      }, function (res) {
+        var buf = '';
+        res.should.have.property('statusCode', 200);
+        res.setEncoding('utf8');
+        res.on('data', function (chunk) {
+          buf += chunk;
+        });
+        res.on('end', function () {
+          buf.should.equal(expected);
+          done();
+        });
       });
-    });
+    }
+
+    return {
+      set: function (field, val) {
+        header[field] = val;
+        return this;
+      },
+
+      should: {
+        respond: function (body) {
+          fields = Object.keys(header)
+            .map(function (field) {
+              return field + ': ' + header[field];
+            })
+            .join(', ');
+
+          expected = body;
+          describe('GET ' + url, function () {
+            this.timeout(500);
+            if (fields) {
+              describe('when given ' + fields, function () {
+                it('should respond with "' + body + '"', request);
+              });
+            } else {
+              it('should respond with "' + body + '"', request);
+            }
+          });
+        }
+      }
+    };
   }
 
-  return {
-    set: function (field, val) {
-      header[field] = val;
-      return this;
-    },
-
-    should: {
-      respond: function (body) {
-        fields = Object.keys(header).map(function (field) {
-          return field + ': ' + header[field];
-        }).join(', ');
-
-        expected = body;
-        describe('GET ' + url, function () {
-          this.timeout(500);
-          if (fields) {
-            describe('when given ' + fields, function () {
-              it('should respond with "' + body + '"', request);
-            });
-          } else {
-            it('should respond with "' + body + '"', request);
-          }
-        });
-      }
-    }
-  };
-}
-
-describe('http server', function () {
   before(function (done) {
-    server.listen(PORT, done);
+    getPort(function (err, portNo) {
+      if (err) {
+        return done(err);
+      }
+      port = portNo;
+      server.listen(port, done);
+    });
   });
 
   beforeEach(function () {

@@ -11,6 +11,8 @@ env:
     # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
     # rate-limiting.  pull it from this sketchy site in China instead.
     - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
+    - ARTIFACTS_BUCKET=mochajs
+    - ARTIFACTS_REGION=us-west-2
 
 matrix:
   fast_finish: true
@@ -35,42 +37,13 @@ matrix:
       env: TARGET=test-node
     - node_js: '8'
       env: TARGET=lint
-    # phantomjs
     - node_js: '8'
-      env: TARGET=test-browser
-    # chrome
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
-    # edge
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
-    # ie11
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
-    # ie10
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
-    # ie9
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
-    # ie8
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
-    # ie7
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
-    # firefox
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
-    # safari
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
+      env: TRAVIS_SAUCE_CONNECT=1 TARGET=test-browser
 
 before_install: scripts/travis-before-install.sh
 
 install:
  - npm install
- - cd node_modules && ln -nsf @coderbyheart/karma-sauce-launcher karma-sauce-launcher && cd ../
 
 before_script: scripts/travis-before-script.sh
 
@@ -89,4 +62,6 @@ addons:
   artifacts:
     paths:
       - .karma/
-      - ./mocha.js
+      - ./BUILDTMP/mocha.js
+  jwt:
+    secure: uZVTLV6IOz2JfT4GJ5Gr0wfaQ3uYQZTtH919oatETYhd2d4+4blXuypd5u93iOV4mIuf3QNlrGPjI6I7vJ/5aMHogD/sWMpmAzy3zX848ueg9Wvv5ldKGYbMNV7eYBrB73EWiwkVk0dS1uDFm0qG/lFFC3vUhnFqzoVRoX7peKQ=
