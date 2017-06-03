@@ -4,6 +4,7 @@ var mocha = require('..');
 var utils = mocha.utils;
 var path = require('path');
 var JSON = require('json3');
+var should = require('should');
 
 describe('utils', function () {
   describe('.clean()', function () {
@@ -46,6 +47,31 @@ describe('utils', function () {
 
     it('should handle empty functions', function () {
       clean('function() {}').should.equal('');
+    });
+  });
+
+  describe('.getTitle()', function () {
+    var getTitle = utils.getTitle;
+    it('should return string if string is passed in', function () {
+      var title = 'this is a title';
+      getTitle(title).should.equal(title);
+    });
+
+    it('should return undefined if undefined is passed in', function () {
+      should.not.exist(getTitle(undefined));
+    });
+
+    it('should return the function if it has no name', function () {
+      var typeOfTitle = typeof (getTitle(function () {}));
+      typeOfTitle.should.equal('function');
+    });
+
+    it('should return the function name if it has a name', function () {
+      function nameFunction () {}
+      getTitle(nameFunction).should.equal('nameFunction');
+
+      var noNameFunction = function () {};
+      getTitle(noNameFunction).should.equal('noNameFunction');
     });
   });
 

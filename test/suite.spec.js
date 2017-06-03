@@ -401,7 +401,7 @@ describe('Suite', function () {
 
   describe('initialization', function () {
     /* eslint no-new: off */
-    it('should throw an error if the title isn\'t a string', function () {
+    it('should throw an error if the title can\'t convert into a nice string', function () {
       (function () {
         new Suite(undefined, 'root');
       }).should.throw();
@@ -414,6 +414,18 @@ describe('Suite', function () {
     it('should not throw if the title is a string', function () {
       (function () {
         new Suite('Bdd suite', 'root');
+      }).should.not.throw();
+    });
+
+    it('should not throw if the title is a function with a name', function () {
+      function bddSuite () {}
+      (function () {
+        new Suite(bddSuite, 'root');
+      }).should.not.throw();
+
+      var variableBddSuite = function () {};
+      (function () {
+        new Suite(variableBddSuite, 'root');
       }).should.not.throw();
     });
   });
