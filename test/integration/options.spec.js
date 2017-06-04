@@ -180,4 +180,56 @@ describe('options', function () {
       });
     });
   });
+
+  describe('--forbid-only', function () {
+    before(function () {
+      args = ['--forbid-only'];
+    });
+
+    it('succeeds if there are only passed tests', function (done) {
+      run('options/forbid-only/passed.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
+    it('fails if there are tests marked only', function (done) {
+      run('options/forbid-only/only.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
+  });
+
+  describe('--forbid-pending', function () {
+    before(function () {
+      args = ['--forbid-pending'];
+    });
+
+    it('succeeds if there are only passed tests', function (done) {
+      run('options/forbid-pending/passed.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
+    it('fails if there are tests marked skip', function (done) {
+      run('options/forbid-pending/skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
+
+    it('fails if there are pending tests', function (done) {
+      run('options/forbid-pending/pending.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
+  });
 });
