@@ -1,6 +1,6 @@
 'use strict';
 
-var mocha = require('../');
+var mocha = require('../../lib/mocha');
 var utils = mocha.utils;
 var Runnable = mocha.Runnable;
 var Suite = mocha.Suite;
@@ -192,7 +192,9 @@ describe('Runnable(title, fn)', function () {
     describe('when timeouts are disabled', function () {
       it('should not error with timeout', function (done) {
         var test = new Runnable('foo', function (done) {
-          setTimeout(process.nextTick.bind(undefined, done), 2);
+          setTimeout(function () {
+            setTimeout(done);
+          }, 2);
         });
         test.timeout(1);
         test.enableTimeouts(false);
@@ -204,7 +206,7 @@ describe('Runnable(title, fn)', function () {
       describe('without error', function () {
         it('should invoke the callback', function (done) {
           var test = new Runnable('foo', function (done) {
-            process.nextTick(done);
+            setTimeout(done);
           });
 
           test.run(done);
@@ -219,9 +221,9 @@ describe('Runnable(title, fn)', function () {
 
             var test = new Runnable('foo', function (done) {
               process.nextTick(done);
-              process.nextTick(done);
-              process.nextTick(done);
-              process.nextTick(done);
+              setTimeout(done);
+              setTimeout(done);
+              setTimeout(done);
             });
 
             test.on('error', function (err) {
@@ -245,10 +247,10 @@ describe('Runnable(title, fn)', function () {
 
             var test = new Runnable('foo', function (done) {
               done(new Error('fail'));
-              process.nextTick(done);
+              setTimeout(done);
               done(new Error('fail'));
-              process.nextTick(done);
-              process.nextTick(done);
+              setTimeout(done);
+              setTimeout(done);
             });
 
             test.on('error', function (err) {
@@ -368,7 +370,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is fulfilled with no value', function () {
         var fulfilledPromise = {
           then: function (fulfilled, rejected) {
-            process.nextTick(fulfilled);
+            setTimeout(fulfilled);
           }
         };
 
@@ -384,7 +386,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is fulfilled with a value', function () {
         var fulfilledPromise = {
           then: function (fulfilled, rejected) {
-            process.nextTick(function () {
+            setTimeout(function () {
               fulfilled({});
             });
           }
@@ -403,7 +405,7 @@ describe('Runnable(title, fn)', function () {
         var expectedErr = new Error('fail');
         var rejectedPromise = {
           then: function (fulfilled, rejected) {
-            process.nextTick(function () {
+            setTimeout(function () {
               rejected(expectedErr);
             });
           }
@@ -425,7 +427,7 @@ describe('Runnable(title, fn)', function () {
         var expectedErr = new Error('Promise rejected with no or falsy reason');
         var rejectedPromise = {
           then: function (fulfilled, rejected) {
-            process.nextTick(function () {
+            setTimeout(function () {
               rejected();
             });
           }

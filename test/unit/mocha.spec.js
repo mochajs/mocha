@@ -1,6 +1,6 @@
 'use strict';
 
-var Mocha = require('../');
+var Mocha = require('../../lib/mocha');
 var Test = Mocha.Test;
 
 describe('Mocha', function () {

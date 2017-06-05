@@ -1,6 +1,6 @@
 'use strict';
 
-var Mocha = require('../');
+var Mocha = require('../../lib/mocha');
 
 describe('Mocha', function () {
   describe('"grep" option', function () {

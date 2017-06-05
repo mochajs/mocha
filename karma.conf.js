@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
+var osName = require('os-name');
 
 module.exports = function (config) {
   var bundleDirpath;
@@ -17,14 +18,7 @@ module.exports = function (config) {
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
       'test/browser-fixtures/bdd.fixture.js',
-      'test/acceptance/*.spec.js'
-    ],
-    exclude: [
-      'test/acceptance/http.spec.js',
-      'test/acceptance/fs.spec.js',
-      'test/acceptance/file-utils.spec.js',
-      'test/acceptance/require/**/*.js',
-      'test/acceptance/misc/**/*.js'
+      'test/unit/*.spec.js'
     ],
     preprocessors: {
       'test/**/*.js': ['browserify']
@@ -47,7 +41,7 @@ module.exports = function (config) {
     },
     reporters: ['spec'],
     colors: true,
-    browsers: ['PhantomJS'], // This is the default browser to run, locally
+    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'], // This is the default browser to run, locally
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
@@ -127,7 +121,7 @@ module.exports = function (config) {
     }
     cfg.files = [
       'test/browser-fixtures/' + ui + '.fixture.js',
-      'test/acceptance/interfaces/' + ui + '.spec.js'
+      'test/interfaces/' + ui + '.spec.js'
     ];
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';

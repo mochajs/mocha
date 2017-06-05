@@ -73,6 +73,10 @@ describe('http server', function () {
     server.listen(PORT, done);
   });
 
+  beforeEach(function () {
+    this.timeout(2000);
+  });
+
   after(function () {
     server.close();
   });
