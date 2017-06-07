@@ -14,6 +14,15 @@ module.exports = function (config) {
       'expect',
       'mocha'
     ],
+    plugins: [
+      'karma-browserify',
+      'karma-chrome-launcher',
+      'karma-phantomjs-launcher',
+      'karma-expect',
+      'karma-mocha',
+      'karma-spec-reporter',
+      require('@coderbyheart/karma-sauce-launcher')
+    ],
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
