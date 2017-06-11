@@ -198,12 +198,15 @@ describe('options', function () {
       run('options/forbid-only/only.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, '`.only` forbidden')
         done();
       });
     });
   });
 
   describe('--forbid-pending', function () {
+    var pendingErrorMessage = 'Pending test forbidden';
+
     before(function () {
       args = ['--forbid-pending'];
     });
@@ -220,6 +223,7 @@ describe('options', function () {
       run('options/forbid-pending/skip.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage)
         done();
       });
     });
@@ -228,6 +232,7 @@ describe('options', function () {
       run('options/forbid-pending/pending.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage)
         done();
       });
     });
@@ -236,6 +241,7 @@ describe('options', function () {
       run('options/forbid-pending/this.skip.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage)
         done();
       });
     });
