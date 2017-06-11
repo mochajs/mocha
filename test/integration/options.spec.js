@@ -231,5 +231,13 @@ describe('options', function () {
         done();
       });
     });
+
+    it('fails if tests call `skip()`', function (done) {
+      run('options/forbid-pending/this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
   });
 });
