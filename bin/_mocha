@@ -17,7 +17,6 @@ var utils = Mocha.utils;
 var interfaceNames = Object.keys(Mocha.interfaces);
 var join = path.join;
 var cwd = process.cwd();
-var getOptions = require('./options');
 var mocha = new Mocha();
 
 /**
@@ -188,7 +187,7 @@ program.on('option:require', function (mod) {
 
 // If not already done, load mocha.opts
 if (!process.env.LOADED_MOCHA_OPTS) {
-  getOptions();
+  require('../lib/options').load();
 }
 
 // parse args
