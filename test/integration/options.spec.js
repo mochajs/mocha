@@ -254,5 +254,14 @@ describe('options', function () {
         done();
       });
     });
+
+    it('fails if before calls `skip()`', function (done) {
+      run('options/forbid-pending/before-this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
   });
 });
