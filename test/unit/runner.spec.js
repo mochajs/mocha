@@ -125,8 +125,11 @@ describe('Runner', function () {
     });
 
     it('should not fail when a new common global is introduced', function () {
+      if (process.browser) {
+        this.skip();
+        return;
+      }
       // verify that the prop isn't enumerable
-      delete global.XMLHttpRequest;
       expect(global.propertyIsEnumerable('XMLHttpRequest')).to.not.be.ok();
 
       // create a new runner and keep a reference to the test.

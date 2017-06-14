@@ -361,7 +361,7 @@ describe('Runnable(title, fn)', function () {
           setTimeout(increment, 1);
           setTimeout(increment, 100);
         });
-        test.timeout(10);
+        test.timeout(50);
         test.run(function (err) {
           expect(err).to.be.ok();
           expect(callCount).to.equal(1);
