@@ -27,7 +27,7 @@ describe('Mocha', function () {
       });
       mocha.suite.addTest(failingTest);
       mocha.run(function (failures) {
-        failures.should.equal(1);
+        expect(failures).to.equal(1);
         done();
       });
     });
