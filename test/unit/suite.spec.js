@@ -4,6 +4,11 @@ var mocha = require('../../lib/mocha');
 var Suite = mocha.Suite;
 var Test = mocha.Test;
 
+function supportsFunctionNames () {
+  // eslint-disable-next-line no-extra-parens
+  return (function foo () {}).name === 'foo';
+}
+
 describe('Suite', function () {
   describe('.clone()', function () {
     beforeEach(function () {
@@ -142,18 +147,31 @@ describe('Suite', function () {
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.beforeAll('test', fn);
 
-        expect(this.suite._beforeAll).to.have.length(1);
+        expect(this.suite._beforeAll)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._beforeAll[0];
-        expect(beforeAllItem.title).to.equal('"before all" hook: test');
-        expect(beforeAllItem.fn).to.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"before all" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.beforeAll(namedFn);
-        expect(this.suite._beforeAll).to.have.length(2);
-        beforeAllItem = this.suite._beforeAll[1];
+        var beforeAllItem = this.suite._beforeAll[0];
         expect(beforeAllItem.title).to.equal('"before all" hook: namedFn');
         expect(beforeAllItem.fn).to.equal(namedFn);
       });
@@ -176,20 +194,33 @@ describe('Suite', function () {
         expect(afterAllItem.fn).to.equal(fn);
       });
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.afterAll('test', fn);
 
-        expect(this.suite._afterAll).to.have.length(1);
+        expect(this.suite._afterAll)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._afterAll[0];
-        expect(beforeAllItem.title).to.equal('"after all" hook: test');
-        expect(beforeAllItem.fn).to.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"after all" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.afterAll(namedFn);
-        expect(this.suite._afterAll).to.have.length(2);
-        beforeAllItem = this.suite._afterAll[1];
-        expect(beforeAllItem.title).to.equal('"after all" hook: namedFn');
-        expect(beforeAllItem.fn).to.equal(namedFn);
+        var afterAllItem = this.suite._afterAll[0];
+        expect(afterAllItem.title).to.equal('"after all" hook: namedFn');
+        expect(afterAllItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -211,20 +242,33 @@ describe('Suite', function () {
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.beforeEach('test', fn);
 
-        expect(this.suite._beforeEach).to.have.length(1);
+        expect(this.suite._beforeEach)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._beforeEach[0];
-        expect(beforeAllItem.title).to.equal('"before each" hook: test');
-        expect(beforeAllItem.fn).to.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"before each" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.beforeEach(namedFn);
-        expect(this.suite._beforeEach).to.have.length(2);
-        beforeAllItem = this.suite._beforeEach[1];
-        expect(beforeAllItem.title).to.equal('"before each" hook: namedFn');
-        expect(beforeAllItem.fn).to.equal(namedFn);
+        var beforeEachItem = this.suite._beforeEach[0];
+        expect(beforeEachItem.title).to.equal('"before each" hook: namedFn');
+        expect(beforeEachItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -246,20 +290,33 @@ describe('Suite', function () {
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.afterEach('test', fn);
 
-        expect(this.suite._afterEach).to.have.length(1);
+        expect(this.suite._afterEach)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._afterEach[0];
-        expect(beforeAllItem.title).to.equal('"after each" hook: test');
-        expect(beforeAllItem.fn).to.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"after each" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.afterEach(namedFn);
-        expect(this.suite._afterEach).to.have.length(2);
-        beforeAllItem = this.suite._afterEach[1];
-        expect(beforeAllItem.title).to.equal('"after each" hook: namedFn');
-        expect(beforeAllItem.fn).to.equal(namedFn);
+        var afterEachItem = this.suite._afterEach[0];
+        expect(afterEachItem.title).to.equal('"after each" hook: namedFn');
+        expect(afterEachItem.fn).to.equal(namedFn);
       });
     });
   });
