@@ -391,15 +391,17 @@ describe('options', function () {
   });
 
   describe('--help', function () {
-    it('works despite the presence of mocha.opts', function (done) {
-      var output = '';
-      try {
-        fs.mkdirSync(path.resolve(__dirname, 'test-env'));
-        fs.mkdirSync(path.resolve(__dirname, 'test-env/test'));
-        fs.writeFileSync(path.resolve(__dirname, 'test-env/test/mocha.opts'), 'foo');
-        var mochaLoc = path.resolve(__dirname, '../../bin/mocha');
-        output = '' + childProcess.execSync(mochaLoc + ' -h', {cwd: path.resolve(__dirname, 'test-env')});
-      } catch (e) {}
+    before(function () {
+      fs.mkdirSync(path.resolve(__dirname, 'test-env'));
+      fs.mkdirSync(path.resolve(__dirname, 'test-env/test'));
+      fs.writeFileSync(path.resolve(__dirname, 'test-env/test/mocha.opts'), 'foo');
+    });
+    it('works despite the presence of mocha.opts', function () {
+      var mochaLoc = path.resolve(__dirname, '../../bin/mocha');
+      var output = '' + childProcess.execSync(mochaLoc + ' -h', {cwd: path.resolve(__dirname, 'test-env')});
+      expect(output).to.contain('Usage:');
+    });
+    after(function () {
       try {
         fs.unlinkSync(path.resolve(__dirname, 'test-env/test/mocha.opts'));
       } catch (e) {}
@@ -409,8 +411,6 @@ describe('options', function () {
       try {
         fs.rmdirSync(path.resolve(__dirname, 'test-env'));
       } catch (e) {}
-      assert(output.indexOf('Usage:') >= 0);
-      done();
     });
   });
 });
