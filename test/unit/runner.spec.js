@@ -80,6 +80,12 @@ describe('Runner', function () {
   });
 
   describe('.checkGlobals(test)', function () {
+    before(function () {
+      if (!Object.create) {
+        this.skip();
+      }
+    });
+
     it('should allow variables that match a wildcard', function (done) {
       runner.globals(['foo*', 'giz*']);
       global.foo = 'baz';
@@ -292,6 +298,11 @@ describe('Runner', function () {
     });
 
     it('should recover if the error stack is not writable', function (done) {
+      if (!Object.create) {
+        this.skip();
+        return;
+      }
+
       var err = new Error('not evil');
       Object.defineProperty(err, 'stack', {
         value: err.stack

@@ -510,6 +510,11 @@ describe('lib/utils', function () {
   describe('map()', function () {
     var map = utils.map;
     it('should behave same as Array.prototype.map', function () {
+      if (!Array.prototype.map) {
+        this.skip();
+        return;
+      }
+
       var arr = [
         1,
         2,

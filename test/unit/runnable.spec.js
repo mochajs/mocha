@@ -46,7 +46,7 @@ describe('Runnable(title, fn)', function () {
     it('should set disabled', function () {
       var run = new Runnable();
       run.timeout(1e10);
-      expect(run.enableTimeouts()).to.be(false);
+      expect(run.enableTimeouts()).to.equal(false);
     });
   });
 
@@ -445,7 +445,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            expect(err).to.eql(expectedErr);
+            expect(err.message).to.equal(expectedErr.message);
             done();
           });
         });
