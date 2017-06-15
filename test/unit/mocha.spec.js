@@ -62,9 +62,15 @@ describe('Mocha', function () {
       mocha.options.ignoreLeaks.should.equal(true);
     });
 
-    it('should set the ignoreLeaks option to true when param equals false', function () {
+    it('should set the ignoreLeaks option to false when param equals false', function () {
       var mocha = new Mocha(blankOpts);
       mocha.ignoreLeaks(false);
+      mocha.options.ignoreLeaks.should.equal(false);
+    });
+
+    it('should set the ignoreLeaks option to false when the param is undefined', function () {
+      var mocha = new Mocha(blankOpts);
+      mocha.ignoreLeaks();
       mocha.options.ignoreLeaks.should.equal(false);
     });
 
@@ -120,7 +126,7 @@ describe('Mocha', function () {
       mocha.options.useInlineDiffs.should.equal(true);
     });
 
-    it('should set the useInlineDiffs option to true when param equals false', function () {
+    it('should set the useInlineDiffs option to false when param equals false', function () {
       var mocha = new Mocha(blankOpts);
       mocha.useInlineDiffs(false);
       mocha.options.useInlineDiffs.should.equal(false);
