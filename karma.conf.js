@@ -5,9 +5,19 @@ var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
 var osName = require('os-name');
+var workaroundMultiplePreprocessorIncompatibility = require('browserify-istanbul');
+var karmaCoverageIstanbul;
+try {
+  karmaCoverageIstanbul = require('karma-coverage/node_modules/istanbul');
+} catch (ignore) {}
 
 module.exports = function (config) {
   var bundleDirpath;
+  var filesBase = [
+    // make browserify bundle these properly (if nothing else, this is necessary for coverage transform; unclear whether it makes a difference as to how browserify gets them otherwise, as it doesn't print any debug logs about them without it)
+    { pattern: '*.js', included: false, served: false },
+    { pattern: 'lib/**/*.js', included: false, served: false }
+  ];
   var cfg = {
     frameworks: [
       'browserify',
@@ -23,12 +33,12 @@ module.exports = function (config) {
       'karma-spec-reporter',
       require('@coderbyheart/karma-sauce-launcher')
     ],
-    files: [
+    files: filesBase.concat([
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
       'test/browser-fixtures/bdd.fixture.js',
       'test/unit/*.spec.js'
-    ],
+    ]),
     preprocessors: {
       'test/**/*.js': ['browserify']
     },
@@ -128,12 +138,28 @@ module.exports = function (config) {
     if (cfg.sauceLabs) {
       cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
     }
-    cfg.files = [
+    cfg.files = filesBase.concat([
       'test/browser-fixtures/' + ui + '.fixture.js',
       'test/interfaces/' + ui + '.spec.js'
-    ];
+    ]);
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';
+  }
+
+  if (env.COVERAGE) {
+    cfg.plugins.push('karma-coverage');
+    filesBase.forEach(function (file) {
+      cfg.preprocessors[file.pattern] = ['browserify'];
+    });
+    cfg.reporters.push('coverage');
+    cfg.coverageReporter = {
+      reporters: [ { type: 'json' }, { type: 'text-summary' } ],
+      dir: 'coverage/reports/browser' + (ui ? '-' + ui : ''),
+      subdir: '.',
+      includeAllSources: true
+    };
+    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/lib/browser/**', '**/node_modules/**', '**/test/**'], instrumenter: karmaCoverageIstanbul }) ];
+    console.error('Reporting coverage to ' + cfg.coverageReporter.dir);
   }
 
   config.set(cfg);
