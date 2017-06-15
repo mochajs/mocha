@@ -1,17 +1,17 @@
 <!--
 Have you read Mocha's Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md
-For more, check out the Mocha gitter space: https://gitter.im/mochajs/mocha
+For more, check out the Mocha Gitter chat room: https://gitter.im/mochajs/mocha
 -->
 
 ### Prerequisites
 <!--
 Place an `x` between the square brackets on the lines below for every satisified prerequisite.
 -->
-* [ ] Checked that your issue isn't already filed by cross referencing [issues with the `common mistake` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Acommon-mistake%20) 
+* [ ] Checked that your issue isn't already filed by cross referencing [issues with the `common mistake` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Acommon-mistake%20)
 * [ ] Checked next-gen ES issues and syntax problems by using the same environment and/or transpiler configuration without Mocha to ensure it isn't just a feature that actually isn't supported in the environment in question or a bug in your code.
 * [ ] 'Smoke tested' the code to be tested by running it outside the real test suite to get a better sense of whether the problem is in the code under test, your usage of Mocha, or Mocha itself
 * [ ] Ensured that there is no discrepancy between the locally and globally installed versions of Mocha. You can find them with:
-`node node_modules/mocha/bin/mocha* --version`(Local) and `mocha -v`(Global). We recommend avoiding the use of globally installed Mocha.
+`node node_modules/.bin/mocha --version`(Local) and `mocha --version`(Global). We recommend avoiding the use of globally installed Mocha.
 
 ### Description
 <!--
@@ -33,10 +33,14 @@ on how to create a mimimal, complete, and verifiable example.
 
 ### Versions
 <!--
-You can get this information from copy and pasting the output of `mocha --version` from the command line.
- Also, please include the following:
- * The version and architecture of the operation system being used.
- * The Node version (`node -v`)
+ If applicable, please specify:
+ * The output of `mocha --version` and `node node_modules/.bin/mocha --version`:
+ * The output of `node --version`:
+ * The version and architecture of your operating system:
+ * Your shell (bash, zsh, PowerShell, cmd, etc.):
+ * Your browser and version (if running browser tests):
+ * Any other third party Mocha related modules (with versions):
+ * The code transpiler being used:
 -->
 
 ### Additional Information
