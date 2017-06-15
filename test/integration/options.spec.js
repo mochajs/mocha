@@ -1,10 +1,9 @@
 'use strict';
 
-var assert = require('assert');
-var childProcess = require('child_process');
 var fs = require('fs');
-var path = require('path');
+var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
+var directInvoke = require('./helpers').invokeMocha;
 var args = [];
 
 describe('options', function () {
@@ -392,25 +391,29 @@ describe('options', function () {
 
   describe('--help', function () {
     before(function () {
-      fs.mkdirSync(path.resolve(__dirname, 'test-env'));
-      fs.mkdirSync(path.resolve(__dirname, 'test-env/test'));
-      fs.writeFileSync(path.resolve(__dirname, 'test-env/test/mocha.opts'), 'foo');
+      try {
+        fs.mkdirSync('test');
+      } catch (ignore) {}
+      try {
+        fs.writeFileSync('test/mocha.opts', 'foo', { flag: 'wx' });
+      } catch (ignore) {}
     });
-    it('works despite the presence of mocha.opts', function () {
-      var mochaLoc = path.resolve(__dirname, '../../bin/mocha');
-      var output = '' + childProcess.execSync(mochaLoc + ' -h', {cwd: path.resolve(__dirname, 'test-env')});
-      expect(output).to.contain('Usage:');
+
+    it('works despite the presence of mocha.opts', function (done) {
+      directInvoke(['-h'], function (error, result) {
+        if (error) { return done(error); }
+        expect(result.output).to.contain('Usage:');
+        done();
+      });
     });
+
     after(function () {
-      try {
-        fs.unlinkSync(path.resolve(__dirname, 'test-env/test/mocha.opts'));
-      } catch (e) {}
-      try {
-        fs.rmdirSync(path.resolve(__dirname, 'test-env/test'));
-      } catch (e) {}
-      try {
-        fs.rmdirSync(path.resolve(__dirname, 'test-env'));
-      } catch (e) {}
+      if (fs.readFileSync('test/mocha.opts').toString() === 'foo') {
+        fs.unlinkSync('test/mocha.opts');
+        try {
+          fs.rmdirSync('test');
+        } catch (ignore) {}
+      }
     });
   });
 });
