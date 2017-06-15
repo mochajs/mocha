@@ -18,7 +18,7 @@ module.exports = function (config) {
   var bundleDirpath;
   var filesBase = [
     // make browserify bundle these properly (if nothing else, this is necessary for coverage transform; unclear whether it makes a difference as to how browserify gets them otherwise, as it doesn't print any debug logs about them without it)
-    { pattern: '*.js', included: false, served: false },
+    { pattern: 'browser-entry.js', included: false, served: false },
     { pattern: 'lib/**/*.js', included: false, served: false }
   ];
   var cfg = {
@@ -162,7 +162,7 @@ module.exports = function (config) {
       subdir: '.',
       includeAllSources: true
     };
-    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/lib/browser/**', '**/node_modules/**', '**/test/**'], instrumenter: nyc, instrumenterConfig: { autoWrap: true, embedSource: true, produceSourceMap: true, noCompact: false } }) ];
+    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/node_modules/**', '**/test/**'], instrumenter: nyc, instrumenterConfig: { autoWrap: true, embedSource: true, produceSourceMap: true, noCompact: false } }) ];
     console.error('Reporting coverage to ' + cfg.coverageReporter.dir);
   }
 
