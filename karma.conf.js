@@ -6,10 +6,13 @@ var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
 var osName = require('os-name');
 var workaroundMultiplePreprocessorIncompatibility = require('browserify-istanbul');
-var karmaCoverageIstanbul;
+var istanbulLib;
 try {
-  karmaCoverageIstanbul = require('karma-coverage/node_modules/istanbul');
-} catch (ignore) {}
+  istanbulLib = require('nyc/node_modules/istanbul-lib-instrument');
+} catch (ignore) {
+  istanbulLib = require('istanbul-lib-instrument');
+}
+var nyc = { Instrumenter: function (options) { return istanbulLib.createInstrumenter(options); } };
 
 module.exports = function (config) {
   var bundleDirpath;
@@ -153,12 +156,13 @@ module.exports = function (config) {
     });
     cfg.reporters.push('coverage');
     cfg.coverageReporter = {
+      instrumenters: { istanbul: nyc },
       reporters: [ { type: 'json' }, { type: 'text-summary' } ],
       dir: 'coverage/reports/browser' + (ui ? '-' + ui : ''),
       subdir: '.',
       includeAllSources: true
     };
-    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/lib/browser/**', '**/node_modules/**', '**/test/**'], instrumenter: karmaCoverageIstanbul }) ];
+    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/lib/browser/**', '**/node_modules/**', '**/test/**'], instrumenter: nyc, instrumenterConfig: { autoWrap: true, embedSource: true, produceSourceMap: true, noCompact: false } }) ];
     console.error('Reporting coverage to ' + cfg.coverageReporter.dir);
   }
 
