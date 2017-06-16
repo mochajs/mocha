@@ -1,9 +1,40 @@
+# 3.5.0 / 2017-06-16
+
+## :newspaper: News
+
+- Mocha now has a [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) (thanks [@kungapal]!).
+- Old issues and PRs are now being marked "stale" by [Probot's "Stale" plugin](https://github.com/probot/stale).  If an issue is marked as such, and you would like to see it remain open, simply add a new comment to the ticket or PR.
+- **WARNING**: Support for non-ES5-compliant environments will be dropped starting with version 4.0.0 of Mocha!
+
+## :lock: Security Fixes
+
+- [#2860]: Address [CVE-2015-8315](https://nodesecurity.io/advisories/46) via upgrade of [debug](https://npm.im/debug) ([@boneskull])
+
+## :tada: Enhancements
+
+- [#2696]: Add `--forbid-only` and `--forbid-pending` flags.  Use these in CI or hooks to ensure tests aren't accidentally being skipped! ([@charlierudolph])
+- [#2813]: Support Node.js 8's `--napi-modules` flag ([@jupp0r])
+
+## :nut_and_bolt: Other
+
+- Various CI-and-test-related fixes and improvements ([@boneskull], [@dasilvacontin], [@PopradiArpad], [@Munter], [@ScottFreeCode])
+- "Officially" support Node.js 8 ([@elergy])
+
+[#2860]: https://github.com/mochajs/mocha/pulls/2860
+[#2696]: https://github.com/mochajs/mocha/pulls/2696
+[#2813]: https://github.com/mochajs/mocha/pulls/2813
+[@charlierudolph]: https://github.com/charlierudolph
+[@PopradiArpad]: https://github.com/PopradiArpad
+[@kungapal]: https://github.com/kungapal
+[@elergy]: https://github.com/elergy
+[@jupp0r]: https://github.com/jupp0r
+
 # 3.4.2 / 2017-05-24
 
 ## :bug: Fixes
 
-- [#2802]: Remove call to deprecated os.tmpDir ([@makepanic])
-- [#2820]: Eagerly set process.exitCode ([@chrisleck])
+- [#2802]: Remove call to deprecated `os.tmpDir` ([@makepanic])
+- [#2820]: Eagerly set `process.exitCode` ([@chrisleck])
 
 ## :nut_and_bolt: Other
 
