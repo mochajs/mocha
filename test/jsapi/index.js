@@ -9,8 +9,7 @@ var mocha = new Mocha({
   growl: true
 });
 
-// mocha.reporter('spec');
-require('should');
+global.expect = require('expect.js');
 
 mocha.addFile('test/unit/suite.spec.js');
 mocha.addFile('test/unit/runner.spec.js');

@@ -1,7 +1,6 @@
 'use strict';
 
 var mocha = require('../../lib/mocha');
-var should = require('should');
 var Test = mocha.Test;
 
 describe('Test', function () {
@@ -19,39 +18,39 @@ describe('Test', function () {
     });
 
     it('should copy the title', function () {
-      this._test.clone().title.should.equal('To be cloned');
+      expect(this._test.clone().title).to.equal('To be cloned');
     });
 
     it('should copy the timeout value', function () {
-      this._test.clone().timeout().should.equal(3043);
+      expect(this._test.clone().timeout()).to.equal(3043);
     });
 
     it('should copy the slow value', function () {
-      this._test.clone().slow().should.equal(101);
+      expect(this._test.clone().slow()).to.equal(101);
     });
 
     it('should copy the enableTimeouts value', function () {
-      this._test.clone().enableTimeouts().should.be.true();
+      expect(this._test.clone().enableTimeouts()).to.be(true);
     });
 
     it('should copy the retries value', function () {
-      this._test.clone().retries().should.equal(3);
+      expect(this._test.clone().retries()).to.equal(3);
     });
 
     it('should copy the currentRetry value', function () {
-      this._test.clone().currentRetry().should.equal(1);
+      expect(this._test.clone().currentRetry()).to.equal(1);
     });
 
     it('should copy the globals value', function () {
-      this._test.clone().globals().should.not.be.empty();
+      expect(this._test.clone().globals()).to.not.be.empty();
     });
 
     it('should copy the parent value', function () {
-      this._test.clone().parent.should.equal('foo');
+      expect(this._test.clone().parent).to.equal('foo');
     });
 
     it('should copy the file value', function () {
-      this._test.clone().file.should.equal('bar');
+      expect(this._test.clone().file).to.equal('bar');
     });
   });
 
@@ -61,17 +60,17 @@ describe('Test', function () {
     });
 
     it('should not be pending by default', function () {
-      should(this._test.isPending()).not.be.ok();
+      expect(this._test.isPending()).to.not.be(true);
     });
 
     it('should be pending when marked as such', function () {
       this._test.pending = true;
-      should(this._test.isPending()).be.ok();
+      expect(this._test.isPending()).to.be(true);
     });
 
     it('should be pending when its parent is pending', function () {
       this._test.parent = { isPending: function () { return true; } };
-      should(this._test.isPending()).be.ok();
+      expect(this._test.isPending()).to.be(true);
     });
   });
 });

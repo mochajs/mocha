@@ -6,19 +6,19 @@ describe('Mocha', function () {
   describe('"grep" option', function () {
     it('should add a RegExp to the mocha.options object', function () {
       var mocha = new Mocha({ grep: /foo.*/ });
-      mocha.options.grep.toString().should.equal('/foo.*/');
+      expect(mocha.options.grep.toString()).to.equal('/foo.*/');
     });
 
     it('should convert string to a RegExp', function () {
       var mocha = new Mocha({ grep: 'foo.*' });
-      mocha.options.grep.toString().should.equal('/foo.*/');
+      expect(mocha.options.grep.toString()).to.equal('/foo.*/');
     });
   });
 
   describe('"fgrep" option', function () {
     it('should escape and convert string to a RegExp', function () {
       var mocha = new Mocha({ fgrep: 'foo.*' });
-      mocha.options.grep.toString().should.equal('/foo\\.\\*/');
+      expect(mocha.options.grep.toString()).to.equal('/foo\\.\\*/');
     });
   });
 
@@ -27,7 +27,7 @@ describe('Mocha', function () {
     function testGrep (mocha) {
       return function testGrep (grep, expected) {
         mocha.grep(grep);
-        mocha.options.grep.toString().should.equal(expected);
+        expect(mocha.options.grep.toString()).to.equal(expected);
       };
     }
 
@@ -54,14 +54,14 @@ describe('Mocha', function () {
 
     it('should return it\'s parent Mocha object for chainability', function () {
       var mocha = new Mocha();
-      mocha.grep().should.equal(mocha);
+      expect(mocha.grep()).to.equal(mocha);
     });
   });
 
   describe('"invert" option', function () {
     it('should add a Boolean to the mocha.options object', function () {
       var mocha = new Mocha({ invert: true });
-      mocha.options.invert.should.be.ok;
+      expect(mocha.options.invert).to.be.ok;
     });
   });
 });

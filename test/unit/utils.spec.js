@@ -7,67 +7,67 @@ var JSON = require('json3');
 describe('lib/utils', function () {
   describe('clean', function () {
     it('should remove the wrapping function declaration', function () {
-      utils.clean('function  (one, two, three)  {\n//code\n}')
-        .should
+      expect(utils.clean('function  (one, two, three)  {\n//code\n}'))
+        .to
         .equal('//code');
     });
 
     it('should handle newlines in the function declaration', function () {
-      utils.clean('function  (one, two, three)\n  {\n//code\n}')
-        .should
+      expect(utils.clean('function  (one, two, three)\n  {\n//code\n}'))
+        .to
         .equal('//code');
     });
 
     it('should remove space character indentation from the function body',
       function () {
-        utils.clean('  //line1\n    //line2')
-          .should
+        expect(utils.clean('  //line1\n    //line2'))
+          .to
           .equal('//line1\n  //line2');
       });
 
     it('should remove tab character indentation from the function body',
       function () {
-        utils.clean('\t//line1\n\t\t//line2')
-          .should
+        expect(utils.clean('\t//line1\n\t\t//line2'))
+          .to
           .equal('//line1\n\t//line2');
       });
 
     it('should handle functions with tabs in their declarations', function () {
-      utils.clean('function\t(\t)\t{\n//code\n}')
-        .should
+      expect(utils.clean('function\t(\t)\t{\n//code\n}'))
+        .to
         .equal('//code');
     });
 
     it('should handle named functions without space after name', function () {
-      utils.clean('function withName() {\n//code\n}')
-        .should
+      expect(utils.clean('function withName() {\n//code\n}'))
+        .to
         .equal('//code');
     });
 
     it('should handle named functions with space after name', function () {
-      utils.clean('function withName () {\n//code\n}')
-        .should
+      expect(utils.clean('function withName () {\n//code\n}'))
+        .to
         .equal('//code');
     });
 
     it(
       'should handle functions with no space between the end and the closing brace',
       function () {
-        utils.clean('function() {/*code*/}')
-          .should
+        expect(utils.clean('function() {/*code*/}'))
+          .to
           .equal('/*code*/');
       });
 
     it('should handle functions with parentheses in the same line',
       function () {
-        utils.clean('function() { if (true) { /* code */ } }')
-          .should
+        expect(utils.clean('function() { if (true) { /* code */ } }'))
+          .to
           .equal('if (true) { /* code */ }');
       });
 
     it('should handle empty functions', function () {
-      utils.clean('function() {}')
-        .should
+      expect(utils.clean('function() {}'))
+        .to
         .equal('');
     });
 
@@ -498,11 +498,11 @@ describe('lib/utils', function () {
   describe('isBuffer()', function () {
     var isBuffer = utils.isBuffer;
     it('should test if object is a Buffer', function () {
-      isBuffer(new Buffer([0x01]))
-        .should
+      expect(isBuffer(new Buffer([0x01])))
+        .to
         .equal(true);
-      isBuffer({})
-        .should
+      expect(isBuffer({}))
+        .to
         .equal(false);
     });
   });
@@ -510,13 +510,18 @@ describe('lib/utils', function () {
   describe('map()', function () {
     var map = utils.map;
     it('should behave same as Array.prototype.map', function () {
+      if (!Array.prototype.map) {
+        this.skip();
+        return;
+      }
+
       var arr = [
         1,
         2,
         3
       ];
-      map(arr, JSON.stringify)
-        .should
+      expect(map(arr, JSON.stringify))
+        .to
         .eql(arr.map(JSON.stringify));
     });
 
@@ -528,8 +533,8 @@ describe('lib/utils', function () {
           2,
           3
         ], function (e, i, arr) {
-          e.should.equal(arr[index]);
-          i.should.equal(index++);
+          expect(e).to.equal(arr[index]);
+          expect(i).to.equal(index++);
         });
       });
 
@@ -540,7 +545,7 @@ describe('lib/utils', function () {
         'b',
         'c'
       ], function () {
-        this.should.equal(scope);
+        expect(this).to.equal(scope);
       }, scope);
     });
   });
@@ -558,7 +563,7 @@ describe('lib/utils', function () {
         ], function (e) {
           return e === 'b';
         });
-        result.should.eql(true);
+        expect(result).to.eql(true);
       });
 
     it(
@@ -571,23 +576,23 @@ describe('lib/utils', function () {
         ], function (e) {
           return e === 'd';
         });
-        result.should.eql(false);
+        expect(result).to.eql(false);
       });
   });
 
   describe('parseQuery()', function () {
     var parseQuery = utils.parseQuery;
     it('should get queryString and return key-value object', function () {
-      parseQuery('?foo=1&bar=2&baz=3')
-        .should
+      expect(parseQuery('?foo=1&bar=2&baz=3'))
+        .to
         .eql({
           foo: '1',
           bar: '2',
           baz: '3'
         });
 
-      parseQuery('?r1=^@(?!.*\\)$)&r2=m{2}&r3=^co.*')
-        .should
+      expect(parseQuery('?r1=^@(?!.*\\)$)&r2=m{2}&r3=^co.*'))
+        .to
         .eql({
           r1: '^@(?!.*\\)$)',
           r2: 'm{2}',
@@ -596,27 +601,27 @@ describe('lib/utils', function () {
     });
 
     it('should parse "+" as a space', function () {
-      parseQuery('?grep=foo+bar')
-        .should
+      expect(parseQuery('?grep=foo+bar'))
+        .to
         .eql({grep: 'foo bar'});
     });
   });
 
   describe('isPromise', function () {
     it('should return true if the value is Promise-ish', function () {
-      utils.isPromise({
+      expect(utils.isPromise({
         then: function () {
         }
-      }).should.be.true;
+      })).to.be(true);
     });
 
     it('should return false if the value is not an object', function () {
-      utils.isPromise(1).should.be.false;
+      expect(utils.isPromise(1)).to.be(false);
     });
 
     it('should return false if the value is an object w/o a "then" function',
       function () {
-        utils.isPromise({}).should.be.false;
+        expect(utils.isPromise({})).to.be(false);
       });
   });
 });

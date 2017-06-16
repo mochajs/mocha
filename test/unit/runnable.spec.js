@@ -38,7 +38,7 @@ describe('Runnable(title, fn)', function () {
     it('should set the timeout', function () {
       var run = new Runnable();
       run.timeout(1000);
-      run.timeout().should.equal(1000);
+      expect(run.timeout()).to.equal(1000);
     });
   });
 
@@ -46,7 +46,7 @@ describe('Runnable(title, fn)', function () {
     it('should set disabled', function () {
       var run = new Runnable();
       run.timeout(1e10);
-      run.enableTimeouts().should.be.false;
+      expect(run.enableTimeouts()).to.equal(false);
     });
   });
 
@@ -54,7 +54,7 @@ describe('Runnable(title, fn)', function () {
     it('should set enabled', function () {
       var run = new Runnable();
       run.enableTimeouts(false);
-      run.enableTimeouts().should.equal(false);
+      expect(run.enableTimeouts()).to.equal(false);
     });
   });
 
@@ -67,47 +67,47 @@ describe('Runnable(title, fn)', function () {
 
     it('should set the slow threshold', function () {
       run.slow(100);
-      run.slow().should.equal(100);
+      expect(run.slow()).to.equal(100);
     });
 
     it('should not set the slow threshold if the parameter is not passed', function () {
       run.slow();
-      run.slow().should.equal(75);
+      expect(run.slow()).to.equal(75);
     });
 
     it('should not set the slow threshold if the parameter is undefined', function () {
       run.slow(undefined);
-      run.slow().should.equal(75);
+      expect(run.slow()).to.equal(75);
     });
   });
 
   describe('.title', function () {
     it('should be present', function () {
-      new Runnable('foo').title.should.equal('foo');
+      expect(new Runnable('foo').title).to.equal('foo');
     });
   });
 
   describe('when arity >= 1', function () {
     it('should be .async', function () {
       var run = new Runnable('foo', function (done) {});
-      run.async.should.equal(1);
-      run.sync.should.be.false();
+      expect(run.async).to.equal(1);
+      expect(run.sync).to.be(false);
     });
   });
 
   describe('when arity == 0', function () {
     it('should be .sync', function () {
       var run = new Runnable('foo', function () {});
-      run.async.should.be.equal(0);
-      run.sync.should.be.true();
+      expect(run.async).to.be.equal(0);
+      expect(run.sync).to.be(true);
     });
   });
 
   describe('#globals', function () {
     it('should allow for whitelisting globals', function (done) {
       var test = new Runnable('foo', function () {});
-      test.async.should.be.equal(0);
-      test.sync.should.be.true();
+      expect(test.async).to.be.equal(0);
+      expect(test.sync).to.be(true);
       test.globals(['foobar']);
       test.run(done);
     });
@@ -117,7 +117,7 @@ describe('Runnable(title, fn)', function () {
     it('should set the number of retries', function () {
       var run = new Runnable();
       run.retries(1);
-      run.retries().should.equal(1);
+      expect(run.retries()).to.equal(1);
     });
   });
 
@@ -142,9 +142,24 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            calls.should.equal(1);
-            test.duration.should.be.type('number');
-            done(err);
+            if (err) {
+              done(err);
+              return;
+            }
+
+            try {
+              expect(calls)
+                .to
+                .equal(1);
+              expect(test.duration)
+                .to
+                .be
+                .a('number');
+            } catch (err) {
+              done(err);
+              return;
+            }
+            done();
           });
         });
       });
@@ -158,8 +173,8 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            calls.should.equal(1);
-            err.message.should.equal('fail');
+            expect(calls).to.equal(1);
+            expect(err.message).to.equal('fail');
             done();
           });
         });
@@ -174,7 +189,7 @@ describe('Runnable(title, fn)', function () {
           function fail () {
             test.run(function () {});
           }
-          fail.should.throw('fail');
+          expect(fail).to.throwError('fail');
           done();
         });
       });
@@ -219,9 +234,9 @@ describe('Runnable(title, fn)', function () {
 
             test.on('error', function (err) {
               ++errCalls;
-              err.message.should.equal('done() called multiple times');
-              calls.should.equal(1);
-              errCalls.should.equal(1);
+              expect(err.message).to.equal('done() called multiple times');
+              expect(calls).to.equal(1);
+              expect(errCalls).to.equal(1);
               done();
             });
 
@@ -246,9 +261,9 @@ describe('Runnable(title, fn)', function () {
 
             test.on('error', function (err) {
               ++errCalls;
-              err.message.should.equal('fail');
-              calls.should.equal(1);
-              errCalls.should.equal(1);
+              expect(err.message).to.equal('fail');
+              expect(calls).to.equal(1);
+              expect(errCalls).to.equal(1);
               done();
             });
 
@@ -266,7 +281,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.message.should.equal('fail');
+            expect(err.message).to.equal('fail');
             done();
           });
         });
@@ -278,7 +293,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.message.should.equal(utils.undefinedError().message);
+            expect(err.message).to.equal(utils.undefinedError().message);
             done();
           });
         });
@@ -293,7 +308,7 @@ describe('Runnable(title, fn)', function () {
           function fail () {
             test.run(function () {});
           }
-          fail.should.throw('fail');
+          expect(fail).to.throwError('fail');
           done();
         });
       });
@@ -305,7 +320,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.message.should.equal('fail');
+            expect(err.message).to.equal('fail');
             done();
           });
         });
@@ -318,7 +333,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.message.should.equal('done() invoked with non-Error: {"error":"Test error"}');
+            expect(err.message).to.equal('done() invoked with non-Error: {"error":"Test error"}');
             done();
           });
         });
@@ -331,7 +346,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.message.should.equal('done() invoked with non-Error: Test error');
+            expect(err.message).to.equal('done() invoked with non-Error: Test error');
             done();
           });
         });
@@ -346,10 +361,10 @@ describe('Runnable(title, fn)', function () {
           setTimeout(increment, 1);
           setTimeout(increment, 100);
         });
-        test.timeout(10);
+        test.timeout(50);
         test.run(function (err) {
-          err.should.be.ok();
-          callCount.should.equal(1);
+          expect(err).to.be.ok();
+          expect(callCount).to.equal(1);
           done();
         });
       });
@@ -408,7 +423,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.should.equal(expectedErr);
+            expect(err).to.equal(expectedErr);
             done();
           });
         });
@@ -430,7 +445,7 @@ describe('Runnable(title, fn)', function () {
           });
 
           test.run(function (err) {
-            err.should.eql(expectedErr);
+            expect(err.message).to.equal(expectedErr.message);
             done();
           });
         });
@@ -448,7 +463,7 @@ describe('Runnable(title, fn)', function () {
 
           test.timeout(10);
           test.run(function (err) {
-            err.should.be.ok();
+            expect(err).to.be.ok();
             done();
           });
         });

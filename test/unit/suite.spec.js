@@ -4,6 +4,11 @@ var mocha = require('../../lib/mocha');
 var Suite = mocha.Suite;
 var Test = mocha.Test;
 
+function supportsFunctionNames () {
+  // eslint-disable-next-line no-extra-parens
+  return (function foo () {}).name === 'foo';
+}
+
 describe('Suite', function () {
   describe('.clone()', function () {
     beforeEach(function () {
@@ -20,43 +25,43 @@ describe('Suite', function () {
     });
 
     it('should copy the title', function () {
-      this.suite.clone().title.should.equal('To be cloned');
+      expect(this.suite.clone().title).to.equal('To be cloned');
     });
 
     it('should copy the timeout value', function () {
-      this.suite.clone().timeout().should.equal(3043);
+      expect(this.suite.clone().timeout()).to.equal(3043);
     });
 
     it('should copy the slow value', function () {
-      this.suite.clone().slow().should.equal(101);
+      expect(this.suite.clone().slow()).to.equal(101);
     });
 
     it('should copy the bail value', function () {
-      this.suite.clone().bail().should.be.true();
+      expect(this.suite.clone().bail()).to.be(true);
     });
 
     it('should not copy the values from the suites array', function () {
-      this.suite.clone().suites.should.be.empty();
+      expect(this.suite.clone().suites).to.be.empty();
     });
 
     it('should not copy the values from the tests array', function () {
-      this.suite.clone().tests.should.be.empty();
+      expect(this.suite.clone().tests).to.be.empty();
     });
 
     it('should not copy the values from the _beforeEach array', function () {
-      this.suite.clone()._beforeEach.should.be.empty();
+      expect(this.suite.clone()._beforeEach).to.be.empty();
     });
 
     it('should not copy the values from the _beforeAll array', function () {
-      this.suite.clone()._beforeAll.should.be.empty();
+      expect(this.suite.clone()._beforeAll).to.be.empty();
     });
 
     it('should not copy the values from the _afterEach array', function () {
-      this.suite.clone()._afterEach.should.be.empty();
+      expect(this.suite.clone()._afterEach).to.be.empty();
     });
 
     it('should not copy the values from the _afterAll array', function () {
-      this.suite.clone()._afterAll.should.be.empty();
+      expect(this.suite.clone()._afterAll).to.be.empty();
     });
   });
 
@@ -67,14 +72,14 @@ describe('Suite', function () {
 
     describe('when no argument is passed', function () {
       it('should return the timeout value', function () {
-        this.suite.timeout().should.equal(2000);
+        expect(this.suite.timeout()).to.equal(2000);
       });
     });
 
     describe('when argument is passed', function () {
       it('should return the Suite object', function () {
         var newSuite = this.suite.timeout(5000);
-        newSuite.timeout().should.equal(5000);
+        expect(newSuite.timeout()).to.equal(5000);
       });
     });
   });
@@ -87,20 +92,20 @@ describe('Suite', function () {
     describe('when given a string', function () {
       it('should parse it', function () {
         this.suite.slow('5 seconds');
-        this.suite.slow().should.equal(5000);
+        expect(this.suite.slow()).to.equal(5000);
       });
     });
 
     describe('when no argument is passed', function () {
       it('should return the slow value', function () {
-        this.suite.slow().should.equal(75);
+        expect(this.suite.slow()).to.equal(75);
       });
     });
 
     describe('when argument is passed', function () {
       it('should return the Suite object', function () {
         var newSuite = this.suite.slow(5000);
-        newSuite.slow().should.equal(5000);
+        expect(newSuite.slow()).to.equal(5000);
       });
     });
   });
@@ -113,14 +118,14 @@ describe('Suite', function () {
 
     describe('when no argument is passed', function () {
       it('should return the bail value', function () {
-        this.suite.bail().should.be.true();
+        expect(this.suite.bail()).to.be(true);
       });
     });
 
     describe('when argument is passed', function () {
       it('should return the Suite object', function () {
         var newSuite = this.suite.bail(false);
-        newSuite.bail().should.be.false();
+        expect(newSuite.bail()).to.be(false);
       });
     });
   });
@@ -135,27 +140,40 @@ describe('Suite', function () {
         var fn = function () {};
         this.suite.beforeAll(fn);
 
-        this.suite._beforeAll.should.have.length(1);
+        expect(this.suite._beforeAll).to.have.length(1);
         var beforeAllItem = this.suite._beforeAll[0];
-        beforeAllItem.title.should.match(/^"before all" hook/);
-        beforeAllItem.fn.should.equal(fn);
+        expect(beforeAllItem.title).to.match(/^"before all" hook/);
+        expect(beforeAllItem.fn).to.equal(fn);
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.beforeAll('test', fn);
 
-        this.suite._beforeAll.should.have.length(1);
+        expect(this.suite._beforeAll)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._beforeAll[0];
-        beforeAllItem.title.should.equal('"before all" hook: test');
-        beforeAllItem.fn.should.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"before all" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.beforeAll(namedFn);
-        this.suite._beforeAll.should.have.length(2);
-        beforeAllItem = this.suite._beforeAll[1];
-        beforeAllItem.title.should.equal('"before all" hook: namedFn');
-        beforeAllItem.fn.should.equal(namedFn);
+        var beforeAllItem = this.suite._beforeAll[0];
+        expect(beforeAllItem.title).to.equal('"before all" hook: namedFn');
+        expect(beforeAllItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -170,26 +188,39 @@ describe('Suite', function () {
         var fn = function () {};
         this.suite.afterAll(fn);
 
-        this.suite._afterAll.should.have.length(1);
+        expect(this.suite._afterAll).to.have.length(1);
         var afterAllItem = this.suite._afterAll[0];
-        afterAllItem.title.should.match(/^"after all" hook/);
-        afterAllItem.fn.should.equal(fn);
+        expect(afterAllItem.title).to.match(/^"after all" hook/);
+        expect(afterAllItem.fn).to.equal(fn);
       });
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.afterAll('test', fn);
 
-        this.suite._afterAll.should.have.length(1);
+        expect(this.suite._afterAll)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._afterAll[0];
-        beforeAllItem.title.should.equal('"after all" hook: test');
-        beforeAllItem.fn.should.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"after all" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.afterAll(namedFn);
-        this.suite._afterAll.should.have.length(2);
-        beforeAllItem = this.suite._afterAll[1];
-        beforeAllItem.title.should.equal('"after all" hook: namedFn');
-        beforeAllItem.fn.should.equal(namedFn);
+        var afterAllItem = this.suite._afterAll[0];
+        expect(afterAllItem.title).to.equal('"after all" hook: namedFn');
+        expect(afterAllItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -204,27 +235,40 @@ describe('Suite', function () {
         var fn = function () {};
         this.suite.beforeEach(fn);
 
-        this.suite._beforeEach.should.have.length(1);
+        expect(this.suite._beforeEach).to.have.length(1);
         var beforeEachItem = this.suite._beforeEach[0];
-        beforeEachItem.title.should.match(/^"before each" hook/);
-        beforeEachItem.fn.should.equal(fn);
+        expect(beforeEachItem.title).to.match(/^"before each" hook/);
+        expect(beforeEachItem.fn).to.equal(fn);
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.beforeEach('test', fn);
 
-        this.suite._beforeEach.should.have.length(1);
+        expect(this.suite._beforeEach)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._beforeEach[0];
-        beforeAllItem.title.should.equal('"before each" hook: test');
-        beforeAllItem.fn.should.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"before each" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.beforeEach(namedFn);
-        this.suite._beforeEach.should.have.length(2);
-        beforeAllItem = this.suite._beforeEach[1];
-        beforeAllItem.title.should.equal('"before each" hook: namedFn');
-        beforeAllItem.fn.should.equal(namedFn);
+        var beforeEachItem = this.suite._beforeEach[0];
+        expect(beforeEachItem.title).to.equal('"before each" hook: namedFn');
+        expect(beforeEachItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -239,27 +283,40 @@ describe('Suite', function () {
         var fn = function () {};
         this.suite.afterEach(fn);
 
-        this.suite._afterEach.should.have.length(1);
+        expect(this.suite._afterEach).to.have.length(1);
         var afterEachItem = this.suite._afterEach[0];
-        afterEachItem.title.should.match(/^"after each" hook/);
-        afterEachItem.fn.should.equal(fn);
+        expect(afterEachItem.title).to.match(/^"after each" hook/);
+        expect(afterEachItem.fn).to.equal(fn);
       });
 
       it('appends title to hook', function () {
-        var fn = function () {};
+        var fn = function () {
+        };
         this.suite.afterEach('test', fn);
 
-        this.suite._afterEach.should.have.length(1);
+        expect(this.suite._afterEach)
+          .to
+          .have
+          .length(1);
         var beforeAllItem = this.suite._afterEach[0];
-        beforeAllItem.title.should.equal('"after each" hook: test');
-        beforeAllItem.fn.should.equal(fn);
+        expect(beforeAllItem.title)
+          .to
+          .equal('"after each" hook: test');
+        expect(beforeAllItem.fn)
+          .to
+          .equal(fn);
+      });
 
+      it('uses function name if available', function () {
+        if (!supportsFunctionNames()) {
+          this.skip();
+          return;
+        }
         function namedFn () {}
         this.suite.afterEach(namedFn);
-        this.suite._afterEach.should.have.length(2);
-        beforeAllItem = this.suite._afterEach[1];
-        beforeAllItem.title.should.equal('"after each" hook: namedFn');
-        beforeAllItem.fn.should.equal(namedFn);
+        var afterEachItem = this.suite._afterEach[0];
+        expect(afterEachItem.title).to.equal('"after each" hook: namedFn');
+        expect(afterEachItem.fn).to.equal(namedFn);
       });
     });
   });
@@ -274,25 +331,25 @@ describe('Suite', function () {
     });
 
     it('sets the parent on the added Suite', function () {
-      this.second.parent.should.equal(this.first);
+      expect(this.second.parent).to.equal(this.first);
     });
 
     it('copies the timeout value', function () {
-      this.second.timeout().should.equal(4002);
+      expect(this.second.timeout()).to.equal(4002);
     });
 
     it('copies the slow value', function () {
-      this.second.slow().should.equal(200);
+      expect(this.second.slow()).to.equal(200);
     });
 
     it('adds the suite to the suites collection', function () {
-      this.first.suites.should.have.length(1);
-      this.first.suites[0].should.equal(this.second);
+      expect(this.first.suites).to.have.length(1);
+      expect(this.first.suites[0]).to.equal(this.second);
     });
 
     it('treats suite as pending if its parent is pending', function () {
       this.first.pending = true;
-      this.second.isPending.should.be.true;
+      expect(this.second.isPending()).to.be(true);
     });
   });
 
@@ -325,7 +382,7 @@ describe('Suite', function () {
 
     describe('when there is no parent', function () {
       it('returns the suite title', function () {
-        this.suite.fullTitle().should.equal('A Suite');
+        expect(this.suite.fullTitle()).to.equal('A Suite');
       });
     });
 
@@ -333,7 +390,7 @@ describe('Suite', function () {
       it('returns the combination of parent\'s and suite\'s title', function () {
         var parentSuite = new Suite('I am a parent');
         parentSuite.addSuite(this.suite);
-        this.suite.fullTitle().should.equal('I am a parent A Suite');
+        expect(this.suite.fullTitle()).to.equal('I am a parent A Suite');
       });
     });
   });
@@ -345,7 +402,7 @@ describe('Suite', function () {
 
     describe('when there are no nested suites or tests', function () {
       it('should return 0', function () {
-        this.suite.total().should.equal(0);
+        expect(this.suite.total()).to.equal(0);
       });
     });
 
@@ -353,7 +410,7 @@ describe('Suite', function () {
       it('should return the number', function () {
         this.suite.addTest(new Test('a child test'));
         this.suite.addTest(new Test('another child test'));
-        this.suite.total().should.equal(2);
+        expect(this.suite.total()).to.equal(2);
       });
     });
   });
@@ -368,7 +425,7 @@ describe('Suite', function () {
         var n = 0;
         function fn () { n++; }
         this.suite.eachTest(fn);
-        n.should.equal(0);
+        expect(n).to.equal(0);
       });
     });
 
@@ -380,7 +437,7 @@ describe('Suite', function () {
         var n = 0;
         function fn () { n++; }
         this.suite.eachTest(fn);
-        n.should.equal(2);
+        expect(n).to.equal(2);
       });
     });
 
@@ -394,7 +451,7 @@ describe('Suite', function () {
         var n = 0;
         function fn () { n++; }
         this.suite.eachTest(fn);
-        n.should.equal(2);
+        expect(n).to.equal(2);
       });
     });
   });
@@ -402,19 +459,19 @@ describe('Suite', function () {
   describe('initialization', function () {
     /* eslint no-new: off */
     it('should throw an error if the title isn\'t a string', function () {
-      (function () {
+      expect(function () {
         new Suite(undefined, 'root');
-      }).should.throw();
+      }).to.throwError();
 
-      (function () {
+      expect(function () {
         new Suite(function () {}, 'root');
-      }).should.throw();
+      }).to.throwError();
     });
 
     it('should not throw if the title is a string', function () {
-      (function () {
+      expect(function () {
         new Suite('Bdd suite', 'root');
-      }).should.not.throw();
+      }).to.not.throwError();
     });
   });
 });
@@ -422,19 +479,19 @@ describe('Suite', function () {
 describe('Test', function () {
   describe('initialization', function () {
     it('should throw an error if the title isn\'t a string', function () {
-      (function () {
+      expect(function () {
         new Test(function () {});
-      }).should.throw();
+      }).to.throwError();
 
-      (function () {
+      expect(function () {
         new Test(undefined, function () {});
-      }).should.throw();
+      }).to.throwError();
     });
 
     it('should not throw if the title is a string', function () {
-      (function () {
+      expect(function () {
         new Test('test-case', function () {});
-      }).should.not.throw();
+      }).to.not.throwError();
     });
   });
 });
