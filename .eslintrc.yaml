@@ -10,3 +10,6 @@ rules:
   strict:
     - error
     - safe
+  linebreak-style:
+    - error
+    - unix
