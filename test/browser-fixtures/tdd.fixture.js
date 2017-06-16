@@ -4,5 +4,5 @@
 
 process.stdout = require('browser-stdout')();
 
-window.mocha.timeout(200)
+window.mocha.timeout(500)
   .ui('tdd');
