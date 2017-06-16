@@ -20,7 +20,7 @@ describe('serial', function () {
     });
 
     it('one', function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'parent before',
         'before',
         'before test one'
@@ -29,7 +29,7 @@ describe('serial', function () {
     });
 
     it('two', function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'parent before',
         'before',
         'before test one',
@@ -45,7 +45,7 @@ describe('serial', function () {
     });
 
     it('three', function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'parent before',
         'before',
         'before test one',
@@ -75,7 +75,7 @@ describe('serial', function () {
     });
 
     after(function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'parent before',
         'before',
         'before test one',

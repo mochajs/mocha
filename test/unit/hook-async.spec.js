@@ -9,7 +9,7 @@ describe('async', function () {
 
   after(function () {
     calls.push('root after all');
-    calls.should.eql([
+    expect(calls).to.eql([
       'root before all',
       'before all',
       'parent before',
@@ -67,7 +67,7 @@ describe('async', function () {
     });
 
     it('one', function (done) {
-      calls.should.eql([
+      expect(calls).to.eql([
         'root before all',
         'before all',
         'parent before',
@@ -79,7 +79,7 @@ describe('async', function () {
     });
 
     it('two', function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'root before all',
         'before all',
         'parent before',
@@ -97,7 +97,7 @@ describe('async', function () {
     });
 
     it('three', function () {
-      calls.should.eql([
+      expect(calls).to.eql([
         'root before all',
         'before all',
         'parent before',
