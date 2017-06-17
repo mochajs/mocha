@@ -263,5 +263,14 @@ describe('options', function () {
         done();
       });
     });
+
+    it('fails if there are tests in suites marked skip', function (done) {
+      run('options/forbid-pending/skip-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
   });
 });
