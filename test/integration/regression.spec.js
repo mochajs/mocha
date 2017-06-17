@@ -114,6 +114,7 @@ describe('regressions', function () {
       assert.equal(res.stats.passes, 1);
       assert.equal(res.stats.failures, 0);
       assert.equal(res.code, 0);
+      done();
     });
   });
 
