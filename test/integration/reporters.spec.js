@@ -68,7 +68,10 @@ describe('reporters', function () {
       var args = ['--reporter=' + reporterAtARelativePath];
 
       run('passing.fixture.js', args, function (err, result) {
-        assert(!err);
+        if (err) {
+          done(err);
+          return;
+        }
         assert.equal(result.code, 0);
         done();
       });
@@ -81,7 +84,10 @@ describe('reporters', function () {
       var args = ['--reporter=' + reporterAtAnAbsolutePath];
 
       run('passing.fixture.js', args, function (err, result) {
-        assert(!err);
+        if (err) {
+          done(err);
+          return;
+        }
         assert.equal(result.code, 0);
         done();
       });
