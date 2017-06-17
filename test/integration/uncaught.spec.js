@@ -7,7 +7,10 @@ var args = [];
 describe('uncaught exceptions', function () {
   it('handles uncaught exceptions from hooks', function (done) {
     run('uncaught-hook.fixture.js', args, function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
@@ -21,7 +24,10 @@ describe('uncaught exceptions', function () {
 
   it('handles uncaught exceptions from async specs', function (done) {
     run('uncaught.fixture.js', args, function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 2);

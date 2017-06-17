@@ -15,7 +15,10 @@ describe('regressions', function () {
         return (res.output.match(pattern) || []).length;
       };
 
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(occurences('testbody1'), 1);
       assert.equal(occurences('testbody2'), 1);
       assert.equal(occurences('testbody3'), 1);
@@ -36,7 +39,10 @@ describe('regressions', function () {
     var simpleUiPath = path.join(__dirname, 'fixtures', 'regression', '1794', 'simple-ui.js');
     var args = ['--require', simpleUiPath, '--ui', 'simple-ui'];
     run('regression/1794/issue-1794.fixture.js', args, function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.code, 0, 'Custom UI should be loaded');
       done();
     });
@@ -47,7 +53,10 @@ describe('regressions', function () {
     // Could easily take longer on even weaker machines (Travis-CI containers for example).
     this.timeout(120000);
     run('regression/issue-1991.fixture.js', [], function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(/process out of memory/.test(res.output), false, 'fixture\'s process out of memory!');
       assert.equal(res.code, 0, 'Runnable fn (it/before[Each]/after[Each]) references should be deleted to avoid memory leaks');
       done();
@@ -68,7 +77,10 @@ describe('regressions', function () {
 
   it('issue-2315: cannot read property currentRetry of undefined', function (done) {
     runJSON('regression/issue-2315.fixture.js', [], function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
@@ -80,7 +92,10 @@ describe('regressions', function () {
   it('issue-2406: should run nested describe.only suites', function (done) {
     this.timeout(2000);
     runJSON('regression/issue-2406.fixture.js', [], function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 2);
       assert.equal(res.stats.failures, 0);
@@ -89,9 +104,12 @@ describe('regressions', function () {
     });
   });
 
-  it('issue-2417: should not recurse infinitely with .only suites nested within each other', function () {
+  it('issue-2417: should not recurse infinitely with .only suites nested within each other', function (done) {
     runJSON('regression/issue-2417.fixture.js', [], function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 1);
       assert.equal(res.stats.failures, 0);
@@ -101,7 +119,10 @@ describe('regressions', function () {
 
   it('issue-1417 uncaught exceptions from async specs', function (done) {
     runJSON('regression/issue-1417.fixture.js', [], function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.pending, 0);
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 2);
