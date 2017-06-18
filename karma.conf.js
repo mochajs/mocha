@@ -6,13 +6,7 @@ var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
 var osName = require('os-name');
 var workaroundMultiplePreprocessorIncompatibility = require('browserify-istanbul');
-var istanbulLib;
-try {
-  istanbulLib = require('nyc/node_modules/istanbul-lib-instrument');
-} catch (ignore) {
-  istanbulLib = require('istanbul-lib-instrument');
-}
-var nyc = { Instrumenter: function (options) { return istanbulLib.createInstrumenter(options); } };
+var nyc = require('./nycInstrumenter');
 
 module.exports = function (config) {
   var bundleDirpath;
@@ -162,7 +156,7 @@ module.exports = function (config) {
       subdir: '.',
       includeAllSources: true
     };
-    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/node_modules/**', '**/test/**'], instrumenter: nyc, instrumenterConfig: { autoWrap: true, embedSource: true, produceSourceMap: true, noCompact: false } }) ];
+    cfg.browserify.transform = [ workaroundMultiplePreprocessorIncompatibility({ ignore: ['**/node_modules/**', '**/test/**'], instrumenter: nyc }) ];
     console.error('Reporting coverage to ' + cfg.coverageReporter.dir);
   }
 

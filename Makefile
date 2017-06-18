@@ -7,9 +7,20 @@ ifdef COVERAGE
 define test_node
 	$(NYC) --report-dir coverage/reports/$(1) $(MOCHA)
 endef
+	instrument_browser := -t ./instrumentBrowserEntry
 else
 	test_node := $(MOCHA)
 endif
+
+define bundle_command
+	$(BROWSERIFY) ./browser-entry \
+		$(1) \
+		--plugin ./scripts/dedefine \
+		--ignore 'fs' \
+		--ignore 'glob' \
+		--ignore 'path' \
+		--ignore 'supports-color' > $@
+endef
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
 SRC = $(shell find lib -name "*.js" -type f | LC_ALL=C sort)
@@ -17,15 +28,14 @@ TESTS = $(shell find test -name "*.js" -type f | sort)
 
 all: mocha.js
 
-mocha.js BUILDTMP/mocha.js: $(SRC) browser-entry.js
-	@printf "==> [Browser :: build]\n"
+mocha.js: $(SRC) browser-entry.js
+	@printf "==> [Browser :: Build]\n"
+	$(call bundle_command)
+
+BUILDTMP/mocha.js: $(SRC) browser-entry.js
+	@printf "==> [Browser :: Build :: Test]\n"
 	mkdir -p ${@D}
-	$(BROWSERIFY) ./browser-entry \
-		--plugin ./scripts/dedefine \
-		--ignore 'fs' \
-		--ignore 'glob' \
-		--ignore 'path' \
-		--ignore 'supports-color' > $@
+	$(call bundle_command,$(instrument_browser))
 
 clean:
 	@printf "==> [Clean]\n"
