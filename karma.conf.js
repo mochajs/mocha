@@ -34,7 +34,9 @@ module.exports = function (config) {
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
       'test/browser-fixtures/bdd.fixture.js',
-      'test/unit/*.spec.js'
+      'test/unit/*.spec.js',
+      'test/browser-unit/*.spec.js',
+      'test/browser-reporters/*.spec.js'
     ]),
     preprocessors: {
       'test/**/*.js': ['browserify']
