@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+    <script src="../../node_modules/expect.js/index.js"></script>
+    <script>mocha.setup('bdd');</script>
+    <script>
+      function require(path) {
+        switch (path) {
+          case '../../lib/reporters/html':
+            return Mocha.reporters.HTML;
+          case '../../lib/test':
+            return Mocha.Test
+          case '../../lib/suite':
+            return Mocha.Suite
+          case '../../lib/context':
+            return Mocha.Context
+          default:
+            throw new Error('require cannot be used without browserify... or updating this hack');
+        }
+      }
+    </script>
+    <!-- The main value of this is to confirm that the HTML reporter test does not interfere with an instance of the HTML reporter that is running the HTML reporter test. -->
+    <script src="../browser-reporters/html.spec.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script>mocha.run()</script>
+  </body>
+</html>
