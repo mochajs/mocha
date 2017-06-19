@@ -32,10 +32,17 @@ mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: Build]\n"
 	$(call bundle_command)
 
-BUILDTMP/mocha.js: $(SRC) browser-entry.js
-	@printf "==> [Browser :: Build :: Test]\n"
-	mkdir -p ${@D}
+BUILDTMP/mocha.js: $(SRC) browser-entry.js BUILDTMP BUILDTMP/mocha.css
+	@printf "==> [Browser :: Build :: Test :: Bundle]\n"
 	$(call bundle_command,$(instrument_browser))
+
+BUILDTMP/mocha.css: BUILDTMP
+	@printf "==> [Browser :: Build :: Test :: CSS]\n"
+	cp mocha.css $@
+
+BUILDTMP:
+	@printf "==> [Browser :: Build :: Test :: Temporary Directory]\n"
+	mkdir -p $@
 
 clean:
 	@printf "==> [Clean]\n"
