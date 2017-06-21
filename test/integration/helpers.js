@@ -115,10 +115,10 @@ module.exports = {
 
 function invokeMocha (args, fn) {
   var output, mocha, listener;
-  // ensure DEBUG doesn't kill tests
+
   output = '';
   args = [path.join('bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, {env: {}});
+  mocha = spawn(process.execPath, args);
 
   listener = function (data) {
     output += data;
