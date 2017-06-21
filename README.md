@@ -9,13 +9,14 @@
 *Thank you* :kissing_heart: to all of you interested in helping.  These are Mocha's immediate needs:
 
 1. Increase test coverage on Node.js and browser
-  - Increase integration coverage for all reporters
-    - `html` reporter must be tested in browser
+  - ~~Increase integration coverage for all reporters~~
+    - ~~`html` reporter must be tested in browser~~
     - ~~Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters~~
     - ~~Filesystem-based reporters must be tested in Node.js context~~
-    - **UPDATE - May 24 2017**: Thanks to [community contributions](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#mag-coverage), the coverage on most reporters has increased dramatically!  The `html` reporter is still in [dire need of coverage](https://coveralls.io/builds/11674428/source?filename=lib%2Freporters%2Fhtml.js).
+    - **UPDATE - May 24 2017**: Thanks to [community contributions](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#mag-coverage), the coverage on most reporters has increased dramatically! ~~The `html` reporter is still in dire need of coverage.~~
   - Increase coverage against all interfaces (`exports` in particular).  Ideally this becomes a "matrix" where we repeat sets of integration tests across all interfaces.
   - Refactor non-Node.js-specific tests to allow them to run in a browser context.  Node.js-specific tests include those which *require* the CLI or filesystem.  Most everything else is fair game.
+  - In general, anything with relatively low coverage percentage could use a little more attention; but also feel free to look for files with a low but non-zero number of uncovered branches or functions, which may not need much to test the other branch and/or the function in question.
 2.  Review current open pull requests
   - We need individuals familiar with Mocha's codebase. Got questions?  Ask them in [our chat room](https://gitter.im/mochajs/mocha).
   - Pull requests **must** have supporting tests.  The only exceptions are pure cosmetic or non-functional changes.
