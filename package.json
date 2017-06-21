@@ -343,6 +343,7 @@
     "nyc": "^10.0.0",
     "os-name": "^2.0.1",
     "phantomjs": "1.9.8",
+    "readable-stream": "2.2.11",
     "rimraf": "^2.5.2",
     "should": "^9.0.2",
     "through2": "^2.0.1",
