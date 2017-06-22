@@ -145,15 +145,18 @@ describe('HTML reporter', function () {
       runner.emit('suite end', mainSuite);
       runner.emit('suite end', rootSuite);
       runner.emit('end');
-      var stacktraceLine = 'at\\s.*(?:[(][^()]+:[0-9]+[)]|:[0-9]+)';
       var output = restoreOutput().outerHTML
         .replace(/\u2023/g, '&#x2023;')
         .replace(/(<li class="duration">duration: <em>)[0-9]+(?:[.][0-9]+)?(<\/em>s<\/li>)/, '$1$2')
         .replace(/href="[^"?]*[?]/g, 'href="?')
         .replace(/class="replay" (href="[^"]*")/g, '$1 class="replay"')
         .replace(/style="display:\s*none;?\s*"/g, 'style="display: none;"')
-        .replace(/\r\n/g, '\n').replace(new RegExp('^\\s*(?:' + stacktraceLine + '\n\\s*)*' + stacktraceLine + '\\s*</', 'm'), 'at STACKTRACE</');
-      expect(output).to.equal('<div id="mocha"><ul id="mocha-stats"><li class="progress"><canvas width="40" height="40"></canvas></li><li class="passes"><a href="javascript:void(0);">passes:</a> <em>3</em></li><li class="failures"><a href="javascript:void(0);">failures:</a> <em>2</em></li><li class="duration">duration: <em></em>s</li></ul><ul id="mocha-report"><li class="suite"><h1><a href="?grep=suite">suite</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=suite%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li><li class="test pass pending"><h2>pending</h2></li><li class="test pass pending"><h2>skipped at runtime</h2></li><li class="test pass slow"><h2>slow<span class="duration">116ms</span> <a href="?grep=suite%20slow" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>setTimeout(done, 100);</code></pre></li><li class="test pass medium"><h2>less slow<span class="duration">63ms</span> <a href="?grep=suite%20less%20slow" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>setTimeout(done, 50);</code></pre></li><li class="test fail"><h2>failing <a href="?grep=suite%20failing" class="replay">&#x2023;</a></h2><pre class="error">AssertionError: example\nat STACKTRACE</pre><pre style="display: none;"><code>var AssertionError = function (message, actual, expected) {\n  this.message = message;\n  this.actual = actual;\n  this.expected = expected;\n  this.showDiff = true;\n};\nAssertionError.prototype = Object.create(Error.prototype);\nAssertionError.prototype.name = \'AssertionError\';\nAssertionError.prototype.constructor = AssertionError;\nthrow new AssertionError(\'example\', \'text with a typo\', \'text without a typo\');</code></pre></li><li class="test fail"><h2>timeout <a href="?grep=suite%20timeout" class="replay">&#x2023;</a></h2><pre class="error">Error: Timeout of 200ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.</pre><pre style="display: none;"><code>/* does not complete */;</code></pre></li></ul></li></ul></div>');
+        .replace(/\s+style=""/g, '')
+        .replace(/(height="[^"]*")(\s+)(width="[^"]*")/g, '$3$2$1')
+        .replace(/<pre class="error">AssertionError: example[^<]*<\/pre>/g, '<pre class="error">AssertionError: example\nat STACKTRACE</pre>')
+        .replace(/<pre class="error">Error: Timeout of 200ms exceeded[.] For async tests and hooks, ensure "done[(][)]" is called; if returning a Promise, ensure it resolves[.][^<]*<\/pre>/g, '<pre class="error">Error: Timeout of 200ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.\nat STACKTRACE</pre>')
+        .replace(/\r\n/g, '\n');
+      expect(output).to.equal('<div id="mocha"><ul id="mocha-stats"><li class="progress"><canvas width="40" height="40"></canvas></li><li class="passes"><a href="javascript:void(0);">passes:</a> <em>3</em></li><li class="failures"><a href="javascript:void(0);">failures:</a> <em>2</em></li><li class="duration">duration: <em></em>s</li></ul><ul id="mocha-report"><li class="suite"><h1><a href="?grep=suite">suite</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=suite%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li><li class="test pass pending"><h2>pending</h2></li><li class="test pass pending"><h2>skipped at runtime</h2></li><li class="test pass slow"><h2>slow<span class="duration">116ms</span> <a href="?grep=suite%20slow" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>setTimeout(done, 100);</code></pre></li><li class="test pass medium"><h2>less slow<span class="duration">63ms</span> <a href="?grep=suite%20less%20slow" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>setTimeout(done, 50);</code></pre></li><li class="test fail"><h2>failing <a href="?grep=suite%20failing" class="replay">&#x2023;</a></h2><pre class="error">AssertionError: example\nat STACKTRACE</pre><pre style="display: none;"><code>var AssertionError = function (message, actual, expected) {\n  this.message = message;\n  this.actual = actual;\n  this.expected = expected;\n  this.showDiff = true;\n};\nAssertionError.prototype = Object.create(Error.prototype);\nAssertionError.prototype.name = \'AssertionError\';\nAssertionError.prototype.constructor = AssertionError;\nthrow new AssertionError(\'example\', \'text with a typo\', \'text without a typo\');</code></pre></li><li class="test fail"><h2>timeout <a href="?grep=suite%20timeout" class="replay">&#x2023;</a></h2><pre class="error">Error: Timeout of 200ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.\nat STACKTRACE</pre><pre style="display: none;"><code>/* does not complete */;</code></pre></li></ul></li></ul></div>');
     } catch (error) {
       try {
         restoreOutput();
@@ -214,14 +217,17 @@ describe('HTML reporter', function () {
       runner.emit('suite end', rootSuite.suites[1]);
       runner.emit('suite end', rootSuite);
       runner.emit('end');
-      var stacktraceLine = 'at\\s.*(?:[(][^()]+:[0-9]+[)]|:[0-9]+)';
       var output = restoreOutput().outerHTML
         .replace(/\u2023/g, '&#x2023;')
         .replace(/(<li class="duration">duration: <em>)[0-9]+(?:[.][0-9]+)?(<\/em>s<\/li>)/, '$1$2')
         .replace(/href="[^"?]*[?]/g, 'href="?')
         .replace(/class="replay" (href="[^"]*")/g, '$1 class="replay"')
         .replace(/style="display:\s*none;?\s*"/g, 'style="display: none;"')
-        .replace(/\r\n/g, '\n').replace(new RegExp('^\\s*(?:' + stacktraceLine + '\n\\s*)*' + stacktraceLine + '\\s*</', 'm'), 'at STACKTRACE</');
+        .replace(/\s+style=""/g, '')
+        .replace(/(height="[^"]*")(\s+)(width="[^"]*")/g, '$3$2$1')
+        .replace(/<pre class="error">AssertionError: example[^<]*<\/pre>/g, '<pre class="error">AssertionError: example\nat STACKTRACE</pre>')
+        .replace(/<pre class="error">Error: Timeout of 200ms exceeded[.] For async tests and hooks, ensure "done[(][)]" is called; if returning a Promise, ensure it resolves[.][^<]*<\/pre>/g, '<pre class="error">Error: Timeout of 200ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.\nat STACKTRACE</pre>')
+        .replace(/\r\n/g, '\n');
       expect(output).to.equal('<div id="mocha"><ul id="mocha-stats"><li class="progress"><canvas width="40" height="40"></canvas></li><li class="passes"><a href="javascript:void(0);">passes:</a> <em>4</em></li><li class="failures"><a href="javascript:void(0);">failures:</a> <em>0</em></li><li class="duration">duration: <em></em>s</li></ul><ul id="mocha-report"><li class="suite"><h1><a href="?grep=outer%20suite%201">outer suite 1</a></h1><ul><li class="suite"><h1><a href="?grep=outer%20suite%201%20inner%20suite%201">inner suite 1</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=outer%20suite%201%20inner%20suite%201%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li></ul></li><li class="suite"><h1><a href="?grep=outer%20suite%201%20inner%20suite%202">inner suite 2</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=outer%20suite%201%20inner%20suite%202%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li></ul></li></ul></li><li class="suite"><h1><a href="?grep=outer%20suite%202">outer suite 2</a></h1><ul><li class="suite"><h1><a href="?grep=outer%20suite%202%20inner%20suite%201">inner suite 1</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=outer%20suite%202%20inner%20suite%201%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li></ul></li><li class="suite"><h1><a href="?grep=outer%20suite%202%20inner%20suite%202">inner suite 2</a></h1><ul><li class="test pass fast"><h2>passing<span class="duration">0ms</span> <a href="?grep=outer%20suite%202%20inner%20suite%202%20passing" class="replay">&#x2023;</a></h2><pre style="display: none;"><code>/* content here */;</code></pre></li></ul></li></ul></li></ul></div>');
     } catch (error) {
       try {
@@ -241,14 +247,17 @@ describe('HTML reporter', function () {
       runner.emit('suite', rootSuite);
       runner.emit('suite end', rootSuite);
       runner.emit('end');
-      var stacktraceLine = 'at\\s.*(?:[(][^()]+:[0-9]+[)]|:[0-9]+)';
       var output = restoreOutput().outerHTML
         .replace(/\u2023/g, '&#x2023;')
         .replace(/(<li class="duration">duration: <em>)[0-9]+(?:[.][0-9]+)?(<\/em>s<\/li>)/, '$1$2')
         .replace(/href="[^"?]*[?]/g, 'href="?')
         .replace(/class="replay" (href="[^"]*")/g, '$1 class="replay"')
         .replace(/style="display:\s*none;?\s*"/g, 'style="display: none;"')
-        .replace(/\r\n/g, '\n').replace(new RegExp('^\\s*(?:' + stacktraceLine + '\n\\s*)*' + stacktraceLine + '\\s*</', 'm'), 'at STACKTRACE</');
+        .replace(/\s+style=""/g, '')
+        .replace(/(height="[^"]*")(\s+)(width="[^"]*")/g, '$3$2$1')
+        .replace(/<pre class="error">AssertionError: example[^<]*<\/pre>/g, '<pre class="error">AssertionError: example\nat STACKTRACE</pre>')
+        .replace(/<pre class="error">Error: Timeout of 200ms exceeded[.] For async tests and hooks, ensure "done[(][)]" is called; if returning a Promise, ensure it resolves[.][^<]*<\/pre>/g, '<pre class="error">Error: Timeout of 200ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves.\nat STACKTRACE</pre>')
+        .replace(/\r\n/g, '\n');
       expect(output).to.equal('<div id="mocha"><ul id="mocha-stats"><li class="progress"><canvas width="40" height="40"></canvas></li><li class="passes"><a href="javascript:void(0);">passes:</a> <em>0</em></li><li class="failures"><a href="javascript:void(0);">failures:</a> <em>0</em></li><li class="duration">duration: <em></em>s</li></ul><ul id="mocha-report"></ul></div>');
     } catch (error) {
       try {
