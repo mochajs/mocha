@@ -32,3 +32,11 @@ context('test suite', function () {
     expect(this.number).to.equal(5);
   });
 });
+
+describe('pending suite', function () {
+  describe.skip('this is pending suite', function () {
+    it('should not run', function () {
+      expect(1 + 1).to.equal(3);
+    });
+  });
+});
