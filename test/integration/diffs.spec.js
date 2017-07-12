@@ -7,7 +7,7 @@ var fs = require('fs');
 var getDiffs = helpers.getDiffs;
 
 function getExpectedOutput () {
-  var output = fs.readFileSync('test/integration/fixtures/diffs/output', 'UTF8');
+  var output = fs.readFileSync('test/integration/fixtures/diffs/output', 'UTF8').replace(/\r\n/g, '\n');
 
   // Diffs are delimited in file by "// DIFF"
   return output.split(/\s*\/\/ DIFF/).slice(1).map(function (diff) {
@@ -21,7 +21,7 @@ describe('diffs', function () {
   before(function (done) {
     run('diffs/diffs.fixture.js', ['-C'], function (err, res) {
       expected = getExpectedOutput();
-      diffs = getDiffs(res.output);
+      diffs = getDiffs(res.output.replace(/\r\n/g, '\n'));
       done(err);
     });
   });
