@@ -74,9 +74,15 @@ test-integration:
 
 test-compilers:
 	@printf "==> [Test :: Compilers]\n"
-	$(call test_node,compilers) --compilers coffee:coffee-script/register,foo:./test/compiler/foo \
-		test/compiler/test.coffee \
-		test/compiler/test.foo
+	$(call test_node,compilers-coffee) --compilers coffee:coffee-script/register \
+		test/compiler
+
+	$(call test_node,compilers-custom) --compilers foo:./test/compiler-fixtures/foo \
+		test/compiler
+
+	$(call test_node,compilers-multiple) \
+		--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo \
+		test/compiler
 
 test-requires:
 	@printf "==> [Test :: Requires]\n"
