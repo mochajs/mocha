@@ -373,6 +373,37 @@ describe('Runner', function () {
     });
   });
 
+  describe('.run(fn)', function () {
+    it('should emit "retryable fail" when a retryable test fails', function (done) {
+      var retries = 2;
+      var retryableFails = 0;
+
+      var test = new Test('im a test about bears', function () {
+        if (retryableFails < retries) {
+          throw new Error('bear error');
+        }
+      });
+
+      test.retries(retries);
+      suite.retries(retries);
+      suite.addTest(test);
+
+      runner.on('retryable fail', function (test, err) {
+        retryableFails += 1;
+
+        expect(test).to.equal(test);
+        expect(err).to.equal(err);
+      });
+
+      runner.run(function (failures) {
+        expect(failures).to.equal(0);
+        expect(retryableFails).to.equal(retries);
+
+        done();
+      });
+    });
+  });
+
   describe('allowUncaught', function () {
     it('should allow unhandled errors to propagate through', function (done) {
       var newRunner = new Runner(suite);
