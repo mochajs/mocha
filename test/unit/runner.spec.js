@@ -377,22 +377,25 @@ describe('Runner', function () {
     it('should emit "retryable fail" when a retryable test fails', function (done) {
       var retries = 2;
       var retryableFails = 0;
+      var ERR = new Error('bear error');
 
-      var test = new Test('im a test about bears', function () {
+      var TEST = new Test('im a test about bears', function () {
         if (retryableFails < retries) {
-          throw new Error('bear error');
+          throw ERR;
         }
       });
 
-      test.retries(retries);
+      TEST.retries(retries);
       suite.retries(retries);
-      suite.addTest(test);
+      suite.addTest(TEST);
 
       runner.on('retryable fail', function (test, err) {
         retryableFails += 1;
 
-        expect(test).to.equal(test);
-        expect(err).to.equal(err);
+        // retries clone the tests, so I guess comparing the test
+        // names should be enough
+        expect(test.title).to.equal(TEST.title);
+        expect(err).to.equal(ERR);
       });
 
       runner.run(function (failures) {
