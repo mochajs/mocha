@@ -320,7 +320,7 @@
     "supports-color": "3.1.2"
   },
   "devDependencies": {
-    "@coderbyheart/karma-sauce-launcher": "coderbyheart/karma-sauce-launcher#5259942cd6d40090eaa13ceeef5b0b8738c7710f",
+    "@coderbyheart/karma-sauce-launcher": "git://github.com/coderbyheart/karma-sauce-launcher#5259942cd6d40090eaa13ceeef5b0b8738c7710f",
     "assert": "^1.4.1",
     "browserify": "^13.0.0",
     "coffee-script": "^1.10.0",
