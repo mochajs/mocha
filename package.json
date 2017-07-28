@@ -367,6 +367,7 @@
     "./index.js": "./browser-entry.js",
     "fs": false,
     "glob": false,
+    "growl": false,
     "path": false,
     "supports-color": false
   },
