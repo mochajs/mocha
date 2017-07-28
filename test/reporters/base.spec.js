@@ -160,6 +160,62 @@ describe('Base reporter', function () {
     });
   });
 
+  describe('cursor', function () {
+    var isatty;
+
+    beforeEach(function () {
+      isatty = Base.isatty;
+      Base.isatty = true;
+    });
+
+    afterEach(function () {
+      Base.isatty = isatty;
+    });
+
+    it('hides the cursor', function () {
+      var errOut;
+      Base.cursor.hide();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\u001b[?25l');
+    });
+
+    it('shows the cursor', function () {
+      var errOut;
+      Base.cursor.show();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\u001b[?25h');
+    });
+
+    it('deletes a line', function () {
+      var errOut;
+      Base.cursor.deleteLine();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\u001b[2K');
+    });
+
+    it('moves the cursor to the beginning of the line', function () {
+      var errOut;
+      Base.cursor.beginningOfLine();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\u001b[0G');
+    });
+
+    it('clears and restarts a line on carriage return in a tty', function () {
+      var errOut;
+      Base.cursor.CR();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\u001b[2K\n\u001b[0G');
+    });
+
+    it('outputs a carriage return when not in a tty', function () {
+      Base.isatty = false;
+      var errOut;
+      Base.cursor.CR();
+      errOut = stdout.join('\n');
+      errOut.should.equal('\r');
+    });
+  });
+
   it('should stringify objects', function () {
     var err = new Error('test');
     var errOut;
