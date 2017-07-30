@@ -68,10 +68,6 @@ matrix:
 
 before_install: scripts/travis-before-install.sh
 
-install:
- - npm install
- - cd node_modules && ln -nsf @coderbyheart/karma-sauce-launcher karma-sauce-launcher && cd ../
-
 before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
