@@ -35,7 +35,7 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	npm run lint
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-to-iso-string test-only test-global-only
 
 test-browser: clean BUILDTMP/mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -116,6 +116,10 @@ test-exports:
 test-glob:
 	@printf "==> [Test :: Glob]\n"
 	bash ./test/glob/glob.sh
+
+test-to-iso-string:
+	@printf "==> [Test :: to-iso-string]\n"
+	$(call test_node,to-iso-string) test/to-iso-string/*.js
 
 test-reporters:
 	@printf "==> [Test :: Reporters]\n"
