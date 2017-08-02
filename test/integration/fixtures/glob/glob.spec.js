@@ -2,6 +2,6 @@
 
 describe('globbing test', function () {
   it('should find this test', function () {
-    // see glob.sh for details
+    // see test/integration/glob.spec.js for details
   });
 });
