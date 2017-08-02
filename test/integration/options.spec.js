@@ -182,6 +182,8 @@ describe('options', function () {
   });
 
   describe('--forbid-only', function () {
+    var onlyErrorMessage = '`.only` forbidden';
+
     before(function () {
       args = ['--forbid-only'];
     });
@@ -198,7 +200,16 @@ describe('options', function () {
       run('options/forbid-only/only.js', args, function (err, res) {
         assert(!err);
         assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, '`.only` forbidden');
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if there are tests in suites marked only', function (done) {
+      run('options/forbid-only/only-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
         done();
       });
     });
