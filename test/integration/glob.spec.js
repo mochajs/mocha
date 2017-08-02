@@ -77,13 +77,22 @@ var testGlob = {
   shouldFail: execMochaWith(function shouldFailWithStderr (error, stderr) { expect(error && error.message).to.contain(stderr); })
 };
 
+var isFlakeyNode = (function () {
+  var version = process.versions.node.split('.');
+  return version[0] === '0' && version[1] === '10' && process.platform === 'win32';
+}());
+
 function execMochaWith (validate) {
   return function execMocha (glob, assertOn, done) {
     exec(node + ' "' + path.join('..', '..', '..', '..', 'bin', 'mocha') + '" -R json-stream ' + glob, { cwd: path.join(__dirname, 'fixtures', 'glob') }, function (error, stdout, stderr) {
       try {
         validate(error, stderr);
-        assertOn({ stdout: stdout, stderr: stderr });
-        done();
+        if (isFlakeyNode && error && (stderr === '')) {
+          execMocha(glob, assertOn, done);
+        } else {
+          assertOn({ stdout: stdout, stderr: stderr });
+          done();
+        }
       } catch (assertion) {
         done(assertion);
       }
