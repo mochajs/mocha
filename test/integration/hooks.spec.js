@@ -10,7 +10,10 @@ describe('hooks', function () {
     runMocha('cascade.fixture.js', args, function (err, res) {
       var lines, expected;
 
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
 
       lines = res.output.split(splitRegExp).map(function (line) {
         return line.trim();

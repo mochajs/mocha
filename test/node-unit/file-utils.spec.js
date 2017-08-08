@@ -13,6 +13,10 @@ describe('file utils', function () {
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;
 
+  beforeEach(function () {
+    this.timeout(2000);
+  });
+
   (function testSymlinkSupport () {
     makeTempDir();
 

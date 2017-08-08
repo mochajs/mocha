@@ -52,7 +52,7 @@ lint:
 	@printf "==> [Test :: Lint]\n"
 	npm run lint
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-requires test-reporters test-only test-global-only
 
 test-browser: clean BUILDTMP/mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -91,9 +91,15 @@ test-integration:
 
 test-compilers:
 	@printf "==> [Test :: Compilers]\n"
-	$(call test_node,compilers) --compilers coffee:coffee-script/register,foo:./test/compiler/foo \
-		test/compiler/test.coffee \
-		test/compiler/test.foo
+	$(call test_node,compilers-coffee) --compilers coffee:coffee-script/register \
+		test/compiler
+
+	$(call test_node,compilers-custom) --compilers foo:./test/compiler-fixtures/foo \
+		test/compiler
+
+	$(call test_node,compilers-multiple) \
+		--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo \
+		test/compiler
 
 test-requires:
 	@printf "==> [Test :: Requires]\n"
@@ -123,10 +129,6 @@ test-exports:
 	@printf "==> [Test :: Exports]\n"
 	$(call test_node,exports) --ui exports \
 		test/interfaces/exports.spec
-
-test-glob:
-	@printf "==> [Test :: Glob]\n"
-	bash ./test/glob/glob.sh
 
 test-reporters:
 	@printf "==> [Test :: Reporters]\n"

@@ -10,7 +10,10 @@ describe('retries', function () {
     helpers.runMocha('retries/hooks.fixture.js', args, function (err, res) {
       var lines, expected;
 
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
 
       lines = res.output.split(helpers.splitRegExp).map(function (line) {
         return line.trim();
@@ -49,7 +52,10 @@ describe('retries', function () {
 
   it('should exit early if test passes', function (done) {
     helpers.runMochaJSON('retries/early-pass.fixture.js', args, function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.passes, 1);
       assert.equal(res.stats.failures, 0);
       assert.equal(res.tests[0].currentRetry, 1);
@@ -61,7 +67,10 @@ describe('retries', function () {
 
   it('should let test override', function (done) {
     helpers.runMochaJSON('retries/nested.fixture.js', args, function (err, res) {
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
       assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
       assert.equal(res.stats.tests, 1);
@@ -75,7 +84,10 @@ describe('retries', function () {
     helpers.runMocha('retries/async.fixture.js', args, function (err, res) {
       var lines, expected;
 
-      assert(!err);
+      if (err) {
+        done(err);
+        return;
+      }
 
       lines = res.output.split(helpers.splitRegExp).map(function (line) {
         return line.trim();
