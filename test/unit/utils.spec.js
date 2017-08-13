@@ -624,4 +624,22 @@ describe('lib/utils', function () {
         expect(utils.isPromise({})).to.be(false);
       });
   });
+
+  describe('escape', function () {
+    it('replaces the usual xml suspects', function () {
+      expect(utils.escape('<a<bc<d<')).to.be('&lt;a&lt;bc&lt;d&lt;');
+      expect(utils.escape('>a>bc>d>')).to.be('&gt;a&gt;bc&gt;d&gt;');
+      expect(utils.escape('"a"bc"d"')).to.be('&quot;a&quot;bc&quot;d&quot;');
+      expect(utils.escape('<>"&')).to.be('&lt;&gt;&quot;&amp;');
+
+      expect(utils.escape('&a&bc&d&')).to.be('&amp;a&amp;bc&amp;d&amp;');
+      expect(utils.escape('&amp;&lt;')).to.be('&amp;amp;&amp;lt;');
+    });
+
+    it('replaces invalid xml characters', function () {
+      expect(utils.escape('\x1B[32mfoo\x1B[0m')).to.be('&#x1B;[32mfoo&#x1B;[0m');
+      // Ensure we can handle non-trivial unicode characters as well
+      expect(utils.escape('💩')).to.be('&#x1F4A9;');
+    });
+  });
 });
