@@ -5,6 +5,7 @@
  */
 
 var fs = require('fs');
+var getOptionsPath = require('./optionsPath');
 
 /**
  * Export `getOptions`.
@@ -18,11 +19,12 @@ module.exports = getOptions;
 
 function getOptions () {
   var optsPath = process.argv.indexOf('--opts') === -1
-    ? 'test/mocha.opts'
+    ? getOptionsPath.getPath()
     : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
+      .replace(/^\/\/.*$/mg, '')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
