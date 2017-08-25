@@ -230,7 +230,7 @@ beforeEach(async function() {
 });
 
 describe('#find()', function() {
-  it('respond with matching records', async function() {
+  it('responds with matching records', async function() {
     const users = await db.find({ type: 'User' });
     users.should.have.length(3);
   });
