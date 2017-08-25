@@ -219,6 +219,24 @@ it('should complete this test', function (done) {
 
 The above test will fail with `Error: Resolution method is overspecified. Specify a callback *or* return a Promise; not both.`.  In versions older than v3.0.0, the call to `done()` is effectively ignored.
 
+### Using async / await
+
+If your JS environment supports [async / await](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function) you can also write asynchronous tests like this:
+
+```js
+beforeEach(async function() {
+  await db.clear();
+  await db.save([tobi, loki, jane]);
+});
+
+describe('#find()', function() {
+  it('responds with matching records', async function() {
+    const users = await db.find({ type: 'User' });
+    users.should.have.length(3);
+  });
+});
+```
+
 ## Synchronous Code
 
 When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
