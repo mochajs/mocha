@@ -1499,7 +1499,7 @@ Mocha.prototype.loadFiles = function (fn) {
  * @api private
  */
 Mocha.prototype._growl = function (runner, reporter) {
-  var notify = require('growl');
+  var notify = require('mygrowl');
 
   runner.on('end', function () {
     var stats = reporter.stats;
