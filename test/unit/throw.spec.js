@@ -45,16 +45,21 @@ describe('a test that throws', function () {
 
     it('should not pass if throwing async and test is async', function (done) {
       var test = new Test('im async and throw undefined async', function (done2) {
-        process.nexTick(function () {
+        process.nextTick(function () {
           throw undefined;
         });
       });
       suite.addTest(test);
       runner = new Runner(suite);
+      var uncaught = Runner.prototype.uncaught;
+      Runner.prototype.uncaught = function () {
+        Runner.prototype.uncaught = uncaught;
+        done();
+      };
       runner.on('end', function () {
         expect(runner.failures).to.equal(1);
         expect(test.state).to.equal('failed');
-        done();
+        expect(runner.uncaught).toBeCalled();
       });
       runner.run();
     });
@@ -91,16 +96,21 @@ describe('a test that throws', function () {
 
     it('should not pass if throwing async and test is async', function (done) {
       var test = new Test('im async and throw null async', function (done2) {
-        process.nexTick(function () {
+        process.nextTick(function () {
           throw null;
         });
       });
       suite.addTest(test);
       runner = new Runner(suite);
+      var uncaught = Runner.prototype.uncaught;
+      Runner.prototype.uncaught = function () {
+        Runner.prototype.uncaught = uncaught;
+        done();
+      };
       runner.on('end', function () {
         expect(runner.failures).to.equal(1);
         expect(test.state).to.equal('failed');
-        done();
+        expect(runner.uncaught).toBeCalled();
       });
       runner.run();
     });
