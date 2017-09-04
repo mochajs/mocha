@@ -863,7 +863,7 @@ Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
   * utils.stringify should handle objects without an Object prototype
   * in runnable test, comparing to undefined error's message rather than a literal
   * Fix test running output truncation on async STDIO
-  * ammended for deprecated customFds option in child_process
+  * amended for deprecated customFds option in child_process
 
 2.1.0 / 2014-12-23
 ==================
@@ -1091,7 +1091,7 @@ Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
 ==================
 
   * add: sort test files with --sort (#813)
-  * update: diff depedency to 1.0.7
+  * update: diff dependency to 1.0.7
   * update: glob dependency to 3.2.3 (#927)
   * fix: diffs show whitespace differences (#976)
   * fix: improve global leaks (#783)
