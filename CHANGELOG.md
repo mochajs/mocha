@@ -1091,7 +1091,7 @@ Thanks @entertainyou, @SimenB, @just-paja for the heads-up.
 ==================
 
   * add: sort test files with --sort (#813)
-  * update: diff depedency to 1.0.7
+  * update: diff dependency to 1.0.7
   * update: glob dependency to 3.2.3 (#927)
   * fix: diffs show whitespace differences (#976)
   * fix: improve global leaks (#783)
