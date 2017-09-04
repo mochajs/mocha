@@ -17,7 +17,7 @@ We must be able to understand the design of your change from this description. K
 
 ### Why should this be in core?
 
-<!-- Explain why this functionality should be in mocha as opposed to it's own package -->
+<!-- Explain why this functionality should be in mocha as opposed to its own package -->
 
 ### Benefits
 
