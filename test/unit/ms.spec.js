@@ -29,7 +29,7 @@ describe('.ms()', function () {
     });
   });
 
-  describe('minutess representation', function () {
+  describe('minutes representation', function () {
     it('should return short format', function () {
       expect(ms(time.minutes(1))).to.equal('1m');
     });

@@ -19,7 +19,7 @@ describe('$.jQuery', function () {
 });
 
 // another generic describe block to verify it is absent
-// when greeping on $.jQuery
+// when grepping on $.jQuery
 describe('@Array', function () {
   it('.pop()', function () {
     assert(true);
