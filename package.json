@@ -301,10 +301,8 @@
   "scripts": {
     "lint": "eslint . bin/*",
     "test": "make test && make clean",
-    "precoverage": "rm -rf coverage",
-    "coverage": "COVERAGE=true npm run test",
-    "postcoverage": "istanbul-combine -d coverage -r lcov -r html coverage/reports/*/*.json",
-    "preversion": "make test && rm mocha.js && make mocha.js && git add mocha.js"
+    "preversion": "make test && rm mocha.js && make mocha.js && git add mocha.js",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "browser-stdout": "1.3.0",
@@ -333,7 +331,6 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "2.0.1",
     "expect.js": "^0.3.1",
-    "istanbul-combine": "^0.3.0",
     "karma": "1.3.0",
     "karma-browserify": "^5.0.5",
     "karma-chrome-launcher": "^2.0.0",

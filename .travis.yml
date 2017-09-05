@@ -72,7 +72,7 @@ before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
 
-after_success: "npm run postcoverage && <coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
+after_success: npm run coveralls
 
 notifications:
   urls:
