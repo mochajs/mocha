@@ -822,9 +822,11 @@ Enables node's debugger support, this executes your script(s) with `node debug <
 
 Accepts a comma-delimited list of accepted global variable names. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`. It also accepts wildcards. You could do `--globals '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
 
+By using this option in conjunction with `--check-leaks`, you can specify a whitelist of known global variables that you would expect to leak into global scope.
+
 ### `--check-leaks`
 
-By default, Mocha will not check for global variables leaked while running tests, to enable this pass `--check-leaks`, to specify globals that are acceptable use `--globals`, for example `--globals jQuery,MyLib`.
+Use this option to have Mocha check for global variables that are leaked while running tests. Specify globals that are acceptable via the `--globals` option (for example: `--check-leaks --globals jQuery,MyLib`).
 
 ### `-r, --require <module-name>`
 
