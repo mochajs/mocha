@@ -11038,9 +11038,7 @@ function growl(msg, options, fn) {
 	// Some AMD build optimizers, like r.js, check for specific condition patterns
 	// like the following:
 	if (
-		typeof define == 'function' &&
-		typeof define.amd == 'object' &&
-		define.amd
+		false
 	) {
 		define(function() {
 			return he;
