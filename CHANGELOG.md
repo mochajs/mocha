@@ -1,3 +1,11 @@
+# 3.5.1 / 2017-09-10
+
+## :bug: Fixes
+
+- [#3001]: Fix AMD-related failures first appearing in v3.5.1 ([@boneskull])
+
+[#3001]: https://github.com/mochajs/mocha/pull/3001
+
 # 3.5.1 / 2017-09-09
 
 ## :newspaper: News
