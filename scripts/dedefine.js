@@ -6,8 +6,7 @@
  */
 
 var through = require('through2');
-var defineRx = /typeof define === ['"]function['"] && define\.amd/g;
-
+var defineRx = /typeof\s+define\s*===?\s*['"]function['"]\s*&&\s*(?:define\.amd|typeof\s+define\.amd\s*===?\s*['"]object['"]\s*&&\s*define\.amd)/g;
 function createStream () {
   return through.obj(function (chunk, enc, next) {
     this.push(String(chunk)
