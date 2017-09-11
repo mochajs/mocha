@@ -6031,7 +6031,7 @@ exports.inherits = require('util').inherits;
  * @return {string}
  */
 exports.escape = function (html) {
-  return he.encode(String(html), { useNamedReferences: true });
+  return he.encode(String(html), { useNamedReferences: false });
 };
 
 /**
