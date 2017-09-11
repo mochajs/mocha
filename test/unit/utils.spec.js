@@ -627,13 +627,13 @@ describe('lib/utils', function () {
 
   describe('escape', function () {
     it('replaces the usual xml suspects', function () {
-      expect(utils.escape('<a<bc<d<')).to.be('&lt;a&lt;bc&lt;d&lt;');
-      expect(utils.escape('>a>bc>d>')).to.be('&gt;a&gt;bc&gt;d&gt;');
-      expect(utils.escape('"a"bc"d"')).to.be('&quot;a&quot;bc&quot;d&quot;');
-      expect(utils.escape('<>"&')).to.be('&lt;&gt;&quot;&amp;');
+      expect(utils.escape('<a<bc<d<')).to.be('&#x3C;a&#x3C;bc&#x3C;d&#x3C;');
+      expect(utils.escape('>a>bc>d>')).to.be('&#x3E;a&#x3E;bc&#x3E;d&#x3E;');
+      expect(utils.escape('"a"bc"d"')).to.be('&#x22;a&#x22;bc&#x22;d&#x22;');
+      expect(utils.escape('<>"&')).to.be('&#x3C;&#x3E;&#x22;&#x26;');
 
-      expect(utils.escape('&a&bc&d&')).to.be('&amp;a&amp;bc&amp;d&amp;');
-      expect(utils.escape('&amp;&lt;')).to.be('&amp;amp;&amp;lt;');
+      expect(utils.escape('&a&bc&d&')).to.be('&#x26;a&#x26;bc&#x26;d&#x26;');
+      expect(utils.escape('&amp;&lt;')).to.be('&#x26;amp;&#x26;lt;');
     });
 
     it('replaces invalid xml characters', function () {

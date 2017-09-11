@@ -43,7 +43,7 @@ describe('Doc reporter', function () {
           root: false,
           title: unescapedTitle
         };
-        expectedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
+        expectedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
         runner.on = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
@@ -142,8 +142,8 @@ describe('Doc reporter', function () {
       test.title = unescapedTitle;
       test.body = unescapedBody;
 
-      var expectedEscapedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
-      var expectedEscapedBody = '&lt;div&gt;' + expectedBody + '&lt;/div&gt;';
+      var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
+      var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
       runner.on = function (event, callback) {
         if (event === 'pass') {
           callback(test);
@@ -192,9 +192,9 @@ describe('Doc reporter', function () {
       test.title = unescapedTitle;
       test.body = unescapedBody;
 
-      var expectedEscapedTitle = '&lt;div&gt;' + expectedTitle + '&lt;/div&gt;';
-      var expectedEscapedBody = '&lt;div&gt;' + expectedBody + '&lt;/div&gt;';
-      var expectedEscapedError = '&lt;div&gt;' + expectedError + '&lt;/div&gt;';
+      var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
+      var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
+      var expectedEscapedError = '&#x3C;div&#x3E;' + expectedError + '&#x3C;/div&#x3E;';
       runner.on = function (event, callback) {
         if (event === 'fail') {
           callback(test, unescapedError);
