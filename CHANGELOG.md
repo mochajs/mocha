@@ -1,3 +1,11 @@
+# 3.5.3 / 2017-09-11
+
+## :bug: Fixes
+
+- [#3003]: Fix invalid entities in xUnit reporter first appearing in v3.5.1 ([@jkrems])
+
+[#3003]: https://github.com/mochajs/mocha/pull/3003
+
 # 3.5.2 / 2017-09-10
 
 ## :bug: Fixes
