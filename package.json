@@ -64,6 +64,7 @@
     "Cory Thomas (https://github.com/dump247)",
     "cybertk (https://github.com/cybertk)",
     "Daniel Ericsson (https://github.com/monowerker)",
+    "Daniel Lewis <daniellewis777@gmail.com> (https://github.com/danday74)",
     "Daniel St. Jules <danielst.jules@gmail.com> (https://github.com/danielstjules)",
     "Daniel Stockman <daniel.stockman@gmail.com> (https://github.com/evocateur)",
     "Dave McKenna <davemckenna01@gmail.com> (https://github.com/davemckenna01)",
@@ -344,6 +345,7 @@
     "readable-stream": "2.2.11",
     "rimraf": "^2.5.2",
     "should": "^9.0.2",
+    "sinon": "^3.2.0",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
   },
