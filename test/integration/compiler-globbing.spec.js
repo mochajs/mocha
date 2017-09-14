@@ -15,9 +15,9 @@ describe('globbing like --compilers', function () {
         expect(results.passes[index]).to.have.property('fullTitle');
         titles.push(results.passes[index].fullTitle);
       }
-      expect(results.passes).to.have.length(2);
-      expect(results.passes).to.contain('coffeescript should work');
-      expect(results.passes).to.contain('custom compiler should work');
+      expect(titles).to.contain('coffeescript should work');
+      expect(titles).to.contain('custom compiler should work');
+      expect(titles).to.have.length(2);
       done();
     });
   });
