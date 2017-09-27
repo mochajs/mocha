@@ -361,8 +361,7 @@
     "bower.json"
   ],
   "browser": {
-    "debug": "./lib/browser/debug.js",
-    "events": "./lib/browser/events.js",
+    "growl": "./lib/browser/growl.js",
     "tty": "./lib/browser/tty.js",
     "./index.js": "./browser-entry.js",
     "fs": false,
