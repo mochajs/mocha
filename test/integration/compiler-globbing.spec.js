@@ -6,7 +6,7 @@ var path = require('path');
 
 describe('globbing like --compilers', function () {
   it('should find a file of each type', function (done) {
-    exec('"' + process.execPath + '" "' + path.join('bin', 'mocha') + '" -R json --require coffee-script/register --require test/compiler-fixtures/foo "test/compiler/*.@(coffee|foo)"', { cwd: path.join(__dirname, '..', '..') }, function (error, stdout) {
+    exec('"' + process.execPath + '" "' + path.join('bin', 'mocha') + '" -R json --require coffee-script/register --require test/compiler-fixtures/foo.fixture "test/compiler/*.@(coffee|foo)"', { cwd: path.join(__dirname, '..', '..') }, function (error, stdout) {
       if (error && !stdout) { return done(error); }
       var results = JSON.parse(stdout);
       expect(results).to.have.property('tests');
