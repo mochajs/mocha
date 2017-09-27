@@ -62,7 +62,7 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 1.  Navigate to the source repository.  You should see a notification about your recent changes in your fork's branch, with a button to create a pull request.  Click it.
 1.  Describe your changes in detail here.  Once you're satisfied, submit the form.
   - *PRO TIP*: If you've used a multi-line commit message, Github will pre-fill the PR's description with it.
-1.  If you have not signed our Contributor License Agreement, a friendly robot will prompt you to do so.  A CLA (electronic) signature is **required** for all contributions of code to Mocha.
+1.  If you have not signed our Contributor License Agreement, a friendly robot will prompt you to do so.  A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
 1.  CI will run against your changes.
   - If the changes fail the checks, you will need to address those before merging.
   - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
