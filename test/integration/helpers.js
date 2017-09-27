@@ -89,7 +89,7 @@ module.exports = {
       } else if (!diffs.length || inStackTrace) {
         // Haven't encountered a spec yet
         // or we're in the middle of a stack trace
-        return;
+
       } else if (line.indexOf('+ expected - actual') !== -1) {
         inDiff = true;
       } else if (line.match(/at Context/)) {
