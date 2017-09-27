@@ -164,10 +164,10 @@ describe('lib/utils', function () {
     });
 
     it('should return Buffer with .toJSON representation', function () {
-      expect(stringify(new Buffer([0x01]))).to.equal('[\n  1\n]');
-      expect(stringify(new Buffer([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
+      expect(stringify(Buffer.from([0x01]))).to.equal('[\n  1\n]');
+      expect(stringify(Buffer.from([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
 
-      expect(stringify(new Buffer('ABCD'))).to.equal('[\n  65\n  66\n  67\n  68\n]');
+      expect(stringify(Buffer.from('ABCD'))).to.equal('[\n  65\n  66\n  67\n  68\n]');
     });
 
     it('should return Date object with .toISOString() + string prefix', function () {
@@ -224,7 +224,7 @@ describe('lib/utils', function () {
           infi: Infinity,
           nan: NaN,
           zero: -0,
-          buffer: new Buffer([0x01, 0x02]),
+          buffer: Buffer.from([0x01, 0x02]),
           array: [1, 2, 3],
           empArr: [],
           matrix: [[1],
@@ -498,7 +498,7 @@ describe('lib/utils', function () {
   describe('isBuffer()', function () {
     var isBuffer = utils.isBuffer;
     it('should test if object is a Buffer', function () {
-      expect(isBuffer(new Buffer([0x01])))
+      expect(isBuffer(Buffer.from([0x01])))
         .to
         .equal(true);
       expect(isBuffer({}))
