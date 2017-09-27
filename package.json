@@ -345,7 +345,7 @@
     "phantomjs": "1.9.8",
     "readable-stream": "2.2.11",
     "rimraf": "^2.5.2",
-    "should": "^9.0.2",
+    "should": "^13.1.0",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
   },
