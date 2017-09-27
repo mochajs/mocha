@@ -3,3 +3,5 @@ env:
 globals:
   expect: false
   assert: false
+rules:
+  no-unused-expressions: off
