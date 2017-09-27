@@ -19,7 +19,7 @@
 2.  Review current open pull requests
   - We need individuals familiar with Mocha's codebase. Got questions?  Ask them in [our chat room](https://gitter.im/mochajs/mocha).
   - Pull requests **must** have supporting tests.  The only exceptions are pure cosmetic or non-functional changes.
-  - Pull request contributors must sign the CLA.
+  - Pull request contributors must sign [the CLA](https://cla.js.foundation/mochajs/mocha).
 3. Close old, inactive issues and pull requests
   - ~~A bot should do this.  We need a bot. Got a bot?~~ We now use GitHub's own [probot-stale](https://www.npmjs.com/package/probot-stale).
 4. Triage issues
