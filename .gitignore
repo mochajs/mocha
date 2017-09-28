@@ -13,7 +13,6 @@ npm-debug.log*
 .nyc_output/
 coverage/
 yarn.lock
-package-lock.json
 mocha.js
 # artifacts from various diff tools
 *_BACKUP_*
