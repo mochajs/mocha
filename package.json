@@ -341,7 +341,6 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "^1.2.0",
     "nyc": "^11.2.1",
-    "os-name": "^2.0.1",
     "readable-stream": "2.2.11",
     "rimraf": "^2.5.2",
     "should": "^13.1.0",
