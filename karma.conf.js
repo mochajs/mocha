@@ -49,7 +49,7 @@ module.exports = function (config) {
           });
       }
     },
-    reporters: ['spec'],
+    reporters: ['mocha'],
     colors: true,
     browsers: ['PhantomJS'],
     logLevel: config.LOG_INFO,
@@ -57,6 +57,9 @@ module.exports = function (config) {
       mocha: {
         reporter: 'html'
       }
+    },
+    mochaReporter: {
+      showDiff: true
     }
   };
 
