@@ -495,18 +495,6 @@ describe('lib/utils', function () {
     });
   });
 
-  describe('isBuffer()', function () {
-    var isBuffer = utils.isBuffer;
-    it('should test if object is a Buffer', function () {
-      expect(isBuffer(Buffer.from([0x01])))
-        .to
-        .equal(true);
-      expect(isBuffer({}))
-        .to
-        .equal(false);
-    });
-  });
-
   describe('map()', function () {
     var map = utils.map;
     it('should behave same as Array.prototype.map', function () {

@@ -49,6 +49,7 @@ module.exports = function (config) {
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
+          .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
           .on('bundled', function (err, content) {
             if (!err && bundleDirpath) {
               // write bundle to directory for debugging

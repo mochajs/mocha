@@ -321,7 +321,8 @@
   "devDependencies": {
     "@coderbyheart/karma-sauce-launcher": "git://github.com/coderbyheart/karma-sauce-launcher#5259942cd6d40090eaa13ceeef5b0b8738c7710f",
     "assert": "^1.4.1",
-    "browserify": "^13.0.0",
+    "browserify": "^14.4.0",
+    "buffer": "^4.9.1",
     "coffee-script": "^1.10.0",
     "coveralls": "^2.11.15",
     "cross-spawn": "^5.1.0",
@@ -367,7 +368,8 @@
     "fs": false,
     "glob": false,
     "path": false,
-    "supports-color": false
+    "supports-color": false,
+    "buffer": "buffer"
   },
   "homepage": "https://mochajs.org",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg"
