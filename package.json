@@ -340,7 +340,6 @@
     "karma-mocha-reporter": "^2.2.4",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "^1.2.0",
-    "karma-spec-reporter": "0.0.31",
     "nyc": "^11.2.1",
     "os-name": "^2.0.1",
     "readable-stream": "2.2.11",
