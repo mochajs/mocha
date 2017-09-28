@@ -3,6 +3,7 @@
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
+var assert = require('assert');
 var reporters = require('../../').reporters;
 var XUnit = reporters.XUnit;
 
@@ -311,6 +312,70 @@ describe('XUnit reporter', function () {
 
         expectedWrite.should.equal(expectedTag);
       });
+    });
+  });
+
+  describe('custom suite name', function () {
+    // capture the events that the reporter subscribes to
+    var events;
+
+    // the runner parameter of the reporter
+    var runner;
+
+    // capture output lines (will contain the resulting XML of the xunit reporter)
+    var lines;
+
+    // the file stream into which the xunit reporter will write into
+    var fileStream;
+
+    beforeEach(function () {
+      events = {};
+
+      runner = {
+        on: function (eventName, eventHandler) {
+          // capture the event handler
+          events[eventName] = eventHandler;
+        }
+      };
+
+      lines = [];
+      fileStream = {
+        write: function (line) {
+          // capture the output lines
+          lines.push(line);
+        }
+      };
+    });
+
+    it('should use "Mocha Tests" as the suite name if no custom name is provided', function () {
+      // arrange
+      var xunit = new XUnit(runner);
+      xunit.fileStream = fileStream;
+
+      // act (trigger the end event to force xunit reporter to write the output)
+      events['end']();
+
+      // assert
+      assert(lines[0].indexOf('Mocha Tests') >= 0, 'it should contain the text "Mocha Tests"');
+    });
+
+    it('should use the custom suite name as the suite name when provided in the reporter options', function () {
+      // arrange
+      var options = {
+        reporterOptions: {
+          // this time, with a custom suite name
+          suiteName: 'Mocha Is Great!'
+        }
+      };
+
+      var xunit = new XUnit(runner, options);
+      xunit.fileStream = fileStream;
+
+      // act (trigger the end event to force xunit reporter to write the output)
+      events['end']();
+
+      // assert
+      assert(lines[0].indexOf('<testsuite name="Mocha Is Great!"') === 0, '"' + lines[0] + '" should contain the text "Mocha Is Great"');
     });
   });
 });
