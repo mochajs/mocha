@@ -138,13 +138,13 @@ program
 
 // --globals
 
-program.on('globals', function (val) {
+program.on('option:globals', function (val) {
   globals = globals.concat(list(val));
 });
 
 // --reporters
 
-program.on('reporters', function () {
+program.on('option:reporters', function () {
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -165,7 +165,7 @@ program.on('reporters', function () {
 
 // --interfaces
 
-program.on('interfaces', function () {
+program.on('option:interfaces', function () {
   console.log('');
   interfaceNames.forEach(function (interfaceName) {
     console.log('    ' + interfaceName);
@@ -178,7 +178,7 @@ program.on('interfaces', function () {
 
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
-program.on('require', function (mod) {
+program.on('option:require', function (mod) {
   var abs = exists(mod) || exists(mod + '.js');
   if (abs) {
     mod = resolve(mod);
