@@ -21,50 +21,12 @@ matrix:
       env: TARGET=test-node
     - node_js: '6'
       env: TARGET=test-node
-    - node_js: '5'
-      env: TARGET=test-node
     - node_js: '4'
-      env: TARGET=test-node
-    - node_js: 'iojs'
-      env: TARGET=test-node
-    - node_js: '0.12'
-      env: TARGET=test-node
-    - node_js: '0.11'
-      env: TARGET=test-node
-    - node_js: '0.10'
       env: TARGET=test-node
     - node_js: '8'
       env: TARGET=lint
-    # phantomjs
     - node_js: '8'
       env: TARGET=test-browser
-    # chrome
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
-    # edge
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
-    # ie11
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
-    # ie10
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
-    # ie9
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
-    # ie8
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
-    # ie7
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
-    # firefox
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
-    # safari
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
 
 before_install: scripts/travis-before-install.sh
 
@@ -72,12 +34,15 @@ before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
 
-after_success: "npm run postcoverage && <coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
+after_success: npm run coveralls
 
 notifications:
+  email: false
   urls:
-    # for gitter
+    # for gitter mochajs/mocha
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
+    # for gitter mochajs/contributors
+    - secure: QQ7hvFqok0kypXLSjfVLsYDpLSFMPKblUsTupLSV6aK//COZ6XnyxIa/CWvnjlbap9bIAs5azHOeS6pe+KQJr2w0K8HUqbUDX1KofaMZmK8JuD1qK1kLjV8LB+5OhHQGs1r8KvGgUf1vYGITdwOvYqE2lr10EbrkmFo7kOSLvpA=
   on_success: change
   on_failure: always
 
@@ -86,3 +51,4 @@ addons:
     paths:
       - .karma/
       - ./mocha.js
+  sauce_connect: true

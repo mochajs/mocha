@@ -5,7 +5,7 @@ NYC := "node_modules/.bin/nyc"
 
 ifdef COVERAGE
 define test_node
-	$(NYC) --report-dir coverage/reports/$(1) $(MOCHA)
+	$(NYC) --no-clean --report-dir coverage/reports/$(1) $(MOCHA)
 endef
 else
 	test_node := $(MOCHA)
@@ -77,11 +77,12 @@ test-compilers:
 	$(call test_node,compilers-coffee) --compilers coffee:coffee-script/register \
 		test/compiler
 
-	$(call test_node,compilers-custom) --compilers foo:./test/compiler-fixtures/foo \
+	$(call test_node,compilers-custom) \
+	--compilers foo:./test/compiler-fixtures/foo.fixture \
 		test/compiler
 
 	$(call test_node,compilers-multiple) \
-		--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo \
+		--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture \
 		test/compiler
 
 test-requires:

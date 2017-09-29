@@ -164,10 +164,10 @@ describe('lib/utils', function () {
     });
 
     it('should return Buffer with .toJSON representation', function () {
-      expect(stringify(new Buffer([0x01]))).to.equal('[\n  1\n]');
-      expect(stringify(new Buffer([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
+      expect(stringify(Buffer.from([0x01]))).to.equal('[\n  1\n]');
+      expect(stringify(Buffer.from([0x01, 0x02]))).to.equal('[\n  1\n  2\n]');
 
-      expect(stringify(new Buffer('ABCD'))).to.equal('[\n  65\n  66\n  67\n  68\n]');
+      expect(stringify(Buffer.from('ABCD'))).to.equal('[\n  65\n  66\n  67\n  68\n]');
     });
 
     it('should return Date object with .toISOString() + string prefix', function () {
@@ -224,7 +224,7 @@ describe('lib/utils', function () {
           infi: Infinity,
           nan: NaN,
           zero: -0,
-          buffer: new Buffer([0x01, 0x02]),
+          buffer: Buffer.from([0x01, 0x02]),
           array: [1, 2, 3],
           empArr: [],
           matrix: [[1],
@@ -498,7 +498,7 @@ describe('lib/utils', function () {
   describe('isBuffer()', function () {
     var isBuffer = utils.isBuffer;
     it('should test if object is a Buffer', function () {
-      expect(isBuffer(new Buffer([0x01])))
+      expect(isBuffer(Buffer.from([0x01])))
         .to
         .equal(true);
       expect(isBuffer({}))
@@ -623,5 +623,23 @@ describe('lib/utils', function () {
       function () {
         expect(utils.isPromise({})).to.be(false);
       });
+  });
+
+  describe('escape', function () {
+    it('replaces the usual xml suspects', function () {
+      expect(utils.escape('<a<bc<d<')).to.be('&#x3C;a&#x3C;bc&#x3C;d&#x3C;');
+      expect(utils.escape('>a>bc>d>')).to.be('&#x3E;a&#x3E;bc&#x3E;d&#x3E;');
+      expect(utils.escape('"a"bc"d"')).to.be('&#x22;a&#x22;bc&#x22;d&#x22;');
+      expect(utils.escape('<>"&')).to.be('&#x3C;&#x3E;&#x22;&#x26;');
+
+      expect(utils.escape('&a&bc&d&')).to.be('&#x26;a&#x26;bc&#x26;d&#x26;');
+      expect(utils.escape('&amp;&lt;')).to.be('&#x26;amp;&#x26;lt;');
+    });
+
+    it('replaces invalid xml characters', function () {
+      expect(utils.escape('\x1B[32mfoo\x1B[0m')).to.be('&#x1B;[32mfoo&#x1B;[0m');
+      // Ensure we can handle non-trivial unicode characters as well
+      expect(utils.escape('💩')).to.be('&#x1F4A9;');
+    });
   });
 });
