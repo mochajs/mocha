@@ -68,6 +68,6 @@ describe('Context Siblings', function () {
 
 describe('timeout()', function () {
   it('should return the timeout', function () {
-    expect(this.timeout()).to.equal(200);
+    expect(this.timeout()).to.equal(!process.browser ? 200 : 500);
   });
 });
