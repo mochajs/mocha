@@ -215,6 +215,8 @@ describe('options', function () {
   });
 
   describe('--forbid-only', function () {
+    var onlyErrorMessage = '`.only` forbidden';
+
     before(function () {
       args = ['--forbid-only'];
     });
@@ -237,12 +239,24 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if there are tests in suites marked only', function (done) {
+      run('options/forbid-only/only-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
         done();
       });
     });
   });
 
   describe('--forbid-pending', function () {
+    var pendingErrorMessage = 'Pending test forbidden';
+
     before(function () {
       args = ['--forbid-pending'];
     });
@@ -265,6 +279,7 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
         done();
       });
     });
@@ -276,6 +291,43 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if tests call `skip()`', function (done) {
+      run('options/forbid-pending/this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if beforeEach calls `skip()`', function (done) {
+      run('options/forbid-pending/beforeEach-this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if before calls `skip()`', function (done) {
+      run('options/forbid-pending/before-this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if there are tests in suites marked skip', function (done) {
+      run('options/forbid-pending/skip-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
         done();
       });
     });
