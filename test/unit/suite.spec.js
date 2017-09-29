@@ -395,6 +395,36 @@ describe('Suite', function () {
     });
   });
 
+  describe('.titlePath()', function () {
+    beforeEach(function () {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when there is no parent', function () {
+      it('returns the suite title', function () {
+        this.suite.titlePath().should.deepEqual(['A Suite']);
+      });
+    });
+
+    describe('when there is a parent', function () {
+      describe('the parent is the root suite', function () {
+        it('returns the suite title', function () {
+          var parentSuite = new Suite('');
+          parentSuite.addSuite(this.suite);
+          this.suite.titlePath().should.deepEqual(['A Suite']);
+        });
+      });
+
+      describe('the parent is not the root suite', function () {
+        it('returns the concatenation of parent\'s and suite\'s title', function () {
+          var parentSuite = new Suite('I am a parent');
+          parentSuite.addSuite(this.suite);
+          this.suite.titlePath().should.deepEqual(['I am a parent', 'A Suite']);
+        });
+      });
+    });
+  });
+
   describe('.total()', function () {
     beforeEach(function () {
       this.suite = new Suite('A Suite');

@@ -3,6 +3,7 @@
 var mocha = require('../../lib/mocha');
 var utils = mocha.utils;
 var Runnable = mocha.Runnable;
+var Suite = mocha.Suite;
 
 describe('Runnable(title, fn)', function () {
   // For every test we poison the global time-related methods.
@@ -84,6 +85,14 @@ describe('Runnable(title, fn)', function () {
   describe('.title', function () {
     it('should be present', function () {
       expect(new Runnable('foo').title).to.equal('foo');
+    });
+  });
+
+  describe('.titlePath()', function () {
+    it('returns the concatenation of the parent\'s title path and runnable\'s title', function () {
+      var runnable = new Runnable('bar');
+      runnable.parent = new Suite('foo');
+      runnable.titlePath().should.deepEqual(['foo', 'bar']);
     });
   });
 
