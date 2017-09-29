@@ -92,7 +92,7 @@ describe('Runnable(title, fn)', function () {
     it('returns the concatenation of the parent\'s title path and runnable\'s title', function () {
       var runnable = new Runnable('bar');
       runnable.parent = new Suite('foo');
-      runnable.titlePath().should.deepEqual(['foo', 'bar']);
+      expect(runnable.titlePath()).to.eql(['foo', 'bar']);
     });
   });
 
