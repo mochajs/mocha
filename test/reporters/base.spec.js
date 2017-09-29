@@ -8,8 +8,8 @@ var Assert = require('assert').AssertionError;
 function makeTest (err) {
   return {
     err: err,
-    fullTitle: function () {
-      return 'test title';
+    titlePath: function () {
+      return ['test title'];
     }
   };
 }
