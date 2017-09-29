@@ -346,6 +346,16 @@ if (program.forbidPending) mocha.forbidPending();
 
 // custom compiler support
 
+if (program.compilers.length > 0) {
+  require("util").deprecate(function () {}, [
+    "`--compilers` is likely to be replaced in a future version of Mocha.",
+    "Instead use `--require` to load the compiler and add your file extension(s) to your filepath globs.",
+    "To glob for multiple file extensions, \"quote\" the path and use `@(one|the-other)`, e.g. \"test/**/*.spec.@(js|coffee)\""
+  ]
+    .concat(program.watch ? ["With `--watch`, also add the extensions through `--watch-extensions`"] : [])
+    .join("\n")
+  )()
+}
 var extensions = ['js'];
 program.compilers.forEach(function (c) {
   var idx = c.indexOf(':');
