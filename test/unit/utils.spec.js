@@ -2,7 +2,6 @@
 
 var utils = require('../../lib/utils');
 var toISOString = require('../../lib/to-iso-string');
-var JSON = require('json3');
 
 describe('lib/utils', function () {
   describe('clean', function () {
