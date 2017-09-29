@@ -37,9 +37,12 @@ script: make $TARGET
 after_success: npm run coveralls
 
 notifications:
+  email: false
   urls:
-    # for gitter
+    # for gitter mochajs/mocha
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
+    # for gitter mochajs/contributors
+    - secure: QQ7hvFqok0kypXLSjfVLsYDpLSFMPKblUsTupLSV6aK//COZ6XnyxIa/CWvnjlbap9bIAs5azHOeS6pe+KQJr2w0K8HUqbUDX1KofaMZmK8JuD1qK1kLjV8LB+5OhHQGs1r8KvGgUf1vYGITdwOvYqE2lr10EbrkmFo7kOSLvpA=
   on_success: change
   on_failure: always
 
