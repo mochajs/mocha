@@ -357,8 +357,7 @@
     "mocha.css",
     "mocha.js",
     "browser-entry.js",
-    "LICENSE",
-    "bower.json"
+    "LICENSE"
   ],
   "browser": {
     "growl": "./lib/browser/growl.js",
