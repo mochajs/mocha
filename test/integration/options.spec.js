@@ -332,4 +332,57 @@ describe('options', function () {
       });
     });
   });
+
+  describe('--exit', function () {
+    var behaviors = {
+      enabled: '--exit',
+      disabled: '--no-exit'
+    };
+
+    /**
+     * Returns a test that executes Mocha in a subprocess with either
+     * `--exit`, `--no-exit`, or default behavior.
+     * @param {boolean} shouldExit - Expected result; `true` if Mocha should have force-killed the process.
+     * @param {string} [behavior] - 'enabled' or 'disabled'
+     * @returns {Function}
+     */
+    var runExit = function (shouldExit, behavior) {
+      return function (done) {
+        this.timeout(0);
+        var didExit = true;
+        var t;
+        var args = behaviors[behavior] ? [behaviors[behavior]] : [];
+
+        var mocha = run('exit.fixture.js', args, function (err) {
+          clearTimeout(t);
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(didExit).to.equal(shouldExit);
+          done();
+        });
+
+        // if this callback happens, then Mocha didn't automatically exit.
+        t = setTimeout(function () {
+          didExit = false;
+          // this is the only way to kill the child, afaik.
+          // after the process ends, the callback to `run()` above is handled.
+          mocha.kill('SIGINT');
+        }, 2000);
+      };
+    };
+
+    describe('default behavior', function () {
+      it('should force exit after root suite completion', runExit(true));
+    });
+
+    describe('with exit enabled', function () {
+      it('should force exit after root suite completion', runExit(true, 'enabled'));
+    });
+
+    describe('with exit disabled', function () {
+      it('should not force exit after root suite completion', runExit(false, 'disabled'));
+    });
+  });
 });
