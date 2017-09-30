@@ -52,6 +52,7 @@ describe('regressions', function () {
     // on a modern MBP takes ±5 seconds on node 4.0, but on older laptops with node 0.12 ±40 seconds.
     // Could easily take longer on even weaker machines (Travis-CI containers for example).
     this.timeout(120000);
+    this.slow(12000);
     run('regression/issue-1991.fixture.js', [], function (err, res) {
       if (err) {
         done(err);

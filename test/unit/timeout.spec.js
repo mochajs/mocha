@@ -14,10 +14,10 @@ describe('timeouts', function () {
   });
 
   it('should allow overriding per-test', function (done) {
-    this.timeout(1000);
+    this.timeout(200);
     setTimeout(function () {
       done();
-    }, 300);
+    }, 50);
   });
 
   describe('disabling', function () {
@@ -56,6 +56,7 @@ describe('timeouts', function () {
       this.timeout(4);
 
       it('should suppress timeout(4)', function (done) {
+        this.slow(100);
         // The test is in the before() call.
         this.enableTimeouts(false);
         setTimeout(done, 50);
