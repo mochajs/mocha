@@ -349,6 +349,7 @@ describe('options', function () {
     var runExit = function (shouldExit, behavior) {
       return function (done) {
         this.timeout(0);
+        this.slow(3000);
         var didExit = true;
         var t;
         var args = behaviors[behavior] ? [behaviors[behavior]] : [];
