@@ -70,7 +70,7 @@ test-unit:
 
 test-integration:
 	@printf "==> [Test :: Integrations]\n"
-	$(call test_node,integration) --timeout 5000 \
+	$(call test_node,integration) --timeout 5000 --slow 500 \
 		test/integration/*.spec.js
 
 test-compilers:

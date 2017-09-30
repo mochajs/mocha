@@ -19,7 +19,7 @@ describe('retries', function () {
   });
 
   it('should allow override and run appropriate hooks', function (done) {
-    this.timeout(200);
+    this.timeout(100);
     this.retries(2);
     console.log('TEST', times);
     if (++times < 3) {
