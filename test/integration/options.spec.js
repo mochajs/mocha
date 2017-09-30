@@ -374,7 +374,7 @@ describe('options', function () {
     };
 
     describe('default behavior', function () {
-      it('should force exit after root suite completion', runExit(true));
+      it('should force exit after root suite completion', runExit(false));
     });
 
     describe('with exit enabled', function () {
