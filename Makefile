@@ -122,24 +122,24 @@ test-reporters:
 test-only:
 	@printf "==> [Test :: Only]\n"
 	$(call test_node,only-tdd) --ui tdd \
-		test/misc/only/tdd.spec
+		test/only/tdd.spec
 
 	$(call test_node,only-bdd) --ui bdd \
-		test/misc/only/bdd.spec
+		test/only/bdd.spec
 
 	$(call test_node,only-bdd-require) --ui qunit \
-		test/misc/only/bdd-require.spec
+		test/only/bdd-require.spec
 
 test-global-only:
 	@printf "==> [Test :: Global Only]\n"
 	$(call test_node,global-only-tdd) --ui tdd \
-		test/misc/only/global/tdd.spec
+		test/only/global/tdd.spec
 
 	$(call test_node,global-only-bdd) --ui bdd \
-		test/misc/only/global/bdd.spec
+		test/only/global/bdd.spec
 
 	$(call test_node,global-only-qunit) --ui qunit \
-		test/misc/only/global/qunit.spec
+		test/only/global/qunit.spec
 
 test-mocha:
 	@printf "==> [Test :: Mocha]\n"
