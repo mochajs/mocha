@@ -17,7 +17,7 @@ TESTS = $(shell find test -name "*.js" -type f | sort)
 
 all: mocha.js
 
-mocha.js BUILDTMP/mocha.js: $(SRC) browser-entry.js
+mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: build]\n"
 	mkdir -p ${@D}
 	$(BROWSERIFY) ./browser-entry \
@@ -30,7 +30,7 @@ mocha.js BUILDTMP/mocha.js: $(SRC) browser-entry.js
 
 clean:
 	@printf "==> [Clean]\n"
-	rm -rf BUILDTMP
+	rm -f mocha.js
 
 lint:
 	@printf "==> [Test :: Lint]\n"
@@ -38,13 +38,13 @@ lint:
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-requires test-reporters test-only test-global-only
 
-test-browser: clean BUILDTMP/mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
+test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
 test: lint test-node test-browser
 
 test-browser-unit:
 	@printf "==> [Test :: Browser]\n"
-	NODE_PATH=BUILDTMP $(KARMA) start --single-run
+	NODE_PATH=. $(KARMA) start --single-run
 
 test-browser-bdd:
 	@printf "==> [Test :: Browser :: BDD]\n"
