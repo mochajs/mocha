@@ -1,7 +1,6 @@
 'use strict';
 
 var utils = require('../../lib/utils');
-var toISOString = require('../../lib/to-iso-string');
 
 describe('lib/utils', function () {
   describe('clean', function () {
@@ -170,18 +169,10 @@ describe('lib/utils', function () {
     });
 
     it('should return Date object with .toISOString() + string prefix', function () {
-      expect(stringify(new Date(0))).to.equal('[Date: ' + shimToISOString(new Date(0)) + ']');
+      expect(stringify(new Date(0))).to.equal('[Date: ' + new Date(0).toISOString() + ']');
 
       var date = new Date(); // now
-      expect(stringify(date)).to.equal('[Date: ' + shimToISOString(date) + ']');
-
-      function shimToISOString (date) {
-        if (date.toISOString) {
-          return date.toISOString();
-        } else {
-          return toISOString(date);
-        }
-      }
+      expect(stringify(date)).to.equal('[Date: ' + date.toISOString() + ']');
     });
 
     it('should return invalid Date object with .toString() + string prefix', function () {
