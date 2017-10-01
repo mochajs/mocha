@@ -301,7 +301,8 @@
   "scripts": {
     "lint": "eslint . bin/*",
     "test": "make test && make clean",
-    "preversion": "make test && rm mocha.js && make mocha.js && git add mocha.js",
+    "preversion": "npm test",
+    "prepublishOnly": "make test && rm mocha.js && make mocha.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
@@ -352,9 +353,7 @@
     "index.js",
     "mocha.css",
     "mocha.js",
-    "browser-entry.js",
-    "LICENSE",
-    "bower.json"
+    "browser-entry.js"
   ],
   "browser": {
     "growl": "./lib/browser/growl.js",

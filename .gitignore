@@ -12,6 +12,6 @@ npm-debug.log*
 *.orig
 .nyc_output/
 coverage/
-BUILDTMP/
 yarn.lock
 package-lock.json
+mocha.js

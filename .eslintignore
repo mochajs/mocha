@@ -1,4 +1,3 @@
 coverage/
 mocha.js
-BUILDTMP
 *.fixture.js

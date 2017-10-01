@@ -4,4 +4,4 @@
 mkdir -p .karma
 
 # ensure we are building a non-broken bundle for AMD
-make BUILDTMP/mocha.js && [[ -z "$(grep 'define.amd' BUILDTMP/mocha.js)" ]] || exit 1
+make mocha.js && [[ -z "$(grep 'define.amd' mocha.js)" ]] || exit 1
