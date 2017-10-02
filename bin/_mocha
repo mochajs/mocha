@@ -348,7 +348,7 @@ if (program.forbidPending) mocha.forbidPending();
 
 if (program.compilers.length > 0) {
   require('util').deprecate(function () {},
-    '"--compilers" will be removed in a future version of Mocha; see https://git.io/vdGQW for more info')();
+    '"--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info')();
 }
 var extensions = ['js'];
 program.compilers.forEach(function (c) {
