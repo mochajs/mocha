@@ -1,3 +1,68 @@
+# 4.0.0 / 2017-10-02
+
+You might want to read this before filing a new bug!  :stuck_out_tongue_closed_eyes:
+
+## :boom: Breaking Changes
+
+For more info, please [read this article](https://boneskull.com/mocha-v4-nears-release/).
+
+### Compatibility
+
+- [#3016]: Drop support for unmaintained versions of Node.js ([@boneskull]):
+  - 0.10.x
+  - 0.11.x
+  - 0.12.x
+  - iojs (any)
+  - 5.x.x
+- [#2979]: Drop support for non-ES5-compliant browsers ([@boneskull]):
+  - IE7
+  - IE8
+  - PhantomJS 1.x
+- [#2615]: Drop Bower support; old versions (3.x, etc.) will remain available ([@ScottFreeCode], [@boneskull])
+
+### Default Behavior
+
+- [#2879]: By default, Mocha will no longer force the process to exit once all tests complete.  This means any test code (or code under test) which would normally prevent `node` from exiting will do so when run in Mocha.  Supply the `--exit` flag to revert to pre-v4.0.0 behavior ([@ScottFreeCode], [@boneskull])
+
+### Reporter Output
+
+- [#2095]: Remove `stdout:` prefix from browser reporter logs ([@skeggse])
+- [#2295]: Add separator in "unified diff" output ([@olsonpm])
+- [#2686]: Print failure message when `--forbid-pending` or `--forbid-only` is specified ([@ScottFreeCode])
+- [#2814]: Indent contexts for better readability when reporting failures ([@charlierudolph])
+
+## :-1: Deprecations
+
+- [#2493]: The `--compilers` command-line option is now soft-deprecated and will emit a warning on `STDERR`.  Read [this](https://github.com/mochajs/mocha/wiki/--compilers-deprecation) for more info and workarounds ([@ScottFreeCode], [@boneskull])
+
+## :tada: Enhancements
+
+- [#2628]: Allow override of default test suite name in XUnit reporter ([@ngeor])
+
+## :book: Documentation
+
+- [#3020]: Link to CLA in `README.md` and `CONTRIBUTING.md` ([@skeggse])
+
+## :nut_and_bolt: Other
+
+- [#2890]: Speed up build by (re-)consolidating SauceLabs tests ([@boneskull])
+
+[#3016]: https://github.com/mochajs/issues/3016
+[#2979]: https://github.com/mochajs/issues/2979
+[#2615]: https://github.com/mochajs/issues/2615
+[#2879]: https://github.com/mochajs/issues/2879
+[#2095]: https://github.com/mochajs/issues/2095
+[#2295]: https://github.com/mochajs/issues/2295
+[#2686]: https://github.com/mochajs/issues/2686
+[#2814]: https://github.com/mochajs/pull/2814
+[#2493]: https://github.com/mochajs/issues/2493
+[#2628]: https://github.com/mochajs/issues/2628
+[#3020]: https://github.com/mochajs/pull/3020
+[#2890]: https://github.com/mochajs/issues/2890
+[@skeggse]: https://github.com/skeggse
+[@olsonpm]: https://github.com/olsonpm
+[@ngeor]: https://github.com/ngeor
+
 # 3.5.3 / 2017-09-11
 
 ## :bug: Fixes
