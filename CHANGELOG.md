@@ -33,7 +33,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :-1: Deprecations
 
-- [#2493]: The `--compilers` command-line option is now soft-deprecated and will emit a warning on `STDERR`.  Read [this](https://github.com/mochajs/mocha/wiki/--compilers-deprecation) for more info and workarounds ([@ScottFreeCode], [@boneskull])
+- [#2493]: The `--compilers` command-line option is now soft-deprecated and will emit a warning on `STDERR`.  Read [this](https://github.com/mochajs/mocha/wiki/compilers-deprecation) for more info and workarounds ([@ScottFreeCode], [@boneskull])
 
 ## :tada: Enhancements
 
