@@ -36,7 +36,7 @@ describe('Doc reporter', function () {
           '      <h1>' + expectedTitle + '</h1>\n',
           '      <dl>\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
       it('should escape title where necessary', function () {
         var suite = {
@@ -56,7 +56,7 @@ describe('Doc reporter', function () {
           '      <h1>' + expectedTitle + '</h1>\n',
           '      <dl>\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if suite root does exist', function () {
@@ -71,7 +71,7 @@ describe('Doc reporter', function () {
         };
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
-        stdout.should.be.empty();
+        expect(stdout).to.be.empty();
       });
     });
   });
@@ -92,7 +92,7 @@ describe('Doc reporter', function () {
         var expectedArray = [
           '  </dl>\n', '</section>\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if suite root does exist', function () {
@@ -107,7 +107,7 @@ describe('Doc reporter', function () {
         };
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
-        stdout.should.be.empty();
+        expect(stdout).to.be.empty();
       });
     });
   });
@@ -134,7 +134,7 @@ describe('Doc reporter', function () {
         '    <dt>' + expectedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedBody + '</code></pre></dd>\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
     it('should escape title and body where necessary', function () {
       var unescapedTitle = '<div>' + expectedTitle + '</div>';
@@ -155,7 +155,7 @@ describe('Doc reporter', function () {
         '    <dt>' + expectedEscapedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
   });
 
@@ -183,7 +183,7 @@ describe('Doc reporter', function () {
         '    <dd class="error"><pre><code>' + expectedBody + '</code></pre></dd>\n',
         '    <dd class="error">' + expectedError + '</dd>\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
     it('should escape title, body and error where necessary', function () {
       var unescapedTitle = '<div>' + expectedTitle + '</div>';
@@ -207,7 +207,7 @@ describe('Doc reporter', function () {
         '    <dd class="error"><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n',
         '    <dd class="error">' + expectedEscapedError + '</dd>\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
   });
 });

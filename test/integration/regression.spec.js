@@ -72,7 +72,7 @@ describe('regressions', function () {
       it('should be pending', function () {});
     });
     after('meta test', function () {
-      afterWasRun.should.be.ok();
+      expect(afterWasRun).to.be.ok();
     });
   });
 

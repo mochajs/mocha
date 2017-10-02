@@ -31,7 +31,7 @@ describe('Min reporter', function () {
         '\u001b[2J',
         '\u001b[1;3H'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
   });
 
@@ -50,7 +50,7 @@ describe('Min reporter', function () {
       }, runner);
       process.stdout.write = stdoutWrite;
 
-      calledEpilogue.should.be.true();
+      expect(calledEpilogue).to.be(true);
     });
   });
 });
