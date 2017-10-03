@@ -302,7 +302,7 @@
     "lint": "eslint . bin/*",
     "test": "make test && make clean",
     "preversion": "npm test",
-    "prepublishOnly": "make test && rm mocha.js && make mocha.js",
+    "prepublishOnly": "rimraf mocha.js && make mocha.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
