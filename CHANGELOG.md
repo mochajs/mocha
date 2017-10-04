@@ -47,18 +47,18 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 - [#2890]: Speed up build by (re-)consolidating SauceLabs tests ([@boneskull])
 
-[#3016]: https://github.com/mochajs/issues/3016
-[#2979]: https://github.com/mochajs/issues/2979
-[#2615]: https://github.com/mochajs/issues/2615
-[#2879]: https://github.com/mochajs/issues/2879
-[#2095]: https://github.com/mochajs/issues/2095
-[#2295]: https://github.com/mochajs/issues/2295
-[#2686]: https://github.com/mochajs/issues/2686
-[#2814]: https://github.com/mochajs/pull/2814
-[#2493]: https://github.com/mochajs/issues/2493
-[#2628]: https://github.com/mochajs/issues/2628
-[#3020]: https://github.com/mochajs/pull/3020
-[#2890]: https://github.com/mochajs/issues/2890
+[#3016]: https://github.com/mochajs/mocha/issues/3016
+[#2979]: https://github.com/mochajs/mocha/issues/2979
+[#2615]: https://github.com/mochajs/mocha/issues/2615
+[#2879]: https://github.com/mochajs/mocha/issues/2879
+[#2095]: https://github.com/mochajs/mocha/issues/2095
+[#2295]: https://github.com/mochajs/mocha/issues/2295
+[#2686]: https://github.com/mochajs/mocha/issues/2686
+[#2814]: https://github.com/mochajs/mocha/pull/2814
+[#2493]: https://github.com/mochajs/mocha/issues/2493
+[#2628]: https://github.com/mochajs/mocha/issues/2628
+[#3020]: https://github.com/mochajs/mocha/pull/3020
+[#2890]: https://github.com/mochajs/mocha/issues/2890
 [@skeggse]: https://github.com/skeggse
 [@olsonpm]: https://github.com/olsonpm
 [@ngeor]: https://github.com/ngeor
