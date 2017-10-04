@@ -300,9 +300,8 @@
   },
   "scripts": {
     "lint": "eslint . bin/*",
-    "test": "make test && make clean",
-    "preversion": "npm test",
-    "prepublishOnly": "rimraf mocha.js && make mocha.js",
+    "test": "make clean && make test",
+    "prepublishOnly": "npm test && make clean && make mocha.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
