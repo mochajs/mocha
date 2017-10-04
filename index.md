@@ -776,6 +776,25 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 Executes tests on changes to JavaScript in the CWD, and once initially.
 
+### `--exit` / `--no-exit`
+
+*Updated in Mocha v4.0.0*
+
+*Prior to* version v4.0.0, *by default*, Mocha would force its own process to exit once it was finished executing all tests.  This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.  Ultimately, "dirty" tests can (but not always) lead to *false positive* or *false negative* results.
+
+"Hanging" most often manifests itself if a server is still listening on a port, or a socket is still open, etc.  It can also be something like a runaway `setInterval()`, or even an errant `Promise` that never fulfilled.
+
+The *default behavior* in v4.0.0 is `--no-exit`, where previously it was `--exit`.
+
+**The easiest way to "fix" the issue is to simply pass `--exit` to the Mocha process.**  It *can* be time-consuming to debug--because it's not always obvious where the problem is--but it *is* recommended to do so.
+
+To ensure your tests aren't leaving messes around, here are some ideas to get started:
+
+- See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector/)
+- Use the new [async_hooks](https://github.com/nodejs/node/commits/master/doc/api/async_hooks.md) API ([example](https://git.io/vdlNM))
+- Try something like [why-is-node-running](https://npm.im/why-is-node-running)
+- Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
+
 ### `--compilers`
 
 *Updated in Mocha v4.0.0*
