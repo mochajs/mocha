@@ -1,5 +1,6 @@
 <!--
 Have you read Mocha's Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md
+
 For more, check out the Mocha Gitter chat room: https://gitter.im/mochajs/mocha
 -->
 
@@ -23,8 +24,7 @@ Place an `x` between the square brackets on the lines below for every satisified
 ### Steps to Reproduce
 
 <!--
-Please add a series of steps to reproduce the problem. See https://stackoverflow.com/help/mcve for in depth information
-on how to create a mimimal, complete, and verifiable example. TL;DR version: Ideally, include minimal (only necessary) code that we can copy-paste into an empty project and run to see the issue (without having to fill in any gaps or make any guesses). Not every issue has to meet that ideal, but for those that can, it ensures we have all the info needed to look for a solution to the problem -- and you may even solve it yourself while narrowing the code down!
+Please add a series of steps to reproduce the problem. See https://stackoverflow.com/help/mcve for in depth information on how to create a mimimal, complete, and verifiable example. TL;DR version: Ideally, include minimal (only necessary) code that we can copy-paste into an empty project and run to see the issue (without having to fill in any gaps or make any guesses). Not every issue has to meet that ideal, but for those that can, it ensures we have all the info needed to look for a solution to the problem -- and you may even solve it yourself while narrowing the code down!
 -->
 
 **Expected behavior:** [What you expect to happen]
