@@ -43,7 +43,7 @@ describe('Landing reporter', function () {
 
       process.stdout.write = stdoutWrite;
 
-      stdout[0].should.deepEqual('\n\n\n  ');
+      expect(stdout[0]).to.eql('\n\n\n  ');
       Base.cursor = cachedCursor;
     });
 
@@ -61,7 +61,7 @@ describe('Landing reporter', function () {
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
-      calledCursorHide.should.be.true();
+      expect(calledCursorHide).to.be(true);
 
       Base.cursor = cachedCursor;
     });
@@ -93,7 +93,7 @@ describe('Landing reporter', function () {
           '  ',
           resetCode
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if test has not failed', function () {
@@ -121,7 +121,7 @@ describe('Landing reporter', function () {
           '  ',
           resetCode
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
   });
@@ -145,8 +145,8 @@ describe('Landing reporter', function () {
       }, runner);
 
       process.stdout.write = stdoutWrite;
-      calledEpilogue.should.be.true();
-      calledCursorShow.should.be.true();
+      expect(calledEpilogue).to.be(true);
+      expect(calledCursorShow).to.be(true);
 
       Base.cursor = cachedCursor;
     });

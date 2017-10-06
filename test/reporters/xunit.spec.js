@@ -32,7 +32,7 @@ describe('XUnit reporter', function () {
         fs.createWriteStream = false;
 
         var boundXUnit = XUnit.bind({}, runner, options);
-        boundXUnit.should.throw('file output not supported in browser');
+        expect(boundXUnit).to.throwException('file output not supported in browser');
         fs.createWriteStream = fsCreateWriteStream;
       });
     });
@@ -51,8 +51,8 @@ describe('XUnit reporter', function () {
         };
         XUnit.call(contextVariables, runner, options);
 
-        expectedDirectory.should.equal(expectedOutput);
-        contextVariables.fileStream.should.equal(expectedOutput);
+        expect(expectedDirectory).to.equal(expectedOutput);
+        expect(contextVariables.fileStream).to.equal(expectedOutput);
 
         fs.createWriteStream = fsCreateWriteStream;
         mkdirp.sync = mkdirpSync;
@@ -103,7 +103,7 @@ describe('XUnit reporter', function () {
         passTest,
         failTest
       ];
-      calledTests.should.deepEqual(expectedCalledTests);
+      expect(calledTests).to.eql(expectedCalledTests);
     });
   });
 
@@ -129,8 +129,8 @@ describe('XUnit reporter', function () {
           callback
         );
 
-        calledEnd.should.be.true();
-        callbackArgument.should.equal(expectedFailure);
+        expect(calledEnd).to.be(true);
+        expect(callbackArgument).to.equal(expectedFailure);
       });
     });
     describe('if fileStream is falsy', function () {
@@ -147,7 +147,7 @@ describe('XUnit reporter', function () {
           callback
         );
 
-        callbackArgument.should.equal(expectedFailure);
+        expect(callbackArgument).to.equal(expectedFailure);
       });
     });
   });
@@ -168,7 +168,7 @@ describe('XUnit reporter', function () {
           expectedLine
         );
 
-        expectedWrite.should.equal(expectedLine + '\n');
+        expect(expectedWrite).to.equal(expectedLine + '\n');
       });
     });
     describe('if fileStream is falsy and stdout exists', function () {
@@ -187,7 +187,7 @@ describe('XUnit reporter', function () {
 
         process.stdout.write = stdoutWrite;
 
-        stdout[0].should.equal(expectedLine + '\n');
+        expect(stdout[0]).to.equal(expectedLine + '\n');
       });
     });
     describe('if fileStream is falsy and stdout does not exist', function () {
@@ -208,7 +208,7 @@ describe('XUnit reporter', function () {
 
         console.log = cachedConsoleLog;
         process = stdoutWrite; // eslint-disable-line no-native-reassign, no-global-assign
-        stdout[0].should.equal(expectedLine);
+        expect(stdout[0]).to.equal(expectedLine);
       });
     });
   });
@@ -248,7 +248,7 @@ describe('XUnit reporter', function () {
 
         var expectedTag = '<testcase classname="' + expectedClassName + '" name="' + expectedTitle + '" time="1"><failure>' + expectedMessage + '\n' + expectedStack + '</failure></testcase>';
 
-        expectedWrite.should.equal(expectedTag);
+        expect(expectedWrite).to.equal(expectedTag);
       });
     });
     describe('on test pending', function () {
@@ -279,7 +279,7 @@ describe('XUnit reporter', function () {
 
         var expectedTag = '<testcase classname="' + expectedClassName + '" name="' + expectedTitle + '" time="1"><skipped/></testcase>';
 
-        expectedWrite.should.equal(expectedTag);
+        expect(expectedWrite).to.equal(expectedTag);
       });
     });
     describe('on test in any other state', function () {
@@ -310,7 +310,7 @@ describe('XUnit reporter', function () {
 
         var expectedTag = '<testcase classname="' + expectedClassName + '" name="' + expectedTitle + '" time="0"/>';
 
-        expectedWrite.should.equal(expectedTag);
+        expect(expectedWrite).to.equal(expectedTag);
       });
     });
   });

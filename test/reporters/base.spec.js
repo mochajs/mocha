@@ -52,8 +52,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/- actual/);
-      errOut.should.match(/\+ expected/);
+      expect(errOut).to.match(/- actual/);
+      expect(errOut).to.match(/\+ expected/);
     });
 
     it('should show diffs if property set to `true`', function () {
@@ -66,8 +66,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/- actual/);
-      errOut.should.match(/\+ expected/);
+      expect(errOut).to.match(/- actual/);
+      expect(errOut).to.match(/\+ expected/);
     });
 
     it('should not show diffs when showDiff property set to `false`', function () {
@@ -80,8 +80,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/- actual/);
-      errOut.should.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- actual/);
+      expect(errOut).to.not.match(/\+ expected/);
     });
 
     it('should not show diffs when expected is not defined', function () {
@@ -93,8 +93,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/- actual/);
-      errOut.should.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- actual/);
+      expect(errOut).to.not.match(/\+ expected/);
     });
   });
 
@@ -113,11 +113,11 @@ describe('Base reporter', function () {
 
       errOut = stdout.join('\n');
 
-      errOut.should.not.match(/"foo\\nbar"/);
-      errOut.should.match(/foo/).and.match(/bar/);
-      errOut.should.match(/test/);
-      errOut.should.match(/actual/);
-      errOut.should.match(/expected/);
+      expect(errOut).to.not.match(/"foo\\nbar"/);
+      expect(errOut).to.match(/foo/).and.match(/bar/);
+      expect(errOut).to.match(/test/);
+      expect(errOut).to.match(/actual/);
+      expect(errOut).to.match(/expected/);
     });
   });
 
@@ -136,10 +136,10 @@ describe('Base reporter', function () {
 
       errOut = stdout.join('\n');
 
-      errOut.should.match(/a foobar inline diff/);
-      errOut.should.match(/test/);
-      errOut.should.match(/actual/);
-      errOut.should.match(/expected/);
+      expect(errOut).to.match(/a foobar inline diff/);
+      expect(errOut).to.match(/test/);
+      expect(errOut).to.match(/actual/);
+      expect(errOut).to.match(/expected/);
     });
 
     it('should split lines when string has more than 4 line breaks', function () {
@@ -156,15 +156,15 @@ describe('Base reporter', function () {
 
       errOut = stdout.join('\n');
 
-      errOut.should.match(/1 \| a/);
-      errOut.should.match(/2 \| foobar/);
-      errOut.should.match(/3 \| inline/);
-      errOut.should.match(/4 \| diff/);
-      errOut.should.match(/5 \| with/);
-      errOut.should.match(/6 \| multiple lines/);
-      errOut.should.match(/test/);
-      errOut.should.match(/actual/);
-      errOut.should.match(/expected/);
+      expect(errOut).to.match(/1 \| a/);
+      expect(errOut).to.match(/2 \| foobar/);
+      expect(errOut).to.match(/3 \| inline/);
+      expect(errOut).to.match(/4 \| diff/);
+      expect(errOut).to.match(/5 \| with/);
+      expect(errOut).to.match(/6 \| multiple lines/);
+      expect(errOut).to.match(/test/);
+      expect(errOut).to.match(/actual/);
+      expect(errOut).to.match(/expected/);
     });
   });
 
@@ -203,7 +203,7 @@ describe('Base reporter', function () {
       ];
 
       regexesToMatch.forEach(function (aRegex) {
-        errOut.should.match(aRegex);
+        expect(errOut).to.match(aRegex);
       });
     });
   });
@@ -220,10 +220,10 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     errOut = stdout.join('\n');
-    errOut.should.match(/"key"/);
-    errOut.should.match(/test/);
-    errOut.should.match(/- actual/);
-    errOut.should.match(/\+ expected/);
+    expect(errOut).to.match(/"key"/);
+    expect(errOut).to.match(/test/);
+    expect(errOut).to.match(/- actual/);
+    expect(errOut).to.match(/\+ expected/);
   });
 
   it('should stringify Object.create(null)', function () {
@@ -240,10 +240,10 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     errOut = stdout.join('\n');
-    errOut.should.match(/"hasOwnProperty"/);
-    errOut.should.match(/test/);
-    errOut.should.match(/- actual/);
-    errOut.should.match(/\+ expected/);
+    expect(errOut).to.match(/"hasOwnProperty"/);
+    expect(errOut).to.match(/test/);
+    expect(errOut).to.match(/- actual/);
+    expect(errOut).to.match(/\+ expected/);
   });
 
   it('should handle error messages that are not strings', function () {
@@ -260,10 +260,10 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/\+true/);
-      errOut.should.match(/-false/);
-      errOut.should.match(/- actual/);
-      errOut.should.match(/\+ expected/);
+      expect(errOut).to.match(/\+true/);
+      expect(errOut).to.match(/-false/);
+      expect(errOut).to.match(/- actual/);
+      expect(errOut).to.match(/\+ expected/);
     }
   });
 
@@ -283,11 +283,11 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      errOut.should.match(/custom error message\n/);
-      errOut.should.match(/\+42/);
-      errOut.should.match(/-43/);
-      errOut.should.match(/- actual/);
-      errOut.should.match(/\+ expected/);
+      expect(errOut).to.match(/custom error message\n/);
+      expect(errOut).to.match(/\+42/);
+      expect(errOut).to.match(/-43/);
+      expect(errOut).to.match(/- actual/);
+      expect(errOut).to.match(/\+ expected/);
     }
   });
 
@@ -302,7 +302,7 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar');
+    expect(errOut).to.equal('1) test title:\n     Error\n  foo\n  bar');
   });
 
   it('should use the inspect() property if `message` is not set', function () {
@@ -313,7 +313,7 @@ describe('Base reporter', function () {
     var test = makeTest(err);
     Base.list([test]);
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:\n     an error happened');
+    expect(errOut).to.equal('1) test title:\n     an error happened');
   });
 
   it('should set an empty message if `message` and `inspect()` are not set', function () {
@@ -323,7 +323,7 @@ describe('Base reporter', function () {
     var test = makeTest(err);
     Base.list([test]);
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:');
+    expect(errOut).to.equal('1) test title:');
   });
 
   it('should not modify stack if it does not contain message', function () {
@@ -337,6 +337,6 @@ describe('Base reporter', function () {
     Base.list([test]);
 
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal('1) test title:\n     Error\n  foo\n  bar');
+    expect(errOut).to.equal('1) test title:\n     Error\n  foo\n  bar');
   });
 });

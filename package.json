@@ -198,6 +198,7 @@
     "Nathan Houle <nathan+github@nathanhoule.com> (https://github.com/ndhoule)",
     "Nathan Rajlich <nathan@tootallnate.net> (https://github.com/TooTallNate)",
     "Nick Fitzgerald (https://github.com/fitzgen)",
+    "Nikolaos Georgiou (https://github.com/ngeor)",
     "noirlab (https://github.com/noirlab)",
     "Noshir Patel <nosh@blackpiano.com> (https://github.com/noshir-patel)",
     "OlegTsyba <oleg.tsyba.ua@gmail.com> (https://github.com/OlegTsyba)",
@@ -341,7 +342,6 @@
     "karma-sauce-launcher": "^1.2.0",
     "nyc": "^11.2.1",
     "rimraf": "^2.5.2",
-    "should": "^13.1.0",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
   },
