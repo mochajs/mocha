@@ -1,3 +1,12 @@
+# 4.0.1 / 2017-10-05
+
+## :bug: Fixes
+
+- [#3051]: Upgrade Growl to v1.10.3 to fix its [peer dep problems](https://github.com/tj/node-growl/pull/68) ([@dpogue])
+
+[#3051]: https://github.com/mochajs/mocha/pull/3051
+[@dpogue]: https://github.com/dpogue
+
 # 4.0.0 / 2017-10-02
 
 You might want to read this before filing a new bug!  :stuck_out_tongue_closed_eyes:
