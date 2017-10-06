@@ -176,7 +176,7 @@ Issues or PRs which require action or feedback from a *specific* maintainer, sho
 ### Meta
 
 - `stale`: The "stalebot" marks things as stale and will close issues if they need feedback but haven't received any.  Comment on an issue to prevent this from happening.
-- `duplicate`: Any issue which is a duplicate of some other issue.  Label `duplicate`, link to original issue in comment, and close.
+- `duplicate`: Any issue which is a duplicate of some other issue.  Label `duplicate`, write "duplicate of #<ISSUE>" in a new comment, and close.  [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/)
 
 ## Milestones
 
@@ -212,7 +212,7 @@ Here are some suggestions:
 3. Don't make it about "users vs. maintainers".  Treat them like a potential future maintainer. 
 4. Avoid adding to the drama.  You could try to reach out privately; email may be in their GitHub profile.  You will likely never hear from that individual again (problem solved)
 5. If an issue is getting out of control, lock it.
-6. If someone is *repeatedly* rude and does not correct their mistakes, you may  ban them from participating in the `mochajs` org.  If you do not have permission to do so, contact one which does (an "owner").
+6. If someone is *repeatedly* rude and does not correct their mistakes, you may ban them from participating in the `mochajs` org.  If you do not have permission to do so, contact one which does (an "owner").
 
 #### Code of Conduct Violations
 
