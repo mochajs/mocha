@@ -167,4 +167,13 @@ describe('Mocha', function () {
       expect(mocha.options.delay).to.equal(true);
     });
   });
+
+  describe('.bail()', function () {
+    it('should set the suite._bail to true if there is no arguments', function () {
+      var mocha = new Mocha({bail: false});
+      expect(mocha.suite._bail).to.equal(false);
+      mocha.bail();
+      expect(mocha.suite._bail).to.equal(true);
+    });
+  });
 });
