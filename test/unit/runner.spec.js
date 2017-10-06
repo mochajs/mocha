@@ -371,6 +371,14 @@ describe('Runner', function () {
       runner.failHook(hook, err);
       done();
     });
+
+    it('should emit "end" if suite bail has no arguments', function (done) {
+      var hook = new Hook();
+      var err = {};
+      suite.bail();
+      runner.on('end', done);
+      runner.failHook(hook, err);
+    });
   });
 
   describe('allowUncaught', function () {
