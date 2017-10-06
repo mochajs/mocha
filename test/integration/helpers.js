@@ -44,9 +44,9 @@ module.exports = {
    * Invokes the mocha binary for the given fixture using the JSON reporter,
    * returning the parsed output, as well as exit code.
    *
-   * @param {string}   fixturePath
-   * @param {array}    args
-   * @param {function} fn
+   * @param {string} fixturePath - Path from __dirname__
+   * @param {string[]} args - Array of args
+   * @param {Function} fn - Callback
    */
   runMochaJSON: function (fixturePath, args, fn) {
     var path;
@@ -54,7 +54,7 @@ module.exports = {
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
+    return invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
       if (err) return fn(err);
 
       try {
@@ -89,7 +89,7 @@ module.exports = {
       } else if (!diffs.length || inStackTrace) {
         // Haven't encountered a spec yet
         // or we're in the middle of a stack trace
-        return;
+
       } else if (line.indexOf('+ expected - actual') !== -1) {
         inDiff = true;
       } else if (line.match(/at Context/)) {
@@ -115,10 +115,10 @@ module.exports = {
 
 function invokeMocha (args, fn) {
   var output, mocha, listener;
-  // ensure DEBUG doesn't kill tests
+
   output = '';
   args = [path.join('bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, {env: {}});
+  mocha = spawn(process.execPath, args);
 
   listener = function (data) {
     output += data;
@@ -134,6 +134,8 @@ function invokeMocha (args, fn) {
       code: code
     });
   });
+
+  return mocha;
 }
 
 function resolveFixturePath (fixture) {

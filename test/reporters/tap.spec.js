@@ -39,8 +39,8 @@ describe('TAP reporter', function () {
       ];
       process.stdout.write = stdoutWrite;
 
-      stdout.should.deepEqual(expectedArray);
-      expectedString.should.equal(expectedSuite);
+      expect(stdout).to.eql(expectedArray);
+      expect(expectedString).to.equal(expectedSuite);
     });
   });
 
@@ -68,7 +68,7 @@ describe('TAP reporter', function () {
       process.stdout.write = stdoutWrite;
 
       var expectedMessage = 'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
-      stdout[0].should.deepEqual(expectedMessage);
+      expect(stdout[0]).to.eql(expectedMessage);
     });
   });
 
@@ -97,7 +97,7 @@ describe('TAP reporter', function () {
       process.stdout.write = stdoutWrite;
 
       var expectedMessage = 'ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n';
-      stdout[0].should.deepEqual(expectedMessage);
+      expect(stdout[0]).to.eql(expectedMessage);
     });
   });
 
@@ -134,7 +134,7 @@ describe('TAP reporter', function () {
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
           '  ' + expectedStack + '\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if there is no error stack', function () {
@@ -165,7 +165,7 @@ describe('TAP reporter', function () {
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
   });
@@ -206,7 +206,7 @@ describe('TAP reporter', function () {
         '# pass ' + numberOfPasses + '\n',
         '# fail ' + numberOfFails + '\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
   });
 });

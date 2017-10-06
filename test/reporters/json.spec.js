@@ -27,16 +27,16 @@ describe('json reporter', function () {
     }));
 
     runner.run(function (failureCount) {
-      failureCount.should.be.exactly(1);
-      runner.should.have.property('testResults');
-      runner.testResults.should.have.property('failures');
-      runner.testResults.failures.should.be.an.instanceOf(Array);
-      runner.testResults.failures.should.have.a.lengthOf(1);
+      expect(failureCount).to.be(1);
+      expect(runner).to.have.property('testResults');
+      expect(runner.testResults).to.have.property('failures');
+      expect(runner.testResults.failures).to.be.an('array');
+      expect(runner.testResults.failures).to.have.length(1);
 
       var failure = runner.testResults.failures[0];
-      failure.should.have.property('title', testTitle);
-      failure.err.message.should.equal(error.message);
-      failure.should.have.properties('err');
+      expect(failure).to.have.property('title', testTitle);
+      expect(failure.err.message).to.equal(error.message);
+      expect(failure).to.have.property('err');
 
       done();
     });
@@ -48,14 +48,14 @@ describe('json reporter', function () {
     suite.addTest(new Test(testTitle));
 
     runner.run(function (failureCount) {
-      failureCount.should.be.exactly(0);
-      runner.should.have.property('testResults');
-      runner.testResults.should.have.property('pending');
-      runner.testResults.pending.should.be.an.instanceOf(Array);
-      runner.testResults.pending.should.have.a.lengthOf(1);
+      expect(failureCount).to.be(0);
+      expect(runner).to.have.property('testResults');
+      expect(runner.testResults).to.have.property('pending');
+      expect(runner.testResults.pending).to.be.an('array');
+      expect(runner.testResults.pending).to.have.length(1);
 
       var pending = runner.testResults.pending[0];
-      pending.should.have.property('title', testTitle);
+      expect(pending).to.have.property('title', testTitle);
 
       done();
     });

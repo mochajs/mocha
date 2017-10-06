@@ -215,6 +215,8 @@ describe('options', function () {
   });
 
   describe('--forbid-only', function () {
+    var onlyErrorMessage = '`.only` forbidden';
+
     before(function () {
       args = ['--forbid-only'];
     });
@@ -237,12 +239,24 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if there are tests in suites marked only', function (done) {
+      run('options/forbid-only/only-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, onlyErrorMessage);
         done();
       });
     });
   });
 
   describe('--forbid-pending', function () {
+    var pendingErrorMessage = 'Pending test forbidden';
+
     before(function () {
       args = ['--forbid-pending'];
     });
@@ -265,6 +279,7 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
         done();
       });
     });
@@ -276,8 +291,99 @@ describe('options', function () {
           return;
         }
         assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
         done();
       });
+    });
+
+    it('fails if tests call `skip()`', function (done) {
+      run('options/forbid-pending/this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if beforeEach calls `skip()`', function (done) {
+      run('options/forbid-pending/beforeEach-this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if before calls `skip()`', function (done) {
+      run('options/forbid-pending/before-this.skip.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+
+    it('fails if there are tests in suites marked skip', function (done) {
+      run('options/forbid-pending/skip-suite.js', args, function (err, res) {
+        assert(!err);
+        assert.equal(res.code, 1);
+        assert.equal(res.failures[0].err.message, pendingErrorMessage);
+        done();
+      });
+    });
+  });
+
+  describe('--exit', function () {
+    var behaviors = {
+      enabled: '--exit',
+      disabled: '--no-exit'
+    };
+
+    /**
+     * Returns a test that executes Mocha in a subprocess with either
+     * `--exit`, `--no-exit`, or default behavior.
+     * @param {boolean} shouldExit - Expected result; `true` if Mocha should have force-killed the process.
+     * @param {string} [behavior] - 'enabled' or 'disabled'
+     * @returns {Function}
+     */
+    var runExit = function (shouldExit, behavior) {
+      return function (done) {
+        this.timeout(0);
+        this.slow(3000);
+        var didExit = true;
+        var t;
+        var args = behaviors[behavior] ? [behaviors[behavior]] : [];
+
+        var mocha = run('exit.fixture.js', args, function (err) {
+          clearTimeout(t);
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(didExit).to.equal(shouldExit);
+          done();
+        });
+
+        // if this callback happens, then Mocha didn't automatically exit.
+        t = setTimeout(function () {
+          didExit = false;
+          // this is the only way to kill the child, afaik.
+          // after the process ends, the callback to `run()` above is handled.
+          mocha.kill('SIGINT');
+        }, 2000);
+      };
+    };
+
+    describe('default behavior', function () {
+      it('should force exit after root suite completion', runExit(false));
+    });
+
+    describe('with exit enabled', function () {
+      it('should force exit after root suite completion', runExit(true, 'enabled'));
+    });
+
+    describe('with exit disabled', function () {
+      it('should not force exit after root suite completion', runExit(false, 'disabled'));
     });
   });
 });

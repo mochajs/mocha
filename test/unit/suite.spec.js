@@ -362,16 +362,16 @@ describe('Suite', function () {
   //   });
   //
   //   it('sets the parent on the added test', function(){
-  //     this.test.parent.should.equal(this.suite);
+  //     expect(this.test.parent).to.equal(this.suite);
   //   });
   //
   //   it('copies the timeout value', function(){
-  //     this.test.timeout().should.equal(4002);
+  //     expect(this.test.timeout()).to.equal(4002);
   //   });
   //
   //   it('adds the test to the tests collection', function(){
-  //     this.suite.tests.should.have.length(1);
-  //     this.suite.tests[0].should.equal(this.test);
+  //     expect(this.suite.tests).to.have.length(1);
+  //     expect(this.suite.tests[0]).to.equal(this.test);
   //   });
   // });
 
@@ -391,6 +391,36 @@ describe('Suite', function () {
         var parentSuite = new Suite('I am a parent');
         parentSuite.addSuite(this.suite);
         expect(this.suite.fullTitle()).to.equal('I am a parent A Suite');
+      });
+    });
+  });
+
+  describe('.titlePath()', function () {
+    beforeEach(function () {
+      this.suite = new Suite('A Suite');
+    });
+
+    describe('when there is no parent', function () {
+      it('returns the suite title', function () {
+        expect(this.suite.titlePath()).to.eql(['A Suite']);
+      });
+    });
+
+    describe('when there is a parent', function () {
+      describe('the parent is the root suite', function () {
+        it('returns the suite title', function () {
+          var parentSuite = new Suite('');
+          parentSuite.addSuite(this.suite);
+          expect(this.suite.titlePath()).to.eql(['A Suite']);
+        });
+      });
+
+      describe('the parent is not the root suite', function () {
+        it('returns the concatenation of parent\'s and suite\'s title', function () {
+          var parentSuite = new Suite('I am a parent');
+          parentSuite.addSuite(this.suite);
+          expect(this.suite.titlePath()).to.eql(['I am a parent', 'A Suite']);
+        });
       });
     });
   });
