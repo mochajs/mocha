@@ -28,9 +28,8 @@ describe('stackTraceFilter()', function () {
           'Immediate._onImmediate (/usr/local/lib/node_modules/mocha/lib/runner.js:276:5)',
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
-        filter(stack.join('\n'))
-          .should
-          .equal(stack.slice(0, 3)
+        expect(filter(stack.join('\n')))
+          .to.equal(stack.slice(0, 3)
             .join('\n'));
 
         stack = [
@@ -47,9 +46,8 @@ describe('stackTraceFilter()', function () {
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
 
-        filter(stack.join('\n'))
-          .should
-          .equal(stack.slice(0, 7)
+        expect(filter(stack.join('\n')))
+          .to.equal(stack.slice(0, 7)
             .join('\n'));
       });
 
@@ -69,9 +67,8 @@ describe('stackTraceFilter()', function () {
           'at file:///.../components/mochajs/mocha/2.1.0/mocha.js:4970:12',
           'at next (file:///.../components/mochajs/mocha/2.1.0/mocha.js:4817:14)'
         ];
-        filter(stack.join('\n'))
-          .should
-          .equal(stack.slice(0, 7)
+        expect(filter(stack.join('\n')))
+          .to.equal(stack.slice(0, 7)
             .join('\n'));
       });
 
@@ -88,9 +85,8 @@ describe('stackTraceFilter()', function () {
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        filter(stack.join('\n'))
-          .should
-          .equal(expected.join('\n'));
+        expect(filter(stack.join('\n')))
+          .to.equal(expected.join('\n'));
       });
     });
 
@@ -114,9 +110,8 @@ describe('stackTraceFilter()', function () {
           'at next (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:284:14)',
           'at Immediate._onImmediate (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:320:5)'
         ];
-        filter(stack.join('\n'))
-          .should
-          .equal(stack.slice(0, 2)
+        expect(filter(stack.join('\n')))
+          .to.equal(stack.slice(0, 2)
             .join('\n'));
       });
     });
@@ -142,9 +137,8 @@ describe('stackTraceFilter()', function () {
         'at localhost:3000/foo/bar/node_modules/mocha.js:4970:12',
         'at next (node_modules/mocha.js:4817:14)'
       ];
-      filter(stack.join('\n'))
-        .should
-        .equal(stack.slice(0, 7)
+      expect(filter(stack.join('\n')))
+        .to.equal(stack.slice(0, 7)
           .join('\n'));
     });
 

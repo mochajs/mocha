@@ -41,7 +41,7 @@ describe('Dot reporter', function () {
       var expectedArray = [
         '\n'
       ];
-      stdout.should.deepEqual(expectedArray);
+      expect(stdout).to.eql(expectedArray);
     });
   });
   describe('on pending', function () {
@@ -61,7 +61,7 @@ describe('Dot reporter', function () {
           '\n  ',
           Base.symbols.comma
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if window width is equal to or less than 1', function () {
@@ -76,7 +76,7 @@ describe('Dot reporter', function () {
         var expectedArray = [
           Base.symbols.comma
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
   });
@@ -102,7 +102,7 @@ describe('Dot reporter', function () {
             '\n  ',
             Base.symbols.dot
           ];
-          stdout.should.deepEqual(expectedArray);
+          expect(stdout).to.eql(expectedArray);
         });
       });
     });
@@ -123,7 +123,7 @@ describe('Dot reporter', function () {
           var expectedArray = [
             Base.symbols.dot
           ];
-          stdout.should.deepEqual(expectedArray);
+          expect(stdout).to.eql(expectedArray);
         });
       });
       describe('if test speed is slow', function () {
@@ -142,7 +142,7 @@ describe('Dot reporter', function () {
           var expectedArray = [
             Base.symbols.dot
           ];
-          stdout.should.deepEqual(expectedArray);
+          expect(stdout).to.eql(expectedArray);
         });
       });
     });
@@ -169,7 +169,7 @@ describe('Dot reporter', function () {
           '\n  ',
           Base.symbols.bang
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if window width is equal to or less than 1', function () {
@@ -189,7 +189,7 @@ describe('Dot reporter', function () {
         var expectedArray = [
           Base.symbols.bang
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
   });
@@ -206,7 +206,7 @@ describe('Dot reporter', function () {
       };
       Dot.call({epilogue: epilogue}, runner);
       process.stdout.write = stdoutWrite;
-      epilogueCalled.should.be.true();
+      expect(epilogueCalled).to.be(true);
     });
   });
 });
