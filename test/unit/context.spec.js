@@ -66,8 +66,16 @@ describe('Context Siblings', function () {
   });
 });
 
-describe('timeout()', function () {
-  it('should return the timeout', function () {
-    expect(this.timeout()).to.equal(200);
+describe('methods', function () {
+  describe('timeout()', function () {
+    it('should return the timeout', function () {
+      expect(this.timeout()).to.equal(200);
+    });
+  });
+
+  describe('retries', function () {
+    it('should return the number of retries', function () {
+      expect(this.retries()).to.equal(-1);
+    });
   });
 });
