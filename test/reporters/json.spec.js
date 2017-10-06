@@ -31,7 +31,7 @@ describe('json reporter', function () {
       expect(runner).to.have.property('testResults');
       expect(runner.testResults).to.have.property('failures');
       expect(runner.testResults.failures).to.be.an('array');
-      expect(runner.testResults.failures.length).to.equal(1);
+      expect(runner.testResults.failures).to.have.length(1);
 
       var failure = runner.testResults.failures[0];
       expect(failure).to.have.property('title', testTitle);
@@ -52,7 +52,7 @@ describe('json reporter', function () {
       expect(runner).to.have.property('testResults');
       expect(runner.testResults).to.have.property('pending');
       expect(runner.testResults.pending).to.be.an('array');
-      expect(runner.testResults.pending.length).to.equal(1);
+      expect(runner.testResults.pending).to.have.length(1);
 
       var pending = runner.testResults.pending[0];
       expect(pending).to.have.property('title', testTitle);
