@@ -73,6 +73,18 @@ describe('methods', function () {
     });
   });
 
+  describe('slow()', function () {
+    it('should return the slow', function () {
+      expect(this.slow()).to.equal(75);
+    });
+  });
+
+  describe('enableTimeouts()', function () {
+    it('should return the enableTimeouts', function () {
+      expect(this.enableTimeouts()).to.equal(true);
+    });
+  });
+
   describe('retries', function () {
     it('should return the number of retries', function () {
       expect(this.retries()).to.equal(-1);
