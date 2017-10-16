@@ -4,7 +4,7 @@ var Mocha = require('../../lib/mocha');
 var Test = Mocha.Test;
 
 describe('Mocha', function () {
-  var blankOpts = { reporter: function () {} }; // no output
+  var blankOpts = { reporter: function () {}, reporterOptions: {} }; // no output
 
   describe('.run(fn)', function () {
     it('should not raise errors if callback was not provided', function () {
@@ -175,5 +175,37 @@ describe('Mocha', function () {
       mocha.bail();
       expect(mocha.suite._bail).to.equal(true);
     });
+  });
+
+  describe('.reporterOptions()', function () {
+
+    it('should be equal when pass reporterOptions by ctor or by setup', function(){
+      var blankMocha = new Mocha(blankOpts);
+      var setupMocha = new Mocha();
+      setupMocha.setup(blankOpts);
+      expect(blankMocha.options).to.equal(setupMocha.options);
+    })
+
+    it('should merge reporterOptions', function(){
+      var fooOptions = { reporter: function () {}, reporterOptions: { foo: 'bar' } }
+      var bazOptions = { reporter: function () {}, reporterOptions: { baz: 'qux' } }
+      var mocha = new Mocha(fooOptions);
+      mocha.reporterOptions(bazOptions);
+      expect(mocha.options.reporterOptions).to.eql({foo: 'bar', baz: 'qux'})
+    })
+
+    it('should override previous reporterOptions', function(){
+      var fooOptions = { reporter: function () {}, reporterOptions: { foo: 'bar' } }
+      var bazOptions = { reporter: function () {}, reporterOptions: { foo: 'qux' } }
+      var mocha = new Mocha(fooOptions);
+      mocha.reporterOptions(bazOptions);
+      expect(mocha.options.reporterOptions).to.eql({foo: 'qux'})
+    })
+
+    it('should be chainable', function () {
+      var mocha = new Mocha(blankOpts);
+      expect(mocha.reporterOptions()).to.equal(mocha);
+    });
+
   });
 });
