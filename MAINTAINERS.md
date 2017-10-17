@@ -160,6 +160,7 @@ If it's *not* a Mocha problem (people tend not to believe this), you may want to
 
 - `confirmed-bug`: A confirmed bug
 - `unconfirmed-bug`: A maintainer has not yet or cannot reproduce; typically `needs-feedback` follows (see "Feedback & Follow-ups" below)
+- `invalid`: Not a bug.  Close the issue.
 
 ### Subsystems, Environments, Etc.
 
@@ -189,6 +190,8 @@ Write "closes #<ISSUE>" or "resolves #<ISSUE>" in a commit or PR to have the ori
 For any issue which is a duplicate, write "duplicate of #<ISSUE>" in a new comment, and close the issue.  [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/).
 
 If the issue is a support question, and you believe it has been answered, close the issue.
+
+If the issue is not Mocha-related, and/or a bug cannot be confirmed, label it `invalid` and close.
 
 It's easy to reopen issues.  If you're not sure, just close it!
 
