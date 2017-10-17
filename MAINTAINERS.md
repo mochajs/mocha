@@ -123,7 +123,7 @@ In other words, to have your opinion heard, participate regularly.  The rest of 
 Maintainers will mainly gather in [the mochajs/contributors channel](https://gitter.im/mochajs/contributors).  This is a *public* channel, and *anyone* can join.
 Videoconference (or audio) calls may happen on a regular or irregular basis, as schedules allow. This is mainly because we have Real Lives and time zones suck.
 
-## Labeling Issues & Pull Requests
+## Working with Issues & Pull Requests
 
 All new issues will need to be triaged, and pull requests must be examined.  Maintainers must understand [Semantic Versioning](http://semver.org) ("SemVer"), as Mocha follows it strictly.
 
@@ -133,15 +133,19 @@ The following list is incomplete, but it's better than nothing:
 
 ### Semantic Versioning
 
-*All* issues should have one of these three labels:
+*All* issues which will be resolved by commit(s) should have one of these three labels:
 
 - `semver-patch` for bug fixes, documentation, development environment changes, CI and tests
 - `semver-minor` for enhancements ("features")
 - `semver-major` for backwards-incompatible ("breaking") changes to the *output*, *API*, or environment support
 
-Pull requests don't need `semver-*` labels, *unless* there is no associated issue.
+To be clear:
 
-An issue or PR which will introduce a breaking change will be `semver-major`, *regardless* of any other label.
+- Features, bugs, and updated tests are examples of issues which will be resolved by commit(s).
+- Support questions, unconfirmed bugs and [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality) are examples of issues which do *not* need `semver-*` labels, since they won't necessarily result in any changes to the codebase.  
+- Pull requests *do not* need `semver-*` labels, *unless there is no associated issue* (PRO TIP: make an issue!)
+- An issue or PR which will introduce a breaking change will be `semver-major`, *regardless* of any other label.
+- **Breaking changes to private APIs will be `semver-major`, if and only if they are known to be consumed by actively developed project(s).** 
 
 ### Questions
 
@@ -154,8 +158,8 @@ If it's *not* a Mocha problem (people tend not to believe this), you may want to
 
 ### Bugs
 
-- `unconfirmed`: A maintainer has not yet or cannot reproduce; typically `needs-feedback` follows (see "Feedback & Follow-ups" below)
-- `bug`: A confirmed bug
+- `confirmed-bug`: A confirmed bug
+- `unconfirmed-bug`: A maintainer has not yet or cannot reproduce; typically `needs-feedback` follows (see "Feedback & Follow-ups" below)
 
 ### Subsystems, Environments, Etc.
 
@@ -176,14 +180,26 @@ Issues or PRs which require action or feedback from a *specific* maintainer, sho
 ### Meta
 
 - `stale`: The "stalebot" marks things as stale and will close issues if they need feedback but haven't received any.  Comment on an issue to prevent this from happening.
-- `duplicate`: Any issue which is a duplicate of some other issue.  Label `duplicate`, write "duplicate of #<ISSUE>" in a new comment, and close.  [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/)
+
+### Closing Issues
+
+Write "closes #<ISSUE>" or "resolves #<ISSUE>" in a commit or PR to have the original issue closed automatically once the PR is merged. 
+
+For any issue which is a duplicate, write "duplicate of #<ISSUE>" in a new comment, and close the issue.  [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/).
+
+If the issue is a support question, and you believe it has been answered, close the issue.
+
+It's easy to reopen issues.  If you're not sure, just close it!
 
 ## Milestones
 
 A major release following SemVer is "just a number".  Yet, given the vast amount of projects which consume Mocha, we should avoid *frequent* breaking changes, as this becomes disruptive.
+
 In the manner of "ripping off a band-aid", sometimes we will want to group features or breaking changes together.
+
 If so, we can add those issues and/or PRs to a new GitHub "milestone", to keep track of what needs to go in before we release.
-Typically milestones have not been useful for anything other than grouping breaking changes together.
+
+> Historically, milestones have not been useful for anything other than grouping breaking changes together.
 
 ## Commenting on Issues and Reviewing Pull Requests
 
