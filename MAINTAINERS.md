@@ -161,6 +161,12 @@ If it's *not* a Mocha problem (people tend not to believe this), you may want to
 - `confirmed-bug`: A confirmed bug
 - `unconfirmed-bug`: A maintainer has not yet or cannot reproduce; typically `needs-feedback` follows (see "Feedback & Follow-ups" below)
 - `invalid`: Not a bug.  Close the issue.
+- `wontfix`: A bug, but for Reasons, it won't get fixed.
+
+### Features
+
+- `feature`: Any feature/enhancement that's up for discussion or has been agreed upon.
+- `wontfix`: A half-baked feature or one which is unsuitable or out-of-scope for Mocha.
 
 ### Subsystems, Environments, Etc.
 
