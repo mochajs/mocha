@@ -180,6 +180,7 @@ Issues or PRs which require action or feedback from a *specific* maintainer, sho
 ### Meta
 
 - `stale`: The "stalebot" marks things as stale and will close issues if they need feedback but haven't received any.  Comment on an issue to prevent this from happening.
+- `help-wanted`: If it's an issue that is not a high priority for the maintenance team, use this label to solicit contributions.
 
 ### Closing Issues
 
