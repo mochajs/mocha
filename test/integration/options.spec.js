@@ -2,6 +2,8 @@
 
 var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
+var fork = require('child_process').fork;
+var path = require('path');
 var args = [];
 
 describe('options', function () {
@@ -384,6 +386,112 @@ describe('options', function () {
 
     describe('with exit disabled', function () {
       it('should not force exit after root suite completion', runExit(false, 'disabled'));
+    });
+  });
+
+  describe('--no-exit', function () {
+    before(function () {
+      args = ['--no-exit'];
+    });
+
+    it('still allows process to finish', function (done) {
+      this.timeout(10 * 1000);
+      var child = fork(path.join(__dirname, '..', '..', 'bin', '_mocha'), args.concat([path.join(__dirname, 'fixtures', 'timeout-0-noexit.fixture.js')]), { silent: true });
+      child.on('error', function (error) {
+        if (timeout) { clearTimeout(timeout); }
+        if (done) { done(error); }
+        done = null;
+      });
+      var timeout;
+      child.on('message', function () {
+        timeout = setTimeout(function () {
+          child.kill('SIGINT');
+          if (done) { done(new Error('Test did not end right away like it should have')); }
+          done = null;
+        }, 5000);
+      });
+      child.on('exit', pass);
+      child.on('close', pass);
+      function pass () {
+        clearTimeout(timeout);
+        if (done) { done(); }
+        done = null;
+      }
+    });
+
+    it('still allows process to finish when --allow-uncaught', function (done) {
+      this.timeout(10 * 1000);
+      var child = fork(path.join(__dirname, '..', '..', 'bin', '_mocha'), args.concat(['--allow-uncaught', path.join(__dirname, 'fixtures', 'timeout-0-noexit.fixture.js')]), { silent: true });
+      child.on('error', function (error) {
+        if (timeout) { clearTimeout(timeout); }
+        if (done) { done(error); }
+        done = null;
+      });
+      var timeout;
+      child.on('message', function () {
+        timeout = setTimeout(function () {
+          child.kill('SIGINT');
+          if (done) { done(new Error('Test did not end right away like it should have')); }
+          done = null;
+        }, 5000);
+      });
+      child.on('exit', pass);
+      child.on('close', pass);
+      function pass () {
+        clearTimeout(timeout);
+        if (done) { done(); }
+        done = null;
+      }
+    });
+
+    it('still allows process to finish with --timeout 0', function (done) {
+      this.timeout(10 * 1000);
+      var child = fork(path.join(__dirname, '..', '..', 'bin', '_mocha'), args.concat(['--timeout', '0', path.join(__dirname, 'fixtures', 'timeout-0-noexit.fixture.js')]), { silent: true });
+      child.on('error', function (error) {
+        if (timeout) { clearTimeout(timeout); }
+        if (done) { done(error); }
+        done = null;
+      });
+      var timeout;
+      child.on('message', function () {
+        timeout = setTimeout(function () {
+          child.kill('SIGINT');
+          if (done) { done(new Error('Test did not end right away like it should have')); }
+          done = null;
+        }, 5000);
+      });
+      child.on('exit', pass);
+      child.on('close', pass);
+      function pass () {
+        clearTimeout(timeout);
+        if (done) { done(); }
+        done = null;
+      }
+    });
+
+    it('still allows process to finish with --timeout 0 when --allow-uncaught', function (done) {
+      this.timeout(10 * 1000);
+      var child = fork(path.join(__dirname, '..', '..', 'bin', '_mocha'), args.concat(['--timeout', '0', '--allow-uncaught', path.join(__dirname, 'fixtures', 'timeout-0-noexit.fixture.js')]), { silent: true });
+      child.on('error', function (error) {
+        if (timeout) { clearTimeout(timeout); }
+        if (done) { done(error); }
+        done = null;
+      });
+      var timeout;
+      child.on('message', function () {
+        timeout = setTimeout(function () {
+          child.kill('SIGINT');
+          if (done) { done(new Error('Test did not end right away like it should have')); }
+          done = null;
+        }, 5000);
+      });
+      child.on('exit', pass);
+      child.on('close', pass);
+      function pass () {
+        clearTimeout(timeout);
+        if (done) { done(); }
+        done = null;
+      }
     });
   });
 });
