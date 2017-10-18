@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
 var directInvoke = require('./helpers').invokeMocha;
@@ -390,30 +391,12 @@ describe('options', function () {
   });
 
   describe('--help', function () {
-    before(function () {
-      try {
-        fs.mkdirSync('test');
-      } catch (ignore) {}
-      try {
-        fs.writeFileSync('test/mocha.opts', 'foo', { flag: 'wx' });
-      } catch (ignore) {}
-    });
-
     it('works despite the presence of mocha.opts', function (done) {
       directInvoke(['-h'], function (error, result) {
         if (error) { return done(error); }
         expect(result.output).to.contain('Usage:');
         done();
-      });
-    });
-
-    after(function () {
-      if (fs.readFileSync('test/mocha.opts').toString() === 'foo') {
-        fs.unlinkSync('test/mocha.opts');
-        try {
-          fs.rmdirSync('test');
-        } catch (ignore) {}
-      }
+      }, path.join(__dirname, 'fixtures', 'options', 'help'));
     });
   });
 });
