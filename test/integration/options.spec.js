@@ -1,7 +1,9 @@
 'use strict';
 
+var path = require('path');
 var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
+var directInvoke = require('./helpers').invokeMocha;
 var args = [];
 
 describe('options', function () {
@@ -384,6 +386,16 @@ describe('options', function () {
 
     describe('with exit disabled', function () {
       it('should not force exit after root suite completion', runExit(false, 'disabled'));
+    });
+  });
+
+  describe('--help', function () {
+    it('works despite the presence of mocha.opts', function (done) {
+      directInvoke(['-h'], function (error, result) {
+        if (error) { return done(error); }
+        expect(result.output).to.contain('Usage:');
+        done();
+      }, path.join(__dirname, 'fixtures', 'options', 'help'));
     });
   });
 });
