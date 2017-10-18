@@ -110,15 +110,34 @@ module.exports = {
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
    */
-  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+')
+  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
+
+  /**
+   * Invokes the mocha binary. Accepts an array of additional command line args
+   * to pass. The callback is invoked with the exit code and output. Optional
+   * current working directory as final parameter.
+   *
+   * In most cases runMocha should be used instead.
+   *
+   * Example response:
+   * {
+   *   code:    1,
+   *   output:  '...'
+   * }
+   *
+   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {Function} done - Callback
+   * @param {string} cwd - Current working directory for mocha run, optional
+   */
+  invokeMocha: invokeMocha
 };
 
-function invokeMocha (args, fn) {
+function invokeMocha (args, fn, cwd) {
   var output, mocha, listener;
 
   output = '';
-  args = [path.join('bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args);
+  args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
+  mocha = spawn(process.execPath, args, { cwd: cwd });
 
   listener = function (data) {
     output += data;
