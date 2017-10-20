@@ -192,7 +192,7 @@ describe('List reporter', function () {
 
       Base.cursor = cachedCursor;
     });
-    it('should immediately construct fail strings', function() {
+    it('should immediately construct fail strings', function () {
       var actual = { a: 'actual' };
       var expected = { a: 'expected' };
       var test = {};
