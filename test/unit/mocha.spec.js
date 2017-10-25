@@ -1,6 +1,7 @@
 'use strict';
 
 var Mocha = require('../../lib/mocha');
+var path = require('path');
 var Test = Mocha.Test;
 
 describe('Mocha', function () {
@@ -174,6 +175,26 @@ describe('Mocha', function () {
       expect(mocha.suite._bail).to.equal(false);
       mocha.bail();
       expect(mocha.suite._bail).to.equal(true);
+    });
+  });
+
+  describe('.loadFiles()', function () {
+    beforeEach(function () {
+      if (path.sep !== '/') {
+        this.skip();
+      }
+    });
+
+    it('makes sure files are decached before calling require on them', function () {
+      var mocha1 = new Mocha(blankOpts);
+      mocha1.addFile('test/unit/suite.spec.js');
+      mocha1.loadFiles();
+      expect(mocha1.suite.suites.length).to.equal(2);
+
+      var mocha2 = new Mocha(blankOpts);
+      mocha2.addFile('test/unit/suite.spec.js');
+      mocha2.loadFiles();
+      expect(mocha2.suite.suites.length).to.equal(2);
     });
   });
 });
