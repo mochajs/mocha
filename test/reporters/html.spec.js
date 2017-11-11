@@ -5,17 +5,17 @@ var Suite = mocha.Suite;
 var Runner = mocha.Runner;
 var reporters = require('../../').reporters;
 var HTML = reporters.HTML;
-var JSDOM = require('jsdom').JSDOM;
+var jsdom = require('jsdom').jsdom;
 
 describe('HTML reporter', function () {
-  var dom;
+  var doc;
   var html;
   var runner;
 
   beforeEach(function () {
-    dom = new JSDOM('<!DOCTYPE html><html><body><div id="mocha"></div></body></html>');
-    global.window = dom.window;
-    global.document = dom.window.document;
+    doc = jsdom('<!DOCTYPE html><html><body><div id="mocha"></div></body></html>');
+    global.window = doc.defaultView;
+    global.document = doc.defaultView.document;
     window.HTMLCanvasElement.prototype.getContext = function () {
       return {
         scale: function () {}
@@ -28,9 +28,9 @@ describe('HTML reporter', function () {
 
   describe('constructor', function () {
     it('should post error message if #mocha does not exist', function () {
-      dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
-      global.window = dom.window;
-      global.document = dom.window.document;
+      doc = jsdom('<!DOCTYPE html><html><body></body></html>');
+      global.window = doc.defaultView;
+      global.document = doc.defaultView.document;
       window.HTMLCanvasElement.prototype.getContext = function () {
         return {
           scale: function () {}
