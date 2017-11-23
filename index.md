@@ -791,7 +791,7 @@ The *default behavior* in v4.0.0 is `--no-exit`, where previously it was `--exit
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
 - See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector/)
-- Use the new [async_hooks](https://github.com/nodejs/node/commits/master/doc/api/async_hooks.md) API ([example](https://git.io/vdlNM))
+- Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://git.io/vdlNM))
 - Try something like [why-is-node-running](https://npm.im/why-is-node-running)
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
