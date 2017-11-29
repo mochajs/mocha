@@ -1230,17 +1230,17 @@ By default, `mocha` looks for the glob `./test/*.js` and `./test/*.coffee`, so y
 
 The following editor-related packages are available:
 
-### Mocha SideBar (VS code)
+### Mocha Sidebar (VS code)
 
-[mocha sidebar](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar) Mocha side bar is the most complete extension in vs code
+[Mocha sidebar](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar) is the most complete mocha extension for vs code.
 
-#### mocha side bar already supports this features
+#### mocha side bar supports the following features
 * [x] see all tests in vscode side bar menu
-* [x] run tests for each level hierarchy from all tests to a single test(and each describer of course) 
-* [x] debug tests for each level hierarchy from all tests to a single test(and each describer of course) 
+* [x] run tests for each level hierarchy from all tests to a single test (and each describe of course) 
+* [x] debug tests for each level hierarchy from all tests to a single test (and each describe of course) 
 * [x] auto run tests on file save
-* [x] see tests results directly on the code 
-* [x] run/debug results directly from the code   
+* [x] see tests results directly in the code editor 
+* [x] run/debug results directly from the code editor  
 
 ![Demo showing mocha menu operation](https://raw.githubusercontent.com/maty21/mocha-sidebar/master/tutorial.gif)
 
