@@ -1,51 +1,51 @@
 sudo: false
-
-# trust dist provides a modern build chain (as opposed to 'precise' dist)
-# which absolves us from having to install compilers and stuff
 dist: trusty
-
 language: node_js
-
 env:
   global:
-    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-    # rate-limiting.  pull it from this sketchy site in China instead.
-    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-
+    - 'PHANTOMJS_CDNURL=''https://cnpmjs.org/downloads'''
 matrix:
   fast_finish: true
   include:
-    - node_js: '8'
-      env: TARGET=test-node COVERAGE=true
-    - node_js: '7'
+    -
+      node_js: '8'
+      env: 'TARGET=test-node COVERAGE=true'
+    -
+      node_js: '7'
       env: TARGET=test-node
-    - node_js: '6'
+    -
+      node_js: '6'
       env: TARGET=test-node
-    - node_js: '4'
+    -
+      node_js: '4'
       env: TARGET=test-node
-    - node_js: '8'
+    -
+      node_js: '8'
       env: TARGET=lint
-    - node_js: '8'
+    -
+      node_js: '8'
       env: TARGET=test-browser
-
 before_install: scripts/travis-before-install.sh
-
 before_script: scripts/travis-before-script.sh
-
-script: make $TARGET
-
-after_success: npm run coveralls
-
+script: 'make $TARGET'
+after_success: 'npm run coveralls'
 notifications:
   email: false
   urls:
-    # for gitter mochajs/mocha
-    - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
-    # for gitter mochajs/contributors
-    - secure: QQ7hvFqok0kypXLSjfVLsYDpLSFMPKblUsTupLSV6aK//COZ6XnyxIa/CWvnjlbap9bIAs5azHOeS6pe+KQJr2w0K8HUqbUDX1KofaMZmK8JuD1qK1kLjV8LB+5OhHQGs1r8KvGgUf1vYGITdwOvYqE2lr10EbrkmFo7kOSLvpA=
+    -
+      secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
+    -
+      secure: QQ7hvFqok0kypXLSjfVLsYDpLSFMPKblUsTupLSV6aK//COZ6XnyxIa/CWvnjlbap9bIAs5azHOeS6pe+KQJr2w0K8HUqbUDX1KofaMZmK8JuD1qK1kLjV8LB+5OhHQGs1r8KvGgUf1vYGITdwOvYqE2lr10EbrkmFo7kOSLvpA=
   on_success: change
   on_failure: always
-
+  webhooks:
+    urls:
+      - 'https://www.travisbuddy.com/'
+    on_success: never
+    on_failure: always
+    on_start: never
+    on_cancel: never
+    on_error: never
 addons:
   artifacts:
     paths:
