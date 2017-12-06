@@ -1,4 +1,0 @@
-root = true
-
-[*.md]
-trim_trailing_whitespace = false
