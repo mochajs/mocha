@@ -303,7 +303,10 @@
     "lint": "eslint . bin/*",
     "test": "make clean && make test",
     "prepublishOnly": "npm test && make clean && make mocha.js",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "prebuildDocs": "node scripts/pre-build-docs.js",
+    "buildDocs": "bundle exec jekyll build --source docs --destination docs/_site --layouts docs/_layouts --safe --drafts",
+    "serveDocs": "bundle exec jekyll serve --config docs/_config.yml --safe --drafts --watch"
   },
   "dependencies": {
     "browser-stdout": "1.3.0",
@@ -340,6 +343,7 @@
     "karma-mocha-reporter": "^2.2.4",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "^1.2.0",
+    "markdown-toc": "^1.2.0",
     "nyc": "^11.2.1",
     "rimraf": "^2.5.2",
     "through2": "^2.0.1",
