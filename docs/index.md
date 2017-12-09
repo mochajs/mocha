@@ -1230,17 +1230,6 @@ By default, `mocha` looks for the glob `./test/*.js` and `./test/*.coffee`, so y
 
 The following editor-related packages are available:
 
-### Mocha Sidebar (VS Code)
-
-[Mocha sidebar](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar) is the most complete mocha extension for vs code.
-
-#### Features
-
-* [x] see all tests in VS Code sidebar menu
-* [x] run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
-* [x] auto run tests on file save
-* [x] see tests results directly in the code editor
-
 ### TextMate
 
 The Mocha TextMate bundle includes snippets to make writing tests quicker and more enjoyable.  To install the bundle, clone a copy of the [Mocha repo](https://github.com/mochajs/mocha), and run:
@@ -1267,6 +1256,17 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
 ![Emacs Mocha Runner in Action](images/emacs.png)
+
+### Mocha Sidebar (VS Code)
+
+[Mocha sidebar](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar) is the most complete mocha extension for vs code.
+
+#### Features
+
+* see all tests in VS Code sidebar menu
+* run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
+* auto run tests on file save
+* see tests results directly in the code editor
 
 ## Examples
 
