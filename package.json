@@ -303,6 +303,7 @@
     "lint": "eslint . bin/*",
     "test": "make clean && make test",
     "prepublishOnly": "npm test && make clean && make mocha.js",
+    "postpublish": "git push --follow-tags",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
