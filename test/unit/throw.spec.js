@@ -7,11 +7,23 @@ var Test = require('../../lib/test');
 var Runner = require('../../lib/runner');
 
 describe('a test that throws', function () {
-  var suite, runner;
+  var suite;
+  var runner;
+  var uncaughtHandlers;
 
   beforeEach(function () {
     suite = new Suite('Suite', 'root');
     runner = new Runner(suite);
+
+    // see https://github.com/mochajs/mocha/pull/2983#issuecomment-350428522
+    uncaughtHandlers = process.listeners('uncaughtException') || [];
+    process.removeAllListeners('uncaughtException');
+  });
+
+  afterEach(function () {
+    uncaughtHandlers.forEach(function (listener) {
+      process.on('uncaughtException', listener);
+    });
   });
 
   describe('undefined', function () {
@@ -51,15 +63,10 @@ describe('a test that throws', function () {
       });
       suite.addTest(test);
       runner = new Runner(suite);
-      var uncaught = Runner.prototype.uncaught;
-      Runner.prototype.uncaught = function () {
-        Runner.prototype.uncaught = uncaught;
-        done();
-      };
       runner.on('end', function () {
         expect(runner.failures).to.equal(1);
         expect(test.state).to.equal('failed');
-        expect(runner.uncaught).toBeCalled();
+        done();
       });
       runner.run();
     });
@@ -102,15 +109,10 @@ describe('a test that throws', function () {
       });
       suite.addTest(test);
       runner = new Runner(suite);
-      var uncaught = Runner.prototype.uncaught;
-      Runner.prototype.uncaught = function () {
-        Runner.prototype.uncaught = uncaught;
-        done();
-      };
       runner.on('end', function () {
         expect(runner.failures).to.equal(1);
         expect(test.state).to.equal('failed');
-        expect(runner.uncaught).toBeCalled();
+        done();
       });
       runner.run();
     });
