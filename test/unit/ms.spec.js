@@ -21,22 +21,11 @@ describe('.ms()', function () {
     it('should return short format', function () {
       expect(ms(2000)).to.equal('2s');
     });
-
-    it('should return long format', function () {
-      expect(ms(2000, { long: true })).to.equal('2 seconds');
-      expect(ms(1000, { long: true })).to.equal('1 second');
-      expect(ms(1010, { long: true })).to.equal('1 second');
-    });
   });
 
   describe('minutes representation', function () {
     it('should return short format', function () {
       expect(ms(time.minutes(1))).to.equal('1m');
-    });
-
-    it('should return long format', function () {
-      expect(ms(time.minutes(1), { long: true })).to.equal('1 minute');
-      expect(ms(time.minutes(3), { long: true })).to.equal('3 minutes');
     });
   });
 
@@ -44,21 +33,11 @@ describe('.ms()', function () {
     it('should return short format', function () {
       expect(ms(time.hours(1))).to.equal('1h');
     });
-
-    it('should return long format', function () {
-      expect(ms(time.hours(1), { long: true })).to.equal('1 hour');
-      expect(ms(time.hours(3), { long: true })).to.equal('3 hours');
-    });
   });
 
   describe('days representation', function () {
     it('should return short format', function () {
       expect(ms(time.days(1))).to.equal('1d');
-    });
-
-    it('should return long format', function () {
-      expect(ms(time.days(1), { long: true })).to.equal('1 day');
-      expect(ms(time.days(3), { long: true })).to.equal('3 days');
     });
   });
 

@@ -16,3 +16,8 @@ yarn.lock
 package-lock.json
 mocha.js
 docs/_site
+# artifacts from various diff tools
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*

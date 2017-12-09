@@ -274,63 +274,28 @@ describe('options', function () {
       });
     });
 
-    it('fails if there are tests marked skip', function (done) {
-      run('options/forbid-pending/skip.js', args, function (err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
-      });
-    });
+    var forbidPendingFailureTests = {
+      'fails if there are tests marked skip': 'skip.js',
+      'fails if there are pending tests': 'pending.js',
+      'fails if tests call `skip()`': 'this.skip.js',
+      'fails if beforeEach calls `skip()`': 'beforeEach-this.skip.js',
+      'fails if before calls `skip()`': 'before-this.skip.js',
+      'fails if there are tests in suites marked skip': 'skip-suite.js'
+    };
 
-    it('fails if there are pending tests', function (done) {
-      run('options/forbid-pending/pending.js', args, function (err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
-      });
-    });
-
-    it('fails if tests call `skip()`', function (done) {
-      run('options/forbid-pending/this.skip.js', args, function (err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
-      });
-    });
-
-    it('fails if beforeEach calls `skip()`', function (done) {
-      run('options/forbid-pending/beforeEach-this.skip.js', args, function (err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
-      });
-    });
-
-    it('fails if before calls `skip()`', function (done) {
-      run('options/forbid-pending/before-this.skip.js', args, function (err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
-      });
-    });
-
-    it('fails if there are tests in suites marked skip', function (done) {
-      run('options/forbid-pending/skip-suite.js', args, function (err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, pendingErrorMessage);
-        done();
+    Object.keys(forbidPendingFailureTests).forEach(function (title) {
+      it(title, function (done) {
+        run(path.join('options', 'forbid-pending', forbidPendingFailureTests[title]),
+          args,
+          function (err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            assert.equal(res.code, 1);
+            assert.equal(res.failures[0].err.message, pendingErrorMessage);
+            done();
+          });
       });
     });
   });
@@ -344,7 +309,8 @@ describe('options', function () {
     /**
      * Returns a test that executes Mocha in a subprocess with either
      * `--exit`, `--no-exit`, or default behavior.
-     * @param {boolean} shouldExit - Expected result; `true` if Mocha should have force-killed the process.
+     * @param {boolean} shouldExit - Expected result; `true` if Mocha should
+     *   have force-killed the process.
      * @param {string} [behavior] - 'enabled' or 'disabled'
      * @returns {Function}
      */
@@ -392,7 +358,9 @@ describe('options', function () {
   describe('--help', function () {
     it('works despite the presence of mocha.opts', function (done) {
       directInvoke(['-h'], function (error, result) {
-        if (error) { return done(error); }
+        if (error) {
+          return done(error);
+        }
         expect(result.output).to.contain('Usage:');
         done();
       }, path.join(__dirname, 'fixtures', 'options', 'help'));
