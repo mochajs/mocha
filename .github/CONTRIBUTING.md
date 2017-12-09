@@ -75,8 +75,8 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 *Excellent.*  Here's how:
 
 - **Handy with JavaScript?**  Please check out the issues labeled [`pr-please`](https://git.io/vXYu2).
-- **Can you write good (and do other stuff good too)?**  Help with the documentation.  See the [issues for our site](https://github.com/mochajs/mochajs.github.io/issues).
-- **Design your thing?**  [Our site](https://github.com/mochajs/mochajs.github.io) needs your magic touch.
+- **Can you write good (and do other stuff good too)?**  Help with the documentation.  See the [0issues for our site](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
+- **Design your thing?**  [Our site](https://github.com/mochajs/mocha/tree/master/docs) needs your magic touch.
 - **Know Mocha's codebase?**  We could use your help triaging issues and/or reviewing pull requests.  Please contact an [org member](https://github.com/orgs/mochajs/people), and we'll chat.
 - **Want to build our community?**  Mocha has a *lot* of users.  We could use your help bringing everyone together in peace and harmony.  Please contact an [org member](https://github.com/mochajs/people).
 - **You can sell dirt to worms?**  Let's raise Mocha's profile in the JavaScript and OSS communities.  Please contact an [org member](https://github.com/mochajs/people)!
