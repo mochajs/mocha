@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Mocha</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/4.0.1/mocha.min.css">
+    <link rel="shortcut icon" href="../favicon.ico">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/4.0.1/mocha.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.1.2/chai.min.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>expect = chai.expect</script>
+    <script src="Array.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
