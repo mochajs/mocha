@@ -52,3 +52,6 @@ addons:
       - .karma/
       - ./mocha.js
   sauce_connect: true
+cache:
+  directories:
+    - ~/.npm
