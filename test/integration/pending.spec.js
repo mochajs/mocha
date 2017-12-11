@@ -19,6 +19,19 @@ describe('pending', function () {
         done();
       });
     });
+    it('should return the test object when used via shorthand methods', function (done) {
+      run('pending/skip-shorthand.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 3);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
   });
 
   describe('synchronous skip()', function () {
