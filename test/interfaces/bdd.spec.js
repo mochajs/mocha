@@ -48,7 +48,7 @@ describe('pending tests', function () {
 });
 
 describe('setting timeout by appending it to test', function () {
-  var runningTest = it('enables users to call timeout on pending tests', function () {
+  var runningTest = it('enables users to call timeout on active tests', function () {
     expect(1 + 1).to.equal(2);
   }).timeout(1003);
 
