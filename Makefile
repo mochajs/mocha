@@ -5,10 +5,10 @@ NYC := "node_modules/.bin/nyc"
 
 ifdef COVERAGE
 define test_node
-	$(NYC) --no-clean --report-dir coverage/reports/$(1) $(MOCHA)
+$(NYC) --no-clean --report-dir coverage/reports/$(1) $(MOCHA)
 endef
 else
-	test_node := $(MOCHA)
+test_node := $(MOCHA)
 endif
 
 TM_BUNDLE = JavaScript\ mocha.tmbundle
@@ -37,7 +37,7 @@ lint:
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-requires test-reporters test-only test-global-only
 
-test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
+test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-esm
 
 test: lint test-node test-browser
 
@@ -47,15 +47,19 @@ test-browser-unit:
 
 test-browser-bdd:
 	@printf "==> [Test :: Browser :: BDD]\n"
-	MOCHA_UI=bdd $(MAKE) test-browser-unit
+	MOCHA_TEST=bdd $(MAKE) test-browser-unit
 
 test-browser-qunit:
 	@printf "==> [Test :: Browser :: QUnit]\n"
-	MOCHA_UI=qunit $(MAKE) test-browser-unit
+	MOCHA_TEST=qunit $(MAKE) test-browser-unit
 
 test-browser-tdd:
 	@printf "==> [Test :: Browser :: TDD]\n"
-	MOCHA_UI=tdd $(MAKE) test-browser-unit
+	MOCHA_TEST=tdd $(MAKE) test-browser-unit
+
+test-browser-esm:
+	@printf "==> [Test :: Browser :: ESM]\n"
+	MOCHA_TEST=esm $(MAKE) test-browser-unit
 
 test-jsapi:
 	@printf "==> [Test :: JS API]\n"

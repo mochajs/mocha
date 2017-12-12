@@ -38,10 +38,13 @@ module.exports = config => {
           .ignore('path')
           .ignore('supports-color')
           .on('bundled', (err, content) => {
-            if (!err && bundleDirpath) {
+            if (err) {
+              throw err;
+            }
+            if (bundleDirpath) {
               // write bundle to directory for debugging
               fs.writeFileSync(path.join(bundleDirpath,
-                `bundle.${Date.now()}.js`), content);
+                `mocha.${Date.now()}.js`), content);
             }
           });
       }
@@ -60,18 +63,8 @@ module.exports = config => {
     }
   };
 
-  // see https://github.com/saucelabs/karma-sauce-example
-
-  // We define the browser to run on the Saucelabs Infrastructure
-  // via the environment variables BROWSER and PLATFORM.
-  // PLATFORM is e.g. "Windows"
-  // BROWSER is expected to be in the format "<name>@<version>",
-  // e.g. "MicrosoftEdge@latest"
-  // See https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-  // for available browsers.
-
-  // TO RUN LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> BROWSER=<browser> PLATFORM=<platform> make test-browser`
+  // TO RUN AGAINST SAUCELABS LOCALLY, execute:
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
   const env = process.env;
   let sauceConfig;
 
@@ -92,8 +85,7 @@ module.exports = config => {
         console.error('No SauceLabs credentials present');
       }
     } else if (env.APPVEYOR) {
-      console.error('AppVeyor detected');
-      bundleDirpath = path.join(baseBundleDirpath, process.env.APPVEYOR_BUILD_ID);
+      throw new Error('no browser tests should run on AppVeyor!');
     } else {
       console.error('Local/unknown environment detected');
       bundleDirpath = path.join(baseBundleDirpath, 'local');
@@ -120,21 +112,48 @@ module.exports = config => {
     addSauceTests(cfg);
   }
 
-  // the MOCHA_UI env var will determine if we're running interface-specific
-  // tests.  since you can only load one at a time, each must be run separately.
-  // each has its own set of acceptance tests and a fixture.
-  // the "bdd" fixture is used by default.
-  const ui = env.MOCHA_UI;
-  if (ui) {
-    if (cfg.sauceLabs) {
-      cfg.sauceLabs.testName = `Interface "${ui}" integration tests`;
-    }
-    cfg.files = [
-      `test/browser-fixtures/${ui}.fixture.js`,
-      `test/interfaces/${ui}.spec.js`
-    ];
-  } else if (cfg.sauceLabs) {
-    cfg.sauceLabs.testName = 'Unit Tests';
+  /* the MOCHA_TEST env var will be set for "special" cases of tests.
+   * these may require different interfaces or other setup which make
+   * them unable to be batched w/ the rest.
+   */
+  const MOCHA_TEST = env.MOCHA_TEST;
+  switch (MOCHA_TEST) {
+    case 'bdd':
+    case 'tdd':
+    case 'qunit':
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = `Interface "${MOCHA_TEST}" Integration Tests`;
+      }
+      cfg.files = [
+        `test/browser-fixtures/${MOCHA_TEST}.fixture.js`,
+        `test/interfaces/${MOCHA_TEST}.spec.js`
+      ];
+      break;
+
+    case 'esm':
+      // for now we will only run against Chrome to test this.
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = 'ESM Integration Tests';
+        cfg.browsers = ['chrome@latest'];
+        cfg.customLaunchers = {
+          'chrome@latest': cfg.customLaunchers['chrome@latest']
+        };
+      } else if (!env.TRAVIS) {
+        cfg.browsers = ['Chrome'];
+      } else {
+        console.error(
+          'skipping ESM tests & exiting; no SauceLabs nor local run detected');
+        process.exit(0);
+      }
+      cfg.files = [
+        'test/browser-fixtures/esm.fixture.html',
+        'test/browser-specific/esm.spec.js'
+      ];
+      break;
+    default:
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = 'Unit Tests';
+      }
   }
 
   config.set(cfg);
@@ -146,9 +165,7 @@ function addSauceTests (cfg) {
   cfg.browsers = cfg.browsers.concat(browsers);
   cfg.customLaunchers = browsers.reduce((acc, browser) => {
     const platform = browserPlatformPairs[browser];
-    const browserParts = browser.split('@');
-    const browserName = browserParts[0];
-    const version = browserParts[1];
+    const [browserName, version] = browser.split('@');
     acc[browser] = {
       base: 'SauceLabs',
       browserName: browserName,
