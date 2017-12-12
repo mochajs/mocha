@@ -1,0 +1,39 @@
+# Number of days of inactivity before an issue becomes stale
+daysUntilStale: 120
+# Number of days of inactivity before a stale issue is closed
+daysUntilClose: 14
+# Issues with these labels will never be considered stale
+exemptLabels:
+  - help-wanted
+  - confirmed-bug
+  - future
+  - chore
+  - feature
+  - unconfirmed-bug
+  - usability
+  - browser
+  - reporter
+  - feature
+  - documentation
+  - nice-to-have
+  - needs-review
+  - qa
+  - usability
+  - semver-minor
+  - semver-major
+  - semver-patch
+  - reporter
+  - common-mistake
+  - developer-experience
+  - good-first-issue
+# Label to use when marking an issue as stale
+staleLabel: stale
+# Comment to post when marking an issue as stale. Set to `false` to disable
+markComment: >
+  I am a bot that watches issues for inactivity.
+
+  This issue hasn't had any recent activity, and I'm labeling it `stale`.  In 14 days, if there are no further comments or activity, I will close this issue.
+
+  Thanks for contributing to Mocha!
+# Comment to post when closing a stale issue. Set to `false` to disable
+closeComment: false

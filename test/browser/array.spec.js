@@ -23,7 +23,7 @@ describe('Array', function () {
 
 describe('Array', function () {
   describe('#pop()', function () {
-    it('should remove and return the last value', function () {
+    it('should remove and return the last value with expected error', function () {
       var arr = [1, 2, 3];
       assert(arr.pop() === 3);
       assert(arr.pop() === 2);

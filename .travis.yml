@@ -1,6 +1,4 @@
-# in order to use 'trusty' dist, need this.
-# see https://docs.travis-ci.com/user/trusty-ci-environment/
-sudo: required
+sudo: false
 
 # trust dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
@@ -13,31 +11,22 @@ env:
     # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
     # rate-limiting.  pull it from this sketchy site in China instead.
     - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-    # we're going to use s3 to temporarily store Karma test bundles for debugging
-    - AWS_ACCESS_KEY_ID=AKIAJ3QQTLQXWXYJ6PTA
-    - secure: k4musDC734E1NFOWaY5qb/l0B9K1cfusFTvMZFayTMs5ubKjeNYCgct2sDSvO5tO7Un935I0sYOOSRPvANPhs8dP1a/8/x0PnwIfnpoCFQCCaI0bWnIQj7nOZ2TaEB/fngZCerCFpNDlzqI6BmaR+XoMvA74v2YD/vVXnzvXNQk=
 
 matrix:
   fast_finish: true
   include:
-    - node_js: '6'
+    - node_js: '8'
+      env: TARGET=test-node COVERAGE=true
+    - node_js: '7'
       env: TARGET=test-node
-    - node_js: '5'
+    - node_js: '6'
       env: TARGET=test-node
     - node_js: '4'
       env: TARGET=test-node
-    - node_js: 'iojs'
-      env: TARGET=test-node
-    - node_js: '0.12'
-      env: TARGET=test-node
-    - node_js: '0.11'
-      env: TARGET=test-node
-    - node_js: '0.10'
-      env: TARGET=test-node
-    - node_js: '6'
+    - node_js: '8'
       env: TARGET=lint
-    - node_js: '6'
-      env: TARGET=test-browser S3=1
+    - node_js: '8'
+      env: TARGET=test-browser
 
 before_install: scripts/travis-before-install.sh
 
@@ -45,11 +34,24 @@ before_script: scripts/travis-before-script.sh
 
 script: make $TARGET
 
-after_script: scripts/travis-after-script.sh
+after_success: npm run coveralls
 
 notifications:
+  email: false
   urls:
-    # for gitter
+    # for gitter mochajs/mocha
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
+    # for gitter mochajs/contributors
+    - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
   on_success: change
   on_failure: always
+
+addons:
+  artifacts:
+    paths:
+      - .karma/
+      - ./mocha.js
+  sauce_connect: true
+cache:
+  directories:
+    - ~/.npm

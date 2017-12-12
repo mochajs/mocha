@@ -36,7 +36,7 @@ describe('reporters', function () {
   describe('xunit', function () {
     it('prints test cases with --reporter-options output (issue: 1864)', function (done) {
       var randomStr = crypto.randomBytes(8).toString('hex');
-      var tmpDir = os.tmpDir().replace(new RegExp(path.sep + '$'), '');
+      var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
 
       var args = ['--reporter=xunit', '--reporter-options', 'output=' + tmpFile];
@@ -57,6 +57,39 @@ describe('reporters', function () {
         });
 
         done(err);
+      });
+    });
+  });
+
+  describe('loader', function () {
+    it('loads a reporter from a path relative to the current working directory', function (done) {
+      var reporterAtARelativePath = 'test/integration/fixtures/simple-reporter.js';
+
+      var args = ['--reporter=' + reporterAtARelativePath];
+
+      run('passing.fixture.js', args, function (err, result) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(result.code, 0);
+        done();
+      });
+    });
+
+    it('loads a reporter from an absolute path', function (done) {
+      // Generates an absolute path string
+      var reporterAtAnAbsolutePath = path.join(process.cwd(), 'test/integration/fixtures/simple-reporter.js');
+
+      var args = ['--reporter=' + reporterAtAnAbsolutePath];
+
+      run('passing.fixture.js', args, function (err, result) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(result.code, 0);
+        done();
       });
     });
   });

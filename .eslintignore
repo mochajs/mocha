@@ -1,2 +1,4 @@
-lib/to-iso-string/**/*.js
+coverage/
 mocha.js
+*.fixture.js
+docs/

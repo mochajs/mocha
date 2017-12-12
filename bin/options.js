@@ -17,6 +17,10 @@ module.exports = getOptions;
  */
 
 function getOptions () {
+  if (process.argv.length === 3 && (process.argv[2] === '-h' || process.argv[2] === '--help')) {
+    return;
+  }
+
   var optsPath = process.argv.indexOf('--opts') === -1
     ? 'test/mocha.opts'
     : process.argv[process.argv.indexOf('--opts') + 1];

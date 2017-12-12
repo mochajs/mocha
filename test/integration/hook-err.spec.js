@@ -19,11 +19,11 @@ describe('hook error handling', function () {
   });
 
   describe('before hook error tip', function () {
-    before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle));
+    before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle()));
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['1) spec 2 "before all" hook:']
+        ['1) spec 2', '"before all" hook:']
       );
     });
   });
@@ -107,11 +107,11 @@ describe('hook error handling', function () {
   });
 
   describe('async - before hook error tip', function () {
-    before(run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle));
+    before(run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle()));
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['1) spec 2 "before all" hook:']
+        ['1) spec 2', '"before all" hook:']
       );
     });
   });
@@ -186,7 +186,7 @@ describe('hook error handling', function () {
 
   function run (fnPath, outputFilter) {
     return function (done) {
-      runMocha(fnPath, [], function (err, res) {
+      runMocha(fnPath, ['--reporter', 'dot'], function (err, res) {
         assert.ifError(err);
 
         lines = res.output
@@ -213,5 +213,15 @@ function onlyConsoleOutput () {
 }
 
 function onlyErrorTitle (line) {
-  return !!(/^1\)/).exec(line);
+  var foundErrorTitle = false;
+  var foundError = false;
+  return function (line) {
+    if (!foundErrorTitle) {
+      foundErrorTitle = !!(/^1\)/).exec(line);
+    }
+    if (!foundError) {
+      foundError = (/Error:/).exec(line);
+    }
+    return foundErrorTitle && !foundError;
+  };
 }

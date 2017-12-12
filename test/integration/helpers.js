@@ -1,8 +1,7 @@
 'use strict';
 
-var spawn = require('child_process').spawn;
+var spawn = require('cross-spawn').spawn;
 var path = require('path');
-var fs = require('fs');
 var baseReporter = require('../../lib/reporters/base');
 
 module.exports = {
@@ -22,61 +21,22 @@ module.exports = {
    *   output:  '...'
    * }
    *
-   * @param {string}   fixturePath
-   * @param {array}    args
-   * @param {function} fn
+   * @param {string} fixturePath - Path to fixture .js file
+   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {Function} done - Callback
    */
-  runMocha: function (fixturePath, args, fn) {
+  runMocha: function (fixturePath, args, done) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
     invokeMocha(args.concat(['-C', path]), function (err, res) {
-      if (err) return fn(err);
-
-      fn(null, getSummary(res));
-    });
-  },
-
-  /**
-   * Invokes the mocha binary on the code of the body of the function.
-   * Accepts an array of additional command line args to pass. The callback is
-   * invoked with a summary of the run, in addition to its output. The summary
-   * includes the number of passing, pending, and failing tests, as well as the
-   * exit code. Useful for testing different reporters.
-   *
-   * Example response:
-   * {
-   *   pending: 0,
-   *   passing: 0,
-   *   failing: 1,
-   *   code:    1,
-   *   output:  '...'
-   * }
-   *
-   * @param {function} fixture
-   * @param {array}    args
-   * @param {function} fn
-   */
-  runMochaFunction: function (fixture, args, fn) {
-    var path = resolveFixturePath(fixture.name + '.js' || 'tempfile.js');
-    args = args || [];
-
-    var fixtureContent = 'var fn = ' + fixture.toString() + '; fn()';
-    fs.writeFileSync(path, fixtureContent, 'utf8');
-
-    function cleanup () {
-      fs.unlink(path);
-      fn.apply(this, arguments);
-    }
-
-    invokeMocha(args.concat(['-C', path]), function (err, res) {
       if (err) {
-        return cleanup(err);
+        return done(err);
       }
 
-      cleanup(null, getSummary(res));
+      done(null, getSummary(res));
     });
   },
 
@@ -84,9 +44,9 @@ module.exports = {
    * Invokes the mocha binary for the given fixture using the JSON reporter,
    * returning the parsed output, as well as exit code.
    *
-   * @param {string}   fixturePath
-   * @param {array}    args
-   * @param {function} fn
+   * @param {string} fixturePath - Path from __dirname__
+   * @param {string[]} args - Array of args
+   * @param {Function} fn - Callback
    */
   runMochaJSON: function (fixturePath, args, fn) {
     var path;
@@ -94,7 +54,7 @@ module.exports = {
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
+    return invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
       if (err) return fn(err);
 
       try {
@@ -129,7 +89,7 @@ module.exports = {
       } else if (!diffs.length || inStackTrace) {
         // Haven't encountered a spec yet
         // or we're in the middle of a stack trace
-        return;
+
       } else if (line.indexOf('+ expected - actual') !== -1) {
         inDiff = true;
       } else if (line.match(/at Context/)) {
@@ -150,15 +110,34 @@ module.exports = {
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
    */
-  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+')
+  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
+
+  /**
+   * Invokes the mocha binary. Accepts an array of additional command line args
+   * to pass. The callback is invoked with the exit code and output. Optional
+   * current working directory as final parameter.
+   *
+   * In most cases runMocha should be used instead.
+   *
+   * Example response:
+   * {
+   *   code:    1,
+   *   output:  '...'
+   * }
+   *
+   * @param {Array<string>} args - Extra args to mocha executable
+   * @param {Function} done - Callback
+   * @param {string} cwd - Current working directory for mocha run, optional
+   */
+  invokeMocha: invokeMocha
 };
 
-function invokeMocha (args, fn) {
+function invokeMocha (args, fn, cwd) {
   var output, mocha, listener;
 
   output = '';
-  args = [path.join('bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args);
+  args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
+  mocha = spawn(process.execPath, args, { cwd: cwd });
 
   listener = function (data) {
     output += data;
@@ -174,6 +153,8 @@ function invokeMocha (args, fn) {
       code: code
     });
   });
+
+  return mocha;
 }
 
 function resolveFixturePath (fixture) {

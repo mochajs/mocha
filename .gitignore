@@ -1,11 +1,7 @@
 .DS_Store
 node_modules
 *.sock
-testing
-_mocha.js
-my-reporter.js
 *.sw*
-lib/browser/diff.js
 .idea
 *.iml
 *.patch
@@ -14,4 +10,13 @@ npm-debug.log*
 .envrc
 .karma/
 *.orig
-
+.nyc_output/
+coverage/
+yarn.lock
+mocha.js
+# artifacts from various diff tools
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*
+docs/_site

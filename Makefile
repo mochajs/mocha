@@ -1,18 +1,27 @@
 BROWSERIFY := "node_modules/.bin/browserify"
-ESLINT := "node_modules/.bin/eslint"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
+NYC := "node_modules/.bin/nyc"
 
-REPORTER ?= spec
+ifdef COVERAGE
+define test_node
+	$(NYC) --no-clean --report-dir coverage/reports/$(1) $(MOCHA)
+endef
+else
+	test_node := $(MOCHA)
+endif
+
 TM_BUNDLE = JavaScript\ mocha.tmbundle
-SRC = $(shell find lib -name "*.js" -type f | sort)
+SRC = $(shell find lib -name "*.js" -type f | LC_ALL=C sort)
 TESTS = $(shell find test -name "*.js" -type f | sort)
 
 all: mocha.js
 
 mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: build]\n"
+	mkdir -p ${@D}
 	$(BROWSERIFY) ./browser-entry \
+		--require buffer/:buffer \
 		--plugin ./scripts/dedefine \
 		--ignore 'fs' \
 		--ignore 'glob' \
@@ -25,9 +34,9 @@ clean:
 
 lint:
 	@printf "==> [Test :: Lint]\n"
-	$(ESLINT) .
+	npm run lint
 
-test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-glob test-requires test-reporters test-only test-global-only
+test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-requires test-reporters test-only test-global-only
 
 test-browser: clean mocha.js test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports
 
@@ -55,116 +64,103 @@ test-jsapi:
 
 test-unit:
 	@printf "==> [Test :: Unit]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		test/acceptance/*.js \
-		--growl \
-		test/*.js
+	$(call test_node,unit) test/unit/*.spec.js \
+		test/node-unit/*.spec.js \
+		--growl
 
 test-integration:
 	@printf "==> [Test :: Integrations]\n"
-	$(MOCHA) --timeout 5000 \
-		--reporter $(REPORTER) \
-		test/integration/*.js
+	$(call test_node,integration) --timeout 5000 --slow 500 \
+		test/integration/*.spec.js
 
 test-compilers:
 	@printf "==> [Test :: Compilers]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--compilers coffee:coffee-script/register,foo:./test/compiler/foo \
-		test/acceptance/test.coffee \
-		test/acceptance/test.foo
+	$(call test_node,compilers-coffee) --compilers coffee:coffee-script/register \
+		test/compiler
+
+	$(call test_node,compilers-custom) \
+	--compilers foo:./test/compiler-fixtures/foo.fixture \
+		test/compiler
+
+	$(call test_node,compilers-multiple) \
+		--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture \
+		test/compiler
 
 test-requires:
 	@printf "==> [Test :: Requires]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--compilers coffee:coffee-script/register \
-		--require test/acceptance/require/a.js \
-		--require test/acceptance/require/b.coffee \
-		--require test/acceptance/require/c.js \
-		--require test/acceptance/require/d.coffee \
-		test/acceptance/require/require.spec.js
+	$(call test_node,requires) --compilers coffee:coffee-script/register \
+		--require test/require/a.js \
+		--require test/require/b.coffee \
+		--require test/require/c.js \
+		--require test/require/d.coffee \
+		test/require/require.spec.js
 
 test-bdd:
 	@printf "==> [Test :: BDD]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui bdd \
-		test/acceptance/interfaces/bdd.spec
+	$(call test_node,bdd) --ui bdd \
+		test/interfaces/bdd.spec
 
 test-tdd:
 	@printf "==> [Test :: TDD]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui tdd \
-		test/acceptance/interfaces/tdd.spec
+	$(call test_node,tdd) --ui tdd \
+		test/interfaces/tdd.spec
 
 test-qunit:
 	@printf "==> [Test :: QUnit]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui qunit \
-		test/acceptance/interfaces/qunit.spec
+	$(call test_node,qunit) --ui qunit \
+		test/interfaces/qunit.spec
 
 test-exports:
 	@printf "==> [Test :: Exports]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui exports \
-		test/acceptance/interfaces/exports.spec
-
-test-glob:
-	@printf "==> [Test :: Glob]\n"
-	bash ./test/acceptance/glob/glob.sh
+	$(call test_node,exports) --ui exports \
+		test/interfaces/exports.spec
 
 test-reporters:
 	@printf "==> [Test :: Reporters]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		test/reporters/*.js
+	$(call test_node,reporters) test/reporters/*.spec.js
 
 test-only:
 	@printf "==> [Test :: Only]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui tdd \
-		test/acceptance/misc/only/tdd.spec
+	$(call test_node,only-tdd) --ui tdd \
+		test/only/tdd.spec
 
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui bdd \
-		test/acceptance/misc/only/bdd.spec
+	$(call test_node,only-bdd) --ui bdd \
+		test/only/bdd.spec
 
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui qunit \
-		test/acceptance/misc/only/bdd-require.spec
+	$(call test_node,only-bdd-require) --ui qunit \
+		test/only/bdd-require.spec
 
 test-global-only:
 	@printf "==> [Test :: Global Only]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui tdd \
-		test/acceptance/misc/only/global/tdd.spec
+	$(call test_node,global-only-tdd) --ui tdd \
+		test/only/global/tdd.spec
 
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui bdd \
-		test/acceptance/misc/only/global/bdd.spec
+	$(call test_node,global-only-bdd) --ui bdd \
+		test/only/global/bdd.spec
 
-	$(MOCHA) --reporter $(REPORTER) \
-		--ui qunit \
-		test/acceptance/misc/only/global/qunit.spec
+	$(call test_node,global-only-qunit) --ui qunit \
+		test/only/global/qunit.spec
 
 test-mocha:
 	@printf "==> [Test :: Mocha]\n"
-	$(MOCHA) --reporter $(REPORTER) \
-		test/mocha
+	$(call test_node,mocha) test/mocha
 
 non-tty:
 	@printf "==> [Test :: Non-TTY]\n"
-	$(MOCHA) --reporter dot \
-		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/dot.out
+	$(call test_node,non-tty-dot) --reporter dot \
+		test/interfaces/bdd.spec 2>&1 > /tmp/dot.out
 
 	@echo dot:
 	@cat /tmp/dot.out
 
-	$(MOCHA) --reporter list \
-		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/list.out
+	$(call test_node,non-tty-list) --reporter list \
+		test/interfaces/bdd.spec 2>&1 > /tmp/list.out
 
 	@echo list:
 	@cat /tmp/list.out
 
-	$(MOCHA) --reporter spec \
-		test/acceptance/interfaces/bdd.spec 2>&1 > /tmp/spec.out
+	$(call test_node,non-tty-spec) --reporter spec \
+		test/interfaces/bdd.spec 2>&1 > /tmp/spec.out
 
 	@echo spec:
 	@cat /tmp/spec.out

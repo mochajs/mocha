@@ -91,12 +91,16 @@ program
   .option('--icu-data-dir', 'include ICU data')
   .option('--inline-diffs', 'display actual/expected differences inline within each string')
   .option('--no-diff', 'do not show a diff on failure')
+  .option('--inspect', 'activate devtools in chrome')
+  .option('--inspect-brk', 'activate devtools in chrome and break on the first line')
   .option('--interfaces', 'display available interfaces')
   .option('--no-deprecation', 'silence deprecation warnings')
-  .option('--no-exit', 'require a clean shutdown of the event loop: mocha will not call process.exit')
+  .option('--exit', 'force shutdown of the event loop after test run: mocha will call process.exit')
   .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
+  .option('--no-warnings', 'silence all node process warnings')
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--perf-basic-prof', 'enable perf linux profiler (basic support)')
+  .option('--napi-modules', 'enable experimental NAPI modules')
   .option('--prof', 'log statistical profiling information')
   .option('--log-timer-events', 'Time events including external callbacks')
   .option('--recursive', 'include sub directories')
@@ -105,9 +109,13 @@ program
   .option('--throw-deprecation', 'throw an exception anytime a deprecated function is used')
   .option('--trace', 'trace function calls')
   .option('--trace-deprecation', 'show stack traces on deprecations')
+  .option('--trace-warnings', 'show stack traces on node process warnings')
   .option('--use_strict', 'enforce strict mode')
   .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
-  .option('--delay', 'wait for async suite definition');
+  .option('--delay', 'wait for async suite definition')
+  .option('--allow-uncaught', 'enable uncaught errors to propagate')
+  .option('--forbid-only', 'causes test marked with only to fail the suite')
+  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite');
 
 program._name = 'mocha';
 
@@ -131,13 +139,13 @@ program
 
 // --globals
 
-program.on('globals', function (val) {
+program.on('option:globals', function (val) {
   globals = globals.concat(list(val));
 });
 
 // --reporters
 
-program.on('reporters', function () {
+program.on('option:reporters', function () {
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -158,7 +166,7 @@ program.on('reporters', function () {
 
 // --interfaces
 
-program.on('interfaces', function () {
+program.on('option:interfaces', function () {
   console.log('');
   interfaceNames.forEach(function (interfaceName) {
     console.log('    ' + interfaceName);
@@ -171,7 +179,7 @@ program.on('interfaces', function () {
 
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
-program.on('require', function (mod) {
+program.on('option:require', function (mod) {
   var abs = exists(mod) || exists(mod + '.js');
   if (abs) {
     mod = resolve(mod);
@@ -319,6 +327,12 @@ if (program.delay) {
   mocha.delay();
 }
 
+// --allow-uncaught
+
+if (program.allowUncaught) {
+  mocha.allowUncaught();
+}
+
 // --globals
 
 mocha.globals(globals);
@@ -329,8 +343,20 @@ if (program.retries) {
   mocha.suite.retries(program.retries);
 }
 
+// --forbid-only
+
+if (program.forbidOnly) mocha.forbidOnly();
+
+// --forbid-pending
+
+if (program.forbidPending) mocha.forbidPending();
+
 // custom compiler support
 
+if (program.compilers.length > 0) {
+  require('util').deprecate(function () {},
+    '"--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info')();
+}
 var extensions = ['js'];
 program.compilers.forEach(function (c) {
   var idx = c.indexOf(':');
@@ -472,12 +498,18 @@ function exitLater (code) {
 }
 
 function exit (code) {
+  var clampedCode = Math.min(code, 255);
+
+  // Eagerly set the process's exit code in case stream.write doesn't
+  // execute its callback before the process terminates.
+  process.exitCode = clampedCode;
+
   // flush output for Node.js Windows pipe bug
   // https://github.com/joyent/node/issues/6247 is just one bug example
   // https://github.com/visionmedia/mocha/issues/333 has a good discussion
   function done () {
     if (!(draining--)) {
-      process.exit(Math.min(code, 255));
+      process.exit(clampedCode);
     }
   }
 
