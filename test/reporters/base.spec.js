@@ -108,8 +108,8 @@ describe('Base reporter', function () {
       Base.hideDiff = false; // Revert to original value
 
       errOut = stdout.join('\n');
-      errOut.should.not.match(/\- actual/);
-      errOut.should.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- actual/);
+      expect(errOut).to.not.match(/\+ expected/);
     });
   });
 
