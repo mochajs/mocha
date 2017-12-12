@@ -4,6 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
+var builder = require('./scripts/build');
+var build = builder.build;
+var bundlerOptions = builder.options;
 
 var browserPlatformPairs = {
   'chrome@latest': 'Windows 8',
@@ -32,23 +35,20 @@ module.exports = function (config) {
     preprocessors: {
       'test/**/*.js': ['browserify']
     },
-    browserify: {
-      debug: true,
-      configure: function configure (b) {
-        b.ignore('glob')
-          .ignore('fs')
-          .ignore('path')
-          .ignore('supports-color')
-          .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
-          .on('bundled', function (err, content) {
-            if (!err && bundleDirpath) {
-              // write bundle to directory for debugging
-              fs.writeFileSync(path.join(bundleDirpath,
-                'bundle.' + Date.now() + '.js'), content);
-            }
-          });
-      }
-    },
+    browserify: Object.assign({insertGlobalVars: bundlerOptions.insertGlobalVars},
+      {
+        debug: true,
+        configure: function configure (b) {
+          build(b)
+            .on('bundled', function (err, content) {
+              if (!err && bundleDirpath) {
+                // write bundle to directory for debugging
+                fs.writeFileSync(path.join(bundleDirpath, 'bundle.' +
+                  Date.now() + '.js'), content);
+              }
+            });
+        }
+      }),
     reporters: ['mocha'],
     colors: true,
     browsers: ['PhantomJS'],

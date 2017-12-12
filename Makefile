@@ -1,4 +1,4 @@
-BROWSERIFY := "node_modules/.bin/browserify"
+BROWSERIFY := "scripts/build.js"
 KARMA := "node_modules/.bin/karma"
 MOCHA := "bin/mocha"
 NYC := "node_modules/.bin/nyc"
@@ -20,13 +20,7 @@ all: mocha.js
 mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: build]\n"
 	mkdir -p ${@D}
-	$(BROWSERIFY) ./browser-entry \
-		--require buffer/:buffer \
-		--plugin ./scripts/dedefine \
-		--ignore 'fs' \
-		--ignore 'glob' \
-		--ignore 'path' \
-		--ignore 'supports-color' > $@
+	$(BROWSERIFY) > $@
 
 clean:
 	@printf "==> [Clean]\n"
