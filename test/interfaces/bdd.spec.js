@@ -40,3 +40,27 @@ describe('pending suite', function () {
     });
   });
 });
+
+describe('pending tests', function () {
+  it.skip('should not run', function () {
+    expect(1 + 1).to.equal(3);
+  });
+});
+
+describe('setting timeout by appending it to test', function () {
+  var runningTest = it('enables users to call timeout on active tests', function () {
+    expect(1 + 1).to.equal(2);
+  }).timeout(1003);
+
+  var skippedTest = xit('enables users to call timeout on pending tests', function () {
+    expect(1 + 1).to.equal(3);
+  }).timeout(1002);
+
+  it('sets timeout on pending tests', function () {
+    expect(skippedTest._timeout).to.equal(1002);
+  });
+
+  it('sets timeout on running tests', function () {
+    expect(runningTest._timeout).to.equal(1003);
+  });
+});
