@@ -89,6 +89,8 @@ As maintainers, *we work together* to learn about the nature of these questions.
 
 A maintainer *must* also have 2FA enabled on their GitHub account.
 
+> If you think that you aren't familiar with mocha's internals enough to contribute, please watch [This walkthrough video!](https://youtu.be/zLayCLcIno0)
+
 #### The Rights of a Maintainer
 
 You may choose to do zero or more of these *at their discretion*:
