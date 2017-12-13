@@ -15,7 +15,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 
 - [browser support](#running-mocha-in-the-browser)
 - [simple async support, including promises](#asynchronous-code)
-- test coverage reporting
+- [test coverage reporting](#wallabyjs)
 - string diff support
 - javascript API for running tests
 - proper exit status for CI support etc
