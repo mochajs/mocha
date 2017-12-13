@@ -51,7 +51,7 @@ module.exports = config => {
     },
     reporters: ['mocha'],
     colors: true,
-    browsers: ['PhantomJS'],
+    browsers: ['ChromeHeadless'],
     logLevel: config.LOG_INFO,
     client: {
       mocha: {

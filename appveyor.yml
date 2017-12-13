@@ -10,7 +10,6 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
-  - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
   - npm install -g npm
   - npm install
   - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
