@@ -7,17 +7,17 @@
  * when found, before invoking the "real" _mocha(1) executable.
  */
 
-var spawn = require('child_process').spawn;
-var path = require('path');
-var getOptions = require('./options');
-var args = [path.join(__dirname, '_mocha')];
+const spawn = require('child_process').spawn;
+const path = require('path');
+const getOptions = require('./options');
+const args = [path.join(__dirname, '_mocha')];
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
 getOptions();
 
-process.argv.slice(2).forEach(function (arg) {
-  var flag = arg.split('=')[0];
+process.argv.slice(2).forEach(arg => {
+  const flag = arg.split('=')[0];
 
   switch (flag) {
     case '-d':
@@ -69,9 +69,11 @@ process.argv.slice(2).forEach(function (arg) {
   }
 });
 
-var proc = spawn(process.execPath, args, { stdio: 'inherit' });
-proc.on('exit', function (code, signal) {
-  process.on('exit', function () {
+const proc = spawn(process.execPath, args, {
+  stdio: 'inherit'
+});
+proc.on('exit', (code, signal) => {
+  process.on('exit', () => {
     if (signal) {
       process.kill(process.pid, signal);
     } else {
@@ -81,7 +83,7 @@ proc.on('exit', function (code, signal) {
 });
 
 // terminate children.
-process.on('SIGINT', function () {
+process.on('SIGINT', () => {
   proc.kill('SIGINT'); // calls runner.abort()
   proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
 });

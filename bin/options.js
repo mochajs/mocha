@@ -4,7 +4,7 @@
  * Dependencies.
  */
 
-var fs = require('fs');
+const fs = require('fs');
 
 /**
  * Export `getOptions`.
@@ -21,18 +21,16 @@ function getOptions () {
     return;
   }
 
-  var optsPath = process.argv.indexOf('--opts') === -1
+  const optsPath = process.argv.indexOf('--opts') === -1
     ? 'test/mocha.opts'
     : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
-    var opts = fs.readFileSync(optsPath, 'utf8')
+    const opts = fs.readFileSync(optsPath, 'utf8')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
-      .map(function (value) {
-        return value.replace(/%20/g, ' ');
-      });
+      .map(value => value.replace(/%20/g, ' '));
 
     process.argv = process.argv
       .slice(0, 2)
