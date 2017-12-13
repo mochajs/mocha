@@ -27,6 +27,7 @@ function getOptions () {
 
   try {
     var opts = fs.readFileSync(optsPath, 'utf8')
+      .replace(/^\s*([^#]*)#.*$/gm, '')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
