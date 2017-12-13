@@ -7,52 +7,136 @@
  * Module dependencies.
  */
 
-var program = require('commander');
-var path = require('path');
-var fs = require('fs');
-var resolve = path.resolve;
-var exists = fs.existsSync || path.existsSync;
-var Mocha = require('../');
-var utils = Mocha.utils;
-var interfaceNames = Object.keys(Mocha.interfaces);
-var join = path.join;
-var cwd = process.cwd();
-var getOptions = require('./options');
-var mocha = new Mocha();
+const program = require('commander');
+const path = require('path');
+const fs = require('fs');
+const resolve = path.resolve;
+const exists = fs.existsSync;
+const Mocha = require('../');
+const utils = Mocha.utils;
+const interfaceNames = Object.keys(Mocha.interfaces);
+const join = path.join;
+const cwd = process.cwd();
+const getOptions = require('./options');
+const mocha = new Mocha();
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = global.Date;
-var setTimeout = global.setTimeout;
-var setInterval = global.setInterval;
-var clearTimeout = global.clearTimeout;
-var clearInterval = global.clearInterval;
+const Date = global.Date;
+const setTimeout = global.setTimeout;
+const setInterval = global.setInterval;
+const clearTimeout = global.clearTimeout;
+const clearInterval = global.clearInterval;
+
+/**
+ * Exits Mocha when tests + code under test has finished execution (default)
+ * @param {number} code - Exit code; typically # of failures
+ */
+const exitLater = code => {
+  process.on('exit', () => {
+    process.exit(Math.min(code, 255));
+  });
+};
+
+/**
+ * Exits Mocha when Mocha itself has finished execution, regardless of
+ * what the tests or code under test is doing.
+ * @param {number} code - Exit code; typically # of failures
+ */
+const exit = code => {
+  const clampedCode = Math.min(code, 255);
+  let draining = 0;
+
+  // Eagerly set the process's exit code in case stream.write doesn't
+  // execute its callback before the process terminates.
+  process.exitCode = clampedCode;
+
+  // flush output for Node.js Windows pipe bug
+  // https://github.com/joyent/node/issues/6247 is just one bug example
+  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
+  const done = () => {
+    if (!(draining--)) {
+      process.exit(clampedCode);
+    }
+  };
+
+  const streams = [process.stdout, process.stderr];
+
+  streams.forEach(stream => {
+    // submit empty write request and wait for completion
+    draining += 1;
+    stream.write('', done);
+  });
+
+  done();
+};
+
+/**
+ * Parse list.
+ */
+const list = str => str.split(/ *, */);
+
+/**
+ * Hide the cursor.
+ */
+const hideCursor = () => {
+  process.stdout.write('\u001b[?25l');
+};
+
+/**
+ * Show the cursor.
+ */
+const showCursor = () => {
+  process.stdout.write('\u001b[?25h');
+};
+
+/**
+ * Stop play()ing.
+ */
+const stop = () => {
+  process.stdout.write('\u001b[2K');
+  clearInterval(play.timer);
+};
+
+/**
+ * Play the given array of strings.
+ */
+const play = (arr, interval) => {
+  const len = arr.length;
+  interval = interval || 100;
+  let i = 0;
+
+  play.timer = setInterval(() => {
+    const str = arr[i++ % len];
+    process.stdout.write(`\u001b[0G${str}`);
+  }, interval);
+};
 
 /**
  * Files.
  */
 
-var files = [];
+let files = [];
 
 /**
  * Globals.
  */
 
-var globals = [];
+let globals = [];
 
 /**
  * Requires.
  */
 
-var requires = [];
+const requires = [];
 
 /**
  * Images.
  */
 
-var images = {
+const images = {
   fail: path.join(__dirname, '..', 'images', 'error.png'),
   pass: path.join(__dirname, '..', 'images', 'ok.png')
 };
@@ -78,7 +162,7 @@ program
   .option('-r, --require <name>', 'require the given module')
   .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
   .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
-  .option('-u, --ui <name>', 'specify user-interface (' + interfaceNames.join('|') + ')', 'bdd')
+  .option('-u, --ui <name>', `specify user-interface (${interfaceNames.join('|')})`, 'bdd')
   .option('-w, --watch', 'watch files for changes')
   .option('--check-leaks', 'check for global variable leaks')
   .option('--full-trace', 'display the full stack trace')
@@ -124,12 +208,12 @@ program._name = 'mocha';
 program
   .command('init <path>')
   .description('initialize a client-side mocha setup at <path>')
-  .action(function (path) {
-    var mkdir = require('mkdirp');
+  .action(path => {
+    const mkdir = require('mkdirp');
     mkdir.sync(path);
-    var css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
-    var js = fs.readFileSync(join(__dirname, '..', 'mocha.js'));
-    var tmpl = fs.readFileSync(join(__dirname, '..', 'lib/template.html'));
+    const css = fs.readFileSync(join(__dirname, '..', 'mocha.css'));
+    const js = fs.readFileSync(join(__dirname, '..', 'mocha.js'));
+    const tmpl = fs.readFileSync(join(__dirname, '..', 'lib/template.html'));
     fs.writeFileSync(join(path, 'mocha.css'), css);
     fs.writeFileSync(join(path, 'mocha.js'), js);
     fs.writeFileSync(join(path, 'tests.js'), '');
@@ -139,13 +223,13 @@ program
 
 // --globals
 
-program.on('option:globals', function (val) {
+program.on('option:globals', val => {
   globals = globals.concat(list(val));
 });
 
 // --reporters
 
-program.on('option:reporters', function () {
+program.on('option:reporters', () => {
   console.log();
   console.log('    dot - dot matrix');
   console.log('    doc - html documentation');
@@ -166,10 +250,10 @@ program.on('option:reporters', function () {
 
 // --interfaces
 
-program.on('option:interfaces', function () {
+program.on('option:interfaces', () => {
   console.log('');
-  interfaceNames.forEach(function (interfaceName) {
-    console.log('    ' + interfaceName);
+  interfaceNames.forEach(interfaceName => {
+    console.log(`    ${interfaceName}`);
   });
   console.log('');
   process.exit();
@@ -179,8 +263,8 @@ program.on('option:interfaces', function () {
 
 module.paths.push(cwd, join(cwd, 'node_modules'));
 
-program.on('option:require', function (mod) {
-  var abs = exists(mod) || exists(mod + '.js');
+program.on('option:require', mod => {
+  const abs = exists(mod) || exists(`${mod}.js`);
   if (abs) {
     mod = resolve(mod);
   }
@@ -202,12 +286,12 @@ Error.stackTraceLimit = Infinity; // TODO: config
 
 // reporter options
 
-var reporterOptions = {};
+const reporterOptions = {};
 if (program.reporterOptions !== undefined) {
-  program.reporterOptions.split(',').forEach(function (opt) {
-    var L = opt.split('=');
+  program.reporterOptions.split(',').forEach(opt => {
+    const L = opt.split('=');
     if (L.length > 2 || L.length === 0) {
-      throw new Error("invalid reporter option '" + opt + "'");
+      throw new Error(`invalid reporter option '${opt}'`);
     } else if (L.length === 2) {
       reporterOptions[L[0]] = L[1];
     } else {
@@ -222,14 +306,14 @@ mocha.reporter(program.reporter, reporterOptions);
 
 // load reporter
 
-var Reporter = null;
+let Reporter = null;
 try {
-  Reporter = require('../lib/reporters/' + program.reporter);
+  Reporter = require(`../lib/reporters/${program.reporter}`);
 } catch (err) {
   try {
     Reporter = require(program.reporter);
   } catch (err2) {
-    throw new Error('reporter "' + program.reporter + '" does not exist');
+    throw new Error(`reporter "${program.reporter}" does not exist`);
   }
 }
 
@@ -354,14 +438,14 @@ if (program.forbidPending) mocha.forbidPending();
 // custom compiler support
 
 if (program.compilers.length > 0) {
-  require('util').deprecate(function () {},
+  require('util').deprecate(() => {},
     '"--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info')();
 }
-var extensions = ['js'];
-program.compilers.forEach(function (c) {
-  var idx = c.indexOf(':');
-  var ext = c.slice(0, idx);
-  var mod = c.slice(idx + 1);
+const extensions = ['js'];
+program.compilers.forEach(c => {
+  const idx = c.indexOf(':');
+  const ext = c.slice(0, idx);
+  let mod = c.slice(idx + 1);
 
   if (mod[0] === '.') {
     mod = join(process.cwd(), mod);
@@ -373,7 +457,7 @@ program.compilers.forEach(function (c) {
 
 // requires
 
-requires.forEach(function (mod) {
+requires.forEach(mod => {
   require(mod);
 });
 
@@ -383,7 +467,7 @@ mocha.ui(program.ui);
 
 // args
 
-var args = program.args;
+const args = program.args;
 
 // default files to test/*.{js,coffee}
 
@@ -391,13 +475,13 @@ if (!args.length) {
   args.push('test');
 }
 
-args.forEach(function (arg) {
-  var newFiles;
+args.forEach(arg => {
+  let newFiles;
   try {
     newFiles = utils.lookupFiles(arg, extensions, program.recursive);
   } catch (err) {
     if (err.message.indexOf('cannot resolve path') === 0) {
-      console.error('Warning: Could not find any test files matching pattern: ' + arg);
+      console.error(`Warning: Could not find any test files matching pattern: ${arg}`);
       return;
     }
 
@@ -414,9 +498,7 @@ if (!files.length) {
 
 // resolve
 
-files = files.map(function (path) {
-  return resolve(path);
-});
+files = files.map(path => resolve(path));
 
 if (program.sort) {
   files.sort();
@@ -424,28 +506,28 @@ if (program.sort) {
 
 // --watch
 
-var runner;
-var loadAndRun;
-var purge;
-var rerun;
+let runner;
+let loadAndRun;
+let purge;
+let rerun;
 
 if (program.watch) {
   console.log();
   hideCursor();
-  process.on('SIGINT', function () {
+  process.on('SIGINT', () => {
     showCursor();
     console.log('\n');
     process.exit(130);
   });
 
-  var watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
-  var runAgain = false;
+  const watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
+  let runAgain = false;
 
-  loadAndRun = function loadAndRun () {
+  loadAndRun = () => {
     try {
       mocha.files = files;
       runAgain = false;
-      runner = mocha.run(function () {
+      runner = mocha.run(() => {
         runner = null;
         if (runAgain) {
           rerun();
@@ -456,15 +538,15 @@ if (program.watch) {
     }
   };
 
-  purge = function purge () {
-    watchFiles.forEach(function (file) {
+  purge = () => {
+    watchFiles.forEach(file => {
       delete require.cache[file];
     });
   };
 
   loadAndRun();
 
-  rerun = function rerun () {
+  rerun = () => {
     purge();
     stop();
     if (!program.grep) {
@@ -476,7 +558,7 @@ if (program.watch) {
     loadAndRun();
   };
 
-  utils.watch(watchFiles, function () {
+  utils.watch(watchFiles, () => {
     runAgain = true;
     if (runner) {
       runner.abort();
@@ -491,41 +573,7 @@ if (program.watch) {
   runner = mocha.run(program.exit ? exit : exitLater);
 }
 
-function exitLater (code) {
-  process.on('exit', function () {
-    process.exit(Math.min(code, 255));
-  });
-}
-
-function exit (code) {
-  var clampedCode = Math.min(code, 255);
-
-  // Eagerly set the process's exit code in case stream.write doesn't
-  // execute its callback before the process terminates.
-  process.exitCode = clampedCode;
-
-  // flush output for Node.js Windows pipe bug
-  // https://github.com/joyent/node/issues/6247 is just one bug example
-  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
-  function done () {
-    if (!(draining--)) {
-      process.exit(clampedCode);
-    }
-  }
-
-  var draining = 0;
-  var streams = [process.stdout, process.stderr];
-
-  streams.forEach(function (stream) {
-    // submit empty write request and wait for completion
-    draining += 1;
-    stream.write('', done);
-  });
-
-  done();
-}
-
-process.on('SIGINT', function () {
+process.on('SIGINT', () => {
   runner.abort();
 
   // This is a hack:
@@ -533,51 +581,3 @@ process.on('SIGINT', function () {
   // The amount of failures will be emitted as error code later
   runner.failures = 130;
 });
-
-/**
- * Parse list.
- */
-
-function list (str) {
-  return str.split(/ *, */);
-}
-
-/**
- * Hide the cursor.
- */
-
-function hideCursor () {
-  process.stdout.write('\u001b[?25l');
-}
-
-/**
- * Show the cursor.
- */
-
-function showCursor () {
-  process.stdout.write('\u001b[?25h');
-}
-
-/**
- * Stop play()ing.
- */
-
-function stop () {
-  process.stdout.write('\u001b[2K');
-  clearInterval(play.timer);
-}
-
-/**
- * Play the given array of strings.
- */
-
-function play (arr, interval) {
-  var len = arr.length;
-  interval = interval || 100;
-  var i = 0;
-
-  play.timer = setInterval(function () {
-    var str = arr[i++ % len];
-    process.stdout.write('\u001b[0G' + str);
-  }, interval);
-}
