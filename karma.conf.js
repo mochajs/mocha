@@ -4,6 +4,9 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var baseBundleDirpath = path.join(__dirname, '.karma');
+var builder = require('./scripts/build');
+var build = builder.build;
+var bundlerOptions = builder.options;
 
 var browserPlatformPairs = {
   'chrome@latest': 'Windows 8',
@@ -32,23 +35,24 @@ module.exports = function (config) {
     preprocessors: {
       'test/**/*.js': ['browserify']
     },
-    browserify: {
+    browserify: Object.assign({
+      insertGlobalVars: bundlerOptions.insertGlobalVars
+    }, {
       debug: true,
       configure: function configure (b) {
-        b.ignore('glob')
-          .ignore('fs')
-          .ignore('path')
-          .ignore('supports-color')
-          .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
+        build(b)
           .on('bundled', function (err, content) {
-            if (!err && bundleDirpath) {
+            if (err) {
+              throw err;
+            }
+            if (bundleDirpath) {
               // write bundle to directory for debugging
-              fs.writeFileSync(path.join(bundleDirpath,
-                'bundle.' + Date.now() + '.js'), content);
+              fs.writeFileSync(path.join(bundleDirpath, 'mocha.' + Date.now() +
+                '.js'), content);
             }
           });
       }
-    },
+    }),
     reporters: ['mocha'],
     colors: true,
     browsers: ['PhantomJS'],
@@ -63,18 +67,8 @@ module.exports = function (config) {
     }
   };
 
-  // see https://github.com/saucelabs/karma-sauce-example
-
-  // We define the browser to run on the Saucelabs Infrastructure
-  // via the environment variables BROWSER and PLATFORM.
-  // PLATFORM is e.g. "Windows"
-  // BROWSER is expected to be in the format "<name>@<version>",
-  // e.g. "MicrosoftEdge@latest"
-  // See https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-  // for available browsers.
-
-  // TO RUN LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> BROWSER=<browser> PLATFORM=<platform> make test-browser`
+  // TO RUN AGAINST SAUCELABS LOCALLY, execute:
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
   var env = process.env;
   var sauceConfig;
 
@@ -86,8 +80,8 @@ module.exports = function (config) {
       if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
         // correlate build/tunnel with Travis
         sauceConfig = {
-          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
-            ' (' + env.TRAVIS_BUILD_ID + ')',
+          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER + ' (' +
+          env.TRAVIS_BUILD_ID + ')',
           tunnelIdentifier: env.TRAVIS_JOB_NUMBER,
           startConnect: false
         };
@@ -96,8 +90,7 @@ module.exports = function (config) {
         console.error('No SauceLabs credentials present');
       }
     } else if (env.APPVEYOR) {
-      console.error('AppVeyor detected');
-      bundleDirpath = path.join(baseBundleDirpath, process.env.APPVEYOR_BUILD_ID);
+      throw new Error('no browser tests should run on AppVeyor!');
     } else {
       console.error('Local/unknown environment detected');
       bundleDirpath = path.join(baseBundleDirpath, 'local');
@@ -124,21 +117,50 @@ module.exports = function (config) {
     addSauceTests(cfg);
   }
 
-  // the MOCHA_UI env var will determine if we're running interface-specific
-  // tests.  since you can only load one at a time, each must be run separately.
-  // each has its own set of acceptance tests and a fixture.
-  // the "bdd" fixture is used by default.
-  var ui = env.MOCHA_UI;
-  if (ui) {
-    if (cfg.sauceLabs) {
-      cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
-    }
-    cfg.files = [
-      'test/browser-fixtures/' + ui + '.fixture.js',
-      'test/interfaces/' + ui + '.spec.js'
-    ];
-  } else if (cfg.sauceLabs) {
-    cfg.sauceLabs.testName = 'Unit Tests';
+  /* the MOCHA_TEST env var will be set for "special" cases of tests.
+   * these may require different interfaces or other setup which make
+   * them unable to be batched w/ the rest.
+   */
+  var MOCHA_TEST = env.MOCHA_TEST;
+  switch (MOCHA_TEST) {
+    case 'bdd':
+    case 'tdd':
+    case 'qunit':
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName =
+          'Interface "' + MOCHA_TEST + '" Integration Tests';
+      }
+      cfg.files = [
+        'test/browser-fixtures/' + MOCHA_TEST + '.fixture.js',
+        'test/interfaces/' + MOCHA_TEST + '.spec.js'
+      ];
+      break;
+
+    case 'esm':
+      // for now we will only run against Chrome to test this.
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = 'ESM Integration Tests';
+        cfg.browsers = ['chrome@latest'];
+        var launcher = cfg.customLaunchers['chrome@latest'];
+        cfg.customLaunchers = {
+          'chrome@latest': launcher
+        };
+      } else if (!env.TRAVIS) {
+        cfg.browsers = ['Chrome'];
+      } else {
+        console.error(
+          'skipping ESM tests & exiting; no SauceLabs nor local run detected');
+        process.exit(0);
+      }
+      cfg.files = [
+        'test/browser-fixtures/esm.fixture.html',
+        'test/browser-specific/esm.spec.js'
+      ];
+      break;
+    default:
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = 'Unit Tests';
+      }
   }
 
   config.set(cfg);

@@ -321,6 +321,7 @@
     "supports-color": "4.4.0"
   },
   "devDependencies": {
+    "aliasify": "^2.1.0",
     "assert": "^1.4.1",
     "browserify": "^14.4.0",
     "buffer": "^4.9.1",
