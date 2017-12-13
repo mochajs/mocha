@@ -1,11 +1,11 @@
 root: true
-env:
-  node: true
-  browser: true
-parserOptions:
-  ecmaVersion: 5
-  sourceType: script
 extends: semistandard
+env:
+  node: yes
+  browser: yes
+  es6: no
+parserOptions:
+  sourceType: script
 rules:
   strict:
     - error

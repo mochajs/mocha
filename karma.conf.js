@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var baseBundleDirpath = path.join(__dirname, '.karma');
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const baseBundleDirpath = path.join(__dirname, '.karma');
 
-var browserPlatformPairs = {
+const browserPlatformPairs = {
   'chrome@latest': 'Windows 8',
   'MicrosoftEdge@latest': 'Windows 10',
   'internet explorer@11.0': 'Windows 8.1',
@@ -15,9 +15,9 @@ var browserPlatformPairs = {
   'safari@latest': 'OS X 10.12'
 };
 
-module.exports = function (config) {
-  var bundleDirpath;
-  var cfg = {
+module.exports = config => {
+  let bundleDirpath;
+  const cfg = {
     frameworks: [
       'browserify',
       'expect',
@@ -40,11 +40,11 @@ module.exports = function (config) {
           .ignore('path')
           .ignore('supports-color')
           .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
-          .on('bundled', function (err, content) {
+          .on('bundled', (err, content) => {
             if (!err && bundleDirpath) {
               // write bundle to directory for debugging
               fs.writeFileSync(path.join(bundleDirpath,
-                'bundle.' + Date.now() + '.js'), content);
+                `bundle.${Date.now()}.js`), content);
             }
           });
       }
@@ -75,8 +75,8 @@ module.exports = function (config) {
 
   // TO RUN LOCALLY, execute:
   // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> BROWSER=<browser> PLATFORM=<platform> make test-browser`
-  var env = process.env;
-  var sauceConfig;
+  const env = process.env;
+  let sauceConfig;
 
   if (env.CI) {
     console.error('CI mode enabled');
@@ -86,8 +86,7 @@ module.exports = function (config) {
       if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
         // correlate build/tunnel with Travis
         sauceConfig = {
-          build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
-            ' (' + env.TRAVIS_BUILD_ID + ')',
+          build: `TRAVIS #${env.TRAVIS_BUILD_NUMBER} (${env.TRAVIS_BUILD_ID})`,
           tunnelIdentifier: env.TRAVIS_JOB_NUMBER,
           startConnect: false
         };
@@ -103,7 +102,7 @@ module.exports = function (config) {
       bundleDirpath = path.join(baseBundleDirpath, 'local');
       // don't need to run sauce from appveyor b/c travis does it.
       if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
-        var id = require('os').hostname() + ' (' + Date.now() + ')';
+        const id = `${require('os').hostname()} (${Date.now()})`;
         sauceConfig = {
           build: id,
           tunnelIdentifier: id,
@@ -128,14 +127,14 @@ module.exports = function (config) {
   // tests.  since you can only load one at a time, each must be run separately.
   // each has its own set of acceptance tests and a fixture.
   // the "bdd" fixture is used by default.
-  var ui = env.MOCHA_UI;
+  const ui = env.MOCHA_UI;
   if (ui) {
     if (cfg.sauceLabs) {
-      cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
+      cfg.sauceLabs.testName = `Interface "${ui}" integration tests`;
     }
     cfg.files = [
-      'test/browser-fixtures/' + ui + '.fixture.js',
-      'test/interfaces/' + ui + '.spec.js'
+      `test/browser-fixtures/${ui}.fixture.js`,
+      `test/interfaces/${ui}.spec.js`
     ];
   } else if (cfg.sauceLabs) {
     cfg.sauceLabs.testName = 'Unit Tests';
@@ -146,13 +145,13 @@ module.exports = function (config) {
 
 function addSauceTests (cfg) {
   cfg.reporters.push('saucelabs');
-  var browsers = Object.keys(browserPlatformPairs);
+  const browsers = Object.keys(browserPlatformPairs);
   cfg.browsers = cfg.browsers.concat(browsers);
-  cfg.customLaunchers = browsers.reduce(function (acc, browser) {
-    var platform = browserPlatformPairs[browser];
-    var browserParts = browser.split('@');
-    var browserName = browserParts[0];
-    var version = browserParts[1];
+  cfg.customLaunchers = browsers.reduce((acc, browser) => {
+    const platform = browserPlatformPairs[browser];
+    const browserParts = browser.split('@');
+    const browserName = browserParts[0];
+    const version = browserParts[1];
     acc[browser] = {
       base: 'SauceLabs',
       browserName: browserName,
