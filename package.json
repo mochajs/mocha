@@ -296,8 +296,7 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 2.15.11"
+    "node": ">= 4.0.0"
   },
   "scripts": {
     "lint": "eslint . bin/*",
