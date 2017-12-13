@@ -1268,6 +1268,8 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 * auto run tests on file save
 * see tests results directly in the code editor
 
+![mocha side bar in Action](images/mocha_side_bar.png)
+
 ## Examples
 
 Real live example code:
