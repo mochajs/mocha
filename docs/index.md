@@ -13,36 +13,36 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](http://no
 
 ## Features
 
-- browser support
-- simple async support, including promises
-- test coverage reporting
-- string diff support
-- javascript API for running tests
+- [browser support](#running-mocha-in-the-browser)
+- [simple async support, including promises](#asynchronous-code)
+- [test coverage reporting](#wallabyjs)
+- [string diff support](#diffs)
+- [javascript API for running tests](#more-information)
 - proper exit status for CI support etc
-- auto-detects and disables coloring for non-ttys
-- maps uncaught exceptions to the correct test case
-- async test timeout support
-- test retry support
-- test-specific timeouts
-- growl notification support
-- reports test durations
-- highlights slow tests
-- file watcher support
-- global variable leak detection
-- optionally run tests that match a regexp
-- auto-exit to prevent "hanging" with an active loop
-- easily meta-generate suites & test-cases
-- mocha.opts file support
-- clickable suite titles to filter test execution
-- node debugger support
+- [auto-detects and disables coloring for non-ttys](#reporters)
+- [maps uncaught exceptions to the correct test case](#browser-specific-methods)
+- [async test timeout support](#delayed-root-suite)
+- [test retry support](#retry-tests)
+- [test-specific timeouts](#test-level) 
+- [growl notification support](#mochaopts)
+- [reports test durations](#test-duration)
+- [highlights slow tests](#dot-matrix)
+- [file watcher support](#min) 
+- [global variable leak detection](#--check-leaks) 
+- [optionally run tests that match a regexp](#-g---grep-pattern) 
+- [auto-exit to prevent "hanging" with an active loop](#--exit----no-exit)
+- [easily meta-generate suites](#markdown) & [test-cases](#list)
+- [mocha.opts file support](#mochaopts)
+- clickable suite titles to filter test execution  
+- [node debugger support](#-d---debug)
 - detects multiple calls to `done()`
-- use any assertion library you want
-- extensible reporting, bundled with 9+ reporters
-- extensible test DSLs or "interfaces"
-- before, after, before each, after each hooks
-- arbitrary transpiler support (coffee-script etc)
-- TextMate bundle
-- and more!
+- [use any assertion library you want](#assertions)
+- [extensible reporting, bundled with 9+ reporters](#reporters)
+- [extensible test DSLs or "interfaces"](#interfaces)
+- [before, after, before each, after each hooks](#hooks)
+- [arbitrary transpiler support (coffee-script etc)](#--compilers)
+- [TextMate bundle](#textmate)
+- [and more!](https://mochajs.org)
 
 ## Table of Contents
 
