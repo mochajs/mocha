@@ -82,6 +82,26 @@ describe('file utils', function () {
         .have
         .length(expectedLength);
     });
+
+    it('should parse extensions from extnsions parameter', function () {
+      var nonJsFile = tmpFile('mocha-utils-text.txt');
+      fs.writeFileSync(nonJsFile, 'yippy skippy ying yang yow');
+
+      var res = utils.lookupFiles(tmpDir, ['txt'], false);
+      expect(res).to.contain(nonJsFile).and.to.have.length(1);
+    });
+
+    it('should not require the extensions parameter when looking up a file', function () {
+      var res = utils.lookupFiles(tmpFile('mocha-utils'), undefined, false);
+      expect(res).to.equal(tmpFile('mocha-utils.js'));
+    });
+
+    it('should require the extensions parameter when looking up a directory', function () {
+      var dirLookup = function () {
+        return utils.lookupFiles(tmpDir, undefined, false);
+      };
+      expect(dirLookup).to.throwError();
+    });
   });
 
   describe('.files', function () {
