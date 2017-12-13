@@ -11,7 +11,7 @@
 1. Increase test coverage on Node.js and browser
    - Increase integration coverage for all reporters
      - `html` reporter must be tested in browser
-     - ~~Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts; PhantomJS can consume all console reporters~~
+     - ~~Basic console reporters (*not* `nyan`, `landing`, etc.) must be tested in **both** browser and Node.js contexts~~
      - ~~Filesystem-based reporters must be tested in Node.js context~~
      - **UPDATE - May 24 2017**: Thanks to [community contributions](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md#mag-coverage), the coverage on most reporters has increased dramatically!  The `html` reporter is still in [dire need of coverage](https://coveralls.io/builds/11674428/source?filename=lib%2Freporters%2Fhtml.js).
    - Increase coverage against all interfaces (`exports` in particular).  Ideally this becomes a "matrix" where we repeat sets of integration tests across all interfaces.
