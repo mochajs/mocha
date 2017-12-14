@@ -24,8 +24,10 @@ fs.createReadStream(docsFilepath)
   .on('close', () => {
     console.log('Done.');
   })
-  .pipe(utils.concat(
-    input => fs.writeFileSync(docsFilepath, toc.insert(String(input), {
+  .pipe(utils.concat(input => {
+    const output = toc.insert(String(input), {
       bullets: '-',
       maxdepth: 2
-    }))));
+    }).replace(/\n\n$/, '\n');
+    return fs.writeFileSync(docsFilepath, output);
+  }));
