@@ -13,10 +13,6 @@ describe('file utils', function () {
   var tmpFile = path.join.bind(path, tmpDir);
   var symlinkSupported = false;
 
-  beforeEach(function () {
-    this.timeout(2000);
-  });
-
   (function testSymlinkSupport () {
     makeTempDir();
 
@@ -32,6 +28,7 @@ describe('file utils', function () {
   }());
 
   beforeEach(function () {
+    this.timeout(2000);
     makeTempDir();
 
     fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
