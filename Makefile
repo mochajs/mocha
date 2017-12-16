@@ -21,7 +21,6 @@ mocha.js: $(SRC) browser-entry.js
 	@printf "==> [Browser :: build]\n"
 	mkdir -p ${@D}
 	$(BROWSERIFY) ./browser-entry \
-		--require buffer/:buffer \
 		--plugin ./scripts/dedefine \
 		--ignore 'fs' \
 		--ignore 'glob' \
