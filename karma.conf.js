@@ -9,8 +9,6 @@ const browserPlatformPairs = {
   'chrome@latest': 'Windows 8',
   'MicrosoftEdge@latest': 'Windows 10',
   'internet explorer@11.0': 'Windows 8.1',
-  'internet explorer@10.0': 'Windows 8',
-  'internet explorer@9.0': 'Windows 7',
   'firefox@latest': 'Windows 10',
   'safari@latest': 'OS X 10.12'
 };
@@ -39,7 +37,7 @@ module.exports = config => {
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
-          .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
+          // .require(path.join(__dirname, 'node_modules', 'buffer'), {expose: 'buffer'})
           .on('bundled', (err, content) => {
             if (!err && bundleDirpath) {
               // write bundle to directory for debugging
