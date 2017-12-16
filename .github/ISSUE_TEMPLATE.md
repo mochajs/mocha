@@ -5,7 +5,7 @@ For more, check out the Mocha Gitter chat room: https://gitter.im/mochajs/mocha
 
 ### Prerequisites
 <!--
-Place an `x` between the square brackets on the lines below for every satisified prerequisite.
+Place an `x` between the square brackets on the lines below for every satisfied prerequisite.
 -->
 * [ ] Checked that your issue isn't already filed by cross referencing [issues with the `common mistake` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Acommon-mistake%20)
 * [ ] Checked next-gen ES issues and syntax problems by using the same environment and/or transpiler configuration without Mocha to ensure it isn't just a feature that actually isn't supported in the environment in question or a bug in your code.
@@ -22,7 +22,7 @@ Place an `x` between the square brackets on the lines below for every satisified
 
 <!--
 Please add a series of steps to reproduce the problem. See https://stackoverflow.com/help/mcve for in depth information
-on how to create a mimimal, complete, and verifiable example.
+on how to create a minimal, complete, and verifiable example.
 -->
 
 **Expected behavior:** [What you expect to happen]
