@@ -57,19 +57,36 @@ header {
   font-style: normal
 }
 
-#_backers a, #_sponsors a {
+#_backers {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#_backers a {
+  margin: 3px;
+}
+
+#_backers a img {
+  display: block;
+  width: 64px;
+  height: 64px;
+
+  margin: 0;
+  box-shadow: none;
+
+  background: url(/images/backer-background.svg?inline) center center no-repeat;
+}
+
+#_sponsors a {
   opacity: 0;
-  -webkit-transition: opacity .3s;
-  -moz-transition: opacity .3s;
-  -o-transition: opacity .3s;
   transition: opacity .3s;
 }
 
-#_backers a img, #_sponsors a img {
+#_sponsors a img {
   max-height: 64px;
 }
 
-.onload h1, #_backers.onload a, #_sponsors.onload a {
+#_sponsors.onload a {
   opacity: 1;
 }
 
@@ -112,11 +129,7 @@ ul {
   margin-top: 20px;
   padding: 0 15px;
   width: 100%;
-  -webkit-column-count: 2;
-  -moz-column-count: 2;
   column-count: 2;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 
@@ -126,8 +139,6 @@ ul li {
   list-style: none;
   border-bottom: 1px solid #eee;
   padding: 5px 0;
-  -webkit-column-break-inside: avoid;
-  -moz-column-break-inside: avoid;
   column-break-inside: avoid;
 }
 
@@ -150,32 +161,17 @@ pre {
   border: 1px solid #ddd;
   border-bottom-color: #ccc;
   background-color: #f3f3f3;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -o-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: inset 0 0 10px #ddd;
-  -moz-box-shadow: inset 0 0 10px #ddd;
   box-shadow: inset 0 0 10px #ddd;
   overflow-x: auto;
 }
 
-img {
+main img:not([src*=avatar]):not([src*=badges]):not([src*=".svg"]) {
   margin: 30px;
   padding: 1px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -o-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
-  -moz-box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
   box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
   max-width: 100%;
-}
-
-img[src*="opencollective.com/mochajs"], img[src*=badges], img[src*=".svg"] {
-    margin: 0;
-    box-shadow: none;
 }
 
 footer {
