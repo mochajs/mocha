@@ -4,7 +4,7 @@ title: 'Mocha - the fun, simple, flexible JavaScript test framework'
 ---
 Mocha is a feature-rich JavaScript test framework running on [Node.js](http://nodejs.org) and in the browser, making asynchronous testing *simple* and *fun*. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
-  [![Gitter](//badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha)
+  [![Gitter](/images/join-chat.svg)](https://gitter.im/mochajs/mocha)
   [![OpenCollective](//opencollective.com/mochajs/backers/badge.svg)](#backers)
   [![OpenCollective](//opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
 
