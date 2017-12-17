@@ -65,6 +65,10 @@ header {
   font-style: normal
 }
 
+nav.badges a + a {
+  margin-left: 3px;
+}
+
 .image-list {
   overflow: hidden;
 }
