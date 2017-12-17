@@ -7,21 +7,54 @@ body {
   border-top: 2px solid #ddd;
 }
 
-#content {
-  padding: 0 110px 60px 110px;
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideright {
+  from {
+    transform: translateX(-45px);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
 header {
   padding: 140px 110px 0 110px;
 }
 
-h1 {
+#_header h1 {
   margin-left: -19px;
   opacity: 0;
-  -webkit-transition: opacity 1s;
-  -moz-transition: opacity 1s;
-  -o-transition: opacity 1s;
-  transition: opacity 1s;
+  animation: fadein 1s forwards;
+}
+
+#tag {
+  color: #c29d7f;
+  font-weight: 100;
+  font-size: 30px;
+  margin-top: -158px;
+  margin-left: 185px;
+  margin-bottom: 125px;
+  letter-spacing: 2px;
+
+  animation: fadein 1s forwards, slideright 1s forwards;
+}
+
+#content {
+  padding: 0 110px 60px 110px;
+}
+
+#tag em {
+  font-style: normal
 }
 
 #_backers a, #_sponsors a {
@@ -59,30 +92,6 @@ h3 {
 h3 > code {
   text-transform: none;
   font-size: 14px;
-}
-
-#tag {
-  opacity: 0;
-  color: #c29d7f;
-  font-weight: 100;
-  font-size: 30px;
-  margin-top: -155px;
-  margin-left: 140px;
-  margin-bottom: 125px;
-  letter-spacing: 2px;
-  -webkit-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
-  -moz-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
-  -o-transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
-  transition: opacity 1s, margin-top 200ms, margin-bottom 200ms, margin-left 1s;
-}
-
-#tag em {
-  font-style: normal
-}
-
-.onload #tag {
-  opacity: 1;
-  margin-left: 185px;
 }
 
 #content > p:first-child {
