@@ -27,11 +27,23 @@ body {
   }
 }
 
+header, #content {
+  max-width: 920px;
+  margin: 0 auto;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
 header {
-  padding: 140px 110px 0 110px;
+  padding-top: 20px;
+}
+
+#content {
+  padding-bottom: 60px;
 }
 
 #_header h1 {
+  margin-top: 0;
   margin-left: -19px;
   opacity: 0;
   animation: fadein 1s forwards;
@@ -47,10 +59,6 @@ header {
   letter-spacing: 2px;
 
   animation: fadein 1s forwards, slideright 1s forwards;
-}
-
-#content {
-  padding: 0 110px 60px 110px;
 }
 
 #tag em {
@@ -123,26 +131,17 @@ a:hover {
 ul {
   margin-top: 20px;
   padding: 0 15px;
-  width: 100%;
+  column-gap: 30px;
   column-count: 2;
   box-sizing: content-box;
 }
 
 ul li {
   margin-top: 5px;
-  margin-right: 60px;
   list-style: none;
   border-bottom: 1px solid #eee;
   padding: 5px 0;
-  column-break-inside: avoid;
-}
-
-ul::after {
-  content: '.';
-  height: 0;
-  display: block;
-  visibility: hidden;
-  clear: both;
+  break-inside: avoid;
 }
 
 code {
@@ -151,7 +150,7 @@ code {
 }
 
 pre {
-  margin: 20px;
+  margin: 20px 0;
   padding: 20px;
   border: 1px solid #ddd;
   border-bottom-color: #ccc;
@@ -162,8 +161,8 @@ pre {
 }
 
 main img:not([src*=avatar]):not([src*=badges]):not([src*=".svg"]) {
-  margin: 30px;
-  padding: 1px;
+  display: block;
+  margin: 30px auto;
   border-radius: 3px;
   box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
   max-width: 100%;
@@ -171,7 +170,6 @@ main img:not([src*=avatar]):not([src*=badges]):not([src*=".svg"]) {
 
 footer {
   background-color: #eee;
-  width: 100%;
   padding: 50px 0;
   text-align: right;
   border-top: 1px solid #ddd;
@@ -184,12 +182,6 @@ footer span {
   font-size: 0.8em;
 }
 
-@media all and (max-width: 850px) {
-  ul li {
-    width: 100%;
-  }
-}
-
 @media all and (max-width: 600px) {
   #tag {
     margin-top: 0;
@@ -197,9 +189,15 @@ footer span {
     margin-bottom: 0;
   }
 
-  .onload #tag {
-    margin-left: 0;
+  ul {
+    column-count: 1;
   }
+
+  pre {
+    padding: 10px;
+    margin: 20px -11px;
+  }
+
 }
 
 blockquote {
