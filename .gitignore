@@ -20,3 +20,4 @@ mocha.js
 *_LOCAL_*
 *_REMOTE_*
 docs/_site
+docs/_dist

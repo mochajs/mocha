@@ -305,6 +305,7 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "prebuildDocs": "node scripts/docs-update-toc.js",
     "buildDocs": "bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts",
+    "postbuildDocs": "buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --asyncscripts ",
     "prewatchDocs": "node scripts/docs-update-toc.js",
     "watchDocs": "bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch"
   },
@@ -322,6 +323,7 @@
   },
   "devDependencies": {
     "assert": "^1.4.1",
+    "assetgraph-builder": "^5.6.4",
     "browserify": "^14.4.0",
     "buffer": "^4.9.1",
     "coffee-script": "^1.10.0",
