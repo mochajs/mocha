@@ -1,15 +1,23 @@
 (function () {
   'use strict';
-  // dumb thing that helps with animation of avatars
-  var avatars = window.avatars = function (type) {
-    return function avatarLoaded () {
-      avatars[type] = typeof avatars[type] === 'number' ? avatars[type] + 1 : 1;
-      if (avatars[type] === 30) {
-        document.getElementById(type).classList.add('onload');
-      }
-    };
-  };
 
-  avatars.backerLoaded = avatars('_backers');
-  avatars.sponsorLoaded = avatars('_sponsors');
+  var imageLists = document.querySelectorAll('.image-list');
+
+  Array.prototype.forEach.call(imageLists, function (imageList) {
+    var images = imageList.querySelectorAll('img');
+    var counter = images.length;
+
+    function onloadHandler() {
+      counter -= 1;
+
+      if (counter === 0) {
+        imageList.classList.add('is-loaded');
+      }
+    }
+
+    for (var i = 0; i < images.length; i += 1) {
+      images[i].onload = onloadHandler;
+    }
+  });
+
 }());

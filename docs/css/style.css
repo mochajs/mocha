@@ -57,37 +57,32 @@ header {
   font-style: normal
 }
 
-#_backers {
-  display: flex;
-  flex-wrap: wrap;
+.image-list {
+  overflow: hidden;
 }
 
-#_backers a {
-  margin: 3px;
+.image-list a {
+  float: left;
+  margin: 6px;
 }
 
-#_backers a img {
+.image-list a img {
   display: block;
-  width: 64px;
   height: 64px;
-
-  margin: 0;
-  box-shadow: none;
-
-  background: url(/images/backer-background.svg?inline) center center no-repeat;
 }
 
-#_sponsors a {
+.faded-images img {
   opacity: 0;
   transition: opacity .3s;
 }
 
-#_sponsors a img {
-  max-height: 64px;
+.faded-images.is-loaded img {
+  opacity: 1;
 }
 
-#_sponsors.onload a {
-  opacity: 1;
+#_backers a img {
+  width: 64px;
+  background: url(/images/backer-background.svg?inline) center center no-repeat;
 }
 
 h2 {
