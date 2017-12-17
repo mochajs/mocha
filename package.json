@@ -303,9 +303,9 @@
     "test": "make clean && make test",
     "prepublishOnly": "npm test && make clean && make mocha.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "prebuildDocs": "node scripts/docs-update-toc.js",
+    "prebuildDocs": "rm -rf docs/_dist && node scripts/docs-update-toc.js",
     "buildDocs": "bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts",
-    "postbuildDocs": "buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --asyncscripts ",
+    "postbuildDocs": "buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --inlinehtmlimage 10000 --asyncscripts ",
     "prewatchDocs": "node scripts/docs-update-toc.js",
     "watchDocs": "bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch"
   },
@@ -348,6 +348,7 @@
     "markdown-toc": "^1.2.0",
     "nyc": "^11.2.1",
     "rimraf": "^2.5.2",
+    "svgo": "^0.7.2",
     "through2": "^2.0.1",
     "watchify": "^3.7.0"
   },
