@@ -635,7 +635,7 @@ $ mocha
 
 Many reporters will display test duration, as well as flagging tests that are slow, as shown here with the "spec" reporter:
 
-![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999)
+![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 To tweak what's considered "slow", you can use the `slow()` method:
 
@@ -702,7 +702,7 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library.  Mocha will attempt to display the difference between what was expected, and what the assertion actually saw.  Here's an example of a "string" diff:
 
-![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999)
+![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ## Usage
 
@@ -1013,69 +1013,69 @@ Mocha reporters adjust to the terminal window, and always disable ANSI-escape co
 
 This is the default reporter.  The "spec" reporter outputs a hierarchical view nested just as the test cases are.
 
-![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999)
-![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999)
+![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Dot Matrix
 
 The dot matrix (or "dot") reporter is simply a series of characters which represent test cases.  Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow.  Good if you prefer minimal output.
 
-![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999)
+![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Nyan
 
 The "nyan" reporter is exactly what you might expect:
 
-![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999)
+![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### TAP
 
-The TAP reporter emits lines for a [Test-Anything-Protocol](http://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
+The TAP reporter emits lines for a [Test-Anything-Protocol](https://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
-![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999)
+![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Landing Strip
 
 The Landing Strip (`landing`) reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
-![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999)
-![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999)
+![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### List
 
 The "list" reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
-![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999)
+![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Progress
 
 The "progress" reporter implements a simple progress-bar:
 
-![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999)
+![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### JSON
 
 The "JSON" reporter outputs a single large JSON object when the tests have completed (failures or not).
 
-![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999)
+![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### JSON Stream
 
 The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
-![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999)
+![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Min
 
 The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
-![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999)
+![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Doc
 
 The "doc" reporter outputs a hierarchical HTML body representation of your tests.  Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
-![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999)
+![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 For example, suppose you have the following JavaScript:
 
@@ -1127,7 +1127,7 @@ The "markdown" reporter generates a markdown TOC and body for your test suite. T
 
 The "HTML" reporter is currently the only browser reporter supported by Mocha, and it looks like this:
 
-![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999)
+![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 ### Undocumented Reporters
 
@@ -1242,22 +1242,22 @@ $ make tm
 
 ### JetBrains
 
-[JetBrains](http://jetbrains.com) provides a [NodeJS plugin](http://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
+[JetBrains](https://www.jetbrains.com/) provides a [NodeJS plugin](https://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
-![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant)
+![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
 The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, assuming your license allows it.
 
 ### Wallaby.js
 
-[Wallaby.js](http://wallabyjs.com) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.) and Visual Studio for both browser and node.js projects.
+[Wallaby.js](https://wallabyjs.com/) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.) and Visual Studio for both browser and node.js projects.
 
-![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant)
+![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
 ### Emacs
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
-![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant)
+![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
 ### Mocha Sidebar (VS Code)
 
@@ -1270,7 +1270,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 * auto run tests on file save
 * see tests results directly in the code editor
 
-![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant)
+![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
 ## Examples
 

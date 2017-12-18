@@ -164,7 +164,7 @@ pre {
   overflow-x: auto;
 }
 
-main img:not([src*=avatar]):not([src*=badges]):not([src*=".svg"]) {
+img.screenshot {
   display: block;
   margin: 30px auto;
   border-radius: 3px;
