@@ -305,7 +305,7 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "prebuildDocs": "rm -rf docs/_dist && node scripts/docs-update-toc.js",
     "buildDocs": "bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts",
-    "postbuildDocs": "buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --inlinehtmlimage 10000 --asyncscripts ",
+    "postbuildDocs": "cp docs/_headers docs/_site/_headers && buildProduction docs/_site/index.html docs/_site/_headers --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --inlinehtmlimage 10000 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers",
     "prewatchDocs": "node scripts/docs-update-toc.js",
     "watchDocs": "bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch"
   },
