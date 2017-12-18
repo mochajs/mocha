@@ -1244,7 +1244,7 @@ $ make tm
 
 [JetBrains](http://jetbrains.com) provides a [NodeJS plugin](http://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
-![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999)
+![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant)
 
 The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, assuming your license allows it.
 
@@ -1252,7 +1252,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 [Wallaby.js](http://wallabyjs.com) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.) and Visual Studio for both browser and node.js projects.
 
-![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999)
+![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant)
 
 ### Emacs
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
