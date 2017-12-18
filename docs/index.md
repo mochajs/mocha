@@ -1257,7 +1257,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 ### Emacs
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
-![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999)
+![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant)
 
 ### Mocha Sidebar (VS Code)
 
@@ -1270,7 +1270,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 * auto run tests on file save
 * see tests results directly in the code editor
 
-![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999)
+![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant)
 
 ## Examples
 
