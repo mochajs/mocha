@@ -18,6 +18,10 @@
     for (var i = 0; i < images.length; i += 1) {
       if (images[i].complete) {
         counter -= 1;
+
+        if (counter === 0) {
+          imageList.classList.add('is-loaded');
+        }
       } else {
         images[i].onload = onloadHandler;
         images[i].onerror = onloadHandler;
