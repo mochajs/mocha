@@ -2,7 +2,7 @@
 layout: default
 title: 'Mocha - the fun, simple, flexible JavaScript test framework'
 ---
-Mocha is a feature-rich JavaScript test framework running on [Node.js](http://nodejs.org) and in the browser, making asynchronous testing *simple* and *fun*. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
+Mocha is a feature-rich JavaScript test framework running on [Node.js](https://nodejs.org) and in the browser, making asynchronous testing *simple* and *fun*. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
 
 <nav class="badges">
   <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
@@ -93,7 +93,7 @@ $ npm install --save-dev mocha
 
 > To install Mocha v3.0.0 or newer with `npm`, you will need `npm` v2.14.2 or newer.  Additionally, to run Mocha, you will need Node.js v4 or newer.
 
-Mocha can also be installed via [Bower](http://bower.io) (`bower install mocha`), and is available at [cdnjs](https://cdnjs.com/libraries/mocha).
+Mocha can also be installed via [Bower](https://bower.io) (`bower install mocha`), and is available at [cdnjs](https://cdnjs.com/libraries/mocha).
 
 ## Getting Started
 
@@ -151,7 +151,7 @@ Mocha allows you to use any assertion library you wish.  In the above example, w
 - [expect.js](https://github.com/LearnBoost/expect.js) - `expect()` style assertions
 - [chai](http://chaijs.com/) - `expect()`, `assert()` and `should`-style assertions
 - [better-assert](https://github.com/visionmedia/better-assert) -  C-style self-documenting `assert()`
-- [unexpected](http://unexpected.js.org) - "the extensible BDD assertion toolkit"
+- [unexpected](https://unexpected.js.org) - "the extensible BDD assertion toolkit"
 
 ## Asynchronous Code
 
@@ -952,7 +952,7 @@ module.exports = {
 
 ### QUnit
 
-The [QUnit](http://qunitjs.com)-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+The [QUnit](https://qunitjs.com)-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
 ```js
 function ok(expr, msg) {
@@ -1108,7 +1108,7 @@ The command `mocha --reporter doc array` would yield:
 </section>
 ```
 
-The SuperAgent request library [test documentation](http://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
+The SuperAgent request library [test documentation](https://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
 
 ```makefile
 test-docs:
@@ -1300,5 +1300,5 @@ $ REPORTER=nyan npm test
 
 ## More Information
 
-In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](http://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
+In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
 
