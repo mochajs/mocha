@@ -1,0 +1,9 @@
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Strict-Transport-Security: max-age=31536000, includeSubDomains
+
+## Far future expires for hashed file names
+/static/*
+  Cache-Control: max-age=31536000
