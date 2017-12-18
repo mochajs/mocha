@@ -16,8 +16,12 @@
     }
 
     for (var i = 0; i < images.length; i += 1) {
-      images[i].onload = onloadHandler;
-      images[i].onerror = onloadHandler;
+      if (images[i].complete) {
+        counter -= 1;
+      } else {
+        images[i].onload = onloadHandler;
+        images[i].onerror = onloadHandler;
+      }
     }
   });
 
