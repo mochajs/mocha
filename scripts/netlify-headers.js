@@ -14,7 +14,7 @@ var resourceHintTypeMap = {
 function getHeaderForRelation (rel) {
     let header = `Link: <${rel.href}>; rel=${resourceHintTypeMap[rel.type]}; as=${rel.as}; type=${rel.to.contentType}`;
 
-    if (rel.crossorigin || rel.as === 'font') {
+    if (rel.as === 'font') {
         header = `${header}; crossorigin=anonymous`;
     }
 
@@ -73,10 +73,6 @@ new AssetGraph({ root: 'docs/_dist' })
 
             resourceHintRelations.forEach(rel => {
                 let header = `Link: <${rel.href}>; rel=preconnect`;
-
-                if (rel.crossorigin) {
-                    header = `${header}; crossorigin=anonymous`;
-                }
 
                 headerMap[url].push(header);
 
