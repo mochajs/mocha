@@ -300,6 +300,7 @@
   },
   "scripts": {
     "lint": "eslint . bin/*",
+    "markdownlint": "markdownlint \"*.md\" \"docs/**/*.md\" \".github/*.md\"",
     "test": "make clean && make test",
     "prepublishOnly": "npm test && make clean && make mocha.js",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -345,6 +346,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "^1.2.0",
     "markdown-toc": "^1.2.0",
+    "markdownlint-cli": "^0.6.0",
     "nyc": "^11.2.1",
     "rimraf": "^2.5.2",
     "svgo": "^0.7.2",

@@ -25,17 +25,17 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [maps uncaught exceptions to the correct test case](#browser-specific-methods)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
-- [test-specific timeouts](#test-level) 
+- [test-specific timeouts](#test-level)
 - [growl notification support](#mochaopts)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
-- [file watcher support](#min) 
-- [global variable leak detection](#--check-leaks) 
-- [optionally run tests that match a regexp](#-g---grep-pattern) 
+- [file watcher support](#min)
+- [global variable leak detection](#--check-leaks)
+- [optionally run tests that match a regexp](#-g---grep-pattern)
 - [auto-exit to prevent "hanging" with an active loop](#--exit----no-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [mocha.opts file support](#mochaopts)
-- clickable suite titles to filter test execution  
+- clickable suite titles to filter test execution
 - [node debugger support](#-d---debug)
 - detects multiple calls to `done()`
 - [use any assertion library you want](#assertions)
@@ -297,7 +297,7 @@ describe('hooks', function() {
 });
 ```
 
-> Tests can appear before, after, or interspersed with your hooks.  Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).  
+> Tests can appear before, after, or interspersed with your hooks.  Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).
 
 ### Describing Hooks
 
@@ -529,9 +529,9 @@ it('should only test in the correct environment', function() {
 });
 ```
 
-The above test will be reported as [pending](#pending-tests).  It's also important to note that calling `this.skip()` will effectively *abort* the test.  
+The above test will be reported as [pending](#pending-tests).  It's also important to note that calling `this.skip()` will effectively *abort* the test.
 
-> *Best practice*: To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.  
+> *Best practice*: To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.
 
 Contrast the above test with the following code:
 
@@ -649,7 +649,6 @@ describe('something slow', function() {
 });
 ```
 
-
 ## Timeouts
 
 ### Suite-level
@@ -706,7 +705,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 ## Usage
 
-```
+```text
   Usage: mocha [debug] [options] [files]
 
 
@@ -780,7 +779,7 @@ Executes tests on changes to JavaScript in the CWD, and once initially.
 
 ### `--exit` / `--no-exit`
 
-*Updated in Mocha v4.0.0*
+> *Updated in Mocha v4.0.0*
 
 *Prior to* version v4.0.0, *by default*, Mocha would force its own process to exit once it was finished executing all tests.  This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.  Ultimately, "dirty" tests can (but not always) lead to *false positive* or *false negative* results.
 
@@ -799,7 +798,7 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 ### `--compilers`
 
-*Updated in Mocha v4.0.0*
+> *Updated in Mocha v4.0.0*
 
 **`--compilers` is deprecated as of Mocha v4.0.0.  See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/compilers-deprecation).**
 
@@ -1112,9 +1111,9 @@ The SuperAgent request library [test documentation](https://visionmedia.github.i
 
 ```makefile
 test-docs:
-	$(MAKE) test REPORTER=doc \
-		| cat docs/head.html - docs/tail.html \
-		> docs/test.html
+  $(MAKE) test REPORTER=doc \
+    | cat docs/head.html - docs/tail.html \
+    > docs/test.html
 ```
 
 View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
@@ -1212,7 +1211,7 @@ The following option(s) *only* function in a browser context:
 
 Back on the server, Mocha will attempt to load `./test/mocha.opts` as a configuration file of sorts. The lines in this file are combined with any command-line arguments.  The command-line arguments take precedence.  For example, suppose you have the following `mocha.opts` file:
 
-```
+```sh
   --require should
   --reporter dot
   --ui bdd
@@ -1255,6 +1254,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 ![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
 ### Emacs
+
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
 ![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
@@ -1265,10 +1265,10 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 #### Features
 
-* see all tests in VS Code sidebar menu
-* run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
-* auto run tests on file save
-* see tests results directly in the code editor
+- see all tests in VS Code sidebar menu
+- run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
+- auto run tests on file save
+- see tests results directly in the code editor
 
 ![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
 
@@ -1301,4 +1301,3 @@ $ REPORTER=nyan npm test
 ## More Information
 
 In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
-

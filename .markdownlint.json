@@ -1,0 +1,10 @@
+{
+  "no-inline-html": false,
+  "line-length": false,
+  "no-trailing-punctuation": false,
+  "no-duplicate-header": false,
+  "first-header-h1": false,
+  "first-line-h1": false,
+  "commands-show-output": false,
+  "single-h1": false
+}
