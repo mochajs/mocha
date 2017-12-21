@@ -13,10 +13,10 @@
 
 ## Development
 
-1.  Run `npm install` to get Node.js deps.
-2.  Run `bundle install` to install Jekyll and its dependencies.  This may or may not require elevated privileges, depending on your system.
-3. To serve the site and rebuild as changes are made, execute `npm run serveDocs`.
-4. To rebuild the site *once*, execute `npm start buildDocs`.
+1. Run `npm install` to get Node.js deps.
+1. Run `bundle install` to install Jekyll and its dependencies.  This may or may not require elevated privileges, depending on your system.
+1. To serve the site and rebuild as changes are made, execute `npm run serveDocs`.
+1. To rebuild the site *once*, execute `npm start buildDocs`.
 
 ### Notes
 
