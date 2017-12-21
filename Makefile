@@ -34,6 +34,7 @@ clean:
 lint:
 	@printf "==> [Test :: Lint]\n"
 	npm run lint
+	npm run markdownlint
 
 test-node: test-bdd test-tdd test-qunit test-exports test-unit test-integration test-jsapi test-compilers test-requires test-reporters test-only test-global-only
 

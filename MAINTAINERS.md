@@ -3,8 +3,8 @@
 Hi stranger!  We've written this document for:
 
 1. Active maintainers of Mocha
-2. Prospective maintainers of Mocha
-3. Anyone curious about how Mocha's maintainers maintain Mocha
+1. Prospective maintainers of Mocha
+1. Anyone curious about how Mocha's maintainers maintain Mocha
 
 The purpose of this document is to *describe our processes*.  We want to avoid conflicts and confusion around "unwritten rules".  In our opinion, the most straightforward way to address this is to *write them down*.  This *also* happens to be the most straightforward way to change them!
 
@@ -34,34 +34,34 @@ This is the most important thing:
 A "contributor" is any individual who has *given back* in some way to the project and its community.  Contributions include (but are not limited to):
 
 1. Reporting bugs which follow the reporting guidelines
-2. Suggesting and debating enhancements that have wide applicability
-3. Helping others with Mocha-related questions on [Gitter](https://gitter.im/mochajs/mocha), [StackOverflow](https://stackoverflow.com), Google groups, or other sites
-4. Sending pull requests which fix bugs, improve documentation, improve developer experience, improve code quality, and/or implement requested enhancements
-5. Reviewing code on pull requests
-6. Providing design assets
-7. Posting a tutorial on a personal blog or blogging site
-8. Suggesting usages for project funds
-9. Organizing a "Mocha-branded" event or workshop
-10. Recruiting more contributors! Don't spam.
-11. Researching the user base, getting feedback, etc. Don't spam.
+1. Suggesting and debating enhancements that have wide applicability
+1. Helping others with Mocha-related questions on [Gitter](https://gitter.im/mochajs/mocha), [StackOverflow](https://stackoverflow.com), Google groups, or other sites
+1. Sending pull requests which fix bugs, improve documentation, improve developer experience, improve code quality, and/or implement requested enhancements
+1. Reviewing code on pull requests
+1. Providing design assets
+1. Posting a tutorial on a personal blog or blogging site
+1. Suggesting usages for project funds
+1. Organizing a "Mocha-branded" event or workshop
+1. Recruiting more contributors! Don't spam.
+1. Researching the user base, getting feedback, etc. Don't spam.
 
 A contributor is *usually* a user as well, but this isn't a hard-and-fast rule. A contributor is also expected to adhere to the [code of conduct](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md) as a user would.
 
 As you can see, it's wide open!  Think of it another way: if you are *adding value to Mocha*, then you are a contributor.
 
 > Due to the nature of GitHub, it's a challenge to recognize those who've made contributions *elsewhere* on the web, or even contributions of the "non-code" variety.  If you know of any great contributions which have gone unnoticed, please bring them to the maintainers' attention!
- 
+
 #### A Note About Donations
 
-A [donation](https://opencollective.com/mochajs) is also a great way to help Mocha if you want to help sustain OSS, but can't find time to contribute in other ways, or just want to say "thanks!"  
+A [donation](https://opencollective.com/mochajs) is also a great way to help Mocha if you want to help sustain OSS, but can't find time to contribute in other ways, or just want to say "thanks!"
 
-We love our backers and sponsors! 💕 
+We love our backers and sponsors! 💕
 
 ### Maintainer
 
-A maintainer has certain "rights" (or "permissions") to the Mocha project and other projects under the `mochajs` organization.  There's no way to dance around this: with these rights come increased responsibilities.  
+A maintainer has certain "rights" (or "permissions") to the Mocha project and other projects under the `mochajs` organization.  There's no way to dance around this: with these rights come increased responsibilities.
 
-However, **there is no expectation of a standard of technical ability** to be a maintainer of Mocha.  This doesn't imply a lack of technical oversight--every pull request will eventually be reviewed.  
+However, **there is no expectation of a standard of technical ability** to be a maintainer of Mocha.  This doesn't imply a lack of technical oversight--every pull request will eventually be reviewed.
 
 **If you think you aren't experienced enough to maintain a project like Mocha, you are incorrect.** The only requirements are the above responsibilities and a desire to help the project.  It bears repeating:
 
@@ -73,12 +73,13 @@ However, **there is no expectation of a standard of technical ability** to be a 
 
 As a maintainer, you are expected to *not just* "follow" the code of conduct, but embody its values.  Your public behavior, whether in the physical or virtual world, reflects upon the project and other maintainers.
 
-> If you don't understand the code of conduct, or why it exists, it is *your responsibility* to educate yourself.  
+> If you don't understand the code of conduct, or why it exists, it is *your responsibility* to educate yourself.
 > This does not imply the CoC is immutable.
 
 Furthermore, a maintainer is a contributor who **contributes regularly**, or expresses a *desire to do so.*  That could be every day--but it might be once a week, or even once a month.  Your boss doesn't work here; contribute as often as you wish.  We are all people with Real Lives, and for many of us, contributing to OSS is just a hobby!
 
 Finally, a maintainer must help define what makes Mocha "Mocha".  At minimum, a maintainer must *understand* the current definition (if a maintainer is not interested in decision-making).  Some of these questions include:
+
 - What's the scope of Mocha?
 - Where should we focus efforts?
 - What's urgent, what can wait?
@@ -98,7 +99,7 @@ You may choose to do zero or more of these *at their discretion*:
 - Merge pull requests
 - Modify issues (closing, adding labels, assigning them other maintainers, etc.)
 - Modify GitHub [Projects](https://github.com/mochajs/mocha/projects)
-- Cancel builds, restart jobs, or otherwise interact with our CI server(s) 
+- Cancel builds, restart jobs, or otherwise interact with our CI server(s)
 - CRUD operations on GitHub integrations
 - Participate in the decision-making process
 - Add new maintainers to the team
@@ -114,6 +115,7 @@ Some maintainers will have full admin rights to the [mochajs org](https://github
 - This level of access will be granted by the current owners to those maintainers who have earned the project's trust.
 
 ## Mocha's Decision-Making Process
+
 Mocha follows a [consensus-seeking decision-making](https://en.wikipedia.org/wiki/Consensus-seeking_decision-making) process.  In other words, all maintainers attempt to come to agreement.  If that fails, we decide by a simple vote.
 
 Active maintainers will make an effort to solicit feedback from others before making important or potentially controversial decisions.  Given the varying geographical distribution and availability of the maintenance team, we resolve to do the best we can to solicit feedback.
@@ -144,14 +146,14 @@ The following list is incomplete, but it's better than nothing:
 To be clear:
 
 - Features, bugs, and updated tests are examples of issues which will be resolved by commit(s).
-- Support questions, unconfirmed bugs and [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality) are examples of issues which do *not* need `semver-*` labels, since they won't necessarily result in any changes to the codebase.  
+- Support questions, unconfirmed bugs and [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality) are examples of issues which do *not* need `semver-*` labels, since they won't necessarily result in any changes to the codebase.
 - Pull requests *do not* need `semver-*` labels, *unless there is no associated issue* (PRO TIP: make an issue!)
 - An issue or PR which will introduce a breaking change will be `semver-major`, *regardless* of any other label.
-- **Breaking changes to private APIs will be `semver-major`, if and only if they are known to be consumed by actively developed project(s).** 
+- **Breaking changes to private APIs will be `semver-major`, if and only if they are known to be consumed by actively developed project(s).**
 
 ### Questions
 
-Support questions should be answered if possible, but the user should be directed to the chat room, StackOverflow, or Google Groups for further help, *if* it is indeed a Mocha-related issue.  
+Support questions should be answered if possible, but the user should be directed to the chat room, StackOverflow, or Google Groups for further help, *if* it is indeed a Mocha-related issue.
 
 If it's *not* a Mocha problem (people tend not to believe this), you may want to show a counter-example.  It's often helpful to direct the issue author to the responsible project, if you can determine what that is.
 
@@ -193,7 +195,7 @@ Issues or PRs which require action or feedback from a *specific* maintainer, sho
 
 ### Closing Issues
 
-Write "closes #<ISSUE>" or "resolves #<ISSUE>" in a commit or PR to have the original issue closed automatically once the PR is merged. 
+Write "closes #<ISSUE>" or "resolves #<ISSUE>" in a commit or PR to have the original issue closed automatically once the PR is merged.
 
 For any issue which is a duplicate, write "duplicate of #<ISSUE>" in a new comment, and close the issue.  [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/).
 
@@ -236,20 +238,20 @@ However, this behavior is often indicative of someone who is "new" to open sourc
 Here are some suggestions:
 
 1. If u mad, wait 20 minutes before writing a comment.
-2. "Kill them with kindness".  Explain how they are presenting themselves; maybe link to a good article or two about it.
-3. Don't make it about "users vs. maintainers".  Treat them like a potential future maintainer. 
-4. Avoid adding to the drama.  You could try to reach out privately; email may be in their GitHub profile.  You will likely never hear from that individual again (problem solved)
-5. If an issue is getting out of control, lock it.
-6. If someone is *repeatedly* rude and does not correct their mistakes, you may ban them from participating in the `mochajs` org.  If you do not have permission to do so, contact one which does (an "owner").
+1. "Kill them with kindness".  Explain how they are presenting themselves; maybe link to a good article or two about it.
+1. Don't make it about "users vs. maintainers".  Treat them like a potential future maintainer.
+1. Avoid adding to the drama.  You could try to reach out privately; email may be in their GitHub profile.  You will likely never hear from that individual again (problem solved)
+1. If an issue is getting out of control, lock it.
+1. If someone is *repeatedly* rude and does not correct their mistakes, you may ban them from participating in the `mochajs` org.  If you do not have permission to do so, contact one which does (an "owner").
 
 #### Code of Conduct Violations
 
 **This section is theoretical, as it's yet to happen**.
 
 1. Inform the individual of the violation; link to the CoC
-2. Follow up with JS Foundation for further guidance
-3. Repeated violators will be banned inasmuch as that is technically possible
-4. No maintainer nor contributor is exempt from the CoC
+1. Follow up with JS Foundation for further guidance
+1. Repeated violators will be banned inasmuch as that is technically possible
+1. No maintainer nor contributor is exempt from the CoC
 
 ## Branches
 
@@ -261,8 +263,8 @@ Maintainers may push new branches to a repo, as long as they remove them when fi
 GitHub has several options for how to merge a PR.  Here's what we do:
 
 1. *If a PR has multiple commits*, "Squash".
-2. *If a PR has a single commit*, "Rebase".
-3. Don't "Merge".
+1. *If a PR has a single commit*, "Rebase".
+1. Don't "Merge".
 
 ### Merging `semver-major` PRs
 
@@ -275,15 +277,15 @@ This is not necessarily ideal, and we should consider another method of using br
 *It's easier to release often.*
 
 1. Decide whether this is a `patch`, `minor`, or `major` release by the PRs which have been merged since the last release.
-2. Checkout `master` in your working copy & pull.
-3. Modify `CHANGELOG.md`; follow the existing conventions in that file.  Commit this file only; add `[ci skip]` to the commit message to avoid a build.
-4. Use `npm version` to bump the version; see `npm version --help` for more info.  (Hint--use `-m`: e.g. `npm version patch -m 'Release v%s'`)
-5. Push `master` to origin with your new tag; e.g. `git push origin master --tags`
-6. Copy & paste the added lines to a new GitHub "release".  Be sure to add any missing link references (use "preview" button).  Save release as draft.
-7. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI.
-8. Once it's green and you're satisfied with the release notes, open your draft release on GitHub, then click "publish"
-9. Back in your working copy, run `npm publish`.
-10. Announce the update on Twitter or just tell your dog or something.
+1. Checkout `master` in your working copy & pull.
+1. Modify `CHANGELOG.md`; follow the existing conventions in that file.  Commit this file only; add `[ci skip]` to the commit message to avoid a build.
+1. Use `npm version` to bump the version; see `npm version --help` for more info.  (Hint--use `-m`: e.g. `npm version patch -m 'Release v%s'`)
+1. Push `master` to origin with your new tag; e.g. `git push origin master --tags`
+1. Copy & paste the added lines to a new GitHub "release".  Be sure to add any missing link references (use "preview" button).  Save release as draft.
+1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI.
+1. Once it's green and you're satisfied with the release notes, open your draft release on GitHub, then click "publish"
+1. Back in your working copy, run `npm publish`.
+1. Announce the update on Twitter or just tell your dog or something.
 
 *Note: there are too many steps above.*
 
@@ -301,7 +303,7 @@ As a maintainer, you have access to the resources the JS Foundation provides.
 
 ## About OpenCollective
 
-Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs).  As a maintainer, you may help decide how the funds are used.  These decisions are made via a consensus-seeking process, much like any other decision.  
+Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs).  As a maintainer, you may help decide how the funds are used.  These decisions are made via a consensus-seeking process, much like any other decision.
 
 Expense transparency is built in to OpenCollective.
 
