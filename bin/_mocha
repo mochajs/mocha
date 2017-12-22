@@ -30,10 +30,10 @@ cli.setMochaOptions(
   opts
 );
 
-var files = cli.resolveFiles(program.args, opts);
+mocha.files = cli.resolveFiles(program.args, opts);
 
 try {
-  cli.run(mocha, program, files);
+  cli.run(mocha, program);
 } catch (e) {
   console.error(e.message);
   process.exit(1);
