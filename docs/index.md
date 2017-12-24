@@ -846,6 +846,10 @@ The `--reporter` option allows you to specify the reporter that will be used, de
 
 Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the `s` suffix, ex: `--timeout 2s` or `--timeout 2000` would be equivalent.
 
+### `--no-timeouts`
+
+Disables timeouts, given implicitly with `--debug`. 
+
 ### `-s, --slow <ms>`
 
 Specify the "slow" test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.
