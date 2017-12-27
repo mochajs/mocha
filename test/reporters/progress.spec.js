@@ -90,13 +90,16 @@ describe('Progress reporter', function () {
           incomplete: expectedIncomplete,
           close: expectedClose
         };
+        var options = {
+          reporterOptions: expectedOptions
+        };
         runner.total = expectedTotal;
         runner.on = function (event, callback) {
           if (event === 'test end') {
             callback();
           }
         };
-        Progress.call({}, runner, expectedOptions);
+        Progress.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
         var expectedArray = [
