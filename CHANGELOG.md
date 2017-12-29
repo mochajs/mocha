@@ -1,3 +1,55 @@
+# 4.1.0 / 2017-12-28
+
+This is mainly a "housekeeping" release.
+
+Welcome [@Bamieh] and [@xxczaki] to the team!
+
+## :bug:: Fixes
+
+- [#2661]: `progress` reporter now accepts reporter options ([@canoztokmak])
+- [#3142]: `xit` in `bdd` interface now properly returns its `Test` object ([@Bamieh])
+- [#3075]: Diffs now computed eagerly to avoid misinformation when reported ([@abrady0])
+- [#2745]: `--help` will now help you even if you have a `mocha.opts` ([@Zarel])
+
+## :tada: Enhancements
+
+- [#2514]: The `--no-diff` flag will completely disable diff output ([@CapacitorSet])
+- [#3058]: All "setters" in Mocha's API are now also "getters" if called without arguments ([@makepanic])
+
+## :book: Documentation
+
+- [#3170]: Optimization and site speed improvements ([@Munter])
+- [#2987]: Moved the old [site repo](https://github.com/mochajs/mochajs.github.io) into the main repo under `docs/` ([@boneskull])
+- [#2896]: Add [maintainer guide](https://github.com/mochajs/mocha/blob/master/MAINTAINERS.md) ([@boneskull])
+- Various fixes and updates ([@xxczaki], [@maty21], [@leedm777])
+
+## :nut_and_bolt: Other
+
+- Test improvements and fixes ([@eugenet8k], [@ngeor], [@38elements], [@Gerhut], [@ScottFreeCode], [@boneskull])
+- Refactoring and cruft excision ([@38elements], [@Bamieh], [@finnigantime], [@boneskull])
+
+[#2661]: https://github.com/mochajs/mocha/issues/2661
+[#3142]: https://github.com/mochajs/mocha/issues/3142
+[#3075]: https://github.com/mochajs/mocha/pull/3075
+[#2745]: https://github.com/mochajs/mocha/issues/2745
+[#2514]: https://github.com/mochajs/mocha/issues/2514
+[#3058]: https://github.com/mochajs/mocha/issues/3058
+[#3170]: https://github.com/mochajs/mocha/pull/3170
+[#2987]: https://github.com/mochajs/mocha/issues/2987
+[#2896]: https://github.com/mochajs/mocha/issues/2896
+[@canoztokmak]: https://github.com/canoztokmak
+[@Bamieh]: https://github.com/Bamieh
+[@abrady0]: https://github.com/abrady0
+[@Zarel]: https://github.com/Zarel
+[@CapacitorSet]: https://github.com/CapacitorSet
+[@xxczaki]: https://github.com/xxczaki
+[@maty21]: https://github.com/maty21
+[@leedm777]: https://github.com/leedm777
+[@eugenet8k]: https://github.com/eugenet8k
+[@38elements]: https://github.com/38elements
+[@Gerhut]: https://github.com/Gerhut
+[@finnigantime]: https://github.com/finnigantime
+
 # 4.0.1 / 2017-10-05
 
 ## :bug: Fixes
