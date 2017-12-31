@@ -15,10 +15,10 @@ env:
 matrix:
   fast_finish: true
   include:
+    - node_js: '9'
+      env: TARGET=test-node COVERAGE=true
     - node_js: '8'
       env: TARGET=test-node COVERAGE=true
-    - node_js: '7'
-      env: TARGET=test-node
     - node_js: '6'
       env: TARGET=test-node
     - node_js: '4'
