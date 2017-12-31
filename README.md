@@ -38,18 +38,16 @@ Once we gain ground on the above items, we can work together formalize our contr
   <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
 </p>
 
-[![Build Status](https://api.travis-ci.org/mochajs/mocha.svg?branch=master)](http://travis-ci.org/mochajs/mocha)
-[![Coverage Status](https://coveralls.io/repos/github/mochajs/mocha/badge.svg)](https://coveralls.io/github/mochajs/mocha)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![OpenCollective](https://opencollective.com/mochajs/backers/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/mochajs/sponsors/badge.svg)](#sponsors)
-<br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354">
+<p align="center">:coffee: Simple, flexible, fun JavaScript test framework for Node.js & The Browser :coffee:</p>
 
-  Mocha is a simple, flexible, fun JavaScript test framework for node.js and the browser. For more information view the [documentation](http://mochajs.org).
+<p align="center"><a href="http://travis-ci.org/mochajs/mocha"><img src="https://api.travis-ci.org/mochajs/mocha.svg?branch=master" alt="Build Status"></a>  <a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>  <a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield" alt="FOSSA Status"></a>  <a href="https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a>  <a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective"></a>  <a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective"></a>
+</p>
+
+<p align="center"><br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354"></p>
 
 ## Links
 
+  - [Documentation](http://mochajs.org)
   - [Changelog](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md)
   - [Google Group](http://groups.google.com/group/mochajs)
   - [Wiki](https://github.com/mochajs/mocha/wiki)
@@ -94,7 +92,7 @@ Once we gain ground on the above items, we can work together formalize our contr
 
 ## Sponsors
 
-Does your company use Mocha?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.  Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org)--who doesn't want a little extra exposure?  [Here's the info](https://opencollective.com/mochajs#sponsor).
+Does your company use Mocha?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.  Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org) - who doesn't want a little extra exposure?  [Here's the info](https://opencollective.com/mochajs#sponsor).
 
 <a href="https://opencollective.com/mochajs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/0/avatar"></a>
 <a href="https://opencollective.com/mochajs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/mochajs/sponsor/1/avatar"></a>
