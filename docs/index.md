@@ -716,7 +716,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -A, --async-only                        force all tests to take a callback (async) or return a promise
     -c, --colors                            force enabling of colors
     -C, --no-colors                         force disabling of colors
-    -G, --growl                             enable growl notification support
+    -G, --growl                             enable growl notification support. You need to have Growl installed!
     -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
     -R, --reporter <name>                   specify the reporter to use
     -S, --sort                              sort test files
@@ -1218,7 +1218,7 @@ Back on the server, Mocha will attempt to load `./test/mocha.opts` as a configur
   --ui bdd
 ```
 
-This will default the reporter to `dot`, require the `should` library, and use `bdd` as the interface. With this, you may then invoke `mocha` with additional arguments, here enabling [Growl](http://growl.info) support, and changing the reporter to `list`:
+This will default the reporter to `dot`, require the `should` library, and use `bdd` as the interface. With this, you may then invoke `mocha` with additional arguments, here enabling [Growl](http://growl.info) support (You need to have Growl installed!), and changing the reporter to `list`:
 
 ```sh
 $ mocha --reporter list --growl
