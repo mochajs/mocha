@@ -4,6 +4,7 @@ var path = require('path');
 var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
 var directInvoke = require('./helpers').invokeMocha;
+var resolvePath = require('./helpers').resolveFixturePath;
 var args = [];
 
 describe('options', function () {
@@ -75,6 +76,29 @@ describe('options', function () {
 
     it('should sort tests in alphabetical order', function (done) {
       run('options/sort*', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+
+        assert.equal(res.passes[0].fullTitle,
+          'alpha should be executed first');
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+  });
+
+  describe.only('--file', function () {
+    before(function () {
+      args = ['--file', resolvePath('options/file-alpha.fixture.js')];
+    });
+
+    it('should run tests passed via file first', function (done) {
+      run('options/file-beta.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
           return;

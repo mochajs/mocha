@@ -121,6 +121,12 @@ const play = (arr, interval) => {
 let files = [];
 
 /**
+ * File args.
+ */
+
+let fileArgs = [];
+
+/**
  * Globals.
  */
 
@@ -199,7 +205,8 @@ program
   .option('--delay', 'wait for async suite definition')
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
-  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite');
+  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite')
+  .option('--file <file>', 'include a file to be ran during the suite', list, []);
 
 program._name = 'mocha';
 
@@ -269,6 +276,12 @@ program.on('option:require', mod => {
     mod = resolve(mod);
   }
   requires.push(mod);
+});
+
+// --file
+
+program.on('option:file', mod => {
+  fileArgs.push(mod);
 });
 
 // If not already done, load mocha.opts
@@ -497,12 +510,15 @@ if (!files.length) {
 }
 
 // resolve
-
+fileArgs = fileArgs.map(path => resolve(path));
 files = files.map(path => resolve(path));
 
 if (program.sort) {
   files.sort();
 }
+
+// add files given through --file to be ran first
+files = fileArgs.concat(files);
 
 // --watch
 

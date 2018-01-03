@@ -129,7 +129,12 @@ module.exports = {
    * @param {Function} done - Callback
    * @param {string} cwd - Current working directory for mocha run, optional
    */
-  invokeMocha: invokeMocha
+  invokeMocha: invokeMocha,
+
+  /**
+   * Resolves the path to a fixture to the full path.
+   */
+  resolveFixturePath: resolveFixturePath
 };
 
 function invokeMocha (args, fn, cwd) {
