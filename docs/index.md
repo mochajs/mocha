@@ -155,7 +155,7 @@ Mocha allows you to use any assertion library you wish.  In the above example, w
 
 ## Asynchronous Code
 
-Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test.
+Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` (or subclassed) instance, or `undefined`, any non-falsy will cause a failed test.
 
 ```js
 describe('User', function() {
@@ -171,7 +171,7 @@ describe('User', function() {
 });
 ```
 
-To make things even easier, the `done()` callback accepts an error, so we may use this directly:
+To make things even easier, the `done()` callback also accepts an `Error` instance (ie, `new Error()`), so we may use this directly:
 
 ```js
 describe('User', function() {
@@ -1301,4 +1301,3 @@ $ REPORTER=nyan npm test
 ## More Information
 
 In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
-
