@@ -2,9 +2,10 @@
 
 var path = require('path');
 var assert = require('assert');
-var run = require('./helpers').runMochaJSON;
-var directInvoke = require('./helpers').invokeMocha;
-var resolvePath = require('./helpers').resolveFixturePath;
+var helpers = require('./helpers');
+var run = helpers.runMochaJSON;
+var directInvoke = helpers.invokeMocha;
+var resolvePath = helpers.resolveFixturePath;
 var args = [];
 
 describe('options', function () {
@@ -92,8 +93,8 @@ describe('options', function () {
     });
   });
 
-  describe.only('--file', function () {
-    before(function () {
+  describe('--file', function () {
+    beforeEach(function () {
       args = ['--file', resolvePath('options/file-alpha.fixture.js')];
     });
 
