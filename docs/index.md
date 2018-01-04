@@ -25,17 +25,17 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [maps uncaught exceptions to the correct test case](#browser-specific-methods)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
-- [test-specific timeouts](#test-level)
+- [test-specific timeouts](#test-level) 
 - [growl notification support](#mochaopts)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
-- [file watcher support](#min)
-- [global variable leak detection](#--check-leaks)
-- [optionally run tests that match a regexp](#-g---grep-pattern)
+- [file watcher support](#min) 
+- [global variable leak detection](#--check-leaks) 
+- [optionally run tests that match a regexp](#-g---grep-pattern) 
 - [auto-exit to prevent "hanging" with an active loop](#--exit----no-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [mocha.opts file support](#mochaopts)
-- clickable suite titles to filter test execution
+- clickable suite titles to filter test execution  
 - [node debugger support](#-d---debug)
 - detects multiple calls to `done()`
 - [use any assertion library you want](#assertions)
@@ -297,7 +297,7 @@ describe('hooks', function() {
 });
 ```
 
-> Tests can appear before, after, or interspersed with your hooks.  Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).
+> Tests can appear before, after, or interspersed with your hooks.  Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).  
 
 ### Describing Hooks
 
@@ -529,9 +529,9 @@ it('should only test in the correct environment', function() {
 });
 ```
 
-The above test will be reported as [pending](#pending-tests).  It's also important to note that calling `this.skip()` will effectively *abort* the test.
+The above test will be reported as [pending](#pending-tests).  It's also important to note that calling `this.skip()` will effectively *abort* the test.  
 
-> *Best practice*: To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.
+> *Best practice*: To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.  
 
 Contrast the above test with the following code:
 
@@ -736,7 +736,6 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --debug-brk                             enable node's debugger breaking on the first line
     --globals <names>                       allow the given comma-delimited global [names]
     --es_staging                            enable all staged features
-    --file <file>                           include a file to be ran during the suite [file]
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
     --icu-data-dir                          include ICU data
