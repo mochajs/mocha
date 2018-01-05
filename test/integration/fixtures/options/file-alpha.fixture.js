@@ -5,5 +5,9 @@ describe('alpha', function () {
     if (global.beta !== undefined) {
       throw new Error('alpha was not executed first');
     }
+
+    if (global.theta !== undefined) {
+      throw new Error('alpha was not executed first');
+    }
   });
 });

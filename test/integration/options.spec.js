@@ -94,11 +94,9 @@ describe('options', function () {
   });
 
   describe('--file', function () {
-    beforeEach(function () {
-      args = ['--file', resolvePath('options/file-alpha.fixture.js')];
-    });
-
     it('should run tests passed via file first', function (done) {
+      args = ['--file', resolvePath('options/file-alpha.fixture.js')];
+
       run('options/file-beta.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
@@ -110,6 +108,32 @@ describe('options', function () {
 
         assert.equal(res.passes[0].fullTitle,
           'alpha should be executed first');
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
+    it('should run multiple tests passed via file first', function (done) {
+      args = [
+        '--file', resolvePath('options/file-alpha.fixture.js'),
+        '--file', resolvePath('options/file-beta.fixture.js')
+      ];
+
+      run('options/file-theta.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 3);
+        assert.equal(res.stats.failures, 0);
+
+        assert.equal(res.passes[0].fullTitle,
+          'alpha should be executed first');
+        assert.equal(res.passes[1].fullTitle,
+          'beta should be executed second');
+        assert.equal(res.passes[2].fullTitle,
+          'theta should be executed third');
         assert.equal(res.code, 0);
         done();
       });

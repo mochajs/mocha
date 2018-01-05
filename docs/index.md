@@ -852,7 +852,7 @@ Specify the "slow" test threshold, defaulting to 75ms. Mocha uses this to highli
 
 ### `--file <file>`
 
-Add a file you want included first in a test suite. This is useful if you have some generic setup code that must be included within the test suite. The file passed is not effected by any other flags (`--recursive` or `--sort` have no effect). Accepts multiple `--file` flags to include multiple files.
+Add a file you want included first in a test suite. This is useful if you have some generic setup code that must be included within the test suite. The file passed is not affected by any other flags (`--recursive` or `--sort` have no effect). Accepts multiple `--file` flags to include multiple files, the order in which the flags are given are the order in which the files are included in the test suite. Can also be used in `mocha.opts`.
 
 ### `-g, --grep <pattern>`
 
