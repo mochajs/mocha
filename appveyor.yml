@@ -12,7 +12,6 @@ install:
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
   - npm install -g npm
   - npm install
-  - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
 matrix:
   fast_finish: true
 build: off
@@ -22,7 +21,7 @@ clone_depth: 1
 test_script:
   - node --version
   - npm --version
-  - make test-node
+  - npm start test.node
 skip_commits:
   message: /\[ci\s+skip\]/
 

@@ -14,25 +14,25 @@ matrix:
   fast_finish: true
   include:
     - node_js: '9'
-      env: TARGET=test-node COVERAGE=true
+      env: TARGET=test.node COVERAGE=true
     - node_js: '8'
-      env: TARGET=test-node
+      env: TARGET=test.node
     - node_js: '6'
-      env: TARGET=test-node
+      env: TARGET=test.node
     - node_js: '4'
-      env: TARGET=test-node
+      env: TARGET=test.node
     - node_js: '8'
       env: TARGET=lint
     - node_js: '8'
-      env: TARGET=test-browser
+      env: TARGET=test.browser
 
 before_install: scripts/travis-before-install.sh
 
 before_script: scripts/travis-before-script.sh
 
-script: make $TARGET
+script: npm start $TARGET
 
-after_success: npm run coveralls
+after_success: npm start coveralls
 
 notifications:
   email: false
