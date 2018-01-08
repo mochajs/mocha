@@ -10,4 +10,4 @@
 
 [build]
   publish = "docs/_dist/"
-  command = "npm run buildDocs"
+  command = "npm start buildDocs"
