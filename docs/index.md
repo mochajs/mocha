@@ -155,7 +155,7 @@ Mocha allows you to use any assertion library you wish.  In the above example, w
 
 ## Asynchronous Code
 
-Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test.
+Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) *or* a falsy value; anything else will cause a failed test.
 
 ```js
 describe('User', function() {
@@ -171,7 +171,7 @@ describe('User', function() {
 });
 ```
 
-To make things even easier, the `done()` callback accepts an error, so we may use this directly:
+To make things even easier, the `done()` callback also accepts an `Error` instance (i.e. `new Error()`), so we may use this directly:
 
 ```js
 describe('User', function() {
