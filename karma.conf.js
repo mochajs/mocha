@@ -131,20 +131,9 @@ module.exports = config => {
       break;
 
     case 'esm':
-      // for now we will only run against Chrome to test this.
-      if (cfg.sauceLabs) {
-        cfg.sauceLabs.testName = 'ESM Integration Tests';
-        cfg.browsers = ['chrome@latest'];
-        cfg.customLaunchers = {
-          'chrome@latest': cfg.customLaunchers['chrome@latest']
-        };
-      } else if (!env.TRAVIS) {
-        cfg.browsers = ['Chrome'];
-      } else {
-        console.error(
-          'skipping ESM tests & exiting; no SauceLabs nor local run detected');
-        process.exit(0);
-      }
+      // just run against ChromeHeadless, since other browsers may not
+      // support
+      cfg.browsers = ['ChromeHeadless'];
       cfg.files = [
         'test/browser-fixtures/esm.fixture.html',
         'test/browser-specific/esm.spec.js'
