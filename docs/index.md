@@ -817,7 +817,7 @@ Only interested in the first exception? use `--bail`!
 
 ### `-d, --debug`
 
-Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the `debugger` statement. Note the difference between `mocha debug` and `mocha --debug`: `mocha debug` will fire up node's built-in debug client, `mocha --debug` will allow you to use a different interface — such as the Blink Developer Tools.
+Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the `debugger` statement. Note the difference between `mocha debug` and `mocha --debug`: `mocha debug` will fire up node's built-in debug client, `mocha --debug` will allow you to use a different interface — such as the Blink Developer Tools. Implies `--no-timeouts`.
 
 ### `--globals <names>`
 
@@ -844,6 +844,10 @@ The `--reporter` option allows you to specify the reporter that will be used, de
 ### `-t, --timeout <ms>`
 
 Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the `s` suffix, ex: `--timeout 2s` or `--timeout 2000` would be equivalent.
+
+### `--no-timeouts`
+
+Disables timeouts. Equivalent to `--timeout 0`.
 
 ### `-s, --slow <ms>`
 
