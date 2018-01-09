@@ -1,5 +1,3 @@
-sudo: false
-
 # trust dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
 dist: trusty
