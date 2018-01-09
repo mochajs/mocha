@@ -169,8 +169,4 @@ non-tty:
 	@echo spec:
 	@cat /tmp/spec.out
 
-tm:
-	@printf "==> [TM]\n"
-	open editors/$(TM_BUNDLE)
-
 .PHONY: test-jsapi test-compilers watch test test-node test-bdd test-tdd test-qunit test-exports test-unit test-integration non-tty tm clean test-browser test-browser-unit test-browser-bdd test-browser-qunit test-browser-tdd test-browser-exports lint test-only test-global-only
