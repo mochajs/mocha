@@ -33,8 +33,8 @@ describe('HTML reporter', function () {
       removeMochaElem();
       var suite = new Suite('Suite', 'root');
       var runner = new Runner(suite);
-      // eslint-disable-next-line no-unused-vars
-      var html = new HTML(runner);
+      // eslint-disable-next-line no-new
+      new HTML(runner);
       var message = document.getElementById('mocha-error').textContent;
       expect(message).to.eql('#mocha div missing, add it to your document');
     });
@@ -44,8 +44,8 @@ describe('HTML reporter', function () {
       addMochaElem();
       var suite = new Suite('Suite', 'root');
       var runner = new Runner(suite);
-      // eslint-disable-next-line no-unused-vars
-      var html = new HTML(runner);
+      // eslint-disable-next-line no-new
+      new HTML(runner);
       expect(document.getElementById('mocha-stats')).to.not.eql(null);
       expect(document.getElementById('mocha-report')).to.not.eql(null);
     });
