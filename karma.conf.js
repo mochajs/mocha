@@ -143,6 +143,7 @@ module.exports = config => {
       if (cfg.sauceLabs) {
         cfg.sauceLabs.testName = 'Unit Tests';
       }
+      cfg.files.push('test/browser-specific/html-reporter.spec.js');
   }
 
   config.set(cfg);
