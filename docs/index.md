@@ -157,7 +157,7 @@ it('double done', function(done) {
 
 Running the above test will give you the below error message:
 
-```
+```sh
 $ ./node_modules/.bin/mocha mocha.test.js
 
 
@@ -175,7 +175,6 @@ $ ./node_modules/.bin/mocha mocha.test.js
       at startup (bootstrap_node.js:187:16)
       at bootstrap_node.js:608:3
 ```
-
 
 ## Assertions
 
