@@ -79,6 +79,11 @@ const exit = code => {
 const list = str => str.split(/ *, */);
 
 /**
+ * Parse multiple flag.
+ */
+const collect = (val, memo) => memo.concat(val);
+
+/**
  * Hide the cursor.
  */
 const hideCursor = () => {
@@ -199,7 +204,8 @@ program
   .option('--delay', 'wait for async suite definition')
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
-  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite');
+  .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite')
+  .option('--file <file>', 'include a file to be ran during the suite', collect, []);
 
 program._name = 'mocha';
 
@@ -497,12 +503,15 @@ if (!files.length) {
 }
 
 // resolve
-
+let fileArgs = program.file.map(path => resolve(path));
 files = files.map(path => resolve(path));
 
 if (program.sort) {
   files.sort();
 }
+
+// add files given through --file to be ran first
+files = fileArgs.concat(files);
 
 // --watch
 

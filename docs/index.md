@@ -736,6 +736,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --debug-brk                             enable node's debugger breaking on the first line
     --globals <names>                       allow the given comma-delimited global [names]
     --es_staging                            enable all staged features
+    --file <file>                           include a file to be ran during the suite [file]
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
     --icu-data-dir                          include ICU data
@@ -852,6 +853,10 @@ Disables timeouts. Equivalent to `--timeout 0`.
 ### `-s, --slow <ms>`
 
 Specify the "slow" test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.
+
+### `--file <file>`
+
+Add a file you want included first in a test suite. This is useful if you have some generic setup code that must be included within the test suite. The file passed is not affected by any other flags (`--recursive` or `--sort` have no effect). Accepts multiple `--file` flags to include multiple files, the order in which the flags are given are the order in which the files are included in the test suite. Can also be used in `mocha.opts`.
 
 ### `-g, --grep <pattern>`
 
