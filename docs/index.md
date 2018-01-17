@@ -37,7 +37,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [mocha.opts file support](#mochaopts)
 - clickable suite titles to filter test execution
 - [node debugger support](#-d---debug)
-- detects multiple calls to `done()`
+- [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
 - [extensible test DSLs or "interfaces"](#interfaces)
@@ -141,6 +141,39 @@ Then run tests with:
 
 ```sh
 $ npm test
+```
+
+## Detects Multiple Calls to `done()`
+
+If you use callback-based async tests, Mocha will throw an error if `done()` is called multiple times. This is handy for catching accidental double callbacks.
+
+```javascript
+it('double done', function(done) {
+  // Calling `done()` twice is an error
+  setImmediate(done);
+  setImmediate(done);
+});
+```
+
+Running the above test will give you the below error message:
+
+```sh
+$ ./node_modules/.bin/mocha mocha.test.js
+
+
+  ✓ double done
+  1) double done
+
+  1 passing (6ms)
+  1 failing
+
+  1) double done:
+     Error: done() called multiple times
+      at Object.<anonymous> (mocha.test.js:1:63)
+      at require (internal/module.js:11:18)
+      at Array.forEach (<anonymous>)
+      at startup (bootstrap_node.js:187:16)
+      at bootstrap_node.js:608:3
 ```
 
 ## Assertions
