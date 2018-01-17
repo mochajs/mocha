@@ -1,14 +1,13 @@
-# 5.0.0 / 2018-01-16
+# 5.0.0 / 2018-01-17
 
-Happy new year!  :fireworks:
-
-Mocha starts off 2018 on the right foot by again dropping support for *unmaintained rubbish*.
+Mocha starts off 2018 right by again dropping support for *unmaintained rubbish*.
 
 Welcome [@vkarpov15] to the team!
 
 ## :boom: Breaking Changes
 
 - **[#3148]: Drop support for IE9 and IE10** ([@Bamieh])
+  Practically speaking, only code which consumes (through bundling or otherwise) the userland [buffer](https://npm.im/buffer) module should be affected.  However, Mocha will no longer test against these browsers, nor apply fixes for them.
 
 ## :tada: Enhancements
 
@@ -30,6 +29,7 @@ Welcome [@vkarpov15] to the team!
 - [#3135]: Fix cross-references ([@vkarpov15])
 - [#3163]: Fix tpyos ([@tbroadley])
 - [#3177]: Tweak `README.md` organization ([@xxczaki])
+- Misc updates ([@boneskull])
 
 ## :nut_and_bolt: Other
 
