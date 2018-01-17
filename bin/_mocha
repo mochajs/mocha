@@ -205,7 +205,8 @@ program
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
   .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite')
-  .option('--file <file>', 'include a file to be ran during the suite', collect, []);
+  .option('--file <file>', 'include a file to be ran during the suite', collect, [])
+  .option('--exclude <files>', 'comma-delimited list of files or patterns to ignore', list, []);
 
 program._name = 'mocha';
 
