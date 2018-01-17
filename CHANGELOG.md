@@ -1,10 +1,72 @@
+# 5.0.0 / 2018-01-16
+
+Happy new year!  :fireworks:
+
+Mocha starts off 2018 on the right foot by again dropping support for *unmaintained rubbish*.
+
+Welcome [@vkarpov15] to the team!
+
+## :boom: Breaking Changes
+
+- **[#3148]: Drop support for IE9 and IE10** ([@Bamieh])
+
+## :tada: Enhancements
+
+- [#3181]: Add useful new `--file` command line argument ([documentation](https://mochajs.org/#--file-file)) ([@hswolff])
+
+## :bug: Fixes
+
+- [#3187]: Fix inaccurate test duration reporting ([@FND])
+- [#3202]: Fix bad markup in HTML reporter ([@DanielRuf])
+
+## :sunglasses: Developer Experience
+
+- [#2352]: Ditch GNU Make for [nps](https://npm.im/nps) to manage scripts ([@TedYav])
+
+## :book: Documentation
+
+- [#3137]: Add missing `--no-timeouts` docs ([@dfberry])
+- [#3134]: Improve `done()` callback docs ([@maraisr])
+- [#3135]: Fix cross-references ([@vkarpov15])
+- [#3163]: Fix tpyos ([@tbroadley])
+- [#3177]: Tweak `README.md` organization ([@xxczaki])
+
+## :nut_and_bolt: Other
+
+- [#3118]: Move TextMate Integration to [its own repo](https://github.com/mochajs/mocha.tmbundle) ([@Bamieh])
+- [#3185]: Add Node.js v9 to build matrix; remove v7 ([@xxczaki])
+- [#3172]: Markdown linting ([@boneskull])
+- Test & Netlify updates ([@Munter], [@boneskull])
+
+[#3148]: https://github.com/mochajs/mocha/issues/3148
+[#3181]: https://github.com/mochajs/mocha/issues/3181
+[#3187]: https://github.com/mochajs/mocha/issues/3187
+[#3202]: https://github.com/mochajs/mocha/pull/3148
+[#2352]: https://github.com/mochajs/mocha/issues/2352
+[#3137]: https://github.com/mochajs/mocha/issues/3137
+[#3134]: https://github.com/mochajs/mocha/issues/3134
+[#3135]: https://github.com/mochajs/mocha/issues/3135
+[#3163]: https://github.com/mochajs/mocha/pull/3163
+[#3177]: https://github.com/mochajs/mocha/pull/3177
+[#3118]: https://github.com/mochajs/mocha/issues/3118
+[#3185]: https://github.com/mochajs/mocha/issues/3185
+[#3172]: https://github.com/mochajs/mocha/issues/3172
+[@hswolff]: https://github.com/hswolff
+[@FND]: https://github.com/FND
+[@DanielRuf]: https://github.com/DanielRuf
+[@TedYav]: https://github.com/TedYav
+[@dfberry]: https://github.com/dfberry
+[@maraisr]: https://github.com/maraisr
+[@vkarpov15]: https://github.com/vkarpov15
+[@tbroadley]: https://github.com/tbroadley
+
 # 4.1.0 / 2017-12-28
 
 This is mainly a "housekeeping" release.
 
 Welcome [@Bamieh] and [@xxczaki] to the team!
 
-## :bug:: Fixes
+## :bug: Fixes
 
 - [#2661]: `progress` reporter now accepts reporter options ([@canoztokmak])
 - [#3142]: `xit` in `bdd` interface now properly returns its `Test` object ([@Bamieh])
