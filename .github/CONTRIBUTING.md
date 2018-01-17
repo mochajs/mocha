@@ -40,8 +40,9 @@ We ask you please keep these goals in mind when making or proposing changes.
 
 Follow these steps to get going.  If you are having trouble, don't be afraid to [ask for help](#got-a-question).
 
+> PRO TIP: Run `npm start` to see a list of commands which can be run with `npm start <command>`
+
 1. [Install Node.js 4.x or newer](https://nodejs.org/download).
-1. Install [GNU Make](https://www.gnu.org/software/make/) or equivalent.
 1. Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
 1. Create a new branch in your working copy.  Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
 1. Execute `npm install` to install the development dependencies.
