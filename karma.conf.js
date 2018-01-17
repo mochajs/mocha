@@ -64,7 +64,7 @@ module.exports = config => {
   };
 
   // TO RUN AGAINST SAUCELABS LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> make test-browser`
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm start test.browser`
   const env = process.env;
   let sauceConfig;
 

@@ -1149,16 +1149,13 @@ The command `mocha --reporter doc array` would yield:
 </section>
 ```
 
-The SuperAgent request library [test documentation](https://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this simple make target:
+The SuperAgent request library [test documentation](https://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this Bash command:
 
-```makefile
-test-docs:
-  $(MAKE) test REPORTER=doc \
-    | cat docs/head.html - docs/tail.html \
-    > docs/test.html
+```bash
+$ mocha --reporter=doc | cat docs/head.html - docs/tail.html > docs/test.html
 ```
 
-View the entire [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
+View SuperAgent's [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
 
 ### Markdown
 
@@ -1275,11 +1272,7 @@ The following editor-related packages are available:
 
 ### TextMate
 
-The Mocha TextMate bundle includes snippets to make writing tests quicker and more enjoyable.  To install the bundle, clone a copy of the [Mocha repo](https://github.com/mochajs/mocha), and run:
-
-```sh
-$ make tm
-```
+The [Mocha TextMate bundle](https://github.com/mochajs/mocha.tmbundle) includes snippets to make writing tests quicker and more enjoyable.
 
 ### JetBrains
 
