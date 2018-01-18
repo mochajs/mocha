@@ -417,19 +417,39 @@ describe('options', function () {
   });
 
   describe('--exclude', function () {
-    it('excludes matching files', function (done) {
-      args = ['--exclude', 'exclude-me'];
-      run('options/exclude.fixture.js', args, function (err, res) {
-        if (err) {
-          done(err);
-          return;
+    /*
+     * Runs mocha in ./fixtures/options/exclude with the given args.
+     * Calls handleResult with the result
+     */
+    function runExcludeTest (args, handleResult, done) {
+      directInvoke(args, function (error, result) {
+        if (error) {
+          return done(error);
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        handleResult(result);
         done();
-      });
+      }, path.join(__dirname, 'fixtures', 'options', 'exclude'));
+    }
+
+    it('should exclude specific files', function (done) {
+      runExcludeTest(['*.spec.js', '--exclude', 'fail.spec.js'], function (result) {
+        expect(result.output).to.contain('1 passing');
+        expect(result.code).to.equal(0);
+      }, done);
+    });
+
+    it('should exclude globbed files', function (done) {
+      runExcludeTest(['**/*.spec.js', '--exclude', '**/fail.spec.js'], function (result) {
+        expect(result.output).to.contain('2 passing');
+        expect(result.code).to.equal(0);
+      }, done);
+    });
+
+    it('should exclude multiple patterns', function (done) {
+      runExcludeTest(['**/*.spec.js', '--exclude', 'fail.spec.js,nested/fail.spec.js'], function (result) {
+        expect(result.output).to.contain('2 passing');
+        expect(result.code).to.equal(0);
+      }, done);
     });
   });
 });
