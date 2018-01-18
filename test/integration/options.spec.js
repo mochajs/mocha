@@ -415,4 +415,21 @@ describe('options', function () {
       }, path.join(__dirname, 'fixtures', 'options', 'help'));
     });
   });
+
+  describe('--exclude', function () {
+    it('excludes matching files', function (done) {
+      args = ['--exclude', 'exclude-me'];
+      run('options/exclude.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+  });
 });
