@@ -4,4 +4,4 @@
 mkdir -p .karma
 
 # ensure we are building a non-broken bundle for AMD
-npm start build && [[ -z "$(grep 'define.amd' mocha.js)" ]] || exit 1
+npm start build.mochajs && [[ -z "$(grep 'define.amd' mocha.js)" ]] || exit 1
