@@ -496,8 +496,14 @@ args.forEach(arg => {
     throw err;
   }
 
-  files = files.concat(newFiles)
-    .filter(fileName => program.exclude.every(pattern => !minimatch(fileName, pattern)));
+  if (typeof newFiles !== 'undefined') {
+    if (typeof newFiles === 'string') {
+      newFiles = [newFiles];
+    }
+    newFiles = newFiles.filter(fileName => program.exclude.every(pattern => !minimatch(fileName, pattern)));
+  }
+
+  files = files.concat(newFiles);
 });
 
 if (!files.length) {
