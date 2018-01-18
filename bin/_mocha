@@ -10,6 +10,7 @@
 const program = require('commander');
 const path = require('path');
 const fs = require('fs');
+const minimatch = require('minimatch');
 const resolve = path.resolve;
 const exists = fs.existsSync;
 const Mocha = require('../');
@@ -495,7 +496,8 @@ args.forEach(arg => {
     throw err;
   }
 
-  files = files.concat(newFiles);
+  files = files.concat(newFiles)
+    .filter(fileName => program.exclude.every(pattern => !minimatch(fileName, pattern)));
 });
 
 if (!files.length) {
