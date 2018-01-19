@@ -136,6 +136,36 @@ describe('Base reporter', function () {
     });
   });
 
+  describe('Diff generation', function () {
+    it('should generate unified diffs if `inlineDiff === false`', function () {
+      var actual = 'a foo unified diff';
+      var expected = 'a bar unified diff';
+
+      var oldInlineDiffs = Base.inlineDiffs;
+      Base.inlineDiffs = false;
+
+      var output = Base.generateDiff(actual, expected);
+
+      Base.inlineDiffs = oldInlineDiffs;
+
+      expect(output).to.equal('\n      + expected - actual\n\n      -a foo unified diff\n      +a bar unified diff\n      ');
+    });
+
+    it('should generate inline diffs if `inlineDiffs === true`', function () {
+      var actual = 'a foo inline diff';
+      var expected = 'a bar inline diff';
+
+      var oldInlineDiffs = Base.inlineDiffs;
+      Base.inlineDiffs = true;
+
+      var output = Base.generateDiff(actual, expected);
+
+      Base.inlineDiffs = oldInlineDiffs;
+
+      expect(output).to.equal('      \n      actual expected\n      \n      a foobar inline diff\n      ');
+    });
+  });
+
   describe('Inline strings diff', function () {
     it('should show single line diff if property set to `true`', function () {
       var err = new Error('test');
