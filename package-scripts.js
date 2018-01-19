@@ -40,7 +40,7 @@ module.exports = {
     test: {
       default: 'nps test.all',
       all: {
-        script: 'nps lint.code test.node test.browser',
+        script: 'nps lint.code test.node test.browser test.bundle',
         description: 'Lint code and runs node / browser environment tests'
       },
       node: {
@@ -204,6 +204,17 @@ module.exports = {
         spec: {
           script: test('non-tty-dot', '--reporter spec test/interfaces/bdd.spec 2>&1 > /tmp/spec.out && echo "spec:" && cat /tmp/spec.out'),
           description: 'Test non-TTY spec reporter'
+        }
+      },
+      bundle: {
+        default: 'nps test.bundle.all',
+        all: {
+          script: 'nps clean build.mochajs test.bundle.amd',
+          description: 'Compile Mocha and run all tests for bundle files'
+        },
+        amd: {
+          script: test('amd', 'test/bundle/amd.spec'),
+          description: 'Test bundle files for AMD'
         }
       }
     },
