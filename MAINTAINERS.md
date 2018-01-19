@@ -157,7 +157,7 @@ Support questions should be answered if possible, but the user should be directe
 
 If it's *not* a Mocha problem (people tend not to believe this), you may want to show a counter-example.  It's often helpful to direct the issue author to the responsible project, if you can determine what that is.
 
-- `common-mistake`: Issues which are *repeatedly* asked support questions or misunderstandings.  This may also apply to questions which receive a lot of 👍's
+- `faq`: Issues which are *repeatedly* asked support questions or misunderstandings.  This may also apply to questions which receive a lot of 👍's
 - `question`: Add this label if it's just a support question
 
 ### Bugs

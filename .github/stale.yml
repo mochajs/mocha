@@ -4,28 +4,25 @@ daysUntilStale: 120
 daysUntilClose: 14
 # Issues with these labels will never be considered stale
 exemptLabels:
-  - help-wanted
-  - confirmed-bug
-  - future
+  - browser
   - chore
+  - confirmed-bug
+  - developer-experience
+  - documentation
+  - faq
   - feature
+  - future
+  - good-first-issue
+  - help-wanted
+  - needs-review
+  - nice-to-have
+  - qa
+  - reporter
+  - semver-major
+  - semver-minor
+  - semver-patch
   - unconfirmed-bug
   - usability
-  - browser
-  - reporter
-  - feature
-  - documentation
-  - nice-to-have
-  - needs-review
-  - qa
-  - usability
-  - semver-minor
-  - semver-major
-  - semver-patch
-  - reporter
-  - common-mistake
-  - developer-experience
-  - good-first-issue
 # Label to use when marking an issue as stale
 staleLabel: stale
 # Comment to post when marking an issue as stale. Set to `false` to disable

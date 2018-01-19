@@ -1163,7 +1163,7 @@ The "markdown" reporter generates a markdown TOC and body for your test suite. T
 
 ### XUnit
 
-The `xunit` reporter is also available.  It outputs an XUnit-compatible XML document, often applicable in CI servers. 
+The `xunit` reporter is also available.  It outputs an XUnit-compatible XML document, often applicable in CI servers.
 
 By default, it will output to the console.  To write directly to a file, use `--reporter-options output=filename.xml`.
 
