@@ -162,6 +162,25 @@ describe('options', function () {
       });
     });
 
+    it('should execute exclusive tests only', function (done) {
+      run('options/delay-only.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        assert.equal(res.stats.tests, 2);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+
+        assert.equal(res.passes[0].title, 'should run this');
+        assert.equal(res.passes[1].title, 'should run this, too');
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+
     it('should throw an error if the test suite failed to run', function (done) {
       run('options/delay-fail.fixture.js', args, function (err, res) {
         if (err) {
