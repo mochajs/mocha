@@ -1161,19 +1161,19 @@ View SuperAgent's [Makefile](https://github.com/visionmedia/superagent/blob/mast
 
 The "markdown" reporter generates a markdown TOC and body for your test suite. This is great if you want to use the tests as documentation within a Github wiki page, or a markdown file in the repository that Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
 
-### HTML
+### XUnit
 
-The "HTML" reporter is currently the only browser reporter supported by Mocha, and it looks like this:
+The `xunit` reporter is also available.  It outputs an XUnit-compatible XML document, often applicable in CI servers. 
 
-![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+By default, it will output to the console.  To write directly to a file, use `--reporter-options output=filename.xml`.
 
-### Undocumented Reporters
+### Third-Party Reporters
 
-The "XUnit" reporter is also available.  By default, it will output to the console.  To write directly to a file, use `--reporter-options output=filename.xml`.
+Mocha allows you to define custom reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter](https://github.com/travisjeffery/mocha-teamcity-reporter).
 
-### Third party reporters
+### HTML Reporter
 
-Mocha allows you to define custom third-party reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter](https://github.com/travisjeffery/mocha-teamcity-reporter).
+**The HTML reporter is not intended for use on the command-line.**
 
 ## Running Mocha in the Browser
 
@@ -1245,6 +1245,14 @@ mocha.setup({
 The following option(s) *only* function in a browser context:
 
 `noHighlighting`: If set to `true`, do not attempt to use syntax highlighting on output test code.
+
+### Reporting
+
+The "HTML" reporter is what you see when running Mocha in the browser.  It looks like this:
+
+![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+
+[Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
 
 ## `mocha.opts`
 
