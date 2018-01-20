@@ -21,7 +21,7 @@ describe('HTML reporter', function () {
 
   function sleep (fn, ms) {
     return new Promise((resolve) => {
-      setTimeout(() => {
+      setTimeout(function () {
         fn();
         resolve();
       }, ms);
@@ -79,7 +79,7 @@ describe('HTML reporter', function () {
           }
         };
         runner.emit('suite', suite);
-        return sleep(() => {
+        return sleep(function () {
           var report = document.getElementById('mocha-report');
           expect(report.innerHTML).to.eql('<li class="suite"><h1><a href="/context.html?grep=fullTitle">title</a></h1><ul></ul></li>');
         }, 50);
@@ -110,7 +110,7 @@ describe('HTML reporter', function () {
           slow: function () {}
         };
         runner.emit('pass', test);
-        return sleep(() => {
+        return sleep(function () {
           var report = document.getElementById('mocha-report');
           expect(report.innerHTML).to.eql('<li class="test pass fast"><h2>title<span class="duration">100ms</span> <a href="/context.html?grep=fullTitle" class="replay">‣</a></h2><pre style="display: none;"><code>body</code></pre></li>');
           expect(document.querySelector('.passes em').textContent).to.eql('1');
@@ -136,7 +136,7 @@ describe('HTML reporter', function () {
           }
         };
         runner.emit('fail', test, err);
-        return sleep(() => {
+        return sleep(function () {
           var report = document.getElementById('mocha-report');
           expect(report.innerHTML).to.eql('<li class="test fail"><h2>title <a href="/context.html?grep=fullTitle" class="replay">‣</a></h2><pre class="error">error message</pre><pre style="display: none;"><code>body</code></pre></li>');
           expect(document.querySelector('.passes em').textContent).to.eql('0');
