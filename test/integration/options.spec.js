@@ -418,37 +418,53 @@ describe('options', function () {
 
   describe('--exclude', function () {
     /*
-     * Runs mocha in ./fixtures/options/exclude with the given args.
-     * Calls handleResult with the result
+     * Runs mocha in {path} with the given args.
+     * Calls handleResult with the result.
      */
-    function runExcludeTest (args, handleResult, done) {
-      directInvoke(args, function (error, result) {
-        if (error) {
-          return done(error);
+    function runMochaTest (fixture, args, handleResult, done) {
+      run(fixture, args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
         }
-        handleResult(result);
+        handleResult(res);
         done();
-      }, path.join(__dirname, 'fixtures', 'options', 'exclude'));
+      });
     }
 
     it('should exclude specific files', function (done) {
-      runExcludeTest(['*.spec.js', '--exclude', 'fail.spec.js'], function (result) {
-        expect(result.output).to.contain('1 passing');
-        expect(result.code).to.equal(0);
+      runMochaTest('options/exclude/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 1);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.passes[0].title, 'should find this test');
+        assert.equal(res.code, 0);
       }, done);
     });
 
     it('should exclude globbed files', function (done) {
-      runExcludeTest(['**/*.spec.js', '--exclude', '**/fail.spec.js'], function (result) {
-        expect(result.output).to.contain('2 passing');
-        expect(result.code).to.equal(0);
+      runMochaTest('options/exclude/**/*.fixture.js', ['--exclude', '**/fail.fixture.js'], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
       }, done);
     });
 
     it('should exclude multiple patterns', function (done) {
-      runExcludeTest(['**/*.spec.js', '--exclude', 'fail.spec.js,nested/fail.spec.js'], function (result) {
-        expect(result.output).to.contain('2 passing');
-        expect(result.code).to.equal(0);
+      runMochaTest('options/exclude/**/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js',
+        '--exclude',
+        'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
       }, done);
     });
   });
