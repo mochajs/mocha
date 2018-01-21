@@ -324,6 +324,7 @@
     "coffee-script": "^1.10.0",
     "coveralls": "^3.0.0",
     "cross-spawn": "^5.1.0",
+    "es6-promise": "^4.2.2",
     "eslint": "^4.8.0",
     "eslint-config-semistandard": "^11.0.0",
     "eslint-config-standard": "^10.2.1",

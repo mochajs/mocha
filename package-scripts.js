@@ -167,7 +167,7 @@ module.exports = {
           description: 'Compile Mocha and run all tests in browser environment'
         },
         unit: {
-          script: 'NODE_PATH=. karma start --single-run',
+          script: 'cp node_modules/es6-promise/dist/es6-promise.auto.min.js test/browser && NODE_PATH=. karma start --single-run',
           description: 'Run unit tests for Mocha in browser'
         },
         bdd: {

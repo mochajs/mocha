@@ -81,7 +81,13 @@ describe('HTML reporter', function () {
         runner.emit('suite', suite);
         return sleep(function () {
           var report = document.getElementById('mocha-report');
-          expect(report.innerHTML).to.eql('<li class="suite"><h1><a href="/context.html?grep=fullTitle">title</a></h1><ul></ul></li>');
+          var root = report.querySelector('.suite');
+          expect(root).to.be.a(HTMLLIElement);
+          expect(root.classList.contains('suite')).to.eql(true);
+
+          var anchor = report.querySelector('li.suite > h1 > a');
+          expect(anchor.textContent).to.eql('title');
+          expect(anchor.href.substring(anchor.href.length - 28)).to.eql('/context.html?grep=fullTitle');
         }, 50);
       });
     });
@@ -112,7 +118,25 @@ describe('HTML reporter', function () {
         runner.emit('pass', test);
         return sleep(function () {
           var report = document.getElementById('mocha-report');
-          expect(report.innerHTML).to.eql('<li class="test pass fast"><h2>title<span class="duration">100ms</span> <a href="/context.html?grep=fullTitle" class="replay">‣</a></h2><pre style="display: none;"><code>body</code></pre></li>');
+          var test = report.querySelector('li.test');
+          expect(test.classList.contains('pass')).to.eql(true);
+          expect(test.classList.contains('fast')).to.eql(true);
+
+          var title = report.querySelector('h2');
+          expect(title.textContent).to.eql('title100ms ‣');
+
+          var duration = title.querySelector('.duration');
+          expect(duration.textContent).to.eql('100ms');
+
+          var anchor = title.querySelector('a');
+          var href = '/context.html?grep=fullTitle';
+          expect(anchor.href.substring(anchor.href.length - href.length)).to.eql(href);
+          expect(anchor.classList.contains('replay')).to.eql(true);
+          expect(anchor.textContent).to.eql('‣');
+
+          var code = report.querySelector('li.test > pre:last-child > code');
+          expect(code.textContent).to.eql('body');
+
           expect(document.querySelector('.passes em').textContent).to.eql('1');
           expect(document.querySelector('.failures em').textContent).to.eql('0');
           expect(document.querySelector('.duration em').textContent).to.not.eql('0');
@@ -138,7 +162,27 @@ describe('HTML reporter', function () {
         runner.emit('fail', test, err);
         return sleep(function () {
           var report = document.getElementById('mocha-report');
-          expect(report.innerHTML).to.eql('<li class="test fail"><h2>title <a href="/context.html?grep=fullTitle" class="replay">‣</a></h2><pre class="error">error message</pre><pre style="display: none;"><code>body</code></pre></li>');
+          var test = report.querySelector('li.test');
+          expect(test).to.be.a(HTMLLIElement);
+          expect(test.classList.contains('fail')).to.eql(true);
+
+          var title = report.querySelector('li.test > h2');
+          expect(title.textContent).to.eql('title ‣');
+
+          var anchor = title.querySelector('a');
+          var href = '/context.html?grep=fullTitle';
+          expect(anchor.href.substring(anchor.href.length - href.length)).to.eql(href);
+          expect(anchor.classList.contains('replay')).to.eql(true);
+
+          var error = report.querySelector('li.test > pre.error');
+          expect(error.textContent).to.eql('error message');
+
+          var pre = report.querySelector('li.test > pre:last-child');
+          expect(pre.style.display).to.eql('none');
+
+          var code = report.querySelector('li.test > pre:last-child > code');
+          expect(code.innerHTML).to.eql('body');
+
           expect(document.querySelector('.passes em').textContent).to.eql('0');
           expect(document.querySelector('.failures em').textContent).to.eql('1');
           expect(document.querySelector('.duration em').textContent).to.not.eql('0');
@@ -150,7 +194,12 @@ describe('HTML reporter', function () {
       it('should add elements for pending', function () {
         runner.emit('pending', {title: 'title'});
         var report = document.getElementById('mocha-report');
-        expect(report.innerHTML).to.eql('<li class="test pass pending"><h2>title</h2></li>');
+        var test = report.querySelector('li.test');
+        expect(test.classList.contains('pass')).to.eql(true);
+        expect(test.classList.contains('pending')).to.eql(true);
+
+        var title = report.querySelector('li.test > h2');
+        expect(title.textContent).to.eql('title');
       });
     });
   });
