@@ -270,7 +270,8 @@ describe('Runnable(title, fn)', function () {
 
             test.on('error', function (err) {
               ++errCalls;
-              expect(err.message).to.equal('fail');
+              expect(err.message).to.equal(
+                "fail (and Mocha's done() called multiple times)");
               expect(calls).to.equal(1);
               expect(errCalls).to.equal(1);
               done();

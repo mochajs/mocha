@@ -15,15 +15,35 @@ describe('multiple calls to done()', function () {
     });
 
     it('results in failures', function () {
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 1);
-      assert.equal(res.stats.failures, 1);
-      assert.equal(res.code, 1);
+      assert.equal(res.stats.pending, 0, 'wrong "pending" count');
+      assert.equal(res.stats.passes, 1, 'wrong "passes" count');
+      assert.equal(res.stats.failures, 1, 'wrong "failures" count');
     });
 
     it('throws a descriptive error', function () {
-      assert.equal(res.failures[0].err.message,
-        'done() called multiple times');
+      assert.equal(res.failures[0].err.message, 'done() called multiple times');
+    });
+  });
+
+  describe('with error passed on second call', function () {
+    before(function (done) {
+      run('multiple-done-with-error.fixture.js', args, function (err, result) {
+        res = result;
+        done(err);
+      });
+    });
+
+    it('results in failures', function () {
+      assert.equal(res.stats.pending, 0, 'wrong "pending" count');
+      assert.equal(res.stats.passes, 1, 'wrong "passes" count');
+      assert.equal(res.stats.failures, 1, 'wrong "failures" count');
+    });
+
+    it('should throw a descriptive error', function () {
+      assert.equal(
+        res.failures[0].err.message,
+        "second error (and Mocha's done() called multiple times)"
+      );
     });
   });
 
@@ -44,8 +64,7 @@ describe('multiple calls to done()', function () {
 
     it('correctly attributes the error', function () {
       assert.equal(res.failures[0].fullTitle, 'suite test1');
-      assert.equal(res.failures[0].err.message,
-        'done() called multiple times');
+      assert.equal(res.failures[0].err.message, 'done() called multiple times');
     });
   });
 
@@ -66,8 +85,7 @@ describe('multiple calls to done()', function () {
 
     it('correctly attributes the error', function () {
       assert.equal(res.failures[0].fullTitle, 'suite "before all" hook');
-      assert.equal(res.failures[0].err.message,
-        'done() called multiple times');
+      assert.equal(res.failures[0].err.message, 'done() called multiple times');
     });
   });
 
@@ -90,8 +108,7 @@ describe('multiple calls to done()', function () {
       assert.equal(res.failures.length, 2);
       res.failures.forEach(function (failure) {
         assert.equal(failure.fullTitle, 'suite "before each" hook');
-        assert.equal(failure.err.message,
-          'done() called multiple times');
+        assert.equal(failure.err.message, 'done() called multiple times');
       });
     });
   });
