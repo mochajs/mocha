@@ -5,14 +5,11 @@ describe('skip in beforeEach', function () {
     var self = this;
     setTimeout(function () {
       self.skip();
+      done();
     }, 50);
   });
 
-  it('should never run this test', function () {
-    throw new Error('never thrown');
-  });
-
-  it('should never run this test', function () {
-    throw new Error('never thrown');
-  });
+  it('should skip this test', function () {});
+  it('should error before reaching this test', function () {});
+  it('should error before reaching this test', function () {});
 });
