@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../mocha.css" />
+    <script src="../../mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script>
+      function assert(expr, msg) {
+        if (!expr) throw new Error(msg || 'failed');
+      }
+    </script>
+    <script src="notification.spec.js"></script>
+  </head>
+  <body>
+    <div id="mocha"></div>
+  <script>
+      (function() {
+        mocha.checkLeaks();
+        mocha.growl()
+        mocha.run();
+      })();
+  </script>
+  </body>
+</html>
