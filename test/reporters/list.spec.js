@@ -150,6 +150,37 @@ describe('List reporter', function() {
       expect(typeof err.actual).to.equal('string');
       expect(typeof err.expected).to.equal('string');
     });
+    describe('with showErrorsImmediately option', function() {
+      it('should log error immediately', function() {
+        var expectedTitle = 'expectedTitle';
+        var functionCount = 1;
+        var error = new Error('expectedMessage');
+        var test = {
+          title: expectedTitle,
+          titlePath: function() {
+            return [this.title];
+          }
+        };
+        runner.on = function(event, callback) {
+          if (event === 'fail') {
+            test.err = error;
+            callback(test);
+          }
+        };
+        List.call({epilogue: function() {}}, runner, {
+          reporterOptions: {showErrorsImmediately: true}
+        });
+        process.stdout.write = stdoutWrite;
+        expect(stdout[0]).to.eql(
+          [
+            '  ' + functionCount + ') ' + expectedTitle + ':',
+            '   ' + error.stack.replace(/^/gm, '  '),
+            '',
+            ''
+          ].join('\n')
+        );
+      });
+    });
   });
 
   describe('on end', function() {
@@ -167,6 +198,37 @@ describe('List reporter', function() {
       process.stdout.write = stdoutWrite;
 
       expect(calledEpilogue).to.be(true);
+    });
+    describe('with showErrorsImmediately option', function() {
+      it('should log error immediately', function() {
+        var expectedTitle = 'expectedTitle';
+        var functionCount = 1;
+        var error = new Error('expectedMessage');
+        var test = {
+          title: expectedTitle,
+          titlePath: function() {
+            return [this.title];
+          }
+        };
+        runner.on = function(event, callback) {
+          if (event === 'fail') {
+            test.err = error;
+            callback(test);
+          }
+        };
+        List.call({epilogue: function() {}}, runner, {
+          reporterOptions: {showErrorsImmediately: true}
+        });
+        process.stdout.write = stdoutWrite;
+        expect(stdout[0]).to.eql(
+          [
+            '  ' + functionCount + ') ' + expectedTitle + ':',
+            '   ' + error.stack.replace(/^/gm, '  '),
+            '',
+            ''
+          ].join('\n')
+        );
+      });
     });
   });
 });

@@ -1176,6 +1176,15 @@ Mocha allows you to define custom reporters. For more information see the [wiki]
 
 **The HTML reporter is not intended for use on the command-line.**
 
+### Printing error messages immediately
+
+If you have long-running tests you may want to print errors immediately to the console so that you don't have to wait for the tests to finish to see why a given test failed.
+The Spec, Dot Matrix, List, and Min reporters support a `showErrorsImmediately` option that will output error details immediately when they occur instead of after all tests have finished:
+
+```bash
+$ mocha --reporter spec --reporter-options showErrorsImmediately=true
+```
+
 ## Running Mocha in the Browser
 
 Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.

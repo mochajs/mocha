@@ -108,5 +108,78 @@ describe('Spec reporter', function() {
       var expectedArray = ['  ' + functionCount + ') ' + expectedTitle + '\n'];
       expect(stdout).to.eql(expectedArray);
     });
+    describe('with showErrorsImmediately option', function() {
+      it('should log error immediately', function() {
+        var expectedTitle = 'expectedTitle';
+        var functionCount = 1;
+        var error = new Error('expectedMessage');
+        var test = {
+          title: expectedTitle,
+          titlePath: function() {
+            return [this.title];
+          }
+        };
+        runner.on = function(event, callback) {
+          if (event === 'fail') {
+            test.err = error;
+            callback(test);
+          }
+        };
+        Spec.call({epilogue: function() {}}, runner, {
+          reporterOptions: {showErrorsImmediately: true}
+        });
+        process.stdout.write = stdoutWrite;
+        expect(stdout[0]).to.eql(
+          [
+            '  ' + functionCount + ') ' + expectedTitle + ':',
+            '   ' + error.stack.replace(/^/gm, '  '),
+            '',
+            ''
+          ].join('\n')
+        );
+      });
+    });
+  });
+  describe('on end', function() {
+    describe('with showErrorsImmediately option', function() {
+      it('should not log error details again', function() {
+        var expectedSuiteTitle = 'expectedSuiteTitle';
+        var suite = {
+          title: expectedSuiteTitle
+        };
+        var functionCount = 1;
+        var error = new Error('expectedMessage');
+        var expectedTestTitle = 'expectedTestTitle';
+        var test = {
+          title: expectedTestTitle,
+          titlePath: function() {
+            return [this.title];
+          }
+        };
+        runner.on = function(event, callback) {
+          if (event === 'suite') {
+            callback(suite);
+          }
+          if (event === 'fail') {
+            test.err = error;
+            callback(test);
+          }
+        };
+        Spec.call({epilogue: function() {}}, runner, {
+          reporterOptions: {showErrorsImmediately: true}
+        });
+        process.stdout.write = stdoutWrite;
+        var expectedArray = [
+          expectedSuiteTitle + '\n',
+          [
+            '  ' + functionCount + ') ' + expectedTestTitle + ':',
+            '   ' + error.stack.replace(/^/gm, '  '),
+            '',
+            ''
+          ].join('\n')
+        ];
+        expect(stdout).to.eql(expectedArray);
+      });
+    });
   });
 });
