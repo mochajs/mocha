@@ -1182,7 +1182,7 @@ If you have long-running tests you may want to print errors immediately to the c
 The Spec, Dot Matrix, List, and Min reporters support a `showErrorsImmediately` option that will output error details immediately when they occur instead of after all tests have finished:
 
 ```bash
-$ mocha --reporter spec --reporter-options showErrorsImmediately=true
+$ mocha --reporter spec --reporter-options showErrorsImmediately=1
 ```
 
 ## Running Mocha in the Browser
