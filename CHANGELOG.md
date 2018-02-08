@@ -1,3 +1,38 @@
+# 5.0.1 / 2018-02-07
+
+...your garden-variety patch release.
+
+:heart: Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support!
+
+## :bug: Fixes
+ 
+- [#1838]: `--delay` now works with `.only()` ([@silviom])
+- [#3119]: Plug memory leak present in v8 ([@boneskull])
+
+## :book: Documentation
+
+- [#3132], [#3098]: Update `--glob` docs ([@outsideris])
+- [#3212]: Update [Wallaby.,js](https://wallabyjs.com)-related docs ([@ArtemGovorov])
+- [#3205]: Remove outdated cruft ([@boneskull])
+
+## :nut_and_bolt: Other
+
+- [#3224]: Add proper Wallaby.js config ([@ArtemGovorov])
+- [#3230]: Update copyright year ([@josephlin55555])
+
+[#1838]: https://github.com/mochajs/mocha/issues/1838
+[#3119]: https://github.com/mochajs/mocha/issues/3119
+[#3132]: https://github.com/mochajs/mocha/issues/3132
+[#3098]: https://github.com/mochajs/mocha/issues/3098
+[#3212]: https://github.com/mochajs/mocha/pulls/3212
+[#3205]: https://github.com/mochajs/mocha/pulls/3205
+[#3224]: https://github.com/mochajs/mocha/pulls/3224
+[#3230]: https://github.com/mochajs/mocha/pulls/3230
+[@silviom]: https://github.com/silviom
+[@outsideris]: https://github.com/outsideris
+[@ArtemGovorov]: https://github.com/ArtemGovorov
+[@josephlin55555]: https://github.com/josephlin55555
+
 # 5.0.0 / 2018-01-17
 
 Mocha starts off 2018 right by again dropping support for *unmaintained rubbish*.
