@@ -1178,8 +1178,9 @@ Mocha allows you to define custom reporters. For more information see the [wiki]
 
 ### Printing error messages immediately
 
-If you have long-running tests you may want to print errors immediately to the console so that you don't have to wait for the tests to finish to see why a given test failed.
-The Spec, Dot Matrix, List, and Min reporters support a `showErrorsImmediately` option that will output error details immediately when they occur instead of after all tests have finished:
+By default, error details will be output at the end of the test run. If you have long-running tests, you may want to print errors as they occur.
+
+The `spec`, `dot`, `list`, and `min` reporters support a `showErrorsImmediately` option that will output error details immediately when they occur instead of after all tests have finished:
 
 ```bash
 $ mocha --reporter spec --reporter-options showErrorsImmediately=1
