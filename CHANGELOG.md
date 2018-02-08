@@ -2,7 +2,7 @@
 
 ...your garden-variety patch release.
 
-:heart: Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support!
+Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart: 
 
 ## :bug: Fixes
  
@@ -12,7 +12,7 @@
 ## :book: Documentation
 
 - [#3132], [#3098]: Update `--glob` docs ([@outsideris])
-- [#3212]: Update [Wallaby.,js](https://wallabyjs.com)-related docs ([@ArtemGovorov])
+- [#3212]: Update [Wallaby.js](https://wallabyjs.com)-related docs ([@ArtemGovorov])
 - [#3205]: Remove outdated cruft ([@boneskull])
 
 ## :nut_and_bolt: Other
