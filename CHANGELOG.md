@@ -2,10 +2,10 @@
 
 ...your garden-variety patch release.
 
-Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart: 
+Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart:
 
 ## :bug: Fixes
- 
+
 - [#1838]: `--delay` now works with `.only()` ([@silviom])
 - [#3119]: Plug memory leak present in v8 ([@boneskull])
 
