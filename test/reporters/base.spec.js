@@ -137,16 +137,22 @@ describe('Base reporter', function () {
   });
 
   describe('Diff generation', function () {
+    var oldInlineDiffs;
+
+    beforeEach(function () {
+      oldInlineDiffs = Base.inlineDiffs;
+    });
+
+    afterEach(function () {
+      Base.inlineDiffs = oldInlineDiffs;
+    });
+
     it('should generate unified diffs if `inlineDiff === false`', function () {
       var actual = 'a foo unified diff';
       var expected = 'a bar unified diff';
 
-      var oldInlineDiffs = Base.inlineDiffs;
       Base.inlineDiffs = false;
-
       var output = Base.generateDiff(actual, expected);
-
-      Base.inlineDiffs = oldInlineDiffs;
 
       expect(output).to.equal('\n      + expected - actual\n\n      -a foo unified diff\n      +a bar unified diff\n      ');
     });
@@ -155,12 +161,8 @@ describe('Base reporter', function () {
       var actual = 'a foo inline diff';
       var expected = 'a bar inline diff';
 
-      var oldInlineDiffs = Base.inlineDiffs;
       Base.inlineDiffs = true;
-
       var output = Base.generateDiff(actual, expected);
-
-      Base.inlineDiffs = oldInlineDiffs;
 
       expect(output).to.equal('      \n      actual expected\n      \n      a foobar inline diff\n      ');
     });
