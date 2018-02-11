@@ -223,8 +223,12 @@ module.exports = {
       description: 'Watch documentation for changes'
     },
     buildApiDocs:{
-      script:"node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f json  --sort-order 'alpha' -a=public > docs/mocha-api.json && node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f md  --sort-order 'alpha' -a=public > docs/mocha-api.md",
+      script:"node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f md  --sort-order 'alpha' -a=public > docs/mocha-api.md",
       description:"build api docs, cli: 'npm start buildApiDocs' "
+    },
+    buildApiDocsDebug:{
+      script:"node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f json  --sort-order 'alpha' -a=public > docs/mocha-api.json",
+      description:"build debuggable api docs, cli: 'npm start buildApiDocsDebug' "
     }
   }
 };
