@@ -2,10 +2,10 @@
 
 ...your garden-variety patch release.
 
-Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart: 
+Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart:
 
 ## :bug: Fixes
- 
+
 - [#1838]: `--delay` now works with `.only()` ([@silviom])
 - [#3119]: Plug memory leak present in v8 ([@boneskull])
 
@@ -76,7 +76,7 @@ Welcome [@vkarpov15] to the team!
 [#3148]: https://github.com/mochajs/mocha/issues/3148
 [#3181]: https://github.com/mochajs/mocha/issues/3181
 [#3187]: https://github.com/mochajs/mocha/issues/3187
-[#3202]: https://github.com/mochajs/mocha/pull/3148
+[#3202]: https://github.com/mochajs/mocha/pull/3202
 [#2352]: https://github.com/mochajs/mocha/issues/2352
 [#3137]: https://github.com/mochajs/mocha/issues/3137
 [#3134]: https://github.com/mochajs/mocha/issues/3134
