@@ -223,7 +223,7 @@ module.exports = {
       description: 'Watch documentation for changes'
     },
     buildApiDocs:{
-      script:"node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f md  --sort-order 'alpha' -a=public > docs/mocha-api.md",
+      script:"node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f json  --sort-order 'alpha' -a=public > docs/mocha-api.json && node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f md  --sort-order 'alpha' -a=public > docs/mocha-api.md",
       description:"build api docs"
     }
   }
