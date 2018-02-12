@@ -16,7 +16,7 @@ const args = [path.join(__dirname, '_mocha')];
 // Must be loaded here to handle node-specific options
 getOptions();
 
-process.argv.slice(2).forEach(arg => {
+process.execArgv.forEach(arg => {
   const flag = arg.split('=')[0];
 
   switch (flag) {
@@ -52,7 +52,9 @@ process.argv.slice(2).forEach(arg => {
       args.unshift(arg);
       break;
     default:
-      if (arg.indexOf('--harmony') === 0) {
+      if (arg.indexOf('--experimental-modules') === 0) {
+        args.unshift(arg);
+      } else if (arg.indexOf('--harmony') === 0) {
         args.unshift(arg);
       } else if (arg.indexOf('--trace') === 0) {
         args.unshift(arg);
