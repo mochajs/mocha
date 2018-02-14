@@ -32,6 +32,21 @@ describe('pending', function () {
         done();
       });
     });
+    it('should keep hierarchies of suites', function (done) {
+      run('pending/skip-hierarchy.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.suites, 2);
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 1);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+        assert.equal(res.passes[0].fullTitle, 'a suite another suite a test');
+        done();
+      });
+    });
   });
 
   describe('synchronous skip()', function () {
