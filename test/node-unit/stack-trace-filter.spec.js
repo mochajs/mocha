@@ -88,6 +88,23 @@ describe('stackTraceFilter()', function () {
         expect(filter(stack.join('\n')))
           .to.equal(expected.join('\n'));
       });
+
+      it('should not replace absolute path which has cwd as infix', function () {
+        var stack = [
+          'Error: /www' + process.cwd() + '/bla.js has a problem',
+          'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
+          'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
+        ];
+
+        var expected = [
+          'Error: /www' + process.cwd() + '/bla.js has a problem',
+          'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
+          'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
+        ];
+
+        expect(filter(stack.join('\n')))
+          .to.equal(expected.join('\n'));
+      });
     });
 
     describe('on Windows', function () {
