@@ -90,7 +90,7 @@ module.exports = {
         // Haven't encountered a spec yet
         // or we're in the middle of a stack trace
 
-      } else if (line.indexOf('- actual + expected') !== -1) {
+      } else if (line.indexOf('- expected + actual') !== -1) {
         inDiff = true;
       } else if (line.match(/at Context/)) {
         // At the start of a stack trace

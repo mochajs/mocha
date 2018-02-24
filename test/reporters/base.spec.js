@@ -52,8 +52,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut).to.match(/- actual/);
-      expect(errOut).to.match(/\+ expected/);
+      expect(errOut).to.match(/- expected/);
+      expect(errOut).to.match(/\+ actual/);
     });
 
     it('should show diffs if property set to `true`', function () {
@@ -66,8 +66,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut).to.match(/- actual/);
-      expect(errOut).to.match(/\+ expected/);
+      expect(errOut).to.match(/- expected/);
+      expect(errOut).to.match(/\+ actual/);
     });
 
     it('should not show diffs when showDiff property set to `false`', function () {
@@ -80,8 +80,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut).to.not.match(/- actual/);
-      expect(errOut).to.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- expected/);
+      expect(errOut).to.not.match(/\+ actual/);
     });
 
     it('should not show diffs when expected is not defined', function () {
@@ -93,8 +93,8 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut).to.not.match(/- actual/);
-      expect(errOut).to.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- expected/);
+      expect(errOut).to.not.match(/\+ actual/);
     });
 
     it('should not show diffs when hideDiff is set', function () {
@@ -108,8 +108,8 @@ describe('Base reporter', function () {
       Base.hideDiff = false; // Revert to original value
 
       errOut = stdout.join('\n');
-      expect(errOut).to.not.match(/- actual/);
-      expect(errOut).to.not.match(/\+ expected/);
+      expect(errOut).to.not.match(/- expected/);
+      expect(errOut).to.not.match(/\+ actual/);
     });
   });
 
@@ -131,8 +131,8 @@ describe('Base reporter', function () {
       expect(errOut).to.not.match(/"foo\\nbar"/);
       expect(errOut).to.match(/foo/).and.match(/bar/);
       expect(errOut).to.match(/test/);
-      expect(errOut).to.match(/actual/);
       expect(errOut).to.match(/expected/);
+      expect(errOut).to.match(/actual/);
     });
   });
 
@@ -148,23 +148,23 @@ describe('Base reporter', function () {
     });
 
     it('should generate unified diffs if `inlineDiff === false`', function () {
-      var actual = 'a foo unified diff';
-      var expected = 'a bar unified diff';
+      var actual = 'a bar unified diff';
+      var expected = 'a foo unified diff';
 
       Base.inlineDiffs = false;
       var output = Base.generateDiff(actual, expected);
 
-      expect(output).to.equal('\n      - actual + expected\n\n      -a foo unified diff\n      +a bar unified diff\n');
+      expect(output).to.equal('\n      - expected + actual\n\n      -a foo unified diff\n      +a bar unified diff\n');
     });
 
     it('should generate inline diffs if `inlineDiffs === true`', function () {
-      var actual = 'a foo inline diff';
-      var expected = 'a bar inline diff';
+      var actual = 'a bar inline diff';
+      var expected = 'a foo inline diff';
 
       Base.inlineDiffs = true;
       var output = Base.generateDiff(actual, expected);
 
-      expect(output).to.equal('\n      actual expected\n\n      a foobar inline diff\n');
+      expect(output).to.equal('\n      expected actual\n\n      a foobar inline diff\n');
     });
   });
 
@@ -173,8 +173,8 @@ describe('Base reporter', function () {
       var err = new Error('test');
       var errOut;
 
-      err.actual = 'a foo inline diff';
-      err.expected = 'a bar inline diff';
+      err.actual = 'a bar inline diff';
+      err.expected = 'a foo inline diff';
       err.showDiff = true;
       var test = makeTest(err);
 
@@ -185,16 +185,16 @@ describe('Base reporter', function () {
 
       expect(errOut).to.match(/a foobar inline diff/);
       expect(errOut).to.match(/test/);
-      expect(errOut).to.match(/actual/);
       expect(errOut).to.match(/expected/);
+      expect(errOut).to.match(/actual/);
     });
 
     it('should split lines when string has more than 4 line breaks', function () {
       var err = new Error('test');
       var errOut;
 
-      err.actual = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
-      err.expected = 'a\nbar\ninline\ndiff\nwith\nmultiple lines';
+      err.actual = 'a\nbar\ninline\ndiff\nwith\nmultiple lines';
+      err.expected = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
       err.showDiff = true;
       var test = makeTest(err);
 
@@ -210,8 +210,8 @@ describe('Base reporter', function () {
       expect(errOut).to.match(/5 \| with/);
       expect(errOut).to.match(/6 \| multiple lines/);
       expect(errOut).to.match(/test/);
-      expect(errOut).to.match(/actual/);
       expect(errOut).to.match(/expected/);
+      expect(errOut).to.match(/actual/);
     });
   });
 
@@ -232,7 +232,7 @@ describe('Base reporter', function () {
 
       var regexesToMatch = [
         /\[/,
-        /\+ {2}"element 1"/,
+        /- {2}"element 1"/,
         /"element 2"/,
         /"element 3"/,
         /"element 4"/,
@@ -242,11 +242,11 @@ describe('Base reporter', function () {
         /"element 8"/,
         /"element 9"/,
         /"element 10"/,
-        /- {2}"element 11"/,
+        /\+ {2}"element 11"/,
         /]/,
         /test/,
-        /expected/,
-        /actual/
+        /- expected/,
+        /\+ actual/
       ];
 
       regexesToMatch.forEach(function (aRegex) {
@@ -269,8 +269,8 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     expect(errOut).to.match(/"key"/);
     expect(errOut).to.match(/test/);
-    expect(errOut).to.match(/- actual/);
-    expect(errOut).to.match(/\+ expected/);
+    expect(errOut).to.match(/- expected/);
+    expect(errOut).to.match(/\+ actual/);
   });
 
   it('should stringify Object.create(null)', function () {
@@ -289,8 +289,8 @@ describe('Base reporter', function () {
     errOut = stdout.join('\n');
     expect(errOut).to.match(/"hasOwnProperty"/);
     expect(errOut).to.match(/test/);
-    expect(errOut).to.match(/- actual/);
-    expect(errOut).to.match(/\+ expected/);
+    expect(errOut).to.match(/- expected/);
+    expect(errOut).to.match(/\+ actual/);
   });
 
   it('should handle error messages that are not strings', function () {
@@ -307,10 +307,10 @@ describe('Base reporter', function () {
       Base.list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut).to.match(/\+true/);
-      expect(errOut).to.match(/-false/);
-      expect(errOut).to.match(/- actual/);
-      expect(errOut).to.match(/\+ expected/);
+      expect(errOut).to.match(/-true/);
+      expect(errOut).to.match(/\+false/);
+      expect(errOut).to.match(/- expected/);
+      expect(errOut).to.match(/\+ actual/);
     }
   });
 
@@ -331,10 +331,10 @@ describe('Base reporter', function () {
 
       errOut = stdout.join('\n');
       expect(errOut).to.match(/custom error message\n/);
-      expect(errOut).to.match(/\+42/);
-      expect(errOut).to.match(/-43/);
-      expect(errOut).to.match(/- actual/);
-      expect(errOut).to.match(/\+ expected/);
+      expect(errOut).to.match(/-42/);
+      expect(errOut).to.match(/\+43/);
+      expect(errOut).to.match(/- expected/);
+      expect(errOut).to.match(/\+ actual/);
     }
   });
 
