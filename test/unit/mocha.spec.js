@@ -106,6 +106,19 @@ describe('Mocha', function () {
     });
   });
 
+  describe('.es-modules()', function () {
+    it('should set the es-modules option to true', function () {
+      var mocha = new Mocha(blankOpts);
+      mocha.esModules();
+      expect(mocha.options.esModules).to.equal(true);
+    });
+
+    it('should be chainable', function () {
+      var mocha = new Mocha(blankOpts);
+      expect(mocha.esModules()).to.equal(mocha);
+    });
+  });
+
   describe('.growl()', function () {
     it('should set the growl option to true', function () {
       var mocha = new Mocha(blankOpts);

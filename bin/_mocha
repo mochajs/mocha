@@ -171,6 +171,7 @@ program
   .option('-w, --watch', 'watch files for changes')
   .option('--check-leaks', 'check for global variable leaks')
   .option('--full-trace', 'display the full stack trace')
+  .option('--es-modules', 'load all test files as ECMAScript Modules')
   .option('--compilers <ext>:<module>,...', 'use the given module(s) to compile files', list, [])
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option('--globals <names>', 'allow the given comma-delimited global [names]', list, [])
@@ -397,6 +398,12 @@ if (program.checkLeaks) {
 
 if (program.fullTrace) {
   mocha.fullTrace();
+}
+
+// --es-modules
+
+if (program.esModules) {
+  mocha.esModules();
 }
 
 // --growl
