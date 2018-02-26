@@ -35,4 +35,21 @@ describe('esModules', function () {
       });
     });
   });
+
+  describe('loading of cjs tests when running with --experimental-modules and --dynamic-import', function () {
+    it('should load cjs test', function (done) {
+      this.timeout(1000);
+      run('es-modules/cjs-test.fixture.js', ['--es-modules', '--experimental-modules', '--harmony-dynamic-import'], function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.pending, 0);
+        assert.equal(res.passing, 1);
+        assert.equal(res.failing, 0);
+        assert.equal(res.code, 0);
+        done();
+      });
+    });
+  });
 });
