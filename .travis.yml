@@ -14,17 +14,7 @@ matrix:
   fast_finish: true
   include:
     - node_js: '9'
-      env: TARGET=test.node COVERAGE=true
-    - node_js: '8'
       env: TARGET=test.node
-    - node_js: '6'
-      env: TARGET=test.node
-    - node_js: '4'
-      env: TARGET=test.node
-    - node_js: '8'
-      env: TARGET=lint
-    - node_js: '8'
-      env: TARGET=test.browser
 
 before_install: scripts/travis-before-install.sh
 
