@@ -1100,6 +1100,8 @@ The "JSON" reporter outputs a single large JSON object when the tests have compl
 
 ![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
+By default, it will output to the console.  To write directly to a file, use `--reporter-options output=filename.json`.
+
 ### JSON Stream
 
 The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
