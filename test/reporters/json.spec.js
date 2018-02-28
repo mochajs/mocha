@@ -149,11 +149,11 @@ describe('json reporter', function () {
         assert.equal(Date.now() - new Date(fileContents.stats.start).getTime() < 10000, true);
         assert.equal(Date.now() - new Date(fileContents.stats.end).getTime() < 10000, true);
         assert.equal(typeof fileContents.stats.duration, 'number', JSON.stringify({ fileContents }, null, 2));
-        assert.equal(fileContents.stats.duration <= 10, true, JSON.stringify({ fileContents }, null, 2));
+        assert.equal(fileContents.stats.duration <= 30, true, JSON.stringify({ fileContents }, null, 2));
         assert.equal(typeof fileContents.tests[0].duration, 'number', JSON.stringify({ fileContents }, null, 2));
-        assert.equal(fileContents.tests[0].duration <= 10, true, JSON.stringify({ fileContents }, null, 2));
+        assert.equal(fileContents.tests[0].duration <= 30, true, JSON.stringify({ fileContents }, null, 2));
         assert.equal(typeof fileContents.failures[0].duration, 'number', JSON.stringify({ fileContents }, null, 2));
-        assert.equal(fileContents.failures[0].duration <= 10, true, JSON.stringify({ fileContents }, null, 2));
+        assert.equal(fileContents.failures[0].duration <= 30, true, JSON.stringify({ fileContents }, null, 2));
         var errLines = fileContents.tests[0].err.stack.split('\n');
         assert.equal(errLines[0], 'Error: oh shit', JSON.stringify({ fileContents }, null, 2));
         var regexResult = /^ {4}at ((Object)|(Context))\.<anonymous> \(test(\/|\\)reporters(\/|\\)json\.spec\.js:92:14\)$/g.exec(errLines[1]);
