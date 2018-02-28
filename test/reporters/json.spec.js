@@ -156,10 +156,10 @@ describe('json reporter', function () {
         assert.equal(fileContents.failures[0].duration <= 10, true);
         var errLines = fileContents.tests[0].err.stack.split('\n');
         assert.equal(errLines[0], 'Error: oh shit');
-        assert.equal(errLines[1], '    at Object.<anonymous> (test/reporters/json.spec.js:92:14)');
+        assert.equal(!!/^ {4}at (Object|Context)\.<anonymous> \(test\/reporters\/json\.spec\.js:92:14\)$/g.exec(errLines[1]), true);
         errLines = fileContents.failures[0].err.stack.split('\n');
         assert.equal(errLines[0], 'Error: oh shit');
-        assert.equal(errLines[1], '    at Object.<anonymous> (test/reporters/json.spec.js:92:14)');
+        assert.equal(!!/^ {4}at (Object|Context)\.<anonymous> \(test\/reporters\/json\.spec\.js:92:14\)$/g.exec(errLines[1]), true);
 
         done();
       });
