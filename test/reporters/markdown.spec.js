@@ -31,7 +31,7 @@ describe('Markdown reporter', function () {
           suites: []
         }]
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'suite') {
           callback(expectedSuite);
         }
@@ -76,7 +76,7 @@ describe('Markdown reporter', function () {
         slow: function () {},
         body: expectedBody
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(expectedTest);
         }

@@ -25,7 +25,7 @@ describe('Progress reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -52,7 +52,7 @@ describe('Progress reporter', function () {
         var expectedTotal = 1;
         var expectedOptions = {};
         runner.total = expectedTotal;
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback();
           }
@@ -94,7 +94,7 @@ describe('Progress reporter', function () {
           reporterOptions: expectedOptions
         };
         runner.total = expectedTotal;
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback();
           }
@@ -126,7 +126,7 @@ describe('Progress reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }

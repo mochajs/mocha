@@ -19,7 +19,7 @@ describe('Min reporter', function () {
 
   describe('on start', function () {
     it('should clear screen then set cursor position', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -38,7 +38,7 @@ describe('Min reporter', function () {
   describe('on end', function () {
     it('should call epilogue', function () {
       var calledEpilogue = false;
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }

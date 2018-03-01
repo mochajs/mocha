@@ -31,7 +31,7 @@ describe('Dot reporter', function () {
 
   describe('on start', function () {
     it('should return a new line', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -50,7 +50,7 @@ describe('Dot reporter', function () {
         Base.window.width = 2;
       });
       it('should return a new line and then a coma', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'pending') {
             callback();
           }
@@ -66,7 +66,7 @@ describe('Dot reporter', function () {
     });
     describe('if window width is equal to or less than 1', function () {
       it('should return a coma', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'pending') {
             callback();
           }
@@ -91,7 +91,7 @@ describe('Dot reporter', function () {
             duration: 1,
             slow: function () { return 2; }
           };
-          runner.on = function (event, callback) {
+          runner.on = runner.once = function (event, callback) {
             if (event === 'pass') {
               callback(test);
             }
@@ -113,7 +113,7 @@ describe('Dot reporter', function () {
             duration: 1,
             slow: function () { return 2; }
           };
-          runner.on = function (event, callback) {
+          runner.on = runner.once = function (event, callback) {
             if (event === 'pass') {
               callback(test);
             }
@@ -132,7 +132,7 @@ describe('Dot reporter', function () {
             duration: 2,
             slow: function () { return 1; }
           };
-          runner.on = function (event, callback) {
+          runner.on = runner.once = function (event, callback) {
             if (event === 'pass') {
               callback(test);
             }
@@ -158,7 +158,7 @@ describe('Dot reporter', function () {
             err: 'some error'
           }
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'fail') {
             callback(test);
           }
@@ -179,7 +179,7 @@ describe('Dot reporter', function () {
             err: 'some error'
           }
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'fail') {
             callback(test);
           }
@@ -195,7 +195,7 @@ describe('Dot reporter', function () {
   });
   describe('on end', function () {
     it('should call the epilogue', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }
