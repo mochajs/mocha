@@ -6,9 +6,10 @@ var Doc = reporters.Doc;
 describe('Doc reporter', function () {
   var stdout;
   var stdoutWrite;
-  var runner = {};
+  var runner;
   beforeEach(function () {
     stdout = [];
+    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -24,7 +25,7 @@ describe('Doc reporter', function () {
         title: expectedTitle
       };
       it('should log html with indents and expected title', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
           }
@@ -44,7 +45,7 @@ describe('Doc reporter', function () {
           title: unescapedTitle
         };
         expectedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
           }
@@ -64,7 +65,7 @@ describe('Doc reporter', function () {
         root: true
       };
       it('should not log any html', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'suite') {
             callback(suite);
           }
@@ -82,7 +83,7 @@ describe('Doc reporter', function () {
         root: false
       };
       it('should log expected html with indents', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'suite end') {
             callback(suite);
           }
@@ -100,7 +101,7 @@ describe('Doc reporter', function () {
         root: true
       };
       it('should not log any html', function () {
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'suite end') {
             callback(suite);
           }
@@ -123,7 +124,7 @@ describe('Doc reporter', function () {
       }
     };
     it('should log html with indents and expected title and body', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(test);
         }
@@ -144,7 +145,7 @@ describe('Doc reporter', function () {
 
       var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
       var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(test);
         }
@@ -171,7 +172,7 @@ describe('Doc reporter', function () {
       }
     };
     it('should log html with indents and expected title, body and error', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test, expectedError);
         }
@@ -195,7 +196,7 @@ describe('Doc reporter', function () {
       var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
       var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
       var expectedEscapedError = '&#x3C;div&#x3E;' + expectedError + '&#x3C;/div&#x3E;';
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test, unescapedError);
         }

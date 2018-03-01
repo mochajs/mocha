@@ -34,7 +34,7 @@ describe('Landing reporter', function () {
     it('should write new lines', function () {
       var cachedCursor = Base.cursor;
       Base.cursor.hide = function () {};
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -53,7 +53,7 @@ describe('Landing reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -73,7 +73,7 @@ describe('Landing reporter', function () {
         var test = {
           state: 'failed'
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback(test);
           }
@@ -101,7 +101,7 @@ describe('Landing reporter', function () {
         var test = {
           state: 'success'
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback(test);
           }
@@ -132,7 +132,7 @@ describe('Landing reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }
