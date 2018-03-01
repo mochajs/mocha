@@ -19,7 +19,7 @@ describe('Json Stream reporter', function () {
 
   describe('on start', function () {
     it('should write stringified start with expected total', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -47,7 +47,7 @@ describe('Json Stream reporter', function () {
         currentRetry: function () { return currentRetry; },
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(expectedTest);
         }
@@ -80,7 +80,7 @@ describe('Json Stream reporter', function () {
           message: expectedErrorMessage,
           stack: expectedErrorStack
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'fail') {
             callback(expectedTest, expectedError);
           }
@@ -109,7 +109,7 @@ describe('Json Stream reporter', function () {
         var expectedError = {
           message: expectedErrorMessage
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'fail') {
             callback(expectedTest, expectedError);
           }
@@ -125,7 +125,7 @@ describe('Json Stream reporter', function () {
 
   describe('on end', function () {
     it('should write end details', function () {
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }

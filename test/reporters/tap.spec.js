@@ -22,7 +22,7 @@ describe('TAP reporter', function () {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
       var expectedString;
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -53,7 +53,7 @@ describe('TAP reporter', function () {
           return expectedTitle;
         }
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'test end') {
           callback();
         }
@@ -82,7 +82,7 @@ describe('TAP reporter', function () {
         },
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'test end') {
           callback();
         }
@@ -116,7 +116,7 @@ describe('TAP reporter', function () {
         var error = {
           stack: expectedStack
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback();
           }
@@ -148,7 +148,7 @@ describe('TAP reporter', function () {
           slow: function () {}
         };
         var error = {};
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
             callback();
           }
@@ -181,7 +181,7 @@ describe('TAP reporter', function () {
         },
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test, {});
         }

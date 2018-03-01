@@ -33,7 +33,7 @@ describe('List reporter', function () {
           return expectedTitle;
         }
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'start') {
           callback();
         }
@@ -61,7 +61,7 @@ describe('List reporter', function () {
           return expectedTitle;
         }
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pending') {
           callback(test);
         }
@@ -89,7 +89,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(test);
         }
@@ -117,7 +117,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pass') {
           callback(test);
         }
@@ -148,7 +148,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test);
         }
@@ -174,12 +174,12 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test);
         }
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test);
         }
@@ -198,7 +198,7 @@ describe('List reporter', function () {
       var test = {};
       var checked = false;
       var err;
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (!checked && event === 'fail') {
           err = new Error('fake failure object with actual/expected');
           err.actual = actual;
@@ -219,7 +219,7 @@ describe('List reporter', function () {
   describe('on end', function () {
     it('should call epilogue', function () {
       var calledEpilogue = false;
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'end') {
           callback();
         }

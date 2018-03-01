@@ -31,7 +31,7 @@ describe('Spec reporter', function () {
       var suite = {
         title: expectedTitle
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'suite') {
           callback(suite);
         }
@@ -50,7 +50,7 @@ describe('Spec reporter', function () {
       var suite = {
         title: expectedTitle
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'pending') {
           callback(suite);
         }
@@ -73,7 +73,7 @@ describe('Spec reporter', function () {
           duration: expectedDuration,
           slow: function () { return 1; }
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'pass') {
             callback(test);
           }
@@ -93,7 +93,7 @@ describe('Spec reporter', function () {
           duration: expectedDuration,
           slow: function () { return 2; }
         };
-        runner.on = function (event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (event === 'pass') {
             callback(test);
           }
@@ -112,7 +112,7 @@ describe('Spec reporter', function () {
       var test = {
         title: expectedTitle
       };
-      runner.on = function (event, callback) {
+      runner.on = runner.once = function (event, callback) {
         if (event === 'fail') {
           callback(test);
         }

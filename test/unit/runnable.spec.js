@@ -490,4 +490,37 @@ describe('Runnable(title, fn)', function () {
       });
     });
   });
+
+  describe('#isFailed()', function () {
+    it('should return `true` if test has not failed', function () {
+      var test = new Runnable('foo', function () {
+      });
+      // runner sets the state
+      test.run(function () {
+        expect(test.isFailed()).not.to.be.ok();
+      });
+    });
+
+    it('should return `true` if test has failed', function () {
+      var test = new Runnable('foo', function () {
+      });
+      // runner sets the state
+      test.state = 'failed';
+      test.run(function () {
+        expect(test.isFailed()).to.be.ok();
+      });
+    });
+
+    it('should return `false` if test is pending', function () {
+      var test = new Runnable('foo', function () {
+      });
+      // runner sets the state
+      test.isPending = function () {
+        return true;
+      };
+      test.run(function () {
+        expect(test.isFailed()).not.to.be.ok();
+      });
+    });
+  });
 });
