@@ -221,6 +221,16 @@ module.exports = {
     watchDocs: {
       script: 'nps prewatchDocs && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
       description: 'Watch documentation for changes'
+    },
+    license: {
+      auth: {
+        script: `license-cli auth "${process.env.FOSSA_API_KEY}"`,
+        description: 'Authorize with FOSSA'
+      },
+      check: {
+        script: `license-cli scan -r "${process.env.TRAVIS_COMMIT}"`,
+        description: 'Perform FOSSA license check'
+      }
     }
   }
 };
