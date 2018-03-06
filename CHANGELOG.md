@@ -1,3 +1,21 @@
+# 5.0.3 / 2018-03-06
+
+This patch features a fix to address a potential "low severity" [ReDoS vulnerability](https://snyk.io/vuln/npm:diff:20180305) in the [diff](https://npm.im/diff) package (a dependency of Mocha).
+
+## :lock: Security Fixes
+
+- [#3266]: Bump `diff` to v3.5.0 ([@anishkny])
+
+## :nut_and_bolt: Other
+
+- [#3011]: Expose `generateDiff()` in `Base` reporter ([@harrysarson])
+
+[#3266]: https://github.com/mochajs/mocha/pull/3266
+[#3011]: https://github.com/mochajs/mocha/issues/3011
+
+[@anishkny]: https://github.com/anishkny
+[@harrysarson]: https://github.com/harrysarson
+
 # 5.0.2 / 2018-03-05
 
 This release fixes a class of tests which report as *false positives*.  **Certain tests will now break**, though they would have previously been reported as passing.  Details below.  Sorry for the inconvenience!
