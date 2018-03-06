@@ -51,17 +51,17 @@ describe('skipped suite w/ callback', function () {
   });
 });
 
-describe('suite with erroneous async callback', function () {
+describe('suite returning a value', function () {
   this.timeout(2000);
-  it('should throw an error for suite callback returning promise', function (done) {
-    run('suite/suite-async-callback.fixture.js', args, function (err, res) {
+  it('should give a deprecation warning for suite callback returning a value', function (done) {
+    run('suite/suite-returning-value.fixture.js', args, function (err, res) {
       if (err) {
         done(err);
         return;
       }
-      var pattern = new RegExp('Error', 'g');
+      var pattern = new RegExp('DeprecationWarning', 'g');
       var result = res.output.match(pattern) || [];
-      assert.equal(result.length, 2);
+      assert.equal(result.length, 1);
       done();
     });
   });
