@@ -1,14 +1,8 @@
-# trust dist provides a modern build chain (as opposed to 'precise' dist)
+# trusty dist provides a modern build chain (as opposed to 'precise' dist)
 # which absolves us from having to install compilers and stuff
 dist: trusty
 
 language: node_js
-
-env:
-  global:
-    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-    # rate-limiting.  pull it from this sketchy site in China instead.
-    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
 
 matrix:
   fast_finish: true
