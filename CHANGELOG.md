@@ -1,3 +1,40 @@
+# 5.0.2 / 2018-03-05
+
+This release fixes a class of tests which report as *false positives*.  **Certain tests will now break**, though they would have previously been reported as passing.  Details below.  Sorry for the inconvenience!
+
+## :bug: Fixes
+
+- [#3226]: Do not swallow errors that are thrown asynchronously from passing tests ([@boneskull]).  Example:
+
+  ```js
+  it('should actually fail, sorry!', function (done) {
+    // passing assertion
+    assert(true === true);
+
+    // test complete & is marked as passing
+    done();
+
+    // ...but something evil lurks within
+    setTimeout(() => {
+      throw new Error('chaos!');
+    }, 100);
+  });
+  ```
+
+  Previously to this version, Mocha would have *silently swallowed* the `chaos!` exception, and you wouldn't know.  Well, *now you know*.  Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
+
+  **Maintainers of external reporters**: *If* a test of this class is encountered, the `Runner` instance will emit the `end` event *twice*; you *may* need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
+- [#3093]: Fix stack trace reformatting problem ([@outsideris])
+
+## :nut_and_bolt Other
+
+- [#3248]: Update `browser-stdout` to v1.3.1 ([@honzajavorek])
+
+[#3248]: https://github.com/mochajs/mocha/issues/3248
+[#3226]: https://github.com/mochajs/mocha/issues/3226
+[#3093]: https://github.com/mochajs/mocha/issues/3093
+[@honzajavorek]: https://github.com/honzajavorek
+
 # 5.0.1 / 2018-02-07
 
 ...your garden-variety patch release.
