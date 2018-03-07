@@ -143,6 +143,8 @@ module.exports = config => {
       if (cfg.sauceLabs) {
         cfg.sauceLabs.testName = 'Unit Tests';
       }
+      cfg.files.push('test/browser/es6-promise.auto.min.js');
+      cfg.files.push('test/browser-specific/html-reporter.spec.js');
   }
 
   config.set(cfg);

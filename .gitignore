@@ -21,3 +21,4 @@ yarn.lock
 *_REMOTE_*
 docs/_site
 docs/_dist
+test/browser/es6-promise.auto.min.js
