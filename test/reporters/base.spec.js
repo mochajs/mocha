@@ -1,5 +1,7 @@
 'use strict';
 
+// comment to commit
+
 var assert = require('assert');
 
 var Base = require('../../lib/reporters/base');
