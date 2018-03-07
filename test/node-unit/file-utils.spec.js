@@ -105,6 +105,26 @@ describe('file utils', function () {
     });
   });
 
+  describe('.files', function () {
+    (symlinkSupported ? it : it.skip)('should return broken symlink file path', function () {
+      expect(utils.files(tmpDir, ['js']))
+        .to.contain(tmpFile('mocha-utils-link.js'))
+        .and.contain(tmpFile('mocha-utils.js'))
+        .and.have.length(2);
+
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to.be(true);
+
+      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
+
+      expect(existsSync(tmpFile('mocha-utils-link.js')))
+        .to.be(false);
+
+      expect(utils.files(tmpDir, ['js']))
+        .to.eql([tmpFile('mocha-utils-link.js')]);
+    });
+  });
+
   afterEach(removeTempDir);
 
   function makeTempDir () {
