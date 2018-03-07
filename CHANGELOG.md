@@ -1,3 +1,11 @@
+# 5.0.4 / 2018-03-07
+
+## :bug: Fixes
+
+- [#3265]: Fixes regression in "watch" functionality introduced in v5.0.2 ([@outsideris])
+
+[#3265]: https://github.com/mochajs/mocha/issues/3265
+
 # 5.0.3 / 2018-03-06
 
 This patch features a fix to address a potential "low severity" [ReDoS vulnerability](https://snyk.io/vuln/npm:diff:20180305) in the [diff](https://npm.im/diff) package (a dependency of Mocha).
