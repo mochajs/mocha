@@ -3,6 +3,8 @@
 var reporters = require('../../').reporters;
 var Doc = reporters.Doc;
 
+var runnerEvent = require('./helpers.js').runnerEvent;
+
 describe('Doc reporter', function () {
   var stdout;
   var stdoutWrite;
@@ -25,11 +27,7 @@ describe('Doc reporter', function () {
         title: expectedTitle
       };
       it('should log html with indents and expected title', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'suite') {
-            callback(suite);
-          }
-        };
+        runner.on = runner.once = runnerEvent('suite', 'suite', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -45,11 +43,7 @@ describe('Doc reporter', function () {
           title: unescapedTitle
         };
         expectedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'suite') {
-            callback(suite);
-          }
-        };
+        runner.on = runner.once = runnerEvent('suite', 'suite', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -65,11 +59,7 @@ describe('Doc reporter', function () {
         root: true
       };
       it('should not log any html', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'suite') {
-            callback(suite);
-          }
-        };
+        runner.on = runner.once = runnerEvent('suite', 'suite', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         expect(stdout).to.be.empty();
@@ -83,11 +73,7 @@ describe('Doc reporter', function () {
         root: false
       };
       it('should log expected html with indents', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'suite end') {
-            callback(suite);
-          }
-        };
+        runner.on = runner.once = runnerEvent('suite end', 'suite end', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -101,11 +87,7 @@ describe('Doc reporter', function () {
         root: true
       };
       it('should not log any html', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'suite end') {
-            callback(suite);
-          }
-        };
+        runner.on = runner.once = runnerEvent('suite end', 'suite end', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         expect(stdout).to.be.empty();
@@ -124,11 +106,7 @@ describe('Doc reporter', function () {
       }
     };
     it('should log html with indents and expected title and body', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -145,11 +123,7 @@ describe('Doc reporter', function () {
 
       var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
       var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -172,11 +146,7 @@ describe('Doc reporter', function () {
       }
     };
     it('should log html with indents and expected title, body and error', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test, expectedError);
-        }
-      };
+      runner.on = runner.once = runnerEvent('fail two args', 'fail', null, null, test, expectedError);
       Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -196,11 +166,7 @@ describe('Doc reporter', function () {
       var expectedEscapedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
       var expectedEscapedBody = '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
       var expectedEscapedError = '&#x3C;div&#x3E;' + expectedError + '&#x3C;/div&#x3E;';
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test, unescapedError);
-        }
-      };
+      runner.on = runner.once = runnerEvent('fail two args', 'fail', null, null, test, unescapedError);
       Doc.call(this, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [

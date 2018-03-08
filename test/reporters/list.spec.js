@@ -4,11 +4,15 @@ var reporters = require('../../').reporters;
 var List = reporters.List;
 var Base = reporters.Base;
 
+var runnerEvent = require('./helpers').runnerEvent;
+
 describe('List reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
   var useColors;
+  var expectedTitle = 'some title';
+  var expectedDuration = 100;
 
   beforeEach(function () {
     stdout = [];
@@ -27,20 +31,12 @@ describe('List reporter', function () {
 
   describe('on start and test', function () {
     it('should write expected new line and title to the console', function () {
-      var expectedTitle = 'some title';
       var test = {
         fullTitle: function () {
           return expectedTitle;
         }
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-        if (event === 'test') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('start test', 'start', 'test', null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -55,17 +51,12 @@ describe('List reporter', function () {
   });
   describe('on pending', function () {
     it('should write expected title to the console', function () {
-      var expectedTitle = 'some title';
       var test = {
         fullTitle: function () {
           return expectedTitle;
         }
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pending') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('pending test', 'pending', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -80,8 +71,6 @@ describe('List reporter', function () {
       Base.cursor.CR = function () {
         calledCursorCR = true;
       };
-      var expectedTitle = 'some title';
-      var expectedDuration = 100;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -89,11 +78,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -108,8 +93,6 @@ describe('List reporter', function () {
       Base.symbols.ok = expectedOkSymbol;
       var cachedCursor = Base.cursor;
       Base.cursor.CR = function () {};
-      var expectedTitle = 'some title';
-      var expectedDuration = 100;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -117,11 +100,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -139,8 +118,6 @@ describe('List reporter', function () {
       Base.cursor.CR = function () {
         calledCursorCR = true;
       };
-      var expectedTitle = 'some title';
-      var expectedDuration = 100;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -148,11 +125,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -165,8 +138,6 @@ describe('List reporter', function () {
       var cachedCursor = Base.cursor;
       var expectedErrorCount = 1;
       Base.cursor.CR = function () {};
-      var expectedTitle = 'some title';
-      var expectedDuration = 100;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -174,16 +145,7 @@ describe('List reporter', function () {
         duration: expectedDuration,
         slow: function () {}
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test);
-        }
-      };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -219,11 +181,7 @@ describe('List reporter', function () {
   describe('on end', function () {
     it('should call epilogue', function () {
       var calledEpilogue = false;
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner.on = runner.once = runnerEvent('end', 'end');
       List.call({
         epilogue: function () {
           calledEpilogue = true;

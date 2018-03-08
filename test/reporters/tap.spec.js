@@ -3,10 +3,14 @@
 var reporters = require('../../').reporters;
 var TAP = reporters.TAP;
 
+var runnerEvent = require('./helpers').runnerEvent;
+
 describe('TAP reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
+  var expectedTitle = 'some title';
+  var countAfterTestEnd = 2;
 
   beforeEach(function () {
     stdout = [];
@@ -22,11 +26,7 @@ describe('TAP reporter', function () {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
       var expectedString;
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner.on = runner.once = runnerEvent('start', 'start');
       runner.suite = expectedSuite;
       runner.grepTotal = function (string) {
         expectedString = string;
@@ -46,8 +46,6 @@ describe('TAP reporter', function () {
 
   describe('on pending', function () {
     it('should write expected message including count and title', function () {
-      var expectedTitle = 'some title';
-      var countAfterTestEnd = 2;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -74,8 +72,6 @@ describe('TAP reporter', function () {
 
   describe('on pass', function () {
     it('should write expected message including count and title', function () {
-      var expectedTitle = 'some title';
-      var countAfterTestEnd = 2;
       var test = {
         fullTitle: function () {
           return expectedTitle;
@@ -104,8 +100,6 @@ describe('TAP reporter', function () {
   describe('on fail', function () {
     describe('if there is an error stack', function () {
       it('should write expected message and stack', function () {
-        var expectedTitle = 'some title';
-        var countAfterTestEnd = 2;
         var expectedStack = 'some stack';
         var test = {
           fullTitle: function () {
@@ -139,8 +133,6 @@ describe('TAP reporter', function () {
     });
     describe('if there is no error stack', function () {
       it('should write expected message only', function () {
-        var expectedTitle = 'some title';
-        var countAfterTestEnd = 2;
         var test = {
           fullTitle: function () {
             return expectedTitle;
@@ -172,7 +164,6 @@ describe('TAP reporter', function () {
 
   describe('on end', function () {
     it('should write total tests, passes and failures', function () {
-      var expectedTitle = 'some title';
       var numberOfPasses = 1;
       var numberOfFails = 1;
       var test = {
