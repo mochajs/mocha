@@ -52,7 +52,7 @@ This release fixes a class of tests which report as *false positives*.  **Certai
   **Maintainers of external reporters**: *If* a test of this class is encountered, the `Runner` instance will emit the `end` event *twice*; you *may* need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
 - [#3093]: Fix stack trace reformatting problem ([@outsideris])
 
-## :nut_and_bolt Other
+## :nut_and_bolt: Other
 
 - [#3248]: Update `browser-stdout` to v1.3.1 ([@honzajavorek])
 
