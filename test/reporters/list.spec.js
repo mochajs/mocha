@@ -13,7 +13,13 @@ describe('List reporter', function () {
   var useColors;
   var expectedTitle = 'some title';
   var expectedDuration = 100;
-
+  var test = {
+    fullTitle: function () {
+      return expectedTitle;
+    },
+    duration: expectedDuration,
+    slow: function () {}
+  };
   beforeEach(function () {
     stdout = [];
     runner = {};
@@ -31,11 +37,6 @@ describe('List reporter', function () {
 
   describe('on start and test', function () {
     it('should write expected new line and title to the console', function () {
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        }
-      };
       runner.on = runner.once = runnerEvent('start test', 'start', 'test', null, test);
       List.call({epilogue: function () {}}, runner);
 
@@ -51,11 +52,6 @@ describe('List reporter', function () {
   });
   describe('on pending', function () {
     it('should write expected title to the console', function () {
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        }
-      };
       runner.on = runner.once = runnerEvent('pending test', 'pending', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
@@ -70,13 +66,6 @@ describe('List reporter', function () {
       var cachedCursor = Base.cursor;
       Base.cursor.CR = function () {
         calledCursorCR = true;
-      };
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        duration: expectedDuration,
-        slow: function () {}
       };
       runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
@@ -93,13 +82,6 @@ describe('List reporter', function () {
       Base.symbols.ok = expectedOkSymbol;
       var cachedCursor = Base.cursor;
       Base.cursor.CR = function () {};
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        duration: expectedDuration,
-        slow: function () {}
-      };
       runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
@@ -118,13 +100,6 @@ describe('List reporter', function () {
       Base.cursor.CR = function () {
         calledCursorCR = true;
       };
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        duration: expectedDuration,
-        slow: function () {}
-      };
       runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
@@ -138,13 +113,6 @@ describe('List reporter', function () {
       var cachedCursor = Base.cursor;
       var expectedErrorCount = 1;
       Base.cursor.CR = function () {};
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        duration: expectedDuration,
-        slow: function () {}
-      };
       runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
@@ -157,9 +125,9 @@ describe('List reporter', function () {
     it('should immediately construct fail strings', function () {
       var actual = { a: 'actual' };
       var expected = { a: 'expected' };
-      var test = {};
       var checked = false;
       var err;
+      test = {};
       runner.on = runner.once = function (event, callback) {
         if (!checked && event === 'fail') {
           err = new Error('fake failure object with actual/expected');
