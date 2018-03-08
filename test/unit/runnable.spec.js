@@ -466,14 +466,15 @@ describe('Runnable(title, fn)', function () {
           then: function () { }
         };
 
-        it('should give the timeout error', function (done) {
+        it('should throw the timeout error', function (done) {
           var test = new Runnable('foo', function () {
             return foreverPendingPromise;
           });
+          test.file = '/some/path';
 
           test.timeout(10);
           test.run(function (err) {
-            expect(err).to.be.ok();
+            expect(err.message).to.match(/Timeout of 10ms exceeded.*\(\/some\/path\)$/);
             done();
           });
         });
