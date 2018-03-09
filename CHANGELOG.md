@@ -87,10 +87,10 @@ Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued suppor
 [#3119]: https://github.com/mochajs/mocha/issues/3119
 [#3132]: https://github.com/mochajs/mocha/issues/3132
 [#3098]: https://github.com/mochajs/mocha/issues/3098
-[#3212]: https://github.com/mochajs/mocha/pulls/3212
-[#3205]: https://github.com/mochajs/mocha/pulls/3205
-[#3224]: https://github.com/mochajs/mocha/pulls/3224
-[#3230]: https://github.com/mochajs/mocha/pulls/3230
+[#3212]: https://github.com/mochajs/mocha/pull/3212
+[#3205]: https://github.com/mochajs/mocha/pull/3205
+[#3224]: https://github.com/mochajs/mocha/pull/3224
+[#3230]: https://github.com/mochajs/mocha/pull/3230
 [@silviom]: https://github.com/silviom
 [@outsideris]: https://github.com/outsideris
 [@ArtemGovorov]: https://github.com/ArtemGovorov
@@ -350,9 +350,9 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 - Various CI-and-test-related fixes and improvements ([@boneskull], [@dasilvacontin], [@PopradiArpad], [@Munter], [@ScottFreeCode])
 - "Officially" support Node.js 8 ([@elergy])
 
-[#2860]: https://github.com/mochajs/mocha/pulls/2860
-[#2696]: https://github.com/mochajs/mocha/pulls/2696
-[#2813]: https://github.com/mochajs/mocha/pulls/2813
+[#2860]: https://github.com/mochajs/mocha/pull/2860
+[#2696]: https://github.com/mochajs/mocha/pull/2696
+[#2813]: https://github.com/mochajs/mocha/pull/2813
 [@charlierudolph]: https://github.com/charlierudolph
 [@PopradiArpad]: https://github.com/PopradiArpad
 [@kungapal]: https://github.com/kungapal
@@ -374,7 +374,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
-[#2778]: https://github.com/mochajs/mocha/pulls/2778
+[#2778]: https://github.com/mochajs/mocha/pull/2778
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 
