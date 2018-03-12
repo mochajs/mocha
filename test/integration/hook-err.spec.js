@@ -43,7 +43,7 @@ describe('hook error handling', function () {
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['test 1', 'test 2', 'after', bang + 'test 3']
+        ['test 1', 'test 2', 'after', bang + 'test 3', 'test 4', 'after 1', bang + 'after 2']
       );
     });
   });
@@ -53,7 +53,7 @@ describe('hook error handling', function () {
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['test 1', 'after', bang + 'test 3']
+        ['test 1', 'after', bang + 'test 3', 'test 4', 'after each 1', bang + 'after each 2']
       );
     });
   });
@@ -131,7 +131,7 @@ describe('hook error handling', function () {
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['test 1', 'test 2', 'after', bang + 'test 3']
+        ['test 1', 'test 2', 'after', bang + 'test 3', 'test 4', 'after 1', bang + 'after 2']
       );
     });
   });
@@ -141,7 +141,7 @@ describe('hook error handling', function () {
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['test 1', 'after', bang + 'test 3']
+        ['test 1', 'after', bang + 'test 3', 'test 4', 'after each 1', bang + 'after each 2']
       );
     });
   });
