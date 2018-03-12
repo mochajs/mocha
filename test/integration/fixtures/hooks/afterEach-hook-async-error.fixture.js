@@ -19,3 +19,18 @@ describe('spec 2', function () {
     console.log('test 3');
   });
 });
+describe('spec 3', function () {
+  afterEach(function (done) {
+    console.log('after each 1');
+    process.nextTick(function () {
+      throw new Error('after each hook error');
+    });
+  });
+  afterEach(function (done) {
+    console.log('after each 2');
+    done();
+  });
+  it('should call all after each hooks also if one fails', function () {
+    console.log('test 4');
+  });
+});
