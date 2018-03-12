@@ -16,7 +16,7 @@ describe('uncaught exceptions', function () {
       assert.equal(res.stats.failures, 1);
 
       assert.equal(res.failures[0].fullTitle,
-        'uncaught "before each" hook');
+        'uncaught "before each" hook for "test"');
       assert.equal(res.code, 1);
       done();
     });
