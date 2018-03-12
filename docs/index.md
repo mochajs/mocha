@@ -418,8 +418,7 @@ describe('Array', function() {
   });
 });
 ```
-
-Pending tests will be reported as such.
+Such incomplete tests will still be included in the test results but as a pending test and not as a failure.
 
 ## Exclusive Tests
 
