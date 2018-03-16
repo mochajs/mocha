@@ -14,7 +14,15 @@ function runnerEvent (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         callback();
       }
     };
-  } else if (runStr === 'pending test' || runStr === 'pass' || runStr === 'fail' || runStr === 'end' || runStr === 'suite' || runStr === 'suite end' || runStr === 'test end') {
+  } else if (
+    runStr === 'pending test' ||
+    runStr === 'pass' ||
+    runStr === 'fail' ||
+    runStr === 'end' ||
+    runStr === 'suite' ||
+    runStr === 'suite end' ||
+    runStr === 'test end'
+  ) {
     test = arg1;
     return function (event, callback) {
       if (event === ifStr1) {
@@ -106,13 +114,23 @@ function createElements (argObj) {
   return res;
 }
 
-function makeExpectedTest (expectedTitle, expectedFullTitle, expectedDuration, currentRetry, expectedBody) {
+function makeExpectedTest (
+  expectedTitle,
+  expectedFullTitle,
+  expectedDuration,
+  currentRetry,
+  expectedBody
+) {
   return {
     title: expectedTitle,
-    fullTitle: function () { return expectedFullTitle; },
+    fullTitle: function () {
+      return expectedFullTitle;
+    },
     duration: expectedDuration,
-    currentRetry: function () { return currentRetry; },
-    slow: function () { }
+    currentRetry: function () {
+      return currentRetry;
+    },
+    slow: function () {}
   };
 }
 
