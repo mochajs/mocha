@@ -11,6 +11,7 @@ describe('TAP reporter', function () {
   var runner;
   var expectedTitle = 'some title';
   var countAfterTestEnd = 2;
+  var test;
 
   beforeEach(function () {
     stdout = [];
@@ -18,6 +19,12 @@ describe('TAP reporter', function () {
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
+    };
+    test = {
+      fullTitle: function () {
+        return expectedTitle;
+      },
+      slow: function () {}
     };
   });
 
@@ -46,19 +53,12 @@ describe('TAP reporter', function () {
 
   describe('on pending', function () {
     it('should write expected message including count and title', function () {
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        }
-      };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'test end') {
-          callback();
-        }
-        if (event === 'pending') {
-          callback(test);
-        }
-      };
+      // var test = {
+      //   fullTitle: function () {
+      //     return expectedTitle;
+      //   }
+      // };
+      runner.on = runner.once = runnerEvent('start test', 'test end', 'pending', null, test);
       runner.suite = '';
       runner.grepTotal = function () { };
       TAP.call({}, runner);
@@ -72,20 +72,8 @@ describe('TAP reporter', function () {
 
   describe('on pass', function () {
     it('should write expected message including count and title', function () {
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        slow: function () {}
-      };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'test end') {
-          callback();
-        }
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('start test', 'test end', 'pass', null, test);
+
       runner.suite = '';
       runner.grepTotal = function () { };
       TAP.call({}, runner);
@@ -101,23 +89,10 @@ describe('TAP reporter', function () {
     describe('if there is an error stack', function () {
       it('should write expected message and stack', function () {
         var expectedStack = 'some stack';
-        var test = {
-          fullTitle: function () {
-            return expectedTitle;
-          },
-          slow: function () {}
-        };
         var error = {
           stack: expectedStack
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'test end') {
-            callback();
-          }
-          if (event === 'fail') {
-            callback(test, error);
-          }
-        };
+        runner.on = runner.once = runnerEvent('test end fail', 'test end', 'fail', null, test, error);
         runner.suite = '';
         runner.grepTotal = function () { };
         TAP.call({}, runner);
@@ -133,12 +108,6 @@ describe('TAP reporter', function () {
     });
     describe('if there is no error stack', function () {
       it('should write expected message only', function () {
-        var test = {
-          fullTitle: function () {
-            return expectedTitle;
-          },
-          slow: function () {}
-        };
         var error = {};
         runner.on = runner.once = function (event, callback) {
           if (event === 'test end') {
@@ -166,23 +135,7 @@ describe('TAP reporter', function () {
     it('should write total tests, passes and failures', function () {
       var numberOfPasses = 1;
       var numberOfFails = 1;
-      var test = {
-        fullTitle: function () {
-          return expectedTitle;
-        },
-        slow: function () {}
-      };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test, {});
-        }
-        if (event === 'end') {
-          callback(test);
-        }
-        if (event === 'pass') {
-          callback(test);
-        }
-      };
+      runner.on = runner.once = runnerEvent('fail end pass', 'fail', 'end', 'pass', test);
       runner.suite = '';
       runner.grepTotal = function () { };
       TAP.call({}, runner);

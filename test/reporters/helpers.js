@@ -53,13 +53,37 @@ function runnerEvent (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       }
     };
   } else if (runStr === 'pass end') {
-    var expectedTest = arg1;
+    test = arg1;
     return function (event, callback) {
       if (event === ifStr1) {
-        callback(expectedTest);
+        callback(test);
       }
       if (event === ifStr2) {
         callback();
+      }
+    };
+  } else if (runStr === 'test end fail') {
+    test = arg1;
+    var error = arg2;
+    return function (event, callback) {
+      if (event === ifStr1) {
+        callback();
+      }
+      if (event === ifStr2) {
+        callback(test, error);
+      }
+    };
+  } else if (runStr === 'fail end pass') {
+    return function (event, callback) {
+      test = arg1;
+      if (event === ifStr1) {
+        callback(test, {});
+      }
+      if (event === ifStr2) {
+        callback(test);
+      }
+      if (event === ifStr3) {
+        callback(test);
       }
     };
   }
@@ -82,7 +106,7 @@ function createElements (argObj) {
   return res;
 }
 
-function makeExpectedTest (expectedTitle, expectedFullTitle, expectedDuration, currentRetry) {
+function makeExpectedTest (expectedTitle, expectedFullTitle, expectedDuration, currentRetry, expectedBody) {
   return {
     title: expectedTitle,
     fullTitle: function () { return expectedFullTitle; },
