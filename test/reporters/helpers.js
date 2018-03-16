@@ -95,7 +95,7 @@ function runnerEvent (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       }
     };
   } else {
-    throw new Error('This function does not support the runner string specified.')
+    throw new Error('This function does not support the runner string specified.');
   }
 }
 
