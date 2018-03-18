@@ -3,7 +3,7 @@
 var reporters = require('../../').reporters;
 var Markdown = reporters.Markdown;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Markdown reporter', function () {
   var stdout;
@@ -15,7 +15,6 @@ describe('Markdown reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -33,7 +32,7 @@ describe('Markdown reporter', function () {
           suites: []
         }]
       };
-      runner.on = runner.once = runnerEvent('suite suite end', 'suite', 'suite end', 'end', expectedSuite);
+      runner = createMockRunner('suite suite end', 'suite', 'suite end', 'end', expectedSuite);
       runner.suite = expectedSuite;
       Markdown.call({}, runner);
       process.stdout.write = stdoutWrite;
@@ -65,7 +64,7 @@ describe('Markdown reporter', function () {
         slow: function () {},
         body: expectedBody
       };
-      runner.on = runner.once = runnerEvent('pass end', 'pass', 'end', null, expectedTest);
+      runner = createMockRunner('pass end', 'pass', 'end', null, expectedTest);
       runner.suite = expectedSuite;
       Markdown.call({}, runner);
       process.stdout.write = stdoutWrite;

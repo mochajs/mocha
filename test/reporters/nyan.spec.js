@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Nyan reporter', function () {
   describe('events', function () {
@@ -15,7 +15,6 @@ describe('Nyan reporter', function () {
 
     beforeEach(function () {
       stdout = [];
-      runner = {};
       stdoutWrite = process.stdout.write;
       process.stdout.write = function (string) {
         stdout.push(string);
@@ -25,7 +24,7 @@ describe('Nyan reporter', function () {
     describe('on start', function () {
       it('should call draw', function () {
         calledDraw = false;
-        runner.on = runner.once = runnerEvent('start', 'start');
+        runner = createMockRunner('start', 'start');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -40,7 +39,7 @@ describe('Nyan reporter', function () {
     describe('on pending', function () {
       it('should call draw', function () {
         calledDraw = false;
-        runner.on = runner.once = runnerEvent('pending', 'pending');
+        runner = createMockRunner('pending', 'pending');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -59,7 +58,7 @@ describe('Nyan reporter', function () {
           duration: '',
           slow: function () {}
         };
-        runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+        runner = createMockRunner('pass', 'pass', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -77,7 +76,7 @@ describe('Nyan reporter', function () {
         var test = {
           err: ''
         };
-        runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+        runner = createMockRunner('fail', 'fail', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -92,7 +91,7 @@ describe('Nyan reporter', function () {
     describe('on end', function () {
       it('should call epilogue', function () {
         var calledEpilogue = false;
-        runner.on = runner.once = runnerEvent('end', 'end');
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -106,7 +105,7 @@ describe('Nyan reporter', function () {
       });
       it('should write numberOfLines amount of new lines', function () {
         var expectedNumberOfLines = 4;
-        runner.on = runner.once = runnerEvent('end', 'end');
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -124,7 +123,7 @@ describe('Nyan reporter', function () {
         Base.cursor.show = function () {
           showCalled = true;
         };
-        runner.on = runner.once = runnerEvent('end', 'end');
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},

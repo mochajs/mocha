@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var Progress = reporters.Progress;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Progress reporter', function () {
   var stdout;
@@ -13,7 +13,6 @@ describe('Progress reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -27,7 +26,7 @@ describe('Progress reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       Progress.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -49,8 +48,8 @@ describe('Progress reporter', function () {
 
         var expectedTotal = 1;
         var expectedOptions = {};
+        runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        runner.on = runner.once = runnerEvent('test end', 'test end');
         Progress.call({}, runner, expectedOptions);
 
         process.stdout.write = stdoutWrite;
@@ -87,8 +86,8 @@ describe('Progress reporter', function () {
         var options = {
           reporterOptions: expectedOptions
         };
+        runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        runner.on = runner.once = runnerEvent('test end', 'test end');
         Progress.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
@@ -116,7 +115,7 @@ describe('Progress reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
       var calledEpilogue = false;
       Progress.call({
         epilogue: function () {

@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var Spec = reporters.Spec;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Spec reporter', function () {
   var stdout;
@@ -15,7 +15,6 @@ describe('Spec reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -33,7 +32,7 @@ describe('Spec reporter', function () {
       var suite = {
         title: expectedTitle
       };
-      runner.on = runner.once = runnerEvent('suite', 'suite', null, null, suite);
+      runner = createMockRunner('suite', 'suite', null, null, suite);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -47,7 +46,7 @@ describe('Spec reporter', function () {
       var suite = {
         title: expectedTitle
       };
-      runner.on = runner.once = runnerEvent('pending test', 'pending', null, null, suite);
+      runner = createMockRunner('pending test', 'pending', null, null, suite);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -65,11 +64,7 @@ describe('Spec reporter', function () {
           duration: expectedDuration,
           slow: function () { return 1; }
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pass') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + ' (' + expectedDuration + 'ms)' + '\n';
@@ -84,11 +79,7 @@ describe('Spec reporter', function () {
           duration: expectedDuration,
           slow: function () { return 2; }
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pass') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
@@ -102,7 +93,7 @@ describe('Spec reporter', function () {
       var test = {
         title: expectedTitle
       };
-      runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+      runner = createMockRunner('fail', 'fail', null, null, test);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [

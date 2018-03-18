@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var Landing = reporters.Landing;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Landing reporter', function () {
   var stdout;
@@ -26,7 +26,6 @@ describe('Landing reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -46,7 +45,7 @@ describe('Landing reporter', function () {
     it('should write new lines', function () {
       var cachedCursor = Base.cursor;
       Base.cursor.hide = function () {};
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -61,7 +60,7 @@ describe('Landing reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -77,7 +76,7 @@ describe('Landing reporter', function () {
         var test = {
           state: 'failed'
         };
-        runner.on = runner.once = runnerEvent('test end', 'test end', null, null, test);
+        runner = createMockRunner('test end', 'test end', null, null, test);
         runner.total = 12;
         Landing.call({}, runner);
 
@@ -91,7 +90,7 @@ describe('Landing reporter', function () {
         var test = {
           state: 'success'
         };
-        runner.on = runner.once = runnerEvent('test end', 'test end', null, null, test);
+        runner = createMockRunner('test end', 'test end', null, null, test);
 
         Landing.call({}, runner);
 
@@ -108,7 +107,7 @@ describe('Landing reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
 
       var calledEpilogue = false;
       Landing.call({

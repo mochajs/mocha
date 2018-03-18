@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var List = reporters.List;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('List reporter', function () {
   var stdout;
@@ -22,7 +22,6 @@ describe('List reporter', function () {
   };
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -37,7 +36,7 @@ describe('List reporter', function () {
 
   describe('on start and test', function () {
     it('should write expected new line and title to the console', function () {
-      runner.on = runner.once = runnerEvent('start test', 'start', 'test', null, test);
+      runner = createMockRunner('start test', 'start', 'test', null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -52,7 +51,7 @@ describe('List reporter', function () {
   });
   describe('on pending', function () {
     it('should write expected title to the console', function () {
-      runner.on = runner.once = runnerEvent('pending test', 'pending', null, null, test);
+      runner = createMockRunner('pending test', 'pending', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -67,7 +66,7 @@ describe('List reporter', function () {
       Base.cursor.CR = function () {
         calledCursorCR = true;
       };
-      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+      runner = createMockRunner('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -82,7 +81,7 @@ describe('List reporter', function () {
       Base.symbols.ok = expectedOkSymbol;
       var cachedCursor = Base.cursor;
       Base.cursor.CR = function () {};
-      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+      runner = createMockRunner('pass', 'pass', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -100,7 +99,7 @@ describe('List reporter', function () {
       Base.cursor.CR = function () {
         calledCursorCR = true;
       };
-      runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+      runner = createMockRunner('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -113,7 +112,7 @@ describe('List reporter', function () {
       var cachedCursor = Base.cursor;
       var expectedErrorCount = 1;
       Base.cursor.CR = function () {};
-      runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+      runner = createMockRunner('fail', 'fail', null, null, test);
       List.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -149,7 +148,7 @@ describe('List reporter', function () {
   describe('on end', function () {
     it('should call epilogue', function () {
       var calledEpilogue = false;
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
       List.call({
         epilogue: function () {
           calledEpilogue = true;

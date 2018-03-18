@@ -3,7 +3,7 @@
 var reporters = require('../../').reporters;
 var Min = reporters.Min;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('Min reporter', function () {
   var stdout;
@@ -12,7 +12,6 @@ describe('Min reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -21,7 +20,7 @@ describe('Min reporter', function () {
 
   describe('on start', function () {
     it('should clear screen then set cursor position', function () {
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       Min.call({epilogue: function () {}}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -36,7 +35,7 @@ describe('Min reporter', function () {
   describe('on end', function () {
     it('should call epilogue', function () {
       var calledEpilogue = false;
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
       Min.call({
         epilogue: function () {
           calledEpilogue = true;

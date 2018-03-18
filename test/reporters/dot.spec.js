@@ -4,7 +4,7 @@ var reporters = require('../../').reporters;
 var Dot = reporters.Dot;
 var Base = reporters.Base;
 
-var runnerEvent = require('./helpers.js').runnerEvent;
+var createMockRunner = require('./helpers.js').createMockRunner;
 
 describe('Dot reporter', function () {
   var stdout;
@@ -15,7 +15,6 @@ describe('Dot reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -33,7 +32,7 @@ describe('Dot reporter', function () {
 
   describe('on start', function () {
     it('should return a new line', function () {
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       Dot.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -48,7 +47,7 @@ describe('Dot reporter', function () {
         Base.window.width = 2;
       });
       it('should return a new line and then a coma', function () {
-        runner.on = runner.once = runnerEvent('pending', 'pending');
+        runner = createMockRunner('pending', 'pending');
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -60,7 +59,7 @@ describe('Dot reporter', function () {
     });
     describe('if window width is equal to or less than 1', function () {
       it('should return a coma', function () {
-        runner.on = runner.once = runnerEvent('pending', 'pending');
+        runner = createMockRunner('pending', 'pending');
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -81,7 +80,7 @@ describe('Dot reporter', function () {
       });
       describe('if test speed is fast', function () {
         it('should return a new line and then a dot', function () {
-          runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -95,7 +94,7 @@ describe('Dot reporter', function () {
     describe('if window width is equal to or less than 1', function () {
       describe('if test speed is fast', function () {
         it('should return a dot', function () {
-          runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -107,7 +106,7 @@ describe('Dot reporter', function () {
       describe('if test speed is slow', function () {
         it('should return a dot', function () {
           test.duration = 2;
-          runner.on = runner.once = runnerEvent('pass', 'pass', null, null, test);
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -129,7 +128,7 @@ describe('Dot reporter', function () {
         Base.window.width = 2;
       });
       it('should return a new line and then an exclamation mark', function () {
-        runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+        runner = createMockRunner('fail', 'fail', null, null, test);
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -141,7 +140,7 @@ describe('Dot reporter', function () {
     });
     describe('if window width is equal to or less than 1', function () {
       it('should return an exclamation mark', function () {
-        runner.on = runner.once = runnerEvent('fail', 'fail', null, null, test);
+        runner = createMockRunner('fail', 'fail', null, null, test);
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -153,7 +152,7 @@ describe('Dot reporter', function () {
   });
   describe('on end', function () {
     it('should call the epilogue', function () {
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
       var epilogueCalled = false;
       var epilogue = function () {
         epilogueCalled = true;

@@ -3,7 +3,7 @@
 var reporters = require('../../').reporters;
 var JSONStream = reporters.JSONStream;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 var makeExpectedTest = require('./helpers').makeExpectedTest;
 
 describe('Json Stream reporter', function () {
@@ -11,38 +11,28 @@ describe('Json Stream reporter', function () {
   var stdout;
   var stdoutWrite;
 
-  var expectedTitle;
-  var expectedFullTitle;
-  var expectedDuration;
-  var currentRetry;
-  var expectedTest;
-  var expectedErrorMessage;
-  var expectedErrorStack;
-  var expectedError;
+  var expectedTitle = 'some title';
+  var expectedFullTitle = 'full title';
+  var expectedDuration = 1000;
+  var currentRetry = 1;
+  var expectedTest = makeExpectedTest(expectedTitle, expectedFullTitle, expectedDuration, currentRetry);
+  var expectedErrorMessage = 'error message';
+  var expectedErrorStack = 'error stack';
+  var expectedError = {
+    message: expectedErrorMessage
+  };
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
-    };
-
-    expectedTitle = 'some title';
-    expectedFullTitle = 'full title';
-    expectedDuration = 1000;
-    currentRetry = 1;
-    expectedTest = makeExpectedTest(expectedTitle, expectedFullTitle, expectedDuration, currentRetry);
-    expectedErrorMessage = 'error message';
-    expectedErrorStack = 'error stack';
-    expectedError = {
-      message: expectedErrorMessage
     };
   });
 
   describe('on start', function () {
     it('should write stringified start with expected total', function () {
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       var expectedTotal = 12;
       runner.total = expectedTotal;
       JSONStream.call({}, runner);
@@ -55,7 +45,7 @@ describe('Json Stream reporter', function () {
 
   describe('on pass', function () {
     it('should write stringified test data', function () {
-      runner.on = runner.once = runnerEvent('pass', 'pass', null, null, expectedTest);
+      runner = createMockRunner('pass', 'pass', null, null, expectedTest);
       JSONStream.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -68,7 +58,7 @@ describe('Json Stream reporter', function () {
     describe('if error stack exists', function () {
       it('should write stringified test data with error data', function () {
         expectedError.stack = expectedErrorStack;
-        runner.on = runner.once = runnerEvent('fail two args', 'fail', null, null, expectedTest, expectedError);
+        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
 
         JSONStream.call({}, runner);
 
@@ -81,7 +71,7 @@ describe('Json Stream reporter', function () {
     describe('if error stack does not exist', function () {
       it('should write stringified test data with error data', function () {
         expectedError.stack = null;
-        runner.on = runner.once = runnerEvent('fail two args', 'fail', null, null, expectedTest, expectedError);
+        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
 
         JSONStream.call({}, runner);
         process.stdout.write = stdoutWrite;
@@ -93,7 +83,7 @@ describe('Json Stream reporter', function () {
 
   describe('on end', function () {
     it('should write end details', function () {
-      runner.on = runner.once = runnerEvent('end', 'end');
+      runner = createMockRunner('end', 'end');
       JSONStream.call({}, runner);
       process.stdout.write = stdoutWrite;
       expect(stdout[0]).to.match(/end/);

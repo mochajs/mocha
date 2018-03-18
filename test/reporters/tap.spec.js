@@ -3,7 +3,7 @@
 var reporters = require('../../').reporters;
 var TAP = reporters.TAP;
 
-var runnerEvent = require('./helpers').runnerEvent;
+var createMockRunner = require('./helpers').createMockRunner;
 
 describe('TAP reporter', function () {
   var stdout;
@@ -15,7 +15,6 @@ describe('TAP reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -33,7 +32,7 @@ describe('TAP reporter', function () {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
       var expectedString;
-      runner.on = runner.once = runnerEvent('start', 'start');
+      runner = createMockRunner('start', 'start');
       runner.suite = expectedSuite;
       runner.grepTotal = function (string) {
         expectedString = string;
@@ -53,12 +52,7 @@ describe('TAP reporter', function () {
 
   describe('on pending', function () {
     it('should write expected message including count and title', function () {
-      // var test = {
-      //   fullTitle: function () {
-      //     return expectedTitle;
-      //   }
-      // };
-      runner.on = runner.once = runnerEvent('start test', 'test end', 'pending', null, test);
+      runner = createMockRunner('start test', 'test end', 'pending', null, test);
       runner.suite = '';
       runner.grepTotal = function () { };
       TAP.call({}, runner);
@@ -72,7 +66,7 @@ describe('TAP reporter', function () {
 
   describe('on pass', function () {
     it('should write expected message including count and title', function () {
-      runner.on = runner.once = runnerEvent('start test', 'test end', 'pass', null, test);
+      runner = createMockRunner('start test', 'test end', 'pass', null, test);
 
       runner.suite = '';
       runner.grepTotal = function () { };
@@ -92,7 +86,7 @@ describe('TAP reporter', function () {
         var error = {
           stack: expectedStack
         };
-        runner.on = runner.once = runnerEvent('test end fail', 'test end', 'fail', null, test, error);
+        runner = createMockRunner('test end fail', 'test end', 'fail', null, test, error);
         runner.suite = '';
         runner.grepTotal = function () { };
         TAP.call({}, runner);
@@ -135,7 +129,7 @@ describe('TAP reporter', function () {
     it('should write total tests, passes and failures', function () {
       var numberOfPasses = 1;
       var numberOfFails = 1;
-      runner.on = runner.once = runnerEvent('fail end pass', 'fail', 'end', 'pass', test);
+      runner = createMockRunner('fail end pass', 'fail', 'end', 'pass', test);
       runner.suite = '';
       runner.grepTotal = function () { };
       TAP.call({}, runner);
