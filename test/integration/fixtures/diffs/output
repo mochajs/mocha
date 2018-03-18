@@ -35,18 +35,6 @@
        seven eight nine
 
 // DIFF
-       1 |  1 |  {
-       2 |  2 |    "address": {
-       3 |  3 |      "city": "new york"
-       4 |    | -    "country": "us"
-         |  4 | +    "country": "usa"
-       5 |  5 |    }
-       6 |  6 |    "age": 30
-       7 |    | -  "name": "joe"
-         |  7 | +  "name": "joel"
-       8 |  8 |  }
-
-// DIFF
        one	tab
       -two		tabs
       +two			tabs

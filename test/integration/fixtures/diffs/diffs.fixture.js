@@ -51,26 +51,6 @@ describe('diffs', function () {
     expect(actual).to.eql(expected);
   });
 
-  it('should display a diff for entire object dumps', function () {
-    actual = {
-      name: 'joel',
-      age: 30,
-      address: {
-        city: 'new york',
-        country: 'usa'
-      }
-    };
-    expected = {
-      name: 'joe',
-      age: 30,
-      address: {
-        city: 'new york',
-        country: 'us'
-      }
-    };
-    expect(actual).to.eql(expected);
-  });
-
   it('should display a full-comparison with escaped special characters', function () {
     actual = 'one\ttab\ntwo\t\t\ttabs';
     expected = 'one\ttab\ntwo\t\ttabs';
