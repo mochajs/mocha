@@ -419,7 +419,7 @@ describe('Array', function() {
 });
 ```
 
-Such incomplete tests will still be included in the test results but as a pending test and not as a failure.
+Pending tests will be included in the test results, and marked as pending. A pending test is not considered a failed test.
 
 ## Exclusive Tests
 
