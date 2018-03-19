@@ -59,7 +59,7 @@ describe('suite returning a value', function () {
         done(err);
         return;
       }
-      var pattern = new RegExp('deprecated', 'g');
+      var pattern = new RegExp('Deprecation Warning', 'g');
       var result = res.output.match(pattern) || [];
       assert.equal(result.length, 1);
       done();
