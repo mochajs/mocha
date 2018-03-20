@@ -127,6 +127,7 @@ module.exports = config => {
     case 'bdd':
     case 'tdd':
     case 'qunit':
+    case 'classbdd':
       if (cfg.sauceLabs) {
         cfg.sauceLabs.testName = `Interface "${MOCHA_TEST}" Integration Tests`;
       }

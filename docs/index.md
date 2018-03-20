@@ -761,7 +761,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -r, --require <name>                    require the given module
     -s, --slow <ms>                         "slow" test threshold in milliseconds [75]
     -t, --timeout <ms>                      set test-case timeout in milliseconds [2000]
-    -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports)
+    -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports|classbdd)
     -w, --watch                             watch files for changes
     --check-leaks                           check for global variable leaks
     --full-trace                            display the full stack trace
@@ -917,7 +917,7 @@ describe('app', function() {
 
 ## Interfaces
 
-Mocha's "interface" system allows developers to choose their style of DSL.  Mocha has **BDD**, **TDD**, **Exports**, **QUnit** and **Require**-style interfaces.
+Mocha's "interface" system allows developers to choose their style of DSL.  Mocha has **BDD**, **TDD**, **Exports**, **QUnit**, **Require**, **ClassBDD**-style interfaces.
 
 ### BDD
 
@@ -951,6 +951,40 @@ The **BDD** interface provides `describe()`, `context()`, `it()`, `specify()`, `
       });
     });
   });
+```
+
+### ClassBDD
+
+The **ClassBDD** interface provides a way to implement tests using the same bdd style syntax but in a classed and less verbose fashion.
+
+The class represents the main suite and the methods represent the `itXXX()`, `before()`, `after()`, `beforeEach()`, and `afterEach()` corresponding to the BDD style.
+
+You can also specify `itSkipXXXX()` or `xitXXXXX` in order to skip a test, or `itOnlyXXXX()` to only execute and specific test.
+
+The suite will be named as the class name, or as the file in case of anonymous classes.
+
+```js
+  class ArraySuiteIndexOf {
+    before() {
+      // ...
+    };
+
+    itShouldNotThrowAnErrorWhenNotPresent() {
+      (function() {
+        [1,2,3].indexOf(4);
+      }).should.not.throw();
+    }
+
+    itShouldReturnMinus1WhenNotPresent() {
+      it('should return -1', function() {
+        [1,2,3].indexOf(4).should.equal(-1);
+      });
+    }
+
+    itShouldReturnTheIndexWhereTheElementFirstAppearsWhenPresent() {
+      [1,2,3].indexOf(3).should.equal(2);
+    }
+  }
 ```
 
 ### TDD

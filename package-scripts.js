@@ -50,6 +50,7 @@ module.exports = {
             'test.node.bdd',
             'test.node.tdd',
             'test.node.qunit',
+            'test.node.classbdd',
             'test.node.exports',
             'test.node.unit',
             'test.node.integration',
@@ -76,6 +77,10 @@ module.exports = {
         exports: {
           script: test('exports', '--ui exports test/interfaces/exports.spec'),
           description: 'Test Node exports interface'
+        },
+        classbdd: {
+          script: test('classbdd', '--ui classbdd test/interfaces/classbdd.spec'),
+          description: 'Test Node ClassBDD interface'
         },
         unit: {
           script: test('unit', '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'),
@@ -138,6 +143,10 @@ module.exports = {
             script: test('only-bdd', '--ui bdd test/only/bdd.spec'),
             description: 'Test .only() with BDD interface'
           },
+          classbdd: {
+            script: test('only-class-bdd', '--ui classbdd test/only/classbdd.spec'),
+            description: 'Test .only() with ClassBDD interface'
+          },
           tdd: {
             script: test('only-tdd', '--ui tdd test/only/tdd.spec'),
             description: 'Test .only() with TDD interface'
@@ -181,6 +190,10 @@ module.exports = {
         qunit: {
           script: 'MOCHA_TEST=qunit nps test.browser.unit',
           description: 'Test QUnit interface in browser'
+        },
+        classbdd: {
+          script: 'MOCHA_TEST=classbdd nps test.browser.classbdd',
+          description: 'Test ClassBDD interface in browser'
         },
         esm: {
           script: 'MOCHA_TEST=esm nps test.browser.unit',
