@@ -1,91 +1,78 @@
 // DIFF
-      -foo rar baz
-      +foo bar baz
+      -foo bar baz
+      +foo rar baz
 
 // DIFF
-       {
-         "age": 23
-      -  "name": "travis j"
-      +  "name": "travis"
-       }
+      1 | 1 |  {
+      2 | 2 |    "age": 23
+      3 |   | -  "name": "travis"
+        | 3 | +  "name": "travis j"
+      4 | 4 |  }
 
 // DIFF
-       foo bar baz
-      -foo rar baz
-      -foo bar raz
-      +foo bar baz
-      +foo bar baz
+      1 | 1 |  foo bar baz
+      2 |   | -foo bar baz
+      3 |   | -foo bar baz
+        | 2 | +foo rar baz
+        | 3 | +foo bar raz
 
 // DIFF
-       {
-         "address": {
-           "city": "new york"
-      -    "country": "usa"
-      +    "country": "us"
-         }
-         "age": 30
-      -  "name": "joel"
-      +  "name": "joe"
-       }
+       1 |  1 |  {
+       2 |  2 |    "address": {
+       3 |  3 |      "city": "new york"
+       4 |    | -    "country": "us"
+         |  4 | +    "country": "usa"
+       5 |  5 |    }
+       6 |  6 |    "age": 30
+       7 |    | -  "name": "joe"
+         |  7 | +  "name": "joel"
+       8 |  8 |  }
 
 // DIFF
        one two three
-      -four zzzz six
-      +four five six
+      -four five six
+      +four zzzz six
        seven eight nine
 
 // DIFF
-       {
-         "address": {
-           "city": "new york"
-      -    "country": "usa"
-      +    "country": "us"
-         }
-         "age": 30
-      -  "name": "joel"
-      +  "name": "joe"
-       }
-
-// DIFF
        one	tab
-      -two			tabs
-      +two		tabs
+      -two		tabs
+      +two			tabs
 
 // DIFF
-       body {
-         font: "Helvetica Neue", Helvetica, arial, sans-serif;
-         background: black;
-      -  color: white;
-      +  color: #fff;
-       }
-       
-       a {
-      -  color: blue
-      +  color: blue;
-       }
-      +
-      +foo {
-      +  bar: 'baz';
-      +}
+       1 |  1 |  body {
+       2 |  2 |    font: "Helvetica Neue", Helvetica, arial, sans-serif;
+       3 |  3 |    background: black;
+       4 |    | -  color: #fff;
+         |  4 | +  color: white;
+       5 |  5 |  }
+       6 |  6 |  
+       7 |  7 |  a {
+       8 |    | -  color: blue;
+         |  8 | +  color: blue
+       9 |  9 |  }
+      10 |    | -foo {
+      11 |    | -  bar: 'baz';
+      12 |    | -}
 
 // DIFF
-       {
-         "age": 2
-      -  "color": "white"
-      -  "name": "tobi"
-      +  "color": "brown"
-      +  "name": "loki"
-         "species": "ferret"
-       }
+      1 | 1 |  {
+      2 | 2 |    "age": 2
+      3 |   | -  "color": "brown"
+      4 |   | -  "name": "loki"
+        | 3 | +  "color": "white"
+        | 4 | +  "name": "tobi"
+      5 | 5 |    "species": "ferret"
+      6 | 6 |  }
 
 // DIFF
        {
          "a": 123
-      +  "b": 456
+      -  "b": 456
        }
 
 // DIFF
        [
-      -  1
-      +  2
+      -  2
+      +  1
        ]

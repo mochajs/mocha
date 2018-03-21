@@ -32,7 +32,6 @@ describe('diffs', function () {
     'should display a diff for medium strings',
     'should display a diff for entire object dumps',
     'should display a diff for multi-line strings',
-    'should display a diff for entire object dumps',
     'should display a full-comparison with escaped special characters',
     'should display a word diff for large strings',
     'should work with objects',
