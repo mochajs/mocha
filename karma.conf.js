@@ -55,7 +55,8 @@ module.exports = config => {
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
-        reporter: 'html'
+        reporter: 'html',
+        timeout: 500
       }
     },
     mochaReporter: {
