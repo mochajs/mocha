@@ -200,7 +200,7 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--trace-warnings', 'show stack traces on node process warnings')
   .option('--use_strict', 'enforce strict mode')
-  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
+  .option('--watch-extensions <ext>,...', 'specify extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
@@ -529,7 +529,7 @@ if (program.watch) {
     process.exit(130);
   });
 
-  const watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
+  const watchFiles = utils.files(cwd, program.watchExtensions);
   let runAgain = false;
 
   loadAndRun = () => {
