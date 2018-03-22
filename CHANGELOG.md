@@ -1,3 +1,37 @@
+# 5.0.5 / 2018-03-22
+
+Welcome [@outsideris] to the team!
+
+## :bug: Fixes
+
+- [#3096]: Fix `--bail` failing to bail within hooks ([@outsideris])
+- [#3184]: Don't skip too many suites (using `describe.skip()`) ([@outsideris])
+
+## :book: Documentation
+
+- [#3133]: Improve docs regarding "pending" behavior ([@ematicipo])
+- [#3276], [#3274]: Fix broken stuff in `CHANGELOG.md` ([@tagoro9], [@honzajavorek])
+
+## :nut_and_bolt: Other
+
+- [#3208]: Improve test coverage for AMD users ([@outsideris])
+- [#3267]: Remove vestiges of PhantomJS from CI ([@anishkny])
+- [#2952]: Fix a debug message ([@boneskull])
+
+[#3096]: https://github.com/mochajs/mocha/issues/3096
+[#3184]: https://github.com/mochajs/mocha/issues/3184
+[#3133]: https://github.com/mochajs/mocha/issues/3133
+[#3276]: https://github.com/mochajs/mocha/pull/3276
+[#3274]: https://github.com/mochajs/mocha/pull/3274
+[#3208]: https://github.com/mochajs/mocha/issues/3208
+[#2952]: https://github.com/mochajs/mocha/issues/2952
+[#3267]: https://github.com/mochajs/mocha/pull/3267
+
+[@ematicipo]: https://github.com/ematicipo
+[@tagoro9]: https://github.com/tagoro9
+[@honzajavorek]: https://github.com/honajavorek
+[@anishkny]: https://github.com/anishkny
+
 # 5.0.4 / 2018-03-07
 
 ## :bug: Fixes
