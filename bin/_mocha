@@ -143,8 +143,8 @@ const requires = [];
  */
 
 const images = {
-  fail: path.join(__dirname, '..', 'images', 'error.png'),
-  pass: path.join(__dirname, '..', 'images', 'ok.png')
+  fail: path.join(__dirname, '..', 'assets/growl', 'error.png'),
+  pass: path.join(__dirname, '..', 'assets/growl', 'ok.png')
 };
 
 // options
