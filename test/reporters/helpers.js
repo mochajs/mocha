@@ -4,7 +4,7 @@
   This function prevents the constant use of creating a runnerEvent.
   runStr is the argument that defines the runnerEvent.
   ifStr1 is one possible reporter argument, as is ifStr2, and ifStr3
-  arg1 and arg2 are the possible variables that need to be put into the 
+  arg1 and arg2 are the possible variables that need to be put into the
   scope of this function for the tests to run properly.
 */
 
