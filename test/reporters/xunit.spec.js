@@ -12,12 +12,18 @@ describe('XUnit reporter', function () {
   var stdoutWrite;
   var runner;
 
+  var callbackArgument = null;
+  var expectedFailure = 'some-failures';
+  var expectedLine = 'some-line';
+  var expectedClassName = 'fullTitle';
+  var expectedTitle = 'some title';
+  var expectedMessage = 'some message';
+  var expectedStack = 'some-stack';
+  var expectedWrite = null;
+
   beforeEach(function () {
     stdout = [];
-    runner = {
-      on: function () {},
-      once: function () {}
-    };
+    runner = {on: function () {}, once: function () {}};
   });
 
   describe('if reporter options output is given', function () {
@@ -112,12 +118,10 @@ describe('XUnit reporter', function () {
     describe('if fileStream is truthly', function () {
       it('should run callback with failure inside streams end', function () {
         var xunit = new XUnit({on: function () {}, once: function () {}});
-        var callbackArgument = null;
         var callback = function (failures) {
           callbackArgument = failures;
         };
         var calledEnd = false;
-        var expectedFailure = 'some-failures';
         var fileStream = {
           end: function (callback) {
             calledEnd = true;
@@ -137,11 +141,9 @@ describe('XUnit reporter', function () {
     describe('if fileStream is falsy', function () {
       it('should run callback with failure', function () {
         var xunit = new XUnit({on: function () {}, once: function () {}});
-        var callbackArgument = null;
         var callback = function (failures) {
           callbackArgument = failures;
         };
-        var expectedFailure = 'some-failures';
         xunit.done.call(
           { fileStream: false },
           expectedFailure,
@@ -156,14 +158,12 @@ describe('XUnit reporter', function () {
   describe('write', function () {
     describe('if fileStream is truthly', function () {
       it('should call fileStream write with line and new line', function () {
-        var expectedWrite = null;
         var xunit = new XUnit({on: function () {}, once: function () {}});
         var fileStream = {
           write: function (write) {
             expectedWrite = write;
           }
         };
-        var expectedLine = 'some-line';
         xunit.write.call(
           { fileStream: fileStream },
           expectedLine
@@ -180,7 +180,6 @@ describe('XUnit reporter', function () {
         };
 
         var xunit = new XUnit({on: function () {}, once: function () {}});
-        var expectedLine = 'some-line';
         xunit.write.call(
           { fileStream: false },
           expectedLine
@@ -201,7 +200,6 @@ describe('XUnit reporter', function () {
         };
 
         var xunit = new XUnit({on: function () {}, once: function () {}});
-        var expectedLine = 'some-line';
         xunit.write.call(
           { fileStream: false },
           expectedLine
@@ -218,12 +216,6 @@ describe('XUnit reporter', function () {
     describe('on test failure', function () {
       it('should write expected tag with error details', function () {
         var xunit = new XUnit({on: function () {}, once: function () {}});
-
-        var expectedWrite = null;
-        var expectedClassName = 'fullTitle';
-        var expectedTitle = 'some title';
-        var expectedMessage = 'some message';
-        var expectedStack = 'some-stack';
         var expectedTest = {
           state: 'failed',
           title: expectedTitle,
@@ -256,8 +248,6 @@ describe('XUnit reporter', function () {
       it('should write expected tag', function () {
         var xunit = new XUnit({on: function () {}, once: function () {}});
 
-        var expectedClassName = 'fullTitle';
-        var expectedTitle = 'some title';
         var expectedTest = {
           isPending: function () { return true; },
           title: expectedTitle,
@@ -268,7 +258,6 @@ describe('XUnit reporter', function () {
           },
           duration: 1000
         };
-        var expectedWrite = null;
         xunit.test.call(
           {
             write: function (string) {
@@ -287,8 +276,6 @@ describe('XUnit reporter', function () {
       it('should write expected tag', function () {
         var xunit = new XUnit({on: function () {}, once: function () {}});
 
-        var expectedClassName = 'fullTitle';
-        var expectedTitle = 'some title';
         var expectedTest = {
           isPending: function () { return false; },
           title: expectedTitle,
@@ -299,7 +286,6 @@ describe('XUnit reporter', function () {
           },
           duration: false
         };
-        var expectedWrite = null;
         xunit.test.call(
           {
             write: function (string) {
@@ -319,13 +305,10 @@ describe('XUnit reporter', function () {
   describe('custom suite name', function () {
     // capture the events that the reporter subscribes to
     var events;
-
     // the runner parameter of the reporter
     var runner;
-
     // capture output lines (will contain the resulting XML of the xunit reporter)
     var lines;
-
     // the file stream into which the xunit reporter will write into
     var fileStream;
 

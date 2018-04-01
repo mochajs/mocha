@@ -3,14 +3,27 @@
 var reporters = require('../../').reporters;
 var JSONStream = reporters.JSONStream;
 
+var createMockRunner = require('./helpers').createMockRunner;
+var makeExpectedTest = require('./helpers').makeExpectedTest;
+
 describe('Json Stream reporter', function () {
   var runner;
   var stdout;
   var stdoutWrite;
 
+  var expectedTitle = 'some title';
+  var expectedFullTitle = 'full title';
+  var expectedDuration = 1000;
+  var currentRetry = 1;
+  var expectedTest = makeExpectedTest(expectedTitle, expectedFullTitle, expectedDuration, currentRetry);
+  var expectedErrorMessage = 'error message';
+  var expectedErrorStack = 'error stack';
+  var expectedError = {
+    message: expectedErrorMessage
+  };
+
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -19,11 +32,7 @@ describe('Json Stream reporter', function () {
 
   describe('on start', function () {
     it('should write stringified start with expected total', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner = createMockRunner('start', 'start');
       var expectedTotal = 12;
       runner.total = expectedTotal;
       JSONStream.call({}, runner);
@@ -36,22 +45,7 @@ describe('Json Stream reporter', function () {
 
   describe('on pass', function () {
     it('should write stringified test data', function () {
-      var expectedTitle = 'some title';
-      var expectedFullTitle = 'full title';
-      var expectedDuration = 1000;
-      var currentRetry = 1;
-      var expectedTest = {
-        title: expectedTitle,
-        fullTitle: function () { return expectedFullTitle; },
-        duration: expectedDuration,
-        currentRetry: function () { return currentRetry; },
-        slow: function () {}
-      };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(expectedTest);
-        }
-      };
+      runner = createMockRunner('pass', 'pass', null, null, expectedTest);
       JSONStream.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -63,28 +57,9 @@ describe('Json Stream reporter', function () {
   describe('on fail', function () {
     describe('if error stack exists', function () {
       it('should write stringified test data with error data', function () {
-        var expectedTitle = 'some title';
-        var expectedFullTitle = 'full title';
-        var expectedDuration = 1000;
-        var currentRetry = 1;
-        var expectedTest = {
-          title: expectedTitle,
-          fullTitle: function () { return expectedFullTitle; },
-          duration: expectedDuration,
-          currentRetry: function () { return currentRetry; },
-          slow: function () {}
-        };
-        var expectedErrorMessage = 'error message';
-        var expectedErrorStack = 'error stack';
-        var expectedError = {
-          message: expectedErrorMessage,
-          stack: expectedErrorStack
-        };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'fail') {
-            callback(expectedTest, expectedError);
-          }
-        };
+        expectedError.stack = expectedErrorStack;
+        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
+
         JSONStream.call({}, runner);
 
         process.stdout.write = stdoutWrite;
@@ -92,30 +67,13 @@ describe('Json Stream reporter', function () {
         expect(stdout[0]).to.eql('["fail",{"title":"' + expectedTitle + '","fullTitle":"' + expectedFullTitle + '","duration":' + expectedDuration + ',"currentRetry":' + currentRetry + ',"err":"' + expectedErrorMessage + '","stack":"' + expectedErrorStack + '"}]\n');
       });
     });
+
     describe('if error stack does not exist', function () {
       it('should write stringified test data with error data', function () {
-        var expectedTitle = 'some title';
-        var expectedFullTitle = 'full title';
-        var expectedDuration = 1000;
-        var currentRetry = 1;
-        var expectedTest = {
-          title: expectedTitle,
-          fullTitle: function () { return expectedFullTitle; },
-          duration: expectedDuration,
-          currentRetry: function () { return currentRetry; },
-          slow: function () {}
-        };
-        var expectedErrorMessage = 'error message';
-        var expectedError = {
-          message: expectedErrorMessage
-        };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'fail') {
-            callback(expectedTest, expectedError);
-          }
-        };
-        JSONStream.call({}, runner);
+        expectedError.stack = null;
+        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
 
+        JSONStream.call({}, runner);
         process.stdout.write = stdoutWrite;
 
         expect(stdout[0]).to.eql('["fail",{"title":"' + expectedTitle + '","fullTitle":"' + expectedFullTitle + '","duration":' + expectedDuration + ',"currentRetry":' + currentRetry + ',"err":"' + expectedErrorMessage + '","stack":null}]\n');
@@ -125,15 +83,9 @@ describe('Json Stream reporter', function () {
 
   describe('on end', function () {
     it('should write end details', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('end', 'end');
       JSONStream.call({}, runner);
-
       process.stdout.write = stdoutWrite;
-
       expect(stdout[0]).to.match(/end/);
     });
   });

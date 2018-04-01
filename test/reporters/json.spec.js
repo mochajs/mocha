@@ -7,6 +7,7 @@ var Test = Mocha.Test;
 
 describe('json reporter', function () {
   var suite, runner;
+  var testTitle = 'json test 1';
 
   beforeEach(function () {
     var mocha = new Mocha({
@@ -19,7 +20,6 @@ describe('json reporter', function () {
   });
 
   it('should have 1 test failure', function (done) {
-    var testTitle = 'json test 1';
     var error = { message: 'oh shit' };
 
     suite.addTest(new Test(testTitle, function (done) {
@@ -43,8 +43,6 @@ describe('json reporter', function () {
   });
 
   it('should have 1 test pending', function (done) {
-    var testTitle = 'json test 1';
-
     suite.addTest(new Test(testTitle));
 
     runner.run(function (failureCount) {

@@ -3,14 +3,18 @@
 var reporters = require('../../').reporters;
 var Markdown = reporters.Markdown;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Markdown reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
+  var expectedTitle = 'expected title';
+  var expectedFullTitle = 'full title';
+  var sluggedFullTitle = 'full-title';
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -19,9 +23,6 @@ describe('Markdown reporter', function () {
 
   describe('on \'suite\'', function () {
     it('should write expected slugged titles on \'end\' event', function () {
-      var expectedTitle = 'expected title';
-      var expectedFullTitle = 'full title';
-      var sluggedFullTitle = 'full-title';
       var expectedSuite = {
         title: expectedTitle,
         fullTitle: function () { return expectedFullTitle; },
@@ -31,17 +32,7 @@ describe('Markdown reporter', function () {
           suites: []
         }]
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'suite') {
-          callback(expectedSuite);
-        }
-        if (event === 'suite end') {
-          callback();
-        }
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('suite suite end', 'suite', 'suite end', 'end', expectedSuite);
       runner.suite = expectedSuite;
       Markdown.call({}, runner);
       process.stdout.write = stdoutWrite;
@@ -57,9 +48,6 @@ describe('Markdown reporter', function () {
   });
   describe('on \'pass\'', function () {
     it('should write test code inside js code block, on \'end\' event', function () {
-      var expectedTitle = 'expected title';
-      var expectedFullTitle = 'full title';
-      var sluggedFullTitle = 'full-title';
       var expectedSuite = {
         title: expectedTitle,
         fullTitle: function () { return expectedFullTitle; },
@@ -76,14 +64,7 @@ describe('Markdown reporter', function () {
         slow: function () {},
         body: expectedBody
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pass') {
-          callback(expectedTest);
-        }
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('pass end', 'pass', 'end', null, expectedTest);
       runner.suite = expectedSuite;
       Markdown.call({}, runner);
       process.stdout.write = stdoutWrite;
