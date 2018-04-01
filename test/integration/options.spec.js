@@ -450,4 +450,57 @@ describe('options', function () {
       }, path.join(__dirname, 'fixtures', 'options', 'help'));
     });
   });
+
+  describe('--exclude', function () {
+    /*
+     * Runs mocha in {path} with the given args.
+     * Calls handleResult with the result.
+     */
+    function runMochaTest (fixture, args, handleResult, done) {
+      run(fixture, args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        handleResult(res);
+        done();
+      });
+    }
+
+    it('should exclude specific files', function (done) {
+      runMochaTest('options/exclude/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 1);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.passes[0].title, 'should find this test');
+        assert.equal(res.code, 0);
+      }, done);
+    });
+
+    it('should exclude globbed files', function (done) {
+      runMochaTest('options/exclude/**/*.fixture.js', ['--exclude', '**/fail.fixture.js'], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+      }, done);
+    });
+
+    it('should exclude multiple patterns', function (done) {
+      runMochaTest('options/exclude/**/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js',
+        '--exclude',
+        'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+      }, done);
+    });
+  });
 });

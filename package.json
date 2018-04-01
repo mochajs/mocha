@@ -19,6 +19,7 @@
     "Adrian Ludwig (https://github.com/adrian-ludwig)",
     "Ainthe Kitchen <a.in.the.k@gmail.com> (https://github.com/ainthek)",
     "ajaykodali (https://github.com/ajaykodali)",
+    "Alex Bainter <alexbainter+github@gmail.com> (https://github.com/metalex9)",
     "Alex Early (https://github.com/aearly)",
     "Alex Pham <thedark1337@thedark1337.com> (https://github.com/thedark1337)",
     "amsul (https://github.com/amsul)",
@@ -314,6 +315,7 @@
     "glob": "7.1.2",
     "growl": "1.10.3",
     "he": "1.1.1",
+    "minimatch": "^3.0.4",
     "mkdirp": "0.5.1",
     "supports-color": "4.4.0"
   },
