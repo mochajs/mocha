@@ -4,15 +4,17 @@ var reporters = require('../../').reporters;
 var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Nyan reporter', function () {
   describe('events', function () {
     var runner;
     var stdout;
     var stdoutWrite;
+    var calledDraw;
 
     beforeEach(function () {
       stdout = [];
-      runner = {};
       stdoutWrite = process.stdout.write;
       process.stdout.write = function (string) {
         stdout.push(string);
@@ -21,12 +23,8 @@ describe('Nyan reporter', function () {
 
     describe('on start', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'start') {
-            callback();
-          }
-        };
+        calledDraw = false;
+        runner = createMockRunner('start', 'start');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -40,12 +38,8 @@ describe('Nyan reporter', function () {
     });
     describe('on pending', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pending') {
-            callback();
-          }
-        };
+        calledDraw = false;
+        runner = createMockRunner('pending', 'pending');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -59,16 +53,12 @@ describe('Nyan reporter', function () {
     });
     describe('on pass', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pass') {
-            var test = {
-              duration: '',
-              slow: function () {}
-            };
-            callback(test);
-          }
+        calledDraw = false;
+        var test = {
+          duration: '',
+          slow: function () {}
         };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -82,15 +72,11 @@ describe('Nyan reporter', function () {
     });
     describe('on fail', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'fail') {
-            var test = {
-              err: ''
-            };
-            callback(test);
-          }
+        calledDraw = false;
+        var test = {
+          err: ''
         };
+        runner = createMockRunner('fail', 'fail', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -105,11 +91,7 @@ describe('Nyan reporter', function () {
     describe('on end', function () {
       it('should call epilogue', function () {
         var calledEpilogue = false;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -123,11 +105,7 @@ describe('Nyan reporter', function () {
       });
       it('should write numberOfLines amount of new lines', function () {
         var expectedNumberOfLines = 4;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -145,11 +123,7 @@ describe('Nyan reporter', function () {
         Base.cursor.show = function () {
           showCalled = true;
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},

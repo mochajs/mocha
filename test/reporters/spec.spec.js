@@ -4,15 +4,17 @@ var reporters = require('../../').reporters;
 var Spec = reporters.Spec;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Spec reporter', function () {
   var stdout;
   var stdoutWrite;
   var runner;
   var useColors;
+  var expectedTitle = 'expectedTitle';
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -27,15 +29,10 @@ describe('Spec reporter', function () {
 
   describe('on suite', function () {
     it('should return title', function () {
-      var expectedTitle = 'expectedTitle';
       var suite = {
         title: expectedTitle
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'suite') {
-          callback(suite);
-        }
-      };
+      runner = createMockRunner('suite', 'suite', null, null, suite);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -46,15 +43,10 @@ describe('Spec reporter', function () {
   });
   describe('on pending', function () {
     it('should return title', function () {
-      var expectedTitle = 'expectedTitle';
       var suite = {
         title: expectedTitle
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'pending') {
-          callback(suite);
-        }
-      };
+      runner = createMockRunner('pending test', 'pending', null, null, suite);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -66,18 +58,13 @@ describe('Spec reporter', function () {
   describe('on pass', function () {
     describe('if test speed is slow', function () {
       it('should return expected tick, title and duration', function () {
-        var expectedTitle = 'expectedTitle';
         var expectedDuration = 2;
         var test = {
           title: expectedTitle,
           duration: expectedDuration,
           slow: function () { return 1; }
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pass') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + ' (' + expectedDuration + 'ms)' + '\n';
@@ -86,18 +73,13 @@ describe('Spec reporter', function () {
     });
     describe('if test speed is fast', function () {
       it('should return expected tick, title and without a duration', function () {
-        var expectedTitle = 'expectedTitle';
         var expectedDuration = 1;
         var test = {
           title: expectedTitle,
           duration: expectedDuration,
           slow: function () { return 2; }
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pass') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         Spec.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedString = '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
@@ -107,16 +89,11 @@ describe('Spec reporter', function () {
   });
   describe('on fail', function () {
     it('should return title and function count', function () {
-      var expectedTitle = 'expectedTitle';
       var functionCount = 1;
       var test = {
         title: expectedTitle
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'fail') {
-          callback(test);
-        }
-      };
+      runner = createMockRunner('fail', 'fail', null, null, test);
       Spec.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [

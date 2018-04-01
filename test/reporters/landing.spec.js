@@ -4,6 +4,8 @@ var reporters = require('../../').reporters;
 var Landing = reporters.Landing;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Landing reporter', function () {
   var stdout;
   var stdoutWrite;
@@ -11,10 +13,19 @@ describe('Landing reporter', function () {
   var useColors;
   var windowWidth;
   var resetCode = '\u001b[0m';
+  var expectedArray = [
+    '\u001b[1D\u001b[2A',
+    '  ',
+    '\n  ',
+    '',
+    '✈',
+    '\n',
+    '  ',
+    resetCode
+  ];
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -34,11 +45,7 @@ describe('Landing reporter', function () {
     it('should write new lines', function () {
       var cachedCursor = Base.cursor;
       Base.cursor.hide = function () {};
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner = createMockRunner('start', 'start');
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -53,11 +60,7 @@ describe('Landing reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner = createMockRunner('start', 'start');
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -73,26 +76,12 @@ describe('Landing reporter', function () {
         var test = {
           state: 'failed'
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'test end') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('test end', 'test end', null, null, test);
         runner.total = 12;
         Landing.call({}, runner);
 
         process.stdout.write = stdoutWrite;
 
-        var expectedArray = [
-          '\u001b[1D\u001b[2A',
-          '  ',
-          '\n  ',
-          '',
-          '✈',
-          '\n',
-          '  ',
-          resetCode
-        ];
         expect(stdout).to.eql(expectedArray);
       });
     });
@@ -101,26 +90,12 @@ describe('Landing reporter', function () {
         var test = {
           state: 'success'
         };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'test end') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('test end', 'test end', null, null, test);
 
         Landing.call({}, runner);
 
         process.stdout.write = stdoutWrite;
 
-        var expectedArray = [
-          '\u001b[1D\u001b[2A',
-          '  ',
-          '\n  ',
-          '',
-          '✈',
-          '\n',
-          '  ',
-          resetCode
-        ];
         expect(stdout).to.eql(expectedArray);
       });
     });
@@ -132,11 +107,8 @@ describe('Landing reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('end', 'end');
+
       var calledEpilogue = false;
       Landing.call({
         epilogue: function () {

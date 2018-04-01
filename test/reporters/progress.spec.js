@@ -4,6 +4,8 @@ var reporters = require('../../').reporters;
 var Progress = reporters.Progress;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Progress reporter', function () {
   var stdout;
   var stdoutWrite;
@@ -11,7 +13,6 @@ describe('Progress reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -25,11 +26,7 @@ describe('Progress reporter', function () {
       Base.cursor.hide = function () {
         calledCursorHide = true;
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner = createMockRunner('start', 'start');
       Progress.call({}, runner);
 
       process.stdout.write = stdoutWrite;
@@ -51,12 +48,8 @@ describe('Progress reporter', function () {
 
         var expectedTotal = 1;
         var expectedOptions = {};
+        runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'test end') {
-            callback();
-          }
-        };
         Progress.call({}, runner, expectedOptions);
 
         process.stdout.write = stdoutWrite;
@@ -93,12 +86,8 @@ describe('Progress reporter', function () {
         var options = {
           reporterOptions: expectedOptions
         };
+        runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'test end') {
-            callback();
-          }
-        };
         Progress.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
@@ -126,11 +115,7 @@ describe('Progress reporter', function () {
       Base.cursor.show = function () {
         calledCursorShow = true;
       };
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('end', 'end');
       var calledEpilogue = false;
       Progress.call({
         epilogue: function () {

@@ -4,6 +4,8 @@ var reporters = require('../../').reporters;
 var Dot = reporters.Dot;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers.js').createMockRunner;
+
 describe('Dot reporter', function () {
   var stdout;
   var stdoutWrite;
@@ -13,7 +15,6 @@ describe('Dot reporter', function () {
 
   beforeEach(function () {
     stdout = [];
-    runner = {};
     stdoutWrite = process.stdout.write;
     process.stdout.write = function (string) {
       stdout.push(string);
@@ -31,11 +32,7 @@ describe('Dot reporter', function () {
 
   describe('on start', function () {
     it('should return a new line', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'start') {
-          callback();
-        }
-      };
+      runner = createMockRunner('start', 'start');
       Dot.call({epilogue: function () {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [
@@ -50,11 +47,7 @@ describe('Dot reporter', function () {
         Base.window.width = 2;
       });
       it('should return a new line and then a coma', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pending') {
-            callback();
-          }
-        };
+        runner = createMockRunner('pending', 'pending');
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -66,11 +59,7 @@ describe('Dot reporter', function () {
     });
     describe('if window width is equal to or less than 1', function () {
       it('should return a coma', function () {
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'pending') {
-            callback();
-          }
-        };
+        runner = createMockRunner('pending', 'pending');
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -81,21 +70,17 @@ describe('Dot reporter', function () {
     });
   });
   describe('on pass', function () {
+    var test = {
+      duration: 1,
+      slow: function () { return 2; }
+    };
     describe('if window width is greater than 1', function () {
       beforeEach(function () {
         Base.window.width = 2;
       });
       describe('if test speed is fast', function () {
         it('should return a new line and then a dot', function () {
-          var test = {
-            duration: 1,
-            slow: function () { return 2; }
-          };
-          runner.on = runner.once = function (event, callback) {
-            if (event === 'pass') {
-              callback(test);
-            }
-          };
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -109,15 +94,7 @@ describe('Dot reporter', function () {
     describe('if window width is equal to or less than 1', function () {
       describe('if test speed is fast', function () {
         it('should return a dot', function () {
-          var test = {
-            duration: 1,
-            slow: function () { return 2; }
-          };
-          runner.on = runner.once = function (event, callback) {
-            if (event === 'pass') {
-              callback(test);
-            }
-          };
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -128,15 +105,8 @@ describe('Dot reporter', function () {
       });
       describe('if test speed is slow', function () {
         it('should return a dot', function () {
-          var test = {
-            duration: 2,
-            slow: function () { return 1; }
-          };
-          runner.on = runner.once = function (event, callback) {
-            if (event === 'pass') {
-              callback(test);
-            }
-          };
+          test.duration = 2;
+          runner = createMockRunner('pass', 'pass', null, null, test);
           Dot.call({epilogue: function () {}}, runner);
           process.stdout.write = stdoutWrite;
           var expectedArray = [
@@ -148,21 +118,17 @@ describe('Dot reporter', function () {
     });
   });
   describe('on fail', function () {
+    var test = {
+      test: {
+        err: 'some error'
+      }
+    };
     describe('if window width is greater than 1', function () {
       beforeEach(function () {
         Base.window.width = 2;
       });
       it('should return a new line and then an exclamation mark', function () {
-        var test = {
-          test: {
-            err: 'some error'
-          }
-        };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'fail') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('fail', 'fail', null, null, test);
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -174,16 +140,7 @@ describe('Dot reporter', function () {
     });
     describe('if window width is equal to or less than 1', function () {
       it('should return an exclamation mark', function () {
-        var test = {
-          test: {
-            err: 'some error'
-          }
-        };
-        runner.on = runner.once = function (event, callback) {
-          if (event === 'fail') {
-            callback(test);
-          }
-        };
+        runner = createMockRunner('fail', 'fail', null, null, test);
         Dot.call({epilogue: function () {}}, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = [
@@ -195,11 +152,7 @@ describe('Dot reporter', function () {
   });
   describe('on end', function () {
     it('should call the epilogue', function () {
-      runner.on = runner.once = function (event, callback) {
-        if (event === 'end') {
-          callback();
-        }
-      };
+      runner = createMockRunner('end', 'end');
       var epilogueCalled = false;
       var epilogue = function () {
         epilogueCalled = true;
