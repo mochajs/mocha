@@ -1,17 +1,40 @@
-language: node_js
+# these are executed in order.  each must pass for the next to be run
+stages:
+  - smoke # this ensures a "user" install works properly
+  - lint # lint code and docs
+  - test # all tests
 
 # defaults
+language: node_js
 node_js: '9'
-script: npm start test.node
+cache:
+  directories:
+    - ~/.npm
+    - node_modules
 
 jobs:
   include:
     - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
-    - node_js: '8'
-    - node_js: '6'
-    - node_js: '4'
+
+    - &node
+      script: npm start test.node
+
+    - <<: *node
+      node_js: '8'
+
+    - <<: *node
+      cache: &cache-old-npm
+        directories:
+          - node_modules
+      node_js: '6'
+
+    - <<: *node
+      cache: *cache-old-npm
+      node_js: '4'
+
     - script: npm start test.bundle
+
     - script: npm start test.browser
       before_script: mkdir -p .karma
       addons:
@@ -20,24 +43,26 @@ jobs:
             - .karma/
             - ./mocha.js
         chrome: stable
+        sauce_connect: true
+
     - stage: lint
       script: npm start lint
+
     - &smoke
       stage: smoke
-      env: SMOKE=1 # just busts the cache
-      install: npm install --production
+      env: NPM_CONFIG_PRODUCTION=1
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+
     - <<: *smoke
       node_js: '8'
-    - <<: *smoke
-      node_js: '6'
-    - <<: *smoke
-      node_js: '4'
 
-stages:
-  - smoke # this ensures a "user" install works properly
-  - lint # lint code and docs
-  - test # all tests
+    - <<: *smoke
+      cache: *cache-old-npm
+      node_js: '6'
+
+    - <<: *smoke
+      cache: *cache-old-npm
+      node_js: '4'
 
 notifications:
   email: false
@@ -48,8 +73,3 @@ notifications:
     - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
   on_success: change
   on_failure: always
-
-cache:
-  directories:
-    - ~/.npm
-    - node_modules

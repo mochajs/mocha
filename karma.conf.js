@@ -85,7 +85,7 @@ module.exports = config => {
         sauceConfig = {
           build: `TRAVIS #${env.TRAVIS_BUILD_NUMBER} (${env.TRAVIS_BUILD_ID})`,
           tunnelIdentifier: env.TRAVIS_JOB_NUMBER,
-          startConnect: true
+          startConnect: false
         };
         console.error('Configured SauceLabs');
       } else {
