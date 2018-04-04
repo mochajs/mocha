@@ -6,25 +6,37 @@ language: node_js
 
 matrix:
   fast_finish: true
-  include:
-    - node_js: '9'
-      env: TARGET=test.node COVERAGE=true
-    - node_js: '8'
-      env: TARGET=test.node
-    - node_js: '6'
-      env: TARGET=test.node
-    - node_js: '4'
-      env: TARGET=test.node
-    - node_js: '8'
-      env: TARGET=lint
-    - node_js: '8'
-      env: TARGET=test.browser
 
 before_install: scripts/travis-before-install.sh
 
 before_script: scripts/travis-before-script.sh
 
-script: npm start $TARGET
+jobs:
+  include:
+    - stage: lint
+      node_js: '8'
+      env: TARGET=lint
+      script: npm start $TARGET
+    - stage: test
+      node_js: '9'
+      env: TARGET=test.node COVERAGE=true
+      script: npm start $TARGET
+    - node_js: '8'
+      env: TARGET=test.node
+      script: npm start $TARGET
+    - node_js: '6'
+      env: TARGET=test.node
+      script: npm start $TARGET
+    - node_js: '4'
+      env: TARGET=test.node
+      script: npm start $TARGET
+    - node_js: '8'
+      env: TARGET=test.browser
+      script: npm start $TARGET
+
+stages:
+  - lint
+  - test
 
 after_success: npm start coveralls
 
