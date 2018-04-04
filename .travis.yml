@@ -1,44 +1,29 @@
-# trusty dist provides a modern build chain (as opposed to 'precise' dist)
-# which absolves us from having to install compilers and stuff
-dist: trusty
-
 language: node_js
 
-matrix:
-  fast_finish: true
-
-before_install: scripts/travis-before-install.sh
-
-before_script: scripts/travis-before-script.sh
+# defaults
+node_js: '9'
+script: npm start $TARGET
+env: TARGET=test.node
 
 jobs:
   include:
-    - stage: lint
-      node_js: '8'
-      env: TARGET=lint
-      script: npm start $TARGET
-    - stage: test
-      node_js: '9'
-      env: TARGET=test.node COVERAGE=true
-      script: npm start $TARGET
+    - env: TARGET=test.node COVERAGE=true
+      after_success: npm start coveralls
     - node_js: '8'
-      env: TARGET=test.node
-      script: npm start $TARGET
     - node_js: '6'
-      env: TARGET=test.node
-      script: npm start $TARGET
     - node_js: '4'
-      env: TARGET=test.node
-      script: npm start $TARGET
-    - node_js: '8'
-      env: TARGET=test.browser
-      script: npm start $TARGET
+    - env: TARGET=test.browser
+      before_script: mkdir -p .karma
+    - stage: lint
+      env: TARGET=lint
+    - stage: smoke
+      install: npm install --production
+      script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
 
 stages:
   - lint
+  - smoke
   - test
-
-after_success: npm start coveralls
 
 notifications:
   email: false
@@ -55,7 +40,6 @@ addons:
     paths:
       - .karma/
       - ./mocha.js
-  sauce_connect: true
   chrome: stable
 cache:
   directories:
