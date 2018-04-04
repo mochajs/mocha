@@ -60,3 +60,4 @@ addons:
 cache:
   directories:
     - ~/.npm
+    - node_modules
