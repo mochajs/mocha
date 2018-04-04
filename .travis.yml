@@ -6,7 +6,7 @@ script: npm start test.node
 
 jobs:
   include:
-    - env: COVERAGE=true
+    - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
     - node_js: '8'
     - node_js: '6'
@@ -16,14 +16,22 @@ jobs:
       before_script: mkdir -p .karma
     - stage: lint
       script: npm start lint
-    - stage: smoke # this ensures a "user" install works properly
+    - &smoke
+      stage: smoke
+      env: BUST_CACHE=1
       install: npm install --production
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+    - <<: *smoke
+      node_js: '8'
+    - <<: *smoke
+      node_js: '6'
+    - <<: *smoke
+      node_js: '4'
 
 stages:
-  - lint
-  - smoke
-  - test
+  - smoke # this ensures a "user" install works properly
+  - lint # lint code and docs
+  - test # all tests
 
 notifications:
   email: false
