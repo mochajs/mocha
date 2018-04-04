@@ -24,13 +24,15 @@ jobs:
       node_js: '8'
 
     - <<: *node
-      cache: &cache-old-npm
+      cache:
         directories:
           - node_modules
       node_js: '6'
 
     - <<: *node
-      cache: *cache-old-npm
+      cache:
+        directories:
+          - node_modules
       node_js: '4'
 
     - script: npm start test.bundle
@@ -52,16 +54,15 @@ jobs:
       stage: smoke
       env: NPM_CONFIG_PRODUCTION=1
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+      cache: false
 
     - <<: *smoke
       node_js: '8'
 
     - <<: *smoke
-      cache: *cache-old-npm
       node_js: '6'
 
     - <<: *smoke
-      cache: *cache-old-npm
       node_js: '4'
 
 notifications:
