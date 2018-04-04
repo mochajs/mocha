@@ -312,7 +312,7 @@
     "diff": "3.5.0",
     "escape-string-regexp": "1.0.5",
     "glob": "7.1.2",
-    "growl": "1.10.3",
+    "growl": "1.10.5",
     "he": "1.1.1",
     "mkdirp": "0.5.1",
     "supports-color": "4.4.0"
