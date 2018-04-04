@@ -315,7 +315,7 @@
     "glob": "7.1.2",
     "growl": "1.10.3",
     "he": "1.1.1",
-    "minimatch": "^3.0.4",
+    "minimatch": "3.0.4",
     "mkdirp": "0.5.1",
     "supports-color": "4.4.0"
   },
