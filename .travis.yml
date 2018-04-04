@@ -14,11 +14,17 @@ jobs:
     - script: npm start test.bundle
     - script: npm start test.browser
       before_script: mkdir -p .karma
+      addons:
+        artifacts:
+          paths:
+            - .karma/
+            - ./mocha.js
+        chrome: stable
     - stage: lint
       script: npm start lint
     - &smoke
       stage: smoke
-      env: BUST_CACHE=1
+      env: SMOKE=1 # just busts the cache
       install: npm install --production
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
     - <<: *smoke
@@ -43,12 +49,6 @@ notifications:
   on_success: change
   on_failure: always
 
-addons:
-  artifacts:
-    paths:
-      - .karma/
-      - ./mocha.js
-  chrome: stable
 cache:
   directories:
     - ~/.npm
