@@ -19,22 +19,16 @@ jobs:
 
     - &node
       script: npm start test.node
-
-    - <<: *node
-      cache: false
       node_js: '8'
+      cache: false
 
     - <<: *node
-      cache: false
       node_js: '6'
 
     - <<: *node
-      cache: false
       node_js: '4'
 
-    - script: npm start test.bundle
-
-    - script: npm start test.browser
+    - script: npm start test.bundle test.browser
       before_script: mkdir -p .karma
       addons:
         artifacts:
