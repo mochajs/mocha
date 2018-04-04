@@ -232,6 +232,10 @@ module.exports = {
     watchDocs: {
       script: 'nps prewatchDocs && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
       description: 'Watch documentation for changes'
+    },
+    updateContributors: {
+      script: 'node scripts/update-contributors.js',
+      description: 'Update list of contributors in package.json'
     }
   }
 };
