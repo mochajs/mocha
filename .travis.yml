@@ -1,44 +1,60 @@
-# trusty dist provides a modern build chain (as opposed to 'precise' dist)
-# which absolves us from having to install compilers and stuff
-dist: trusty
+# these are executed in order.  each must pass for the next to be run
+stages:
+  - smoke # this ensures a "user" install works properly
+  - lint # lint code and docs
+  - test # all tests
 
+# defaults
 language: node_js
-
-matrix:
-  fast_finish: true
-
-before_install: scripts/travis-before-install.sh
-
-before_script: scripts/travis-before-script.sh
+node_js: '9'
+cache:
+  directories:
+    - ~/.npm
+    - node_modules
 
 jobs:
   include:
-    - stage: lint
+    - script: COVERAGE=1 npm start test.node
+      after_success: npm start coveralls
+
+    - &node
+      script: npm start test.node
       node_js: '8'
-      env: TARGET=lint
-      script: npm start $TARGET
-    - stage: test
-      node_js: '9'
-      env: TARGET=test.node COVERAGE=true
-      script: npm start $TARGET
-    - node_js: '8'
-      env: TARGET=test.node
-      script: npm start $TARGET
-    - node_js: '6'
-      env: TARGET=test.node
-      script: npm start $TARGET
-    - node_js: '4'
-      env: TARGET=test.node
-      script: npm start $TARGET
-    - node_js: '8'
-      env: TARGET=test.browser
-      script: npm start $TARGET
+      cache: false
 
-stages:
-  - lint
-  - test
+    - <<: *node
+      node_js: '6'
 
-after_success: npm start coveralls
+    - <<: *node
+      node_js: '4'
+
+    - script: npm start test.bundle test.browser
+      before_script: mkdir -p .karma
+      addons:
+        artifacts:
+          paths:
+            - .karma/
+            - ./mocha.js
+        chrome: stable
+        sauce_connect: true
+
+    - stage: lint
+      script: npm start lint
+
+    - &smoke
+      stage: smoke
+      env: NPM_CONFIG_PRODUCTION=1
+      script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+      cache: false
+
+    - <<: *smoke
+      node_js: '8'
+
+    - <<: *smoke
+      node_js: '6'
+
+    - <<: *smoke
+      node_js: '4'
 
 notifications:
   email: false
@@ -49,15 +65,3 @@ notifications:
     - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
   on_success: change
   on_failure: always
-
-addons:
-  artifacts:
-    paths:
-      - .karma/
-      - ./mocha.js
-  sauce_connect: true
-  chrome: stable
-cache:
-  directories:
-    - ~/.npm
-    - node_modules
