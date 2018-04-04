@@ -2,21 +2,21 @@ language: node_js
 
 # defaults
 node_js: '9'
-script: npm start $TARGET
-env: TARGET=test.node
+script: npm start test.node
 
 jobs:
   include:
-    - env: TARGET=test.node COVERAGE=true
+    - env: COVERAGE=true
       after_success: npm start coveralls
     - node_js: '8'
     - node_js: '6'
     - node_js: '4'
-    - env: TARGET=test.browser
+    - script: npm start test.bundle
+    - script: npm start test.browser
       before_script: mkdir -p .karma
     - stage: lint
-      env: TARGET=lint
-    - stage: smoke
+      script: npm start lint
+    - stage: smoke # this ensures a "user" install works properly
       install: npm install --production
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
 
