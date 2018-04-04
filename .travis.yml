@@ -21,13 +21,18 @@ jobs:
     - &node
       script: npm start test.node
       node_js: '8'
-      cache: false
 
     - <<: *node
       node_js: '6'
+      cache:
+        directories:
+          - node_modules
 
     - <<: *node
       node_js: '4'
+      cache:
+        directories:
+          - node_modules
 
     - script: npm start test.bundle test.browser
       before_script: mkdir -p .karma
