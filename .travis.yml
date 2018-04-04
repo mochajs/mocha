@@ -21,18 +21,15 @@ jobs:
       script: npm start test.node
 
     - <<: *node
+      cache: false
       node_js: '8'
 
     - <<: *node
-      cache:
-        directories:
-          - node_modules
+      cache: false
       node_js: '6'
 
     - <<: *node
-      cache:
-        directories:
-          - node_modules
+      cache: false
       node_js: '4'
 
     - script: npm start test.bundle
