@@ -1,6 +1,7 @@
 # these are executed in order.  each must pass for the next to be run
 stages:
   - smoke # this ensures a "user" install works properly
+  - precache # warm up cache for default Node.js version
   - lint # lint code and docs
   - test # all tests
 
@@ -55,6 +56,9 @@ jobs:
 
     - <<: *smoke
       node_js: '4'
+
+    - stage: precache
+      script: true
 
 notifications:
   email: false
