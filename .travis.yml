@@ -11,7 +11,8 @@ node_js: '9'
 cache:
   directories:
     - ~/.npm
-    - node_modules
+before_install: npm install -g npm@^5.8.0
+install: npm ci
 
 jobs:
   include:
@@ -24,15 +25,9 @@ jobs:
 
     - <<: *node
       node_js: '6'
-      cache:
-        directories:
-          - node_modules
 
     - <<: *node
       node_js: '4'
-      cache:
-        directories:
-          - node_modules
 
     - script: npm start test.bundle test.browser
       before_script: mkdir -p .karma
@@ -50,6 +45,7 @@ jobs:
     - &smoke
       stage: smoke
       env: NPM_CONFIG_PRODUCTION=1
+      install: npm install
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
       cache: false
 
