@@ -44,8 +44,7 @@ jobs:
 
     - &smoke
       stage: smoke
-      env: NPM_CONFIG_PRODUCTION=1
-      install: npm install
+      install: npm install --production
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
       cache: false
 
