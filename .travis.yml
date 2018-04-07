@@ -8,7 +8,6 @@ stages:
 # defaults
 language: node_js
 node_js: '9'
-env: PATH=~/npm/node_modules/.bin:$PATH
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
@@ -17,6 +16,8 @@ before_install: |
     cd ~/npm && npm install npm
     cd -
   } || true
+  # avoids bugs around https://github.com/travis-ci/travis-ci/issues/5092
+  export PATH=~/npm/node_modules/.bin:$PATH
 # this avoids compilation in most cases (where we don't need it)
 install: npm ci --ignore-scripts
 cache:
