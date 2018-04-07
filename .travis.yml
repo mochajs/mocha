@@ -8,10 +8,21 @@ stages:
 # defaults
 language: node_js
 node_js: '9'
+env: PATH=~/npm/node_modules/.bin:$PATH
+# `nvm install` happens before the cache is restored, which means
+# we must install our own npm elsewhere (`~/npm`)
+before_install: |
+  [[ ! -x ~/npm/node_modules/.bin/npm ]] && {
+    # caching feature creates `~/npm` for us
+    cd ~/npm && npm install npm
+    cd -
+  } || true
+# this avoids compilation in most cases (where we don't need it)
+install: npm ci --ignore-scripts
 cache:
   directories:
-    - ~/.npm
-    - node_modules
+    - ~/.npm # cache npm's cache
+    - ~/npm # cache latest npm
 
 jobs:
   include:
@@ -24,18 +35,12 @@ jobs:
 
     - <<: *node
       node_js: '6'
-      cache:
-        directories:
-          - node_modules
 
     - <<: *node
       node_js: '4'
-      cache:
-        directories:
-          - node_modules
 
     - script: npm start test.bundle test.browser
-      before_script: mkdir -p .karma
+      install: npm ci # we need the native modules here
       addons:
         artifacts:
           paths:
@@ -47,11 +52,18 @@ jobs:
     - stage: lint
       script: npm start lint
 
+    # smoke tests use default npm.
     - &smoke
       stage: smoke
-      env: NPM_CONFIG_PRODUCTION=1
+      env: null
+      before_install: true
+      install: npm install --production
+      # `--opts /dev/null` means "ignore test/mocha.opts"
       script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
-      cache: false
+      cache:
+        directories:
+          - ~/.npm
+          - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
 
     - <<: *smoke
       node_js: '8'
