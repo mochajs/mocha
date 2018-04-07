@@ -14,7 +14,7 @@ env: PATH=~/npm/node_modules/.bin:$PATH
 before_install: |
   [[ ! -x ~/npm/node_modules/.bin/npm ]] && {
     # caching feature creates `~/npm` for us
-    cd ~/npm && npm install npm
+    cd ~/npm && npm install npm && export PATH=~/npm/node_modules/.bin:$PATH
     cd -
   } || true
 # this avoids compilation in most cases (where we don't need it)
