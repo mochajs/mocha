@@ -112,7 +112,7 @@ describe('TAP reporter', function () {
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
           '  ' + expectedErrorMessage + '\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if there is an error stack', function () {
@@ -170,7 +170,7 @@ describe('TAP reporter', function () {
           '  ' + expectedErrorMessage + '\n',
           '  ' + expectedStack + '\n'
         ];
-        stdout.should.deepEqual(expectedArray);
+        expect(stdout).to.eql(expectedArray);
       });
     });
     describe('if there is no error stack or error message', function () {
