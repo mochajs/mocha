@@ -58,4 +58,31 @@ describe('json reporter', function () {
       done();
     });
   });
+
+  it('should handle circular objects in errors', function (done) {
+    var testTitle = 'json test 1';
+    function CircleError () {
+      this.message = 'oh shit';
+      this.circular = this;
+    }
+    var error = new CircleError();
+
+    suite.addTest(new Test(testTitle, function (done) {
+      throw error;
+    }));
+
+    runner.run(function (failureCount) {
+      expect(failureCount).to.equal(1);
+      expect(runner).to.have.property('testResults');
+      expect(runner.testResults).to.have.property('failures');
+      expect(runner.testResults.failures).to.be.an(Array);
+      expect(runner.testResults.failures).to.have.length(1);
+
+      var failure = runner.testResults.failures[0];
+      expect(failure).to.have.property('title', testTitle);
+      expect(failure).to.have.property('err');
+
+      done();
+    });
+  });
 });
