@@ -72,15 +72,15 @@ describe('json reporter', function () {
     }));
 
     runner.run(function (failureCount) {
-      failureCount.should.be.exactly(1);
-      runner.should.have.property('testResults');
-      runner.testResults.should.have.property('failures');
-      runner.testResults.failures.should.be.an.instanceOf(Array);
-      runner.testResults.failures.should.have.a.lengthOf(1);
+      expect(failureCount).to.equal(1);
+      expect(runner).to.have.property('testResults');
+      expect(runner.testResults).to.have.property('failures');
+      expect(runner.testResults.failures).to.be.an(Array);
+      expect(runner.testResults.failures).to.have.length(1);
 
       var failure = runner.testResults.failures[0];
-      failure.should.have.property('title', testTitle);
-      failure.should.have.properties('err');
+      expect(failure).to.have.property('title', testTitle);
+      expect(failure).to.have.property('err');
 
       done();
     });
