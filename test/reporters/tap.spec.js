@@ -80,6 +80,41 @@ describe('TAP reporter', function () {
   });
 
   describe('on fail', function () {
+    describe('if there is an error message', function () {
+      it('should write expected message and error message', function () {
+        var expectedTitle = 'some title';
+        var countAfterTestEnd = 2;
+        var expectedErrorMessage = 'some error';
+        var test = {
+          fullTitle: function () {
+            return expectedTitle;
+          },
+          slow: function () {}
+        };
+        var error = {
+          message: expectedErrorMessage
+        };
+        runner.on = function (event, callback) {
+          if (event === 'test end') {
+            callback();
+          }
+          if (event === 'fail') {
+            callback(test, error);
+          }
+        };
+        runner.suite = '';
+        runner.grepTotal = function () { };
+        TAP.call({}, runner);
+
+        process.stdout.write = stdoutWrite;
+
+        var expectedArray = [
+          'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
+          '  ' + expectedErrorMessage + '\n'
+        ];
+        expect(stdout).to.eql(expectedArray);
+      });
+    });
     describe('if there is an error stack', function () {
       it('should write expected message and stack', function () {
         var expectedStack = 'some stack';
@@ -100,7 +135,45 @@ describe('TAP reporter', function () {
         expect(stdout).to.eql(expectedArray);
       });
     });
-    describe('if there is no error stack', function () {
+    describe('if there is an error stack and error message', function () {
+      it('should write expected message and stack', function () {
+        var expectedTitle = 'some title';
+        var countAfterTestEnd = 2;
+        var expectedStack = 'some stack';
+        var expectedErrorMessage = 'some error';
+        var test = {
+          fullTitle: function () {
+            return expectedTitle;
+          },
+          slow: function () {}
+        };
+        var error = {
+          stack: expectedStack,
+          message: expectedErrorMessage
+        };
+        runner.on = function (event, callback) {
+          if (event === 'test end') {
+            callback();
+          }
+          if (event === 'fail') {
+            callback(test, error);
+          }
+        };
+        runner.suite = '';
+        runner.grepTotal = function () { };
+        TAP.call({}, runner);
+
+        process.stdout.write = stdoutWrite;
+
+        var expectedArray = [
+          'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
+          '  ' + expectedErrorMessage + '\n',
+          '  ' + expectedStack + '\n'
+        ];
+        expect(stdout).to.eql(expectedArray);
+      });
+    });
+    describe('if there is no error stack or error message', function () {
       it('should write expected message only', function () {
         var error = {};
         runner.on = runner.once = function (event, callback) {
