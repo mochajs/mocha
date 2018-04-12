@@ -211,7 +211,7 @@ module.exports = {
       script: 'nyc report --reporter=text-lcov | coveralls',
       description: 'Send code coverage report to coveralls (run during CI)'
     },
-    prebuildDocs: 'rm -rf docs/_dist && node scripts/docs-update-toc.js',
+    prebuildDocs: 'rm -rf docs/_dist docs/api && node scripts/docs-update-toc.js && nps buildApiDocs',
     buildDocs: {
       script: 'nps prebuildDocs && bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts && nps postbuildDocs',
       description: 'Build documentation'
@@ -223,7 +223,7 @@ module.exports = {
       description: 'Watch documentation for changes'
     },
     buildApiDocs: {
-      script: "node node_modules/documentation/bin/documentation.js build ./lib/mocha.js -f md  --sort-order 'alpha' -a=public > docs/mocha-api.md",
+      script: "mkdirp docs/api && documentation build ./lib/mocha.js -f html --sort-order 'alpha' -a=public -o docs/api",
       description: "build api docs, cli: 'npm start buildApiDocs' "
     },
     buildApiDocsDebug: {

@@ -21,3 +21,4 @@ yarn.lock
 *_REMOTE_*
 docs/_site
 docs/_dist
+docs/api
