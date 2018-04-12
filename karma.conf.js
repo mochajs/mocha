@@ -55,11 +55,18 @@ module.exports = config => {
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
-        reporter: 'html'
+        reporter: 'html',
+        timeout: 500
       }
     },
     mochaReporter: {
       showDiff: true
+    },
+    customLaunchers: {
+      ChromeDebug: {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9333']
+      }
     }
   };
 
@@ -162,7 +169,7 @@ function addSauceTests (cfg) {
       platform: platform
     };
     return acc;
-  }, {});
+  }, cfg.customLaunchers);
 
   // See https://github.com/karma-runner/karma-sauce-launcher
   // See https://github.com/bermi/sauce-connect-launcher#advanced-usage

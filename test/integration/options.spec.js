@@ -68,6 +68,22 @@ describe('options', function () {
         done();
       });
     });
+
+    it('should stop all hooks after the first error', function (done) {
+      run('options/bail-with-after.fixture.js', args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.failures, 1);
+
+        assert.equal(res.failures[0].title, 'should only display this error');
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
   });
 
   describe('--sort', function () {
@@ -432,6 +448,59 @@ describe('options', function () {
         expect(result.output).to.contain('Usage:');
         done();
       }, path.join(__dirname, 'fixtures', 'options', 'help'));
+    });
+  });
+
+  describe('--exclude', function () {
+    /*
+     * Runs mocha in {path} with the given args.
+     * Calls handleResult with the result.
+     */
+    function runMochaTest (fixture, args, handleResult, done) {
+      run(fixture, args, function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        handleResult(res);
+        done();
+      });
+    }
+
+    it('should exclude specific files', function (done) {
+      runMochaTest('options/exclude/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 1);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.passes[0].title, 'should find this test');
+        assert.equal(res.code, 0);
+      }, done);
+    });
+
+    it('should exclude globbed files', function (done) {
+      runMochaTest('options/exclude/**/*.fixture.js', ['--exclude', '**/fail.fixture.js'], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+      }, done);
+    });
+
+    it('should exclude multiple patterns', function (done) {
+      runMochaTest('options/exclude/**/*.fixture.js', [
+        '--exclude',
+        'test/integration/fixtures/options/exclude/fail.fixture.js',
+        '--exclude',
+        'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
+      ], function (res) {
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+      }, done);
     });
   });
 });

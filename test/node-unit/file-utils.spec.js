@@ -38,7 +38,11 @@ describe('file utils', function () {
   });
 
   describe('.lookupFiles', function () {
-    (symlinkSupported ? it : it.skip)('should not return broken symlink file path', function () {
+    it('should not return broken symlink file path', function () {
+      if (!symlinkSupported) {
+        return this.skip();
+      }
+
       expect(utils.lookupFiles(tmpDir, ['js'], false))
         .to
         .contain(tmpFile('mocha-utils-link.js'))

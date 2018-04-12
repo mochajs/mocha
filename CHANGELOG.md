@@ -1,11 +1,108 @@
+# 5.0.5 / 2018-03-22
+
+Welcome [@outsideris] to the team!
+
+## :bug: Fixes
+
+- [#3096]: Fix `--bail` failing to bail within hooks ([@outsideris])
+- [#3184]: Don't skip too many suites (using `describe.skip()`) ([@outsideris])
+
+## :book: Documentation
+
+- [#3133]: Improve docs regarding "pending" behavior ([@ematicipo])
+- [#3276], [#3274]: Fix broken stuff in `CHANGELOG.md` ([@tagoro9], [@honzajavorek])
+
+## :nut_and_bolt: Other
+
+- [#3208]: Improve test coverage for AMD users ([@outsideris])
+- [#3267]: Remove vestiges of PhantomJS from CI ([@anishkny])
+- [#2952]: Fix a debug message ([@boneskull])
+
+[#3096]: https://github.com/mochajs/mocha/issues/3096
+[#3184]: https://github.com/mochajs/mocha/issues/3184
+[#3133]: https://github.com/mochajs/mocha/issues/3133
+[#3276]: https://github.com/mochajs/mocha/pull/3276
+[#3274]: https://github.com/mochajs/mocha/pull/3274
+[#3208]: https://github.com/mochajs/mocha/issues/3208
+[#2952]: https://github.com/mochajs/mocha/issues/2952
+[#3267]: https://github.com/mochajs/mocha/pull/3267
+
+[@ematicipo]: https://github.com/ematicipo
+[@tagoro9]: https://github.com/tagoro9
+[@honzajavorek]: https://github.com/honajavorek
+[@anishkny]: https://github.com/anishkny
+
+# 5.0.4 / 2018-03-07
+
+## :bug: Fixes
+
+- [#3265]: Fixes regression in "watch" functionality introduced in v5.0.2 ([@outsideris])
+
+[#3265]: https://github.com/mochajs/mocha/issues/3265
+
+# 5.0.3 / 2018-03-06
+
+This patch features a fix to address a potential "low severity" [ReDoS vulnerability](https://snyk.io/vuln/npm:diff:20180305) in the [diff](https://npm.im/diff) package (a dependency of Mocha).
+
+## :lock: Security Fixes
+
+- [#3266]: Bump `diff` to v3.5.0 ([@anishkny])
+
+## :nut_and_bolt: Other
+
+- [#3011]: Expose `generateDiff()` in `Base` reporter ([@harrysarson])
+
+[#3266]: https://github.com/mochajs/mocha/pull/3266
+[#3011]: https://github.com/mochajs/mocha/issues/3011
+
+[@anishkny]: https://github.com/anishkny
+[@harrysarson]: https://github.com/harrysarson
+
+# 5.0.2 / 2018-03-05
+
+This release fixes a class of tests which report as *false positives*.  **Certain tests will now break**, though they would have previously been reported as passing.  Details below.  Sorry for the inconvenience!
+
+## :bug: Fixes
+
+- [#3226]: Do not swallow errors that are thrown asynchronously from passing tests ([@boneskull]).  Example:
+
+  ```js
+  it('should actually fail, sorry!', function (done) {
+    // passing assertion
+    assert(true === true);
+
+    // test complete & is marked as passing
+    done();
+
+    // ...but something evil lurks within
+    setTimeout(() => {
+      throw new Error('chaos!');
+    }, 100);
+  });
+  ```
+
+  Previously to this version, Mocha would have *silently swallowed* the `chaos!` exception, and you wouldn't know.  Well, *now you know*.  Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
+
+  **Maintainers of external reporters**: *If* a test of this class is encountered, the `Runner` instance will emit the `end` event *twice*; you *may* need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
+- [#3093]: Fix stack trace reformatting problem ([@outsideris])
+
+## :nut_and_bolt: Other
+
+- [#3248]: Update `browser-stdout` to v1.3.1 ([@honzajavorek])
+
+[#3248]: https://github.com/mochajs/mocha/issues/3248
+[#3226]: https://github.com/mochajs/mocha/issues/3226
+[#3093]: https://github.com/mochajs/mocha/issues/3093
+[@honzajavorek]: https://github.com/honzajavorek
+
 # 5.0.1 / 2018-02-07
 
 ...your garden-variety patch release.
 
-Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart: 
+Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued support! :heart:
 
 ## :bug: Fixes
- 
+
 - [#1838]: `--delay` now works with `.only()` ([@silviom])
 - [#3119]: Plug memory leak present in v8 ([@boneskull])
 
@@ -24,10 +121,10 @@ Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued suppor
 [#3119]: https://github.com/mochajs/mocha/issues/3119
 [#3132]: https://github.com/mochajs/mocha/issues/3132
 [#3098]: https://github.com/mochajs/mocha/issues/3098
-[#3212]: https://github.com/mochajs/mocha/pulls/3212
-[#3205]: https://github.com/mochajs/mocha/pulls/3205
-[#3224]: https://github.com/mochajs/mocha/pulls/3224
-[#3230]: https://github.com/mochajs/mocha/pulls/3230
+[#3212]: https://github.com/mochajs/mocha/pull/3212
+[#3205]: https://github.com/mochajs/mocha/pull/3205
+[#3224]: https://github.com/mochajs/mocha/pull/3224
+[#3230]: https://github.com/mochajs/mocha/pull/3230
 [@silviom]: https://github.com/silviom
 [@outsideris]: https://github.com/outsideris
 [@ArtemGovorov]: https://github.com/ArtemGovorov
@@ -76,7 +173,7 @@ Welcome [@vkarpov15] to the team!
 [#3148]: https://github.com/mochajs/mocha/issues/3148
 [#3181]: https://github.com/mochajs/mocha/issues/3181
 [#3187]: https://github.com/mochajs/mocha/issues/3187
-[#3202]: https://github.com/mochajs/mocha/pull/3148
+[#3202]: https://github.com/mochajs/mocha/pull/3202
 [#2352]: https://github.com/mochajs/mocha/issues/2352
 [#3137]: https://github.com/mochajs/mocha/issues/3137
 [#3134]: https://github.com/mochajs/mocha/issues/3134
@@ -287,9 +384,9 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 - Various CI-and-test-related fixes and improvements ([@boneskull], [@dasilvacontin], [@PopradiArpad], [@Munter], [@ScottFreeCode])
 - "Officially" support Node.js 8 ([@elergy])
 
-[#2860]: https://github.com/mochajs/mocha/pulls/2860
-[#2696]: https://github.com/mochajs/mocha/pulls/2696
-[#2813]: https://github.com/mochajs/mocha/pulls/2813
+[#2860]: https://github.com/mochajs/mocha/pull/2860
+[#2696]: https://github.com/mochajs/mocha/pull/2696
+[#2813]: https://github.com/mochajs/mocha/pull/2813
 [@charlierudolph]: https://github.com/charlierudolph
 [@PopradiArpad]: https://github.com/PopradiArpad
 [@kungapal]: https://github.com/kungapal
@@ -311,7 +408,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
-[#2778]: https://github.com/mochajs/mocha/pulls/2778
+[#2778]: https://github.com/mochajs/mocha/pull/2778
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 

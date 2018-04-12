@@ -10,6 +10,7 @@
 const program = require('commander');
 const path = require('path');
 const fs = require('fs');
+const minimatch = require('minimatch');
 const resolve = path.resolve;
 const exists = fs.existsSync;
 const Mocha = require('../');
@@ -200,12 +201,13 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--trace-warnings', 'show stack traces on node process warnings')
   .option('--use_strict', 'enforce strict mode')
-  .option('--watch-extensions <ext>,...', 'additional extensions to monitor with --watch', list, [])
+  .option('--watch-extensions <ext>,...', 'specify extensions to monitor with --watch', list, [])
   .option('--delay', 'wait for async suite definition')
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
   .option('--forbid-only', 'causes test marked with only to fail the suite')
   .option('--forbid-pending', 'causes pending tests and test marked with skip to fail the suite')
-  .option('--file <file>', 'include a file to be ran during the suite', collect, []);
+  .option('--file <file>', 'include a file to be ran during the suite', collect, [])
+  .option('--exclude <file>', 'a file or glob pattern to ignore', collect, []);
 
 program._name = 'mocha';
 
@@ -494,6 +496,13 @@ args.forEach(arg => {
     throw err;
   }
 
+  if (typeof newFiles !== 'undefined') {
+    if (typeof newFiles === 'string') {
+      newFiles = [newFiles];
+    }
+    newFiles = newFiles.filter(fileName => program.exclude.every(pattern => !minimatch(fileName, pattern)));
+  }
+
   files = files.concat(newFiles);
 });
 
@@ -529,7 +538,7 @@ if (program.watch) {
     process.exit(130);
   });
 
-  const watchFiles = utils.files(cwd, [ 'js' ].concat(program.watchExtensions));
+  const watchFiles = utils.files(cwd, program.watchExtensions);
   let runAgain = false;
 
   loadAndRun = () => {

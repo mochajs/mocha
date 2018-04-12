@@ -419,7 +419,7 @@ describe('Array', function() {
 });
 ```
 
-Pending tests will be reported as such.
+Pending tests will be included in the test results, and marked as pending. A pending test is not considered a failed test.
 
 ## Exclusive Tests
 
@@ -518,7 +518,7 @@ describe('Array', function() {
 
 *Note*: Hooks, if present, will still be executed.
 
-> Be mindful not to commit usages of `.only()` to version control, unless you really mean it!
+> Be mindful not to commit usages of `.only()` to version control, unless you really mean it! To do so one can run mocha with the option `--forbid-only` in the continuous integration test command (or in a git precommit hook).
 
 ## Inclusive Tests
 

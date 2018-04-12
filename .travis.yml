@@ -1,38 +1,82 @@
-# trust dist provides a modern build chain (as opposed to 'precise' dist)
-# which absolves us from having to install compilers and stuff
-dist: trusty
+# these are executed in order.  each must pass for the next to be run
+stages:
+  - smoke # this ensures a "user" install works properly
+  - precache # warm up cache for default Node.js version
+  - lint # lint code and docs
+  - test # all tests
 
+# defaults
 language: node_js
+node_js: '9'
+# `nvm install` happens before the cache is restored, which means
+# we must install our own npm elsewhere (`~/npm`)
+before_install: |
+  [[ ! -x ~/npm/node_modules/.bin/npm ]] && {
+    # caching feature creates `~/npm` for us
+    cd ~/npm && npm install npm
+    cd -
+  } || true
+  # avoids bugs around https://github.com/travis-ci/travis-ci/issues/5092
+  export PATH=~/npm/node_modules/.bin:$PATH
+# this avoids compilation in most cases (where we don't need it)
+install: npm ci --ignore-scripts
+cache:
+  directories:
+    - ~/.npm # cache npm's cache
+    - ~/npm # cache latest npm
 
-env:
-  global:
-    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-    # rate-limiting.  pull it from this sketchy site in China instead.
-    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-
-matrix:
-  fast_finish: true
+jobs:
   include:
-    - node_js: '9'
-      env: TARGET=test.node COVERAGE=true
-    - node_js: '8'
-      env: TARGET=test.node
-    - node_js: '6'
-      env: TARGET=test.node
-    - node_js: '4'
-      env: TARGET=test.node
-    - node_js: '8'
-      env: TARGET=lint
-    - node_js: '8'
-      env: TARGET=test.browser
+    - script: COVERAGE=1 npm start test.node
+      after_success: npm start coveralls
 
-before_install: scripts/travis-before-install.sh
+    - &node
+      script: npm start test.node
+      node_js: '8'
 
-before_script: scripts/travis-before-script.sh
+    - <<: *node
+      node_js: '6'
 
-script: npm start $TARGET
+    - <<: *node
+      node_js: '4'
 
-after_success: npm start coveralls
+    - script: npm start test.bundle test.browser
+      install: npm ci # we need the native modules here
+      addons:
+        artifacts:
+          paths:
+            - .karma/
+            - ./mocha.js
+        chrome: stable
+        sauce_connect: true
+
+    - stage: lint
+      script: npm start lint
+
+    # smoke tests use default npm.
+    - &smoke
+      stage: smoke
+      env: null
+      before_install: true
+      install: npm install --production
+      # `--opts /dev/null` means "ignore test/mocha.opts"
+      script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+      cache:
+        directories:
+          - ~/.npm
+          - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
+
+    - <<: *smoke
+      node_js: '8'
+
+    - <<: *smoke
+      node_js: '6'
+
+    - <<: *smoke
+      node_js: '4'
+
+    - stage: precache
+      script: true
 
 notifications:
   email: false
@@ -43,14 +87,3 @@ notifications:
     - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
   on_success: change
   on_failure: always
-
-addons:
-  artifacts:
-    paths:
-      - .karma/
-      - ./mocha.js
-  sauce_connect: true
-  chrome: stable
-cache:
-  directories:
-    - ~/.npm

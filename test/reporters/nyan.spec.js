@@ -4,15 +4,17 @@ var reporters = require('../../').reporters;
 var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
 
+var createMockRunner = require('./helpers').createMockRunner;
+
 describe('Nyan reporter', function () {
   describe('events', function () {
     var runner;
     var stdout;
     var stdoutWrite;
+    var calledDraw;
 
     beforeEach(function () {
       stdout = [];
-      runner = {};
       stdoutWrite = process.stdout.write;
       process.stdout.write = function (string) {
         stdout.push(string);
@@ -21,12 +23,8 @@ describe('Nyan reporter', function () {
 
     describe('on start', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = function (event, callback) {
-          if (event === 'start') {
-            callback();
-          }
-        };
+        calledDraw = false;
+        runner = createMockRunner('start', 'start');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -40,12 +38,8 @@ describe('Nyan reporter', function () {
     });
     describe('on pending', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = function (event, callback) {
-          if (event === 'pending') {
-            callback();
-          }
-        };
+        calledDraw = false;
+        runner = createMockRunner('pending', 'pending');
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -59,16 +53,12 @@ describe('Nyan reporter', function () {
     });
     describe('on pass', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = function (event, callback) {
-          if (event === 'pass') {
-            var test = {
-              duration: '',
-              slow: function () {}
-            };
-            callback(test);
-          }
+        calledDraw = false;
+        var test = {
+          duration: '',
+          slow: function () {}
         };
+        runner = createMockRunner('pass', 'pass', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -82,15 +72,11 @@ describe('Nyan reporter', function () {
     });
     describe('on fail', function () {
       it('should call draw', function () {
-        var calledDraw = false;
-        runner.on = function (event, callback) {
-          if (event === 'fail') {
-            var test = {
-              err: ''
-            };
-            callback(test);
-          }
+        calledDraw = false;
+        var test = {
+          err: ''
         };
+        runner = createMockRunner('fail', 'fail', null, null, test);
         NyanCat.call({
           draw: function () {
             calledDraw = true;
@@ -105,11 +91,7 @@ describe('Nyan reporter', function () {
     describe('on end', function () {
       it('should call epilogue', function () {
         var calledEpilogue = false;
-        runner.on = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -123,11 +105,7 @@ describe('Nyan reporter', function () {
       });
       it('should write numberOfLines amount of new lines', function () {
         var expectedNumberOfLines = 4;
-        runner.on = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -145,11 +123,7 @@ describe('Nyan reporter', function () {
         Base.cursor.show = function () {
           showCalled = true;
         };
-        runner.on = function (event, callback) {
-          if (event === 'end') {
-            callback();
-          }
-        };
+        runner = createMockRunner('end', 'end');
         NyanCat.call({
           draw: function () {},
           generateColors: function () {},
@@ -177,7 +151,7 @@ describe('Nyan reporter', function () {
 
     describe('if tick is false', function () {
       it('should draw face with expected spaces, _ and ^', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
         nyanCat.draw.call({
@@ -213,7 +187,7 @@ describe('Nyan reporter', function () {
     });
     describe('if tick is true', function () {
       it('should draw face with expected spaces, _ and ~', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
         nyanCat.draw.call({
@@ -262,7 +236,7 @@ describe('Nyan reporter', function () {
     });
 
     it('should write cursor down interaction with expected number', function () {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       var expectedNumber = 25;
 
       nyanCat.cursorDown(expectedNumber);
@@ -287,7 +261,7 @@ describe('Nyan reporter', function () {
     });
 
     it('should write cursor up interaction with expected number', function () {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       var expectedNumber = 25;
 
       nyanCat.cursorUp(expectedNumber);
@@ -313,7 +287,7 @@ describe('Nyan reporter', function () {
       });
 
       it('should return argument string', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         var expectedString = 'hello';
         var outputString = nyanCat.rainbowify(expectedString);
 
@@ -334,7 +308,7 @@ describe('Nyan reporter', function () {
       it('should return rainbowified string from the given string and predefined codes', function () {
         var startCode = '\u001b[38;5;';
         var endCode = '\u001b[0m';
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         var expectedString = 'hello';
         var colorCode = 'somecode';
         var expectedRainbowifyString = startCode + colorCode + 'm' + expectedString + endCode;
@@ -353,7 +327,7 @@ describe('Nyan reporter', function () {
   describe('appendRainbow', function () {
     describe('if tick is true', function () {
       it('should set an _ segment', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         var expectedSegment;
         var inputArray = [];
         var trajectories = [inputArray, inputArray, inputArray, inputArray];
@@ -370,7 +344,7 @@ describe('Nyan reporter', function () {
         expect(expectedSegment).to.equal('_');
       });
       it('should shift each trajectory item, if its length is greater of equal to its max width', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
 
         var rainbowifyResult = 'rainbowify';
         var inputArray = ['itemToShify'];
@@ -390,7 +364,7 @@ describe('Nyan reporter', function () {
     });
     describe('if tick is false', function () {
       it('should set an - segment', function () {
-        var nyanCat = new NyanCat({on: function () {}});
+        var nyanCat = new NyanCat({on: function () {}, once: function () {}});
         var expectedSegment;
         var inputArray = [];
         var trajectories = [inputArray, inputArray, inputArray, inputArray];
@@ -424,7 +398,7 @@ describe('Nyan reporter', function () {
       var passes = 2;
       var pending = 1;
       var failures = 1;
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.drawScoreboard.call({
         cursorUp: function () {},
         stats: { passes: passes, pending: pending, failures: failures },
@@ -455,7 +429,7 @@ describe('Nyan reporter', function () {
       var expectedCursorArgument = null;
       var expectedNumberOfLines = 1000;
 
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.drawScoreboard.call({
         cursorUp: function (lines) {
           expectedCursorArgument = lines;
@@ -481,7 +455,7 @@ describe('Nyan reporter', function () {
       var expectedContents = 'input';
       var inputArray = [expectedContents];
       var trajectories = [inputArray];
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.drawRainbow.call({
         cursorUp: function () {},
         trajectories: trajectories,
@@ -507,7 +481,7 @@ describe('Nyan reporter', function () {
       var expectedCursorArgument = null;
       var expectedNumberOfLines = 1000;
 
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.drawRainbow.call({
         cursorUp: function (lines) {
           expectedCursorArgument = lines;
@@ -523,25 +497,25 @@ describe('Nyan reporter', function () {
   });
   describe('face', function () {
     it('expected face:(x .x) when "failures" at least one', function () {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.stats = { passes: 2, pending: 1, failures: 1 };
       expect(nyanCat.face()).to.equal('( x .x)');
     });
 
     it('expected face:(x .x) when "pending" at least one and no failing', function () {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
       expect(nyanCat.face()).to.equal('( o .o)');
     });
 
     it('expected face:(^ .^) when "passing" only', function () {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.stats = { passes: 1, pending: 0, failures: 0 };
       expect(nyanCat.face()).to.equal('( ^ .^)');
     });
 
     it('expected face:(- .-) when otherwise', function (done) {
-      var nyanCat = new NyanCat({on: function () {}});
+      var nyanCat = new NyanCat({on: function () {}, once: function () {}});
       nyanCat.stats = { passes: 0, pending: 0, failures: 0 };
       expect(nyanCat.face()).to.equal('( - .-)');
       done();
