@@ -26,6 +26,24 @@ describe('a test that throws', function() {
     });
   });
 
+  describe('non-extensible', function() {
+    it('should not crash if throwing non-extensible type', function(done) {
+      var test = new Test('im async and throw string async', function(done2) {
+        process.nextTick(function() {
+          throw 'error';
+        });
+      });
+      suite.addTest(test);
+      runner = new Runner(suite);
+      runner.on('end', function() {
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
+        done();
+      });
+      runner.run();
+    });
+  });
+
   describe('undefined', function() {
     it('should not pass if throwing sync and test is sync', function(done) {
       var test = new Test('im sync and throw undefined sync', function() {
