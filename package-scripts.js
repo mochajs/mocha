@@ -230,7 +230,7 @@ module.exports = {
         description: 'Build documentation'
       },
       prebuild: {
-        script: 'rimraf docs/_dist && node scripts/docs-update-toc.js',
+        script: 'rimraf docs/_dist docs/api && node scripts/docs-update-toc.js && nps docs.api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -247,6 +247,14 @@ module.exports = {
       watch: {
         script: 'nps docs.prewatch && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
         description: 'Watch docs for changes & build'
+      },
+      api: {
+        script: "mkdirp docs/api && documentation build ./lib/mocha.js -f html --sort-order 'alpha' -a=public -o docs/api",
+        description: "build api docs, cli: 'npm start docs.api' "
+      },
+      apidebug: {
+        script: "documentation build ./lib/mocha.js -f json  --sort-order 'alpha' -a=public > docs/mocha-api.json",
+        description: "build debuggable api docs, cli: 'npm start docs.apidebug' "
       }
     },
     updateContributors: {
