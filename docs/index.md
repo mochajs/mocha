@@ -52,6 +52,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
 - [Assertions](#assertions)
 - [Asynchronous Code](#asynchronous-code)
 - [Synchronous Code](#synchronous-code)
