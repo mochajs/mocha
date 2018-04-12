@@ -13,9 +13,14 @@ describe('Min reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
+  });
+
+  afterEach(function() {
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
@@ -25,7 +30,7 @@ describe('Min reporter', function() {
 
       process.stdout.write = stdoutWrite;
       var expectedArray = ['\u001b[2J', '\u001b[1;3H'];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
 
@@ -43,7 +48,7 @@ describe('Min reporter', function() {
       );
       process.stdout.write = stdoutWrite;
 
-      expect(calledEpilogue).to.be(true);
+      expect(calledEpilogue, 'to be', true);
     });
   });
 });

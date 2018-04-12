@@ -58,7 +58,6 @@
       -  color: white;
       +  color: #fff;
        }
-       
        a {
       -  color: blue
       +  color: blue;

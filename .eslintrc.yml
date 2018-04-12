@@ -33,7 +33,6 @@ overrides:
       mocha: yes
     globals:
       expect: no
-      assert: no
   - files:
     - doc/**/*.js
     env:

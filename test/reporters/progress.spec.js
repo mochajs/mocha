@@ -14,9 +14,14 @@ describe('Progress reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
+  });
+
+  afterEach(function() {
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
@@ -30,7 +35,7 @@ describe('Progress reporter', function() {
       Progress.call({}, runner);
 
       process.stdout.write = stdoutWrite;
-      expect(calledCursorHide).to.be(true);
+      expect(calledCursorHide, 'to be', true);
 
       Base.cursor = cachedCursor;
     });
@@ -54,7 +59,7 @@ describe('Progress reporter', function() {
 
         process.stdout.write = stdoutWrite;
 
-        expect(stdout).to.eql([]);
+        expect(stdout, 'to equal', []);
 
         Base.cursor = cachedCursor;
         Base.useColors = useColors;
@@ -98,8 +103,8 @@ describe('Progress reporter', function() {
           expectedIncomplete,
           expectedClose
         ];
-        expect(calledCursorCR).to.be(true);
-        expect(stdout).to.eql(expectedArray);
+        expect(calledCursorCR, 'to be', true);
+        expect(stdout, 'to equal', expectedArray);
 
         Base.cursor = cachedCursor;
         Base.useColors = useColors;
@@ -127,8 +132,8 @@ describe('Progress reporter', function() {
       );
 
       process.stdout.write = stdoutWrite;
-      expect(calledEpilogue).to.be(true);
-      expect(calledCursorShow).to.be(true);
+      expect(calledEpilogue, 'to be', true);
+      expect(calledCursorShow, 'to be', true);
 
       Base.cursor = cachedCursor;
     });

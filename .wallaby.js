@@ -3,7 +3,7 @@
 module.exports = () => {
   return {
     files: [
-      'index.js', 'lib/**/*.js', 'test/setup.js',
+      'index.js', 'lib/**/*.js', 'test/setup.js', 'test/assertions.js',
       {
         pattern: 'test/node-unit/**/*.fixture.js',
         instrument: false

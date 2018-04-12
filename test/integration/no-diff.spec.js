@@ -11,8 +11,8 @@ describe('no-diff', function() {
           done(err);
           return;
         }
-        expect(res.output).not.to.match(/\+ expected/);
-        expect(res.output).not.to.match(/- actual/);
+        expect(res.output, 'not to match', /\+ expected/);
+        expect(res.output, 'not to match', /- actual/);
         done();
       });
     });
@@ -25,8 +25,8 @@ describe('no-diff', function() {
           done(err);
           return;
         }
-        expect(res.output).to.match(/\+ expected/);
-        expect(res.output).to.match(/- actual/);
+        expect(res.output, 'to match', /\+ expected/);
+        expect(res.output, 'to match', /- actual/);
         done();
       });
     });

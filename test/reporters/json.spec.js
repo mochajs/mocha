@@ -29,17 +29,19 @@ describe('json reporter', function() {
     );
 
     runner.run(function(failureCount) {
-      expect(failureCount).to.be(1);
-      expect(runner).to.have.property('testResults');
-      expect(runner.testResults).to.have.property('failures');
-      expect(runner.testResults.failures).to.be.an('array');
-      expect(runner.testResults.failures).to.have.length(1);
-
-      var failure = runner.testResults.failures[0];
-      expect(failure).to.have.property('title', testTitle);
-      expect(failure.err.message).to.equal(error.message);
-      expect(failure).to.have.property('err');
-
+      expect(runner, 'to satisfy', {
+        testResults: {
+          failures: [
+            {
+              title: testTitle,
+              err: {
+                message: error.message
+              }
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 1);
       done();
     });
   });
@@ -48,15 +50,16 @@ describe('json reporter', function() {
     suite.addTest(new Test(testTitle));
 
     runner.run(function(failureCount) {
-      expect(failureCount).to.be(0);
-      expect(runner).to.have.property('testResults');
-      expect(runner.testResults).to.have.property('pending');
-      expect(runner.testResults.pending).to.be.an('array');
-      expect(runner.testResults.pending).to.have.length(1);
-
-      var pending = runner.testResults.pending[0];
-      expect(pending).to.have.property('title', testTitle);
-
+      expect(runner, 'to satisfy', {
+        testResults: {
+          pending: [
+            {
+              title: testTitle
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
       done();
     });
   });
@@ -76,16 +79,19 @@ describe('json reporter', function() {
     );
 
     runner.run(function(failureCount) {
-      expect(failureCount).to.equal(1);
-      expect(runner).to.have.property('testResults');
-      expect(runner.testResults).to.have.property('failures');
-      expect(runner.testResults.failures).to.be.an(Array);
-      expect(runner.testResults.failures).to.have.length(1);
-
-      var failure = runner.testResults.failures[0];
-      expect(failure).to.have.property('title', testTitle);
-      expect(failure).to.have.property('err');
-
+      expect(runner, 'to satisfy', {
+        testResults: {
+          failures: [
+            {
+              title: testTitle,
+              err: {
+                message: error.message
+              }
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 1);
       done();
     });
   });

@@ -72,44 +72,6 @@ module.exports = {
   },
 
   /**
-   * Returns an array of diffs corresponding to exceptions thrown from specs,
-   * given the plaintext output (-C) of a mocha run.
-   *
-   * @param  {string}   output
-   * returns {string[]}
-   */
-  getDiffs: function(output) {
-    var diffs, i, inDiff, inStackTrace;
-
-    diffs = [];
-    output.split('\n').forEach(function(line) {
-      if (line.match(/^\s{2}\d+\)/)) {
-        // New spec, e.g. "1) spec title"
-        diffs.push([]);
-        i = diffs.length - 1;
-        inStackTrace = false;
-        inDiff = false;
-      } else if (!diffs.length || inStackTrace) {
-        // Haven't encountered a spec yet
-        // or we're in the middle of a stack trace
-      } else if (line.indexOf('+ expected - actual') !== -1) {
-        inDiff = true;
-      } else if (line.match(/at Context/)) {
-        // At the start of a stack trace
-        inStackTrace = true;
-        inDiff = false;
-      } else if (inDiff) {
-        diffs[i].push(line);
-      }
-    });
-
-    // Ignore empty lines before/after diff
-    return diffs.map(function(diff) {
-      return diff.slice(1, -3).join('\n');
-    });
-  },
-
-  /**
    * regular expression used for splitting lines based on new line / dot symbol.
    */
   splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
