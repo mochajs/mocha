@@ -1,3 +1,39 @@
+# 5.1.0 / 2018-04-12
+
+## :tada: Enhancements
+
+- [#3210]: Add `--exclude` option ([@metalex9])
+
+## :bug: Fixes
+
+- [#3318]: Fix failures in circular objects in JSON reporter ([@jeversmann], [@boneskull])
+
+## :book: Documentation
+
+- [#3323]: Publish actual [API documentation](https://mochajs.org/api/)! ([@dfberry], [@Munter])
+- [#3299]: Improve docs around exclusive tests ([@nicgirault])
+
+## :nut_and_bolt: Other
+
+- [#3302], [#3308], [#3310], [#3315], [#3316]: Build matrix improvements ([more info](https://boneskull.com/mocha-and-travis-ci-build-stages/)) ([@outsideris], [@boneskull])
+- [#3272]: Refactor reporter tests ([@jMuzsik])
+
+[#3210]: https://github.com/mochajs/mocha/pull/3210
+[#3318]: https://github.com/mochajs/mocha/pull/3318
+[#3323]: https://github.com/mochajs/mocha/pull/3323
+[#3299]: https://github.com/mochajs/mocha/pull/3299
+[#3302]: https://github.com/mochajs/mocha/pull/3302
+[#3308]: https://github.com/mochajs/mocha/pull/3308
+[#3310]: https://github.com/mochajs/mocha/pull/3310
+[#3315]: https://github.com/mochajs/mocha/pull/3315
+[#3316]: https://github.com/mochajs/mocha/pull/3316
+[#3272]: https://github.com/mochajs/mocha/pull/3272
+[@metalex9]: https://github.com/metalex9
+[@jeversmann]: https://github.com/jeversmann
+[@dfberry]: https://github.com/dfberry
+[@nicgirault]: https://github.com/nicgirault
+[@jMuzsik]: https://github.com/jMuzsik
+
 # 5.0.5 / 2018-03-22
 
 Welcome [@outsideris] to the team!
