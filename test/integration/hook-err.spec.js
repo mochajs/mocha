@@ -21,7 +21,17 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('before each hook error', function() {
+  describe('nested before hook error', function () {
+    before(run('hooks/before-nested-hook-error.fixture.js', onlyErrorTitle()));
+    it('should verify results', function () {
+      assert.deepEqual(
+        lines,
+        ['1) spec 1', 'nested', '"before all" hook for "should fail because of hook error":']
+      );
+    });
+  });
+
+  describe('before each hook error', function () {
     before(run('hooks/beforeEach-hook-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['before', bang + 'test 3']);
