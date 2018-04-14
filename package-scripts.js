@@ -249,7 +249,7 @@ module.exports = {
         description: 'Watch docs for changes & build'
       },
       api: {
-        script: 'mkdirp docs/api && jsdoc -c jsdoc.conf.json',
+        script: 'mkdirp docs/api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/api',
         description: 'build api docs'
       }
     },
