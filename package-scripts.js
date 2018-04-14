@@ -249,12 +249,8 @@ module.exports = {
         description: 'Watch docs for changes & build'
       },
       api: {
-        script: "mkdirp docs/api && documentation build ./lib/mocha.js -f html --sort-order 'alpha' -a=public -o docs/api",
-        description: "build api docs, cli: 'npm start docs.api' "
-      },
-      apidebug: {
-        script: "documentation build ./lib/mocha.js -f json  --sort-order 'alpha' -a=public > docs/mocha-api.json",
-        description: "build debuggable api docs, cli: 'npm start docs.apidebug' "
+        script: 'mkdirp docs/api && jsdoc -c jsdoc.conf.json',
+        description: 'build api docs'
       }
     },
     updateContributors: {
