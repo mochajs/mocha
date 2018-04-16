@@ -106,8 +106,8 @@ describe('diffs', function () {
   });
 
   it('should display diff by data and not like an objects', function () {
-    actual = new Buffer([0x01]);
-    expected = new Buffer([0x02]);
+    actual = Buffer.from([0x01]);
+    expected = Buffer.from([0x02]);
     expect(actual).to.eql(expected);
   });
 });
