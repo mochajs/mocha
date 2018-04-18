@@ -1,14 +1,14 @@
 'use strict';
 
 describe('spec 1', function () {
-  it('should pass', function () {
+  it('should not blame me', function () {
     console.log('test 1');
   });
-  describe('nested', function () {
+  describe('nested 1', function () {
     before(function() {
       throw new Error('Nested before hook error');
     });
-    it('should fail because of hook error', function () {
+    it('blames me', function () {
       console.log('test 2');
     });
   });

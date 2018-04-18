@@ -16,8 +16,16 @@ describe('hook error handling', function() {
 
   describe('before hook error tip', function() {
     before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle()));
+<<<<<<< HEAD
     it('should verify results', function() {
       expect(lines, 'to equal', ['1) spec 2', '"before all" hook:']);
+=======
+    it('should verify results', function () {
+      assert.deepEqual(
+        lines,
+        ['1) spec 2', '"before all" hook for "skipped":']
+      );
+>>>>>>> Update hook error tests so error tip & nested error are consistent
     });
   });
 
@@ -26,7 +34,7 @@ describe('hook error handling', function() {
     it('should verify results', function () {
       assert.deepEqual(
         lines,
-        ['1) spec 1', 'nested', '"before all" hook for "should fail because of hook error":']
+        ['1) spec 1', 'nested 1', '"before all" hook for "blames me":']
       );
     });
   });
