@@ -1,7 +1,0 @@
-env:
-  mocha: true
-globals:
-  expect: false
-  assert: false
-rules:
-  no-unused-expressions: off

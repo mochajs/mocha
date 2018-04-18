@@ -149,8 +149,8 @@ function makeExpectedTest (
 }
 
 module.exports = {
-  createMockRunner,
-  makeTest,
-  createElements,
-  makeExpectedTest
+  createMockRunner: createMockRunner,
+  makeTest: makeTest,
+  createElements: createElements,
+  makeExpectedTest: makeExpectedTest
 };
