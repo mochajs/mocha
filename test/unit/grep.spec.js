@@ -61,7 +61,7 @@ describe('Mocha', function () {
   describe('"invert" option', function () {
     it('should add a Boolean to the mocha.options object', function () {
       var mocha = new Mocha({ invert: true });
-      expect(mocha.options.invert).to.be.ok;
+      expect(mocha.options.invert, 'to be', true);
     });
   });
 });
