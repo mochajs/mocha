@@ -83,57 +83,43 @@ describe('pending', function() {
         });
       });
       it('should run before and after hooks', function(done) {
-        runMocha('pending/skip-sync-before-hooks.fixture.js', args, function(
-          err,
-          res
-        ) {
-          if (err) {
-            done(err);
-            return;
+        runMocha(
+          'pending/skip-sync-before-hooks.fixture.js',
+          args.concat(['--reporter', 'dot']),
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            var lines = res.output
+              .split(splitRegExp)
+              .map(function(line) {
+                return line.trim();
+              })
+              .filter(function(line) {
+                return line.length;
+              })
+              .slice(0, -1);
+
+            var expected = [
+              'outer before',
+              'inner before',
+              'inner after',
+              'outer after'
+            ];
+
+            assert.equal(res.pending, 2);
+            assert.equal(res.passing, 2);
+            assert.equal(res.failing, 0);
+            assert.equal(res.code, 0);
+            expected.forEach(function(line, i) {
+              assert.equal(true, lines[i].includes(line));
+            });
+
+            done();
           }
-          var output = res.output.split(splitRegExp);
-          assert.equal(res.pending, 2);
-          assert.equal(res.passing, 2);
-          assert.equal(res.failing, 0);
-          assert.equal(res.code, 0);
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'outer before';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'outer after';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'inner before';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'inner after';
-            }).length
-          );
-          assert.equal(
-            0,
-            output.filter(function(txt) {
-              return txt === 'skipped before';
-            }).length
-          );
-          assert.equal(
-            0,
-            output.filter(function(txt) {
-              return txt === 'skipped after';
-            }).length
-          );
-          done();
-        });
+        );
       });
     });
 
@@ -208,57 +194,43 @@ describe('pending', function() {
         });
       });
       it('should run before and after hooks', function(done) {
-        runMocha('pending/skip-async-before-hooks.fixture.js', args, function(
-          err,
-          res
-        ) {
-          if (err) {
-            done(err);
-            return;
+        runMocha(
+          'pending/skip-async-before-hooks.fixture.js',
+          args.concat(['--reporter', 'dot']),
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            var lines = res.output
+              .split(splitRegExp)
+              .map(function(line) {
+                return line.trim();
+              })
+              .filter(function(line) {
+                return line.length;
+              })
+              .slice(0, -1);
+
+            var expected = [
+              'outer before',
+              'inner before',
+              'inner after',
+              'outer after'
+            ];
+
+            assert.equal(res.pending, 2);
+            assert.equal(res.passing, 2);
+            assert.equal(res.failing, 0);
+            assert.equal(res.code, 0);
+            expected.forEach(function(line, i) {
+              assert.equal(true, lines[i].includes(line));
+            });
+
+            done();
           }
-          var output = res.output.split(splitRegExp);
-          assert.equal(res.pending, 2);
-          assert.equal(res.passing, 2);
-          assert.equal(res.failing, 0);
-          assert.equal(res.code, 0);
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'outer before';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'outer after';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'inner before';
-            }).length
-          );
-          assert.equal(
-            1,
-            output.filter(function(txt) {
-              return txt === 'inner after';
-            }).length
-          );
-          assert.equal(
-            0,
-            output.filter(function(txt) {
-              return txt === 'skipped before';
-            }).length
-          );
-          assert.equal(
-            0,
-            output.filter(function(txt) {
-              return txt === 'skipped after';
-            }).length
-          );
-          done();
-        });
+        );
       });
     });
 

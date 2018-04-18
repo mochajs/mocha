@@ -1,4 +1,4 @@
-'use string';
+'use strict';
 
 describe('outer suite', function () {
 
@@ -6,7 +6,7 @@ describe('outer suite', function () {
     console.log('outer before');
   });
 
-  it('should run this test', function () {});
+  it('should run this test', function () { });
 
   describe('inner suite', function () {
 
@@ -51,7 +51,7 @@ describe('outer suite', function () {
 
   });
 
-  it('should run this test', function () {});
+  it('should run this test', function () { });
 
   after(function () {
     console.log('outer after');
