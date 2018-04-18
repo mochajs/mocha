@@ -26,7 +26,11 @@ matrix:
     - node_js: '8'
       env: TARGET=test.browser
 
-before_install: scripts/travis-before-install.sh
+before_install:
+  - scripts/travis-before-install.sh
+  - npm install -g npm@latest
+
+install: npm ci
 
 before_script: scripts/travis-before-script.sh
 

@@ -10,8 +10,9 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
-  - npm install -g npm
-  - npm install
+  # upgrade npm
+  - npm install -g npm@latest
+  - npm ci
 matrix:
   fast_finish: true
 build: off
