@@ -1,3 +1,11 @@
+# 5.1.1 / 2018-04-18
+
+## :bug: Fixes
+
+- [#3325]: Revert change which broke `--watch` ([@boneskull])
+
+[#3325]: https://github.com/mochajs/mocha/issues/3325
+
 # 5.1.0 / 2018-04-12
 
 ## :tada: Enhancements
