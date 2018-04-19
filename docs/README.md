@@ -15,8 +15,8 @@
 
 1. Run `npm install` from working copy root to get Node.js deps.
 1. Run `bundle install` to install Jekyll and its dependencies.  This may or may not require elevated privileges, depending on your system.
-1. To serve the site and rebuild as changes are made, execute `npm run docs.watch`.
-1. To rebuild the site *once*, execute `npm start docs.build`.
+1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
+1. To rebuild the site *once*, execute `npm start docs`.
 
 ### Notes
 
