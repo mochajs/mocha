@@ -247,7 +247,7 @@ program
     '--watch-extensions <ext>,...',
     'specify extensions to monitor with --watch',
     list,
-    []
+    ['js']
   )
   .option('--delay', 'wait for async suite definition')
   .option('--allow-uncaught', 'enable uncaught errors to propagate')
