@@ -3,6 +3,7 @@ exclude:
   - README.md
   - .*
   - LICENSE*
+  - API.md
 repository: mochajs/mocha
 source: docs
 
