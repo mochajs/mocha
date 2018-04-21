@@ -470,6 +470,7 @@
     "supports-color": "4.4.0"
   },
   "devDependencies": {
+    "@mocha/docdash": "^1.0.1",
     "assert": "^1.4.1",
     "assetgraph-builder": "^5.6.4",
     "browserify": "^14.4.0",
@@ -494,7 +495,6 @@
     "karma-sauce-launcher": "^1.2.0",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.6.0",
-    "mocha-docdash": "^1.0.0",
     "nps": "^5.7.1",
     "nyc": "^11.2.1",
     "rimraf": "^2.5.2",
