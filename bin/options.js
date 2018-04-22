@@ -16,17 +16,22 @@ module.exports = getOptions;
  * Get options.
  */
 
-function getOptions () {
-  if (process.argv.length === 3 && (process.argv[2] === '-h' || process.argv[2] === '--help')) {
+function getOptions() {
+  if (
+    process.argv.length === 3 &&
+    (process.argv[2] === '-h' || process.argv[2] === '--help')
+  ) {
     return;
   }
 
-  const optsPath = process.argv.indexOf('--opts') === -1
-    ? 'test/mocha.opts'
-    : process.argv[process.argv.indexOf('--opts') + 1];
+  const optsPath =
+    process.argv.indexOf('--opts') === -1
+      ? 'test/mocha.opts'
+      : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
-    const opts = fs.readFileSync(optsPath, 'utf8')
+    const opts = fs
+      .readFileSync(optsPath, 'utf8')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)

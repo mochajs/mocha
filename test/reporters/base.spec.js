@@ -8,7 +8,7 @@ var Assert = require('assert').AssertionError;
 var makeTest = require('./helpers').makeTest;
 var createElements = require('./helpers').createElements;
 
-describe('Base reporter', function () {
+describe('Base reporter', function() {
   var stdout;
   var stdoutWrite;
   var useColors;
@@ -16,27 +16,27 @@ describe('Base reporter', function () {
   var errOut;
   var test;
 
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
     useColors = Base.useColors;
     Base.useColors = false;
   });
 
-  afterEach(function () {
+  afterEach(function() {
     process.stdout.write = stdoutWrite;
     Base.useColors = useColors;
   });
 
-  describe('showDiff', function () {
-    beforeEach(function () {
-      err = new Assert({ actual: 'foo', expected: 'bar' });
+  describe('showDiff', function() {
+    beforeEach(function() {
+      err = new Assert({actual: 'foo', expected: 'bar'});
     });
 
-    it('should show diffs by default', function () {
+    it('should show diffs by default', function() {
       test = makeTest(err);
 
       Base.list([test]);
@@ -46,7 +46,7 @@ describe('Base reporter', function () {
       expect(errOut).to.match(/\+ expected/);
     });
 
-    it('should show diffs if property set to `true`', function () {
+    it('should show diffs if property set to `true`', function() {
       err.showDiff = true;
       test = makeTest(err);
 
@@ -57,7 +57,7 @@ describe('Base reporter', function () {
       expect(errOut).to.match(/\+ expected/);
     });
 
-    it('should not show diffs when showDiff property set to `false`', function () {
+    it('should not show diffs when showDiff property set to `false`', function() {
       err.showDiff = false;
       test = makeTest(err);
 
@@ -68,7 +68,7 @@ describe('Base reporter', function () {
       expect(errOut).to.not.match(/\+ expected/);
     });
 
-    it('should not show diffs when expected is not defined', function () {
+    it('should not show diffs when expected is not defined', function() {
       err = new Error('ouch');
 
       test = makeTest(err);
@@ -80,7 +80,7 @@ describe('Base reporter', function () {
       expect(errOut).to.not.match(/\+ expected/);
     });
 
-    it('should not show diffs when hideDiff is set', function () {
+    it('should not show diffs when hideDiff is set', function() {
       test = makeTest(err);
 
       Base.hideDiff = true;
@@ -93,9 +93,9 @@ describe('Base reporter', function () {
     });
   });
 
-  describe('Getting two strings', function () {
+  describe('Getting two strings', function() {
     // Fix regression V1.2.1(see: issue #1241)
-    it('should show strings diff as is', function () {
+    it('should show strings diff as is', function() {
       err = new Error('test');
 
       err.actual = 'foo\nbar';
@@ -108,50 +108,56 @@ describe('Base reporter', function () {
       errOut = stdout.join('\n');
 
       expect(errOut).to.not.match(/"foo\\nbar"/);
-      expect(errOut).to.match(/foo/).and.match(/bar/);
+      expect(errOut)
+        .to.match(/foo/)
+        .and.match(/bar/);
       expect(errOut).to.match(/test/);
       expect(errOut).to.match(/actual/);
       expect(errOut).to.match(/expected/);
     });
   });
 
-  describe('Diff generation', function () {
+  describe('Diff generation', function() {
     var oldInlineDiffs;
     var actual;
     var expected;
     var output;
 
-    beforeEach(function () {
+    beforeEach(function() {
       oldInlineDiffs = Base.inlineDiffs;
     });
 
-    afterEach(function () {
+    afterEach(function() {
       Base.inlineDiffs = oldInlineDiffs;
     });
 
-    it('should generate unified diffs if `inlineDiff === false`', function () {
+    it('should generate unified diffs if `inlineDiff === false`', function() {
       actual = 'a foo unified diff';
       expected = 'a bar unified diff';
 
       Base.inlineDiffs = false;
       output = Base.generateDiff(actual, expected);
 
-      expect(output).to.equal('\n      + expected - actual\n\n      -a foo unified diff\n      +a bar unified diff\n      ');
+      expect(output).to.equal(
+        '\n      + expected - actual\n\n      -a foo unified diff\n      +a bar unified diff\n      '
+      );
     });
 
-    it('should generate inline diffs if `inlineDiffs === true`', function () {
+    it('should generate inline diffs if `inlineDiffs === true`', function() {
       actual = 'a foo inline diff';
       expected = 'a bar inline diff';
 
       Base.inlineDiffs = true;
       output = Base.generateDiff(actual, expected);
 
-      expect(output).to.equal('      \n      actual expected\n      \n      a foobar inline diff\n      ');
+      expect(output).to.equal(
+        '      \n      actual expected\n      \n      a foobar inline diff\n      '
+      );
     });
   });
 
-  describe('Inline strings diff', function () {
-    it('should show single line diff if property set to `true`', function () {
+  describe('Inline strings diff', function() {
+    it('should show single line diff if property set to `true`', function() {
       err = new Error('test');
 
       err.actual = 'a foo inline diff';
@@ -170,7 +176,7 @@ describe('Base reporter', function () {
       expect(errOut).to.match(/expected/);
     });
 
-    it('should split lines when string has more than 4 line breaks', function () {
+    it('should split lines when string has more than 4 line breaks', function() {
       err = new Error('test');
 
       err.actual = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
@@ -195,14 +201,14 @@ describe('Base reporter', function () {
     });
   });
 
-  describe('unified diff reporter', function () {
-    beforeEach(function () {
+  describe('unified diff reporter', function() {
+    beforeEach(function() {
       err = new Error('test');
     });
 
-    it('should separate diff hunks by two dashes', function () {
-      err.actual = createElements({ from: 2, to: 11 });
-      err.expected = createElements({ from: 1, to: 10 });
+    it('should separate diff hunks by two dashes', function() {
+      err.actual = createElements({from: 2, to: 11});
+      err.expected = createElements({from: 1, to: 10});
       err.showDiff = true;
       test = makeTest(err);
 
@@ -230,13 +236,13 @@ describe('Base reporter', function () {
         /actual/
       ];
 
-      regexesToMatch.forEach(function (aRegex) {
+      regexesToMatch.forEach(function(aRegex) {
         expect(errOut).to.match(aRegex);
       });
     });
   });
 
-  it('should stringify objects', function () {
+  it('should stringify objects', function() {
     err = new Error('test');
 
     err.actual = {key: 'a1'};
@@ -253,7 +259,7 @@ describe('Base reporter', function () {
     expect(errOut).to.match(/\+ expected/);
   });
 
-  it('should stringify Object.create(null)', function () {
+  it('should stringify Object.create(null)', function() {
     err = new Error('test');
 
     err.actual = Object.create(null);
@@ -272,7 +278,7 @@ describe('Base reporter', function () {
     expect(errOut).to.match(/\+ expected/);
   });
 
-  it('should handle error messages that are not strings', function () {
+  it('should handle error messages that are not strings', function() {
     try {
       assert(false, true);
     } catch (err) {
@@ -291,7 +297,7 @@ describe('Base reporter', function () {
     }
   });
 
-  it('should interpret chaijs custom error messages', function () {
+  it('should interpret chaijs custom error messages', function() {
     try {
       // expect(43, 'custom error message').to.equal(42);
       // AssertionError: custom error message: expected 43 to equal 42.
@@ -313,7 +319,7 @@ describe('Base reporter', function () {
     }
   });
 
-  it('should remove message from stack', function () {
+  it('should remove message from stack', function() {
     err = {
       message: 'Error',
       stack: 'Error\nfoo\nbar',
@@ -327,10 +333,12 @@ describe('Base reporter', function () {
     expect(errOut).to.equal('1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it('should use the inspect() property if `message` is not set', function () {
+  it('should use the inspect() property if `message` is not set', function() {
     err = {
       showDiff: false,
-      inspect: function () { return 'an error happened'; }
+      inspect: function() {
+        return 'an error happened';
+      }
     };
     test = makeTest(err);
     Base.list([test]);
@@ -338,7 +346,7 @@ describe('Base reporter', function () {
     expect(errOut).to.equal('1) test title:\n     an error happened');
   });
 
-  it('should set an empty message if `message` and `inspect()` are not set', function () {
+  it('should set an empty message if `message` and `inspect()` are not set', function() {
     err = {
       showDiff: false
     };
@@ -348,7 +356,7 @@ describe('Base reporter', function () {
     expect(errOut).to.equal('1) test title:');
   });
 
-  it('should not modify stack if it does not contain message', function () {
+  it('should not modify stack if it does not contain message', function() {
     err = {
       message: 'Error',
       stack: 'foo\nbar',

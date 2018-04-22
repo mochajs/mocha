@@ -16,11 +16,7 @@ const browserPlatformPairs = {
 module.exports = config => {
   let bundleDirpath;
   const cfg = {
-    frameworks: [
-      'browserify',
-      'expect',
-      'mocha'
-    ],
+    frameworks: ['browserify', 'expect', 'mocha'],
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
@@ -32,8 +28,9 @@ module.exports = config => {
     },
     browserify: {
       debug: true,
-      configure: function configure (b) {
-        b.ignore('glob')
+      configure: function configure(b) {
+        b
+          .ignore('glob')
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
@@ -43,8 +40,10 @@ module.exports = config => {
             }
             if (bundleDirpath) {
               // write bundle to directory for debugging
-              fs.writeFileSync(path.join(bundleDirpath,
-                `mocha.${Date.now()}.js`), content);
+              fs.writeFileSync(
+                path.join(bundleDirpath, `mocha.${Date.now()}.js`),
+                content
+              );
             }
           });
       }
@@ -155,7 +154,7 @@ module.exports = config => {
   config.set(cfg);
 };
 
-function addSauceTests (cfg) {
+function addSauceTests(cfg) {
   cfg.reporters.push('saucelabs');
   const browsers = Object.keys(browserPlatformPairs);
   cfg.browsers = cfg.browsers.concat(browsers);

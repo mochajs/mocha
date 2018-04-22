@@ -3,10 +3,10 @@
 var helpers = require('./helpers');
 var run = helpers.runMocha;
 
-describe('no-diff', function () {
-  describe('when enabled', function () {
-    it('should not display a diff', function (done) {
-      run('no-diff.fixture.js', ['--no-diff'], function (err, res) {
+describe('no-diff', function() {
+  describe('when enabled', function() {
+    it('should not display a diff', function(done) {
+      run('no-diff.fixture.js', ['--no-diff'], function(err, res) {
         if (err) {
           done(err);
           return;
@@ -18,9 +18,9 @@ describe('no-diff', function () {
     });
   });
 
-  describe('when disabled', function () {
-    it('should display a diff', function (done) {
-      run('no-diff.fixture.js', ['--diff'], function (err, res) {
+  describe('when disabled', function() {
+    it('should display a diff', function(done) {
+      run('no-diff.fixture.js', ['--diff'], function(err, res) {
         if (err) {
           done(err);
           return;
