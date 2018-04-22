@@ -69,6 +69,22 @@ describe('options', function() {
       });
     });
 
+    it('should stop all tests after the first error in before hook', function(done) {
+      run('options/bail-with-before.fixture.js', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 0);
+        assert.equal(res.stats.failures, 1);
+
+        assert.equal(res.failures[0].title, '"before all" hook');
+        assert.equal(res.code, 1);
+        done();
+      });
+    });
+
     it('should stop all hooks after the first error', function(done) {
       run('options/bail-with-after.fixture.js', args, function(err, res) {
         if (err) {
