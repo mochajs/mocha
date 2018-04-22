@@ -5,9 +5,9 @@ var helpers = require('./helpers');
 var args = ['--reporter', 'dot'];
 var bang = require('../../lib/reporters/base').symbols.bang;
 
-describe('retries', function () {
-  it('are ran in correct order', function (done) {
-    helpers.runMocha('retries/hooks.fixture.js', args, function (err, res) {
+describe('retries', function() {
+  it('are ran in correct order', function(done) {
+    helpers.runMocha('retries/hooks.fixture.js', args, function(err, res) {
       var lines, expected;
 
       if (err) {
@@ -15,11 +15,15 @@ describe('retries', function () {
         return;
       }
 
-      lines = res.output.split(helpers.splitRegExp).map(function (line) {
-        return line.trim();
-      }).filter(function (line) {
-        return line.length;
-      }).slice(0, -1);
+      lines = res.output
+        .split(helpers.splitRegExp)
+        .map(function(line) {
+          return line.trim();
+        })
+        .filter(function(line) {
+          return line.length;
+        })
+        .slice(0, -1);
 
       expected = [
         'before',
@@ -41,7 +45,7 @@ describe('retries', function () {
         'after'
       ];
 
-      expected.forEach(function (line, i) {
+      expected.forEach(function(line, i) {
         assert.equal(lines[i], line);
       });
 
@@ -50,8 +54,11 @@ describe('retries', function () {
     });
   });
 
-  it('should exit early if test passes', function (done) {
-    helpers.runMochaJSON('retries/early-pass.fixture.js', args, function (err, res) {
+  it('should exit early if test passes', function(done) {
+    helpers.runMochaJSON('retries/early-pass.fixture.js', args, function(
+      err,
+      res
+    ) {
       if (err) {
         done(err);
         return;
@@ -65,8 +72,8 @@ describe('retries', function () {
     });
   });
 
-  it('should let test override', function (done) {
-    helpers.runMochaJSON('retries/nested.fixture.js', args, function (err, res) {
+  it('should let test override', function(done) {
+    helpers.runMochaJSON('retries/nested.fixture.js', args, function(err, res) {
       if (err) {
         done(err);
         return;
@@ -80,8 +87,8 @@ describe('retries', function () {
     });
   });
 
-  it('should not hang w/ async test', function (done) {
-    helpers.runMocha('retries/async.fixture.js', args, function (err, res) {
+  it('should not hang w/ async test', function(done) {
+    helpers.runMocha('retries/async.fixture.js', args, function(err, res) {
       var lines, expected;
 
       if (err) {
@@ -89,11 +96,15 @@ describe('retries', function () {
         return;
       }
 
-      lines = res.output.split(helpers.splitRegExp).map(function (line) {
-        return line.trim();
-      }).filter(function (line) {
-        return line.length;
-      }).slice(0, -1);
+      lines = res.output
+        .split(helpers.splitRegExp)
+        .map(function(line) {
+          return line.trim();
+        })
+        .filter(function(line) {
+          return line.length;
+        })
+        .slice(0, -1);
 
       expected = [
         'before',
@@ -109,7 +120,7 @@ describe('retries', function () {
         'after'
       ];
 
-      expected.forEach(function (line, i) {
+      expected.forEach(function(line, i) {
         assert.equal(lines[i], line);
       });
 

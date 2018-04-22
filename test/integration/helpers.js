@@ -25,13 +25,13 @@ module.exports = {
    * @param {Array<string>} args - Extra args to mocha executable
    * @param {Function} done - Callback
    */
-  runMocha: function (fixturePath, args, done) {
+  runMocha: function(fixturePath, args, done) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeMocha(args.concat(['-C', path]), function (err, res) {
+    invokeMocha(args.concat(['-C', path]), function(err, res) {
       if (err) {
         return done(err);
       }
@@ -48,13 +48,16 @@ module.exports = {
    * @param {string[]} args - Array of args
    * @param {Function} fn - Callback
    */
-  runMochaJSON: function (fixturePath, args, fn) {
+  runMochaJSON: function(fixturePath, args, fn) {
     var path;
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    return invokeMocha(args.concat(['--reporter', 'json', path]), function (err, res) {
+    return invokeMocha(args.concat(['--reporter', 'json', path]), function(
+      err,
+      res
+    ) {
       if (err) return fn(err);
 
       try {
@@ -75,11 +78,11 @@ module.exports = {
    * @param  {string}   output
    * returns {string[]}
    */
-  getDiffs: function (output) {
+  getDiffs: function(output) {
     var diffs, i, inDiff, inStackTrace;
 
     diffs = [];
-    output.split('\n').forEach(function (line) {
+    output.split('\n').forEach(function(line) {
       if (line.match(/^\s{2}\d+\)/)) {
         // New spec, e.g. "1) spec title"
         diffs.push([]);
@@ -89,7 +92,6 @@ module.exports = {
       } else if (!diffs.length || inStackTrace) {
         // Haven't encountered a spec yet
         // or we're in the middle of a stack trace
-
       } else if (line.indexOf('+ expected - actual') !== -1) {
         inDiff = true;
       } else if (line.match(/at Context/)) {
@@ -102,7 +104,7 @@ module.exports = {
     });
 
     // Ignore empty lines before/after diff
-    return diffs.map(function (diff) {
+    return diffs.map(function(diff) {
       return diff.slice(1, -3).join('\n');
     });
   },
@@ -137,14 +139,14 @@ module.exports = {
   resolveFixturePath: resolveFixturePath
 };
 
-function invokeMocha (args, fn, cwd) {
+function invokeMocha(args, fn, cwd) {
   var output, mocha, listener;
 
   output = '';
   args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, { cwd: cwd });
+  mocha = spawn(process.execPath, args, {cwd: cwd});
 
-  listener = function (data) {
+  listener = function(data) {
     output += data;
   };
 
@@ -152,7 +154,7 @@ function invokeMocha (args, fn, cwd) {
   mocha.stderr.on('data', listener);
   mocha.on('error', fn);
 
-  mocha.on('close', function (code) {
+  mocha.on('close', function(code) {
     fn(null, {
       output: output.split('\n').join('\n'),
       code: code
@@ -162,17 +164,17 @@ function invokeMocha (args, fn, cwd) {
   return mocha;
 }
 
-function resolveFixturePath (fixture) {
+function resolveFixturePath(fixture) {
   return path.join('./test/integration/fixtures', fixture);
 }
 
-function getSummary (res) {
-  return ['passing', 'pending', 'failing'].reduce(function (summary, type) {
+function getSummary(res) {
+  return ['passing', 'pending', 'failing'].reduce(function(summary, type) {
     var pattern, match;
 
     pattern = new RegExp('  (\\d+) ' + type + '\\s');
     match = pattern.exec(res.output);
-    summary[type] = (match) ? parseInt(match, 10) : 0;
+    summary[type] = match ? parseInt(match, 10) : 0;
 
     return summary;
   }, res);

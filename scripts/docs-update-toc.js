@@ -16,7 +16,8 @@ const docsFilepath = path.join(__dirname, '..', 'docs', 'index.md');
 
 console.log('Updating TOC...');
 
-fs.createReadStream(docsFilepath)
+fs
+  .createReadStream(docsFilepath)
   .on('error', err => {
     console.log(err);
     process.exit(1);
@@ -24,10 +25,14 @@ fs.createReadStream(docsFilepath)
   .on('close', () => {
     console.log('Done.');
   })
-  .pipe(utils.concat(input => {
-    const output = toc.insert(String(input), {
-      bullets: '-',
-      maxdepth: 2
-    }).replace(/\n\n$/, '\n');
-    return fs.writeFileSync(docsFilepath, output);
-  }));
+  .pipe(
+    utils.concat(input => {
+      const output = toc
+        .insert(String(input), {
+          bullets: '-',
+          maxdepth: 2
+        })
+        .replace(/\n\n$/, '\n');
+      return fs.writeFileSync(docsFilepath, output);
+    })
+  );

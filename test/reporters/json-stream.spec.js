@@ -6,7 +6,7 @@ var JSONStream = reporters.JSONStream;
 var createMockRunner = require('./helpers').createMockRunner;
 var makeExpectedTest = require('./helpers').makeExpectedTest;
 
-describe('Json Stream reporter', function () {
+describe('Json Stream reporter', function() {
   var runner;
   var stdout;
   var stdoutWrite;
@@ -15,23 +15,28 @@ describe('Json Stream reporter', function () {
   var expectedFullTitle = 'full title';
   var expectedDuration = 1000;
   var currentRetry = 1;
-  var expectedTest = makeExpectedTest(expectedTitle, expectedFullTitle, expectedDuration, currentRetry);
+  var expectedTest = makeExpectedTest(
+    expectedTitle,
+    expectedFullTitle,
+    expectedDuration,
+    currentRetry
+  );
   var expectedErrorMessage = 'error message';
   var expectedErrorStack = 'error stack';
   var expectedError = {
     message: expectedErrorMessage
   };
 
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
   });
 
-  describe('on start', function () {
-    it('should write stringified start with expected total', function () {
+  describe('on start', function() {
+    it('should write stringified start with expected total', function() {
       runner = createMockRunner('start', 'start');
       var expectedTotal = 12;
       runner.total = expectedTotal;
@@ -43,46 +48,96 @@ describe('Json Stream reporter', function () {
     });
   });
 
-  describe('on pass', function () {
-    it('should write stringified test data', function () {
+  describe('on pass', function() {
+    it('should write stringified test data', function() {
       runner = createMockRunner('pass', 'pass', null, null, expectedTest);
       JSONStream.call({}, runner);
 
       process.stdout.write = stdoutWrite;
 
-      expect(stdout[0]).to.eql('["pass",{"title":"' + expectedTitle + '","fullTitle":"' + expectedFullTitle + '","duration":' + expectedDuration + ',"currentRetry":' + currentRetry + '}]\n');
+      expect(stdout[0]).to.eql(
+        '["pass",{"title":"' +
+          expectedTitle +
+          '","fullTitle":"' +
+          expectedFullTitle +
+          '","duration":' +
+          expectedDuration +
+          ',"currentRetry":' +
+          currentRetry +
+          '}]\n'
+      );
     });
   });
 
-  describe('on fail', function () {
-    describe('if error stack exists', function () {
-      it('should write stringified test data with error data', function () {
+  describe('on fail', function() {
+    describe('if error stack exists', function() {
+      it('should write stringified test data with error data', function() {
         expectedError.stack = expectedErrorStack;
-        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
+        runner = createMockRunner(
+          'fail two args',
+          'fail',
+          null,
+          null,
+          expectedTest,
+          expectedError
+        );
 
         JSONStream.call({}, runner);
 
         process.stdout.write = stdoutWrite;
 
-        expect(stdout[0]).to.eql('["fail",{"title":"' + expectedTitle + '","fullTitle":"' + expectedFullTitle + '","duration":' + expectedDuration + ',"currentRetry":' + currentRetry + ',"err":"' + expectedErrorMessage + '","stack":"' + expectedErrorStack + '"}]\n');
+        expect(stdout[0]).to.eql(
+          '["fail",{"title":"' +
+            expectedTitle +
+            '","fullTitle":"' +
+            expectedFullTitle +
+            '","duration":' +
+            expectedDuration +
+            ',"currentRetry":' +
+            currentRetry +
+            ',"err":"' +
+            expectedErrorMessage +
+            '","stack":"' +
+            expectedErrorStack +
+            '"}]\n'
+        );
       });
     });
 
-    describe('if error stack does not exist', function () {
-      it('should write stringified test data with error data', function () {
+    describe('if error stack does not exist', function() {
+      it('should write stringified test data with error data', function() {
         expectedError.stack = null;
-        runner = createMockRunner('fail two args', 'fail', null, null, expectedTest, expectedError);
+        runner = createMockRunner(
+          'fail two args',
+          'fail',
+          null,
+          null,
+          expectedTest,
+          expectedError
+        );
 
         JSONStream.call({}, runner);
         process.stdout.write = stdoutWrite;
 
-        expect(stdout[0]).to.eql('["fail",{"title":"' + expectedTitle + '","fullTitle":"' + expectedFullTitle + '","duration":' + expectedDuration + ',"currentRetry":' + currentRetry + ',"err":"' + expectedErrorMessage + '","stack":null}]\n');
+        expect(stdout[0]).to.eql(
+          '["fail",{"title":"' +
+            expectedTitle +
+            '","fullTitle":"' +
+            expectedFullTitle +
+            '","duration":' +
+            expectedDuration +
+            ',"currentRetry":' +
+            currentRetry +
+            ',"err":"' +
+            expectedErrorMessage +
+            '","stack":null}]\n'
+        );
       });
     });
   });
 
-  describe('on end', function () {
-    it('should write end details', function () {
+  describe('on end', function() {
+    it('should write end details', function() {
       runner = createMockRunner('end', 'end');
       JSONStream.call({}, runner);
       process.stdout.write = stdoutWrite;
