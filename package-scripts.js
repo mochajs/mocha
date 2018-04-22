@@ -35,6 +35,11 @@ module.exports = {
         description: 'Run markdownlint linter'
       }
     },
+    reformat: {
+      script:
+        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*"',
+      description: 'Reformat codebase with Prettier'
+    },
     clean: {
       script: 'rimraf mocha.js',
       description: 'Clean browser bundle'
