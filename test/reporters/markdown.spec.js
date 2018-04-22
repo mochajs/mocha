@@ -5,7 +5,7 @@ var Markdown = reporters.Markdown;
 
 var createMockRunner = require('./helpers').createMockRunner;
 
-describe('Markdown reporter', function () {
+describe('Markdown reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
@@ -13,44 +13,66 @@ describe('Markdown reporter', function () {
   var expectedFullTitle = 'full title';
   var sluggedFullTitle = 'full-title';
 
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
   });
 
-  describe('on \'suite\'', function () {
-    it('should write expected slugged titles on \'end\' event', function () {
+  describe("on 'suite'", function() {
+    it("should write expected slugged titles on 'end' event", function() {
       var expectedSuite = {
         title: expectedTitle,
-        fullTitle: function () { return expectedFullTitle; },
-        suites: [{
-          title: expectedTitle,
-          fullTitle: function () { return expectedFullTitle; },
-          suites: []
-        }]
+        fullTitle: function() {
+          return expectedFullTitle;
+        },
+        suites: [
+          {
+            title: expectedTitle,
+            fullTitle: function() {
+              return expectedFullTitle;
+            },
+            suites: []
+          }
+        ]
       };
-      runner = createMockRunner('suite suite end', 'suite', 'suite end', 'end', expectedSuite);
+      runner = createMockRunner(
+        'suite suite end',
+        'suite',
+        'suite end',
+        'end',
+        expectedSuite
+      );
       runner.suite = expectedSuite;
       Markdown.call({}, runner);
       process.stdout.write = stdoutWrite;
 
       var expectedArray = [
         '# TOC\n',
-        ' - [' + expectedTitle + '](#' + sluggedFullTitle + ')\n   - [' + expectedTitle + '](#' + sluggedFullTitle + ')\n',
+        ' - [' +
+          expectedTitle +
+          '](#' +
+          sluggedFullTitle +
+          ')\n   - [' +
+          expectedTitle +
+          '](#' +
+          sluggedFullTitle +
+          ')\n',
         '<a name="' + sluggedFullTitle + '"></a>\n ' + expectedTitle + '\n'
       ];
 
       expect(stdout).to.eql(expectedArray);
     });
   });
-  describe('on \'pass\'', function () {
-    it('should write test code inside js code block, on \'end\' event', function () {
+  describe("on 'pass'", function() {
+    it("should write test code inside js code block, on 'end' event", function() {
       var expectedSuite = {
         title: expectedTitle,
-        fullTitle: function () { return expectedFullTitle; },
+        fullTitle: function() {
+          return expectedFullTitle;
+        },
         suites: []
       };
       var expectedDuration = 1000;
@@ -58,10 +80,14 @@ describe('Markdown reporter', function () {
       var expectedBody = 'some body';
       var expectedTest = {
         title: expectedTitle,
-        fullTitle: function () { return expectedFullTitle; },
+        fullTitle: function() {
+          return expectedFullTitle;
+        },
         duration: expectedDuration,
-        currentRetry: function () { return currentRetry; },
-        slow: function () {},
+        currentRetry: function() {
+          return currentRetry;
+        },
+        slow: function() {},
         body: expectedBody
       };
       runner = createMockRunner('pass end', 'pass', 'end', null, expectedTest);

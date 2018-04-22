@@ -1,32 +1,34 @@
 'use strict';
 
-describe('serial', function () {
-  describe('nested', function () {
+describe('serial', function() {
+  describe('nested', function() {
     var calls = [];
 
-    beforeEach(function () {
+    beforeEach(function() {
       calls.push('parent before');
       if (this.currentTest) {
         calls.push('parent before test ' + this.currentTest.title);
       }
     });
 
-    afterEach(function () {
+    afterEach(function() {
       calls.push('parent after');
       if (this.currentTest) {
-        calls.push('parent after test ' + this.currentTest.title + ' ' + this.currentTest.state);
+        calls.push(
+          'parent after test ' +
+            this.currentTest.title +
+            ' ' +
+            this.currentTest.state
+        );
       }
     });
 
-    it('foo', function () {
-      expect(calls).to.eql([
-        'parent before',
-        'parent before test foo'
-      ]);
+    it('foo', function() {
+      expect(calls).to.eql(['parent before', 'parent before test foo']);
       calls.push('foo');
     });
 
-    it('bar', function () {
+    it('bar', function() {
       expect(calls).to.eql([
         'parent before',
         'parent before test foo',
@@ -38,15 +40,15 @@ describe('serial', function () {
       ]);
     });
 
-    describe('hooks', function () {
-      beforeEach(function () {
+    describe('hooks', function() {
+      beforeEach(function() {
         calls.push('before');
         if (this.currentTest) {
           calls.push('before test ' + this.currentTest.title);
         }
       });
 
-      it('one', function () {
+      it('one', function() {
         expect(calls).to.eql([
           'parent before',
           'parent before test foo',
@@ -65,7 +67,7 @@ describe('serial', function () {
         calls.push('one');
       });
 
-      it('two', function () {
+      it('two', function() {
         expect(calls).to.eql([
           'parent before',
           'parent before test foo',
@@ -93,10 +95,15 @@ describe('serial', function () {
         calls.push('two');
       });
 
-      afterEach(function () {
+      afterEach(function() {
         calls.push('after');
         if (this.currentTest) {
-          calls.push('after test ' + this.currentTest.title + ' ' + this.currentTest.state);
+          calls.push(
+            'after test ' +
+              this.currentTest.title +
+              ' ' +
+              this.currentTest.state
+          );
         }
       });
     });

@@ -3,18 +3,18 @@
 var path = require('path');
 var utils = require('../../lib/utils');
 
-describe('stackTraceFilter()', function () {
-  describe('on node', function () {
+describe('stackTraceFilter()', function() {
+  describe('on node', function() {
     var filter = utils.stackTraceFilter();
 
-    describe('on POSIX OS', function () {
-      before(function () {
+    describe('on POSIX OS', function() {
+      before(function() {
         if (path.sep !== '/') {
           this.skip();
         }
       });
 
-      it('should get a stack-trace as a string and prettify it', function () {
+      it('should get a stack-trace as a string and prettify it', function() {
         var stack = [
           'AssertionError: foo bar',
           'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
@@ -28,9 +28,7 @@ describe('stackTraceFilter()', function () {
           'Immediate._onImmediate (/usr/local/lib/node_modules/mocha/lib/runner.js:276:5)',
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
-        expect(filter(stack.join('\n')))
-          .to.equal(stack.slice(0, 3)
-            .join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 3).join('\n'));
 
         stack = [
           'AssertionError: bar baz',
@@ -46,12 +44,10 @@ describe('stackTraceFilter()', function () {
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
 
-        expect(filter(stack.join('\n')))
-          .to.equal(stack.slice(0, 7)
-            .join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
       });
 
-      it('does not ignore other bower_components and components', function () {
+      it('does not ignore other bower_components and components', function() {
         var stack = [
           'Error: failed',
           'at assert (index.html:11:26)',
@@ -67,12 +63,10 @@ describe('stackTraceFilter()', function () {
           'at file:///.../components/mochajs/mocha/2.1.0/mocha.js:4970:12',
           'at next (file:///.../components/mochajs/mocha/2.1.0/mocha.js:4817:14)'
         ];
-        expect(filter(stack.join('\n')))
-          .to.equal(stack.slice(0, 7)
-            .join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
       });
 
-      it('should replace absolute with relative paths', function () {
+      it('should replace absolute with relative paths', function() {
         var stack = [
           'Error: ' + process.cwd() + '/bla.js has a problem',
           'at foo (' + process.cwd() + '/foo/index.js:13:226)',
@@ -85,11 +79,10 @@ describe('stackTraceFilter()', function () {
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        expect(filter(stack.join('\n')))
-          .to.equal(expected.join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(expected.join('\n'));
       });
 
-      it('should not replace absolute path which has cwd as infix', function () {
+      it('should not replace absolute path which has cwd as infix', function() {
         var stack = [
           'Error: /www' + process.cwd() + '/bla.js has a problem',
           'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
@@ -102,19 +95,18 @@ describe('stackTraceFilter()', function () {
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        expect(filter(stack.join('\n')))
-          .to.equal(expected.join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(expected.join('\n'));
       });
     });
 
-    describe('on Windows', function () {
-      before(function () {
+    describe('on Windows', function() {
+      before(function() {
         if (path.sep === '/') {
           this.skip();
         }
       });
 
-      it('should work on Windows', function () {
+      it('should work on Windows', function() {
         var stack = [
           'Error: failed',
           'at Context.<anonymous> (C:\\Users\\ishida\\src\\test\\test\\mytest.js:5:9)',
@@ -127,21 +119,19 @@ describe('stackTraceFilter()', function () {
           'at next (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:284:14)',
           'at Immediate._onImmediate (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:320:5)'
         ];
-        expect(filter(stack.join('\n')))
-          .to.equal(stack.slice(0, 2)
-            .join('\n'));
+        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 2).join('\n'));
       });
     });
   });
 
-  describe('on browser', function () {
+  describe('on browser', function() {
     var filter;
-    before(function () {
+    before(function() {
       global.document = true;
       global.location = {href: 'localhost:3000/foo/bar/index.html'};
       filter = utils.stackTraceFilter();
     });
-    it('does not strip out other bower_components', function () {
+    it('does not strip out other bower_components', function() {
       var stack = [
         'Error: failed',
         'at assert (index.html:11:26)',
@@ -154,12 +144,10 @@ describe('stackTraceFilter()', function () {
         'at localhost:3000/foo/bar/node_modules/mocha.js:4970:12',
         'at next (node_modules/mocha.js:4817:14)'
       ];
-      expect(filter(stack.join('\n')))
-        .to.equal(stack.slice(0, 7)
-          .join('\n'));
+      expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
     });
 
-    after(function () {
+    after(function() {
       delete global.document;
       delete global.location;
     });

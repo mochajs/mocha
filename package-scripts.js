@@ -9,10 +9,12 @@ const path = require('path');
  * @param {string} mochaParams Parameters for the mocha CLI to execute the desired test.
  * @returns {string} Command string to be executed by nps.
  */
-function test (testName, mochaParams) {
+function test(testName, mochaParams) {
   const coverageCommand = `nyc --no-clean --report-dir coverage/reports/${testName}`;
   const mochaCommand = `node ${path.join('bin', 'mocha')}`; // Include 'node' and path.join for Windows compatibility
-  return `${process.env.COVERAGE ? coverageCommand : ''} ${mochaCommand} ${mochaParams}`.trim();
+  return `${
+    process.env.COVERAGE ? coverageCommand : ''
+  } ${mochaCommand} ${mochaParams}`.trim();
 }
 
 module.exports = {
@@ -87,11 +89,17 @@ module.exports = {
           hiddenFromHelp: true
         },
         unit: {
-          script: test('unit', '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'),
+          script: test(
+            'unit',
+            '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'
+          ),
           description: 'Run Node.js unit tests'
         },
         integration: {
-          script: test('integration', '--timeout 5000 --slow 500 "test/integration/*.spec.js"'),
+          script: test(
+            'integration',
+            '--timeout 5000 --slow 500 "test/integration/*.spec.js"'
+          ),
           description: 'Run Node.js integration tests',
           hiddenFromHelp: true
         },
@@ -102,33 +110,51 @@ module.exports = {
         },
         compilers: {
           default: {
-            script: 'nps test.node.compilers.coffee test.node.compilers.custom test.node.compilers.multiple',
+            script:
+              'nps test.node.compilers.coffee test.node.compilers.custom test.node.compilers.multiple',
             description: 'Run Node.js --compilers flag tests (deprecated)',
             hiddenFromHelp: true
           },
           coffee: {
-            script: test('compilers-coffee', '--compilers coffee:coffee-script/register test/compiler'),
-            description: 'Run Node.js coffeescript compiler tests using --compilers flag (deprecated)',
+            script: test(
+              'compilers-coffee',
+              '--compilers coffee:coffee-script/register test/compiler'
+            ),
+            description:
+              'Run Node.js coffeescript compiler tests using --compilers flag (deprecated)',
             hiddenFromHelp: true
           },
           custom: {
-            script: test('compilers-custom', '--compilers foo:./test/compiler-fixtures/foo.fixture test/compiler'),
-            description: 'Run Node.js custom compiler tests using --compilers flag (deprecated)',
+            script: test(
+              'compilers-custom',
+              '--compilers foo:./test/compiler-fixtures/foo.fixture test/compiler'
+            ),
+            description:
+              'Run Node.js custom compiler tests using --compilers flag (deprecated)',
             hiddenFromHelp: true
           },
           multiple: {
-            script: test('compilers-multiple', '--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture test/compiler'),
-            description: 'Run Node.js multiple compiler tests using--compilers flag (deprecated)',
+            script: test(
+              'compilers-multiple',
+              '--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture test/compiler'
+            ),
+            description:
+              'Run Node.js multiple compiler tests using--compilers flag (deprecated)',
             hiddenFromHelp: true
           }
         },
         requires: {
-          script: test('requires', ['--require coffee-script/register',
-            '--require test/require/a.js',
-            '--require test/require/b.coffee',
-            '--require test/require/c.js',
-            '--require test/require/d.coffee',
-            'test/require/require.spec.js'].join(' ')),
+          script: test(
+            'requires',
+            [
+              '--require coffee-script/register',
+              '--require test/require/a.js',
+              '--require test/require/b.coffee',
+              '--require test/require/c.js',
+              '--require test/require/d.coffee',
+              'test/require/require.spec.js'
+            ].join(' ')
+          ),
           description: 'Run Node.js --require flag tests',
           hiddenFromHelp: true
         },
@@ -161,22 +187,34 @@ module.exports = {
             hiddenFromHelp: true
           },
           bddRequire: {
-            script: test('only-bdd-require', '--ui qunit test/only/bdd-require.spec'),
+            script: test(
+              'only-bdd-require',
+              '--ui qunit test/only/bdd-require.spec'
+            ),
             description: 'Run Node.js "only" w/ QUnit interface tests',
             hiddenFromHelp: true
           },
           globalBdd: {
-            script: test('global-only-bdd', '--ui bdd test/only/global/bdd.spec'),
+            script: test(
+              'global-only-bdd',
+              '--ui bdd test/only/global/bdd.spec'
+            ),
             description: 'Run Node.js "global only" w/ BDD interface tests',
             hiddenFromHelp: true
           },
           globalTdd: {
-            script: test('global-only-tdd', '--ui tdd test/only/global/tdd.spec'),
+            script: test(
+              'global-only-tdd',
+              '--ui tdd test/only/global/tdd.spec'
+            ),
             description: 'Run Node.js "global only" w/ TDD interface tests',
             hiddenFromHelp: true
           },
           globalQunit: {
-            script: test('global-only-qunit', '--ui qunit test/only/global/qunit.spec'),
+            script: test(
+              'global-only-qunit',
+              '--ui qunit test/only/global/qunit.spec'
+            ),
             description: 'Run Node.js "global only" w/ QUnit interface tests',
             hiddenFromHelp: true
           }
@@ -184,7 +222,8 @@ module.exports = {
       },
       browser: {
         default: {
-          script: 'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm',
+          script:
+            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm',
           description: 'Run browser tests'
         },
         unit: {
@@ -231,16 +270,19 @@ module.exports = {
     },
     docs: {
       default: {
-        script: 'nps docs.prebuild && bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts && nps docs.postbuild',
+        script:
+          'nps docs.prebuild && bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts && nps docs.postbuild',
         description: 'Build documentation'
       },
       prebuild: {
-        script: 'rimraf docs/_dist docs/api && node scripts/docs-update-toc.js && nps docs.api',
+        script:
+          'rimraf docs/_dist docs/api && node scripts/docs-update-toc.js && nps docs.api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
       postbuild: {
-        script: 'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+        script:
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
@@ -250,11 +292,13 @@ module.exports = {
         hiddenFromHelp: true
       },
       watch: {
-        script: 'nps docs.prewatch && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
+        script:
+          'nps docs.prewatch && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
         description: 'Watch docs for changes & build'
       },
       api: {
-        script: 'mkdirp docs/api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/api',
+        script:
+          'mkdirp docs/api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/api',
         description: 'build api docs'
       }
     },

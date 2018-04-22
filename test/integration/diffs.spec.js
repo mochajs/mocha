@@ -6,20 +6,28 @@ var run = helpers.runMocha;
 var fs = require('fs');
 var getDiffs = helpers.getDiffs;
 
-function getExpectedOutput () {
-  var output = fs.readFileSync('test/integration/fixtures/diffs/output', 'UTF8').replace(/\r\n/g, '\n');
+function getExpectedOutput() {
+  var output = fs
+    .readFileSync('test/integration/fixtures/diffs/output', 'UTF8')
+    .replace(/\r\n/g, '\n');
 
   // Diffs are delimited in file by "// DIFF"
-  return output.split(/\s*\/\/ DIFF/).slice(1).map(function (diff) {
-    return diff.split('\n').filter(Boolean).join('\n');
-  });
+  return output
+    .split(/\s*\/\/ DIFF/)
+    .slice(1)
+    .map(function(diff) {
+      return diff
+        .split('\n')
+        .filter(Boolean)
+        .join('\n');
+    });
 }
 
-describe('diffs', function () {
+describe('diffs', function() {
   var diffs, expected;
 
-  before(function (done) {
-    run('diffs/diffs.fixture.js', ['-C'], function (err, res) {
+  before(function(done) {
+    run('diffs/diffs.fixture.js', ['-C'], function(err, res) {
       expected = getExpectedOutput();
       diffs = getDiffs(res.output.replace(/\r\n/g, '\n'));
       done(err);
@@ -38,8 +46,8 @@ describe('diffs', function () {
     'should work with objects',
     'should show value diffs and not be affected by commas',
     'should display diff by data and not like an objects'
-  ].forEach(function (title, i) {
-    it(title, function () {
+  ].forEach(function(title, i) {
+    it(title, function() {
       assert.equal(diffs[i], expected[i]);
     });
   });

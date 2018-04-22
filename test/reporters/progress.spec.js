@@ -6,24 +6,24 @@ var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
 
-describe('Progress reporter', function () {
+describe('Progress reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
 
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
   });
 
-  describe('on start', function () {
-    it('should call cursor hide', function () {
+  describe('on start', function() {
+    it('should call cursor hide', function() {
       var cachedCursor = Base.cursor;
       var calledCursorHide = false;
-      Base.cursor.hide = function () {
+      Base.cursor.hide = function() {
         calledCursorHide = true;
       };
       runner = createMockRunner('start', 'start');
@@ -36,13 +36,13 @@ describe('Progress reporter', function () {
     });
   });
 
-  describe('on test end', function () {
-    describe('if line has not changed', function () {
-      it('should return and not write anything', function () {
+  describe('on test end', function() {
+    describe('if line has not changed', function() {
+      it('should return and not write anything', function() {
         var cachedCursor = Base.cursor;
         var useColors = Base.useColors;
         Base.useColors = false;
-        Base.cursor.CR = function () {};
+        Base.cursor.CR = function() {};
         var windowWidth = Base.window.width;
         Base.window.width = -3;
 
@@ -61,13 +61,13 @@ describe('Progress reporter', function () {
         Base.window.width = windowWidth;
       });
     });
-    describe('if line has changed', function () {
-      it('should write expected progress of open and close options', function () {
+    describe('if line has changed', function() {
+      it('should write expected progress of open and close options', function() {
         var calledCursorCR = false;
         var cachedCursor = Base.cursor;
         var useColors = Base.useColors;
         Base.useColors = false;
-        Base.cursor.CR = function () {
+        Base.cursor.CR = function() {
           calledCursorCR = true;
         };
         var windowWidth = Base.window.width;
@@ -108,20 +108,23 @@ describe('Progress reporter', function () {
     });
   });
 
-  describe('on end', function () {
-    it('should call cursor show and epilogue', function () {
+  describe('on end', function() {
+    it('should call cursor show and epilogue', function() {
       var cachedCursor = Base.cursor;
       var calledCursorShow = false;
-      Base.cursor.show = function () {
+      Base.cursor.show = function() {
         calledCursorShow = true;
       };
       runner = createMockRunner('end', 'end');
       var calledEpilogue = false;
-      Progress.call({
-        epilogue: function () {
-          calledEpilogue = true;
-        }
-      }, runner);
+      Progress.call(
+        {
+          epilogue: function() {
+            calledEpilogue = true;
+          }
+        },
+        runner
+      );
 
       process.stdout.write = stdoutWrite;
       expect(calledEpilogue).to.be(true);
