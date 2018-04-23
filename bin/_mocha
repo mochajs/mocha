@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-/* eslint no-unused-vars: off */
-
 /**
  * Module dependencies.
  */
@@ -24,11 +22,7 @@ const mocha = new Mocha();
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
-
-const Date = global.Date;
-const setTimeout = global.setTimeout;
 const setInterval = global.setInterval;
-const clearTimeout = global.clearTimeout;
 const clearInterval = global.clearInterval;
 
 /**
@@ -137,15 +131,6 @@ let globals = [];
  */
 
 const requires = [];
-
-/**
- * Images.
- */
-
-const images = {
-  fail: path.join(__dirname, '..', 'assets', 'growl', 'error.png'),
-  pass: path.join(__dirname, '..', 'assets', 'growl', 'ok.png')
-};
 
 // options
 
@@ -369,12 +354,11 @@ mocha.reporter(program.reporter, reporterOptions);
 
 // load reporter
 
-let Reporter = null;
 try {
-  Reporter = require(`../lib/reporters/${program.reporter}`);
+  require(`../lib/reporters/${program.reporter}`);
 } catch (err) {
   try {
-    Reporter = require(program.reporter);
+    require(program.reporter);
   } catch (err2) {
     throw new Error(`reporter "${program.reporter}" does not exist`);
   }
