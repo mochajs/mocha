@@ -209,7 +209,8 @@ describe('Dot reporter', function() {
             '   ' + error.stack.replace(/^/gm, '  '),
             '',
             ''
-          ].join('\n')
+          ].join('\n'),
+          '\n'
         ];
         expect(stdout).to.eql(expectedArray);
       });
