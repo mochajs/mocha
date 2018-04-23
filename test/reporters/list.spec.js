@@ -6,7 +6,7 @@ var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
 
-describe('List reporter', function () {
+describe('List reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
@@ -14,60 +14,57 @@ describe('List reporter', function () {
   var expectedTitle = 'some title';
   var expectedDuration = 100;
   var test = {
-    fullTitle: function () {
+    fullTitle: function() {
       return expectedTitle;
     },
     duration: expectedDuration,
-    slow: function () {}
+    slow: function() {}
   };
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
     useColors = Base.useColors;
     Base.useColors = false;
   });
 
-  afterEach(function () {
+  afterEach(function() {
     Base.useColors = useColors;
   });
 
-  describe('on start and test', function () {
-    it('should write expected new line and title to the console', function () {
+  describe('on start and test', function() {
+    it('should write expected new line and title to the console', function() {
       runner = createMockRunner('start test', 'start', 'test', null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
       var startString = '\n';
       var testString = '    ' + expectedTitle + ': ';
-      var expectedArray = [
-        startString,
-        testString
-      ];
+      var expectedArray = [startString, testString];
       expect(stdout).to.eql(expectedArray);
     });
   });
-  describe('on pending', function () {
-    it('should write expected title to the console', function () {
+  describe('on pending', function() {
+    it('should write expected title to the console', function() {
       runner = createMockRunner('pending test', 'pending', null, null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
 
       expect(stdout[0]).to.eql('  - ' + expectedTitle + '\n');
     });
   });
-  describe('on pass', function () {
-    it('should call cursor CR', function () {
+  describe('on pass', function() {
+    it('should call cursor CR', function() {
       var calledCursorCR = false;
       var cachedCursor = Base.cursor;
-      Base.cursor.CR = function () {
+      Base.cursor.CR = function() {
         calledCursorCR = true;
       };
       runner = createMockRunner('pass', 'pass', null, null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
 
@@ -75,32 +72,40 @@ describe('List reporter', function () {
 
       Base.cursor = cachedCursor;
     });
-    it('should write expected symbol, title and duration to the console', function () {
+    it('should write expected symbol, title and duration to the console', function() {
       var cachedSymbols = Base.symbols;
       var expectedOkSymbol = 'OK';
       Base.symbols.ok = expectedOkSymbol;
       var cachedCursor = Base.cursor;
-      Base.cursor.CR = function () {};
+      Base.cursor.CR = function() {};
       runner = createMockRunner('pass', 'pass', null, null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
 
-      expect(stdout[0]).to.equal('  ' + expectedOkSymbol + ' ' + expectedTitle + ': ' + expectedDuration + 'ms\n');
+      expect(stdout[0]).to.equal(
+        '  ' +
+          expectedOkSymbol +
+          ' ' +
+          expectedTitle +
+          ': ' +
+          expectedDuration +
+          'ms\n'
+      );
 
       Base.cursor = cachedCursor;
       Base.symbols = cachedSymbols;
     });
   });
-  describe('on fail', function () {
-    it('should call cursor CR', function () {
+  describe('on fail', function() {
+    it('should call cursor CR', function() {
       var calledCursorCR = false;
       var cachedCursor = Base.cursor;
-      Base.cursor.CR = function () {
+      Base.cursor.CR = function() {
         calledCursorCR = true;
       };
       runner = createMockRunner('fail', 'fail', null, null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
 
@@ -108,26 +113,28 @@ describe('List reporter', function () {
 
       Base.cursor = cachedCursor;
     });
-    it('should write expected error number and title', function () {
+    it('should write expected error number and title', function() {
       var cachedCursor = Base.cursor;
       var expectedErrorCount = 1;
-      Base.cursor.CR = function () {};
+      Base.cursor.CR = function() {};
       runner = createMockRunner('fail', 'fail', null, null, test);
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
 
-      expect(stdout[0]).to.equal('  ' + expectedErrorCount + ') ' + expectedTitle + '\n');
+      expect(stdout[0]).to.equal(
+        '  ' + expectedErrorCount + ') ' + expectedTitle + '\n'
+      );
 
       Base.cursor = cachedCursor;
     });
-    it('should immediately construct fail strings', function () {
-      var actual = { a: 'actual' };
-      var expected = { a: 'expected' };
+    it('should immediately construct fail strings', function() {
+      var actual = {a: 'actual'};
+      var expected = {a: 'expected'};
       var checked = false;
       var err;
       test = {};
-      runner.on = runner.once = function (event, callback) {
+      runner.on = runner.once = function(event, callback) {
         if (!checked && event === 'fail') {
           err = new Error('fake failure object with actual/expected');
           err.actual = actual;
@@ -137,7 +144,7 @@ describe('List reporter', function () {
           checked = true;
         }
       };
-      List.call({epilogue: function () {}}, runner);
+      List.call({epilogue: function() {}}, runner);
 
       process.stdout.write = stdoutWrite;
       expect(typeof err.actual).to.equal('string');
@@ -145,15 +152,18 @@ describe('List reporter', function () {
     });
   });
 
-  describe('on end', function () {
-    it('should call epilogue', function () {
+  describe('on end', function() {
+    it('should call epilogue', function() {
       var calledEpilogue = false;
       runner = createMockRunner('end', 'end');
-      List.call({
-        epilogue: function () {
-          calledEpilogue = true;
-        }
-      }, runner);
+      List.call(
+        {
+          epilogue: function() {
+            calledEpilogue = true;
+          }
+        },
+        runner
+      );
       process.stdout.write = stdoutWrite;
 
       expect(calledEpilogue).to.be(true);

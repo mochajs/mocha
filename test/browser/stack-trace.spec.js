@@ -1,6 +1,6 @@
 'use strict';
-describe('Stack trace', function () {
-  it('should prettify the stack-trace', function () {
+describe('Stack trace', function() {
+  it('should prettify the stack-trace', function() {
     var err = new Error();
     // We do this fake stack-trace because we under development,
     // and our root isn't `node_modules`, `bower` or `components`
