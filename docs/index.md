@@ -1275,6 +1275,18 @@ $ mocha --reporter list --growl
 
 By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, use `--recursive`, since `./test/*.js` only matches files in the first level of `test` and `./test/**/*.js` only matches files in the second level of `test`.
 
+To configure where `mocha` looks for tests, you may pass your own glob:
+
+```
+$ mocha ./spec/*.js
+```
+
+If you use shell expansion for this, you must wrap your glob pattern in double quotes (note, using the `--recursive` flag here is useless):
+
+```
+$ mocha "./spec/**/*.js"
+```
+
 ## Editor Plugins
 
 The following editor-related packages are available:
