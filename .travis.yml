@@ -7,7 +7,7 @@ stages:
 
 # defaults
 language: node_js
-node_js: '9'
+node_js: '10'
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
