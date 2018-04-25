@@ -30,11 +30,9 @@ function getOptions() {
     : 'test/mocha.opts';
 
   if (optPathSpecified && !fs.existsSync(optsPath)) {
-    console.error(
-      `Warning: Could not find specified options file: ${optsPath}
-Continuing with default configuration.\n`
-    );
-    return;
+    const noSuchFileError = new Error(`Specified options file does not exist: ${optsPath}`);
+    noSuchFileError.code = 'ENOENT';
+    throw noSuchFileError;
   }
 
   try {
