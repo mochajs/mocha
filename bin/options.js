@@ -24,16 +24,17 @@ function getOptions() {
     return;
   }
 
-  const optPathSpecified = (process.argv.indexOf('--opts') > -1);
-  const optsPath = optPathSpecified ?
-      process.argv[process.argv.indexOf('--opts') + 1]
-        : 'test/mocha.opts';
+  const optPathSpecified = process.argv.indexOf('--opts') > -1;
+  const optsPath = optPathSpecified
+    ? process.argv[process.argv.indexOf('--opts') + 1]
+    : 'test/mocha.opts';
 
   if (optPathSpecified && !fs.existsSync(optsPath)) {
     console.error(
       `Warning: Could not find specified options file: ${optsPath}
 Continuing with default configuration.\n`
     );
+    return;
   }
 
   try {
