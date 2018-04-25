@@ -35,6 +35,9 @@ jobs:
       node_js: '8'
 
     - <<: *node
+      node_js: '9'
+
+    - <<: *node
       node_js: '6'
 
     - <<: *node
