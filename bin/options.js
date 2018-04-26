@@ -30,6 +30,7 @@ function getOptions() {
       : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
+    // prettier-ignore
     const opts = fs.readFileSync(optsPath, 'utf8')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
