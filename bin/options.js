@@ -52,5 +52,5 @@ function getOptions() {
     // ignore
   }
 
-  process.env.LOADED_MOCHA_OPTS = true;
+  process.env.LOADED_MOCHA_OPTS = 'true';
 }
