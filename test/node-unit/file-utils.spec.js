@@ -20,8 +20,8 @@ describe('file utils', function() {
     try {
       fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
       symlinkSupported = true;
-    } catch (ignored) {
-      // ignored
+    } catch (ignore) {
+      // determine if file symlinks are supported
     } finally {
       removeTempDir();
     }
