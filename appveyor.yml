@@ -11,9 +11,10 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
-  - npm install --ignore-scripts
+  - npm install -g npm@^5
+  - npm ci --ignore-scripts
 matrix:
-  fast_finish: true
+  fast_finish: false
 build: off
 version: '{build}'
 shallow_clone: true
