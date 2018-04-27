@@ -14,7 +14,7 @@ install:
   - npm install -g npm@^5
   - npm ci --ignore-scripts
 matrix:
-  fast_finish: false
+  fast_finish: true
 build: off
 version: '{build}'
 shallow_clone: true
