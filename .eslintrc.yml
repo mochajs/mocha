@@ -16,9 +16,6 @@ rules:
   strict:
     - error
     - safe
-  linebreak-style:
-    - error
-    - unix
 overrides:
   - files:
     - scripts/**/*.js
