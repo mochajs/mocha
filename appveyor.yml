@@ -2,6 +2,7 @@ platform:
   - x64
 environment:
   matrix:
+    - nodejs_version: '10'
     - nodejs_version: '9'
     - nodejs_version: '8'
     - nodejs_version: '6'
@@ -10,8 +11,8 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
-  - npm install -g npm
-  - npm install
+  - npm install -g npm@^5
+  - npm ci --ignore-scripts
 matrix:
   fast_finish: true
 build: off
