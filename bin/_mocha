@@ -367,19 +367,6 @@ if (program.reporterOptions !== undefined) {
 
 mocha.reporter(program.reporter, reporterOptions);
 
-// load reporter
-
-let Reporter = null;
-try {
-  Reporter = require(`../lib/reporters/${program.reporter}`);
-} catch (err) {
-  try {
-    Reporter = require(program.reporter);
-  } catch (err2) {
-    throw new Error(`reporter "${program.reporter}" does not exist`);
-  }
-}
-
 // --no-colors
 
 if (!program.colors) {
