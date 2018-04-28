@@ -30,7 +30,8 @@ function getOptions() {
       : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
-    const opts = fs.readFileSync(optsPath, 'utf8')
+    const opts = fs
+      .readFileSync(optsPath, 'utf8')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
