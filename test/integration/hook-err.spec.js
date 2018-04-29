@@ -39,7 +39,7 @@ describe('hook error handling', function() {
   describe('after each hook error', function() {
     before(run('hooks/afterEach-hook-error.fixture.js'));
     it('should verify results', function() {
-      assert.deepEqual(lines, ['test 1', 'after', bang + 'test 3']);
+      assert.deepEqual(lines, ['test 1', 'after', bang, 'test 3']);
     });
   });
 
@@ -62,7 +62,8 @@ describe('hook error handling', function() {
         '1-2 before each',
         '1-2 test 1',
         '1-2 after each',
-        bang + '1 after each',
+        bang,
+        '1 after each',
         'root after each',
         '1-2 after',
         '1 after',
