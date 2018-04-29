@@ -17,7 +17,7 @@ describe('multiple calls to done()', function() {
     it('results in failures', function() {
       assert.equal(res.stats.pending, 0, 'wrong "pending" count');
       assert.equal(res.stats.passes, 1, 'wrong "passes" count');
-      assert.equal(res.stats.failures, 1, 'wrong "failures" count');
+      assert.equal(res.stats.failures, 2, 'wrong "failures" count');
     });
 
     it('throws a descriptive error', function() {
@@ -35,7 +35,7 @@ describe('multiple calls to done()', function() {
 
     it('results in failures', function() {
       assert.equal(res.stats.pending, 0, 'wrong "pending" count');
-      assert.equal(res.stats.passes, 1, 'wrong "passes" count');
+      assert.equal(res.stats.passes, 0, 'wrong "passes" count');
       assert.equal(res.stats.failures, 1, 'wrong "failures" count');
     });
 
