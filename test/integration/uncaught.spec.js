@@ -51,15 +51,11 @@ describe('uncaught exceptions', function() {
         return;
       }
       assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 1);
+      assert.equal(res.stats.passes, 0);
       assert.equal(res.stats.failures, 1);
 
       assert.equal(
         res.failures[0].title,
-        'should bail if a successful test asynchronously fails'
-      );
-      assert.equal(
-        res.passes[0].title,
         'should bail if a successful test asynchronously fails'
       );
 

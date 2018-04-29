@@ -1,13 +1,13 @@
 'use strict';
 
 var assert = require('assert');
-var runMocha = require('./helpers').runMocha;
+var helpers = require('./helpers');
 var splitRegExp = require('./helpers').splitRegExp;
 var args = ['--reporter', 'dot'];
 
 describe('hooks', function() {
   it('are ran in correct order', function(done) {
-    runMocha('cascade.fixture.js', args, function(err, res) {
+    helpers.runMocha('cascade.fixture.js', args, function(err, res) {
       var lines, expected;
 
       if (err) {
@@ -48,5 +48,21 @@ describe('hooks', function() {
       assert.equal(res.code, 0);
       done();
     });
+  });
+
+  it('can fail a test in an afterEach hook', function(done) {
+    helpers.runMochaJSON(
+      'hooks/afterEach-hook-conditionally-fail.fixture.js',
+      args,
+      function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        assert.equal(res.stats.passes, 2);
+        assert.equal(res.stats.failures, 1);
+        done();
+      }
+    );
   });
 });
