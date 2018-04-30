@@ -172,6 +172,40 @@ mocha.run = function(fn) {
 };
 
 /**
+ * Use HTML notifications instead of Growl
+ */
+Mocha.prototype._growl = mocha._growl = function (runner, reporter) {
+  runner.on('end', function () {
+    var stats = reporter.stats;
+    if (!('Notification' in window)) return;
+    var notification, title, msg;
+    if (stats.failures) {
+      title = 'Failed';
+      msg = stats.failures + ' of ' + runner.total + ' tests failed';
+    } else {
+      title = 'Passed';
+      msg = stats.passes + ' tests passed in ' + stats.duration + 'ms';
+    }
+    var options = { body: msg };
+    if (Notification.permission === 'granted') {
+      notification = new Notification(title, options);
+    } else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function (permission) {
+        if (permission === 'granted') {
+          notification = new Notification(title, options);
+        }
+      });
+    }
+    if (notification) {
+      notification.onclick = function () {
+        window.focus();
+        this.close();
+      };
+    }
+  });
+};
+
+/**
  * Expose the process shim.
  * https://github.com/mochajs/mocha/pull/916
  */
