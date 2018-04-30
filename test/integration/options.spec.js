@@ -62,12 +62,9 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(res.failures[0].title, '"before all" hook');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have failed test', '"before all" hook');
         done();
       });
     });
