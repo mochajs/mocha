@@ -40,9 +40,6 @@ jobs:
     - <<: *node
       node_js: '6'
 
-    - <<: *node
-      node_js: '4'
-
     - script: npm start test.bundle test.browser
       install: npm ci # we need the native modules here
       addons:
@@ -77,9 +74,6 @@ jobs:
 
     - <<: *smoke
       node_js: '6'
-
-    - <<: *smoke
-      node_js: '4'
 
     - stage: precache
       script: true
