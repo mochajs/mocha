@@ -9,7 +9,7 @@
 - Ruby
 - RubyGems
 - Bundler (`gem install bundler`)
-- Node.js v4.0.0 or greater
+- Node.js v6.x or greater
 
 ## Development
 
