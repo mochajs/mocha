@@ -32,10 +32,10 @@ jobs:
 
     - &node
       script: npm start test.node
-      node_js: '8'
+      node_js: '9'
 
     - <<: *node
-      node_js: '9'
+      node_js: '8'
 
     - <<: *node
       node_js: '6'
