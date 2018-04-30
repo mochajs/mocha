@@ -451,7 +451,7 @@
     "_mocha": "./bin/_mocha"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 6.0.0"
   },
   "scripts": {
     "prepublishOnly": "nps test clean build",
