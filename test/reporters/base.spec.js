@@ -311,7 +311,7 @@ describe('Base reporter', function() {
     }
   });
 
-  it('should interpret chaijs custom error messages', function() {
+  it('should interpret Chai custom error messages', function() {
     var chaiExpect = require('chai').expect;
     try {
       chaiExpect(43, 'custom error message').to.equal(42);
@@ -324,11 +324,11 @@ describe('Base reporter', function() {
       list([test]);
 
       errOut = stdout.join('\n');
-      expect(errOut, 'to match', /custom error message\n/);
-      expect(errOut, 'to match', /\+42/);
-      expect(errOut, 'to match', /-43/);
-      expect(errOut, 'to match', /- actual/);
-      expect(errOut, 'to match', /\+ expected/);
+      expect(errOut, 'to match', /custom error message\n/)
+        .and('to match', /\+42/)
+        .and('to match', /-43/)
+        .and('to match', /- actual/)
+        .and('to match', /\+ expected/);
     }
   });
 
