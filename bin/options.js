@@ -40,8 +40,8 @@ function getOptions() {
     process.argv = process.argv
       .slice(0, 2)
       .concat(opts.concat(process.argv.slice(2)));
-  } catch (err) {
-    // ignore
+  } catch (ignore) {
+    // NOTE: should console.error() and throw the error
   }
 
   process.env.LOADED_MOCHA_OPTS = true;
