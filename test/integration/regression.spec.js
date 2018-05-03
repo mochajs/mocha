@@ -32,6 +32,7 @@ describe('regressions', function() {
     var processArgv = process.argv.join('');
     var mochaOpts = fs
       .readFileSync(path.join(__dirname, '..', 'mocha.opts'), 'utf-8')
+      .replace(/^#.*$/gm, '')
       .split(/[\s]+/)
       .join('');
     assert.notEqual(
