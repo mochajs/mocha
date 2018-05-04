@@ -42,7 +42,7 @@ overrides:
       no-restricted-globals:
         - error
         - name: setTimeout
-          message: &GH-237 See https://git.io/vp2dO
+          message: &GH-237 See https://github.com/mochajs/mocha/issues/237
         - name: clearTimeout
           message: *GH-237
         - name: setInterval
