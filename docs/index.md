@@ -1257,15 +1257,32 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 
 ## `mocha.opts`
 
-Back on the server, Mocha will attempt to load `./test/mocha.opts` as a configuration file of sorts. The lines in this file are combined with any command-line arguments.  The command-line arguments take precedence.  For example, suppose you have the following `mocha.opts` file:
+Back on the server, Mocha will attempt to load `"./test/mocha.opts"` as a
+Run-Control file of sorts.
+
+Beginning-of-line comment support is available; any line _starting_ with a
+hash (#) symbol will be considered a comment. Blank lines may also be used.
+Any other line will be treated as a command-line argument (along with any
+associated option value) to be used as a default setting. Settings should be
+specified one per line.
+
+The lines in this file are prepended to any actual command-line arguments.
+As such, actual command-line arguments will take precedence over the defaults.
+
+For example, suppose you have the following `mocha.opts` file:
 
 ```sh
+# mocha.opts
+
   --require should
   --reporter dot
   --ui bdd
 ```
 
-This will default the reporter to `dot`, require the `should` library, and use `bdd` as the interface. With this, you may then invoke `mocha` with additional arguments, here enabling [Growl](http://growl.info) support, and changing the reporter to `list`:
+The settings above will default the reporter to `dot`, require the `should`
+library, and use `bdd` as the interface. With this, you may then invoke `mocha`
+with additional arguments, here enabling [Growl](http://growl.info/) support,
+and changing the reporter to `list`:
 
 ```sh
 $ mocha --reporter list --growl
