@@ -4,6 +4,7 @@ var path = require('path');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var directInvoke = helpers.invokeMocha;
+var directInvokeBlocking = helpers.invokeBlockingMocha;
 var resolvePath = helpers.resolveFixturePath;
 var args = [];
 
@@ -501,6 +502,37 @@ describe('options', function() {
         },
         done
       );
+    });
+  });
+
+  describe('--watch', function() {
+    describe('with watch enabled', function() {
+      it('should return correct output when watch process is terminated', function(done) {
+        // After the process ends, this callback is ran
+        var assertionCallback = function(err, data) {
+          clearTimeout(t);
+          if (err) {
+            done(err);
+            return;
+          }
+
+          var expectedCloseCursor = '\u001b[?25h';
+          assert(
+            data.output.indexOf(expectedCloseCursor) !== -1,
+            'No assert found'
+          );
+          done();
+        };
+
+        this.timeout(0);
+        this.slow(3000);
+        // executes Mocha in a subprocess
+        var mocha = directInvokeBlocking(['--watch'], assertionCallback);
+        var t = setTimeout(function() {
+          // kill the child process
+          mocha.kill('SIGINT');
+        }, 500);
+      });
     });
   });
 });
