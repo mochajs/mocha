@@ -10,7 +10,7 @@ it('fails exactly once when a global error is thrown synchronously and done erro
     done(new Error('test error'));
   }, 1); // Not 0 - it will 'succeed', but won't test the breaking condition
 
-  throw new Error('sync error');
+  throw new Error('sync error a');
 });
 
 it('fails exactly once when a global error is thrown synchronously and done completes', function (done) {
@@ -18,5 +18,5 @@ it('fails exactly once when a global error is thrown synchronously and done comp
     done();
   }, 1); // Not 0 - it will 'succeed', but won't test the breaking condition
 
-  throw new Error('sync error');
+  throw new Error('sync error b');
 });

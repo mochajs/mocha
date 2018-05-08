@@ -9,7 +9,7 @@ var mocha = new Mocha({
   growl: true
 });
 
-global.expect = require('expect.js');
+require('../setup');
 
 mocha.addFile('test/unit/suite.spec.js');
 mocha.addFile('test/unit/runner.spec.js');
