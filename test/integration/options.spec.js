@@ -521,6 +521,7 @@ describe('options', function() {
             data.output.indexOf(expectedCloseCursor) !== -1,
             'No assert found'
           );
+          assert.equal(data.code, 130);
           done();
         };
 
