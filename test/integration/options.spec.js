@@ -517,11 +517,8 @@ describe('options', function() {
           }
 
           var expectedCloseCursor = '\u001b[?25h';
-          assert(
-            data.output.indexOf(expectedCloseCursor) !== -1,
-            'No assert found'
-          );
-          assert.equal(data.code, 130);
+          expect(data.output).to.contain(expectedCloseCursor);
+          expect(data.code).to.equal(130);
           done();
         };
 
