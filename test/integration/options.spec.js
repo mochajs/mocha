@@ -529,7 +529,7 @@ describe('options', function() {
         var t = setTimeout(function() {
           // kill the child process
           mocha.kill('SIGINT');
-        }, 500);
+        }, 2000);
       });
     });
   });
