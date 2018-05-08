@@ -96,19 +96,39 @@ module.exports = {
   invokeMocha: invokeMocha,
 
   /**
+   * Same as above except mocha child process spawned is blocked on stdout stream
+   */
+  invokeBlockingMocha: invokeBlockingMocha,
+
+  /**
    * Resolves the path to a fixture to the full path.
    */
   resolveFixturePath: resolveFixturePath
 };
 
 function invokeMocha(args, fn, cwd) {
-  var output, mocha, listener;
-
-  output = '';
   args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, {cwd: cwd});
 
-  listener = function(data) {
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function invokeBlockingMocha(args, fn, cwd) {
+  args = [
+    path.join(
+      __dirname,
+      '../..',
+      'test/integration/fixtures',
+      'mocha-process-blocked'
+    )
+  ].concat(args);
+
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function _spawnMochaWithListeners(args, fn, cwd) {
+  var output = '';
+  var mocha = spawn(process.execPath, args, {cwd: cwd});
+  var listener = function(data) {
     output += data;
   };
 
