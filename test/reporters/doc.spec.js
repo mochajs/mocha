@@ -12,9 +12,14 @@ describe('Doc reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
+  });
+
+  afterEach(function() {
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on suite', function() {
@@ -34,7 +39,7 @@ describe('Doc reporter', function() {
           '      <h1>' + expectedTitle + '</h1>\n',
           '      <dl>\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
       it('should escape title where necessary', function() {
         var suite = {
@@ -50,7 +55,7 @@ describe('Doc reporter', function() {
           '      <h1>' + expectedTitle + '</h1>\n',
           '      <dl>\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if suite root does exist', function() {
@@ -61,7 +66,7 @@ describe('Doc reporter', function() {
         runner = createMockRunner('suite', 'suite', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
-        expect(stdout).to.be.empty();
+        expect(stdout, 'to be empty');
       });
     });
   });
@@ -76,7 +81,7 @@ describe('Doc reporter', function() {
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
         var expectedArray = ['  </dl>\n', '</section>\n'];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if suite root does exist', function() {
@@ -87,7 +92,7 @@ describe('Doc reporter', function() {
         runner = createMockRunner('suite end', 'suite end', null, null, suite);
         Doc.call(this, runner);
         process.stdout.write = stdoutWrite;
-        expect(stdout).to.be.empty();
+        expect(stdout, 'to be empty');
       });
     });
   });
@@ -110,7 +115,7 @@ describe('Doc reporter', function() {
         '    <dt>' + expectedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedBody + '</code></pre></dd>\n'
       ];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
     it('should escape title and body where necessary', function() {
       var unescapedTitle = '<div>' + expectedTitle + '</div>';
@@ -129,7 +134,7 @@ describe('Doc reporter', function() {
         '    <dt>' + expectedEscapedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
       ];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
 
@@ -162,7 +167,7 @@ describe('Doc reporter', function() {
           '</code></pre></dd>\n',
         '    <dd class="error">' + expectedError + '</dd>\n'
       ];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
     it('should escape title, body and error where necessary', function() {
       var unescapedTitle = '<div>' + expectedTitle + '</div>';
@@ -194,7 +199,7 @@ describe('Doc reporter', function() {
           '</code></pre></dd>\n',
         '    <dd class="error">' + expectedEscapedError + '</dd>\n'
       ];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
 });

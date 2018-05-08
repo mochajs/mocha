@@ -27,8 +27,9 @@ describe('Landing reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
     useColors = Base.useColors;
     Base.useColors = false;
@@ -39,6 +40,7 @@ describe('Landing reporter', function() {
   afterEach(function() {
     Base.useColors = useColors;
     Base.window.width = windowWidth;
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
@@ -50,7 +52,7 @@ describe('Landing reporter', function() {
 
       process.stdout.write = stdoutWrite;
 
-      expect(stdout[0]).to.eql('\n\n\n  ');
+      expect(stdout[0], 'to equal', '\n\n\n  ');
       Base.cursor = cachedCursor;
     });
 
@@ -64,7 +66,7 @@ describe('Landing reporter', function() {
       Landing.call({}, runner);
 
       process.stdout.write = stdoutWrite;
-      expect(calledCursorHide).to.be(true);
+      expect(calledCursorHide, 'to be', true);
 
       Base.cursor = cachedCursor;
     });
@@ -82,7 +84,7 @@ describe('Landing reporter', function() {
 
         process.stdout.write = stdoutWrite;
 
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if test has not failed', function() {
@@ -96,7 +98,7 @@ describe('Landing reporter', function() {
 
         process.stdout.write = stdoutWrite;
 
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
   });
@@ -120,8 +122,8 @@ describe('Landing reporter', function() {
       );
 
       process.stdout.write = stdoutWrite;
-      expect(calledEpilogue).to.be(true);
-      expect(calledCursorShow).to.be(true);
+      expect(calledEpilogue, 'to be', true);
+      expect(calledCursorShow, 'to be', true);
 
       Base.cursor = cachedCursor;
     });
