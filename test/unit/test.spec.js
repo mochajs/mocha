@@ -18,39 +18,39 @@ describe('Test', function() {
     });
 
     it('should copy the title', function() {
-      expect(this._test.clone().title).to.equal('To be cloned');
+      expect(this._test.clone().title, 'to be', 'To be cloned');
     });
 
     it('should copy the timeout value', function() {
-      expect(this._test.clone().timeout()).to.equal(3043);
+      expect(this._test.clone().timeout(), 'to be', 3043);
     });
 
     it('should copy the slow value', function() {
-      expect(this._test.clone().slow()).to.equal(101);
+      expect(this._test.clone().slow(), 'to be', 101);
     });
 
     it('should copy the enableTimeouts value', function() {
-      expect(this._test.clone().enableTimeouts()).to.be(true);
+      expect(this._test.clone().enableTimeouts(), 'to be', true);
     });
 
     it('should copy the retries value', function() {
-      expect(this._test.clone().retries()).to.equal(3);
+      expect(this._test.clone().retries(), 'to be', 3);
     });
 
     it('should copy the currentRetry value', function() {
-      expect(this._test.clone().currentRetry()).to.equal(1);
+      expect(this._test.clone().currentRetry(), 'to be', 1);
     });
 
     it('should copy the globals value', function() {
-      expect(this._test.clone().globals()).to.not.be.empty();
+      expect(this._test.clone().globals(), 'not to be empty');
     });
 
     it('should copy the parent value', function() {
-      expect(this._test.clone().parent).to.equal('foo');
+      expect(this._test.clone().parent, 'to be', 'foo');
     });
 
     it('should copy the file value', function() {
-      expect(this._test.clone().file).to.equal('bar');
+      expect(this._test.clone().file, 'to be', 'bar');
     });
   });
 
@@ -60,12 +60,12 @@ describe('Test', function() {
     });
 
     it('should not be pending by default', function() {
-      expect(this._test.isPending()).to.not.be(true);
+      expect(this._test.isPending(), 'not to be', true);
     });
 
     it('should be pending when marked as such', function() {
       this._test.pending = true;
-      expect(this._test.isPending()).to.be(true);
+      expect(this._test.isPending(), 'to be', true);
     });
 
     it('should be pending when its parent is pending', function() {
@@ -74,7 +74,7 @@ describe('Test', function() {
           return true;
         }
       };
-      expect(this._test.isPending()).to.be(true);
+      expect(this._test.isPending(), 'to be', true);
     });
   });
 });

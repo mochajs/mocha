@@ -1,6 +1,5 @@
 'use strict';
 
-var expect = require('expect.js');
 var exec = require('child_process').exec;
 var path = require('path');
 
@@ -12,7 +11,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         './*.js',
         function(results) {
-          expect(results.stdout).to.contain(
+          expect(
+            results.stdout,
+            'to contain',
             '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
           );
         },
@@ -24,7 +25,9 @@ describe('globbing', function() {
       testGlob.shouldFail(
         './*-none.js',
         function(results) {
-          expect(results.stderr).to.contain(
+          expect(
+            results.stderr,
+            'to contain',
             'Could not find any test files matching pattern'
           );
         },
@@ -36,10 +39,14 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         './*.js ./*-none.js',
         function(results) {
-          expect(results.stdout).to.contain(
+          expect(
+            results.stdout,
+            'to contain',
             '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
           );
-          expect(results.stderr).to.contain(
+          expect(
+            results.stderr,
+            'to contain',
             'Could not find any test files matching pattern'
           );
         },
@@ -53,7 +60,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         '"./*.js"',
         function(results) {
-          expect(results.stdout).to.contain(
+          expect(
+            results.stdout,
+            'to contain',
             '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
           );
         },
@@ -65,7 +74,9 @@ describe('globbing', function() {
       testGlob.shouldFail(
         '"./*-none.js"',
         function(results) {
-          expect(results.stderr).to.contain(
+          expect(
+            results.stderr,
+            'to contain',
             'Could not find any test files matching pattern'
           );
         },
@@ -77,10 +88,14 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         '"./*.js" "./*-none.js"',
         function(results) {
-          expect(results.stdout).to.contain(
+          expect(
+            results.stdout,
+            'to contain',
             '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
           );
-          expect(results.stderr).to.contain(
+          expect(
+            results.stderr,
+            'to contain',
             'Could not find any test files matching pattern'
           );
         },
@@ -93,7 +108,9 @@ describe('globbing', function() {
         testGlob.shouldSucceed(
           '"./**/*.js"',
           function(results) {
-            expect(results.stdout).to.contain(
+            expect(
+              results.stdout,
+              'to contain',
               '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
             );
           },
@@ -105,7 +122,9 @@ describe('globbing', function() {
         testGlob.shouldFail(
           '"./**/*-none.js"',
           function(results) {
-            expect(results.stderr).to.contain(
+            expect(
+              results.stderr,
+              'to contain',
               'Could not find any test files matching pattern'
             );
           },
@@ -117,10 +136,14 @@ describe('globbing', function() {
         testGlob.shouldSucceed(
           '"./**/*.js" "./**/*-none.js"',
           function(results) {
-            expect(results.stdout).to.contain(
+            expect(
+              results.stdout,
+              'to contain',
               '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
             );
-            expect(results.stderr).to.contain(
+            expect(
+              results.stderr,
+              'to contain',
               'Could not find any test files matching pattern'
             );
           },
@@ -139,7 +162,7 @@ var testGlob = {
   }),
 
   shouldFail: execMochaWith(function shouldFailWithStderr(error, stderr) {
-    expect(error && error.message).to.contain(stderr);
+    expect(error && error.message, 'to contain', stderr);
   })
 };
 

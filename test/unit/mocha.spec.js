@@ -29,7 +29,7 @@ describe('Mocha', function() {
         });
         mocha.suite.addTest(failingTest);
         mocha.run(function(failures) {
-          expect(failures).to.equal(1);
+          expect(failures, 'to be', 1);
           done();
         });
       }
@@ -40,8 +40,8 @@ describe('Mocha', function() {
     it('should add the given file to the files array', function() {
       var mocha = new Mocha(blankOpts);
       mocha.addFile('myFile.js');
-      expect(mocha.files.length).to.equal(1);
-      expect(mocha.files[0]).to.equal('myFile.js');
+      expect(mocha.files.length, 'to be', 1);
+      expect(mocha.files[0], 'to be', 'myFile.js');
     });
   });
 
@@ -49,12 +49,12 @@ describe('Mocha', function() {
     it('should set the invert option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.invert();
-      expect(mocha.options.invert).to.equal(true);
+      expect(mocha.options.invert, 'to be', true);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.invert()).to.equal(mocha);
+      expect(mocha.invert(), 'to be', mocha);
     });
   });
 
@@ -62,24 +62,24 @@ describe('Mocha', function() {
     it('should set the ignoreLeaks option to true when param equals true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.ignoreLeaks(true);
-      expect(mocha.options.ignoreLeaks).to.equal(true);
+      expect(mocha.options.ignoreLeaks, 'to be', true);
     });
 
     it('should set the ignoreLeaks option to false when param equals false', function() {
       var mocha = new Mocha(blankOpts);
       mocha.ignoreLeaks(false);
-      expect(mocha.options.ignoreLeaks).to.equal(false);
+      expect(mocha.options.ignoreLeaks, 'to be', false);
     });
 
     it('should set the ignoreLeaks option to false when the param is undefined', function() {
       var mocha = new Mocha(blankOpts);
       mocha.ignoreLeaks();
-      expect(mocha.options.ignoreLeaks).to.equal(false);
+      expect(mocha.options.ignoreLeaks, 'to be', false);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.ignoreLeaks(false)).to.equal(mocha);
+      expect(mocha.ignoreLeaks(false), 'to be', mocha);
     });
   });
 
@@ -87,12 +87,12 @@ describe('Mocha', function() {
     it('should set the ignoreLeaks option to false', function() {
       var mocha = new Mocha(blankOpts);
       mocha.checkLeaks();
-      expect(mocha.options.ignoreLeaks).to.equal(false);
+      expect(mocha.options.ignoreLeaks, 'to be', false);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.checkLeaks()).to.equal(mocha);
+      expect(mocha.checkLeaks(), 'to be', mocha);
     });
   });
 
@@ -100,12 +100,12 @@ describe('Mocha', function() {
     it('should set the fullStackTrace option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.fullTrace();
-      expect(mocha.options.fullStackTrace).to.equal(true);
+      expect(mocha.options.fullStackTrace, 'to be', true);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.fullTrace()).to.equal(mocha);
+      expect(mocha.fullTrace(), 'to be', mocha);
     });
   });
 
@@ -113,12 +113,12 @@ describe('Mocha', function() {
     it('should set the growl option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.growl();
-      expect(mocha.options.growl).to.equal(true);
+      expect(mocha.options.growl, 'to be', true);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.growl()).to.equal(mocha);
+      expect(mocha.growl(), 'to be', mocha);
     });
   });
 
@@ -126,24 +126,24 @@ describe('Mocha', function() {
     it('should set the useInlineDiffs option to true when param equals true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.useInlineDiffs(true);
-      expect(mocha.options.useInlineDiffs).to.equal(true);
+      expect(mocha.options.useInlineDiffs, 'to be', true);
     });
 
     it('should set the useInlineDiffs option to false when param equals false', function() {
       var mocha = new Mocha(blankOpts);
       mocha.useInlineDiffs(false);
-      expect(mocha.options.useInlineDiffs).to.equal(false);
+      expect(mocha.options.useInlineDiffs, 'to be', false);
     });
 
     it('should set the useInlineDiffs option to false when the param is undefined', function() {
       var mocha = new Mocha(blankOpts);
       mocha.useInlineDiffs();
-      expect(mocha.options.useInlineDiffs).to.equal(false);
+      expect(mocha.options.useInlineDiffs, 'to be', false);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
-      expect(mocha.useInlineDiffs()).to.equal(mocha);
+      expect(mocha.useInlineDiffs(), 'to be', mocha);
     });
   });
 
@@ -151,7 +151,7 @@ describe('Mocha', function() {
     it('should set the noHighlighting option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.noHighlighting();
-      expect(mocha.options.noHighlighting).to.equal(true);
+      expect(mocha.options.noHighlighting, 'to be', true);
     });
   });
 
@@ -159,7 +159,7 @@ describe('Mocha', function() {
     it('should set the allowUncaught option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.allowUncaught();
-      expect(mocha.options.allowUncaught).to.equal(true);
+      expect(mocha.options.allowUncaught, 'to be', true);
     });
   });
 
@@ -167,16 +167,16 @@ describe('Mocha', function() {
     it('should set the delay option to true', function() {
       var mocha = new Mocha(blankOpts);
       mocha.delay();
-      expect(mocha.options.delay).to.equal(true);
+      expect(mocha.options.delay, 'to be', true);
     });
   });
 
   describe('.bail()', function() {
     it('should set the suite._bail to true if there is no arguments', function() {
       var mocha = new Mocha({bail: false});
-      expect(mocha.suite._bail).to.equal(false);
+      expect(mocha.suite._bail, 'to be', false);
       mocha.bail();
-      expect(mocha.suite._bail).to.equal(true);
+      expect(mocha.suite._bail, 'to be', true);
     });
   });
 });

@@ -16,7 +16,7 @@ const browserPlatformPairs = {
 module.exports = config => {
   let bundleDirpath;
   const cfg = {
-    frameworks: ['browserify', 'expect', 'mocha'],
+    frameworks: ['browserify', 'mocha'],
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
@@ -141,8 +141,8 @@ module.exports = config => {
       // support
       cfg.browsers = ['ChromeHeadless'];
       cfg.files = [
-        'test/browser-fixtures/esm.fixture.html',
-        'test/browser-specific/esm.spec.js'
+        'test/browser-specific/esm.spec.js',
+        'test/browser-fixtures/esm.fixture.html'
       ];
       break;
     default:
@@ -150,6 +150,12 @@ module.exports = config => {
         cfg.sauceLabs.testName = 'Unit Tests';
       }
   }
+
+  cfg.files.unshift(
+    'node_modules/unexpected/unexpected.js',
+    {pattern: 'node_modules/unexpected/unexpected.js.map', included: false},
+    'test/browser-specific/setup.js'
+  );
 
   config.set(cfg);
 };

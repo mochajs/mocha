@@ -10,7 +10,7 @@ it('should build a non-broken bundle for AMD', function(done) {
       return done(err);
     }
 
-    expect(content).not.to.match(/define.amd/);
+    expect(content, 'not to match', /define.amd/);
     done();
   });
 });

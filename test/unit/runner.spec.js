@@ -24,7 +24,7 @@ describe('Runner', function() {
       suite.addTest(new Test('im a test about bears', noop));
       var newRunner = new Runner(suite);
       newRunner.grep(/lions/);
-      expect(newRunner.total).to.equal(2);
+      expect(newRunner.total, 'to be', 2);
     });
 
     it('should update the runner.total with number of matched tests when inverted', function() {
@@ -33,7 +33,7 @@ describe('Runner', function() {
       suite.addTest(new Test('im a test about bears', noop));
       var newRunner = new Runner(suite);
       newRunner.grep(/lions/, true);
-      expect(newRunner.total).to.equal(1);
+      expect(newRunner.total, 'to be', 1);
     });
   });
 
@@ -43,7 +43,7 @@ describe('Runner', function() {
       suite.addTest(new Test('im another test about lions', noop));
       suite.addTest(new Test('im a test about bears', noop));
       runner.grep(/lions/);
-      expect(runner.grepTotal(suite)).to.equal(2);
+      expect(runner.grepTotal(suite), 'to be', 2);
     });
 
     it('should return the total number of matched tests when inverted', function() {
@@ -51,31 +51,34 @@ describe('Runner', function() {
       suite.addTest(new Test('im another test about lions', noop));
       suite.addTest(new Test('im a test about bears', noop));
       runner.grep(/lions/, true);
-      expect(runner.grepTotal(suite)).to.equal(1);
+      expect(runner.grepTotal(suite), 'to be', 1);
     });
   });
 
   describe('.globalProps()', function() {
     it('should include common non enumerable globals', function() {
       var props = runner.globalProps();
-      expect(props).to.contain('setTimeout');
-      expect(props).to.contain('clearTimeout');
-      expect(props).to.contain('setInterval');
-      expect(props).to.contain('clearInterval');
-      expect(props).to.contain('Date');
-      expect(props).to.contain('XMLHttpRequest');
+      expect(
+        props,
+        'to contain',
+        'setTimeout',
+        'clearTimeout',
+        'setInterval',
+        'clearInterval',
+        'Date',
+        'XMLHttpRequest'
+      );
     });
   });
 
   describe('.globals()', function() {
     it('should default to the known globals', function() {
-      expect(runner.globals().length).to.be.above(16);
+      expect(runner.globals().length, 'to be greater than', 16);
     });
 
     it('should white-list globals', function() {
       runner.globals(['foo', 'bar']);
-      expect(runner.globals()).to.contain('foo');
-      expect(runner.globals()).to.contain('bar');
+      expect(runner.globals(), 'to contain', 'foo', 'bar');
     });
   });
 
@@ -101,8 +104,8 @@ describe('Runner', function() {
       runner.checkGlobals();
       global.foo = 'bar';
       runner.on('fail', function(_test, err) {
-        expect(_test).to.equal(test);
-        expect(err.message).to.equal('global leak detected: foo');
+        expect(_test, 'to be', test);
+        expect(err.message, 'to be', 'global leak detected: foo');
         delete global.foo;
         done();
       });
@@ -130,7 +133,7 @@ describe('Runner', function() {
         return;
       }
       // verify that the prop isn't enumerable
-      expect(global.propertyIsEnumerable('XMLHttpRequest')).to.not.be.ok();
+      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', false);
 
       // create a new runner and keep a reference to the test.
       var test = new Test('im a test about bears', noop);
@@ -139,11 +142,11 @@ describe('Runner', function() {
 
       // make the prop enumerable again.
       global.XMLHttpRequest = function() {};
-      expect(global.propertyIsEnumerable('XMLHttpRequest')).to.be.ok();
+      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', true);
 
       // verify the test hasn't failed.
       newRunner.checkGlobals(test);
-      expect(test).to.not.have.key('state');
+      expect(test, 'not to have key', 'state');
 
       // clean up our global space.
       delete global.XMLHttpRequest;
@@ -155,8 +158,8 @@ describe('Runner', function() {
       global.foo = 'bar';
       global.bar = 'baz';
       runner.on('fail', function(_test, err) {
-        expect(_test).to.equal(test);
-        expect(err.message).to.equal('global leaks detected: foo, bar');
+        expect(_test, 'to be', test);
+        expect(err.message, 'to be', 'global leaks detected: foo, bar');
         delete global.foo;
         delete global.bar;
         done();
@@ -175,7 +178,7 @@ describe('Runner', function() {
 
       // verify the test hasn't failed.
       runner.checkGlobals(test);
-      expect(test).to.not.have.key('state');
+      expect(test, 'not to have key', 'state');
 
       delete global.foo;
     });
@@ -189,8 +192,8 @@ describe('Runner', function() {
       global.foo = 'bar';
       global.bar = 'baz';
       runner.on('fail', function(test, err) {
-        expect(test.title).to.equal('im a test about lions');
-        expect(err.message).to.equal('global leak detected: bar');
+        expect(test.title, 'to be', 'im a test about lions');
+        expect(err.message, 'to be', 'global leak detected: bar');
         delete global.foo;
         done();
       });
@@ -223,25 +226,25 @@ describe('Runner', function() {
 
   describe('.fail(test, err)', function() {
     it('should increment .failures', function() {
-      expect(runner.failures).to.equal(0);
+      expect(runner.failures, 'to be', 0);
       runner.fail(new Test('one', noop), {});
-      expect(runner.failures).to.equal(1);
+      expect(runner.failures, 'to be', 1);
       runner.fail(new Test('two', noop), {});
-      expect(runner.failures).to.equal(2);
+      expect(runner.failures, 'to be', 2);
     });
 
     it('should set test.state to "failed"', function() {
       var test = new Test('some test', noop);
       runner.fail(test, 'some error');
-      expect(test.state).to.equal('failed');
+      expect(test.state, 'to be', 'failed');
     });
 
     it('should emit "fail"', function(done) {
       var test = new Test('some other test', noop);
       var err = {};
       runner.on('fail', function(test, err) {
-        expect(test).to.equal(test);
-        expect(err).to.equal(err);
+        expect(test, 'to be', test);
+        expect(err, 'to be', err);
         done();
       });
       runner.fail(test, err);
@@ -251,7 +254,9 @@ describe('Runner', function() {
       var test = new Test('helpful test', noop);
       var err = 'string';
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal(
+        expect(
+          err.message,
+          'to be',
           'the string "string" was thrown, throw an Error :)'
         );
         done();
@@ -263,7 +268,7 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
       var err = new Error('an error message');
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal('an error message');
+        expect(err.message, 'to be', 'an error message');
         done();
       });
       runner.fail(test, err);
@@ -273,7 +278,7 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
       var err = {message: 'an error message'};
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal('an error message');
+        expect(err.message, 'to be', 'an error message');
         done();
       });
       runner.fail(test, err);
@@ -283,7 +288,9 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
       var err = {x: 1};
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal(
+        expect(
+          err.message,
+          'to be',
           'the object {\n  "x": 1\n} was thrown, throw an Error :)'
         );
         done();
@@ -295,7 +302,9 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
       var err = [1, 2];
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal(
+        expect(
+          err.message,
+          'to be',
           'the array [\n  1\n  2\n] was thrown, throw an Error :)'
         );
         done();
@@ -316,7 +325,7 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
 
       runner.on('fail', function(test, err) {
-        expect(err.message).to.equal('not evil');
+        expect(err.message, 'to be', 'not evil');
         done();
       });
 
@@ -326,11 +335,11 @@ describe('Runner', function() {
 
   describe('.failHook(hook, err)', function() {
     it('should increment .failures', function() {
-      expect(runner.failures).to.equal(0);
+      expect(runner.failures, 'to be', 0);
       runner.failHook(new Test('fail hook 1', noop), {});
-      expect(runner.failures).to.equal(1);
+      expect(runner.failures, 'to be', 1);
       runner.failHook(new Test('fail hook 2', noop), {});
-      expect(runner.failures).to.equal(2);
+      expect(runner.failures, 'to be', 2);
     });
 
     it('should augment hook title with current test title', function() {
@@ -338,19 +347,19 @@ describe('Runner', function() {
       hook.ctx = {currentTest: new Test('should behave', noop)};
 
       runner.failHook(hook, {});
-      expect(hook.title).to.equal('"before each" hook for "should behave"');
+      expect(hook.title, 'to be', '"before each" hook for "should behave"');
 
       hook.ctx.currentTest = new Test('should obey', noop);
       runner.failHook(hook, {});
-      expect(hook.title).to.equal('"before each" hook for "should obey"');
+      expect(hook.title, 'to be', '"before each" hook for "should obey"');
     });
 
     it('should emit "fail"', function(done) {
       var hook = new Hook();
       var err = {};
       runner.on('fail', function(hook, err) {
-        expect(hook).to.equal(hook);
-        expect(err).to.equal(err);
+        expect(hook, 'to be', hook);
+        expect(err, 'to be', err);
         done();
       });
       runner.failHook(hook, err);
@@ -386,7 +395,7 @@ describe('Runner', function() {
       function fail() {
         newRunner.runTest();
       }
-      expect(fail).to.throwError('allow unhandled errors');
+      expect(fail, 'to throw', 'allow unhandled errors');
       done();
     });
   });
@@ -420,7 +429,7 @@ describe('Runner', function() {
         err.stack = stack.join('\n');
 
         runner.on('fail', function(hook, err) {
-          expect(err.stack).to.equal(stack.slice(0, 3).join('\n'));
+          expect(err.stack, 'to be', stack.slice(0, 3).join('\n'));
           done();
         });
         runner.failHook(hook, err);
@@ -443,7 +452,7 @@ describe('Runner', function() {
         runner.fullStackTrace = true;
 
         runner.on('fail', function(hook, err) {
-          expect(err.stack).to.equal(stack.join('\n'));
+          expect(err.stack, 'to be', stack.join('\n'));
           done();
         });
         runner.failHook(hook, err);

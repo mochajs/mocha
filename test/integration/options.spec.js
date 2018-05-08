@@ -1,7 +1,6 @@
 'use strict';
 
 var path = require('path');
-var assert = require('assert');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var directInvoke = helpers.invokeMocha;
@@ -20,12 +19,7 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(res.failures[0].title, 'throws an error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed');
         done();
       });
     });
@@ -36,12 +30,7 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].title, 'should pass');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
     });
@@ -58,13 +47,11 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 1);
 
-        assert.equal(res.passes[0].title, 'should display this spec');
-        assert.equal(res.failures[0].title, 'should only display this error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have passed test', 'should display this spec')
+          .and('to have failed test', 'should only display this error')
+          .and('to have passed test count', 1);
         done();
       });
     });
@@ -75,12 +62,9 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(res.failures[0].title, '"before all" hook');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have failed test', '"before all" hook');
         done();
       });
     });
@@ -91,12 +75,9 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(res.failures[0].title, 'should only display this error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have run test', 'should only display this error');
         done();
       });
     });
@@ -113,12 +94,10 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed test count', 2).and(
+          'to have passed test order',
+          'should be executed first'
+        );
         done();
       });
     });
@@ -133,12 +112,9 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('to have passed test order', 'should be executed first');
         done();
       });
     });
@@ -156,14 +132,14 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 3);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.passes[1].fullTitle, 'beta should be executed second');
-        assert.equal(res.passes[2].fullTitle, 'theta should be executed third');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 3)
+          .and(
+            'to have passed test order',
+            'should be executed first',
+            'should be executed second',
+            'should be executed third'
+          );
         done();
       });
     });
@@ -180,15 +156,7 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(
-          res.passes[0].title,
-          'should have no effect if attempted twice in the same suite'
-        );
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed').and('to have passed test count', 1);
         done();
       });
     });
@@ -199,15 +167,13 @@ describe('options', function() {
           done(err);
           return;
         }
-
-        assert.equal(res.stats.tests, 2);
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].title, 'should run this');
-        assert.equal(res.passes[1].title, 'should run this, too');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and(
+            'to have passed test order',
+            'should run this',
+            'should run this, too'
+          );
         done();
       });
     });
@@ -218,15 +184,10 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(
-          res.failures[0].title,
+        expect(res, 'to have failed').and(
+          'to have failed test',
           'Uncaught error outside test suite'
         );
-        assert.equal(res.code, 1);
         done();
       });
     });
@@ -240,10 +201,9 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('not to have pending tests');
         done();
       });
     });
@@ -256,10 +216,9 @@ describe('options', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
           done();
         });
       });
@@ -271,10 +230,10 @@ describe('options', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 1);
-          assert.equal(res.code, 1);
+          expect(res, 'to have failed')
+            .and('to have passed test count', 4)
+            .and('to have failed test count', 1)
+            .and('not to have pending tests');
           done();
         });
       });
@@ -288,10 +247,9 @@ describe('options', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
           done();
         });
       });
@@ -306,12 +264,10 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.tests, 1);
-        assert.equal(res.tests[0].currentRetry, 3);
-        assert.equal(res.stats.failures, 1);
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('not to have pending tests')
+          .and('not to have passed tests')
+          .and('to have retried test', 'should fail', 3);
         done();
       });
     });
@@ -330,7 +286,7 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
     });
@@ -341,17 +297,18 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        expect(res, 'to have failed with error', onlyErrorMessage);
         done();
       });
     });
 
     it('fails if there are tests in suites marked only', function(done) {
       run('options/forbid-only/only-suite.js', args, function(err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed with error', onlyErrorMessage);
         done();
       });
     });
@@ -370,7 +327,7 @@ describe('options', function() {
           done(err);
           return;
         }
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
     });
@@ -398,8 +355,7 @@ describe('options', function() {
               done(err);
               return;
             }
-            assert.equal(res.code, 1);
-            assert.equal(res.failures[0].err.message, pendingErrorMessage);
+            expect(res, 'to have failed with error', pendingErrorMessage);
             done();
           }
         );
@@ -435,7 +391,7 @@ describe('options', function() {
             done(err);
             return;
           }
-          expect(didExit).to.equal(shouldExit);
+          expect(didExit, 'to be', shouldExit);
           done();
         });
 
@@ -476,7 +432,7 @@ describe('options', function() {
           if (error) {
             return done(error);
           }
-          expect(result.output).to.contain('Usage:');
+          expect(result.output, 'to contain', 'Usage:');
           done();
         },
         path.join(__dirname, 'fixtures', 'options', 'help')
@@ -508,11 +464,9 @@ describe('options', function() {
           'test/integration/fixtures/options/exclude/fail.fixture.js'
         ],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 1);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.passes[0].title, 'should find this test');
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have run test', 'should find this test')
+            .and('not to have pending tests');
         },
         done
       );
@@ -523,10 +477,9 @@ describe('options', function() {
         'options/exclude/**/*.fixture.js',
         ['--exclude', '**/fail.fixture.js'],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
         },
         done
       );
@@ -542,10 +495,9 @@ describe('options', function() {
           'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
         ],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
         },
         done
       );
