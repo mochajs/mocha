@@ -118,7 +118,7 @@ function invokeBlockingMocha(args, fn, cwd) {
       __dirname,
       '../..',
       'test/integration/fixtures',
-      'mocha-process-blocked'
+      'mocha-process-hanging'
     )
   ].concat(args);
 
