@@ -509,7 +509,11 @@ describe('options', function() {
     describe('with watch enabled', function() {
       it('should return correct output when watch process is terminated', function(done) {
         // After the process ends, this callback is ran
-        var assertionCallback = function(err, data) {
+
+        this.timeout(0);
+        this.slow(3000);
+        // executes Mocha in a subprocess
+        var mocha = directInvokeBlocking(['--watch'], function(err, data) {
           clearTimeout(t);
           if (err) {
             done(err);
@@ -517,19 +521,16 @@ describe('options', function() {
           }
 
           var expectedCloseCursor = '\u001b[?25h';
-          expect(data.output).to.contain(expectedCloseCursor);
-          expect(data.code).to.equal(130);
+          console.log('data', data);
+          expect(data.output, 'to contain', expectedCloseCursor);
+          expect(data.code, 'to be', 130);
           done();
-        };
-
-        this.timeout(0);
-        this.slow(3000);
-        // executes Mocha in a subprocess
-        var mocha = directInvokeBlocking(['--watch'], assertionCallback);
+        });
         var t = setTimeout(function() {
           // kill the child process
+          console.log('TIMER SIGINT')
           mocha.kill('SIGINT');
-        }, 2000);
+        }, 500);
       });
     });
   });
