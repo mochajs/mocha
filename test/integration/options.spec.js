@@ -5,7 +5,7 @@ var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var runRaw = helpers.runMochaJSONRaw;
 var directInvoke = helpers.invokeMocha;
-var directInvokeBlocking = helpers.invokeBlockingMocha;
+// var directInvokeBlocking = helpers.invokeBlockingMocha;
 var resolvePath = helpers.resolveFixturePath;
 var args = [];
 
@@ -523,14 +523,13 @@ describe('options', function() {
           }
 
           var expectedCloseCursor = '\u001b[?25h';
-          console.log('data', data);
+          // console.log('data', data);
           expect(data.output, 'to contain', expectedCloseCursor);
           expect(data.code, 'to be', 130);
           done();
         });
         var t = setTimeout(function() {
           // kill the child process
-          console.log('TIMER SIGINT')
           mocha.kill('SIGINT');
         }, 500);
       });
