@@ -505,7 +505,7 @@ describe('options', function() {
     });
   });
 
-  describe.only('--watch', function() {
+  describe('--watch', function() {
     describe('with watch enabled', function() {
       it('should return correct output when watch process is terminated', function(done) {
         // After the process ends, this callback is ran
