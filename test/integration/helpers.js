@@ -72,6 +72,22 @@ module.exports = {
   },
   runMochaJSONRaw: function(fixturePath, args, fn) {
     var path;
+<<<<<<< HEAD
+=======
+
+    path = resolveFixturePath(fixturePath);
+    args = args || [];
+
+    return invokeSubMocha(args.concat(['--reporter', 'json', path]), function(
+      err,
+      resRaw
+    ) {
+      if (err) return fn(err);
+
+      fn(null, resRaw);
+    });
+  },
+>>>>>>> 38bfa4e... use invoker
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
