@@ -72,22 +72,6 @@ module.exports = {
   },
   runMochaJSONRaw: function(fixturePath, args, fn) {
     var path;
-<<<<<<< HEAD
-=======
-
-    path = resolveFixturePath(fixturePath);
-    args = args || [];
-
-    return invokeSubMocha(args.concat(['--reporter', 'json', path]), function(
-      err,
-      resRaw
-    ) {
-      if (err) return fn(err);
-
-      fn(null, resRaw);
-    });
-  },
->>>>>>> 38bfa4e... use invoker
 
     path = resolveFixturePath(fixturePath);
     args = args || [];
@@ -125,11 +109,6 @@ module.exports = {
    * @param {string} cwd - Current working directory for mocha run, optional
    */
   invokeMocha: invokeMocha,
-
-  /**
-   * Same as above except mocha child process spawned is blocked on stdout stream
-   */
-  invokeBlockingMocha: invokeBlockingMocha,
 
   /**
    * Resolves the path to a fixture to the full path.
