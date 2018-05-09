@@ -563,6 +563,16 @@ let rerun;
 if (program.watch) {
   console.log();
   hideCursor();
+  if (process.platform === 'win32') {
+    // Windows support
+    var rl = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    rl.on('SIGINT', function() {
+      process.emit('SIGINT');
+    });
+  }
   process.on('SIGINT', () => {
     showCursor();
     console.log('\n');
