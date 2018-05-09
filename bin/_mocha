@@ -570,7 +570,9 @@ if (program.watch) {
       output: process.stdout
     });
     rl.on('SIGINT', function() {
-      process.emit('SIGINT');
+      showCursor();
+      console.log('\n');
+      process.exit(130);
     });
   }
   process.on('SIGINT', () => {
