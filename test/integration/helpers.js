@@ -133,19 +133,6 @@ function invokeSubMocha(args, fn, cwd) {
   return _spawnMochaWithListeners(args, fn, cwd);
 }
 
-function invokeBlockingMocha(args, fn, cwd) {
-  args = [
-    path.join(
-      __dirname,
-      '../..',
-      'test/integration/fixtures',
-      'mocha-process-hanging.fixture.js'
-    )
-  ].concat(args);
-
-  return _spawnMochaWithListeners(args, fn, cwd);
-}
-
 function _spawnMochaWithListeners(args, fn, cwd) {
   var output = '';
   var mocha = spawn(process.execPath, args, {cwd: cwd});

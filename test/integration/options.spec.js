@@ -5,7 +5,7 @@ var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var runRaw = helpers.runMochaJSONRaw;
 var directInvoke = helpers.invokeMocha;
-// var directInvokeBlocking = helpers.invokeBlockingMocha;
+var directInvokeBlocking = helpers.invokeBlockingMocha;
 var resolvePath = helpers.resolveFixturePath;
 var args = [];
 
