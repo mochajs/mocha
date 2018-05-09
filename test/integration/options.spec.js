@@ -523,12 +523,14 @@ describe('options', function() {
           }
 
           var expectedCloseCursor = '\u001b[?25h';
+          console.log('data', data);
           expect(data.output, 'to contain', expectedCloseCursor);
           expect(data.code, 'to be', 130);
           done();
         });
         var t = setTimeout(function() {
           // kill the child process
+          console.log('TIMER SIGINT')
           mocha.kill('SIGINT');
         }, 500);
       });
