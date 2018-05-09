@@ -513,7 +513,6 @@ describe('options', function() {
         this.timeout(0);
         this.slow(3000);
         // executes Mocha in a subprocess
-        // var mocha = directInvokeBlocking(['--watch'], function(err, data) {
         var mocha = runRaw('exit.fixture.js', ['--watch'], function(err, data) {
           clearTimeout(t);
           if (err) {
