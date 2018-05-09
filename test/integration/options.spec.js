@@ -522,10 +522,7 @@ describe('options', function() {
             return;
           }
 
-          console.log('expect', expect.toString());
-          console.log('data', data);
           var expectedCloseCursor = '\u001b[?25h';
-          // console.log('data', data);
           expect(data.output, 'to contain', expectedCloseCursor);
           expect(data.code, 'to be', 130);
           done();
@@ -533,7 +530,7 @@ describe('options', function() {
         var t = setTimeout(function() {
           // kill the child process
           mocha.kill('SIGINT');
-        }, 2000);
+        }, 500);
       });
     });
   });
