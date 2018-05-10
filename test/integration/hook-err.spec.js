@@ -53,6 +53,17 @@ describe('hook error handling', function() {
     });
   });
 
+  describe('nested after hook error', function() {
+    before(run('hooks/after-nested-hook-error.fixture.js', onlyErrorTitle()));
+    it('should verify results', function() {
+      assert.deepEqual(lines, [
+        '1) spec 1',
+        'nested 1',
+        '"after all" hook for "blames me":'
+      ]);
+    });
+  });
+
   describe('after each hook error', function() {
     before(run('hooks/afterEach-hook-error.fixture.js'));
     it('should verify results', function() {
