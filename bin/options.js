@@ -5,6 +5,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Export `getOptions`.
@@ -24,10 +25,12 @@ function getOptions() {
     return;
   }
 
-  const optsPath =
-    process.argv.indexOf('--opts') === -1
-      ? 'test/mocha.opts'
-      : process.argv[process.argv.indexOf('--opts') + 1];
+  const optsIndex = process.argv.indexOf('--opts');
+  const optsPathSpecified = optsIndex !== -1;
+  const defaultOptsPath = path.join('test', 'mocha.opts');
+  const optsPath = optsPathSpecified
+    ? process.argv[optsIndex + 1]
+    : defaultOptsPath;
 
   try {
     const opts = fs
@@ -38,12 +41,19 @@ function getOptions() {
       .filter(Boolean)
       .map(value => value.replace(/%20/g, ' '));
 
-    process.argv = process.argv
-      .slice(0, 2)
-      .concat(opts.concat(process.argv.slice(2)));
-  } catch (ignore) {
-    // NOTE: should console.error() and throw the error
+    if (opts.length > 0) {
+      process.argv = process.argv
+        .slice(0, 2)
+        .concat(opts.concat(process.argv.slice(2)));
+    }
+  } catch (err) {
+    // Default options file may not exist - rethrow anything else
+    if (optsPathSpecified || err.code !== 'ENOENT') {
+      console.error(`failed to load Mocha options file: ${optsPath}`);
+      throw err;
+    }
+  } finally {
+    // Despite its name, signifies loading was attempted and should not be again
+    process.env.LOADED_MOCHA_OPTS = '1';
   }
-
-  process.env.LOADED_MOCHA_OPTS = true;
 }

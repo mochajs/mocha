@@ -127,7 +127,7 @@ function invokeMocha(args, fn, cwd) {
 }
 
 function resolveFixturePath(fixture) {
-  return path.join('./test/integration/fixtures', fixture);
+  return path.join('test', 'integration', 'fixtures', fixture);
 }
 
 function getSummary(res) {
