@@ -440,6 +440,42 @@ describe('options', function() {
     });
   });
 
+  describe('--opts', function() {
+    var testFile = path.join('options', 'opts.fixture.js');
+
+    it('works despite nonexistent default options file', function(done) {
+      args = [];
+      run(testFile, args, function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        assert.equal(res.stats.pending, 0);
+        assert.equal(res.stats.passes, 1);
+        assert.equal(res.stats.failures, 0);
+        assert.equal(res.code, 0);
+        return done();
+      });
+    });
+
+    it('should throw an error due to nonexistent options file', function(done) {
+      args = ['--opts', 'nosuchoptionsfile', testFile];
+      directInvoke(
+        args,
+        function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res.output).to.contain('failed to load Mocha options file');
+          expect(res.output).to.contain('ENOENT:');
+          expect(res.code).to.be(1);
+          return done();
+        },
+        path.join(__dirname, 'fixtures')
+      );
+    });
+
+  });
+
   describe('--exclude', function() {
     /*
      * Runs mocha in {path} with the given args.
