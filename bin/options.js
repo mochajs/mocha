@@ -5,6 +5,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Export `getOptions`.
@@ -13,13 +14,22 @@ const fs = require('fs');
 module.exports = getOptions;
 
 /**
- * Default pathname for run-control file.
+ * Default test directory.
  *
  * @constant
  * @type {string}
  * @default
  */
-const defaultPathname = 'test/mocha.opts';
+const DEFAULT_TEST_DIRECTORY = 'test';
+
+/**
+ * Default filename of run-control file.
+ *
+ * @constant
+ * @type {string}
+ * @default
+ */
+const DEFAULT_OPTS_FILENAME = 'mocha.opts';
 
 /**
  * Reads contents of the run-control file.
@@ -69,20 +79,32 @@ function getOptions() {
     return;
   }
 
-  const optsPath =
-    process.argv.indexOf('--opts') === -1
-      ? defaultPathname
-      : process.argv[process.argv.indexOf('--opts') + 1];
+  const optsIndex = process.argv.indexOf('--opts');
+  const optsPathSpecified = optsIndex !== -1;
+  const defaultOptsPath = path.join(
+    DEFAULT_TEST_DIRECTORY,
+    DEFAULT_OPTS_FILENAME
+  );
+  const optsPath = optsPathSpecified
+    ? process.argv[optsIndex + 1]
+    : defaultOptsPath;
 
   try {
     const opts = parseOptions(readOptionsFile(optsPath));
 
+    if (opts.length > 0) {
     process.argv = process.argv
       .slice(0, 2)
       .concat(opts.concat(process.argv.slice(2)));
-  } catch (ignore) {
-    // NOTE: should console.error() and throw the error
+    }
+  } catch (err) {
+    // Default options file may not exist - rethrow anything else
+    if (optsPathSpecified || err.code !== 'ENOENT') {
+      console.error(`failed to load Mocha options file: ${optsPath}`);
+      throw err;
+    }
+  } finally {
+    // Despite its name, signifies loading was attempted and should not be again
+    process.env.LOADED_MOCHA_OPTS = '1';
   }
-
-  process.env.LOADED_MOCHA_OPTS = true;
 }
