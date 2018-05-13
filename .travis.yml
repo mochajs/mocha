@@ -1,3 +1,4 @@
+sudo: required
 # these are executed in order.  each must pass for the next to be run
 stages:
   - smoke # this ensures a "user" install works properly
