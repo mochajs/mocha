@@ -6,7 +6,7 @@ describe('outer suite', function () {
     console.log('outer before');
   });
 
-  it('should run this test', function () {});
+  it('should run this test', function () { });
 
   describe('inner suite', function () {
     before(function () {
@@ -18,11 +18,11 @@ describe('outer suite', function () {
     });
 
     beforeEach(function () {
-      throw new Error('never thrown');
+      throw new Error('beforeEach should not run');
     });
 
     afterEach(function () {
-      throw new Error('never thrown');
+      throw new Error('afterEach should not run');
     });
 
     after(function () {
@@ -30,7 +30,7 @@ describe('outer suite', function () {
     });
 
     it('should never run this test', function () {
-      throw new Error('never thrown');
+      throw new Error('inner suite test should not run');
     });
 
     describe('skipped suite', function () {
@@ -39,7 +39,7 @@ describe('outer suite', function () {
       });
 
       it('should never run this test', function () {
-        throw new Error('never thrown');
+        throw new Error('skipped suie test should not run');
       });
 
       after(function () {
@@ -48,7 +48,7 @@ describe('outer suite', function () {
     });
   });
 
-  it('should run this test', function () {});
+  it('should run this test', function () { });
 
   after(function () {
     console.log('outer after');

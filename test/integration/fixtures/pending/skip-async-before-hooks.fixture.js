@@ -20,15 +20,15 @@ describe('outer suite', function () {
     });
 
     beforeEach(function () {
-      throw new Error('never thrown');
+      throw new Error('beforeEach should not run');
     });
 
     afterEach(function () {
-      throw new Error('never thrown');
+      throw new Error('afterEach should not run');
     });
 
     it('should not run this test', function () {
-      throw new Error('never thrown');
+      throw new Error('inner suite test should not run');
     });
 
     after(function () {
@@ -41,7 +41,7 @@ describe('outer suite', function () {
       });
 
       it('should not run this test', function () {
-        throw new Error('never thrown');
+        throw new Error('skipped suite test should not run');
       });
 
       after(function () {
