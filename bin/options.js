@@ -24,10 +24,18 @@ function getOptions() {
     return;
   }
 
-  const optsPath =
-    process.argv.indexOf('--opts') === -1
-      ? 'test/mocha.opts'
-      : process.argv[process.argv.indexOf('--opts') + 1];
+  const optPathSpecified = process.argv.indexOf('--opts') > -1;
+  const optsPath = optPathSpecified
+    ? process.argv[process.argv.indexOf('--opts') + 1]
+    : 'test/mocha.opts';
+
+  if (optPathSpecified && !fs.existsSync(optsPath)) {
+    const noSuchFileError = new Error(
+      `Specified options file does not exist: ${optsPath}`
+    );
+    noSuchFileError.code = 'ENOENT';
+    throw noSuchFileError;
+  }
 
   try {
     const opts = fs
@@ -45,5 +53,5 @@ function getOptions() {
     // NOTE: should console.error() and throw the error
   }
 
-  process.env.LOADED_MOCHA_OPTS = true;
+  process.env.LOADED_MOCHA_OPTS = 'true';
 }
