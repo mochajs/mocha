@@ -385,13 +385,13 @@ describe('Runner', function() {
     });
   });
 
-  describe('.run(fn)', function () {
-    it('should emit "retryable fail" when a retryable test fails', function (done) {
+  describe('.run(fn)', function() {
+    it('should emit "retryable fail" when a retryable test fails', function(done) {
       var retries = 2;
       var retryableFails = 0;
       var ERR = new Error('bear error');
 
-      var TEST = new Test('im a test about bears', function () {
+      var TEST = new Test('im a test about bears', function() {
         if (retryableFails < retries) {
           throw ERR;
         }
@@ -401,7 +401,7 @@ describe('Runner', function() {
       suite.retries(retries);
       suite.addTest(TEST);
 
-      runner.on('retryable fail', function (test, err) {
+      runner.on('retryable fail', function(test, err) {
         retryableFails += 1;
 
         // retries clone the tests, so I guess comparing the test
@@ -410,7 +410,7 @@ describe('Runner', function() {
         expect(err).to.equal(ERR);
       });
 
-      runner.run(function (failures) {
+      runner.run(function(failures) {
         expect(failures).to.equal(0);
         expect(retryableFails).to.equal(retries);
 
