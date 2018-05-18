@@ -1,3 +1,35 @@
+# 5.2.0 / 2018-05-18
+
+## :tada: Enhancements
+
+- [#3375]: Add support for comments in `mocha.opts` ([@plroebuck])
+
+## :bug: Fixes
+
+- [#3346]: Exit correctly from `before` hooks when using `--bail` ([@outsideris])
+
+## :book: Documentation
+
+- [#3328]: Mocha-flavored [API docs](https://mochajs.org/api/)! ([@Munter])
+
+## :nut_and_bolt: Other
+
+- [#3330]: Use `Buffer.from()` ([@harrysarson])
+- [#3295]: Remove redundant folder ([@DavNej])
+- [#3356]: Refactoring ([@plroebuck])
+
+[#3375]: https://github.com/mochajs/mocha/pull/3375
+[#3346]: https://github.com/mochajs/mocha/pull/3346
+[#3328]: https://github.com/mochajs/mocha/pull/3328
+[#3330]: https://github.com/mochajs/mocha/pull/3330
+[#3295]: https://github.com/mochajs/mocha/pull/3295
+[#3356]: https://github.com/mochajs/mocha/pull/3356
+
+[@plroebuck]: https://github.com/plroebuck
+[@harrysarson]: https://github.com/harrysarson
+[@outsideris]: https://github.com/outsideris
+[@Munter]: https://github.com/Munter
+
 # 5.1.1 / 2018-04-18
 
 ## :bug: Fixes
