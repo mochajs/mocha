@@ -8,21 +8,28 @@
   scope of this function for the tests to run properly.
 */
 
-function createMockRunner (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
-  var runnerFunction = createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2);
+function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
+  var runnerFunction = createRunnerFunction(
+    runStr,
+    ifStr1,
+    ifStr2,
+    ifStr3,
+    arg1,
+    arg2
+  );
   return {
     on: runnerFunction,
     once: runnerFunction
   };
 }
 
-function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
+function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var test = null;
   switch (runStr) {
     case 'start':
     case 'pending':
     case 'end':
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -34,7 +41,7 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'suite end':
     case 'test end':
       test = arg1;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
@@ -42,14 +49,14 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'fail two args':
       test = arg1;
       var expectedError = arg2;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback(test, expectedError);
         }
       };
     case 'start test':
       test = arg1;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -59,7 +66,7 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       };
     case 'suite suite end':
       var expectedSuite = arg1;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback(expectedSuite);
         }
@@ -72,7 +79,7 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       };
     case 'pass end':
       test = arg1;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
@@ -83,7 +90,7 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'test end fail':
       test = arg1;
       var error = arg2;
-      return function (event, callback) {
+      return function(event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -92,7 +99,7 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     case 'fail end pass':
-      return function (event, callback) {
+      return function(event, callback) {
         test = arg1;
         if (event === ifStr1) {
           callback(test, {});
@@ -111,16 +118,16 @@ function createRunnerFunction (runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   }
 }
 
-function makeTest (err) {
+function makeTest(err) {
   return {
     err: err,
-    titlePath: function () {
+    titlePath: function() {
       return ['test title'];
     }
   };
 }
 
-function createElements (argObj) {
+function createElements(argObj) {
   var res = [];
   for (var i = argObj.from; i <= argObj.to; i++) {
     res.push('element ' + i);
@@ -128,7 +135,7 @@ function createElements (argObj) {
   return res;
 }
 
-function makeExpectedTest (
+function makeExpectedTest(
   expectedTitle,
   expectedFullTitle,
   expectedDuration,
@@ -137,14 +144,14 @@ function makeExpectedTest (
 ) {
   return {
     title: expectedTitle,
-    fullTitle: function () {
+    fullTitle: function() {
       return expectedFullTitle;
     },
     duration: expectedDuration,
-    currentRetry: function () {
+    currentRetry: function() {
       return currentRetry;
     },
-    slow: function () {}
+    slow: function() {}
   };
 }
 

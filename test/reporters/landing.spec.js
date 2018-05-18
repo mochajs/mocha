@@ -6,7 +6,7 @@ var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
 
-describe('Landing reporter', function () {
+describe('Landing reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
@@ -24,10 +24,10 @@ describe('Landing reporter', function () {
     resetCode
   ];
 
-  beforeEach(function () {
+  beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function (string) {
+    process.stdout.write = function(string) {
       stdout.push(string);
     };
     useColors = Base.useColors;
@@ -36,15 +36,15 @@ describe('Landing reporter', function () {
     Base.window.width = 1;
   });
 
-  afterEach(function () {
+  afterEach(function() {
     Base.useColors = useColors;
     Base.window.width = windowWidth;
   });
 
-  describe('on start', function () {
-    it('should write new lines', function () {
+  describe('on start', function() {
+    it('should write new lines', function() {
       var cachedCursor = Base.cursor;
-      Base.cursor.hide = function () {};
+      Base.cursor.hide = function() {};
       runner = createMockRunner('start', 'start');
       Landing.call({}, runner);
 
@@ -54,10 +54,10 @@ describe('Landing reporter', function () {
       Base.cursor = cachedCursor;
     });
 
-    it('should call cursor hide', function () {
+    it('should call cursor hide', function() {
       var cachedCursor = Base.cursor;
       var calledCursorHide = false;
-      Base.cursor.hide = function () {
+      Base.cursor.hide = function() {
         calledCursorHide = true;
       };
       runner = createMockRunner('start', 'start');
@@ -70,9 +70,9 @@ describe('Landing reporter', function () {
     });
   });
 
-  describe('on test end', function () {
-    describe('if test has failed', function () {
-      it('should write expected landing strip', function () {
+  describe('on test end', function() {
+    describe('if test has failed', function() {
+      it('should write expected landing strip', function() {
         var test = {
           state: 'failed'
         };
@@ -85,8 +85,8 @@ describe('Landing reporter', function () {
         expect(stdout).to.eql(expectedArray);
       });
     });
-    describe('if test has not failed', function () {
-      it('should write expected landing strip', function () {
+    describe('if test has not failed', function() {
+      it('should write expected landing strip', function() {
         var test = {
           state: 'success'
         };
@@ -100,21 +100,24 @@ describe('Landing reporter', function () {
       });
     });
   });
-  describe('on end', function () {
-    it('should call cursor show and epilogue', function () {
+  describe('on end', function() {
+    it('should call cursor show and epilogue', function() {
       var cachedCursor = Base.cursor;
       var calledCursorShow = false;
-      Base.cursor.show = function () {
+      Base.cursor.show = function() {
         calledCursorShow = true;
       };
       runner = createMockRunner('end', 'end');
 
       var calledEpilogue = false;
-      Landing.call({
-        epilogue: function () {
-          calledEpilogue = true;
-        }
-      }, runner);
+      Landing.call(
+        {
+          epilogue: function() {
+            calledEpilogue = true;
+          }
+        },
+        runner
+      );
 
       process.stdout.write = stdoutWrite;
       expect(calledEpilogue).to.be(true);
