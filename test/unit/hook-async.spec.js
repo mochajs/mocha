@@ -1,15 +1,15 @@
 'use strict';
 
-describe('async', function () {
+describe('async', function() {
   var calls = [];
 
-  before(function () {
+  before(function() {
     calls.push('root before all');
   });
 
-  after(function () {
+  after(function() {
     calls.push('root after all');
-    expect(calls).to.eql([
+    expect(calls, 'to equal', [
       'root before all',
       'before all',
       'parent before',
@@ -38,26 +38,26 @@ describe('async', function () {
     ]);
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
     calls.push('parent before');
   });
 
-  afterEach(function () {
+  afterEach(function() {
     calls.push('parent after');
   });
 
-  describe('hooks', function () {
-    before(function () {
+  describe('hooks', function() {
+    before(function() {
       calls.push('before all');
     });
 
-    after(function () {
+    after(function() {
       calls.push('after all');
     });
 
-    beforeEach(function (done) {
+    beforeEach(function(done) {
       var ctx = this;
-      process.nextTick(function () {
+      process.nextTick(function() {
         calls.push('before');
         if (ctx.currentTest) {
           calls.push('before test ' + ctx.currentTest.title);
@@ -66,8 +66,8 @@ describe('async', function () {
       });
     });
 
-    it('one', function (done) {
-      expect(calls).to.eql([
+    it('one', function(done) {
+      expect(calls, 'to equal', [
         'root before all',
         'before all',
         'parent before',
@@ -78,8 +78,8 @@ describe('async', function () {
       process.nextTick(done);
     });
 
-    it('two', function () {
-      expect(calls).to.eql([
+    it('two', function() {
+      expect(calls, 'to equal', [
         'root before all',
         'before all',
         'parent before',
@@ -96,8 +96,8 @@ describe('async', function () {
       calls.push('two');
     });
 
-    it('three', function () {
-      expect(calls).to.eql([
+    it('three', function() {
+      expect(calls, 'to equal', [
         'root before all',
         'before all',
         'parent before',
@@ -121,12 +121,14 @@ describe('async', function () {
       calls.push('three');
     });
 
-    afterEach(function (done) {
+    afterEach(function(done) {
       var ctx = this;
-      process.nextTick(function () {
+      process.nextTick(function() {
         calls.push('after');
         if (ctx.currentTest) {
-          calls.push('after test ' + ctx.currentTest.title + ' ' + ctx.currentTest.state);
+          calls.push(
+            'after test ' + ctx.currentTest.title + ' ' + ctx.currentTest.state
+          );
         }
         done();
       });

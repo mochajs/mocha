@@ -1,0 +1,40 @@
+root: true
+extends:
+  - semistandard
+  - plugin:prettier/recommended
+env:
+  node: yes
+  browser: yes
+parserOptions:
+  ecmaVersion: 5
+  ecmaFeatures:
+    globalReturn: no
+    experimentalObjectRestSpread: no
+    jsx: no
+  sourceType: script
+rules:
+  strict:
+    - error
+    - safe
+overrides:
+  - files:
+    - scripts/**/*.js
+    - package-scripts.js
+    - karma.conf.js
+    - .wallaby.js
+    - bin/*
+    parserOptions:
+      ecmaVersion: 6
+    env:
+      browser: no
+  - files:
+    - test/**/*.js
+    env:
+      mocha: yes
+    globals:
+      expect: no
+  - files:
+    - doc/**/*.js
+    env:
+      node: no
+

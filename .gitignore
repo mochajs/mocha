@@ -12,6 +12,14 @@ npm-debug.log*
 *.orig
 .nyc_output/
 coverage/
-BUILDTMP/
 yarn.lock
-package-lock.json
+/mocha.js
+# artifacts from various diff tools
+*_BACKUP_*
+*_BASE_*
+*_LOCAL_*
+*_REMOTE_*
+docs/_site
+docs/_dist
+docs/api
+.vscode/

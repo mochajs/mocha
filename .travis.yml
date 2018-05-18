@@ -1,92 +1,95 @@
-sudo: false
+# these are executed in order.  each must pass for the next to be run
+stages:
+  - smoke # this ensures a "user" install works properly
+  - precache # warm up cache for default Node.js version
+  - lint # lint code and docs
+  - test # all tests
 
-# trust dist provides a modern build chain (as opposed to 'precise' dist)
-# which absolves us from having to install compilers and stuff
-dist: trusty
-
+# defaults
 language: node_js
+node_js: '10'
+# `nvm install` happens before the cache is restored, which means
+# we must install our own npm elsewhere (`~/npm`)
+before_install: |
+  [[ ! -x ~/npm/node_modules/.bin/npm ]] && {
+    # caching feature creates `~/npm` for us
+    cd ~/npm && npm install npm@^5
+    cd -
+  } || true
+  # avoids bugs around https://github.com/travis-ci/travis-ci/issues/5092
+  export PATH=~/npm/node_modules/.bin:$PATH
+# this avoids compilation in most cases (where we don't need it)
+install: npm ci --ignore-scripts
+cache:
+  directories:
+    - ~/.npm # cache npm's cache
+    - ~/npm # cache latest npm
 
-env:
-  global:
-    # phantomjs hosts binaries @ bitbucket, which has fairly restrictive
-    # rate-limiting.  pull it from this sketchy site in China instead.
-    - PHANTOMJS_CDNURL='https://cnpmjs.org/downloads'
-
-matrix:
-  fast_finish: true
+jobs:
   include:
-    - node_js: '8'
-      env: TARGET=test-node COVERAGE=true
-    - node_js: '7'
-      env: TARGET=test-node
-    - node_js: '6'
-      env: TARGET=test-node
-    - node_js: '5'
-      env: TARGET=test-node
-    - node_js: '4'
-      env: TARGET=test-node
-    - node_js: 'iojs'
-      env: TARGET=test-node
-    - node_js: '0.12'
-      env: TARGET=test-node
-    - node_js: '0.11'
-      env: TARGET=test-node
-    - node_js: '0.10'
-      env: TARGET=test-node
-    - node_js: '8'
-      env: TARGET=lint
-    # phantomjs
-    - node_js: '8'
-      env: TARGET=test-browser
-    # chrome
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="chrome@latest" PLATFORM="Windows 8"
-    # edge
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="MicrosoftEdge@latest" PLATFORM="Windows 10"
-    # ie11
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@11.0" PLATFORM="Windows 8.1"
-    # ie10
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@10.0" PLATFORM="Windows 8"
-    # ie9
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@9.0" PLATFORM="Windows 7"
-    # ie8
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@8.0" PLATFORM="Windows 7"
-    # ie7
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="internet explorer@7.0" PLATFORM="Windows XP"
-    # firefox
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="firefox@latest" PLATFORM="Windows 8.1"
-    # safari
-    - node_js: '8'
-      env: TARGET=test-browser BROWSER="safari@latest" PLATFORM="OS X 10.11"
+    - script: COVERAGE=1 npm start test.node
+      after_success: npm start coveralls
 
-before_install: scripts/travis-before-install.sh
+    - &node
+      script: npm start test.node
+      node_js: '9'
 
-install:
- - npm install
- - cd node_modules && ln -nsf @coderbyheart/karma-sauce-launcher karma-sauce-launcher && cd ../
+    - <<: *node
+      node_js: '8'
 
-before_script: scripts/travis-before-script.sh
+    - <<: *node
+      node_js: '6'
 
-script: make $TARGET
+    - <<: *node
+      node_js: '4'
 
-after_success: "npm run postcoverage && <coverage/lcov.info ./node_modules/coveralls/bin/coveralls.js"
+    - script: npm start test.bundle test.browser
+      install: npm ci # we need the native modules here
+      addons:
+        artifacts:
+          paths:
+            - .karma/
+            - ./mocha.js
+        chrome: stable
+        sauce_connect: true
+
+    - stage: lint
+      script: npm start lint
+
+    # smoke tests use default npm.
+    - &smoke
+      stage: smoke
+      env: null
+      before_install: true
+      install: npm install --production
+      # `--opts /dev/null` means "ignore test/mocha.opts"
+      script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+      cache:
+        directories:
+          - ~/.npm
+          - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
+
+    - <<: *smoke
+      node_js: '9'
+
+    - <<: *smoke
+      node_js: '8'
+
+    - <<: *smoke
+      node_js: '6'
+
+    - <<: *smoke
+      node_js: '4'
+
+    - stage: precache
+      script: true
 
 notifications:
+  email: false
   urls:
-    # for gitter
+    # for gitter mochajs/mocha
     - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
+    # for gitter mochajs/contributors
+    - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
   on_success: change
   on_failure: always
-
-addons:
-  artifacts:
-    paths:
-      - .karma/
-      - ./mocha.js

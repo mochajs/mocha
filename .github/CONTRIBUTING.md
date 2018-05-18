@@ -40,45 +40,46 @@ We ask you please keep these goals in mind when making or proposing changes.
 
 Follow these steps to get going.  If you are having trouble, don't be afraid to [ask for help](#got-a-question).
 
-1.  [Install Node.js 4.x or newer](https://nodejs.org/download).
-1.  Install [GNU Make](https://www.gnu.org/software/make/) or equivalent.
-1.  Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
-1.  Create a new branch in your working copy.  Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
-1.  Execute `npm install` to install the development dependencies.
-1.  Make your changes and add them via `git add`.
-  - **Do not modify** the root `mocha.js` file directly; it is automatically generated.
-  - Your changes will likely be somewhere in `lib/`, `bin/` or `browser-entry.js` if your changes are browser-specific.
-  - Please add unit and/or integration tests (depending on the nature of your changes).
-  - Keep your PR focused.  Don't fix two things at once, or make formatting changes alongside bug fixes.
-1.  Before committing, run `npm test`.
-  - This will run unit tests, Node.js and browser integration tests, and lint the source code.
-  - The "browser" tests use Mocha to test itself; it will rebuild the root `mocha.js` file with your changes.
-  - **Please avoid committing changes to `mocha.js`**.
-  - Ultimately, your pull request will be built on our continuous integration servers ([Travis CI](https://travis-ci.org/mochajs/mocha) and [AppVeyor](https://ci.appveyor.com/project/boneskull/mocha)).  The first step to ensuring these checks pass is to test on your own machine.
-1.  Commit your changes.
-  - Use a brief message on the first line, referencing a relevant issue (e.g. `#12345`).
-  - Add detail in subsequent lines.
-1.  Push your changes to your fork.
-1.  Navigate to the source repository.  You should see a notification about your recent changes in your fork's branch, with a button to create a pull request.  Click it.
-1.  Describe your changes in detail here.  Once you're satisfied, submit the form.
-  - *PRO TIP*: If you've used a multi-line commit message, Github will pre-fill the PR's description with it.
-1.  If you have not signed our Contributor License Agreement, a friendly robot will prompt you to do so.  A CLA (electronic) signature is **required** for all contributions of code to Mocha.
-1.  CI will run against your changes.
-  - If the changes fail the checks, you will need to address those before merging.
-  - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
-  - Github will indicate if there's a conflict.  If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase/) your branch onto the `master` branch of the source repository.  *Don't merge.*
-  - It's no longer necessary to "squash" your changes.
-1.  Be patient while your PR is reviewed.  This can take awhile ([why?](https://github.com/orgs/mochajs/projects/4)).  We may request changes; don't be afraid to question them.
+> PRO TIP: Run `npm start` to see a list of commands which can be run with `npm start <command>`
+
+1. [Install Node.js 4.x or newer](https://nodejs.org/download).
+1. Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
+1. Create a new branch in your working copy.  Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
+1. Execute `npm install` to install the development dependencies.
+1. Make your changes and add them via `git add`.
+    - **Do not modify** the root `mocha.js` file directly; it is automatically generated.
+    - Your changes will likely be somewhere in `lib/`, `bin/` or `browser-entry.js` if your changes are browser-specific.
+    - Please add unit and/or integration tests (depending on the nature of your changes).
+    - Keep your PR focused.  Don't fix two things at once, or make formatting changes alongside bug fixes.
+1. Before committing, run `npm test`.
+    - This will run unit tests, Node.js and browser integration tests, and lint the source code.
+    - The "browser" tests use Mocha to test itself; it will rebuild the root `mocha.js` file with your changes.
+    - **Please avoid committing changes to `mocha.js`**.
+    - Ultimately, your pull request will be built on our continuous integration servers ([Travis CI](https://travis-ci.org/mochajs/mocha) and [AppVeyor](https://ci.appveyor.com/project/boneskull/mocha)).  The first step to ensuring these checks pass is to test on your own machine.
+1. Commit your changes.
+    - Use a brief message on the first line, referencing a relevant issue (e.g. `#12345`).
+    - Add detail in subsequent lines.
+1. Push your changes to your fork.
+1. Navigate to the source repository.  You should see a notification about your recent changes in your fork's branch, with a button to create a pull request.  Click it.
+1. Describe your changes in detail here.  Once you're satisfied, submit the form.
+    - *PRO TIP*: If you've used a multi-line commit message, Github will pre-fill the PR's description with it.
+1. If you have not signed our Contributor License Agreement, a friendly robot will prompt you to do so.  A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
+1. CI will run against your changes.
+    - If the changes fail the checks, you will need to address those before merging.
+    - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
+    - Github will indicate if there's a conflict.  If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase/) your branch onto the `master` branch of the source repository.  *Don't merge.*
+    - It's no longer necessary to "squash" your changes.
+1. Be patient while your PR is reviewed.  This can take awhile ([why?](https://github.com/orgs/mochajs/projects/4)).  We may request changes; don't be afraid to question them.
 
 ## :angel: I Just Want To Help
 
 *Excellent.*  Here's how:
 
-- **Handy with JavaScript?**  Please check out the issues labeled [`pr-please`](https://git.io/vXYu2).
-- **Can you write good (and do other stuff good too)?**  Help with the documentation.  See the [issues for our site](https://github.com/mochajs/mochajs.github.io/issues).
-- **Design your thing?**  [Our site](https://github.com/mochajs/mochajs.github.io) needs your magic touch.
+- **Handy with JavaScript?**  Please check out the issues labeled [`help-wanted`](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Ahelp-wanted).
+- **Can you write good (and do other stuff good too)?**  Help with the documentation.  See the [issues for our site](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
+- **Design your thing?**  [Our site](https://github.com/mochajs/mocha/tree/master/docs) needs your magic touch.
 - **Know Mocha's codebase?**  We could use your help triaging issues and/or reviewing pull requests.  Please contact an [org member](https://github.com/orgs/mochajs/people), and we'll chat.
 - **Want to build our community?**  Mocha has a *lot* of users.  We could use your help bringing everyone together in peace and harmony.  Please contact an [org member](https://github.com/mochajs/people).
-- **You can sell dirt to worms?**  Let's raise Mocha's profile in the JavaScript and OSS communities.  Please contact an [org member](https://github.com/mochajs/people)!
+- **You can sell dirt to worms?**  Let's raise Mocha's profile in the JavaScript and OSS communities.  Please contact an [org member](https://github.com/orgs/mochajs/people)!
 - **Wait--you write unit tests for *fun*?**  A PR which increases coverage is unlikely to be turned down.
 - **Are you experienced?**  If you're a seasoned Mocha user, why not help answer some questions in the [chat room](https://gitter.im/mochajs/mocha)?

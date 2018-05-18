@@ -5,10 +5,11 @@ var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
-describe('json reporter', function () {
+describe('json reporter', function() {
   var suite, runner;
+  var testTitle = 'json test 1';
 
-  beforeEach(function () {
+  beforeEach(function() {
     var mocha = new Mocha({
       reporter: 'json'
     });
@@ -18,45 +19,79 @@ describe('json reporter', function () {
     var mochaReporter = new mocha._reporter(runner);
   });
 
-  it('should have 1 test failure', function (done) {
-    var testTitle = 'json test 1';
-    var error = { message: 'oh shit' };
+  it('should have 1 test failure', function(done) {
+    var error = {message: 'oh shit'};
 
-    suite.addTest(new Test(testTitle, function (done) {
-      done(new Error(error.message));
-    }));
+    suite.addTest(
+      new Test(testTitle, function(done) {
+        done(new Error(error.message));
+      })
+    );
 
-    runner.run(function (failureCount) {
-      failureCount.should.be.exactly(1);
-      runner.should.have.property('testResults');
-      runner.testResults.should.have.property('failures');
-      runner.testResults.failures.should.be.an.instanceOf(Array);
-      runner.testResults.failures.should.have.a.lengthOf(1);
-
-      var failure = runner.testResults.failures[0];
-      failure.should.have.property('title', testTitle);
-      failure.err.message.should.equal(error.message);
-      failure.should.have.properties('err');
-
+    runner.run(function(failureCount) {
+      expect(runner, 'to satisfy', {
+        testResults: {
+          failures: [
+            {
+              title: testTitle,
+              err: {
+                message: error.message
+              }
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 1);
       done();
     });
   });
 
-  it('should have 1 test pending', function (done) {
-    var testTitle = 'json test 1';
-
+  it('should have 1 test pending', function(done) {
     suite.addTest(new Test(testTitle));
 
-    runner.run(function (failureCount) {
-      failureCount.should.be.exactly(0);
-      runner.should.have.property('testResults');
-      runner.testResults.should.have.property('pending');
-      runner.testResults.pending.should.be.an.instanceOf(Array);
-      runner.testResults.pending.should.have.a.lengthOf(1);
+    runner.run(function(failureCount) {
+      expect(runner, 'to satisfy', {
+        testResults: {
+          pending: [
+            {
+              title: testTitle
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
+      done();
+    });
+  });
 
-      var pending = runner.testResults.pending[0];
-      pending.should.have.property('title', testTitle);
+  it('should handle circular objects in errors', function(done) {
+    var testTitle = 'json test 1';
+    function CircleError() {
+      this.message = 'oh shit';
+      this.circular = this;
+    }
+    var error = new CircleError();
 
+    suite.addTest(
+      new Test(testTitle, function(done) {
+        throw error;
+      })
+    );
+
+    runner.run(function(failureCount) {
+      expect(runner, 'to satisfy', {
+        testResults: {
+          failures: [
+            {
+              title: testTitle,
+              err: {
+                message: error.message
+              }
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 1);
       done();
     });
   });

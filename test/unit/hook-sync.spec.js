@@ -1,35 +1,31 @@
 'use strict';
 
-describe('serial', function () {
+describe('serial', function() {
   var calls = [];
 
-  beforeEach(function () {
+  beforeEach(function() {
     calls.push('parent before');
   });
 
-  afterEach(function () {
+  afterEach(function() {
     calls.push('parent after');
   });
 
-  describe('hooks', function () {
-    beforeEach(function () {
+  describe('hooks', function() {
+    beforeEach(function() {
       calls.push('before');
       if (this.currentTest) {
         calls.push('before test ' + this.currentTest.title);
       }
     });
 
-    it('one', function () {
-      expect(calls).to.eql([
-        'parent before',
-        'before',
-        'before test one'
-      ]);
+    it('one', function() {
+      expect(calls, 'to equal', ['parent before', 'before', 'before test one']);
       calls.push('one');
     });
 
-    it('two', function () {
-      expect(calls).to.eql([
+    it('two', function() {
+      expect(calls, 'to equal', [
         'parent before',
         'before',
         'before test one',
@@ -44,8 +40,8 @@ describe('serial', function () {
       calls.push('two');
     });
 
-    it('three', function () {
-      expect(calls).to.eql([
+    it('three', function() {
+      expect(calls, 'to equal', [
         'parent before',
         'before',
         'before test one',
@@ -67,15 +63,17 @@ describe('serial', function () {
       calls.push('three');
     });
 
-    afterEach(function () {
+    afterEach(function() {
       calls.push('after');
       if (this.currentTest) {
-        calls.push('after test ' + this.currentTest.title + ' ' + this.currentTest.state);
+        calls.push(
+          'after test ' + this.currentTest.title + ' ' + this.currentTest.state
+        );
       }
     });
 
-    after(function () {
-      expect(calls).to.eql([
+    after(function() {
+      expect(calls, 'to equal', [
         'parent before',
         'before',
         'before test one',

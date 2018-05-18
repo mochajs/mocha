@@ -1,28 +1,22 @@
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var baseBundleDirpath = path.join(__dirname, '.karma');
-var osName = require('os-name');
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const baseBundleDirpath = path.join(__dirname, '.karma');
 
-module.exports = function (config) {
-  var bundleDirpath;
-  var cfg = {
-    frameworks: [
-      'browserify',
-      'expect',
-      'mocha'
-    ],
-    plugins: [
-      'karma-browserify',
-      'karma-chrome-launcher',
-      'karma-phantomjs-launcher',
-      'karma-expect',
-      'karma-mocha',
-      'karma-spec-reporter',
-      require('@coderbyheart/karma-sauce-launcher')
-    ],
+const browserPlatformPairs = {
+  'chrome@latest': 'Windows 8',
+  'MicrosoftEdge@latest': 'Windows 10',
+  'internet explorer@11.0': 'Windows 8.1',
+  'firefox@latest': 'Windows 10',
+  'safari@latest': 'OS X 10.12'
+};
+
+module.exports = config => {
+  let bundleDirpath;
+  const cfg = {
+    frameworks: ['browserify', 'mocha'],
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
@@ -34,75 +28,80 @@ module.exports = function (config) {
     },
     browserify: {
       debug: true,
-      configure: function configure (b) {
-        b.ignore('glob')
+      configure: function configure(b) {
+        b
+          .ignore('glob')
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
-          .on('bundled', function (err, content) {
-            if (!err && bundleDirpath) {
+          .on('bundled', (err, content) => {
+            if (err) {
+              throw err;
+            }
+            if (bundleDirpath) {
               // write bundle to directory for debugging
-              fs.writeFileSync(path.join(bundleDirpath,
-                'bundle.' + Date.now() + '.js'), content);
+              fs.writeFileSync(
+                path.join(bundleDirpath, `mocha.${Date.now()}.js`),
+                content
+              );
             }
           });
       }
     },
-    reporters: ['spec'],
+    reporters: ['mocha'],
     colors: true,
-    browsers: [osName() === 'macOS Sierra' ? 'Chrome' : 'PhantomJS'], // This is the default browser to run, locally
+    browsers: ['ChromeHeadless'],
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
-        reporter: 'html'
+        reporter: 'html',
+        timeout: 500
+      }
+    },
+    mochaReporter: {
+      showDiff: true
+    },
+    customLaunchers: {
+      ChromeDebug: {
+        base: 'Chrome',
+        flags: ['--remote-debugging-port=9333']
       }
     }
   };
 
-  // see https://github.com/saucelabs/karma-sauce-example
-
-  // We define the browser to run on the Saucelabs Infrastructure
-  // via the environment variables BROWSER and PLATFORM.
-  // PLATFORM is e.g. "Windows"
-  // BROWSER is expected to be in the format "<name>@<version>",
-  // e.g. "MicrosoftEdge@latest"
-  // See https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-  // for available browsers.
-
-  // TO RUN LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> BROWSER=<browser> PLATFORM=<platform> make test-browser`
-  var env = process.env;
-  var sauceConfig;
+  // TO RUN AGAINST SAUCELABS LOCALLY, execute:
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm start test.browser`
+  const env = process.env;
+  let sauceConfig;
 
   if (env.CI) {
     console.error('CI mode enabled');
     if (env.TRAVIS) {
       console.error('Travis-CI detected');
       bundleDirpath = path.join(baseBundleDirpath, process.env.TRAVIS_BUILD_ID);
-      if (env.BROWSER && env.PLATFORM) {
-        if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
-          // correlate build/tunnel with Travis
-          sauceConfig = {
-            build: 'TRAVIS #' + env.TRAVIS_BUILD_NUMBER +
-            ' (' + env.TRAVIS_BUILD_ID + ')',
-            tunnelIdentifier: env.TRAVIS_JOB_NUMBER
-          };
-          console.error('Configured SauceLabs');
-        } else {
-          console.error('No SauceLabs credentials present');
-        }
+      if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
+        // correlate build/tunnel with Travis
+        sauceConfig = {
+          build: `TRAVIS #${env.TRAVIS_BUILD_NUMBER} (${env.TRAVIS_BUILD_ID})`,
+          tunnelIdentifier: env.TRAVIS_JOB_NUMBER,
+          startConnect: false
+        };
+        console.error('Configured SauceLabs');
+      } else {
+        console.error('No SauceLabs credentials present');
       }
     } else if (env.APPVEYOR) {
-      console.error('AppVeyor detected');
-      bundleDirpath = path.join(baseBundleDirpath, process.env.APPVEYOR_BUILD_ID);
+      throw new Error('no browser tests should run on AppVeyor!');
     } else {
       console.error('Local/unknown environment detected');
       bundleDirpath = path.join(baseBundleDirpath, 'local');
       // don't need to run sauce from appveyor b/c travis does it.
       if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
+        const id = `${require('os').hostname()} (${Date.now()})`;
         sauceConfig = {
-          build: require('os')
-            .hostname() + ' (' + Date.now() + ')'
+          build: id,
+          tunnelIdentifier: id,
+          startConnect: true
         };
         console.error('Configured SauceLabs');
       } else {
@@ -119,52 +118,78 @@ module.exports = function (config) {
     addSauceTests(cfg);
   }
 
-  // the MOCHA_UI env var will determine if we're running interface-specific
-  // tests.  since you can only load one at a time, each must be run separately.
-  // each has its own set of acceptance tests and a fixture.
-  // the "bdd" fixture is used by default.
-  var ui = env.MOCHA_UI;
-  if (ui) {
-    if (cfg.sauceLabs) {
-      cfg.sauceLabs.testName = 'Interface "' + ui + '" integration tests';
-    }
-    cfg.files = [
-      'test/browser-fixtures/' + ui + '.fixture.js',
-      'test/interfaces/' + ui + '.spec.js'
-    ];
-  } else if (cfg.sauceLabs) {
-    cfg.sauceLabs.testName = 'Unit Tests';
+  /* the MOCHA_TEST env var will be set for "special" cases of tests.
+   * these may require different interfaces or other setup which make
+   * them unable to be batched w/ the rest.
+   */
+  const MOCHA_TEST = env.MOCHA_TEST;
+  switch (MOCHA_TEST) {
+    case 'bdd':
+    case 'tdd':
+    case 'qunit':
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = `Interface "${MOCHA_TEST}" Integration Tests`;
+      }
+      cfg.files = [
+        `test/browser-fixtures/${MOCHA_TEST}.fixture.js`,
+        `test/interfaces/${MOCHA_TEST}.spec.js`
+      ];
+      break;
+
+    case 'esm':
+      // just run against ChromeHeadless, since other browsers may not
+      // support
+      cfg.browsers = ['ChromeHeadless'];
+      cfg.files = [
+        'test/browser-specific/esm.spec.js',
+        'test/browser-fixtures/esm.fixture.html'
+      ];
+      break;
+    default:
+      if (cfg.sauceLabs) {
+        cfg.sauceLabs.testName = 'Unit Tests';
+      }
   }
+
+  cfg.files.unshift(
+    'node_modules/unexpected/unexpected.js',
+    {pattern: 'node_modules/unexpected/unexpected.js.map', included: false},
+    'test/browser-specific/setup.js'
+  );
 
   config.set(cfg);
 };
 
-function addSauceTests (cfg) {
-  var env = process.env;
+function addSauceTests(cfg) {
   cfg.reporters.push('saucelabs');
-  cfg.customLaunchers = {};
-  cfg.customLaunchers[env.BROWSER] = {
-    base: 'SauceLabs',
-    browserName: env.BROWSER.split('@')[0],
-    version: env.BROWSER.split('@')[1],
-    platform: env.PLATFORM
-  };
-  cfg.browsers = [env.BROWSER];
+  const browsers = Object.keys(browserPlatformPairs);
+  cfg.browsers = cfg.browsers.concat(browsers);
+  cfg.customLaunchers = browsers.reduce((acc, browser) => {
+    const platform = browserPlatformPairs[browser];
+    const [browserName, version] = browser.split('@');
+    acc[browser] = {
+      base: 'SauceLabs',
+      browserName: browserName,
+      version: version,
+      platform: platform
+    };
+    return acc;
+  }, cfg.customLaunchers);
 
   // See https://github.com/karma-runner/karma-sauce-launcher
   // See https://github.com/bermi/sauce-connect-launcher#advanced-usage
-  cfg.sauceLabs = {
+  Object.assign(cfg.sauceLabs, {
     public: 'public',
-    startConnect: true,
     connectOptions: {
-      connectRetries: 10,
-      connectRetryTimeout: 60000
+      connectRetries: 2,
+      connectRetryTimeout: 30000,
+      detached: cfg.sauceLabs.startConnect,
+      tunnelIdentifier: cfg.sauceLabs.tunnelIdentifier
     }
-  };
+  });
 
-  cfg.concurrency = 5;
-
-  cfg.retryLimit = 5;
+  cfg.concurrency = Infinity;
+  cfg.retryLimit = 1;
 
   // for slow browser booting, ostensibly
   cfg.captureTimeout = 120000;

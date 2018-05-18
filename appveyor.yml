@@ -1,18 +1,18 @@
+platform:
+  - x64
 environment:
   matrix:
+    - nodejs_version: '10'
+    - nodejs_version: '9'
     - nodejs_version: '8'
-    - nodejs_version: '7'
     - nodejs_version: '6'
     - nodejs_version: '4'
-    - nodejs_version: '0.12'
-    - nodejs_version: '0.10'
 install:
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
   - set PATH=%APPDATA%\npm;c:\MinGW\bin;%PATH%
-  - set PHANTOMJS_CDNURL=https://cnpmjs.org/downloads
-  - npm install
-  - copy c:\MinGW\bin\mingw32-make.exe c:\MinGW\bin\make.exe
+  - npm install -g npm@^5
+  - npm ci --ignore-scripts
 matrix:
   fast_finish: true
 build: off
@@ -22,7 +22,7 @@ clone_depth: 1
 test_script:
   - node --version
   - npm --version
-  - make test-node
+  - npm start test.node
 skip_commits:
   message: /\[ci\s+skip\]/
 

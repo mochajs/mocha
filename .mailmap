@@ -1,12 +1,30 @@
+# see https://www.git-scm.com/docs/git-check-mailmap for formatting info
 TJ Holowaychuk <tj@vision-media.ca>
-Travis Jeffery <tj@travisjeffery.com>   <travisjeffery@gmail.com>
-Travis Jeffery <tj@travisjeffery.com>   Dr. Travis Jeffery <tj@travisjeffery.com>
-Christopher Hiller <boneskull@boneskull.com>  Christopher Hiller <chiller@badwing.com>
-David da Silva Contín <dasilvacontin@gmail.com>   David da Silva <daviddasilvacontin@me.com>
-David da Silva Contín <dasilvacontin@gmail.com>   David da Silva <dasilvacontin@gmail.com>
-David da Silva Contín <dasilvacontin@gmail.com>   <daviddasilvacontin@gmail.com>
-Ariel Mashraki <ariel@mashraki.co.il>   Ariel Mashraki <ariel@codeoasis.com>
-Ariel Mashraki <ariel@mashraki.co.il>   Ariel Mashraki <ariel.mashraki@ironsrc.com>
-Forbes Lindesay <forbes@lindesay.co.uk>   Forbes Lindesay <fpfl2@cam.ac.uk>
-Ben Bradley <ben@bradleyit.com>   Ben Bradley <[ben.bradley@cigna.com|mailto:ben.bradley@cigna.com]>
-Glen Mailer <glenjamin@gmail.com>   Glen Mailer <glen.mailer@bskyb.com>
+Travis Jeffery <tj@travisjeffery.com> <travisjeffery@gmail.com>
+Travis Jeffery <tj@travisjeffery.com> Dr. Travis Jeffery <tj@travisjeffery.com>
+Christopher Hiller <boneskull@boneskull.com> <chiller@badwing.com>
+David da Silva Contín <dasilvacontin@gmail.com> David da Silva <daviddasilvacontin@me.com>
+David da Silva Contín <dasilvacontin@gmail.com> David da Silva <dasilvacontin@gmail.com>
+David da Silva Contín <dasilvacontin@gmail.com> <daviddasilvacontin@gmail.com>
+Ariel Mashraki <ariel@mashraki.co.il> <ariel@codeoasis.com>
+Ariel Mashraki <ariel@mashraki.co.il> <ariel.mashraki@ironsrc.com>
+Forbes Lindesay <forbes@lindesay.co.uk> <fpfl2@cam.ac.uk>
+Ben Bradley <ben@bradleyit.com> <[ben.bradley@cigna.com|mailto:ben.bradley@cigna.com]>
+Glen Mailer <glenjamin@gmail.com> <glen.mailer@bskyb.com>
+38elements <mh19820223@gmail.com> <38elements@users.noreply.github.com>
+Andreas Lind Petersen <andreas@one.com> Andreas Lind <andreas@one.com>
+Ben Harris <benhdev@gmail.com> <bdharris08@gmail.com>
+Can Oztokmak <can@zeplin.io> <coztokmak@gmail.com>
+Will Langstroth <will@langstroth.com> <william.langstroth@gmail.com>
+Sulabh Bista <sul4bh@gmail.com> <sulabh.bista@makethunder.com>
+Rustem Mustafin <mustafin.rustem@gmail.com> <mustafin@kt-labs.com>
+Rico Sta. Cruz <rstacruz@users.noreply.github.com> <hi@ricostacruz.com>
+Pete Hawkins <pete@petes-imac.frontinternal.net> <pete@phawk.co.uk>
+Raynos <raynos2@gmail.com> <=>
+Raynos <raynos2@gmail.com> Raynos (Jake Verbaten) <raynos2@gmail.com>
+Markus Tacker <m@coderbyheart.com> <markus@resourceful-humans.com>
+Long Ho <longlho@users.noreply.github.com> <longho@yahoo-inc.com>
+László Bácsi <lackac@lackac.hu> Laszlo Bacsi <lackac@lackac.hu>
+Eli Skeggs <skeggse@users.noreply.github.com> <skeggse@gmail.com>
+Domenic Denicola <domenic@domenicdenicola.com> domenic <domenic@domenicdenicola.com>
+Michael Schoonmaker <michael.r.schoonmaker@gmail.com> <michael.schoonmaker@redrobotlabs.com>
