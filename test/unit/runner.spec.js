@@ -406,13 +406,13 @@ describe('Runner', function() {
 
         // retries clone the tests, so I guess comparing the test
         // names should be enough
-        expect(test.title).to.equal(TEST.title);
-        expect(err).to.equal(ERR);
+        expect(test.title, 'to be', TEST.title);
+        expect(err, 'to be', ERR);
       });
 
       runner.run(function(failures) {
-        expect(failures).to.equal(0);
-        expect(retryableFails).to.equal(retries);
+        expect(failures, 'to be', 0);
+        expect(retryableFails, 'to be', retries);
 
         done();
       });
