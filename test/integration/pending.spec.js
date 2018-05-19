@@ -147,6 +147,42 @@ describe('pending', function() {
           done();
         });
       });
+
+      it('should allow a skip reason', function(done) {
+        run('pending/skip-async-spec-with-reason.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 1);
+          assert.equal(res.stats.passes, 1);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          assert.equal(res.pending[0].reason, 'skip reason');
+          done();
+        });
+      });
+
+      it('should allow a skip with no reason to result in no reason property', function(done) {
+        run('pending/skip-async-spec-with-no-reason.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 1);
+          assert.equal(res.stats.passes, 1);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          assert.ok(!res.pending[0].hasOwnProperty('reason'));
+          done();
+        });
+      });
     });
 
     describe('in before', function() {
