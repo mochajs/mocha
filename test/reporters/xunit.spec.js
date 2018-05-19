@@ -256,6 +256,39 @@ describe('XUnit reporter', function() {
               return expectedClassName;
             }
           },
+          duration: 1000
+        };
+        xunit.test.call(
+          {
+            write: function(string) {
+              expectedWrite = string;
+            }
+          },
+          expectedTest
+        );
+
+        var expectedTag =
+          '<testcase classname="' +
+          expectedClassName +
+          '" name="' +
+          expectedTitle +
+          '" time="1"><skipped/></testcase>';
+
+        expect(expectedWrite, 'to be', expectedTag);
+      });
+      it('should write expected tag with message', function() {
+        var xunit = new XUnit({on: function() {}, once: function() {}});
+
+        var expectedTest = {
+          isPending: function() {
+            return true;
+          },
+          title: expectedTitle,
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
           duration: 1000,
           reason: expectedReason
         };
@@ -273,7 +306,9 @@ describe('XUnit reporter', function() {
           expectedClassName +
           '" name="' +
           expectedTitle +
-          '" time="1"><skipped/></testcase>';
+          '" time="1"><skipped message="' +
+          expectedReason +
+          '"/></testcase>';
 
         expect(expectedWrite, 'to be', expectedTag);
       });
