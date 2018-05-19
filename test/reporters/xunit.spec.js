@@ -20,6 +20,7 @@ describe('XUnit reporter', function() {
   var expectedMessage = 'some message';
   var expectedStack = 'some-stack';
   var expectedWrite = null;
+  var expectedReason = 'some reason';
 
   beforeEach(function() {
     stdout = [];
@@ -255,7 +256,8 @@ describe('XUnit reporter', function() {
               return expectedClassName;
             }
           },
-          duration: 1000
+          duration: 1000,
+          reason: expectedReason
         };
         xunit.test.call(
           {

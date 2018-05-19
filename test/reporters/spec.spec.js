@@ -12,6 +12,7 @@ describe('Spec reporter', function() {
   var runner;
   var useColors;
   var expectedTitle = 'expectedTitle';
+  var expectedReason = 'expected reason';
 
   beforeEach(function() {
     stdout = [];
@@ -50,6 +51,19 @@ describe('Spec reporter', function() {
       Spec.call({epilogue: function() {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = ['  - ' + expectedTitle + '\n'];
+      expect(stdout, 'to equal', expectedArray);
+    });
+    it('should return title and reason', function() {
+      var suite = {
+        title: expectedTitle,
+        reason: expectedReason
+      };
+      runner = createMockRunner('pending test', 'pending', null, null, suite);
+      Spec.call({epilogue: function() {}}, runner);
+      process.stdout.write = stdoutWrite;
+      var expectedArray = [
+        '  - ' + expectedTitle + ' (' + expectedReason + ')' + '\n'
+      ];
       expect(stdout, 'to equal', expectedArray);
     });
   });
