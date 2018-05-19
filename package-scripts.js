@@ -39,7 +39,7 @@ module.exports = {
     },
     reformat: {
       script:
-        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*"',
+        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*" "scripts/*"',
       description: 'Reformat codebase with Prettier'
     },
     clean: {
