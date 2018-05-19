@@ -397,7 +397,6 @@ describe('Runner', function() {
         }
       });
 
-      TEST.retries(retries);
       suite.retries(retries);
       suite.addTest(TEST);
 
