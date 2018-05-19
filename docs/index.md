@@ -597,6 +597,20 @@ before(function() {
 
 > Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
+You may provide a `reason` argument to `this.skip()` which can be helpful in self documenting test results.
+
+```js
+it('should only test in the correct environment', function() {
+  if (/* check test environment */) {
+    // make assertions
+  } else {
+    this.skip('the environment is not correct');
+  }
+});
+```
+
+*Note*: The `reason` argument is only supported by `this.skip()`, not `.skip()`. If you want to mark a test as pending with a reason, it must be done at runtime.
+
 ## Retry Tests
 
 You can choose to retry failed tests up to a certain number of times. This feature is designed to handle end-to-end tests (functional tests/Selenium...) where resources cannot be easily mocked/stubbed. **It's not recommended to use this feature for unit tests**.
