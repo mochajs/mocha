@@ -66,7 +66,7 @@ describe('pending', function() {
       });
 
       it('should allow a skip reason', function(done) {
-        run('pending/skip-with-message.fixture.js', args, function(err, res) {
+        run('pending/skip-with-reason.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
