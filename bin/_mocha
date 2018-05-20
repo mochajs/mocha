@@ -284,6 +284,48 @@ program
     process.exit(0);
   });
 
+program
+  .command('init-test')
+  .description('initialize a node.js mocha setup at current working directory')
+  .action(() => {
+    let hasTestDir = false;
+    const defaultTestDIr = 'test';
+    try {
+      const testFiles = fs.readdirSync(join(cwd, defaultTestDIr));
+      if (testFiles.length < 1) {
+        hasTestDir = true;
+      }
+    } catch (ignore) {}
+
+    if (!hasTestDir) {
+      const mkdir = require('mkdirp');
+      mkdir.sync(defaultTestDIr);
+      const test = fs.readFileSync(
+        join(__dirname, '..', 'lib/template.js.tmpl')
+      );
+      fs.writeFileSync(join(defaultTestDIr, 'index.js'), test);
+    } else {
+      console.log('test directory is not empty. Skip to create test files');
+    }
+
+    try {
+      const pkg = fs.readFileSync('package.json', 'utf8');
+      const pkgRegExp = /"scripts"\s*:\s*{\n*(.*\n)*?(\s*"test"\s*:\s*"(.*)")(.*\n)?.*}/gm;
+      let testScript = pkgRegExp.exec(pkg);
+      if (testScript && testScript.length > 3) {
+        testScript = testScript[3];
+      }
+      const newPkg = pkg.replace(
+        testScript,
+        `mocha --recursive \\"./${defaultTestDIr}/*.js\\"`
+      );
+      fs.writeFileSync('package.json', newPkg);
+    } catch (ignore) {
+      console.log('There is no package.json. You should run npm init first.');
+    }
+    process.exit(0);
+  });
+
 // --globals
 
 program.on('option:globals', val => {
