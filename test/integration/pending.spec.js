@@ -99,6 +99,25 @@ describe('pending', function() {
           done();
         });
       });
+
+      it('should allow a skip reason', function(done) {
+        run('pending/skip-sync-before-with-reason.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 2);
+          assert.equal(res.stats.passes, 0);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          assert.equal(res.pending[0].reason, 'skip reason');
+          assert.equal(res.pending[1].reason, 'skip reason');
+          done();
+        });
+      });
     });
 
     describe('in beforeEach', function() {
@@ -117,6 +136,26 @@ describe('pending', function() {
           assert.equal(res.code, 0);
           done();
         });
+      });
+
+      it('should allow a skip reason', function(done) {
+        run(
+          'pending/skip-sync-beforeEach-with-reason.fixture.js',
+          args,
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            assert.equal(res.stats.pending, 2);
+            assert.equal(res.stats.passes, 0);
+            assert.equal(res.stats.failures, 0);
+            assert.equal(res.code, 0);
+            assert.equal(res.pending[0].reason, 'skip reason');
+            assert.equal(res.pending[1].reason, 'skip reason');
+            done();
+          }
+        );
       });
     });
   });
@@ -168,6 +207,27 @@ describe('pending', function() {
           assert.equal(res.stats.passes, 0);
           assert.equal(res.stats.failures, 0);
           assert.equal(res.code, 0);
+          assert.ok(!res.pending[0].hasOwnProperty('reason'));
+          assert.ok(!res.pending[1].hasOwnProperty('reason'));
+          done();
+        });
+      });
+
+      it('should allow a skip reason', function(done) {
+        run('pending/skip-async-before-with-reason.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 2);
+          assert.equal(res.stats.passes, 0);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          assert.equal(res.pending[0].reason, 'skip reason');
+          assert.equal(res.pending[1].reason, 'skip reason');
           done();
         });
       });
@@ -187,8 +247,30 @@ describe('pending', function() {
           assert.equal(res.stats.passes, 0);
           assert.equal(res.stats.failures, 0);
           assert.equal(res.code, 0);
+          assert.ok(!res.pending[0].hasOwnProperty('reason'));
+          assert.ok(!res.pending[1].hasOwnProperty('reason'));
           done();
         });
+      });
+
+      it('should allow a skip reason', function(done) {
+        run(
+          'pending/skip-sync-beforeEach-with-reason.fixture.js',
+          args,
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            assert.equal(res.stats.pending, 2);
+            assert.equal(res.stats.passes, 0);
+            assert.equal(res.stats.failures, 0);
+            assert.equal(res.code, 0);
+            assert.equal(res.pending[0].reason, 'skip reason');
+            assert.equal(res.pending[1].reason, 'skip reason');
+            done();
+          }
+        );
       });
     });
   });
