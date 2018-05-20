@@ -29,7 +29,6 @@
 [@outsideris]: https://github.com/outsideris
 [@Munter]: https://github.com/Munter
 
-
 # 5.1.1 / 2018-04-18
 
 ## :bug: Fixes
