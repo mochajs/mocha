@@ -45,6 +45,40 @@ describe('Mocha', function() {
     });
   });
 
+  describe('.unloadFile()', function() {
+    it('should load and unload file to/from cache', function() {
+      var mocha = new Mocha(blankOpts);
+      var filePath = __filename;
+      mocha.addFile(filePath);
+      mocha.loadFiles();
+
+      expect(
+        require.cache[require.resolve(filePath)] != undefined,
+        'to be',
+        true
+      );
+      mocha.unloadFile(filePath);
+      expect(require.cache[require.resolve(filePath)], 'to be', undefined);
+    });
+  });
+
+  describe('.unloadFiles()', function() {
+    it('should unload all test files from cache', function() {
+      var mocha = new Mocha(blankOpts);
+      var filePath = __filename;
+      mocha.addFile(filePath);
+      mocha.loadFiles();
+
+      expect(
+        require.cache[require.resolve(filePath)] != undefined,
+        'to be',
+        true
+      );
+      mocha.unloadFiles();
+      expect(require.cache[require.resolve(filePath)], 'to be', undefined);
+    });
+  });
+
   describe('.invert()', function() {
     it('should set the invert option to true', function() {
       var mocha = new Mocha(blankOpts);
