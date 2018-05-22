@@ -53,7 +53,7 @@ describe('Mocha', function() {
       mocha.loadFiles();
 
       expect(
-        require.cache[require.resolve(filePath)] != undefined,
+        require.cache[require.resolve(filePath)] !== undefined,
         'to be',
         true
       );
@@ -70,7 +70,7 @@ describe('Mocha', function() {
       mocha.loadFiles();
 
       expect(
-        require.cache[require.resolve(filePath)] != undefined,
+        require.cache[require.resolve(filePath)] !== undefined,
         'to be',
         true
       );
