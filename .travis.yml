@@ -1,4 +1,3 @@
-sudo: required
 # these are executed in order.  each must pass for the next to be run
 stages:
   - smoke # this ensures a "user" install works properly
@@ -43,16 +42,6 @@ jobs:
 
     - <<: *node
       node_js: '4'
-
-    - script: npm start test.bundle test.browser
-      install: npm ci # we need the native modules here
-      addons:
-        artifacts:
-          paths:
-            - .karma/
-            - ./mocha.js
-        chrome: stable
-        sauce_connect: true
 
     - stage: lint
       script: npm start lint

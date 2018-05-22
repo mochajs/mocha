@@ -6,7 +6,11 @@ const mkdirp = require('mkdirp');
 const baseBundleDirpath = path.join(__dirname, '.karma');
 
 const browserPlatformPairs = {
-  'chrome@latest': 'Windows 8'
+  'chrome@latest': 'Windows 8',
+  'MicrosoftEdge@latest': 'Windows 10',
+  'internet explorer@11.0': 'Windows 8.1',
+  'firefox@latest': 'Windows 10',
+  'safari@latest': 'OS X 10.12'
 };
 
 module.exports = config => {
