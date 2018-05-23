@@ -1,3 +1,5 @@
+'use strict';
+
 var Mocha = require('../../lib/mocha');
 
 describe('.unloadFile()', function() {
