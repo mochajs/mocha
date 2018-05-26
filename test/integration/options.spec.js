@@ -507,7 +507,7 @@ describe('options', function() {
 
   describe('--watch', function() {
     describe('with watch enabled', function() {
-      it('should return correct output when watch process is terminated', function(done) {
+      it('should show the cursor and signal correct exit code, when watch process is terminated', function(done) {
         if (process.platform === 'win32') {
           // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
           // due to lack of *nix signal compliance.
