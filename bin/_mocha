@@ -563,22 +563,7 @@ let rerun;
 if (program.watch) {
   console.log();
   hideCursor();
-  if (process.platform === 'win32') {
-    // Windows support
-    var rl = require('readline').createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-    console.log('WINDOWS - RL CREATED');
-    rl.on('SIGINT', function() {
-      console.log('RL ON SIGINT');
-      showCursor();
-      console.log('\n');
-      process.exit(130);
-    });
-  }
   process.on('SIGINT', () => {
-    console.log('WATCH SIGINT');
     showCursor();
     console.log('\n');
     process.exit(130);
