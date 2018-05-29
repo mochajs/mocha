@@ -474,7 +474,7 @@
   },
   "devDependencies": {
     "@mocha/docdash": "^1.0.1",
-    "assetgraph-builder": "^6.2.0",
+    "assetgraph-builder": "^6.3.0",
     "browserify": "^16.2.2",
     "chai": "^4.1.2",
     "coffee-script": "^1.10.0",
@@ -499,7 +499,7 @@
     "karma-sauce-launcher": "^1.2.0",
     "lint-staged": "^7.1.0",
     "markdown-toc": "^1.2.0",
-    "markdownlint-cli": "^0.8.1",
+    "markdownlint-cli": "^0.9.0",
     "nps": "^5.7.1",
     "nyc": "^11.7.3",
     "prettier-eslint-cli": "^4.7.1",
