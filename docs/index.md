@@ -94,8 +94,6 @@ $ npm install --save-dev mocha
 
 > To install Mocha v3.0.0 or newer with `npm`, you will need `npm` v2.14.2 or newer.  Additionally, to run Mocha, you will need Node.js v4 or newer.
 
-Mocha can also be installed via [Bower](https://bower.io) (`bower install mocha`), and is available at [cdnjs](https://cdnjs.com/libraries/mocha).
-
 ## Getting Started
 
 ```sh
