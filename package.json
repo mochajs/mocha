@@ -474,7 +474,7 @@
   },
   "devDependencies": {
     "@mocha/docdash": "^1.0.1",
-    "assetgraph-builder": "^6.3.0",
+    "assetgraph-builder": "^5.9.1",
     "browserify": "^16.2.2",
     "chai": "^4.1.2",
     "coffee-script": "^1.10.0",
@@ -504,7 +504,7 @@
     "nyc": "^11.7.3",
     "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.5.2",
-    "svgo": "^1.0.5",
+    "svgo": "^0.7.2",
     "through2": "^2.0.1",
     "unexpected": "^10.37.7",
     "watchify": "^3.7.0"
