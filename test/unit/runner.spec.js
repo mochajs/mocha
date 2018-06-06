@@ -385,6 +385,39 @@ describe('Runner', function() {
     });
   });
 
+  describe('.run(fn)', function() {
+    it('should emit "retryable fail" when a retryable test fails', function(done) {
+      var retries = 2;
+      var retryableFails = 0;
+      var ERR = new Error('bear error');
+
+      var TEST = new Test('im a test about bears', function() {
+        if (retryableFails < retries) {
+          throw ERR;
+        }
+      });
+
+      suite.retries(retries);
+      suite.addTest(TEST);
+
+      runner.on('retryable fail', function(test, err) {
+        retryableFails += 1;
+
+        // retries clone the tests, so I guess comparing the test
+        // names should be enough
+        expect(test.title, 'to be', TEST.title);
+        expect(err, 'to be', ERR);
+      });
+
+      runner.run(function(failures) {
+        expect(failures, 'to be', 0);
+        expect(retryableFails, 'to be', retries);
+
+        done();
+      });
+    });
+  });
+
   describe('allowUncaught', function() {
     it('should allow unhandled errors to propagate through', function(done) {
       var newRunner = new Runner(suite);
