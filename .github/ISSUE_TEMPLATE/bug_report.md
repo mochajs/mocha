@@ -1,3 +1,10 @@
+---
+name: Bug report
+about: To report a part of mocha not working as expected
+title: ''
+labels: 'unconfirmed-bug'
+---
+
 <!--
 Have you read Mocha's Code of Conduct? By filing an Issue, you are expected to comply with it, including treating everyone with respect: https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md
 For more, check out the Mocha Gitter chat room: https://gitter.im/mochajs/mocha
