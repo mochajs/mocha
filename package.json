@@ -504,7 +504,7 @@
     "nyc": "^11.7.3",
     "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.5.2",
-    "svgo": "^0.7.2",
+    "svgo": "^1.0.5",
     "through2": "^2.0.1",
     "unexpected": "^10.37.7",
     "watchify": "^3.7.0"
