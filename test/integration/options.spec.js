@@ -505,14 +505,12 @@ describe('options', function() {
     });
   });
 
-  describe('--watch', function() {
-    describe('with watch enabled', function() {
-      it('should show the cursor and signal correct exit code, when watch process is terminated', function(done) {
-        if (process.platform === 'win32') {
-          // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
-          // due to lack of *nix signal compliance.
-          done();
-        } else {
+  if (process.platform !== 'win32') {
+    // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
+    // due to lack of *nix signal compliance.
+    describe('--watch', function() {
+      describe('with watch enabled', function() {
+        it('should show the cursor and signal correct exit code, when watch process is terminated', function(done) {
           this.timeout(0);
           this.slow(3000);
           // executes Mocha in a subprocess
@@ -536,8 +534,8 @@ describe('options', function() {
             // kill the child process
             mocha.kill('SIGINT');
           }, 500);
-        }
+        });
       });
     });
-  });
+  }
 });
