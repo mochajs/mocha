@@ -729,6 +729,21 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 > In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) will cause the timeout to be disabled.
 
+### Ignore Timeouts
+
+You can also treat a timeout as a non-fail for cases where you want a given test to timeout, but it is not critical if it does. This is done using the --ignore-timeouts flag. This can also be done on a per scope basis as shown below:
+
+```js
+describe('a suite of tests', function() {
+  beforeEach(function(done) {
+    this.timeout(3000); // A very long environment setup.
+    this.ignoreTimeout(true);
+    setTimeout(done, 2500);
+  });
+});
+```
+
+
 ## Diffs
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library.  Mocha will attempt to display the difference between what was expected, and what the assertion actually saw.  Here's an example of a "string" diff:
