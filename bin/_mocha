@@ -99,26 +99,12 @@ const showCursor = () => {
 };
 
 /**
- * Stop play()ing.
+ * Stop.
  */
 const stop = () => {
   process.stdout.write('\u001b[2K');
-  clearInterval(play.timer);
 };
 
-/**
- * Play the given array of strings.
- */
-const play = (arr, interval) => {
-  const len = arr.length;
-  interval = interval || 100;
-  let i = 0;
-
-  play.timer = setInterval(() => {
-    const str = arr[i++ % len];
-    process.stdout.write(`\u001b[0G${str}`);
-  }, interval);
-};
 
 /**
  * Files.
