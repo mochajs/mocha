@@ -105,7 +105,6 @@ const stop = () => {
   process.stdout.write('\u001b[2K');
 };
 
-
 /**
  * Files.
  */
