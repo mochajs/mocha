@@ -5,6 +5,7 @@
   ],
   "exclude": [
     "lib/browser",
-    "test/**/*"
+    "test/**/*",
+    "bin/base.js"
   ]
 }
