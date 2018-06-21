@@ -11,6 +11,7 @@ const spawn = require('child_process').spawn;
 const path = require('path');
 const getOptions = require('./options');
 const args = [path.join(__dirname, '_mocha')];
+const envFlags = process.allowedEnvironmentNodeFlags;
 
 // Load mocha.opts into process.argv
 // Must be loaded here to handle node-specific options
@@ -19,12 +20,20 @@ getOptions();
 process.argv.slice(2).forEach(arg => {
   const flag = arg.split('=')[0];
 
+  // every flag UNSHIFTED onto the `args` array is
+  // an flag for the `node` executable; every flag
+  // PUSHED onto the `args` array is a Mocha flag.
+
   switch (flag) {
+    // non-standard debug flags.
+    // any debug-related flag needs Mocha's --no-timeouts
+    // or Mocha will timeout while the debugger is paused.
     case '-d':
+    case 'debug':
+      // rename flag
       args.unshift('--debug');
       args.push('--no-timeouts');
       break;
-    case 'debug':
     case '--debug':
     case '--debug-brk':
     case '--inspect':
@@ -32,37 +41,39 @@ process.argv.slice(2).forEach(arg => {
       args.unshift(arg);
       args.push('--no-timeouts');
       break;
+    // non-standard flag
     case '-gc':
-    case '--expose-gc':
+      // rename flag
       args.unshift('--expose-gc');
       break;
-    case '--gc-global':
-    case '--es_staging':
-    case '--no-deprecation':
-    case '--no-warnings':
-    case '--prof':
-    case '--log-timer-events':
-    case '--throw-deprecation':
-    case '--trace-deprecation':
-    case '--trace-warnings':
-    case '--use_strict':
-    case '--allow-natives-syntax':
-    case '--perf-basic-prof':
-    case '--napi-modules':
-      args.unshift(arg);
-      break;
     default:
-      if (arg.indexOf('--harmony') === 0) {
+      if (
+        envFlags.indexOf(arg) > -1 ||
+        arg.indexOf('--harmony') === 0 ||
+        arg.indexOf('--preserve-symlinks') === 0 ||
+        arg === '--gc-global' ||
+        arg === '--es_staging' ||
+        arg === '--expose-gc' ||
+        arg === '--log-timer-events' ||
+        arg === '--use_strict' ||
+        arg === '--allow-natives-syntax' ||
+        arg === '--perf-basic-prof'
+      ) {
+        // these are Node.js flags supported by NODE_OPTIONS,
+        // convenience for --harmony-* flags, and the two
+        // --preserve-symlinks-* flags which aren't supported
+        // by NODE_OPTIONS for security reasons.
+        // the rest are hardcoded V8 options somebody wanted.
         args.unshift(arg);
-      } else if (arg.indexOf('--trace') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--icu-data-dir') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--max-old-space-size') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--preserve-symlinks') === 0) {
-        args.unshift(arg);
+      } else if (arg.indexOf('--v8-') === 0) {
+        // for v8 flags, prepend "--v8-" to flag name to
+        // pass directly to Node.  but not --v8-options
+        // since that's just akin to --help
+        if (arg !== '--v8-options') {
+          args.unshift(`--${arg.slice(5)}`);
+        }
       } else {
+        // treat as Mocha option
         args.push(arg);
       }
       break;
