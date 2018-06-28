@@ -1,37 +1,43 @@
 'use strict';
 
 var Mocha = require('../../lib/mocha');
+var Path = require('path');
 
 describe('.unloadFile()', function() {
   it('should load and unload file to/from cache', function() {
     var mocha = new Mocha({});
     var filePath = __filename;
+
     mocha.addFile(filePath);
     mocha.loadFiles();
 
-    expect(
-      require.cache[require.resolve(filePath)] !== undefined,
-      'to be',
-      true
-    );
+    expect(require.cache, 'to have property', require.resolve(filePath));
     mocha.unloadFile(filePath);
-    expect(require.cache[require.resolve(filePath)], 'to be', undefined);
+    expect(require.cache, 'not to have property', require.resolve(filePath));
   });
 });
 
 describe('.unloadFiles()', function() {
   it('should unload all test files from cache', function() {
     var mocha = new Mocha({});
-    var filePath = __filename;
-    mocha.addFile(filePath);
-    mocha.loadFiles();
+    var testFiles = [
+      __filename,
+      Path.join(__dirname, 'fs.spec.js'),
+      Path.join(__dirname, 'color.spec.js')
+    ];
 
-    expect(
-      require.cache[require.resolve(filePath)] !== undefined,
-      'to be',
-      true
-    );
+    testFiles.forEach(function(file) {
+      mocha.addFile(file);
+    });
+
+    mocha.loadFiles();
+    testFiles.forEach(function(file) {
+      expect(require.cache, 'to have property', require.resolve(file));
+    });
+
     mocha.unloadFiles();
-    expect(require.cache[require.resolve(filePath)], 'to be', undefined);
+    testFiles.forEach(function(file) {
+      expect(require.cache, 'not to have property', require.resolve(file));
+    });
   });
 });
