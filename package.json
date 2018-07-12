@@ -457,6 +457,7 @@
     "prepublishOnly": "nps test clean build",
     "start": "nps",
     "test": "nps test",
+    "coverage": "nyc npm run test && nyc report --reporter=html",
     "precommit": "lint-staged"
   },
   "dependencies": {
