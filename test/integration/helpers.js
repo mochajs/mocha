@@ -70,42 +70,19 @@ module.exports = {
       fn(null, result);
     });
   },
+  runMochaJSONRaw: function(fixturePath, args, fn) {
+    var path;
 
-  /**
-   * Returns an array of diffs corresponding to exceptions thrown from specs,
-   * given the plaintext output (-C) of a mocha run.
-   *
-   * @param  {string}   output
-   * returns {string[]}
-   */
-  getDiffs: function(output) {
-    var diffs, i, inDiff, inStackTrace;
+    path = resolveFixturePath(fixturePath);
+    args = args || [];
 
-    diffs = [];
-    output.split('\n').forEach(function(line) {
-      if (line.match(/^\s{2}\d+\)/)) {
-        // New spec, e.g. "1) spec title"
-        diffs.push([]);
-        i = diffs.length - 1;
-        inStackTrace = false;
-        inDiff = false;
-      } else if (!diffs.length || inStackTrace) {
-        // Haven't encountered a spec yet
-        // or we're in the middle of a stack trace
-      } else if (line.indexOf('+ expected - actual') !== -1) {
-        inDiff = true;
-      } else if (line.match(/at Context/)) {
-        // At the start of a stack trace
-        inStackTrace = true;
-        inDiff = false;
-      } else if (inDiff) {
-        diffs[i].push(line);
-      }
-    });
+    return invokeSubMocha(args.concat(['--reporter', 'json', path]), function(
+      err,
+      resRaw
+    ) {
+      if (err) return fn(err);
 
-    // Ignore empty lines before/after diff
-    return diffs.map(function(diff) {
-      return diff.slice(1, -3).join('\n');
+      fn(null, resRaw);
     });
   },
 
@@ -140,13 +117,21 @@ module.exports = {
 };
 
 function invokeMocha(args, fn, cwd) {
-  var output, mocha, listener;
-
-  output = '';
   args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, {cwd: cwd});
 
-  listener = function(data) {
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function invokeSubMocha(args, fn, cwd) {
+  args = [path.join(__dirname, '..', '..', 'bin', '_mocha')].concat(args);
+
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function _spawnMochaWithListeners(args, fn, cwd) {
+  var output = '';
+  var mocha = spawn(process.execPath, args, {cwd: cwd});
+  var listener = function(data) {
     output += data;
   };
 

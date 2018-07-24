@@ -94,8 +94,6 @@ $ npm install --save-dev mocha
 
 > To install Mocha v3.0.0 or newer with `npm`, you will need `npm` v2.14.2 or newer.  Additionally, to run Mocha, you will need Node.js v4 or newer.
 
-Mocha can also be installed via [Bower](https://bower.io) (`bower install mocha`), and is available at [cdnjs](https://cdnjs.com/libraries/mocha).
-
 ## Getting Started
 
 ```sh
@@ -742,7 +740,6 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 ```text
   Usage: mocha [debug] [options] [files]
 
-
   Options:
 
     -V, --version                           output the version number
@@ -751,7 +748,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -C, --no-colors                         force disabling of colors
     -G, --growl                             enable growl notification support
     -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
-    -R, --reporter <name>                   specify the reporter to use
+    -R, --reporter <name>                   specify the reporter to use (default: spec)
     -S, --sort                              sort test files
     -b, --bail                              bail after first test failure
     -d, --debug                             enable node's debugger, synonym for node --debug
@@ -762,19 +759,19 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -r, --require <name>                    require the given module
     -s, --slow <ms>                         "slow" test threshold in milliseconds [75]
     -t, --timeout <ms>                      set test-case timeout in milliseconds [2000]
-    -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports)
+    -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: bdd)
     -w, --watch                             watch files in the current working directory for changes
     --check-leaks                           check for global variable leaks
     --full-trace                            display the full stack trace
-    --compilers <ext>:<module>,...          use the given module(s) to compile files
+    --compilers <ext>:<module>,...          use the given module(s) to compile files (default: )
     --debug-brk                             enable node's debugger breaking on the first line
-    --globals <names>                       allow the given comma-delimited global [names]
+    --globals <names>                       allow the given comma-delimited global [names] (default: )
     --es_staging                            enable all staged features
-    --file <file>                           include a file to be ran during the suite [file]
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
     --icu-data-dir                          include ICU data
     --inline-diffs                          display actual/expected differences inline within each string
+    --no-diff                               do not show a diff on failure
     --inspect                               activate devtools in chrome
     --inspect-brk                           activate devtools in chrome and break on the first line
     --interfaces                            display available interfaces
@@ -782,7 +779,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
     --no-timeouts                           disables timeouts, given implicitly with --debug
     --no-warnings                           silence all node process warnings
-    --opts <path>                           specify opts path
+    --opts <path>                           specify opts path (default: test/mocha.opts)
     --perf-basic-prof                       enable perf linux profiler (basic support)
     --napi-modules                          enable experimental NAPI modules
     --prof                                  log statistical profiling information
@@ -795,13 +792,14 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --trace-deprecation                     show stack traces on deprecations
     --trace-warnings                        show stack traces on node process warnings
     --use_strict                            enforce strict mode
-    --watch-extensions <ext>,...            additional extensions to monitor with --watch
+    --watch-extensions <ext>,...            specify extensions to monitor with --watch (default: js)
     --delay                                 wait for async suite definition
     --allow-uncaught                        enable uncaught errors to propagate
     --forbid-only                           causes test marked with only to fail the suite
     --forbid-pending                        causes pending tests and test marked with skip to fail the suite
+    --file <file>                           include a file to be ran during the suite (default: )
+    --exclude <file>                        a file or glob pattern to ignore (default: )
     -h, --help                              output usage information
-
 
   Commands:
 
@@ -1257,15 +1255,32 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 
 ## `mocha.opts`
 
-Back on the server, Mocha will attempt to load `./test/mocha.opts` as a configuration file of sorts. The lines in this file are combined with any command-line arguments.  The command-line arguments take precedence.  For example, suppose you have the following `mocha.opts` file:
+Back on the server, Mocha will attempt to load `"./test/mocha.opts"` as a
+Run-Control file of sorts.
+
+Beginning-of-line comment support is available; any line _starting_ with a
+hash (#) symbol will be considered a comment. Blank lines may also be used.
+Any other line will be treated as a command-line argument (along with any
+associated option value) to be used as a default setting. Settings should be
+specified one per line.
+
+The lines in this file are prepended to any actual command-line arguments.
+As such, actual command-line arguments will take precedence over the defaults.
+
+For example, suppose you have the following `mocha.opts` file:
 
 ```sh
+# mocha.opts
+
   --require should
   --reporter dot
   --ui bdd
 ```
 
-This will default the reporter to `dot`, require the `should` library, and use `bdd` as the interface. With this, you may then invoke `mocha` with additional arguments, here enabling [Growl](http://growl.info) support, and changing the reporter to `list`:
+The settings above will default the reporter to `dot`, require the `should`
+library, and use `bdd` as the interface. With this, you may then invoke `mocha`
+with additional arguments, here enabling [Growl](http://growl.info/) support,
+and changing the reporter to `list`:
 
 ```sh
 $ mocha --reporter list --growl
@@ -1273,7 +1288,21 @@ $ mocha --reporter list --growl
 
 ## The `test/` Directory
 
-By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, use `--recursive`, since `./test/*.js` only matches files in the first level of `test` and `./test/**/*.js` only matches files in the second level of `test`.
+By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, pass the `--recursive` option.
+
+To configure where `mocha` looks for tests, you may pass your own glob:
+
+```sh
+$ mocha --recursive "./spec/*.js"
+```
+
+Some shells support recursive matching by using the `**` wildcard in a glob. Bash >= 4.3 supports this with the [`globstar` option](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html) which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH](http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing) and [Fish](https://fishshell.com/docs/current/#expand-wildcard) support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
+
+```sh
+$ mocha "./spec/**/*.js"
+```
+
+*Note*: Double quotes around the glob are recommended for portability.
 
 ## Editor Plugins
 

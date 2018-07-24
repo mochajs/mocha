@@ -16,8 +16,9 @@ describe('Spec reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
     useColors = Base.useColors;
     Base.useColors = false;
@@ -25,6 +26,7 @@ describe('Spec reporter', function() {
 
   afterEach(function() {
     Base.useColors = useColors;
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on suite', function() {
@@ -36,7 +38,7 @@ describe('Spec reporter', function() {
       Spec.call({epilogue: function() {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = [expectedTitle + '\n'];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
   describe('on pending', function() {
@@ -48,7 +50,7 @@ describe('Spec reporter', function() {
       Spec.call({epilogue: function() {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = ['  - ' + expectedTitle + '\n'];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
   describe('on pass', function() {
@@ -74,7 +76,7 @@ describe('Spec reporter', function() {
           expectedDuration +
           'ms)' +
           '\n';
-        expect(stdout[0]).to.equal(expectedString);
+        expect(stdout[0], 'to be', expectedString);
       });
     });
     describe('if test speed is fast', function() {
@@ -92,7 +94,7 @@ describe('Spec reporter', function() {
         process.stdout.write = stdoutWrite;
         var expectedString =
           '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
-        expect(stdout[0]).to.equal(expectedString);
+        expect(stdout[0], 'to be', expectedString);
       });
     });
   });
@@ -106,7 +108,7 @@ describe('Spec reporter', function() {
       Spec.call({epilogue: function() {}}, runner);
       process.stdout.write = stdoutWrite;
       var expectedArray = ['  ' + functionCount + ') ' + expectedTitle + '\n'];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
 });

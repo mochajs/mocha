@@ -39,7 +39,7 @@ module.exports = {
     },
     reformat: {
       script:
-        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*"',
+        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*" "scripts/*"',
       description: 'Reformat codebase with Prettier'
     },
     clean: {
@@ -159,7 +159,7 @@ module.exports = {
           hiddenFromHelp: true
         },
         reporters: {
-          script: test('reporters', '"test/reporters/*.spec.js"'),
+          script: test('reporters', '--timeout 500 "test/reporters/*.spec.js"'),
           description: 'Run Node.js reporter tests',
           hiddenFromHelp: true
         },

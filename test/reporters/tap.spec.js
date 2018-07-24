@@ -16,8 +16,9 @@ describe('TAP reporter', function() {
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
     test = {
       fullTitle: function() {
@@ -25,6 +26,10 @@ describe('TAP reporter', function() {
       },
       slow: function() {}
     };
+  });
+
+  afterEach(function() {
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
@@ -43,8 +48,8 @@ describe('TAP reporter', function() {
       var expectedArray = ['1..' + expectedTotal + '\n'];
       process.stdout.write = stdoutWrite;
 
-      expect(stdout).to.eql(expectedArray);
-      expect(expectedString).to.equal(expectedSuite);
+      expect(stdout, 'to equal', expectedArray);
+      expect(expectedString, 'to be', expectedSuite);
     });
   });
 
@@ -65,7 +70,7 @@ describe('TAP reporter', function() {
 
       var expectedMessage =
         'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
-      expect(stdout[0]).to.eql(expectedMessage);
+      expect(stdout[0], 'to equal', expectedMessage);
     });
   });
 
@@ -81,7 +86,7 @@ describe('TAP reporter', function() {
 
       var expectedMessage =
         'ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n';
-      expect(stdout[0]).to.eql(expectedMessage);
+      expect(stdout[0], 'to equal', expectedMessage);
     });
   });
 
@@ -118,7 +123,7 @@ describe('TAP reporter', function() {
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
           '  ' + expectedErrorMessage + '\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if there is an error stack', function() {
@@ -145,7 +150,7 @@ describe('TAP reporter', function() {
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
           '  ' + expectedStack + '\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if there is an error stack and error message', function() {
@@ -183,7 +188,7 @@ describe('TAP reporter', function() {
           '  ' + expectedErrorMessage + '\n',
           '  ' + expectedStack + '\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
     describe('if there is no error stack or error message', function() {
@@ -206,7 +211,7 @@ describe('TAP reporter', function() {
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n'
         ];
-        expect(stdout).to.eql(expectedArray);
+        expect(stdout, 'to equal', expectedArray);
       });
     });
   });
@@ -230,7 +235,7 @@ describe('TAP reporter', function() {
         '# pass ' + numberOfPasses + '\n',
         '# fail ' + numberOfFails + '\n'
       ];
-      expect(stdout).to.eql(expectedArray);
+      expect(stdout, 'to equal', expectedArray);
     });
   });
 });

@@ -34,8 +34,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();
@@ -48,8 +48,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();
@@ -66,8 +66,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();
@@ -82,8 +82,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();
@@ -96,8 +96,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();
@@ -112,8 +112,8 @@ describe('a test that throws', function() {
       suite.addTest(test);
       runner = new Runner(suite);
       runner.on('end', function() {
-        expect(runner.failures).to.equal(1);
-        expect(test.state).to.equal('failed');
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
         done();
       });
       runner.run();

@@ -32,6 +32,7 @@ function getOptions() {
   try {
     const opts = fs
       .readFileSync(optsPath, 'utf8')
+      .replace(/^#.*$/gm, '')
       .replace(/\\\s/g, '%20')
       .split(/\s/)
       .filter(Boolean)
@@ -40,8 +41,8 @@ function getOptions() {
     process.argv = process.argv
       .slice(0, 2)
       .concat(opts.concat(process.argv.slice(2)));
-  } catch (err) {
-    // ignore
+  } catch (ignore) {
+    // NOTE: should console.error() and throw the error
   }
 
   process.env.LOADED_MOCHA_OPTS = true;

@@ -1,0 +1,12 @@
+{
+  "linters": {
+    "(bin/*|**/*.js)": [
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "ignore": [
+    "docs/**/*.js",
+    "test/**/*.fixture.js"
+  ]
+}
