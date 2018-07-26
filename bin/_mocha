@@ -82,7 +82,12 @@ const list = str => str.split(/ *, */);
 /**
  * Parse multiple flag.
  */
-const collect = (val, memo) => memo.concat(val);
+const collect = (val, memo) => {
+  if (!memo) {
+    memo = [];
+  }
+  return memo.concat(val);
+};
 
 /**
  * Hide the cursor.
@@ -171,15 +176,13 @@ program
   .option(
     '--compilers <ext>:<module>,...',
     'use the given module(s) to compile files',
-    list,
-    []
+    list
   )
   .option('--debug-brk', "enable node's debugger breaking on the first line")
   .option(
     '--globals <names>',
     'allow the given comma-delimited global [names]',
-    list,
-    []
+    list
   )
   .option('--es_staging', 'enable all staged features')
   .option(
@@ -241,13 +244,8 @@ program
     '--forbid-pending',
     'causes pending tests and test marked with skip to fail the suite'
   )
-  .option(
-    '--file <file>',
-    'include a file to be ran during the suite',
-    collect,
-    []
-  )
-  .option('--exclude <file>', 'a file or glob pattern to ignore', collect, []);
+  .option('--file <file>', 'include a file to be ran during the suite', collect)
+  .option('--exclude <file>', 'a file or glob pattern to ignore', collect);
 
 program._name = 'mocha';
 
@@ -472,6 +470,9 @@ if (program.forbidPending) mocha.forbidPending();
 
 // custom compiler support
 
+if (!program.compilers) {
+  program.compilers = [];
+}
 if (program.compilers.length > 0) {
   require('util').deprecate(() => {},
   '"--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info')();
@@ -506,6 +507,9 @@ const args = program.args;
 
 // default files to test/*.{js,coffee}
 
+if (!program.exclude) {
+  program.exclude = [];
+}
 if (!args.length) {
   args.push('test');
 }
@@ -543,6 +547,9 @@ if (!files.length) {
 }
 
 // resolve
+if (!program.file) {
+  program.file = [];
+}
 let fileArgs = program.file.map(path => resolve(path));
 files = files.map(path => resolve(path));
 
