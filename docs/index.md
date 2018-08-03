@@ -766,6 +766,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --compilers <ext>:<module>,...          use the given module(s) to compile files (default: )
     --debug-brk                             enable node's debugger breaking on the first line
     --globals <names>                       allow the given comma-delimited global [names] (default: )
+    --gc-global                             always perform global GCs
     --es_staging                            enable all staged features
     --experimental-modules                  experimental ES Module support
     --harmony<_classes,_generators,...>     all node --harmony* flags are available

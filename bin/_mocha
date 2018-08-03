@@ -181,6 +181,7 @@ program
     list,
     []
   )
+  .option('--gc-global', 'always perform global GCs')
   .option('--es_staging', 'enable all staged features')
   .option('--experimental-modules', 'experimental ES Module support')
   .option(
