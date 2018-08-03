@@ -191,6 +191,7 @@ program
     'Instructs the module loader to preserve symbolic links when resolving and caching modules'
   )
   .option('--icu-data-dir', 'include ICU data')
+  .option('--max-old-space-size', 'max size of the old generation (in Mbytes)')
   .option(
     '--inline-diffs',
     'display actual/expected differences inline within each string'

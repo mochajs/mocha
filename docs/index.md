@@ -770,6 +770,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
     --icu-data-dir                          include ICU data
+    --max-old-space-size                    max size of the old generation (in Mbytes)
     --inline-diffs                          display actual/expected differences inline within each string
     --no-diff                               do not show a diff on failure
     --inspect                               activate devtools in chrome
