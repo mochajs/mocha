@@ -767,6 +767,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --debug-brk                             enable node's debugger breaking on the first line
     --globals <names>                       allow the given comma-delimited global [names] (default: )
     --es_staging                            enable all staged features
+    --experimental-modules                  experimental ES Module support
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
     --icu-data-dir                          include ICU data

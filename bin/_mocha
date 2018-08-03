@@ -182,6 +182,7 @@ program
     []
   )
   .option('--es_staging', 'enable all staged features')
+  .option('--experimental-modules', 'experimental ES Module support')
   .option(
     '--harmony<_classes,_generators,...>',
     'all node --harmony* flags are available'
