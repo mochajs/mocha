@@ -795,6 +795,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --trace-deprecation                     show stack traces on deprecations
     --trace-warnings                        show stack traces on node process warnings
     --use_strict                            enforce strict mode
+    --allow-natives-syntax                  allow natives syntax
     --watch-extensions <ext>,...            specify extensions to monitor with --watch (default: js)
     --delay                                 wait for async suite definition
     --allow-uncaught                        enable uncaught errors to propagate
