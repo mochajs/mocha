@@ -1191,14 +1191,13 @@ A typical setup might look something like the following, where we call `mocha.se
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link href="https://unpkg.com/mocha@5.1.1/mocha.css" rel="stylesheet" />
+  <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
 </head>
 <body>
   <div id="mocha"></div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://unpkg.com/chai/chai.js"></script>
-  <script src="https://unpkg.com/mocha@5.1.1/mocha.js"></script>
+  <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
 
   <script>mocha.setup('bdd')</script>
   <script src="test.array.js"></script>
@@ -1206,7 +1205,6 @@ A typical setup might look something like the following, where we call `mocha.se
   <script src="test.xhr.js"></script>
   <script>
     mocha.checkLeaks();
-    mocha.globals(['jQuery']);
     mocha.run();
   </script>
 </body>
