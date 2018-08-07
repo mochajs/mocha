@@ -18,7 +18,7 @@ Anyone involved with Mocha will fall into one of these buckets: **user**, **cont
 
 A "user" for the purpose of this document is any *individual developer* who consumes Mocha to write and/or execute tests.  A user interacts with contributors.  A user interacts with the software, web site, documentation, etc., which these contributors provide.
 
-As a user, you're expected to follow the [code of conduct](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md) when interacting in Mocha's "official" social spaces. This includes:
+As a user, you're expected to follow the [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) when interacting in Mocha's "official" social spaces. This includes:
 
 - Any chatroom under the `mochajs` organization on Gitter
 - Any project under the `mochajs` organization on GitHub
@@ -45,7 +45,7 @@ A "contributor" is any individual who has *given back* in some way to the projec
 1. Recruiting more contributors! Don't spam.
 1. Researching the user base, getting feedback, etc. Don't spam.
 
-A contributor is *usually* a user as well, but this isn't a hard-and-fast rule. A contributor is also expected to adhere to the [code of conduct](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md) as a user would.
+A contributor is *usually* a user as well, but this isn't a hard-and-fast rule. A contributor is also expected to adhere to the [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) as a user would.
 
 As you can see, it's wide open!  Think of it another way: if you are *adding value to Mocha*, then you are a contributor.
 
