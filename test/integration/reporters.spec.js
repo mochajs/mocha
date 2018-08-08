@@ -111,12 +111,11 @@ describe('reporters', function() {
               return;
             }
 
+            var expectedVersion = 13;
+            var expectedPlan = '1..' + expected.numTests;
+
             var outputLines = res.output.split('\n');
 
-            // see https://testanything.org/tap-version-13-specification.html
-
-            // Version
-            var expectedVersion = 13;
             // first line must be version line
             expect(
               outputLines[0],
@@ -124,8 +123,6 @@ describe('reporters', function() {
               'TAP version ' + expectedVersion
             );
 
-            // Plan
-            var expectedPlan = '1..' + expected.numTests;
             // plan must appear once
             expect(outputLines, 'to contain', expectedPlan);
             expect(
@@ -138,6 +135,7 @@ describe('reporters', function() {
               return line.match(/^not ok/) || line.match(/^ok/);
             };
             var firstTestLine = outputLines.findIndex(testLineMatcher);
+            // there must be at least one test line
             expect(firstTestLine, 'to be greater than', -1);
             var lastTestLine =
               outputLines.length -
