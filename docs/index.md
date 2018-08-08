@@ -142,6 +142,48 @@ Then run tests with:
 $ npm test
 ```
 
+## Run cycle overview
+
+A brief outline on the order Mocha's components are invoked.
+Worth noting that all hooks, 'describe' and 'it' callbacks are run in the order they are defined (i.e. found in the file).
+
+```
+run `mocha spec.js`
+|
+spawn _mocha in child process
+|
+---------- inside child process
+  process and apply options
+  |
+  parse and execute spec file/s
+  |
+  -------------- per spec file:
+    'describe' callbacks
+    |
+    'before' root-level pre-hook
+    |
+    'before' pre-hook
+    |
+    ---------------- per test:
+      'beforeEach' root-level pre-hook
+      |
+      'beforeEach' pre-hook
+      |
+      'it' callbacks
+      |
+      'afterEach' post-hook
+      |
+      'afterEach' root-level post-hook
+    ------------------------
+    |
+    'after' post-hook
+    |
+    'after' root-level post-hooks
+  ------------------------
+------------------------
+```
+
+
 ## Detects Multiple Calls to `done()`
 
 If you use callback-based async tests, Mocha will throw an error if `done()` is called multiple times. This is handy for catching accidental double callbacks.
