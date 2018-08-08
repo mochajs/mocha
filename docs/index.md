@@ -52,6 +52,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Run Cycle overview](#run-cycle-overview)
 - [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
 - [Assertions](#assertions)
 - [Asynchronous Code](#asynchronous-code)
@@ -142,7 +143,7 @@ Then run tests with:
 $ npm test
 ```
 
-## Run cycle overview
+## Run Cycle overview
 
 A brief outline on the order Mocha's components are invoked.
 Worth noting that all hooks, 'describe' and 'it' callbacks are run in the order they are defined (i.e. found in the file).
