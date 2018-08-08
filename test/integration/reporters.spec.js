@@ -101,8 +101,34 @@ describe('reporters', function() {
   });
 
   describe('tap', function() {
+    var not = function(predicate) {
+      return function() {
+        return !predicate.apply(this, arguments);
+      };
+    };
+    var versionPredicate = function(line) {
+      return line.match(/^TAP version \d+$/) != null;
+    };
+    var planPredicate = function(line) {
+      return line.match(/^1\.\.\d+$/) != null;
+    };
     var testLinePredicate = function(line) {
       return line.match(/^not ok/) != null || line.match(/^ok/) != null;
+    };
+    var diagnosticPredicate = function(line) {
+      return line.match(/^#/) != null;
+    };
+    var bailOutPredicate = function(line) {
+      return line.match(/^Bail out!/) != null;
+    };
+    var anythingElsePredicate = function(line) {
+      return (
+        versionPredicate(line) === false &&
+        planPredicate(line) === false &&
+        testLinePredicate(line) === false &&
+        diagnosticPredicate(line) === false &&
+        bailOutPredicate(line) === false
+      );
     };
 
     describe('produces valid TAP v13 output', function() {
@@ -177,22 +203,20 @@ describe('reporters', function() {
 
         var outputLines = res.output.split('\n');
         for (var i = 0; i + 1 < outputLines.length; i++) {
-          console.log('>', outputLines[i]);
-          console.log('\t', testLinePredicate(outputLines[i]));
-          console.log('\t', testLinePredicate(outputLines[i + 1]));
           if (
             testLinePredicate(outputLines[i]) &&
             testLinePredicate(outputLines[i + 1]) === false
           ) {
             var blockLinesStart = i + 1;
             var blockLinesEnd =
-              i + 1 + outputLines.slice(i + 1).findIndex(anythingElsePredicate);
+              i +
+              1 +
+              outputLines.slice(i + 1).findIndex(not(anythingElsePredicate));
             var blockLines =
               blockLinesEnd > blockLinesStart
                 ? outputLines.slice(blockLinesStart, blockLinesEnd)
                 : outputLines.slice(blockLinesStart);
-            console.log(i);
-            console.log(blockLines);
+
             i += blockLines.length;
           }
         }
