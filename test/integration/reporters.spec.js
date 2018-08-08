@@ -99,4 +99,30 @@ describe('reporters', function() {
       });
     });
   });
+
+  describe('tap', function() {
+    describe('produces valid TAP v13 output', function() {
+      var runFixtureAndValidateOutput = function(fixture) {
+        it('for ' + fixture, function(done) {
+          var args = ['--reporter=tap'];
+          run(fixture, args, function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            // see https://testanything.org/tap-version-13-specification.html
+
+            // first line must be `TAP version 13`
+            var firstLine = res.output.split('\n', 1)[0];
+            expect(firstLine, 'to equal', 'TAP version 13');
+            done();
+          });
+        });
+      };
+
+      runFixtureAndValidateOutput('passing.fixture.js');
+      runFixtureAndValidateOutput('uncaught.fixture.js');
+    });
+  });
 });
