@@ -148,10 +148,10 @@ $ npm test
 A brief outline on the order Mocha's components are invoked.
 Worth noting that all hooks, 'describe' and 'it' callbacks are run in the order they are defined (i.e. found in the file).
 
-```
-run `mocha spec.js`
+```js
+run 'mocha spec.js'
 |
-spawn _mocha in child process
+spawn child process
 |
 |--------------> inside child process
   process and apply options
