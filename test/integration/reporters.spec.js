@@ -156,7 +156,9 @@ describe('reporters', function() {
             // plan must appear once
             expect(outputLines, 'to contain', expectedPlan);
             expect(
-              outputLines.filter(l => l === expectedPlan),
+              outputLines.filter(function(l) {
+                return l === expectedPlan;
+              }),
               'to have length',
               1
             );
