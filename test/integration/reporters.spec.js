@@ -101,6 +101,10 @@ describe('reporters', function() {
   });
 
   describe('tap', function() {
+    var testLinePredicate = function(line) {
+      return line.match(/^not ok/) != null || line.match(/^ok/) != null;
+    };
+
     describe('produces valid TAP v13 output', function() {
       var runFixtureAndValidateOutput = function(fixture, expected) {
         it('for ' + fixture, function(done) {
@@ -131,10 +135,7 @@ describe('reporters', function() {
               1
             );
             // plan cannot appear in middle of the output
-            var testLineMatcher = function(line) {
-              return line.match(/^not ok/) || line.match(/^ok/);
-            };
-            var firstTestLine = outputLines.findIndex(testLineMatcher);
+            var firstTestLine = outputLines.findIndex(testLinePredicate);
             // there must be at least one test line
             expect(firstTestLine, 'to be greater than', -1);
             var lastTestLine =
@@ -143,7 +144,7 @@ describe('reporters', function() {
               outputLines
                 .slice()
                 .reverse()
-                .findIndex(testLineMatcher);
+                .findIndex(testLinePredicate);
             var planLine = outputLines.findIndex(function(line) {
               return line === expectedPlan;
             });
@@ -163,6 +164,40 @@ describe('reporters', function() {
       });
       runFixtureAndValidateOutput('uncaught.fixture.js', {
         numTests: 2
+      });
+    });
+
+    it('places exceptions correctly in YAML blocks', function(done) {
+      var args = ['--reporter=tap'];
+      run('uncaught.fixture.js', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        var outputLines = res.output.split('\n');
+        for (var i = 0; i + 1 < outputLines.length; i++) {
+          console.log('>', outputLines[i]);
+          console.log('\t', testLinePredicate(outputLines[i]));
+          console.log('\t', testLinePredicate(outputLines[i + 1]));
+          if (
+            testLinePredicate(outputLines[i]) &&
+            testLinePredicate(outputLines[i + 1]) === false
+          ) {
+            var blockLinesStart = i + 1;
+            var blockLinesEnd =
+              i + 1 + outputLines.slice(i + 1).findIndex(anythingElsePredicate);
+            var blockLines =
+              blockLinesEnd > blockLinesStart
+                ? outputLines.slice(blockLinesStart, blockLinesEnd)
+                : outputLines.slice(blockLinesStart);
+            console.log(i);
+            console.log(blockLines);
+            i += blockLines.length;
+          }
+        }
+
+        done();
       });
     });
   });
