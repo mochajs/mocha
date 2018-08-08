@@ -221,7 +221,7 @@ describe('reporters', function() {
                 : outputLines.slice(blockLinesStart);
             i += blockLines.length;
 
-            expect(blockLines[0], 'to match', /^\s+\-\-\-/);
+            expect(blockLines[0], 'to match', /^\s+---/);
             expect(blockLines[blockLines.length - 1], 'to match', /^\s+\.\.\./);
           }
         }
