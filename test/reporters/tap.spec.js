@@ -56,10 +56,10 @@ describe('TAP reporter', function() {
       };
       TAP.call({}, runner);
 
-      var expectedArray = ['1..' + expectedTotal + '\n'];
+      var expectedSecondLine = '1..' + expectedTotal + '\n';
       process.stdout.write = stdoutWrite;
 
-      expect(stdout, 'to equal', expectedArray);
+      expect(stdout[1], 'to equal', expectedSecondLine);
       expect(expectedString, 'to be', expectedSuite);
     });
   });
