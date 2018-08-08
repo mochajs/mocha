@@ -102,7 +102,7 @@ describe('reporters', function() {
 
   describe('tap', function() {
     describe('produces valid TAP v13 output', function() {
-      var runFixtureAndValidateOutput = function(fixture) {
+      var runFixtureAndValidateOutput = function(fixture, expected) {
         it('for ' + fixture, function(done) {
           var args = ['--reporter=tap'];
           run(fixture, args, function(err, res) {
@@ -111,18 +111,61 @@ describe('reporters', function() {
               return;
             }
 
+            var outputLines = res.output.split('\n');
+
             // see https://testanything.org/tap-version-13-specification.html
 
-            // first line must be `TAP version 13`
-            var firstLine = res.output.split('\n', 1)[0];
-            expect(firstLine, 'to equal', 'TAP version 13');
+            // Version
+            var expectedVersion = 13;
+            // first line must be version line
+            expect(
+              outputLines[0],
+              'to equal',
+              'TAP version ' + expectedVersion
+            );
+
+            // Plan
+            var expectedPlan = '1..' + expected.numTests;
+            // plan must appear once
+            expect(outputLines, 'to contain', expectedPlan);
+            expect(
+              outputLines.filter(l => l === expectedPlan),
+              'to have length',
+              1
+            );
+            // plan cannot appear in middle of the output
+            var testLineMatcher = function(line) {
+              return line.match(/^not ok/) || line.match(/^ok/);
+            };
+            var firstTestLine = outputLines.findIndex(testLineMatcher);
+            expect(firstTestLine, 'to be greater than', -1);
+            var lastTestLine =
+              outputLines.length -
+              1 -
+              outputLines
+                .slice()
+                .reverse()
+                .findIndex(testLineMatcher);
+            var planLine = outputLines.findIndex(function(line) {
+              return line === expectedPlan;
+            });
+            expect(
+              planLine < firstTestLine || planLine > lastTestLine,
+              'to equal',
+              true
+            );
+
             done();
           });
         });
       };
 
-      runFixtureAndValidateOutput('passing.fixture.js');
-      runFixtureAndValidateOutput('uncaught.fixture.js');
+      runFixtureAndValidateOutput('passing.fixture.js', {
+        numTests: 2
+      });
+      runFixtureAndValidateOutput('uncaught.fixture.js', {
+        numTests: 2
+      });
     });
   });
 });
