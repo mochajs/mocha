@@ -33,6 +33,17 @@ describe('TAP reporter', function() {
   });
 
   describe('on start', function() {
+    it('should write expected version on first line', function() {
+      runner = createMockRunner('start', 'start');
+      runner.grepTotal = function(string) {};
+      TAP.call({}, runner);
+
+      var expectedFirstLine = 'TAP version 13\n';
+      process.stdout.write = stdoutWrite;
+
+      expect(stdout[0], 'to equal', expectedFirstLine);
+    });
+
     it('should hand runners suite into grepTotal and log the total', function() {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
