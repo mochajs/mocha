@@ -152,19 +152,19 @@ run `mocha spec.js`
 |
 spawn _mocha in child process
 |
----------- inside child process
+|--------------> inside child process
   process and apply options
   |
   parse and execute spec file/s
   |
-  -------------- per spec file:
+  |--------------> per spec file
     'describe' callbacks
     |
     'before' root-level pre-hook
     |
     'before' pre-hook
     |
-    ---------------- per test:
+    |--------------> per test
       'beforeEach' root-level pre-hook
       |
       'beforeEach' pre-hook
@@ -174,13 +174,13 @@ spawn _mocha in child process
       'afterEach' post-hook
       |
       'afterEach' root-level post-hook
-    ------------------------
+    |--------------> per test end
     |
     'after' post-hook
     |
     'after' root-level post-hooks
-  ------------------------
-------------------------
+  |--------------> per spec file end
+|--------------> inside child process end
 ```
 
 
