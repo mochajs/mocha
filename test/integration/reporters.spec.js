@@ -202,6 +202,7 @@ describe('reporters', function() {
         }
 
         var outputLines = res.output.split('\n');
+
         for (var i = 0; i + 1 < outputLines.length; i++) {
           if (
             testLinePredicate(outputLines[i]) &&
@@ -216,8 +217,10 @@ describe('reporters', function() {
               blockLinesEnd > blockLinesStart
                 ? outputLines.slice(blockLinesStart, blockLinesEnd)
                 : outputLines.slice(blockLinesStart);
-
             i += blockLines.length;
+
+            expect(blockLines[0], 'to match', /^\s+\-\-\-/);
+            expect(blockLines[blockLines.length - 1], 'to match', /^\s+\.\.\./);
           }
         }
 
