@@ -121,7 +121,9 @@ describe('TAP reporter', function() {
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
-          '  ' + expectedErrorMessage + '\n'
+          '  ---\n',
+          '    message: ' + expectedErrorMessage + '\n',
+          '  ...\n'
         ];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -148,7 +150,10 @@ describe('TAP reporter', function() {
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
-          '  ' + expectedStack + '\n'
+          '  ---\n',
+          '    stack: |-\n',
+          '      ' + expectedStack + '\n',
+          '  ...\n'
         ];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -185,8 +190,11 @@ describe('TAP reporter', function() {
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
-          '  ' + expectedErrorMessage + '\n',
-          '  ' + expectedStack + '\n'
+          '  ---\n',
+          '    message: ' + expectedErrorMessage + '\n',
+          '    stack: |-\n',
+          '      ' + expectedStack + '\n',
+          '  ...\n'
         ];
         expect(stdout, 'to equal', expectedArray);
       });
