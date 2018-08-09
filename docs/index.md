@@ -145,7 +145,7 @@ $ npm test
 
 ## Run Cycle Overview
 
-A brief outline on the order Mocha's components are invoked.
+A brief outline on the order Mocha's components are executed.
 Worth noting that all hooks, `describe` and `it` callbacks are run in the order they are defined (i.e. found in the file).
 
 ``` java
