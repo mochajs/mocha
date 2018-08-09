@@ -184,7 +184,6 @@ spawn child process
 |--------------> inside child process end
 ```
 
-
 ## Detects Multiple Calls to `done()`
 
 If you use callback-based async tests, Mocha will throw an error if `done()` is called multiple times. This is handy for catching accidental double callbacks.
