@@ -156,7 +156,7 @@ spawn child process
 |--------------> inside child process
   process and apply options
   |
-  parse and execute spec file/s
+  run spec file/s
   |
   |--------------> per spec file
     'describe' callbacks
