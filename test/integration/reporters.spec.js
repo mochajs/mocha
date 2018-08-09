@@ -190,14 +190,14 @@ describe('reporters', function() {
       runFixtureAndValidateOutput('passing.fixture.js', {
         numTests: 2
       });
-      runFixtureAndValidateOutput('uncaught.fixture.js', {
-        numTests: 2
+      runFixtureAndValidateOutput('reporters.fixture.js', {
+        numTests: 12
       });
     });
 
     it('places exceptions correctly in YAML blocks', function(done) {
       var args = ['--reporter=tap'];
-      run('uncaught.fixture.js', args, function(err, res) {
+      run('reporters.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
