@@ -763,9 +763,9 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -w, --watch                             watch files for changes
     --check-leaks                           check for global variable leaks
     --full-trace                            display the full stack trace
-    --compilers <ext>:<module>,...          use the given module(s) to compile files (default: )
+    --compilers <ext>:<module>,...          use the given module(s) to compile files
     --debug-brk                             enable node's debugger breaking on the first line
-    --globals <names>                       allow the given comma-delimited global [names] (default: )
+    --globals <names>                       allow the given comma-delimited global [names]
     --es_staging                            enable all staged features
     --harmony<_classes,_generators,...>     all node --harmony* flags are available
     --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
@@ -797,8 +797,8 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     --allow-uncaught                        enable uncaught errors to propagate
     --forbid-only                           causes test marked with only to fail the suite
     --forbid-pending                        causes pending tests and test marked with skip to fail the suite
-    --file <file>                           include a file to be ran during the suite (default: )
-    --exclude <file>                        a file or glob pattern to ignore (default: )
+    --file <file>                           include a file to be ran during the suite
+    --exclude <file>                        a file or glob pattern to ignore
     -h, --help                              output usage information
 
   Commands:
