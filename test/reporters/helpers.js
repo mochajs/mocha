@@ -1,5 +1,7 @@
 'use strict';
 
+var MochaError = require('../../lib/error');
+
 /*
   This function prevents the constant use of creating a runnerEvent.
   runStr is the argument that defines the runnerEvent.
@@ -116,8 +118,9 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     default:
-      throw new Error(
-        'This function does not support the runner string specified.'
+      throw new MochaError(
+        'This function does not support the runner string specified.',
+        'ERR_RUNNER_STRING_NOT_SUPPORTED'
       );
   }
 }

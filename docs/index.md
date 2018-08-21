@@ -73,6 +73,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
 - [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
+- [Error Codes](#error-codes)
 - [Editor Plugins](#editor-plugins)
 - [Examples](#examples)
 - [Testing Mocha](#testing-mocha)
@@ -1657,6 +1658,35 @@ $ mocha "./spec/**/*.js"
 ```
 
 *Note*: Double quotes around the glob are recommended for portability.
+
+## Error Codes
+
+List of codes associated with Errors thrown inside Mocha. Following NodeJS practices.
+
+| Code        | Meaning |
+| ------------- | ------------- |
+| ERR_CANNOT_RESOLVE_PATH | file/s of test not found |
+| ERR_INVALID_REPORTER | reporter from options not found |
+| ERR_INVALID_INTERFACE | interface from options not found |
+| ERR_EXTENSIONS_REQUIRED | filepath given is a dir, extension parameter not found |
+| ERR_OUTPUT_NOT_SUPPORTED | type of output not supported in the browser |
+| ERR_RUNNER_STRING_NOT_SUPPORTED | runner specified is not supported or found |
+| ERR_MISSING_CALLBACK | failure creating suite as no callback was found |
+| ERR_TITLE_NOT_STRING | failure creating suite as title specified is not a string |
+| ERR_UNDEFINED_ERROR | an error was thrown but no details were specified |
+
+To introduce a new Error please follow below.
+
+```javascript
+// import custom error object
+var MochaError = require('./error');
+
+// throw inside block with catch
+throw new MochaError(
+  'Our error message'
+  'ERR_ERROR_CODE'
+);
+```
 
 ## Editor Plugins
 
