@@ -148,7 +148,7 @@ $ npm test
 A brief outline on the order Mocha's components are executed.
 Worth noting that all hooks, `describe` and `it` callbacks are run in the order they are defined (i.e. found in the file).
 
-``` java
+``` java [//]: # (Used 'java' language so Mocha globals are highlighted)
 run 'mocha spec.js'
 |
 spawn child process
@@ -159,7 +159,7 @@ spawn child process
   run spec file/s
   |
   |--------------> per spec file
-    'describe' callbacks
+    suite callbacks (e.g., 'describe')
     |
     'before' root-level pre-hook
     |
@@ -170,18 +170,18 @@ spawn child process
       |
       'beforeEach' pre-hook
       |
-      'it' callbacks
+      test callbacks (e.g., 'it')
       |
       'afterEach' post-hook
       |
       'afterEach' root-level post-hook
-    |--------------> per test end
+    |<-------------- per test end
     |
     'after' post-hook
     |
     'after' root-level post-hooks
-  |--------------> per spec file end
-|--------------> inside child process end
+  |<-------------- per spec file end
+|<-------------- inside child process end
 ```
 
 ## Detects Multiple Calls to `done()`
