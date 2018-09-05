@@ -231,7 +231,7 @@ program
   .option('--trace-deprecation', 'show stack traces on deprecations')
   .option('--trace-warnings', 'show stack traces on node process warnings')
   .option('--use_strict', 'enforce strict mode')
-  .option('--allow-natives-syntax', 'allow natives syntax')
+  .option('--allow-natives-syntax', 'allow direct calls to V8 native commands')
   .option(
     '--watch-extensions <ext>,...',
     'specify extensions to monitor with --watch',
