@@ -1665,28 +1665,14 @@ List of codes associated with Errors thrown inside Mocha. Following NodeJS pract
 
 | Code        | Meaning |
 | ------------- | ------------- |
-| ERR_CANNOT_RESOLVE_PATH | file/s of test not found |
-| ERR_INVALID_REPORTER | reporter from options not found |
-| ERR_INVALID_INTERFACE | interface from options not found |
-| ERR_EXTENSIONS_REQUIRED | filepath given is a dir, extension parameter not found |
-| ERR_OUTPUT_NOT_SUPPORTED | type of output not supported in the browser |
-| ERR_RUNNER_STRING_NOT_SUPPORTED | runner specified is not supported or found |
-| ERR_MISSING_CALLBACK | failure creating suite as no callback was found |
-| ERR_TITLE_NOT_STRING | failure creating suite as title specified is not a string |
+| ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found |
+| ERR_MOCHA_MISSING_CALLBACK | callback for a running suite was not found |
+| ERR_MOCHA_INVALID_REPORTER | reporter specified in options not found |
+| ERR_MOCHA_INVALID_INTERFACE | interface specified in options not found |
+| ERR_MOCHA_NOT_SUPPORTED | type of output specified was not supported |
+| ERR_MOCHA_INVALID_ARG_VALUE | an invalid argument value was found |
+| ERR_MOCHA_MISSING_ARGUMENT | an argument was missing |
 | ERR_UNDEFINED_ERROR | an error was thrown but no details were specified |
-
-To introduce a new Error please follow below.
-
-```javascript
-// import custom error object
-var MochaError = require('./error');
-
-// throw inside block with catch
-throw new MochaError(
-  'Our error message'
-  'ERR_ERROR_CODE'
-);
-```
 
 ## Editor Plugins
 

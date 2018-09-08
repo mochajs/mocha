@@ -13,7 +13,8 @@ describe('suite w/no callback', function() {
         if (err) {
           return done(err);
         }
-        var result = res.output.match(/no callback was supplied/) || [];
+        var pattern = /MissingCallbackError:/g;
+        var result = res.output.match(pattern) || [];
         assert.strictEqual(result.length, 1);
         done();
       },
