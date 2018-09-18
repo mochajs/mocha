@@ -50,7 +50,8 @@ describe('hook error handling', function() {
       assert.deepEqual(lines, [
         'test 1',
         'after',
-        bang + 'test 3',
+        bang,
+        'test 3',
         'test 4',
         'after each 1',
         bang + 'after each 2'
@@ -138,7 +139,8 @@ describe('hook error handling', function() {
       assert.deepEqual(lines, [
         'test 1',
         'after',
-        bang + 'test 3',
+        bang,
+        'test 3',
         'test 4',
         'after each 1',
         bang + 'after each 2'
@@ -165,7 +167,8 @@ describe('hook error handling', function() {
         '1-2 before each',
         '1-2 test 1',
         '1-2 after each',
-        bang + '1 after each',
+        bang,
+        '1 after each',
         'root after each',
         '1-2 after',
         '1 after',
