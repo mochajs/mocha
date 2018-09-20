@@ -53,6 +53,109 @@ describe('TAP reporter', function() {
         expect(expectedString, 'to be', expectedSuite);
       });
     });
+
+    describe('on fail', function() {
+      describe('if there is an error message', function() {
+        it('should write expected message and error message', function() {
+          var expectedTitle = 'some title';
+          var countAfterTestEnd = 2;
+          var expectedErrorMessage = 'some error';
+          var test = {
+            fullTitle: function() {
+              return expectedTitle;
+            },
+            slow: function() {}
+          };
+          var error = {
+            message: expectedErrorMessage
+          };
+          runner.on = function(event, callback) {
+            if (event === 'test end') {
+              callback();
+            }
+            if (event === 'fail') {
+              callback(test, error);
+            }
+          };
+          runner.suite = '';
+          runner.grepTotal = function() {};
+          TAP.call({}, runner);
+
+          process.stdout.write = stdoutWrite;
+
+          var expectedArray = [
+            'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
+            '  ' + expectedErrorMessage + '\n'
+          ];
+          expect(stdout, 'to equal', expectedArray);
+        });
+      });
+      describe('if there is an error stack', function() {
+        it('should write expected message and stack', function() {
+          var expectedStack = 'some stack';
+          var error = {
+            stack: expectedStack
+          };
+          runner = createMockRunner(
+            'test end fail',
+            'test end',
+            'fail',
+            null,
+            test,
+            error
+          );
+          runner.suite = '';
+          runner.grepTotal = function() {};
+          TAP.call({}, runner);
+
+          process.stdout.write = stdoutWrite;
+
+          var expectedArray = [
+            'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
+            '  ' + expectedStack + '\n'
+          ];
+          expect(stdout, 'to equal', expectedArray);
+        });
+      });
+      describe('if there is an error stack and error message', function() {
+        it('should write expected message and stack', function() {
+          var expectedTitle = 'some title';
+          var countAfterTestEnd = 2;
+          var expectedStack = 'some stack';
+          var expectedErrorMessage = 'some error';
+          var test = {
+            fullTitle: function() {
+              return expectedTitle;
+            },
+            slow: function() {}
+          };
+          var error = {
+            stack: expectedStack,
+            message: expectedErrorMessage
+          };
+          runner.on = function(event, callback) {
+            if (event === 'test end') {
+              callback();
+            }
+            if (event === 'fail') {
+              callback(test, error);
+            }
+          };
+          runner.suite = '';
+          runner.grepTotal = function() {};
+          TAP.call({}, runner);
+
+          process.stdout.write = stdoutWrite;
+
+          var expectedArray = [
+            'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
+            '  ' + expectedErrorMessage + '\n',
+            '  ' + expectedStack + '\n'
+          ];
+          expect(stdout, 'to equal', expectedArray);
+        });
+      });
+    });
   });
 
   describe('TAP13 spec', function() {
@@ -89,7 +192,7 @@ describe('TAP reporter', function() {
         );
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
@@ -105,7 +208,7 @@ describe('TAP reporter', function() {
 
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
@@ -140,7 +243,7 @@ describe('TAP reporter', function() {
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -170,7 +273,7 @@ describe('TAP reporter', function() {
           );
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -210,7 +313,7 @@ describe('TAP reporter', function() {
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -239,7 +342,7 @@ describe('TAP reporter', function() {
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -258,7 +361,7 @@ describe('TAP reporter', function() {
         runner = createMockRunner('fail end pass', 'fail', 'end', 'pass', test);
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
