@@ -52,6 +52,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Run Cycle Overview](#run-cycle-overview)
 - [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
 - [Assertions](#assertions)
 - [Asynchronous Code](#asynchronous-code)
@@ -140,6 +141,47 @@ Then run tests with:
 
 ```sh
 $ npm test
+```
+
+## Run Cycle Overview
+
+A brief outline on the order Mocha's components are executed.
+Worth noting that all hooks, `describe` and `it` callbacks are run in the order they are defined (i.e. found in the file).
+
+``` js
+run 'mocha spec.js'
+|
+spawn child process
+|
+|--------------> inside child process
+  process and apply options
+  |
+  run spec file/s
+  |
+  |--------------> per spec file
+    suite callbacks (e.g., 'describe')
+    |
+    'before' root-level pre-hook
+    |
+    'before' pre-hook
+    |
+    |--------------> per test
+      'beforeEach' root-level pre-hook
+      |
+      'beforeEach' pre-hook
+      |
+      test callbacks (e.g., 'it')
+      |
+      'afterEach' post-hook
+      |
+      'afterEach' root-level post-hook
+    |<-------------- per test end
+    |
+    'after' post-hook
+    |
+    'after' root-level post-hooks
+  |<-------------- per spec file end
+|<-------------- inside child process end
 ```
 
 ## Detects Multiple Calls to `done()`
