@@ -335,15 +335,27 @@ Error.stackTraceLimit = Infinity; // TODO: config
 // reporter options
 
 const reporterOptions = {};
+
+function addReporterOption(object, name, value) {
+  if (name.length === 1) {
+    object[name[0]] = value;
+  } else {
+    if (!object[name[0]]) {
+      object[name[0]] = {};
+    }
+    addReporterOption(object[name[0]], name.slice(1), value);
+  }
+}
+
 if (program.reporterOptions !== undefined) {
   program.reporterOptions.split(',').forEach(opt => {
     const L = opt.split('=');
     if (L.length > 2 || L.length === 0) {
       throw new Error(`invalid reporter option '${opt}'`);
     } else if (L.length === 2) {
-      reporterOptions[L[0]] = L[1];
+      addReporterOption(reporterOptions, L[0].split('.'), L[1]);
     } else {
-      reporterOptions[L[0]] = true;
+      addReporterOption(reporterOptions, L[0].split('.'), true);
     }
   });
 }

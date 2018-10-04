@@ -505,6 +505,43 @@ describe('options', function() {
     });
   });
 
+  describe('--reporter-options', function() {
+    /*
+     * Runs mocha in {path} with the given args.
+     * Calls handleResult with the result.
+     */
+    function runMochaTest(args, handleResult, done) {
+      helpers.runMocha('passing.fixture.js', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        handleResult(JSON.parse(res.output));
+        done();
+      });
+    }
+
+    it('should accept nested options to --reporter-options', function(done) {
+      runMochaTest(
+        [
+          '--reporter',
+          'test/integration/fixtures/options-reporter.js',
+          '--reporter-options',
+          'nested.value1=a,nested.value2=b'
+        ],
+        function(res) {
+          expect(res, 'to equal', {
+            nested: {
+              value1: 'a',
+              value2: 'b'
+            }
+          });
+        },
+        done
+      );
+    });
+  });
+
   if (process.platform !== 'win32') {
     // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
     // due to lack of *nix signal compliance.
