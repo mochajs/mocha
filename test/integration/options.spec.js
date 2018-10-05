@@ -540,6 +540,48 @@ describe('options', function() {
         done
       );
     });
+
+    it('should accept multiple --reporter-option arguments', function(done) {
+      runMochaTest(
+        [
+          '--reporter',
+          'test/integration/fixtures/options-reporter.js',
+          '--reporter-option',
+          'value1=a',
+          '--reporter-option',
+          'value2=b'
+        ],
+        function(res) {
+          expect(res, 'to equal', {
+            value1: 'a',
+            value2: 'b'
+          });
+        },
+        done
+      );
+    });
+
+    it('should accept nested options to --reporter-option', function(done) {
+      runMochaTest(
+        [
+          '--reporter',
+          'test/integration/fixtures/options-reporter.js',
+          '--reporter-option',
+          'nested.value1=a',
+          '--reporter-option',
+          'nested.value2=b'
+        ],
+        function(res) {
+          expect(res, 'to equal', {
+            nested: {
+              value1: 'a',
+              value2: 'b'
+            }
+          });
+        },
+        done
+      );
+    });
   });
 
   if (process.platform !== 'win32') {

@@ -149,6 +149,12 @@ program
   .option('-C, --no-colors', 'force disabling of colors')
   .option('-G, --growl', 'enable growl notification support')
   .option('-O, --reporter-options <k=v,k2=v2,...>', 'reporter-specific options')
+  .option(
+    '-o, --reporter-option <k=v>',
+    'reporter-specific option',
+    collect,
+    []
+  )
   .option('-R, --reporter <name>', 'specify the reporter to use', 'spec')
   .option('-S, --sort', 'sort test files')
   .option('-b, --bail', 'bail after first test failure')
@@ -347,8 +353,9 @@ function addReporterOption(object, name, value) {
   }
 }
 
-if (program.reporterOptions !== undefined) {
-  program.reporterOptions.split(',').forEach(opt => {
+program.reporterOption
+  .concat(program.reporterOptions ? program.reporterOptions.split(',') : [])
+  .forEach(opt => {
     const L = opt.split('=');
     if (L.length > 2 || L.length === 0) {
       throw new Error(`invalid reporter option '${opt}'`);
@@ -358,7 +365,6 @@ if (program.reporterOptions !== undefined) {
       addReporterOption(reporterOptions, L[0].split('.'), true);
     }
   });
-}
 
 // reporter
 
