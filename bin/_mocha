@@ -165,7 +165,10 @@ program
     `specify user-interface (${interfaceNames.join('|')})`,
     'bdd'
   )
-  .option('-w, --watch', 'watch files for changes')
+  .option(
+    '-w, --watch',
+    'watch files in the current working directory for changes'
+  )
   .option('--check-leaks', 'check for global variable leaks')
   .option('--full-trace', 'display the full stack trace')
   .option(

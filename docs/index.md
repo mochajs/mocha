@@ -802,7 +802,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -s, --slow <ms>                         "slow" test threshold in milliseconds [75]
     -t, --timeout <ms>                      set test-case timeout in milliseconds [2000]
     -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: bdd)
-    -w, --watch                             watch files for changes
+    -w, --watch                             watch files in the current working directory for changes
     --check-leaks                           check for global variable leaks
     --full-trace                            display the full stack trace
     --compilers <ext>:<module>,...          use the given module(s) to compile files (default: )
