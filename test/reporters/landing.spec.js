@@ -10,6 +10,7 @@ describe('Landing reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
+  var asciiOnly;
   var useColors;
   var windowWidth;
   var resetCode = '\u001b[0m';
@@ -31,13 +32,16 @@ describe('Landing reporter', function() {
       stdout.push(string);
       stdoutWrite.call(process.stdout, string, enc, callback);
     };
+    asciiOnly = Base.asciiOnly;
     useColors = Base.useColors;
+    Base.asciiOnly = false;
     Base.useColors = false;
     windowWidth = Base.window.width;
     Base.window.width = 1;
   });
 
   afterEach(function() {
+    Base.asciiOnly = asciiOnly;
     Base.useColors = useColors;
     Base.window.width = windowWidth;
     process.stdout.write = stdoutWrite;

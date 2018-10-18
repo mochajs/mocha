@@ -9,6 +9,7 @@ var createMockRunner = require('./helpers.js').createMockRunner;
 describe('Dot reporter', function() {
   var stdout;
   var runner;
+  var asciiOnly;
   var useColors;
   var windowWidth;
   var color;
@@ -41,9 +42,11 @@ describe('Dot reporter', function() {
 
   beforeEach(function() {
     stdout = [];
+    asciiOnly = Base.asciiOnly;
     useColors = Base.useColors;
     windowWidth = Base.window.width;
     color = Base.color;
+    Base.asciiOnly = false;
     Base.useColors = false;
     Base.window.width = 0;
     Base.color = function(type, str) {
@@ -52,6 +55,7 @@ describe('Dot reporter', function() {
   });
 
   afterEach(function() {
+    Base.asciiOnly = asciiOnly;
     Base.useColors = useColors;
     Base.window.width = windowWidth;
     Base.color = color;

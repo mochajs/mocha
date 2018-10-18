@@ -45,7 +45,9 @@ describe('Progress reporter', function() {
     describe('if line has not changed', function() {
       it('should return and not write anything', function() {
         var cachedCursor = Base.cursor;
+        var asciiOnly = Base.asciiOnly;
         var useColors = Base.useColors;
+        Base.asciiOnly = false;
         Base.useColors = false;
         Base.cursor.CR = function() {};
         var windowWidth = Base.window.width;
@@ -62,6 +64,7 @@ describe('Progress reporter', function() {
         expect(stdout, 'to equal', []);
 
         Base.cursor = cachedCursor;
+        Base.asciiOnly = asciiOnly;
         Base.useColors = useColors;
         Base.window.width = windowWidth;
       });
@@ -70,7 +73,9 @@ describe('Progress reporter', function() {
       it('should write expected progress of open and close options', function() {
         var calledCursorCR = false;
         var cachedCursor = Base.cursor;
+        var asciiOnly = Base.asciiOnly;
         var useColors = Base.useColors;
+        Base.asciiOnly = false;
         Base.useColors = false;
         Base.cursor.CR = function() {
           calledCursorCR = true;
@@ -107,6 +112,7 @@ describe('Progress reporter', function() {
         expect(stdout, 'to equal', expectedArray);
 
         Base.cursor = cachedCursor;
+        Base.asciiOnly = asciiOnly;
         Base.useColors = useColors;
         Base.window.width = windowWidth;
       });

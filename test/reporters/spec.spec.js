@@ -10,6 +10,7 @@ describe('Spec reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
+  var asciiOnly;
   var useColors;
   var expectedTitle = 'expectedTitle';
 
@@ -20,11 +21,14 @@ describe('Spec reporter', function() {
       stdout.push(string);
       stdoutWrite.call(process.stdout, string, enc, callback);
     };
+    asciiOnly = Base.asciiOnly;
     useColors = Base.useColors;
+    Base.asciiOnly = false;
     Base.useColors = false;
   });
 
   afterEach(function() {
+    Base.asciiOnly = asciiOnly;
     Base.useColors = useColors;
     process.stdout.write = stdoutWrite;
   });

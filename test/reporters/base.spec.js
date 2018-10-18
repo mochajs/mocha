@@ -10,26 +10,32 @@ var createElements = require('./helpers').createElements;
 describe('Base reporter', function() {
   var stdout;
   var stdoutWrite;
+  var asciiOnly;
   var useColors;
   var err;
   var errOut;
   var test;
 
   function list(tests) {
+    Base.asciiOnly = false;
     Base.useColors = false;
     var retval = Base.list(tests);
+    Base.asciiOnly = asciiOnly;
     Base.useColors = useColors;
     return retval;
   }
 
   function generateDiff(actual, expected) {
+    Base.asciiOnly = false;
     Base.useColors = false;
     var retval = Base.generateDiff(actual, expected);
+    Base.asciiOnly = asciiOnly;
     Base.useColors = useColors;
     return retval;
   }
 
   beforeEach(function() {
+    asciiOnly = Base.asciiOnly;
     useColors = Base.useColors;
     stdout = [];
     stdoutWrite = process.stdout.write;
