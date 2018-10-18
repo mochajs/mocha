@@ -16,7 +16,8 @@ const docsFilepath = path.join(__dirname, '..', 'docs', 'index.md');
 
 console.log('Updating TOC...');
 
-fs.createReadStream(docsFilepath)
+fs
+  .createReadStream(docsFilepath)
   .on('error', err => {
     console.log(err);
     process.exit(1);

@@ -29,7 +29,8 @@ module.exports = config => {
     browserify: {
       debug: true,
       configure: function configure(b) {
-        b.ignore('glob')
+        b
+          .ignore('glob')
           .ignore('fs')
           .ignore('path')
           .ignore('supports-color')
