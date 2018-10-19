@@ -70,7 +70,7 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
     - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
     - Github will indicate if there's a conflict.  If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase/) your branch onto the `master` branch of the source repository.  *Don't merge.*
     - It's no longer necessary to "squash" your changes.
-1. Be patient while your PR is reviewed. This can take a while. We may request changes; don't be afraid to question them.
+1. Be patient while your PR is reviewed. This can take a while. We may request changes, but don't be afraid to question them.
 
 ## :angel: I Just Want To Help
 
