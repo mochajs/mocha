@@ -26,6 +26,52 @@ describe('a test that throws', function() {
     });
   });
 
+  describe('non-extensible', function() {
+    it('should not pass if throwing sync and test is sync', function(done) {
+      var test = new Test('im sync and throw string sync', function() {
+        throw 'non-extensible';
+      });
+      suite.addTest(test);
+      runner = new Runner(suite);
+      runner.on('end', function() {
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
+        done();
+      });
+      runner.run();
+    });
+
+    it('should not pass if throwing sync and test is async', function(done) {
+      var test = new Test('im async and throw string sync', function(done2) {
+        throw 'non-extensible';
+      });
+      suite.addTest(test);
+      runner = new Runner(suite);
+      runner.on('end', function() {
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
+        done();
+      });
+      runner.run();
+    });
+
+    it('should not pass if throwing async and test is async', function(done) {
+      var test = new Test('im async and throw string async', function(done2) {
+        process.nextTick(function() {
+          throw 'non-extensible';
+        });
+      });
+      suite.addTest(test);
+      runner = new Runner(suite);
+      runner.on('end', function() {
+        expect(runner.failures, 'to be', 1);
+        expect(test.state, 'to be', 'failed');
+        done();
+      });
+      runner.run();
+    });
+  });
+
   describe('undefined', function() {
     it('should not pass if throwing sync and test is sync', function(done) {
       var test = new Test('im sync and throw undefined sync', function() {
