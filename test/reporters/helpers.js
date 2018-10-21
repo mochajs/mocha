@@ -155,9 +155,51 @@ function makeExpectedTest(
   };
 }
 
+/**
+ * Creates closure with reference to the reporter class constructor.
+ *
+ * @param {Function} ctor - Reporter class constructor
+ * @return {createRunReporterFunction~runReporter}
+ */
+function createRunReporterFunction(ctor) {
+  /**
+   * Run reporter using stream reassignment to capture output.
+   *
+   * @param {Object} stubSelf - Reporter-like stub instance
+   * @param {Runner} runner - Mock instance
+   * @param {Object} [options] - Reporter configuration settings
+   * @param {boolean} [tee=false] - Whether to echo output to screen
+   * @return {string[]} Lines of output written to `stdout`
+   */
+  var runReporter = function(stubSelf, runner, options, tee) {
+    var stdout = [];
+
+    // Reassign stream in order to make a copy of all reporter output
+    var stdoutWrite = process.stdout.write;
+    process.stdout.write = function(string, enc, callback) {
+      stdout.push(string);
+      if (tee) {
+        stdoutWrite.call(process.stdout, string, enc, callback);
+      }
+    };
+
+    // Invoke reporter
+    ctor.call(stubSelf, runner, options);
+
+    // Revert stream reassignment here so reporter output
+    // can't be corrupted if any test assertions throw
+    process.stdout.write = stdoutWrite;
+
+    return stdout;
+  };
+
+  return runReporter;
+}
+
 module.exports = {
-  createMockRunner: createMockRunner,
-  makeTest: makeTest,
   createElements: createElements,
-  makeExpectedTest: makeExpectedTest
+  createMockRunner: createMockRunner,
+  createRunReporterFunction: createRunReporterFunction,
+  makeExpectedTest: makeExpectedTest,
+  makeTest: makeTest
 };
