@@ -1,3 +1,7 @@
+###
+### .travis.yml
+###
+
 # these are executed in order.  each must pass for the next to be run
 stages:
   - smoke # this ensures a "user" install works properly
@@ -8,6 +12,10 @@ stages:
 # defaults
 language: node_js
 node_js: '10'
+addons:
+  apt:
+    packages:
+    - libnotify-bin
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
