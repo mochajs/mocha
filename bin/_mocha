@@ -157,9 +157,17 @@ program
   .option('-f, --fgrep <string>', 'only run tests containing <string>')
   .option('-gc, --expose-gc', 'expose gc extension')
   .option('-i, --invert', 'inverts --grep and --fgrep matches')
-  .option('-r, --require <name>', 'require the given module')
-  .option('-s, --slow <ms>', '"slow" test threshold in milliseconds [75]')
-  .option('-t, --timeout <ms>', 'set test-case timeout in milliseconds [2000]')
+  .option('-r, --require <name>', 'require the given module', [])
+  .option(
+    '-s, --slow <ms>',
+    'specify "slow" test threshold in milliseconds',
+    75
+  )
+  .option(
+    '-t, --timeout <ms>',
+    'specify test timeout threshold in milliseconds',
+    2000
+  )
   .option(
     '-u, --ui <name>',
     `specify user-interface (${interfaceNames.join('|')})`,
@@ -204,7 +212,7 @@ program
     '--inspect-brk',
     'activate devtools in chrome and break on the first line'
   )
-  .option('--interfaces', 'display available interfaces')
+  .option('--interfaces', 'output provided interfaces and exit')
   .option('--no-deprecation', 'silence deprecation warnings')
   .option(
     '--exit',
@@ -218,10 +226,11 @@ program
   .option('--prof', 'log statistical profiling information')
   .option('--log-timer-events', 'Time events including external callbacks')
   .option('--recursive', 'include sub directories')
-  .option('--reporters', 'display available reporters')
+  .option('--reporters', 'output provided reporters and exit')
   .option(
     '--retries <times>',
-    'set numbers of time to retry a failed test case'
+    'specify number of times to retry a failed test case',
+    0
   )
   .option(
     '--throw-deprecation',
@@ -246,11 +255,16 @@ program
   )
   .option(
     '--file <file>',
-    'include a file to be ran during the suite',
+    'adds file be loaded prior to suite execution',
     collect,
     []
   )
-  .option('--exclude <file>', 'a file or glob pattern to ignore', collect, []);
+  .option(
+    '--exclude <file>',
+    'adds file or glob pattern to ignore',
+    collect,
+    []
+  );
 
 program._name = 'mocha';
 
