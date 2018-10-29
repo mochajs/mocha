@@ -35,6 +35,7 @@ describe('reporters', function() {
 
   describe('xunit', function() {
     it('prints test cases with --reporter-options output (issue: 1864)', function(done) {
+      this.slow(900);
       var randomStr = crypto.randomBytes(8).toString('hex');
       var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
@@ -66,6 +67,7 @@ describe('reporters', function() {
   });
 
   describe('loader', function() {
+    this.slow(950);
     it('loads a reporter from a path relative to the current working directory', function(done) {
       var reporterAtARelativePath =
         'test/integration/fixtures/simple-reporter.js';

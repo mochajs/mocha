@@ -6,6 +6,7 @@ var args = [];
 
 describe('this.timeout()', function() {
   it('is respected by sync and async suites', function(done) {
+    this.slow(900);
     run('timeout.fixture.js', args, function(err, res) {
       if (err) {
         done(err);

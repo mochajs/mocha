@@ -4,6 +4,7 @@ var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
 
 describe('regressions', function() {
+  this.slow(900);
   it('issue-1327: should run all 3 specs exactly once', function(done) {
     var args = [];
     run('regression/issue-1327.fixture.js', args, function(err, res) {

@@ -4,6 +4,7 @@ var helpers = require('./helpers');
 var run = helpers.runMocha;
 
 describe('no-diff', function() {
+  this.slow(900);
   describe('when enabled', function() {
     it('should not display a diff', function(done) {
       run('no-diff.fixture.js', ['--no-diff'], function(err, res) {

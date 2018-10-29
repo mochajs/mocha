@@ -6,6 +6,7 @@ var path = require('path');
 var node = '"' + process.execPath + '"';
 
 describe('globbing', function() {
+  this.slow(600);
   describe('by the shell', function() {
     it('should find the first level test', function(done) {
       testGlob.shouldSucceed(

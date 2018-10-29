@@ -7,6 +7,7 @@ var splitRegExp = require('./helpers').splitRegExp;
 var args = [];
 
 describe('pending', function() {
+  this.slow(900);
   describe('pending specs', function() {
     it('should be created by omitting a function', function(done) {
       run('pending/spec.fixture.js', args, function(err, res) {

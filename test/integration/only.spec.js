@@ -4,6 +4,7 @@ var run = require('./helpers').runMochaJSON;
 var assert = require('assert');
 
 describe('.only()', function() {
+  this.slow(900);
   describe('bdd', function() {
     it('should run only tests that marked as `only`', function(done) {
       run('options/only/bdd.fixture.js', ['--ui', 'bdd'], function(err, res) {

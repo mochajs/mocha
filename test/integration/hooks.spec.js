@@ -7,6 +7,7 @@ var splitRegExp = require('./helpers').splitRegExp;
 var args = ['--reporter', 'dot'];
 
 describe('hooks', function() {
+  this.slow(900);
   it('are ran in correct order', function(done) {
     runMocha('cascade.fixture.js', args, function(err, res) {
       var lines, expected;

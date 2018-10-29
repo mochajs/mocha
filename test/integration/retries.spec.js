@@ -6,6 +6,7 @@ var args = [];
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function() {
+  this.slow(950);
   it('are ran in correct order', function(done) {
     helpers.runMocha(
       'retries/hooks.fixture.js',

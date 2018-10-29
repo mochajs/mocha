@@ -5,6 +5,7 @@ var run = require('./helpers').runMochaJSON;
 var args = [];
 
 describe('uncaught exceptions', function() {
+  this.slow(900);
   it('handles uncaught exceptions from hooks', function(done) {
     run('uncaught-hook.fixture.js', args, function(err, res) {
       if (err) {

@@ -5,6 +5,7 @@ var path = require('path');
 
 describe('globbing like --compilers', function() {
   it('should find a file of each type', function(done) {
+    this.slow(900);
     exec(
       '"' +
         process.execPath +
