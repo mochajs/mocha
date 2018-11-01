@@ -591,9 +591,7 @@ if (program.watch) {
   };
 
   purge = () => {
-    watchFiles.forEach(file => {
-      delete require.cache[file];
-    });
+    watchFiles.forEach(mocha.unloadFile);
   };
 
   loadAndRun();
