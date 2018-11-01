@@ -75,7 +75,7 @@ jobs:
           - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
 
     - <<: *smoke
-      node_js: '9'
+      node_js: '10'
 
     - <<: *smoke
       node_js: '8'
