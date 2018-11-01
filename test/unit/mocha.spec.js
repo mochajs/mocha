@@ -110,12 +110,26 @@ describe('Mocha', function() {
   });
 
   describe('.growl()', function() {
-    it('should set the growl option to true', function() {
-      var mocha = new Mocha(blankOpts);
-      mocha.growl();
-      expect(mocha.options.growl, 'to be', true);
+    context('if Growl capable', function() {
+      it('should set the growl option to true', function() {
+        var mocha = new Mocha(blankOpts);
+        mocha.isGrowlCapable = function() {
+          return true;
+        };
+        mocha.growl();
+        expect(mocha.options.growl, 'to be', true);
+      });
     });
-
+    context('if not Growl capable', function() {
+      it('should set the growl option to false', function() {
+        var mocha = new Mocha(blankOpts);
+        mocha.isGrowlCapable = function() {
+          return false;
+        };
+        mocha.growl();
+        expect(mocha.options.growl, 'to be', false);
+      });
+    });
     it('should be chainable', function() {
       var mocha = new Mocha(blankOpts);
       expect(mocha.growl(), 'to be', mocha);
