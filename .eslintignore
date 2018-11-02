@@ -2,4 +2,5 @@ coverage/
 mocha.js
 *.fixture.js
 docs/
+out/
 !lib/mocha.js
