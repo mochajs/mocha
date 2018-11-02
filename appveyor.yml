@@ -12,8 +12,8 @@ shallow_clone: true
 clone_depth: 1
 environment:
   matrix:
+    - nodejs_version: '11'
     - nodejs_version: '10'
-    - nodejs_version: '9'
     - nodejs_version: '8'
     - nodejs_version: '6'
 matrix:
@@ -69,4 +69,3 @@ notifications:
     on_build_success: false
     on_build_failure: false
     on_build_status_changed: false
-
