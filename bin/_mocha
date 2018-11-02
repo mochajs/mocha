@@ -218,7 +218,10 @@ program
     '--exit',
     'force shutdown of the event loop after test run: mocha will call process.exit'
   )
-  .option('--no-timeouts', 'disables timeouts, given implicitly with --debug')
+  .option(
+    '--no-timeouts',
+    'disables timeouts, given implicitly with --debug/--inspect'
+  )
   .option('--no-warnings', 'silence all node process warnings')
   .option('--opts <path>', 'specify opts path', 'test/mocha.opts')
   .option('--perf-basic-prof', 'enable perf linux profiler (basic support)')

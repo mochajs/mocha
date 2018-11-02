@@ -818,7 +818,7 @@ Options:
   --interfaces                            output provided interfaces and exit
   --no-deprecation                        silence deprecation warnings
   --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
-  --no-timeouts                           disables timeouts, given implicitly with --debug
+  --no-timeouts                           disables timeouts, given implicitly with --debug/--inspect
   --no-warnings                           silence all node process warnings
   --opts <path>                           specify opts path (default: "test/mocha.opts")
   --perf-basic-prof                       enable perf linux profiler (basic support)
