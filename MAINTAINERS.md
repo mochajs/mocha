@@ -279,17 +279,15 @@ This is not necessarily ideal, and we should consider another method of using br
 1. Decide whether this is a `patch`, `minor`, or `major` release by the PRs which have been merged since the last release.
 1. Checkout `master` in your working copy & pull.
 1. Modify `CHANGELOG.md`; follow the existing conventions in that file.  Commit this file only; add `[ci skip]` to the commit message to avoid a build.
-1. Use `npm version` to bump the version; see `npm version --help` for more info.  (Hint--use `-m`: e.g. `npm version patch -m 'Release v%s'`)
-1. Push `master` to origin with your new tag; e.g. `git push origin master --tags`
+1. Use `npm version` (use `npm@6+`) to bump the version; see `npm version --help` for more info.  (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
+1. Push `master` to `origin` with your new tag; e.g. `git push origin master --tags`
 1. Copy & paste the added lines to a new GitHub "release".  Be sure to add any missing link references (use "preview" button).  Save release as draft.
 1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI.
-1. Once it's green and you're satisfied with the release notes, open your draft release on GitHub, then click "publish"
+1. Once the build is green, and you're satisfied with the release notes, open your draft release on GitHub, then click "publish."
 1. Back in your working copy, run `npm publish`.
-1. Announce the update on Twitter or just tell your dog or something.
+1. Announce the update on Twitter or just tell your dog or something.  New releases will be automatically tweeted by [@b0neskull](https://twitter.com/b0neskull).
 
 *Note: there are too many steps above.*
-
-> As of this writing, `npm version` (using npm@5) is not working well, and you may have to tag manually.  Commit the change to the version in `package.json` with a message of the format `Release vX.Y.Z`, then tag the changeset using `vX.Y.Z`.
 
 ## Projects
 
