@@ -510,14 +510,18 @@
     "watchify": "^3.7.0"
   },
   "files": [
-    "bin",
-    "images",
-    "lib",
+    "bin/{*mocha,options.js}",
+    "assets/growl/*.png",
+    "lib/**/*.{js,html}",
     "index.js",
     "mocha.css",
     "mocha.js",
     "browser-entry.js"
   ],
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
   "browser": {
     "growl": "./lib/browser/growl.js",
     "tty": "./lib/browser/tty.js",
@@ -527,10 +531,13 @@
     "path": false,
     "supports-color": false
   },
-  "homepage": "https://mochajs.org",
+  "homepage": "https://mochajs.org/",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "prettier": {
     "singleQuote": true,
     "bracketSpacing": false
+  },
+  "bugs": {
+    "url": "https://github.com/mochajs/mocha/issues/"
   }
 }
