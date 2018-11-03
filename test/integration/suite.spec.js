@@ -50,3 +50,19 @@ describe('skipped suite w/ callback', function() {
     });
   });
 });
+
+describe('suite returning a value', function () {
+  this.timeout(2000);
+  it('should give a deprecation warning for suite callback returning a value', function (done) {
+    run('suite/suite-returning-value.fixture.js', args, function (err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      var pattern = new RegExp('Deprecation Warning', 'g');
+      var result = res.output.match(pattern) || [];
+      assert.equal(result.length, 1);
+      done();
+    });
+  });
+});
