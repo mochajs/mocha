@@ -108,29 +108,12 @@ describe('Runnable(title, fn)', function() {
     });
   });
 
-  describe('when arity >= 1', function() {
-    it('should be .async', function() {
-      var run = new Runnable('foo', function(done) {});
-      assert(run.async === 1);
-      assert(run.sync === false);
-    });
-  });
-
-  describe('when arity == 0', function() {
-    it('should be .sync', function() {
-      var run = new Runnable('foo', function() {});
-      assert(run.async === 0);
-      assert(run.sync === true);
-    });
-  });
-
   describe('#globals', function() {
-    it('should allow for whitelisting globals', function(done) {
-      var test = new Runnable('foo', function() {});
-      assert(test.async === 0);
-      assert(test.sync === true);
-      test.globals(['foobar']);
-      test.run(done);
+    it('should allow for whitelisting globals', function() {
+      var globals = ['foobar'];
+      var runnable = new Runnable('foo', function() {});
+      runnable.globals(globals);
+      assert(runnable.globals() === globals);
     });
   });
 
