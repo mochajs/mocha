@@ -6,20 +6,23 @@ var Path = require('path');
 describe('.unloadFile()', function() {
   it('should unload a specific file from cache', function() {
     var mocha = new Mocha({});
+    var resolvedFilePath;
     var filePath = __filename;
 
     mocha.addFile(filePath);
     mocha.loadFiles();
-    expect(require.cache, 'to have property', require.resolve(filePath));
+    resolvedFilePath = require.resolve(filePath);
+    expect(require.cache, 'to have key', resolvedFilePath);
 
     mocha.unloadFile(filePath);
-    expect(require.cache, 'not to have property', require.resolve(filePath));
+    expect(require.cache, 'not to have key', resolvedFilePath);
   });
 });
 
 describe('.unloadFiles()', function() {
   it('should unload all test files from cache', function() {
     var mocha = new Mocha({});
+    var resolvedTestFiles;
     var testFiles = [
       __filename,
       Path.join(__dirname, 'fs.spec.js'),
@@ -28,13 +31,10 @@ describe('.unloadFiles()', function() {
 
     testFiles.forEach(mocha.addFile, mocha);
     mocha.loadFiles();
-    testFiles.forEach(function(file) {
-      expect(require.cache, 'to have property', require.resolve(file));
-    });
+    resolvedTestFiles = testFiles.map(require.resolve);
+    expect(require.cache, 'to have keys', resolvedTestFiles);
 
     mocha.unloadFiles();
-    testFiles.forEach(function(file) {
-      expect(require.cache, 'not to have property', require.resolve(file));
-    });
+    expect(require.cache, 'not to have keys', resolvedTestFiles);
   });
 });
