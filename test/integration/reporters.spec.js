@@ -134,7 +134,8 @@ describe('reporters', function() {
     describe('produces valid TAP v13 output', function() {
       var runFixtureAndValidateOutput = function(fixture, expected) {
         it('for ' + fixture, function(done) {
-          var args = ['--reporter=tap', '--reporter-options', 'spec=13'];
+          var args = ['--reporter=tap', '--reporter-options', 'tapVersion=13'];
+
           run(fixture, args, function(err, res) {
             if (err) {
               done(err);
@@ -196,7 +197,8 @@ describe('reporters', function() {
     });
 
     it('places exceptions correctly in YAML blocks', function(done) {
-      var args = ['--reporter=tap', '--reporter-options', 'spec=13'];
+      var args = ['--reporter=tap', '--reporter-options', 'tapVersion=13'];
+
       run('reporters.fixture.js', args, function(err, res) {
         if (err) {
           done(err);

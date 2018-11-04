@@ -33,8 +33,9 @@ describe('TAP reporter', function() {
   });
 
   describe('TAP12 spec', function() {
+    var options = {};
     describe('on start', function() {
-      it('should hand runners suite into grepTotal and log the total', function() {
+      it('should write the number of tests that it plans to run', function() {
         var expectedSuite = 'some suite';
         var expectedTotal = 10;
         var expectedString;
@@ -44,7 +45,7 @@ describe('TAP reporter', function() {
           expectedString = string;
           return expectedTotal;
         };
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         var expectedArray = ['1..' + expectedTotal + '\n'];
         process.stdout.write = stdoutWrite;
@@ -65,7 +66,7 @@ describe('TAP reporter', function() {
         );
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
@@ -81,7 +82,7 @@ describe('TAP reporter', function() {
 
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
@@ -109,14 +110,13 @@ describe('TAP reporter', function() {
           runner.on = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -143,7 +143,7 @@ describe('TAP reporter', function() {
           );
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -173,14 +173,13 @@ describe('TAP reporter', function() {
           runner.on = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -198,14 +197,13 @@ describe('TAP reporter', function() {
           runner.on = runner.once = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
           runner.suite = '';
           runner.grepTotal = function() {};
-          TAP.call({}, runner);
+          TAP.call({}, runner, options);
 
           process.stdout.write = stdoutWrite;
 
@@ -223,7 +221,7 @@ describe('TAP reporter', function() {
         runner = createMockRunner('fail end pass', 'fail', 'end', 'pass', test);
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
+        TAP.call({}, runner, options);
 
         process.stdout.write = stdoutWrite;
 
@@ -241,9 +239,13 @@ describe('TAP reporter', function() {
   });
 
   describe('TAP13 spec', function() {
-    var options = {reporterOptions: {spec: '13'}};
+    var options = {
+      reporterOptions: {
+        tapVersion: '13'
+      }
+    };
     describe('on start', function() {
-      it('should hand runners suite into grepTotal and log the total', function() {
+      it('should write the number of tests that it plans to run', function() {
         var expectedSuite = 'some suite';
         var expectedTotal = 10;
         var expectedString;
@@ -318,8 +320,7 @@ describe('TAP reporter', function() {
           runner.on = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
@@ -388,8 +389,7 @@ describe('TAP reporter', function() {
           runner.on = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
@@ -417,8 +417,7 @@ describe('TAP reporter', function() {
           runner.on = runner.once = function(event, callback) {
             if (event === 'test end') {
               callback();
-            }
-            if (event === 'fail') {
+            } else if (event === 'fail') {
               callback(test, error);
             }
           };
