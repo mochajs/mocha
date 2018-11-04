@@ -110,7 +110,7 @@ describe('Mocha', function() {
   });
 
   describe('.growl()', function() {
-    context('if Growl capable', function() {
+    describe('if Growl capable', function() {
       it('should set the growl option to true', function() {
         var mocha = new Mocha(blankOpts);
         mocha.isGrowlCapable = function() {
@@ -120,7 +120,7 @@ describe('Mocha', function() {
         expect(mocha.options.growl, 'to be', true);
       });
     });
-    context('if not Growl capable', function() {
+    describe('if not Growl capable', function() {
       it('should set the growl option to false', function() {
         var mocha = new Mocha(blankOpts);
         mocha.isGrowlCapable = function() {
