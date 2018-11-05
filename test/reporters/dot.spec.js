@@ -5,42 +5,17 @@ var Dot = reporters.Dot;
 var Base = reporters.Base;
 
 var createMockRunner = require('./helpers.js').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Dot reporter', function() {
-  var stdout;
   var runner;
   var useColors;
   var windowWidth;
   var color;
-  var showOutput = false;
-
-  /**
-   * Run reporter using stream reassignment to capture output.
-   *
-   * @param {Object} stubSelf - Reporter-like stub instance
-   * @param {Runner} runner - Mock instance
-   * @param {boolean} [tee=false] - If `true`, echo captured output to screen
-   */
-  function runReporter(stubSelf, runner, tee) {
-    // Reassign stream in order to make a copy of all reporter output
-    var stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      if (tee) {
-        stdoutWrite.call(process.stdout, string, enc, callback);
-      }
-    };
-
-    // Invoke reporter
-    Dot.call(stubSelf, runner);
-
-    // Revert stream reassignment here so reporter output
-    // can't be corrupted if any test assertions throw
-    process.stdout.write = stdoutWrite;
-  }
+  var options = {};
+  var runReporter = makeRunReporter(Dot);
 
   beforeEach(function() {
-    stdout = [];
     useColors = Base.useColors;
     windowWidth = Base.window.width;
     color = Base.color;
@@ -61,7 +36,7 @@ describe('Dot reporter', function() {
   describe('on start', function() {
     it('should write a newline', function() {
       runner = createMockRunner('start', 'start');
-      runReporter({epilogue: function() {}}, runner, showOutput);
+      var stdout = runReporter({epilogue: function() {}}, runner, options);
       var expectedArray = ['\n'];
       expect(stdout, 'to equal', expectedArray);
     });
@@ -73,7 +48,7 @@ describe('Dot reporter', function() {
       });
       it('should write a newline followed by a comma', function() {
         runner = createMockRunner('pending', 'pending');
-        runReporter({epilogue: function() {}}, runner, showOutput);
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedArray = ['\n  ', 'pending_' + Base.symbols.comma];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -81,7 +56,7 @@ describe('Dot reporter', function() {
     describe('if window width is equal to or less than 1', function() {
       it('should write a comma', function() {
         runner = createMockRunner('pending', 'pending');
-        runReporter({epilogue: function() {}}, runner, showOutput);
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedArray = ['pending_' + Base.symbols.comma];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -101,7 +76,7 @@ describe('Dot reporter', function() {
       describe('if test speed is fast', function() {
         it('should write a newline followed by a dot', function() {
           runner = createMockRunner('pass', 'pass', null, null, test);
-          runReporter({epilogue: function() {}}, runner, showOutput);
+          var stdout = runReporter({epilogue: function() {}}, runner, options);
           expect(test.speed, 'to equal', 'fast');
           var expectedArray = ['\n  ', 'fast_' + Base.symbols.dot];
           expect(stdout, 'to equal', expectedArray);
@@ -112,7 +87,7 @@ describe('Dot reporter', function() {
       describe('if test speed is fast', function() {
         it('should write a grey dot', function() {
           runner = createMockRunner('pass', 'pass', null, null, test);
-          runReporter({epilogue: function() {}}, runner, showOutput);
+          var stdout = runReporter({epilogue: function() {}}, runner, options);
           expect(test.speed, 'to equal', 'fast');
           var expectedArray = ['fast_' + Base.symbols.dot];
           expect(stdout, 'to equal', expectedArray);
@@ -122,7 +97,7 @@ describe('Dot reporter', function() {
         it('should write a yellow dot', function() {
           test.duration = 2;
           runner = createMockRunner('pass', 'pass', null, null, test);
-          runReporter({epilogue: function() {}}, runner, showOutput);
+          var stdout = runReporter({epilogue: function() {}}, runner, options);
           expect(test.speed, 'to equal', 'medium');
           var expectedArray = ['medium_' + Base.symbols.dot];
           expect(stdout, 'to equal', expectedArray);
@@ -132,7 +107,7 @@ describe('Dot reporter', function() {
         it('should write a bright yellow dot', function() {
           test.duration = 3;
           runner = createMockRunner('pass', 'pass', null, null, test);
-          runReporter({epilogue: function() {}}, runner, showOutput);
+          var stdout = runReporter({epilogue: function() {}}, runner, options);
           expect(test.speed, 'to equal', 'slow');
           var expectedArray = ['bright-yellow_' + Base.symbols.dot];
           expect(stdout, 'to equal', expectedArray);
@@ -152,7 +127,7 @@ describe('Dot reporter', function() {
       });
       it('should write a newline followed by an exclamation mark', function() {
         runner = createMockRunner('fail', 'fail', null, null, test);
-        runReporter({epilogue: function() {}}, runner, showOutput);
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedArray = ['\n  ', 'fail_' + Base.symbols.bang];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -160,7 +135,7 @@ describe('Dot reporter', function() {
     describe('if window width is equal to or less than 1', function() {
       it('should write an exclamation mark', function() {
         runner = createMockRunner('fail', 'fail', null, null, test);
-        runReporter({epilogue: function() {}}, runner, showOutput);
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedArray = ['fail_' + Base.symbols.bang];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -173,7 +148,7 @@ describe('Dot reporter', function() {
       var epilogue = function() {
         epilogueCalled = true;
       };
-      runReporter({epilogue: epilogue}, runner, showOutput);
+      runReporter({epilogue: epilogue}, runner, options);
       expect(epilogueCalled, 'to be', true);
     });
   });
