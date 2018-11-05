@@ -1,3 +1,14 @@
+
+# 6.0.0 / 2018-xx-xx
+
+## :boom: Breaking Changes
+
+- [#3149]: Drop Node.js v4.x support ([@outsideris])
+- [#627]: Emit filepath in "timeout exceeded" exceptions where applicable ([@boneskull])
+- [#3275]: `--watch-extensions` no longer implies `js`; it must be explicitly added ([@TheDancingCode])
+- [#2908]: `tap` reporter emits error messages ([@chrmod])
+- [#3345], [#1635]: Tests failed in "after each" hooks only report as failed ([@outsideris])
+
 # 5.2.0 / 2018-05-18
 
 ## :tada: Enhancements
