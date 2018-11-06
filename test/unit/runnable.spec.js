@@ -46,18 +46,51 @@ describe('Runnable(title, fn)', function() {
   });
 
   describe('#timeout(ms)', function() {
-    it('should set the timeout', function() {
-      var run = new Runnable();
-      run.timeout(1000);
-      assert(run.timeout() === 1000);
-    });
-  });
+    var INT_MAX = 2147483647; // (32-bit signed integer)
 
-  describe('#timeout(ms) when ms>2^31', function() {
-    it('should set disabled', function() {
-      var run = new Runnable();
-      run.timeout(1e10);
-      assert(run.enableTimeouts() === false);
+    describe('when value is less than `setTimeout` limit', function() {
+      var oneSecond = 1000;
+
+      it('should set the timeout given numeric', function() {
+        var run = new Runnable();
+        run.timeout(oneSecond);
+        assert(run.timeout() === oneSecond);
+        assert(run.enableTimeouts() === true);
+      });
+      it('should set the timeout given timestamp', function() {
+        var run = new Runnable();
+        run.timeout('1s');
+        assert(run.timeout() === oneSecond);
+        assert(run.enableTimeouts() === true);
+      });
+    });
+
+    describe('when value is equal to `setTimeout` limit', function() {
+      it('should set the timeout given numeric', function() {
+        var run = new Runnable();
+        run.timeout(INT_MAX);
+        assert(run.timeout() === INT_MAX);
+        assert(run.enableTimeouts() === true);
+      });
+      it('should set the timeout given timestamp', function() {
+        var run = new Runnable();
+        run.timeout(INT_MAX + 'ms');
+        assert(run.timeout() === INT_MAX);
+        assert(run.enableTimeouts() === true);
+      });
+    });
+
+    describe('when value is greater than `setTimeout` limit', function() {
+      it('should disable timeouts given numeric', function() {
+        var run = new Runnable();
+        run.timeout(INT_MAX + 1);
+        assert(run.enableTimeouts() === false);
+      });
+      it('should disable timeouts given timestamp', function() {
+        var run = new Runnable();
+        run.timeout('24.9d'); // 2151360000ms
+        assert(run.enableTimeouts() === false);
+      });
     });
   });
 
