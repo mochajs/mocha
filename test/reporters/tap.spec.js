@@ -7,9 +7,7 @@ var createMockRunner = require('./helpers').createMockRunner;
 var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('TAP reporter', function() {
-  var ECHO = true;
   var runner;
-  var options = {};
   var runReporter = makeRunReporter(TAP);
   var expectedTitle = 'some title';
   var countAfterTestEnd = 2;
@@ -31,6 +29,7 @@ describe('TAP reporter', function() {
 
   describe('TAP12 spec', function() {
     var options = {};
+
     describe('on start', function() {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
@@ -125,6 +124,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is an error stack', function() {
         it('should write expected message and stack', function() {
           var expectedStack = 'some stack';
@@ -151,6 +151,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is an error stack and error message', function() {
         it('should write expected message and stack', function() {
           var expectedStack = 'some stack';
@@ -187,6 +188,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is no error stack or error message', function() {
         it('should write expected message only', function() {
           var error = {};
@@ -217,6 +219,7 @@ describe('TAP reporter', function() {
         });
       });
     });
+
     describe('on end', function() {
       it('should write total tests, passes and failures', function() {
         var numberOfPasses = 1;
@@ -246,6 +249,7 @@ describe('TAP reporter', function() {
         tapVersion: '13'
       }
     };
+
     describe('on start', function() {
       var expectedSuite = 'some suite';
       var expectedTotal = 10;
@@ -346,6 +350,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is an error stack', function() {
         it('should write expected message and stack', function() {
           var expectedStack = 'some stack';
@@ -375,6 +380,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is an error stack and error message', function() {
         it('should write expected message and stack', function() {
           var expectedStack = 'some stack';
@@ -415,6 +421,7 @@ describe('TAP reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
       });
+
       describe('if there is no error stack or error message', function() {
         it('should write expected message only', function() {
           var error = {};
