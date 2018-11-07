@@ -669,11 +669,13 @@ Many reporters will display test duration and flag tests that are slow (default:
 
 ![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
-There are three levels of test duration:
+There are three levels of test duration (depicted in the following image):
 
-1. FAST: Tests run under half of the "slow" threshold is considered "FAST". The duration will be shown in green or not shown at all.
-2. REASONABLE (in yellow): Tests duration under threshold but above half of threshold will be shown in yellow.
-3. SLOW (in red): Tests that runs over the threshold.
+1. FAST: Tests that run within half of the "slow" threshold will show the duration in green (if at all).
+2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
+3. SLOW: Tests that run exceeding the threshold will show the duration in red.
+
+![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 To tweak what's considered "slow", you can use the `slow()` method:
 
