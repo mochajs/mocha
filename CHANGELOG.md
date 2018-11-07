@@ -8,6 +8,7 @@
 - [#3275]: `--watch-extensions` no longer implies `js`; it must be explicitly added ([@TheDancingCode])
 - [#2908]: `tap` reporter emits error messages ([@chrmod])
 - [#3345], [#1635]: Tests failed in "after each" hooks only report as failed ([@outsideris])
+- (from #3356) `debug` and `d` are no longer aliases of `--debug`
 
 # 5.2.0 / 2018-05-18
 
