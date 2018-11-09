@@ -46,18 +46,84 @@ describe('Runnable(title, fn)', function() {
   });
 
   describe('#timeout(ms)', function() {
-    it('should set the timeout', function() {
-      var run = new Runnable();
-      run.timeout(1000);
-      assert(run.timeout() === 1000);
-    });
-  });
+    var MIN_TIMEOUT = 0;
+    var MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
 
-  describe('#timeout(ms) when ms>2^31', function() {
-    it('should set disabled', function() {
-      var run = new Runnable();
-      run.timeout(1e10);
-      assert(run.enableTimeouts() === false);
+    describe('when value is less than lower bound', function() {
+      it('should clamp to lower bound given numeric', function() {
+        var run = new Runnable();
+        run.timeout(-1);
+        assert(run.timeout() === MIN_TIMEOUT);
+      });
+      // :TODO: Our internal version of `ms` can't handle negative time,
+      // but package version can. Skip this check until that change is merged.
+      it.skip('should clamp to lower bound given timestamp', function() {
+        var run = new Runnable();
+        run.timeout('-1 ms');
+        assert(run.timeout() === MIN_TIMEOUT);
+      });
+    });
+
+    describe('when value is equal to lower bound', function() {
+      it('should set the value and disable timeouts given numeric', function() {
+        var run = new Runnable();
+        run.timeout(MIN_TIMEOUT);
+        assert(run.timeout() === MIN_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
+      it('should set the value and disable timeouts given timestamp', function() {
+        var run = new Runnable();
+        run.timeout(MIN_TIMEOUT + 'ms');
+        assert(run.timeout() === MIN_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
+    });
+
+    describe('when value is within `setTimeout` bounds', function() {
+      var oneSecond = 1000;
+
+      it('should set the timeout given numeric', function() {
+        var run = new Runnable();
+        run.timeout(oneSecond);
+        assert(run.timeout() === oneSecond);
+        assert(run.enableTimeouts() === true);
+      });
+      it('should set the timeout given timestamp', function() {
+        var run = new Runnable();
+        run.timeout('1s');
+        assert(run.timeout() === oneSecond);
+        assert(run.enableTimeouts() === true);
+      });
+    });
+
+    describe('when value is equal to upper bound', function() {
+      it('should set the value and disable timeout given numeric', function() {
+        var run = new Runnable();
+        run.timeout(MAX_TIMEOUT);
+        assert(run.timeout() === MAX_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
+      it('should set the value and disable timeout given timestamp', function() {
+        var run = new Runnable();
+        run.timeout(MAX_TIMEOUT + 'ms');
+        assert(run.timeout() === MAX_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
+    });
+
+    describe('when value is greater than `setTimeout` limit', function() {
+      it('should clamp to upper bound given numeric', function() {
+        var run = new Runnable();
+        run.timeout(MAX_TIMEOUT + 1);
+        assert(run.timeout() === MAX_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
+      it('should clamp to upper bound given timestamp', function() {
+        var run = new Runnable();
+        run.timeout('24.9d'); // 2151360000ms
+        assert(run.timeout() === MAX_TIMEOUT);
+        assert(run.enableTimeouts() === false);
+      });
     });
   });
 
