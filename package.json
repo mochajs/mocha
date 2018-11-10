@@ -446,9 +446,18 @@
     "type": "git",
     "url": "https://github.com/mochajs/mocha.git"
   },
+  "bugs": {
+    "url": "https://github.com/mochajs/mocha/issues/"
+  },
+  "homepage": "https://mochajs.org/",
+  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
+  },
+  "directories": {
+    "lib": "./lib",
+    "test": "./test"
   },
   "engines": {
     "node": ">= 6.0.0"
@@ -502,6 +511,7 @@
     "markdownlint-cli": "^0.9.0",
     "nps": "^5.7.1",
     "nyc": "^11.7.3",
+    "package-json-versionify": "^1.0.4",
     "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.5.2",
     "svgo": "^0.7.2",
@@ -518,9 +528,10 @@
     "mocha.js",
     "browser-entry.js"
   ],
-  "directories": {
-    "lib": "lib",
-    "test": "test"
+  "browserify": {
+    "transform": [
+      "package-json-versionify"
+    ]
   },
   "browser": {
     "growl": "./lib/browser/growl.js",
@@ -531,13 +542,8 @@
     "path": false,
     "supports-color": false
   },
-  "homepage": "https://mochajs.org/",
-  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "prettier": {
     "singleQuote": true,
     "bracketSpacing": false
-  },
-  "bugs": {
-    "url": "https://github.com/mochajs/mocha/issues/"
   }
 }
