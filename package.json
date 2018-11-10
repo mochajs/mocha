@@ -479,7 +479,8 @@
     "he": "1.1.1",
     "minimatch": "3.0.4",
     "mkdirp": "0.5.1",
-    "supports-color": "5.4.0"
+    "supports-color": "5.4.0",
+    "ms": "2.1.1"
   },
   "devDependencies": {
     "@mocha/docdash": "^1.0.1",
