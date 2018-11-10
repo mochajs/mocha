@@ -26,7 +26,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
-- [growl notification support](#mochaopts)
+- [Growl notifications](#desktop-notification-support)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
@@ -70,6 +70,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
+- [Desktop Notification Support](#desktop-notification-support)
 - [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
 - [Editor Plugins](#editor-plugins)
@@ -788,7 +789,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
     -A, --async-only                        force all tests to take a callback (async) or return a promise
     -c, --colors                            force enabling of colors
     -C, --no-colors                         force disabling of colors
-    -G, --growl                             enable growl notification support
+    -G, --growl                             enable Growl notification support
     -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
     -R, --reporter <name>                   specify the reporter to use (default: spec)
     -S, --sort                              sort test files
@@ -1293,6 +1294,30 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 
 [Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
 
+## Desktop Notification Support
+
+Desktop notifications allow asynchronous communication of events without
+forcing you to react to a notification immediately. Their appearance
+and specific functionality vary across platforms. They typically disappear
+automatically after a short delay, but their content is often stored in some
+manner that allows you to access past notifications.
+
+[Growl][] was an early notification system implementation for OS X and Windows,
+hence, the name of Mocha's `--growl` option.
+
+In order to use desktop notifications with the command-line interface (CLI),
+you **must** first install some platform-specific prerequisite software.
+Instructions for doing so can be found [here](https://github.com/mochajs/mocha/wiki/Growl-Notifications).
+
+Enable Mocha's desktop notifications as follows:
+
+```bash
+$ mocha --growl
+```
+
+When the root suite completes test execution, a desktop notification should
+appear informing you whether your tests passed or not.
+
 ## `mocha.opts`
 
 Back on the server, Mocha will attempt to load `"./test/mocha.opts"` as a
@@ -1319,11 +1344,11 @@ For example, suppose you have the following `mocha.opts` file:
 
 The settings above will default the reporter to `dot`, require the `should`
 library, and use `bdd` as the interface. With this, you may then invoke `mocha`
-with additional arguments, here enabling [Growl](http://growl.info/) support,
-and changing the reporter to `list`:
+with additional arguments, here changing the reporter to `list` and setting the
+slow threshold to half a second:
 
 ```sh
-$ mocha --reporter list --growl
+$ mocha --reporter list --slow 500
 ```
 
 ## The `test/` Directory
@@ -1414,3 +1439,12 @@ $ REPORTER=nyan npm test
 ## More Information
 
 In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/) or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
+
+
+[//]: # (Cross reference section)
+
+[Growl]: http://growl.info/
+[Growl-install]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
+[Mocha-gitter]: https://gitter.im/mochajs/mocha
+[Mocha-website]: https://mochajs.org/
+
