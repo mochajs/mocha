@@ -4,22 +4,17 @@ var reporters = require('../../').reporters;
 var TAP = reporters.TAP;
 
 var createMockRunner = require('./helpers').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('TAP reporter', function() {
-  var stdout;
-  var stdoutWrite;
   var runner;
+  var options = {};
+  var runReporter = makeRunReporter(TAP);
   var expectedTitle = 'some title';
   var countAfterTestEnd = 2;
   var test;
 
   beforeEach(function() {
-    stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      stdoutWrite.call(process.stdout, string, enc, callback);
-    };
     test = {
       fullTitle: function() {
         return expectedTitle;
@@ -29,7 +24,7 @@ describe('TAP reporter', function() {
   });
 
   afterEach(function() {
-    process.stdout.write = stdoutWrite;
+    runner = undefined;
   });
 
   describe('on start', function() {
@@ -43,10 +38,9 @@ describe('TAP reporter', function() {
         expectedString = string;
         return expectedTotal;
       };
-      TAP.call({}, runner);
+      var stdout = runReporter({}, runner, options);
 
       var expectedArray = ['1..' + expectedTotal + '\n'];
-      process.stdout.write = stdoutWrite;
 
       expect(stdout, 'to equal', expectedArray);
       expect(expectedString, 'to be', expectedSuite);
@@ -64,9 +58,7 @@ describe('TAP reporter', function() {
       );
       runner.suite = '';
       runner.grepTotal = function() {};
-      TAP.call({}, runner);
-
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({}, runner, options);
 
       var expectedMessage =
         'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
@@ -80,9 +72,7 @@ describe('TAP reporter', function() {
 
       runner.suite = '';
       runner.grepTotal = function() {};
-      TAP.call({}, runner);
-
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({}, runner, options);
 
       var expectedMessage =
         'ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n';
@@ -105,6 +95,7 @@ describe('TAP reporter', function() {
         var error = {
           message: expectedErrorMessage
         };
+        runner = createMockRunner('test end fail', 'test end', 'fail');
         runner.on = function(event, callback) {
           if (event === 'test end') {
             callback();
@@ -115,9 +106,7 @@ describe('TAP reporter', function() {
         };
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
-
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
@@ -142,9 +131,7 @@ describe('TAP reporter', function() {
         );
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
-
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
@@ -169,6 +156,7 @@ describe('TAP reporter', function() {
           stack: expectedStack,
           message: expectedErrorMessage
         };
+        runner = createMockRunner('test end fail', 'test end', 'fail');
         runner.on = function(event, callback) {
           if (event === 'test end') {
             callback();
@@ -179,9 +167,7 @@ describe('TAP reporter', function() {
         };
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
-
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
@@ -193,6 +179,7 @@ describe('TAP reporter', function() {
     });
     describe('if there is no error stack or error message', function() {
       it('should write expected message only', function() {
+        runner = createMockRunner('test end fail', 'test end', 'fail');
         var error = {};
         runner.on = runner.once = function(event, callback) {
           if (event === 'test end') {
@@ -204,9 +191,7 @@ describe('TAP reporter', function() {
         };
         runner.suite = '';
         runner.grepTotal = function() {};
-        TAP.call({}, runner);
-
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n'
@@ -223,9 +208,7 @@ describe('TAP reporter', function() {
       runner = createMockRunner('fail end pass', 'fail', 'end', 'pass', test);
       runner.suite = '';
       runner.grepTotal = function() {};
-      TAP.call({}, runner);
-
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({}, runner, options);
 
       var totalTests = numberOfPasses + numberOfFails;
       var expectedArray = [
