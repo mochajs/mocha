@@ -1,3 +1,7 @@
+###
+### .travis.yml
+###
+
 # these are executed in order.  each must pass for the next to be run
 stages:
   - smoke # this ensures a "user" install works properly
@@ -7,7 +11,11 @@ stages:
 
 # defaults
 language: node_js
-node_js: '10'
+node_js: '11'
+addons:
+  apt:
+    packages:
+    - libnotify-bin
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
@@ -32,7 +40,7 @@ jobs:
 
     - &node
       script: npm start test.node
-      node_js: '9'
+      node_js: '10'
 
     - <<: *node
       node_js: '8'
@@ -67,7 +75,7 @@ jobs:
           - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
 
     - <<: *smoke
-      node_js: '9'
+      node_js: '10'
 
     - <<: *smoke
       node_js: '8'

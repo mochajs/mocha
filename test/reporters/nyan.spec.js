@@ -5,41 +5,33 @@ var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Nyan reporter', function() {
   describe('events', function() {
     var runner;
-    var stdout;
-    var stdoutWrite;
     var calledDraw;
-
-    beforeEach(function() {
-      stdout = [];
-      stdoutWrite = process.stdout.write;
-      process.stdout.write = function(string, enc, callback) {
-        stdout.push(string);
-        stdoutWrite.call(process.stdout, string, enc, callback);
-      };
-    });
+    var options = {};
+    var runReporter = makeRunReporter(NyanCat);
 
     afterEach(function() {
-      process.stdout.write = stdoutWrite;
+      runner = undefined;
     });
 
     describe('on start', function() {
       it('should call draw', function() {
         calledDraw = false;
         runner = createMockRunner('start', 'start');
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {
               calledDraw = true;
             },
             generateColors: function() {}
           },
-          runner
+          runner,
+          options
         );
-        process.stdout.write = stdoutWrite;
 
         expect(calledDraw, 'to be', true);
       });
@@ -48,16 +40,16 @@ describe('Nyan reporter', function() {
       it('should call draw', function() {
         calledDraw = false;
         runner = createMockRunner('pending', 'pending');
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {
               calledDraw = true;
             },
             generateColors: function() {}
           },
-          runner
+          runner,
+          options
         );
-        process.stdout.write = stdoutWrite;
 
         expect(calledDraw, 'to be', true);
       });
@@ -70,16 +62,16 @@ describe('Nyan reporter', function() {
           slow: function() {}
         };
         runner = createMockRunner('pass', 'pass', null, null, test);
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {
               calledDraw = true;
             },
             generateColors: function() {}
           },
-          runner
+          runner,
+          options
         );
-        process.stdout.write = stdoutWrite;
 
         expect(calledDraw, 'to be', true);
       });
@@ -91,16 +83,16 @@ describe('Nyan reporter', function() {
           err: ''
         };
         runner = createMockRunner('fail', 'fail', null, null, test);
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {
               calledDraw = true;
             },
             generateColors: function() {}
           },
-          runner
+          runner,
+          options
         );
-        process.stdout.write = stdoutWrite;
 
         expect(calledDraw, 'to be', true);
       });
@@ -109,7 +101,7 @@ describe('Nyan reporter', function() {
       it('should call epilogue', function() {
         var calledEpilogue = false;
         runner = createMockRunner('end', 'end');
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {},
             generateColors: function() {},
@@ -117,28 +109,28 @@ describe('Nyan reporter', function() {
               calledEpilogue = true;
             }
           },
-          runner
+          runner,
+          options
         );
-        process.stdout.write = stdoutWrite;
 
         expect(calledEpilogue, 'to be', true);
       });
       it('should write numberOfLines amount of new lines', function() {
         var expectedNumberOfLines = 4;
         runner = createMockRunner('end', 'end');
-        NyanCat.call(
+        var stdout = runReporter(
           {
             draw: function() {},
             generateColors: function() {},
             epilogue: function() {}
           },
-          runner
+          runner,
+          options
         );
 
         var arrayOfNewlines = stdout.filter(function(value) {
           return value === '\n';
         });
-        process.stdout.write = stdoutWrite;
 
         expect(arrayOfNewlines, 'to have length', expectedNumberOfLines);
       });
@@ -149,16 +141,16 @@ describe('Nyan reporter', function() {
           showCalled = true;
         };
         runner = createMockRunner('end', 'end');
-        NyanCat.call(
+        runReporter(
           {
             draw: function() {},
             generateColors: function() {},
             epilogue: function() {}
           },
-          runner
+          runner,
+          options
         );
 
-        process.stdout.write = stdoutWrite;
         expect(showCalled, 'to be', true);
         Base.cursor.show = cachedShow;
       });
@@ -199,7 +191,6 @@ describe('Nyan reporter', function() {
           cursorUp: function() {}
         });
 
-        process.stdout.write = stdoutWrite;
         var expectedArray = [
           '\u001b[0C',
           '_,------,',
@@ -235,7 +226,6 @@ describe('Nyan reporter', function() {
           cursorUp: function() {}
         });
 
-        // process.stdout.write = stdoutWrite;
         var expectedArray = [
           '\u001b[0C',
           '_,------,',
@@ -276,7 +266,6 @@ describe('Nyan reporter', function() {
       var expectedNumber = 25;
 
       nyanCat.cursorDown(expectedNumber);
-      process.stdout.write = stdoutWrite;
       var expectedArray = ['\u001b[' + expectedNumber + 'B'];
       expect(stdout, 'to equal', expectedArray);
     });
@@ -303,7 +292,6 @@ describe('Nyan reporter', function() {
       var expectedNumber = 25;
 
       nyanCat.cursorUp(expectedNumber);
-      process.stdout.write = stdoutWrite;
       var expectedArray = ['\u001b[' + expectedNumber + 'A'];
       expect(stdout, 'to equal', expectedArray);
     });
@@ -432,13 +420,16 @@ describe('Nyan reporter', function() {
     var stdoutWrite;
     var stdout;
     var cachedColor;
+    var showOutput = false;
 
     beforeEach(function() {
       stdout = [];
       stdoutWrite = process.stdout.write;
       process.stdout.write = function(string, enc, callback) {
         stdout.push(string);
-        stdoutWrite.call(process.stdout, string, enc, callback);
+        if (showOutput) {
+          stdoutWrite.call(process.stdout, string, enc, callback);
+        }
       };
       cachedColor = Base.color;
       Base.color = function(type, n) {
@@ -496,13 +487,16 @@ describe('Nyan reporter', function() {
   describe('drawRainbow', function() {
     var stdoutWrite;
     var stdout;
+    var showOutput = false;
 
     beforeEach(function() {
       stdout = [];
       stdoutWrite = process.stdout.write;
       process.stdout.write = function(string, enc, callback) {
         stdout.push(string);
-        stdoutWrite.call(process.stdout, string, enc, callback);
+        if (showOutput) {
+          stdoutWrite.call(process.stdout, string, enc, callback);
+        }
       };
     });
 
@@ -524,7 +518,6 @@ describe('Nyan reporter', function() {
         numberOfLines: 1
       });
 
-      process.stdout.write = stdoutWrite;
       var expectedArray = [
         '\u001b[' + expectedWidth + 'C',
         expectedContents,
