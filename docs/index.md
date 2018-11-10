@@ -1440,11 +1440,9 @@ $ REPORTER=nyan npm test
 
 In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/) or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
 
-
 [//]: # (Cross reference section)
 
 [Growl]: http://growl.info/
 [Growl-install]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
 [Mocha-gitter]: https://gitter.im/mochajs/mocha
 [Mocha-website]: https://mochajs.org/
-
