@@ -34,6 +34,16 @@ describe('Mocha', function() {
         });
       }
     );
+
+    it('should emit start event', function(done) {
+      var mocha = new Mocha(blankOpts);
+      mocha.run().on('start', done);
+    });
+
+    it('should emit end event', function(done) {
+      var mocha = new Mocha(blankOpts);
+      mocha.run().on('end', done);
+    });
   });
 
   describe('.addFile()', function() {

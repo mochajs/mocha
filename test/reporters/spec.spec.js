@@ -5,28 +5,23 @@ var Spec = reporters.Spec;
 var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Spec reporter', function() {
-  var stdout;
-  var stdoutWrite;
   var runner;
+  var options = {};
+  var runReporter = makeRunReporter(Spec);
   var useColors;
   var expectedTitle = 'expectedTitle';
 
   beforeEach(function() {
-    stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      stdoutWrite.call(process.stdout, string, enc, callback);
-    };
     useColors = Base.useColors;
     Base.useColors = false;
   });
 
   afterEach(function() {
     Base.useColors = useColors;
-    process.stdout.write = stdoutWrite;
+    runner = undefined;
   });
 
   describe('on suite', function() {
@@ -35,8 +30,7 @@ describe('Spec reporter', function() {
         title: expectedTitle
       };
       runner = createMockRunner('suite', 'suite', null, null, suite);
-      Spec.call({epilogue: function() {}}, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({epilogue: function() {}}, runner, options);
       var expectedArray = [expectedTitle + '\n'];
       expect(stdout, 'to equal', expectedArray);
     });
@@ -47,8 +41,7 @@ describe('Spec reporter', function() {
         title: expectedTitle
       };
       runner = createMockRunner('pending test', 'pending', null, null, suite);
-      Spec.call({epilogue: function() {}}, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({epilogue: function() {}}, runner, options);
       var expectedArray = ['  - ' + expectedTitle + '\n'];
       expect(stdout, 'to equal', expectedArray);
     });
@@ -65,8 +58,7 @@ describe('Spec reporter', function() {
           }
         };
         runner = createMockRunner('pass', 'pass', null, null, test);
-        Spec.call({epilogue: function() {}}, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedString =
           '  ' +
           Base.symbols.ok +
@@ -90,8 +82,7 @@ describe('Spec reporter', function() {
           }
         };
         runner = createMockRunner('pass', 'pass', null, null, test);
-        Spec.call({epilogue: function() {}}, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter({epilogue: function() {}}, runner, options);
         var expectedString =
           '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
         expect(stdout[0], 'to be', expectedString);
@@ -105,8 +96,7 @@ describe('Spec reporter', function() {
         title: expectedTitle
       };
       runner = createMockRunner('fail', 'fail', null, null, test);
-      Spec.call({epilogue: function() {}}, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({epilogue: function() {}}, runner, options);
       var expectedArray = ['  ' + functionCount + ') ' + expectedTitle + '\n'];
       expect(stdout, 'to equal', expectedArray);
     });
