@@ -4,26 +4,18 @@ var reporters = require('../../').reporters;
 var Markdown = reporters.Markdown;
 
 var createMockRunner = require('./helpers').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Markdown reporter', function() {
-  var stdout;
-  var stdoutWrite;
   var runner;
+  var options = {};
+  var runReporter = makeRunReporter(Markdown);
   var expectedTitle = 'expected title';
   var expectedFullTitle = 'full title';
   var sluggedFullTitle = 'full-title';
 
-  beforeEach(function() {
-    stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      stdoutWrite.call(process.stdout, string, enc, callback);
-    };
-  });
-
   afterEach(function() {
-    process.stdout.write = stdoutWrite;
+    runner = undefined;
   });
 
   describe("on 'suite'", function() {
@@ -51,8 +43,7 @@ describe('Markdown reporter', function() {
         expectedSuite
       );
       runner.suite = expectedSuite;
-      Markdown.call({}, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({}, runner, options);
 
       var expectedArray = [
         '# TOC\n',
@@ -97,8 +88,7 @@ describe('Markdown reporter', function() {
       };
       runner = createMockRunner('pass end', 'pass', 'end', null, expectedTest);
       runner.suite = expectedSuite;
-      Markdown.call({}, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter({}, runner, options);
 
       var expectedArray = [
         '# TOC\n',
