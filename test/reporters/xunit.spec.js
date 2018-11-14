@@ -18,6 +18,8 @@ describe('XUnit reporter', function() {
   var expectedClassName = 'fullTitle';
   var expectedTitle = 'some title';
   var expectedMessage = 'some message';
+  var expectedDiff =
+    '\n      + expected - actual\n\n      -foo\n      +bar\n      ';
   var expectedStack = 'some-stack';
   var expectedWrite = null;
 
@@ -214,6 +216,8 @@ describe('XUnit reporter', function() {
           },
           duration: 1000,
           err: {
+            actual: 'foo',
+            expected: 'bar',
             message: expectedMessage,
             stack: expectedStack
           }
@@ -234,6 +238,8 @@ describe('XUnit reporter', function() {
           expectedTitle +
           '" time="1"><failure>' +
           expectedMessage +
+          '\n' +
+          expectedDiff +
           '\n' +
           expectedStack +
           '</failure></testcase>';

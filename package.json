@@ -446,9 +446,18 @@
     "type": "git",
     "url": "https://github.com/mochajs/mocha.git"
   },
+  "bugs": {
+    "url": "https://github.com/mochajs/mocha/issues/"
+  },
+  "homepage": "https://mochajs.org/",
+  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
+  },
+  "directories": {
+    "lib": "./lib",
+    "test": "./test"
   },
   "engines": {
     "node": ">= 6.0.0"
@@ -461,7 +470,7 @@
   },
   "dependencies": {
     "browser-stdout": "1.3.1",
-    "commander": "2.15.1",
+    "commander": "2.19.0",
     "debug": "3.1.0",
     "diff": "3.5.0",
     "escape-string-regexp": "1.0.5",
@@ -474,9 +483,9 @@
   },
   "devDependencies": {
     "@mocha/docdash": "^1.0.1",
-    "assetgraph-builder": "^6.4.1",
-    "browserify": "^16.2.2",
-    "chai": "^4.1.2",
+    "assetgraph-builder": "^6.4.2",
+    "browserify": "^16.2.3",
+    "chai": "^4.2.0",
     "coffee-script": "^1.10.0",
     "coveralls": "^3.0.2",
     "cross-spawn": "^6.0.5",
@@ -486,38 +495,43 @@
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-prettier": "^2.7.0",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.0.1",
     "husky": "^0.14.3",
     "jsdoc": "^3.5.5",
-    "karma": "^3.0.0",
+    "karma": "^3.1.1",
     "karma-browserify": "^5.3.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.4",
     "karma-sauce-launcher": "^1.2.0",
-    "lint-staged": "^7.2.2",
+    "lint-staged": "^7.3.0",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.9.0",
-    "nps": "^5.9.2",
+    "nps": "^5.9.3",
     "nyc": "^11.9.0",
     "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.5.2",
     "svgo": "^0.7.2",
-    "through2": "^2.0.1",
-    "unexpected": "^10.38.0",
+    "through2": "^2.0.5",
+    "unexpected": "^10.39.1",
     "watchify": "^3.7.0"
   },
   "files": [
-    "bin",
-    "images",
-    "lib",
+    "bin/{*mocha,options.js}",
+    "assets/growl/*.png",
+    "lib/**/*.{js,html}",
     "index.js",
     "mocha.css",
     "mocha.js",
     "browser-entry.js"
   ],
+  "browserify": {
+    "transform": [
+      "package-json-versionify"
+    ]
+  },
   "browser": {
     "growl": "./lib/browser/growl.js",
     "tty": "./lib/browser/tty.js",
@@ -527,8 +541,6 @@
     "path": false,
     "supports-color": false
   },
-  "homepage": "https://mochajs.org",
-  "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "prettier": {
     "singleQuote": true,
     "bracketSpacing": false

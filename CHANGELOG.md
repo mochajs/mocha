@@ -477,13 +477,13 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :nut_and_bolt: Other
 
-- [#2778]: Move linting into an npm script ([@Munter])
+- [#2807]: Move linting into an npm script ([@Munter])
 
 [@chrisleck]: https://github.com/chrisleck
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
-[#2778]: https://github.com/mochajs/mocha/pull/2778
+[#2807]: https://github.com/mochajs/mocha/pull/2807
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 

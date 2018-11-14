@@ -22,4 +22,5 @@ yarn.lock
 docs/_site
 docs/_dist
 docs/api
+out/
 .vscode/
