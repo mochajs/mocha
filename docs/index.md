@@ -26,7 +26,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
-- [Growl notifications](#desktop-notification-support)
+- [Growl support](#desktop-notification-support)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
@@ -1303,6 +1303,11 @@ manner that allows you to access past notifications.
 [Growl][] was an early notification system implementation for OS X and Windows,
 hence, the name of Mocha's `--growl` option.
 
+Once enabled, when your root suite completes test execution, a desktop
+notification should appear informing you whether your tests passed or failed.
+
+### Node-based notifications
+
 In order to use desktop notifications with the command-line interface (CLI),
 you **must** first install some platform-specific prerequisite software.
 Instructions for doing so can be found [here](https://github.com/mochajs/mocha/wiki/Growl-Notifications).
@@ -1313,8 +1318,42 @@ Enable Mocha's desktop notifications as follows:
 $ mocha --growl
 ```
 
-When the root suite completes test execution, a desktop notification should
-appear informing you whether your tests passed or not.
+### Browser-based notifications
+
+Web notification support is being made available for current versions of
+modern browsers. Ensure your browser version supports both
+[promises](https://caniuse.com/#feat=promises) and
+[web notifications](https://caniuse.com/#feat=notifications). As the
+Notification API evolved over time, **do not expect** the minimum possible
+browser version to necessarily work.
+
+Enable Mocha's web notifications with a slight modification to your
+client-side mocha HTML. Add `mocha.growl()` prior to running your tests as
+shown below:
+
+```html
+&lt;!DOCTYPE html>
+&lt;html>
+  &lt;head>
+    &lt;title>Mocha&lt;/title>
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+    &lt;link rel="stylesheet" href="mocha.css" />
+  &lt;/head>
+  &lt;body>
+    &lt;div id="mocha">&lt;/div>
+    &lt;script src="mocha.js">&lt;/script>
+    &lt;script>
+      mocha.setup('bdd');
+      mocha.growl();       // &lt;-- activate web notifications
+    &lt;/script>
+    &lt;script src="tests.js">&lt;/script>
+    &lt;script>
+      mocha.run();
+    &lt;/script>
+  &lt;/body>
+&lt;/html>
+```
 
 ## `mocha.opts`
 
