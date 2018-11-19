@@ -1328,8 +1328,8 @@ Notification API evolved over time, **do not expect** the minimum possible
 browser version to necessarily work.
 
 Enable Mocha's web notifications with a slight modification to your
-client-side mocha HTML. Add `mocha.growl()` prior to running your tests as
-shown below:
+client-side mocha HTML. Add a call to `mocha.growl()` prior to running your
+tests as shown below:
 
 ```html
 <!DOCTYPE html>
@@ -1343,12 +1343,12 @@ shown below:
   <body>
     <div id="mocha"></div>
     <script src="mocha.js"></script>
-    <script>
+    <script class="mocha-init">
       mocha.setup('bdd');
-      mocha.growl();      // <-- add this line to activate web notifications
+      mocha.growl();      // <-- Enables Mocha's web notifications
     </script>
     <script src="tests.js"></script>
-    <script>
+    <script class="mocha-run">
       mocha.run();
     </script>
   </body>
