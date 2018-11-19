@@ -1332,27 +1332,27 @@ client-side mocha HTML. Add `mocha.growl()` prior to running your tests as
 shown below:
 
 ```html
-&lt;!DOCTYPE html>
-&lt;html>
-  &lt;head>
-    &lt;title>Mocha&lt;/title>
-    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
-    &lt;link rel="stylesheet" href="mocha.css" />
-  &lt;/head>
-  &lt;body>
-    &lt;div id="mocha">&lt;/div>
-    &lt;script src="mocha.js">&lt;/script>
-    &lt;script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="mocha.js"></script>
+    <script>
       mocha.setup('bdd');
-      mocha.growl();       // &lt;-- activate web notifications
-    &lt;/script>
-    &lt;script src="tests.js">&lt;/script>
-    &lt;script>
+      mocha.growl();      // <-- add this line to activate web notifications
+    </script>
+    <script src="tests.js"></script>
+    <script>
       mocha.run();
-    &lt;/script>
-  &lt;/body>
-&lt;/html>
+    </script>
+  </body>
+</html>
 ```
 
 ## `mocha.opts`
