@@ -1240,12 +1240,14 @@ A typical setup might look something like the following, where we call `mocha.se
   <script src="https://unpkg.com/chai/chai.js"></script>
   <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
 
-  <script>mocha.setup('bdd')</script>
+  <script class="mocha-init">
+    mocha.setup('bdd');
+    mocha.checkLeaks();
+  </script>
   <script src="test.array.js"></script>
   <script src="test.object.js"></script>
   <script src="test.xhr.js"></script>
-  <script>
-    mocha.checkLeaks();
+  <script class="mocha-exec">
     mocha.run();
   </script>
 </body>
@@ -1338,17 +1340,17 @@ tests as shown below:
     <title>Mocha</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="mocha.css" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha@5.3.0/mocha.css" />
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="mocha.js"></script>
+    <script src="https://unpkg.com/mocha@5.3.0/mocha.js"></script>
     <script class="mocha-init">
       mocha.setup('bdd');
-      mocha.growl();      // <-- Enables Mocha's web notifications
+      mocha.growl();      // <-- Enables web notifications
     </script>
     <script src="tests.js"></script>
-    <script class="mocha-run">
+    <script class="mocha-exec">
       mocha.run();
     </script>
   </body>
