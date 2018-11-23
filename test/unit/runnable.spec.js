@@ -55,9 +55,7 @@ describe('Runnable(title, fn)', function() {
         run.timeout(-1);
         assert(run.timeout() === MIN_TIMEOUT);
       });
-      // :TODO: Our internal version of `ms` can't handle negative time,
-      // but package version can. Skip this check until that change is merged.
-      it.skip('should clamp to lower bound given timestamp', function() {
+      it('should clamp to lower bound given timestamp', function() {
         var run = new Runnable();
         run.timeout('-1 ms');
         assert(run.timeout() === MIN_TIMEOUT);

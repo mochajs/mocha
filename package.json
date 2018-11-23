@@ -479,6 +479,7 @@
     "he": "1.1.1",
     "minimatch": "3.0.4",
     "mkdirp": "0.5.1",
+    "ms": "2.1.1",
     "supports-color": "5.4.0"
   },
   "devDependencies": {
