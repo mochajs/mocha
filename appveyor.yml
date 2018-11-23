@@ -22,7 +22,7 @@ install:
   ## Manual Growl install
   - ps: Add-AppveyorMessage "Installing Growl..."
   - ps: $exePath = "$($env:USERPROFILE)\GrowlInstaller.exe"
-  - ps: (New-Object Net.WebClient).DownloadFile('http://www.growlforwindows.com/gfw/downloads/GrowlInstaller.exe', $exePath)
+  - ps: (New-Object Net.WebClient).DownloadFile('https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe', $exePath)
   - ps: mkdir C:\GrowlInstaller | out-null
   - ps: 7z x $exePath -oC:\GrowlInstaller | out-null
   - ps: cmd /c start /wait msiexec /i C:\GrowlInstaller\Growl_v2.0.msi /quiet
