@@ -21,12 +21,17 @@ matrix:
 install:
   ## Manual Growl install
   - ps: Add-AppveyorMessage "Installing Growl..."
-  - ps: $exePath = "$($env:USERPROFILE)\GrowlInstaller.exe"
-  - ps: (New-Object Net.WebClient).DownloadFile('http://www.growlforwindows.com/gfw/downloads/GrowlInstaller.exe', $exePath)
+  - ps: $seaURL = "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
+  - ps: $seaPath = "$($env:USERPROFILE)\GrowlInstaller.exe"
+  - ps: $webclient = New-Object Net.WebClient
+  - ps: $webclient.DownloadFile($seaURL, $seaPath)
   - ps: mkdir C:\GrowlInstaller | out-null
-  - ps: 7z x $exePath -oC:\GrowlInstaller | out-null
+  - ps: 7z x $seaPath -oC:\GrowlInstaller | out-null
   - ps: cmd /c start /wait msiexec /i C:\GrowlInstaller\Growl_v2.0.msi /quiet
   - ps: $env:path = "C:\Program Files (x86)\Growl for Windows;$env:path"
+  ## Growl requires some time before it's ready to handle notifications
+  - ps: Add-AppveyorMessage "Starting Growl service..."
+  - ps: Start-Process -NoNewWindow Growl
   ## Node-related installs
   - ps: Add-AppveyorMessage "Installing Node..."
   - set PATH=%APPDATA%\npm;C:\MinGW\bin;%PATH%
@@ -41,22 +46,16 @@ install:
 platform:
   - x64
 build: script
-before_build:
-  ## Growl requires some time before it's ready to handle notifications
-  - ps: Start-Process -NoNewWindow Growl
-  - ps: Add-AppveyorMessage "Started Growl service..."
-  - ps: Start-Sleep -Milliseconds 2000
 build_script:
-  ## Placeholder command
-  - ps: Start-Sleep -Milliseconds 0
-  #- ps: Add-AppveyorMessage "Verify Growl responding..."
-  #- ps: growlnotify test
+  - ps: Add-AppveyorMessage "Verify Growl responding..."
+  - ps: growlnotify test
 
 ## Test configuration
 before_test:
   - set CI=true
 test_script:
   - ps: Add-AppveyorMessage "Displaying version information"
+  - ps: (Get-ComputerInfo -Property OsName,OsVersion,OsArchitecture | Format-Table -HideTableHeaders -AutoSize | Out-String).Trim()
   - node --version
   - npm --version
   - ps: Add-AppveyorMessage "Running tests..."
