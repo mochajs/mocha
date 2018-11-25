@@ -21,7 +21,7 @@ addons:
 before_install: |
   [[ ! -x ~/npm/node_modules/.bin/npm ]] && {
     # caching feature creates `~/npm` for us
-    cd ~/npm && npm install npm@^5
+    cd ~/npm && npm install npm
     cd -
   } || true
   # avoids bugs around https://github.com/travis-ci/travis-ci/issues/5092

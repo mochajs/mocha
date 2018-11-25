@@ -37,7 +37,7 @@ install:
   - set PATH=%APPDATA%\npm;C:\MinGW\bin;%PATH%
   - ps: Install-Product node $env:nodejs_version x64
   - ps: Add-AppveyorMessage "Installing npm..."
-  - npm install -g npm@^5
+  - npm install -g npm
   ## Mocha-related package installs
   - ps: Add-AppveyorMessage "Installing Mocha dependencies..."
   - npm ci --ignore-scripts
