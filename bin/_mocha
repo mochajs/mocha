@@ -527,7 +527,9 @@ const args = program.args;
 // default files to test/*.{js,coffee}
 
 if (!args.length) {
-  args.push('test');
+  process._testDirectory
+    ? args.push(process._testDirectory)
+    : args.push('test');
 }
 
 args.forEach(arg => {

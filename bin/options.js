@@ -5,6 +5,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Export `getOptions`.
@@ -69,9 +70,26 @@ function getOptions() {
     return;
   }
 
+  try {
+    const testDir = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')
+    ).directories['test'];
+
+    if (testDir && testDir !== 'test') {
+      process._testDirectory = testDir;
+    }
+  } catch (ignore) {
+    // NOTE: should console.error() and throw the error
+  }
+
   const optsPath =
     process.argv.indexOf('--opts') === -1
-      ? defaultPathname
+      ? process._testDirectory
+        ? path.join(
+            process._testDirectory,
+            defaultPathname.slice(defaultPathname.lastIndexOf('/') + 1)
+          )
+        : defaultPathname
       : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {
