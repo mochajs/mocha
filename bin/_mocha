@@ -18,7 +18,7 @@ const utils = Mocha.utils;
 const interfaceNames = Object.keys(Mocha.interfaces);
 const join = path.join;
 const cwd = process.cwd();
-const getOptions = require('./options');
+const options = require('./options');
 const mocha = new Mocha();
 
 /**
@@ -341,7 +341,7 @@ program.on('option:require', mod => {
 
 // If not already done, load mocha.opts
 if (!process.env.LOADED_MOCHA_OPTS) {
-  getOptions();
+  options.getOptions();
 }
 
 // parse args
@@ -524,12 +524,11 @@ mocha.ui(program.ui);
 
 const args = program.args;
 
-// default files to test/*.{js,coffee}
+// sets directory for test files with default to test/*.{js,coffee}
 
 if (!args.length) {
-  process._testDirectory
-    ? args.push(process._testDirectory)
-    : args.push('test');
+  const testDirectory = options.getTestDirectory();
+  testDirectory ? args.push(testDirectory) : args.push('test');
 }
 
 args.forEach(arg => {

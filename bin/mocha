@@ -9,7 +9,7 @@
 
 const spawn = require('child_process').spawn;
 const path = require('path');
-const getOptions = require('./options');
+const getOptions = require('./options').getOptions;
 const args = [path.join(__dirname, '_mocha')];
 
 // Load mocha.opts into process.argv

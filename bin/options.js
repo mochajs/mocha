@@ -3,15 +3,18 @@
 /**
  * Dependencies.
  */
-
 const fs = require('fs');
 const path = require('path');
+const readPkgUp = require('read-pkg-up');
 
 /**
  * Export `getOptions`.
+ * Export `getTestDirectory`.
  */
-
-module.exports = getOptions;
+module.exports = {
+  getOptions: getOptions,
+  getTestDirectory: getTestDirectory
+};
 
 /**
  * Default pathname for run-control file.
@@ -21,6 +24,31 @@ module.exports = getOptions;
  * @default
  */
 const defaultPathname = 'test/mocha.opts';
+
+/**
+ * Reads directories.test of package.json.
+ *
+ * @public
+ * @returns {string} test directory, if it exists
+ */
+function getTestDirectory() {
+  if (getTestDirectory.cash) {
+    return getTestDirectory.cash;
+  }
+
+  try {
+    const packPath = readPkgUp.sync('__dirname').path;
+    const testDir = require(packPath).directories.test;
+    if (testDir) {
+      return (getTestDirectory.cash = testDir);
+    } else {
+      return (getTestDirectory.cash = 'test');
+    }
+  } catch (ignore) {
+    return (getTestDirectory.cash = 'test');
+    // NOTE: should console.error() and throw the error
+  }
+}
 
 /**
  * Reads contents of the run-control file.
@@ -70,23 +98,13 @@ function getOptions() {
     return;
   }
 
-  try {
-    const testDir = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')
-    ).directories['test'];
-
-    if (testDir && testDir !== 'test') {
-      process._testDirectory = testDir;
-    }
-  } catch (ignore) {
-    // NOTE: should console.error() and throw the error
-  }
+  const testDirectory = getTestDirectory();
 
   const optsPath =
     process.argv.indexOf('--opts') === -1
-      ? process._testDirectory
+      ? testDirectory
         ? path.join(
-            process._testDirectory,
+            testDirectory,
             defaultPathname.slice(defaultPathname.lastIndexOf('/') + 1)
           )
         : defaultPathname
