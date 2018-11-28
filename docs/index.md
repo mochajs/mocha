@@ -1326,7 +1326,9 @@ $ mocha --reporter list --growl
 
 ## The `test/` Directory
 
-By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. Use the field `directories.test` in package.json to overwrite the default folder. If you want to include sub directories, pass the `--recursive` option.
+By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, pass the `--recursive` option.
+
+Use the field `directories.test` in "package.json" file to use an alternate directory:
 
 ```json
 "directories": {
