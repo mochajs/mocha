@@ -1,3 +1,34 @@
+# 5.2.0 / 2018-05-18
+
+## :tada: Enhancements
+
+- [#3375]: Add support for comments in `mocha.opts` ([@plroebuck])
+
+## :bug: Fixes
+
+- [#3346]: Exit correctly from `before` hooks when using `--bail` ([@outsideris])
+
+## :book: Documentation
+
+- [#3328]: Mocha-flavored [API docs](https://mochajs.org/api/)! ([@Munter])
+
+## :nut_and_bolt: Other
+
+- [#3330]: Use `Buffer.from()` ([@harrysarson])
+- [#3295]: Remove redundant folder ([@DavNej](https://github.com/DajNev))
+- [#3356](https://github.com/mochajs/mocha/pull/3356): Refactoring ([@plroebuck])
+
+[#3375]: https://github.com/mochajs/mocha/pull/3375
+[#3346]: https://github.com/mochajs/mocha/pull/3346
+[#3328]: https://github.com/mochajs/mocha/pull/3328
+[#3330]: https://github.com/mochajs/mocha/pull/3330
+[#3295]: https://github.com/mochajs/mocha/pull/3295
+
+[@plroebuck]: https://github.com/plroebuck
+[@harrysarson]: https://github.com/harrysarson
+[@outsideris]: https://github.com/outsideris
+[@Munter]: https://github.com/Munter
+
 # 5.1.1 / 2018-04-18
 
 ## :bug: Fixes
@@ -446,13 +477,13 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :nut_and_bolt: Other
 
-- [#2778]: Move linting into an npm script ([@Munter])
+- [#2807]: Move linting into an npm script ([@Munter])
 
 [@chrisleck]: https://github.com/chrisleck
 [@makepanic]: https://github.com/makepanic
 [@Munter]: https://github.com/Munter
 
-[#2778]: https://github.com/mochajs/mocha/pull/2778
+[#2807]: https://github.com/mochajs/mocha/pull/2807
 [#2802]: https://github.com/mochajs/mocha/issues/2802
 [#2820]: https://github.com/mochajs/mocha/pull/2820
 

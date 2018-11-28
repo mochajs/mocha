@@ -42,7 +42,8 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 
 > PRO TIP: Run `npm start` to see a list of commands which can be run with `npm start <command>`
 
-1. [Install Node.js 4.x or newer](https://nodejs.org/download).
+1. [Install Node.js 6.x or newer](https://nodejs.org/en/download/).
+    - If you're new to installing Node, a tool like [nvm](https://github.com/creationix/nvm#install-script) can help you manage multiple version installations.
 1. Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
 1. Create a new branch in your working copy.  Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
 1. Execute `npm install` to install the development dependencies.
@@ -69,14 +70,14 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
     - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
     - Github will indicate if there's a conflict.  If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase/) your branch onto the `master` branch of the source repository.  *Don't merge.*
     - It's no longer necessary to "squash" your changes.
-1. Be patient while your PR is reviewed.  This can take awhile ([why?](https://github.com/orgs/mochajs/projects/4)).  We may request changes; don't be afraid to question them.
+1. Be patient while your PR is reviewed. This can take a while. We may request changes, but don't be afraid to question them.
 
 ## :angel: I Just Want To Help
 
 *Excellent.*  Here's how:
 
-- **Handy with JavaScript?**  Please check out the issues labeled [`help-wanted`](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3Ahelp-wanted).
-- **Can you write good (and do other stuff good too)?**  Help with the documentation.  See the [issues for our site](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
+- **Handy with JavaScript?**  Please check out the issues labeled [`help-wanted`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
+- **Can you write well?**  Help with the documentation.  See the [issues for our site](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
 - **Design your thing?**  [Our site](https://github.com/mochajs/mocha/tree/master/docs) needs your magic touch.
 - **Know Mocha's codebase?**  We could use your help triaging issues and/or reviewing pull requests.  Please contact an [org member](https://github.com/orgs/mochajs/people), and we'll chat.
 - **Want to build our community?**  Mocha has a *lot* of users.  We could use your help bringing everyone together in peace and harmony.  Please contact an [org member](https://github.com/mochajs/people).

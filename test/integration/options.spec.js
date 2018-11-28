@@ -3,6 +3,7 @@
 var path = require('path');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
+var runRaw = helpers.runMochaJSONRaw;
 var directInvoke = helpers.invokeMocha;
 var resolvePath = helpers.resolveFixturePath;
 var args = [];
@@ -539,4 +540,38 @@ describe('options', function() {
       );
     });
   });
+
+  if (process.platform !== 'win32') {
+    // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
+    // due to lack of *nix signal compliance.
+    describe('--watch', function() {
+      describe('with watch enabled', function() {
+        it('should show the cursor and signal correct exit code, when watch process is terminated', function(done) {
+          this.timeout(0);
+          this.slow(3000);
+          // executes Mocha in a subprocess
+          var mocha = runRaw('exit.fixture.js', ['--watch'], function(
+            err,
+            data
+          ) {
+            // After the process ends, this callback is ran
+            clearTimeout(t);
+            if (err) {
+              done(err);
+              return;
+            }
+
+            var expectedCloseCursor = '\u001b[?25h';
+            expect(data.output, 'to contain', expectedCloseCursor);
+            expect(data.code, 'to be', 130);
+            done();
+          });
+          var t = setTimeout(function() {
+            // kill the child process
+            mocha.kill('SIGINT');
+          }, 500);
+        });
+      });
+    });
+  }
 });

@@ -70,6 +70,21 @@ module.exports = {
       fn(null, result);
     });
   },
+  runMochaJSONRaw: function(fixturePath, args, fn) {
+    var path;
+
+    path = resolveFixturePath(fixturePath);
+    args = args || [];
+
+    return invokeSubMocha(args.concat(['--reporter', 'json', path]), function(
+      err,
+      resRaw
+    ) {
+      if (err) return fn(err);
+
+      fn(null, resRaw);
+    });
+  },
 
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
@@ -102,13 +117,21 @@ module.exports = {
 };
 
 function invokeMocha(args, fn, cwd) {
-  var output, mocha, listener;
-
-  output = '';
   args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
-  mocha = spawn(process.execPath, args, {cwd: cwd});
 
-  listener = function(data) {
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function invokeSubMocha(args, fn, cwd) {
+  args = [path.join(__dirname, '..', '..', 'bin', '_mocha')].concat(args);
+
+  return _spawnMochaWithListeners(args, fn, cwd);
+}
+
+function _spawnMochaWithListeners(args, fn, cwd) {
+  var output = '';
+  var mocha = spawn(process.execPath, args, {cwd: cwd});
+  var listener = function(data) {
     output += data;
   };
 

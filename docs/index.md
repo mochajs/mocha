@@ -52,6 +52,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 - [Installation](#installation)
 - [Getting Started](#getting-started)
+- [Run Cycle Overview](#run-cycle-overview)
 - [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
 - [Assertions](#assertions)
 - [Asynchronous Code](#asynchronous-code)
@@ -92,9 +93,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> To install Mocha v3.0.0 or newer with `npm`, you will need `npm` v2.14.2 or newer.  Additionally, to run Mocha, you will need Node.js v4 or newer.
-
-Mocha can also be installed via [Bower](https://bower.io) (`bower install mocha`), and is available at [cdnjs](https://cdnjs.com/libraries/mocha).
+> Mocha currently requires Node.js v6.x or newer.
 
 ## Getting Started
 
@@ -142,6 +141,47 @@ Then run tests with:
 
 ```sh
 $ npm test
+```
+
+## Run Cycle Overview
+
+A brief outline on the order Mocha's components are executed.
+Worth noting that all hooks, `describe` and `it` callbacks are run in the order they are defined (i.e. found in the file).
+
+``` js
+run 'mocha spec.js'
+|
+spawn child process
+|
+|--------------> inside child process
+  process and apply options
+  |
+  run spec file/s
+  |
+  |--------------> per spec file
+    suite callbacks (e.g., 'describe')
+    |
+    'before' root-level pre-hook
+    |
+    'before' pre-hook
+    |
+    |--------------> per test
+      'beforeEach' root-level pre-hook
+      |
+      'beforeEach' pre-hook
+      |
+      test callbacks (e.g., 'it')
+      |
+      'afterEach' post-hook
+      |
+      'afterEach' root-level post-hook
+    |<-------------- per test end
+    |
+    'after' post-hook
+    |
+    'after' root-level post-hooks
+  |<-------------- per spec file end
+|<-------------- inside child process end
 ```
 
 ## Detects Multiple Calls to `done()`
@@ -739,73 +779,71 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 ## Usage
 
-```text
-  Usage: mocha [debug] [options] [files]
+```console
+Usage: mocha [debug] [options] [files]
 
+Options:
+  -V, --version                           output the version number
+  -A, --async-only                        force all tests to take a callback (async) or return a promise
+  -c, --colors                            force enabling of colors
+  -C, --no-colors                         force disabling of colors
+  -G, --growl                             enable growl notification support
+  -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
+  -R, --reporter <name>                   specify the reporter to use (default: "spec")
+  -S, --sort                              sort test files
+  -b, --bail                              bail after first test failure
+  -d, --debug                             enable node's debugger, synonym for node --debug
+  -g, --grep <pattern>                    only run tests matching <pattern>
+  -f, --fgrep <string>                    only run tests containing <string>
+  -gc, --expose-gc                        expose gc extension
+  -i, --invert                            inverts --grep and --fgrep matches
+  -r, --require <name>                    require the given module (default: [])
+  -s, --slow <ms>                         specify "slow" test threshold in milliseconds (default: 75)
+  -t, --timeout <ms>                      specify test timeout threshold in milliseconds (default: 2000)
+  -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: "bdd")
+  -w, --watch                             watch files in the current working directory for changes
+  --check-leaks                           check for global variable leaks
+  --full-trace                            display the full stack trace
+  --compilers <ext>:<module>,...          use the given module(s) to compile files (default: [])
+  --debug-brk                             enable node's debugger breaking on the first line
+  --globals <names>                       allow the given comma-delimited global [names] (default: [])
+  --es_staging                            enable all staged features
+  --harmony<_classes,_generators,...>     all node --harmony* flags are available
+  --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
+  --icu-data-dir                          include ICU data
+  --inline-diffs                          display actual/expected differences inline within each string
+  --no-diff                               do not show a diff on failure
+  --inspect                               activate devtools in chrome
+  --inspect-brk                           activate devtools in chrome and break on the first line
+  --interfaces                            output provided interfaces and exit
+  --no-deprecation                        silence deprecation warnings
+  --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
+  --no-timeouts                           disables timeouts, given implicitly with --debug/--inspect
+  --no-warnings                           silence all node process warnings
+  --opts <path>                           specify opts path (default: "test/mocha.opts")
+  --perf-basic-prof                       enable perf linux profiler (basic support)
+  --napi-modules                          enable experimental NAPI modules
+  --prof                                  log statistical profiling information
+  --log-timer-events                      Time events including external callbacks
+  --recursive                             include sub directories
+  --reporters                             output provided reporters and exit
+  --retries <times>                       specify number of times to retry a failed test case (default: 0)
+  --throw-deprecation                     throw an exception anytime a deprecated function is used
+  --trace                                 trace function calls
+  --trace-deprecation                     show stack traces on deprecations
+  --trace-warnings                        show stack traces on node process warnings
+  --use_strict                            enforce strict mode
+  --watch-extensions <ext>,...            specify extensions to monitor with --watch (default: ["js"])
+  --delay                                 wait for async suite definition
+  --allow-uncaught                        enable uncaught errors to propagate
+  --forbid-only                           causes test marked with only to fail the suite
+  --forbid-pending                        causes pending tests and test marked with skip to fail the suite
+  --file <file>                           adds file be loaded prior to suite execution (default: [])
+  --exclude <file>                        adds file or glob pattern to ignore (default: [])
+  -h, --help                              output usage information
 
-  Options:
-
-    -V, --version                           output the version number
-    -A, --async-only                        force all tests to take a callback (async) or return a promise
-    -c, --colors                            force enabling of colors
-    -C, --no-colors                         force disabling of colors
-    -G, --growl                             enable growl notification support
-    -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
-    -R, --reporter <name>                   specify the reporter to use
-    -S, --sort                              sort test files
-    -b, --bail                              bail after first test failure
-    -d, --debug                             enable node's debugger, synonym for node --debug
-    -g, --grep <pattern>                    only run tests matching <pattern>
-    -f, --fgrep <string>                    only run tests containing <string>
-    -gc, --expose-gc                        expose gc extension
-    -i, --invert                            inverts --grep and --fgrep matches
-    -r, --require <name>                    require the given module
-    -s, --slow <ms>                         "slow" test threshold in milliseconds [75]
-    -t, --timeout <ms>                      set test-case timeout in milliseconds [2000]
-    -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports)
-    -w, --watch                             watch files for changes
-    --check-leaks                           check for global variable leaks
-    --full-trace                            display the full stack trace
-    --compilers <ext>:<module>,...          use the given module(s) to compile files
-    --debug-brk                             enable node's debugger breaking on the first line
-    --globals <names>                       allow the given comma-delimited global [names]
-    --es_staging                            enable all staged features
-    --file <file>                           include a file to be ran during the suite [file]
-    --harmony<_classes,_generators,...>     all node --harmony* flags are available
-    --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
-    --icu-data-dir                          include ICU data
-    --inline-diffs                          display actual/expected differences inline within each string
-    --inspect                               activate devtools in chrome
-    --inspect-brk                           activate devtools in chrome and break on the first line
-    --interfaces                            display available interfaces
-    --no-deprecation                        silence deprecation warnings
-    --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
-    --no-timeouts                           disables timeouts, given implicitly with --debug
-    --no-warnings                           silence all node process warnings
-    --opts <path>                           specify opts path
-    --perf-basic-prof                       enable perf linux profiler (basic support)
-    --napi-modules                          enable experimental NAPI modules
-    --prof                                  log statistical profiling information
-    --log-timer-events                      Time events including external callbacks
-    --recursive                             include sub directories
-    --reporters                             display available reporters
-    --retries <times>                       set numbers of time to retry a failed test case
-    --throw-deprecation                     throw an exception anytime a deprecated function is used
-    --trace                                 trace function calls
-    --trace-deprecation                     show stack traces on deprecations
-    --trace-warnings                        show stack traces on node process warnings
-    --use_strict                            enforce strict mode
-    --watch-extensions <ext>,...            additional extensions to monitor with --watch
-    --delay                                 wait for async suite definition
-    --allow-uncaught                        enable uncaught errors to propagate
-    --forbid-only                           causes test marked with only to fail the suite
-    --forbid-pending                        causes pending tests and test marked with skip to fail the suite
-    -h, --help                              output usage information
-
-
-  Commands:
-
-    init <path>  initialize a client-side mocha setup at <path>
+Commands:
+  init <path>                             initialize a client-side mocha setup at <path>
 ```
 
 ### `-w, --watch`
@@ -1193,14 +1231,13 @@ A typical setup might look something like the following, where we call `mocha.se
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+  <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
 </head>
 <body>
   <div id="mocha"></div>
 
-  <script src="https://cdn.rawgit.com/jquery/jquery/2.1.4/dist/jquery.min.js"></script>
-  <script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
-  <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
 
   <script>mocha.setup('bdd')</script>
   <script src="test.array.js"></script>
@@ -1208,7 +1245,6 @@ A typical setup might look something like the following, where we call `mocha.se
   <script src="test.xhr.js"></script>
   <script>
     mocha.checkLeaks();
-    mocha.globals(['jQuery']);
     mocha.run();
   </script>
 </body>
@@ -1290,7 +1326,21 @@ $ mocha --reporter list --growl
 
 ## The `test/` Directory
 
-By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, use `--recursive`, since `./test/*.js` only matches files in the first level of `test` and `./test/**/*.js` only matches files in the second level of `test`.
+By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, pass the `--recursive` option.
+
+To configure where `mocha` looks for tests, you may pass your own glob:
+
+```sh
+$ mocha --recursive "./spec/*.js"
+```
+
+Some shells support recursive matching by using the `**` wildcard in a glob. Bash >= 4.3 supports this with the [`globstar` option](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html) which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH](http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing) and [Fish](https://fishshell.com/docs/current/#expand-wildcard) support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
+
+```sh
+$ mocha "./spec/**/*.js"
+```
+
+*Note*: Double quotes around the glob are recommended for portability.
 
 ## Editor Plugins
 

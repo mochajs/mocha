@@ -14,9 +14,54 @@ const path = require('path');
 module.exports = getOptions;
 
 /**
- * Get options.
+ * Default pathname for run-control file.
+ *
+ * @constant
+ * @type {string}
+ * @default
  */
+const defaultPathname = 'test/mocha.opts';
 
+/**
+ * Reads contents of the run-control file.
+ *
+ * @private
+ * @param {string} pathname - Pathname of run-control file.
+ * @returns {string} file contents
+ */
+function readOptionsFile(pathname) {
+  return fs.readFileSync(pathname, 'utf8');
+}
+
+/**
+ * Parses options read from run-control file.
+ *
+ * @private
+ * @param {string} content - Content read from run-control file.
+ * @returns {string[]} cmdline options (and associated arguments)
+ */
+function parseOptions(content) {
+  /*
+   * Replaces comments with empty strings
+   * Replaces escaped spaces (e.g., 'xxx\ yyy') with HTML space
+   * Splits on whitespace, creating array of substrings
+   * Filters empty string elements from array
+   * Replaces any HTML space with space
+   */
+  return content
+    .replace(/^#.*$/gm, '')
+    .replace(/\\\s/g, '%20')
+    .split(/\s/)
+    .filter(Boolean)
+    .map(value => value.replace(/%20/g, ' '));
+}
+
+/**
+ * Prepends options from run-control file to the command line arguments.
+ *
+ * @public
+ * @see {@link https://mochajs.org/#mochaopts|mocha.opts}
+ */
 function getOptions() {
   if (
     process.argv.length === 3 &&
@@ -33,13 +78,7 @@ function getOptions() {
     : defaultOptsPath;
 
   try {
-    const opts = fs
-      .readFileSync(optsPath, 'utf8')
-      .replace(/^#.*$/gm, '')
-      .replace(/\\\s/g, '%20')
-      .split(/\s/)
-      .filter(Boolean)
-      .map(value => value.replace(/%20/g, ' '));
+    const opts = parseOptions(readOptionsFile(optsPath));
 
     if (opts.length > 0) {
       process.argv = process.argv

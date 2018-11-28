@@ -11,9 +11,10 @@
 
 ## Links
 
-- **[Documentation](https://mochajs.org)**
+- **[Documentation](https://mochajs.org/)**
 - **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md)**
 - [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md)
+- [Contributing](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
 - [Gitter Chatroom](https://gitter.im/mochajs/mocha) (ask questions here!)
 - [Google Group](https://groups.google.com/group/mochajs)
 - [Issue Tracker](https://github.com/mochajs/mocha/issues)

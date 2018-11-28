@@ -4,22 +4,15 @@ var reporters = require('../../').reporters;
 var Doc = reporters.Doc;
 
 var createMockRunner = require('./helpers.js').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Doc reporter', function() {
-  var stdout;
-  var stdoutWrite;
   var runner;
-  beforeEach(function() {
-    stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      stdoutWrite.call(process.stdout, string, enc, callback);
-    };
-  });
+  var options = {};
+  var runReporter = makeRunReporter(Doc);
 
   afterEach(function() {
-    process.stdout.write = stdoutWrite;
+    runner = undefined;
   });
 
   describe('on suite', function() {
@@ -32,8 +25,7 @@ describe('Doc reporter', function() {
       };
       it('should log html with indents and expected title', function() {
         runner = createMockRunner('suite', 'suite', null, null, suite);
-        Doc.call(this, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <section class="suite">\n',
           '      <h1>' + expectedTitle + '</h1>\n',
@@ -48,8 +40,7 @@ describe('Doc reporter', function() {
         };
         expectedTitle = '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
         runner = createMockRunner('suite', 'suite', null, null, suite);
-        Doc.call(this, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <section class="suite">\n',
           '      <h1>' + expectedTitle + '</h1>\n',
@@ -64,8 +55,7 @@ describe('Doc reporter', function() {
       };
       it('should not log any html', function() {
         runner = createMockRunner('suite', 'suite', null, null, suite);
-        Doc.call(this, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
         expect(stdout, 'to be empty');
       });
     });
@@ -78,8 +68,7 @@ describe('Doc reporter', function() {
       };
       it('should log expected html with indents', function() {
         runner = createMockRunner('suite end', 'suite end', null, null, suite);
-        Doc.call(this, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
         var expectedArray = ['  </dl>\n', '</section>\n'];
         expect(stdout, 'to equal', expectedArray);
       });
@@ -90,8 +79,7 @@ describe('Doc reporter', function() {
       };
       it('should not log any html', function() {
         runner = createMockRunner('suite end', 'suite end', null, null, suite);
-        Doc.call(this, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
         expect(stdout, 'to be empty');
       });
     });
@@ -109,8 +97,7 @@ describe('Doc reporter', function() {
     };
     it('should log html with indents and expected title and body', function() {
       runner = createMockRunner('pass', 'pass', null, null, test);
-      Doc.call(this, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter(this, runner, options);
       var expectedArray = [
         '    <dt>' + expectedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedBody + '</code></pre></dd>\n'
@@ -128,8 +115,7 @@ describe('Doc reporter', function() {
       var expectedEscapedBody =
         '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
       runner = createMockRunner('pass', 'pass', null, null, test);
-      Doc.call(this, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter(this, runner, options);
       var expectedArray = [
         '    <dt>' + expectedEscapedTitle + '</dt>\n',
         '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
@@ -158,8 +144,7 @@ describe('Doc reporter', function() {
         test,
         expectedError
       );
-      Doc.call(this, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter(this, runner, options);
       var expectedArray = [
         '    <dt class="error">' + expectedTitle + '</dt>\n',
         '    <dd class="error"><pre><code>' +
@@ -190,8 +175,7 @@ describe('Doc reporter', function() {
         test,
         unescapedError
       );
-      Doc.call(this, runner);
-      process.stdout.write = stdoutWrite;
+      var stdout = runReporter(this, runner, options);
       var expectedArray = [
         '    <dt class="error">' + expectedEscapedTitle + '</dt>\n',
         '    <dd class="error"><pre><code>' +
