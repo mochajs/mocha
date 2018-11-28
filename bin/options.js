@@ -14,13 +14,22 @@ const path = require('path');
 module.exports = getOptions;
 
 /**
- * Default pathname for run-control file.
+ * Default test directory.
  *
  * @constant
  * @type {string}
  * @default
  */
-const defaultPathname = 'test/mocha.opts';
+const DEFAULT_TEST_DIRECTORY = 'test';
+
+/**
+ * Default filename of run-control file.
+ *
+ * @constant
+ * @type {string}
+ * @default
+ */
+const DEFAULT_OPTS_FILENAME = 'mocha.opts';
 
 /**
  * Reads contents of the run-control file.
@@ -72,7 +81,7 @@ function getOptions() {
 
   const optsIndex = process.argv.indexOf('--opts');
   const optsPathSpecified = optsIndex !== -1;
-  const defaultOptsPath = path.join('test', 'mocha.opts');
+  const defaultOptsPath = path.join(DEFAULT_TEST_DIRECTORY, DEFAULT_OPTS_FILENAME);
   const optsPath = optsPathSpecified
     ? process.argv[optsIndex + 1]
     : defaultOptsPath;
