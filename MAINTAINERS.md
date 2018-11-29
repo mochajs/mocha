@@ -1,5 +1,44 @@
 # Mocha Maintainer's Handbook
 
+<!-- toc -->
+
+- [Introduction](#introduction)
+- [Terminology](#terminology)
+  - [User](#user)
+  - [Contributor](#contributor)
+    - [A Note About Donations](#a-note-about-donations)
+  - [Maintainer](#maintainer)
+    - [The Responsibilities of a Maintainer](#the-responsibilities-of-a-maintainer)
+    - [The Rights of a Maintainer](#the-rights-of-a-maintainer)
+    - [About "Owners"](#about-owners)
+- [Mocha's Decision-Making Process](#mochas-decision-making-process)
+- [Communication](#communication)
+- [Working with Issues & Pull Requests](#working-with-issues--pull-requests)
+  - [Semantic Versioning](#semantic-versioning)
+  - [Questions](#questions)
+  - [Bugs](#bugs)
+  - [Features](#features)
+  - [Subsystems, Environments, Etc.](#subsystems-environments-etc)
+  - [Feedback & Follow-ups](#feedback--follow-ups)
+  - [Meta](#meta)
+  - [Closing Issues](#closing-issues)
+- [Commenting on Issues and Reviewing Pull Requests](#commenting-on-issues-and-reviewing-pull-requests)
+  - [Reviewing Code](#reviewing-code)
+  - [The Part About Jerks](#the-part-about-jerks)
+    - [Rude or Entitled People](#rude-or-entitled-people)
+    - [Code of Conduct Violations](#code-of-conduct-violations)
+- [Branches](#branches)
+- [Merging PRs](#merging-prs)
+  - [Using Milestones](#using-milestones)
+- [Mocha's Release Process](#mochas-release-process)
+- [Projects](#projects)
+- [About The JS Foundation](#about-the-js-foundation)
+- [About OpenCollective](#about-opencollective)
+
+<!-- tocstop -->
+
+## Introduction
+
 Hi stranger!  We've written this document for:
 
 1. Active maintainers of Mocha
@@ -133,23 +172,44 @@ All new issues will need to be triaged, and pull requests must be examined.  Mai
 
 > If you see an issue or PR that could use some labels, please add them!
 
-The following list is incomplete, but it's better than nothing:
-
 ### Semantic Versioning
 
-*All* issues which will be resolved by commit(s) should have one of these three labels:
+The TL;DR of Semantic Versioning is:
 
-- `semver-patch` for bug fixes, documentation, development environment changes, CI and tests
-- `semver-minor` for enhancements ("features")
-- `semver-major` for backwards-incompatible ("breaking") changes to the *output*, *API*, or environment support
+- MAJOR version when you make incompatible API changes,
+- MINOR version when you add functionality in a backwards-compatible manner, and
+- PATCH version when you make backwards-compatible bug fixes.
 
-To be clear:
+Pull requests *must* have one of these three (3) labels:
 
-- Features, bugs, and updated tests are examples of issues which will be resolved by commit(s).
-- Support questions, unconfirmed bugs and [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality) are examples of issues which do *not* need `semver-*` labels, since they won't necessarily result in any changes to the codebase.
-- Pull requests *do not* need `semver-*` labels, *unless there is no associated issue* (PRO TIP: make an issue!)
-- An issue or PR which will introduce a breaking change will be `semver-major`, *regardless* of any other label.
-- **Breaking changes to private APIs will be `semver-major`, if and only if they are known to be consumed by actively developed project(s).**
+- `semver-patch` for backwards-compatible bug fixes, documentation, or anything which does not affect a "production" (`npm install mocha`) installation of Mocha
+- `semver-minor` for backwards-compatible new features or usability/interface enhancements
+- `semver-major` for backwards-incompatible ("breaking") changes to the API
+
+A PR which introduces a breaking change is considered to be `semver-major`, *regardless* of whether it's a bug fix, feature, or whatever.
+
+For the purposes of the above definitions, Mocha has some unique considerations, and includes the following in its definition of "API":
+
+1. Mocha's *documented*, programmatic interface which *is not explicitly tagged with `@private`*
+1. Mocha's machine-readable reporter output
+1. Mocha's default settings
+1. Mocha's command-line options
+1. The environments which Mocha supports; this includes:
+    1. Browser versions
+    1. Node.js versions
+    1. Compatibility with popular module loaders (e.g., AMD)
+
+**Err on the side of the user; breaking changes to private APIs will be `semver-major`, if and only if they are known to be consumed by actively developed project(s).**
+
+Examples of a breaking changes might be:
+
+- Throwing an `Error` where one wasn't thrown before
+- Removing a command-line option or alias
+- Removing an environment from the CI configuration
+- Changing the default reporter!
+- Changing defaults in a way which would cause tests which were previously successful to start failing, or a failing test to start passing
+  - The exception is fixing likely false-positives
+  - A good example would be changing the default `timeout` value
 
 ### Questions
 
@@ -179,7 +239,7 @@ If it's *not* a Mocha problem (people tend not to believe this), you may want to
 - `documentation`: Issues around incorrect or missing docs
 - `qa`: Issues around Mocha's own test suite
 - `chore`: Refactors, CI tweaks, dependencies, etc.
-- `developer experience`: Issues which will make it easier to contribute and maintain Mocha
+- `developer-experience`: Issues which will make it easier to contribute and maintain Mocha
 
 ### Feedback & Follow-ups
 
@@ -191,7 +251,8 @@ Issues or PRs which require action or feedback from a *specific* maintainer, sho
 ### Meta
 
 - `stale`: The "stalebot" marks things as stale and will close issues if they need feedback but haven't received any.  Comment on an issue to prevent this from happening.
-- `help-wanted`: If it's an issue that is not a high priority for the maintenance team, use this label to solicit contributions.
+- `help wanted`: If it's an issue that is not a high priority for the maintenance team, use this label to solicit contributions.  Note lack of `-` in this label's name.
+- `good-first-issue`: Typically combined with `help wanted`; an issue that new contributors to Mocha may find straightforward.
 
 ### Closing Issues
 
@@ -202,18 +263,6 @@ For any issue which is a duplicate, write "duplicate of #<ISSUE>" in a new comme
 If the issue is a support question, and you believe it has been answered, close the issue.
 
 If the issue is not Mocha-related, and/or a bug cannot be confirmed, label it `invalid` and close.
-
-It's easy to reopen issues.  If you're not sure, just close it!
-
-## Milestones
-
-A major release following SemVer is "just a number".  Yet, given the vast amount of projects which consume Mocha, we should avoid *frequent* breaking changes, as this becomes disruptive.
-
-In the manner of "ripping off a band-aid", sometimes we will want to group features or breaking changes together.
-
-If so, we can add those issues and/or PRs to a new GitHub "milestone", to keep track of what needs to go in before we release.
-
-> Historically, milestones have not been useful for anything other than grouping breaking changes together.
 
 ## Commenting on Issues and Reviewing Pull Requests
 
@@ -255,8 +304,11 @@ Here are some suggestions:
 
 ## Branches
 
-`master` is the only maintained branch in `mochajs/mocha` or any of the other repos.
+`master` is the only maintained branch in `mochajs/mocha` or any of the other repos.  **`master` is the only branch to which force-pushing is disallowed.**
+
 Maintainers may push new branches to a repo, as long as they remove them when finished (merging a PR will prompt to do so).
+
+Please *please* ***please*** delete old or unused branches.
 
 ## Merging PRs
 
@@ -266,17 +318,25 @@ GitHub has several options for how to merge a PR.  Here's what we do:
 1. *If a PR has a single commit*, "Rebase".
 1. Don't "Merge".
 
-### Merging `semver-major` PRs
+**Upon acceptance of a PR, you must assign it a milestone.**
 
-Once a `semver-major` PR has landed, this means the next release will be a major release.  This is because we only maintain a single branch, `master`.  So, this opens the floodgates to cram more breaking changes in.  See the section about "milestones".
+### Using Milestones
 
-This is not necessarily ideal, and we should consider another method of using branches *if* it has little potential for confusion!
+If you know that the PR is breaking, assign it to a new or existing milestone correlating with the next major release.  For example, if Mocha's current version is v6.5.2, then this milestone would be named `v7.0.0`.
+
+Likewise, if the PR is `semver-minor`, create or use a new milestone correlating to the next *minor* release, e.g., `v6.6.0`.
+
+If it's unclear what the next milestone will be, use or create a milestone named `next`.  This milestone will be renamed to the new version at release time.
+
+By using milestones, we can cherry-pick non-breaking changes into minor or patch releases, and keep `master` as the latest version.
+
+**This is subject to change, hopefully.**
 
 ## Mocha's Release Process
 
 *It's easier to release often.*
 
-1. Decide whether this is a `patch`, `minor`, or `major` release by the PRs which have been merged since the last release.
+1. Decide whether this is a `patch`, `minor`, or `major` release.
 1. Checkout `master` in your working copy & pull.
 1. Modify `CHANGELOG.md`; follow the existing conventions in that file.  Commit this file only; add `[ci skip]` to the commit message to avoid a build.
 1. Use `npm version` (use `npm@6+`) to bump the version; see `npm version --help` for more info.  (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
