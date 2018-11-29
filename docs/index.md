@@ -66,10 +66,11 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Dynamically Generating Tests](#dynamically-generating-tests)
 - [Timeouts](#timeouts)
 - [Diffs](#diffs)
-- [Usage](#usage)
+- [Command-Line Usage](#command-line-usage)
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
+- [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
 - [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
 - [Editor Plugins](#editor-plugins)
@@ -809,88 +810,120 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 ![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
-## Usage
+## Command-Line Usage
 
 <!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
 
 ```plain
+mocha [spec..]
 
-Usage: mocha [debug] [options] [files]
+Run tests with Mocha
 
-Options:
-  -V, --version                           output the version number
-  -A, --async-only                        force all tests to take a callback (async) or return a promise
-  -c, --colors                            force enabling of colors
-  -C, --no-colors                         force disabling of colors
-  -G, --growl                             enable growl notification support
-  -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
-  -R, --reporter <name>                   specify the reporter to use (default: "spec")
-  -S, --sort                              sort test files
-  -b, --bail                              bail after first test failure
-  -d, --debug                             enable node's debugger, synonym for node --debug
-  -g, --grep <pattern>                    only run tests matching <pattern>
-  -f, --fgrep <string>                    only run tests containing <string>
-  -gc, --expose-gc                        expose gc extension
-  -i, --invert                            inverts --grep and --fgrep matches
-  -r, --require <name>                    require the given module (default: [])
-  -s, --slow <ms>                         specify "slow" test threshold in milliseconds (default: 75)
-  -t, --timeout <ms>                      specify test timeout threshold in milliseconds (default: 2000)
-  -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: "bdd")
-  -w, --watch                             watch files in the current working directory for changes
-  --check-leaks                           check for global variable leaks
-  --full-trace                            display the full stack trace
-  --compilers <ext>:<module>,...          use the given module(s) to compile files (default: [])
-  --debug-brk                             enable node's debugger breaking on the first line
-  --globals <names>                       allow the given comma-delimited global [names] (default: [])
-  --es_staging                            enable all staged features
-  --harmony<_classes,_generators,...>     all node --harmony* flags are available
-  --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
-  --icu-data-dir                          include ICU data
-  --inline-diffs                          display actual/expected differences inline within each string
-  --no-diff                               do not show a diff on failure
-  --inspect                               activate devtools in chrome
-  --inspect-brk                           activate devtools in chrome and break on the first line
-  --interfaces                            output provided interfaces and exit
-  --no-deprecation                        silence deprecation warnings
-  --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
-  --no-timeouts                           disables timeouts, given implicitly with --debug/--inspect
-  --no-warnings                           silence all node process warnings
-  --opts <path>                           specify opts path (default: "test/mocha.opts")
-  --perf-basic-prof                       enable perf linux profiler (basic support)
-  --napi-modules                          enable experimental NAPI modules
-  --prof                                  log statistical profiling information
-  --log-timer-events                      Time events including external callbacks
-  --recursive                             include sub directories
-  --reporters                             output provided reporters and exit
-  --retries <times>                       specify number of times to retry a failed test case (default: 0)
-  --throw-deprecation                     throw an exception anytime a deprecated function is used
-  --trace                                 trace function calls
-  --trace-deprecation                     show stack traces on deprecations
-  --trace-warnings                        show stack traces on node process warnings
-  --use_strict                            enforce strict mode
-  --watch-extensions <ext>,...            specify extensions to monitor with --watch (default: ["js"])
-  --delay                                 wait for async suite definition
-  --allow-uncaught                        enable uncaught errors to propagate
-  --forbid-only                           causes test marked with only to fail the suite
-  --forbid-pending                        causes pending tests and test marked with skip to fail the suite
-  --file <file>                           adds file be loaded prior to suite execution (default: [])
-  --exclude <file>                        adds file or glob pattern to ignore (default: [])
-  -h, --help                              output usage information
+Commands
+mocha debug [spec..]  Run tests with Mocha                           [default]
+mocha init <path>     create a client-side Mocha setup at <path>
 
-Commands:
-  init <path>                             initialize a client-side mocha setup at <path>
+Rules & Behavior
+--allow-uncaught           Allow uncaught errors to propagate        [boolean]
+--async-only, -A           Require all tests to use a callback (async) or
+return a Promise                          [boolean]
+--bail, -b                 Abort ("bail") after first test failure   [boolean]
+--check-leaks              Check for global variable leaks           [boolean]
+--delay                    Delay initial execution of root suite
+--exit                     Force Mocha to quit after tests complete  [boolean]
+--forbid-only              Fail if exclusive test(s) encountered     [boolean]
+--forbid-pending           Fail if pending test(s) encountered       [boolean]
+--global, --globals        List of allowed global variables            [array]
+--retries                  Retry failed tests this many times         [number]
+--slow, -s                 Specify "slow" test threshold (in milliseconds)
+[number] [default: 75]
+--timeout, -t, --timeouts  Specify test timeout threshold (in milliseconds)
+[number] [default: 2000]
+--ui, -u                   Specify user interface    [string] [default: "bdd"]
 
+Reporting & Output
+--color, -c, --colors                     Force-enable color output  [boolean]
+--diff                                    Show diff on failure
+[boolean] [default: true]
+--full-trace                              Display full stack traces  [boolean]
+--growl, -G                               Enable Growl notifications [boolean]
+--inline-diffs                            Display actual/expected differences
+inline within each string  [boolean]
+--reporter, -R                            Specify reporter to use
+[string] [default: "spec"]
+--reporter-option, --reporter-options,    Reporter-specific options
+-O                                        (<k=v,[k1=v1,..]>)           [array]
+
+Configuration
+--config   Path to config file                    [default: (nearest rc file)]
+--opts     Path to `mocha.opts`        [string] [default: "./test/mocha.opts"]
+--package  Path to package.json for config                            [string]
+
+File Handling
+--exclude                        Ignore file(s) or glob pattern(s)
+[array] [default: (none)]
+--extension, --watch-extensions  File extension(s) to load and/or watch
+[array] [default: js]
+--file                           Specify file(s) to be loaded prior to root
+suite execution     [array] [default: (none)]
+--recursive                      Look for tests in subdirectories    [boolean]
+--require, -r                    Require module      [array] [default: (none)]
+--sort, -S                       Sort test files
+--watch, -w                      Watch files in the current working directory
+for changes                         [boolean]
+
+Test Filters
+--fgrep, -f   Only run tests containing this string                   [string]
+--grep, -g    Only run tests matching this string or regexp           [string]
+--invert, -i  Inverts --grep and --fgrep matches                     [boolean]
+
+Positional Arguments
+spec  One or more files, directories, or globs to test
+[array] [default: ["test/"]]
+
+Other Options
+--help, -h     Show usage information & exit                         [boolean]
+--version, -V  Show version number & exit                            [boolean]
+--interfaces   List built-in user interfaces & exit
+--reporters    List built-in reporters & exit
+
+Mocha Resources
+Chat: https://gitter.im/mochajs/mocha/
+GitHub: https://github.com/mochajs/mocha.git
+Docs: https://mochajs.org/
 ```
 
-<!-- AUTO-GENERATED-CONTENT:END -->
+<!-- usagestop -->
 
-### `-w, --watch`
+### `--allow-uncaught`
 
-Executes tests on changes to JavaScript in the CWD, and once initially.
+By default, Mocha will attempt to trap uncaught exceptions thrown from running tests and report these as test failures.  Use `--allow-uncaught` to disable this behavior and allow uncaught exceptions to propagate.  Will typically cause the process to crash.
 
-### `--exit` / `--no-exit`
+This flag is useful when debugging particularly difficult-to-track exceptions.
 
-> *Updated in Mocha v4.0.0*
+### `--async-only, -A`
+
+Enforce a rule that tests must be written in "async" style, meaning each test provides a `done` callback or returns a `Promise`.  Non-compliant tests will be marked as failures.
+
+### `--bail, -b`
+
+Causes Mocha to stop running tests after the first test failure it encounters.
+
+`--bail` does *not* imply `--exit`.
+
+### `--check-leaks`
+
+Use this option to have Mocha check for global variables that are leaked while running tests. Specify globals that are acceptable via the `--global` option (for example: `--check-leaks --global jQuery --global MyLib`).
+
+### `--compilers`
+
+> *`--compilers` was removed in v6.0.0. See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/compilers-deprecation).*
+
+### `--exit`
+
+> *Updated in v4.0.0.*
+
+TL;DR: If your tests hang after an upgrade to Mocha v4.0.0 or newer, use `--exit` for a quick (though not necessarily recommended) fix.
 
 *Prior to* version v4.0.0, *by default*, Mocha would force its own process to exit once it was finished executing all tests.  This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.  Ultimately, "dirty" tests can (but not always) lead to *false positive* or *false negative* results.
 
@@ -904,73 +937,209 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 - See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector/)
 - Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://git.io/vdlNM))
-- Try something like [why-is-node-running](https://npm.im/why-is-node-running)
+- Try something like [wtfnode](https://npm.im/wtfnode)
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
-### `--compilers`
+### `--forbid-only`
 
-> *Updated in Mocha v4.0.0*
+Enforce a rule that tests may not be exclusive (use of e.g., `describe.only()` or `it.only()` is disallowed).
 
-**`--compilers` is deprecated as of Mocha v4.0.0.  See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/compilers-deprecation).**
+`--forbid-only` causes Mocha to fail when an exclusive ("only'd") test or suite is encountered, and it will abort further test execution.
 
-CoffeeScript is no longer supported out of the box. CS and similar transpilers
-may be used by mapping the file extensions (for use with `--watch`) and the module
-name. For example `--compilers coffee:coffee-script` with CoffeeScript 1.6- or
-`--compilers coffee:coffee-script/register` with CoffeeScript 1.7+.
+### `--forbid-pending`
 
-#### About Babel
+Enforce a rule that tests may not be skipped (use of e.g., `describe.skip()`,  `it.skip()`, or `this.skip()` anywhere is disallowed).
 
-If your ES6 modules have extension `.js`, you can `npm install --save-dev babel-register` and use `mocha --require babel-register`; `--compilers` is only necessary if you need to specify a file extension.
+`--forbid-pending` causes Mocha to fail when a skipped ("pending") test or suite is encountered, and it will abort further test execution.
 
-### `-b, --bail`
+### `--global <variable-name>`
 
-Only interested in the first exception? use `--bail`!
+> *Updated in v6.0.0; the option is `--global` and `--globals` is now an alias.*
 
-### `-d, --debug`
+Define a global variable name. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--global app --global YUI`.
 
-Enables node's debugger support, this executes your script(s) with `node debug <file ...>` allowing you to step through code and break with the `debugger` statement. Note the difference between `mocha debug` and `mocha --debug`: `mocha debug` will fire up node's built-in debug client, `mocha --debug` will allow you to use a different interface — such as the Blink Developer Tools. Implies `--no-timeouts`.
+`--global` accepts wildcards. You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
 
-### `--globals <names>`
+`--global` can accept a comma-delimited list; `--global app,YUI` is equivalent to `--global app --global YUI`.
 
-Accepts a comma-delimited list of accepted global variable names. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--globals app,YUI`. It also accepts wildcards. You could do `--globals '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
+By using this option in conjunction with `--check-leaks`, you can specify a whitelist of known global variables that you *expect* to leak into global scope.
 
-By using this option in conjunction with `--check-leaks`, you can specify a whitelist of known global variables that you would expect to leak into global scope.
+### `--retries <n>`
 
-### `--check-leaks`
+Retries failed tests `n` times.
 
-Use this option to have Mocha check for global variables that are leaked while running tests. Specify globals that are acceptable via the `--globals` option (for example: `--check-leaks --globals jQuery,MyLib`).
+Mocha does not retry test failures by default.
 
-### `-r, --require <module-name>`
+### `--slow <ms>, -s <ms>`
 
-The `--require` option is useful for libraries such as [should.js](https://github.com/shouldjs/should.js), so you may simply `--require should` instead of manually invoking `require('should')` within each test file. Note that this works well for `should` as it augments `Object.prototype`, however if you wish to access a module's exports you will have to require them, for example `var should = require('should')`. Furthermore, it can be used with relative paths, e.g. `--require ./test/helper.js`
+Specify the "slow" test threshold in milliseconds.  Mocha uses this to highlight test cases that are taking too long.  "Slow" tests are not considered failures.
 
-### `-u, --ui <name>`
+Note: A test that executes for *half* of the "slow" time will be highlighted *in yellow* with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted *in red*.
 
-The `--ui` option lets you specify the interface to use, defaulting to "bdd".
+### `--timeout <ms>, -t <ms>`
 
-### `-R, --reporter <name>`
+> *Update in v6.0.0: `--no-timeout` is implied when invoking Mocha using debug flags. It is equivalent to `--timeout 0`.  `--timeout 99999999` is no longer needed.*
 
-The `--reporter` option allows you to specify the reporter that will be used, defaulting to "spec". This flag may also be used to utilize third-party reporters. For example if you `npm install mocha-lcov-reporter` you may then do `--reporter mocha-lcov-reporter`.
+Specifies the test case timeout, defaulting to two (2) seconds (2000 milliseconds).  Tests taking longer than this amount of time will be marked as failed.
 
-### `-t, --timeout <ms>`
+To override you may pass the timeout in milliseconds, or a value with the `s` suffix, e.g., `--timeout 2s` and `--timeout 2000` are equivalent.
 
-Specifies the test-case timeout, defaulting to 2 seconds. To override you may pass the timeout in milliseconds, or a value with the `s` suffix, ex: `--timeout 2s` or `--timeout 2000` would be equivalent.
+To disable timeouts, use `--no-timeout`.
 
-### `--no-timeouts`
+Note: synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking.  Infinite loops will still be infinite loops!
 
-Disables timeouts. Equivalent to `--timeout 0`.
+### `--ui <name>, -u <name>`
 
-### `-s, --slow <ms>`
+The `--ui` option lets you specify the interface to use, defaulting to `bdd`.
 
-Specify the "slow" test threshold, defaulting to 75ms. Mocha uses this to highlight test-cases that are taking too long.
+### `--color, -c, --colors`
 
-### `--file <file>`
+> *Updated in v6.0.0.  `--colors` is now an alias for `--color`.*
 
-Add a file you want included first in a test suite. This is useful if you have some generic setup code that must be included within the test suite. The file passed is not affected by any other flags (`--recursive` or `--sort` have no effect). Accepts multiple `--file` flags to include multiple files, the order in which the flags are given are the order in which the files are included in the test suite. Can also be used in `mocha.opts`.
+"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`.  By default, Mocha uses [supports-color](https://npm.im/supports-color) to decide.
 
-### `-g, --grep <pattern>`
+In some cases, color output will be explicitly suppressed by certain reporters outputting in a machine-readable format.
 
-The `--grep` option when specified will trigger mocha to only run tests matching the given `pattern` which is internally compiled to a `RegExp`.
+### `--diff`
+
+When possible, show the difference between expected and actual values when an assertion failure is encountered.
+
+This flag is unusual in that it **defaults to `true`**; use `--no-diff` to suppress Mocha's own diff output.
+
+Some assertion libraries will supply their own diffs, in which case Mocha's will not be used, regardless of the default value.
+
+Mocha's own diff output does not conform to any known standards, and is designed to be human-readable.
+
+### `--full-trace`
+
+Enable "full" stack traces.  By default, Mocha attempts to distill stack traces into less noisy (though still useful) output.
+
+This flag is helpful when debugging a suspected issue within Mocha or Node.js itself.
+
+### `--growl, -G`
+
+Enable [Growl](http://growl.info) (or OS-level notifications where available).
+
+Requires extra software to be installed; see the [growl module's docs](https://npm.im/growl) for more information.
+
+### `--inline-diffs`
+
+Enable "inline" diffs, an alternative output for diffing strings.
+
+Useful when working with large strings.
+
+Does nothing if an assertion library supplies its own diff output.
+
+### `--reporter <name>, -R <name>`
+
+Specify the reporter that will be used, defaulting to `spec`.
+
+Allows use of third-party reporters. For example, [mocha-lcov-reporter](https://npm.im/mocha-lcov-reporter) may be used with `--reporter mocha-lcov-reporter` after it has been installed.
+
+### `--reporter-option <option>, -O <option>, --reporter-options <option>`
+
+> *Updated in v6.0.0.  Can be specified multiple times.  `--reporter-options` is now an alias for `--reporter-option`.*
+
+Provide options specific to a reporter in `<key>=<value>` format, e.g., `--reporter tap --reporter-option tapVersion=13`.
+
+Not all reporters accept options.
+
+Can be specified as a comma-delimited list.
+
+### `--config <path>`
+
+> *New in v6.0.0.*
+
+Specify an explicit path to a [configuration file](#configuring-mocha-node-js).
+
+By default, Mocha will search for a config file if `--config` is not specified; use `--no-config` to suppress this behavior.
+
+### `--opts <path>`
+
+> *Updated in v6.0.0; added `--no-opts`.*
+
+Specify a path to [`mocha.opts`](#mocha-opts).
+
+By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts` to suppress this behavior.
+
+### `--package <path>`
+
+> *New in v6.0.0.*
+
+Specify an explicit path to a [`package.json` file](#configuring-mocha-node-js)  (ostensibly containing configuration in a `mocha` property).
+
+By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
+
+### `--exclude <file/directory/glob>`
+
+Explicitly exclude one or more files, directories or "globs" that would otherwise be loaded.
+
+Files specified using `--file` *are not affected* by this option.
+
+Can be specified multiple times.
+
+### `--extension <ext>, --watch-extensions <ext>`
+
+> *Updated in v6.0.0.  Previously `--watch-extensions`, but now expanded to affect general test file loading behavior. `--watch-extensions` is now an alias*
+
+Files having this extension will be considered test files.  Defaults to `js`.
+
+Affects `--watch` behavior.
+
+Specifying `--extension` will *remove* `.js` as a test file extension; use `--extension js` to re-add it.  For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
+
+### `--file <file/directory/glob>`
+
+Explicitly *include* a test file to be loaded before other test files files.  Multiple uses of `--file` are allowed, and will be loaded in order given.
+
+Useful if you want to declare, for example, hooks to be run before every test across all other test files.
+
+Files specified this way are not affected by `--sort` or `--recursive`.
+
+Files specified in this way should contain one or more suites, tests or hooks.  If this is not the case, consider `--require` instead.
+
+### `--recursive`
+
+When looking for test files, recurse into subdirectories.
+
+See `--extension` for defining which files are considered test files.
+
+### `--require <module>, -r <module>`
+
+Require a module before loading the user interface or test files.  This is useful for:
+
+- Test harnesses
+- Assertion libraries that augment built-ins or global scope (such as [should.js](https://npm.im/should.js))
+- Instant ECMAScript modules via [esm](https://npm.im/esm)
+- Compilers such as Babel via [@babel/register](https://npm.im/@babel/register) or TypeScript via [ts-node](https://npm.im/ts-node) (using `--require ts-node/register`)
+
+Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
+
+Note you cannot use `--require` to set a global `beforeEach()` hook, for example--use `--file` instead, which allows you to specify an explicit order in which test files are loaded.
+
+### `--sort, -S`
+
+Sort test files (by absolute path) using [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+
+### `--watch, -w`
+
+Executes tests on changes to JavaScript in the current working directory (and once initially).
+
+By default, only files with extension `.js` are watched.  Use `--extension` to change this behavior.
+
+### `--fgrep <string>, -f <string>`
+
+> *BREAKING CHANGE in v6.0.0; now mutually exclusive with `--grep`.*
+
+Cause Mocha to only run tests having titles containing the given `string`.
+
+Mutually exclusive with `--grep`.
+
+### `--grep <regexp>, -g <regexp>`
+
+> *BREAKING CHANGE in v6.0.0; now mutually exclusive with `--fgrep`.*
+
+Cause Mocha to only run tests matching the given `regexp`, which is internally compiled to a [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp).
 
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
@@ -991,6 +1160,53 @@ describe('app', function() {
   });
 });
 ```
+
+Mutually exclusive with `--fgrep`.
+
+### `--invert`
+
+Use the *inverse* of the match specified by `--grep` or `fgrep`.
+
+Requires either `--grep` or `--fgrep` (but not both).
+
+### `--debug, --inspect, --debug-brk, --inspect-brk, debug, inspect`
+
+> *BREAKING CHANGE in v6.0.0; `-d` is no longer an alias for `--debug`.*
+> *Other updates in v6.0.0:*
+> *In versions of Node.js implementing `--inspect` and `--inspect-brk`, `--debug` and `--debug-brk` are respectively aliases for these two options.*
+> *Likewise, `debug` (not `--debug`) is an alias for `inspect` (not `--inspect`) in Node.js versions where `debug` is deprecated.*
+
+Enables Node.js' debugger or inspector.
+
+Use `--inspect` / `--inspect-brk` / `--debug` / `--debug-brk` to launch the V8 inspector for use with Chrome Dev Tools.
+
+Use `inspect` / `debug` to launch Node.js' internal debugger.
+
+All of these options are mutually exclusive.
+
+Implies `--no-timeout`.
+
+### About Option Types
+
+> *Updated in v6.0.0.*
+
+Each flag annotated of type `[boolean]` in Mocha's `--help` output can be *negated* by prepending `--no-` to the flag name.  For example, `--no-color` will disable Mocha's color output, which is enabled by default.
+
+Unless otherwise noted, *all* boolean flags default to `false`.
+
+### About `node` Flags
+
+The `mocha` executable supports all applicable flags which the `node` executable supports.
+
+These flags vary depending on your version of Node.js.
+
+`node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
+
+### About V8 Flags
+
+Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
+
+V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
 ## Interfaces
 
@@ -1329,13 +1545,72 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 
 [Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
 
+## Configuring Mocha (Node.js)
+
+> *New in v6.0.0*
+
+In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+
+- **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
+- **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
+- **JSON**: Create a `.mocharc.json` in your project's root directory.  Comments--while not valid JSON--are allowed in this file, and will be ignored by Mocha.
+- **`package.json`**: Create a `mocha` property in your project's `package.json`.
+
+Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
+
+### Custom Locations
+
+You can specify a custom location for your configuration file with the `--config <path>` option.  Mocha will use the file's extension to determine how to parse the file, and will assume JSON if unknown.
+
+You can specify a custom `package.json` location as well, using the `--package <path>` option.
+
+### Ignoring Config Files
+
+To skip looking for config files, use `--no-config`. Likewise, use `--no-package` to stop Mocha from looking for configuration in a `package.json`.
+
+### Priorities
+
+If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for--and use--only one.  The priority is:
+
+1. `.mocharc.js`
+1. `.mocharc.yaml`
+1. `.mocharc.yml`
+1. `.mocharc.json`
+
+### Merging
+
+Mocha will also *merge* any options found in `package.json` *and* `mocha.opts` into its run-time configuration.  In case of conflict, the priority is:
+
+1. Arguments specified on command-line
+1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
+1. `mocha` property of `package.json`
+1. `mocha.opts`
+
+Options which can safely be repeated (e.g., `--require`) will be *concatenated*, with higher-priorty configuration sources appearing earlier in the list.  For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+
+### Extending Configuration
+
+Configurations can inherit from other modules using the `extends` keyword.  See [here](http://yargs.js.org/docs/#api-configobject-extends-keyword) for more information.
+
+### Configuration Format
+
+- Any "boolean" flag (which doesn't require a parameter, such as `--bail`), can be specified using a boolean value, e.g.: `"bail": true`.
+- Any "array"-type option (see `mocha --help` for a list) can be a single string value.
+- For options containing a dash (`-`), the option name can be specified using camelCase.
+- Aliases are valid names, e.g., `R` instead of `reporter`.
+- Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
+- Flags to `node` are *also* supported in configuration files, like in `mocha.opts`.  Use caution, as these can vary between versions of Node.js!
+
+**For more configuration examples, see the [`example/config` directory on GitHub.](https://github.com/mochajs/mocha/tree/master/example/config)**
+
 ## `mocha.opts`
 
-Back on the server, Mocha will attempt to load `"./test/mocha.opts"` as a
-Run-Control file of sorts.
+> *Updated in v6.0.0; `mocha.opts` is now considered "legacy"--though not yet deprecated--and we recommend using a configuration file instead.*
+
+Mocha will attempt to load `"./test/mocha.opts"` as a run-control file of sorts.
 
 Beginning-of-line comment support is available; any line _starting_ with a
-hash (#) symbol will be considered a comment. Blank lines may also be used.
+hash (`#`) symbol will be considered a comment. Blank lines may also be used.
 Any other line will be treated as a command-line argument (along with any
 associated option value) to be used as a default setting. Settings should be
 specified one per line.
@@ -1347,7 +1622,6 @@ For example, suppose you have the following `mocha.opts` file:
 
 ```sh
 # mocha.opts
-
   --require should
   --reporter dot
   --ui bdd
@@ -1361,6 +1635,8 @@ and changing the reporter to `list`:
 ```sh
 $ mocha --reporter list --growl
 ```
+
+To ignore your `mocha.opts`, use the `--no-opts` option.
 
 ## The `test/` Directory
 

@@ -53,7 +53,7 @@ describe('hooks', function() {
   it('can fail a test in an afterEach hook', function(done) {
     helpers.runMochaJSON(
       'hooks/afterEach-hook-conditionally-fail.fixture.js',
-      args,
+      [],
       function(err, res) {
         if (err) {
           done(err);

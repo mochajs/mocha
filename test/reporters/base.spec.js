@@ -2,7 +2,6 @@
 
 var assert = require('assert');
 var chaiExpect = require('chai').expect;
-
 var Base = require('../../lib/reporters/base');
 var AssertionError = assert.AssertionError;
 var makeTest = require('./helpers').makeTest;

@@ -67,8 +67,8 @@ jobs:
       env: null
       before_install: true
       install: npm install --production
-      # `--opts /dev/null` means "ignore test/mocha.opts"
-      script: ./bin/mocha --opts /dev/null --reporter spec test/sanity/sanity.spec.js
+
+      script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
       cache:
         directories:
           - ~/.npm

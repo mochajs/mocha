@@ -3,14 +3,17 @@
 const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
+const os = require('os');
 const baseBundleDirpath = path.join(__dirname, '.karma');
 
+const hostname = os.hostname();
+
 const browserPlatformPairs = {
-  'chrome@latest': 'Windows 8',
+  'chrome@latest': 'Windows 10',
   'MicrosoftEdge@latest': 'Windows 10',
-  'internet explorer@11.0': 'Windows 8.1',
+  'internet explorer@latest': 'Windows 10',
   'firefox@latest': 'Windows 10',
-  'safari@latest': 'OS X 10.12'
+  'safari@latest': 'macOS 10.13'
 };
 
 module.exports = config => {
@@ -20,7 +23,6 @@ module.exports = config => {
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
-      'test/browser-fixtures/bdd.fixture.js',
       'test/unit/*.spec.js'
     ],
     preprocessors: {
@@ -54,8 +56,7 @@ module.exports = config => {
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
-        reporter: 'html',
-        timeout: 500
+        opts: require.resolve('./test/browser-specific/mocha.opts')
       }
     },
     mochaReporter: {
@@ -93,11 +94,11 @@ module.exports = config => {
     } else if (env.APPVEYOR) {
       throw new Error('no browser tests should run on AppVeyor!');
     } else {
-      console.error('Local/unknown environment detected');
-      bundleDirpath = path.join(baseBundleDirpath, 'local');
+      console.error(`Local environment (${hostname}) detected`);
+      bundleDirpath = path.join(baseBundleDirpath, hostname);
       // don't need to run sauce from appveyor b/c travis does it.
       if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
-        const id = `${require('os').hostname()} (${Date.now()})`;
+        const id = `${hostname} (${Date.now()})`;
         sauceConfig = {
           build: id,
           tunnelIdentifier: id,
@@ -130,10 +131,8 @@ module.exports = config => {
       if (cfg.sauceLabs) {
         cfg.sauceLabs.testName = `Interface "${MOCHA_TEST}" Integration Tests`;
       }
-      cfg.files = [
-        `test/browser-fixtures/${MOCHA_TEST}.fixture.js`,
-        `test/interfaces/${MOCHA_TEST}.spec.js`
-      ];
+      cfg.files = [`test/interfaces/${MOCHA_TEST}.spec.js`];
+      cfg.client.mocha.ui = MOCHA_TEST;
       break;
 
     case 'esm':
@@ -141,8 +140,11 @@ module.exports = config => {
       // support
       cfg.browsers = ['ChromeHeadless'];
       cfg.files = [
-        'test/browser-specific/esm.spec.js',
-        'test/browser-fixtures/esm.fixture.html'
+        {
+          pattern: 'test/browser-specific/fixtures/esm.fixture.mjs',
+          type: 'module'
+        },
+        {pattern: 'test/browser-specific/esm.spec.mjs', type: 'module'}
       ];
       break;
     default:
@@ -152,9 +154,10 @@ module.exports = config => {
   }
 
   cfg.files.unshift(
-    'node_modules/unexpected/unexpected.js',
-    {pattern: 'node_modules/unexpected/unexpected.js.map', included: false},
-    'test/browser-specific/setup.js'
+    require.resolve('unexpected/unexpected'),
+    {pattern: require.resolve('unexpected/unexpected.js.map'), included: false},
+    require.resolve('unexpected-sinon'),
+    require.resolve('./test/browser-specific/setup')
   );
 
   config.set(cfg);
