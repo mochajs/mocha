@@ -5,7 +5,7 @@
  * dependencies in our Browserify bundle.
  */
 
-const through = require('through2');
+const {through} = require('mississippi');
 const defineRx = /typeof\s+define\s*===?\s*['"]function['"]\s*&&\s*(?:define\.amd|typeof\s+define\.amd\s*===?\s*['"]object['"]\s*&&\s*define\.amd)/g;
 function createStream() {
   return through.obj(function(chunk, enc, next) {
