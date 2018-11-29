@@ -57,6 +57,7 @@ module.exports = {
       node: {
         default: {
           script: `nps ${[
+            'build',
             'test.node.bdd',
             'test.node.tdd',
             'test.node.qunit',
@@ -64,10 +65,10 @@ module.exports = {
             'test.node.unit',
             'test.node.integration',
             'test.node.jsapi',
-            'test.node.compilers',
             'test.node.requires',
             'test.node.reporters',
-            'test.node.only'
+            'test.node.only',
+            'test.node.opts'
           ].join(' ')}`,
           description: 'Run Node.js tests'
         },
@@ -94,57 +95,30 @@ module.exports = {
         unit: {
           script: test(
             'unit',
-            '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'
+            '"test/unit/*.spec.js" "test/node-unit/**/*.spec.js" --growl'
           ),
           description: 'Run Node.js unit tests'
         },
         integration: {
           script: test(
             'integration',
-            '--timeout 5000 --slow 500 "test/integration/*.spec.js"'
+            '--timeout 5000 --slow 1500 "test/integration/*.spec.js"'
           ),
           description: 'Run Node.js integration tests',
+          hiddenFromHelp: true
+        },
+        opts: {
+          script: test(
+            'opts',
+            '--opts test/opts/mocha.opts test/opts/opts.spec.js --no-config'
+          ),
+          description: 'Run tests concerning mocha.opts',
           hiddenFromHelp: true
         },
         jsapi: {
           script: 'node test/jsapi',
           description: 'Run Node.js Mocha JavaScript API tests',
           hiddenFromHelp: true
-        },
-        compilers: {
-          default: {
-            script:
-              'nps test.node.compilers.coffee test.node.compilers.custom test.node.compilers.multiple',
-            description: 'Run Node.js --compilers flag tests (deprecated)',
-            hiddenFromHelp: true
-          },
-          coffee: {
-            script: test(
-              'compilers-coffee',
-              '--compilers coffee:coffee-script/register test/compiler'
-            ),
-            description:
-              'Run Node.js coffeescript compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          custom: {
-            script: test(
-              'compilers-custom',
-              '--compilers foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js custom compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          multiple: {
-            script: test(
-              'compilers-multiple',
-              '--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js multiple compiler tests using--compilers flag (deprecated)',
-            hiddenFromHelp: true
-          }
         },
         requires: {
           script: test(
@@ -270,6 +244,11 @@ module.exports = {
       script: 'nyc report --reporter=text-lcov | coveralls',
       description: 'Send code coverage report to coveralls (run during CI)',
       hiddenFromHelp: true
+    },
+    'coverage-report': {
+      script: 'nyc report --reporter=html',
+      description:
+        'Output HTML coverage report to coverage/index.html (run tests with COVERAGE=1 first)'
     },
     docs: {
       default: {
