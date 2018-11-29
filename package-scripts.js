@@ -279,7 +279,7 @@ module.exports = {
       },
       prebuild: {
         script:
-          'rimraf docs/_dist docs/api && node scripts/docs-update-toc.js && nps docs.api',
+          'rimraf docs/_dist docs/api && node scripts/preprocess-docs.js && nps docs.api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -290,7 +290,7 @@ module.exports = {
         hiddenFromHelp: true
       },
       prewatch: {
-        script: 'node scripts/docs-update-toc.js',
+        script: 'node scripts/preprocess-docs.js',
         description: 'Prepare system for doc building w/ watch',
         hiddenFromHelp: true
       },
