@@ -1,0 +1,6 @@
+###
+### mocha.opts
+###
+
+--reporter html
+--timeout 1000

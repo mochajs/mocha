@@ -2,11 +2,12 @@
 
 var path = require('path');
 var helpers = require('./helpers');
-var runMochaJSON = helpers.runMochaJSON;
 var runMocha = helpers.runMocha;
-var runRaw = helpers.runMochaJSONRaw;
-var directInvoke = helpers.invokeMocha;
+var runMochaJSON = helpers.runMochaJSON;
+var runMochaJSONRaw = helpers.runMochaJSONRaw;
+var invokeMocha = helpers.invokeMocha;
 var resolvePath = helpers.resolveFixturePath;
+var toJSONRunResult = helpers.toJSONRunResult;
 var args = [];
 
 describe('options', function() {
@@ -317,34 +318,42 @@ describe('options', function() {
     });
 
     it('fails if there are tests in suites marked only', function(done) {
-      runMocha('options/forbid-only/only-suite.js', args, function(err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
-        done();
-      });
+      runMocha(
+        'options/forbid-only/only-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
     });
 
     it('fails if there is empty suite marked only', function(done) {
-      runMocha('options/forbid-only/only-empty-suite.js', args, function(
-        err,
-        res
-      ) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
-        done();
-      });
+      runMocha(
+        'options/forbid-only/only-empty-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
     });
 
     it('fails if there is suite marked only which matches a grep', function(done) {
@@ -361,7 +370,8 @@ describe('options', function() {
             output: new RegExp(onlyErrorMessage)
           });
           done();
-        }
+        },
+        {stdio: 'pipe'}
       );
     });
 
@@ -418,37 +428,41 @@ describe('options', function() {
     });
 
     it('fails if there are tests in suites marked skip', function(done) {
-      runMocha('options/forbid-pending/skip-suite.js', args, function(
-        err,
-        res
-      ) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(pendingErrorMessage)
-        });
-        done();
-      });
+      runMocha(
+        'options/forbid-pending/skip-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(pendingErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
     });
 
     it('fails if there is empty suite marked pending', function(done) {
-      runMocha('options/forbid-pending/skip-empty-suite.js', args, function(
-        err,
-        res
-      ) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(pendingErrorMessage)
-        });
-        done();
-      });
+      runMocha(
+        'options/forbid-pending/skip-empty-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(pendingErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
     });
 
     var forbidPendingFailureTests = {
@@ -497,8 +511,9 @@ describe('options', function() {
      */
     var runExit = function(shouldExit, behavior) {
       return function(done) {
+        var timeout = this.timeout();
         this.timeout(0);
-        this.slow(3000);
+        this.slow(Infinity);
         var didExit = true;
         var t;
         var args = behaviors[behavior] ? [behaviors[behavior]] : [];
@@ -519,7 +534,7 @@ describe('options', function() {
           // this is the only way to kill the child, afaik.
           // after the process ends, the callback to `run()` above is handled.
           mocha.kill('SIGINT');
-        }, 2000);
+        }, timeout - 500);
       };
     };
 
@@ -544,16 +559,16 @@ describe('options', function() {
 
   describe('--help', function() {
     it('works despite the presence of mocha.opts', function(done) {
-      directInvoke(
+      invokeMocha(
         ['-h'],
         function(error, result) {
           if (error) {
             return done(error);
           }
-          expect(result.output, 'to contain', 'Usage:');
+          expect(result.output, 'to contain', 'Run tests with Mocha');
           done();
         },
-        path.join(__dirname, 'fixtures', 'options', 'help')
+        {cwd: path.join(__dirname, 'fixtures', 'options', 'help')}
       );
     });
   });
@@ -563,7 +578,7 @@ describe('options', function() {
 
     it('works despite nonexistent default options file', function(done) {
       args = [];
-      run(testFile, args, function(err, res) {
+      runMochaJSON(testFile, args, function(err, res) {
         if (err) {
           return done(err);
         }
@@ -574,22 +589,19 @@ describe('options', function() {
 
     it('should throw an error due to nonexistent options file', function(done) {
       args = ['--opts', 'nosuchoptionsfile', testFile];
-      directInvoke(
+      invokeMocha(
         args,
         function(err, res) {
           if (err) {
             return done(err);
           }
-          expect(
-            res.output,
-            'to contain',
-            'failed to load Mocha options file',
-            'ENOENT:'
-          );
-          expect(res.code, 'to be', 1); // failed
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: /unable to read nosuchoptionsfile/i
+          });
           return done();
         },
-        path.join(__dirname, 'fixtures')
+        {cwd: path.join(__dirname, 'fixtures'), stdio: 'pipe'}
       );
     });
   });
@@ -667,28 +679,88 @@ describe('options', function() {
           this.timeout(0);
           this.slow(3000);
           // executes Mocha in a subprocess
-          var mocha = runRaw('exit.fixture.js', ['--watch'], function(
-            err,
-            data
-          ) {
-            // After the process ends, this callback is ran
-            clearTimeout(t);
-            if (err) {
-              done(err);
-              return;
-            }
+          var mocha = runMochaJSONRaw(
+            'exit.fixture.js',
+            ['--watch'],
+            function(err, data) {
+              // After the process ends, this callback is ran
+              if (err) {
+                done(err);
+                return;
+              }
 
-            var expectedCloseCursor = '\u001b[?25h';
-            expect(data.output, 'to contain', expectedCloseCursor);
-            expect(data.code, 'to be', 130);
-            done();
-          });
-          var t = setTimeout(function() {
+              var expectedCloseCursor = '\u001b[?25h';
+              expect(data.output, 'to contain', expectedCloseCursor);
+              expect(data.code, 'to be', 130);
+              done();
+            },
+            {stdio: 'pipe'}
+          );
+          setTimeout(function() {
             // kill the child process
             mocha.kill('SIGINT');
-          }, 500);
+          }, 1000);
         });
       });
     });
   }
+
+  describe('--compilers', function() {
+    it('should fail', function(done) {
+      invokeMocha(['--compilers', 'coffee:coffee-script/register'], function(
+        error,
+        result
+      ) {
+        if (error) {
+          return done(error);
+        }
+        expect(result.code, 'to be', 1);
+        done();
+      });
+    });
+  });
+
+  describe('--fgrep and --grep', function() {
+    it('should conflict', function(done) {
+      runMocha(
+        'uncaught.fixture.js',
+        ['--fgrep', 'first', '--grep', 'second'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(result, 'to have failed');
+          done();
+        }
+      );
+    });
+  });
+
+  describe('--extension', function() {
+    it('should allow comma-separated variables', function(done) {
+      invokeMocha(
+        [
+          '--require',
+          'coffee-script/register',
+          '--require',
+          './test/setup',
+          '--reporter',
+          'json',
+          '--extension',
+          'js,coffee',
+          'test/integration/fixtures/options/extension'
+        ],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(toJSONRunResult(result), 'to have passed').and(
+            'to have passed test count',
+            2
+          );
+          done();
+        }
+      );
+    });
+  });
 });
