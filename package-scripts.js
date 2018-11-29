@@ -12,6 +12,9 @@ const path = require('path');
 function test(testName, mochaParams) {
   const coverageCommand = `nyc --no-clean --report-dir coverage/reports/${testName}`;
   const mochaCommand = `node ${path.join('bin', 'mocha')}`; // Include 'node' and path.join for Windows compatibility
+  if (process.env.CI && !/^only-/.test(testName)) {
+    mochaParams += ' --forbid-only';
+  }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
   } ${mochaCommand} ${mochaParams}`.trim();
@@ -196,7 +199,7 @@ module.exports = {
           },
           globalBdd: {
             script: test(
-              'global-only-bdd',
+              'only-global-bdd',
               '--ui bdd test/only/global/bdd.spec'
             ),
             description: 'Run Node.js "global only" w/ BDD interface tests',
@@ -204,7 +207,7 @@ module.exports = {
           },
           globalTdd: {
             script: test(
-              'global-only-tdd',
+              'only-global-tdd',
               '--ui tdd test/only/global/tdd.spec'
             ),
             description: 'Run Node.js "global only" w/ TDD interface tests',
@@ -212,7 +215,7 @@ module.exports = {
           },
           globalQunit: {
             script: test(
-              'global-only-qunit',
+              'only-global-qunit',
               '--ui qunit test/only/global/qunit.spec'
             ),
             description: 'Run Node.js "global only" w/ QUnit interface tests',
