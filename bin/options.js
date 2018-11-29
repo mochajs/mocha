@@ -32,22 +32,22 @@ const defaultPathname = 'test/mocha.opts';
  * @returns {string} test directory, if it exists
  */
 function getTestDirectory() {
-  if (getTestDirectory.cash) {
-    return getTestDirectory.cash;
+  if (!getTestDirectory.cache) {
+    try {
+      const pkg = readPkgUp.sync('__dirname').path;
+      const testDir = require(pkg).directories.test;
+      if (testDir) {
+        getTestDirectory.cache = testDir;
+      } else {
+        getTestDirectory.cache = 'test';
+      }
+    } catch (ignore) {
+      getTestDirectory.cache = 'test';
+      // NOTE: should console.error() and throw the error
+    }
   }
 
-  try {
-    const packPath = readPkgUp.sync('__dirname').path;
-    const testDir = require(packPath).directories.test;
-    if (testDir) {
-      return (getTestDirectory.cash = testDir);
-    } else {
-      return (getTestDirectory.cash = 'test');
-    }
-  } catch (ignore) {
-    return (getTestDirectory.cash = 'test');
-    // NOTE: should console.error() and throw the error
-  }
+  return getTestDirectory.cache;
 }
 
 /**
