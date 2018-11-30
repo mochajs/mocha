@@ -64,7 +64,7 @@ module.exports = {
         var result = JSON.parse(res.output);
         result.code = res.code;
       } catch (err) {
-        return fn(err);
+        return fn(new Error('output is not valid JSON:\n\n' + res.output));
       }
 
       fn(null, result);
