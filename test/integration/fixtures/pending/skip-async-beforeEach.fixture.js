@@ -9,7 +9,13 @@ describe('skip in beforeEach', function () {
     }, 0);
   });
 
-  it('should skip this test', function () {});
-  it('should error before reaching this test', function () {});
-  it('should error before reaching this test', function () {});
+  it('should skip this test', function () {
+    throw new Error('never run this test');
+  });
+  it('should not reach this test', function () {
+    throw new Error('never run this test');
+  });
+  it('should not reach this test', function () {
+    throw new Error('never run this test');
+  });
 });

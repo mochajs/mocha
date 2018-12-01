@@ -8,7 +8,5 @@ describe('skip in test', function () {
     }, 0);
   });
 
-  it('should run other tests in the suite', function () {
-    // Do nothing
-  });
+  it('should run other tests in the suite', function () {});
 });

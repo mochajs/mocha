@@ -1,7 +1,6 @@
 'use strict';
 
 describe('outer describe', function () {
-
   it('should run this test', function () {});
 
   describe('skip in before', function () {
@@ -9,10 +8,13 @@ describe('outer describe', function () {
       this.skip();
     });
 
-    it('should never run this test', function () {});
-    it('should never run this test', function () {});
+    it('should never run this test', function () {
+      throw new Error('never run this test');
+    });
+    it('should never run this test', function () {
+      throw new Error('never run this test');
+    });
   });
 
   it('should run this test', function () {});
-
 });

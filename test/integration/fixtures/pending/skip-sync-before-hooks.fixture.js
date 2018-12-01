@@ -39,7 +39,7 @@ describe('outer suite', function () {
       });
 
       it('should never run this test', function () {
-        throw new Error('skipped suie test should not run');
+        throw new Error('skipped suite test should not run');
       });
 
       after(function () {
