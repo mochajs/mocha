@@ -6,7 +6,7 @@ describe('skip in beforeEach', function () {
     setTimeout(function () {
       self.skip();
       done();
-    }, 50);
+    }, 0);
   });
 
   it('should skip this test', function () {});

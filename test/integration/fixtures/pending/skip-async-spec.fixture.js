@@ -5,7 +5,7 @@ describe('skip in test', function () {
     var self = this;
     setTimeout(function () {
       self.skip();
-    }, 50);
+    }, 0);
   });
 
   it('should run other tests in the suite', function () {

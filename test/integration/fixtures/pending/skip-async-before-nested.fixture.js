@@ -4,7 +4,7 @@ describe('skip in before with nested describes', function () {
     setTimeout(function () {
       self.skip();
       done();
-    }, 50);
+    }, 0);
   });
 
   it('should never run this test', function () { });

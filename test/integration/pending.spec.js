@@ -189,7 +189,7 @@ describe('pending', function() {
           assert.equal(res.stats.pending, 2);
           assert.equal(res.stats.passes, 2);
           assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0, 'code');
+          assert.equal(res.code, 0);
           done();
         });
       });

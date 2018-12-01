@@ -9,7 +9,7 @@ describe('outer describe', function () {
       var self = this;
       setTimeout(function () {
         self.skip();
-      }, 50);
+      }, 0);
     });
 
     it('should never run this test', function () {});

@@ -16,7 +16,7 @@ describe('outer suite', function () {
       setTimeout(function () {
         self.skip();
         done();
-      });
+      }, 0);
     });
 
     beforeEach(function () {
