@@ -5,6 +5,7 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var assert = require('assert');
 var createStatsCollector = require('../../lib/stats-collector');
+var EventEmitter = require('events').EventEmitter;
 var reporters = require('../../').reporters;
 var XUnit = reporters.XUnit;
 
@@ -319,6 +320,57 @@ describe('XUnit reporter', function() {
 
         expect(expectedWrite, 'to be', expectedTag);
       });
+    });
+    it('should write expected summary statistics', function() {
+      var count = 0;
+      var simpleError = {
+        actual: 'foo',
+        expected: 'bar',
+        message: expectedMessage,
+        stack: expectedStack
+      };
+      var generateTest = function(passed) {
+        var t = {
+          title: expectedTitle + count,
+          state: passed ? 'passed' : 'failed',
+          isPending: function() {
+            return false;
+          },
+          slow: function() {
+            return false;
+          },
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
+          duration: 1000
+        };
+        return t;
+      };
+
+      var runner = new EventEmitter();
+      createStatsCollector(runner);
+      var xunit = new XUnit(runner);
+      expectedWrite = '';
+      xunit.write = function(string) {
+        expectedWrite += string;
+      };
+
+      // 3 tests, no failures (i.e. tests that could not run), and 2 errors
+      runner.emit('test end');
+      runner.emit('pass', generateTest(true));
+      runner.emit('test end');
+      runner.emit('fail', generateTest(false), simpleError);
+      runner.emit('test end');
+      runner.emit('fail', generateTest(false), simpleError);
+      runner.emit('end');
+
+      var expectedTag =
+        '<testsuite name="Mocha Tests" tests="3" failures="0" errors="2" skipped="0"';
+
+      expect(expectedWrite, 'to contain', expectedTag);
+      expect(expectedWrite, 'to contain', '</testsuite>');
     });
   });
 
