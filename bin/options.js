@@ -17,37 +17,54 @@ module.exports = {
 };
 
 /**
- * Default pathname for run-control file.
+ * Default test directory.
  *
  * @constant
  * @type {string}
  * @default
  */
-const defaultPathname = 'test/mocha.opts';
+const DEFAULT_TEST_DIRECTORY = 'test';
+
+/**
+ * Default filename of run-control file.
+ *
+ * @constant
+ * @type {string}
+ * @default
+ */
+const DEFAULT_OPTS_FILENAME = 'mocha.opts';
 
 /**
  * Reads directories.test of package.json.
  *
  * @public
- * @returns {string} test directory, if it exists
+ * @returns {string} test directory
  */
+let cachedTestDirectory;
+
 function getTestDirectory() {
-  if (!getTestDirectory.cache) {
+  if (!cachedTestDirectory) {
+    cachedTestDirectory = DEFAULT_TEST_DIRECTORY;
     try {
-      const pkg = readPkgUp.sync('__dirname').path;
-      const testDir = require(pkg).directories.test;
-      if (testDir) {
-        getTestDirectory.cache = testDir;
-      } else {
-        getTestDirectory.cache = 'test';
+      let pkgPath = readPkgUp.sync(process.cwd()).path;
+
+      if (!pkgPath) {
+        // PIW: get directory of specific test location
+        const specTest = path.dirname(process.argv[process.argv.length - 1]);
+        pkgPath = readPkgUp.sync(specTest).path;
       }
-    } catch (ignore) {
-      getTestDirectory.cache = 'test';
-      // NOTE: should console.error() and throw the error
-    }
+
+      if (pkgPath) {
+        const pkg = require(pkgPath);
+
+        if (pkg.directories && pkg.directories.test) {
+          cachedTestDirectory = pkg.directories.test;
+        }
+      }
+    } catch (ignore) {}
   }
 
-  return getTestDirectory.cache;
+  return cachedTestDirectory;
 }
 
 /**
@@ -98,16 +115,14 @@ function getOptions() {
     return;
   }
 
-  const testDirectory = getTestDirectory();
+  const defaultPathname = path.posix.join(
+    getTestDirectory(),
+    DEFAULT_OPTS_FILENAME
+  );
 
   const optsPath =
     process.argv.indexOf('--opts') === -1
-      ? testDirectory
-        ? path.join(
-            testDirectory,
-            defaultPathname.slice(defaultPathname.lastIndexOf('/') + 1)
-          )
-        : defaultPathname
+      ? defaultPathname
       : process.argv[process.argv.indexOf('--opts') + 1];
 
   try {

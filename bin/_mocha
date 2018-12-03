@@ -526,7 +526,7 @@ mocha.ui(program.ui);
 
 const args = program.args;
 
-// sets directory for test files with default to test/*.{js,coffee}
+// Set default directory for test files
 
 if (!args.length) {
   args.push(getTestDirectory());

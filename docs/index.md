@@ -1328,7 +1328,7 @@ $ mocha --reporter list --growl
 
 By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include subdirectories, pass the `--recursive` option.
 
-Mocha will honor the [test directory](https://docs.npmjs.com/files/package.json#directoriestest) setting in your "package.json" if it exists. 
+Mocha will honor the [test directory](https://docs.npmjs.com/files/package.json#directoriestest) setting in your "package.json" if it exists.
 
 Set this field's value to `"./test"` to match Mocha's default, or specify an alternate directory to where your Mocha tests. For example, if an example project used an alternate directory named "myTests", its "package.json" setting would look like this:
 
