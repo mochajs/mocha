@@ -6,10 +6,10 @@ describe('skip in beforeEach', function () {
   });
 
   it('should never run this test', function () {
-    throw new Error('never thrown');
+    throw new Error('never run this test');
   });
 
   it('should never run this test', function () {
-    throw new Error('never thrown');
+    throw new Error('never run this test');
   });
 });
