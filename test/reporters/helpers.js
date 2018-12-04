@@ -8,6 +8,8 @@
   scope of this function for the tests to run properly.
 */
 
+var createStatsCollector = require('../../lib/stats-collector');
+
 function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var runnerFunction = createRunnerFunction(
     runStr,
@@ -17,10 +19,12 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     arg1,
     arg2
   );
-  return {
+  var mockRunner = {
     on: runnerFunction,
     once: runnerFunction
   };
+  createStatsCollector(mockRunner);
+  return mockRunner;
 }
 
 function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
