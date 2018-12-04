@@ -635,6 +635,30 @@ before(function() {
 });
 ```
 
+This will skip all `it`, `beforeEach/afterEach`, and `describe` blocks within the suite. `before/after` hooks are skipped unless they are defined at the same level as the hook containing `this.skip()`.
+
+```js
+describe('outer', function () {
+  before(function () {
+    this.skip();
+  });
+
+  after(function () {
+    // will be executed
+  });
+
+  describe('inner', function () {
+    before(function () {
+      // will be skipped
+    });
+
+    after(function () {
+      // will be skipped
+    });
+  });
+});
+```
+
 > Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
 ## Retry Tests
