@@ -707,9 +707,17 @@ $ mocha
 
 <h2 id="test-duration">Test duration</h2>
 
-Many reporters will display test duration, as well as flagging tests that are slow, as shown here with the "spec" reporter:
+Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the "spec" reporter:
 
 ![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+
+There are three levels of test duration (depicted in the following image):
+
+1. FAST: Tests that run within half of the "slow" threshold will show the duration in green (if at all).
+2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
+3. SLOW: Tests that run exceeding the threshold will show the duration in red.
+
+![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 To tweak what's considered "slow", you can use the `slow()` method:
 
