@@ -417,13 +417,46 @@ describe('options', function() {
       });
     });
 
+    it('fails if there are tests in suites marked skip', function(done) {
+      runMocha('options/forbid-pending/skip-suite.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(pendingErrorMessage)
+        });
+        done();
+      });
+    });
+
+    it('fails if there is empty suite marked pending', function(done) {
+      runMocha('options/forbid-pending/skip-empty-suite.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(pendingErrorMessage)
+        });
+        done();
+      });
+    });
+
     var forbidPendingFailureTests = {
       'fails if there are tests marked skip': 'skip.js',
       'fails if there are pending tests': 'pending.js',
       'fails if tests call `skip()`': 'this.skip.js',
       'fails if beforeEach calls `skip()`': 'beforeEach-this.skip.js',
-      'fails if before calls `skip()`': 'before-this.skip.js',
-      'fails if there are tests in suites marked skip': 'skip-suite.js'
+      'fails if before calls `skip()`': 'before-this.skip.js'
     };
 
     Object.keys(forbidPendingFailureTests).forEach(function(title) {
