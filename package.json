@@ -2,13 +2,7 @@
   "name": "mocha",
   "version": "5.2.0",
   "description": "simple, flexible, fun test framework",
-  "keywords": [
-    "mocha",
-    "test",
-    "bdd",
-    "tdd",
-    "tap"
-  ],
+  "keywords": ["mocha", "test", "bdd", "tdd", "tap"],
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "contributors": [
     "38elements <mh19820223@gmail.com>",
@@ -489,7 +483,6 @@
     "chai": "^4.1.2",
     "coffee-script": "^1.10.0",
     "coveralls": "^3.0.1",
-    "common-tags": "^1.8.0",
     "cross-spawn": "^6.0.5",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
@@ -509,16 +502,17 @@
     "karma-mocha-reporter": "^2.2.4",
     "karma-sauce-launcher": "^1.2.0",
     "lint-staged": "^7.1.0",
+    "markdown-magic": "^0.1.25",
+    "markdown-magic-package-json": "^2.0.0",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.9.0",
     "nps": "^5.7.1",
     "nyc": "^11.7.3",
-    "mississippi": "^3.0.0",
     "package-json-versionify": "^1.0.4",
     "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.5.2",
     "svgo": "^0.7.2",
-    "through2": "^2.0.1",
+    "through2": "^2.0.5",
     "unexpected": "^10.37.7",
     "watchify": "^3.7.0"
   },
@@ -532,9 +526,7 @@
     "browser-entry.js"
   ],
   "browserify": {
-    "transform": [
-      "package-json-versionify"
-    ]
+    "transform": ["package-json-versionify"]
   },
   "browser": {
     "growl": "./lib/browser/growl.js",
@@ -548,5 +540,6 @@
   "prettier": {
     "singleQuote": true,
     "bracketSpacing": false
-  }
+  },
+  "gitter": "https://gitter.im/mochajs/mocha"
 }
