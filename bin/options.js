@@ -46,20 +46,9 @@ function getTestDirectory() {
   if (!cachedTestDirectory) {
     cachedTestDirectory = DEFAULT_TEST_DIRECTORY;
     try {
-      let pkgPath = readPkgUp.sync(process.cwd()).path;
-
-      if (!pkgPath) {
-        // PIW: get directory of specific test location
-        const specTest = path.dirname(process.argv[process.argv.length - 1]);
-        pkgPath = readPkgUp.sync(specTest).path;
-      }
-
-      if (pkgPath) {
-        const pkg = require(pkgPath);
-
-        if (pkg.directories && pkg.directories.test) {
-          cachedTestDirectory = pkg.directories.test;
-        }
+      const pkg = readPkgUp.sync({cwd: process.cwd()}).pkg;
+      if (pkg.directories && pkg.directories.test) {
+        cachedTestDirectory = pkg.directories.test;
       }
     } catch (ignore) {}
   }
