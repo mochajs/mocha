@@ -48,7 +48,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 ## Table of Contents
 
-<!-- toc -->
+<!-- AUTO-GENERATED-CONTENT:START (toc:maxdepth=2&bullets=-) -->
 
 - [Installation](#installation)
 - [Getting Started](#getting-started)
@@ -77,7 +77,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Testing Mocha](#testing-mocha)
 - [More Information](#more-information)
 
-<!-- tocstop -->
+<!-- AUTO-GENERATED-CONTENT:END -->
 
 ## Installation
 
@@ -93,7 +93,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> Mocha currently requires Node.js v6.x or newer.
+> As of v6.0.0, Mocha requires Node.js v6.0.0 or newer.
 
 ## Getting Started
 
@@ -811,76 +811,78 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 ## Usage
 
-<!-- usage -->
+<!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
 
 ```plain
+
 Usage: mocha [debug] [options] [files]
 
 Options:
--V, --version                           output the version number
--A, --async-only                        force all tests to take a callback (async) or return a promise
--c, --colors                            force enabling of colors
--C, --no-colors                         force disabling of colors
--G, --growl                             enable growl notification support
--O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
--R, --reporter <name>                   specify the reporter to use (default: "spec")
--S, --sort                              sort test files
--b, --bail                              bail after first test failure
--d, --debug                             enable node's debugger, synonym for node --debug
--g, --grep <pattern>                    only run tests matching <pattern>
--f, --fgrep <string>                    only run tests containing <string>
--gc, --expose-gc                        expose gc extension
--i, --invert                            inverts --grep and --fgrep matches
--r, --require <name>                    require the given module (default: [])
--s, --slow <ms>                         specify "slow" test threshold in milliseconds (default: 75)
--t, --timeout <ms>                      specify test timeout threshold in milliseconds (default: 2000)
--u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: "bdd")
--w, --watch                             watch files in the current working directory for changes
---check-leaks                           check for global variable leaks
---full-trace                            display the full stack trace
---compilers <ext>:<module>,...          use the given module(s) to compile files (default: [])
---debug-brk                             enable node's debugger breaking on the first line
---globals <names>                       allow the given comma-delimited global [names] (default: [])
---es_staging                            enable all staged features
---harmony<_classes,_generators,...>     all node --harmony* flags are available
---preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
---icu-data-dir                          include ICU data
---inline-diffs                          display actual/expected differences inline within each string
---no-diff                               do not show a diff on failure
---inspect                               activate devtools in chrome
---inspect-brk                           activate devtools in chrome and break on the first line
---interfaces                            output provided interfaces and exit
---no-deprecation                        silence deprecation warnings
---exit                                  force shutdown of the event loop after test run: mocha will call process.exit
---no-timeouts                           disables timeouts, given implicitly with --debug/--inspect
---no-warnings                           silence all node process warnings
---opts <path>                           specify opts path (default: "test/mocha.opts")
---perf-basic-prof                       enable perf linux profiler (basic support)
---napi-modules                          enable experimental NAPI modules
---prof                                  log statistical profiling information
---log-timer-events                      Time events including external callbacks
---recursive                             include sub directories
---reporters                             output provided reporters and exit
---retries <times>                       specify number of times to retry a failed test case (default: 0)
---throw-deprecation                     throw an exception anytime a deprecated function is used
---trace                                 trace function calls
---trace-deprecation                     show stack traces on deprecations
---trace-warnings                        show stack traces on node process warnings
---use_strict                            enforce strict mode
---watch-extensions <ext>,...            specify extensions to monitor with --watch (default: ["js"])
---delay                                 wait for async suite definition
---allow-uncaught                        enable uncaught errors to propagate
---forbid-only                           causes test marked with only to fail the suite
---forbid-pending                        causes pending tests and test marked with skip to fail the suite
---file <file>                           adds file be loaded prior to suite execution (default: [])
---exclude <file>                        adds file or glob pattern to ignore (default: [])
--h, --help                              output usage information
+  -V, --version                           output the version number
+  -A, --async-only                        force all tests to take a callback (async) or return a promise
+  -c, --colors                            force enabling of colors
+  -C, --no-colors                         force disabling of colors
+  -G, --growl                             enable growl notification support
+  -O, --reporter-options <k=v,k2=v2,...>  reporter-specific options
+  -R, --reporter <name>                   specify the reporter to use (default: "spec")
+  -S, --sort                              sort test files
+  -b, --bail                              bail after first test failure
+  -d, --debug                             enable node's debugger, synonym for node --debug
+  -g, --grep <pattern>                    only run tests matching <pattern>
+  -f, --fgrep <string>                    only run tests containing <string>
+  -gc, --expose-gc                        expose gc extension
+  -i, --invert                            inverts --grep and --fgrep matches
+  -r, --require <name>                    require the given module (default: [])
+  -s, --slow <ms>                         specify "slow" test threshold in milliseconds (default: 75)
+  -t, --timeout <ms>                      specify test timeout threshold in milliseconds (default: 2000)
+  -u, --ui <name>                         specify user-interface (bdd|tdd|qunit|exports) (default: "bdd")
+  -w, --watch                             watch files in the current working directory for changes
+  --check-leaks                           check for global variable leaks
+  --full-trace                            display the full stack trace
+  --compilers <ext>:<module>,...          use the given module(s) to compile files (default: [])
+  --debug-brk                             enable node's debugger breaking on the first line
+  --globals <names>                       allow the given comma-delimited global [names] (default: [])
+  --es_staging                            enable all staged features
+  --harmony<_classes,_generators,...>     all node --harmony* flags are available
+  --preserve-symlinks                     Instructs the module loader to preserve symbolic links when resolving and caching modules
+  --icu-data-dir                          include ICU data
+  --inline-diffs                          display actual/expected differences inline within each string
+  --no-diff                               do not show a diff on failure
+  --inspect                               activate devtools in chrome
+  --inspect-brk                           activate devtools in chrome and break on the first line
+  --interfaces                            output provided interfaces and exit
+  --no-deprecation                        silence deprecation warnings
+  --exit                                  force shutdown of the event loop after test run: mocha will call process.exit
+  --no-timeouts                           disables timeouts, given implicitly with --debug/--inspect
+  --no-warnings                           silence all node process warnings
+  --opts <path>                           specify opts path (default: "test/mocha.opts")
+  --perf-basic-prof                       enable perf linux profiler (basic support)
+  --napi-modules                          enable experimental NAPI modules
+  --prof                                  log statistical profiling information
+  --log-timer-events                      Time events including external callbacks
+  --recursive                             include sub directories
+  --reporters                             output provided reporters and exit
+  --retries <times>                       specify number of times to retry a failed test case (default: 0)
+  --throw-deprecation                     throw an exception anytime a deprecated function is used
+  --trace                                 trace function calls
+  --trace-deprecation                     show stack traces on deprecations
+  --trace-warnings                        show stack traces on node process warnings
+  --use_strict                            enforce strict mode
+  --watch-extensions <ext>,...            specify extensions to monitor with --watch (default: ["js"])
+  --delay                                 wait for async suite definition
+  --allow-uncaught                        enable uncaught errors to propagate
+  --forbid-only                           causes test marked with only to fail the suite
+  --forbid-pending                        causes pending tests and test marked with skip to fail the suite
+  --file <file>                           adds file be loaded prior to suite execution (default: [])
+  --exclude <file>                        adds file or glob pattern to ignore (default: [])
+  -h, --help                              output usage information
 
 Commands:
-init <path>                             initialize a client-side mocha setup at <path>
+  init <path>                             initialize a client-side mocha setup at <path>
+
 ```
 
-<!-- usagestop -->
+<!-- AUTO-GENERATED-CONTENT:END -->
 
 ### `-w, --watch`
 
@@ -1447,4 +1449,8 @@ $ REPORTER=nyan npm test
 
 ## More Information
 
-In addition to chatting with us on [Gitter](https://gitter.im/mochajs/mocha), for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/) or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
+In addition to chatting with us on [Gitter], for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/) or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
+
+<!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
+[Gitter]: https://gitter.im/mochajs/mocha
+<!-- AUTO-GENERATED-CONTENT:END -->

@@ -279,7 +279,7 @@ module.exports = {
       },
       prebuild: {
         script:
-          'rimraf docs/_dist docs/api && node scripts/preprocess-docs.js && nps docs.api',
+          'rimraf docs/_dist docs/api && nps docs.preprocess && nps docs.api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -289,14 +289,15 @@ module.exports = {
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
-      prewatch: {
-        script: 'node scripts/preprocess-docs.js',
-        description: 'Prepare system for doc building w/ watch',
+      preprocess: {
+        script:
+          'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
+        description: 'Preprocess documenation',
         hiddenFromHelp: true
       },
       watch: {
         script:
-          'nps docs.prewatch && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
+          'nps docs.preprocess && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
         description: 'Watch docs for changes & build'
       },
       api: {
