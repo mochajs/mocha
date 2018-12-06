@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * This is a transform stream used to minify "package.json" results
+ * This is a transform stream used to cull "package.json" results
  * when our source is transformed for our Browserify bundle.
  *
  * Based on Nolan Lawson's "package-json-versionify" package.

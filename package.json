@@ -530,7 +530,7 @@
   ],
   "browserify": {
     "transform": [
-      "./scripts/package-json-minify"
+      "./scripts/package-json-cullify"
     ]
   },
   "browser": {
