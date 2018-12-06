@@ -1,0 +1,16 @@
+{
+  "name": "mocha",
+  "version": "1.0.0",
+  "description": "get directories.test as test folder",
+  "main": "index.js",
+  "directories": {
+    "test": "./subdir1-1"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC"
+}
