@@ -4,7 +4,7 @@
   "description": "get directories.test as test folder",
   "main": "index.js",
   "directories": {
-    "test": "subdir1-1"
+    "test": "fake-directory"
   },
   "dependencies": {},
   "devDependencies": {},
