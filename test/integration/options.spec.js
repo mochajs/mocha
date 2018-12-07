@@ -2,7 +2,8 @@
 
 var path = require('path');
 var helpers = require('./helpers');
-var run = helpers.runMochaJSON;
+var runMochaJSON = helpers.runMochaJSON;
+var runMocha = helpers.runMocha;
 var runRaw = helpers.runMochaJSONRaw;
 var directInvoke = helpers.invokeMocha;
 var resolvePath = helpers.resolveFixturePath;
@@ -15,7 +16,10 @@ describe('options', function() {
     });
 
     it('should fail synchronous specs', function(done) {
-      run('options/async-only-sync.fixture.js', args, function(err, res) {
+      runMochaJSON('options/async-only-sync.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
@@ -26,7 +30,10 @@ describe('options', function() {
     });
 
     it('should allow asynchronous specs', function(done) {
-      run('options/async-only-async.fixture.js', args, function(err, res) {
+      runMochaJSON('options/async-only-async.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
@@ -43,7 +50,7 @@ describe('options', function() {
     });
 
     it('should stop after the first error', function(done) {
-      run('options/bail.fixture.js', args, function(err, res) {
+      runMochaJSON('options/bail.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -58,7 +65,10 @@ describe('options', function() {
     });
 
     it('should stop all tests after the first error in before hook', function(done) {
-      run('options/bail-with-before.fixture.js', args, function(err, res) {
+      runMochaJSON('options/bail-with-before.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
@@ -71,7 +81,10 @@ describe('options', function() {
     });
 
     it('should stop all hooks after the first error', function(done) {
-      run('options/bail-with-after.fixture.js', args, function(err, res) {
+      runMochaJSON('options/bail-with-after.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
@@ -90,7 +103,7 @@ describe('options', function() {
     });
 
     it('should sort tests in alphabetical order', function(done) {
-      run('options/sort*', args, function(err, res) {
+      runMochaJSON('options/sort*', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -108,7 +121,7 @@ describe('options', function() {
     it('should run tests passed via file first', function(done) {
       args = ['--file', resolvePath('options/file-alpha.fixture.js')];
 
-      run('options/file-beta.fixture.js', args, function(err, res) {
+      runMochaJSON('options/file-beta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -128,7 +141,7 @@ describe('options', function() {
         resolvePath('options/file-beta.fixture.js')
       ];
 
-      run('options/file-theta.fixture.js', args, function(err, res) {
+      runMochaJSON('options/file-theta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -152,7 +165,7 @@ describe('options', function() {
     });
 
     it('should run the generated test suite', function(done) {
-      run('options/delay.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -163,7 +176,7 @@ describe('options', function() {
     });
 
     it('should execute exclusive tests only', function(done) {
-      run('options/delay-only.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay-only.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -180,7 +193,7 @@ describe('options', function() {
     });
 
     it('should throw an error if the test suite failed to run', function(done) {
-      run('options/delay-fail.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay-fail.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -197,7 +210,7 @@ describe('options', function() {
   describe('--grep', function() {
     it('runs specs matching a string', function(done) {
       args = ['--grep', 'match'];
-      run('options/grep.fixture.js', args, function(err, res) {
+      runMochaJSON('options/grep.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -212,7 +225,7 @@ describe('options', function() {
     describe('runs specs matching a RegExp', function() {
       it('with RegExp like strings(pattern follow by flag)', function(done) {
         args = ['--grep', '/match/i'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
@@ -226,7 +239,7 @@ describe('options', function() {
 
       it('string as pattern', function(done) {
         args = ['--grep', '.*'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
@@ -243,7 +256,7 @@ describe('options', function() {
     describe('with --invert', function() {
       it('runs specs that do not match the pattern', function(done) {
         args = ['--grep', 'fail', '--invert'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
@@ -260,7 +273,7 @@ describe('options', function() {
   describe('--retries', function() {
     it('retries after a certain threshold', function(done) {
       args = ['--retries', '3'];
-      run('options/retries.fixture.js', args, function(err, res) {
+      runMochaJSON('options/retries.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -282,7 +295,7 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      run('options/forbid-only/passed.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/passed.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -293,7 +306,7 @@ describe('options', function() {
     });
 
     it('fails if there are tests marked only', function(done) {
-      run('options/forbid-only/only.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/only.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -304,14 +317,82 @@ describe('options', function() {
     });
 
     it('fails if there are tests in suites marked only', function(done) {
-      run('options/forbid-only/only-suite.js', args, function(err, res) {
+      runMocha('options/forbid-only/only-suite.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        expect(res, 'to have failed with error', onlyErrorMessage);
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(onlyErrorMessage)
+        });
         done();
       });
+    });
+
+    it('fails if there is empty suite marked only', function(done) {
+      runMocha('options/forbid-only/only-empty-suite.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(onlyErrorMessage)
+        });
+        done();
+      });
+    });
+
+    it('fails if there is suite marked only which matches a grep', function(done) {
+      runMocha(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'suite marked with only'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        }
+      );
+    });
+
+    it('succeeds if suite marked only does not match grep', function(done) {
+      runMochaJSON(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'bumble bees'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed');
+          done();
+        }
+      );
+    });
+
+    it('succeeds if suite marked only does not match grep (using "invert")', function(done) {
+      runMochaJSON(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'suite marked with only', '--invert'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed');
+          done();
+        }
+      );
     });
   });
 
@@ -323,7 +404,10 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      run('options/forbid-pending/passed.js', args, function(err, res) {
+      runMochaJSON('options/forbid-pending/passed.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
@@ -333,18 +417,51 @@ describe('options', function() {
       });
     });
 
+    it('fails if there are tests in suites marked skip', function(done) {
+      runMocha('options/forbid-pending/skip-suite.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(pendingErrorMessage)
+        });
+        done();
+      });
+    });
+
+    it('fails if there is empty suite marked pending', function(done) {
+      runMocha('options/forbid-pending/skip-empty-suite.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to satisfy', {
+          code: 1,
+          output: new RegExp(pendingErrorMessage)
+        });
+        done();
+      });
+    });
+
     var forbidPendingFailureTests = {
       'fails if there are tests marked skip': 'skip.js',
       'fails if there are pending tests': 'pending.js',
       'fails if tests call `skip()`': 'this.skip.js',
       'fails if beforeEach calls `skip()`': 'beforeEach-this.skip.js',
-      'fails if before calls `skip()`': 'before-this.skip.js',
-      'fails if there are tests in suites marked skip': 'skip-suite.js'
+      'fails if before calls `skip()`': 'before-this.skip.js'
     };
 
     Object.keys(forbidPendingFailureTests).forEach(function(title) {
       it(title, function(done) {
-        run(
+        runMochaJSON(
           path.join(
             'options',
             'forbid-pending',
@@ -386,7 +503,7 @@ describe('options', function() {
         var t;
         var args = behaviors[behavior] ? [behaviors[behavior]] : [];
 
-        var mocha = run('exit.fixture.js', args, function(err) {
+        var mocha = runMochaJSON('exit.fixture.js', args, function(err) {
           clearTimeout(t);
           if (err) {
             done(err);
@@ -447,7 +564,7 @@ describe('options', function() {
      * Calls handleResult with the result.
      */
     function runMochaTest(fixture, args, handleResult, done) {
-      run(fixture, args, function(err, res) {
+      runMochaJSON(fixture, args, function(err, res) {
         if (err) {
           done(err);
           return;

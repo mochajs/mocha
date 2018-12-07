@@ -1,6 +1,7 @@
 'use strict';
 
 var assert = require('assert');
+var chaiExpect = require('chai').expect;
 
 var Base = require('../../lib/reporters/base');
 var AssertionError = assert.AssertionError;
@@ -312,8 +313,6 @@ describe('Base reporter', function() {
   });
 
   it('should interpret Chai custom error messages', function() {
-    this.timeout(1000);
-    var chaiExpect = require('chai').expect;
     try {
       chaiExpect(43, 'custom error message').to.equal(42);
     } catch (err) {
