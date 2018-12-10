@@ -1,14 +1,76 @@
 
-# 6.0.0 / 2018-xx-xx
+# 6.0.0-0 / 2018-xx-xx
 
 ## :boom: Breaking Changes
 
 - [#3149]: Drop Node.js v4.x support ([@outsideris])
-- [#627]: Emit filepath in "timeout exceeded" exceptions where applicable ([@boneskull])
-- [#3275]: `--watch-extensions` no longer implies `js`; it must be explicitly added ([@TheDancingCode])
+- [#3556]: Changes to command-line options ([@boneskull]):
+  - `--grep` and `--fgrep` are now mutually exclusive; attempting to use both will cause Mocha to fail instead of simply ignoring `--grep`
+  - `--compilers` is no longer supported; attempting to use will cause Mocha to fail with a link to more information
+  - `-d` is no longer an alias for `--debug`; `-d` is currently ignored
+  - [#3275]: `--watch-extensions` no longer implies `js`; it must be explicitly added ([@TheDancingCode])
 - [#2908]: `tap` reporter emits error messages ([@chrmod])
-- [#3345], [#1635]: Tests failed in "after each" hooks only report as failed ([@outsideris])
-- (from #3356) `debug` and `d` are no longer aliases of `--debug`
+- [#2819]: When conditionally skipping in a `before` hook, subsequent `before` hooks *and* tests in nested suites are now skipped ([@bannmoore])
+- [#627]: Emit filepath in "timeout exceeded" exceptions where applicable ([@boneskull])
+- [#3556]: `lib/template.html` has moved to `lib/browser/template.html` ([@boneskull])
+- [#2576]: An exception is now thrown if Mocha fails to parse or find a `mocha.opts` at a user-specified path ([@plroebuck])
+
+## :fax: Deprecations
+
+These are *soft*-deprecated, and will emit a warning upon use.  Support will be removed in (likely) the next major version of Mocha:
+
+- `-gc` users should use `--gc-global` instead
+- Consumers of the function exported by `bin/options` should now use the `loadMochaOpts` or `loadOptions` (preferred) functions exported by the `lib/cli/options` module
+
+Regarding the `Mocha` class constructor (from `lib/mocha`):
+  - Use property `color: false` instead of `useColors: false`
+  - Use property `timeout: false` instead of `enableTimeouts: false`
+
+All of the above deprecations were introduced by [#3556].
+
+`mocha.opts` is now considered "legacy"; please prefer RC file or `package.json` over `mocha.opts`.
+
+## :tada: Enhancements
+
+Enhancements introduced in [#3556]:
+
+- Mocha now supports "RC" files in JS, JSON, YAML, or `package.json`-based (using `mocha` property) format
+  - `.mocharc.js`, `.mocharc.json`, `.mocharc.yaml` or `.mocharc.yml` are valid "rc" file names and will be automatically loaded
+  - Use `--config /path/to/rc/file` to specify an explicit path
+  - Use `--package /path/to/package.json` to specify an explicit `package.json` to read the `mocha` prop from
+  - Use `--no-config` or `--no-package` to completely disable loading of configuration via RC file and `package.json`, respectively
+  - Configurations are merged as applicable using the priority list:
+    1. Command-line arguments
+    1. RC file
+    1. `package.json`
+    1. `mocha.opts`
+    1. Mocha's own defaults
+  - Here are some [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
+- Node/V8 flag support in `mocha` executable:
+  - Support all allowed `node` flags as supported by the running version of `node` (also thanks to [@demurgos])
+  - Support any V8 flag by prepending `--v8-` to the flag name
+  - All flags are also supported via config files, `package.json` properties, or `mocha.opts`
+  - Debug-related flags (e.g., `--inspect`) now *imply* `--no-timeouts`
+  - Use of e.g., `--debug` will automatically invoke `--inspect` if supported by running version of `node`
+- Support negation of any Mocha-specific command-line flag by prepending `--no-` to the flag name
+- Interfaces now have descriptions when listed using `--interfaces` flag
+- `Mocha` constructor supports all options
+
+- [#3352]: `tap` reporter is now TAP13-capable ([@plroebuck])
+- [#3535]: Mocha's version can now be queried programmatically via property `Mocha.prototype.version` ([@plroebuck])
+- [#3428]: `xunit` reporter shows diffs ([@mlucool])
+
+## :bug: Fixes
+
+- [#3356]: `--no-timeouts` and `--timeout 0` now does what you'd expect ([@boneskull])
+- [#3475]: Restore `--no-exit` option ([@boneskull])
+- [#3570]: Long-running tests now respect `SIGINT` ([@boneskull])
+- [#2944]: `--forbid-only` and `--forbid-pending` now "fail fast" when encountered on a suite ([@outsideris])
+- [#1652], [#2951]: Fix broken clamping of timeout values ([@plroebuck])
+- [#2753]: `start` and `end` events now emitted properly from `Runner` instance when using Mocha programmatically ([@outsideris])
+- [#2095], [#3521]: Do not log `stdout:` prefix in browser console ([@Bamieh])
+
+[#3556]: https://github.com/mochajs/mocha/pull/3556
 
 # 5.2.0 / 2018-05-18
 
