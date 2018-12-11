@@ -1,9 +1,8 @@
-
 # 6.0.0-0 / 2018-xx-xx
 
 ## :boom: Breaking Changes
 
-- [#3149]: Drop Node.js v4.x support ([@outsideris])
+- [#3149]: **Drop Node.js v4.x support** ([@outsideris])
 - [#3556]: Changes to command-line options ([@boneskull]):
   - `--grep` and `--fgrep` are now mutually exclusive; attempting to use both will cause Mocha to fail instead of simply ignoring `--grep`
   - `--compilers` is no longer supported; attempting to use will cause Mocha to fail with a link to more information
@@ -23,8 +22,9 @@ These are *soft*-deprecated, and will emit a warning upon use.  Support will be 
 - Consumers of the function exported by `bin/options` should now use the `loadMochaOpts` or `loadOptions` (preferred) functions exported by the `lib/cli/options` module
 
 Regarding the `Mocha` class constructor (from `lib/mocha`):
-  - Use property `color: false` instead of `useColors: false`
-  - Use property `timeout: false` instead of `enableTimeouts: false`
+
+- Use property `color: false` instead of `useColors: false`
+- Use property `timeout: false` instead of `enableTimeouts: false`
 
 All of the above deprecations were introduced by [#3556].
 
