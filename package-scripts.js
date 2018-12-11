@@ -286,7 +286,7 @@ module.exports = {
       }
     },
     updateContributors: {
-      script: 'node scripts/update-contributors.js',
+      script: 'contributors',
       description: 'Update list of contributors in package.json'
     }
   }
