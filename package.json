@@ -529,6 +529,7 @@
     "rewiremock": "^3.12.3",
     "rimraf": "^2.5.2",
     "sinon": "^7.1.1",
+    "strip-ansi": "^5.0.0",
     "svgo": "^0.7.2",
     "through2": "^2.0.5",
     "unexpected": "^10.39.2",
