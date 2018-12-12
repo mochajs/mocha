@@ -466,7 +466,8 @@
     "prepublishOnly": "nps test clean build",
     "start": "nps",
     "test": "nps test",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "version": "nps updateContributors && git add -A ./package.json"
   },
   "dependencies": {
     "ansi-colors": "3.2.1",
@@ -493,6 +494,7 @@
     "yargs-unparser": "^1.5.0"
   },
   "devDependencies": {
+    "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^1.0.1",
     "assetgraph-builder": "^5.9.1",
     "browserify": "^16.2.3",
@@ -568,5 +570,12 @@
     "short-option-groups": false,
     "dot-notation": false
   },
-  "gitter": "https://gitter.im/mochajs/mocha"
+  "gitter": "https://gitter.im/mochajs/mocha",
+  "@mocha/contributors": {
+    "exclude": [
+      "greenkeeperio-bot <support@greenkeeper.io>",
+      "greenkeeper[bot] <greenkeeper[bot]@users.noreply.github.com>",
+      "TJ Holowaychuk <tj@vision-media.ca>"
+    ]
+  }
 }
