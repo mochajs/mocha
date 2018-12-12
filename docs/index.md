@@ -889,9 +889,9 @@ Other Options
   --reporters    List built-in reporters & exit
 
 Mocha Resources
-    Chat: [35mhttps://gitter.im/mochajs/mocha[39m
-  GitHub: [34mhttps://github.com/mochajs/mocha.git[39m
-    Docs: [33mhttps://mochajs.org/[39m
+    Chat: https://gitter.im/mochajs/mocha
+  GitHub: https://github.com/mochajs/mocha.git
+    Docs: https://mochajs.org/
 
 ```
 
