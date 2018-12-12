@@ -29,7 +29,11 @@ new AssetGraph({root: 'docs/_dist'})
     followRelations: {type: 'HtmlAnchor', crossorigin: false}
   })
   .queue(function(assetGraph) {
-    const assets = assetGraph.findAssets({type: 'Html', isInline: false});
+    const assets = assetGraph.findAssets({
+      type: 'Html',
+      isInline: false,
+      isLoaded: true
+    });
 
     const headerMap = {};
 

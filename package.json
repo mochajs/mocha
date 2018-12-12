@@ -532,7 +532,7 @@
     "rimraf": "^2.5.2",
     "sinon": "^7.1.1",
     "strip-ansi": "^5.0.0",
-    "svgo": "^0.7.2",
+    "svgo": "^1.1.1",
     "through2": "^2.0.5",
     "unexpected": "^10.39.2",
     "unexpected-sinon": "^10.10.1",
