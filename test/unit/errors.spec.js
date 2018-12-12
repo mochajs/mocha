@@ -4,7 +4,7 @@ var errors = require('../../lib/errors');
 
 describe('Errors', function() {
   var expectedMessage = 'some message';
-  it('should include expected code in throw reporter errors', function() {
+  it('should include expected code in thrown reporter errors', function() {
     var throwError = function() {
       throw errors.InvalidReporterError(expectedMessage);
     };
@@ -14,7 +14,7 @@ describe('Errors', function() {
     });
   });
 
-  it('should include expected code in throw interface errors', function() {
+  it('should include expected code in thrown interface errors', function() {
     var throwError = function() {
       throw errors.InvalidInterfaceError(expectedMessage);
     };
