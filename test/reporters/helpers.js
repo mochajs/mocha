@@ -118,7 +118,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     default:
-      throw new NotSupportedError(
+      throw NotSupportedError(
         'This function does not support the runner string specified.'
       );
   }
