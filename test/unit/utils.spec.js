@@ -591,6 +591,10 @@ describe('lib/utils', function() {
     it('should return false if the value is an object w/o a "then" function', function() {
       expect(utils.isPromise({}), 'to be', false);
     });
+
+    it('should return false if the object is null', function() {
+      expect(utils.isPromise(null), 'to be', false);
+    });
   });
 
   describe('escape', function() {

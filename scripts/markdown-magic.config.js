@@ -8,6 +8,7 @@
  */
 
 const {execSync} = require('child_process');
+const stripAnsi = require('strip-ansi');
 const markdownToc = require('markdown-toc');
 const path = require('path');
 
@@ -17,11 +18,13 @@ exports.transforms = {
     const flag = options.flag || '--help';
     const header = options.header || '\n```plain';
     const footer = options.footer || '```\n';
-    const output = String(
-      execSync(`${process.execPath} ${executable} ${flag} -C`, {
-        cwd: path.join(__dirname, '..')
-      })
-    ).trim();
+    const output = stripAnsi(
+      String(
+        execSync(`${process.execPath} ${executable} ${flag}`, {
+          cwd: path.join(__dirname, '..')
+        })
+      ).trim()
+    );
     return [header, output, footer].join('\n\n');
   },
   // we can't use the builtin `TOC` plugin in markdown-magic
