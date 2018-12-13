@@ -1,5 +1,7 @@
 # 6.0.0-0 / 2018-xx-xx
 
+Welcome @craigtaub to the team!
+
 ## :boom: Breaking Changes
 
 - [#3149]: **Drop Node.js v4.x support** ([@outsideris])
@@ -13,7 +15,7 @@
 - [#627]: Emit filepath in "timeout exceeded" exceptions where applicable ([@boneskull])
 - [#3556]: `lib/template.html` has moved to `lib/browser/template.html` ([@boneskull])
 - [#2576]: An exception is now thrown if Mocha fails to parse or find a `mocha.opts` at a user-specified path ([@plroebuck])
-
+- [#3458]: Instantiating a `Base`-extending reporter without a `Runner` parameter will throw an exception ([@craigtaub])
 ## :fax: Deprecations
 
 These are *soft*-deprecated, and will emit a warning upon use.  Support will be removed in (likely) the next major version of Mocha:
@@ -55,9 +57,10 @@ Enhancements introduced in [#3556]:
 - Support negation of any Mocha-specific command-line flag by prepending `--no-` to the flag name
 - Interfaces now have descriptions when listed using `--interfaces` flag
 - `Mocha` constructor supports all options
+- `--extension` is now an alias for `--watch-extensions` and affects *non-watch-mode* test runs as well.  For example, to run *only* `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
 
 - [#3352]: `tap` reporter is now TAP13-capable ([@plroebuck])
-- [#3535]: Mocha's version can now be queried programmatically via property `Mocha.prototype.version` ([@plroebuck])
+- [#3535]: Mocha's version can now be queried programmatically via public property `Mocha.prototype.version` ([@plroebuck])
 - [#3428]: `xunit` reporter shows diffs ([@mlucool])
 
 ## :bug: Fixes
