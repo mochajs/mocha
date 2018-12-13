@@ -301,6 +301,15 @@ module.exports = {
     updateContributors: {
       script: 'contributors',
       description: 'Update list of contributors in package.json'
+    },
+    linkifyChangelog: {
+      script: 'node scripts/linkify-changelog.js',
+      description: 'Add/update GitHub links in CHANGELOG.md'
+    },
+    version: {
+      script:
+        'nps updateContributors && nps linkifyChangelog && git add -A ./package.json ./CHANGELOG.md',
+      description: 'Tasks to perform when `npm version` is run'
     }
   }
 };
