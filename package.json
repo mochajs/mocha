@@ -496,7 +496,7 @@
   "devDependencies": {
     "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^1.0.1",
-    "assetgraph-builder": "^5.9.1",
+    "assetgraph-builder": "^6.4.2",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
     "coffee-script": "^1.10.0",
@@ -532,7 +532,7 @@
     "rimraf": "^2.5.2",
     "sinon": "^7.1.1",
     "strip-ansi": "^5.0.0",
-    "svgo": "^0.7.2",
+    "svgo": "^1.1.1",
     "through2": "^2.0.5",
     "unexpected": "^10.39.2",
     "unexpected-sinon": "^10.10.1",

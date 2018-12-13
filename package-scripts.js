@@ -102,7 +102,7 @@ module.exports = {
         integration: {
           script: test(
             'integration',
-            '--timeout 5000 --slow 1500 "test/integration/*.spec.js"'
+            '--timeout 10000 --slow 3750 "test/integration/*.spec.js"'
           ),
           description: 'Run Node.js integration tests',
           hiddenFromHelp: true
@@ -264,7 +264,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'mkdirp docs/_dist && buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
