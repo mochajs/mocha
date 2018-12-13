@@ -71,6 +71,8 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - [#3428](https://github.com/mochajs/mocha/issues/3428): `xunit` reporter shows diffs ([**@mlucool**](https://github.com/mlucool))
 
+- [#2529](https://github.com/mochajs/mocha/issues/2529): `Runner` now emits a `retry` event when tests are retried (reporters can listen for this) ([**@catdad**](https://github.com/catdad))
+
 ## :bug: Fixes
 
 - [#3356](https://github.com/mochajs/mocha/issues/3356): `--no-timeouts` and `--timeout 0` now does what you'd expect ([**@boneskull**](https://github.com/boneskull))
