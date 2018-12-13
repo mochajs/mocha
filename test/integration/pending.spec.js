@@ -2,6 +2,8 @@
 
 var assert = require('assert');
 var run = require('./helpers').runMochaJSON;
+var runMocha = require('./helpers').runMocha;
+var splitRegExp = require('./helpers').splitRegExp;
 var args = [];
 
 describe('pending', function() {
@@ -74,6 +76,64 @@ describe('pending', function() {
             return;
           }
           assert.equal(res.stats.pending, 2);
+          assert.equal(res.stats.passes, 2);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          done();
+        });
+      });
+      it('should run before and after hooks', function(done) {
+        runMocha(
+          'pending/skip-sync-before-hooks.fixture.js',
+          args.concat(['--reporter', 'dot']),
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            var lines = res.output
+              .split(splitRegExp)
+              .map(function(line) {
+                return line.trim();
+              })
+              .filter(function(line) {
+                return line.length;
+              })
+              .slice(0, -1);
+
+            var expected = [
+              'outer before',
+              'inner before',
+              'inner after',
+              'outer after'
+            ];
+
+            assert.equal(res.pending, 2);
+            assert.equal(res.passing, 2);
+            assert.equal(res.failing, 0);
+            assert.equal(res.code, 0);
+            expected.forEach(function(line, i) {
+              assert.equal(true, lines[i].includes(line));
+            });
+
+            done();
+          }
+        );
+      });
+    });
+
+    describe('in before with nested describe', function() {
+      it('should skip all suite specs, even if nested', function(done) {
+        run('pending/skip-sync-before-nested.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 3);
           assert.equal(res.stats.passes, 0);
           assert.equal(res.stats.failures, 0);
           assert.equal(res.code, 0);
@@ -127,6 +187,64 @@ describe('pending', function() {
             return;
           }
           assert.equal(res.stats.pending, 2);
+          assert.equal(res.stats.passes, 2);
+          assert.equal(res.stats.failures, 0);
+          assert.equal(res.code, 0);
+          done();
+        });
+      });
+      it('should run before and after hooks', function(done) {
+        runMocha(
+          'pending/skip-async-before-hooks.fixture.js',
+          args.concat(['--reporter', 'dot']),
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+
+            var lines = res.output
+              .split(splitRegExp)
+              .map(function(line) {
+                return line.trim();
+              })
+              .filter(function(line) {
+                return line.length;
+              })
+              .slice(0, -1);
+
+            var expected = [
+              'outer before',
+              'inner before',
+              'inner after',
+              'outer after'
+            ];
+
+            assert.equal(res.pending, 2);
+            assert.equal(res.passing, 2);
+            assert.equal(res.failing, 0);
+            assert.equal(res.code, 0);
+            expected.forEach(function(line, i) {
+              assert.equal(true, lines[i].includes(line));
+            });
+
+            done();
+          }
+        );
+      });
+    });
+
+    describe('in before with nested describe', function() {
+      it('should skip all suite specs, even if nested', function(done) {
+        run('pending/skip-async-before-nested.fixture.js', args, function(
+          err,
+          res
+        ) {
+          if (err) {
+            done(err);
+            return;
+          }
+          assert.equal(res.stats.pending, 3);
           assert.equal(res.stats.passes, 0);
           assert.equal(res.stats.failures, 0);
           assert.equal(res.code, 0);
@@ -137,7 +255,7 @@ describe('pending', function() {
 
     describe('in beforeEach', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip-sync-beforeEach.fixture.js', args, function(
+        run('pending/skip-async-beforeEach.fixture.js', args, function(
           err,
           res
         ) {
@@ -145,10 +263,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 2);
+          assert.equal(res.stats.pending, 1);
           assert.equal(res.stats.passes, 0);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.equal(res.stats.failures, 1);
+          assert.equal(res.code, 1);
           done();
         });
       });

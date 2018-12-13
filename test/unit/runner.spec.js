@@ -331,6 +331,14 @@ describe('Runner', function() {
 
       runner.fail(test, err);
     });
+
+    it('should return and not increment failures when test is pending', function() {
+      var test = new Test('a test');
+      suite.addTest(test);
+      test.pending = true;
+      runner.fail(test, new Error());
+      expect(runner.failures, 'to be', 0);
+    });
   });
 
   describe('.failHook(hook, err)', function() {
@@ -457,6 +465,17 @@ describe('Runner', function() {
         });
         runner.failHook(hook, err);
       });
+    });
+  });
+
+  describe('abort', function() {
+    it('should set _abort property to true', function() {
+      runner.abort();
+      expect(runner._abort, 'to be true');
+    });
+
+    it('should return the Runner', function() {
+      expect(runner.abort(), 'to be', runner);
     });
   });
 });

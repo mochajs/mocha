@@ -3,76 +3,101 @@
 'use strict';
 
 /**
- * This tiny wrapper file checks for known node flags and appends them
- * when found, before invoking the "real" _mocha(1) executable.
+ * This wrapper executable checks for known node flags and appends them when found, before invoking the "real" _mocha(1) executable.
+ *
+ * @module bin/mocha
+ * @private
  */
 
-const spawn = require('child_process').spawn;
-const path = require('path');
-const getOptions = require('./options');
-const args = [path.join(__dirname, '_mocha')];
+const {deprecate} = require('../lib/utils');
+const {spawn} = require('child_process');
+const {loadOptions} = require('../lib/cli/options');
+const {isNodeFlag, impliesNoTimeouts} = require('../lib/cli/node-flags');
+const unparse = require('yargs-unparser');
+const debug = require('debug')('mocha:cli');
+const {aliases} = require('../lib/cli/run-option-metadata');
 
-// Load mocha.opts into process.argv
-// Must be loaded here to handle node-specific options
-getOptions();
+const mochaPath = require.resolve('./_mocha');
+const childOpts = {};
+const nodeOpts = {};
 
-process.argv.slice(2).forEach(arg => {
-  const flag = arg.split('=')[0];
+const opts = loadOptions(process.argv.slice(2));
+debug('loaded opts', opts);
 
-  switch (flag) {
-    case '-d':
-      args.unshift('--debug');
-      args.push('--no-timeouts');
-      break;
-    case 'debug':
-    case '--debug':
-    case '--debug-brk':
-    case '--inspect':
-    case '--inspect-brk':
-      args.unshift(arg);
-      args.push('--no-timeouts');
-      break;
-    case '-gc':
-    case '--expose-gc':
-      args.unshift('--expose-gc');
-      break;
-    case '--gc-global':
-    case '--es_staging':
-    case '--experimental-modules':
-    case '--no-deprecation':
-    case '--no-warnings':
-    case '--prof':
-    case '--log-timer-events':
-    case '--throw-deprecation':
-    case '--trace-deprecation':
-    case '--trace-warnings':
-    case '--use_strict':
-    case '--allow-natives-syntax':
-    case '--perf-basic-prof':
-    case '--napi-modules':
-      args.unshift(arg);
-      break;
-    default:
-      if (arg.indexOf('--harmony') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--trace') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--icu-data-dir') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--max-old-space-size') === 0) {
-        args.unshift(arg);
-      } else if (arg.indexOf('--preserve-symlinks') === 0) {
-        args.unshift(arg);
-      } else {
-        args.push(arg);
-      }
-      break;
+Object.keys(opts).forEach(opt => {
+  if (isNodeFlag(opt)) {
+    if (/^v8-/.test(opt)) {
+      opt = opt.slice(2);
+    }
+    nodeOpts[opt] = opts[opt];
+    if (impliesNoTimeouts(opt)) {
+      debug(`option "${opt}" disabled timeouts`);
+      childOpts.timeout = false;
+    }
+  } else {
+    childOpts[opt] = opts[opt];
   }
 });
+
+// allow --debug to invoke --inspect on Node.js v8 or newer  nodeOpts.inspect = childOpts.debug;
+if (childOpts.debug) {
+  childOpts.timeout = false;
+  delete childOpts.debug;
+  debug('--debug -> --inspect');
+} else if (childOpts['debug-brk']) {
+  nodeOpts['inspect-brk'] = childOpts['debug-brk'];
+  childOpts.timeout = false;
+  delete childOpts['debug-brk'];
+  debug('--debug-brk -> --inspect-brk');
+}
+
+// historical
+if (nodeOpts.gc) {
+  deprecate(
+    '"-gc" is deprecated and will be removed from a future version of Mocha.  Use "--gc-global" instead.'
+  );
+  nodeOpts['gc-global'] = nodeOpts.gc;
+  delete nodeOpts.gc;
+}
+
+// Native debugger handling
+// see https://nodejs.org/api/debugger.html#debugger_debugger
+// look for 'debug' or 'inspect' that would launch this debugger,
+// remove it from Mocha's opts and prepend it to Node's opts.
+// also coerce depending on Node.js version.
+if (/^(debug|inspect)$/.test(childOpts._[0])) {
+  childOpts.timeout = false;
+  childOpts._.shift();
+  // don't conflict with inspector
+  delete nodeOpts['debug'];
+  delete nodeOpts['inspect'];
+  delete nodeOpts['debug-brk'];
+  delete nodeOpts['inspect-brk'];
+  nodeOpts._ = [
+    parseInt(
+      process.version
+        .slice(1)
+        .split('.')
+        .shift(),
+      10
+    ) >= 8
+      ? 'inspect'
+      : 'debug'
+  ];
+}
+
+const args = [].concat(
+  unparse(nodeOpts),
+  mochaPath,
+  unparse(childOpts, {alias: aliases})
+);
+
+debug(`exec ${process.execPath} w/ args:`, args);
 
 const proc = spawn(process.execPath, args, {
   stdio: 'inherit'
 });
+
 proc.on('exit', (code, signal) => {
   process.on('exit', () => {
     if (signal) {
