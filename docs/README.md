@@ -22,8 +22,8 @@
 
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should *not* be included in the build.
-- `docs/index.md` may be mutated upon build, depending on what `scripts/docs-update-toc.js` does.  If it updates the table of contents (because of your changes), **you must commit `docs/index.md`**.
-- `docs/_site/` is where the generated static site lives (and is what you see at [mochajs.org](https://mochajs.org)).  It is *not* under version control.
+- `docs/_dist` and `docs/api` are where the deployed site lives.  `does/_site` is essentially a build step.  These three directories are *not* under version control.
+- See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://npm.im/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
 
 ## License
 
