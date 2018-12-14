@@ -496,7 +496,7 @@
   "devDependencies": {
     "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^1.0.1",
-    "assetgraph-builder": "^5.9.1",
+    "assetgraph-builder": "^6.4.2",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
     "coffee-script": "^1.10.0",
