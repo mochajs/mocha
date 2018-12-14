@@ -4,6 +4,10 @@ var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
 var baseReporter = require('../../lib/reporters/base');
+var noop = require('../../lib/utils').noop;
+
+var mochaPath = require.resolve('../../bin/mocha');
+var cliPath = require.resolve('../../lib/cli/cli');
 
 module.exports = {
   /**
@@ -123,7 +127,7 @@ module.exports = {
   splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
 
   /**
-   * Invokes the mocha binary. Accepts an array of additional command line args
+   * Invokes the `mocha` binary. Accepts an array of additional command line args
    * to pass. The callback is invoked with the exit code and output. Optional
    * current working directory as final parameter.
    *
@@ -143,6 +147,7 @@ module.exports = {
    * @param {Object} [opts] - Options for `spawn()`
    */
   invokeMocha: invokeMocha,
+  invokeSubMocha: invokeSubMocha,
 
   /**
    * Resolves the path to a fixture to the full path.
@@ -166,14 +171,14 @@ function toJSONRunResult(result) {
 }
 
 function invokeMocha(args, fn, opts) {
-  args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
-
+  args = [mochaPath].concat(args);
+  fn = fn || noop;
   return _spawnMochaWithListeners(args, fn, opts);
 }
 
 function invokeSubMocha(args, fn, opts) {
-  args = [path.join(__dirname, '..', '..', 'bin', '_mocha')].concat(args);
-
+  args = [cliPath].concat(args);
+  fn = fn || noop;
   return _spawnMochaWithListeners(args, fn, opts);
 }
 
