@@ -1236,13 +1236,13 @@ A typical setup might look something like the following, where we call `mocha.se
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link href="https://unpkg.com/mocha@6.0.0/mocha.css" rel="stylesheet" />
+  <link href="https://unpkg.com/mocha/mocha.css" rel="stylesheet" />
 </head>
 <body>
   <div id="mocha"></div>
 
   <script src="https://unpkg.com/chai/chai.js"></script>
-  <script src="https://unpkg.com/mocha@6.0.0/mocha.js"></script>
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
 
   <script class="mocha-init">
     mocha.setup('bdd');
@@ -1344,11 +1344,11 @@ tests as shown below:
     <title>Mocha</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/mocha@6.0.0/mocha.css" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="https://unpkg.com/mocha@6.0.0/mocha.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
     <script class="mocha-init">
       mocha.setup('bdd');
       mocha.growl();      // <-- Enables web notifications
