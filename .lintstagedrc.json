@@ -1,6 +1,7 @@
 {
   "linters": {
-    "(bin/*|*.{js,json}|**/*.{js,json})": ["prettier-eslint --write", "git add"]
+    "(bin/*|*.js|**/*.js)": ["eslint --fix", "git add"],
+    "(*.{json,yml}|**/*.{json,yml})": ["prettier --write", "git add"]
   },
   "ignore": ["docs/**/*.js", "test/**/*.fixture.js", "package*.json"]
 }

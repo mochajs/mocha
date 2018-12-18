@@ -14,7 +14,7 @@ describe('utils.deprecate test', function() {
           return done(err);
         }
         var result = res.output.match(/deprecated thing/g) || [];
-        assert.equal(result.length, 2);
+        assert.strictEqual(result.length, 2);
         done();
       },
       {stdio: 'pipe'}
