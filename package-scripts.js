@@ -69,7 +69,7 @@ module.exports = {
       },
       node: {
         default: {
-          script: `nps ${[
+          script: `rimraf .nyc_output && nps ${[
             'build',
             'test.node.bdd',
             'test.node.tdd',
