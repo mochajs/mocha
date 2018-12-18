@@ -17,7 +17,8 @@ module.exports = () => {
       },
       'package.json',
       'test/opts/mocha.opts',
-      'mocharc.yml'
+      'mocharc.yml',
+      '!lib/browser/**/*.js',
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
@@ -52,7 +53,6 @@ module.exports = () => {
         return execFile.apply(this, arguments);
       };
       require('./test/setup');
-    },
-    debug: true
+    }
   };
 };
