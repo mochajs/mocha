@@ -15,7 +15,7 @@ node_js: '11'
 addons:
   apt:
     packages:
-    - libnotify-bin
+      - libnotify-bin
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
