@@ -85,6 +85,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 - [#3595](https://github.com/mochajs/mocha/issues/3595): Fix mochajs.org deployment problems ([**@papandreou**](https://github.com/papandreou))
 - [#3518](https://github.com/mochajs/mocha/issues/3518): Improve `utils.isPromise()` ([**@fabiosantoscode**](https://github.com/fabiosantoscode))
 - [#3320](https://github.com/mochajs/mocha/issues/3320): Fail gracefully when non-extensible objects are thrown in async tests ([**@fargies**](https://github.com/fargies))
+- [#2475](https://github.com/mochajs/mocha/issues/2475): XUnit does not duplicate test result numbers in "errors" and "failures"; "failures" will **always** be zero ([**@mlucool**](https://github.com/mlucool))
 
 ## :book: Documentation
 
