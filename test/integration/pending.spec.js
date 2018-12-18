@@ -14,10 +14,10 @@ describe('pending', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 1);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.stats.pending, 1);
+        assert.strictEqual(res.stats.passes, 0);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
         done();
       });
     });
@@ -27,10 +27,10 @@ describe('pending', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 3);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.stats.pending, 3);
+        assert.strictEqual(res.stats.passes, 0);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
         done();
       });
     });
@@ -40,12 +40,15 @@ describe('pending', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.suites, 2);
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
-        assert.equal(res.passes[0].fullTitle, 'a suite another suite a test');
+        assert.strictEqual(res.stats.suites, 2);
+        assert.strictEqual(res.stats.pending, 0);
+        assert.strictEqual(res.stats.passes, 1);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
+        assert.strictEqual(
+          res.passes[0].fullTitle,
+          'a suite another suite a test'
+        );
         done();
       });
     });
@@ -59,10 +62,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 1);
-          assert.equal(res.stats.passes, 1);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 1);
+          assert.strictEqual(res.stats.passes, 1);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -75,10 +78,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 2);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 2);
+          assert.strictEqual(res.stats.passes, 2);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -109,12 +112,12 @@ describe('pending', function() {
               'outer after'
             ];
 
-            assert.equal(res.pending, 2);
-            assert.equal(res.passing, 2);
-            assert.equal(res.failing, 0);
-            assert.equal(res.code, 0);
+            assert.strictEqual(res.pending, 2);
+            assert.strictEqual(res.passing, 2);
+            assert.strictEqual(res.failing, 0);
+            assert.strictEqual(res.code, 0);
             expected.forEach(function(line, i) {
-              assert.equal(true, lines[i].includes(line));
+              assert.strictEqual(true, lines[i].includes(line));
             });
 
             done();
@@ -133,10 +136,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 3);
-          assert.equal(res.stats.passes, 0);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 3);
+          assert.strictEqual(res.stats.passes, 0);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -152,10 +155,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 2);
-          assert.equal(res.stats.passes, 0);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 2);
+          assert.strictEqual(res.stats.passes, 0);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -170,10 +173,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 1);
-          assert.equal(res.stats.passes, 1);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 1);
+          assert.strictEqual(res.stats.passes, 1);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -186,10 +189,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 2);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 2);
+          assert.strictEqual(res.stats.passes, 2);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -220,12 +223,12 @@ describe('pending', function() {
               'outer after'
             ];
 
-            assert.equal(res.pending, 2);
-            assert.equal(res.passing, 2);
-            assert.equal(res.failing, 0);
-            assert.equal(res.code, 0);
+            assert.strictEqual(res.pending, 2);
+            assert.strictEqual(res.passing, 2);
+            assert.strictEqual(res.failing, 0);
+            assert.strictEqual(res.code, 0);
             expected.forEach(function(line, i) {
-              assert.equal(true, lines[i].includes(line));
+              assert.strictEqual(true, lines[i].includes(line));
             });
 
             done();
@@ -244,10 +247,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 3);
-          assert.equal(res.stats.passes, 0);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          assert.strictEqual(res.stats.pending, 3);
+          assert.strictEqual(res.stats.passes, 0);
+          assert.strictEqual(res.stats.failures, 0);
+          assert.strictEqual(res.code, 0);
           done();
         });
       });
@@ -263,10 +266,10 @@ describe('pending', function() {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 1);
-          assert.equal(res.stats.passes, 0);
-          assert.equal(res.stats.failures, 1);
-          assert.equal(res.code, 1);
+          assert.strictEqual(res.stats.pending, 1);
+          assert.strictEqual(res.stats.passes, 0);
+          assert.strictEqual(res.stats.failures, 1);
+          assert.strictEqual(res.code, 1);
           done();
         });
       });
