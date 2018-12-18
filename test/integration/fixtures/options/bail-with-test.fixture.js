@@ -11,25 +11,17 @@ describe('suite1', function () {
   });
   it('test suite1', function () {
     runOrder.push('test suite1');
+    throw new Error('test suite1 error');
   });
 
   describe('suite1A', function () {
-    before('before suite1A', function () {
-      runOrder.push('before suite1A');
-    });
-    beforeEach('beforeEach suite1A', function () {
-      runOrder.push('beforeEach suite1A');
-    }); 
+    before('before suite1A', function () {});
+    beforeEach('beforeEach suite1A', function () {}); 
     it('test suite1A', function () {
-      runOrder.push('test suite1A');
+      runOrder.push('test suite1A - should not run');
     });
-    afterEach('afterEach suite1A', function () {
-      runOrder.push('afterEach suite1A');
-    });
-    after('after suite1A', function () {
-      runOrder.push('after suite1A');
-      throw new Error('after suite1A error');
-    });
+    afterEach('afterEach suite1A', function () {});
+    after('after suite1A', function () {});
   });
 
   afterEach('afterEach suite1', function () {
@@ -39,9 +31,7 @@ describe('suite1', function () {
     runOrder.push('after suite1');
     assert.deepStrictEqual(runOrder, [
       'before suite1', 'beforeEach suite1', 'test suite1',
-      'afterEach suite1', 'before suite1A', 'beforeEach suite1',
-      'beforeEach suite1A', 'test suite1A', 'afterEach suite1A',
-      'afterEach suite1', 'after suite1A', 'after suite1'
+      'afterEach suite1', 'after suite1'
     ]);
   });
 });

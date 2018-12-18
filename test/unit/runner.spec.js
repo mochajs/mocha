@@ -373,14 +373,6 @@ describe('Runner', function() {
       runner.failHook(hook, err);
     });
 
-    it('should emit "end" if suite bail is true', function(done) {
-      var hook = new Hook();
-      var err = {};
-      suite.bail(true);
-      runner.on('end', done);
-      runner.failHook(hook, err);
-    });
-
     it('should not emit "end" if suite bail is not true', function(done) {
       var hook = new Hook();
       var err = {};

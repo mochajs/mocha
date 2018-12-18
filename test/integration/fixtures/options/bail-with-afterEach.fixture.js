@@ -25,10 +25,10 @@ describe('suite1', function () {
     });
     afterEach('afterEach suite1A', function () {
       runOrder.push('afterEach suite1A');
+      throw new Error('afterEach suite1A error');
     });
     after('after suite1A', function () {
       runOrder.push('after suite1A');
-      throw new Error('after suite1A error');
     });
   });
 

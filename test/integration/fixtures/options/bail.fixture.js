@@ -13,11 +13,11 @@ describe('suite1', function () {
 });
 
 describe('suite2', function () {
-  before(function (done) {
+  before(function () {
     throw new Error('this hook should not be displayed');
   });
 
-  it('should not display this error', function (done) {
+  it('should not display this error', function () {
     throw new Error('this should not be displayed');
   });
 });
