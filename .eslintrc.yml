@@ -28,12 +28,48 @@ overrides:
       ecmaVersion: 6
     env:
       browser: no
+
   - files:
       - test/**/*.{js,mjs}
     env:
       mocha: yes
     globals:
       expect: no
+  - files:
+    - bin/*
+    - lib/**/*.js
+    rules:
+      no-restricted-globals:
+        - error
+        - name: setTimeout
+          message: &GH-237 See https://github.com/mochajs/mocha/issues/237
+        - name: clearTimeout
+          message: *GH-237
+        - name: setInterval
+          message: *GH-237
+        - name: clearInterval
+          message: *GH-237
+        - name: setImmediate
+          message: *GH-237
+        - name: clearImmediate
+          message: *GH-237
+        - name: Date
+          message: *GH-237
+      no-restricted-modules:
+        - error
+        - timers
+      no-restricted-syntax:
+        - error
+        # disallow `global.setTimeout()`, `global.setInterval()`, etc.
+        - selector: 'CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]'
+          message: *GH-237
+        # disallow `new global.Date()`
+        - selector: 'NewExpression[callee.object.name=global][callee.property.name=Date]'
+          message: *GH-237
+        # disallow property access of `global.<timer>.*`
+        - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
+          message: *GH-237
+
   - files:
       - test/**/*.mjs
     parserOptions:

@@ -36,7 +36,8 @@ module.exports = {
         description: 'Run ESLint linter'
       },
       markdown: {
-        script: 'markdownlint "*.md" "docs/**/*.md" ".github/*.md"',
+        script:
+          'markdownlint "*.md" "docs/**/*.md" ".github/*.md" "lib/**/*.md" "test/**/*.md" "example/**/*.md"',
         description: 'Run markdownlint linter'
       }
     },
