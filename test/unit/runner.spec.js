@@ -331,6 +331,14 @@ describe('Runner', function() {
 
       runner.fail(test, err);
     });
+
+    it('should return and not increment failures when test is pending', function() {
+      var test = new Test('a test');
+      suite.addTest(test);
+      test.pending = true;
+      runner.fail(test, new Error());
+      expect(runner.failures, 'to be', 0);
+    });
   });
 
   describe('.failHook(hook, err)', function() {
@@ -382,6 +390,36 @@ describe('Runner', function() {
       });
       runner.failHook(hook, err);
       done();
+    });
+  });
+
+  describe('.run(fn)', function() {
+    it('should emit "retry" when a retryable test fails', function(done) {
+      var retries = 2;
+      var retryableFails = 0;
+      var err = new Error('bear error');
+
+      var test = new Test('im a test about bears', function() {
+        if (retryableFails < retries) {
+          throw err;
+        }
+      });
+
+      suite.retries(retries);
+      suite.addTest(test);
+
+      runner.on('retry', function(testClone, testErr) {
+        retryableFails += 1;
+        expect(testClone.title, 'to be', test.title);
+        expect(testErr, 'to be', err);
+      });
+
+      runner.run(function(failures) {
+        expect(failures, 'to be', 0);
+        expect(retryableFails, 'to be', retries);
+
+        done();
+      });
     });
   });
 
@@ -457,6 +495,17 @@ describe('Runner', function() {
         });
         runner.failHook(hook, err);
       });
+    });
+  });
+
+  describe('abort', function() {
+    it('should set _abort property to true', function() {
+      runner.abort();
+      expect(runner._abort, 'to be true');
+    });
+
+    it('should return the Runner', function() {
+      expect(runner.abort(), 'to be', runner);
     });
   });
 });

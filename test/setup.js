@@ -2,5 +2,5 @@
 
 var unexpected = require('unexpected');
 global.expect = require('./assertions').mixinMochaAssertions(
-  unexpected.clone()
+  unexpected.clone().use(require('unexpected-sinon'))
 );

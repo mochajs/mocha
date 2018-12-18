@@ -21,6 +21,7 @@ describe('List reporter', function() {
     duration: expectedDuration,
     slow: function() {}
   };
+
   beforeEach(function() {
     useColors = Base.useColors;
     Base.useColors = false;
@@ -126,7 +127,11 @@ describe('List reporter', function() {
       test = {};
       runner = createMockRunner('fail', 'fail', null, null, test);
       runner.on = runner.once = function(event, callback) {
-        if (!checked && event === 'fail') {
+        if (
+          !checked &&
+          event === 'fail' &&
+          callback.toString().includes('stringifyDiffObjs') // target correct fail event callback
+        ) {
           err = new Error('fake failure object with actual/expected');
           err.actual = actual;
           err.expected = expected;
