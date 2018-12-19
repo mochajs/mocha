@@ -66,6 +66,22 @@ describe('options', function() {
       });
     });
 
+    it('should stop after the first error - async', function(done) {
+      runMochaJSON('options/bail-async.fixture.js', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        expect(res, 'to have failed')
+          .and('to have passed test', 'should display this spec')
+          .and('to have failed test', 'should only display this error')
+          .and('to have passed test count', 1)
+          .and('to have failed test count', 1);
+        done();
+      });
+    });
+
     it('should stop all tests after failing "before" hook', function(done) {
       runMochaJSON('options/bail-with-before.fixture.js', args, function(
         err,
