@@ -1,7 +1,8 @@
 'use strict';
 
-var runMocha = require('./helpers').runMocha;
-var splitRegExp = require('./helpers').splitRegExp;
+var helpers = require('./helpers');
+var runMocha = helpers.runMocha;
+var splitRegExp = helpers.splitRegExp;
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('hook error handling', function() {
@@ -165,6 +166,47 @@ describe('hook error handling', function() {
       });
     };
   }
+
+  describe('unhandled Promise rejections', function() {
+    describe('asynchronously caught in "before" hook', function() {
+      beforeEach(function() {});
+      it('should result in an unhandled Promise rejection', function(done) {
+        runMocha(
+          'hooks/before-hook-promise-rejection',
+          function(err, result) {
+            if (err) {
+              return done(err);
+            }
+            expect(result, 'to have passed').and('to satisfy', {
+              output: /UnhandledPromiseRejectionWarning/
+            });
+
+            done();
+          },
+          {stdio: 'pipe'}
+        );
+      });
+    });
+
+    describe('in "before each" hook', function() {
+      it('asynchronously caught in "beforeEach" hook', function(done) {
+        runMocha(
+          'hooks/beforeEach-hook-promise-rejection',
+          function(err, result) {
+            if (err) {
+              return done(err);
+            }
+
+            expect(result, 'to have passed').and('to satisfy', {
+              output: /UnhandledPromiseRejectionWarning/
+            });
+            done();
+          },
+          {stdio: 'pipe'}
+        );
+      });
+    });
+  });
 });
 
 function onlyConsoleOutput() {

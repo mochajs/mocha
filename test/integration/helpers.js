@@ -30,6 +30,12 @@ module.exports = {
    * @param {Object} [opts] - Options for `spawn()`
    */
   runMocha: function(fixturePath, args, fn, opts) {
+    if (typeof args === 'function') {
+      opts = fn;
+      fn = args;
+      args = [];
+    }
+
     var path;
 
     path = resolveFixturePath(fixturePath);
@@ -61,6 +67,12 @@ module.exports = {
    * @returns {*} Parsed object
    */
   runMochaJSON: function(fixturePath, args, fn, opts) {
+    if (typeof args === 'function') {
+      opts = fn;
+      fn = args;
+      args = [];
+    }
+
     var path;
 
     path = resolveFixturePath(fixturePath);
@@ -208,6 +220,9 @@ function _spawnMochaWithListeners(args, fn, opts) {
 }
 
 function resolveFixturePath(fixture) {
+  if (path.extname(fixture) !== '.js') {
+    fixture += '.fixture.js';
+  }
   return path.join('test', 'integration', 'fixtures', fixture);
 }
 
