@@ -49,10 +49,10 @@ describe('retries', function() {
         ];
 
         expected.forEach(function(line, i) {
-          assert.equal(lines[i], line);
+          assert.strictEqual(lines[i], line);
         });
 
-        assert.equal(res.code, 1);
+        assert.strictEqual(res.code, 1);
         done();
       }
     );
@@ -67,11 +67,11 @@ describe('retries', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.passes, 1);
-      assert.equal(res.stats.failures, 0);
-      assert.equal(res.tests[0].currentRetry, 1);
-      assert.equal(res.stats.tests, 1);
-      assert.equal(res.code, 0);
+      assert.strictEqual(res.stats.passes, 1);
+      assert.strictEqual(res.stats.failures, 0);
+      assert.strictEqual(res.tests[0].currentRetry, 1);
+      assert.strictEqual(res.stats.tests, 1);
+      assert.strictEqual(res.code, 0);
       done();
     });
   });
@@ -82,11 +82,11 @@ describe('retries', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 1);
-      assert.equal(res.stats.tests, 1);
-      assert.equal(res.tests[0].currentRetry, 1);
-      assert.equal(res.code, 1);
+      assert.strictEqual(res.stats.passes, 0);
+      assert.strictEqual(res.stats.failures, 1);
+      assert.strictEqual(res.stats.tests, 1);
+      assert.strictEqual(res.tests[0].currentRetry, 1);
+      assert.strictEqual(res.code, 1);
       done();
     });
   });
@@ -128,10 +128,10 @@ describe('retries', function() {
         ];
 
         expected.forEach(function(line, i) {
-          assert.equal(lines[i], line);
+          assert.strictEqual(lines[i], line);
         });
 
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.code, 0);
         done();
       }
     );
