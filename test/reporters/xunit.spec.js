@@ -4,12 +4,14 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var assert = require('assert');
+var createStatsCollector = require('../../lib/stats-collector');
 var reporters = require('../../').reporters;
 var XUnit = reporters.XUnit;
 
 describe('XUnit reporter', function() {
   var stdout;
   var stdoutWrite;
+  // the runner parameter of the reporter
   var runner;
 
   var callbackArgument = null;
@@ -26,6 +28,7 @@ describe('XUnit reporter', function() {
   beforeEach(function() {
     stdout = [];
     runner = {on: function() {}, once: function() {}};
+    createStatsCollector(runner);
   });
 
   describe('if reporter options output is given', function() {
@@ -322,8 +325,6 @@ describe('XUnit reporter', function() {
   describe('custom suite name', function() {
     // capture the events that the reporter subscribes to
     var events;
-    // the runner parameter of the reporter
-    var runner;
     // capture output lines (will contain the resulting XML of the xunit reporter)
     var lines;
     // the file stream into which the xunit reporter will write into
@@ -332,13 +333,10 @@ describe('XUnit reporter', function() {
     beforeEach(function() {
       events = {};
 
-      runner = {
-        on: function(eventName, eventHandler) {
-          // capture the event handler
-          events[eventName] = eventHandler;
-        }
+      runner.on = runner.once = function(eventName, eventHandler) {
+        // capture the event handler
+        events[eventName] = eventHandler;
       };
-      runner.once = runner.on;
 
       lines = [];
       fileStream = {

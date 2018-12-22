@@ -3,7 +3,7 @@
     "allowUnknownTags": true
   },
   "source": {
-    "include": ["lib/", "./docs/API.md"]
+    "include": ["lib/", "./docs/API.md", "bin"]
   },
   "plugins": ["plugins/markdown"],
   "opts": {

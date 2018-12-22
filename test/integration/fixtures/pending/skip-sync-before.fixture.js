@@ -1,15 +1,20 @@
 'use strict';
 
-describe('skip in before', function () {
-  before(function () {
-    this.skip();
+describe('outer describe', function () {
+  it('should run this test', function () {});
+
+  describe('skip in before', function () {
+    before(function () {
+      this.skip();
+    });
+
+    it('should never run this test', function () {
+      throw new Error('never run this test');
+    });
+    it('should never run this test', function () {
+      throw new Error('never run this test');
+    });
   });
 
-  it('should never run this test', function () {
-    throw new Error('never thrown');
-  });
-
-  it('should never run this test', function () {
-    throw new Error('never thrown');
-  });
+  it('should run this test', function () {});
 });

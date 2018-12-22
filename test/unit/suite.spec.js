@@ -210,27 +210,29 @@ describe('Suite', function() {
   });
 
   describe('.beforeEach()', function() {
+    var suite;
+
     beforeEach(function() {
-      this.suite = new Suite('A Suite');
+      suite = new Suite('A Suite');
     });
 
     describe('wraps the passed in function in a Hook', function() {
       it('adds it to _beforeEach', function() {
         var fn = function() {};
-        this.suite.beforeEach(fn);
+        suite.beforeEach(fn);
 
-        expect(this.suite._beforeEach, 'to have length', 1);
-        var beforeEachItem = this.suite._beforeEach[0];
+        expect(suite._beforeEach, 'to have length', 1);
+        var beforeEachItem = suite._beforeEach[0];
         expect(beforeEachItem.title, 'to match', /^"before each" hook/);
         expect(beforeEachItem.fn, 'to be', fn);
       });
 
       it('appends title to hook', function() {
         var fn = function() {};
-        this.suite.beforeEach('test', fn);
+        suite.beforeEach('test', fn);
 
-        expect(this.suite._beforeEach, 'to have length', 1);
-        var beforeAllItem = this.suite._beforeEach[0];
+        expect(suite._beforeEach, 'to have length', 1);
+        var beforeAllItem = suite._beforeEach[0];
         expect(beforeAllItem.title, 'to be', '"before each" hook: test');
         expect(beforeAllItem.fn, 'to be', fn);
       });
@@ -241,10 +243,21 @@ describe('Suite', function() {
           return;
         }
         function namedFn() {}
-        this.suite.beforeEach(namedFn);
-        var beforeEachItem = this.suite._beforeEach[0];
+        suite.beforeEach(namedFn);
+        var beforeEachItem = suite._beforeEach[0];
         expect(beforeEachItem.title, 'to be', '"before each" hook: namedFn');
         expect(beforeEachItem.fn, 'to be', namedFn);
+      });
+    });
+
+    describe('when the suite is pending', function() {
+      beforeEach(function() {
+        suite.pending = true;
+      });
+
+      it('should not create a hook', function() {
+        suite.beforeEach(function() {});
+        expect(suite._beforeEach, 'to be empty');
       });
     });
   });
@@ -479,6 +492,14 @@ describe('Suite', function() {
       expect(function() {
         new Suite('Bdd suite', 'root');
       }, 'not to throw');
+    });
+  });
+
+  describe('timeout()', function() {
+    it('should convert a string to milliseconds', function() {
+      var suite = new Suite('some suite');
+      suite.timeout('100');
+      expect(suite.timeout(), 'to be', 100);
     });
   });
 });
