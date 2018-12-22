@@ -42,10 +42,10 @@ describe('hooks', function() {
       ];
 
       expected.forEach(function(line, i) {
-        assert.equal(lines[i], line);
+        assert.strictEqual(lines[i], line);
       });
 
-      assert.equal(res.code, 0);
+      assert.strictEqual(res.code, 0);
       done();
     });
   });

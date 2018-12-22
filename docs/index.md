@@ -909,7 +909,7 @@ Enforce a rule that tests must be written in "async" style, meaning each test pr
 
 ### `--bail, -b`
 
-Causes Mocha to stop running tests after the first test failure it encounters.
+Causes Mocha to stop running tests after the first test failure it encounters. Corresponding `after()` and `afterEach()` hooks are executed for potential cleanup.
 
 `--bail` does *not* imply `--exit`.
 

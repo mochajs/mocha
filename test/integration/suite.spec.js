@@ -14,7 +14,7 @@ describe('suite w/no callback', function() {
           return done(err);
         }
         var result = res.output.match(/no callback was supplied/) || [];
-        assert.equal(result.length, 1);
+        assert.strictEqual(result.length, 1);
         done();
       },
       {stdio: 'pipe'}
@@ -30,7 +30,7 @@ describe('skipped suite w/no callback', function() {
       }
       var pattern = new RegExp('Error', 'g');
       var result = res.output.match(pattern) || [];
-      assert.equal(result.length, 0);
+      assert.strictEqual(result.length, 0);
       done();
     });
   });
@@ -44,7 +44,7 @@ describe('skipped suite w/ callback', function() {
       }
       var pattern = new RegExp('Error', 'g');
       var result = res.output.match(pattern) || [];
-      assert.equal(result.length, 0);
+      assert.strictEqual(result.length, 0);
       done();
     });
   });
@@ -61,7 +61,7 @@ describe('suite returning a value', function() {
         }
         var pattern = new RegExp('Deprecation Warning', 'g');
         var result = res.output.match(pattern) || [];
-        assert.equal(result.length, 1);
+        assert.strictEqual(result.length, 1);
         done();
       },
       {stdio: 'pipe'}
