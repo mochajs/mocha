@@ -36,14 +36,27 @@ module.exports = {
         description: 'Run ESLint linter'
       },
       markdown: {
-        script: 'markdownlint "*.md" "docs/**/*.md" ".github/*.md"',
+        script:
+          'markdownlint "*.md" "docs/**/*.md" ".github/*.md" "lib/**/*.md" "test/**/*.md" "example/**/*.md"',
         description: 'Run markdownlint linter'
       }
     },
-    reformat: {
-      script:
-        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*" "scripts/*"',
-      description: 'Reformat codebase with Prettier'
+    format: {
+      default: {
+        script: 'nps format.eslint && nps format.prettier',
+        default: 'Format codebase w/ ESLint and Prettier'
+      },
+      eslint: {
+        script: 'eslint --fix . "bin/*"',
+        description: 'Format JavaScript files',
+        hiddenFromHelp: true
+      },
+      prettier: {
+        script:
+          'prettier --write "!(package*).json" ".*.json" "lib/**/*.json" "*.yml"',
+        description: 'Format JSON & YAML files',
+        hiddenFromHelp: true
+      }
     },
     clean: {
       script: 'rimraf mocha.js',

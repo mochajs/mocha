@@ -11,12 +11,15 @@ describe('uncaught exceptions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 1);
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 0);
+      assert.strictEqual(res.stats.failures, 1);
 
-      assert.equal(res.failures[0].fullTitle, 'uncaught "before each" hook');
-      assert.equal(res.code, 1);
+      assert.strictEqual(
+        res.failures[0].fullTitle,
+        'uncaught "before each" hook'
+      );
+      assert.strictEqual(res.code, 1);
       done();
     });
   });
@@ -27,19 +30,19 @@ describe('uncaught exceptions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 2);
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 0);
+      assert.strictEqual(res.stats.failures, 2);
 
-      assert.equal(
+      assert.strictEqual(
         res.failures[0].title,
         'fails exactly once when a global error is thrown first'
       );
-      assert.equal(
+      assert.strictEqual(
         res.failures[1].title,
         'fails exactly once when a global error is thrown second'
       );
-      assert.equal(res.code, 2);
+      assert.strictEqual(res.code, 2);
       done();
     });
   });
@@ -50,20 +53,20 @@ describe('uncaught exceptions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 1);
-      assert.equal(res.stats.failures, 1);
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 1);
+      assert.strictEqual(res.stats.failures, 1);
 
-      assert.equal(
+      assert.strictEqual(
         res.failures[0].title,
         'should bail if a successful test asynchronously fails'
       );
-      assert.equal(
+      assert.strictEqual(
         res.passes[0].title,
         'should bail if a successful test asynchronously fails'
       );
 
-      assert.equal(res.code, 1);
+      assert.strictEqual(res.code, 1);
       done();
     });
   });

@@ -11,10 +11,10 @@ describe('this.timeout()', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 2);
-      assert.equal(res.code, 2);
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 0);
+      assert.strictEqual(res.stats.failures, 2);
+      assert.strictEqual(res.code, 2);
       done();
     });
   });
