@@ -451,6 +451,7 @@
   },
   "homepage": "https://mochajs.org/",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
+  "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"

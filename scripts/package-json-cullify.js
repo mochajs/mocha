@@ -10,7 +10,7 @@
 const browserifyPackageJSON = require('browserify-package-json');
 
 module.exports = function(filename, options) {
-  const fieldsToKeep = ['name', 'version', 'homepage', 'logo'];
+  const fieldsToKeep = ['name', 'version', 'homepage', 'notifyLogo'];
   const bpjOptions = Object.assign(options || {}, {only: fieldsToKeep});
 
   return browserifyPackageJSON(filename, bpjOptions);
