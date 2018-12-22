@@ -64,6 +64,7 @@ describe('Mocha', function() {
           mocha.reporter('xunit').run();
         } catch (e) {
           console.log(e);
+          expect.fail(e.message);
         }
       }, 'not to throw');
     });
