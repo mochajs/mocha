@@ -451,6 +451,7 @@
   },
   "homepage": "https://mochajs.org/",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
+  "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
     "mocha": "./bin/mocha",
     "_mocha": "./bin/_mocha"
@@ -497,6 +498,7 @@
     "@mocha/docdash": "^1.0.1",
     "assetgraph-builder": "^6.4.2",
     "browserify": "^16.2.3",
+    "browserify-package-json": "^1.0.1",
     "chai": "^4.2.0",
     "coffee-script": "^1.10.0",
     "coveralls": "^3.0.2",
@@ -525,7 +527,6 @@
     "markdownlint-cli": "^0.13.0",
     "nps": "^5.9.3",
     "nyc": "^13.1.0",
-    "package-json-versionify": "^1.0.4",
     "prettier": "^1.15.3",
     "rewiremock": "^3.12.3",
     "rimraf": "^2.5.2",
@@ -548,13 +549,13 @@
   ],
   "browserify": {
     "transform": [
-      "package-json-versionify"
+      "./scripts/package-json-cullify"
     ]
   },
   "browser": {
-    "growl": "./lib/browser/growl.js",
-    "tty": "./lib/browser/tty.js",
     "./index.js": "./browser-entry.js",
+    "./lib/growl.js": "./lib/browser/growl.js",
+    "tty": "./lib/browser/tty.js",
     "fs": false,
     "glob": false,
     "path": false,
