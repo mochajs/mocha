@@ -749,7 +749,7 @@ To tweak what's considered "slow", you can use the `slow()` method:
 
 ```js
 describe('something slow', function() {
-  this.slow(10000);
+  this.slow(300000);  // five minutes
 
   it('should take long enough for me to go make a sandwich', function() {
     // ...
@@ -1488,7 +1488,7 @@ A typical setup might look something like the following, where we call `mocha.se
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link href="https://unpkg.com/mocha/mocha.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
 </head>
 <body>
   <div id="mocha"></div>
@@ -1568,11 +1568,11 @@ notification should appear informing you whether your tests passed or failed.
 
 In order to use desktop notifications with the command-line interface (CLI),
 you **must** first install some platform-specific prerequisite software.
-Instructions for doing so can be found [here](https://github.com/mochajs/mocha/wiki/Growl-Notifications).
+Instructions for doing so can be found [here][Growl-install].
 
 Enable Mocha's desktop notifications as follows:
 
-```bash
+```sh
 $ mocha --growl
 ```
 
