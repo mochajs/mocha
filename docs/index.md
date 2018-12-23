@@ -26,7 +26,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
-- [growl notification support](#mochaopts)
+- [Growl support](#desktop-notification-support)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
@@ -70,6 +70,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
+- [Desktop Notification Support](#desktop-notification-support)
 - [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
 - [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
@@ -748,7 +749,7 @@ To tweak what's considered "slow", you can use the `slow()` method:
 
 ```js
 describe('something slow', function() {
-  this.slow(10000);
+  this.slow(300000);  // five minutes
 
   it('should take long enough for me to go make a sandwich', function() {
     // ...
@@ -1487,20 +1488,22 @@ A typical setup might look something like the following, where we call `mocha.se
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
-  <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
 </head>
 <body>
   <div id="mocha"></div>
 
   <script src="https://unpkg.com/chai/chai.js"></script>
-  <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
 
-  <script>mocha.setup('bdd')</script>
+  <script class="mocha-init">
+    mocha.setup('bdd');
+    mocha.checkLeaks();
+  </script>
   <script src="test.array.js"></script>
   <script src="test.object.js"></script>
   <script src="test.xhr.js"></script>
-  <script>
-    mocha.checkLeaks();
+  <script class="mocha-exec">
     mocha.run();
   </script>
 </body>
@@ -1546,6 +1549,69 @@ The "HTML" reporter is what you see when running Mocha in the browser.  It looks
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
 [Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
+
+## Desktop Notification Support
+
+Desktop notifications allow asynchronous communication of events without
+forcing you to react to a notification immediately. Their appearance
+and specific functionality vary across platforms. They typically disappear
+automatically after a short delay, but their content is often stored in some
+manner that allows you to access past notifications.
+
+[Growl][] was an early notification system implementation for OS X and Windows,
+hence, the name of Mocha's `--growl` option.
+
+Once enabled, when your root suite completes test execution, a desktop
+notification should appear informing you whether your tests passed or failed.
+
+### Node-based notifications
+
+In order to use desktop notifications with the command-line interface (CLI),
+you **must** first install some platform-specific prerequisite software.
+Instructions for doing so can be found [here][Growl-install].
+
+Enable Mocha's desktop notifications as follows:
+
+```sh
+$ mocha --growl
+```
+
+### Browser-based notifications
+
+Web notification support is being made available for current versions of
+modern browsers. Ensure your browser version supports both
+[promises](https://caniuse.com/#feat=promises) and
+[web notifications](https://caniuse.com/#feat=notifications). As the
+Notification API evolved over time, **do not expect** the minimum possible
+browser version to necessarily work.
+
+Enable Mocha's web notifications with a slight modification to your
+client-side mocha HTML. Add a call to `mocha.growl()` prior to running your
+tests as shown below:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mocha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+    <script class="mocha-init">
+      mocha.setup('bdd');
+      mocha.growl();      // <-- Enables web notifications
+    </script>
+    <script src="tests.js"></script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
+```
 
 ## Configuring Mocha (Node.js)
 
@@ -1631,11 +1697,11 @@ For example, suppose you have the following `mocha.opts` file:
 
 The settings above will default the reporter to `dot`, require the `should`
 library, and use `bdd` as the interface. With this, you may then invoke `mocha`
-with additional arguments, here enabling [Growl](http://growl.info/) support,
-and changing the reporter to `list`:
+with additional arguments, here changing the reporter to `list` and setting the
+slow threshold to half a second:
 
 ```sh
-$ mocha --reporter list --growl
+$ mocha --reporter list --slow 500
 ```
 
 To ignore your `mocha.opts`, use the `--no-opts` option.
@@ -1727,7 +1793,20 @@ $ REPORTER=nyan npm test
 
 ## More Information
 
-In addition to chatting with us on [Gitter], for additional information such as using spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub. For discussions join the [Google Group](https://groups.google.com/group/mochajs). For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/) or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js#L51).
+In addition to chatting with us on [Gitter][Gitter-mocha], for additional information such as using
+spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki][Mocha-wiki] on GitHub.
+For discussions join the [Google Group][Google-mocha]. For a running example of Mocha, view
+[example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
+or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
+
+[//]: # (Cross reference section)
+
+[Gitter-mocha]: https://gitter.im/mochajs/mocha
+[Google-mocha]: https://groups.google.com/group/mochajs
+[Growl]: http://growl.info/
+[Growl-install]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
+[Mocha-website]: https://mochajs.org/
+[Mocha-wiki]: https://github.com/mochajs/mocha/wiki
 
 <!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
 [Gitter]: https://gitter.im/mochajs/mocha
