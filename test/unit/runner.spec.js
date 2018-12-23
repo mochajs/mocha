@@ -373,14 +373,6 @@ describe('Runner', function() {
       runner.failHook(hook, err);
     });
 
-    it('should emit "end" if suite bail is true', function(done) {
-      var hook = new Hook();
-      var err = {};
-      suite.bail(true);
-      runner.on('end', done);
-      runner.failHook(hook, err);
-    });
-
     it('should not emit "end" if suite bail is not true', function(done) {
       var hook = new Hook();
       var err = {};
@@ -390,6 +382,36 @@ describe('Runner', function() {
       });
       runner.failHook(hook, err);
       done();
+    });
+  });
+
+  describe('.run(fn)', function() {
+    it('should emit "retry" when a retryable test fails', function(done) {
+      var retries = 2;
+      var retryableFails = 0;
+      var err = new Error('bear error');
+
+      var test = new Test('im a test about bears', function() {
+        if (retryableFails < retries) {
+          throw err;
+        }
+      });
+
+      suite.retries(retries);
+      suite.addTest(test);
+
+      runner.on('retry', function(testClone, testErr) {
+        retryableFails += 1;
+        expect(testClone.title, 'to be', test.title);
+        expect(testErr, 'to be', err);
+      });
+
+      runner.run(function(failures) {
+        expect(failures, 'to be', 0);
+        expect(retryableFails, 'to be', retries);
+
+        done();
+      });
     });
   });
 

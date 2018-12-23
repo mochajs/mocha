@@ -4,47 +4,10 @@ var mocha = require('../../lib/mocha');
 var utils = mocha.utils;
 var Runnable = mocha.Runnable;
 var Suite = mocha.Suite;
-
-/**
- * Custom assert function.
- * Because of the below "poison pill", we cannot trust third-party code
- * including assertion libraries, not to call the global functions we're
- * poisoning--so we must make our own assertions.
- * @param {*} expr - Throws if false
- */
-function assert(expr) {
-  if (!expr) {
-    throw new Error('assertion failure');
-  }
-}
+var sinon = require('sinon');
+var Pending = require('../../lib/pending');
 
 describe('Runnable(title, fn)', function() {
-  // For every test we poison the global time-related methods.
-  // runnable.js etc. should keep its own local copy, in order to fix GH-237.
-  // NB: we can't poison global.Date because the normal implementation of
-  // global.setTimeout uses it [1] so if the runnable.js keeps a copy of
-  // global.setTimeout (like it's supposed to), that will blow up.
-  // [1]: https://github.com/joyent/node/blob/7fc835afe362ebd30a0dbec81d3360bd24525222/lib/timers.js#L74
-  var setTimeout = global.setTimeout;
-  var setInterval = global.setInterval;
-  var clearTimeout = global.clearTimeout;
-  var clearInterval = global.clearInterval;
-
-  function poisonPill() {
-    throw new Error("Don't use global time-related stuff.");
-  }
-
-  beforeEach(function() {
-    global.setTimeout = global.setInterval = global.clearTimeout = global.clearInterval = poisonPill;
-  });
-
-  afterEach(function() {
-    global.setTimeout = setTimeout;
-    global.setInterval = setInterval;
-    global.clearTimeout = clearTimeout;
-    global.clearInterval = clearInterval;
-  });
-
   describe('#timeout(ms)', function() {
     var MIN_TIMEOUT = 0;
     var MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
@@ -53,74 +16,128 @@ describe('Runnable(title, fn)', function() {
       it('should clamp to lower bound given numeric', function() {
         var run = new Runnable();
         run.timeout(-1);
-        assert(run.timeout() === MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', MIN_TIMEOUT);
       });
       it('should clamp to lower bound given timestamp', function() {
         var run = new Runnable();
         run.timeout('-1 ms');
-        assert(run.timeout() === MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', MIN_TIMEOUT);
       });
     });
 
     describe('when value is equal to lower bound', function() {
-      it('should set the value and disable timeouts given numeric', function() {
-        var run = new Runnable();
+      var run;
+
+      beforeEach(function() {
+        run = new Runnable();
         run.timeout(MIN_TIMEOUT);
-        assert(run.timeout() === MIN_TIMEOUT);
-        assert(run.enableTimeouts() === false);
       });
-      it('should set the value and disable timeouts given timestamp', function() {
-        var run = new Runnable();
-        run.timeout(MIN_TIMEOUT + 'ms');
-        assert(run.timeout() === MIN_TIMEOUT);
-        assert(run.enableTimeouts() === false);
+      describe('given numeric value', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        });
+
+        it('should disable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
+      });
+
+      describe('given string timestamp', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        });
+
+        it('should disable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
       });
     });
 
     describe('when value is within `setTimeout` bounds', function() {
-      var oneSecond = 1000;
+      var run;
+      var timeout = 1000;
 
-      it('should set the timeout given numeric', function() {
-        var run = new Runnable();
-        run.timeout(oneSecond);
-        assert(run.timeout() === oneSecond);
-        assert(run.enableTimeouts() === true);
+      beforeEach(function() {
+        run = new Runnable();
+        run.timeout(timeout);
       });
-      it('should set the timeout given timestamp', function() {
-        var run = new Runnable();
-        run.timeout('1s');
-        assert(run.timeout() === oneSecond);
-        assert(run.enableTimeouts() === true);
+
+      describe('given numeric value', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', timeout);
+        });
+
+        it('should enable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be true');
+        });
+      });
+
+      describe('given string timestamp', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', timeout);
+        });
+
+        it('should enable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be true');
+        });
       });
     });
 
     describe('when value is equal to upper bound', function() {
-      it('should set the value and disable timeout given numeric', function() {
-        var run = new Runnable();
+      var run;
+
+      beforeEach(function() {
+        run = new Runnable();
         run.timeout(MAX_TIMEOUT);
-        assert(run.timeout() === MAX_TIMEOUT);
-        assert(run.enableTimeouts() === false);
       });
-      it('should set the value and disable timeout given timestamp', function() {
-        var run = new Runnable();
-        run.timeout(MAX_TIMEOUT + 'ms');
-        assert(run.timeout() === MAX_TIMEOUT);
-        assert(run.enableTimeouts() === false);
+      describe('given numeric value', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        });
+
+        it('should disable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
+      });
+
+      describe('given string timestamp', function() {
+        it('should set the timeout value', function() {
+          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        });
+
+        it('should disable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
       });
     });
 
-    describe('when value is greater than `setTimeout` limit', function() {
-      it('should clamp to upper bound given numeric', function() {
-        var run = new Runnable();
-        run.timeout(MAX_TIMEOUT + 1);
-        assert(run.timeout() === MAX_TIMEOUT);
-        assert(run.enableTimeouts() === false);
+    describe('when value is out-of-bounds', function() {
+      var run;
+      var timeout = MAX_TIMEOUT + 1;
+
+      beforeEach(function() {
+        run = new Runnable();
+        run.timeout(timeout);
       });
-      it('should clamp to upper bound given timestamp', function() {
-        var run = new Runnable();
-        run.timeout('24.9d'); // 2151360000ms
-        assert(run.timeout() === MAX_TIMEOUT);
-        assert(run.enableTimeouts() === false);
+
+      describe('given numeric value', function() {
+        it('should clamp the value to max timeout', function() {
+          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        });
+
+        it('should enable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
+      });
+
+      describe('given string timestamp', function() {
+        it('should clamp the value to max timeout', function() {
+          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        });
+
+        it('should enable timeouts', function() {
+          expect(run.enableTimeouts(), 'to be false');
+        });
       });
     });
   });
@@ -129,7 +146,7 @@ describe('Runnable(title, fn)', function() {
     it('should set enabled', function() {
       var run = new Runnable();
       run.enableTimeouts(false);
-      assert(run.enableTimeouts() === false);
+      expect(run.enableTimeouts(), 'to be false');
     });
   });
 
@@ -142,23 +159,30 @@ describe('Runnable(title, fn)', function() {
 
     it('should set the slow threshold', function() {
       run.slow(100);
-      assert(run.slow() === 100);
+      expect(run.slow(), 'to be', 100);
     });
 
     it('should not set the slow threshold if the parameter is not passed', function() {
       run.slow();
-      assert(run.slow() === 75);
+      expect(run.slow(), 'to be', 75);
     });
 
     it('should not set the slow threshold if the parameter is undefined', function() {
       run.slow(undefined);
-      assert(run.slow() === 75);
+      expect(run.slow(), 'to be', 75);
+    });
+
+    describe('when passed a time-formatted string', function() {
+      it('should convert to ms', function() {
+        run.slow('1s');
+        expect(run.slow(), 'to be', 1000);
+      });
     });
   });
 
   describe('.title', function() {
     it('should be present', function() {
-      assert(new Runnable('foo').title === 'foo');
+      expect(new Runnable('foo').title, 'to be', 'foo');
     });
   });
 
@@ -166,35 +190,51 @@ describe('Runnable(title, fn)', function() {
     it("returns the concatenation of the parent's title path and runnable's title", function() {
       var runnable = new Runnable('bar');
       runnable.parent = new Suite('foo');
-      assert(
-        JSON.stringify(runnable.titlePath()) === JSON.stringify(['foo', 'bar'])
+      expect(
+        JSON.stringify(runnable.titlePath()),
+        'to be',
+        JSON.stringify(['foo', 'bar'])
       );
     });
   });
 
   describe('when arity >= 1', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable('foo', function(done) {});
+    });
+
     it('should be .async', function() {
-      var run = new Runnable('foo', function(done) {});
-      assert(run.async === 1);
-      assert(run.sync === false);
+      expect(run.async, 'to be', 1);
+    });
+
+    it('should not be .sync', function() {
+      expect(run.sync, 'to be false');
     });
   });
 
   describe('when arity == 0', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable('foo', function() {});
+    });
+
+    it('should not be .async', function() {
+      expect(run.async, 'to be', 0);
+    });
+
     it('should be .sync', function() {
-      var run = new Runnable('foo', function() {});
-      assert(run.async === 0);
-      assert(run.sync === true);
+      expect(run.sync, 'to be true');
     });
   });
 
   describe('#globals', function() {
-    it('should allow for whitelisting globals', function(done) {
-      var test = new Runnable('foo', function() {});
-      assert(test.async === 0);
-      assert(test.sync === true);
-      test.globals(['foobar']);
-      test.run(done);
+    it('should allow for whitelisting globals', function() {
+      var runnable = new Runnable('foo', function() {});
+      runnable.globals(['foobar']);
+      expect(runnable._allowedGlobals, 'to equal', ['foobar']);
     });
   });
 
@@ -202,141 +242,135 @@ describe('Runnable(title, fn)', function() {
     it('should set the number of retries', function() {
       var run = new Runnable();
       run.retries(1);
-      assert(run.retries() === 1);
+      expect(run.retries(), 'to be', 1);
     });
   });
 
   describe('.run(fn)', function() {
     describe('when .pending', function() {
       it('should not invoke the callback', function(done) {
-        var test = new Runnable('foo', function() {
-          throw new Error('should not be called');
-        });
+        var spy = sinon.spy();
+        var runnable = new Runnable('foo', spy);
 
-        test.pending = true;
-        test.run(done);
+        runnable.pending = true;
+        runnable.run(function(err) {
+          if (err) {
+            return done(err);
+          }
+          expect(spy, 'was not called');
+          done();
+        });
       });
     });
 
     describe('when sync', function() {
       describe('without error', function() {
         it('should invoke the callback', function(done) {
-          var calls = 0;
-          var test = new Runnable('foo', function() {
-            ++calls;
-          });
+          var spy = sinon.spy();
+          var runnable = new Runnable('foo', spy);
 
-          test.run(function(err) {
+          runnable.run(function(err) {
             if (err) {
-              done(err);
-              return;
+              return done(err);
             }
 
-            try {
-              assert(calls === 1);
-              assert(typeof test.duration === 'number');
-            } catch (err) {
-              done(err);
-              return;
-            }
+            expect(spy, 'was called times', 1);
             done();
           });
         });
       });
 
       describe('when an exception is thrown', function() {
-        it('should invoke the callback', function(done) {
-          var calls = 0;
-          var test = new Runnable('foo', function() {
-            ++calls;
-            throw new Error('fail');
-          });
+        it('should invoke the callback with error', function(done) {
+          var stub = sinon.stub().throws('Error', 'fail');
+          var runnable = new Runnable('foo', stub);
 
-          test.run(function(err) {
-            assert(calls === 1);
-            assert(err.message === 'fail');
+          runnable.run(function(err) {
+            expect(err.message, 'to be', 'fail');
+            expect(stub, 'was called');
             done();
           });
         });
       });
 
       describe('when an exception is thrown and is allowed to remain uncaught', function() {
-        it('throws an error when it is allowed', function(done) {
-          var test = new Runnable('foo', function() {
-            throw new Error('fail');
-          });
-          test.allowUncaught = true;
+        it('throws an error when it is allowed', function() {
+          var stub = sinon.stub().throws('Error', 'fail');
+          var runnable = new Runnable('foo', stub);
+          runnable.allowUncaught = true;
+
           function fail() {
-            test.run(function() {});
+            runnable.run(function() {});
           }
-          try {
-            fail();
-            done(new Error('failed to throw'));
-          } catch (e) {
-            assert(e.message === 'fail');
-            done();
-          }
+          expect(fail, 'to throw', 'fail');
         });
       });
     });
 
     describe('when timeouts are disabled', function() {
       it('should not error with timeout', function(done) {
-        var test = new Runnable('foo', function(done) {
+        var runnable = new Runnable('foo', function(done) {
           setTimeout(function() {
             setTimeout(done);
           }, 2);
         });
-        test.timeout(1);
-        test.enableTimeouts(false);
-        test.run(done);
+        runnable.timeout(1);
+        runnable.enableTimeouts(false);
+        runnable.run(function(err) {
+          expect(err, 'to be falsy');
+          done();
+        });
       });
     });
 
     describe('when async', function() {
       describe('without error', function() {
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function(done) {
+          var runnable = new Runnable('foo', function(done) {
             setTimeout(done);
           });
 
-          test.run(done);
+          runnable.run(function(err) {
+            expect(err, 'to be falsy');
+            done();
+          });
         });
       });
 
       describe('when the callback is invoked several times', function() {
         describe('without an error', function() {
           it('should emit a single "error" event', function(done) {
-            var calls = 0;
-            var errCalls = 0;
+            var callbackSpy = sinon.spy();
+            var errorSpy = sinon.spy();
 
-            var test = new Runnable('foo', function(done) {
+            var runnable = new Runnable('foo', function(done) {
               process.nextTick(done);
               setTimeout(done);
               setTimeout(done);
               setTimeout(done);
             });
 
-            test.on('error', function(err) {
-              ++errCalls;
-              assert(err.message === 'done() called multiple times');
-              assert(calls === 1);
-              assert(errCalls === 1);
-              done();
+            // XXX too many diff assertions and very flimsy assertion that this
+            // event was only emitted once.  think of a better way.
+            runnable.on('error', errorSpy).on('error', function(err) {
+              process.nextTick(function() {
+                expect(errorSpy, 'was called times', 1);
+                expect(err.message, 'to be', 'done() called multiple times');
+                expect(callbackSpy, 'was called times', 1);
+                done();
+              });
             });
 
-            test.run(function() {
-              ++calls;
-            });
+            runnable.run(callbackSpy);
           });
         });
 
         describe('with an error', function() {
           it('should emit a single "error" event', function(done) {
-            var calls = 0;
-            var errCalls = 0;
+            var callbackSpy = sinon.spy();
+            var errorSpy = sinon.spy();
 
-            var test = new Runnable('foo', function(done) {
+            var runnable = new Runnable('foo', function(done) {
               done(new Error('fail'));
               setTimeout(done);
               done(new Error('fail'));
@@ -344,44 +378,47 @@ describe('Runnable(title, fn)', function() {
               setTimeout(done);
             });
 
-            test.on('error', function(err) {
-              ++errCalls;
-              assert(
-                err.message ===
+            // XXX too many diff assertions and very flimsy assertion that this
+            // event was only emitted once.  think of a better way.
+            runnable.on('error', errorSpy).on('error', function(err) {
+              process.nextTick(function() {
+                expect(errorSpy, 'was called times', 1);
+                expect(
+                  err.message,
+                  'to be',
                   "fail (and Mocha's done() called multiple times)"
-              );
-              assert(calls === 1);
-              assert(errCalls === 1);
-              done();
+                );
+                expect(callbackSpy, 'was called times', 1);
+                done();
+              });
             });
 
-            test.run(function() {
-              ++calls;
-            });
+            runnable.run(callbackSpy);
           });
         });
       });
 
       describe('when an exception is thrown', function() {
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function(done) {
-            throw new Error('fail');
-          });
+          var runnable = new Runnable(
+            'foo',
+            sinon.stub().throws('Error', 'fail')
+          );
 
-          test.run(function(err) {
-            assert(err.message === 'fail');
+          runnable.run(function(err) {
+            expect(err.message, 'to be', 'fail');
             done();
           });
         });
 
         it('should not throw its own exception if passed a non-object', function(done) {
-          var test = new Runnable('foo', function(done) {
+          var runnable = new Runnable('foo', function(done) {
             /* eslint no-throw-literal: off */
             throw null;
           });
 
-          test.run(function(err) {
-            assert(err.message === utils.undefinedError().message);
+          runnable.run(function(err) {
+            expect(err.message, 'to be', utils.undefinedError().message);
             done();
           });
         });
@@ -389,31 +426,27 @@ describe('Runnable(title, fn)', function() {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function() {
         it('throws an error when it is allowed', function(done) {
-          var test = new Runnable('foo', function(done) {
+          var runnable = new Runnable('foo', function(done) {
             throw new Error('fail');
           });
-          test.allowUncaught = true;
+          runnable.allowUncaught = true;
+
           function fail() {
-            test.run(function() {});
+            runnable.run(function() {});
           }
-          try {
-            fail();
-            done(new Error('failed to throw'));
-          } catch (e) {
-            assert(e.message === 'fail');
-          }
+          expect(fail, 'to throw', 'fail');
           done();
         });
       });
 
       describe('when an error is passed', function() {
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function(done) {
+          var runnable = new Runnable('foo', function(done) {
             done(new Error('fail'));
           });
 
-          test.run(function(err) {
-            assert(err.message === 'fail');
+          runnable.run(function(err) {
+            expect(err.message, 'to be', 'fail');
             done();
           });
         });
@@ -421,14 +454,17 @@ describe('Runnable(title, fn)', function() {
 
       describe('when done() is invoked with a non-Error object', function() {
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function(done) {
-            done({error: 'Test error'});
+          var runnable = new Runnable('foo', function(done) {
+            done({
+              error: 'Test error'
+            });
           });
 
-          test.run(function(err) {
-            assert(
-              err.message ===
-                'done() invoked with non-Error: {"error":"Test error"}'
+          runnable.run(function(err) {
+            expect(
+              err.message,
+              'to be',
+              'done() invoked with non-Error: {"error":"Test error"}'
             );
             done();
           });
@@ -437,30 +473,31 @@ describe('Runnable(title, fn)', function() {
 
       describe('when done() is invoked with a string', function() {
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function(done) {
+          var runnable = new Runnable('foo', function(done) {
             done('Test error');
           });
 
-          test.run(function(err) {
-            assert(err.message === 'done() invoked with non-Error: Test error');
+          runnable.run(function(err) {
+            expect(
+              err.message,
+              'to be',
+              'done() invoked with non-Error: Test error'
+            );
             done();
           });
         });
       });
 
       it('should allow updating the timeout', function(done) {
-        var callCount = 0;
-        var increment = function() {
-          callCount++;
-        };
-        var test = new Runnable('foo', function(done) {
-          setTimeout(increment, 1);
-          setTimeout(increment, 100);
+        var spy = sinon.spy();
+        var runnable = new Runnable('foo', function(done) {
+          setTimeout(spy, 1);
+          setTimeout(spy, 100);
         });
-        test.timeout(50);
-        test.run(function(err) {
-          assert(err);
-          assert(callCount === 1);
+        runnable.timeout(50);
+        runnable.run(function(err) {
+          expect(err, 'to be truthy');
+          expect(spy, 'was called times', 1);
           done();
         });
       });
@@ -471,17 +508,20 @@ describe('Runnable(title, fn)', function() {
     describe('when fn returns a promise', function() {
       describe('when the promise is fulfilled with no value', function() {
         var fulfilledPromise = {
-          then: function(fulfilled, rejected) {
+          then: function(fulfilled) {
             setTimeout(fulfilled);
           }
         };
 
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function() {
+          var runnable = new Runnable('foo', function() {
             return fulfilledPromise;
           });
 
-          test.run(done);
+          runnable.run(function(err) {
+            expect(err, 'to be falsy');
+            done();
+          });
         });
       });
 
@@ -495,11 +535,14 @@ describe('Runnable(title, fn)', function() {
         };
 
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function() {
+          var runnable = new Runnable('foo', function() {
             return fulfilledPromise;
           });
 
-          test.run(done);
+          runnable.run(function(err) {
+            expect(err, 'to be falsy');
+            done();
+          });
         });
       });
 
@@ -514,12 +557,12 @@ describe('Runnable(title, fn)', function() {
         };
 
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function() {
+          var runnable = new Runnable('foo', function() {
             return rejectedPromise;
           });
 
-          test.run(function(err) {
-            assert(err === expectedErr);
+          runnable.run(function(err) {
+            expect(err, 'to be', expectedErr);
             done();
           });
         });
@@ -536,12 +579,12 @@ describe('Runnable(title, fn)', function() {
         };
 
         it('should invoke the callback', function(done) {
-          var test = new Runnable('foo', function() {
+          var runnable = new Runnable('foo', function() {
             return rejectedPromise;
           });
 
-          test.run(function(err) {
-            assert(err.message === expectedErr.message);
+          runnable.run(function(err) {
+            expect(err.message, 'to be', expectedErr.message);
             done();
           });
         });
@@ -553,15 +596,17 @@ describe('Runnable(title, fn)', function() {
         };
 
         it('should throw the timeout error', function(done) {
-          var test = new Runnable('foo', function() {
+          var runnable = new Runnable('foo', function() {
             return foreverPendingPromise;
           });
-          test.file = '/some/path';
+          runnable.file = '/some/path';
 
-          test.timeout(10);
-          test.run(function(err) {
-            assert(
-              /Timeout of 10ms exceeded.*\(\/some\/path\)$/.test(err.message)
+          runnable.timeout(10);
+          runnable.run(function(err) {
+            expect(
+              err.message,
+              'to match',
+              /Timeout of 10ms exceeded.*\(\/some\/path\)$/
             );
             done();
           });
@@ -571,42 +616,100 @@ describe('Runnable(title, fn)', function() {
 
     describe('when fn returns a non-promise', function() {
       it('should invoke the callback', function(done) {
-        var test = new Runnable('foo', function() {
-          return {then: 'i ran my tests'};
+        var runnable = new Runnable('foo', function() {
+          return {
+            then: 'i ran my tests'
+          };
         });
 
-        test.run(done);
+        runnable.run(done);
+      });
+    });
+
+    describe('if timed-out', function() {
+      it('should ignore call to `done` and not execute callback again', function(done) {
+        var runnable = new Runnable('foo', function(done) {
+          setTimeout(done, 20);
+        });
+        runnable.timeout(10);
+        runnable.run(function(err) {
+          expect(err.message, 'to match', /^Timeout of 10ms/);
+          // timedOut is set *after* this callback is executed
+          process.nextTick(function() {
+            expect(runnable.timedOut, 'to be truthy');
+            done();
+          });
+        });
+      });
+    });
+
+    describe('if async', function() {
+      it('this.skip() should call callback with Pending', function(done) {
+        var runnable = new Runnable('foo', function(done) {
+          // normally "this" but it gets around having to muck with a context
+          runnable.skip();
+        });
+        runnable.run(function(err) {
+          expect(err.constructor, 'to be', Pending);
+          done();
+        });
+      });
+
+      it('this.skip() should halt synchronous execution', function(done) {
+        var aborted = true;
+        var runnable = new Runnable('foo', function(done) {
+          // normally "this" but it gets around having to muck with a context
+          runnable.skip();
+          aborted = false;
+        });
+        runnable.run(function() {
+          expect(aborted, 'to be true');
+          done();
+        });
       });
     });
   });
 
   describe('#isFailed()', function() {
     it('should return `true` if test has not failed', function() {
-      var test = new Runnable('foo', function() {});
+      var runnable = new Runnable('foo', function() {});
       // runner sets the state
-      test.run(function() {
-        assert(!test.isFailed());
+      runnable.run(function() {
+        expect(runnable.isFailed(), 'to be false');
       });
     });
 
     it('should return `true` if test has failed', function() {
-      var test = new Runnable('foo', function() {});
+      var runnable = new Runnable('foo', function() {});
       // runner sets the state
-      test.state = 'failed';
-      test.run(function() {
-        assert(!test.isFailed());
+      runnable.state = 'failed';
+      runnable.run(function() {
+        expect(runnable.isFailed(), 'to be false');
       });
     });
 
     it('should return `false` if test is pending', function() {
-      var test = new Runnable('foo', function() {});
+      var runnable = new Runnable('foo', function() {});
       // runner sets the state
-      test.isPending = function() {
+      runnable.isPending = function() {
         return true;
       };
-      test.run(function() {
-        assert(!test.isFailed());
+      runnable.run(function() {
+        expect(runnable.isFailed(), 'to be false');
       });
+    });
+  });
+
+  describe('#resetTimeout()', function() {
+    it('should not time out if timeouts disabled after reset', function(done) {
+      var runnable = new Runnable('foo', function() {});
+      runnable.timeout(10);
+      runnable.resetTimeout();
+      runnable.enableTimeouts(false);
+      setTimeout(function() {
+        expect(runnable.timedOut, 'to be', false);
+        done();
+      }, 20);
     });
   });
 });
