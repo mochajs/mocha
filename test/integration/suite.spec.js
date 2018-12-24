@@ -1,6 +1,5 @@
 'use strict';
 
-var assert = require('assert');
 var run = require('./helpers').runMocha;
 var args = [];
 
@@ -15,7 +14,7 @@ describe('suite w/no callback', function() {
         }
         var pattern = /MissingCallbackError/g;
         var result = res.output.match(pattern) || [];
-        assert.strictEqual(result.length, 1);
+        expect(result, 'to have length', 1);
         done();
       },
       {stdio: 'pipe'}
@@ -31,7 +30,7 @@ describe('skipped suite w/no callback', function() {
       }
       var pattern = new RegExp('Error', 'g');
       var result = res.output.match(pattern) || [];
-      assert.strictEqual(result.length, 0);
+      expect(result, 'to have length', 0);
       done();
     });
   });
@@ -45,7 +44,7 @@ describe('skipped suite w/ callback', function() {
       }
       var pattern = new RegExp('Error', 'g');
       var result = res.output.match(pattern) || [];
-      assert.strictEqual(result.length, 0);
+      expect(result, 'to have length', 0);
       done();
     });
   });
@@ -62,7 +61,7 @@ describe('suite returning a value', function() {
         }
         var pattern = new RegExp('Deprecation Warning', 'g');
         var result = res.output.match(pattern) || [];
-        assert.strictEqual(result.length, 1);
+        expect(result, 'to have length', 1);
         done();
       },
       {stdio: 'pipe'}

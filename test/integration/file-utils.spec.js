@@ -76,8 +76,7 @@ describe('file utils', function() {
         return utils.lookupFiles(tmpDir, undefined, false);
       };
       expect(dirLookup, 'to throw', {
-        message: 'Parameter required when filepath is a directory',
-        code: 'ERR_MOCHA_MISSING_ARGUMENT',
+        code: 'ERR_MOCHA_MISSING_ARG_TYPE',
         argument: 'extensions'
       });
     });

@@ -1,7 +1,7 @@
 'use strict';
 
 var errors = require('../../lib/errors');
-var NotSupportedError = errors.NotSupportedError;
+var createNotSupportedError = errors.createNotSupportedError;
 /*
   This function prevents the constant use of creating a runnerEvent.
   runStr is the argument that defines the runnerEvent.
@@ -118,7 +118,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     default:
-      throw NotSupportedError(
+      throw createNotSupportedError(
         'This function does not support the runner string specified.'
       );
   }
