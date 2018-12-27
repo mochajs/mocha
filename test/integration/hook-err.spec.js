@@ -3,7 +3,6 @@
 var runMocha = require('./helpers').runMocha;
 var splitRegExp = require('./helpers').splitRegExp;
 var bang = require('../../lib/reporters/base').symbols.bang;
-var assert = require('assert');
 
 describe('hook error handling', function() {
   var lines;
@@ -17,25 +16,26 @@ describe('hook error handling', function() {
 
   describe('before hook error tip', function() {
     before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle()));
-    it('should verify results', function () {
-      assert.deepEqual(
-        lines,
-        ['1) spec 2', '"before all" hook for "skipped":']
-      );
+    it('should verify results', function() {
+      expect(lines, 'to equal', [
+        '1) spec 2',
+        '"before all" hook for "skipped":'
+      ]);
     });
   });
 
-  describe('nested before hook error', function () {
+  describe('nested before hook error', function() {
     before(run('hooks/before-nested-hook-error.fixture.js', onlyErrorTitle()));
-    it('should verify results', function () {
-      assert.deepEqual(
-        lines,
-        ['1) spec 1', 'nested 1', '"before all" hook for "blames me":']
-      );
+    it('should verify results', function() {
+      expect(lines, 'to equal', [
+        '1) spec 1',
+        'nested 1',
+        '"before all" hook for "blames me":'
+      ]);
     });
   });
 
-  describe('before each hook error', function () {
+  describe('before each hook error', function() {
     before(run('hooks/beforeEach-hook-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['before', bang + 'test 3']);
@@ -52,7 +52,7 @@ describe('hook error handling', function() {
   describe('nested after hook error', function() {
     before(run('hooks/after-nested-hook-error.fixture.js', onlyErrorTitle()));
     it('should verify results', function() {
-      assert.deepEqual(lines, [
+      expect(lines, 'to equal', [
         '1) spec 1',
         'nested 1',
         '"after all" hook for "blames me":'
