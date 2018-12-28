@@ -487,7 +487,7 @@
     "node-environment-flags": "1.0.2",
     "object.assign": "4.1.0",
     "strip-json-comments": "2.0.1",
-    "supports-color": "5.5.0",
+    "supports-color": "^6.0.0",
     "wide-align": "1.1.3",
     "yargs": "12.0.5",
     "yargs-parser": "11.1.1",
