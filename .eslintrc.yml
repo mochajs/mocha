@@ -24,6 +24,7 @@ overrides:
       - bin/*
       - lib/cli/**/*.js
       - test/node-unit/**/*.js
+      - lib/growl.js
     parserOptions:
       ecmaVersion: 6
     env:
