@@ -12,6 +12,9 @@ const path = require('path');
 function test(testName, mochaParams) {
   const coverageCommand = `nyc --no-clean --report-dir coverage/reports/${testName}`;
   const mochaCommand = `node ${path.join('bin', 'mocha')}`; // Include 'node' and path.join for Windows compatibility
+  if (process.env.CI && !/^only-/.test(testName)) {
+    mochaParams += ' --forbid-only';
+  }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
   } ${mochaCommand} ${mochaParams}`.trim();
@@ -20,7 +23,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify ./browser-entry --plugin ./scripts/dedefine --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' > mocha.js`,
+      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' -o mocha.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -33,14 +36,27 @@ module.exports = {
         description: 'Run ESLint linter'
       },
       markdown: {
-        script: 'markdownlint "*.md" "docs/**/*.md" ".github/*.md"',
+        script:
+          'markdownlint "*.md" "docs/**/*.md" ".github/*.md" "lib/**/*.md" "test/**/*.md" "example/**/*.md"',
         description: 'Run markdownlint linter'
       }
     },
-    reformat: {
-      script:
-        'prettier-eslint --write "*.js" "lib/**/*.js" "test/**/*.js" "bin/*"',
-      description: 'Reformat codebase with Prettier'
+    format: {
+      default: {
+        script: 'nps format.eslint && nps format.prettier',
+        default: 'Format codebase w/ ESLint and Prettier'
+      },
+      eslint: {
+        script: 'eslint --fix . "bin/*"',
+        description: 'Format JavaScript files',
+        hiddenFromHelp: true
+      },
+      prettier: {
+        script:
+          'prettier --write "!(package*).json" ".*.json" "lib/**/*.json" "*.yml"',
+        description: 'Format JSON & YAML files',
+        hiddenFromHelp: true
+      }
     },
     clean: {
       script: 'rimraf mocha.js',
@@ -54,6 +70,7 @@ module.exports = {
       node: {
         default: {
           script: `nps ${[
+            'build',
             'test.node.bdd',
             'test.node.tdd',
             'test.node.qunit',
@@ -61,10 +78,10 @@ module.exports = {
             'test.node.unit',
             'test.node.integration',
             'test.node.jsapi',
-            'test.node.compilers',
             'test.node.requires',
             'test.node.reporters',
-            'test.node.only'
+            'test.node.only',
+            'test.node.opts'
           ].join(' ')}`,
           description: 'Run Node.js tests'
         },
@@ -91,57 +108,30 @@ module.exports = {
         unit: {
           script: test(
             'unit',
-            '"test/unit/*.spec.js" "test/node-unit/*.spec.js" --growl'
+            '"test/unit/*.spec.js" "test/node-unit/**/*.spec.js" --growl'
           ),
           description: 'Run Node.js unit tests'
         },
         integration: {
           script: test(
             'integration',
-            '--timeout 5000 --slow 500 "test/integration/*.spec.js"'
+            '--timeout 10000 --slow 3750 "test/integration/*.spec.js"'
           ),
           description: 'Run Node.js integration tests',
+          hiddenFromHelp: true
+        },
+        opts: {
+          script: test(
+            'opts',
+            '--opts test/opts/mocha.opts test/opts/opts.spec.js --no-config'
+          ),
+          description: 'Run tests concerning mocha.opts',
           hiddenFromHelp: true
         },
         jsapi: {
           script: 'node test/jsapi',
           description: 'Run Node.js Mocha JavaScript API tests',
           hiddenFromHelp: true
-        },
-        compilers: {
-          default: {
-            script:
-              'nps test.node.compilers.coffee test.node.compilers.custom test.node.compilers.multiple',
-            description: 'Run Node.js --compilers flag tests (deprecated)',
-            hiddenFromHelp: true
-          },
-          coffee: {
-            script: test(
-              'compilers-coffee',
-              '--compilers coffee:coffee-script/register test/compiler'
-            ),
-            description:
-              'Run Node.js coffeescript compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          custom: {
-            script: test(
-              'compilers-custom',
-              '--compilers foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js custom compiler tests using --compilers flag (deprecated)',
-            hiddenFromHelp: true
-          },
-          multiple: {
-            script: test(
-              'compilers-multiple',
-              '--compilers coffee:coffee-script/register,foo:./test/compiler-fixtures/foo.fixture test/compiler'
-            ),
-            description:
-              'Run Node.js multiple compiler tests using--compilers flag (deprecated)',
-            hiddenFromHelp: true
-          }
         },
         requires: {
           script: test(
@@ -159,7 +149,7 @@ module.exports = {
           hiddenFromHelp: true
         },
         reporters: {
-          script: test('reporters', '"test/reporters/*.spec.js"'),
+          script: test('reporters', '--timeout 500 "test/reporters/*.spec.js"'),
           description: 'Run Node.js reporter tests',
           hiddenFromHelp: true
         },
@@ -196,7 +186,7 @@ module.exports = {
           },
           globalBdd: {
             script: test(
-              'global-only-bdd',
+              'only-global-bdd',
               '--ui bdd test/only/global/bdd.spec'
             ),
             description: 'Run Node.js "global only" w/ BDD interface tests',
@@ -204,7 +194,7 @@ module.exports = {
           },
           globalTdd: {
             script: test(
-              'global-only-tdd',
+              'only-global-tdd',
               '--ui tdd test/only/global/tdd.spec'
             ),
             description: 'Run Node.js "global only" w/ TDD interface tests',
@@ -212,7 +202,7 @@ module.exports = {
           },
           globalQunit: {
             script: test(
-              'global-only-qunit',
+              'only-global-qunit',
               '--ui qunit test/only/global/qunit.spec'
             ),
             description: 'Run Node.js "global only" w/ QUnit interface tests',
@@ -268,6 +258,11 @@ module.exports = {
       description: 'Send code coverage report to coveralls (run during CI)',
       hiddenFromHelp: true
     },
+    'coverage-report': {
+      script: 'nyc report --reporter=html',
+      description:
+        'Output HTML coverage report to coverage/index.html (run tests with COVERAGE=1 first)'
+    },
     docs: {
       default: {
         script:
@@ -276,24 +271,25 @@ module.exports = {
       },
       prebuild: {
         script:
-          'rimraf docs/_dist docs/api && node scripts/docs-update-toc.js && nps docs.api',
+          'rimraf docs/_dist docs/api && nps docs.preprocess && nps docs.api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'mkdirp docs/_dist && buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
-      prewatch: {
-        script: 'node scripts/docs-update-toc.js',
-        description: 'Prepare system for doc building w/ watch',
+      preprocess: {
+        script:
+          'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
+        description: 'Preprocess documenation',
         hiddenFromHelp: true
       },
       watch: {
         script:
-          'nps docs.prewatch && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
+          'nps docs.preprocess && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
         description: 'Watch docs for changes & build'
       },
       api: {
@@ -303,7 +299,7 @@ module.exports = {
       }
     },
     updateContributors: {
-      script: 'node scripts/update-contributors.js',
+      script: 'contributors',
       description: 'Update list of contributors in package.json'
     }
   }

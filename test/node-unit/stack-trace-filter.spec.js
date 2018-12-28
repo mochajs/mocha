@@ -28,7 +28,7 @@ describe('stackTraceFilter()', function() {
           'Immediate._onImmediate (/usr/local/lib/node_modules/mocha/lib/runner.js:276:5)',
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
-        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 3).join('\n'));
+        expect(filter(stack.join('\n')), 'to be', stack.slice(0, 3).join('\n'));
 
         stack = [
           'AssertionError: bar baz',
@@ -44,7 +44,7 @@ describe('stackTraceFilter()', function() {
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
 
-        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
+        expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
       });
 
       it('does not ignore other bower_components and components', function() {
@@ -63,7 +63,7 @@ describe('stackTraceFilter()', function() {
           'at file:///.../components/mochajs/mocha/2.1.0/mocha.js:4970:12',
           'at next (file:///.../components/mochajs/mocha/2.1.0/mocha.js:4817:14)'
         ];
-        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
+        expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
       });
 
       it('should replace absolute with relative paths', function() {
@@ -79,7 +79,7 @@ describe('stackTraceFilter()', function() {
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        expect(filter(stack.join('\n'))).to.equal(expected.join('\n'));
+        expect(filter(stack.join('\n')), 'to be', expected.join('\n'));
       });
 
       it('should not replace absolute path which has cwd as infix', function() {
@@ -95,7 +95,7 @@ describe('stackTraceFilter()', function() {
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        expect(filter(stack.join('\n'))).to.equal(expected.join('\n'));
+        expect(filter(stack.join('\n')), 'to be', expected.join('\n'));
       });
     });
 
@@ -119,7 +119,7 @@ describe('stackTraceFilter()', function() {
           'at next (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:284:14)',
           'at Immediate._onImmediate (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runner.js:320:5)'
         ];
-        expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 2).join('\n'));
+        expect(filter(stack.join('\n')), 'to be', stack.slice(0, 2).join('\n'));
       });
     });
   });
@@ -144,7 +144,7 @@ describe('stackTraceFilter()', function() {
         'at localhost:3000/foo/bar/node_modules/mocha.js:4970:12',
         'at next (node_modules/mocha.js:4817:14)'
       ];
-      expect(filter(stack.join('\n'))).to.equal(stack.slice(0, 7).join('\n'));
+      expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
     });
 
     after(function() {

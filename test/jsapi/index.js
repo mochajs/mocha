@@ -9,7 +9,7 @@ var mocha = new Mocha({
   growl: true
 });
 
-global.expect = require('expect.js');
+require('../setup');
 
 mocha.addFile('test/unit/suite.spec.js');
 mocha.addFile('test/unit/runner.spec.js');
@@ -18,7 +18,6 @@ mocha.addFile('test/unit/hook-sync.spec.js');
 mocha.addFile('test/unit/hook-sync-nested.spec.js');
 mocha.addFile('test/unit/hook-async.spec.js');
 mocha.addFile('test/unit/duration.spec.js');
-mocha.addFile('test/node-unit/fs.spec.js');
 mocha.addFile('test/unit/globals.spec.js');
 mocha.addFile('test/unit/timeout.spec.js');
 

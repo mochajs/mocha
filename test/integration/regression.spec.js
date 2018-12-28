@@ -1,7 +1,5 @@
 'use strict';
 
-var assert = require('assert');
-var fs = require('fs');
 var path = require('path');
 var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
@@ -19,31 +17,12 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(occurences('testbody1'), 1);
-      assert.equal(occurences('testbody2'), 1);
-      assert.equal(occurences('testbody3'), 1);
-
-      assert.equal(res.code, 1);
+      expect(res, 'to have failed');
+      expect(occurences('testbody1'), 'to be', 1);
+      expect(occurences('testbody2'), 'to be', 1);
+      expect(occurences('testbody3'), 'to be', 1);
       done();
     });
-  });
-
-  it('should not duplicate mocha.opts args in process.argv', function() {
-    var processArgv = process.argv.join('');
-    var mochaOpts = fs
-      .readFileSync(path.join(__dirname, '..', 'mocha.opts'), 'utf-8')
-      .split(/[\s]+/)
-      .join('');
-    assert.notEqual(
-      processArgv.indexOf(mochaOpts),
-      -1,
-      'process.argv missing mocha.opts'
-    );
-    assert.equal(
-      processArgv.indexOf(mochaOpts),
-      processArgv.lastIndexOf(mochaOpts),
-      'process.argv contains duplicated mocha.opts'
-    );
   });
 
   it("issue-1794: Can't --require custom UI and use it", function(done) {
@@ -60,7 +39,7 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(res.code, 0, 'Custom UI should be loaded');
+      expect(res, 'to have passed');
       done();
     });
   });
@@ -75,15 +54,8 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(
-        /process out of memory/.test(res.output),
-        false,
-        "fixture's process out of memory!"
-      );
-      assert.equal(
-        res.code,
-        0,
-        'Runnable fn (it/before[Each]/after[Each]) references should be deleted to avoid memory leaks'
+      expect(res, 'not to contain output', 'process out of memory').and(
+        'to have passed'
       );
       done();
     });
@@ -101,7 +73,7 @@ describe('regressions', function() {
       it('should be pending', function() {});
     });
     after('meta test', function() {
-      expect(afterWasRun).to.be.ok();
+      expect(afterWasRun, 'to be', true);
     });
   });
 
@@ -111,25 +83,22 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 1);
-      assert.equal(res.code, 1);
+      expect(res, 'to have failed')
+        .and('not to have pending tests')
+        .and('to have failed test count', 1);
       done();
     });
   });
 
   it('issue-2406: should run nested describe.only suites', function(done) {
-    this.timeout(2000);
     runJSON('regression/issue-2406.fixture.js', [], function(err, res) {
       if (err) {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 2);
-      assert.equal(res.stats.failures, 0);
-      assert.equal(res.code, 0);
+      expect(res, 'to have passed')
+        .and('not to have pending tests')
+        .and('to have passed test count', 2);
       done();
     });
   });
@@ -140,10 +109,9 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 1);
-      assert.equal(res.stats.failures, 0);
-      assert.equal(res.code, 0);
+      expect(res, 'to have passed')
+        .and('not to have pending tests')
+        .and('to have passed test count', 1);
       done();
     });
   });
@@ -154,21 +122,14 @@ describe('regressions', function() {
         done(err);
         return;
       }
-      assert.equal(res.stats.pending, 0);
-      assert.equal(res.stats.passes, 0);
-      assert.equal(res.stats.failures, 2);
-
-      assert.equal(
-        res.failures[0].title,
-        'fails exactly once when a global error is thrown synchronously and done errors'
-      );
-      assert.equal(res.failures[0].err.message, 'sync error');
-      assert.equal(
-        res.failures[1].title,
-        'fails exactly once when a global error is thrown synchronously and done completes'
-      );
-      assert.equal(res.failures[1].err.message, 'sync error');
-      assert.equal(res.code, 2);
+      expect(res, 'to have failed with errors', 'sync error a', 'sync error b')
+        .and('to have exit code', 2)
+        .and('not to have passed tests')
+        .and('not to have pending tests')
+        .and('to have failed test order', [
+          'fails exactly once when a global error is thrown synchronously and done errors',
+          'fails exactly once when a global error is thrown synchronously and done completes'
+        ]);
       done();
     });
   });

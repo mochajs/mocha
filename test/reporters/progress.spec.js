@@ -5,18 +5,25 @@ var Progress = reporters.Progress;
 var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
 describe('Progress reporter', function() {
   var stdout;
   var stdoutWrite;
   var runner;
+  var runReporter = makeRunReporter(Progress);
 
   beforeEach(function() {
     stdout = [];
     stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
+    process.stdout.write = function(string, enc, callback) {
       stdout.push(string);
+      stdoutWrite.call(process.stdout, string, enc, callback);
     };
+  });
+
+  afterEach(function() {
+    process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
@@ -27,10 +34,9 @@ describe('Progress reporter', function() {
         calledCursorHide = true;
       };
       runner = createMockRunner('start', 'start');
-      Progress.call({}, runner);
+      runReporter({}, runner, {});
 
-      process.stdout.write = stdoutWrite;
-      expect(calledCursorHide).to.be(true);
+      expect(calledCursorHide, 'to be', true);
 
       Base.cursor = cachedCursor;
     });
@@ -50,11 +56,9 @@ describe('Progress reporter', function() {
         var expectedOptions = {};
         runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        Progress.call({}, runner, expectedOptions);
+        var stdout = runReporter({}, runner, expectedOptions);
 
-        process.stdout.write = stdoutWrite;
-
-        expect(stdout).to.eql([]);
+        expect(stdout, 'to equal', []);
 
         Base.cursor = cachedCursor;
         Base.useColors = useColors;
@@ -88,9 +92,8 @@ describe('Progress reporter', function() {
         };
         runner = createMockRunner('test end', 'test end');
         runner.total = expectedTotal;
-        Progress.call({}, runner, options);
+        var stdout = runReporter({}, runner, options);
 
-        process.stdout.write = stdoutWrite;
         var expectedArray = [
           '\u001b[J',
           '  ' + expectedOpen,
@@ -98,8 +101,8 @@ describe('Progress reporter', function() {
           expectedIncomplete,
           expectedClose
         ];
-        expect(calledCursorCR).to.be(true);
-        expect(stdout).to.eql(expectedArray);
+        expect(calledCursorCR, 'to be', true);
+        expect(stdout, 'to equal', expectedArray);
 
         Base.cursor = cachedCursor;
         Base.useColors = useColors;
@@ -117,18 +120,18 @@ describe('Progress reporter', function() {
       };
       runner = createMockRunner('end', 'end');
       var calledEpilogue = false;
-      Progress.call(
+      runReporter(
         {
           epilogue: function() {
             calledEpilogue = true;
           }
         },
-        runner
+        runner,
+        {}
       );
 
-      process.stdout.write = stdoutWrite;
-      expect(calledEpilogue).to.be(true);
-      expect(calledCursorShow).to.be(true);
+      expect(calledEpilogue, 'to be', true);
+      expect(calledCursorShow, 'to be', true);
 
       Base.cursor = cachedCursor;
     });

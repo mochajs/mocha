@@ -5,12 +5,12 @@ var JSONStream = reporters.JSONStream;
 
 var createMockRunner = require('./helpers').createMockRunner;
 var makeExpectedTest = require('./helpers').makeExpectedTest;
+var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 
-describe('Json Stream reporter', function() {
+describe('JSON Stream reporter', function() {
   var runner;
-  var stdout;
-  var stdoutWrite;
-
+  var options = {};
+  var runReporter = makeRunReporter(JSONStream);
   var expectedTitle = 'some title';
   var expectedFullTitle = 'full title';
   var expectedDuration = 1000;
@@ -27,12 +27,8 @@ describe('Json Stream reporter', function() {
     message: expectedErrorMessage
   };
 
-  beforeEach(function() {
-    stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string) {
-      stdout.push(string);
-    };
+  afterEach(function() {
+    runner = undefined;
   });
 
   describe('on start', function() {
@@ -40,22 +36,24 @@ describe('Json Stream reporter', function() {
       runner = createMockRunner('start', 'start');
       var expectedTotal = 12;
       runner.total = expectedTotal;
-      JSONStream.call({}, runner);
+      var stdout = runReporter({}, runner, options);
 
-      process.stdout.write = stdoutWrite;
-
-      expect(stdout[0]).to.eql('["start",{"total":' + expectedTotal + '}]\n');
+      expect(
+        stdout[0],
+        'to equal',
+        '["start",{"total":' + expectedTotal + '}]\n'
+      );
     });
   });
 
   describe('on pass', function() {
     it('should write stringified test data', function() {
       runner = createMockRunner('pass', 'pass', null, null, expectedTest);
-      JSONStream.call({}, runner);
+      var stdout = runReporter({}, runner, options);
 
-      process.stdout.write = stdoutWrite;
-
-      expect(stdout[0]).to.eql(
+      expect(
+        stdout[0],
+        'to equal',
         '["pass",{"title":"' +
           expectedTitle +
           '","fullTitle":"' +
@@ -82,11 +80,11 @@ describe('Json Stream reporter', function() {
           expectedError
         );
 
-        JSONStream.call({}, runner);
+        var stdout = runReporter({}, runner, options);
 
-        process.stdout.write = stdoutWrite;
-
-        expect(stdout[0]).to.eql(
+        expect(
+          stdout[0],
+          'to equal',
           '["fail",{"title":"' +
             expectedTitle +
             '","fullTitle":"' +
@@ -116,10 +114,11 @@ describe('Json Stream reporter', function() {
           expectedError
         );
 
-        JSONStream.call({}, runner);
-        process.stdout.write = stdoutWrite;
+        var stdout = runReporter(this, runner, options);
 
-        expect(stdout[0]).to.eql(
+        expect(
+          stdout[0],
+          'to equal',
           '["fail",{"title":"' +
             expectedTitle +
             '","fullTitle":"' +
@@ -139,9 +138,8 @@ describe('Json Stream reporter', function() {
   describe('on end', function() {
     it('should write end details', function() {
       runner = createMockRunner('end', 'end');
-      JSONStream.call({}, runner);
-      process.stdout.write = stdoutWrite;
-      expect(stdout[0]).to.match(/end/);
+      var stdout = runReporter(this, runner, options);
+      expect(stdout[0], 'to match', /end/);
     });
   });
 });

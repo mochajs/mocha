@@ -11,10 +11,10 @@ describe('.only()', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 11);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.stats.pending, 0);
+        assert.strictEqual(res.stats.passes, 11);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
         done();
       });
     });
@@ -27,10 +27,10 @@ describe('.only()', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 8);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.stats.pending, 0);
+        assert.strictEqual(res.stats.passes, 8);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
         done();
       });
     });
@@ -46,10 +46,10 @@ describe('.only()', function() {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 5);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        assert.strictEqual(res.stats.pending, 0);
+        assert.strictEqual(res.stats.passes, 5);
+        assert.strictEqual(res.stats.failures, 0);
+        assert.strictEqual(res.code, 0);
         done();
       });
     });

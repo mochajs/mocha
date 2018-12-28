@@ -1,11 +1,13 @@
 'use strict';
 
 var path = require('path');
-var assert = require('assert');
 var helpers = require('./helpers');
-var run = helpers.runMochaJSON;
-var directInvoke = helpers.invokeMocha;
+var runMocha = helpers.runMocha;
+var runMochaJSON = helpers.runMochaJSON;
+var runMochaJSONRaw = helpers.runMochaJSONRaw;
+var invokeMocha = helpers.invokeMocha;
 var resolvePath = helpers.resolveFixturePath;
+var toJSONRunResult = helpers.toJSONRunResult;
 var args = [];
 
 describe('options', function() {
@@ -15,33 +17,29 @@ describe('options', function() {
     });
 
     it('should fail synchronous specs', function(done) {
-      run('options/async-only-sync.fixture.js', args, function(err, res) {
+      runMochaJSON('options/async-only-sync.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(res.failures[0].title, 'throws an error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed');
         done();
       });
     });
 
     it('should allow asynchronous specs', function(done) {
-      run('options/async-only-async.fixture.js', args, function(err, res) {
+      runMochaJSON('options/async-only-async.fixture.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].title, 'should pass');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
     });
@@ -53,34 +51,126 @@ describe('options', function() {
     });
 
     it('should stop after the first error', function(done) {
-      run('options/bail.fixture.js', args, function(err, res) {
+      runMochaJSON('options/bail.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 1);
 
-        assert.equal(res.passes[0].title, 'should display this spec');
-        assert.equal(res.failures[0].title, 'should only display this error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have passed test', 'should display this spec')
+          .and('to have failed test', 'should only display this error')
+          .and('to have passed test count', 1)
+          .and('to have failed test count', 1);
         done();
       });
     });
 
-    it('should stop all hooks after the first error', function(done) {
-      run('options/bail-with-after.fixture.js', args, function(err, res) {
+    it('should stop after the first error - async', function(done) {
+      runMochaJSON('options/bail-async.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
 
-        assert.equal(res.failures[0].title, 'should only display this error');
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('to have passed test', 'should display this spec')
+          .and('to have failed test', 'should only display this error')
+          .and('to have passed test count', 1)
+          .and('to have failed test count', 1);
+        done();
+      });
+    });
+
+    it('should stop all tests after failing "before" hook', function(done) {
+      runMochaJSON('options/bail-with-before.fixture.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have failed test', '"before all" hook: before suite1')
+          .and('to have passed test count', 0);
+        done();
+      });
+    });
+
+    it('should stop all tests after failing "beforeEach" hook', function(done) {
+      runMochaJSON('options/bail-with-beforeEach.fixture.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and(
+            'to have failed test',
+            '"before each" hook: beforeEach suite1 for "test suite1"'
+          )
+          .and('to have passed test count', 0);
+        done();
+      });
+    });
+
+    it('should stop all tests after failing test', function(done) {
+      runMochaJSON('options/bail-with-test.fixture.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have failed test', 'test suite1')
+          .and('to have passed test count', 0);
+        done();
+      });
+    });
+
+    it('should stop all tests after failing "after" hook', function(done) {
+      runMochaJSON('options/bail-with-after.fixture.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and('to have failed test', '"after all" hook: after suite1A')
+          .and('to have passed test count', 2)
+          .and('to have passed test order', 'test suite1', 'test suite1A');
+        done();
+      });
+    });
+
+    it('should stop all tests after failing "afterEach" hook', function(done) {
+      runMochaJSON('options/bail-with-afterEach.fixture.js', args, function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed')
+          .and('to have failed test count', 1)
+          .and(
+            'to have failed test',
+            '"after each" hook: afterEach suite1A for "test suite1A"'
+          )
+          .and('to have passed test count', 2)
+          .and('to have passed test order', 'test suite1', 'test suite1A');
         done();
       });
     });
@@ -92,17 +182,15 @@ describe('options', function() {
     });
 
     it('should sort tests in alphabetical order', function(done) {
-      run('options/sort*', args, function(err, res) {
+      runMochaJSON('options/sort*', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed test count', 2).and(
+          'to have passed test order',
+          'should be executed first'
+        );
         done();
       });
     });
@@ -112,17 +200,14 @@ describe('options', function() {
     it('should run tests passed via file first', function(done) {
       args = ['--file', resolvePath('options/file-alpha.fixture.js')];
 
-      run('options/file-beta.fixture.js', args, function(err, res) {
+      runMochaJSON('options/file-beta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('to have passed test order', 'should be executed first');
         done();
       });
     });
@@ -135,19 +220,19 @@ describe('options', function() {
         resolvePath('options/file-beta.fixture.js')
       ];
 
-      run('options/file-theta.fixture.js', args, function(err, res) {
+      runMochaJSON('options/file-theta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 3);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].fullTitle, 'alpha should be executed first');
-        assert.equal(res.passes[1].fullTitle, 'beta should be executed second');
-        assert.equal(res.passes[2].fullTitle, 'theta should be executed third');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 3)
+          .and(
+            'to have passed test order',
+            'should be executed first',
+            'should be executed second',
+            'should be executed third'
+          );
         done();
       });
     });
@@ -159,58 +244,43 @@ describe('options', function() {
     });
 
     it('should run the generated test suite', function(done) {
-      run('options/delay.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 1);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(
-          res.passes[0].title,
-          'should have no effect if attempted twice in the same suite'
-        );
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed').and('to have passed test count', 1);
         done();
       });
     });
 
     it('should execute exclusive tests only', function(done) {
-      run('options/delay-only.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay-only.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-
-        assert.equal(res.stats.tests, 2);
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-
-        assert.equal(res.passes[0].title, 'should run this');
-        assert.equal(res.passes[1].title, 'should run this, too');
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and(
+            'to have passed test order',
+            'should run this',
+            'should run this, too'
+          );
         done();
       });
     });
 
     it('should throw an error if the test suite failed to run', function(done) {
-      run('options/delay-fail.fixture.js', args, function(err, res) {
+      runMochaJSON('options/delay-fail.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.failures, 1);
-
-        assert.equal(
-          res.failures[0].title,
+        expect(res, 'to have failed').and(
+          'to have failed test',
           'Uncaught error outside test suite'
         );
-        assert.equal(res.code, 1);
         done();
       });
     });
@@ -219,15 +289,14 @@ describe('options', function() {
   describe('--grep', function() {
     it('runs specs matching a string', function(done) {
       args = ['--grep', 'match'];
-      run('options/grep.fixture.js', args, function(err, res) {
+      runMochaJSON('options/grep.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 0);
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('not to have pending tests');
         done();
       });
     });
@@ -235,30 +304,29 @@ describe('options', function() {
     describe('runs specs matching a RegExp', function() {
       it('with RegExp like strings(pattern follow by flag)', function(done) {
         args = ['--grep', '/match/i'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
           done();
         });
       });
 
       it('string as pattern', function(done) {
         args = ['--grep', '.*'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 1);
-          assert.equal(res.code, 1);
+          expect(res, 'to have failed')
+            .and('to have passed test count', 4)
+            .and('to have failed test count', 1)
+            .and('not to have pending tests');
           done();
         });
       });
@@ -267,15 +335,14 @@ describe('options', function() {
     describe('with --invert', function() {
       it('runs specs that do not match the pattern', function(done) {
         args = ['--grep', 'fail', '--invert'];
-        run('options/grep.fixture.js', args, function(err, res) {
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
           }
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 4);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
           done();
         });
       });
@@ -285,17 +352,15 @@ describe('options', function() {
   describe('--retries', function() {
     it('retries after a certain threshold', function(done) {
       args = ['--retries', '3'];
-      run('options/retries.fixture.js', args, function(err, res) {
+      runMochaJSON('options/retries.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.stats.pending, 0);
-        assert.equal(res.stats.passes, 0);
-        assert.equal(res.stats.tests, 1);
-        assert.equal(res.tests[0].currentRetry, 3);
-        assert.equal(res.stats.failures, 1);
-        assert.equal(res.code, 1);
+        expect(res, 'to have failed')
+          .and('not to have pending tests')
+          .and('not to have passed tests')
+          .and('to have retried test', 'should fail', 3);
         done();
       });
     });
@@ -309,35 +374,113 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      run('options/forbid-only/passed.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/passed.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
     });
 
     it('fails if there are tests marked only', function(done) {
-      run('options/forbid-only/only.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/only.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, onlyErrorMessage);
+        expect(res, 'to have failed with error', onlyErrorMessage);
         done();
       });
     });
 
     it('fails if there are tests in suites marked only', function(done) {
-      run('options/forbid-only/only-suite.js', args, function(err, res) {
-        assert(!err);
-        assert.equal(res.code, 1);
-        assert.equal(res.failures[0].err.message, onlyErrorMessage);
-        done();
-      });
+      runMocha(
+        'options/forbid-only/only-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+
+    it('fails if there is empty suite marked only', function(done) {
+      runMocha(
+        'options/forbid-only/only-empty-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+
+    it('fails if there is suite marked only which matches a grep', function(done) {
+      runMocha(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'suite marked with only'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(onlyErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+
+    it('succeeds if suite marked only does not match grep', function(done) {
+      runMochaJSON(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'bumble bees'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed');
+          done();
+        }
+      );
+    });
+
+    it('succeeds if suite marked only does not match grep (using "invert")', function(done) {
+      runMochaJSON(
+        'options/forbid-only/only-suite.js',
+        args.concat('--fgrep', 'suite marked with only', '--invert'),
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed');
+          done();
+        }
+      );
     });
   });
 
@@ -349,14 +492,55 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      run('options/forbid-pending/passed.js', args, function(err, res) {
+      runMochaJSON('options/forbid-pending/passed.js', args, function(
+        err,
+        res
+      ) {
         if (err) {
           done(err);
           return;
         }
-        assert.equal(res.code, 0);
+        expect(res, 'to have passed');
         done();
       });
+    });
+
+    it('fails if there are tests in suites marked skip', function(done) {
+      runMocha(
+        'options/forbid-pending/skip-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(pendingErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+
+    it('fails if there is empty suite marked pending', function(done) {
+      runMocha(
+        'options/forbid-pending/skip-empty-suite.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(pendingErrorMessage)
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
     });
 
     var forbidPendingFailureTests = {
@@ -364,13 +548,12 @@ describe('options', function() {
       'fails if there are pending tests': 'pending.js',
       'fails if tests call `skip()`': 'this.skip.js',
       'fails if beforeEach calls `skip()`': 'beforeEach-this.skip.js',
-      'fails if before calls `skip()`': 'before-this.skip.js',
-      'fails if there are tests in suites marked skip': 'skip-suite.js'
+      'fails if before calls `skip()`': 'before-this.skip.js'
     };
 
     Object.keys(forbidPendingFailureTests).forEach(function(title) {
       it(title, function(done) {
-        run(
+        runMochaJSON(
           path.join(
             'options',
             'forbid-pending',
@@ -382,8 +565,7 @@ describe('options', function() {
               done(err);
               return;
             }
-            assert.equal(res.code, 1);
-            assert.equal(res.failures[0].err.message, pendingErrorMessage);
+            expect(res, 'to have failed with error', pendingErrorMessage);
             done();
           }
         );
@@ -407,19 +589,20 @@ describe('options', function() {
      */
     var runExit = function(shouldExit, behavior) {
       return function(done) {
+        var timeout = this.timeout();
         this.timeout(0);
-        this.slow(3000);
+        this.slow(Infinity);
         var didExit = true;
         var t;
         var args = behaviors[behavior] ? [behaviors[behavior]] : [];
 
-        var mocha = run('exit.fixture.js', args, function(err) {
+        var mocha = runMochaJSON('exit.fixture.js', args, function(err) {
           clearTimeout(t);
           if (err) {
             done(err);
             return;
           }
-          expect(didExit).to.equal(shouldExit);
+          expect(didExit, 'to be', shouldExit);
           done();
         });
 
@@ -429,7 +612,7 @@ describe('options', function() {
           // this is the only way to kill the child, afaik.
           // after the process ends, the callback to `run()` above is handled.
           mocha.kill('SIGINT');
-        }, 2000);
+        }, timeout - 500);
       };
     };
 
@@ -454,16 +637,49 @@ describe('options', function() {
 
   describe('--help', function() {
     it('works despite the presence of mocha.opts', function(done) {
-      directInvoke(
+      invokeMocha(
         ['-h'],
         function(error, result) {
           if (error) {
             return done(error);
           }
-          expect(result.output).to.contain('Usage:');
+          expect(result.output, 'to contain', 'Run tests with Mocha');
           done();
         },
-        path.join(__dirname, 'fixtures', 'options', 'help')
+        {cwd: path.join(__dirname, 'fixtures', 'options', 'help')}
+      );
+    });
+  });
+
+  describe('--opts', function() {
+    var testFile = path.join('options', 'opts.fixture.js');
+
+    it('works despite nonexistent default options file', function(done) {
+      args = [];
+      runMochaJSON(testFile, args, function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, 'to have passed').and('to have passed test count', 1);
+        return done();
+      });
+    });
+
+    it('should throw an error due to nonexistent options file', function(done) {
+      args = ['--opts', 'nosuchoptionsfile', testFile];
+      invokeMocha(
+        args,
+        function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: /unable to read nosuchoptionsfile/i
+          });
+          return done();
+        },
+        {cwd: path.join(__dirname, 'fixtures'), stdio: 'pipe'}
       );
     });
   });
@@ -474,7 +690,7 @@ describe('options', function() {
      * Calls handleResult with the result.
      */
     function runMochaTest(fixture, args, handleResult, done) {
-      run(fixture, args, function(err, res) {
+      runMochaJSON(fixture, args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -492,11 +708,9 @@ describe('options', function() {
           'test/integration/fixtures/options/exclude/fail.fixture.js'
         ],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 1);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.passes[0].title, 'should find this test');
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('to have run test', 'should find this test')
+            .and('not to have pending tests');
         },
         done
       );
@@ -507,10 +721,9 @@ describe('options', function() {
         'options/exclude/**/*.fixture.js',
         ['--exclude', '**/fail.fixture.js'],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
         },
         done
       );
@@ -526,12 +739,105 @@ describe('options', function() {
           'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
         ],
         function(res) {
-          assert.equal(res.stats.pending, 0);
-          assert.equal(res.stats.passes, 2);
-          assert.equal(res.stats.failures, 0);
-          assert.equal(res.code, 0);
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
         },
         done
+      );
+    });
+  });
+
+  if (process.platform !== 'win32') {
+    // Windows: Feature works but SIMULATING the signal (ctr+c), via child process, does not work
+    // due to lack of *nix signal compliance.
+    describe('--watch', function() {
+      describe('with watch enabled', function() {
+        it('should show the cursor and signal correct exit code, when watch process is terminated', function(done) {
+          this.timeout(0);
+          this.slow(3000);
+          // executes Mocha in a subprocess
+          var mocha = runMochaJSONRaw(
+            'exit.fixture.js',
+            ['--watch'],
+            function(err, data) {
+              // After the process ends, this callback is ran
+              if (err) {
+                done(err);
+                return;
+              }
+
+              var expectedCloseCursor = '\u001b[?25h';
+              expect(data.output, 'to contain', expectedCloseCursor);
+              expect(data.code, 'to be', 130);
+              done();
+            },
+            {stdio: 'pipe'}
+          );
+          setTimeout(function() {
+            // kill the child process
+            mocha.kill('SIGINT');
+          }, 1000);
+        });
+      });
+    });
+  }
+
+  describe('--compilers', function() {
+    it('should fail', function(done) {
+      invokeMocha(['--compilers', 'coffee:coffee-script/register'], function(
+        error,
+        result
+      ) {
+        if (error) {
+          return done(error);
+        }
+        expect(result.code, 'to be', 1);
+        done();
+      });
+    });
+  });
+
+  describe('--fgrep and --grep', function() {
+    it('should conflict', function(done) {
+      runMocha(
+        'uncaught.fixture.js',
+        ['--fgrep', 'first', '--grep', 'second'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(result, 'to have failed');
+          done();
+        }
+      );
+    });
+  });
+
+  describe('--extension', function() {
+    it('should allow comma-separated variables', function(done) {
+      invokeMocha(
+        [
+          '--require',
+          'coffee-script/register',
+          '--require',
+          './test/setup',
+          '--reporter',
+          'json',
+          '--extension',
+          'js,coffee',
+          'test/integration/fixtures/options/extension'
+        ],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(toJSONRunResult(result), 'to have passed').and(
+            'to have passed test count',
+            2
+          );
+          done();
+        }
       );
     });
   });

@@ -9,21 +9,21 @@
 - Ruby
 - RubyGems
 - Bundler (`gem install bundler`)
-- Node.js v4.0.0 or greater
+- Node.js v6.x or greater
 
 ## Development
 
 1. Run `npm install` from working copy root to get Node.js deps.
 1. Run `bundle install` to install Jekyll and its dependencies.  This may or may not require elevated privileges, depending on your system.
-1. To serve the site and rebuild as changes are made, execute `npm run docs.watch`.
-1. To rebuild the site *once*, execute `npm start docs.build`.
+1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
+1. To rebuild the site *once*, execute `npm start docs`.
 
 ### Notes
 
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should *not* be included in the build.
-- `docs/index.md` may be mutated upon build, depending on what `scripts/docs-update-toc.js` does.  If it updates the table of contents (because of your changes), **you must commit `docs/index.md`**.
-- `docs/_site/` is where the generated static site lives (and is what you see at [mochajs.org](https://mochajs.org)).  It is *not* under version control.
+- `docs/_dist` and `docs/api` are where the deployed site lives.  `docs/_site` is essentially a build step.  These three directories are *not* under version control.
+- See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://npm.im/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
 
 ## License
 

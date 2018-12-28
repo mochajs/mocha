@@ -4,12 +4,15 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var assert = require('assert');
+var createStatsCollector = require('../../lib/stats-collector');
+var EventEmitter = require('events').EventEmitter;
 var reporters = require('../../').reporters;
 var XUnit = reporters.XUnit;
 
 describe('XUnit reporter', function() {
   var stdout;
   var stdoutWrite;
+  // the runner parameter of the reporter
   var runner;
 
   var callbackArgument = null;
@@ -18,12 +21,15 @@ describe('XUnit reporter', function() {
   var expectedClassName = 'fullTitle';
   var expectedTitle = 'some title';
   var expectedMessage = 'some message';
+  var expectedDiff =
+    '\n      + expected - actual\n\n      -foo\n      +bar\n      ';
   var expectedStack = 'some-stack';
   var expectedWrite = null;
 
   beforeEach(function() {
     stdout = [];
     runner = {on: function() {}, once: function() {}};
+    createStatsCollector(runner);
   });
 
   describe('if reporter options output is given', function() {
@@ -39,9 +45,7 @@ describe('XUnit reporter', function() {
         fs.createWriteStream = false;
 
         var boundXUnit = XUnit.bind({}, runner, options);
-        expect(boundXUnit).to.throwException(
-          'file output not supported in browser'
-        );
+        expect(boundXUnit, 'to throw', 'file output not supported in browser');
         fs.createWriteStream = fsCreateWriteStream;
       });
     });
@@ -66,8 +70,8 @@ describe('XUnit reporter', function() {
         };
         XUnit.call(contextVariables, runner, options);
 
-        expect(expectedDirectory).to.equal(expectedOutput);
-        expect(contextVariables.fileStream).to.equal(expectedOutput);
+        expect(expectedDirectory, 'to be', expectedOutput);
+        expect(contextVariables.fileStream, 'to be', expectedOutput);
 
         fs.createWriteStream = fsCreateWriteStream;
         mkdirp.sync = mkdirpSync;
@@ -117,12 +121,12 @@ describe('XUnit reporter', function() {
       );
 
       var expectedCalledTests = [pendingTest, passTest, failTest];
-      expect(calledTests).to.eql(expectedCalledTests);
+      expect(calledTests, 'to equal', expectedCalledTests);
     });
   });
 
   describe('done', function() {
-    describe('if fileStream is truthly', function() {
+    describe('if fileStream is truthy', function() {
       it('should run callback with failure inside streams end', function() {
         var xunit = new XUnit({on: function() {}, once: function() {}});
         var callback = function(failures) {
@@ -137,8 +141,8 @@ describe('XUnit reporter', function() {
         };
         xunit.done.call({fileStream: fileStream}, expectedFailure, callback);
 
-        expect(calledEnd).to.be(true);
-        expect(callbackArgument).to.equal(expectedFailure);
+        expect(calledEnd, 'to be', true);
+        expect(callbackArgument, 'to be', expectedFailure);
       });
     });
     describe('if fileStream is falsy', function() {
@@ -149,13 +153,13 @@ describe('XUnit reporter', function() {
         };
         xunit.done.call({fileStream: false}, expectedFailure, callback);
 
-        expect(callbackArgument).to.equal(expectedFailure);
+        expect(callbackArgument, 'to be', expectedFailure);
       });
     });
   });
 
   describe('write', function() {
-    describe('if fileStream is truthly', function() {
+    describe('if fileStream is truthy', function() {
       it('should call fileStream write with line and new line', function() {
         var xunit = new XUnit({on: function() {}, once: function() {}});
         var fileStream = {
@@ -165,7 +169,7 @@ describe('XUnit reporter', function() {
         };
         xunit.write.call({fileStream: fileStream}, expectedLine);
 
-        expect(expectedWrite).to.equal(expectedLine + '\n');
+        expect(expectedWrite, 'to be', expectedLine + '\n');
       });
     });
     describe('if fileStream is falsy and stdout exists', function() {
@@ -180,7 +184,7 @@ describe('XUnit reporter', function() {
 
         process.stdout.write = stdoutWrite;
 
-        expect(stdout[0]).to.equal(expectedLine + '\n');
+        expect(stdout[0], 'to be', expectedLine + '\n');
       });
     });
     describe('if fileStream is falsy and stdout does not exist', function() {
@@ -197,7 +201,7 @@ describe('XUnit reporter', function() {
 
         console.log = cachedConsoleLog;
         process = stdoutWrite; // eslint-disable-line no-native-reassign, no-global-assign
-        expect(stdout[0]).to.equal(expectedLine);
+        expect(stdout[0], 'to be', expectedLine);
       });
     });
   });
@@ -216,6 +220,8 @@ describe('XUnit reporter', function() {
           },
           duration: 1000,
           err: {
+            actual: 'foo',
+            expected: 'bar',
             message: expectedMessage,
             stack: expectedStack
           }
@@ -237,10 +243,12 @@ describe('XUnit reporter', function() {
           '" time="1"><failure>' +
           expectedMessage +
           '\n' +
+          expectedDiff +
+          '\n' +
           expectedStack +
           '</failure></testcase>';
 
-        expect(expectedWrite).to.equal(expectedTag);
+        expect(expectedWrite, 'to be', expectedTag);
       });
     });
     describe('on test pending', function() {
@@ -275,7 +283,7 @@ describe('XUnit reporter', function() {
           expectedTitle +
           '" time="1"><skipped/></testcase>';
 
-        expect(expectedWrite).to.equal(expectedTag);
+        expect(expectedWrite, 'to be', expectedTag);
       });
     });
     describe('on test in any other state', function() {
@@ -310,16 +318,65 @@ describe('XUnit reporter', function() {
           expectedTitle +
           '" time="0"/>';
 
-        expect(expectedWrite).to.equal(expectedTag);
+        expect(expectedWrite, 'to be', expectedTag);
       });
+    });
+    it('should write expected summary statistics', function() {
+      var count = 0;
+      var simpleError = {
+        actual: 'foo',
+        expected: 'bar',
+        message: expectedMessage,
+        stack: expectedStack
+      };
+      var generateTest = function(passed) {
+        var t = {
+          title: expectedTitle + count,
+          state: passed ? 'passed' : 'failed',
+          isPending: function() {
+            return false;
+          },
+          slow: function() {
+            return false;
+          },
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
+          duration: 1000
+        };
+        return t;
+      };
+
+      var runner = new EventEmitter();
+      createStatsCollector(runner);
+      var xunit = new XUnit(runner);
+      expectedWrite = '';
+      xunit.write = function(string) {
+        expectedWrite += string;
+      };
+
+      // 3 tests, no failures (i.e. tests that could not run), and 2 errors
+      runner.emit('test end');
+      runner.emit('pass', generateTest(true));
+      runner.emit('test end');
+      runner.emit('fail', generateTest(false), simpleError);
+      runner.emit('test end');
+      runner.emit('fail', generateTest(false), simpleError);
+      runner.emit('end');
+
+      var expectedTag =
+        '<testsuite name="Mocha Tests" tests="3" failures="0" errors="2" skipped="0"';
+
+      expect(expectedWrite, 'to contain', expectedTag);
+      expect(expectedWrite, 'to contain', '</testsuite>');
     });
   });
 
   describe('custom suite name', function() {
     // capture the events that the reporter subscribes to
     var events;
-    // the runner parameter of the reporter
-    var runner;
     // capture output lines (will contain the resulting XML of the xunit reporter)
     var lines;
     // the file stream into which the xunit reporter will write into
@@ -328,13 +385,10 @@ describe('XUnit reporter', function() {
     beforeEach(function() {
       events = {};
 
-      runner = {
-        on: function(eventName, eventHandler) {
-          // capture the event handler
-          events[eventName] = eventHandler;
-        }
+      runner.on = runner.once = function(eventName, eventHandler) {
+        // capture the event handler
+        events[eventName] = eventHandler;
       };
-      runner.once = runner.on;
 
       lines = [];
       fileStream = {
