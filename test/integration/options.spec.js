@@ -374,7 +374,7 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      runMochaJSON('options/forbid-only/passed.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/passed', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -385,7 +385,7 @@ describe('options', function() {
     });
 
     it('fails if there are tests marked only', function(done) {
-      runMochaJSON('options/forbid-only/only.js', args, function(err, res) {
+      runMochaJSON('options/forbid-only/only', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -397,7 +397,7 @@ describe('options', function() {
 
     it('fails if there are tests in suites marked only', function(done) {
       runMocha(
-        'options/forbid-only/only-suite.js',
+        'options/forbid-only/only-suite',
         args,
         function(err, res) {
           if (err) {
@@ -417,7 +417,7 @@ describe('options', function() {
 
     it('fails if there is empty suite marked only', function(done) {
       runMocha(
-        'options/forbid-only/only-empty-suite.js',
+        'options/forbid-only/only-empty-suite',
         args,
         function(err, res) {
           if (err) {
@@ -436,7 +436,7 @@ describe('options', function() {
 
     it('fails if there is suite marked only which matches a grep', function(done) {
       runMocha(
-        'options/forbid-only/only-suite.js',
+        'options/forbid-only/only-suite',
         args.concat('--fgrep', 'suite marked with only'),
         function(err, res) {
           if (err) {
@@ -455,7 +455,7 @@ describe('options', function() {
 
     it('succeeds if suite marked only does not match grep', function(done) {
       runMochaJSON(
-        'options/forbid-only/only-suite.js',
+        'options/forbid-only/only-suite',
         args.concat('--fgrep', 'bumble bees'),
         function(err, res) {
           if (err) {
@@ -470,7 +470,7 @@ describe('options', function() {
 
     it('succeeds if suite marked only does not match grep (using "invert")', function(done) {
       runMochaJSON(
-        'options/forbid-only/only-suite.js',
+        'options/forbid-only/only-suite',
         args.concat('--fgrep', 'suite marked with only', '--invert'),
         function(err, res) {
           if (err) {
@@ -492,10 +492,7 @@ describe('options', function() {
     });
 
     it('succeeds if there are only passed tests', function(done) {
-      runMochaJSON('options/forbid-pending/passed.js', args, function(
-        err,
-        res
-      ) {
+      runMochaJSON('options/forbid-pending/passed', args, function(err, res) {
         if (err) {
           done(err);
           return;
@@ -507,7 +504,7 @@ describe('options', function() {
 
     it('fails if there are tests in suites marked skip', function(done) {
       runMocha(
-        'options/forbid-pending/skip-suite.js',
+        'options/forbid-pending/skip-suite',
         args,
         function(err, res) {
           if (err) {
@@ -526,7 +523,7 @@ describe('options', function() {
 
     it('fails if there is empty suite marked pending', function(done) {
       runMocha(
-        'options/forbid-pending/skip-empty-suite.js',
+        'options/forbid-pending/skip-empty-suite',
         args,
         function(err, res) {
           if (err) {
@@ -544,11 +541,11 @@ describe('options', function() {
     });
 
     var forbidPendingFailureTests = {
-      'fails if there are tests marked skip': 'skip.js',
-      'fails if there are pending tests': 'pending.js',
-      'fails if tests call `skip()`': 'this.skip.js',
-      'fails if beforeEach calls `skip()`': 'beforeEach-this.skip.js',
-      'fails if before calls `skip()`': 'before-this.skip.js'
+      'fails if there are tests marked skip': 'skip',
+      'fails if there are pending tests': 'pending',
+      'fails if tests call `skip()`': 'this-skip',
+      'fails if beforeEach calls `skip()`': 'beforeEach-this-skip',
+      'fails if before calls `skip()`': 'before-this-skip'
     };
 
     Object.keys(forbidPendingFailureTests).forEach(function(title) {
