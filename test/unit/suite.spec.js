@@ -390,7 +390,7 @@ describe('Suite', function() {
     describe('when there is a parent', function() {
       describe('the parent is the root suite', function() {
         it('returns the suite title', function() {
-          var parentSuite = new Suite('');
+          var parentSuite = new Suite('', {}, true);
           parentSuite.addSuite(this.suite);
           expect(this.suite.titlePath(), 'to equal', ['A Suite']);
         });
@@ -492,6 +492,16 @@ describe('Suite', function() {
       expect(function() {
         new Suite('Bdd suite', 'root');
       }, 'not to throw');
+    });
+
+    it('should be root suite', function() {
+      var rootSuite = new Suite('', {}, true);
+      expect(rootSuite.root, 'to be', true);
+    });
+
+    it('should not be root suite', function() {
+      var suite = new Suite('');
+      expect(suite.root, 'to be', false);
     });
   });
 
