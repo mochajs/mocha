@@ -56,6 +56,20 @@ describe('Mocha', function() {
     });
   });
 
+  describe('.reporter("xunit").run(fn)', function() {
+    it('should not raise errors if callback was not provided', function() {
+      var mocha = new Mocha();
+      expect(function() {
+        try {
+          mocha.reporter('xunit').run();
+        } catch (e) {
+          console.log(e);
+          expect.fail(e.message);
+        }
+      }, 'not to throw');
+    });
+  });
+
   describe('.addFile()', function() {
     it('should add the given file to the files array', function() {
       var mocha = new Mocha(opts);
