@@ -73,6 +73,8 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - [#2529](https://github.com/mochajs/mocha/issues/2529): `Runner` now emits a `retry` event when tests are retried (reporters can listen for this) ([**@catdad**](https://github.com/catdad))
 
+- [#2962](https://github.com/mochajs/mocha/issues/2962), [#3111](https://github.com/mochajs/mocha/issues/3111): In-browser notification support; warn about missing prereqs when `--growl` supplied ([**@plroebuck**](https://github.com/plroebuck))
+
 ## :bug: Fixes
 
 - [#3356](https://github.com/mochajs/mocha/issues/3356): `--no-timeouts` and `--timeout 0` now does what you'd expect ([**@boneskull**](https://github.com/boneskull))
@@ -87,6 +89,8 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 - [#3320](https://github.com/mochajs/mocha/issues/3320): Fail gracefully when non-extensible objects are thrown in async tests ([**@fargies**](https://github.com/fargies))
 - [#2475](https://github.com/mochajs/mocha/issues/2475): XUnit does not duplicate test result numbers in "errors" and "failures"; "failures" will **always** be zero ([**@mlucool**](https://github.com/mlucool))
 - [#3398](https://github.com/mochajs/mocha/issues/3398), [#3598](https://github.com/mochajs/mocha/issues/3598), [#3457](https://github.com/mochajs/mocha/issues/3457), [#3617](https://github.com/mochajs/mocha/issues/3617): Fix regression wherein `--bail` would not execute "after" nor "after each" hooks ([**@juergba**](https://github.com/juergba))
+- [#3580](https://github.com/mochajs/mocha/issues/3580): Fix potential exception when using XUnit reporter programmatically ([**@Lana-Light**](https://github.com/Lana-Light))
+- [#1304](https://github.com/mochajs/mocha/issues/1304): Do not output color to `TERM=dumb` ([**@plroebuck**](https://github.com/plroebuck))
 
 ## :book: Documentation
 
