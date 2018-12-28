@@ -1,7 +1,8 @@
 'use strict';
 
-var runMocha = require('./helpers').runMocha;
-var splitRegExp = require('./helpers').splitRegExp;
+var helpers = require('./helpers');
+var runMocha = helpers.runMocha;
+var splitRegExp = helpers.splitRegExp;
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('hook error handling', function() {
