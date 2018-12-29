@@ -22,7 +22,6 @@ overrides:
       - karma.conf.js
       - .wallaby.js
       - bin/*
-      - lib/*
       - lib/cli/**/*.js
       - test/node-unit/**/*.js
     parserOptions:
@@ -37,8 +36,8 @@ overrides:
     globals:
       expect: no
   - files:
-      - bin/*
-      - lib/**/*.js
+    - bin/*
+    - lib/**/*.js
     rules:
       no-restricted-globals:
         - error

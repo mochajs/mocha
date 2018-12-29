@@ -1665,13 +1665,12 @@ List of codes associated with Errors thrown inside Mocha. Following NodeJS pract
 
 | Code        | Meaning |
 | ------------- | ------------- |
-| ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found |
-| ERR_MOCHA_MISSING_CALLBACK | callback for a running suite was not found |
-| ERR_MOCHA_INVALID_REPORTER | reporter specified in options not found |
-| ERR_MOCHA_INVALID_INTERFACE | interface specified in options not found |
-| ERR_MOCHA_NOT_SUPPORTED | type of output specified was not supported |
-| ERR_MOCHA_MISSING_ARG_TYPE | an argument was missing |
+| ERR_MOCHA_INVALID_ARG_VALUE | an argument used did not use the supported value |
 | ERR_MOCHA_INVALID_ARG_TYPE | an argument used did not use the supported type |
+| ERR_MOCHA_INVALID_INTERFACE | interface specified in options not found |
+| ERR_MOCHA_INVALID_REPORTER | reporter specified in options not found |
+| ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found |
+| ERR_MOCHA_NOT_SUPPORTED | type of output specified was not supported |
 | ERR_MOCHA_UNDEFINED_ERROR | an error was thrown but no details were specified |
 
 ## Editor Plugins

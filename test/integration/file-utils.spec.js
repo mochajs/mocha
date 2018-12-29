@@ -76,7 +76,8 @@ describe('file utils', function() {
         return utils.lookupFiles(tmpDir, undefined, false);
       };
       expect(dirLookup, 'to throw', {
-        code: 'ERR_MOCHA_MISSING_ARG_TYPE',
+        name: 'TypeError',
+        code: 'ERR_MOCHA_INVALID_ARG_TYPE',
         argument: 'extensions'
       });
     });

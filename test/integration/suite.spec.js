@@ -28,7 +28,7 @@ describe('skipped suite w/no callback', function() {
       if (err) {
         return done(err);
       }
-      var pattern = new RegExp('Error', 'g');
+      var pattern = new RegExp('TypeError', 'g');
       var result = res.output.match(pattern) || [];
       expect(result, 'to have length', 0);
       done();
@@ -42,7 +42,7 @@ describe('skipped suite w/ callback', function() {
       if (err) {
         return done(err);
       }
-      var pattern = new RegExp('Error', 'g');
+      var pattern = new RegExp('TypeError', 'g');
       var result = res.output.match(pattern) || [];
       expect(result, 'to have length', 0);
       done();
