@@ -11,4 +11,5 @@ We primarily use GitHub as an issue tracker; for usage and support questions, pl
 * Website: https://mochajs.org/
 * Chat room: http://gitter.im/mochajs/mocha
 * StackOverflow: https://stackoverflow.com/questions/tagged/mocha using the tag `mocha`
+* API documentation: https://mochajs.org/api/
 -->
