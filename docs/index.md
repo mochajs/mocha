@@ -1665,8 +1665,8 @@ List of codes associated with Errors thrown inside Mocha. Following NodeJS pract
 
 | Code        | Meaning |
 | ------------- | ------------- |
-| ERR_MOCHA_INVALID_ARG_VALUE | an argument used did not use the supported value |
-| ERR_MOCHA_INVALID_ARG_TYPE | an argument used did not use the supported type |
+| ERR_MOCHA_INVALID_ARG_TYPE | argument of the wrong type was passed to Mocha's API |
+| ERR_MOCHA_INVALID_ARG_VALUE | invalid or unsupported value was passed for a given argument |
 | ERR_MOCHA_INVALID_INTERFACE | interface specified in options not found |
 | ERR_MOCHA_INVALID_REPORTER | reporter specified in options not found |
 | ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found |
