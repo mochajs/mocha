@@ -12,9 +12,9 @@ describe('suite w/no callback', function() {
         if (err) {
           return done(err);
         }
-        var pattern = /MissingCallbackError/g;
+        var pattern = new RegExp('TypeError', 'g');
         var result = res.output.match(pattern) || [];
-        expect(result, 'to have length', 1);
+        expect(result, 'to have length', 2);
         done();
       },
       {stdio: 'pipe'}
