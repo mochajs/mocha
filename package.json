@@ -467,7 +467,7 @@
     "prepublishOnly": "nps test clean build",
     "start": "nps",
     "test": "nps test",
-    "version": "nps updateContributors && git add -A ./package.json"
+    "version": "nps version"
   },
   "dependencies": {
     "ansi-colors": "3.2.3",
@@ -487,7 +487,7 @@
     "node-environment-flags": "1.0.2",
     "object.assign": "4.1.0",
     "strip-json-comments": "2.0.1",
-    "supports-color": "^6.0.0",
+    "supports-color": "6.0.0",
     "which": "1.3.1",
     "wide-align": "1.1.3",
     "yargs": "12.0.5",
@@ -529,12 +529,16 @@
     "nps": "^5.9.3",
     "nyc": "^13.1.0",
     "prettier": "^1.15.3",
+    "remark": "^10.0.1",
+    "remark-github": "^7.0.5",
+    "remark-inline-links": "^3.1.2",
     "rewiremock": "^3.12.3",
     "rimraf": "^2.5.2",
     "sinon": "^7.1.1",
     "strip-ansi": "^5.0.0",
     "svgo": "^1.1.1",
     "through2": "^3.0.0",
+    "to-vfile": "^5.0.2",
     "unexpected": "^10.39.2",
     "unexpected-sinon": "^10.10.1",
     "watchify": "^3.7.0"
