@@ -126,7 +126,7 @@ describe('XUnit reporter', function() {
   });
 
   describe('done', function() {
-    describe('if fileStream is truthly', function() {
+    describe('if fileStream is truthy', function() {
       it('should run callback with failure inside streams end', function() {
         var xunit = new XUnit({on: function() {}, once: function() {}});
         var callback = function(failures) {
@@ -159,7 +159,7 @@ describe('XUnit reporter', function() {
   });
 
   describe('write', function() {
-    describe('if fileStream is truthly', function() {
+    describe('if fileStream is truthy', function() {
       it('should call fileStream write with line and new line', function() {
         var xunit = new XUnit({on: function() {}, once: function() {}});
         var fileStream = {

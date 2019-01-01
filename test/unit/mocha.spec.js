@@ -56,6 +56,20 @@ describe('Mocha', function() {
     });
   });
 
+  describe('.reporter("xunit").run(fn)', function() {
+    it('should not raise errors if callback was not provided', function() {
+      var mocha = new Mocha();
+      expect(function() {
+        try {
+          mocha.reporter('xunit').run();
+        } catch (e) {
+          console.log(e);
+          expect.fail(e.message);
+        }
+      }, 'not to throw');
+    });
+  });
+
   describe('.addFile()', function() {
     it('should add the given file to the files array', function() {
       var mocha = new Mocha(opts);
@@ -129,12 +143,26 @@ describe('Mocha', function() {
   });
 
   describe('.growl()', function() {
-    it('should set the growl option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.growl();
-      expect(mocha.options, 'to have property', 'growl', true);
+    describe('if capable of notifications', function() {
+      it('should set the growl option to true', function() {
+        var mocha = new Mocha(opts);
+        mocha.isGrowlCapable = function forceEnable() {
+          return true;
+        };
+        mocha.growl();
+        expect(mocha.options, 'to have property', 'growl', true);
+      });
     });
-
+    describe('if not capable of notifications', function() {
+      it('should set the growl option to false', function() {
+        var mocha = new Mocha(opts);
+        mocha.isGrowlCapable = function forceDisable() {
+          return false;
+        };
+        mocha.growl();
+        expect(mocha.options, 'to have property', 'growl', false);
+      });
+    });
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.growl(), 'to be', mocha);
