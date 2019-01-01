@@ -66,7 +66,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - `--extension` is now an alias for `--watch-extensions` and affects _non-watch-mode_ test runs as well.  For example, to run _only_ `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
 
-- [#3352](https://github.com/mochajs/mocha/issues/3352): `tap` reporter is now TAP13-capable ([**@plroebuck**](https://github.com/plroebuck))
+- [#3552](https://github.com/mochajs/mocha/issues/3552): `tap` reporter is now TAP13-capable ([**@plroebuck**](https://github.com/plroebuck) & [**@mollstam**](https://github.com/mollstam))
 
 - [#3535](https://github.com/mochajs/mocha/issues/3535): Mocha's version can now be queried programmatically via public property `Mocha.prototype.version` ([**@plroebuck**](https://github.com/plroebuck))
 
