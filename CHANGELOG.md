@@ -1,5 +1,7 @@
 # 6.0.0-0 / 2019-01-01
 
+**Documentation for this release can be found at [next.mochajs.org](https://next.mochajs.org)**!
+
 Welcome [**@plroebuck**](https://github.com/plroebuck), [**@craigtaub**](https://github.com/craigtaub), & [**@markowsiak**](https://github.com/markowsiak) to the team!
 
 ## :boom: Breaking Changes
