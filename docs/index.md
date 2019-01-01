@@ -74,6 +74,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
 - [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
+- [Error Codes](#error-codes)
 - [Editor Plugins](#editor-plugins)
 - [Examples](#examples)
 - [Testing Mocha](#testing-mocha)
@@ -1723,6 +1724,20 @@ $ mocha "./spec/**/*.js"
 ```
 
 *Note*: Double quotes around the glob are recommended for portability.
+
+## Error Codes
+
+List of codes associated with Errors thrown inside Mocha. Following NodeJS practices.
+
+| Code        | Meaning |
+| ------------- | ------------- |
+| ERR_MOCHA_INVALID_ARG_TYPE | argument of the wrong type was passed to Mocha's API |
+| ERR_MOCHA_INVALID_ARG_VALUE | invalid or unsupported value was passed for a given argument |
+| ERR_MOCHA_INVALID_INTERFACE | interface specified in options not found |
+| ERR_MOCHA_INVALID_REPORTER | reporter specified in options not found |
+| ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found |
+| ERR_MOCHA_NOT_SUPPORTED | type of output specified was not supported |
+| ERR_MOCHA_UNDEFINED_ERROR | an error was thrown but no details were specified |
 
 ## Editor Plugins
 
