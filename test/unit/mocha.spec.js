@@ -225,4 +225,19 @@ describe('Mocha', function() {
       expect(mocha.suite._bail, 'to be', true);
     });
   });
+
+  describe('error handling', function() {
+    it('should throw reporter error if an invalid reporter is given', function() {
+      var updatedOpts = {reporter: 'invalidReporter', reporterOptions: {}};
+      var throwError = function() {
+        // eslint-disable-next-line no-new
+        new Mocha(updatedOpts);
+      };
+      expect(throwError, 'to throw', {
+        message: 'invalid reporter "invalidReporter"',
+        code: 'ERR_MOCHA_INVALID_REPORTER',
+        reporter: 'invalidReporter'
+      });
+    });
+  });
 });

@@ -75,11 +75,11 @@ describe('file utils', function() {
       var dirLookup = function() {
         return utils.lookupFiles(tmpDir, undefined, false);
       };
-      expect(
-        dirLookup,
-        'to throw',
-        'extensions parameter required when filepath is a directory'
-      );
+      expect(dirLookup, 'to throw', {
+        name: 'TypeError',
+        code: 'ERR_MOCHA_INVALID_ARG_TYPE',
+        argument: 'extensions'
+      });
     });
   });
 
