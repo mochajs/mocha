@@ -1,3 +1,9 @@
+# 6.0.0-1 / 2019-01-02
+
+## :bug: Fixes
+
+- Fix missing `mocharc.json` in published package (@boneskull)
+
 # 6.0.0-0 / 2019-01-01
 
 **Documentation for this release can be found at [next.mochajs.org](https://next.mochajs.org)**!
