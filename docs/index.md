@@ -1405,7 +1405,7 @@ The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur
 
 ### Min
 
-The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
+The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it only outputs the test summary.
 
 ![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
 
