@@ -2,7 +2,7 @@
 
 ## :bug: Fixes
 
-- Fix missing `mocharc.json` in published package (@boneskull)
+- Fix missing `mocharc.json` in published package ([**@boneskull**](https://github.com/boneskull))
 
 # 6.0.0-0 / 2019-01-01
 
