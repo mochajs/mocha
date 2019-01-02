@@ -560,7 +560,7 @@
   "files": [
     "bin/{*mocha,options.js}",
     "assets/growl/*.png",
-    "lib/**/*.{js,html}",
+    "lib/**/*.{js,html,json}",
     "index.js",
     "mocha.css",
     "mocha.js",
