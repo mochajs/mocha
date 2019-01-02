@@ -16,11 +16,11 @@ describe('Min reporter', function() {
   });
 
   describe('on start', function() {
-    it('should clear screen then set cursor position', function() {
+    it('should not clear screen or set cursor position', function() {
       runner = createMockRunner('start', 'start');
       var stdout = runReporter({epilogue: function() {}}, runner, options);
 
-      var expectedArray = ['\u001b[2J', '\u001b[1;3H'];
+      var expectedArray = [];
       expect(stdout, 'to equal', expectedArray);
     });
   });
