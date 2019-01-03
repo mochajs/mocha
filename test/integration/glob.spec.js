@@ -47,7 +47,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            '✖ Cannot find any files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -96,7 +96,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            '✖ Cannot find any files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -144,7 +144,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              '✖ Cannot find any files matching pattern'
+              'Warning: Cannot find any files matching pattern'
             );
           },
           done
