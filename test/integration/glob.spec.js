@@ -28,7 +28,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern "./*-none.js"'
+            '✖ Cannot find any files matching pattern "./*-none.js"'
           );
         },
         done
@@ -36,18 +36,13 @@ describe('globbing', function() {
     });
 
     it('should handle both matching and non-matching patterns in the same command', function(done) {
-      testGlob.shouldSucceed(
+      testGlob.shouldFail(
         './*.js ./*-none.js',
         function(results) {
           expect(
-            results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
-          );
-          expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            '✖ Cannot find any files matching pattern'
           );
         },
         done
@@ -77,7 +72,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            '✖ Cannot find any files matching pattern "./*-none.js"'
           );
         },
         done
@@ -85,18 +80,13 @@ describe('globbing', function() {
     });
 
     it('should handle both matching and non-matching patterns in the same command', function(done) {
-      testGlob.shouldSucceed(
+      testGlob.shouldFail(
         '"./*.js" "./*-none.js"',
         function(results) {
           expect(
-            results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
-          );
-          expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            '✖ Cannot find any files matching pattern'
           );
         },
         done
@@ -125,7 +115,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'cannot find any files matching pattern'
+              '✖ Cannot find any files matching pattern "./**/*-none.js"'
             );
           },
           done
@@ -133,18 +123,13 @@ describe('globbing', function() {
       });
 
       it('should handle both matching and non-matching patterns in the same command', function(done) {
-        testGlob.shouldSucceed(
+        testGlob.shouldFail(
           '"./**/*.js" "./**/*-none.js"',
           function(results) {
             expect(
-              results.stdout,
-              'to contain',
-              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
-            );
-            expect(
               results.stderr,
               'to contain',
-              'cannot find any files matching pattern'
+              '✖ Cannot find any files matching pattern'
             );
           },
           done
