@@ -1,26 +1,143 @@
-.DS_Store
-node_modules
-*.sock
-*.sw*
-.idea
-*.iml
+# Mocha-specific
+docs/_site
+docs/_dist
+docs/api
+/mocha.js
+.karma/
+
+#########################################
+# NON-MOCHA STUFF GOES BELOW THIS THING #
+#########################################
+
+# Git mergetool
+# Use `git config mergetool.keepBackup false` to stop generating these files
+*.orig
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# nyc/istanbul
+coverage
+.nyc_output
+
+# Dependencies
+node_modules/
+
+# npm
+.npm
+*.tgz
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Yarn
+yarn.lock
+.yarn-integrity
+
+# Various temporary files
+*~
+
+# Emacs
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+[._]*.un~
+
+# Diff
 *.patch
 *.diff
-npm-debug.log*
-.envrc
-.karma/
-*.orig
-.nyc_output/
-coverage/
-yarn.lock
-/mocha.js
-# artifacts from various diff tools
+
+# VSCode
+.vscode/
+
+# JetBrains' IDEs
+.idea/
+*.iws
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+
+# SourceTree
 *_BACKUP_*
 *_BASE_*
 *_LOCAL_*
 *_REMOTE_*
-docs/_site
-docs/_dist
-docs/api
-out/
-.vscode/
+
+# SublimeText
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+Package Control.last-run
+Package Control.ca-list
+Package Control.ca-bundle
+Package Control.system-ca-bundle
+Package Control.cache/
+Package Control.ca-certs/
+Package Control.merged-ca-bundle
+Package Control.user-ca-bundle
+oscrypto-ca-bundle.crt
+bh_unicode_properties.cache
+GitHub.sublime-settings
+
+# direnv
+.envrc
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# SauceConnect
+*.sock
