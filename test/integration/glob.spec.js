@@ -36,9 +36,14 @@ describe('globbing', function() {
     });
 
     it('should handle both matching and non-matching patterns in the same command', function(done) {
-      testGlob.shouldFail(
+      testGlob.shouldSucceed(
         './*.js ./*-none.js',
         function(results) {
+          expect(
+            results.stdout,
+            'to contain',
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+          );
           expect(
             results.stderr,
             'to contain',
@@ -80,9 +85,14 @@ describe('globbing', function() {
     });
 
     it('should handle both matching and non-matching patterns in the same command', function(done) {
-      testGlob.shouldFail(
+      testGlob.shouldSucceed(
         '"./*.js" "./*-none.js"',
         function(results) {
+          expect(
+            results.stdout,
+            'to contain',
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+          );
           expect(
             results.stderr,
             'to contain',
@@ -123,9 +133,14 @@ describe('globbing', function() {
       });
 
       it('should handle both matching and non-matching patterns in the same command', function(done) {
-        testGlob.shouldFail(
+        testGlob.shouldSucceed(
           '"./**/*.js" "./**/*-none.js"',
           function(results) {
+            expect(
+              results.stdout,
+              'to contain',
+              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
+            );
             expect(
               results.stderr,
               'to contain',
