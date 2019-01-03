@@ -19,7 +19,7 @@ describe('cli "run" command', function() {
       it('should disallow an array of module names', function() {
         expect(
           () => validatePlugin({foo: ['bar']}, 'foo'),
-          'to throw',
+          'to throw a',
           TypeError
         );
       });
