@@ -3,7 +3,7 @@
 var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
-var baseReporter = require('../../lib/reporters/base');
+var Base = require('../../lib/reporters/base');
 
 var DEFAULT_FIXTURE = resolveFixturePath('__default__');
 var MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
@@ -95,7 +95,8 @@ module.exports = {
           fn(
             new Error(
               format(
-                'Failed to parse JSON reporter output from result:\n\n%O',
+                'Failed to parse JSON reporter output.\nArgs: %O\nResult:\n\n%O',
+                args,
                 res
               )
             )
@@ -137,7 +138,7 @@ module.exports = {
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
    */
-  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
+  splitRegExp: new RegExp('[\\n' + Base.symbols.dot + ']+'),
 
   /**
    * Invokes the mocha binary. Accepts an array of additional command line args
@@ -253,7 +254,8 @@ function _spawnMochaWithListeners(args, fn, opts) {
   mocha.on('close', function(code) {
     fn(null, {
       output: output.split('\n').join('\n'),
-      code: code
+      code: code,
+      args: args
     });
   });
 

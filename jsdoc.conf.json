@@ -1,32 +1,33 @@
 {
-  "tags": {
-    "allowUnknownTags": true
+  "markdown": {
+    "hardwrap": true,
+    "parser": "gfm"
   },
+  "mocha-docdash": {
+    "sort": true,
+    "static": false
+  },
+  "opts": {
+    "destination": "docs/_dist/api",
+    "encoding": "utf8",
+    "recurse": true,
+    "template": "node_modules/@mocha/docdash",
+    "tutorials": "docs/api-tutorials",
+    "verbose": true
+  },
+  "plugins": ["plugins/markdown"],
   "source": {
     "include": ["lib/", "./docs/API.md", "bin"]
   },
-  "plugins": ["plugins/markdown"],
-  "opts": {
-    "encoding": "utf8",
-    "template": "node_modules/@mocha/docdash",
-    "destination": "docs/_dist/api",
-    "recurse": true,
-    "verbose": true
-  },
-  "markdown": {
-    "parser": "gfm",
-    "hardwrap": true
+  "tags": {
+    "allowUnknownTags": true
   },
   "templates": {
     "cleverLinks": false,
-    "monospaceLinks": false,
     "default": {
-      "outputSourceFiles": true,
-      "includeDate": false
-    }
+      "includeDate": false,
+      "outputSourceFiles": true
   },
-  "mocha-docdash": {
-    "static": false,
-    "sort": true
+    "monospaceLinks": false
   }
 }

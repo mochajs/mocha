@@ -21,10 +21,6 @@ mocha.addFile('test/unit/duration.spec.js');
 mocha.addFile('test/unit/globals.spec.js');
 mocha.addFile('test/unit/timeout.spec.js');
 
-mocha
-  .run(function() {
-    console.log('done');
-  })
-  .on('pass', function(test) {
-    // console.log('... %s', test.title);
-  });
+mocha.run(function() {
+  console.log('done');
+});
