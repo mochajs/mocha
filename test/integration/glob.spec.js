@@ -25,6 +25,20 @@ describe('globbing', function() {
       testGlob.shouldFail(
         './*-none.js',
         function(results) {
+          expect(
+            results.stderr,
+            'to contain',
+            'Error: Cannot find any files matching pattern'
+          );
+        },
+        done
+      );
+    });
+
+    it('should handle multiple non-matching patterns', function(done) {
+      testGlob.shouldFail(
+        './*-none.js ./*-none-twice.js',
+        function(results) {
           expect(results.stderr, 'to contain', 'Error: No test files found');
         },
         done
@@ -70,6 +84,20 @@ describe('globbing', function() {
       testGlob.shouldFail(
         '"./*-none.js"',
         function(results) {
+          expect(
+            results.stderr,
+            'to contain',
+            'Error: Cannot find any files matching pattern'
+          );
+        },
+        done
+      );
+    });
+
+    it('should handle multiple non-matching patterns', function(done) {
+      testGlob.shouldFail(
+        '"./*-none.js" "./*-none-twice.js"',
+        function(results) {
           expect(results.stderr, 'to contain', 'Error: No test files found');
         },
         done
@@ -114,7 +142,11 @@ describe('globbing', function() {
         testGlob.shouldFail(
           '"./**/*-none.js"',
           function(results) {
-            expect(results.stderr, 'to contain', 'Error: No test files found');
+            expect(
+              results.stderr,
+              'to contain',
+              'Error: Cannot find any files matching pattern'
+            );
           },
           done
         );
