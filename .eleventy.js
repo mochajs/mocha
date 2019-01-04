@@ -9,7 +9,6 @@ module.exports = function (eleventyConfig) {
   /* Markdown Plugins */
   const markdown = require("markdown-it")({
     html: true,
-    breaks: true,
     linkify: true
   });
 
