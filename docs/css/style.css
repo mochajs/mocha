@@ -132,6 +132,21 @@ a:hover {
   color: #717171;
 }
 
+a.direct-link {
+    position: absolute;
+    transform: translateX(-100%);
+    text-decoration: none;
+    text-indent: -60px;
+    width: 30px;
+    background: url(../images/link-icon.svg) center center no-repeat;
+    background-size: auto 60%;
+    opacity: 0;
+}
+
+:hover>a.direct-link {
+    opacity: 1;
+}
+
 ul {
   margin-top: 20px;
   padding: 0 15px;

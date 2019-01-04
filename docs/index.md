@@ -18,7 +18,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 - [browser support](#running-mocha-in-the-browser)
 - [simple async support, including promises](#asynchronous-code)
-- [test coverage reporting](#wallabyjs)
+- [test coverage reporting](#wallaby.js)
 - [string diff support](#diffs)
 - [javascript API for running tests](#more-information)
 - proper exit status for CI support etc
@@ -32,20 +32,20 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
 - [global variable leak detection](#--check-leaks)
-- [optionally run tests that match a regexp](#-g---grep-pattern)
-- [auto-exit to prevent "hanging" with an active loop](#--exit----no-exit)
+- [optionally run tests that match a regexp](#--grep-<regexp>%2C--g-<regexp>)
+- [auto-exit to prevent "hanging" with an active loop](#--exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
-- [mocha.opts file support](#mochaopts)
+- [config file support](#--config-<path>)
+- [mocha.opts file support](#--opts-<path>)
 - clickable suite titles to filter test execution
-- [node debugger support](#-d---debug)
-- [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
+- [node debugger support](#--debug%2C---inspect%2C---debug-brk%2C---inspect-brk%2C-debug%2C-inspect)
+- [detects multiple calls to `done()`](#detects-multiple-calls-to-done())
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
 - [extensible test DSLs or "interfaces"](#interfaces)
 - [before, after, before each, after each hooks](#hooks)
 - [arbitrary transpiler support (coffee-script etc)](#--compilers)
 - [TextMate bundle](#textmate)
-- [and more!](https://mochajs.org)
 
 ## Table of Contents
 
@@ -54,7 +54,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Installation](#installation)
 - [Getting Started](#getting-started)
 - [Run Cycle Overview](#run-cycle-overview)
-- [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
+- [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done())
 - [Assertions](#assertions)
 - [Asynchronous Code](#asynchronous-code)
 - [Synchronous Code](#synchronous-code)
@@ -72,9 +72,9 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [Reporters](#reporters)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
 - [Desktop Notification Support](#desktop-notification-support)
-- [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
-- [`mocha.opts`](#mochaopts)
-- [The `test/` Directory](#the-test-directory)
+- [Configuring Mocha (Node.js)](#configuring-mocha-(node.js))
+- [`mocha.opts`](#mocha.opts)
+- [The `test/` Directory](#the-test%2F-directory)
 - [Error Codes](#error-codes)
 - [Editor Plugins](#editor-plugins)
 - [Examples](#examples)
@@ -137,8 +137,8 @@ Set up a test script in package.json:
 
 ```json
 "scripts": {
-    "test": "mocha"
-  }
+  "test": "mocha"
+}
 ```
 
 Then run tests with:
@@ -1063,7 +1063,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 > *Updated in v6.0.0; added `--no-opts`.*
 
-Specify a path to [`mocha.opts`](#mocha-opts).
+Specify a path to [`mocha.opts`](#mocha.opts).
 
 By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts` to suppress this behavior.
 
@@ -1619,7 +1619,7 @@ tests as shown below:
 
 > *New in v6.0.0*
 
-In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+In addition to supporting the legacy [`mocha.opts`](#mocha.opts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
 
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
