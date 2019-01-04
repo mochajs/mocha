@@ -6,6 +6,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("docs/_headers");
   eleventyConfig.addPassthroughCopy("docs/favicon.ico");
 
+  eleventyConfig.addPassthroughCopy("docs/example");
 
   /* Markdown Plugins */
   const markdown = require("markdown-it")({

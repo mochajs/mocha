@@ -265,18 +265,18 @@ module.exports = {
     },
     docs: {
       default: {
-        script: 'nps docs.prebuild && eleventy && nps docs.postbuild',
+        script:
+          'nps docs.prebuild && eleventy && nps docs.postbuild && nps docs.api',
         description: 'Build documentation'
       },
       prebuild: {
-        script:
-          'rimraf docs/_dist docs/api && nps docs.preprocess && nps docs.api',
+        script: 'rimraf docs/_dist docs/_site && nps docs.preprocess',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
       postbuild: {
         script:
-          'mkdirp docs/_dist && buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
@@ -291,8 +291,7 @@ module.exports = {
         description: 'Watch docs for changes & build'
       },
       api: {
-        script:
-          'mkdirp docs/api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/api',
+        script: 'jsdoc -c jsdoc.conf.json && cp LICENSE docs/_dist/api',
         description: 'build api docs'
       }
     },
