@@ -14,6 +14,7 @@ module.exports = function (eleventyConfig) {
   });
 
   markdown.use(require("markdown-it-anchor"), {
+    slugify: require('uslug'),
     permalink: true,
     permalinkBefore: true,
     permalinkClass: "direct-link",
