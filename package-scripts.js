@@ -281,18 +281,27 @@ module.exports = {
         hiddenFromHelp: true
       },
       preprocess: {
-        script:
-          'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
-        description: 'Preprocess documenation',
-        hiddenFromHelp: true
+        default: {
+          script:
+            'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
+          description: 'Preprocess documentation',
+          hiddenFromHelp: true
+        },
+        api: {
+          script:
+            'md-magic --config ./scripts/markdown-magic.config.js --path "docs/api-tutorials/*.md"',
+          description: 'Preprocess API documentation',
+          hiddenFromHelp: true
+        }
       },
       watch: {
         script: 'nps docs.preprocess && eleventy --serve',
         description: 'Watch docs for changes & build'
       },
       api: {
-        script: 'jsdoc -c jsdoc.conf.json && cp LICENSE docs/_dist/api',
-        description: 'build api docs'
+        script:
+          'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/_dist/api',
+        description: 'Build API docs'
       }
     },
     updateContributors: {

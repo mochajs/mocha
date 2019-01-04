@@ -7,6 +7,9 @@ var assert = require('assert');
 var createStatsCollector = require('../../lib/stats-collector');
 var EventEmitter = require('events').EventEmitter;
 var reporters = require('../../').reporters;
+var constants = require('../../lib/runnable').constants;
+var STATE_FAILED = constants.STATE_FAILED;
+var STATE_PASSED = constants.STATE_PASSED;
 var XUnit = reporters.XUnit;
 
 describe('XUnit reporter', function() {
@@ -211,7 +214,7 @@ describe('XUnit reporter', function() {
       it('should write expected tag with error details', function() {
         var xunit = new XUnit({on: function() {}, once: function() {}});
         var expectedTest = {
-          state: 'failed',
+          state: STATE_FAILED,
           title: expectedTitle,
           parent: {
             fullTitle: function() {
@@ -332,7 +335,7 @@ describe('XUnit reporter', function() {
       var generateTest = function(passed) {
         var t = {
           title: expectedTitle + count,
-          state: passed ? 'passed' : 'failed',
+          state: passed ? STATE_PASSED : STATE_FAILED,
           isPending: function() {
             return false;
           },
