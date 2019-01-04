@@ -4,6 +4,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("docs/images");
   eleventyConfig.addPassthroughCopy("docs/CNAME");
   eleventyConfig.addPassthroughCopy("docs/_headers");
+  eleventyConfig.addPassthroughCopy("docs/favicon.ico");
 
 
   /* Markdown Plugins */
