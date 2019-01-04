@@ -1063,7 +1063,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 > *Updated in v6.0.0; added `--no-opts`.*
 
-Specify a path to [`mocha.opts`](#mocha.opts).
+Specify a path to [`mocha.opts`](#mochaopts).
 
 By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts` to suppress this behavior.
 
@@ -1619,7 +1619,7 @@ tests as shown below:
 
 > *New in v6.0.0*
 
-In addition to supporting the legacy [`mocha.opts`](#mocha.opts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
 
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
