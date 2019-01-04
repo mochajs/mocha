@@ -265,8 +265,7 @@ module.exports = {
     },
     docs: {
       default: {
-        script:
-          'nps docs.prebuild && bundle exec jekyll build --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts && nps docs.postbuild',
+        script: 'nps docs.prebuild && eleventy && nps docs.postbuild',
         description: 'Build documentation'
       },
       prebuild: {
@@ -288,8 +287,7 @@ module.exports = {
         hiddenFromHelp: true
       },
       watch: {
-        script:
-          'nps docs.preprocess && bundle exec jekyll serve --source ./docs --destination ./docs/_site --config ./docs/_config.yml --safe --drafts --watch',
+        script: 'nps docs.preprocess && eleventy --serve',
         description: 'Watch docs for changes & build'
       },
       api: {
