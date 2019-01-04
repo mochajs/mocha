@@ -1,17 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ page.title }}</title>
+    <link rel="preconnect" href="https://opencollective.com" />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://stats.g.doubleclick.net" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/prism.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
 
-  {% include head.html %}
+    <!--[if lt IE 9]> <script src="js/html5shiv.min.js"></script> <![endif]-->
+  </head>
 
   <body>
+    <header id="_header">
+      <h1>
+        <a href="/">
+          <img
+            src="/images/mocha-logo.svg"
+            alt="Mocha"
+            width="192"
+            height="192"
+          />
+        </a>
+      </h1>
 
-    {% include header.html %}
+      <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
+    </header>
 
-    <main id="content">
-      {{ content }}
-    </main>
+    <main id="content">{{ content }}</main>
 
-    {% include footer.html %}
+    <footer>
+      <span>
+        <a href="https://mochajs.org">mochajs.org</a> is licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
+          >Creative Commons Attribution 4.0 International License</a
+        >.
+        <p>
+          <em>Last updated: {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}</em>
+        </p></span
+      >
+    </footer>
+
+    <script src="js/ga.js" async></script>
   </body>
-
 </html>
