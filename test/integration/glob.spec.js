@@ -28,7 +28,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern "./*-none.js"'
+            'Error: Cannot find any files matching pattern "./*-none.js"'
           );
         },
         done
@@ -47,7 +47,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -77,7 +77,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            'Error: Cannot find any files matching pattern "./*-none.js"'
           );
         },
         done
@@ -96,7 +96,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'cannot find any files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -125,7 +125,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'cannot find any files matching pattern'
+              'Error: Cannot find any files matching pattern "./**/*-none.js"'
             );
           },
           done
@@ -144,7 +144,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'cannot find any files matching pattern'
+              'Warning: Cannot find any files matching pattern'
             );
           },
           done
