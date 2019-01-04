@@ -1,15 +1,22 @@
 'use strict';
 
-var path = '../../../../../lib/';
-var Mocha = require(path + 'mocha');
-var Test = require(path + 'test');
+var Mocha = require('../../../../../lib/mocha');
+var Test = Mocha.Test;
+var EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
 
 /**
  * A simple UI that only exposes a single function: test
  */
 module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
-  suite.on('pre-require', function(context, file, mocha) {
-    var common = require(path + 'interfaces/common')([suite], context);
+  suite.on(EVENT_FILE_PRE_REQUIRE, function(
+    context,
+    file,
+    mocha
+  ) {
+    var common = require('../../../../../lib/interfaces/common')(
+      [suite],
+      context
+    );
 
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
