@@ -36,20 +36,22 @@ cache:
 
 jobs:
   include:
-    - script: COVERAGE=1 npm start test.node
+    - before_script: node scripts/test-runner-filter.js || travis_terminate 0
+      script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
 
     - &node
+      before_script: node scripts/test-runner-filter.js || travis_terminate 0
       script: npm start test.node
       node_js: '10'
 
     - <<: *node
       node_js: '8'
 
-    - script: npm start test.bundle test.browser
-      # XXX: update when canvas supplies a prebuilt binary for Node.js v12.x
+    - install: npm ci # we need the native modules here
+      before_script: node scripts/test-runner-filter.js || travis_terminate 0
+      script: npm start test.bundle test.browser
       node_js: 10
-      install: npm ci # we need the native modules here
       addons:
         artifacts:
           paths:
