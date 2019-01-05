@@ -18,7 +18,7 @@ module.exports = () => {
       'package.json',
       'test/opts/mocha.opts',
       'mocharc.yml',
-      '!lib/browser/**/*.js',
+      '!lib/browser/**/*.js'
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
