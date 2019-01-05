@@ -4,6 +4,20 @@
 
 ## General configuration
 version: '{build}'
+
+only_commits:
+  files:
+    - bin/
+    - lib/
+    - test/
+    - .mocharc.yml
+    - .wallaby.js
+    - .appveyor.yml
+    - index.js
+    - package.json
+    - package-lock.json
+    - package-scripts.json
+
 skip_commits:
   message: /\[ci\s+skip\]/
 
