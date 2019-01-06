@@ -11,8 +11,8 @@ _So you wanna build the site?_
 ## Development
 
 1. Run `npm install` from working copy root to get Node.js deps.
-1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
-1. To rebuild the site _once_, execute `npm start docs`.
+2. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
+3. To rebuild the site _once_, execute `npm start docs`.
 
 ### Notes
 
