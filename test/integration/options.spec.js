@@ -346,6 +346,26 @@ describe('options', function() {
           done();
         });
       });
+
+      it('fails if no --grep', function(done) {
+        args = ['--invert'];
+        runMocha(
+          'options/grep.fixture.js',
+          args,
+          function(err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            expect(res, 'to satisfy', {
+              code: 1,
+              output: /fgrep/
+            });
+            done();
+          },
+          {stdio: 'pipe'}
+        );
+      });
     });
   });
 
