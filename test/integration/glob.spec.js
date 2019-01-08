@@ -28,7 +28,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Error: No test files found: ./*-none.js'
+            'Error: No test files found: "./*-none.js"'
           );
         },
         done
@@ -40,6 +40,7 @@ describe('globbing', function() {
         './*-none.js ./*-none-twice.js',
         function(results) {
           expect(results.stderr, 'to contain', 'Error: No test files found');
+          expect(results.stderr, 'not to contain', '*-none');
         },
         done
       );
@@ -87,7 +88,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Error: No test files found: ./*-none.js'
+            'Error: No test files found: "./*-none.js"'
           );
         },
         done
@@ -145,7 +146,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'Error: No test files found: ./**/*-none.js'
+              'Error: No test files found: "./**/*-none.js"'
             );
           },
           done
