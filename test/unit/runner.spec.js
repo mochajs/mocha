@@ -468,6 +468,19 @@ describe('Runner', function() {
       expect(fail, 'to throw', 'allow unhandled errors');
     });
 
+    it('should not allow unhandled errors in hooks to propagate through', function() {
+      suite.beforeEach(function() {
+        throw new Error('this error will not propagate');
+      });
+      var runner = new Runner(suite);
+      try {
+        runner.hook('beforeEach', function() {});
+        expect(true, 'to be', true);
+      } catch (err) {
+        expect(false, 'to be', true);
+      }
+    });
+
     it('should allow unhandled errors in sync hooks to propagate through', function() {
       suite.beforeEach(function() {
         throw new Error('allow unhandled errors in sync hooks');
@@ -481,8 +494,8 @@ describe('Runner', function() {
     });
 
     it('async - should allow unhandled errors in hooks to propagate through', function() {
+      // having `done` triggers the async path
       suite.beforeEach(function(done) {
-        // having `done` triggers the async path
         throw new Error('allow unhandled errors in async hooks');
       });
       var runner = new Runner(suite);
