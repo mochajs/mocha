@@ -240,4 +240,11 @@ describe('Mocha', function() {
       });
     });
   });
+
+  describe('globals', function() {
+    it('should return an empty array when globals is undefined', function() {
+      var mocha = new Mocha();
+      expect(mocha.options.globals.length, 'to be', 0);
+    });
+  });
 });
