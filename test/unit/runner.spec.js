@@ -443,7 +443,20 @@ describe('Runner', function() {
   });
 
   describe('allowUncaught', function() {
-    it('should allow unhandled errors to propagate through', function(done) {
+    var immediately;
+
+    before(function() {
+      immediately = Runner.immediately;
+      Runner.immediately = function(fn) {
+        fn();
+      };
+    });
+
+    after(function() {
+      Runner.immediately = immediately;
+    });
+
+    it('should allow unhandled errors to propagate through', function() {
       var newRunner = new Runner(suite);
       newRunner.allowUncaught = true;
       newRunner.test = new Test('failing test', function() {
@@ -453,7 +466,31 @@ describe('Runner', function() {
         newRunner.runTest();
       }
       expect(fail, 'to throw', 'allow unhandled errors');
-      done();
+    });
+
+    it('should allow unhandled errors in sync hooks to propagate through', function() {
+      suite.beforeEach(function() {
+        throw new Error('allow unhandled errors in sync hooks');
+      });
+      var runner = new Runner(suite);
+      runner.allowUncaught = true;
+      function throwError() {
+        runner.hook('beforeEach', function() {});
+      }
+      expect(throwError, 'to throw', 'allow unhandled errors in sync hooks');
+    });
+
+    it('async - should allow unhandled errors in hooks to propagate through', function() {
+      suite.beforeEach(function(done) {
+        // having `done` triggers the async path
+        throw new Error('allow unhandled errors in async hooks');
+      });
+      var runner = new Runner(suite);
+      runner.allowUncaught = true;
+      function throwError() {
+        runner.hook('beforeEach', function() {});
+      }
+      expect(throwError, 'to throw', 'allow unhandled errors in async hooks');
     });
   });
 
