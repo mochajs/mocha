@@ -347,7 +347,7 @@ describe('options', function() {
         });
       });
 
-      it('fails if no --grep', function(done) {
+      it('should throw an error when `--invert` used in isolation', function(done) {
         args = ['--invert'];
         runMocha(
           'options/grep.fixture.js',
@@ -359,7 +359,7 @@ describe('options', function() {
             }
             expect(res, 'to satisfy', {
               code: 1,
-              output: /fgrep/
+              output: /--invert.*--grep <regexp>/
             });
             done();
           },
