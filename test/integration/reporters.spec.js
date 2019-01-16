@@ -134,7 +134,7 @@ describe('reporters', function() {
     describe('produces valid TAP v13 output', function() {
       var runFixtureAndValidateOutput = function(fixture, expected) {
         it('for ' + fixture, function(done) {
-          var args = ['--reporter=tap', '--reporter-options', 'tapVersion=13'];
+          var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
           run(fixture, args, function(err, res) {
             if (err) {
@@ -196,8 +196,42 @@ describe('reporters', function() {
       });
     });
 
+    it('should fail if given invalid `tapVersion`', function(done) {
+      var invalidTapVersion = 'nosuch';
+      var args = [
+        '--reporter=tap',
+        '--reporter-option',
+        'tapVersion=' + invalidTapVersion
+      ];
+
+      run(
+        'reporters.fixture.js',
+        args,
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          function dquote(s) {
+            return '"' + s + '"';
+          }
+
+          var pattern =
+            '^Error: invalid or unsupported TAP version: ' +
+            dquote(invalidTapVersion);
+          expect(res, 'to satisfy', {
+            code: 1,
+            output: new RegExp(pattern, 'm')
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+
     it('places exceptions correctly in YAML blocks', function(done) {
-      var args = ['--reporter=tap', '--reporter-options', 'tapVersion=13'];
+      var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
       run('reporters.fixture.js', args, function(err, res) {
         if (err) {
