@@ -176,63 +176,16 @@ describe('options', function() {
     });
   });
 
-  describe('--sort', function() {
-    before(function() {
-      args = ['--sort'];
-    });
-
-    it('should sort tests in alphabetical order', function(done) {
-      runMochaJSON('options/sort*', args, function(err, res) {
-        if (err) {
-          done(err);
-          return;
+  describe('--compilers', function() {
+    it('should fail', function(done) {
+      invokeMocha(['--compilers', 'coffee:coffee-script/register'], function(
+        error,
+        result
+      ) {
+        if (error) {
+          return done(error);
         }
-        expect(res, 'to have passed test count', 2).and(
-          'to have passed test order',
-          'should be executed first'
-        );
-        done();
-      });
-    });
-  });
-
-  describe('--file', function() {
-    it('should run tests passed via file first', function(done) {
-      args = ['--file', resolvePath('options/file-alpha.fixture.js')];
-
-      runMochaJSON('options/file-beta.fixture.js', args, function(err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to have passed')
-          .and('to have passed test count', 2)
-          .and('to have passed test order', 'should be executed first');
-        done();
-      });
-    });
-
-    it('should run multiple tests passed via file first', function(done) {
-      args = [
-        '--file',
-        resolvePath('options/file-alpha.fixture.js'),
-        '--file',
-        resolvePath('options/file-beta.fixture.js')
-      ];
-
-      runMochaJSON('options/file-theta.fixture.js', args, function(err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        expect(res, 'to have passed')
-          .and('to have passed test count', 3)
-          .and(
-            'to have passed test order',
-            'should be executed first',
-            'should be executed second',
-            'should be executed third'
-          );
+        expect(result.code, 'to be', 1);
         done();
       });
     });
@@ -286,83 +239,215 @@ describe('options', function() {
     });
   });
 
-  describe('--grep', function() {
-    it('runs specs matching a string', function(done) {
-      args = ['--grep', 'match'];
-      runMochaJSON('options/grep.fixture.js', args, function(err, res) {
+  describe('--exclude', function() {
+    /*
+     * Runs mocha in {path} with the given args.
+     * Calls handleResult with the result.
+     */
+    function runMochaTest(fixture, args, handleResult, done) {
+      runMochaJSON(fixture, args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        handleResult(res);
+        done();
+      });
+    }
+
+    it('should exclude specific files', function(done) {
+      runMochaTest(
+        'options/exclude/*.fixture.js',
+        [
+          '--exclude',
+          'test/integration/fixtures/options/exclude/fail.fixture.js'
+        ],
+        function(res) {
+          expect(res, 'to have passed')
+            .and('to have run test', 'should find this test')
+            .and('not to have pending tests');
+        },
+        done
+      );
+    });
+
+    it('should exclude globbed files', function(done) {
+      runMochaTest(
+        'options/exclude/**/*.fixture.js',
+        ['--exclude', '**/fail.fixture.js'],
+        function(res) {
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
+        },
+        done
+      );
+    });
+
+    it('should exclude multiple patterns', function(done) {
+      runMochaTest(
+        'options/exclude/**/*.fixture.js',
+        [
+          '--exclude',
+          'test/integration/fixtures/options/exclude/fail.fixture.js',
+          '--exclude',
+          'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
+        ],
+        function(res) {
+          expect(res, 'to have passed')
+            .and('not to have pending tests')
+            .and('to have passed test count', 2);
+        },
+        done
+      );
+    });
+  });
+
+  describe('--exit', function() {
+    var behaviors = {
+      enabled: '--exit',
+      disabled: '--no-exit'
+    };
+
+    /**
+     * Returns a test that executes Mocha in a subprocess with either
+     * `--exit`, `--no-exit`, or default behavior.
+     * @param {boolean} shouldExit - Expected result; `true` if Mocha should
+     *   have force-killed the process.
+     * @param {string} [behavior] - 'enabled' or 'disabled'
+     * @returns {Function}
+     */
+    var runExit = function(shouldExit, behavior) {
+      return function(done) {
+        var timeout = this.timeout();
+        this.timeout(0);
+        this.slow(Infinity);
+        var didExit = true;
+        var t;
+        var args = behaviors[behavior] ? [behaviors[behavior]] : [];
+
+        var mocha = runMochaJSON('exit.fixture.js', args, function(err) {
+          clearTimeout(t);
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(didExit, 'to be', shouldExit);
+          done();
+        });
+
+        // if this callback happens, then Mocha didn't automatically exit.
+        t = setTimeout(function() {
+          didExit = false;
+          // this is the only way to kill the child, afaik.
+          // after the process ends, the callback to `run()` above is handled.
+          mocha.kill('SIGINT');
+        }, timeout - 500);
+      };
+    };
+
+    describe('default behavior', function() {
+      it('should force exit after root suite completion', runExit(false));
+    });
+
+    describe('with exit enabled', function() {
+      it(
+        'should force exit after root suite completion',
+        runExit(true, 'enabled')
+      );
+    });
+
+    describe('with exit disabled', function() {
+      it(
+        'should not force exit after root suite completion',
+        runExit(false, 'disabled')
+      );
+    });
+  });
+
+  describe('--extension', function() {
+    it('should allow comma-separated variables', function(done) {
+      invokeMocha(
+        [
+          '--require',
+          'coffee-script/register',
+          '--require',
+          './test/setup',
+          '--reporter',
+          'json',
+          '--extension',
+          'js,coffee',
+          'test/integration/fixtures/options/extension'
+        ],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(toJSONRunResult(result), 'to have passed').and(
+            'to have passed test count',
+            2
+          );
+          done();
+        }
+      );
+    });
+  });
+
+  describe('--file', function() {
+    it('should run tests passed via file first', function(done) {
+      args = ['--file', resolvePath('options/file-alpha.fixture.js')];
+
+      runMochaJSON('options/file-beta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
         expect(res, 'to have passed')
           .and('to have passed test count', 2)
-          .and('not to have pending tests');
+          .and('to have passed test order', 'should be executed first');
         done();
       });
     });
 
-    describe('runs specs matching a RegExp', function() {
-      it('with RegExp like strings(pattern follow by flag)', function(done) {
-        args = ['--grep', '/match/i'];
-        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
-          if (err) {
-            done(err);
-            return;
-          }
-          expect(res, 'to have passed')
-            .and('to have passed test count', 4)
-            .and('not to have pending tests');
-          done();
-        });
-      });
+    it('should run multiple tests passed via file first', function(done) {
+      args = [
+        '--file',
+        resolvePath('options/file-alpha.fixture.js'),
+        '--file',
+        resolvePath('options/file-beta.fixture.js')
+      ];
 
-      it('string as pattern', function(done) {
-        args = ['--grep', '.*'];
-        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
-          if (err) {
-            done(err);
-            return;
-          }
-          expect(res, 'to have failed')
-            .and('to have passed test count', 4)
-            .and('to have failed test count', 1)
-            .and('not to have pending tests');
-          done();
-        });
-      });
-    });
-
-    describe('with --invert', function() {
-      it('runs specs that do not match the pattern', function(done) {
-        args = ['--grep', 'fail', '--invert'];
-        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
-          if (err) {
-            done(err);
-            return;
-          }
-          expect(res, 'to have passed')
-            .and('to have passed test count', 4)
-            .and('not to have pending tests');
-          done();
-        });
-      });
-    });
-  });
-
-  describe('--retries', function() {
-    it('retries after a certain threshold', function(done) {
-      args = ['--retries', '3'];
-      runMochaJSON('options/retries.fixture.js', args, function(err, res) {
+      runMochaJSON('options/file-theta.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        expect(res, 'to have failed')
-          .and('not to have pending tests')
-          .and('not to have passed tests')
-          .and('to have retried test', 'should fail', 3);
+        expect(res, 'to have passed')
+          .and('to have passed test count', 3)
+          .and(
+            'to have passed test order',
+            'should be executed first',
+            'should be executed second',
+            'should be executed third'
+          );
         done();
       });
+    });
+  });
+
+  describe('--fgrep and --grep', function() {
+    it('should conflict', function(done) {
+      runMocha(
+        'uncaught.fixture.js',
+        ['--fgrep', 'first', '--grep', 'second'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(result, 'to have failed');
+          done();
+        }
+      );
     });
   });
 
@@ -570,65 +655,66 @@ describe('options', function() {
     });
   });
 
-  describe('--exit', function() {
-    var behaviors = {
-      enabled: '--exit',
-      disabled: '--no-exit'
-    };
+  describe('--grep', function() {
+    it('runs specs matching a string', function(done) {
+      args = ['--grep', 'match'];
+      runMochaJSON('options/grep.fixture.js', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('not to have pending tests');
+        done();
+      });
+    });
 
-    /**
-     * Returns a test that executes Mocha in a subprocess with either
-     * `--exit`, `--no-exit`, or default behavior.
-     * @param {boolean} shouldExit - Expected result; `true` if Mocha should
-     *   have force-killed the process.
-     * @param {string} [behavior] - 'enabled' or 'disabled'
-     * @returns {Function}
-     */
-    var runExit = function(shouldExit, behavior) {
-      return function(done) {
-        var timeout = this.timeout();
-        this.timeout(0);
-        this.slow(Infinity);
-        var didExit = true;
-        var t;
-        var args = behaviors[behavior] ? [behaviors[behavior]] : [];
-
-        var mocha = runMochaJSON('exit.fixture.js', args, function(err) {
-          clearTimeout(t);
+    describe('runs specs matching a RegExp', function() {
+      it('with RegExp like strings(pattern follow by flag)', function(done) {
+        args = ['--grep', '/match/i'];
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
           if (err) {
             done(err);
             return;
           }
-          expect(didExit, 'to be', shouldExit);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
           done();
         });
+      });
 
-        // if this callback happens, then Mocha didn't automatically exit.
-        t = setTimeout(function() {
-          didExit = false;
-          // this is the only way to kill the child, afaik.
-          // after the process ends, the callback to `run()` above is handled.
-          mocha.kill('SIGINT');
-        }, timeout - 500);
-      };
-    };
-
-    describe('default behavior', function() {
-      it('should force exit after root suite completion', runExit(false));
+      it('string as pattern', function(done) {
+        args = ['--grep', '.*'];
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have failed')
+            .and('to have passed test count', 4)
+            .and('to have failed test count', 1)
+            .and('not to have pending tests');
+          done();
+        });
+      });
     });
 
-    describe('with exit enabled', function() {
-      it(
-        'should force exit after root suite completion',
-        runExit(true, 'enabled')
-      );
-    });
-
-    describe('with exit disabled', function() {
-      it(
-        'should not force exit after root suite completion',
-        runExit(false, 'disabled')
-      );
+    describe('with --invert', function() {
+      it('runs specs that do not match the pattern', function(done) {
+        args = ['--grep', 'fail', '--invert'];
+        runMochaJSON('options/grep.fixture.js', args, function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed')
+            .and('to have passed test count', 4)
+            .and('not to have pending tests');
+          done();
+        });
+      });
     });
   });
 
@@ -681,67 +767,40 @@ describe('options', function() {
     });
   });
 
-  describe('--exclude', function() {
-    /*
-     * Runs mocha in {path} with the given args.
-     * Calls handleResult with the result.
-     */
-    function runMochaTest(fixture, args, handleResult, done) {
-      runMochaJSON(fixture, args, function(err, res) {
+  describe('--retries', function() {
+    it('retries after a certain threshold', function(done) {
+      args = ['--retries', '3'];
+      runMochaJSON('options/retries.fixture.js', args, function(err, res) {
         if (err) {
           done(err);
           return;
         }
-        handleResult(res);
+        expect(res, 'to have failed')
+          .and('not to have pending tests')
+          .and('not to have passed tests')
+          .and('to have retried test', 'should fail', 3);
         done();
       });
-    }
+    });
+  });
 
-    it('should exclude specific files', function(done) {
-      runMochaTest(
-        'options/exclude/*.fixture.js',
-        [
-          '--exclude',
-          'test/integration/fixtures/options/exclude/fail.fixture.js'
-        ],
-        function(res) {
-          expect(res, 'to have passed')
-            .and('to have run test', 'should find this test')
-            .and('not to have pending tests');
-        },
-        done
-      );
+  describe('--sort', function() {
+    before(function() {
+      args = ['--sort'];
     });
 
-    it('should exclude globbed files', function(done) {
-      runMochaTest(
-        'options/exclude/**/*.fixture.js',
-        ['--exclude', '**/fail.fixture.js'],
-        function(res) {
-          expect(res, 'to have passed')
-            .and('not to have pending tests')
-            .and('to have passed test count', 2);
-        },
-        done
-      );
-    });
-
-    it('should exclude multiple patterns', function(done) {
-      runMochaTest(
-        'options/exclude/**/*.fixture.js',
-        [
-          '--exclude',
-          'test/integration/fixtures/options/exclude/fail.fixture.js',
-          '--exclude',
-          'test/integration/fixtures/options/exclude/nested/fail.fixture.js'
-        ],
-        function(res) {
-          expect(res, 'to have passed')
-            .and('not to have pending tests')
-            .and('to have passed test count', 2);
-        },
-        done
-      );
+    it('should sort tests in alphabetical order', function(done) {
+      runMochaJSON('options/sort*', args, function(err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have passed test count', 2).and(
+          'to have passed test order',
+          'should be executed first'
+        );
+        done();
+      });
     });
   });
 
@@ -779,63 +838,4 @@ describe('options', function() {
       });
     });
   }
-
-  describe('--compilers', function() {
-    it('should fail', function(done) {
-      invokeMocha(['--compilers', 'coffee:coffee-script/register'], function(
-        error,
-        result
-      ) {
-        if (error) {
-          return done(error);
-        }
-        expect(result.code, 'to be', 1);
-        done();
-      });
-    });
-  });
-
-  describe('--fgrep and --grep', function() {
-    it('should conflict', function(done) {
-      runMocha(
-        'uncaught.fixture.js',
-        ['--fgrep', 'first', '--grep', 'second'],
-        function(err, result) {
-          if (err) {
-            return done(err);
-          }
-          expect(result, 'to have failed');
-          done();
-        }
-      );
-    });
-  });
-
-  describe('--extension', function() {
-    it('should allow comma-separated variables', function(done) {
-      invokeMocha(
-        [
-          '--require',
-          'coffee-script/register',
-          '--require',
-          './test/setup',
-          '--reporter',
-          'json',
-          '--extension',
-          'js,coffee',
-          'test/integration/fixtures/options/extension'
-        ],
-        function(err, result) {
-          if (err) {
-            return done(err);
-          }
-          expect(toJSONRunResult(result), 'to have passed').and(
-            'to have passed test count',
-            2
-          );
-          done();
-        }
-      );
-    });
-  });
 });
