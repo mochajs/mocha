@@ -302,6 +302,27 @@ describe('Suite', function() {
     });
   });
 
+  describe('.create()', function() {
+    before(function() {
+      this.first = new Suite('Root suite', {}, true);
+      this.second = new Suite('RottenRoot suite', {}, true);
+      this.first.addSuite(this.second);
+    });
+
+    it('does not create a second root suite', function() {
+      expect(this.second.parent, 'to be', this.first);
+      expect(this.first.root, 'to be', true);
+      expect(this.second.root, 'to be', false);
+    });
+
+    it('does not denote the root suite by being titleless', function() {
+      var emptyTitleSuite = Suite.create(this.second, '');
+      expect(emptyTitleSuite.parent, 'to be', this.second);
+      expect(emptyTitleSuite.root, 'to be', false);
+      expect(this.second.root, 'to be', false);
+    });
+  });
+
   describe('.addSuite()', function() {
     beforeEach(function() {
       this.first = new Suite('First suite');
@@ -390,8 +411,8 @@ describe('Suite', function() {
     describe('when there is a parent', function() {
       describe('the parent is the root suite', function() {
         it('returns the suite title', function() {
-          var parentSuite = new Suite('');
-          parentSuite.addSuite(this.suite);
+          var rootSuite = new Suite('', {}, true);
+          rootSuite.addSuite(this.suite);
           expect(this.suite.titlePath(), 'to equal', ['A Suite']);
         });
       });
