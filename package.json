@@ -517,6 +517,7 @@
     "chai": "^4.2.0",
     "coffee-script": "^1.10.0",
     "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
     "cross-spawn": "^6.0.5",
     "eslint": "^5.10.0",
     "eslint-config-prettier": "^3.3.0",
@@ -582,7 +583,8 @@
   },
   "prettier": {
     "singleQuote": true,
-    "bracketSpacing": false
+    "bracketSpacing": false,
+    "endOfLine": "auto"
   },
   "yargs": {
     "combine-arrays": true,
