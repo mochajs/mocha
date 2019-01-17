@@ -174,7 +174,16 @@ module.exports = {
    */
   resolveFixturePath: resolveFixturePath,
 
-  toJSONRunResult: toJSONRunResult
+  toJSONRunResult: toJSONRunResult,
+
+  /**
+   * Given a regexp-like string, escape it so it can be used with the `RegExp` constructor
+   * @param {string} str - string to be escaped
+   * @returns {string} Escaped string
+   */
+  escapeRegExp: function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  }
 };
 
 /**
