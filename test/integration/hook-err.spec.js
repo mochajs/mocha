@@ -18,7 +18,10 @@ describe('hook error handling', function() {
   describe('before hook error tip', function() {
     before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle()));
     it('should verify results', function() {
-      expect(lines, 'to equal', ['1) spec 2', '"before all" hook:']);
+      expect(lines, 'to equal', [
+        '1) spec 2',
+        '"before all" hook for "skipped":'
+      ]);
     });
   });
 
