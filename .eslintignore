@@ -4,3 +4,4 @@ mocha.js
 docs/
 out/
 !lib/mocha.js
+!.*.js

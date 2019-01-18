@@ -2,7 +2,8 @@
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   X-Content-Type-Options: nosniff
-  Strict-Transport-Security: max-age=31536000, includeSubDomains
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Referrer-Policy: strict-origin-when-cross-origin
 
 ## Far future expires for hashed file names
 /static/*

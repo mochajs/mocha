@@ -509,6 +509,7 @@
     "yargs-unparser": "1.5.0"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^0.6.0",
     "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^1.0.1",
     "assetgraph-builder": "^6.4.2",
@@ -537,6 +538,10 @@
     "karma-mocha-reporter": "^2.2.4",
     "karma-sauce-launcher": "^1.2.0",
     "lint-staged": "^8.1.0",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2",
+    "markdown-it-attrs": "^2.3.2",
+    "markdown-it-prism": "^2.0.1",
     "markdown-magic": "^0.1.25",
     "markdown-magic-package-json": "^2.0.0",
     "markdown-toc": "^1.2.0",
@@ -556,6 +561,7 @@
     "to-vfile": "^5.0.2",
     "unexpected": "^10.39.2",
     "unexpected-sinon": "^10.10.1",
+    "uslug": "^1.0.4",
     "watchify": "^3.7.0"
   },
   "files": [
