@@ -1,9 +1,9 @@
 # Mocha-specific
 docs/_site
 docs/_dist
-docs/api
-/mocha.js
+mocha.js
 .karma/
+!lib/mocha.js
 
 #########################################
 # NON-MOCHA STUFF GOES BELOW THIS THING #

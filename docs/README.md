@@ -1,28 +1,24 @@
 # mochajs.org
 
-*So you wanna build the site?*
+_So you wanna build the site?_
 
-[mochajs.org](https://mochajs.org) is built using [Jekyll](http://jekyllrb.com), the popular static site generator.
+[mochajs.org](https://mochajs.org) is built using [Eleventy](https://www.11ty.io/), a simple static site generator.
 
 ## Prerequisites
 
-- Ruby
-- RubyGems
-- Bundler (`gem install bundler`)
 - Node.js v6.x or greater
 
 ## Development
 
 1. Run `npm install` from working copy root to get Node.js deps.
-1. Run `bundle install` to install Jekyll and its dependencies.  This may or may not require elevated privileges, depending on your system.
 1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
-1. To rebuild the site *once*, execute `npm start docs`.
+1. To rebuild the site _once_, execute `npm start docs`.
 
 ### Notes
 
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
-- This file (`docs/README.md`) should *not* be included in the build.
-- `docs/_dist` and `docs/api` are where the deployed site lives.  `docs/_site` is essentially a build step.  These three directories are *not* under version control.
+- This file (`docs/README.md`) should _not_ be included in the build.
+- `docs/_dist` is where the deployed site lives. `docs/_site` is essentially a build step. These directories are _not_ under version control.
 - See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://npm.im/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
 
 ## License

@@ -31,21 +31,21 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
-- [global variable leak detection](#--check-leaks)
-- [optionally run tests that match a regexp](#-g---grep-pattern)
-- [auto-exit to prevent "hanging" with an active loop](#--exit----no-exit)
+- [global variable leak detection](#-check-leaks)
+- [optionally run tests that match a regexp](#-grep-regexp-g-regexp)
+- [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
-- [mocha.opts file support](#mochaopts)
+- [config file support](#-config-path)
+- [mocha.opts file support](#-opts-path)
 - clickable suite titles to filter test execution
-- [node debugger support](#-d---debug)
+- [node debugger support](#-debug-inspect-debug-brk-inspect-brk-debug-inspect)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
 - [extensible test DSLs or "interfaces"](#interfaces)
 - [before, after, before each, after each hooks](#hooks)
-- [arbitrary transpiler support (coffee-script etc)](#--compilers)
+- [arbitrary transpiler support (coffee-script etc)](#-compilers)
 - [TextMate bundle](#textmate)
-- [and more!](https://mochajs.org)
 
 ## Table of Contents
 
@@ -137,8 +137,8 @@ Set up a test script in package.json:
 
 ```json
 "scripts": {
-    "test": "mocha"
-  }
+  "test": "mocha"
+}
 ```
 
 Then run tests with:
@@ -737,7 +737,7 @@ $ mocha
 
 Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the "spec" reporter:
 
-![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 There are three levels of test duration (depicted in the following image):
 
@@ -745,7 +745,7 @@ There are three levels of test duration (depicted in the following image):
 2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
 3. SLOW: Tests that run exceeding the threshold will show the duration in red.
 
-![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 To tweak what's considered "slow", you can use the `slow()` method:
 
@@ -811,7 +811,7 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library.  Mocha will attempt to display the difference between what was expected, and what the assertion actually saw.  Here's an example of a "string" diff:
 
-![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ## Command-Line Usage
 
@@ -1063,7 +1063,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 > *Updated in v6.0.0; added `--no-opts`.*
 
-Specify a path to [`mocha.opts`](#mocha-opts).
+Specify a path to [`mocha.opts`](#mochaopts).
 
 By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts` to suppress this behavior.
 
@@ -1352,69 +1352,69 @@ Mocha reporters adjust to the terminal window, and always disable ANSI-escape co
 
 This is the default reporter.  The "spec" reporter outputs a hierarchical view nested just as the test cases are.
 
-![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
-![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Dot Matrix
 
 The dot matrix (or "dot") reporter is simply a series of characters which represent test cases.  Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow.  Good if you prefer minimal output.
 
-![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Nyan
 
 The "nyan" reporter is exactly what you might expect:
 
-![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### TAP
 
 The TAP reporter emits lines for a [Test-Anything-Protocol](https://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
 
-![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Landing Strip
 
 The Landing Strip (`landing`) reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
-![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
-![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### List
 
 The "list" reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
-![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Progress
 
 The "progress" reporter implements a simple progress-bar:
 
-![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON
 
 The "JSON" reporter outputs a single large JSON object when the tests have completed (failures or not).
 
-![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON Stream
 
 The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
-![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Min
 
 The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
-![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Doc
 
 The "doc" reporter outputs a hierarchical HTML body representation of your tests.  Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
-![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 For example, suppose you have the following JavaScript:
 
@@ -1548,7 +1548,7 @@ The following option(s) *only* function in a browser context:
 
 The "HTML" reporter is what you see when running Mocha in the browser.  It looks like this:
 
-![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot"}
+![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 [Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
 
@@ -1752,7 +1752,7 @@ The [Mocha TextMate bundle](https://github.com/mochajs/mocha.tmbundle) includes 
 
 [JetBrains](https://www.jetbrains.com/) provides a [NodeJS plugin](https://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
-![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
+![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, assuming your license allows it.
 
@@ -1760,13 +1760,13 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 [Wallaby.js](https://wallabyjs.com/) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and node.js projects.
 
-![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
+![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 ### Emacs
 
 [Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
-![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
+![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 ### Mocha Sidebar (VS Code)
 
@@ -1779,7 +1779,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 - auto run tests on file save
 - see tests results directly in the code editor
 
-![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot"}
+![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 ## Examples
 
