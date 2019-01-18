@@ -217,26 +217,26 @@ module.exports = {
           description: 'Run browser tests'
         },
         unit: {
-          script: 'NODE_PATH=. karma start --single-run',
+          script: 'cross-env NODE_PATH=. karma start --single-run',
           description: 'Run browser unit tests'
         },
         bdd: {
-          script: 'MOCHA_TEST=bdd nps test.browser.unit',
+          script: 'cross-env MOCHA_TEST=bdd nps test.browser.unit',
           description: 'Run browser BDD interface tests',
           hiddenFromHelp: true
         },
         tdd: {
-          script: 'MOCHA_TEST=tdd nps test.browser.unit',
+          script: 'cross-env MOCHA_TEST=tdd nps test.browser.unit',
           description: 'Run browser TDD interface tests',
           hiddenFromHelp: true
         },
         qunit: {
-          script: 'MOCHA_TEST=qunit nps test.browser.unit',
+          script: 'cross-env MOCHA_TEST=qunit nps test.browser.unit',
           description: 'Run browser QUnit interface tests',
           hiddenFromHelp: true
         },
         esm: {
-          script: 'MOCHA_TEST=esm nps test.browser.unit',
+          script: 'cross-env MOCHA_TEST=esm nps test.browser.unit',
           description: 'Run browser ES modules support test',
           hiddenFromHelp: true
         }
