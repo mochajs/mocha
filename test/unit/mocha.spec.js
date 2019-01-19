@@ -24,13 +24,13 @@ describe('Mocha', function() {
     it('should prefer "color" over "useColors"', function() {
       // eslint-disable-next-line no-new
       new Mocha({useColors: true, color: false});
-      expect(Mocha.prototype.useColors, 'was called with', false);
+      expect(Mocha.prototype.useColors, 'to have a call satisfying', [false]);
     });
 
     it('should assign "useColors" to "color"', function() {
       // eslint-disable-next-line no-new
       new Mocha({useColors: true});
-      expect(Mocha.prototype.useColors, 'was called with', true);
+      expect(Mocha.prototype.useColors, 'to have a call satisfying', [true]);
     });
 
     it('should call utils.deprecate()', function() {

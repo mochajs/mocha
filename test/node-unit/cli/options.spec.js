@@ -114,7 +114,7 @@ describe('options', function() {
               try {
                 loadOptions(`--opts ${opts}`);
               } catch (ignored) {}
-              expect(readFileSync, 'was called with', opts, 'utf8');
+              expect(readFileSync, 'to have a call satisfying', [opts, 'utf8']);
             });
 
             it('should throw', function() {
@@ -151,7 +151,10 @@ describe('options', function() {
             });
 
             it('should attempt to load default mocha.opts', function() {
-              expect(readFileSync, 'was called with', defaults.opts, 'utf8');
+              expect(readFileSync, 'to have a call satisfying', [
+                defaults.opts,
+                'utf8'
+              ]);
             });
 
             it('should set opts = false', function() {
@@ -514,7 +517,7 @@ describe('options', function() {
             try {
               loadOptions(`--config ${config}`);
             } catch (ignored) {}
-            expect(loadConfig, 'was called with', config);
+            expect(loadConfig, 'to have a call satisfying', [config]);
           });
 
           it('should throw to warn the user', function() {
@@ -555,7 +558,9 @@ describe('options', function() {
             });
 
             it('should attempt to load file at found path', function() {
-              expect(loadConfig, 'was called with', '/some/.mocharc.json');
+              expect(loadConfig, 'to have a call satisfying', [
+                '/some/.mocharc.json'
+              ]);
             });
 
             it('should set config = false', function() {
