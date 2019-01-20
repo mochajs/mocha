@@ -16,16 +16,14 @@ describe('--opts', function() {
       if (err) {
         return done(err);
       }
+
       expect(res, 'to have passed').and('to have passed test count', 1);
       done();
     });
   });
 
   it('should throw an error due to nonexistent options file', function(done) {
-    var spawnOpts = {
-      cwd: path.join(__dirname, '..', 'fixtures'),
-      stdio: 'pipe'
-    };
+    var spawnOpts = {stdio: 'pipe'};
     var nonexistentFile = 'nosuchoptionsfile';
     args = ['--opts', nonexistentFile, resolvePath(fixture)];
     invokeMocha(
@@ -34,6 +32,7 @@ describe('--opts', function() {
         if (err) {
           return done(err);
         }
+
         var pattern = 'unable to read ' + nonexistentFile;
         expect(res, 'to satisfy', {
           code: 1,
