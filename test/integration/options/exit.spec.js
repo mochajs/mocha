@@ -52,14 +52,14 @@ describe('--exit', function() {
     it('should force exit after root suite completion', runExit(false));
   });
 
-  describe('with exit enabled', function() {
+  describe('when enabled', function() {
     it(
       'should force exit after root suite completion',
       runExit(true, 'enabled')
     );
   });
 
-  describe('with exit disabled', function() {
+  describe('when disabled', function() {
     it(
       'should not force exit after root suite completion',
       runExit(false, 'disabled')

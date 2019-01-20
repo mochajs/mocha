@@ -10,7 +10,7 @@ describe('--watch', function() {
     args = ['--watch'];
   });
 
-  describe('with watch enabled', function() {
+  describe('when enabled', function() {
     before(function() {
       // Feature works but SIMULATING the signal (ctrl+c) via child process
       // does not work due to lack of POSIX signal compliance on Windows.

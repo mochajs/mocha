@@ -55,7 +55,7 @@ describe('--grep', function() {
     });
   });
 
-  describe('with --invert', function() {
+  describe('when --invert used', function() {
     it('should run specs that do not match the pattern', function(done) {
       args = ['--grep', 'fail', '--invert'];
       runMochaJSON(fixture, args, function(err, res) {
@@ -90,7 +90,7 @@ describe('--grep', function() {
     });
   });
 
-  describe('when both --fgrep and --grep are used together', function() {
+  describe('when both --fgrep and --grep used together', function() {
     it('should conflict', function(done) {
       // var fixture = 'uncaught.fixture.js';
       args = ['--fgrep', 'first', '--grep', 'second'];
