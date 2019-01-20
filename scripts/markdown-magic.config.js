@@ -37,6 +37,7 @@ exports.transforms = {
     return (
       '\n' +
       markdownToc(config.outputContent, {
+        slugify: require('uslug'),
         bullets: options.bullets,
         firsth1: false,
         // if filter is supplied, maxdepth is apparently ignored,

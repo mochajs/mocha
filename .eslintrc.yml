@@ -21,6 +21,7 @@ overrides:
       - package-scripts.js
       - karma.conf.js
       - .wallaby.js
+      - .eleventy.js
       - bin/*
       - lib/cli/**/*.js
       - test/node-unit/**/*.js
@@ -37,8 +38,8 @@ overrides:
     globals:
       expect: no
   - files:
-    - bin/*
-    - lib/**/*.js
+      - bin/*
+      - lib/**/*.js
     rules:
       no-restricted-globals:
         - error

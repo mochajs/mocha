@@ -1,5 +1,5 @@
 html {
-  font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 16px/1.6 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -27,7 +27,8 @@ body {
   }
 }
 
-header, #content {
+header,
+#content {
   max-width: 920px;
   margin: 0 auto;
   padding-left: 30px;
@@ -62,7 +63,7 @@ header {
 }
 
 #tag em {
-  font-style: normal
+  font-style: normal;
 }
 
 nav.badges a + a {
@@ -85,7 +86,7 @@ nav.badges a + a {
 
 .faded-images img {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .faded-images.is-loaded img {
@@ -125,11 +126,26 @@ h3 > code {
 }
 
 a {
-  color: #8D6748;
+  color: #8d6748;
 }
 
 a:hover {
   color: #717171;
+}
+
+a.direct-link {
+  position: absolute;
+  transform: translateX(-100%);
+  text-decoration: none;
+  text-indent: -60px;
+  width: 30px;
+  background: url(../images/link-icon.svg) center center no-repeat;
+  background-size: auto 60%;
+  opacity: 0;
+}
+
+:hover > a.direct-link {
+  opacity: 1;
 }
 
 ul {
@@ -201,7 +217,6 @@ footer span {
     padding: 10px;
     margin: 20px -11px;
   }
-
 }
 
 blockquote {

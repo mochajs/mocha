@@ -17,13 +17,13 @@ module.exports = () => {
       },
       'package.json',
       'test/opts/mocha.opts',
-      'mocharc.yml',
-      '!lib/browser/**/*.js',
+      'mocharc.yml'
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
       'test/setup.js',
-      'test/assertions.js'
+      'test/assertions.js',
+      'lib/browser/**/*.js'
     ],
     tests: ['test/unit/**/*.spec.js', 'test/node-unit/**/*.spec.js'],
     env: {
