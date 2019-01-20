@@ -23,6 +23,8 @@ function getHeaderForRelation(rel) {
   return header;
 }
 
+console.error('Generating optimal netlify headers...');
+
 new AssetGraph({root: 'docs/_dist'})
   .loadAssets('*.html')
   .populate({
@@ -110,7 +112,8 @@ new AssetGraph({root: 'docs/_dist'})
       });
 
       console.log('');
+
+      console.error('netlify headers done!');
     });
   })
-  .writeAssetsToDisc({isLoaded: true})
   .run();
