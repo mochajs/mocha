@@ -11,7 +11,7 @@ stages:
 
 # defaults
 language: node_js
-node_js: '11'
+node_js: '11.6'
 addons:
   apt:
     packages:
