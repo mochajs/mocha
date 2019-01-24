@@ -59,7 +59,7 @@ describe('suite returning a value', function() {
         if (err) {
           return done(err);
         }
-        var pattern = new RegExp('Deprecation Warning', 'g');
+        var pattern = new RegExp('Suites ignore return values', 'g');
         var result = res.output.match(pattern) || [];
         expect(result, 'to have length', 1);
         done();
