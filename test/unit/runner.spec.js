@@ -6,6 +6,7 @@ var Runner = mocha.Runner;
 var Test = mocha.Test;
 var Hook = mocha.Hook;
 var path = require('path');
+var fs = require('fs');
 var noop = mocha.utils.noop;
 
 describe('Runner', function() {
@@ -491,6 +492,62 @@ describe('Runner', function() {
 
         runner.on('fail', function(hook, err) {
           expect(err.stack, 'to be', stack.join('\n'));
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+    });
+
+    describe('hugeStackTrace', function() {
+      beforeEach(function() {
+        if (path.sep !== '/') {
+          this.skip();
+        }
+      });
+
+      it('should not hang if the error message is ridiculously long single line', function(done) {
+        var hook = new Hook();
+        hook.parent = suite;
+        var data = [];
+        // mock a long message
+        for (var i = 0; i < 10000; i++) data[i] = {a: 1};
+        var message = JSON.stringify(data);
+        var err = new Error();
+        // Fake stack-trace
+        err.stack = [message].concat(stack).join('\n');
+
+        runner.on('fail', function(hook, err) {
+          expect(
+            err.stack
+              .split('\n')
+              .slice(1)
+              .join('\n'),
+            'to be',
+            stack.slice(0, 3).join('\n')
+          );
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+
+      it('should not hang if error message is ridiculously long multiple lines either', function(done) {
+        var hook = new Hook();
+        hook.parent = suite;
+        var fpath = path.join(__dirname, '../../mocha.js');
+        var message = fs.readFileSync(fpath, 'utf8');
+        var err = new Error();
+        // Fake stack-trace
+        err.stack = [message].concat(stack).join('\n');
+
+        runner.on('fail', function(hook, err) {
+          expect(
+            err.stack
+              .split('\n')
+              .slice(-3)
+              .join('\n'),
+            'to be',
+            stack.slice(0, 3).join('\n')
+          );
           done();
         });
         runner.failHook(hook, err);
