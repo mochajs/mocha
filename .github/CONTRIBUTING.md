@@ -64,12 +64,13 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 1. Navigate to the source repository.  You should see a notification about your recent changes in your fork's branch, with a button to create a pull request.  Click it.
 1. Describe your changes in detail here.  Once you're satisfied, submit the form.
     - *PRO TIP*: If you've used a multi-line commit message, Github will pre-fill the PR's description with it.
-1. If you have not signed our Contributor License Agreement, a friendly robot will prompt you to do so.  A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
+1. You must accept the [DCO](#developers-certificate-of-origin-11).  To do this, either manually append `Signed-off-by: <your@email.com>` as the last line of your commit message, or use the `-s` flag with `git commit`, e.g., `git commit -s -m 'a commit message'".
+    - *PRO TIP*: Create an alias like `git config alias.ci 'commit -s'` to sign off on commits automatically.
+    - If you have multiple commits without signoff, you may just want to squash them into a single commit and sign off on that.
 1. CI will run against your changes.
     - If the changes fail the checks, you will need to address those before merging.
     - You don't need to make a new PR to make changes.  Instead, commit on top of your changes, and push these to your fork's branch.  The PR will be updated, and CI will re-run.
     - Github will indicate if there's a conflict.  If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase/) your branch onto the `master` branch of the source repository.  *Don't merge.*
-    - It's no longer necessary to "squash" your changes.
 1. Be patient while your PR is reviewed. This can take a while. We may request changes, but don't be afraid to question them.
 
 ## :angel: I Just Want To Help
@@ -84,3 +85,15 @@ Follow these steps to get going.  If you are having trouble, don't be afraid to 
 - **You can sell dirt to worms?**  Let's raise Mocha's profile in the JavaScript and OSS communities.  Please contact an [org member](https://github.com/orgs/mochajs/people)!
 - **Wait--you write unit tests for *fun*?**  A PR which increases coverage is unlikely to be turned down.
 - **Are you experienced?**  If you're a seasoned Mocha user, why not help answer some questions in the [chat room](https://gitter.im/mochajs/mocha)?
+
+## Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I have the right to submit it under the open source license indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best of my knowledge, is covered under an appropriate open source license and I have the right under that license to submit that work with modifications, whether created in whole or in part by me, under the same open source license (unless I am permitted to submit under a different license), as indicated in the file; or
+
+(c) The contribution was provided directly to me by some other person who certified (a), (b) or (c) and I have not modified it.
+
+(d) I understand and agree that this project and the contribution are public and that a record of the contribution (including all personal information I submit with it, including my sign-off) is maintained indefinitely and may be redistributed consistent with this project or the open source license(s) involved.
