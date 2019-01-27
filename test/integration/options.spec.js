@@ -774,7 +774,7 @@ describe('options', function() {
           setTimeout(function() {
             // kill the child process
             mocha.kill('SIGINT');
-          }, 1000);
+          }, 1500);
         });
       });
     });
