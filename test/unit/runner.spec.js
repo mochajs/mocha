@@ -344,9 +344,13 @@ describe('Runner', function() {
   describe('.failHook(hook, err)', function() {
     it('should increment .failures', function() {
       expect(runner.failures, 'to be', 0);
-      runner.failHook(new Test('fail hook 1', noop), {});
+      var test1 = new Test('fail hook 1', noop);
+      var test2 = new Test('fail hook 2', noop);
+      suite.addTest(test1);
+      suite.addTest(test2);
+      runner.failHook(test1, new Error('error1'));
       expect(runner.failures, 'to be', 1);
-      runner.failHook(new Test('fail hook 2', noop), {});
+      runner.failHook(test2, new Error('error2'));
       expect(runner.failures, 'to be', 2);
     });
 
@@ -364,7 +368,8 @@ describe('Runner', function() {
 
     it('should emit "fail"', function(done) {
       var hook = new Hook();
-      var err = {};
+      hook.parent = suite;
+      var err = new Error('error');
       runner.on('fail', function(hook, err) {
         expect(hook, 'to be', hook);
         expect(err, 'to be', err);
@@ -375,7 +380,8 @@ describe('Runner', function() {
 
     it('should not emit "end" if suite bail is not true', function(done) {
       var hook = new Hook();
-      var err = {};
+      hook.parent = suite;
+      var err = new Error('error');
       suite.bail(false);
       runner.on('end', function() {
         throw new Error('"end" was emit, but the bail is false');
@@ -454,6 +460,7 @@ describe('Runner', function() {
 
       it('should prettify the stack-trace', function(done) {
         var hook = new Hook();
+        hook.parent = suite;
         var err = new Error();
         // Fake stack-trace
         err.stack = stack.join('\n');
@@ -475,6 +482,7 @@ describe('Runner', function() {
 
       it('should display the full stack-trace', function(done) {
         var hook = new Hook();
+        hook.parent = suite;
         var err = new Error();
         // Fake stack-trace
         err.stack = stack.join('\n');

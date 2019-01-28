@@ -52,7 +52,10 @@ describe('--bail', function() {
 
       expect(res, 'to have failed')
         .and('to have failed test count', 1)
-        .and('to have failed test', '"before all" hook: before suite1')
+        .and(
+          'to have failed test',
+          '"before all" hook: before suite1 for "test suite1"'
+        )
         .and('to have passed test count', 0);
       done();
     });
@@ -100,7 +103,10 @@ describe('--bail', function() {
 
       expect(res, 'to have failed')
         .and('to have failed test count', 1)
-        .and('to have failed test', '"after all" hook: after suite1A')
+        .and(
+          'to have failed test',
+          '"after all" hook: after suite1A for "test suite1A"'
+        )
         .and('to have passed test count', 2)
         .and('to have passed test order', 'test suite1', 'test suite1A');
       done();
