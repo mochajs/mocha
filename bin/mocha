@@ -39,8 +39,9 @@ Object.keys(opts).forEach(opt => {
   }
 });
 
-// allow --debug to invoke --inspect on Node.js v8 or newer  nodeOpts.inspect = childOpts.debug;
+// allow --debug to invoke --inspect on Node.js v8 or newer
 if (childOpts.debug) {
+  nodeOpts.inspect = childOpts.debug;
   childOpts.timeout = false;
   delete childOpts.debug;
   debug('--debug -> --inspect');
