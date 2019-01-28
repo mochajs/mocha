@@ -12,10 +12,15 @@
 const {deprecate, warn} = require('../lib/utils');
 const {spawn} = require('child_process');
 const {loadOptions} = require('../lib/cli/options');
-const {isNodeFlag, impliesNoTimeouts} = require('../lib/cli/node-flags');
+const {
+  unparseNodeFlags,
+  isNodeFlag,
+  impliesNoTimeouts
+} = require('../lib/cli/node-flags');
 const unparse = require('yargs-unparser');
-const debug = require('debug')('mocha:cli');
+const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
+const nodeEnv = require('node-environment-flags');
 
 const mochaPath = require.resolve('./_mocha');
 const mochaArgs = {};
@@ -45,13 +50,12 @@ const disableTimeouts = value => {
  * @ignore
  */
 const trimV8Option = value =>
-  value !== 'v8-options' && /^v8-/.test(value) ? value.slice(2) : value;
+  value !== 'v8-options' && /^v8-/.test(value) ? value.slice(3) : value;
 
 // sort options into "node" and "mocha" buckets
 Object.keys(opts).forEach(opt => {
-  opt = trimV8Option(opt);
   if (isNodeFlag(opt)) {
-    nodeArgs[opt] = opts[opt];
+    nodeArgs[trimV8Option(opt)] = opts[opt];
     disableTimeouts(opt);
   } else {
     mochaArgs[opt] = opts[opt];
@@ -90,9 +94,8 @@ if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
 }
 
 // allow --debug to invoke --inspect on Node.js v8 or newer.
-// these show up in childOpts because they are not recognized as valid node flags in this version of node.
 ['debug', 'debug-brk']
-  .filter(opt => opt in mochaArgs)
+  .filter(opt => opt in nodeArgs && !nodeEnv.has(opt))
   .forEach(opt => {
     const newOpt = opt === 'debug' ? 'inspect' : 'inspect-brk';
     warn(
@@ -100,10 +103,10 @@ if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
         process.version
       }; use "--${newOpt}" instead.`
     );
-    nodeArgs[newOpt] = mochaArgs[opt];
+    nodeArgs[newOpt] = nodeArgs[opt];
     mochaArgs.timeout = false;
     debug(`--${opt} -> ${newOpt}`);
-    delete mochaArgs[opt];
+    delete nodeArgs[opt];
   });
 
 // historical
@@ -115,8 +118,10 @@ if (nodeArgs.gc) {
   delete nodeArgs.gc;
 }
 
+debug('final node args', nodeArgs);
+
 const args = [].concat(
-  unparse(nodeArgs),
+  unparseNodeFlags(nodeArgs),
   mochaPath,
   unparse(mochaArgs, {alias: aliases})
 );
