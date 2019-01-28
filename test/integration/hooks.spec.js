@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
+var runMochaJSON = require('./helpers').runMochaJSON;
 var splitRegExp = require('./helpers').splitRegExp;
 var args = ['--reporter', 'dot'];
 
@@ -46,6 +47,18 @@ describe('hooks', function() {
       });
 
       assert.strictEqual(res.code, 0);
+      done();
+    });
+  });
+
+  it('current test title of all hooks', function(done) {
+    runMochaJSON('current-test-title.fixture.js', [], function(err, res) {
+      if (err) {
+        return done(err);
+      }
+      expect(res, 'to have passed')
+        .and('to have passed test count', 3)
+        .and('to have passed test order', 'test1 B', 'test1 C', 'test2 C');
       done();
     });
   });

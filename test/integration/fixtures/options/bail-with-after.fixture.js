@@ -50,7 +50,7 @@ describe('suite2', function () {
   before('before suite2', function () {});
   beforeEach('beforeEach suite2', function () {});
   it('test suite2', function () {
-    runOrder.push('test suite2 - should not run');
+    console.log('test suite2 - should not run');
   });
   afterEach('afterEach suite2', function () {});
   after('after suite2', function () {});

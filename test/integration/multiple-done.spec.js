@@ -90,7 +90,10 @@ describe('multiple calls to done()', function() {
     });
 
     it('correctly attributes the error', function() {
-      assert.strictEqual(res.failures[0].fullTitle, 'suite "before all" hook');
+      assert.strictEqual(
+        res.failures[0].fullTitle,
+        'suite "before all" hook in "suite"'
+      );
       assert.strictEqual(
         res.failures[0].err.message,
         'done() called multiple times'
@@ -116,7 +119,10 @@ describe('multiple calls to done()', function() {
     it('correctly attributes the errors', function() {
       assert.strictEqual(res.failures.length, 2);
       res.failures.forEach(function(failure) {
-        assert.strictEqual(failure.fullTitle, 'suite "before each" hook');
+        assert.strictEqual(
+          failure.fullTitle,
+          'suite "before each" hook in "suite"'
+        );
         assert.strictEqual(failure.err.message, 'done() called multiple times');
       });
     });
