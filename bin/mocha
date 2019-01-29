@@ -9,7 +9,7 @@
  * @private
  */
 
-const {deprecate} = require('../lib/utils');
+const {deprecate, warn} = require('../lib/utils');
 const {spawn} = require('child_process');
 const {loadOptions} = require('../lib/cli/options');
 const {isNodeFlag, impliesNoTimeouts} = require('../lib/cli/node-flags');
@@ -18,62 +18,65 @@ const debug = require('debug')('mocha:cli');
 const {aliases} = require('../lib/cli/run-option-metadata');
 
 const mochaPath = require.resolve('./_mocha');
-const childOpts = {};
-const nodeOpts = {};
+const mochaArgs = {};
+const nodeArgs = {};
 
 const opts = loadOptions(process.argv.slice(2));
 debug('loaded opts', opts);
 
+/**
+ * Given option/command `value`, disable timeouts if applicable
+ * @param {string} [value] - Value to check
+ * @ignore
+ */
+const disableTimeouts = value => {
+  if (impliesNoTimeouts(value)) {
+    debug(`option "${value}" disabled timeouts`);
+    mochaArgs.timeout = false;
+    delete mochaArgs.timeouts;
+    delete mochaArgs.t;
+  }
+};
+
+/**
+ * If `value` begins with `v8-` and is not explicitly `v8-options`, remove prefix
+ * @param {string} [value] - Value to check
+ * @returns {string} `value` with prefix (maybe) removed
+ * @ignore
+ */
+const trimV8Option = value =>
+  value !== 'v8-options' && /^v8-/.test(value) ? value.slice(2) : value;
+
+// sort options into "node" and "mocha" buckets
 Object.keys(opts).forEach(opt => {
+  opt = trimV8Option(opt);
   if (isNodeFlag(opt)) {
-    if (/^v8-/.test(opt)) {
-      opt = opt.slice(2);
-    }
-    nodeOpts[opt] = opts[opt];
-    if (impliesNoTimeouts(opt)) {
-      debug(`option "${opt}" disabled timeouts`);
-      childOpts.timeout = false;
-    }
+    nodeArgs[opt] = opts[opt];
+    disableTimeouts(opt);
   } else {
-    childOpts[opt] = opts[opt];
+    mochaArgs[opt] = opts[opt];
   }
 });
-
-// allow --debug to invoke --inspect on Node.js v8 or newer  nodeOpts.inspect = childOpts.debug;
-if (childOpts.debug) {
-  childOpts.timeout = false;
-  delete childOpts.debug;
-  debug('--debug -> --inspect');
-} else if (childOpts['debug-brk']) {
-  nodeOpts['inspect-brk'] = childOpts['debug-brk'];
-  childOpts.timeout = false;
-  delete childOpts['debug-brk'];
-  debug('--debug-brk -> --inspect-brk');
-}
-
-// historical
-if (nodeOpts.gc) {
-  deprecate(
-    '"-gc" is deprecated and will be removed from a future version of Mocha.  Use "--gc-global" instead.'
-  );
-  nodeOpts['gc-global'] = nodeOpts.gc;
-  delete nodeOpts.gc;
-}
 
 // Native debugger handling
 // see https://nodejs.org/api/debugger.html#debugger_debugger
 // look for 'debug' or 'inspect' that would launch this debugger,
 // remove it from Mocha's opts and prepend it to Node's opts.
 // also coerce depending on Node.js version.
-if (/^(debug|inspect)$/.test(childOpts._[0])) {
-  childOpts.timeout = false;
-  childOpts._.shift();
+// A deprecation warning will be printed by node, if applicable.
+// (mochaArgs._ are "positional" arguments, not prefixed with - or --)
+if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
+  const command = mochaArgs._.shift();
+  disableTimeouts(command);
   // don't conflict with inspector
-  delete nodeOpts['debug'];
-  delete nodeOpts['inspect'];
-  delete nodeOpts['debug-brk'];
-  delete nodeOpts['inspect-brk'];
-  nodeOpts._ = [
+  ['debug', 'inspect', 'debug-brk', 'inspect-brk']
+    .filter(opt => opt in nodeArgs || opt in mochaArgs)
+    .forEach(opt => {
+      warn(`command "${command}" provided; --${opt} ignored`);
+      delete nodeArgs[opt];
+      delete mochaArgs[opt];
+    });
+  nodeArgs._ = [
     parseInt(
       process.version
         .slice(1)
@@ -86,10 +89,36 @@ if (/^(debug|inspect)$/.test(childOpts._[0])) {
   ];
 }
 
+// allow --debug to invoke --inspect on Node.js v8 or newer.
+// these show up in childOpts because they are not recognized as valid node flags in this version of node.
+['debug', 'debug-brk']
+  .filter(opt => opt in mochaArgs)
+  .forEach(opt => {
+    const newOpt = opt === 'debug' ? 'inspect' : 'inspect-brk';
+    warn(
+      `"--${opt}" is not available in Node.js ${
+        process.version
+      }; use "--${newOpt}" instead.`
+    );
+    nodeArgs[newOpt] = mochaArgs[opt];
+    mochaArgs.timeout = false;
+    debug(`--${opt} -> ${newOpt}`);
+    delete mochaArgs[opt];
+  });
+
+// historical
+if (nodeArgs.gc) {
+  deprecate(
+    '"-gc" is deprecated and will be removed from a future version of Mocha.  Use "--gc-global" instead.'
+  );
+  nodeArgs['gc-global'] = nodeArgs.gc;
+  delete nodeArgs.gc;
+}
+
 const args = [].concat(
-  unparse(nodeOpts),
+  unparse(nodeArgs),
   mochaPath,
-  unparse(childOpts, {alias: aliases})
+  unparse(mochaArgs, {alias: aliases})
 );
 
 debug(`exec ${process.execPath} w/ args:`, args);
