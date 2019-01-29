@@ -669,4 +669,40 @@ describe('lib/utils', function() {
       expect(process.emitWarning, 'was not called');
     });
   });
+
+  describe('warn', function() {
+    var emitWarning;
+
+    beforeEach(function() {
+      if (process.emitWarning) {
+        emitWarning = process.emitWarning;
+        sandbox.stub(process, 'emitWarning');
+      } else {
+        process.emitWarning = sandbox.spy();
+      }
+    });
+
+    afterEach(function() {
+      // if this is not set, then we created it, so we should remove it.
+      if (!emitWarning) {
+        delete process.emitWarning;
+      }
+    });
+
+    it('should call process.emitWarning', function() {
+      utils.warn('foo');
+      expect(process.emitWarning, 'was called times', 1);
+    });
+
+    it('should not cache messages', function() {
+      utils.warn('foo');
+      utils.warn('foo');
+      expect(process.emitWarning, 'was called times', 2);
+    });
+
+    it('should ignore falsy messages', function() {
+      utils.warn('');
+      expect(process.emitWarning, 'was not called');
+    });
+  });
 });
