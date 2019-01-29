@@ -5,7 +5,12 @@ var spawn = require('cross-spawn').spawn;
 var path = require('path');
 var baseReporter = require('../../lib/reporters/base');
 
+var DEFAULT_FIXTURE = resolveFixturePath('__default__');
+var MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
+var _MOCHA_EXECUTABLE = require.resolve('../../bin/_mocha');
+
 module.exports = {
+  DEFAULT_FIXTURE: DEFAULT_FIXTURE,
   /**
    * Invokes the mocha binary for the given fixture with color output disabled.
    * Accepts an array of additional command line args to pass. The callback is
@@ -177,20 +182,56 @@ function toJSONRunResult(result) {
   return result;
 }
 
-function invokeMocha(args, fn, opts) {
-  args = [path.join(__dirname, '..', '..', 'bin', 'mocha')].concat(args);
+/**
+ * Creates arguments loading a default fixture if none provided
+ *
+ * @param {string[]|*} [args] - Arguments to `spawn`
+ * @returns string[]
+ */
+function defaultArgs(args) {
+  return !args || !args.length ? ['--file', DEFAULT_FIXTURE] : args;
+}
 
-  return _spawnMochaWithListeners(args, fn, opts);
+function invokeMocha(args, fn, opts) {
+  if (typeof args === 'function') {
+    opts = fn;
+    fn = args;
+    args = [];
+  }
+  return _spawnMochaWithListeners(
+    defaultArgs([MOCHA_EXECUTABLE].concat(args)),
+    fn,
+    opts
+  );
 }
 
 function invokeSubMocha(args, fn, opts) {
-  args = [path.join(__dirname, '..', '..', 'bin', '_mocha')].concat(args);
-
-  return _spawnMochaWithListeners(args, fn, opts);
+  if (typeof args === 'function') {
+    opts = fn;
+    fn = args;
+    args = [];
+  }
+  return _spawnMochaWithListeners(
+    defaultArgs([_MOCHA_EXECUTABLE].concat(args)),
+    fn,
+    opts
+  );
 }
 
+/**
+ * Spawns Mocha in a subprocess and returns an object containing its output and exit code
+ *
+ * @param {string[]} args - Path to executable and arguments
+ * @param {Function} fn - Callback
+ * @param {Object|string} [opts] - Options to `cross-spawn`, or 'pipe' for shortcut to `{stdio: pipe}`
+ * @returns {ChildProcess}
+ * @private
+ */
 function _spawnMochaWithListeners(args, fn, opts) {
   var output = '';
+  if (opts === 'pipe') {
+    opts = {stdio: 'pipe'};
+  }
   opts = Object.assign(
     {
       cwd: process.cwd(),
