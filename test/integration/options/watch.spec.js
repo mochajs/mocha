@@ -147,9 +147,9 @@ function runMochaWatch(args, cwd, change) {
     {cwd}
   );
 
-  return sleep(1000)
+  return sleep(1200)
     .then(() => change())
-    .then(() => sleep(1000))
+    .then(() => sleep(1200))
     .then(() => {
       mochaProcess.kill('SIGINT');
       return resultPromise;
