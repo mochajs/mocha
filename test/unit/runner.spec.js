@@ -513,7 +513,7 @@ describe('Runner', function() {
         return JSON.stringify(data);
       }
 
-      it('should not hang if the overlong error message is single line', function(done) {
+      it('should not hang if overlong error message is single line', function(done) {
         var hook = new Hook();
         hook.parent = suite;
         var message = genOverlongSingleLineMessage();
