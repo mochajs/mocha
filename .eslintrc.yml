@@ -9,7 +9,6 @@ parserOptions:
   ecmaVersion: 5
   ecmaFeatures:
     globalReturn: no
-    experimentalObjectRestSpread: no
     jsx: no
   sourceType: script
 rules:
@@ -18,23 +17,63 @@ rules:
     - safe
 overrides:
   - files:
-    - scripts/**/*.js
-    - package-scripts.js
-    - karma.conf.js
-    - .wallaby.js
-    - bin/*
+      - scripts/**/*.js
+      - package-scripts.js
+      - karma.conf.js
+      - .wallaby.js
+      - .eleventy.js
+      - bin/*
+      - lib/cli/**/*.js
+      - test/node-unit/**/*.js
+      - lib/growl.js
     parserOptions:
       ecmaVersion: 6
     env:
       browser: no
+
   - files:
-    - test/**/*.js
+      - test/**/*.{js,mjs}
     env:
       mocha: yes
     globals:
       expect: no
   - files:
-    - doc/**/*.js
-    env:
-      node: no
+      - bin/*
+      - lib/**/*.js
+    rules:
+      no-restricted-globals:
+        - error
+        - name: setTimeout
+          message: &GH-237 See https://github.com/mochajs/mocha/issues/237
+        - name: clearTimeout
+          message: *GH-237
+        - name: setInterval
+          message: *GH-237
+        - name: clearInterval
+          message: *GH-237
+        - name: setImmediate
+          message: *GH-237
+        - name: clearImmediate
+          message: *GH-237
+        - name: Date
+          message: *GH-237
+      no-restricted-modules:
+        - error
+        - timers
+      no-restricted-syntax:
+        - error
+        # disallow `global.setTimeout()`, `global.setInterval()`, etc.
+        - selector: 'CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]'
+          message: *GH-237
+        # disallow `new global.Date()`
+        - selector: 'NewExpression[callee.object.name=global][callee.property.name=Date]'
+          message: *GH-237
+        # disallow property access of `global.<timer>.*`
+        - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
+          message: *GH-237
 
+  - files:
+      - test/**/*.mjs
+    parserOptions:
+      ecmaVersion: 6
+      sourceType: module

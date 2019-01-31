@@ -1,5 +1,7 @@
 'use strict';
 
+var errors = require('../../lib/errors');
+var createNotSupportedError = errors.createNotSupportedError;
 /*
   This function prevents the constant use of creating a runnerEvent.
   runStr is the argument that defines the runnerEvent.
@@ -7,6 +9,8 @@
   arg1 and arg2 are the possible variables that need to be put into the
   scope of this function for the tests to run properly.
 */
+
+var createStatsCollector = require('../../lib/stats-collector');
 
 function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var runnerFunction = createRunnerFunction(
@@ -17,10 +21,12 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     arg1,
     arg2
   );
-  return {
+  var mockRunner = {
     on: runnerFunction,
     once: runnerFunction
   };
+  createStatsCollector(mockRunner);
+  return mockRunner;
 }
 
 function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
@@ -112,7 +118,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     default:
-      throw new Error(
+      throw createNotSupportedError(
         'This function does not support the runner string specified.'
       );
   }
@@ -155,9 +161,51 @@ function makeExpectedTest(
   };
 }
 
+/**
+ * Creates closure with reference to the reporter class constructor.
+ *
+ * @param {Function} ctor - Reporter class constructor
+ * @return {createRunReporterFunction~runReporter}
+ */
+function createRunReporterFunction(ctor) {
+  /**
+   * Run reporter using stream reassignment to capture output.
+   *
+   * @param {Object} stubSelf - Reporter-like stub instance
+   * @param {Runner} runner - Mock instance
+   * @param {Object} [options] - Reporter configuration settings
+   * @param {boolean} [tee=false] - Whether to echo output to screen
+   * @return {string[]} Lines of output written to `stdout`
+   */
+  var runReporter = function(stubSelf, runner, options, tee) {
+    var stdout = [];
+
+    // Reassign stream in order to make a copy of all reporter output
+    var stdoutWrite = process.stdout.write;
+    process.stdout.write = function(string, enc, callback) {
+      stdout.push(string);
+      if (tee) {
+        stdoutWrite.call(process.stdout, string, enc, callback);
+      }
+    };
+
+    // Invoke reporter
+    ctor.call(stubSelf, runner, options);
+
+    // Revert stream reassignment here so reporter output
+    // can't be corrupted if any test assertions throw
+    process.stdout.write = stdoutWrite;
+
+    return stdout;
+  };
+
+  return runReporter;
+}
+
 module.exports = {
-  createMockRunner: createMockRunner,
-  makeTest: makeTest,
   createElements: createElements,
-  makeExpectedTest: makeExpectedTest
+  createMockRunner: createMockRunner,
+  createRunReporterFunction: createRunReporterFunction,
+  makeExpectedTest: makeExpectedTest,
+  makeTest: makeTest
 };

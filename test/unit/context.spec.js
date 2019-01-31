@@ -78,7 +78,9 @@ describe('Context Siblings', function() {
 describe('methods', function() {
   describe('timeout()', function() {
     it('should return the timeout', function() {
-      expect(this.timeout(), 'to be', 200);
+      // set this explicitly because browser and node use diff settings
+      this.timeout(1000);
+      expect(this.timeout(), 'to be', 1000);
     });
   });
 

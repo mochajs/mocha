@@ -6,6 +6,7 @@ var Runner = mocha.Runner;
 var Test = mocha.Test;
 var Hook = mocha.Hook;
 var path = require('path');
+var fs = require('fs');
 var noop = mocha.utils.noop;
 
 describe('Runner', function() {
@@ -331,14 +332,26 @@ describe('Runner', function() {
 
       runner.fail(test, err);
     });
+
+    it('should return and not increment failures when test is pending', function() {
+      var test = new Test('a test');
+      suite.addTest(test);
+      test.pending = true;
+      runner.fail(test, new Error());
+      expect(runner.failures, 'to be', 0);
+    });
   });
 
   describe('.failHook(hook, err)', function() {
     it('should increment .failures', function() {
       expect(runner.failures, 'to be', 0);
-      runner.failHook(new Test('fail hook 1', noop), {});
+      var test1 = new Test('fail hook 1', noop);
+      var test2 = new Test('fail hook 2', noop);
+      suite.addTest(test1);
+      suite.addTest(test2);
+      runner.failHook(test1, new Error('error1'));
       expect(runner.failures, 'to be', 1);
-      runner.failHook(new Test('fail hook 2', noop), {});
+      runner.failHook(test2, new Error('error2'));
       expect(runner.failures, 'to be', 2);
     });
 
@@ -356,7 +369,8 @@ describe('Runner', function() {
 
     it('should emit "fail"', function(done) {
       var hook = new Hook();
-      var err = {};
+      hook.parent = suite;
+      var err = new Error('error');
       runner.on('fail', function(hook, err) {
         expect(hook, 'to be', hook);
         expect(err, 'to be', err);
@@ -365,23 +379,46 @@ describe('Runner', function() {
       runner.failHook(hook, err);
     });
 
-    it('should emit "end" if suite bail is true', function(done) {
-      var hook = new Hook();
-      var err = {};
-      suite.bail(true);
-      runner.on('end', done);
-      runner.failHook(hook, err);
-    });
-
     it('should not emit "end" if suite bail is not true', function(done) {
       var hook = new Hook();
-      var err = {};
+      hook.parent = suite;
+      var err = new Error('error');
       suite.bail(false);
       runner.on('end', function() {
         throw new Error('"end" was emit, but the bail is false');
       });
       runner.failHook(hook, err);
       done();
+    });
+  });
+
+  describe('.run(fn)', function() {
+    it('should emit "retry" when a retryable test fails', function(done) {
+      var retries = 2;
+      var retryableFails = 0;
+      var err = new Error('bear error');
+
+      var test = new Test('im a test about bears', function() {
+        if (retryableFails < retries) {
+          throw err;
+        }
+      });
+
+      suite.retries(retries);
+      suite.addTest(test);
+
+      runner.on('retry', function(testClone, testErr) {
+        retryableFails += 1;
+        expect(testClone.title, 'to be', test.title);
+        expect(testErr, 'to be', err);
+      });
+
+      runner.run(function(failures) {
+        expect(failures, 'to be', 0);
+        expect(retryableFails, 'to be', retries);
+
+        done();
+      });
     });
   });
 
@@ -424,6 +461,7 @@ describe('Runner', function() {
 
       it('should prettify the stack-trace', function(done) {
         var hook = new Hook();
+        hook.parent = suite;
         var err = new Error();
         // Fake stack-trace
         err.stack = stack.join('\n');
@@ -445,6 +483,7 @@ describe('Runner', function() {
 
       it('should display the full stack-trace', function(done) {
         var hook = new Hook();
+        hook.parent = suite;
         var err = new Error();
         // Fake stack-trace
         err.stack = stack.join('\n');
@@ -457,6 +496,73 @@ describe('Runner', function() {
         });
         runner.failHook(hook, err);
       });
+    });
+
+    describe('hugeStackTrace', function() {
+      beforeEach(function() {
+        if (path.sep !== '/') {
+          this.skip();
+        }
+      });
+
+      it('should not hang if the error message is ridiculously long single line', function(done) {
+        var hook = new Hook();
+        hook.parent = suite;
+        var data = [];
+        // mock a long message
+        for (var i = 0; i < 10000; i++) data[i] = {a: 1};
+        var message = JSON.stringify(data);
+        var err = new Error();
+        // Fake stack-trace
+        err.stack = [message].concat(stack).join('\n');
+
+        runner.on('fail', function(hook, err) {
+          expect(
+            err.stack
+              .split('\n')
+              .slice(1)
+              .join('\n'),
+            'to be',
+            stack.slice(0, 3).join('\n')
+          );
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+
+      it('should not hang if error message is ridiculously long multiple lines either', function(done) {
+        var hook = new Hook();
+        hook.parent = suite;
+        var fpath = path.join(__dirname, '../../mocha.js');
+        var message = fs.readFileSync(fpath, 'utf8');
+        var err = new Error();
+        // Fake stack-trace
+        err.stack = [message].concat(stack).join('\n');
+
+        runner.on('fail', function(hook, err) {
+          expect(
+            err.stack
+              .split('\n')
+              .slice(-3)
+              .join('\n'),
+            'to be',
+            stack.slice(0, 3).join('\n')
+          );
+          done();
+        });
+        runner.failHook(hook, err);
+      });
+    });
+  });
+
+  describe('abort', function() {
+    it('should set _abort property to true', function() {
+      runner.abort();
+      expect(runner._abort, 'to be true');
+    });
+
+    it('should return the Runner', function() {
+      expect(runner.abort(), 'to be', runner);
     });
   });
 });

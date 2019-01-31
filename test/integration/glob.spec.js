@@ -28,8 +28,19 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Could not find any test files matching pattern'
+            'Error: No test files found: "./*-none.js"'
           );
+        },
+        done
+      );
+    });
+
+    it('should handle multiple non-matching patterns', function(done) {
+      testGlob.shouldFail(
+        './*-none.js ./*-none-twice.js',
+        function(results) {
+          expect(results.stderr, 'to contain', 'Error: No test files found');
+          expect(results.stderr, 'not to contain', '*-none');
         },
         done
       );
@@ -47,7 +58,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Could not find any test files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -77,8 +88,18 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Could not find any test files matching pattern'
+            'Error: No test files found: "./*-none.js"'
           );
+        },
+        done
+      );
+    });
+
+    it('should handle multiple non-matching patterns', function(done) {
+      testGlob.shouldFail(
+        '"./*-none.js" "./*-none-twice.js"',
+        function(results) {
+          expect(results.stderr, 'to contain', 'Error: No test files found');
         },
         done
       );
@@ -96,7 +117,7 @@ describe('globbing', function() {
           expect(
             results.stderr,
             'to contain',
-            'Could not find any test files matching pattern'
+            'Warning: Cannot find any files matching pattern'
           );
         },
         done
@@ -125,7 +146,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'Could not find any test files matching pattern'
+              'Error: No test files found: "./**/*-none.js"'
             );
           },
           done
@@ -144,7 +165,7 @@ describe('globbing', function() {
             expect(
               results.stderr,
               'to contain',
-              'Could not find any test files matching pattern'
+              'Warning: Cannot find any files matching pattern'
             );
           },
           done
@@ -179,7 +200,7 @@ function execMochaWith(validate) {
       node +
         ' "' +
         path.join('..', '..', '..', '..', 'bin', 'mocha') +
-        '" -R json-stream ' +
+        '" -R json-stream --no-config ' +
         glob,
       {cwd: path.join(__dirname, 'fixtures', 'glob')},
       function(error, stdout, stderr) {

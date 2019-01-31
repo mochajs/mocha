@@ -12,7 +12,7 @@ describe('it.only via require("mocha")', function() {
   });
   describe('nested within a describe/context', function() {
     it.only('should run all enclosing beforeEach hooks', function() {
-      require('assert').equal(this.didRunBeforeEach, true);
+      require('assert').strictEqual(this.didRunBeforeEach, true);
     });
   });
 });

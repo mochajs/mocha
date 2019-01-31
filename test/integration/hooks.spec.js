@@ -1,13 +1,14 @@
 'use strict';
 
 var assert = require('assert');
-var helpers = require('./helpers');
+var runMocha = require('./helpers').runMocha;
+var runMochaJSON = require('./helpers').runMochaJSON;
 var splitRegExp = require('./helpers').splitRegExp;
 var args = ['--reporter', 'dot'];
 
 describe('hooks', function() {
   it('are ran in correct order', function(done) {
-    helpers.runMocha('cascade.fixture.js', args, function(err, res) {
+    runMocha('cascade.fixture.js', args, function(err, res) {
       var lines, expected;
 
       if (err) {
@@ -42,27 +43,23 @@ describe('hooks', function() {
       ];
 
       expected.forEach(function(line, i) {
-        assert.equal(lines[i], line);
+        assert.strictEqual(lines[i], line);
       });
 
-      assert.equal(res.code, 0);
+      assert.strictEqual(res.code, 0);
       done();
     });
   });
 
-  it('can fail a test in an afterEach hook', function(done) {
-    helpers.runMochaJSON(
-      'hooks/afterEach-hook-conditionally-fail.fixture.js',
-      args,
-      function(err, res) {
-        if (err) {
-          done(err);
-          return;
-        }
-        assert.equal(res.stats.passes, 2);
-        assert.equal(res.stats.failures, 1);
-        done();
+  it('current test title of all hooks', function(done) {
+    runMochaJSON('current-test-title.fixture.js', [], function(err, res) {
+      if (err) {
+        return done(err);
       }
-    );
+      expect(res, 'to have passed')
+        .and('to have passed test count', 3)
+        .and('to have passed test order', 'test1 B', 'test1 C', 'test2 C');
+      done();
+    });
   });
 });

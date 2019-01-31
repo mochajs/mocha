@@ -1,0 +1,7 @@
+require: test/setup
+ui: bdd
+global:
+  - okGlobalA,okGlobalB
+  - okGlobalC
+  - callback*
+timeout: 200

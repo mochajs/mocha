@@ -23,13 +23,19 @@ function getHeaderForRelation(rel) {
   return header;
 }
 
+console.error('Generating optimal netlify headers...');
+
 new AssetGraph({root: 'docs/_dist'})
   .loadAssets('*.html')
   .populate({
     followRelations: {type: 'HtmlAnchor', crossorigin: false}
   })
   .queue(function(assetGraph) {
-    const assets = assetGraph.findAssets({type: 'Html', isInline: false});
+    const assets = assetGraph.findAssets({
+      type: 'Html',
+      isInline: false,
+      isLoaded: true
+    });
 
     const headerMap = {};
 
@@ -106,7 +112,8 @@ new AssetGraph({root: 'docs/_dist'})
       });
 
       console.log('');
+
+      console.error('netlify headers done!');
     });
   })
-  .writeAssetsToDisc({isLoaded: true})
   .run();
