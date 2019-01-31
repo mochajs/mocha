@@ -1,6 +1,5 @@
 'use strict';
 
-var fs = require('fs');
 var path = require('path');
 var mocha = require('../../lib/mocha');
 var Suite = mocha.Suite;
@@ -452,13 +451,27 @@ describe('Runner', function() {
       'at processImmediate [as _immediateCallback] (timers.js:321:17)'
     ];
 
-    describe('shortStackTrace', function() {
-      beforeEach(function() {
-        if (process.platform === 'win32') {
-          this.skip();
-        }
-      });
+    before(function() {
+      // Only for Node running on Windows
+      if ('platform' in process && process.platform === 'win32') {
+        var addDrive = function(str) {
+          var drive = 'C:';
+          var pos = str.indexOf(path.posix.sep);
+          return pos !== -1 ? str.slice(0, pos) + drive + str.slice(pos) : str;
+        };
 
+        var useWinPathSep = function(str) {
+          return str.split(path.posix.sep).join(path.win32.sep);
+        };
+
+        // Fake Windows pathnames in stacktrace
+        stack = stack.map(function(line) {
+          return useWinPathSep(addDrive(line));
+        });
+      }
+    });
+
+    describe('shortStackTrace', function() {
       it('should prettify the stack-trace', function(done) {
         var hook = new Hook();
         hook.parent = suite;
@@ -475,12 +488,6 @@ describe('Runner', function() {
     });
 
     describe('longStackTrace', function() {
-      beforeEach(function() {
-        if (process.platform === 'win32') {
-          this.skip();
-        }
-      });
-
       it('should display the full stack-trace', function(done) {
         var hook = new Hook();
         hook.parent = suite;
@@ -499,18 +506,27 @@ describe('Runner', function() {
     });
 
     describe('hugeStackTrace', function() {
-      beforeEach(function() {
-        if (process.platform === 'win32') {
-          this.skip();
-        }
-      });
-
+      // Generate 64k string
       function genOverlongSingleLineMessage() {
+        var n = 8200;
         var data = [];
-        for (var i = 0; i < 10000; i++) {
+        data.length = n;
+        for (var i = 0; i < n; i++) {
           data[i] = {a: 1};
         }
         return JSON.stringify(data);
+      }
+
+      // Generate 64k string
+      function genOverlongMultiLineMessage() {
+        var n = 1150;
+        var data = [];
+        data.length = n;
+        var str = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+        for (var i = 0; i < n; i++) {
+          data[i] = str;
+        }
+        return data.join('\n');
       }
 
       it('should not hang if overlong error message is single line', function(done) {
@@ -532,11 +548,6 @@ describe('Runner', function() {
         });
         runner.failHook(hook, err);
       });
-
-      function genOverlongMultiLineMessage() {
-        var fpath = path.join(__dirname, '..', '..', 'mocha.js');
-        return fs.readFileSync(fpath, 'utf8');
-      }
 
       it('should not hang if overlong error message is multiple lines', function(done) {
         var hook = new Hook();
