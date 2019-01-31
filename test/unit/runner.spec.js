@@ -472,6 +472,12 @@ describe('Runner', function() {
     });
 
     describe('shortStackTrace', function() {
+      before(function() {
+        if ('browser' in process) {
+          this.skip();
+        }
+      });
+
       it('should prettify the stack-trace', function(done) {
         var hook = new Hook();
         hook.parent = suite;
@@ -506,6 +512,12 @@ describe('Runner', function() {
     });
 
     describe('hugeStackTrace', function() {
+      before(function() {
+        if ('browser' in process) {
+          this.skip();
+        }
+      });
+
       // Generate 64k string
       function genOverlongSingleLineMessage() {
         var n = 8200;
