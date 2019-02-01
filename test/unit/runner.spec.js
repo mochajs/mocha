@@ -1,12 +1,11 @@
 'use strict';
 
+var path = require('path');
 var mocha = require('../../lib/mocha');
 var Suite = mocha.Suite;
 var Runner = mocha.Runner;
 var Test = mocha.Test;
 var Hook = mocha.Hook;
-var path = require('path');
-var fs = require('fs');
 var noop = mocha.utils.noop;
 
 describe('Runner', function() {
@@ -452,9 +451,29 @@ describe('Runner', function() {
       'at processImmediate [as _immediateCallback] (timers.js:321:17)'
     ];
 
+    before(function() {
+      // Only for Node running on Windows
+      if (process.platform === 'win32') {
+        var addDrive = function(str) {
+          var drive = 'C:';
+          var pos = str.indexOf(path.posix.sep);
+          return pos !== -1 ? str.slice(0, pos) + drive + str.slice(pos) : str;
+        };
+
+        var useWinPathSep = function(str) {
+          return str.split(path.posix.sep).join(path.win32.sep);
+        };
+
+        // Fake Windows pathnames in stacktrace
+        stack = stack.map(function(line) {
+          return useWinPathSep(addDrive(line));
+        });
+      }
+    });
+
     describe('shortStackTrace', function() {
-      beforeEach(function() {
-        if (path.sep !== '/') {
+      before(function() {
+        if (process.browser) {
           this.skip();
         }
       });
@@ -475,12 +494,6 @@ describe('Runner', function() {
     });
 
     describe('longStackTrace', function() {
-      beforeEach(function() {
-        if (path.sep !== '/') {
-          this.skip();
-        }
-      });
-
       it('should display the full stack-trace', function(done) {
         var hook = new Hook();
         hook.parent = suite;
@@ -499,29 +512,47 @@ describe('Runner', function() {
     });
 
     describe('hugeStackTrace', function() {
-      beforeEach(function() {
-        if (path.sep !== '/') {
+      before(function() {
+        if (process.browser) {
           this.skip();
         }
       });
 
-      it('should not hang if the error message is ridiculously long single line', function(done) {
+      // Generate 64k string
+      function genOverlongSingleLineMessage() {
+        var n = 8200;
+        var data = [];
+        data.length = n;
+        for (var i = 0; i < n; i++) {
+          data[i] = {a: 1};
+        }
+        return JSON.stringify(data);
+      }
+
+      // Generate 64k string
+      function genOverlongMultiLineMessage() {
+        var n = 1150;
+        var data = [];
+        data.length = n;
+        var str = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+        for (var i = 0; i < n; i++) {
+          data[i] = str;
+        }
+        return data.join('\n');
+      }
+
+      it('should not hang if overlong error message is single line', function(done) {
         var hook = new Hook();
         hook.parent = suite;
-        var data = [];
-        // mock a long message
-        for (var i = 0; i < 10000; i++) data[i] = {a: 1};
-        var message = JSON.stringify(data);
+        var message = genOverlongSingleLineMessage();
         var err = new Error();
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
         runner.on('fail', function(hook, err) {
+          var filteredErrStack = err.stack.split('\n').slice(1);
           expect(
-            err.stack
-              .split('\n')
-              .slice(1)
-              .join('\n'),
+            filteredErrStack.join('\n'),
             'to be',
             stack.slice(0, 3).join('\n')
           );
@@ -530,21 +561,18 @@ describe('Runner', function() {
         runner.failHook(hook, err);
       });
 
-      it('should not hang if error message is ridiculously long multiple lines either', function(done) {
+      it('should not hang if overlong error message is multiple lines', function(done) {
         var hook = new Hook();
         hook.parent = suite;
-        var fpath = path.join(__dirname, '../../mocha.js');
-        var message = fs.readFileSync(fpath, 'utf8');
+        var message = genOverlongMultiLineMessage();
         var err = new Error();
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
         runner.on('fail', function(hook, err) {
+          var filteredErrStack = err.stack.split('\n').slice(-3);
           expect(
-            err.stack
-              .split('\n')
-              .slice(-3)
-              .join('\n'),
+            filteredErrStack.join('\n'),
             'to be',
             stack.slice(0, 3).join('\n')
           );
