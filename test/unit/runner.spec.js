@@ -453,7 +453,7 @@ describe('Runner', function() {
 
     before(function() {
       // Only for Node running on Windows
-      if ('platform' in process && process.platform === 'win32') {
+      if (process.platform === 'win32') {
         var addDrive = function(str) {
           var drive = 'C:';
           var pos = str.indexOf(path.posix.sep);
@@ -473,7 +473,7 @@ describe('Runner', function() {
 
     describe('shortStackTrace', function() {
       before(function() {
-        if ('browser' in process) {
+        if (process.browser) {
           this.skip();
         }
       });
@@ -513,7 +513,7 @@ describe('Runner', function() {
 
     describe('hugeStackTrace', function() {
       before(function() {
-        if ('browser' in process) {
+        if (process.browser) {
           this.skip();
         }
       });
