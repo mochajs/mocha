@@ -151,6 +151,12 @@ a.direct-link {
 ul {
   margin-top: 20px;
   padding: 0 15px;
+  box-sizing: content-box;
+}
+
+.two-column-display {
+  margin-top: 20px;
+  padding: 0 15px;
   column-gap: 30px;
   column-count: 2;
   box-sizing: content-box;
