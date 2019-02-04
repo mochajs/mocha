@@ -833,7 +833,7 @@ Rules & Behavior
                              return a Promise                          [boolean]
   --bail, -b                 Abort ("bail") after first test failure   [boolean]
   --check-leaks              Check for global variable leaks           [boolean]
-  --delay                    Delay initial execution of root suite
+  --delay                    Delay initial execution of root suite     [boolean]
   --exit                     Force Mocha to quit after tests complete  [boolean]
   --forbid-only              Fail if exclusive test(s) encountered     [boolean]
   --forbid-pending           Fail if pending test(s) encountered       [boolean]
@@ -872,7 +872,7 @@ File Handling
                                    suite execution     [array] [default: (none)]
   --recursive                      Look for tests in subdirectories    [boolean]
   --require, -r                    Require module      [array] [default: (none)]
-  --sort, -S                       Sort test files
+  --sort, -S                       Sort test files                     [boolean]
   --watch, -w                      Watch files in the current working directory
                                    for changes                         [boolean]
 
@@ -888,8 +888,8 @@ Positional Arguments
 Other Options
   --help, -h     Show usage information & exit                         [boolean]
   --version, -V  Show version number & exit                            [boolean]
-  --interfaces   List built-in user interfaces & exit
-  --reporters    List built-in reporters & exit
+  --interfaces   List built-in user interfaces & exit                  [boolean]
+  --reporters    List built-in reporters & exit                        [boolean]
 
 Mocha Resources
     Chat: https://gitter.im/mochajs/mocha
