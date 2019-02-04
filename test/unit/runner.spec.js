@@ -103,9 +103,9 @@ describe('Runner', function() {
       var test = new Test('im a test', noop);
       runner.checkGlobals();
       global.foo = 'bar';
-      runner.on('fail', function(_test, err) {
+      runner.on('fail', function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(err.message, 'to be', 'global leak detected: foo');
+        expect(_err, 'to have message', 'global leak detected: foo');
         delete global.foo;
         done();
       });
@@ -141,7 +141,7 @@ describe('Runner', function() {
       var newRunner = new Runner(suite);
 
       // make the prop enumerable again.
-      global.XMLHttpRequest = function() {};
+      global.XMLHttpRequest = noop;
       expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', true);
 
       // verify the test hasn't failed.
@@ -157,9 +157,9 @@ describe('Runner', function() {
       runner.checkGlobals();
       global.foo = 'bar';
       global.bar = 'baz';
-      runner.on('fail', function(_test, err) {
+      runner.on('fail', function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(err.message, 'to be', 'global leaks detected: foo, bar');
+        expect(_err, 'to have message', 'global leaks detected: foo, bar');
         delete global.foo;
         delete global.bar;
         done();
@@ -191,9 +191,9 @@ describe('Runner', function() {
 
       global.foo = 'bar';
       global.bar = 'baz';
-      runner.on('fail', function(test, err) {
-        expect(test.title, 'to be', 'im a test about lions');
-        expect(err.message, 'to be', 'global leak detected: bar');
+      runner.on('fail', function(_test, _err) {
+        expect(_test.title, 'to be', 'im a test about lions');
+        expect(_err, 'to have message', 'global leak detected: bar');
         delete global.foo;
         done();
       });
@@ -206,21 +206,21 @@ describe('Runner', function() {
         delete global.derp;
         done();
       });
-      runner.checkGlobals(new Test('herp', function() {}));
+      runner.checkGlobals(new Test('herp', noop));
     });
   });
 
   describe('.hook(name, fn)', function() {
     it('should execute hooks after failed test if suite bail is true', function(done) {
-      runner.fail(new Test('failed test', noop));
+      runner.fail(new Test('failed test', noop), new Error());
       suite.bail(true);
       suite.afterEach(function() {
         suite.afterAll(function() {
           done();
         });
       });
-      runner.hook('afterEach', function() {});
-      runner.hook('afterAll', function() {});
+      runner.hook('afterEach', noop);
+      runner.hook('afterAll', noop);
     });
   });
 
@@ -229,7 +229,7 @@ describe('Runner', function() {
       expect(runner.failures, 'to be', 0);
       runner.fail(new Test('one', noop), {});
       expect(runner.failures, 'to be', 1);
-      runner.fail(new Test('two', noop), {});
+      runner.fail(new Test('two', noop), new Error());
       expect(runner.failures, 'to be', 2);
     });
 
@@ -242,9 +242,10 @@ describe('Runner', function() {
     it('should emit "fail"', function(done) {
       var test = new Test('some other test', noop);
       var err = {};
-      runner.on('fail', function(test, err) {
-        expect(test, 'to be', test);
-        expect(err, 'to be', err);
+      runner.on('fail', function(_test, _err) {
+        expect(_test, 'to be', test);
+        expect(_err, 'to be an', Error);
+        expect(_err, 'not to be', {});
         done();
       });
       runner.fail(test, err);
@@ -253,10 +254,11 @@ describe('Runner', function() {
     it('should emit a helpful message when failed with a string', function(done) {
       var test = new Test('helpful test', noop);
       var err = 'string';
-      runner.on('fail', function(test, err) {
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'to be an', Error);
         expect(
-          err.message,
-          'to be',
+          _err,
+          'to have message',
           'the string "string" was thrown, throw an Error :)'
         );
         done();
@@ -267,8 +269,9 @@ describe('Runner', function() {
     it('should emit a the error when failed with an Error instance', function(done) {
       var test = new Test('a test', noop);
       var err = new Error('an error message');
-      runner.on('fail', function(test, err) {
-        expect(err.message, 'to be', 'an error message');
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'to be an', Error);
+        expect(_err, 'to have message', 'an error message');
         done();
       });
       runner.fail(test, err);
@@ -277,8 +280,9 @@ describe('Runner', function() {
     it('should emit the error when failed with an Error-like object', function(done) {
       var test = new Test('a test', noop);
       var err = {message: 'an error message'};
-      runner.on('fail', function(test, err) {
-        expect(err.message, 'to be', 'an error message');
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'not to be an', Error);
+        expect(_err.message, 'to be', 'an error message');
         done();
       });
       runner.fail(test, err);
@@ -287,10 +291,11 @@ describe('Runner', function() {
     it('should emit a helpful message when failed with an Object', function(done) {
       var test = new Test('a test', noop);
       var err = {x: 1};
-      runner.on('fail', function(test, err) {
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'to be an', Error);
         expect(
-          err.message,
-          'to be',
+          _err,
+          'to have message',
           'the object {\n  "x": 1\n} was thrown, throw an Error :)'
         );
         done();
@@ -301,10 +306,11 @@ describe('Runner', function() {
     it('should emit a helpful message when failed with an Array', function(done) {
       var test = new Test('a test', noop);
       var err = [1, 2];
-      runner.on('fail', function(test, err) {
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'to be an', Error);
         expect(
-          err.message,
-          'to be',
+          _err,
+          'to have message',
           'the array [\n  1\n  2\n] was thrown, throw an Error :)'
         );
         done();
@@ -324,8 +330,8 @@ describe('Runner', function() {
       });
       var test = new Test('a test', noop);
 
-      runner.on('fail', function(test, err) {
-        expect(err.message, 'to be', 'not evil');
+      runner.on('fail', function(_test, _err) {
+        expect(_err, 'to have message', 'not evil');
         done();
       });
 
@@ -370,9 +376,9 @@ describe('Runner', function() {
       var hook = new Hook();
       hook.parent = suite;
       var err = new Error('error');
-      runner.on('fail', function(hook, err) {
-        expect(hook, 'to be', hook);
-        expect(err, 'to be', err);
+      runner.on('fail', function(_hook, _err) {
+        expect(_hook, 'to be', hook);
+        expect(_err, 'to be', err);
         done();
       });
       runner.failHook(hook, err);
@@ -485,8 +491,8 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = stack.join('\n');
 
-        runner.on('fail', function(hook, err) {
-          expect(err.stack, 'to be', stack.slice(0, 3).join('\n'));
+        runner.on('fail', function(_hook, _err) {
+          expect(_err.stack, 'to be', stack.slice(0, 3).join('\n'));
           done();
         });
         runner.failHook(hook, err);
@@ -503,8 +509,8 @@ describe('Runner', function() {
         // Add --stack-trace option
         runner.fullStackTrace = true;
 
-        runner.on('fail', function(hook, err) {
-          expect(err.stack, 'to be', stack.join('\n'));
+        runner.on('fail', function(_hook, _err) {
+          expect(_err.stack, 'to be', stack.join('\n'));
           done();
         });
         runner.failHook(hook, err);
@@ -549,8 +555,8 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(hook, err) {
-          var filteredErrStack = err.stack.split('\n').slice(1);
+        runner.on('fail', function(_hook, _err) {
+          var filteredErrStack = _err.stack.split('\n').slice(1);
           expect(
             filteredErrStack.join('\n'),
             'to be',
@@ -569,8 +575,8 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(hook, err) {
-          var filteredErrStack = err.stack.split('\n').slice(-3);
+        runner.on('fail', function(_hook, _err) {
+          var filteredErrStack = _err.stack.split('\n').slice(-3);
           expect(
             filteredErrStack.join('\n'),
             'to be',
