@@ -245,7 +245,7 @@ describe('Runner', function() {
       runner.on('fail', function(_test, _err) {
         expect(_test, 'to be', test);
         expect(_err, 'to be an', Error);
-        expect(_err, 'to not be', {});
+        expect(_err, 'not to be', {});
         done();
       });
       runner.fail(test, err);
@@ -281,7 +281,7 @@ describe('Runner', function() {
       var test = new Test('a test', noop);
       var err = {message: 'an error message'};
       runner.on('fail', function(_test, _err) {
-        expect(_err, 'to not be an', Error);
+        expect(_err, 'not to be an', Error);
         expect(_err.message, 'to be', 'an error message');
         done();
       });
