@@ -37,7 +37,7 @@ debug('loaded opts', opts);
 const disableTimeouts = value => {
   if (impliesNoTimeouts(value)) {
     debug(`option "${value}" disabled timeouts`);
-    mochaArgs.timeout = false;
+    mochaArgs.timeout = 0;
     delete mochaArgs.timeouts;
     delete mochaArgs.t;
   }

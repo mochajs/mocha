@@ -3,15 +3,8 @@
 var helpers = require('../helpers');
 var invokeMocha = helpers.invokeMocha;
 var DEFAULT_FIXTURE = helpers.DEFAULT_FIXTURE;
-var platform = require('os').platform();
 
 describe('--debug', function() {
-  before(function() {
-    if (platform === 'win32') {
-      this.skip();
-    }
-  });
-
   describe('Node.js v8+', function() {
     before(function() {
       if (process.version.substring(0, 2) === 'v6') {
@@ -54,8 +47,8 @@ describe('--debug', function() {
 
       // debugger must be manually killed
       setTimeout(function() {
-        proc.kill('SIGINT');
-      }, 1000);
+        process.kill(proc.pid, 'SIGINT');
+      }, 2000);
     });
 
     it('should respect custom host/port', function(done) {
@@ -108,10 +101,7 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
-            'to contain output',
-            /Debugger listening/i
-          );
+          expect(res, 'to contain output', /Debugger listening/i);
           done();
         },
         'pipe'
@@ -119,8 +109,8 @@ describe('--debug', function() {
 
       // debugger must be manually killed
       setTimeout(function() {
-        proc.kill('SIGINT');
-      }, 1000);
+        process.kill(proc.pid, 'SIGINT');
+      }, 2000);
     });
 
     it('should respect custom host/port', function(done) {
@@ -130,7 +120,8 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
+          expect(
+            res,
             'to contain output',
             /Debugger listening on .*127.0.0.1:9229/i
           );
@@ -140,8 +131,8 @@ describe('--debug', function() {
       );
 
       setTimeout(function() {
-        proc.kill('SIGINT');
-      }, 1000);
+        process.kill(proc.pid, 'SIGINT');
+      }, 2000);
     });
   });
 });
