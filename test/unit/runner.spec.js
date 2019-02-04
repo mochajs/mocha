@@ -103,9 +103,9 @@ describe('Runner', function() {
       var test = new Test('im a test', noop);
       runner.checkGlobals();
       global.foo = 'bar';
-      runner.on('fail', function(_test, err) {
+      runner.on('fail', function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(err.message, 'to be', 'global leak detected: foo');
+        expect(_err, 'to have message', "global leak detected: 'foo'");
         delete global.foo;
         done();
       });
@@ -157,9 +157,9 @@ describe('Runner', function() {
       runner.checkGlobals();
       global.foo = 'bar';
       global.bar = 'baz';
-      runner.on('fail', function(_test, err) {
+      runner.on('fail', function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(err.message, 'to be', 'global leaks detected: foo, bar');
+        expect(_err, 'to have message', "global leaks detected: 'foo', 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -191,10 +191,11 @@ describe('Runner', function() {
 
       global.foo = 'bar';
       global.bar = 'baz';
-      runner.on('fail', function(test, err) {
-        expect(test.title, 'to be', 'im a test about lions');
-        expect(err.message, 'to be', 'global leak detected: bar');
+      runner.on('fail', function(_test, _err) {
+        expect(_test.title, 'to be', 'im a test about lions');
+        expect(_err, 'to have message', "global leak detected: 'bar'");
         delete global.foo;
+        // :BUG?: 'global.bar' still exists when next test run...
         done();
       });
       runner.checkGlobals(test);
@@ -206,7 +207,7 @@ describe('Runner', function() {
         delete global.derp;
         done();
       });
-      runner.checkGlobals(new Test('herp', function() {}));
+      runner.checkGlobals(new Test('herp', noop));
     });
   });
 
