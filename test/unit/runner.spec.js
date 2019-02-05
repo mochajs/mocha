@@ -194,23 +194,23 @@ describe('Runner', function() {
 
       suite.addTest(test);
 
-      global.foo = 'bar';
-      global.bar = 'baz';
+      global.foo = 'whitelisted';
+      global.bar = 'detect-me';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'im a test about lions');
         expect(_err, 'to have message', "global leak detected: 'bar'");
         delete global.foo;
-        // :BUG?: 'global.bar' still exists when next test run...
+        delete global.bar;
         done();
       });
       runner.checkGlobals(test);
     });
 
-    it('should emit "fail" when a global beginning with d is introduced', function(done) {
+    it('should emit "fail" when a global beginning with "d" is introduced', function(done) {
       global.derp = 'bar';
-      runner.on(EVENT_TEST_FAIL, function(test, err) {
-        expect(test.title, 'to be', 'herp');
-        expect(err.message, 'to be', 'global leak detected: derp');
+      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        expect(_test.title, 'to be', 'herp');
+        expect(_err, 'to have message', "global leak detected: 'derp'");
         delete global.derp;
         done();
       });
