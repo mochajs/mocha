@@ -10,7 +10,7 @@ exports.mixinMochaAssertions = function(expect) {
           Object.prototype.toString.call(v) === '[object Object]' &&
           typeof v.output === 'string' &&
           typeof v.code === 'number' &&
-          Object.keys(v).length === 2
+          Array.isArray(v.args)
         );
       }
     })

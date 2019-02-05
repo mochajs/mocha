@@ -1,11 +1,12 @@
 'use strict';
 
-var mocha = require('../../lib/mocha');
-var utils = mocha.utils;
-var Runnable = mocha.Runnable;
-var Suite = mocha.Suite;
+var Mocha = require('../../lib/mocha');
+var utils = Mocha.utils;
+var Runnable = Mocha.Runnable;
+var Suite = Mocha.Suite;
 var sinon = require('sinon');
 var Pending = require('../../lib/pending');
+var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
   describe('#timeout(ms)', function() {
@@ -682,7 +683,7 @@ describe('Runnable(title, fn)', function() {
     it('should return `true` if test has failed', function() {
       var runnable = new Runnable('foo', function() {});
       // runner sets the state
-      runnable.state = 'failed';
+      runnable.state = STATE_FAILED;
       runnable.run(function() {
         expect(runnable.isFailed(), 'to be false');
       });

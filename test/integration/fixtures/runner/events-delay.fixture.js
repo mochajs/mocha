@@ -18,6 +18,8 @@ var EVENT_TEST_PENDING = constants.EVENT_TEST_PENDING;
 var EVENT_TEST_RETRY = constants.EVENT_TEST_RETRY;
 
 var emitOrder = [
+  EVENT_DELAY_BEGIN,
+  EVENT_DELAY_END,
   EVENT_SUITE_BEGIN, // incorrect order
   EVENT_RUN_BEGIN,
   EVENT_SUITE_BEGIN,
@@ -52,13 +54,18 @@ Runner.prototype.emit = function(event, ...args) {
   return realEmit.call(this, event, ...args);
 };
 
-describe('suite A', function() {
-  before('before', function() {});
-  beforeEach('beforeEach', function() {});
-  it('test A', function() {});
-  describe('suite B', function() {
-    it('test B', function() {});
+setTimeout(function() {
+
+  describe('suite A', function() {
+    before('before', function() {});
+    beforeEach('beforeEach', function() {});
+    it('test A', function() {});
+    describe('suite B', function() {
+      it('test B', function() {});
+    });
+    afterEach('afterEach', function() {});
+    after('after', function() {});
   });
-  afterEach('afterEach', function() {});
-  after('after', function() {});
-});
+
+  run();
+}, 100);

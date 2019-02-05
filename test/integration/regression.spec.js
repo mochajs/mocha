@@ -31,7 +31,7 @@ describe('regressions', function() {
       'fixtures',
       'regression',
       '1794',
-      'simple-ui.js'
+      'simple-ui.fixture.js'
     );
     var args = ['--require', simpleUiPath, '--ui', 'simple-ui'];
     run('regression/1794/issue-1794.fixture.js', args, function(err, res) {

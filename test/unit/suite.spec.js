@@ -1,8 +1,10 @@
 'use strict';
 
-var mocha = require('../../lib/mocha');
-var Suite = mocha.Suite;
-var Test = mocha.Test;
+var Mocha = require('../../lib/mocha');
+var Suite = Mocha.Suite;
+var Test = Mocha.Test;
+var sinon = require('sinon');
+var utils = Mocha.utils;
 
 function supportsFunctionNames() {
   // eslint-disable-next-line no-extra-parens
@@ -10,6 +12,15 @@ function supportsFunctionNames() {
 }
 
 describe('Suite', function() {
+  var sandbox;
+  beforeEach(function() {
+    sandbox = sinon.createSandbox();
+  });
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   describe('.clone()', function() {
     beforeEach(function() {
       this.suite = new Suite('To be cloned');
@@ -497,7 +508,11 @@ describe('Suite', function() {
     });
   });
 
-  describe('initialization', function() {
+  describe('constructor', function() {
+    beforeEach(function() {
+      sandbox.stub(utils, 'deprecate');
+    });
+
     /* eslint no-new: off */
     it("should throw an error if the title isn't a string", function() {
       expect(function() {
@@ -513,6 +528,13 @@ describe('Suite', function() {
       expect(function() {
         new Suite('Bdd suite', 'root');
       }, 'not to throw');
+    });
+
+    it('should report listened-for deprecated events as deprecated', function() {
+      new Suite('foo').on(Suite.constants.EVENT_SUITE_ADD_TEST, function() {});
+      expect(utils.deprecate, 'to have all calls satisfying', [
+        /Event "[^"]+" is deprecated/i
+      ]);
     });
   });
 
