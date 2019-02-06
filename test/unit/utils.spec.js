@@ -705,4 +705,24 @@ describe('lib/utils', function() {
       expect(process.emitWarning, 'was not called');
     });
   });
+
+  describe('createMap', function() {
+    it('should return an object with a null prototype', function() {
+      expect(Object.getPrototypeOf(utils.createMap()), 'to be', null);
+    });
+
+    it('should add props to the object', function() {
+      expect(utils.createMap({foo: 'bar'}), 'to exhaustively satisfy', {
+        foo: 'bar'
+      });
+    });
+
+    it('should add props from all object parameters to the object', function() {
+      expect(
+        utils.createMap({foo: 'bar'}, {bar: 'baz'}),
+        'to exhaustively satisfy',
+        {foo: 'bar', bar: 'baz'}
+      );
+    });
+  });
 });

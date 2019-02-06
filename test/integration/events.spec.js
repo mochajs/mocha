@@ -56,4 +56,23 @@ describe('event order', function() {
       );
     });
   });
+
+  describe('--delay test case', function() {
+    it('should assert --delay event order', function(done) {
+      runMochaJSON('runner/events-delay.fixture.js', ['--delay'], function(
+        err,
+        res
+      ) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have passed')
+          .and('to have passed test count', 2)
+          .and('to have passed test order', 'test A', 'test B')
+          .and('to have failed test count', 0);
+        done();
+      });
+    });
+  });
 });

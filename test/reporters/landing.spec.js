@@ -1,7 +1,11 @@
 'use strict';
 
-var reporters = require('../../').reporters;
+var Mocha = require('../..');
+var reporters = Mocha.reporters;
 var Landing = reporters.Landing;
+var constants = Mocha.Runnable.constants;
+var STATE_FAILED = constants.STATE_FAILED;
+var STATE_PASSED = constants.STATE_PASSED;
 var Base = reporters.Base;
 
 var createMockRunner = require('./helpers').createMockRunner;
@@ -67,7 +71,7 @@ describe('Landing reporter', function() {
     describe('if test has failed', function() {
       it('should write expected landing strip', function() {
         var test = {
-          state: 'failed'
+          state: STATE_FAILED
         };
         runner = createMockRunner('test end', 'test end', null, null, test);
         runner.total = 12;
@@ -79,7 +83,7 @@ describe('Landing reporter', function() {
     describe('if test has not failed', function() {
       it('should write expected landing strip', function() {
         var test = {
-          state: 'success'
+          state: STATE_PASSED
         };
         runner = createMockRunner('test end', 'test end', null, null, test);
 
