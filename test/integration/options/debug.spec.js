@@ -19,10 +19,7 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
-            'to contain output',
-            /Debugger listening/i
-          );
+          expect(res, 'to contain output', /Debugger listening/i);
           done();
         },
         'pipe'
@@ -36,10 +33,7 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
-            'to contain output',
-            /Debugger listening/i
-          );
+          expect(res, 'to contain output', /Debugger listening/i);
           done();
         },
         'pipe'
@@ -58,7 +52,8 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
+          expect(
+            res,
             'to contain output',
             /Debugger listening on .*127.0.0.1:9229/i
           );
@@ -75,10 +70,7 @@ describe('--debug', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed').and(
-            'to contain output',
-            /"--debug" is not available/i
-          );
+          expect(res, 'to contain output', /"--debug" is not available/i);
           done();
         },
         'pipe'
