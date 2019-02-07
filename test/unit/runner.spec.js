@@ -563,7 +563,7 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(_hook, _err) {
+        runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
           var filteredErrStack = _err.stack.split('\n').slice(1);
           expect(
             filteredErrStack.join('\n'),
@@ -583,7 +583,7 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(_hook, _err) {
+        runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
           var filteredErrStack = _err.stack.split('\n').slice(-3);
           expect(
             filteredErrStack.join('\n'),
