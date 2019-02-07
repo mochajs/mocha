@@ -5,6 +5,7 @@ var fs = require('fs');
 var crypto = require('crypto');
 var path = require('path');
 var run = require('./helpers').runMocha;
+var dQuote = require('./utils').dQuote;
 
 describe('reporters', function() {
   describe('markdown', function() {
@@ -213,13 +214,9 @@ describe('reporters', function() {
             return;
           }
 
-          function dquote(s) {
-            return '"' + s + '"';
-          }
-
           var pattern =
             '^Error: invalid or unsupported TAP version: ' +
-            dquote(invalidTapVersion);
+            dQuote(invalidTapVersion);
           expect(res, 'to satisfy', {
             code: 1,
             output: new RegExp(pattern, 'm')
