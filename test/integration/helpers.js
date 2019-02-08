@@ -81,10 +81,10 @@ module.exports = {
     var path;
 
     path = resolveFixturePath(fixturePath);
-    args = args || [];
+    args = (args || []).concat('--reporter', 'json', path);
 
     return invokeMocha(
-      args.concat(['--reporter', 'json', path]),
+      args,
       function(err, res) {
         if (err) return fn(err);
 
@@ -95,8 +95,8 @@ module.exports = {
           fn(
             new Error(
               format(
-                'Failed to parse JSON reporter output.\nArgs: %O\nResult:\n\n%O',
-                args,
+                'Failed to parse JSON reporter output. Error:\n%O\nResponse:\n%O',
+                err,
                 res
               )
             )
