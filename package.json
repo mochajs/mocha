@@ -498,7 +498,7 @@
     "minimatch": "3.0.4",
     "mkdirp": "0.5.1",
     "ms": "2.1.1",
-    "node-environment-flags": "1.0.2",
+    "node-environment-flags": "1.0.4",
     "object.assign": "4.1.0",
     "strip-json-comments": "2.0.1",
     "supports-color": "6.0.0",
