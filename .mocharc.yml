@@ -4,4 +4,4 @@ global:
   - okGlobalA,okGlobalB
   - okGlobalC
   - callback*
-timeout: 200
+timeout: 300
