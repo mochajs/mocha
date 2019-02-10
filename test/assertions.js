@@ -100,6 +100,24 @@ exports.mixinMochaAssertions = function(expect) {
         code: expect.it('to be greater than', 0)
       });
     })
+    .addAssertion(
+      '<RawRunResult|RawResult> [not] to have failed (with|having) output <any>',
+      function(expect, result, output) {
+        expect(result, '[not] to satisfy', {
+          code: expect.it('to be greater than', 0),
+          output: output
+        });
+      }
+    )
+    .addAssertion(
+      '<RawRunResult|RawResult> [not] to have passed (with|having) output <any>',
+      function(expect, result, output) {
+        expect(result, '[not] to satisfy', {
+          code: 0,
+          output: output
+        });
+      }
+    )
     .addAssertion('<JSONRunResult> [not] to have test count <number>', function(
       expect,
       result,
