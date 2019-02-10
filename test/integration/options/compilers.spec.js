@@ -4,20 +4,18 @@ var helpers = require('../helpers');
 var invokeMocha = helpers.invokeMocha;
 
 describe('--compilers', function() {
-  var args = [];
+  it('should report deprecation', function(done) {
+    invokeMocha(
+      ['--compilers', 'coffee:coffee-script/register'],
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
 
-  before(function() {
-    args = ['--compilers', 'coffee:coffee-script/register'];
-  });
-
-  it('should fail', function(done) {
-    invokeMocha(args, function(err, res) {
-      if (err) {
-        return done(err);
-      }
-
-      expect(res.code, 'to be', 1);
-      done();
-    });
+        expect(res, 'to have failed with output', /compilers is deprecated/i);
+        done();
+      },
+      'pipe'
+    );
   });
 });

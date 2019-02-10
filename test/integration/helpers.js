@@ -86,22 +86,29 @@ module.exports = {
     return invokeMocha(
       args,
       function(err, res) {
-        if (err) return fn(err);
+        if (err) {
+          return fn(err);
+        }
 
+        var result;
         try {
-          var result = toJSONRunResult(res);
-          fn(null, result);
+          // attempt to catch a JSON parsing error *only* here.
+          // previously, the callback was called within this `try` block,
+          // which would result in errors thrown from the callback
+          // getting caught by the `catch` block below.
+          result = toJSONRunResult(res);
         } catch (err) {
-          fn(
+          return fn(
             new Error(
               format(
-                'Failed to parse JSON reporter output. Error:\n%O\nResponse:\n%O',
+                'Failed to parse JSON reporter output. Error:\n%O\nResult:\n%O',
                 err,
                 res
               )
             )
           );
         }
+        fn(null, result);
       },
       opts
     );

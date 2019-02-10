@@ -75,4 +75,23 @@ describe('event order', function() {
       });
     });
   });
+
+  describe('--retries and --bail test case', function() {
+    it('should assert --retries event order', function(done) {
+      runMochaJSON(
+        'runner/events-bail-retries.fixture.js',
+        ['--retries', '1', '--bail'],
+        function(err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have failed with error', 'error test A')
+            .and('to have failed test count', 1)
+            .and('to have passed test count', 0);
+          done();
+        }
+      );
+    });
+  });
 });
