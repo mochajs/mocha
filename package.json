@@ -560,6 +560,7 @@
     "through2": "^3.0.0",
     "to-vfile": "^5.0.2",
     "unexpected": "^10.39.2",
+    "unexpected-eventemitter": "^1.1.3",
     "unexpected-sinon": "^10.10.1",
     "uslug": "^1.0.4",
     "watchify": "^3.7.0"
