@@ -4,4 +4,5 @@ process.stdout = require('browser-stdout')();
 
 global.expect = global.weknowhow.expect
   .clone()
-  .use(global.weknowhow.unexpectedSinon);
+  .use(global.weknowhow.unexpectedSinon)
+  .use(global.unexpectedEventEmitter);

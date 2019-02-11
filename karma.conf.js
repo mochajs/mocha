@@ -156,6 +156,7 @@ module.exports = config => {
     require.resolve('unexpected/unexpected'),
     {pattern: require.resolve('unexpected/unexpected.js.map'), included: false},
     require.resolve('unexpected-sinon'),
+    require.resolve('unexpected-eventemitter/dist/unexpected-eventemitter.js'),
     require.resolve('./test/browser-specific/setup')
   );
 
