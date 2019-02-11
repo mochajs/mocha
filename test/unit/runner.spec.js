@@ -117,7 +117,7 @@ describe('Runner', function() {
       global.foo = 'bar';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', 'global leak detected: foo');
+        expect(_err, 'to have message', "global leak detected: 'foo'");
         delete global.foo;
         done();
       });
@@ -171,7 +171,7 @@ describe('Runner', function() {
       global.bar = 'baz';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', 'global leaks detected: foo, bar');
+        expect(_err, 'to have message', "global leaks detected: 'foo', 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -201,22 +201,23 @@ describe('Runner', function() {
 
       suite.addTest(test);
 
-      global.foo = 'bar';
-      global.bar = 'baz';
+      global.foo = 'whitelisted';
+      global.bar = 'detect-me';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'im a test about lions');
-        expect(_err, 'to have message', 'global leak detected: bar');
+        expect(_err, 'to have message', "global leak detected: 'bar'");
         delete global.foo;
+        delete global.bar;
         done();
       });
       runner.checkGlobals(test);
     });
 
-    it('should emit "fail" when a global beginning with d is introduced', function(done) {
+    it('should emit "fail" when a global beginning with "d" is introduced', function(done) {
       global.derp = 'bar';
-      runner.on(EVENT_TEST_FAIL, function(test, err) {
-        expect(test.title, 'to be', 'herp');
-        expect(err.message, 'to be', 'global leak detected: derp');
+      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        expect(_test.title, 'to be', 'herp');
+        expect(_err, 'to have message', "global leak detected: 'derp'");
         delete global.derp;
         done();
       });
@@ -569,7 +570,7 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(_hook, _err) {
+        runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
           var filteredErrStack = _err.stack.split('\n').slice(1);
           expect(
             filteredErrStack.join('\n'),
@@ -589,7 +590,7 @@ describe('Runner', function() {
         // Fake stack-trace
         err.stack = [message].concat(stack).join('\n');
 
-        runner.on('fail', function(_hook, _err) {
+        runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
           var filteredErrStack = _err.stack.split('\n').slice(-3);
           expect(
             filteredErrStack.join('\n'),
