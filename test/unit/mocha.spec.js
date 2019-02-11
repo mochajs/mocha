@@ -234,7 +234,7 @@ describe('Mocha', function() {
         new Mocha(updatedOpts);
       };
       expect(throwError, 'to throw', {
-        message: 'invalid reporter "invalidReporter"',
+        message: "invalid reporter 'invalidReporter'",
         code: 'ERR_MOCHA_INVALID_REPORTER',
         reporter: 'invalidReporter'
       });

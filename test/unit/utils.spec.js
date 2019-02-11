@@ -706,6 +706,45 @@ describe('lib/utils', function() {
     });
   });
 
+  describe('sQuote/dQuote', function() {
+    var str = 'xxx';
+
+    it('should return its input as string wrapped in single quotes', function() {
+      var expected = "'xxx'";
+      expect(utils.sQuote(str), 'to be', expected);
+    });
+
+    it('should return its input as string wrapped in double quotes', function() {
+      var expected = '"xxx"';
+      expect(utils.dQuote(str), 'to be', expected);
+    });
+  });
+
+  describe('ngettext', function() {
+    var singular = 'singular';
+    var plural = 'plural';
+
+    it("should return plural string if 'n' is 0", function() {
+      expect(utils.ngettext(0, singular, plural), 'to be', plural);
+    });
+
+    it("should return singular string if 'n' is 1", function() {
+      expect(utils.ngettext(1, singular, plural), 'to be', singular);
+    });
+
+    it("should return plural string if 'n' is greater than 1", function() {
+      var arr = ['aaa', 'bbb'];
+      expect(utils.ngettext(arr.length, singular, plural), 'to be', plural);
+    });
+
+    it("should return undefined if 'n' is not a non-negative integer", function() {
+      expect(utils.ngettext('', singular, plural), 'to be undefined');
+      expect(utils.ngettext(-1, singular, plural), 'to be undefined');
+      expect(utils.ngettext(true, singular, plural), 'to be undefined');
+      expect(utils.ngettext({}, singular, plural), 'to be undefined');
+    });
+  });
+
   describe('createMap', function() {
     it('should return an object with a null prototype', function() {
       expect(Object.getPrototypeOf(utils.createMap()), 'to be', null);
