@@ -1,3 +1,29 @@
+# 6.0.0 (in progress)
+
+## :bug: Fixes
+
+- [#3650](https://github.com/mochajs/mocha/issues/3650), [#3654](https://github.com/mochajs/mocha/issues/3654): Fix noisy error message when no files found ([**@craigtaub**](https://github.com/craigtaub))
+- [#3632](https://github.com/mochajs/mocha/issues/3632): Tests having an empty title are no longer confused with the "root" suite ([**@juergba**](https://github.com/juergba))
+- [#3666](https://github.com/mochajs/mocha/issues/3666): Fix missing error codes ([**@vkarpov15**](https://github.com/vkarpov15))
+- [#3684](https://github.com/mochajs/mocha/issues/3684): Fix exiting problem in Node.js v11.7.0+ ([**@addaleax**](https://github.com/addaleax))
+- [#3691](https://github.com/mochajs/mocha/issues/3691): Fix `--delay` (and other boolean options) not working in all cases ([**@boneskull**](https://github.com/boneskull))
+- [#3692](https://github.com/mochajs/mocha/issues/3692): Fix invalid command-line argument usage not causing actual errors ([**@boneskull**](https://github.com/boneskull))
+- [#3698](https://github.com/mochajs/mocha/issues/3698), [#3699](https://github.com/mochajs/mocha/issues/3699): Fix debug-related Node.js options not working in all cases ([**@boneskull**](https://github.com/boneskull))
+- [#3700](https://github.com/mochajs/mocha/issues/3700): Growl notifications now show the correct number of tests run ([**@outsideris**](https://github.com/outsideris))
+- [#3686](https://github.com/mochajs/mocha/issues/3686): Avoid potential ReDoS when diffing large objects ([**@cyjake**](https://github.com/cyjake))
+- [#3715](https://github.com/mochajs/mocha/issues/3715): Fix incorrect order of emitted events when used programmatically ([**@boneskull**](https://github.com/boneskull))
+- [#3706](https://github.com/mochajs/mocha/issues/3706): Fix regression wherein `--reporter-option`/`--reporter-options` did not support comma-separated key/value pairs
+
+## :book: Documentation
+
+- [#3652](https://github.com/mochajs/mocha/issues/3652): Switch from Jekyll to Eleventy ([**@Munter**](https://github.com/Munter))
+
+## :nut_and_bolt: Other
+
+- [#3648](https://github.com/mochajs/mocha/issues/3648), [#3680](https://github.com/mochajs/mocha/issues/3680): Fixes to support latest versions of [unexpected](https://npm.im/unexpected) and [unexpected-sinon](https://npm.im/unexpected-sinon) ([**@sunesimonsen**](https://github.com/sunesimonsen))
+- [#3638](https://github.com/mochajs/mocha/issues/3638): Add meta tag to site ([**@MartijnCuppens**](https://github.com/MartijnCuppens))
+- [#3653](https://github.com/mochajs/mocha/issues/3653): Fix parts of test suite failing to run on Windows ([**@boneskull**](https://github.com/boneskull))
+
 # 6.0.0-1 / 2019-01-02
 
 ## :bug: Fixes
