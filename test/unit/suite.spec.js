@@ -602,9 +602,12 @@ describe('Suite', function() {
 
       suite.filterOnly();
 
-      expect(suite.suites.length, 'to be', 0);
-      expect(suite.tests.length, 'to be', 1);
-      expect(suite.tests[0].title, 'to be', 'c');
+      expect(suite, 'to satisfy', {
+        suites: expect.it('to be empty'),
+        tests: expect
+          .it('to have length', 1)
+          .and('to have an item satisfying', {title: 'c'})
+      });
     });
 
     it('should filter out all other tests and suites if a suite has `only`', function() {
@@ -623,9 +626,12 @@ describe('Suite', function() {
 
       suite.filterOnly();
 
-      expect(suite.suites.length, 'to be', 1);
-      expect(suite.tests.length, 'to be', 0);
-      expect(suite.suites[0].title, 'to be', 'b');
+      expect(suite, 'to satisfy', {
+        suites: expect
+          .it('to have length', 1)
+          .and('to have an item satisfying', {title: 'b'}),
+        tests: expect.it('to be empty')
+      });
     });
   });
 });
