@@ -226,6 +226,58 @@ describe('Mocha', function() {
     });
   });
 
+  describe('.unloadFile()', function() {
+    before(function() {
+      if (process.browser) {
+        this.skip();
+      }
+    });
+
+    it('should unload a specific file from cache', function() {
+      var mocha = new Mocha(opts);
+      var resolvedFilePath;
+      var filePath = __filename;
+
+      mocha.addFile(filePath);
+      mocha.loadFiles();
+      resolvedFilePath = require.resolve(filePath);
+      expect(require.cache, 'to have key', resolvedFilePath);
+
+      mocha.unloadFile(filePath);
+      expect(require.cache, 'not to have key', resolvedFilePath);
+    });
+  });
+
+  describe('.unloadFiles()', function() {
+    var path;
+
+    before(function() {
+      if (process.browser) {
+        this.skip();
+      } else {
+        path = require('path');
+      }
+    });
+
+    it('should unload all test files from cache', function() {
+      var mocha = new Mocha(opts);
+      var resolvedTestFiles;
+      var testFiles = [
+        __filename,
+        path.join(__dirname, 'throw.spec.js'),
+        path.join(__dirname, 'context.spec.js')
+      ];
+
+      testFiles.forEach(mocha.addFile, mocha);
+      mocha.loadFiles();
+      resolvedTestFiles = testFiles.map(require.resolve);
+      expect(require.cache, 'to have keys', resolvedTestFiles);
+
+      mocha.unloadFiles();
+      expect(require.cache, 'not to have keys', resolvedTestFiles);
+    });
+  });
+
   describe('error handling', function() {
     it('should throw reporter error if an invalid reporter is given', function() {
       var updatedOpts = {reporter: 'invalidReporter', reporterOptions: {}};
