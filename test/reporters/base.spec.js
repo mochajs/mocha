@@ -417,4 +417,20 @@ describe('Base reporter', function() {
     var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
+
+  it('should let you stub out console.log without effecting reporters output', function() {
+    var logCached = console.log;
+    var logRes = [];
+
+    console.log = function(line) {
+      logRes.push(line);
+    };
+    var base = new Base({on: function() {}, stats: {duration: 0, passes: 3}});
+    base.epilogue();
+
+    expect(stdout[1], 'to contain', '3 passing');
+    expect(logRes, 'to have length', 0);
+
+    console.log = logCached;
+  });
 });
