@@ -4,7 +4,7 @@ title: 'Mocha - the fun, simple, flexible JavaScript test framework'
 description: 'Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun.'
 ---
 
-Mocha is a feature-rich JavaScript test framework running on [Node.js](https://nodejs.org) and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub](https://github.com/mochajs/mocha).
+Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
 
 <nav class="badges">
   <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
@@ -86,7 +86,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js](https://n
 
 ## Installation
 
-Install with [npm](https://npmjs.org) globally:
+Install with [npm][] globally:
 
 ```sh
 $ npm install --global mocha
@@ -224,13 +224,13 @@ $ ./node_modules/.bin/mocha mocha.test.js
 
 ## Assertions
 
-Mocha allows you to use any assertion library you wish. In the above example, we're using Node.js' built-in [assert](https://nodejs.org/api/assert.html) module--but generally, if it throws an `Error`, it will work! This means you can use libraries such as:
+Mocha allows you to use any assertion library you wish. In the above example, we're using Node.js' built-in [assert][node-assert] module &mdash; but generally, if it throws an `Error`, it will work! This means you can use libraries such as:
 
-- [should.js](https://github.com/shouldjs/should.js) - BDD style shown throughout these docs
-- [expect.js](https://github.com/LearnBoost/expect.js) - `expect()` style assertions
-- [chai](http://chaijs.com/) - `expect()`, `assert()` and `should`-style assertions
-- [better-assert](https://github.com/visionmedia/better-assert) - C-style self-documenting `assert()`
-- [unexpected](http://unexpected.js.org) - "the extensible BDD assertion toolkit"
+- [should.js][] - BDD style shown throughout these docs
+- [expect.js][] - `expect()` style assertions
+- [chai][] - `expect()`, `assert()` and `should`-style assertions
+- [better-assert][] - C-style self-documenting `assert()`
+- [unexpected][] - "the extensible BDD assertion toolkit"
 
 ## Asynchronous Code
 
@@ -265,7 +265,7 @@ describe('User', function() {
 
 ### Working with Promises
 
-Alternately, instead of using the `done()` callback, you may return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). This is useful if the APIs you are testing return promises instead of taking callbacks:
+Alternately, instead of using the `done()` callback, you may return a [Promise][mdn-promise]. This is useful if the APIs you are testing return promises instead of taking callbacks:
 
 ```js
 beforeEach(function() {
@@ -281,7 +281,7 @@ describe('#find()', function() {
 });
 ```
 
-> The latter example uses [Chai as Promised](https://www.npmjs.com/package/chai-as-promised) for fluent promise assertions.
+> The latter example uses [Chai as Promised][chai-as-promised] for fluent promise assertions.
 
 In Mocha v3.0.0 and newer, returning a `Promise` _and_ calling `done()` will result in an exception, as this is generally a mistake:
 
@@ -301,7 +301,7 @@ The above test will fail with `Error: Resolution method is overspecified. Specif
 
 ### Using async / await
 
-If your JS environment supports [async / await](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function) you can also write asynchronous tests like this:
+If your JS environment supports [async / await][mdn-async], you can also write asynchronous tests like this:
 
 ```js
 beforeEach(async function() {
@@ -334,7 +334,7 @@ describe('Array', function() {
 
 ## Arrow Functions
 
-Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) ("lambdas") to Mocha is discouraged. Lambdas lexically bind `this` and cannot access the Mocha context. For example, the following code will fail:
+Passing [arrow functions][mdn-arrow] (aka "lambdas") to Mocha is discouraged. Lambdas lexically bind `this` and cannot access the Mocha context. For example, the following code will fail:
 
 ```js
 describe('my suite', () => {
@@ -803,7 +803,7 @@ describe('a suite of tests', function() {
 
 Again, use `this.timeout(0)` to disable the timeout for a hook.
 
-> In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) will cause the timeout to be disabled.
+> In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value][mdn-settimeout-maxdelay] will cause the timeout to be disabled.
 
 ## Diffs
 
@@ -934,13 +934,13 @@ _Prior to_ version v4.0.0, _by default_, Mocha would force its own process to ex
 
 The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it was `--exit`.
 
-**The easiest way to "fix" the issue is to simply pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug--because it's not always obvious where the problem is--but it _is_ recommended to do so.
+**The easiest way to "fix" the issue is to simply pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
 
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
-- See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector/)
-- Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://git.io/vdlNM))
-- Try something like [wtfnode](https://npm.im/wtfnode)
+- See the [Node.js guide to debugging][node-inspector]
+- Use the new [`async_hooks`][node-async-hooks] API ([example](https://git.io/vdlNM))
+- Try something like [wtfnode][]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
 ### `--forbid-only`
@@ -999,7 +999,7 @@ The `--ui` option lets you specify the interface to use, defaulting to `bdd`.
 
 > _Updated in v6.0.0. `--colors` is now an alias for `--color`._
 
-"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`. By default, Mocha uses [supports-color](https://npm.im/supports-color) to decide.
+"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`. By default, Mocha uses the [supports-color][] module to decide.
 
 In some cases, color output will be explicitly suppressed by certain reporters outputting in a machine-readable format.
 
@@ -1021,7 +1021,7 @@ This flag is helpful when debugging a suspected issue within Mocha or Node.js it
 
 ### `--growl, -G`
 
-Enable [Growl](http://growl.info) (or OS-level notifications where available).
+Enable [Growl][] (or OS-level notifications where available).
 
 Requires extra software to be installed; see the [growl module's docs](https://npm.im/growl) for more information.
 
@@ -1037,7 +1037,7 @@ Does nothing if an assertion library supplies its own diff output.
 
 Specify the reporter that will be used, defaulting to `spec`.
 
-Allows use of third-party reporters. For example, [mocha-lcov-reporter](https://npm.im/mocha-lcov-reporter) may be used with `--reporter mocha-lcov-reporter` after it has been installed.
+Allows use of third-party reporters. For example, [mocha-lcov-reporter][] may be used with `--reporter mocha-lcov-reporter` after it has been installed.
 
 ### `--reporter-option <option>, -O <option>, --reporter-options <option>`
 
@@ -1113,16 +1113,16 @@ Require a module before loading the user interface or test files. This is useful
 
 - Test harnesses
 - Assertion libraries that augment built-ins or global scope (such as [should.js](https://npm.im/should.js))
-- Instant ECMAScript modules via [esm](https://npm.im/esm)
-- Compilers such as Babel via [@babel/register](https://npm.im/@babel/register) or TypeScript via [ts-node](https://npm.im/ts-node) (using `--require ts-node/register`)
+- Instant ECMAScript modules via [esm][]
+- Compilers such as Babel via [@babel/register][babel-register] or TypeScript via [ts-node][] (using `--require ts-node/register`)
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
 
-Note you cannot use `--require` to set a global `beforeEach()` hook, for example--use `--file` instead, which allows you to specify an explicit order in which test files are loaded.
+Note you cannot use `--require` to set a global `beforeEach()` hook, for example &mdash; use `--file` instead, which allows you to specify an explicit order in which test files are loaded.
 
 ### `--sort, -S`
 
-Sort test files (by absolute path) using [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+Sort test files (by absolute path) using [Array.prototype.sort][mdn-array-sort].
 
 ### `--watch, -w`
 
@@ -1142,7 +1142,7 @@ Mutually exclusive with `--grep`.
 
 > _BREAKING CHANGE in v6.0.0; now mutually exclusive with `--fgrep`._
 
-Cause Mocha to only run tests matching the given `regexp`, which is internally compiled to a [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp).
+Cause Mocha to only run tests matching the given `regexp`, which is internally compiled to a [RegExp][mdn-regexp].
 
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
@@ -1266,7 +1266,7 @@ suite('Array', function() {
 
 ### Exports
 
-The **Exports** interface is much like Mocha's predecessor [expresso](https://github.com/tj/expresso). The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
+The **Exports** interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
 ```js
 module.exports = {
@@ -1286,7 +1286,7 @@ module.exports = {
 
 ### QUnit
 
-The [QUnit](https://qunitjs.com)-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+The [QUnit][]-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
 ```js
 function ok(expr, msg) {
@@ -1364,7 +1364,7 @@ The "nyan" reporter is exactly what you might expect:
 
 ### TAP
 
-The TAP reporter emits lines for a [Test-Anything-Protocol](https://en.wikipedia.org/wiki/Test_Anything_Protocol) consumer.
+The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
 ![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -1464,7 +1464,7 @@ By default, it will output to the console. To write directly to a file, use `--r
 
 ### Third-Party Reporters
 
-Mocha allows you to define custom reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter](https://github.com/travisjeffery/mocha-teamcity-reporter).
+Mocha allows you to define custom reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter][mocha-teamcity-reporter].
 
 ### HTML Reporter
 
@@ -1483,10 +1483,12 @@ The following method(s) _only_ function in a browser context:
 A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the **BDD** interface before loading the test scripts, running them `onload` with `mocha.run()`.
 
 ```html
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
   </head>
   <body>
@@ -1547,7 +1549,7 @@ The "HTML" reporter is what you see when running Mocha in the browser. It looks 
 
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
-[Mochawesome](https://www.npmjs.com/package/mochawesome) is a great alternative to the default HTML reporter.
+[Mochawesome][] is a great alternative to the default HTML reporter.
 
 ## Desktop Notification Support
 
@@ -1579,10 +1581,9 @@ $ mocha --growl
 
 Web notification support is being made available for current versions of
 modern browsers. Ensure your browser version supports both
-[promises](https://caniuse.com/#feat=promises) and
-[web notifications](https://caniuse.com/#feat=notifications). As the
-Notification API evolved over time, **do not expect** the minimum possible
-browser version to necessarily work.
+[promises][caniuse-promises] and [web notifications][caniuse-notifications].
+As the Notification API evolved over time, **do not expect** the minimum
+possible browser version to necessarily work.
 
 Enable Mocha's web notifications with a slight modification to your
 client-side mocha HTML. Add a call to `mocha.growl()` prior to running your
@@ -1590,21 +1591,24 @@ tests as shown below:
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Mocha</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
   </head>
   <body>
     <div id="mocha"></div>
+
+    <script src="https://unpkg.com/chai/chai.js"></script>
     <script src="https://unpkg.com/mocha/mocha.js"></script>
+
     <script class="mocha-init">
       mocha.setup('bdd');
       mocha.growl(); // <-- Enables web notifications
     </script>
-    <script src="tests.js"></script>
+    <script src="test.spec.js"></script>
     <script class="mocha-exec">
       mocha.run();
     </script>
@@ -1620,7 +1624,7 @@ In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control form
 
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
-- **JSON**: Create a `.mocharc.json` in your project's root directory. Comments--while not valid JSON--are allowed in this file, and will be ignored by Mocha.
+- **JSON**: Create a `.mocharc.json` in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
 - **`package.json`**: Create a `mocha` property in your project's `package.json`.
 
 Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
@@ -1637,7 +1641,7 @@ To skip looking for config files, use `--no-config`. Likewise, use `--no-package
 
 ### Priorities
 
-If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for--and use--only one. The priority is:
+If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for &mdash; and use &mdash; only one. The priority is:
 
 1. `.mocharc.js`
 1. `.mocharc.yaml`
@@ -1657,7 +1661,7 @@ Options which can safely be repeated (e.g., `--require`) will be _concatenated_,
 
 ### Extending Configuration
 
-Configurations can inherit from other modules using the `extends` keyword. See [here](http://yargs.js.org/docs/#api-configobject-extends-keyword) for more information.
+Configurations can inherit from other modules using the `extends` keyword. See [here][yargs-configobject-extends] for more information.
 
 ### Configuration Format
 
@@ -1672,7 +1676,7 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 
 ## `mocha.opts`
 
-> _Updated in v6.0.0; `mocha.opts` is now considered "legacy"--though not yet deprecated--and we recommend using a configuration file instead._
+> _Updated in v6.0.0; `mocha.opts` is now considered "legacy" &mdash; though not yet deprecated &mdash; and we recommend using a configuration file instead._
 
 Mocha will attempt to load `"./test/mocha.opts"` as a run-control file of sorts.
 
@@ -1715,7 +1719,7 @@ To configure where `mocha` looks for tests, you may pass your own glob:
 $ mocha --recursive "./spec/*.js"
 ```
 
-Some shells support recursive matching by using the `**` wildcard in a glob. Bash >= 4.3 supports this with the [`globstar` option](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html) which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH](http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing) and [Fish](https://fishshell.com/docs/current/#expand-wildcard) support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
+Some shells support recursive matching by using the `**` wildcard in a glob. Bash >= 4.3 supports this with the [`globstar` option][bash-globbing] which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH][zsh-globbing] and [Fish][fish-globbing] support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
 
 ```sh
 $ mocha "./spec/**/*.js"
@@ -1731,7 +1735,6 @@ When Mocha itself throws exception, the associated `Error` will have a `code` pr
 
 | Code                             | Description                                                  |
 | -------------------------------- | ------------------------------------------------------------ |
-| ERR_MOCHA_INVALID_ARG            | argument is invalid                                          |
 | ERR_MOCHA_INVALID_ARG_TYPE       | argument of the wrong type was passed to Mocha's API         |
 | ERR_MOCHA_INVALID_ARG_VALUE      | invalid or unsupported value was passed for a given argument |
 | ERR_MOCHA_INVALID_EXCEPTION      | a falsy or otherwise underspecified exception was thrown     |
@@ -1750,7 +1753,7 @@ The [Mocha TextMate bundle](https://github.com/mochajs/mocha.tmbundle) includes 
 
 ### JetBrains
 
-[JetBrains](https://www.jetbrains.com/) provides a [NodeJS plugin](https://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
+[JetBrains][] provides a [NodeJS plugin](https://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
 ![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
@@ -1758,19 +1761,19 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 ### Wallaby.js
 
-[Wallaby.js](https://wallabyjs.com/) is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and node.js projects.
+[Wallaby.js][] is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and node.js projects.
 
 ![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 ### Emacs
 
-[Emacs](https://www.gnu.org/software/emacs/) support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
+[Emacs][] support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
 ![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
 ### Mocha Sidebar (VS Code)
 
-[Mocha sidebar](https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar) is the most complete mocha extension for vs code.
+[Mocha sidebar][vscode-mocha-sidebar] is the most complete mocha extension for vs code.
 
 #### Features
 
@@ -1816,12 +1819,51 @@ For discussions join the [Google Group][google-mocha]. For a running example of 
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
 [//]: # 'Cross reference section'
+[babel-register]: https://npm.im/@babel/register
+[bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
+[better-assert]: https://github.com/visionmedia/better-assert
+[caniuse-notifications]: https://caniuse.com/#feat=notifications
+[caniuse-promises]: https://caniuse.com/#feat=promises
+[chai]: https://www.chaijs.com/
+[chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
+[emacs]: https://www.gnu.org/software/emacs/
+[esm]: https://npm.im/esm
+[expect.js]: https://github.com/LearnBoost/expect.js
+[expresso]: https://github.com/tj/expresso
+[fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
+[github-mocha]: https://github.com/mochajs/mocha
 [gitter-mocha]: https://gitter.im/mochajs/mocha
 [google-mocha]: https://groups.google.com/group/mochajs
 [growl]: http://growl.info/
 [growl-install]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
+[jetbrains]: https://www.jetbrains.com/
+[mdn-array-sort]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+[mdn-arrow]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+[mdn-async]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function
+[mdn-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[mdn-regexp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp
+[mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
+[mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
+[mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
 [mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
+[mochawesome]: https://www.npmjs.com/package/mochawesome
+[node.js]: https://nodejs.org/
+[node-assert]: https://nodejs.org/api/assert.html
+[node-async-hooks]: https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md
+[node-inspector]: https://nodejs.org/en/docs/inspector/
+[npm]: https://npmjs.org/
+[qunit]: https://qunitjs.com/
+[should.js]: https://github.com/shouldjs/should.js
+[supports-color]: https://npm.im/supports-color
+[test-anything-protocol]: https://en.wikipedia.org/wiki/Test_Anything_Protocol
+[ts-node]: https://npm.im/ts-node
+[unexpected]: https://unexpected.js.org/
+[vscode-mocha-sidebar]: https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
+[wallaby.js]: https://wallabyjs.com/
+[wtfnode]: https://npm.im/wtfnode
+[yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
+[zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 
 <!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
 
