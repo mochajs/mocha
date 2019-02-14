@@ -547,7 +547,7 @@
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.13.0",
     "nps": "^5.9.3",
-    "nyc": "^13.1.0",
+    "nyc": "^13.3.0",
     "prettier": "^1.15.3",
     "remark": "^10.0.1",
     "remark-github": "^7.0.5",
