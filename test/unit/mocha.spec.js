@@ -21,6 +21,7 @@ describe('Mocha', function() {
       sandbox.stub(Mocha.prototype, 'useColors').returnsThis();
       sandbox.stub(utils, 'deprecate');
     });
+
     it('should prefer "color" over "useColors"', function() {
       // eslint-disable-next-line no-new
       new Mocha({useColors: true, color: false});
@@ -67,14 +68,6 @@ describe('Mocha', function() {
           expect.fail(e.message);
         }
       }, 'not to throw');
-    });
-  });
-
-  describe('.addFile()', function() {
-    it('should add the given file to the files array', function() {
-      var mocha = new Mocha(opts);
-      mocha.addFile('myFile.js');
-      expect(mocha.files, 'to have length', 1).and('to contain', 'myFile.js');
     });
   });
 
@@ -153,6 +146,7 @@ describe('Mocha', function() {
         expect(mocha.options, 'to have property', 'growl', true);
       });
     });
+
     describe('if not capable of notifications', function() {
       it('should set the growl option to false', function() {
         var mocha = new Mocha(opts);
@@ -163,6 +157,7 @@ describe('Mocha', function() {
         expect(mocha.options, 'to have property', 'growl', false);
       });
     });
+
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.growl(), 'to be', mocha);
@@ -195,10 +190,16 @@ describe('Mocha', function() {
   });
 
   describe('.noHighlighting()', function() {
+    // :NOTE: Browser-only option...
     it('should set the noHighlighting option to true', function() {
       var mocha = new Mocha(opts);
       mocha.noHighlighting();
       expect(mocha.options, 'to have property', 'noHighlighting', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.noHighlighting(), 'to be', mocha);
     });
   });
 
@@ -208,6 +209,11 @@ describe('Mocha', function() {
       mocha.allowUncaught();
       expect(mocha.options, 'to have property', 'allowUncaught', true);
     });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.allowUncaught(), 'to be', mocha);
+    });
   });
 
   describe('.delay()', function() {
@@ -216,6 +222,11 @@ describe('Mocha', function() {
       mocha.delay();
       expect(mocha.options, 'to have property', 'delay', true);
     });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.delay(), 'to be', mocha);
+    });
   });
 
   describe('.bail()', function() {
@@ -223,6 +234,11 @@ describe('Mocha', function() {
       var mocha = new Mocha(opts);
       mocha.bail();
       expect(mocha.suite._bail, 'to be', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.bail(), 'to be', mocha);
     });
   });
 
