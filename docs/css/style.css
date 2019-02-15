@@ -5,6 +5,7 @@ html {
 body {
   color: #2c2c2c;
   border-top: 2px solid #ddd;
+  scroll-behavior: smooth;
 }
 
 @keyframes fadein {
