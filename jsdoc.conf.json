@@ -27,7 +27,7 @@
     "default": {
       "includeDate": false,
       "outputSourceFiles": true
-  },
+    },
     "monospaceLinks": false
   }
 }

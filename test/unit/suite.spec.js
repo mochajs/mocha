@@ -545,6 +545,95 @@ describe('Suite', function() {
       expect(suite.timeout(), 'to be', 100);
     });
   });
+
+  describe('hasOnly()', function() {
+    it('should return true if a test has `only`', function() {
+      var suite = new Suite('foo');
+      var test = new Test('bar');
+
+      suite.appendOnlyTest(test);
+
+      expect(suite.hasOnly(), 'to be', true);
+    });
+
+    it('should return true if a suite has `only`', function() {
+      var suite = new Suite('foo');
+      var nested = new Suite('bar');
+
+      suite.appendOnlySuite(nested);
+
+      expect(suite.hasOnly(), 'to be', true);
+    });
+
+    it('should return true if nested suite has `only`', function() {
+      var suite = new Suite('foo');
+      var nested = new Suite('bar');
+      var test = new Test('baz');
+
+      nested.appendOnlyTest(test);
+      // `nested` has a `only` test, but `suite` doesn't know about it
+      suite.suites.push(nested);
+
+      expect(suite.hasOnly(), 'to be', true);
+    });
+
+    it('should return false if no suite or test is marked `only`', function() {
+      var suite = new Suite('foo');
+      var nested = new Suite('bar');
+      var test = new Test('baz');
+
+      suite.suites.push(nested);
+      nested.tests.push(test);
+
+      expect(suite.hasOnly(), 'to be', false);
+    });
+  });
+
+  describe('.filterOnly()', function() {
+    it('should filter out all other tests and suites if a test has `only`', function() {
+      var suite = new Suite('a');
+      var nested = new Suite('b');
+      var test = new Test('c');
+      var test2 = new Test('d');
+
+      suite.suites.push(nested);
+      suite.appendOnlyTest(test);
+      suite.tests.push(test2);
+
+      suite.filterOnly();
+
+      expect(suite, 'to satisfy', {
+        suites: expect.it('to be empty'),
+        tests: expect
+          .it('to have length', 1)
+          .and('to have an item satisfying', {title: 'c'})
+      });
+    });
+
+    it('should filter out all other tests and suites if a suite has `only`', function() {
+      var suite = new Suite('a');
+      var nested1 = new Suite('b');
+      var nested2 = new Suite('c');
+      var test = new Test('d');
+      var nestedTest = new Test('e');
+
+      nested1.appendOnlyTest(nestedTest);
+
+      suite.tests.push(test);
+      suite.suites.push(nested1);
+      suite.appendOnlySuite(nested1);
+      suite.suites.push(nested2);
+
+      suite.filterOnly();
+
+      expect(suite, 'to satisfy', {
+        suites: expect
+          .it('to have length', 1)
+          .and('to have an item satisfying', {title: 'b'}),
+        tests: expect.it('to be empty')
+      });
+    });
+  });
 });
 
 describe('Test', function() {
