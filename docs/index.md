@@ -281,7 +281,7 @@ describe('#find()', function() {
 });
 ```
 
-> The latter example uses [Chai as Promised][chai-as-promised] for fluent promise assertions.
+> The latter example uses [Chai as Promised][npm-chai-as-promised] for fluent promise assertions.
 
 In Mocha v3.0.0 and newer, returning a `Promise` _and_ calling `done()` will result in an exception, as this is generally a mistake:
 
@@ -670,7 +670,7 @@ You can choose to retry failed tests up to a certain number of times. This featu
 
 This feature does re-run `beforeEach/afterEach` hooks but not `before/after` hooks.
 
-**NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks](https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js) for `Promise` chain).
+**NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks][selenium-webdriver-testing] for `Promise` chain).
 
 ```js
 describe('retries', function() {
@@ -920,7 +920,7 @@ Use this option to have Mocha check for global variables that are leaked while r
 
 ### `--compilers`
 
-> _`--compilers` was removed in v6.0.0. See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/compilers-deprecation)._
+> _`--compilers` was removed in v6.0.0. See [further explanation and workarounds][mocha-wiki-compilers]._
 
 ### `--exit`
 
@@ -939,8 +939,8 @@ The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
 - See the [Node.js guide to debugging][node-inspector]
-- Use the new [`async_hooks`][node-async-hooks] API ([example](https://git.io/vdlNM))
-- Try something like [wtfnode][]
+- Use the new [`async_hooks`][node-async-hooks] API ([example][gist-async-hooks])
+- Try something like [wtfnode][npm-wtfnode]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
 ### `--forbid-only`
@@ -999,7 +999,7 @@ The `--ui` option lets you specify the interface to use, defaulting to `bdd`.
 
 > _Updated in v6.0.0. `--colors` is now an alias for `--color`._
 
-"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`. By default, Mocha uses the [supports-color][] module to decide.
+"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`. By default, Mocha uses the [supports-color][npm-supports-color] module to decide.
 
 In some cases, color output will be explicitly suppressed by certain reporters outputting in a machine-readable format.
 
@@ -1023,7 +1023,7 @@ This flag is helpful when debugging a suspected issue within Mocha or Node.js it
 
 Enable [Growl][] (or OS-level notifications where available).
 
-Requires extra software to be installed; see the [growl module's docs](https://npm.im/growl) for more information.
+Requires extra software to be installed; see the [growl module's docs][npm-growl] for more information.
 
 ### `--inline-diffs`
 
@@ -1037,7 +1037,7 @@ Does nothing if an assertion library supplies its own diff output.
 
 Specify the reporter that will be used, defaulting to `spec`.
 
-Allows use of third-party reporters. For example, [mocha-lcov-reporter][] may be used with `--reporter mocha-lcov-reporter` after it has been installed.
+Allows use of third-party reporters. For example, [mocha-lcov-reporter][npm-mocha-lcov-reporter] may be used with `--reporter mocha-lcov-reporter` after it has been installed.
 
 ### `--reporter-option <option>, -O <option>, --reporter-options <option>`
 
@@ -1112,9 +1112,9 @@ See `--extension` for defining which files are considered test files.
 Require a module before loading the user interface or test files. This is useful for:
 
 - Test harnesses
-- Assertion libraries that augment built-ins or global scope (such as [should.js](https://npm.im/should.js))
-- Instant ECMAScript modules via [esm][]
-- Compilers such as Babel via [@babel/register][babel-register] or TypeScript via [ts-node][] (using `--require ts-node/register`)
+- Assertion libraries that augment built-ins or global scope (such as [should.js][npm-should.js])
+- Instant ECMAScript modules via [esm][npm-esm]
+- Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`)
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
 
@@ -1444,17 +1444,20 @@ The command `mocha --reporter doc array` would yield:
 </section>
 ```
 
-The SuperAgent request library [test documentation](https://visionmedia.github.io/superagent/docs/test.html) was generated with Mocha's doc reporter using this Bash command:
+The SuperAgent request library [test documentation][superagent-docs-test] was generated with Mocha's doc reporter using this Bash command:
 
 ```bash
 $ mocha --reporter=doc | cat docs/head.html - docs/tail.html > docs/test.html
 ```
 
-View SuperAgent's [Makefile](https://github.com/visionmedia/superagent/blob/master/Makefile) for reference.
+View SuperAgent's [Makefile][superagent-makefile] for reference.
 
 ### Markdown
 
-The "markdown" reporter generates a markdown TOC and body for your test suite. This is great if you want to use the tests as documentation within a Github wiki page, or a markdown file in the repository that Github can render. For example here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
+The "markdown" reporter generates a markdown TOC and body for your test suite.
+This is great if you want to use the tests as documentation within a Github
+wiki page, or a markdown file in the repository that Github can render. For
+example, here is the Connect [test output][connect-test-output].
 
 ### XUnit
 
@@ -1464,7 +1467,7 @@ By default, it will output to the console. To write directly to a file, use `--r
 
 ### Third-Party Reporters
 
-Mocha allows you to define custom reporters. For more information see the [wiki](https://github.com/mochajs/mocha/wiki/Third-party-reporters). An example is the [TeamCity reporter][mocha-teamcity-reporter].
+Mocha allows you to define custom reporters. For more information see the [wiki][mocha-wiki-more-reporters]. An example is the [TeamCity reporter][mocha-teamcity-reporter].
 
 ### HTML Reporter
 
@@ -1549,7 +1552,7 @@ The "HTML" reporter is what you see when running Mocha in the browser. It looks 
 
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
-[Mochawesome][] is a great alternative to the default HTML reporter.
+[Mochawesome][npm-mochawesome] is a great alternative to the default HTML reporter.
 
 ## Desktop Notification Support
 
@@ -1569,7 +1572,7 @@ notification should appear informing you whether your tests passed or failed.
 
 In order to use desktop notifications with the command-line interface (CLI),
 you **must** first install some platform-specific prerequisite software.
-Instructions for doing so can be found [here][growl-install].
+Instructions for doing so can be found [here][mocha-wiki-growl].
 
 Enable Mocha's desktop notifications as follows:
 
@@ -1672,7 +1675,7 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 - Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
 - Flags to `node` are _also_ supported in configuration files, like in `mocha.opts`. Use caution, as these can vary between versions of Node.js!
 
-**For more configuration examples, see the [`example/config` directory on GitHub.](https://github.com/mochajs/mocha/tree/master/example/config)**
+**For more configuration examples, see the [`example/config`][example-mocha-config] directory on GitHub.**
 
 ## `mocha.opts`
 
@@ -1719,11 +1722,18 @@ To configure where `mocha` looks for tests, you may pass your own glob:
 $ mocha --recursive "./spec/*.js"
 ```
 
-Some shells support recursive matching by using the `**` wildcard in a glob. Bash >= 4.3 supports this with the [`globstar` option][bash-globbing] which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH][zsh-globbing] and [Fish][fish-globbing] support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
+Some shells support recursive matching by using the globstar (`**`) wildcard. Bash >= 4.3 supports this with the [`globstar` option][bash-globbing] which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH][zsh-globbing] and [Fish][fish-globbing] support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
 
 ```sh
 $ mocha "./spec/**/*.js"
 ```
+
+[You should _always_ quote your globs in npm scripts][article-globbing]. If you
+use double quotes, it's the shell on UNIX that will expand the glob. On the
+other hand, if you use single quotes, the [`node-glob`][npm-glob] module will
+handle its expansion.
+
+See this [tutorial][gist-globbing-tutorial] on using globs.
 
 _Note_: Double quotes around the glob are recommended for portability.
 
@@ -1749,11 +1759,11 @@ The following editor-related packages are available:
 
 ### TextMate
 
-The [Mocha TextMate bundle](https://github.com/mochajs/mocha.tmbundle) includes snippets to make writing tests quicker and more enjoyable.
+The [Mocha TextMate bundle][textmate-mocha] includes snippets to make writing tests quicker and more enjoyable.
 
 ### JetBrains
 
-[JetBrains][] provides a [NodeJS plugin](https://www.jetbrains.com/idea/features/nodejs.html) for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
+[JetBrains][] provides a [NodeJS plugin][jetbrains-plugin] for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
 ![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
@@ -1767,7 +1777,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 ### Emacs
 
-[Emacs][] support for running Mocha tests is available via a 3rd party package [mocha.el](https://github.com/scottaj/mocha.el). The package is available on MELPA, and can be installed via `M-x package-install mocha`.
+[Emacs][] support for running Mocha tests is available via a 3rd party package [mocha.el][emacs-mocha.el]. The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
 ![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
 
@@ -1788,11 +1798,11 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 Real live example code:
 
-- [Express](https://github.com/visionmedia/express/tree/master/test)
-- [Connect](https://github.com/senchalabs/connect/tree/master/test)
-- [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
-- [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
-- [Mocha](https://github.com/mochajs/mocha/tree/master/test)
+- [Express][example-express-test]
+- [Connect][example-connect-test]
+- [SuperAgent][example-superagent-test]
+- [WebSocket.io][example-websocket.io-test]
+- [Mocha][example-mocha-test]
 
 ## Testing Mocha
 
@@ -1804,12 +1814,6 @@ $ npm install
 $ npm test
 ```
 
-To use a different reporter:
-
-```sh
-$ REPORTER=nyan npm test
-```
-
 ## More Information
 
 In addition to chatting with us on [Gitter][gitter-mocha], for additional information such as using
@@ -1819,49 +1823,70 @@ For discussions join the [Google Group][google-mocha]. For a running example of 
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
 [//]: # 'Cross reference section'
-[babel-register]: https://npm.im/@babel/register
+[article-globbing]: https://medium.com/@jakubsynowiec/you-should-always-quote-your-globs-in-npm-scripts-621887a2a784
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 [better-assert]: https://github.com/visionmedia/better-assert
 [caniuse-notifications]: https://caniuse.com/#feat=notifications
 [caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
-[chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
+[connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [emacs]: https://www.gnu.org/software/emacs/
-[esm]: https://npm.im/esm
+[emacs-mocha.el]: https://github.com/scottaj/mocha.el
+[example-express-test]: https://github.com/visionmedia/express/tree/master/test
+[example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
+[example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
+[example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
+[example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
+[example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
 [fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
 [github-mocha]: https://github.com/mochajs/mocha
+[gist-async-hooks]: https://git.io/vdlNM
+[gist-globbing-tutorial]: https://gist.github.com/reggi/475793ea1846affbcfe8
 [gitter-mocha]: https://gitter.im/mochajs/mocha
 [google-mocha]: https://groups.google.com/group/mochajs
 [growl]: http://growl.info/
-[growl-install]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
 [jetbrains]: https://www.jetbrains.com/
+[jetbrains-plugin]: https://www.jetbrains.com/idea/features/nodejs.html
 [mdn-array-sort]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 [mdn-arrow]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
 [mdn-async]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function
 [mdn-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [mdn-regexp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp
 [mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
-[mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
 [mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
 [mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
-[mochawesome]: https://www.npmjs.com/package/mochawesome
+[mocha-wiki-compilers]: https://github.com/mochajs/mocha/wiki/compilers-deprecation
+[mocha-wiki-growl]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
+[mocha-wiki-more-reporters]: https://github.com/mochajs/mocha/wiki/Third-party-reporters
 [node.js]: https://nodejs.org/
 [node-assert]: https://nodejs.org/api/assert.html
 [node-async-hooks]: https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md
 [node-inspector]: https://nodejs.org/en/docs/inspector/
 [npm]: https://npmjs.org/
+[npm-babel-register]: https://npm.im/@babel/register
+[npm-chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
+[npm-esm]: https://npm.im/esm
+[npm-glob]: https://www.npmjs.com/package/glob
+[npm-growl]: https://npm.im/growl
+[npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
+[npm-mochawesome]: https://www.npmjs.com/package/mochawesome
+[npm-should.js]: https://npm.im/should.js
+[npm-supports-color]: https://npm.im/supports-color
+[npm-ts-node]: https://npm.im/ts-node
+[npm-wtfnode]: https://npm.im/wtfnode
 [qunit]: https://qunitjs.com/
+[selenium-webdriver-testing]: https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js
 [should.js]: https://github.com/shouldjs/should.js
-[supports-color]: https://npm.im/supports-color
+[superagent-docs-test]: https://visionmedia.github.io/superagent/docs/test.html
+[superagent-makefile]: https://github.com/visionmedia/superagent/blob/master/Makefile
 [test-anything-protocol]: https://en.wikipedia.org/wiki/Test_Anything_Protocol
-[ts-node]: https://npm.im/ts-node
+[textmate-mocha]: https://github.com/mochajs/mocha.tmbundle
 [unexpected]: https://unexpected.js.org/
 [vscode-mocha-sidebar]: https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
 [wallaby.js]: https://wallabyjs.com/
-[wtfnode]: https://npm.im/wtfnode
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 
