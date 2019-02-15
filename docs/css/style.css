@@ -1,11 +1,11 @@
 html {
   font: 16px/1.6 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
   color: #2c2c2c;
   border-top: 2px solid #ddd;
-  scroll-behavior: smooth;
 }
 
 @keyframes fadein {
