@@ -1745,12 +1745,12 @@ When Mocha itself throws exception, the associated `Error` will have a `code` pr
 
 | Code                             | Description                                                  |
 | -------------------------------- | ------------------------------------------------------------ |
-| ERR_MOCHA_INVALID_ARG_TYPE       | argument of the wrong type was passed to Mocha's API         |
+| ERR_MOCHA_INVALID_ARG_TYPE       | wrong type was passed for a given argument                   |
 | ERR_MOCHA_INVALID_ARG_VALUE      | invalid or unsupported value was passed for a given argument |
 | ERR_MOCHA_INVALID_EXCEPTION      | a falsy or otherwise underspecified exception was thrown     |
 | ERR_MOCHA_INVALID_INTERFACE      | interface specified in options not found                     |
 | ERR_MOCHA_INVALID_REPORTER       | reporter specified in options not found                      |
-| ERR_MOCHA_NO_FILES_MATCH_PATTERN | file/s of test could not be found                            |
+| ERR_MOCHA_NO_FILES_MATCH_PATTERN | test file(s) could not be found                              |
 | ERR_MOCHA_UNSUPPORTED            | requested behavior, option, or parameter is unsupported      |
 
 ## Editor Plugins
