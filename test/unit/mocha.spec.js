@@ -41,7 +41,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.allowUncaught()', function() {
+  describe('#allowUncaught()', function() {
     it('should set the allowUncaught option to true', function() {
       var mocha = new Mocha(opts);
       mocha.allowUncaught();
@@ -54,7 +54,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.bail()', function() {
+  describe('#bail()', function() {
     it('should set the suite._bail to true if there is no arguments', function() {
       var mocha = new Mocha(opts);
       mocha.bail();
@@ -67,7 +67,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.checkLeaks()', function() {
+  describe('#checkLeaks()', function() {
     it('should set the ignoreLeaks option to false', function() {
       var mocha = new Mocha(opts);
       mocha.checkLeaks();
@@ -80,7 +80,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.delay()', function() {
+  describe('#delay()', function() {
     it('should set the delay option to true', function() {
       var mocha = new Mocha(opts);
       mocha.delay();
@@ -93,7 +93,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.fullTrace()', function() {
+  describe('#fullTrace()', function() {
     it('should set the fullStackTrace option to true', function() {
       var mocha = new Mocha(opts);
       mocha.fullTrace();
@@ -106,7 +106,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.globals()', function() {
+  describe('#globals()', function() {
     it('should be an empty array initially', function() {
       var mocha = new Mocha();
       expect(mocha.options.globals, 'to be empty');
@@ -152,7 +152,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.growl()', function() {
+  describe('#growl()', function() {
     describe('if capable of notifications', function() {
       it('should set the growl option to true', function() {
         var mocha = new Mocha(opts);
@@ -181,7 +181,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.ignoreLeaks()', function() {
+  describe('#ignoreLeaks()', function() {
     it('should set the ignoreLeaks option to true when param equals true', function() {
       var mocha = new Mocha(opts);
       mocha.ignoreLeaks(true);
@@ -206,7 +206,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.invert()', function() {
+  describe('#invert()', function() {
     it('should set the invert option to true', function() {
       var mocha = new Mocha(opts);
       mocha.invert();
@@ -219,7 +219,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.noHighlighting()', function() {
+  describe('#noHighlighting()', function() {
     // :NOTE: Browser-only option...
     it('should set the noHighlighting option to true', function() {
       var mocha = new Mocha(opts);
@@ -233,7 +233,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.reporter("xunit").run(fn)', function() {
+  describe('#reporter("xunit")#run(fn)', function() {
     it('should not raise errors if callback was not provided', function() {
       var mocha = new Mocha();
       expect(function() {
@@ -247,7 +247,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.run(fn)', function() {
+  describe('#run(fn)', function() {
     it('should not raise errors if callback was not provided', function() {
       sandbox.stub(Mocha.Runner.prototype, 'run');
       var mocha = new Mocha(opts);
@@ -263,7 +263,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.useInlineDiffs()', function() {
+  describe('#useInlineDiffs()', function() {
     it('should set the useInlineDiffs option to true when param equals true', function() {
       var mocha = new Mocha(opts);
       mocha.useInlineDiffs(true);
