@@ -233,6 +233,26 @@ describe('Mocha', function() {
     });
   });
 
+  describe('#reporter()', function() {
+    it('should throw reporter error if an invalid reporter is given', function() {
+      var updatedOpts = {reporter: 'invalidReporter', reporterOptions: {}};
+      var throwError = function() {
+        // eslint-disable-next-line no-new
+        new Mocha(updatedOpts);
+      };
+      expect(throwError, 'to throw', {
+        message: "invalid reporter 'invalidReporter'",
+        code: 'ERR_MOCHA_INVALID_REPORTER',
+        reporter: 'invalidReporter'
+      });
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.reporter(), 'to be', mocha);
+    });
+  });
+
   describe('#reporter("xunit")#run(fn)', function() {
     it('should not raise errors if callback was not provided', function() {
       var mocha = new Mocha();
@@ -285,21 +305,6 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.useInlineDiffs(), 'to be', mocha);
-    });
-  });
-
-  describe('error handling', function() {
-    it('should throw reporter error if an invalid reporter is given', function() {
-      var updatedOpts = {reporter: 'invalidReporter', reporterOptions: {}};
-      var throwError = function() {
-        // eslint-disable-next-line no-new
-        new Mocha(updatedOpts);
-      };
-      expect(throwError, 'to throw', {
-        message: "invalid reporter 'invalidReporter'",
-        code: 'ERR_MOCHA_INVALID_REPORTER',
-        reporter: 'invalidReporter'
-      });
     });
   });
 });
