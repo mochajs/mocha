@@ -41,71 +41,29 @@ describe('Mocha', function() {
     });
   });
 
-  describe('.run(fn)', function() {
-    it('should not raise errors if callback was not provided', function() {
-      sandbox.stub(Mocha.Runner.prototype, 'run');
+  describe('.allowUncaught()', function() {
+    it('should set the allowUncaught option to true', function() {
       var mocha = new Mocha(opts);
-      expect(function() {
-        mocha.run();
-      }, 'not to throw');
-    });
-
-    it('should execute the callback when complete', function(done) {
-      var mocha = new Mocha(opts);
-      sandbox.stub(Mocha.Runner.prototype, 'run').callsArg(0);
-      mocha.run(done);
-    });
-  });
-
-  describe('.reporter("xunit").run(fn)', function() {
-    it('should not raise errors if callback was not provided', function() {
-      var mocha = new Mocha();
-      expect(function() {
-        try {
-          mocha.reporter('xunit').run();
-        } catch (e) {
-          console.log(e);
-          expect.fail(e.message);
-        }
-      }, 'not to throw');
-    });
-  });
-
-  describe('.invert()', function() {
-    it('should set the invert option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.invert();
-      expect(mocha.options, 'to have property', 'invert', true);
+      mocha.allowUncaught();
+      expect(mocha.options, 'to have property', 'allowUncaught', true);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
-      expect(mocha.invert(), 'to be', mocha);
+      expect(mocha.allowUncaught(), 'to be', mocha);
     });
   });
 
-  describe('.ignoreLeaks()', function() {
-    it('should set the ignoreLeaks option to true when param equals true', function() {
+  describe('.bail()', function() {
+    it('should set the suite._bail to true if there is no arguments', function() {
       var mocha = new Mocha(opts);
-      mocha.ignoreLeaks(true);
-      expect(mocha.options, 'to have property', 'ignoreLeaks', true);
-    });
-
-    it('should set the ignoreLeaks option to false when param equals false', function() {
-      var mocha = new Mocha(opts);
-      mocha.ignoreLeaks(false);
-      expect(mocha.options, 'to have property', 'ignoreLeaks', false);
-    });
-
-    it('should set the ignoreLeaks option to false when the param is undefined', function() {
-      var mocha = new Mocha(opts);
-      mocha.ignoreLeaks();
-      expect(mocha.options, 'to have property', 'ignoreLeaks', false);
+      mocha.bail();
+      expect(mocha.suite._bail, 'to be', true);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
-      expect(mocha.ignoreLeaks(), 'to be', mocha);
+      expect(mocha.bail(), 'to be', mocha);
     });
   });
 
@@ -119,6 +77,19 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.checkLeaks(), 'to be', mocha);
+    });
+  });
+
+  describe('.delay()', function() {
+    it('should set the delay option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.delay();
+      expect(mocha.options, 'to have property', 'delay', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.delay(), 'to be', mocha);
     });
   });
 
@@ -210,6 +181,88 @@ describe('Mocha', function() {
     });
   });
 
+  describe('.ignoreLeaks()', function() {
+    it('should set the ignoreLeaks option to true when param equals true', function() {
+      var mocha = new Mocha(opts);
+      mocha.ignoreLeaks(true);
+      expect(mocha.options, 'to have property', 'ignoreLeaks', true);
+    });
+
+    it('should set the ignoreLeaks option to false when param equals false', function() {
+      var mocha = new Mocha(opts);
+      mocha.ignoreLeaks(false);
+      expect(mocha.options, 'to have property', 'ignoreLeaks', false);
+    });
+
+    it('should set the ignoreLeaks option to false when the param is undefined', function() {
+      var mocha = new Mocha(opts);
+      mocha.ignoreLeaks();
+      expect(mocha.options, 'to have property', 'ignoreLeaks', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.ignoreLeaks(), 'to be', mocha);
+    });
+  });
+
+  describe('.invert()', function() {
+    it('should set the invert option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.invert();
+      expect(mocha.options, 'to have property', 'invert', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.invert(), 'to be', mocha);
+    });
+  });
+
+  describe('.noHighlighting()', function() {
+    // :NOTE: Browser-only option...
+    it('should set the noHighlighting option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.noHighlighting();
+      expect(mocha.options, 'to have property', 'noHighlighting', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.noHighlighting(), 'to be', mocha);
+    });
+  });
+
+  describe('.reporter("xunit").run(fn)', function() {
+    it('should not raise errors if callback was not provided', function() {
+      var mocha = new Mocha();
+      expect(function() {
+        try {
+          mocha.reporter('xunit').run();
+        } catch (e) {
+          console.log(e);
+          expect.fail(e.message);
+        }
+      }, 'not to throw');
+    });
+  });
+
+  describe('.run(fn)', function() {
+    it('should not raise errors if callback was not provided', function() {
+      sandbox.stub(Mocha.Runner.prototype, 'run');
+      var mocha = new Mocha(opts);
+      expect(function() {
+        mocha.run();
+      }, 'not to throw');
+    });
+
+    it('should execute the callback when complete', function(done) {
+      var mocha = new Mocha(opts);
+      sandbox.stub(Mocha.Runner.prototype, 'run').callsArg(0);
+      mocha.run(done);
+    });
+  });
+
   describe('.useInlineDiffs()', function() {
     it('should set the useInlineDiffs option to true when param equals true', function() {
       var mocha = new Mocha(opts);
@@ -232,59 +285,6 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.useInlineDiffs(), 'to be', mocha);
-    });
-  });
-
-  describe('.noHighlighting()', function() {
-    // :NOTE: Browser-only option...
-    it('should set the noHighlighting option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.noHighlighting();
-      expect(mocha.options, 'to have property', 'noHighlighting', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.noHighlighting(), 'to be', mocha);
-    });
-  });
-
-  describe('.allowUncaught()', function() {
-    it('should set the allowUncaught option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.allowUncaught();
-      expect(mocha.options, 'to have property', 'allowUncaught', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.allowUncaught(), 'to be', mocha);
-    });
-  });
-
-  describe('.delay()', function() {
-    it('should set the delay option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.delay();
-      expect(mocha.options, 'to have property', 'delay', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.delay(), 'to be', mocha);
-    });
-  });
-
-  describe('.bail()', function() {
-    it('should set the suite._bail to true if there is no arguments', function() {
-      var mocha = new Mocha(opts);
-      mocha.bail();
-      expect(mocha.suite._bail, 'to be', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.bail(), 'to be', mocha);
     });
   });
 
