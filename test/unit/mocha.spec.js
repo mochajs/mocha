@@ -5,7 +5,7 @@ var Mocha = require('../../lib/mocha');
 var sinon = require('sinon');
 
 describe('Mocha', function() {
-  var opts = {reporter: function() {}}; // no output
+  var opts = {reporter: utils.noop}; // no output
   var sandbox;
 
   beforeEach(function() {
@@ -132,6 +132,52 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.fullTrace(), 'to be', mocha);
+    });
+  });
+
+  describe('.globals()', function() {
+    it('should be an empty array initially', function() {
+      var mocha = new Mocha();
+      expect(mocha.options.globals, 'to be empty');
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.globals(), 'to be', mocha);
+    });
+
+    describe('when argument is invalid', function() {
+      it('should not add empty string to the whitelist', function() {
+        var mocha = new Mocha(opts);
+        mocha.globals('');
+        expect(mocha.options.globals, 'to be empty');
+      });
+
+      it('should not add empty array to the whitelist', function() {
+        var mocha = new Mocha(opts);
+        mocha.globals([]);
+        expect(mocha.options.globals, 'to be empty');
+      });
+    });
+
+    describe('when argument is valid', function() {
+      var elem = 'foo';
+      var elem2 = 'bar';
+
+      it('should add string to the whitelist', function() {
+        var mocha = new Mocha(opts);
+        mocha.globals(elem);
+        expect(mocha.options.globals, 'to contain', elem);
+        expect(mocha.options.globals, 'to have length', 1);
+      });
+
+      it('should add string array to the whitelist', function() {
+        var mocha = new Mocha(opts);
+        var elems = [elem, elem2];
+        mocha.globals(elems);
+        expect(mocha.options.globals, 'to contain', elem, elem2);
+        expect(mocha.options.globals, 'to have length', elems.length);
+      });
     });
   });
 
