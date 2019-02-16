@@ -5,7 +5,7 @@ var chai = require('chai');
 var sinon = require('sinon');
 var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-
+var Base = reporters.Base;
 var AssertionError = assert.AssertionError;
 var Base = reporters.Base;
 var chaiExpect = chai.expect;
@@ -419,18 +419,8 @@ describe('Base reporter', function() {
   });
 
   it('should let you stub out console.log without effecting reporters output', function() {
-    var logCached = console.log;
-    var logRes = [];
-
-    console.log = function(line) {
-      logRes.push(line);
-    };
-    var base = new Base({on: function() {}, stats: {duration: 0, passes: 3}});
-    base.epilogue();
-
-    expect(stdout[1], 'to contain', '3 passing');
-    expect(logRes, 'to have length', 0);
-
-    console.log = logCached;
+    sinon.stub(console, 'log');
+    Base.list([]);
+    expect(console.log, 'was not called');
   });
 });
