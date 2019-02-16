@@ -118,13 +118,13 @@ describe('Mocha', function() {
     });
 
     describe('when argument is invalid', function() {
-      it('should not add empty string to the whitelist', function() {
+      it('should not modify the whitelist when given empty string', function() {
         var mocha = new Mocha(opts);
         mocha.globals('');
         expect(mocha.options.globals, 'to be empty');
       });
 
-      it('should not add empty array to the whitelist', function() {
+      it('should not modify the whitelist when given empty array', function() {
         var mocha = new Mocha(opts);
         mocha.globals([]);
         expect(mocha.options.globals, 'to be empty');
@@ -142,7 +142,7 @@ describe('Mocha', function() {
         expect(mocha.options.globals, 'to have length', 1);
       });
 
-      it('should add string array to the whitelist', function() {
+      it('should add contents of string array to the whitelist', function() {
         var mocha = new Mocha(opts);
         var elems = [elem, elem2];
         mocha.globals(elems);
