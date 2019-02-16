@@ -1714,7 +1714,9 @@ To ignore your `mocha.opts`, use the `--no-opts` option.
 
 ## The `test/` Directory
 
-By default, `mocha` looks for the glob `./test/*.js`, so you may want to put your tests in `test/` folder. If you want to include sub directories, pass the `--recursive` option.
+By default, `mocha` looks for the glob `"./test/*.js"`, so you may want to put
+your tests in `test/` folder. If you want to include subdirectories, pass the
+`--recursive` option.
 
 To configure where `mocha` looks for tests, you may pass your own glob:
 
