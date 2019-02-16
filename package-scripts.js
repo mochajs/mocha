@@ -270,7 +270,8 @@ module.exports = {
         description: 'Build documentation'
       },
       prebuild: {
-        script: 'rimraf docs/_dist docs/_site && nps docs.preprocess',
+        script:
+          'shx cp docs/index.md docs/index.md.tmp && rimraf docs/_dist docs/_site && nps docs.preprocess',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -283,7 +284,7 @@ module.exports = {
       preprocess: {
         default: {
           script:
-            'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
+            'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md.tmp',
           description: 'Preprocess documentation',
           hiddenFromHelp: true
         },
