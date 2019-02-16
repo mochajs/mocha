@@ -253,21 +253,13 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#reporter("xunit")#run(fn)', function() {
-    it('should not raise errors if callback was not provided', function() {
-      var mocha = new Mocha();
-      expect(function() {
-        try {
-          mocha.reporter('xunit').run();
-        } catch (e) {
-          console.log(e);
-          expect.fail(e.message);
-        }
-      }, 'not to throw');
-    });
-  });
-
   describe('#run(fn)', function() {
+    it('should execute the callback when complete', function(done) {
+      var mocha = new Mocha(opts);
+      sandbox.stub(Mocha.Runner.prototype, 'run').callsArg(0);
+      mocha.run(done);
+    });
+
     it('should not raise errors if callback was not provided', function() {
       sandbox.stub(Mocha.Runner.prototype, 'run');
       var mocha = new Mocha(opts);
@@ -276,10 +268,19 @@ describe('Mocha', function() {
       }, 'not to throw');
     });
 
-    it('should execute the callback when complete', function(done) {
-      var mocha = new Mocha(opts);
-      sandbox.stub(Mocha.Runner.prototype, 'run').callsArg(0);
-      mocha.run(done);
+    describe('#reporter("xunit")#run(fn)', function() {
+      // :TBD: Why does specifying reporter differentiate this test from preceding one
+      it('should not raise errors if callback was not provided', function() {
+        var mocha = new Mocha();
+        expect(function() {
+          try {
+            mocha.reporter('xunit').run();
+          } catch (e) {
+            console.log(e);
+            expect.fail(e.message);
+          }
+        }, 'not to throw');
+      });
     });
   });
 
