@@ -10,7 +10,7 @@ Have you read Mocha's Code of Conduct? By filing an Issue, you are expected to c
 For more, check out the Mocha Gitter chat room: https://gitter.im/mochajs/mocha
 
 Detail the steps necessary to reproduce the problem. To get the fastest support, create an MCVE and upload it to GitHub.
-See https://stackoverflow.com/help/mcve for MCVE.
+create an [MCVE](https://stackoverflow.com/help/mcve) and upload it to GitHub.
 -->
 
 ### Prerequisites
@@ -53,11 +53,13 @@ Scrub if needed so as not to reveal passwords, etc.
 
 - The output of `mocha --version` and `node node_modules/.bin/mocha --version`:
 - The output of `node --version`:
-- The version and architecture of your operating system:
-- Your shell (bash, zsh, PowerShell, cmd, etc.):
+- Your operating system
+  - name and version:
+  - architecture (32 or 64-bit):
+- Your shell (e.g., bash, zsh, PowerShell, cmd):
 - Your browser and version (if running browser tests):
-- Any other third party Mocha related modules (with versions):
-- The code transpiler being used:
+- Any third-party Mocha-related modules (and their versions):
+- Any code transpiler (e.g., TypeScript, CoffeeScript, Babel) being used (and its version):
 
 ### Additional Information
 
