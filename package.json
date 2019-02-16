@@ -517,7 +517,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.7.1",
     "@mocha/contributors": "^1.0.3",
-    "@mocha/docdash": "^1.0.1",
+    "@mocha/docdash": "^2.0.0",
     "assetgraph-builder": "^6.6.3",
     "browserify": "^16.2.3",
     "browserify-package-json": "^1.0.1",
