@@ -269,7 +269,7 @@ function _spawnMochaWithListeners(args, fn, opts) {
 
   mocha.on('close', function(code) {
     fn(null, {
-      output: output.split('\n').join('\n'),
+      output: output,
       code: code,
       args: args
     });
