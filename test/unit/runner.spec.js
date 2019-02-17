@@ -9,6 +9,7 @@ var Test = Mocha.Test;
 var Runnable = Mocha.Runnable;
 var Hook = Mocha.Hook;
 var noop = Mocha.utils.noop;
+var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
 var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
@@ -443,19 +444,6 @@ describe('Runner', function() {
   });
 
   describe('allowUncaught', function() {
-    var immediately;
-
-    before(function() {
-      immediately = Runner.immediately;
-      Runner.immediately = function(fn) {
-        fn();
-      };
-    });
-
-    after(function() {
-      Runner.immediately = immediately;
-    });
-
     it('should allow unhandled errors to propagate through', function() {
       var newRunner = new Runner(suite);
       newRunner.allowUncaught = true;
@@ -468,42 +456,73 @@ describe('Runner', function() {
       expect(fail, 'to throw', 'allow unhandled errors');
     });
 
-    it('should not allow unhandled errors in hooks to propagate through', function() {
+    it('should not allow unhandled errors in sync hooks to propagate through', function(done) {
       suite.beforeEach(function() {
-        throw new Error('this error will not propagate');
+        throw new Error();
       });
       var runner = new Runner(suite);
-      try {
-        runner.hook('beforeEach', function() {});
-        expect(true, 'to be', true);
-      } catch (err) {
-        expect(false, 'to be', true);
-      }
+      runner.allowUncaught = false;
+
+      // We are monkey patching here with runner.once and a hook.run wrapper to effectively
+      // capture thrown errors within the event loop phase where Runner.immediately executes
+      runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        var _run = hook.run;
+        hook.run = function(fn) {
+          function throwError() {
+            _run.call(hook, fn);
+          }
+          expect(throwError, 'not to throw');
+          done();
+        };
+      });
+
+      runner.hook('beforeEach', noop);
     });
 
-    it('should allow unhandled errors in sync hooks to propagate through', function() {
+    it('should allow unhandled errors in sync hooks to propagate through', function(done) {
       suite.beforeEach(function() {
         throw new Error('allow unhandled errors in sync hooks');
       });
       var runner = new Runner(suite);
       runner.allowUncaught = true;
-      function throwError() {
-        runner.hook('beforeEach', function() {});
-      }
-      expect(throwError, 'to throw', 'allow unhandled errors in sync hooks');
+
+      runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        var _run = hook.run;
+        hook.run = function(fn) {
+          function throwError() {
+            _run.call(hook, fn);
+          }
+          var expected = 'allow unhandled errors in sync hooks';
+          expect(throwError, 'to throw', expected);
+          done();
+        };
+      });
+
+      runner.hook('beforeEach', noop);
     });
 
-    it('async - should allow unhandled errors in hooks to propagate through', function() {
-      // having `done` triggers the async path
+    it('async - should allow unhandled errors in hooks to propagate through', function(done) {
+      // the `done` argument, although unused, it triggers the async path
+      // see this.async in the Runnable constructor
       suite.beforeEach(function(done) {
         throw new Error('allow unhandled errors in async hooks');
       });
       var runner = new Runner(suite);
       runner.allowUncaught = true;
-      function throwError() {
-        runner.hook('beforeEach', function() {});
-      }
-      expect(throwError, 'to throw', 'allow unhandled errors in async hooks');
+
+      runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        var _run = hook.run;
+        hook.run = function(fn) {
+          function throwError() {
+            _run.call(hook, fn);
+          }
+          var expected = 'allow unhandled errors in async hooks';
+          expect(throwError, 'to throw', expected);
+          done();
+        };
+      });
+
+      runner.hook('beforeEach', noop);
     });
   });
 
