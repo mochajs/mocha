@@ -5,7 +5,7 @@ var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
-describe('json reporter', function() {
+describe('JSON reporter', function() {
   var suite, runner;
   var testTitle = 'json test 1';
 
