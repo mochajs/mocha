@@ -91,10 +91,10 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Use `--no-config` or `--no-package` to completely disable loading of configuration via RC file and `package.json`, respectively
   - Configurations are merged as applicable using the priority list:
     1. Command-line arguments
-    2. RC file
-    3. `package.json`
-    4. `mocha.opts`
-    5. Mocha's own defaults
+    1. RC file
+    1. `package.json`
+    1. `mocha.opts`
+    1. Mocha's own defaults
   - Check out these [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
 
 - Node/V8 flag support in `mocha` executable:
