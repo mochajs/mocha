@@ -7,7 +7,6 @@
 ## :bug: Fixes
 
 - [#3737](https://github.com/mochajs/mocha/issues/3737) Fix falsy values from options globals [**@plroebuck**](https://github.com/plroebuck)
-- [#3677](https://github.com/mochajs/mocha/issues/3677) Fix add error objects for createUnsupportedError and createInvalidExceptionError [**@boneskull**](https://github.com/boneskull)
 - [#3707](https://github.com/mochajs/mocha/issues/3707) Fix encapsulation issues for `Suite#_onlyTests` and `Suite#_onlySuites` [**@vkarpov15**](https://github.com/vkarpov15)
 - [#3711](https://github.com/mochajs/mocha/issues/3711) Fix diagnostic messages dealing with plurality and markup of output [**@plroebuck**](https://github.com/plroebuck)
 - [#3723](https://github.com/mochajs/mocha/issues/3723) Fix "reporter-option" to allow comma-separated options [**@boneskull**](https://github.com/boneskull)
@@ -30,7 +29,8 @@
 
 ## :nut_and_bolt: Other
 
-- [#3733](https://github.com/mochajs/mocha/issues/3733) removed unneeded processing in post-processing hook [**@wanseob**](https://github.com/wanseob)
+- [#3677](https://github.com/mochajs/mocha/issues/3677) Add error objects for createUnsupportedError and createInvalidExceptionError [**@boneskull**](https://github.com/boneskull)
+- [#3733](https://github.com/mochajs/mocha/issues/3733) Removed unnecessary processing in post-processing hook [**@wanseob**](https://github.com/wanseob)
 - [#3730](https://github.com/mochajs/mocha/issues/3730) Update nyc to latest version [**@coreyfarrell**](https://github.com/coreyfarrell)
 - [#3648](https://github.com/mochajs/mocha/issues/3648), [#3680](https://github.com/mochajs/mocha/issues/3680): Fixes to support latest versions of [unexpected](https://npm.im/unexpected) and [unexpected-sinon](https://npm.im/unexpected-sinon) ([**@sunesimonsen**](https://github.com/sunesimonsen))
 - [#3638](https://github.com/mochajs/mocha/issues/3638): Add meta tag to site ([**@MartijnCuppens**](https://github.com/MartijnCuppens))
@@ -91,10 +91,10 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Use `--no-config` or `--no-package` to completely disable loading of configuration via RC file and `package.json`, respectively
   - Configurations are merged as applicable using the priority list:
     1. Command-line arguments
-    1. RC file
-    1. `package.json`
-    1. `mocha.opts`
-    1. Mocha's own defaults
+    2. RC file
+    3. `package.json`
+    4. `mocha.opts`
+    5. Mocha's own defaults
   - Check out these [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
 
 - Node/V8 flag support in `mocha` executable:
