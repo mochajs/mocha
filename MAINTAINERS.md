@@ -359,10 +359,6 @@ In addition to above, you'll need to ensure the docs at [https://mochajs.org](ht
 
 *Note: there are too many steps above.*
 
-## Projects
-
-There are [Projects](https://github.com/mochajs/mocha/projects), but we haven't yet settled on how to use them.
-
 ## About The JS Foundation
 
 The [JS Foundation](https://js.foundation) retains copyright of all projects underneath the [mochajs org](https://github.com/mochajs).  The Foundation does not influence technical decisions nor the project roadmap.  It is, however, charged with ensuring the continued vitality and sustainability of projects under its banner.
