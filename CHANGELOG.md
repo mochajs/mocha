@@ -1,7 +1,17 @@
-# 6.0.0 (in progress)
+# 6.0.0 / 2019-02-18
+
+## :tada: Enhancements
+
+- [#3726](https://github.com/mochajs/mocha/issues/3726) Add ability to unload files from `require` cache [**@plroebuck**](https://github.com/plroebuck)
 
 ## :bug: Fixes
 
+- [#3737](https://github.com/mochajs/mocha/issues/3737) Fix falsy values from options globals [**@plroebuck**](https://github.com/plroebuck)
+- [#3677](https://github.com/mochajs/mocha/issues/3677) Fix add error objects for createUnsupportedError and createInvalidExceptionError [**@boneskull**](https://github.com/boneskull)
+- [#3707](https://github.com/mochajs/mocha/issues/3707) Fix encapsulation issues for `Suite#_onlyTests` and `Suite#_onlySuites` [**@vkarpov15**](https://github.com/vkarpov15)
+- [#3711](https://github.com/mochajs/mocha/issues/3711) Fix diagnostic messages dealing with plurality and markup of output [**@plroebuck**](https://github.com/plroebuck)
+- [#3723](https://github.com/mochajs/mocha/issues/3723) Fix "reporter-option" to allow comma-separated options [**@boneskull**](https://github.com/boneskull)
+- [#3722](https://github.com/mochajs/mocha/issues/3722) Fix code quality and performance of `lookupFiles` and `files` [**@plroebuck**](https://github.com/plroebuck)
 - [#3650](https://github.com/mochajs/mocha/issues/3650), [#3654](https://github.com/mochajs/mocha/issues/3654): Fix noisy error message when no files found ([**@craigtaub**](https://github.com/craigtaub))
 - [#3632](https://github.com/mochajs/mocha/issues/3632): Tests having an empty title are no longer confused with the "root" suite ([**@juergba**](https://github.com/juergba))
 - [#3666](https://github.com/mochajs/mocha/issues/3666): Fix missing error codes ([**@vkarpov15**](https://github.com/vkarpov15))
@@ -20,6 +30,8 @@
 
 ## :nut_and_bolt: Other
 
+- [#3733](https://github.com/mochajs/mocha/issues/3733) removed unneeded processing in post-processing hook [**@wanseob**](https://github.com/wanseob)
+- [#3730](https://github.com/mochajs/mocha/issues/3730) Update nyc to latest version [**@coreyfarrell**](https://github.com/coreyfarrell)
 - [#3648](https://github.com/mochajs/mocha/issues/3648), [#3680](https://github.com/mochajs/mocha/issues/3680): Fixes to support latest versions of [unexpected](https://npm.im/unexpected) and [unexpected-sinon](https://npm.im/unexpected-sinon) ([**@sunesimonsen**](https://github.com/sunesimonsen))
 - [#3638](https://github.com/mochajs/mocha/issues/3638): Add meta tag to site ([**@MartijnCuppens**](https://github.com/MartijnCuppens))
 - [#3653](https://github.com/mochajs/mocha/issues/3653): Fix parts of test suite failing to run on Windows ([**@boneskull**](https://github.com/boneskull))
