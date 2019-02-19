@@ -2,8 +2,7 @@ describe('skip in before with nested describes', function () {
   before(function (done) {
     var self = this;
     setTimeout(function () {
-      self.skip();
-      done();
+      self.skip();   // done() is not required
     }, 0);
   });
 

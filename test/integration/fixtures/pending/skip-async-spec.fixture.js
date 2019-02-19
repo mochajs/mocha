@@ -4,7 +4,7 @@ describe('skip in test', function () {
   it('should skip async', function (done) {
     var self = this;
     setTimeout(function () {
-      self.skip();
+      self.skip();   // done() is not required
     }, 0);
   });
 

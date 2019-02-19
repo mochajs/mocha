@@ -258,18 +258,21 @@ describe('pending', function() {
 
     describe('in beforeEach', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip-async-beforeEach.fixture.js', args, function(
-          err,
-          res
-        ) {
+        var fixture = 'pending/skip-async-beforeEach.fixture.js';
+        run(fixture, args, function(err, res) {
           if (err) {
-            done(err);
-            return;
+            return done(err);
           }
-          assert.strictEqual(res.stats.pending, 1);
-          assert.strictEqual(res.stats.passes, 0);
-          assert.strictEqual(res.stats.failures, 1);
-          assert.strictEqual(res.code, 1);
+          expect(res, 'to have passed')
+            .and('to have passed test count', 0)
+            .and('to have pending test count', 3)
+            .and(
+              'to have pending test order',
+              'should skip this test-1',
+              'should skip this test-2',
+              'should skip this test-3'
+            )
+            .and('to have failed test count', 0);
           done();
         });
       });
