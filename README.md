@@ -103,3 +103,11 @@ Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors
 [MIT](LICENSE)
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
+
+## Honorable Mentions
+
+<p align="center">
+  <a href="https://matomo.org">
+    <img src="/assets/backers/52010312-1d77fb80-248a-11e9-95f5-3c093dae2a61.png" alt="MochaJS Backer" height="120">
+  </a>
+</p>
