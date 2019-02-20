@@ -1,6 +1,6 @@
 'use strict';
 
-var Mocha = require('../../../../../lib/mocha');
+var Mocha = require('../../../lib/mocha');
 var Test = Mocha.Test;
 var EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
 
@@ -13,7 +13,7 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
     file,
     mocha
   ) {
-    var common = require('../../../../../lib/interfaces/common')(
+    var common = require('../../../lib/interfaces/common')(
       [suite],
       context
     );

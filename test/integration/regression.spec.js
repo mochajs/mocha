@@ -1,6 +1,5 @@
 'use strict';
 
-var path = require('path');
 var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
 
@@ -21,25 +20,6 @@ describe('regressions', function() {
       expect(occurences('testbody1'), 'to be', 1);
       expect(occurences('testbody2'), 'to be', 1);
       expect(occurences('testbody3'), 'to be', 1);
-      done();
-    });
-  });
-
-  it("issue-1794: Can't --require custom UI and use it", function(done) {
-    var simpleUiPath = path.join(
-      __dirname,
-      'fixtures',
-      'regression',
-      '1794',
-      'simple-ui.fixture.js'
-    );
-    var args = ['--require', simpleUiPath, '--ui', 'simple-ui'];
-    run('regression/1794/issue-1794.fixture.js', args, function(err, res) {
-      if (err) {
-        done(err);
-        return;
-      }
-      expect(res, 'to have passed');
       done();
     });
   });
