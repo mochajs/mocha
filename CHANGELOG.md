@@ -1,3 +1,21 @@
+# 6.0.1 / 2019-02-21
+
+The obligatory round of post-major-release bugfixes.
+
+## :bug: Fixes
+
+These issues were regressions.
+
+- #3754 - Mocha again finds `test.js` when run without arguments (@plroebuck)
+- #3756 - Mocha again supports third-party interfaces via `--ui` (@boneskull)
+- #3755 - Fix broken `--watch` (@boneskull)
+- #3759 - Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ (@boneskull)
+
+## :book: Documentation
+
+- #3738 - Upgrade to `@mocha/docdash@2` (@tendonstrength)
+- #3751 - Use preferred names for example config files (@Szauka)
+
 # 6.0.0 / 2019-02-18
 
 ## :tada: Enhancements
