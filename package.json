@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -77,6 +77,7 @@
     "Brian Lalor <blalor@bravo5.org>",
     "Brian M. Carlson <brian.m.carlson@gmail.com>",
     "Brian Moore <guardbionic-github@yahoo.com>",
+    "Brian Tomlin <tendonstrength@gmail.com>",
     "Brittany Moore <moore.brittanyann@gmail.com>",
     "Bryan Donovan <bdondo@gmail.com>",
     "Buck Doyle <b@chromatin.ca>",
@@ -411,6 +412,7 @@
     "Sulabh Bista <sul4bh@gmail.com>",
     "Sune Simonsen <sune@we-knowhow.dk>",
     "Svetlana <39729453+Lana-Light@users.noreply.github.com>",
+    "Szauka <33459309+Szauka@users.noreply.github.com>",
     "Tapiwa Kelvin <tapiwa@munzwa.tk>",
     "Ted Yavuzkurt <hello@TedY.io>",
     "Teddy Zeenny <teddyzeenny@gmail.com>",
