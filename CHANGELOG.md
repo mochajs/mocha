@@ -6,15 +6,15 @@ The obligatory round of post-major-release bugfixes.
 
 These issues were regressions.
 
-- #3754 - Mocha again finds `test.js` when run without arguments (@plroebuck)
-- #3756 - Mocha again supports third-party interfaces via `--ui` (@boneskull)
-- #3755 - Fix broken `--watch` (@boneskull)
-- #3759 - Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ (@boneskull)
+- [#3754](https://github.com/mochajs/mocha/issues/3754) - Mocha again finds `test.js` when run without arguments ([**@plroebuck**](https://github.com/plroebuck))
+- [#3756](https://github.com/mochajs/mocha/issues/3756) - Mocha again supports third-party interfaces via `--ui` ([**@boneskull**](https://github.com/boneskull))
+- [#3755](https://github.com/mochajs/mocha/issues/3755) - Fix broken `--watch` ([**@boneskull**](https://github.com/boneskull))
+- [#3759](https://github.com/mochajs/mocha/issues/3759) - Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ ([**@boneskull**](https://github.com/boneskull))
 
 ## :book: Documentation
 
-- #3738 - Upgrade to `@mocha/docdash@2` (@tendonstrength)
-- #3751 - Use preferred names for example config files (@Szauka)
+- [#3738](https://github.com/mochajs/mocha/issues/3738) - Upgrade to `@mocha/docdash@2` ([**@tendonstrength**](https://github.com/tendonstrength))
+- [#3751](https://github.com/mochajs/mocha/issues/3751) - Use preferred names for example config files ([**@Szauka**](https://github.com/Szauka))
 
 # 6.0.0 / 2019-02-18
 
