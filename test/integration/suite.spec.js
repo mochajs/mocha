@@ -51,7 +51,7 @@ describe('skipped suite w/ callback', function() {
 });
 
 describe('suite returning a value', function() {
-  it('should give a deprecation warning for suite callback returning a value', function(done) {
+  it('should not give a deprecation warning for suite callback returning a value', function(done) {
     run(
       'suite/suite-returning-value.fixture.js',
       args,
@@ -59,9 +59,7 @@ describe('suite returning a value', function() {
         if (err) {
           return done(err);
         }
-        var pattern = new RegExp('Suites ignore return values', 'g');
-        var result = res.output.match(pattern) || [];
-        expect(result, 'to have length', 1);
+        expect(res, 'not to contain output', /Suites ignore return values/);
         done();
       },
       {stdio: 'pipe'}
