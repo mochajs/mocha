@@ -79,7 +79,6 @@ Session.vim
 out/
 .idea_modules/
 atlassian-ide-plugin.xml
-mocha.iml
 
 # SourceTree
 *_BACKUP_*

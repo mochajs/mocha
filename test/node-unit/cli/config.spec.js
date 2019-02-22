@@ -21,7 +21,6 @@ describe('cli/config', function() {
       beforeEach(function() {
         sandbox.stub(parsers, 'yaml').returns(config);
         sandbox.stub(parsers, 'json').returns(config);
-        sandbox.stub(parsers, 'json5').returns(config);
         sandbox.stub(parsers, 'js').returns(config);
       });
 
@@ -61,20 +60,9 @@ describe('cli/config', function() {
       describe('when supplied a filepath with .jsonc extension', function() {
         const filepath = 'foo.jsonc';
 
-        it('should use the JSON5 parser', function() {
+        it('should use the JSON parser', function() {
           loadConfig('foo.jsonc');
-          expect(parsers.json5, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
-        });
-      });
-
-      describe('when supplied a filepath with .json5 extension', function() {
-        const filepath = 'foo.json5';
-
-        it('should use the JSON5 parser', function() {
-          loadConfig('foo.json5');
-          expect(parsers.json5, 'to have calls satisfying', [
+          expect(parsers.json, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
         });
