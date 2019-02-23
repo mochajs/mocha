@@ -1824,6 +1824,8 @@ For discussions join the [Google Group][google-mocha]. For a running example of 
 [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
+
+
 [//]: # 'Cross reference section'
 [article-globbing]: https://medium.com/@jakubsynowiec/you-should-always-quote-your-globs-in-npm-scripts-621887a2a784
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
@@ -1891,6 +1893,12 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [wallaby.js]: https://wallabyjs.com/
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
+
+<p align="center">
+  <a href="https://matomo.org">
+    <img src="images/matomo-logo.png" alt="Matomo">
+  </a>
+</p>
 
 <!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
 
