@@ -1824,8 +1824,6 @@ For discussions join the [Google Group][google-mocha]. For a running example of 
 [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
-
-
 [//]: # 'Cross reference section'
 [article-globbing]: https://medium.com/@jakubsynowiec/you-should-always-quote-your-globs-in-npm-scripts-621887a2a784
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
