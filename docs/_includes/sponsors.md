@@ -4,6 +4,6 @@ Use Mocha at Work?  Ask your manager or marketing team if they'd help [support](
 
 <!-- markdownlint-disable MD034 -->
 {% for i in (0..15) %}[![](https://opencollective.com/mochajs/sponsor/{{ i }}/avatar.jpg)](https://opencollective.com/mochajs/sponsor/{{ i }}/website){: target="_blank"} {% endfor %}
-{: .image-list .faded-images}
+{: .image-list .faded-images id="_sponsors"}
 
 <script src="js/avatars.js"></script>

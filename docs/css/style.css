@@ -144,7 +144,7 @@ a.direct-link {
   opacity: 0;
 }
 
-a[href="https://opencollective.com/mochajs/sponsor/3/website"], a[href="https://opencollective.com/mochajs/sponsor/4/website"] {
+#_sponsors {
     background-color: #a9a3a3e8;
     box-shadow: 0px 0px 16px 8px #9e9a9ad6;
 }
