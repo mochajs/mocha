@@ -1892,11 +1892,11 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 
-<p align="center">
-  <a href="https://matomo.org">
-    <img src="images/matomo-logo.png" alt="Matomo">
-  </a>
-</p>
+<center>
+    <a href="https://matomo.org">
+        <img src="images/matomo-logo.png" alt="Matomo">
+    </a>
+</center>
 
 <!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
 
