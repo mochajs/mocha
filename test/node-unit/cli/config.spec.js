@@ -24,7 +24,7 @@ describe('cli/config', function() {
         sandbox.stub(parsers, 'js').returns(config);
       });
 
-      describe('when supplied a filepath with .yaml extension', function() {
+      describe('when supplied a filepath with ".yaml" extension', function() {
         const filepath = 'foo.yaml';
 
         it('should use the YAML parser', function() {
@@ -35,7 +35,7 @@ describe('cli/config', function() {
         });
       });
 
-      describe('when supplied a filepath with .yml extension', function() {
+      describe('when supplied a filepath with ".yml" extension', function() {
         const filepath = 'foo.yml';
 
         it('should use the YAML parser', function() {
@@ -46,7 +46,7 @@ describe('cli/config', function() {
         });
       });
 
-      describe('when supplied a filepath with .js extension', function() {
+      describe('when supplied a filepath with ".js" extension', function() {
         const filepath = 'foo.js';
 
         it('should use the JS parser', function() {
@@ -57,7 +57,7 @@ describe('cli/config', function() {
         });
       });
 
-      describe('when supplied a filepath with .jsonc extension', function() {
+      describe('when supplied a filepath with ".jsonc" extension', function() {
         const filepath = 'foo.jsonc';
 
         it('should use the JSON parser', function() {
@@ -68,7 +68,7 @@ describe('cli/config', function() {
         });
       });
 
-      describe('when supplied a filepath with .json extension', function() {
+      describe('when supplied a filepath with ".json" extension', function() {
         const filepath = 'foo.json';
 
         it('should use the JSON parser', function() {
