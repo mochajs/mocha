@@ -3,12 +3,12 @@
 // This same configuration could be provided in the `mocha` property of your
 // project's `package.json`.
 {
-  diff: true,
+  "diff": true,
   "extension": ["js"],
   "opts": "./test/mocha.opts",
   "package": /* 📦 */ "./package.json",
   "reporter": /* 📋 */ "spec",
-  "slow": 75.,
-  "timeout": /* ⏱ */ +2000,
-  "ui": "bdd",
+  "slow": 75,
+  "timeout": 2000,
+  "ui": "bdd"
 }
