@@ -4,8 +4,8 @@
 
 Two more regressions fixed:
 
-- #3768: Test file paths no longer dropped from `mocha.opts` (@boneskull)
-- #3767: `--require` does not break on module names that look like certain `node` flags (@boneskull)
+- [#3768](https://github.com/mochajs/mocha/issues/3768): Test file paths no longer dropped from `mocha.opts` ([**@boneskull**](https://github.com/boneskull))
+- [#3767](https://github.com/mochajs/mocha/issues/3767): `--require` does not break on module names that look like certain `node` flags ([**@boneskull**](https://github.com/boneskull))
 
 # 6.0.1 / 2019-02-21
 
@@ -675,8 +675,11 @@ Thanks to all our contributors, sponsors and backers! Keep on the lookout for a 
 ## :boom: Breaking Changes
 
 - :warning: Due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0, **Mocha no longer supports Node.js v0.8**.
+
 - :warning: **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.** Previously, this requirement only affected Mocha's development dependencies. In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
+
 - `.only()` is no longer "fuzzy", can be used multiple times, and generally just works like you think it should. :joy:
+
 - To avoid common bugs, when a test injects a callback function (suggesting asynchronous execution), calls it, _and_ returns a `Promise`, Mocha will now throw an exception:
 
   \```js
@@ -694,9 +697,13 @@ Thanks to all our contributors, sponsors and backers! Keep on the lookout for a 
   The above test will fail with `Error: Resolution method is overspecified. Specify a callback *or* return a Promise; not both.`.
 
 - When a test timeout value _greater than_ `2147483648` is specified in any context (`--timeout`, `mocha.setup()`, per-suite, per-test, etc.), the timeout will be _disabled_ and the test(s) will be allowed to run indefinitely. This is equivalent to specifying a timeout value of `0`. See [MDN](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) for reasoning.
+
 - The `dot` reporter now uses more visually distinctive characters when indicating "pending" and "failed" tests.
+
 - Mocha no longer supports [component](https://www.npmjs.com/package/component).
+
 - The long-forsaken `HTMLCov` and `JSONCov` reporters--and any relationship to the "node-jscoverage" project--have been removed.
+
 - `spec` reporter now omits leading carriage returns (`\r`) in non-TTY environment.
 
 ## :tada: Enhancements
