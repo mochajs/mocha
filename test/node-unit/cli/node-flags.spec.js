@@ -15,6 +15,18 @@ describe('node-flags', function() {
       });
     });
 
+    describe('when expecting leading dashes', function() {
+      it('should require leading dashes', function() {
+        expect(isNodeFlag('throw-deprecation', false), 'to be false');
+        expect(isNodeFlag('--throw-deprecation', false), 'to be true');
+      });
+
+      it('should return false for --require/-r', function() {
+        expect(isNodeFlag('--require', false), 'to be false');
+        expect(isNodeFlag('-r', false), 'to be false');
+      });
+    });
+
     describe('special cases', function() {
       it('should return true for flags starting with "preserve-symlinks"', function() {
         expect(isNodeFlag('preserve-symlinks'), 'to be true');
