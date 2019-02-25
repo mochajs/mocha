@@ -1,3 +1,12 @@
+# 6.0.2 / 2019-02-25
+
+## :bug: Fixes
+
+Two more regressions fixed:
+
+- #3768: Test file paths no longer dropped from `mocha.opts` (@boneskull)
+- #3767: `--require` does not break on module names that look like certain `node` flags (@boneskull)
+
 # 6.0.1 / 2019-02-21
 
 The obligatory round of post-major-release bugfixes.
@@ -6,15 +15,15 @@ The obligatory round of post-major-release bugfixes.
 
 These issues were regressions.
 
-- [#3754](https://github.com/mochajs/mocha/issues/3754) - Mocha again finds `test.js` when run without arguments ([**@plroebuck**](https://github.com/plroebuck))
-- [#3756](https://github.com/mochajs/mocha/issues/3756) - Mocha again supports third-party interfaces via `--ui` ([**@boneskull**](https://github.com/boneskull))
-- [#3755](https://github.com/mochajs/mocha/issues/3755) - Fix broken `--watch` ([**@boneskull**](https://github.com/boneskull))
-- [#3759](https://github.com/mochajs/mocha/issues/3759) - Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ ([**@boneskull**](https://github.com/boneskull))
+- [#3754](https://github.com/mochajs/mocha/issues/3754): Mocha again finds `test.js` when run without arguments ([**@plroebuck**](https://github.com/plroebuck))
+- [#3756](https://github.com/mochajs/mocha/issues/3756): Mocha again supports third-party interfaces via `--ui` ([**@boneskull**](https://github.com/boneskull))
+- [#3755](https://github.com/mochajs/mocha/issues/3755): Fix broken `--watch` ([**@boneskull**](https://github.com/boneskull))
+- [#3759](https://github.com/mochajs/mocha/issues/3759): Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ ([**@boneskull**](https://github.com/boneskull))
 
 ## :book: Documentation
 
-- [#3738](https://github.com/mochajs/mocha/issues/3738) - Upgrade to `@mocha/docdash@2` ([**@tendonstrength**](https://github.com/tendonstrength))
-- [#3751](https://github.com/mochajs/mocha/issues/3751) - Use preferred names for example config files ([**@Szauka**](https://github.com/Szauka))
+- [#3738](https://github.com/mochajs/mocha/issues/3738): Upgrade to `@mocha/docdash@2` ([**@tendonstrength**](https://github.com/tendonstrength))
+- [#3751](https://github.com/mochajs/mocha/issues/3751): Use preferred names for example config files ([**@Szauka**](https://github.com/Szauka))
 
 # 6.0.0 / 2019-02-18
 
@@ -80,11 +89,11 @@ Welcome [**@plroebuck**](https://github.com/plroebuck), [**@craigtaub**](https:/
 - [#3556](https://github.com/mochajs/mocha/issues/3556): `lib/template.html` has moved to `lib/browser/template.html` ([**@boneskull**](https://github.com/boneskull))
 - [#2576](https://github.com/mochajs/mocha/issues/2576): An exception is now thrown if Mocha fails to parse or find a `mocha.opts` at a user-specified path ([**@plroebuck**](https://github.com/plroebuck))
 - [#3458](https://github.com/mochajs/mocha/issues/3458): Instantiating a `Base`-extending reporter without a `Runner` parameter will throw an exception ([**@craigtaub**](https://github.com/craigtaub))
-- [#3125](https://github.com/mochajs/mocha/issues/3125): For consumers of Mocha's programmatic API, all exceptions thrown from Mocha now have a `code` property (and some will have additional metadata).  Some `Error` messages have changed.  **Please use the `code` property to check `Error` types instead of the `message` property**; these descriptions will be  localized in the future. ([**@craigtaub**](https://github.com/craigtaub))
+- [#3125](https://github.com/mochajs/mocha/issues/3125): For consumers of Mocha's programmatic API, all exceptions thrown from Mocha now have a `code` property (and some will have additional metadata). Some `Error` messages have changed. **Please use the `code` property to check `Error` types instead of the `message` property**; these descriptions will be localized in the future. ([**@craigtaub**](https://github.com/craigtaub))
 
 ## :fax: Deprecations
 
-These are _soft_-deprecated, and will emit a warning upon use.  Support will be removed in (likely) the next major version of Mocha:
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
 
 - `-gc` users should use `--gc-global` instead
 - Consumers of the function exported by `bin/options` should now use the `loadMochaOpts` or `loadOptions` (preferred) functions exported by the `lib/cli/options` module
@@ -103,6 +112,7 @@ All of the above deprecations were introduced by [#3556](https://github.com/moch
 Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556):
 
 - Mocha now supports "RC" files in JS, JSON, YAML, or `package.json`-based (using `mocha` property) format
+
   - `.mocharc.js`, `.mocharc.json`, `.mocharc.yaml` or `.mocharc.yml` are valid "rc" file names and will be automatically loaded
   - Use `--config /path/to/rc/file` to specify an explicit path
   - Use `--package /path/to/package.json` to specify an explicit `package.json` to read the `mocha` prop from
@@ -116,6 +126,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Check out these [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
 
 - Node/V8 flag support in `mocha` executable:
+
   - Support all allowed `node` flags as supported by the running version of `node` (also thanks to [**@demurgos**](https://github.com/demurgos))
   - Support any V8 flag by prepending `--v8-` to the flag name
   - All flags are also supported via config files, `package.json` properties, or `mocha.opts`
@@ -128,7 +139,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - `Mocha` constructor supports all options
 
-- `--extension` is now an alias for `--watch-extensions` and affects _non-watch-mode_ test runs as well.  For example, to run _only_ `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
+- `--extension` is now an alias for `--watch-extensions` and affects _non-watch-mode_ test runs as well. For example, to run _only_ `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
 
 - [#3552](https://github.com/mochajs/mocha/issues/3552): `tap` reporter is now TAP13-capable ([**@plroebuck**](https://github.com/plroebuck) & [**@mollstam**](https://github.com/mollstam))
 
@@ -259,30 +270,31 @@ This patch features a fix to address a potential "low severity" [ReDoS vulnerabi
 
 # 5.0.2 / 2018-03-05
 
-This release fixes a class of tests which report as _false positives_.  **Certain tests will now break**, though they would have previously been reported as passing.  Details below.  Sorry for the inconvenience!
+This release fixes a class of tests which report as _false positives_. **Certain tests will now break**, though they would have previously been reported as passing. Details below. Sorry for the inconvenience!
 
 ## :bug: Fixes
 
-- [#3226](https://github.com/mochajs/mocha/issues/3226): Do not swallow errors that are thrown asynchronously from passing tests ([@boneskull](https://github.com/boneskull)).  Example:
+- [#3226](https://github.com/mochajs/mocha/issues/3226): Do not swallow errors that are thrown asynchronously from passing tests ([@boneskull](https://github.com/boneskull)). Example:
 
   \```js
   it('should actually fail, sorry!', function (done) {
-    // passing assertion
-    assert(true === true);
+  // passing assertion
+  assert(true === true);
 
-    // test complete & is marked as passing
-    done();
+  // test complete & is marked as passing
+  done();
 
-    // ...but something evil lurks within
-    setTimeout(() => {
-      throw new Error('chaos!');
-    }, 100);
+  // ...but something evil lurks within
+  setTimeout(() => {
+  throw new Error('chaos!');
+  }, 100);
   });
   \```
 
-  Previously to this version, Mocha would have _silently swallowed_ the `chaos!` exception, and you wouldn't know.  Well, _now you know_.  Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
+  Previously to this version, Mocha would have _silently swallowed_ the `chaos!` exception, and you wouldn't know. Well, _now you know_. Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
 
   **Maintainers of external reporters**: _If_ a test of this class is encountered, the `Runner` instance will emit the `end` event _twice_; you _may_ need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
+
 - [#3093](https://github.com/mochajs/mocha/issues/3093): Fix stack trace reformatting problem ([@outsideris](https://github.com/outsideris))
 
 ## :nut_and_bolt: Other
@@ -320,7 +332,7 @@ Welcome [@vkarpov15](https://github.com/vkarpov15) to the team!
 ## :boom: Breaking Changes
 
 - **[#3148](https://github.com/mochajs/mocha/issues/3148): Drop support for IE9 and IE10** ([@Bamieh](https://github.com/Bamieh))
-  Practically speaking, only code which consumes (through bundling or otherwise) the userland [buffer](https://npm.im/buffer) module should be affected.  However, Mocha will no longer test against these browsers, nor apply fixes for them.
+  Practically speaking, only code which consumes (through bundling or otherwise) the userland [buffer](https://npm.im/buffer) module should be affected. However, Mocha will no longer test against these browsers, nor apply fixes for them.
 
 ## :tada: Enhancements
 
@@ -389,7 +401,7 @@ Welcome [@Bamieh](https://github.com/Bamieh) and [@xxczaki](https://github.com/x
 
 # 4.0.0 / 2017-10-02
 
-You might want to read this before filing a new bug!  :stuck_out_tongue_closed_eyes:
+You might want to read this before filing a new bug! :stuck_out_tongue_closed_eyes:
 
 ## :boom: Breaking Changes
 
@@ -411,7 +423,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ### Default Behavior
 
-- [#2879](https://github.com/mochajs/mocha/issues/2879): By default, Mocha will no longer force the process to exit once all tests complete.  This means any test code (or code under test) which would normally prevent `node` from exiting will do so when run in Mocha.  Supply the `--exit` flag to revert to pre-v4.0.0 behavior ([@ScottFreeCode](https://github.com/ScottFreeCode), [@boneskull](https://github.com/boneskull))
+- [#2879](https://github.com/mochajs/mocha/issues/2879): By default, Mocha will no longer force the process to exit once all tests complete. This means any test code (or code under test) which would normally prevent `node` from exiting will do so when run in Mocha. Supply the `--exit` flag to revert to pre-v4.0.0 behavior ([@ScottFreeCode](https://github.com/ScottFreeCode), [@boneskull](https://github.com/boneskull))
 
 ### Reporter Output
 
@@ -422,7 +434,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :-1: Deprecations
 
-- [#2493](https://github.com/mochajs/mocha/issues/2493): The `--compilers` command-line option is now soft-deprecated and will emit a warning on `STDERR`.  Read [this](https://github.com/mochajs/mocha/wiki/compilers-deprecation) for more info and workarounds ([@ScottFreeCode](https://github.com/ScottFreeCode), [@boneskull](https://github.com/boneskull))
+- [#2493](https://github.com/mochajs/mocha/issues/2493): The `--compilers` command-line option is now soft-deprecated and will emit a warning on `STDERR`. Read [this](https://github.com/mochajs/mocha/wiki/compilers-deprecation) for more info and workarounds ([@ScottFreeCode](https://github.com/ScottFreeCode), [@boneskull](https://github.com/boneskull))
 
 ## :tada: Enhancements
 
@@ -452,7 +464,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :newspaper: News
 
-- :mega: Mocha is now sponsoring [PDXNode](http://pdxnode.org)!  If you're in the [Portland](https://wikipedia.org/wiki/Portland,_Oregon) area, come check out the monthly talks and hack nights!
+- :mega: Mocha is now sponsoring [PDXNode](http://pdxnode.org)! If you're in the [Portland](https://wikipedia.org/wiki/Portland,_Oregon) area, come check out the monthly talks and hack nights!
 
 ## :bug: Fixes
 
@@ -471,7 +483,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 ## :newspaper: News
 
 - Mocha now has a [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) (thanks [@kungapal](https://github.com/kungapal)!).
-- Old issues and PRs are now being marked "stale" by [Probot's "Stale" plugin](https://github.com/probot/stale).  If an issue is marked as such, and you would like to see it remain open, simply add a new comment to the ticket or PR.
+- Old issues and PRs are now being marked "stale" by [Probot's "Stale" plugin](https://github.com/probot/stale). If an issue is marked as such, and you would like to see it remain open, simply add a new comment to the ticket or PR.
 - **WARNING**: Support for non-ES5-compliant environments will be dropped starting with version 4.0.0 of Mocha!
 
 ## :lock: Security Fixes
@@ -480,7 +492,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :tada: Enhancements
 
-- [#2696](https://github.com/mochajs/mocha/pull/2696): Add `--forbid-only` and `--forbid-pending` flags.  Use these in CI or hooks to ensure tests aren't accidentally being skipped! ([@charlierudolph](https://github.com/charlierudolph))
+- [#2696](https://github.com/mochajs/mocha/pull/2696): Add `--forbid-only` and `--forbid-pending` flags. Use these in CI or hooks to ensure tests aren't accidentally being skipped! ([@charlierudolph](https://github.com/charlierudolph))
 - [#2813](https://github.com/mochajs/mocha/pull/2813): Support Node.js 8's `--napi-modules` flag ([@jupp0r](https://github.com/jupp0r))
 
 ## :nut_and_bolt: Other
@@ -582,11 +594,11 @@ As highlights:
 
 ### Mocha is now a JS Foundation Project!
 
-Mocha is proud to have joined the [JS Foundation](https://js.foundation).  For more information, [read the announcement](https://js.foundation/announcements/2016/10/17/Linux-Foundation-Unites-JavaScript-Community-Open-Web-Development/).
+Mocha is proud to have joined the [JS Foundation](https://js.foundation). For more information, [read the announcement](https://js.foundation/announcements/2016/10/17/Linux-Foundation-Unites-JavaScript-Community-Open-Web-Development/).
 
 ### Contributor License Agreement
 
-Under the foundation, all contributors to Mocha must sign the [JS Foundation CLA](https://js.foundation/CLA/) before their code can be merged.  When sending a PR--if you have not already signed the CLA--a friendly bot will ask you to do so.
+Under the foundation, all contributors to Mocha must sign the [JS Foundation CLA](https://js.foundation/CLA/) before their code can be merged. When sending a PR--if you have not already signed the CLA--a friendly bot will ask you to do so.
 
 Mocha remains licensed under the [MIT license](https://github.com/mochajs/mocha/blob/master/LICENSE).
 
@@ -606,7 +618,7 @@ Mocha remains licensed under the [MIT license](https://github.com/mochajs/mocha/
 - [#2570](https://github.com/mochajs/mocha/issues/2570): Use [karma-mocha](https://npmjs.com/package/karma-mocha) proper ([@boneskull](https://github.com/boneskull))
 - Licenses updated to reflect new copyright, add link to license and browser matrix to `README.md` ([@boneskull](https://github.com/boneskull), [@ScottFreeCode](https://github.com/ScottFreeCode), [@dasilvacontin](https://github.com/dasilvacontin))
 
-Thanks to all our contributors, sponsors and backers!  Keep on the lookout for a public roadmap and new contribution guide coming soon.
+Thanks to all our contributors, sponsors and backers! Keep on the lookout for a public roadmap and new contribution guide coming soon.
 
 # 3.1.2 / 2016-10-10
 
@@ -663,7 +675,7 @@ Thanks to all our contributors, sponsors and backers!  Keep on the lookout for a
 ## :boom: Breaking Changes
 
 - :warning: Due to the increasing difficulty of applying security patches made within its dependency tree, as well as looming incompatibilities with Node.js v7.0, **Mocha no longer supports Node.js v0.8**.
-- :warning: **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.**  Previously, this requirement only affected Mocha's development dependencies.  In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
+- :warning: **Mocha may no longer be installed by versions of `npm` less than `1.4.0`.** Previously, this requirement only affected Mocha's development dependencies. In short, this allows Mocha to depend on packages which have dependencies fixed to major versions (`^`).
 - `.only()` is no longer "fuzzy", can be used multiple times, and generally just works like you think it should. :joy:
 - To avoid common bugs, when a test injects a callback function (suggesting asynchronous execution), calls it, _and_ returns a `Promise`, Mocha will now throw an exception:
 
@@ -671,16 +683,17 @@ Thanks to all our contributors, sponsors and backers!  Keep on the lookout for a
   const assert = require('assert');
 
   it('should complete this test', function (done) {
-    return new Promise(function (resolve) {
-      assert.ok(true);
-      resolve();
-    })
-      .then(done);
+  return new Promise(function (resolve) {
+  assert.ok(true);
+  resolve();
+  })
+  .then(done);
   });
   \```
 
   The above test will fail with `Error: Resolution method is overspecified. Specify a callback *or* return a Promise; not both.`.
-- When a test timeout value _greater than_ `2147483648` is specified in any context (`--timeout`, `mocha.setup()`, per-suite, per-test, etc.), the timeout will be _disabled_ and the test(s) will be allowed to run indefinitely.  This is equivalent to specifying a timeout value of `0`.  See [MDN](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) for reasoning.
+
+- When a test timeout value _greater than_ `2147483648` is specified in any context (`--timeout`, `mocha.setup()`, per-suite, per-test, etc.), the timeout will be _disabled_ and the test(s) will be allowed to run indefinitely. This is equivalent to specifying a timeout value of `0`. See [MDN](https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value) for reasoning.
 - The `dot` reporter now uses more visually distinctive characters when indicating "pending" and "failed" tests.
 - Mocha no longer supports [component](https://www.npmjs.com/package/component).
 - The long-forsaken `HTMLCov` and `JSONCov` reporters--and any relationship to the "node-jscoverage" project--have been removed.
@@ -698,16 +711,16 @@ Thanks to all our contributors, sponsors and backers!  Keep on the lookout for a
 
 ## :bug: Bug Fixes
 
-- [#2259](https://github.com/mochajs/mocha/pull/2259): Restore ES3 compatibility.  Specifically, support an environment lacking `Date.prototype.toISOString()`, `JSON`, or has a non-standard implementation of `JSON`. ([@ndhoule](https://github.com/ndhoule), [@boneskull](https://github.com/boneskull))
+- [#2259](https://github.com/mochajs/mocha/pull/2259): Restore ES3 compatibility. Specifically, support an environment lacking `Date.prototype.toISOString()`, `JSON`, or has a non-standard implementation of `JSON`. ([@ndhoule](https://github.com/ndhoule), [@boneskull](https://github.com/boneskull))
 - [#2286](https://github.com/mochajs/mocha/issues/2286): Fix `after()` failing to execute if test skipped using `this.skip()` in `beforeEach()`; no longer marks the entire suite as "pending". ([@dasilvacontin](https://github.com/dasilvacontin), [@boneskull](https://github.com/boneskull))
 - [#2208](https://github.com/mochajs/mocha/pull/2208): Fix function name display in `markdown` and `html` (browser) reporters. ([@ScottFreeCode](https://github.com/ScottFreeCode))
 - [#2299](https://github.com/mochajs/mocha/pull/2299): Fix progress bar in `html` (browser) reporter. ([@AviVahl](https://github.com/avivahl))
 - [#2307](https://github.com/mochajs/mocha/pull/2307): Fix `doc` reporter crashing when test fails. ([@jleyba](https://github.com/jleyba))
-- [#2323](https://github.com/mochajs/mocha/issues/2323): Ensure browser entry point (`browser-entry.js`) is published to npm (for use with bundlers).  ([@boneskull](https://github.com/boneskull))
+- [#2323](https://github.com/mochajs/mocha/issues/2323): Ensure browser entry point (`browser-entry.js`) is published to npm (for use with bundlers). ([@boneskull](https://github.com/boneskull))
 - [#2310](https://github.com/mochajs/mocha/issues/2310): Ensure custom reporter with an absolute path works in Windows. ([@silentcloud](https://github.com/silentcloud))
 - [#2311](https://github.com/mochajs/mocha/issues/2311): Fix problem wherein calling `this.slow()` without a value would blast any previously set value. ([@boneskull](https://github.com/boneskull))
 - [#1813](https://github.com/mochajs/mocha/issues/1813): Ensure Mocha's own test suite will run in Windows. ([@tswaters](https://github.com/tswaters), [@TimothyGu](https://github.com/timothygu), [@boneskull](https://github.com/boneskull))
-- [#2317](https://github.com/mochajs/mocha/issues/2317): Ensure all interfaces are displayed in `--help` on CLI.  ([@ScottFreeCode](https://github.com/ScottFreeCode))
+- [#2317](https://github.com/mochajs/mocha/issues/2317): Ensure all interfaces are displayed in `--help` on CLI. ([@ScottFreeCode](https://github.com/ScottFreeCode))
 - [#1644](https://github.com/mochajs/mocha/issues/1644): Don't exhibit undefined behavior when calling `this.timeout()` with very large values ([@callumacrae](https://github.com/callumacrae), [@boneskull](https://github.com/boneskull))
 - [#2361](https://github.com/mochajs/mocha/pull/2361): Don't truncate name of thrown anonymous exception. ([@boneskull](https://github.com/boneskull))
 - [#2367](https://github.com/mochajs/mocha/pull/2367): Fix invalid CSS. ([@bensontrent](https://github.com/bensontrent))
@@ -741,7 +754,7 @@ Thanks [**@entertainyou**](https://github.com/entertainyou), [**@SimenB**](https
 
 # 2.5.0 / 2016-05-23
 
-This has been awhile coming!  We needed to feel confident that the next release wouldn't break browser compatibility (e.g. the last few patch releases).
+This has been awhile coming! We needed to feel confident that the next release wouldn't break browser compatibility (e.g. the last few patch releases).
 
 ## Browser Tests in CI
 
@@ -753,13 +766,13 @@ We now run unit tests against PhantomJS v1.x and an assortment of browsers on [S
 - Safari (latest)
 - Microsoft Edge (latest)
 
-To accomplish this, we now run Mocha's unit tests (and a handful of integration tests) via [Karma](https://npmjs.com/package/karma) and a modified [karma-mocha](https://npmjs.com/package/karma-mocha).  Along the way, we had to solve issue [#880](https://github.com/mochajs/mocha/issues/880) (apologies to [**@mderijcke**](https://github.com/mderijcke) and [**@sukima**](https://github.com/sukima) who had PRs addressing this), as well as replace most usages of [should](https://npmjs.com/package/should) with [expect.js](https://npmjs.com/package/expect.js) for IE8.
+To accomplish this, we now run Mocha's unit tests (and a handful of integration tests) via [Karma](https://npmjs.com/package/karma) and a modified [karma-mocha](https://npmjs.com/package/karma-mocha). Along the way, we had to solve issue [#880](https://github.com/mochajs/mocha/issues/880) (apologies to [**@mderijcke**](https://github.com/mderijcke) and [**@sukima**](https://github.com/sukima) who had PRs addressing this), as well as replace most usages of [should](https://npmjs.com/package/should) with [expect.js](https://npmjs.com/package/expect.js) for IE8.
 
 Going forward, when sending PRs, your code will _only_ run against PhantomJS v1.x (and not hit SauceLabs) [because security](https://docs.travis-ci.com/user/pull-requests/#Security-Restrictions-when-testing-Pull-Requests).
 
 ## Node.js 6.x
 
- Node.js 6.x "just worked" before, but now it's in the CI matrix, so it's "officially" supported.  Mocha _still retains support_ for Node.js 0.8.x.
+Node.js 6.x "just worked" before, but now it's in the CI matrix, so it's "officially" supported. Mocha _still retains support_ for Node.js 0.8.x.
 
 ## "Minor" Release
 
@@ -791,7 +804,7 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 
 # 2.4.5 / 2016-01-28
 
-- [#2080](https://github.com/mochajs/mocha/issues/2080), [#2078](https://github.com/mochajs/mocha/issues/2078), [#2072](https://github.com/mochajs/mocha/pull/2072), [#2073](https://github.com/mochajs/mocha/pull/2073), [#1200](https://github.com/mochajs/mocha/issues/1200) - Revert changes to console colors in changeset [1192914](https://github.com/mochajs/mocha/commit/119291449cd03a11cdeda9e37cf718a69a012896) and subsequent related changes thereafter.  Restores compatibility with IE8 & PhantomJS.  See also [mantoni/mochify.js#129](https://github.com/mantoni/mochify.js/issues/129) and [openlayers/ol3#4746](https://github.com/openlayers/ol3/pull/4746) ([@boneskull](https://github.com/boneskull))
+- [#2080](https://github.com/mochajs/mocha/issues/2080), [#2078](https://github.com/mochajs/mocha/issues/2078), [#2072](https://github.com/mochajs/mocha/pull/2072), [#2073](https://github.com/mochajs/mocha/pull/2073), [#1200](https://github.com/mochajs/mocha/issues/1200) - Revert changes to console colors in changeset [1192914](https://github.com/mochajs/mocha/commit/119291449cd03a11cdeda9e37cf718a69a012896) and subsequent related changes thereafter. Restores compatibility with IE8 & PhantomJS. See also [mantoni/mochify.js#129](https://github.com/mantoni/mochify.js/issues/129) and [openlayers/ol3#4746](https://github.com/openlayers/ol3/pull/4746) ([@boneskull](https://github.com/boneskull))
 - [#2082](https://github.com/mochajs/mocha/pull/2082) - Fix several test assertions ([@mislav](https://github.com/mislav))
 
 # 2.4.4 / 2016-01-27
@@ -1008,7 +1021,7 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 - fix bad markdown in CONTRIBUTING.md
 - add setImmediate/clearImmediate to globals; closes [#1435](https://github.com/mochajs/mocha/issues/1435)
 - Fix buffer diffs (closes [#1132](https://github.com/mochajs/mocha/issues/1132), closes [#1433](https://github.com/mochajs/mocha/issues/1433))
-- add a CONTRIBUTING.md.  closes [#882](https://github.com/mochajs/mocha/issues/882)
+- add a CONTRIBUTING.md. closes [#882](https://github.com/mochajs/mocha/issues/882)
 - fix intermittent build failures (maybe). closes [#1407](https://github.com/mochajs/mocha/issues/1407)
 - add Slack notification to .travis.yml
 - Fix slack link
@@ -1450,7 +1463,7 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 - Added preliminary test coverage support. Closes [#5](https://github.com/mochajs/mocha/issues/5)
 - Added `HTMLCov` reporter
 - Added `JSONCov` reporter [kunklejr]
-- Added `xdescribe()` and `xit()` to the BDD interface. Closes [#263](https://github.com/mochajs/mocha/issues/263) (docs   \* Changed: make json reporter output pretty json
+- Added `xdescribe()` and `xit()` to the BDD interface. Closes [#263](https://github.com/mochajs/mocha/issues/263) (docs \* Changed: make json reporter output pretty json
 - Fixed node-inspector support, swapped `--debug` for `debug` to match node. Closes [#247](https://github.com/mochajs/mocha/issues/247)
 
 # 0.12.1 / 2012-02-14
