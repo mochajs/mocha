@@ -165,14 +165,13 @@ describe('options', function() {
 
         describe('when path to mocha.opts (`--opts <path>`) is valid', function() {
           let result;
-
           beforeEach(function() {
             const filepath = '/path/to/mocha.opts';
             readFileSync = sandbox.stub();
             // package.json
             readFileSync.onFirstCall().throws();
             // mocha.opts
-            readFileSync.onSecondCall().returns('--retries 3');
+            readFileSync.onSecondCall().returns('--retries 3 foobar.spec.js');
             findConfig = sandbox.stub().returns('/some/.mocharc.json');
             loadConfig = sandbox.stub().returns({});
             findupSync = sandbox.stub().returns('/some/package.json');
@@ -191,7 +190,7 @@ describe('options', function() {
               'to equal',
               Object.assign(
                 {
-                  _: []
+                  _: ['foobar.spec.js']
                 },
                 defaults,
                 {
@@ -353,7 +352,9 @@ describe('options', function() {
             const filepath = '/some/package.json';
             readFileSync = sandbox.stub();
             // package.json
-            readFileSync.onFirstCall().returns('{"mocha": {"retries": 3}}');
+            readFileSync
+              .onFirstCall()
+              .returns('{"mocha": {"retries": 3, "_": ["foobar.spec.js"]}}');
             // mocha.opts
             readFileSync.onSecondCall().throws();
             findConfig = sandbox.stub().returns('/some/.mocharc.json');
@@ -374,7 +375,7 @@ describe('options', function() {
               'to equal',
               Object.assign(
                 {
-                  _: []
+                  _: ['foobar.spec.js']
                 },
                 defaults,
                 {
@@ -443,8 +444,10 @@ describe('options', function() {
             readFileSync = sandbox.stub();
             readFileSync
               .onFirstCall()
-              .returns('{"mocha": {"check-leaks": true}}');
-            readFileSync.onSecondCall().returns('--retries 3');
+              .returns(
+                '{"mocha": {"check-leaks": true, "_": ["foobar.spec.js"]}}'
+              );
+            readFileSync.onSecondCall().returns('--retries 3 foobar.spec.js');
             findConfig = sandbox.stub();
             loadConfig = sandbox.stub();
             findupSync = sandbox.stub().returns('/some/package.json');
@@ -463,7 +466,7 @@ describe('options', function() {
             expect(
               result,
               'to equal',
-              Object.assign({_: []}, defaults, {
+              Object.assign({_: ['foobar.spec.js']}, defaults, {
                 'check-leaks': true,
                 config: false,
                 opts: false,
