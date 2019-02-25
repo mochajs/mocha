@@ -188,6 +188,12 @@ img.screenshot {
   max-width: 100%;
 }
 
+a img.matomoLogo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
 footer {
   background-color: #eee;
   padding: 50px 0;
