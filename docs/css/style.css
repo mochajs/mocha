@@ -223,3 +223,25 @@ blockquote {
   padding: 10px;
   border-left: 1px solid #eee;
 }
+
+#more-sponsors {
+  margin: 200px auto;
+  padding-top: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  font-size: 0.8em;
+}
+
+#more-sponsors .left {
+  width: 30%;
+}
+
+#more-sponsors .right img {
+  width: 100%;
+}
+
+#more-sponsors .right {
+  width: 70%;
+}
