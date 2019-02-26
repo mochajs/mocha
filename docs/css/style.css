@@ -188,7 +188,7 @@ img.screenshot {
   max-width: 100%;
 }
 
-a img.matomoLogo {
+#matomoLogo {
     display: block;
     margin-left: auto;
     margin-right: auto
