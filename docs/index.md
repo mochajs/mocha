@@ -1627,7 +1627,7 @@ In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control form
 
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
-- **JSON**: Create a `.mocharc.json` in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
+- **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
 - **`package.json`**: Create a `mocha` property in your project's `package.json`.
 
 Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
@@ -1649,6 +1649,7 @@ If no custom path was given, and if there are multiple configuration files in th
 1. `.mocharc.js`
 1. `.mocharc.yaml`
 1. `.mocharc.yml`
+1. `.mocharc.jsonc`
 1. `.mocharc.json`
 
 ### Merging
