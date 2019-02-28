@@ -188,10 +188,12 @@ img.screenshot {
   max-width: 100%;
 }
 
-#matomoLogo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto
+.sponsor-logo {
+    display: block; 
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 172px; 
+    height: 172px;
 }
 
 footer {
