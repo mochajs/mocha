@@ -39,6 +39,11 @@ header {
   padding-top: 20px;
 }
 
+#mocha-logo {
+  width:192;
+  height:192;
+}
+
 #content {
   padding-bottom: 60px;
 }
