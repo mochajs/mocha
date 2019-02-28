@@ -14,6 +14,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 {% include backers.md %}
 {% include sponsors.md %}
+{% include honorableMentions.md %}
 
 ## Features
 

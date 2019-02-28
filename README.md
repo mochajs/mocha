@@ -108,6 +108,6 @@ Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors
 
 <p align="center">
   <a href="https://matomo.org">
-    <img src="/assets/backers/52010312-1d77fb80-248a-11e9-95f5-3c093dae2a61.png" alt="MochaJS Backer" height="120">
+    <img src="/assets/backers/matomo/52010312-1d77fb80-248a-11e9-95f5-3c093dae2a61.png" alt="MochaJS Backer" height="120">
   </a>
 </p>
