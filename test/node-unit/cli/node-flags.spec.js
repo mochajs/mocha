@@ -1,7 +1,11 @@
 'use strict';
 
 const nodeEnvFlags = require('node-environment-flags');
-const {isNodeFlag, impliesNoTimeouts} = require('../../../lib/cli/node-flags');
+const {
+  isNodeFlag,
+  impliesNoTimeouts,
+  unparseNodeFlags
+} = require('../../../lib/cli/node-flags');
 
 describe('node-flags', function() {
   describe('isNodeFlag()', function() {
@@ -84,6 +88,48 @@ describe('node-flags', function() {
       expect(impliesNoTimeouts('inspect'), 'to be true');
       expect(impliesNoTimeouts('debug-brk'), 'to be true');
       expect(impliesNoTimeouts('inspect-brk'), 'to be true');
+    });
+  });
+
+  describe('unparseNodeFlags()', function() {
+    it('should handle single v8 flags', function() {
+      expect(unparseNodeFlags({'v8-numeric': 100}), 'to equal', [
+        '--v8-numeric=100'
+      ]);
+      expect(unparseNodeFlags({'v8-boolean': true}), 'to equal', [
+        '--v8-boolean'
+      ]);
+    });
+
+    it('should handle multiple v8 flags', function() {
+      expect(
+        unparseNodeFlags({'v8-numeric-one': 1, 'v8-numeric-two': 2}),
+        'to equal',
+        ['--v8-numeric-one=1', '--v8-numeric-two=2']
+      );
+      expect(
+        unparseNodeFlags({'v8-boolean-one': true, 'v8-boolean-two': true}),
+        'to equal',
+        ['--v8-boolean-one', '--v8-boolean-two']
+      );
+      expect(
+        unparseNodeFlags({
+          'v8-boolean-one': true,
+          'v8-numeric-one': 1,
+          'v8-boolean-two': true
+        }),
+        'to equal',
+        ['--v8-boolean-one', '--v8-numeric-one=1', '--v8-boolean-two']
+      );
+      expect(
+        unparseNodeFlags({
+          'v8-numeric-one': 1,
+          'v8-boolean-one': true,
+          'v8-numeric-two': 2
+        }),
+        'to equal',
+        ['--v8-numeric-one=1', '--v8-boolean-one', '--v8-numeric-two=2']
+      );
     });
   });
 });
