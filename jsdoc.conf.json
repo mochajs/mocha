@@ -5,7 +5,8 @@
   },
   "mocha-docdash": {
     "sort": true,
-    "static": false
+    "static": false,
+    "headScripts": ["/js/matomo.js"]
   },
   "opts": {
     "destination": "docs/_dist/api",
