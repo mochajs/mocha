@@ -167,9 +167,9 @@ body {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: 0;
-  -moz-box-shadow: 0;
-  box-shadow: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   padding: 0;
   margin: 0;
   margin-top: 18px;
@@ -317,7 +317,7 @@ body {
 
 @media screen and (max-device-width: 480px) {
   #mocha {
-    margin: 60px 0px;
+    margin: 60px 0;
   }
 
   #mocha #stats {
