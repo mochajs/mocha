@@ -11,7 +11,7 @@ describe('--inspect', function() {
         this.skip();
       }
     });
-    it('should invoke --inspect', function(done) {
+    it('should start debugger from --inspect', function(done) {
       invokeMocha(
         ['--inspect', DEFAULT_FIXTURE],
         function(err, res) {
@@ -25,7 +25,7 @@ describe('--inspect', function() {
       );
     });
 
-    it('should invoke --inspect-brk', function(done) {
+    it('should start deubgger from --inspect-brk', function(done) {
       var proc = invokeMocha(
         ['--inspect-brk', DEFAULT_FIXTURE],
         function(err, res) {
@@ -44,7 +44,7 @@ describe('--inspect', function() {
       }, 2000);
     });
 
-    it('should invoke --inspect and --inspect-brk', function(done) {
+    it('should start debugger if supply both --inspect and --inspect-brk', function(done) {
       var proc = invokeMocha(
         ['--inspect', '--inspect-brk', DEFAULT_FIXTURE],
         function(err, res) {
@@ -81,7 +81,7 @@ describe('--inspect', function() {
       );
     });
 
-    it('should warn about incorrect usage for version', function(done) {
+    it('should warn about incorrect usage', function(done) {
       var proc = invokeMocha(
         ['--inspect', '--inspect-brk', DEFAULT_FIXTURE],
         function(err, res) {
