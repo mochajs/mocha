@@ -27,30 +27,30 @@ body {
   }
 }
 
-header,
-#content {
+.header,
+.content {
   max-width: 920px;
   margin: 0 auto;
   padding-left: 30px;
   padding-right: 30px;
 }
 
-header {
+.header {
   padding-top: 20px;
 }
 
-#content {
+.content {
   padding-bottom: 60px;
 }
 
-#_header h1 {
+.header h1 {
   margin-top: 0;
   margin-left: -19px;
   opacity: 0;
   animation: fadein 1s forwards;
 }
 
-#tag {
+.tagline {
   color: #c29d7f;
   font-weight: 100;
   font-size: 30px;
@@ -62,7 +62,7 @@ header {
   animation: fadein 1s forwards, slideright 1s forwards;
 }
 
-#tag em {
+.tagline em {
   font-style: normal;
 }
 
@@ -93,7 +93,7 @@ nav.badges a + a {
   opacity: 1;
 }
 
-#_backers a img {
+.backers img {
   width: 64px;
   background: url(/images/backer-background.svg?inline) center center no-repeat;
 }
@@ -119,7 +119,7 @@ h3 > code {
   font-size: 14px;
 }
 
-#content > p:first-child {
+.content > p:first-child {
   font-size: 20px;
   font-weight: 200;
   letter-spacing: 1px;
@@ -203,7 +203,7 @@ footer span {
 }
 
 @media all and (max-width: 600px) {
-  #tag {
+  .tagline {
     margin-top: 0;
     margin-left: 0;
     margin-bottom: 0;
