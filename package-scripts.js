@@ -276,7 +276,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && shx cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
@@ -300,7 +300,7 @@ module.exports = {
       },
       api: {
         script:
-          'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/_dist/api',
+          'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json && shx cp LICENSE docs/_dist/api',
         description: 'Build API docs'
       }
     },
