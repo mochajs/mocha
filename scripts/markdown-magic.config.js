@@ -24,7 +24,7 @@ exports.transforms = {
     const footer = options.footer || '```\n';
     const output = stripAnsi(
       String(
-        execSync(`${process.execPath} ${executable} ${flag}`, {
+        execSync(`"${process.execPath}" ${executable} ${flag}`, {
           cwd: path.join(__dirname, '..')
         })
       ).trim()
