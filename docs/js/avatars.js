@@ -15,7 +15,7 @@
       }
     }
 
-    for (var i = 0; i < images.length; i += 1) {
+    for (var i = 0, len = images.length; i < len; i += 1) {
       if (images[i].complete) {
         counter -= 1;
 
@@ -23,10 +23,9 @@
           imageList.classList.add('is-loaded');
         }
       } else {
-        images[i].onload = onloadHandler;
-        images[i].onerror = onloadHandler;
+        images[i].addEventListener('load', onloadHandler);
+        images[i].addEventListener('error', onloadHandler);
       }
     }
   });
-
-}());
+})();
