@@ -95,7 +95,7 @@ nav.badges a + a {
 
 #_backers a img {
   width: 64px;
-  background: url(/images/backer-background.svg?inline) center center no-repeat;
+  background: url(/images/backer-background.svg) center center no-repeat;
 }
 
 h2 {
