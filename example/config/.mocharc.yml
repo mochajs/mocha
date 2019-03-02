@@ -29,6 +29,7 @@ inline-diffs: false
 # needs to be used with grep or fgrep
 # invert: false
 opts: './test/mocha.opts'
+# Only allowed as a CLI flag; ignored in config files.  For example `mocha --package ./manifest.json`
 package: './package.json'
 recursive: false
 reporter: spec
