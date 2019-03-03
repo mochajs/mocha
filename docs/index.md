@@ -8,8 +8,8 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 <nav class="badges">
   <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
-  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
-  <a href="#sponsors"><img src="//opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective sponsors"></a>
+  <a href="#backers"><img src="https://opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
+  <a href="#sponsors"><img src="https://opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective sponsors"></a>
 </nav>
 
 {% include backers.md %}
@@ -1828,24 +1828,24 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [//]: # 'Cross reference section'
 [article-globbing]: https://medium.com/@jakubsynowiec/you-should-always-quote-your-globs-in-npm-scripts-621887a2a784
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
-[better-assert]: https://github.com/visionmedia/better-assert
+[better-assert]: https://github.com/tj/better-assert
 [caniuse-notifications]: https://caniuse.com/#feat=notifications
 [caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-express-test]: https://github.com/visionmedia/express/tree/master/test
+[example-express-test]: https://github.com/expressjs/express/tree/master/test
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
 [example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
-[expect.js]: https://github.com/LearnBoost/expect.js
-[expresso]: https://github.com/tj/expresso
+[expect.js]: https://github.com/Automattic/expect.js
+[expresso]: https://github.com/visionmedia/expresso
 [fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
 [github-mocha]: https://github.com/mochajs/mocha
-[gist-async-hooks]: https://git.io/vdlNM
+[gist-async-hooks]: https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843
 [gist-globbing-tutorial]: https://gist.github.com/reggi/475793ea1846affbcfe8
 [gitter-mocha]: https://gitter.im/mochajs/mocha
 [google-mocha]: https://groups.google.com/group/mochajs
@@ -1854,32 +1854,32 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [jetbrains-plugin]: https://www.jetbrains.com/idea/features/nodejs.html
 [mdn-array-sort]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
 [mdn-arrow]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-[mdn-async]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function
+[mdn-async]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
 [mdn-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [mdn-regexp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp
-[mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
+[mdn-settimeout-maxdelay]: https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout#Maximum_delay_value
 [mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
 [mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
 [mocha-wiki-compilers]: https://github.com/mochajs/mocha/wiki/compilers-deprecation
 [mocha-wiki-growl]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
 [mocha-wiki-more-reporters]: https://github.com/mochajs/mocha/wiki/Third-party-reporters
-[node.js]: https://nodejs.org/
+[node.js]: https://nodejs.org/en/
 [node-assert]: https://nodejs.org/api/assert.html
 [node-async-hooks]: https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md
-[node-inspector]: https://nodejs.org/en/docs/inspector/
-[npm]: https://npmjs.org/
-[npm-babel-register]: https://npm.im/@babel/register
+[node-inspector]: https://nodejs.org/en/docs/guides/debugging-getting-started/
+[npm]: https://www.npmjs.com/
+[npm-babel-register]: https://www.npmjs.com/package/@babel/register
 [npm-chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
-[npm-esm]: https://npm.im/esm
+[npm-esm]: https://www.npmjs.com/package/esm
 [npm-glob]: https://www.npmjs.com/package/glob
-[npm-growl]: https://npm.im/growl
-[npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
+[npm-growl]: https://www.npmjs.com/package/growl
+[npm-mocha-lcov-reporter]: https://www.npmjs.com/package/mocha-lcov-reporter
 [npm-mochawesome]: https://www.npmjs.com/package/mochawesome
-[npm-should.js]: https://npm.im/should.js
-[npm-supports-color]: https://npm.im/supports-color
-[npm-ts-node]: https://npm.im/ts-node
-[npm-wtfnode]: https://npm.im/wtfnode
+[npm-should.js]: https://www.npmjs.com/package/should
+[npm-supports-color]: https://www.npmjs.com/package/supports-color
+[npm-ts-node]: https://www.npmjs.com/package/ts-node
+[npm-wtfnode]: https://www.npmjs.com/package/wtfnode
 [qunit]: https://qunitjs.com/
 [selenium-webdriver-testing]: https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js
 [should.js]: https://github.com/shouldjs/should.js
@@ -1890,7 +1890,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [unexpected]: https://unexpected.js.org/
 [vscode-mocha-sidebar]: https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
 [wallaby.js]: https://wallabyjs.com/
-[yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
+[yargs-configobject-extends]: https://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 
 <!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->

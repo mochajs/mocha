@@ -19,7 +19,7 @@ _So you wanna build the site?_
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should _not_ be included in the build.
 - `docs/_dist` is where the deployed site lives. `docs/_site` is essentially a build step. These directories are _not_ under version control.
-- See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://npm.im/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
+- See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://www.npmjs.com/package/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
 
 ## License
 

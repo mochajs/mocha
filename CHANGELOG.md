@@ -59,7 +59,7 @@ These issues were regressions.
 - [#3677](https://github.com/mochajs/mocha/issues/3677): Add error objects for createUnsupportedError and createInvalidExceptionError ([**@boneskull**](https://github.com/boneskull))
 - [#3733](https://github.com/mochajs/mocha/issues/3733): Removed unnecessary processing in post-processing hook ([**@wanseob**](https://github.com/wanseob))
 - [#3730](https://github.com/mochajs/mocha/issues/3730): Update nyc to latest version ([**@coreyfarrell**](https://github.com/coreyfarrell))
-- [#3648](https://github.com/mochajs/mocha/issues/3648), [#3680](https://github.com/mochajs/mocha/issues/3680): Fixes to support latest versions of [unexpected](https://npm.im/unexpected) and [unexpected-sinon](https://npm.im/unexpected-sinon) ([**@sunesimonsen**](https://github.com/sunesimonsen))
+- [#3648](https://github.com/mochajs/mocha/issues/3648), [#3680](https://github.com/mochajs/mocha/issues/3680): Fixes to support latest versions of [unexpected](https://www.npmjs.com/package/unexpected) and [unexpected-sinon](https://www.npmjs.com/package/unexpected-sinon) ([**@sunesimonsen**](https://github.com/sunesimonsen))
 - [#3638](https://github.com/mochajs/mocha/issues/3638): Add meta tag to site ([**@MartijnCuppens**](https://github.com/MartijnCuppens))
 - [#3653](https://github.com/mochajs/mocha/issues/3653): Fix parts of test suite failing to run on Windows ([**@boneskull**](https://github.com/boneskull))
 
@@ -258,7 +258,7 @@ Welcome [@outsideris](https://github.com/outsideris) to the team!
 
 # 5.0.3 / 2018-03-06
 
-This patch features a fix to address a potential "low severity" [ReDoS vulnerability](https://snyk.io/vuln/npm:diff:20180305) in the [diff](https://npm.im/diff) package (a dependency of Mocha).
+This patch features a fix to address a potential "low severity" [ReDoS vulnerability](https://snyk.io/vuln/npm:diff:20180305) in the [diff](https://www.npmjs.com/package/diff) package (a dependency of Mocha).
 
 ## :lock: Security Fixes
 
@@ -332,7 +332,7 @@ Welcome [@vkarpov15](https://github.com/vkarpov15) to the team!
 ## :boom: Breaking Changes
 
 - **[#3148](https://github.com/mochajs/mocha/issues/3148): Drop support for IE9 and IE10** ([@Bamieh](https://github.com/Bamieh))
-  Practically speaking, only code which consumes (through bundling or otherwise) the userland [buffer](https://npm.im/buffer) module should be affected. However, Mocha will no longer test against these browsers, nor apply fixes for them.
+  Practically speaking, only code which consumes (through bundling or otherwise) the userland [buffer](https://www.npmjs.com/package/buffer) module should be affected. However, Mocha will no longer test against these browsers, nor apply fixes for them.
 
 ## :tada: Enhancements
 
@@ -345,7 +345,7 @@ Welcome [@vkarpov15](https://github.com/vkarpov15) to the team!
 
 ## :sunglasses: Developer Experience
 
-- [#2352](https://github.com/mochajs/mocha/issues/2352): Ditch GNU Make for [nps](https://npm.im/nps) to manage scripts ([@TedYav](https://github.com/TedYav))
+- [#2352](https://github.com/mochajs/mocha/issues/2352): Ditch GNU Make for [nps](https://www.npmjs.com/package/nps) to manage scripts ([@TedYav](https://github.com/TedYav))
 
 ## :book: Documentation
 
@@ -488,7 +488,7 @@ For more info, please [read this article](https://boneskull.com/mocha-v4-nears-r
 
 ## :lock: Security Fixes
 
-- [#2860](https://github.com/mochajs/mocha/pull/2860): Address [CVE-2015-8315](https://nodesecurity.io/advisories/46) via upgrade of [debug](https://npm.im/debug) ([@boneskull](https://github.com/boneskull))
+- [#2860](https://github.com/mochajs/mocha/pull/2860): Address [CVE-2015-8315](https://nodesecurity.io/advisories/46) via upgrade of [debug](https://www.npmjs.com/package/debug) ([@boneskull](https://github.com/boneskull))
 
 ## :tada: Enhancements
 
