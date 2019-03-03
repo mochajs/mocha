@@ -5,7 +5,7 @@ var invokeMocha = helpers.invokeMocha;
 var DEFAULT_FIXTURE = helpers.DEFAULT_FIXTURE;
 
 describe('--inspect', function() {
-  it('should start debugger from --inspect', function(done) {
+  it('should run deubgger from --inspect', function(done) {
     invokeMocha(
       ['--inspect', DEFAULT_FIXTURE],
       function(err, res) {
@@ -19,7 +19,7 @@ describe('--inspect', function() {
     );
   });
 
-  it('should start deubgger from --inspect-brk', function(done) {
+  it('should run deubgger from --inspect-brk', function(done) {
     var proc = invokeMocha(
       ['--inspect-brk', DEFAULT_FIXTURE],
       function(err, res) {
@@ -38,7 +38,7 @@ describe('--inspect', function() {
     }, 2000);
   });
 
-  it('should start debugger if supply both --inspect and --inspect-brk', function(done) {
+  it('should invoke --inspect-brk for combination --inspect and --inspect-brk', function(done) {
     var proc = invokeMocha(
       ['--inspect', '--inspect-brk', DEFAULT_FIXTURE],
       function(err, res) {

@@ -45,25 +45,7 @@ describe('--debug', function() {
       }, 2000);
     });
 
-    it('should respect custom host/port', function(done) {
-      invokeMocha(
-        ['--debug=127.0.0.1:9229', DEFAULT_FIXTURE],
-        function(err, res) {
-          if (err) {
-            return done(err);
-          }
-          expect(
-            res,
-            'to contain output',
-            /Debugger listening on .*127.0.0.1:9229/i
-          );
-          done();
-        },
-        'pipe'
-      );
-    });
-
-    it('should start debugger if supply both --debug and --debug-brk', function(done) {
+    it('should invoke --inspect-brk for combination --debug and --debug-brk', function(done) {
       var proc = invokeMocha(
         ['--debug', '--debug-brk', DEFAULT_FIXTURE],
         function(err, res) {
@@ -80,6 +62,24 @@ describe('--debug', function() {
       setTimeout(function() {
         process.kill(proc.pid, 'SIGINT');
       }, 2000);
+    });
+
+    it('should respect custom host/port', function(done) {
+      invokeMocha(
+        ['--debug=127.0.0.1:9229', DEFAULT_FIXTURE],
+        function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(
+            res,
+            'to contain output',
+            /Debugger listening on .*127.0.0.1:9229/i
+          );
+          done();
+        },
+        'pipe'
+      );
     });
 
     it('should warn about incorrect usage for version', function(done) {
