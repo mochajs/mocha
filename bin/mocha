@@ -109,8 +109,8 @@ if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
     delete nodeArgs[opt];
   });
 
-// ignore --inspect when --inspect-brk is present, on Node.js v8 or newer
-if (!nodeEnv.has('debug') && (nodeArgs['inspect'] && nodeArgs['inspect-brk'])) {
+// ignore --inspect when --inspect-brk is present
+if (nodeArgs['inspect'] && nodeArgs['inspect-brk']) {
   warn(
     '"--inspect" and "--inspect-brk" together is redundant. Use just "--inspect-brk"'
   );
