@@ -1491,7 +1491,7 @@ A typical setup might look something like the following, where we call `mocha.se
   <head>
     <meta charset="utf-8" />
     <title>Mocha Tests</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
   </head>
   <body>
@@ -1598,7 +1598,7 @@ tests as shown below:
   <head>
     <meta charset="utf-8" />
     <title>Mocha Tests</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
   </head>
   <body>
