@@ -276,7 +276,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --browsers ">= 1%, last 1 major version, not dead, Chrome >= 45, Firefox >= 38, Edge >= 12, Explorer >= 10, iOS >= 9, Safari >= 9, Android >= 5, Opera >= 30" --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && shx cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
