@@ -190,14 +190,9 @@ img.screenshot {
 
 footer {
   background-color: #eee;
-  padding: 50px 0;
+  padding: 50px 30px;
   text-align: right;
   border-top: 1px solid #ddd;
-}
-
-footer div {
-  display: block;
-  margin-right: 30px;
   color: #888;
   font-size: 0.8em;
 }
