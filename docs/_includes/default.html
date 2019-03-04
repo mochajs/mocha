@@ -42,9 +42,16 @@
         href="https://creativecommons.org/licenses/by/4.0/">
         Creative Commons Attribution 4.0 International License
       </a>.
-      <p>
-        <em>Last updated: {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}</em>
-      </p>
+      <dl class="dl-inline last-modified">
+        <dt>Last updated</dt>
+        <dd>
+          <time
+            itemprop="lastModified"
+            datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+            {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
+          </time>
+        </dd>
+      </dl>
     </footer>
   </body>
 </html>
