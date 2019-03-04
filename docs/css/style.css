@@ -206,6 +206,25 @@ footer div {
   margin-right: 30px;
 }
 
+.last-modified {
+  font-style: italic;
+}
+
+.dl-inline dt,
+.dl-inline dd {
+  display: inline;
+  margin: 0;
+}
+
+.dl-inline dt:after {
+  content: ': ';
+}
+
+.dl-inline dd + dt:before {
+  content: '';
+  display: block;
+}
+
 @media all and (max-width: 600px) {
   #tag {
     margin-top: 0;
