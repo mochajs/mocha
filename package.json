@@ -562,6 +562,7 @@
     "remark-inline-links": "^3.1.2",
     "rewiremock": "^3.12.3",
     "rimraf": "^2.5.2",
+    "shx": "^0.3.2",
     "sinon": "^7.2.4",
     "strip-ansi": "^5.0.0",
     "svgo": "^1.1.1",
