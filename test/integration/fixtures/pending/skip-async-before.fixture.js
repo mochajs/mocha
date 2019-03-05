@@ -7,7 +7,7 @@ describe('outer describe', function () {
     before(function (done) {
       var self = this;
       setTimeout(function () {
-        self.skip();
+        self.skip();   // done() is not required
       }, 0);
     });
 
