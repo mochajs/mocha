@@ -14,8 +14,7 @@ describe('outer suite', function () {
       console.log('inner before');
       var self = this;
       setTimeout(function () {
-        self.skip();
-        done();
+        self.skip();   // done() is not required
       }, 0);
     });
 
