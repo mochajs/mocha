@@ -197,7 +197,7 @@ img.screenshot {
 .sponsorship {
     display: flex; 
     justify-content: center;
-	border-bottom: 10px solid white;
+	margin-bottom: 60px;
 }
 
 footer {
