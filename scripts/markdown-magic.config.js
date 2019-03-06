@@ -40,18 +40,15 @@ exports.transforms = {
    */
   toc: (content, options, config) => {
     const IGNORED_HEADINGS_REGEXP = /Features|Table of Contents/i;
-    return (
-      '\n' +
-      markdownToc(config.outputContent, {
-        slugify: require('uslug'),
-        bullets: options.bullets,
-        firsth1: false,
-        // if filter is supplied, maxdepth is apparently ignored,
-        // so we have to do it ourselves.
-        filter: (str, ele) => ele.lvl < 2 && !IGNORED_HEADINGS_REGEXP.test(str)
-      }).content +
-      '\n'
-    );
+    const toc = markdownToc(config.outputContent, {
+      slugify: require('uslug'),
+      bullets: options.bullets,
+      firsth1: false,
+      // if filter is supplied, maxdepth is apparently ignored,
+      // so we have to do it ourselves.
+      filter: (str, ele) => ele.lvl < 2 && !IGNORED_HEADINGS_REGEXP.test(str)
+    }).content;
+    return '\n' + toc + '\n';
   },
   manifest: require('markdown-magic-package-json'),
   /**
