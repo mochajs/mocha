@@ -20,11 +20,11 @@ exports.transforms = {
   usage: (content, options) => {
     const {executable} = options;
     const flag = options.flag || '--help';
-    const header = options.header || '\n```plain';
+    const header = options.header || '\n```text';
     const footer = options.footer || '```\n';
     const output = stripAnsi(
       String(
-        execSync(`${process.execPath} ${executable} ${flag}`, {
+        execSync(`"${process.execPath}" ${executable} ${flag}`, {
           cwd: path.join(__dirname, '..')
         })
       ).trim()
