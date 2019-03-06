@@ -521,6 +521,7 @@
     "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^2.1.0",
     "assetgraph-builder": "^6.9.0",
+    "autoprefixer": "^9.4.10",
     "browserify": "^16.2.3",
     "browserify-package-json": "^1.0.1",
     "chai": "^4.2.0",
