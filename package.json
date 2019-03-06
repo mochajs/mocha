@@ -512,7 +512,7 @@
     "supports-color": "6.0.0",
     "which": "1.3.1",
     "wide-align": "1.1.3",
-    "yargs": "12.0.5",
+    "yargs": "13.2.2",
     "yargs-parser": "11.1.1",
     "yargs-unparser": "1.5.0"
   },
@@ -601,11 +601,6 @@
     "singleQuote": true,
     "bracketSpacing": false,
     "endOfLine": "auto"
-  },
-  "yargs": {
-    "combine-arrays": true,
-    "short-option-groups": false,
-    "dot-notation": false
   },
   "gitter": "https://gitter.im/mochajs/mocha",
   "@mocha/contributors": {
