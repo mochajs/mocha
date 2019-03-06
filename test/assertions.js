@@ -9,8 +9,8 @@ exports.mixinMochaAssertions = function(expect) {
         return (
           Object.prototype.toString.call(v) === '[object Object]' &&
           typeof v.output === 'string' &&
-          typeof v.code === 'number' &&
-          Object.keys(v).length === 2
+          'code' in v && // may be null
+          Array.isArray(v.args)
         );
       }
     })
@@ -59,9 +59,9 @@ exports.mixinMochaAssertions = function(expect) {
       }
     )
     .addAssertion(
-      '<RawResult|RawRunResult|JSONRunResult> [not] to have [completed with] [exit] code <number>',
+      '<RawRunResult|JSONRunResult> [not] to have completed with [exit] code <number>',
       function(expect, result, code) {
-        expect(result, '[not] to have property', 'code', code);
+        expect(result.code, '[not] to be', code);
       }
     )
     .addAssertion(
@@ -100,6 +100,24 @@ exports.mixinMochaAssertions = function(expect) {
         code: expect.it('to be greater than', 0)
       });
     })
+    .addAssertion(
+      '<RawRunResult|RawResult> [not] to have failed (with|having) output <any>',
+      function(expect, result, output) {
+        expect(result, '[not] to satisfy', {
+          code: expect.it('to be greater than', 0),
+          output: output
+        });
+      }
+    )
+    .addAssertion(
+      '<RawRunResult|RawResult> [not] to have passed (with|having) output <any>',
+      function(expect, result, output) {
+        expect(result, '[not] to satisfy', {
+          code: 0,
+          output: output
+        });
+      }
+    )
     .addAssertion('<JSONRunResult> [not] to have test count <number>', function(
       expect,
       result,
@@ -294,6 +312,12 @@ exports.mixinMochaAssertions = function(expect) {
       '<RawResult|RawRunResult> [not] to contain [output] <any>',
       function(expect, result, output) {
         expect(result.output, '[not] to satisfy', output);
+      }
+    )
+    .addAssertion(
+      '<RawRunResult|JSONRunResult> to have [exit] code <number>',
+      function(expect, result, code) {
+        expect(result.code, 'to be', code);
       }
     );
 };

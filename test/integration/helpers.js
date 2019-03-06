@@ -3,7 +3,7 @@
 var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
-var baseReporter = require('../../lib/reporters/base');
+var Base = require('../../lib/reporters/base');
 
 var DEFAULT_FIXTURE = resolveFixturePath('__default__');
 var MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
@@ -81,26 +81,34 @@ module.exports = {
     var path;
 
     path = resolveFixturePath(fixturePath);
-    args = args || [];
+    args = (args || []).concat('--reporter', 'json', path);
 
     return invokeMocha(
-      args.concat(['--reporter', 'json', path]),
+      args,
       function(err, res) {
-        if (err) return fn(err);
+        if (err) {
+          return fn(err);
+        }
 
+        var result;
         try {
-          var result = toJSONRunResult(res);
-          fn(null, result);
+          // attempt to catch a JSON parsing error *only* here.
+          // previously, the callback was called within this `try` block,
+          // which would result in errors thrown from the callback
+          // getting caught by the `catch` block below.
+          result = toJSONRunResult(res);
         } catch (err) {
-          fn(
+          return fn(
             new Error(
               format(
-                'Failed to parse JSON reporter output from result:\n\n%O',
+                'Failed to parse JSON reporter output. Error:\n%O\nResult:\n%O',
+                err,
                 res
               )
             )
           );
         }
+        fn(null, result);
       },
       opts
     );
@@ -137,7 +145,7 @@ module.exports = {
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
    */
-  splitRegExp: new RegExp('[\\n' + baseReporter.symbols.dot + ']+'),
+  splitRegExp: new RegExp('[\\n' + Base.symbols.dot + ']+'),
 
   /**
    * Invokes the mocha binary. Accepts an array of additional command line args
@@ -166,7 +174,16 @@ module.exports = {
    */
   resolveFixturePath: resolveFixturePath,
 
-  toJSONRunResult: toJSONRunResult
+  toJSONRunResult: toJSONRunResult,
+
+  /**
+   * Given a regexp-like string, escape it so it can be used with the `RegExp` constructor
+   * @param {string} str - string to be escaped
+   * @returns {string} Escaped string
+   */
+  escapeRegExp: function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  }
 };
 
 /**
@@ -252,8 +269,9 @@ function _spawnMochaWithListeners(args, fn, opts) {
 
   mocha.on('close', function(code) {
     fn(null, {
-      output: output.split('\n').join('\n'),
-      code: code
+      output: output,
+      code: code,
+      args: args
     });
   });
 

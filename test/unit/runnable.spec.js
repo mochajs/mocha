@@ -1,11 +1,11 @@
 'use strict';
 
-var mocha = require('../../lib/mocha');
-var utils = mocha.utils;
-var Runnable = mocha.Runnable;
-var Suite = mocha.Suite;
+var Mocha = require('../../lib/mocha');
+var Runnable = Mocha.Runnable;
+var Suite = Mocha.Suite;
 var sinon = require('sinon');
 var Pending = require('../../lib/pending');
+var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
   describe('#timeout(ms)', function() {
@@ -418,7 +418,7 @@ describe('Runnable(title, fn)', function() {
           });
 
           runnable.run(function(err) {
-            expect(err.message, 'to be', utils.undefinedError().message);
+            expect(err.message, 'to be', Runnable.toValueOrError().message);
             done();
           });
         });
@@ -682,7 +682,7 @@ describe('Runnable(title, fn)', function() {
     it('should return `true` if test has failed', function() {
       var runnable = new Runnable('foo', function() {});
       // runner sets the state
-      runnable.state = 'failed';
+      runnable.state = STATE_FAILED;
       runnable.run(function() {
         expect(runnable.isFailed(), 'to be false');
       });
@@ -710,6 +710,18 @@ describe('Runnable(title, fn)', function() {
         expect(runnable.timedOut, 'to be', false);
         done();
       }, 20);
+    });
+  });
+
+  describe('static method', function() {
+    describe('toValueOrError', function() {
+      it('should return identity if parameter is truthy', function() {
+        expect(Runnable.toValueOrError('foo'), 'to be', 'foo');
+      });
+
+      it('should return an Error if parameter is falsy', function() {
+        expect(Runnable.toValueOrError(null), 'to be an', Error);
+      });
     });
   });
 });

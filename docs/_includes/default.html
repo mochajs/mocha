@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{{ title }}</title>
     <link
       rel="preload"
       href="https://opencollective.com/static/images/user.svg"
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/prism.css" />
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" href="favicon.ico" />
 
     <!--[if lt IE 9]> <script src="js/html5shiv.min.js"></script> <![endif]-->
   </head>
@@ -23,29 +23,37 @@
       <h1>
         <a href="/">
           <img
+            id="mocha-logo"
             src="/images/mocha-logo.svg"
-            alt="Mocha"
-            width="192"
-            height="192"
+            alt="Mocha logo"
           />
         </a>
       </h1>
-
       <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
     </header>
 
     <main id="content">{{ content }}</main>
 
     <footer>
-      <span>
-        <a href="https://mochajs.org">mochajs.org</a> is licensed under a
-        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
-          >Creative Commons Attribution 4.0 International License</a
+      <div>
+        <a rel="home" href="https://mochajs.org/">mochajs.org</a>
+        is licensed under a
+        <a
+          rel="license external noopener"
+          href="https://creativecommons.org/licenses/by/4.0/">
+          Creative Commons Attribution 4.0 International License</a
         >.
-        <p>
-          <em>Last updated: {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}</em>
-        </p></span
-      >
+        <dl class="dl-inline last-modified">
+          <dt>Last updated</dt>
+          <dd>
+            <time
+              itemprop="lastModified"
+              datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+              {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
+            </time>
+          </dd>
+        </dl>
+      </div>
     </footer>
   </body>
 </html>
