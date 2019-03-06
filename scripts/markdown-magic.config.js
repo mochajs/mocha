@@ -8,10 +8,10 @@
  */
 
 const {execSync} = require('child_process');
-const stripAnsi = require('strip-ansi');
-const markdownToc = require('markdown-toc');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const markdownToc = require('markdown-toc');
+const stripAnsi = require('strip-ansi');
 
 exports.transforms = {
   /**
