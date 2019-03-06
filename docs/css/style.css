@@ -3,8 +3,8 @@ html {
 }
 
 body {
-  color: #2c2c2c;
   border-top: 2px solid #ddd;
+  color: #2c2c2c;
 }
 
 @keyframes fadein {
@@ -29,8 +29,8 @@ body {
 
 header,
 #content {
-  max-width: 920px;
   margin: 0 auto;
+  max-width: 920px;
   padding-left: 30px;
   padding-right: 30px;
 }
@@ -39,27 +39,31 @@ header {
   padding-top: 20px;
 }
 
+#mocha-logo {
+  height: 192px;
+  width: 192px;
+}
+
 #content {
   padding-bottom: 60px;
 }
 
 #_header h1 {
+  animation: fadein 1s forwards;
   margin-top: 0;
   margin-left: -19px;
   opacity: 0;
-  animation: fadein 1s forwards;
 }
 
 #tag {
+  animation: fadein 1s forwards, slideright 1s forwards;
   color: #c29d7f;
-  font-weight: 100;
   font-size: 30px;
+  font-weight: 100;
+  letter-spacing: 2px;
   margin-top: -158px;
   margin-left: 185px;
   margin-bottom: 125px;
-  letter-spacing: 2px;
-
-  animation: fadein 1s forwards, slideright 1s forwards;
 }
 
 #tag em {
@@ -94,29 +98,29 @@ nav.badges a + a {
 }
 
 #_backers a img {
-  width: 64px;
   background: url(/images/backer-background.svg?inline) center center no-repeat;
+  width: 64px;
 }
 
 h2 {
-  margin-top: 80px;
+  border-bottom: 1px solid #ddd;
   font-weight: 400;
   letter-spacing: 1px;
-  border-bottom: 1px solid #ddd;
+  margin-top: 80px;
   text-transform: uppercase;
 }
 
 h3 {
+  border-bottom: 1px solid #eee;
   font-weight: 200;
   letter-spacing: 1px;
-  border-bottom: 1px solid #eee;
   margin-top: 40px;
   text-transform: uppercase;
 }
 
 h3 > code {
-  text-transform: none;
   font-size: 14px;
+  text-transform: none;
 }
 
 #content > p:first-child {
@@ -134,14 +138,14 @@ a:hover {
 }
 
 a.direct-link {
-  position: absolute;
-  transform: translateX(-100%);
-  text-decoration: none;
-  text-indent: -60px;
-  width: 30px;
   background: url(../images/link-icon.svg) center center no-repeat;
   background-size: auto 60%;
   opacity: 0;
+  position: absolute;
+  text-decoration: none;
+  text-indent: -60px;
+  transform: translateX(-100%);
+  width: 30px;
 }
 
 :hover > a.direct-link {
@@ -149,19 +153,19 @@ a.direct-link {
 }
 
 ul {
+  box-sizing: content-box;
+  column-count: 2;
+  column-gap: 30px;
   margin-top: 20px;
   padding: 0 15px;
-  column-gap: 30px;
-  column-count: 2;
-  box-sizing: content-box;
 }
 
 ul li {
-  margin-top: 5px;
-  list-style: none;
   border-bottom: 1px solid #eee;
-  padding: 5px 0;
   break-inside: avoid;
+  list-style: none;
+  margin-top: 5px;
+  padding: 5px 0;
 }
 
 code {
@@ -170,36 +174,54 @@ code {
 }
 
 pre {
-  margin: 20px 0;
-  padding: 20px;
+  background-color: #f3f3f3;
   border: 1px solid #ddd;
   border-bottom-color: #ccc;
-  background-color: #f3f3f3;
   border-radius: 3px;
   box-shadow: inset 0 0 10px #ddd;
+  margin: 20px 0;
   overflow-x: auto;
+  padding: 20px;
 }
 
 img.screenshot {
-  display: block;
-  margin: 30px auto;
   border-radius: 3px;
   box-shadow: 0 3px 10px #dedede, 0 1px 5px #888;
+  display: block;
+  margin: 30px auto;
   max-width: 100%;
 }
 
 footer {
   background-color: #eee;
+  border-top: 1px solid #ddd;
   padding: 50px 0;
   text-align: right;
-  border-top: 1px solid #ddd;
 }
 
-footer span {
-  display: block;
-  margin-right: 30px;
+footer div {
   color: #888;
   font-size: 0.8em;
+  margin-right: 30px;
+}
+
+.last-modified {
+  font-style: italic;
+}
+
+.dl-inline dt,
+.dl-inline dd {
+  display: inline;
+  margin: 0;
+}
+
+.dl-inline dt:after {
+  content: ': ';
+}
+
+.dl-inline dd + dt:before {
+  content: '';
+  display: block;
 }
 
 @media all and (max-width: 600px) {
@@ -214,12 +236,12 @@ footer span {
   }
 
   pre {
-    padding: 10px;
     margin: 20px -11px;
+    padding: 10px;
   }
 }
 
 blockquote {
-  padding: 10px;
   border-left: 1px solid #eee;
+  padding: 10px;
 }
