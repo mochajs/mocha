@@ -20,24 +20,49 @@ describe('Mocha', function() {
     beforeEach(function() {
       sandbox.stub(Mocha.prototype, 'useColors').returnsThis();
       sandbox.stub(utils, 'deprecate');
+      sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
     });
 
-    it('should prefer "color" over "useColors"', function() {
-      // eslint-disable-next-line no-new
-      new Mocha({useColors: true, color: false});
-      expect(Mocha.prototype.useColors, 'to have a call satisfying', [false]);
+    describe('when "useColors" option is defined', function() {
+      it('should prefer "color" over "useColors"', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({useColors: true, color: false});
+        expect(Mocha.prototype.useColors, 'to have a call satisfying', [
+          false
+        ]).and('was called once');
+      });
+
+      it('should assign "useColors" to "color"', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({useColors: true});
+        expect(Mocha.prototype.useColors, 'to have a call satisfying', [
+          true
+        ]).and('was called once');
+      });
+
+      it('should call utils.deprecate()', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({useColors: true});
+        expect(utils.deprecate, 'was called once');
+      });
     });
 
-    it('should assign "useColors" to "color"', function() {
-      // eslint-disable-next-line no-new
-      new Mocha({useColors: true});
-      expect(Mocha.prototype.useColors, 'to have a call satisfying', [true]);
+    describe('when "timeout" option is `undefined`', function() {
+      it('should not attempt to set timeout', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({timeout: undefined});
+        expect(Mocha.prototype.timeout, 'was not called');
+      });
     });
 
-    it('should call utils.deprecate()', function() {
-      // eslint-disable-next-line no-new
-      new Mocha({useColors: true});
-      expect(utils.deprecate, 'was called');
+    describe('when "timeout" option is `false`', function() {
+      it('should set a timeout of 0', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({timeout: false});
+        expect(Mocha.prototype.timeout, 'to have a call satisfying', [0]).and(
+          'was called once'
+        );
+      });
     });
   });
 
