@@ -8,10 +8,10 @@
  */
 
 const {execSync} = require('child_process');
-const stripAnsi = require('strip-ansi');
-const markdownToc = require('markdown-toc');
-const path = require('path');
 const fs = require('fs');
+const path = require('path');
+const markdownToc = require('markdown-toc');
+const stripAnsi = require('strip-ansi');
 
 exports.transforms = {
   /**
@@ -20,11 +20,11 @@ exports.transforms = {
   usage: (content, options) => {
     const {executable} = options;
     const flag = options.flag || '--help';
-    const header = options.header || '\n```plain';
+    const header = options.header || '\n```text';
     const footer = options.footer || '```\n';
     const output = stripAnsi(
       String(
-        execSync(`${process.execPath} ${executable} ${flag}`, {
+        execSync(`"${process.execPath}" ${executable} ${flag}`, {
           cwd: path.join(__dirname, '..')
         })
       ).trim()
@@ -40,18 +40,15 @@ exports.transforms = {
    */
   toc: (content, options, config) => {
     const IGNORED_HEADINGS_REGEXP = /Features|Table of Contents/i;
-    return (
-      '\n' +
-      markdownToc(config.outputContent, {
-        slugify: require('uslug'),
-        bullets: options.bullets,
-        firsth1: false,
-        // if filter is supplied, maxdepth is apparently ignored,
-        // so we have to do it ourselves.
-        filter: (str, ele) => ele.lvl < 2 && !IGNORED_HEADINGS_REGEXP.test(str)
-      }).content +
-      '\n'
-    );
+    const toc = markdownToc(config.outputContent, {
+      slugify: require('uslug'),
+      bullets: options.bullets,
+      firsth1: false,
+      // if filter is supplied, maxdepth is apparently ignored,
+      // so we have to do it ourselves.
+      filter: (str, ele) => ele.lvl < 2 && !IGNORED_HEADINGS_REGEXP.test(str)
+    }).content;
+    return '\n' + toc + '\n';
   },
   manifest: require('markdown-magic-package-json'),
   /**
