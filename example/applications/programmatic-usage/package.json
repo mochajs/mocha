@@ -8,7 +8,6 @@
   },
   "author": "",
   "license": "ISC",
-  "eslintIgnore": ["node_modules"],
   "dependencies": {
     "mocha": "^6.0.2"
   }

@@ -13,7 +13,6 @@
   "dependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
-    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
@@ -23,7 +22,6 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "mocha": "^6.0.2",
-    "promise-polyfill": "^8.1.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "webpack": "^4.29.5"
