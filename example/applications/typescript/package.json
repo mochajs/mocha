@@ -1,0 +1,21 @@
+{
+  "name": "typescript-application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "compile": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^11.9.4",
+    "mocha": "^6.0.0",
+    "typescript": "^3.3.3"
+  },
+  "devDependencies": {
+    "ts-node": "^8.0.2"
+  }
+}

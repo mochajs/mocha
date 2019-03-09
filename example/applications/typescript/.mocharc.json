@@ -1,0 +1,12 @@
+{
+  "diff": true,
+  "bail": true,
+  "extension": ["ts"],
+  "spec": "src/**/*.spec.ts",
+  "package": "./package.json",
+  "require": "ts-node/register",
+  "reporter": "spec",
+  "slow": 75,
+  "timeout": 2000,
+  "ui": "bdd"
+}

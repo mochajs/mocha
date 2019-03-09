@@ -1,0 +1,15 @@
+{
+  "name": "programmatic-usage-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "eslintIgnore": ["node_modules"],
+  "dependencies": {
+    "mocha": "^6.0.2"
+  }
+}

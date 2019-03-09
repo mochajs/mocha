@@ -6,3 +6,4 @@ out/
 !lib/mocha.js
 test/integration/fixtures
 !.*.js
+example/applications
