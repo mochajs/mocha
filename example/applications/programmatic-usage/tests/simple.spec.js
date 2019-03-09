@@ -7,6 +7,6 @@ describe('my suite', function() {
     // pass
   });
   it('#index', function() {
-      equal(index(), 1);
+      equal(index(), "programmatic example");
   });
 });

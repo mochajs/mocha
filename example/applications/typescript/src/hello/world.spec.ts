@@ -6,6 +6,6 @@ describe('#World', () => {
     equal(true, true);
   });
   it('should return expected string', function() {
-    equal(world('first'), "firstadditional")
+    equal(world('incoming'), "incoming-static")
   });
 });

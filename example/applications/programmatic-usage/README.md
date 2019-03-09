@@ -1,5 +1,5 @@
 # Programmatic usage
 
-## Commands
+## npm scripts
 
 - test

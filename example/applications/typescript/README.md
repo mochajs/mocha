@@ -1,6 +1,6 @@
 # Typescript application
 
-## Commands
+## npm scripts
 
 - test
 - compile

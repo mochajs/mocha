@@ -1,3 +1,3 @@
 module.exports = () => {
-  return 1
+  return "programmatic example"
 };

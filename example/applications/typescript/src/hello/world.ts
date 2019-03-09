@@ -1,3 +1,3 @@
 export default function(incomingText: String) {
-  return `${incomingText}additional`;
+  return `${incomingText}-static`;
 }

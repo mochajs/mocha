@@ -7,9 +7,9 @@ import App from '../src/app.js';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('<MyComponent />', () => {
-  it('renders three <Foo /> components', () => {
+describe('<App />', () => {
+  it('renders our app with welcome text', () => {
     const wrapper = shallow(<App />);
-    expect(wrapper.text()).to.equal("Well hey!")
+    expect(wrapper.text()).to.equal("Welcome to the React application.")
   });
 });

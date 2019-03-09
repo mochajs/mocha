@@ -1,6 +1,6 @@
 # React, webpack (plus babel and enzyme)
 
-## Commands
+## npm scripts
 
 - test
 - build
