@@ -8,6 +8,9 @@
     "build": "webpack",
     "start": "npm run build && open index.html"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

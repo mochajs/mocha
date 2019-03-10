@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node index.js"
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
