@@ -1,5 +1,5 @@
-import world from './world';
 import { equal } from "assert";
+import world from './world';
 
 describe('#World', () => {
   it('should be able to execute a test', function() {

@@ -4,8 +4,7 @@ var fs = require('fs');
 
 var path = require('path');
 
-// Instantiate a Mocha instance.
-// options given
+// Instantiate a Mocha
 var mocha = new Mocha({
   reporter: 'list'
 });

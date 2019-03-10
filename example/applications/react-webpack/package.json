@@ -1,7 +1,7 @@
 {
   "name": "example-applications-react-webpack",
   "version": "1.0.0",
-  "description": "",
+  "description": "React Webpack example",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -11,7 +11,6 @@
   "engines": {
     "node": ">=10.0.0"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/cli": "^7.2.3",

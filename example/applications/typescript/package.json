@@ -1,7 +1,7 @@
 {
   "name": "example-applications-typescript",
   "version": "1.0.0",
-  "description": "",
+  "description": "Typescript example",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -10,11 +10,9 @@
   "engines": {
     "node": ">=10.0.0"
   },
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/mocha": "^5.2.6",
-    "@types/node": "^11.9.4",
     "mocha": "^6.0.0",
     "typescript": "^3.3.3"
   },

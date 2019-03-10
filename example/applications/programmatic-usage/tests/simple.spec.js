@@ -1,12 +1,14 @@
 const { equal } = require("assert");
 const index = require('../src/index');
 
-describe('my suite', function() {
+describe('programmatic usage suite', function() {
 
-  it('pass', function() {
+  it('should pass', function() {
     // pass
   });
-  it('#index', function() {
-      equal(index(), "programmatic example");
+  describe('#index', function() {
+    it('should return expected string', function() {
+        equal(index(), "programmatic example");
+    });
   });
 });
