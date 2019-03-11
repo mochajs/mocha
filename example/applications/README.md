@@ -15,5 +15,6 @@ Feel free to send a branch to supply an MCVE's from one of the applications.
 - 3rd party reporter
 - Browser (including Karma)
 - Angular
+- async setups (i.e. `--file` plus root hooks, `--delay`)
 
 We welcome suggestions on other useful setups.
