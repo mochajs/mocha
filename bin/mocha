@@ -120,30 +120,34 @@ if (nodeArgs.gc) {
 
 debug('final node args', nodeArgs);
 
-const args = [].concat(
-  unparseNodeFlags(nodeArgs),
-  mochaPath,
-  unparse(mochaArgs, {alias: aliases})
-);
+if (Object.keys(nodeArgs).length) {
+  const args = [].concat(
+    unparseNodeFlags(nodeArgs),
+    mochaPath,
+    unparse(mochaArgs, {alias: aliases})
+  );
 
-debug(`exec ${process.execPath} w/ args:`, args);
+  debug(`exec ${process.execPath} w/ args:`, args);
 
-const proc = spawn(process.execPath, args, {
-  stdio: 'inherit'
-});
-
-proc.on('exit', (code, signal) => {
-  process.on('exit', () => {
-    if (signal) {
-      process.kill(process.pid, signal);
-    } else {
-      process.exit(code);
-    }
+  const proc = spawn(process.execPath, args, {
+    stdio: 'inherit'
   });
-});
 
-// terminate children.
-process.on('SIGINT', () => {
-  proc.kill('SIGINT'); // calls runner.abort()
-  proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
-});
+  proc.on('exit', (code, signal) => {
+    process.on('exit', () => {
+      if (signal) {
+        process.kill(process.pid, signal);
+      } else {
+        process.exit(code);
+      }
+    });
+  });
+
+  // terminate children.
+  process.on('SIGINT', () => {
+    proc.kill('SIGINT'); // calls runner.abort()
+    proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+  });
+} else {
+  require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
+}
