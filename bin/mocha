@@ -3,14 +3,14 @@
 'use strict';
 
 /**
- * This wrapper executable checks for known node flags and appends them when found, before invoking the "real" _mocha(1) executable.
+ * This wrapper executable checks for known node flags and appends them when found,
+ * before invoking the "real" executable (`lib/cli/cli.js`)
  *
  * @module bin/mocha
  * @private
  */
 
 const {deprecate, warn} = require('../lib/utils');
-const {spawn} = require('child_process');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -22,7 +22,6 @@ const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
 const nodeEnv = require('node-environment-flags');
 
-const mochaPath = require.resolve('./_mocha');
 const mochaArgs = {};
 const nodeArgs = {};
 
@@ -118,9 +117,12 @@ if (nodeArgs.gc) {
   delete nodeArgs.gc;
 }
 
-debug('final node args', nodeArgs);
-
 if (Object.keys(nodeArgs).length) {
+  const {spawn} = require('child_process');
+  const mochaPath = require.resolve('../lib/cli/cli.js');
+
+  debug('final node args', nodeArgs);
+
   const args = [].concat(
     unparseNodeFlags(nodeArgs),
     mochaPath,
