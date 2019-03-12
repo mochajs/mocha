@@ -629,7 +629,7 @@ describe('options', function() {
           findupSync
         });
 
-        expect(loadOptions(), 'to satisfy', {timeout: 800, require: ['foo']});
+        expect(loadOptions(), 'to satisfy', {timeout: '800', require: ['foo']});
       });
 
       it('should prioritize package.json over mocha.opts', function() {
@@ -692,7 +692,7 @@ describe('options', function() {
           loadOptions('--timeout 500'),
           'to have property',
           'timeout',
-          500
+          '500'
         );
       });
     });
