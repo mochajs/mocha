@@ -10,14 +10,16 @@ const configPath = require.resolve('../../../lib/cli/config');
 
 const proxyLoadOptions = ({
   readFileSync = {},
-  findupSync = {},
+  findupSync = null,
   findConfig = {},
   loadConfig = {}
 } = {}) =>
   rewiremock.proxy(modulePath, r => ({
     fs: r.with({readFileSync}).directChildOnly(),
     [mocharcPath]: defaults,
-    'findup-sync': r.by(() => findupSync).directChildOnly(),
+    'find-up': r
+      .by(() => (findupSync ? {sync: findupSync} : {}))
+      .directChildOnly(),
     [configPath]: r.with({findConfig, loadConfig}).directChildOnly()
   })).loadOptions;
 

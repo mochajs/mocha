@@ -497,7 +497,7 @@
     "debug": "3.2.6",
     "diff": "3.5.0",
     "escape-string-regexp": "1.0.5",
-    "findup-sync": "2.0.0",
+    "find-up": "3.0.0",
     "glob": "7.1.3",
     "growl": "1.10.5",
     "he": "1.2.0",
