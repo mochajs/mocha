@@ -109,12 +109,12 @@ describe('cli/config', function() {
     let findConfig;
 
     beforeEach(function() {
-      findup = sandbox.stub().returns('/some/path/.mocharc.js');
+      findup = {sync: sandbox.stub().returns('/some/path/.mocharc.js')};
       rewiremock.enable();
       findConfig = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
         r => ({
-          'findup-sync': r.by(() => findup)
+          'find-up': r.by(() => findup)
         })
       ).findConfig;
     });
