@@ -29,7 +29,6 @@ inline-diffs: false
 # needs to be used with grep or fgrep
 # invert: false
 opts: './test/mocha.opts'
-package: './package.json'
 recursive: false
 reporter: spec
 reporter-option:
