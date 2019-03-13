@@ -11,22 +11,20 @@
 
 const {deprecate, warn} = require('../lib/utils');
 const {spawn} = require('child_process');
-const {loadOptions} = require('../lib/cli/options');
+const {parseArgv} = require('../lib/cli/cli');
 const {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts
 } = require('../lib/cli/node-flags');
-const unparse = require('yargs-unparser');
 const debug = require('debug')('mocha:cli:mocha');
-const {aliases} = require('../lib/cli/run-option-metadata');
 const nodeEnv = require('node-environment-flags');
 
 const mochaPath = require.resolve('./_mocha');
 const mochaArgs = {};
 const nodeArgs = {};
 
-const opts = loadOptions(process.argv.slice(2));
+const opts = parseArgv(process.argv.slice(2));
 debug('loaded opts', opts);
 
 /**
@@ -123,7 +121,8 @@ debug('final node args', nodeArgs);
 const args = [].concat(
   unparseNodeFlags(nodeArgs),
   mochaPath,
-  unparse(mochaArgs, {alias: aliases})
+  '--preParsedJsonOptions',
+  JSON.stringify(mochaArgs)
 );
 
 debug(`exec ${process.execPath} w/ args:`, args);

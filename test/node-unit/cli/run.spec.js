@@ -7,7 +7,14 @@ describe('command', function() {
   describe('run', function() {
     describe('builder', function() {
       const IGNORED_OPTIONS = new Set(['help', 'version']);
-      const options = builder(require('yargs')).getOptions();
+      const yargs = require('yargs');
+      // Without doing this first, yargs will throw an error when we call `.positional()` below.
+      yargs
+        .command('foo', 'bar', yargs => {
+          return yargs;
+        })
+        .parse(['foo']);
+      const options = builder(yargs).getOptions();
       ['number', 'string', 'boolean', 'array'].forEach(type => {
         describe(`${type} type`, function() {
           Array.from(new Set(options[type])).forEach(option => {
