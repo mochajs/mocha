@@ -27,7 +27,9 @@ const defaults = {
   timeout: 1000,
   timeouts: 1000,
   t: 1000,
-  opts: '/default/path/to/mocha.opts'
+  opts: '/default/path/to/mocha.opts',
+  extension: ['js'],
+  'watch-extensions': ['js']
 };
 
 describe('options', function() {
@@ -59,6 +61,7 @@ describe('options', function() {
   describe('loadOptions()', function() {
     describe('when no parameter provided', function() {
       beforeEach(function() {
+        this.timeout(500);
         readFileSync = sandbox.stub();
         readFileSync.onFirstCall().returns('{}');
         readFileSync.onSecondCall().returns('--retries 3');
@@ -497,8 +500,8 @@ describe('options', function() {
           beforeEach(function() {
             readFileSync = sandbox.stub();
             config = '/some/.mocharc.json';
-            readFileSync.onFirstCall().returns('--retries 3');
-            readFileSync.onSecondCall().returns('{}');
+            readFileSync.onFirstCall().returns('{}');
+            readFileSync.onSecondCall().returns('--retries 3');
             findConfig = sandbox.stub();
             loadConfig = sandbox.stub().throws('Error', 'failed to parse');
             findupSync = sandbox.stub().returns('/some/package.json');
@@ -542,8 +545,8 @@ describe('options', function() {
 
             beforeEach(function() {
               readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('--retries 3');
-              readFileSync.onSecondCall().returns('{}');
+              readFileSync.onFirstCall().returns('{}');
+              readFileSync.onSecondCall().throws();
               findConfig = sandbox.stub().returns('/some/.mocharc.json');
               loadConfig = sandbox.stub().returns({});
               findupSync = sandbox.stub().returns('/some/package.json');
@@ -578,8 +581,8 @@ describe('options', function() {
 
             beforeEach(function() {
               readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('--retries 3');
-              readFileSync.onSecondCall().returns('{}');
+              readFileSync.onFirstCall().returns('{}');
+              readFileSync.onSecondCall().throws();
               findConfig = sandbox.stub().returns(null);
               loadConfig = sandbox.stub().returns({});
               findupSync = sandbox.stub().returns('/some/package.json');
@@ -713,6 +716,79 @@ describe('options', function() {
           it(`should return basic parsed arguments and flag`, function() {
             expect(loadOptions(`--${arg}`), 'to equal', {_: [], [arg]: true});
           });
+        });
+      });
+    });
+
+    describe('"extension" handling', function() {
+      describe('when user supplies "extension" option', function() {
+        let result;
+
+        beforeEach(function() {
+          readFileSync = sandbox.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sandbox.stub().returns('/some/.mocharc.json');
+          loadConfig = sandbox.stub().returns({extension: ['tsx']});
+          findupSync = sandbox.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions(['--extension', 'ts']);
+        });
+
+        it('should not concatenate the default value', function() {
+          expect(result, 'to have property', 'extension', ['ts', 'tsx']);
+        });
+      });
+
+      describe('when user does not supply "extension" option', function() {
+        let result;
+
+        beforeEach(function() {
+          readFileSync = sandbox.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sandbox.stub().returns('/some/.mocharc.json');
+          loadConfig = sandbox.stub().returns({});
+          findupSync = sandbox.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions();
+        });
+
+        it('should retain the default', function() {
+          expect(result, 'to have property', 'extension', ['js']);
+        });
+      });
+    });
+
+    describe('"spec" handling', function() {
+      describe('when user supplies "spec" in config and positional arguments', function() {
+        let result;
+
+        beforeEach(function() {
+          readFileSync = sandbox.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sandbox.stub().returns('/some/.mocharc.json');
+          loadConfig = sandbox.stub().returns({spec: '*.spec.js'});
+          findupSync = sandbox.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions(['*.test.js']);
+        });
+
+        it('should place both into the positional arguments array', function() {
+          expect(result, 'to have property', '_', ['*.test.js', '*.spec.js']);
         });
       });
     });
