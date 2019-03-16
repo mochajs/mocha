@@ -87,7 +87,7 @@ describe('cli/config', function() {
         sandbox.stub(parsers, 'js').returns(config);
       });
 
-      it('should assume package name and use JS parser', function() {
+      it('should use the JS parser', function() {
         loadConfig('foo.bar');
         expect(parsers.js, 'was called');
       });
