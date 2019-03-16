@@ -87,9 +87,9 @@ describe('cli/config', function() {
         sandbox.stub(parsers, 'js').returns(config);
       });
 
-      it('should assume JSON', function() {
+      it('should assume package name and use JS parser', function() {
         loadConfig('foo.bar');
-        expect(parsers.json, 'was called');
+        expect(parsers.js, 'was called');
       });
     });
 
