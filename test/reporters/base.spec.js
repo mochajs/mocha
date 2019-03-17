@@ -420,7 +420,13 @@ describe('Base reporter', function() {
 
   it('should let you stub out console.log without effecting reporters output', function() {
     sinon.stub(console, 'log');
+    sinon.stub(Base, 'consoleLog');
     Base.list([]);
+
+    expect(Base.consoleLog, 'was called');
     expect(console.log, 'was not called');
+
+    console.log.restore();
+    Base.consoleLog.restore();
   });
 });
