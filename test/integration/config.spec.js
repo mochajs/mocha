@@ -61,21 +61,44 @@ describe('config', function() {
 
   describe('when configuring Mocha via package', function() {
     var projRootDir = getProjectRootDir();
-    var configDir = path.join('fixtures', 'config');
+    var modulesDir = path.join(projRootDir, 'node_modules');
+    var configDir = path.join(__dirname, 'fixtures', 'config');
     var pkgName = 'mocha-config';
-    var pkgDir = path.join(__dirname, configDir, pkgName);
+    var addedPkgToNodeModules = false;
+    var pkgInNodeModules = false;
 
     before(function() {
-      fs.symlinkSync(
-        pkgDir,
-        path.join(projRootDir, 'node_modules', pkgName),
-        'dir'
-      );
+      try {
+        var srcPath = path.join(configDir, pkgName);
+        var targetPath = path.join(modulesDir, pkgName);
+        fs.symlinkSync(srcPath, targetPath, 'dir');
+        pkgInNodeModules = true;
+        addedPkgToNodeModules = true;
+        if (process.platform !== 'win32') {
+          require('child_process').execSync('ls -al ' + targetPath);
+        }
+      } catch (err) {
+        if (err.code === 'EEXIST') {
+          console.log('setup:', 'package already exists in "node_modules"');
+          pkgInNodeModules = true;
+        } else {
+          console.error('setup failed:', err);
+        }
+      }
     });
 
     it('should load configuration given valid package name', function() {
-      var configDir = path.join(__dirname, 'fixtures', 'config');
       var js;
+
+      if (!pkgInNodeModules) {
+        this.skip();
+      }
+
+      try {
+        console.log('require.resolve:', require.resolve(pkgName));
+      } catch (err) {
+        console.error('require.resolve:', err);
+      }
 
       function _loadConfig() {
         js = loadConfig(pkgName);
@@ -95,7 +118,13 @@ describe('config', function() {
     });
 
     after(function() {
-      fs.unlinkSync(path.join(projRootDir, 'node_modules', pkgName));
+      if (addedPkgToNodeModules) {
+        try {
+          fs.unlinkSync(path.join(modulesDir, pkgName));
+        } catch (err) {
+          console.error('teardown failed:', err);
+        }
+      }
     });
   });
 });
