@@ -1,7 +1,7 @@
 'use strict';
 
-// this is not a "functional" test; we aren't invoking the mocha executable.
-// instead we just avoid test doubles.
+// This is not a "functional" test; we aren't invoking the mocha executable.
+// Instead we just avoid test doubles.
 
 var fs = require('fs');
 var path = require('path');
@@ -61,26 +61,23 @@ describe('config', function() {
 
   describe('when configuring Mocha via package', function() {
     var projRootDir = getProjectRootDir();
-    var modulesDir = path.join(projRootDir, 'node_modules');
+    var nodeModulesDir = path.join(projRootDir, 'node_modules');
     var configDir = path.join(__dirname, 'fixtures', 'config');
     var pkgName = 'mocha-config';
-    var addedPkgToNodeModules = false;
-    var pkgInNodeModules = false;
+    var installedLocally = false;
+    var symlinkedPkg = false;
 
     before(function() {
       try {
         var srcPath = path.join(configDir, pkgName);
-        var targetPath = path.join(modulesDir, pkgName);
+        var targetPath = path.join(nodeModulesDir, pkgName);
         fs.symlinkSync(srcPath, targetPath, 'dir');
-        pkgInNodeModules = true;
-        addedPkgToNodeModules = true;
-        if (process.platform !== 'win32') {
-          require('child_process').execSync('ls -al ' + targetPath);
-        }
+        symlinkedPkg = true;
+        installedLocally = true;
       } catch (err) {
         if (err.code === 'EEXIST') {
           console.log('setup:', 'package already exists in "node_modules"');
-          pkgInNodeModules = true;
+          installedLocally = true;
         } else {
           console.error('setup failed:', err);
         }
@@ -90,14 +87,8 @@ describe('config', function() {
     it('should load configuration given valid package name', function() {
       var js;
 
-      if (!pkgInNodeModules) {
+      if (!installedLocally) {
         this.skip();
-      }
-
-      try {
-        console.log('require.resolve:', require.resolve(pkgName));
-      } catch (err) {
-        console.error('require.resolve:', err);
       }
 
       function _loadConfig() {
@@ -110,17 +101,19 @@ describe('config', function() {
     });
 
     it('should throw given invalid package name', function() {
+      var invalidPkgName = pkgName.toUpperCase();
+
       function _loadConfig() {
-        loadConfig(pkgName.toUpperCase());
+        loadConfig(invalidPkgName);
       }
 
       expect(_loadConfig, 'to throw');
     });
 
     after(function() {
-      if (addedPkgToNodeModules) {
+      if (symlinkedPkg) {
         try {
-          fs.unlinkSync(path.join(modulesDir, pkgName));
+          fs.unlinkSync(path.join(nodeModulesDir, pkgName));
         } catch (err) {
           console.error('teardown failed:', err);
         }
