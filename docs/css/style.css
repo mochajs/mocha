@@ -141,6 +141,7 @@ a.direct-link {
   background: url(../images/link-icon.svg) center center no-repeat;
   background-size: auto 60%;
   opacity: 0;
+  overflow: hidden;
   position: absolute;
   text-decoration: none;
   text-indent: -60px;
