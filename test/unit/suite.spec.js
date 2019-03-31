@@ -23,7 +23,7 @@ describe('Suite', function() {
 
   describe('.clone()', function() {
     beforeEach(function() {
-      this.suite = new Suite('To be cloned');
+      this.suite = new Suite('To be cloned', {}, true);
       this.suite._timeout = 3043;
       this.suite._slow = 101;
       this.suite._bail = true;
@@ -73,6 +73,10 @@ describe('Suite', function() {
 
     it('should not copy the values from the _afterAll array', function() {
       expect(this.suite.clone()._afterAll, 'to be empty');
+    });
+
+    it('should copy the root property', function() {
+      expect(this.suite.clone().root, 'to be', true);
     });
   });
 
