@@ -71,6 +71,28 @@ describe('pending', function() {
       });
     });
 
+    describe('in after', function() {
+      it('should run all tests', function(done) {
+        runMocha(
+          'pending/skip-sync-after.fixture.js',
+          args,
+          function(err, res) {
+            if (err) {
+              return done(err);
+            }
+            expect(res, 'to have passed').and('to satisfy', {
+              passing: 3,
+              failing: 0,
+              pending: 0,
+              output: expect.it('to contain', '"after all" hook is DEPRECATED')
+            });
+            done();
+          },
+          'pipe'
+        );
+      });
+    });
+
     describe('in before', function() {
       it('should skip all suite specs', function(done) {
         run('pending/skip-sync-before.fixture.js', args, function(err, res) {
