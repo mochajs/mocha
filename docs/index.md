@@ -626,7 +626,7 @@ Because this test _does nothing_, it will be reported as _passing_.
 
 > _Best practice_: Don't do nothing! A test should make an assertion or use `this.skip()`.
 
-To skip _multiple_ tests in this manner, use `this.skip()` in a "before" hook:
+To skip _multiple_ tests in this manner, use `this.skip()` in a "before all" hook:
 
 ```js
 before(function() {
@@ -661,6 +661,8 @@ describe('outer', function() {
   });
 });
 ```
+
+Skipping a test within an "after all" hook is deprecated and will throw an exception in a future version of Mocha. Use a return statement or other means to abort hook execution.
 
 > Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
@@ -910,7 +912,7 @@ Enforce a rule that tests must be written in "async" style, meaning each test pr
 
 ### `--bail, -b`
 
-Causes Mocha to stop running tests after the first test failure it encounters. Corresponding `after()` and `afterEach()` hooks are executed for potential cleanup.
+Causes Mocha to stop running tests after the first test failure it encounters. Corresponding "after each" and "after all" hooks are executed for potential cleanup.
 
 `--bail` does _not_ imply `--exit`.
 
