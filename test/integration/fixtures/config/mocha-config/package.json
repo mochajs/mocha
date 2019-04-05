@@ -4,11 +4,11 @@
   "description": "Configure Mocha via package",
   "main": "index.js",
   "peerDependencies": {
-    "mocha": "^6.1.0"
+    "mocha": "^7.0.0"
   },
   "keywords": [
     "mocha",
     "config"
   ],
-  "license": "ISC"
+  "license": "CC0"
 }
