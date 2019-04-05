@@ -1,6 +1,12 @@
 'use strict';
 
-const {loadConfig, parsers, CONFIG_FILES} = require('../../../lib/cli/config');
+const path = require('path');
+const {
+  resolveConfigPath,
+  parseConfig,
+  parsers,
+  CONFIG_FILES
+} = require('../../../lib/cli/config');
 const {createSandbox} = require('sinon');
 const rewiremock = require('rewiremock/node');
 
@@ -16,7 +22,50 @@ describe('cli/config', function() {
     sandbox.restore();
   });
 
-  describe('loadConfig()', function() {
+  describe('resolveConfigPath', function() {
+    let prevCwd;
+    const cwd = path.resolve(__dirname, '../../integration/fixtures/config');
+    const yamlpath = 'subdir/mocha-config.yaml';
+    const absYamlpath = path.join(cwd, yamlpath);
+    const modulepath = 'shared-config';
+    const absModulepath = path.resolve(
+      cwd,
+      'node_modules/shared-config/mocha-config.js'
+    );
+
+    beforeEach(function() {
+      prevCwd = process.cwd();
+      process.chdir(cwd);
+    });
+
+    afterEach(function() {
+      process.chdir(prevCwd);
+    });
+
+    describe('when supplied a cwd-relative path', function() {
+      it('should return absolute path to file', function() {
+        const {absFilepath, discoveryMethod} = resolveConfigPath(yamlpath);
+        expect(absFilepath, 'to be', absYamlpath);
+        expect(discoveryMethod, 'to be', 'cwd-relative');
+      });
+    });
+    describe('when supplied an absolute path', function() {
+      it('should return absolute path to file', function() {
+        const {absFilepath, discoveryMethod} = resolveConfigPath(absYamlpath);
+        expect(absFilepath, 'to be', absYamlpath);
+        expect(discoveryMethod, 'to be', 'cwd-relative');
+      });
+    });
+    describe('when supplied a require-able path', function() {
+      it('should return absolute path to file with require-resolve discovery', function() {
+        const {absFilepath, discoveryMethod} = resolveConfigPath(modulepath);
+        expect(absFilepath, 'to be', absModulepath);
+        expect(discoveryMethod, 'to be', 'node-require-resolve');
+      });
+    });
+  });
+
+  describe('parseConfig()', function() {
     describe('when parsing succeeds', function() {
       beforeEach(function() {
         sandbox.stub(parsers, 'yaml').returns(config);
@@ -28,7 +77,7 @@ describe('cli/config', function() {
         const filepath = 'foo.yaml';
 
         it('should use the YAML parser', function() {
-          loadConfig(filepath);
+          parseConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
@@ -39,7 +88,7 @@ describe('cli/config', function() {
         const filepath = 'foo.yml';
 
         it('should use the YAML parser', function() {
-          loadConfig(filepath);
+          parseConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
@@ -50,7 +99,7 @@ describe('cli/config', function() {
         const filepath = 'foo.js';
 
         it('should use the JS parser', function() {
-          loadConfig(filepath);
+          parseConfig(filepath);
           expect(parsers.js, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
@@ -61,7 +110,7 @@ describe('cli/config', function() {
         const filepath = 'foo.jsonc';
 
         it('should use the JSON parser', function() {
-          loadConfig('foo.jsonc');
+          parseConfig('foo.jsonc');
           expect(parsers.json, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
@@ -72,7 +121,7 @@ describe('cli/config', function() {
         const filepath = 'foo.json';
 
         it('should use the JSON parser', function() {
-          loadConfig('foo.json');
+          parseConfig('foo.json');
           expect(parsers.json, 'to have calls satisfying', [
             {args: [filepath], returned: config}
           ]).and('was called times', 1);
@@ -88,7 +137,7 @@ describe('cli/config', function() {
       });
 
       it('should assume JSON', function() {
-        loadConfig('foo.bar');
+        parseConfig('foo.bar');
         expect(parsers.json, 'was called');
       });
     });
@@ -99,7 +148,7 @@ describe('cli/config', function() {
       });
 
       it('should throw', function() {
-        expect(() => loadConfig('goo.yaml'), 'to throw', /failed to parse/);
+        expect(() => parseConfig('goo.yaml'), 'to throw', /failed to parse/);
       });
     });
   });
