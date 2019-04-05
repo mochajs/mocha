@@ -7,7 +7,7 @@ describe('command', function() {
   describe('run', function() {
     describe('builder', function() {
       const IGNORED_OPTIONS = new Set(['help', 'version']);
-      const options = builder(require('yargs')).getOptions();
+      const options = builder(require('yargs/yargs')().reset()).getOptions();
       ['number', 'string', 'boolean', 'array'].forEach(type => {
         describe(`${type} type`, function() {
           Array.from(new Set(options[type])).forEach(option => {
