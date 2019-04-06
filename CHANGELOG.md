@@ -1,3 +1,47 @@
+# 6.1.0 / 2019-04-07
+
+## :lock: Security Fixes
+
+- #3845: Update dependency "js-yaml" to v3.13.0 per npm security advisory (@plroebuck)
+
+## :tada: Enhancements
+
+- #3766: Make reporter constructor support optional `options` parameter (@plroebuck)
+- #3760: Add support for config files with `.jsonc` extension (@sstephant)
+
+## :fax: Deprecations
+
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
+
+- #3719: Deprecate `this.skip()` for "after all" hooks (@juergba)
+
+## :bug: Fixes
+
+- #3829: Use cwd-relative pathname to load config file (@plroebuck)
+- #3745: Fix async calls of `this.skip()` in "before each" hooks (@juergba)
+- #3669: Enable `--allow-uncaught` for uncaught exceptions thrown inside hooks (@givanse)
+
+and some regressions:
+
+- #3848: Fix `Suite` cloning by copying `root` property (@fatso83)
+- #3816: Guard against undefined timeout option (@boneskull)
+- #3814: Update "yargs" in order to avoid deprecation message (@boneskull)
+- #3788: Fix support for multiple node flags (@aginzberg)
+
+## :book: Documentation
+
+- [mochajs/mocha-examples](https://github.com/mochajs/mocha-examples): New repository of working examples of common configurations using mocha (@craigtaub)
+- #3850: Remove pound icon showing on header hover on docs (@jd2rogers2)
+- #3812: Add autoprefixer to documentation page CSS (@Munter)
+- #3811: Update doc examples "tests.html" (@DavidLi119)
+- #3807: Mocha website HTML tweaks (@plroebuck)
+- #3793: Update config file example ".mocharc.yml" (@cspotcode)
+
+## :nut_and_bolt: Other
+
+- #3830: Replace dependency "findup-sync" with "find-up" for faster startup (@cspotcode)
+- #3799: Update devDependencies to fix many npm vulnerabilities (@XhmikosR)
+
 # 6.0.2 / 2019-02-25
 
 ## :bug: Fixes
@@ -158,7 +202,6 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 - [#3570](https://github.com/mochajs/mocha/issues/3570): Long-running tests now respect `SIGINT` ([**@boneskull**](https://github.com/boneskull))
 - [#2944](https://github.com/mochajs/mocha/issues/2944): `--forbid-only` and `--forbid-pending` now "fail fast" when encountered on a suite ([**@outsideris**](https://github.com/outsideris))
 - [#1652](https://github.com/mochajs/mocha/issues/1652), [#2951](https://github.com/mochajs/mocha/issues/2951): Fix broken clamping of timeout values ([**@plroebuck**](https://github.com/plroebuck))
-- [#2753](https://github.com/mochajs/mocha/issues/2753): `start` and `end` events now emitted properly from `Runner` instance when using Mocha programmatically ([**@outsideris**](https://github.com/outsideris))
 - [#2095](https://github.com/mochajs/mocha/issues/2095), [#3521](https://github.com/mochajs/mocha/issues/3521): Do not log `stdout:` prefix in browser console ([**@Bamieh**](https://github.com/Bamieh))
 - [#3595](https://github.com/mochajs/mocha/issues/3595): Fix mochajs.org deployment problems ([**@papandreou**](https://github.com/papandreou))
 - [#3518](https://github.com/mochajs/mocha/issues/3518): Improve `utils.isPromise()` ([**@fabiosantoscode**](https://github.com/fabiosantoscode))
