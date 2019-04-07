@@ -2,45 +2,45 @@
 
 ## :lock: Security Fixes
 
-- #3845: Update dependency "js-yaml" to v3.13.0 per npm security advisory (@plroebuck)
+- [#3845](https://github.com/mochajs/mocha/issues/3845): Update dependency "js-yaml" to v3.13.0 per npm security advisory ([**@plroebuck**](https://github.com/plroebuck))
 
 ## :tada: Enhancements
 
-- #3766: Make reporter constructor support optional `options` parameter (@plroebuck)
-- #3760: Add support for config files with `.jsonc` extension (@sstephant)
+- [#3766](https://github.com/mochajs/mocha/issues/3766): Make reporter constructor support optional `options` parameter ([**@plroebuck**](https://github.com/plroebuck))
+- [#3760](https://github.com/mochajs/mocha/issues/3760): Add support for config files with `.jsonc` extension ([**@sstephant**](https://github.com/sstephant))
 
 ## :fax: Deprecations
 
 These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
 
-- #3719: Deprecate `this.skip()` for "after all" hooks (@juergba)
+- [#3719](https://github.com/mochajs/mocha/issues/3719): Deprecate `this.skip()` for "after all" hooks ([**@juergba**](https://github.com/juergba))
 
 ## :bug: Fixes
 
-- #3829: Use cwd-relative pathname to load config file (@plroebuck)
-- #3745: Fix async calls of `this.skip()` in "before each" hooks (@juergba)
-- #3669: Enable `--allow-uncaught` for uncaught exceptions thrown inside hooks (@givanse)
+- [#3829](https://github.com/mochajs/mocha/issues/3829): Use cwd-relative pathname to load config file ([**@plroebuck**](https://github.com/plroebuck))
+- [#3745](https://github.com/mochajs/mocha/issues/3745): Fix async calls of `this.skip()` in "before each" hooks ([**@juergba**](https://github.com/juergba))
+- [#3669](https://github.com/mochajs/mocha/issues/3669): Enable `--allow-uncaught` for uncaught exceptions thrown inside hooks ([**@givanse**](https://github.com/givanse))
 
 and some regressions:
 
-- #3848: Fix `Suite` cloning by copying `root` property (@fatso83)
-- #3816: Guard against undefined timeout option (@boneskull)
-- #3814: Update "yargs" in order to avoid deprecation message (@boneskull)
-- #3788: Fix support for multiple node flags (@aginzberg)
+- [#3848](https://github.com/mochajs/mocha/issues/3848): Fix `Suite` cloning by copying `root` property ([**@fatso83**](https://github.com/fatso83))
+- [#3816](https://github.com/mochajs/mocha/issues/3816): Guard against undefined timeout option ([**@boneskull**](https://github.com/boneskull))
+- [#3814](https://github.com/mochajs/mocha/issues/3814): Update "yargs" in order to avoid deprecation message ([**@boneskull**](https://github.com/boneskull))
+- [#3788](https://github.com/mochajs/mocha/issues/3788): Fix support for multiple node flags ([**@aginzberg**](https://github.com/aginzberg))
 
 ## :book: Documentation
 
-- [mochajs/mocha-examples](https://github.com/mochajs/mocha-examples): New repository of working examples of common configurations using mocha (@craigtaub)
-- #3850: Remove pound icon showing on header hover on docs (@jd2rogers2)
-- #3812: Add autoprefixer to documentation page CSS (@Munter)
-- #3811: Update doc examples "tests.html" (@DavidLi119)
-- #3807: Mocha website HTML tweaks (@plroebuck)
-- #3793: Update config file example ".mocharc.yml" (@cspotcode)
+- [mochajs/mocha-examples](https://github.com/mochajs/mocha-examples): New repository of working examples of common configurations using mocha ([**@craigtaub**](https://github.com/craigtaub))
+- [#3850](https://github.com/mochajs/mocha/issues/3850): Remove pound icon showing on header hover on docs ([**@jd2rogers2**](https://github.com/jd2rogers2))
+- [#3812](https://github.com/mochajs/mocha/issues/3812): Add autoprefixer to documentation page CSS ([**@Munter**](https://github.com/Munter))
+- [#3811](https://github.com/mochajs/mocha/issues/3811): Update doc examples "tests.html" ([**@DavidLi119**](https://github.com/DavidLi119))
+- [#3807](https://github.com/mochajs/mocha/issues/3807): Mocha website HTML tweaks ([**@plroebuck**](https://github.com/plroebuck))
+- [#3793](https://github.com/mochajs/mocha/issues/3793): Update config file example ".mocharc.yml" ([**@cspotcode**](https://github.com/cspotcode))
 
 ## :nut_and_bolt: Other
 
-- #3830: Replace dependency "findup-sync" with "find-up" for faster startup (@cspotcode)
-- #3799: Update devDependencies to fix many npm vulnerabilities (@XhmikosR)
+- [#3830](https://github.com/mochajs/mocha/issues/3830): Replace dependency "findup-sync" with "find-up" for faster startup ([**@cspotcode**](https://github.com/cspotcode))
+- [#3799](https://github.com/mochajs/mocha/issues/3799): Update devDependencies to fix many npm vulnerabilities ([**@XhmikosR**](https://github.com/XhmikosR))
 
 # 6.0.2 / 2019-02-25
 
