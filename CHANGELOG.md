@@ -1,3 +1,9 @@
+# 6.1.1 / 2019-04-07
+
+## :bug: Fixes
+
+- Fix Windows End-of-Line publishing issue
+
 # 6.1.0 / 2019-04-07
 
 ## :lock: Security Fixes
