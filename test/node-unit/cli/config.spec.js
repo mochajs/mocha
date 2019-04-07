@@ -82,12 +82,10 @@ describe('cli/config', function() {
 
     describe('when supplied a filepath with unsupported extension', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'yaml').returns(config);
         sandbox.stub(parsers, 'json').returns(config);
-        sandbox.stub(parsers, 'js').returns(config);
       });
 
-      it('should assume JSON', function() {
+      it('should use the JSON parser', function() {
         loadConfig('foo.bar');
         expect(parsers.json, 'was called');
       });
