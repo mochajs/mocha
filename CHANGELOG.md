@@ -2,13 +2,13 @@
 
 ## :bug: Fixes
 
-- #3867: Re-publish v6.1.1 from POSIX OS to avoid dropped executable flags (@boneskull)
+- [#3867](https://github.com/mochajs/mocha/issues/3867): Re-publish v6.1.1 from POSIX OS to avoid dropped executable flags ([**@boneskull**](https://github.com/boneskull))
 
 # 6.1.1 / 2019-04-07
 
 ## :bug: Fixes
 
-- #3866: Fix Windows End-of-Line publishing issue (@juergba & @cspotcode)
+- [#3866](https://github.com/mochajs/mocha/issues/3866): Fix Windows End-of-Line publishing issue ([**@juergba**](https://github.com/juergba) & [**@cspotcode**](https://github.com/cspotcode))
 
 # 6.1.0 / 2019-04-07
 
