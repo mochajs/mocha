@@ -1,8 +1,14 @@
+# 6.1.2 / 2019-04-08
+
+## :bug: Fixes
+
+- #3867: Re-publish v6.1.1 from POSIX OS to avoid dropped executable flags (@boneskull)
+
 # 6.1.1 / 2019-04-07
 
 ## :bug: Fixes
 
-- Fix Windows End-of-Line publishing issue
+- #3866: Fix Windows End-of-Line publishing issue (@juergba & @cspotcode)
 
 # 6.1.0 / 2019-04-07
 
