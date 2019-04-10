@@ -418,15 +418,24 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it('should let you stub out console.log without effecting reporters output', function() {
-    sinon.stub(console, 'log');
-    sinon.stub(Base, 'consoleLog');
-    Base.list([]);
+  describe('when reporter output immune to user test changes', function() {
+    var sandbox;
 
-    expect(Base.consoleLog, 'was called');
-    expect(console.log, 'was not called');
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+      sandbox.stub(console, 'log');
+      sandbox.stub(Base, 'consoleLog').callThrough();
+    });
 
-    console.log.restore();
-    Base.consoleLog.restore();
+    it('should let you stub out console.log without effecting reporters output', function() {
+      Base.list([]);
+
+      expect(Base.consoleLog, 'was called');
+      expect(console.log, 'was not called');
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
   });
 });
