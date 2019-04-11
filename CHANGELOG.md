@@ -1,3 +1,10 @@
+# 6.1.3 / 2019-04-11
+
+## :bug: Fixes
+
+- #3863: Fix `yargs`-related global scope pollution (@inukshuk)
+- #3869: Fix failure when installed w/ `pnpm` (@boneskull)
+
 # 6.1.2 / 2019-04-08
 
 ## :bug: Fixes
