@@ -2,8 +2,8 @@
 
 ## :bug: Fixes
 
-- #3863: Fix `yargs`-related global scope pollution (@inukshuk)
-- #3869: Fix failure when installed w/ `pnpm` (@boneskull)
+- [#3863](https://github.com/mochajs/mocha/issues/3863): Fix `yargs`-related global scope pollution ([**@inukshuk**](https://github.com/inukshuk))
+- [#3869](https://github.com/mochajs/mocha/issues/3869): Fix failure when installed w/ `pnpm` ([**@boneskull**](https://github.com/boneskull))
 
 # 6.1.2 / 2019-04-08
 
