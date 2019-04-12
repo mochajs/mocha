@@ -1,5 +1,5 @@
 'use strict';
 
-describe('exclude test pass', function () {
+describe('ignore test pass', function () {
   it('should find this test', function () {});
 });
