@@ -420,17 +420,19 @@ describe('Base reporter', function() {
 
   describe('when reporter output immune to user test changes', function() {
     var sandbox;
+    var baseConsoleLog;
 
     beforeEach(function() {
       sandbox = sinon.createSandbox();
       sandbox.stub(console, 'log');
-      sandbox.stub(Base, 'consoleLog').callThrough();
+      baseConsoleLog = sandbox.stub(Base, 'consoleLog');
     });
 
     it('should let you stub out console.log without effecting reporters output', function() {
       Base.list([]);
+      baseConsoleLog.restore();
 
-      expect(Base.consoleLog, 'was called');
+      expect(baseConsoleLog, 'was called');
       expect(console.log, 'was not called');
     });
 
