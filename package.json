@@ -528,7 +528,7 @@
     "yargs-unparser": "1.5.0"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^0.7.1",
+    "@11ty/eleventy": "^0.8.2",
     "@mocha/contributors": "^1.0.3",
     "@mocha/docdash": "^2.1.0",
     "assetgraph-builder": "^6.10.0",
