@@ -1,5 +1,6 @@
 'use strict';
 
+var sinon = require('sinon');
 var Mocha = require('../../');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
@@ -28,7 +29,9 @@ describe('JSON reporter', function() {
       })
     );
 
+    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
+      stdoutWrite.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [
@@ -49,7 +52,9 @@ describe('JSON reporter', function() {
   it('should have 1 test pending', function(done) {
     suite.addTest(new Test(testTitle));
 
+    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
+      stdoutWrite.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           pending: [
@@ -78,7 +83,9 @@ describe('JSON reporter', function() {
       })
     );
 
+    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
+      stdoutWrite.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [
