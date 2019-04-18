@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "6.1.3",
+  "version": "6.1.4",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -75,6 +75,7 @@
     "Berker Peksag <berker.peksag@gmail.com>",
     "berni <berni@extensa.pl>",
     "Bjørge Næss <bjoerge@origo.no>",
+    "Bjorn Stromberg <bjorn@bjornstar.com>",
     "Brendan Nee <brendan.nee@gmail.com>",
     "Brian Beck <exogen@gmail.com>",
     "Brian Lalor <blalor@bravo5.org>",
