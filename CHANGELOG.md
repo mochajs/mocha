@@ -1,3 +1,9 @@
+# 6.1.4 / 2019-04-18
+
+## :lock: Security Fixes
+
+- [#3877](https://github.com/mochajs/mocha/issues/3877): Upgrade [js-yaml](https://npm.im/js-yaml), addressing [code injection vulnerability](https://www.npmjs.com/advisories/813) ([**@bjornstar**](https://github.com/bjornstar))
+
 # 6.1.3 / 2019-04-11
 
 ## :bug: Fixes
