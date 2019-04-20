@@ -1055,7 +1055,7 @@ Can be specified as a comma-delimited list.
 
 > _New in v6.0.0._
 
-Specify an explicit path to a [configuration file](#configuring-mocha-node-js).
+Specify an explicit path to a [configuration file](#configuring-mocha-nodejs).
 
 By default, Mocha will search for a config file if `--config` is not specified; use `--no-config` to suppress this behavior.
 
@@ -1071,7 +1071,7 @@ By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts`
 
 > _New in v6.0.0._
 
-Specify an explicit path to a [`package.json` file](#configuring-mocha-node-js) (ostensibly containing configuration in a `mocha` property).
+Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (ostensibly containing configuration in a `mocha` property).
 
 By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
 
