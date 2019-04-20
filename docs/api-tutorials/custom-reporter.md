@@ -112,9 +112,9 @@ The event names are exported from the `constants` property of `Mocha.Runner`:
 
 > It's important to understand that all `Suite` callbacks will be run _before_ the [Runner] emits `EVENT_RUN_BEGIN`. Hooks and tests, however, won't run until _after_ the [Runner] emits `EVENT_RUN_BEGIN`.
 
-[runner]: /api/mocha.runner
-[test]: /api/mocha.test
-[hook]: /api/mocha.hook
-[suite]: /api/mocha.suite
+[runner]: /api/runner
+[test]: /api/test
+[hook]: /api/hook
+[suite]: /api/suite
 [base]: /api/mocha.reporters.base
 [delay]: /#delayed-root-suite
