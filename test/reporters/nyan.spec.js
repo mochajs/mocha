@@ -1,5 +1,6 @@
 'use strict';
 
+var sandbox = require('sinon').createSandbox();
 var reporters = require('../../').reporters;
 var NyanCat = reporters.Nyan;
 var Base = reporters.Base;
@@ -10,110 +11,90 @@ var makeRunReporter = require('./helpers.js').createRunReporterFunction;
 describe('Nyan reporter', function() {
   describe('events', function() {
     var runner;
-    var calledDraw;
     var options = {};
     var runReporter = makeRunReporter(NyanCat);
 
     afterEach(function() {
+      sandbox.restore();
       runner = undefined;
     });
 
     describe('on start', function() {
       it('should call draw', function() {
-        calledDraw = false;
-        runner = createMockRunner('start', 'start');
-        runReporter(
-          {
-            draw: function() {
-              calledDraw = true;
-            },
-            generateColors: function() {}
-          },
-          runner,
-          options
-        );
+        var reporterStub = {
+          draw: function() {},
+          generateColors: function() {}
+        };
+        sandbox.stub(reporterStub, 'draw');
 
-        expect(calledDraw, 'to be', true);
+        runner = createMockRunner('start', 'start');
+        runReporter(reporterStub, runner, options);
+
+        expect(reporterStub.draw, 'was called');
       });
     });
     describe('on pending', function() {
       it('should call draw', function() {
-        calledDraw = false;
-        runner = createMockRunner('pending', 'pending');
-        runReporter(
-          {
-            draw: function() {
-              calledDraw = true;
-            },
-            generateColors: function() {}
-          },
-          runner,
-          options
-        );
+        var reporterStub = {
+          draw: function() {},
+          generateColors: function() {}
+        };
+        sandbox.stub(reporterStub, 'draw');
 
-        expect(calledDraw, 'to be', true);
+        runner = createMockRunner('pending', 'pending');
+        runReporter(reporterStub, runner, options);
+
+        expect(reporterStub.draw, 'was called');
       });
     });
     describe('on pass', function() {
       it('should call draw', function() {
-        calledDraw = false;
+        var reporterStub = {
+          draw: function() {},
+          generateColors: function() {}
+        };
+        sandbox.stub(reporterStub, 'draw');
+
         var test = {
           duration: '',
           slow: function() {}
         };
         runner = createMockRunner('pass', 'pass', null, null, test);
-        runReporter(
-          {
-            draw: function() {
-              calledDraw = true;
-            },
-            generateColors: function() {}
-          },
-          runner,
-          options
-        );
+        runReporter(reporterStub, runner, options);
 
-        expect(calledDraw, 'to be', true);
+        expect(reporterStub.draw, 'was called');
       });
     });
     describe('on fail', function() {
       it('should call draw', function() {
-        calledDraw = false;
+        var reporterStub = {
+          draw: function() {},
+          generateColors: function() {}
+        };
+        sandbox.stub(reporterStub, 'draw');
+
         var test = {
           err: ''
         };
         runner = createMockRunner('fail', 'fail', null, null, test);
-        runReporter(
-          {
-            draw: function() {
-              calledDraw = true;
-            },
-            generateColors: function() {}
-          },
-          runner,
-          options
-        );
+        runReporter(reporterStub, runner, options);
 
-        expect(calledDraw, 'to be', true);
+        expect(reporterStub.draw, 'was called');
       });
     });
     describe('on end', function() {
       it('should call epilogue', function() {
-        var calledEpilogue = false;
-        runner = createMockRunner('end', 'end');
-        runReporter(
-          {
-            draw: function() {},
-            generateColors: function() {},
-            epilogue: function() {
-              calledEpilogue = true;
-            }
-          },
-          runner,
-          options
-        );
+        var reporterStub = {
+          draw: function() {},
+          generateColors: function() {},
+          epilogue: function() {}
+        };
+        sandbox.stub(reporterStub, 'epilogue');
 
-        expect(calledEpilogue, 'to be', true);
+        runner = createMockRunner('end', 'end');
+        runReporter(reporterStub, runner, options);
+
+        expect(reporterStub.epilogue, 'was called');
       });
       it('should write numberOfLines amount of new lines', function() {
         var expectedNumberOfLines = 4;
@@ -135,11 +116,8 @@ describe('Nyan reporter', function() {
         expect(arrayOfNewlines, 'to have length', expectedNumberOfLines);
       });
       it('should call Base show', function() {
-        var showCalled = false;
-        var cachedShow = Base.cursor.show;
-        Base.cursor.show = function() {
-          showCalled = true;
-        };
+        sandbox.stub(Base.cursor, 'show');
+
         runner = createMockRunner('end', 'end');
         runReporter(
           {
@@ -151,8 +129,7 @@ describe('Nyan reporter', function() {
           options
         );
 
-        expect(showCalled, 'to be', true);
-        Base.cursor.show = cachedShow;
+        expect(Base.cursor.show, 'was called');
       });
     });
   });
@@ -299,15 +276,8 @@ describe('Nyan reporter', function() {
 
   describe('rainbowify', function() {
     describe('useColors is false', function() {
-      var useColors;
-
       beforeEach(function() {
-        useColors = Base.useColors;
-        Base.useColors = false;
-      });
-
-      afterEach(function() {
-        Base.useColors = useColors;
+        sandbox.stub(Base, 'useColors').value(false);
       });
 
       it('should return argument string', function() {
@@ -319,16 +289,10 @@ describe('Nyan reporter', function() {
       });
     });
     describe('useColors is true', function() {
-      var useColors;
-
       beforeEach(function() {
-        useColors = Base.useColors;
-        Base.useColors = true;
+        sandbox.stub(Base, 'useColors').value(true);
       });
 
-      afterEach(function() {
-        Base.useColors = useColors;
-      });
       it('should return rainbowified string from the given string and predefined codes', function() {
         var startCode = '\u001b[38;5;';
         var endCode = '\u001b[0m';

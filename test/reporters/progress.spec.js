@@ -1,5 +1,6 @@
 'use strict';
 
+var sandbox = require('sinon').createSandbox();
 var reporters = require('../../').reporters;
 var Progress = reporters.Progress;
 var Base = reporters.Base;
@@ -23,34 +24,27 @@ describe('Progress reporter', function() {
   });
 
   afterEach(function() {
+    sandbox.restore();
     process.stdout.write = stdoutWrite;
   });
 
   describe('on start', function() {
     it('should call cursor hide', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorHide = false;
-      Base.cursor.hide = function() {
-        calledCursorHide = true;
-      };
+      sandbox.stub(Base.cursor, 'hide');
+
       runner = createMockRunner('start', 'start');
       runReporter({}, runner, {});
 
-      expect(calledCursorHide, 'to be', true);
-
-      Base.cursor = cachedCursor;
+      expect(Base.cursor.hide, 'was called');
     });
   });
 
   describe('on test end', function() {
     describe('if line has not changed', function() {
       it('should return and not write anything', function() {
-        var cachedCursor = Base.cursor;
-        var useColors = Base.useColors;
-        Base.useColors = false;
-        Base.cursor.CR = function() {};
-        var windowWidth = Base.window.width;
-        Base.window.width = -3;
+        sandbox.stub(Base, 'useColors').value(false);
+        sandbox.stub(Base.cursor, 'CR');
+        sandbox.stub(Base.window, 'width').value(-3);
 
         var expectedTotal = 1;
         var expectedOptions = {};
@@ -59,23 +53,13 @@ describe('Progress reporter', function() {
         var stdout = runReporter({}, runner, expectedOptions);
 
         expect(stdout, 'to equal', []);
-
-        Base.cursor = cachedCursor;
-        Base.useColors = useColors;
-        Base.window.width = windowWidth;
       });
     });
     describe('if line has changed', function() {
       it('should write expected progress of open and close options', function() {
-        var calledCursorCR = false;
-        var cachedCursor = Base.cursor;
-        var useColors = Base.useColors;
-        Base.useColors = false;
-        Base.cursor.CR = function() {
-          calledCursorCR = true;
-        };
-        var windowWidth = Base.window.width;
-        Base.window.width = 5;
+        sandbox.stub(Base, 'useColors').value(false);
+        sandbox.stub(Base.cursor, 'CR');
+        sandbox.stub(Base.window, 'width').value(5);
 
         var expectedTotal = 12;
         var expectedOpen = 'OpEn';
@@ -101,39 +85,23 @@ describe('Progress reporter', function() {
           expectedIncomplete,
           expectedClose
         ];
-        expect(calledCursorCR, 'to be', true);
+        expect(Base.cursor.CR, 'was called');
         expect(stdout, 'to equal', expectedArray);
-
-        Base.cursor = cachedCursor;
-        Base.useColors = useColors;
-        Base.window.width = windowWidth;
       });
     });
   });
 
   describe('on end', function() {
     it('should call cursor show and epilogue', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorShow = false;
-      Base.cursor.show = function() {
-        calledCursorShow = true;
-      };
+      var reporterStub = {epilogue: function() {}};
+      sandbox.stub(Base.cursor, 'show');
+      sandbox.stub(reporterStub, 'epilogue');
+
       runner = createMockRunner('end', 'end');
-      var calledEpilogue = false;
-      runReporter(
-        {
-          epilogue: function() {
-            calledEpilogue = true;
-          }
-        },
-        runner,
-        {}
-      );
+      runReporter(reporterStub, runner, {});
 
-      expect(calledEpilogue, 'to be', true);
-      expect(calledCursorShow, 'to be', true);
-
-      Base.cursor = cachedCursor;
+      expect(reporterStub.epilogue, 'was called');
+      expect(Base.cursor.show, 'was called');
     });
   });
 });
