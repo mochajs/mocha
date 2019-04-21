@@ -1116,7 +1116,7 @@ Require a module before loading the user interface or test files. This is useful
 - Test harnesses
 - Assertion libraries that augment built-ins or global scope (such as [should.js][npm-should.js])
 - Instant ECMAScript modules via [esm][npm-esm]
-- Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`). See [Babel][example-babel] and [TypeScript][example-typescript] working examples.
+- Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`). See [Babel][example-babel] or [TypeScript][example-typescript] working examples.
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
 
@@ -1474,7 +1474,7 @@ Mocha allows you to define custom reporters. For more information see the [wiki]
 Examples:
 
 - the [TeamCity reporter][mocha-teamcity-reporter]
-- our [working eaample][example-third-party-reporter].
+- our [working example][example-third-party-reporter]
 
 ### HTML Reporter
 
@@ -1808,12 +1808,12 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 Real live example code:
 
-- [Mocha Examples][https://github.com/mochajs/mocha-examples]
+- [Mocha examples][mocha-examples]
 - [Express][example-express-test]
 - [Connect][example-connect-test]
 - [SuperAgent][example-superagent-test]
 - [WebSocket.io][example-websocket.io-test]
-- [Mocha][example-mocha-test]
+- [Mocha tests][example-mocha-test]
 
 ## Testing Mocha
 
@@ -1869,6 +1869,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [mdn-promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 [mdn-regexp]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp
 [mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
+[mocha-examples]: https://github.com/mochajs/mocha-examples
 [mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
 [mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
