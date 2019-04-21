@@ -1116,7 +1116,7 @@ Require a module before loading the user interface or test files. This is useful
 - Test harnesses
 - Assertion libraries that augment built-ins or global scope (such as [should.js][npm-should.js])
 - Instant ECMAScript modules via [esm][npm-esm]
-- Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`)
+- Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`). See [Babel][example-babel] and [TypeScript][example-typescript] working examples.
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
 
@@ -1469,7 +1469,12 @@ By default, it will output to the console. To write directly to a file, use `--r
 
 ### Third-Party Reporters
 
-Mocha allows you to define custom reporters. For more information see the [wiki][mocha-wiki-more-reporters]. An example is the [TeamCity reporter][mocha-teamcity-reporter].
+Mocha allows you to define custom reporters. For more information see the [wiki][mocha-wiki-more-reporters].
+
+Examples:
+
+- the [TeamCity reporter][mocha-teamcity-reporter]
+- our [working eaample][example-third-party-reporter].
 
 ### HTML Reporter
 
@@ -1803,6 +1808,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 Real live example code:
 
+- [Mocha Examples][https://github.com/mochajs/mocha-examples]
 - [Express][example-express-test]
 - [Connect][example-connect-test]
 - [SuperAgent][example-superagent-test]
@@ -1837,12 +1843,15 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-express-test]: https://github.com/visionmedia/express/tree/master/test
+[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/babel
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
-[example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
-[example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
+[example-express-test]: https://github.com/visionmedia/express/tree/master/test
 [example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
 [example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
+[example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
+[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/third-party-reporter
+[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/typescript
+[example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
 [fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
