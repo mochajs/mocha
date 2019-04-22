@@ -1,5 +1,6 @@
 'use strict';
 
+var sandbox = require('sinon').createSandbox();
 var reporters = require('../../').reporters;
 var List = reporters.List;
 var Base = reporters.Base;
@@ -11,7 +12,6 @@ describe('List reporter', function() {
   var runner;
   var options = {};
   var runReporter = makeRunReporter(List);
-  var useColors;
   var expectedTitle = 'some title';
   var expectedDuration = 100;
   var test = {
@@ -23,12 +23,11 @@ describe('List reporter', function() {
   };
 
   beforeEach(function() {
-    useColors = Base.useColors;
-    Base.useColors = false;
+    sandbox.stub(Base, 'useColors').value(false);
   });
 
   afterEach(function() {
-    Base.useColors = useColors;
+    sandbox.restore();
     runner = undefined;
   });
 
@@ -53,24 +52,18 @@ describe('List reporter', function() {
   });
   describe('on pass', function() {
     it('should call cursor CR', function() {
-      var calledCursorCR = false;
-      var cachedCursor = Base.cursor;
-      Base.cursor.CR = function() {
-        calledCursorCR = true;
-      };
+      sandbox.stub(Base.cursor, 'CR');
+
       runner = createMockRunner('pass', 'pass', null, null, test);
       runReporter({epilogue: function() {}}, runner, options);
 
-      expect(calledCursorCR, 'to be', true);
-
-      Base.cursor = cachedCursor;
+      expect(Base.cursor.CR, 'was called');
     });
     it('should write expected symbol, title and duration to the console', function() {
-      var cachedSymbols = Base.symbols;
       var expectedOkSymbol = 'OK';
-      Base.symbols.ok = expectedOkSymbol;
-      var cachedCursor = Base.cursor;
-      Base.cursor.CR = function() {};
+      sandbox.stub(Base.symbols, 'ok').value(expectedOkSymbol);
+      sandbox.stub(Base.cursor, 'CR');
+
       runner = createMockRunner('pass', 'pass', null, null, test);
       var stdout = runReporter({epilogue: function() {}}, runner, options);
 
@@ -85,29 +78,21 @@ describe('List reporter', function() {
           expectedDuration +
           'ms\n'
       );
-
-      Base.cursor = cachedCursor;
-      Base.symbols = cachedSymbols;
     });
   });
   describe('on fail', function() {
     it('should call cursor CR', function() {
-      var calledCursorCR = false;
-      var cachedCursor = Base.cursor;
-      Base.cursor.CR = function() {
-        calledCursorCR = true;
-      };
+      sandbox.stub(Base.cursor, 'CR');
+
       runner = createMockRunner('fail', 'fail', null, null, test);
       runReporter({epilogue: function() {}}, runner, options);
 
-      expect(calledCursorCR, 'to be', true);
-
-      Base.cursor = cachedCursor;
+      expect(Base.cursor.CR, 'was called');
     });
     it('should write expected error number and title', function() {
-      var cachedCursor = Base.cursor;
+      sandbox.stub(Base.cursor, 'CR');
+
       var expectedErrorCount = 1;
-      Base.cursor.CR = function() {};
       runner = createMockRunner('fail', 'fail', null, null, test);
       var stdout = runReporter({epilogue: function() {}}, runner, options);
 
@@ -116,8 +101,6 @@ describe('List reporter', function() {
         'to be',
         '  ' + expectedErrorCount + ') ' + expectedTitle + '\n'
       );
-
-      Base.cursor = cachedCursor;
     });
     it('should immediately construct fail strings', function() {
       var actual = {a: 'actual'};
@@ -149,19 +132,13 @@ describe('List reporter', function() {
 
   describe('on end', function() {
     it('should call epilogue', function() {
-      var calledEpilogue = false;
-      runner = createMockRunner('end', 'end');
-      runReporter(
-        {
-          epilogue: function() {
-            calledEpilogue = true;
-          }
-        },
-        runner,
-        options
-      );
+      var reporterStub = {epilogue: function() {}};
+      sandbox.stub(reporterStub, 'epilogue');
 
-      expect(calledEpilogue, 'to be', true);
+      runner = createMockRunner('end', 'end');
+      runReporter(reporterStub, runner, options);
+
+      expect(reporterStub.epilogue, 'was called');
     });
   });
 });
