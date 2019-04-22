@@ -1,5 +1,6 @@
 'use strict';
 
+var sandbox = require('sinon').createSandbox();
 var Mocha = require('../..');
 var reporters = Mocha.reporters;
 var Landing = reporters.Landing;
@@ -15,8 +16,6 @@ describe('Landing reporter', function() {
   var runner;
   var options = {};
   var runReporter = makeRunReporter(Landing);
-  var useColors;
-  var windowWidth;
   var resetCode = '\u001b[0m';
   var expectedArray = [
     '\u001b[1D\u001b[2A',
@@ -30,40 +29,32 @@ describe('Landing reporter', function() {
   ];
 
   beforeEach(function() {
-    useColors = Base.useColors;
-    Base.useColors = false;
-    windowWidth = Base.window.width;
-    Base.window.width = 1;
+    sandbox.stub(Base, 'useColors').value(false);
+    sandbox.stub(Base.window, 'width').value(1);
   });
 
   afterEach(function() {
-    Base.useColors = useColors;
-    Base.window.width = windowWidth;
+    sandbox.restore();
     runner = undefined;
   });
 
   describe('on start', function() {
     it('should write new lines', function() {
-      var cachedCursor = Base.cursor;
-      Base.cursor.hide = function() {};
+      sandbox.stub(Base.cursor, 'hide');
+
       runner = createMockRunner('start', 'start');
       var stdout = runReporter({}, runner, options);
 
       expect(stdout[0], 'to equal', '\n\n\n  ');
-      Base.cursor = cachedCursor;
     });
 
     it('should call cursor hide', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorHide = false;
-      Base.cursor.hide = function() {
-        calledCursorHide = true;
-      };
+      sandbox.stub(Base.cursor, 'hide');
+
       runner = createMockRunner('start', 'start');
       runReporter({}, runner, options);
-      expect(calledCursorHide, 'to be', true);
 
-      Base.cursor = cachedCursor;
+      expect(Base.cursor.hide, 'was called');
     });
   });
 
@@ -95,28 +86,16 @@ describe('Landing reporter', function() {
   });
   describe('on end', function() {
     it('should call cursor show and epilogue', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorShow = false;
-      Base.cursor.show = function() {
-        calledCursorShow = true;
-      };
+      var reporterStub = {epilogue: function() {}};
+      sandbox.stub(Base.cursor, 'show');
+      sandbox.stub(reporterStub, 'epilogue');
+
       runner = createMockRunner('end', 'end');
 
-      var calledEpilogue = false;
-      runReporter(
-        {
-          epilogue: function() {
-            calledEpilogue = true;
-          }
-        },
-        runner,
-        options
-      );
+      runReporter(reporterStub, runner, options);
 
-      expect(calledEpilogue, 'to be', true);
-      expect(calledCursorShow, 'to be', true);
-
-      Base.cursor = cachedCursor;
+      expect(reporterStub.epilogue, 'was called');
+      expect(Base.cursor.show, 'was called');
     });
   });
 });
