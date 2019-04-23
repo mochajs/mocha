@@ -39,7 +39,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [config file support](#-config-path)
 - [mocha.opts file support](#-opts-path)
 - clickable suite titles to filter test execution
-- [node debugger support](#-debug-inspect-debug-brk-inspect-brk-debug-inspect)
+- [node debugger support](#-inspect-inspect-brk-inspect)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
@@ -987,7 +987,7 @@ Note: A test that executes for _half_ of the "slow" time will be highlighted _in
 
 ### `--timeout <ms>, -t <ms>`
 
-> _Update in v6.0.0: `--no-timeout` is implied when invoking Mocha using debug flags. It is equivalent to `--timeout 0`. `--timeout 99999999` is no longer needed._
+> _Update in v6.0.0: `--no-timeout` is implied when invoking Mocha using inspect flags. It is equivalent to `--timeout 0`. `--timeout 99999999` is no longer needed._
 
 Specifies the test case timeout, defaulting to two (2) seconds (2000 milliseconds). Tests taking longer than this amount of time will be marked as failed.
 
@@ -1178,15 +1178,15 @@ Use the _inverse_ of the match specified by `--grep` or `fgrep`.
 
 Requires either `--grep` or `--fgrep` (but not both).
 
-### `--debug, --inspect, --debug-brk, --inspect-brk, debug, inspect`
+### `--inspect, --inspect-brk, inspect`
 
-> _BREAKING CHANGE in v6.0.0; `-d` is no longer an alias for `--debug`. Other updates in v6.0.0: In versions of Node.js implementing `--inspect` and `--inspect-brk`, `--debug` and `--debug-brk` are respectively aliases for these two options. Likewise, `debug` (not `--debug`) is an alias for `inspect` (not `--inspect`) in Node.js versions where `debug` is deprecated._
+> _BREAKING CHANGE in v7.0.0; `--debug` / `--debug-brk` are removed and `debug` is deprecated._
 
-Enables Node.js' debugger or inspector.
+Enables Node.js' inspector.
 
-Use `--inspect` / `--inspect-brk` / `--debug` / `--debug-brk` to launch the V8 inspector for use with Chrome Dev Tools.
+Use `--inspect` / `--inspect-brk` to launch the V8 inspector for use with Chrome Dev Tools.
 
-Use `inspect` / `debug` to launch Node.js' internal debugger.
+Use `inspect` to launch Node.js' internal debugger.
 
 All of these options are mutually exclusive.
 
