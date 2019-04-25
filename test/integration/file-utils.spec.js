@@ -58,7 +58,7 @@ describe('file utils', function() {
       ex.and('to have length', expectedLength);
     });
 
-    it('should parse extensions from extnsions parameter', function() {
+    it('should parse extensions from extensions parameter', function() {
       var nonJsFile = tmpFile('mocha-utils-text.txt');
       fs.writeFileSync(nonJsFile, 'yippy skippy ying yang yow');
 
@@ -66,9 +66,14 @@ describe('file utils', function() {
       expect(res, 'to contain', nonJsFile).and('to have length', 1);
     });
 
-    it('should not require the extensions parameter when looking up a file', function() {
-      var res = utils.lookupFiles(tmpFile('mocha-utils'), undefined, false);
-      expect(res, 'to be', tmpFile('mocha-utils.js'));
+    it('should require the extensions parameter when looking up a file', function() {
+      var dirLookup = function() {
+        return utils.lookupFiles(tmpFile('mocha-utils'), undefined, false);
+      };
+      expect(dirLookup, 'to throw', {
+        name: 'Error',
+        code: 'ERR_MOCHA_NO_FILES_MATCH_PATTERN'
+      });
     });
 
     it('should require the extensions parameter when looking up a directory', function() {
