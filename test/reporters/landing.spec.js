@@ -1,20 +1,25 @@
 'use strict';
 
-var sandbox = require('sinon').createSandbox();
-var Mocha = require('../..');
-var reporters = Mocha.reporters;
-var Landing = reporters.Landing;
-var constants = Mocha.Runnable.constants;
-var STATE_FAILED = constants.STATE_FAILED;
-var STATE_PASSED = constants.STATE_PASSED;
-var Base = reporters.Base;
+var sinon = require('sinon');
+var events = require('../../').Runner.constants;
+var helpers = require('./helpers');
+var reporters = require('../../').reporters;
+var states = require('../../').Runnable.constants;
 
-var createMockRunner = require('./helpers').createMockRunner;
-var makeRunReporter = require('./helpers.js').createRunReporterFunction;
+var Base = reporters.Base;
+var Landing = reporters.Landing;
+var createMockRunner = helpers.createMockRunner;
+var makeRunReporter = helpers.createRunReporterFunction;
+
+var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+var EVENT_RUN_END = events.EVENT_RUN_END;
+var EVENT_TEST_END = events.EVENT_TEST_END;
+
+var STATE_FAILED = states.STATE_FAILED;
+var STATE_PASSED = states.STATE_PASSED;
 
 describe('Landing reporter', function() {
-  var runner;
-  var options = {};
+  var sandbox;
   var runReporter = makeRunReporter(Landing);
   var resetCode = '\u001b[0m';
   var expectedArray = [
@@ -29,73 +34,98 @@ describe('Landing reporter', function() {
   ];
 
   beforeEach(function() {
+    sandbox = sinon.createSandbox();
     sandbox.stub(Base, 'useColors').value(false);
     sandbox.stub(Base.window, 'width').value(1);
   });
 
   afterEach(function() {
     sandbox.restore();
-    runner = undefined;
   });
 
-  describe('on start', function() {
-    it('should write new lines', function() {
-      sandbox.stub(Base.cursor, 'hide');
+  describe('event handlers', function() {
+    describe("on 'start' event", function() {
+      it('should write newlines', function() {
+        sandbox.stub(Base.cursor, 'hide');
 
-      runner = createMockRunner('start', 'start');
-      var stdout = runReporter({}, runner, options);
-
-      expect(stdout[0], 'to equal', '\n\n\n  ');
-    });
-
-    it('should call cursor hide', function() {
-      sandbox.stub(Base.cursor, 'hide');
-
-      runner = createMockRunner('start', 'start');
-      runReporter({}, runner, options);
-
-      expect(Base.cursor.hide, 'was called');
-    });
-  });
-
-  describe('on test end', function() {
-    describe('if test has failed', function() {
-      it('should write expected landing strip', function() {
-        var test = {
-          state: STATE_FAILED
-        };
-        runner = createMockRunner('test end', 'test end', null, null, test);
-        runner.total = 12;
+        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var options = {};
         var stdout = runReporter({}, runner, options);
+        sandbox.restore();
 
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout[0], 'to equal', '\n\n\n  ');
+      });
+
+      it('should call cursor hide', function() {
+        var hideCursorStub = sandbox.stub(Base.cursor, 'hide');
+
+        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var options = {};
+        runReporter({}, runner, options);
+        sandbox.restore();
+
+        expect(hideCursorStub.called, 'to be true');
       });
     });
-    describe('if test has not failed', function() {
-      it('should write expected landing strip', function() {
-        var test = {
-          state: STATE_PASSED
-        };
-        runner = createMockRunner('test end', 'test end', null, null, test);
 
-        var stdout = runReporter({}, runner, options);
+    describe("on 'test end' event", function() {
+      describe('when test passes', function() {
+        it('should write expected landing strip', function() {
+          var test = {
+            state: STATE_PASSED
+          };
+          var runner = createMockRunner(
+            'test end',
+            EVENT_TEST_END,
+            null,
+            null,
+            test
+          );
+          var options = {};
+          var stdout = runReporter({}, runner, options);
+          sandbox.restore();
 
-        expect(stdout, 'to equal', expectedArray);
+          expect(stdout, 'to equal', expectedArray);
+        });
+      });
+
+      describe('when test fails', function() {
+        it('should write expected landing strip', function() {
+          var test = {
+            state: STATE_FAILED
+          };
+          var runner = createMockRunner(
+            'test end',
+            EVENT_TEST_END,
+            null,
+            null,
+            test
+          );
+          runner.total = 12;
+          var options = {};
+          var stdout = runReporter({}, runner, options);
+          sandbox.restore();
+
+          expect(stdout, 'to equal', expectedArray);
+        });
       });
     });
-  });
-  describe('on end', function() {
-    it('should call cursor show and epilogue', function() {
-      var reporterStub = {epilogue: function() {}};
-      sandbox.stub(Base.cursor, 'show');
-      sandbox.stub(reporterStub, 'epilogue');
 
-      runner = createMockRunner('end', 'end');
+    describe("on 'end' event", function() {
+      it('should call cursor show and epilogue', function() {
+        var showCursorStub = sandbox.stub(Base.cursor, 'show');
 
-      runReporter(reporterStub, runner, options);
+        var fakeThis = {
+          epilogue: sinon.spy()
+        };
+        var runner = createMockRunner('end', EVENT_RUN_END);
+        var options = {};
+        runReporter(fakeThis, runner, options);
+        sandbox.restore();
 
-      expect(reporterStub.epilogue, 'was called');
-      expect(Base.cursor.show, 'was called');
+        expect(fakeThis.epilogue.calledOnce, 'to be true');
+        expect(showCursorStub.called, 'to be true');
+      });
     });
   });
 });
