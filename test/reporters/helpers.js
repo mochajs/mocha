@@ -1,17 +1,22 @@
 'use strict';
 
+var sinon = require('sinon');
 var errors = require('../../lib/errors');
-var createUnsupportedError = errors.createUnsupportedError;
-/*
-  This function prevents the constant use of creating a runnerEvent.
-  runStr is the argument that defines the runnerEvent.
-  ifStr1 is one possible reporter argument, as is ifStr2, and ifStr3
-  arg1 and arg2 are the possible variables that need to be put into the
-  scope of this function for the tests to run properly.
-*/
-
 var createStatsCollector = require('../../lib/stats-collector');
 
+var createUnsupportedError = errors.createUnsupportedError;
+
+/**
+ * Creates a mock runner object.
+ *
+ * @param {string} runStr - argument that defines the runnerEvent
+ * @param {string} ifStr1 - runner event
+ * @param {(string|null)} [ifStr2] - runner event
+ * @param {(string|null)} [ifStr3] - runner event
+ * @param {(*|null)} [arg1] - variable to be added to event handler's scope
+ * @param {(*|null)} [arg2] - variable to be added to event handler's scope
+ * @return {Object} mock runner instance
+ */
 function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var runnerFunction = createRunnerFunction(
     runStr,
@@ -29,6 +34,20 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   return mockRunner;
 }
 
+/**
+ * Creates an event handler function to be used by the runner.
+ *
+ * @description
+ * Arguments 'ifStr1', 'ifStr2', and 'ifStr3' should be `Runner.constants`.
+ *
+ * @param {string} runStr - argument that defines the runnerEvent
+ * @param {string} ifStr1 - runner event
+ * @param {(string|null)} [ifStr2] - runner event
+ * @param {(string|null)} [ifStr3] - runner event
+ * @param {(*|null)} [arg1] - variable to be added to event handler's scope
+ * @param {(*|null)} [arg2] - variable to be added to event handler's scope
+ * @return {Function} event handler for the requested runner events
+ */
 function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var test = null;
   switch (runStr) {
@@ -178,23 +197,35 @@ function createRunReporterFunction(ctor) {
    * @return {string[]} Lines of output written to `stdout`
    */
   var runReporter = function(stubSelf, runner, options, tee) {
+    var origStdoutWrite = process.stdout.write;
+    var stdoutWriteStub = sinon.stub(process.stdout, 'write');
     var stdout = [];
 
-    // Reassign stream in order to make a copy of all reporter output
-    var stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
+    var gather = function(chunk, enc, callback) {
+      stdout.push(chunk);
       if (tee) {
-        stdoutWrite.call(process.stdout, string, enc, callback);
+        origStdoutWrite.call(process.stdout, chunk);
       }
     };
 
-    // Invoke reporter
-    ctor.call(stubSelf, runner, options);
+    // Reassign stream in order to make a copy of all reporter output
+    stdoutWriteStub.callsFake(gather);
 
-    // Revert stream reassignment here so reporter output
-    // can't be corrupted if any test assertions throw
-    process.stdout.write = stdoutWrite;
+    // Give `stubSelf` access to `ctor` prototype chain
+    Object.setPrototypeOf(stubSelf, ctor.prototype);
+
+    try {
+      try {
+        // Invoke reporter
+        ctor.call(stubSelf, runner, options);
+      } finally {
+        // Revert stream reassignment here so reporter output
+        // can't be corrupted if any test assertions throw
+        stdoutWriteStub.restore();
+      }
+    } catch (err) {
+      throw err; // Rethrow
+    }
 
     return stdout;
   };

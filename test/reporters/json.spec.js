@@ -7,8 +7,11 @@ var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
 describe('JSON reporter', function() {
-  var suite, runner;
+  var sandbox;
+  var suite;
+  var runner;
   var testTitle = 'json test 1';
+  var noop = function() {};
 
   beforeEach(function() {
     var mocha = new Mocha({
@@ -16,8 +19,18 @@ describe('JSON reporter', function() {
     });
     suite = new Suite('JSON suite', 'root');
     runner = new Runner(suite);
+    var options = {};
     /* eslint no-unused-vars: off */
-    var mochaReporter = new mocha._reporter(runner);
+    var mochaReporter = new mocha._reporter(runner, options);
+  });
+
+  beforeEach(function() {
+    sandbox = sinon.createSandbox();
+    sandbox.stub(process.stdout, 'write').callsFake(noop);
+  });
+
+  afterEach(function() {
+    sandbox.restore();
   });
 
   it('should have 1 test failure', function(done) {
@@ -29,9 +42,8 @@ describe('JSON reporter', function() {
       })
     );
 
-    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
-      stdoutWrite.restore();
+      sandbox.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [
@@ -52,9 +64,8 @@ describe('JSON reporter', function() {
   it('should have 1 test pending', function(done) {
     suite.addTest(new Test(testTitle));
 
-    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
-      stdoutWrite.restore();
+      sandbox.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           pending: [
@@ -83,9 +94,8 @@ describe('JSON reporter', function() {
       })
     );
 
-    var stdoutWrite = sinon.stub(process.stdout, 'write');
     runner.run(function(failureCount) {
-      stdoutWrite.restore();
+      sandbox.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [

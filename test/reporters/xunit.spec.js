@@ -1,25 +1,34 @@
 'use strict';
 
-var fs = require('fs');
-var mkdirp = require('mkdirp');
-var path = require('path');
-var assert = require('assert');
-var createStatsCollector = require('../../lib/stats-collector');
 var EventEmitter = require('events').EventEmitter;
+var fs = require('fs');
+var os = require('os');
+var path = require('path');
+var mkdirp = require('mkdirp');
+var rimraf = require('rimraf');
+var sinon = require('sinon');
+var createStatsCollector = require('../../lib/stats-collector');
+var events = require('../../').Runner.constants;
 var reporters = require('../../').reporters;
-var constants = require('../../lib/runnable').constants;
-var STATE_FAILED = constants.STATE_FAILED;
-var STATE_PASSED = constants.STATE_PASSED;
+var states = require('../../').Runnable.constants;
+
+var Base = reporters.Base;
 var XUnit = reporters.XUnit;
 
-describe('XUnit reporter', function() {
-  var stdout;
-  var stdoutWrite;
-  // the runner parameter of the reporter
-  var runner;
+var EVENT_RUN_END = events.EVENT_RUN_END;
+var EVENT_TEST_END = events.EVENT_TEST_END;
+var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-  var callbackArgument = null;
-  var expectedFailure = 'some-failures';
+var STATE_FAILED = states.STATE_FAILED;
+var STATE_PASSED = states.STATE_PASSED;
+
+describe('XUnit reporter', function() {
+  var sandbox;
+  var runner;
+  var noop = function() {};
+
   var expectedLine = 'some-line';
   var expectedClassName = 'fullTitle';
   var expectedTitle = 'some title';
@@ -27,192 +36,286 @@ describe('XUnit reporter', function() {
   var expectedDiff =
     '\n      + expected - actual\n\n      -foo\n      +bar\n      ';
   var expectedStack = 'some-stack';
-  var expectedWrite = null;
 
   beforeEach(function() {
-    stdout = [];
-    runner = {on: function() {}, once: function() {}};
+    runner = {on: noop, once: noop};
     createStatsCollector(runner);
   });
 
-  describe('if reporter options output is given', function() {
-    var expectedOutput = 'some-output';
+  describe("when 'reporterOptions.output' is provided", function() {
+    var expectedOutput = path.join(path.sep, 'path', 'to', 'some-output');
     var options = {
       reporterOptions: {
         output: expectedOutput
       }
     };
-    describe('but it cant create a write stream', function() {
-      it('should throw expected error', function() {
-        var fsCreateWriteStream = fs.createWriteStream;
-        fs.createWriteStream = false;
 
-        var boundXUnit = XUnit.bind({}, runner, options);
-        expect(boundXUnit, 'to throw', 'file output not supported in browser');
-        fs.createWriteStream = fsCreateWriteStream;
+    describe('when fileStream can be created', function() {
+      var mkdirpSync;
+      var fsCreateWriteStream;
+
+      beforeEach(function() {
+        sandbox = sinon.createSandbox();
+        mkdirpSync = sandbox.stub(mkdirp, 'sync');
+        fsCreateWriteStream = sandbox.stub(fs, 'createWriteStream');
       });
-    });
-    describe('and it can create a write stream', function() {
-      it('should locate the output dir, create it, then assign as fileStream', function() {
-        var expectedDirectory;
-        var mkdirpSync = mkdirp.sync;
-        var pathDirname = path.dirname;
-        var fsCreateWriteStream = fs.createWriteStream;
-        mkdirp.sync = function(directory) {
-          expectedDirectory = directory;
-        };
-        path.dirname = function(location) {
-          return location;
-        };
-        fs.createWriteStream = function(streamDetails) {
-          return streamDetails;
-        };
 
-        var contextVariables = {
+      it('should open given file for writing, recursively creating directories in pathname', function() {
+        var fakeThis = {
           fileStream: null
         };
-        XUnit.call(contextVariables, runner, options);
+        XUnit.call(fakeThis, runner, options);
 
-        expect(expectedDirectory, 'to be', expectedOutput);
-        expect(contextVariables.fileStream, 'to be', expectedOutput);
+        var expectedDirectory = path.dirname(expectedOutput);
+        expect(mkdirpSync.calledWith(expectedDirectory), 'to be true');
+        expect(fsCreateWriteStream.calledWith(expectedOutput), 'to be true');
+      });
 
-        fs.createWriteStream = fsCreateWriteStream;
-        mkdirp.sync = mkdirpSync;
-        path.dirname = pathDirname;
+      afterEach(function() {
+        sandbox.restore();
+      });
+    });
+
+    describe('when fileStream cannot be created', function() {
+      describe('when given an invalid pathname', function() {
+        var tmpdir;
+        var invalidPath;
+
+        beforeEach(function createInvalidPath() {
+          tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'mocha-test-'));
+
+          function touch(filename) {
+            fs.closeSync(fs.openSync(filename, 'w'));
+          }
+
+          // Create path where file 'some-file' used as directory
+          invalidPath = path.join(
+            tmpdir,
+            'some-file',
+            path.basename(expectedOutput)
+          );
+          touch(path.dirname(invalidPath));
+        });
+
+        it('should throw system error', function() {
+          var options = {
+            reporterOptions: {
+              output: invalidPath
+            }
+          };
+          var boundXUnit = XUnit.bind({}, runner, options);
+          expect(
+            boundXUnit,
+            'to throw',
+            expect.it('to be an', Error).and('to satisfy', {
+              syscall: 'mkdir',
+              code: 'EEXIST',
+              path: path.dirname(invalidPath)
+            })
+          );
+        });
+
+        afterEach(function() {
+          rimraf.sync(tmpdir);
+        });
+      });
+
+      describe('when run in browser', function() {
+        beforeEach(function() {
+          sandbox = sinon.createSandbox();
+          sandbox.stub(fs, 'createWriteStream').value(false);
+        });
+
+        it('should throw unsupported error', function() {
+          var boundXUnit = XUnit.bind({}, runner, options);
+          expect(
+            boundXUnit,
+            'to throw',
+            'file output not supported in browser'
+          );
+        });
+
+        afterEach(function() {
+          sandbox.restore();
+        });
       });
     });
   });
 
-  describe("on 'pending', 'pass' and 'fail' events", function() {
-    it("should add test to tests called on 'end' event", function() {
-      var pendingTest = {
-        name: 'pending',
-        slow: function() {}
-      };
-      var failTest = {
-        name: 'fail',
-        slow: function() {}
-      };
-      var passTest = {
-        name: 'pass',
-        slow: function() {}
-      };
-      runner.on = runner.once = function(event, callback) {
-        if (event === 'pending') {
-          callback(pendingTest);
-        }
-        if (event === 'pass') {
-          callback(passTest);
-        }
-        if (event === 'fail') {
-          callback(failTest);
-        }
-        if (event === 'end') {
-          callback();
-        }
-      };
-
-      var calledTests = [];
-      XUnit.call(
-        {
-          write: function() {},
-          test: function(test) {
-            calledTests.push(test);
-          }
-        },
-        runner
-      );
-
-      var expectedCalledTests = [pendingTest, passTest, failTest];
-      expect(calledTests, 'to equal', expectedCalledTests);
-    });
-  });
-
-  describe('done', function() {
-    describe('if fileStream is truthy', function() {
-      it('should run callback with failure inside streams end', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-        var callback = function(failures) {
-          callbackArgument = failures;
+  describe('event handlers', function() {
+    describe("on 'pending', 'pass' and 'fail' events", function() {
+      it("should add test to tests called on 'end' event", function() {
+        var pendingTest = {
+          name: 'pending',
+          slow: noop
         };
-        var calledEnd = false;
-        var fileStream = {
-          end: function(callback) {
-            calledEnd = true;
+        var failTest = {
+          name: 'fail',
+          slow: noop
+        };
+        var passTest = {
+          name: 'pass',
+          slow: noop
+        };
+        runner.on = runner.once = function(event, callback) {
+          if (event === EVENT_TEST_PENDING) {
+            callback(pendingTest);
+          } else if (event === EVENT_TEST_PASS) {
+            callback(passTest);
+          } else if (event === EVENT_TEST_FAIL) {
+            callback(failTest);
+          } else if (event === EVENT_RUN_END) {
             callback();
           }
         };
-        xunit.done.call({fileStream: fileStream}, expectedFailure, callback);
 
-        expect(calledEnd, 'to be', true);
-        expect(callbackArgument, 'to be', expectedFailure);
-      });
-    });
-    describe('if fileStream is falsy', function() {
-      it('should run callback with failure', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-        var callback = function(failures) {
-          callbackArgument = failures;
-        };
-        xunit.done.call({fileStream: false}, expectedFailure, callback);
-
-        expect(callbackArgument, 'to be', expectedFailure);
-      });
-    });
-  });
-
-  describe('write', function() {
-    describe('if fileStream is truthy', function() {
-      it('should call fileStream write with line and new line', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-        var fileStream = {
-          write: function(write) {
-            expectedWrite = write;
+        var calledTests = [];
+        var fakeThis = {
+          write: noop,
+          test: function(test) {
+            calledTests.push(test);
           }
         };
-        xunit.write.call({fileStream: fileStream}, expectedLine);
+        XUnit.call(fakeThis, runner);
 
-        expect(expectedWrite, 'to be', expectedLine + '\n');
-      });
-    });
-    describe('if fileStream is falsy and stdout exists', function() {
-      it('should call write with line and new line', function() {
-        stdoutWrite = process.stdout.write;
-        process.stdout.write = function(string) {
-          stdout.push(string);
-        };
-
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-        xunit.write.call({fileStream: false}, expectedLine);
-
-        process.stdout.write = stdoutWrite;
-
-        expect(stdout[0], 'to be', expectedLine + '\n');
-      });
-    });
-    describe('if fileStream is falsy and stdout does not exist', function() {
-      it('should call write with line', function() {
-        stdoutWrite = process;
-        process = false; // eslint-disable-line no-native-reassign, no-global-assign
-        var cachedConsoleLog = console.log;
-        console.log = function(string) {
-          stdout.push(string);
-        };
-
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-        xunit.write.call({fileStream: false}, expectedLine);
-
-        console.log = cachedConsoleLog;
-        process = stdoutWrite; // eslint-disable-line no-native-reassign, no-global-assign
-        expect(stdout[0], 'to be', expectedLine);
+        var expectedCalledTests = [pendingTest, passTest, failTest];
+        expect(calledTests, 'to equal', expectedCalledTests);
       });
     });
   });
 
-  describe('test', function() {
+  describe('#done', function() {
+    var xunit;
+    var options = {
+      reporterOptions: {}
+    };
+    var expectedNFailures = 13;
+    var callback;
+
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+      callback = sandbox.spy();
+    });
+
+    afterEach(function() {
+      callback = null;
+      xunit = null;
+      sandbox.restore();
+    });
+
+    describe('when output directed to file', function() {
+      var fakeThis;
+
+      beforeEach(function() {
+        xunit = new XUnit(runner, options);
+
+        fakeThis = {
+          fileStream: {
+            end: sinon.stub().callsFake(function(chunk, encoding, cb) {
+              if (typeof arguments[0] === 'function') {
+                cb = arguments[0];
+              }
+              cb();
+            }),
+            write: function(chunk, encoding, cb) {}
+          }
+        };
+      });
+
+      it("should run completion callback via 'fileStream.end'", function() {
+        xunit.done.call(fakeThis, expectedNFailures, callback);
+
+        expect(fakeThis.fileStream.end.calledOnce, 'to be true');
+        expect(callback.calledOnce, 'to be true');
+        expect(callback.calledWith(expectedNFailures), 'to be true');
+      });
+    });
+
+    describe('when output directed to stdout (or console)', function() {
+      var fakeThis;
+
+      beforeEach(function() {
+        xunit = new XUnit(runner, options);
+        fakeThis = {};
+      });
+
+      it('should run completion callback', function() {
+        xunit.done.call(fakeThis, expectedNFailures, callback);
+
+        expect(callback.calledOnce, 'to be true');
+        expect(callback.calledWith(expectedNFailures), 'to be true');
+      });
+    });
+  });
+
+  describe('#write', function() {
+    // :TODO: Method should be named 'writeln', not 'write'
+    describe('when output directed to file', function() {
+      var fileStream = {
+        write: sinon.spy()
+      };
+
+      it("should call 'fileStream.write' with line and newline", function() {
+        var xunit = new XUnit(runner);
+        var fakeThis = {fileStream: fileStream};
+        xunit.write.call(fakeThis, expectedLine);
+
+        expect(fileStream.write.calledWith(expectedLine + '\n'), 'to be true');
+      });
+    });
+
+    describe('when output directed to stdout', function() {
+      it("should call 'process.stdout.write' with line and newline", function() {
+        var xunit = new XUnit(runner);
+        var fakeThis = {fileStream: false};
+        var stdoutWriteStub = sinon.stub(process.stdout, 'write');
+        xunit.write.call(fakeThis, expectedLine);
+        stdoutWriteStub.restore();
+
+        expect(stdoutWriteStub.calledWith(expectedLine + '\n'), 'to be true');
+      });
+    });
+
+    describe('when output directed to console', function() {
+      it("should call 'console.log' with line", function() {
+        // :TODO: XUnit needs a trivially testable means to force console.log()
+        var realProcess = process;
+        process = false; // eslint-disable-line no-native-reassign, no-global-assign
+
+        var xunit = new XUnit(runner);
+        var fakeThis = {fileStream: false};
+        var consoleLogStub = sinon.stub(console, 'log');
+        xunit.write.call(fakeThis, expectedLine);
+        consoleLogStub.restore();
+
+        process = realProcess; // eslint-disable-line no-native-reassign, no-global-assign
+
+        expect(consoleLogStub.calledWith(expectedLine), 'to be true');
+      });
+    });
+  });
+
+  describe('#test', function() {
+    var expectedWrite;
+    var fakeThis = {
+      write: function(str) {
+        expectedWrite = str;
+      }
+    };
+
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+      sandbox.stub(Base, 'useColors').value(false);
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+      expectedWrite = null;
+    });
+
     describe('on test failure', function() {
       it('should write expected tag with error details', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
+        var xunit = new XUnit(runner);
         var expectedTest = {
           state: STATE_FAILED,
           title: expectedTitle,
@@ -229,14 +332,9 @@ describe('XUnit reporter', function() {
             stack: expectedStack
           }
         };
-        xunit.test.call(
-          {
-            write: function(string) {
-              expectedWrite = string;
-            }
-          },
-          expectedTest
-        );
+
+        xunit.test.call(fakeThis, expectedTest);
+        sandbox.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -250,14 +348,13 @@ describe('XUnit reporter', function() {
           '\n' +
           expectedStack +
           '</failure></testcase>';
-
         expect(expectedWrite, 'to be', expectedTag);
       });
     });
+
     describe('on test pending', function() {
       it('should write expected tag', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-
+        var xunit = new XUnit(runner);
         var expectedTest = {
           isPending: function() {
             return true;
@@ -270,14 +367,9 @@ describe('XUnit reporter', function() {
           },
           duration: 1000
         };
-        xunit.test.call(
-          {
-            write: function(string) {
-              expectedWrite = string;
-            }
-          },
-          expectedTest
-        );
+
+        xunit.test.call(fakeThis, expectedTest);
+        sandbox.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -285,14 +377,13 @@ describe('XUnit reporter', function() {
           '" name="' +
           expectedTitle +
           '" time="1"><skipped/></testcase>';
-
         expect(expectedWrite, 'to be', expectedTag);
       });
     });
+
     describe('on test in any other state', function() {
       it('should write expected tag', function() {
-        var xunit = new XUnit({on: function() {}, once: function() {}});
-
+        var xunit = new XUnit(runner);
         var expectedTest = {
           isPending: function() {
             return false;
@@ -305,14 +396,9 @@ describe('XUnit reporter', function() {
           },
           duration: false
         };
-        xunit.test.call(
-          {
-            write: function(string) {
-              expectedWrite = string;
-            }
-          },
-          expectedTest
-        );
+
+        xunit.test.call(fakeThis, expectedTest);
+        sandbox.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -320,12 +406,14 @@ describe('XUnit reporter', function() {
           '" name="' +
           expectedTitle +
           '" time="0"/>';
-
         expect(expectedWrite, 'to be', expectedTag);
       });
     });
+
     it('should write expected summary statistics', function() {
-      var count = 0;
+      var numTests = 0;
+      var numPass = 0;
+      var numFail = 0;
       var simpleError = {
         actual: 'foo',
         expected: 'bar',
@@ -333,8 +421,14 @@ describe('XUnit reporter', function() {
         stack: expectedStack
       };
       var generateTest = function(passed) {
-        var t = {
-          title: expectedTitle + count,
+        numTests++;
+        if (passed) {
+          numPass++;
+        } else {
+          numFail++;
+        }
+        return {
+          title: [expectedTitle, numTests].join(': '),
           state: passed ? STATE_PASSED : STATE_FAILED,
           isPending: function() {
             return false;
@@ -349,26 +443,36 @@ describe('XUnit reporter', function() {
           },
           duration: 1000
         };
-        return t;
       };
 
       var runner = new EventEmitter();
       createStatsCollector(runner);
       var xunit = new XUnit(runner);
       expectedWrite = '';
-      xunit.write = function(string) {
-        expectedWrite += string;
-      };
+      sandbox.stub(xunit, 'write').callsFake(function(str) {
+        expectedWrite += str;
+      });
 
       // 3 tests, no failures (i.e. tests that could not run), and 2 errors
-      runner.emit('test end');
-      runner.emit('pass', generateTest(true));
-      runner.emit('test end');
-      runner.emit('fail', generateTest(false), simpleError);
-      runner.emit('test end');
-      runner.emit('fail', generateTest(false), simpleError);
-      runner.emit('end');
+      runner.emit(EVENT_TEST_PASS, generateTest(true));
+      runner.emit(EVENT_TEST_END);
+      runner.emit(EVENT_TEST_FAIL, generateTest(false), simpleError);
+      runner.emit(EVENT_TEST_END);
+      runner.emit(EVENT_TEST_FAIL, generateTest(false), simpleError);
+      runner.emit(EVENT_TEST_END);
+      runner.emit(EVENT_RUN_END);
 
+      sandbox.restore();
+
+      var expectedNumPass = 1;
+      var expectedNumFail = 2;
+      var expectedNumTests = 3;
+
+      expect(expectedNumPass, 'to be', numPass);
+      expect(expectedNumFail, 'to be', numFail);
+      expect(expectedNumTests, 'to be', numTests);
+
+      // :NOTE: Mocha test "fail" is an XUnit "error"
       var expectedTag =
         '<testsuite name="Mocha Tests" tests="3" failures="0" errors="2" skipped="0"';
 
@@ -377,66 +481,62 @@ describe('XUnit reporter', function() {
     });
   });
 
-  describe('custom suite name', function() {
-    // capture the events that the reporter subscribes to
-    var events;
-    // capture output lines (will contain the resulting XML of the xunit reporter)
-    var lines;
-    // the file stream into which the xunit reporter will write into
+  describe('suite name', function() {
+    // Capture the events that the reporter subscribes to
+    var events = {};
+    // Capture output lines (will contain the resulting XML of XUnit reporter)
+    var lines = [];
+    // File stream into which the XUnit reporter will write
     var fileStream;
 
-    beforeEach(function() {
-      events = {};
-
-      runner.on = runner.once = function(eventName, eventHandler) {
-        // capture the event handler
-        events[eventName] = eventHandler;
-      };
-
-      lines = [];
+    before(function() {
       fileStream = {
-        write: function(line) {
-          // capture the output lines
-          lines.push(line);
+        write: function(chunk, encoding, cb) {
+          lines.push(chunk);
         }
       };
     });
 
-    it('should use "Mocha Tests" as the suite name if no custom name is provided', function() {
-      // arrange
-      var xunit = new XUnit(runner);
-      xunit.fileStream = fileStream;
+    beforeEach(function() {
+      lines = [];
+      events = {};
 
-      // act (trigger the end event to force xunit reporter to write the output)
-      events['end']();
-
-      // assert
-      assert(
-        lines[0].indexOf('Mocha Tests') >= 0,
-        'it should contain the text "Mocha Tests"'
-      );
+      runner.on = runner.once = function(eventName, eventHandler) {
+        // Capture the event handler
+        events[eventName] = eventHandler;
+      };
     });
 
-    it('should use the custom suite name as the suite name when provided in the reporter options', function() {
-      // arrange
+    it('should use custom name if provided via reporter options', function() {
+      var customSuiteName = 'Mocha Is Great!';
       var options = {
         reporterOptions: {
-          // this time, with a custom suite name
-          suiteName: 'Mocha Is Great!'
+          suiteName: customSuiteName
         }
       };
 
       var xunit = new XUnit(runner, options);
       xunit.fileStream = fileStream;
 
-      // act (trigger the end event to force xunit reporter to write the output)
-      events['end']();
+      // Trigger end event to force XUnit reporter to write its output
+      events[EVENT_RUN_END]();
 
-      // assert
-      assert(
-        lines[0].indexOf('<testsuite name="Mocha Is Great!"') === 0,
-        '"' + lines[0] + '" should contain the text "Mocha Is Great"'
-      );
+      expect(lines[0], 'to contain', customSuiteName);
+    });
+
+    it('should use default name otherwise', function() {
+      var defaultSuiteName = 'Mocha Tests';
+      var options = {
+        reporterOptions: {}
+      };
+
+      var xunit = new XUnit(runner, options);
+      xunit.fileStream = fileStream;
+
+      // Trigger end event to force XUnit reporter to write its output
+      events[EVENT_RUN_END]();
+
+      expect(lines[0], 'to contain', defaultSuiteName);
     });
   });
 });
