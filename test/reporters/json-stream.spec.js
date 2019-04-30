@@ -1,15 +1,22 @@
 'use strict';
 
+var events = require('../../').Runner.constants;
+var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-var JSONStream = reporters.JSONStream;
+var utils = require('../../lib/utils');
 
-var createMockRunner = require('./helpers').createMockRunner;
-var makeExpectedTest = require('./helpers').makeExpectedTest;
-var makeRunReporter = require('./helpers.js').createRunReporterFunction;
+var JSONStream = reporters.JSONStream;
+var createMockRunner = helpers.createMockRunner;
+var dQuote = utils.dQuote;
+var makeExpectedTest = helpers.makeExpectedTest;
+var makeRunReporter = helpers.createRunReporterFunction;
+
+var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+var EVENT_RUN_END = events.EVENT_RUN_END;
+var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
 describe('JSON Stream reporter', function() {
-  var runner;
-  var options = {};
   var runReporter = makeRunReporter(JSONStream);
   var expectedTitle = 'some title';
   var expectedFullTitle = 'full title';
@@ -27,119 +34,126 @@ describe('JSON Stream reporter', function() {
     message: expectedErrorMessage
   };
 
-  afterEach(function() {
-    runner = undefined;
-  });
-
-  describe('on start', function() {
-    it('should write stringified start with expected total', function() {
-      runner = createMockRunner('start', 'start');
-      var expectedTotal = 12;
-      runner.total = expectedTotal;
-      var stdout = runReporter({}, runner, options);
-
-      expect(
-        stdout[0],
-        'to equal',
-        '["start",{"total":' + expectedTotal + '}]\n'
-      );
-    });
-  });
-
-  describe('on pass', function() {
-    it('should write stringified test data', function() {
-      runner = createMockRunner('pass', 'pass', null, null, expectedTest);
-      var stdout = runReporter({}, runner, options);
-
-      expect(
-        stdout[0],
-        'to equal',
-        '["pass",{"title":"' +
-          expectedTitle +
-          '","fullTitle":"' +
-          expectedFullTitle +
-          '","duration":' +
-          expectedDuration +
-          ',"currentRetry":' +
-          currentRetry +
-          '}]\n'
-      );
-    });
-  });
-
-  describe('on fail', function() {
-    describe('if error stack exists', function() {
-      it('should write stringified test data with error data', function() {
-        expectedError.stack = expectedErrorStack;
-        runner = createMockRunner(
-          'fail two args',
-          'fail',
-          null,
-          null,
-          expectedTest,
-          expectedError
-        );
-
+  describe('event handlers', function() {
+    describe("on 'start' event", function() {
+      it('should write stringified start with expected total', function() {
+        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var expectedTotal = 12;
+        runner.total = expectedTotal;
+        var options = {};
         var stdout = runReporter({}, runner, options);
 
         expect(
           stdout[0],
           'to equal',
-          '["fail",{"title":"' +
-            expectedTitle +
-            '","fullTitle":"' +
-            expectedFullTitle +
-            '","duration":' +
-            expectedDuration +
-            ',"currentRetry":' +
-            currentRetry +
-            ',"err":"' +
-            expectedErrorMessage +
-            '","stack":"' +
-            expectedErrorStack +
-            '"}]\n'
+          '["start",{"total":' + expectedTotal + '}]\n'
         );
       });
     });
 
-    describe('if error stack does not exist', function() {
-      it('should write stringified test data with error data', function() {
-        expectedError.stack = null;
-        runner = createMockRunner(
-          'fail two args',
-          'fail',
+    describe("on 'pass' event", function() {
+      it('should write stringified test data', function() {
+        var runner = createMockRunner(
+          'pass',
+          EVENT_TEST_PASS,
           null,
           null,
-          expectedTest,
-          expectedError
+          expectedTest
         );
-
-        var stdout = runReporter(this, runner, options);
+        var options = {};
+        var stdout = runReporter({}, runner, options);
 
         expect(
           stdout[0],
           'to equal',
-          '["fail",{"title":"' +
-            expectedTitle +
-            '","fullTitle":"' +
-            expectedFullTitle +
-            '","duration":' +
+          '["pass",{"title":' +
+            dQuote(expectedTitle) +
+            ',"fullTitle":' +
+            dQuote(expectedFullTitle) +
+            ',"duration":' +
             expectedDuration +
             ',"currentRetry":' +
             currentRetry +
-            ',"err":"' +
-            expectedErrorMessage +
-            '","stack":null}]\n'
+            '}]\n'
         );
       });
     });
-  });
 
-  describe('on end', function() {
-    it('should write end details', function() {
-      runner = createMockRunner('end', 'end');
-      var stdout = runReporter(this, runner, options);
-      expect(stdout[0], 'to match', /end/);
+    describe("on 'fail' event", function() {
+      describe('when error stack exists', function() {
+        it('should write stringified test data with error data', function() {
+          expectedError.stack = expectedErrorStack;
+          var runner = createMockRunner(
+            'fail two args',
+            EVENT_TEST_FAIL,
+            null,
+            null,
+            expectedTest,
+            expectedError
+          );
+          var options = {};
+          var stdout = runReporter({}, runner, options);
+
+          expect(
+            stdout[0],
+            'to equal',
+            '["fail",{"title":' +
+              dQuote(expectedTitle) +
+              ',"fullTitle":' +
+              dQuote(expectedFullTitle) +
+              ',"duration":' +
+              expectedDuration +
+              ',"currentRetry":' +
+              currentRetry +
+              ',"err":' +
+              dQuote(expectedErrorMessage) +
+              ',"stack":' +
+              dQuote(expectedErrorStack) +
+              '}]\n'
+          );
+        });
+      });
+
+      describe('when error stack does not exist', function() {
+        it('should write stringified test data with error data', function() {
+          expectedError.stack = null;
+          var runner = createMockRunner(
+            'fail two args',
+            EVENT_TEST_FAIL,
+            null,
+            null,
+            expectedTest,
+            expectedError
+          );
+          var options = {};
+          var stdout = runReporter(this, runner, options);
+
+          expect(
+            stdout[0],
+            'to equal',
+            '["fail",{"title":' +
+              dQuote(expectedTitle) +
+              ',"fullTitle":' +
+              dQuote(expectedFullTitle) +
+              ',"duration":' +
+              expectedDuration +
+              ',"currentRetry":' +
+              currentRetry +
+              ',"err":' +
+              dQuote(expectedErrorMessage) +
+              ',"stack":null}]\n'
+          );
+        });
+      });
+    });
+
+    describe("on 'end' event", function() {
+      it('should write summary statistics', function() {
+        var runner = createMockRunner('end', EVENT_RUN_END);
+        var options = {};
+        var stdout = runReporter(this, runner, options);
+        expect(stdout[0], 'to match', /end/);
+      });
     });
   });
 });
