@@ -35,9 +35,12 @@ describe('node-flags', function() {
       it('should return true for flags starting with "preserve-symlinks"', function() {
         expect(isNodeFlag('preserve-symlinks'), 'to be true');
         expect(isNodeFlag('preserve-symlinks-main'), 'to be true');
-        // XXX this is not true in some newer versions of Node.js.  figure out where
-        // this changed.
-        expect(isNodeFlag('preserve_symlinks'), 'to be false');
+        // Node >= v12 both flags exist in process.allowedNodeEnvironmentFlags
+        const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
+        expect(
+          isNodeFlag('preserve_symlinks'),
+          nodeVersion >= 12 ? 'to be true' : 'to be false'
+        );
       });
 
       it('should return true for flags starting with "harmony-" or "harmony_"', function() {
