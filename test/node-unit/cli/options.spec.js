@@ -86,7 +86,7 @@ describe('options', function() {
             config: false,
             opts: false,
             package: false,
-            retries: 3
+            retries: '3'
           })
         );
       });
@@ -202,7 +202,7 @@ describe('options', function() {
                   config: false,
                   opts: false,
                   package: false,
-                  retries: 3
+                  retries: '3'
                 }
               )
             );
@@ -427,7 +427,7 @@ describe('options', function() {
                 config: false,
                 opts: false,
                 package: false,
-                retries: 3
+                retries: '3'
               })
             );
           });
@@ -476,7 +476,7 @@ describe('options', function() {
                 config: false,
                 opts: false,
                 package: false,
-                retries: 3
+                retries: '3'
               })
             );
           });
