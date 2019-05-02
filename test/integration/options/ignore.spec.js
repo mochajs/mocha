@@ -5,7 +5,7 @@ var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 var resolvePath = helpers.resolveFixturePath;
 
-describe('--exclude', function() {
+describe('--ignore', function() {
   /*
    * Runs mocha in {path} with the given args.
    * Calls handleResult with the result.
@@ -26,11 +26,11 @@ describe('--exclude', function() {
     });
   }
 
-  it('should exclude specific files', function(done) {
-    var fixtures = path.join('options', 'exclude', '*');
+  it('should ignore specific files', function(done) {
+    var fixtures = path.join('options', 'ignore', '*');
     runMochaTest(
       fixtures,
-      ['--exclude', resolvePath(path.join('options', 'exclude', 'fail'))],
+      ['--ignore', resolvePath(path.join('options', 'ignore', 'fail'))],
       function(res) {
         expect(res, 'to have passed')
           .and('to have run test', 'should find this test')
@@ -40,11 +40,11 @@ describe('--exclude', function() {
     );
   });
 
-  it('should exclude globbed files', function(done) {
-    var fixtures = path.join('options', 'exclude', '**', '*');
+  it('should ignore globbed files', function(done) {
+    var fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
-      ['--exclude', '**/fail.fixture.js'],
+      ['--ignore', '**/fail.fixture.js'],
       function(res) {
         expect(res, 'to have passed')
           .and('not to have pending tests')
@@ -54,15 +54,15 @@ describe('--exclude', function() {
     );
   });
 
-  it('should exclude multiple patterns', function(done) {
-    var fixtures = path.join('options', 'exclude', '**', '*');
+  it('should ignore multiple patterns', function(done) {
+    var fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
       [
-        '--exclude',
-        resolvePath(path.join('options', 'exclude', 'fail')),
-        '--exclude',
-        resolvePath(path.join('options', 'exclude', 'nested', 'fail'))
+        '--ignore',
+        resolvePath(path.join('options', 'ignore', 'fail')),
+        '--ignore',
+        resolvePath(path.join('options', 'ignore', 'nested', 'fail'))
       ],
       function(res) {
         expect(res, 'to have passed')

@@ -817,7 +817,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 <!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
 
-```plain
+```text
 
 mocha [spec..]
 
@@ -864,7 +864,7 @@ Configuration
   --package  Path to package.json for config                            [string]
 
 File Handling
-  --exclude                        Ignore file(s) or glob pattern(s)
+  --ignore, --exclude              Ignore file(s) or glob pattern(s)
                                                        [array] [default: (none)]
   --extension, --watch-extensions  File extension(s) to load and/or watch
                                                            [array] [default: js]
@@ -1075,9 +1075,9 @@ Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (
 
 By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
 
-### `--exclude <file/directory/glob>`
+### `--ignore <file|directory|glob>`
 
-Explicitly exclude one or more files, directories or "globs" that would otherwise be loaded.
+Explicitly ignore (exclude) one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.
 
 Files specified using `--file` _are not affected_ by this option.
 
@@ -1093,7 +1093,7 @@ Affects `--watch` behavior.
 
 Specifying `--extension` will _remove_ `.js` as a test file extension; use `--extension js` to re-add it. For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
 
-### `--file <file/directory/glob>`
+### `--file <file|directory|glob>`
 
 Explicitly _include_ a test file to be loaded before other test files files. Multiple uses of `--file` are allowed, and will be loaded in order given.
 

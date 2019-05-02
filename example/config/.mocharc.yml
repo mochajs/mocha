@@ -6,8 +6,6 @@ check-leaks: false
 color: true
 delay: false
 diff: true
-exclude:
-  - /path/to/some/excluded/file
 exit: false # could be expressed as "no-exit: true"
 extension:
   - js
@@ -25,6 +23,8 @@ global:
 # fgrep and grep are mutually exclusive
 # grep: something
 growl: false
+ignore:
+  - /path/to/some/ignored/file
 inline-diffs: false
 # needs to be used with grep or fgrep
 # invert: false
@@ -39,8 +39,8 @@ retries: 1
 slow: 75
 sort: false
 spec: test/**/*.spec.js # the positional arguments!
-v8-stack-trace-limit: 100 # V8 flags are prepended with "v8-"
 timeout: false # same as "no-timeout: true" or "timeout: 0"
 trace-warnings: true # node flags ok
 ui: bdd
+v8-stack-trace-limit: 100 # V8 flags are prepended with "v8-"
 watch: false
