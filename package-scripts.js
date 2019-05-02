@@ -266,7 +266,7 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.prebuild && eleventy && nps docs.postbuild && nps docs.api',
+          'nps docs.prebuild && nps docs.api && eleventy && nps docs.postbuild',
         description: 'Build documentation'
       },
       prebuild: {
@@ -299,8 +299,7 @@ module.exports = {
         description: 'Watch docs for changes & build'
       },
       api: {
-        script:
-          'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json && cp LICENSE docs/_dist/api',
+        script: 'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json',
         description: 'Build API docs'
       }
     },
