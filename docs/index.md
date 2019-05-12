@@ -1467,6 +1467,8 @@ The `xunit` reporter is also available. It outputs an XUnit-compatible XML docum
 
 By default, it will output to the console. To write directly to a file, use `--reporter-options output=filename.xml`.
 
+To specify custom report title, use `--reporter-options suiteName="Custom name"`.
+
 ### Third-Party Reporters
 
 Mocha allows you to define custom reporters. For more information see the [wiki][mocha-wiki-more-reporters].
