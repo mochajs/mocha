@@ -550,6 +550,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "fs-extra": "^8.0.1",
     "husky": "^1.3.1",
     "jsdoc": "^3.5.5",
     "karma": "^4.0.1",
