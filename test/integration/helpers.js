@@ -114,32 +114,37 @@ module.exports = {
     );
   },
   /**
-   * Invokes the mocha binary for the given fixture using the JSON reporter,
-   * returning the **raw** string output, as well as exit code.
+   * Invokes the mocha binary with the given arguments fixture using
+   * the JSON reporter. Returns the child process and a promise for the
+   * results of running the command. The result includes the **raw**
+   * string output, as well as exit code.
    *
    * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
-   * want it.
-   * @param {string} fixturePath - Path from __dirname__
+   * want it as part of the result output.
+   *
    * @param {string[]} args - Array of args
-   * @param {Function} fn - Callback
    * @param {Object} [opts] - Opts for `spawn()`
-   * @returns {string} Raw output
+   * @returns {[ChildProcess|Promise<Result>]}
    */
-  runMochaJSONRaw: function(fixturePath, args, fn, opts) {
-    var path;
-
-    path = resolveFixturePath(fixturePath);
+  runMochaJSONRawAsync: function(args, opts) {
     args = args || [];
 
-    return invokeSubMocha(
-      args.concat(['--reporter', 'json', path]),
-      function(err, resRaw) {
-        if (err) return fn(err);
+    let childProcess;
+    const resultPromise = new Promise((resolve, reject) => {
+      childProcess = invokeSubMocha(
+        [...args, '--reporter', 'json'],
+        function(err, resRaw) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(resRaw);
+          }
+        },
+        opts
+      );
+    });
 
-        fn(null, resRaw);
-      },
-      opts
-    );
+    return [childProcess, resultPromise];
   },
 
   /**
