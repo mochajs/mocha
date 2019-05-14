@@ -16,6 +16,7 @@ addons:
   apt:
     packages:
       - libnotify-bin
+      - libpango1.0-dev
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
