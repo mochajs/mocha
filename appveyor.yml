@@ -35,7 +35,9 @@ install:
   ## Node-related installs
   - ps: Add-AppveyorMessage "Installing Node..."
   - set PATH=%APPDATA%\npm;C:\MinGW\bin;%PATH%
-  - ps: Install-Product node $env:nodejs_version x64
+  ## :NOTE: Using slower `Update-NodeJSInstallation` until pre-installed Node-12 image made available...
+  #- ps: Install-Product node $env:nodejs_version $env:platform
+  - ps: Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) $env:platform
   - ps: Add-AppveyorMessage "Installing npm..."
   - npm install -g npm
   ## Mocha-related package installs
