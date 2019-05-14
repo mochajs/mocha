@@ -15,8 +15,15 @@ node_js: '12'
 addons:
   apt:
     packages:
+      # Growl
       - libnotify-bin
+      # Canvas
+      - pkg-config
+      - libcairo2-dev
       - libpango1.0-dev
+      - libjpeg-dev
+      - libgif-dev
+      - librsvg2-dev
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
