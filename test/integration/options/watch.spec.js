@@ -4,9 +4,6 @@ const fs = require('fs-extra');
 const os = require('os');
 const path = require('path');
 const helpers = require('../helpers');
-const runMochaJSONRawAsync = helpers.runMochaJSONRawAsync;
-
-const sigintExitCode = 130;
 
 describe('--watch', function() {
   describe('when enabled', function() {
@@ -15,11 +12,6 @@ describe('--watch', function() {
 
     beforeEach(function() {
       this.tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mocha-'));
-
-      const fixtureSource = helpers.DEFAULT_FIXTURE;
-
-      this.testFile = path.join(this.tempDir, 'test.js');
-      fs.copySync(fixtureSource, this.testFile);
     });
 
     afterEach(function() {
@@ -28,79 +20,39 @@ describe('--watch', function() {
       }
     });
 
-    it('should show the cursor and signal correct exit code, when watch process is terminated', function() {
-      // Feature works but SIMULATING the signal (ctrl+c) via child process
-      // does not work due to lack of POSIX signal compliance on Windows.
-      if (process.platform === 'win32') {
-        this.skip();
-      }
-
-      const [mocha, resultPromise] = runMochaJSONRawAsync([
-        helpers.DEFAULT_FIXTURE,
-        '--watch'
-      ]);
-
-      return sleep(1000)
-        .then(() => {
-          mocha.kill('SIGINT');
-          return resultPromise;
-        })
-        .then(data => {
-          const expectedCloseCursor = '\u001b[?25h';
-          expect(data.output, 'to contain', expectedCloseCursor);
-
-          expect(data.code, 'to be', sigintExitCode);
-        });
-    });
-
     it('reruns test when watched test file is touched', function() {
-      const [mocha, outputPromise] = runMochaJSONWatchAsync([this.testFile], {
-        cwd: this.tempDir
-      });
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
 
-      return expect(
-        sleep(1000)
-          .then(() => {
-            touchFile(this.testFile);
-            return sleep(1000);
-          })
-          .then(() => {
-            mocha.kill('SIGINT');
-            return outputPromise;
-          }),
-        'when fulfilled',
-        'to have length',
-        2
-      );
+      return runMochaWatch([testFile], this.tempDir, () => {
+        touchFile(testFile);
+      }).then(results => {
+        expect(results, 'to have length', 2);
+      });
     });
 
     it('reruns test when file matching extension is touched', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
       const watchedFile = path.join(this.tempDir, 'file.xyz');
       touchFile(watchedFile);
-      const [mocha, outputPromise] = runMochaJSONWatchAsync(
-        [this.testFile, '--extension', 'xyz,js'],
-        {
-          cwd: this.tempDir
-        }
-      );
 
-      return expect(
-        sleep(1000)
-          .then(() => {
-            touchFile(watchedFile);
-            return sleep(1000);
-          })
-          .then(() => {
-            mocha.kill('SIGINT');
-            return outputPromise;
-          }),
-        'when fulfilled',
-        'to have length',
-        2
-      );
+      return runMochaWatch(
+        [testFile, '--extension', 'xyz,js'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
     });
 
-    it('ignores files in "node_modules" and ".git"', function() {
+    it('ignores files in "node_modules" and ".git" by default', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
       const nodeModulesFile = path.join(
         this.tempDir,
         'node_modules',
@@ -111,50 +63,91 @@ describe('--watch', function() {
       touchFile(gitFile);
       touchFile(nodeModulesFile);
 
-      const [mocha, outputPromise] = runMochaJSONWatchAsync(
-        [this.testFile, '--extension', 'xyz,js'],
-        {
-          cwd: this.tempDir
+      return runMochaWatch(
+        [testFile, '--extension', 'xyz,js'],
+        this.tempDir,
+        () => {
+          touchFile(gitFile);
+          touchFile(nodeModulesFile);
         }
-      );
+      ).then(results => {
+        expect(results, 'to have length', 1);
+      });
+    });
 
-      return expect(
-        sleep(1000)
-          .then(() => {
-            touchFile(gitFile);
-            touchFile(nodeModulesFile);
-          })
-          .then(() => sleep(1000))
-          .then(() => {
-            mocha.kill('SIGINT');
-            return outputPromise;
-          }),
-        'when fulfilled',
-        'to have length',
-        1
-      );
+    it('reloads test files when they change', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('options/watch/test-file-change', testFile);
+
+      return runMochaWatch([testFile], this.tempDir, () => {
+        replaceFileContents(
+          testFile,
+          'testShouldFail = true',
+          'testShouldFail = false'
+        );
+      }).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].passes, 'to have length', 0);
+        expect(results[0].failures, 'to have length', 1);
+        expect(results[1].passes, 'to have length', 1);
+        expect(results[1].failures, 'to have length', 0);
+      });
+    });
+
+    it('reloads test dependencies when they change', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('options/watch/test-with-dependency', testFile);
+
+      const dependency = path.join(this.tempDir, 'lib', 'dependency.js');
+      copyFixture('options/watch/dependency', dependency);
+
+      return runMochaWatch([testFile], this.tempDir, () => {
+        replaceFileContents(
+          dependency,
+          'module.exports.testShouldFail = false',
+          'module.exports.testShouldFail = true'
+        );
+      }).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].passes, 'to have length', 1);
+        expect(results[0].failures, 'to have length', 0);
+        expect(results[1].passes, 'to have length', 0);
+        expect(results[1].failures, 'to have length', 1);
+      });
     });
   });
 });
 
 /**
- * Invokes the mocha binary with the `--watch` argument for the given fixture.
+ * Runs the mocha binary in watch mode calls `change` and returns the
+ * JSON reporter output.
  *
- * Returns child process and a promise for the test results. The test results
- * are an array of JSON objects generated by the JSON reporter.
+ * The function starts mocha with the given arguments and `--watch` and
+ * waits until the first test run has completed. Then it calls `change`
+ * and waits until the second test run has been completed. Mocha is
+ * killed and the list of JSON outputs is returned.
  */
-function runMochaJSONWatchAsync(args, spawnOpts) {
-  args = [...args, '--watch'];
-  const [mocha, mochaDone] = runMochaJSONRawAsync(args, spawnOpts);
-  const testResults = mochaDone.then(data => {
-    const testResults = data.output
-      // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, '')
-      .split('\u001b[2K')
-      .map(x => JSON.parse(x));
-    return testResults;
-  });
-  return [mocha, testResults];
+function runMochaWatch(args, cwd, change) {
+  const [mochaProcess, resultPromise] = helpers.invokeMochaAsync(
+    [...args, '--watch', '--reporter', 'json'],
+    {cwd}
+  );
+
+  return sleep(1000)
+    .then(() => change())
+    .then(() => sleep(1000))
+    .then(() => {
+      mochaProcess.kill('SIGINT');
+      return resultPromise;
+    })
+    .then(data => {
+      const testResults = data.output
+        // eslint-disable-next-line no-control-regex
+        .replace(/\u001b\[\?25./g, '')
+        .split('\u001b[2K')
+        .map(x => JSON.parse(x));
+      return testResults;
+    });
 }
 
 /**
@@ -164,6 +157,26 @@ function runMochaJSONWatchAsync(args, spawnOpts) {
 function touchFile(file) {
   fs.ensureDirSync(path.dirname(file));
   fs.appendFileSync(file, ' ');
+}
+
+/**
+ * Synchronously eplace all substrings matched by `pattern` with
+ * `replacement` in the file’s content.
+ */
+function replaceFileContents(file, pattern, replacement) {
+  const contents = fs.readFileSync(file, 'utf-8');
+  const newContents = contents.replace(pattern, replacement);
+  fs.writeFileSync(file, newContents, 'utf-8');
+}
+
+/**
+ * Synchronously copy a fixture to the given destion file path. Creates
+ * parent directories of the destination path if necessary.
+ */
+function copyFixture(fixtureName, dest) {
+  const fixtureSource = helpers.resolveFixturePath(fixtureName);
+  fs.ensureDirSync(path.dirname(dest));
+  fs.copySync(fixtureSource, dest);
 }
 
 function sleep(time) {
