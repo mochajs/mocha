@@ -66,6 +66,34 @@ describe('file utils', function() {
       expect(res, 'to contain', nonJsFile).and('to have length', 1);
     });
 
+    it('should return only the ".js" file', function() {
+      var TsFile = tmpFile('mocha-utils.ts');
+      fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
+
+      var res = utils
+        .lookupFiles(tmpFile('mocha-utils'), ['js'], false)
+        .map(path.normalize.bind(path));
+      expect(res, 'to contain', tmpFile('mocha-utils.js')).and(
+        'to have length',
+        1
+      );
+    });
+
+    it('should return ".js" and ".ts" files', function() {
+      var TsFile = tmpFile('mocha-utils.ts');
+      fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
+
+      var res = utils
+        .lookupFiles(tmpFile('mocha-utils'), ['js', 'ts'], false)
+        .map(path.normalize.bind(path));
+      expect(
+        res,
+        'to contain',
+        tmpFile('mocha-utils.js'),
+        tmpFile('mocha-utils.ts')
+      ).and('to have length', 2);
+    });
+
     it('should require the extensions parameter when looking up a file', function() {
       var dirLookup = function() {
         return utils.lookupFiles(tmpFile('mocha-utils'), undefined, false);
