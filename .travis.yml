@@ -11,11 +11,15 @@ stages:
 
 # defaults
 language: node_js
-node_js: '11'
+node_js: '12'
 addons:
   apt:
     packages:
+      # Growl
       - libnotify-bin
+      # Canvas
+      - libpango1.0-dev
+      - libgif-dev
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
 before_install: |
