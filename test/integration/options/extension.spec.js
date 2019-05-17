@@ -8,7 +8,7 @@ describe('--extension', function() {
   it('should allow comma-separated variables', function(done) {
     var args = [
       '--require',
-      'coffeescript/register',
+      'coffee-script/register',
       '--require',
       './test/setup',
       '--reporter',

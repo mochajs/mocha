@@ -45,7 +45,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [extensible reporting, bundled with 9+ reporters](#reporters)
 - [extensible test DSLs or "interfaces"](#interfaces)
 - [before, after, before each, after each hooks](#hooks)
-- [arbitrary transpiler support (coffeescript etc)](#-compilers)
+- [arbitrary transpiler support (coffee-script etc)](#-compilers)
 - [TextMate bundle](#textmate)
 
 ## Table of Contents
@@ -864,12 +864,12 @@ Configuration
   --package  Path to package.json for config                            [string]
 
 File Handling
+  --ignore, --exclude              Ignore file(s) or glob pattern(s)
+                                                       [array] [default: (none)]
   --extension, --watch-extensions  File extension(s) to load and/or watch
                                                            [array] [default: js]
   --file                           Specify file(s) to be loaded prior to root
                                    suite execution     [array] [default: (none)]
-  --ignore, --exclude              Ignore file(s) or glob pattern(s)
-                                                       [array] [default: (none)]
   --recursive                      Look for tests in subdirectories    [boolean]
   --require, -r                    Require module      [array] [default: (none)]
   --sort, -S                       Sort test files                     [boolean]
