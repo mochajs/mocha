@@ -174,6 +174,14 @@ describe('Mocha', function() {
         expect(mocha.options.globals, 'to contain', elem, elem2);
         expect(mocha.options.globals, 'to have length', elems.length);
       });
+
+      it('should not have duplicates', function() {
+        var mocha = new Mocha({globals: [elem, elem2]});
+        var elems = [elem, elem2];
+        mocha.globals(elems);
+        expect(mocha.options.globals, 'to contain', elem, elem2);
+        expect(mocha.options.globals, 'to have length', elems.length);
+      });
     });
   });
 
