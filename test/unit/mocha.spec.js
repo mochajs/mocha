@@ -74,6 +74,10 @@ describe('Mocha', function() {
           ['singular']
         ]).and('was called once');
       });
+      it('should delete mocha.options.global', function() {
+        var mocha = new Mocha({global: ['singular']});
+        expect(mocha.options.global, 'to be', undefined);
+      });
     });
 
     describe('when options.globals is provided', function() {
@@ -93,6 +97,10 @@ describe('Mocha', function() {
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
           ['singular']
         ]).and('was called once');
+      });
+      it('should delete mocha.options.global', function() {
+        var mocha = new Mocha({global: ['singular'], globals: ['plural']});
+        expect(mocha.options.global, 'to be', undefined);
       });
     });
   });
@@ -200,6 +208,14 @@ describe('Mocha', function() {
 
       it('should add contents of string array to the whitelist', function() {
         var mocha = new Mocha(opts);
+        var elems = [elem, elem2];
+        mocha.globals(elems);
+        expect(mocha.options.globals, 'to contain', elem, elem2);
+        expect(mocha.options.globals, 'to have length', elems.length);
+      });
+
+      it('should not have duplicates', function() {
+        var mocha = new Mocha({globals: [elem, elem2]});
         var elems = [elem, elem2];
         mocha.globals(elems);
         expect(mocha.options.globals, 'to contain', elem, elem2);
