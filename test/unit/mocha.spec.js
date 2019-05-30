@@ -198,6 +198,7 @@ describe('Mocha', function() {
     describe('when argument is valid', function() {
       var elem = 'foo';
       var elem2 = 'bar';
+      var elem3 = 'baz';
 
       it('should add string to the whitelist', function() {
         var mocha = new Mocha(opts);
@@ -216,9 +217,9 @@ describe('Mocha', function() {
 
       it('should not have duplicates', function() {
         var mocha = new Mocha({globals: [elem, elem2]});
-        var elems = [elem, elem2];
+        var elems = [elem, elem2, elem3];
         mocha.globals(elems);
-        expect(mocha.options.globals, 'to contain', elem, elem2);
+        expect(mocha.options.globals, 'to contain', elem, elem2, elem3);
         expect(mocha.options.globals, 'to have length', elems.length);
       });
     });
