@@ -66,8 +66,8 @@ describe('Mocha', function() {
       });
     });
 
-    describe('when options.global is provided', function() {
-      it('should pass options.global to #globals()', function() {
+    describe('when "options.global" is provided', function() {
+      it('should pass "options.global" to #globals()', function() {
         // eslint-disable-next-line no-new
         new Mocha({global: ['singular']});
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
@@ -80,8 +80,8 @@ describe('Mocha', function() {
       });
     });
 
-    describe('when options.globals is provided', function() {
-      it('should pass options.globals to #globals()', function() {
+    describe('when "options.globals" is provided', function() {
+      it('should pass "options.globals" to #globals()', function() {
         // eslint-disable-next-line no-new
         new Mocha({globals: ['plural']});
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
@@ -90,8 +90,8 @@ describe('Mocha', function() {
       });
     });
 
-    describe('when options.global AND options.globals are provided', function() {
-      it('should pass options.global to #globals(), ignoring options.globals', function() {
+    describe('when "options.global" AND "options.globals" are provided', function() {
+      it('should pass "options.global" to #globals(), ignoring "options.globals"', function() {
         // eslint-disable-next-line no-new
         new Mocha({global: ['singular'], globals: ['plural']});
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
