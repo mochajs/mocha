@@ -147,6 +147,31 @@ describe('lib/utils', function() {
       var fn = '() => foo()';
       expect(utils.clean(fn), 'to be', 'foo()');
     });
+
+    it('should format async functions', function() {
+      var fn = 'async function() { /* code */ }';
+      expect(utils.clean(fn), 'to be', '/* code */');
+    });
+
+    it('should format named async functions', function() {
+      var fn = 'async function foo() { /* code */ }';
+      expect(utils.clean(fn), 'to be', '/* code */');
+    });
+
+    it('should format generators', function() {
+      var fn = 'function*foo () { /* code */ }';
+      expect(utils.clean(fn), 'to be', '/* code */');
+    });
+
+    it('should format async generators', function() {
+      var fn = 'async function * foo () { /* code */ }';
+      expect(utils.clean(fn), 'to be', '/* code */');
+    });
+
+    it('should format async arrow functions', function() {
+      var fn = 'async () => { /* code */ }';
+      expect(utils.clean(fn), 'to be', '/* code */');
+    });
   });
 
   describe('stringify', function() {
