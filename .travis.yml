@@ -11,7 +11,7 @@ stages:
 
 # defaults
 language: node_js
-node_js: '11'
+node_js: '12'
 addons:
   apt:
     packages:
@@ -49,6 +49,8 @@ jobs:
       node_js: '6'
 
     - script: npm start test.bundle test.browser
+      # XXX: avoid having to build canvas from sources (Node.js v12)
+      node_js: '10'
       install: npm ci # we need the native modules here
       addons:
         artifacts:
