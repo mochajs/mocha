@@ -52,4 +52,16 @@ describe('--file', function() {
       done();
     });
   });
+
+  it('should support having no other test files', function(done) {
+    args = ['--file', resolvePath(fixtures.alpha)];
+
+    runMochaJSON('filethatdoesnotexist.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+      expect(res, 'to have passed').and('to have passed test count', 1);
+      done();
+    });
+  });
 });
