@@ -566,17 +566,7 @@ _Note_: Hooks, if present, will still be executed.
 
 ## Inclusive Tests
 
-This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to simply ignore these suite(s) and test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an entire suite:
-
-```js
-describe('Array', function() {
-  describe.skip('#indexOf()', function() {
-    // ...
-  });
-});
-```
-
-Or a specific test-case:
+This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to simply ignore test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an individual test:
 
 ```js
 describe('Array', function() {
@@ -591,6 +581,20 @@ describe('Array', function() {
   });
 });
 ```
+
+You can also put `.skip()` on an entire suite. This is equivalent to appending `.skip()` onto all tests in the suite. Hooks in the suite are also skipped.
+
+```js
+describe('Array', function() {
+  describe.skip('#indexOf()', function() {
+    it('should return -1 unless present', function() {
+      // this test will not be run
+    });
+  });
+});
+```
+
+_Note_: Code in skipped suites, that is placed outside of hooks or tests is still executed, as mocha will still invoke the suite function to build up the suite structure for visualization.
 
 > _Best practice_: Use `.skip()` instead of commenting tests out.
 
