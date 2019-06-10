@@ -124,4 +124,28 @@ describe('--forbid-only', function() {
       }
     );
   });
+
+  it.only('should fail even if before has "skip"', function(done) {
+    var fixture = path.join('options', 'forbid-only', 'only-before');
+    runMochaJSON(fixture, args, function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res, 'to have failed with error', '`.only` forbidden');
+      done();
+    });
+  });
+
+  it('should fail even if beforeEach has "skip"', function(done) {
+    var fixture = path.join('options', 'forbid-only', 'only-before-each');
+    runMochaJSON(fixture, ['--forbid-only'], function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res, 'to have failed with error', '`.only` forbidden');
+      done();
+    });
+  });
 });

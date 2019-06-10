@@ -113,20 +113,4 @@ describe('regressions', function() {
       done();
     });
   });
-
-  it('issue-3840: --forbid-only does not recognize `it.only` when `before` crashes', function(done) {
-    var onlyErrorMessage = '`.only` forbidden';
-
-    runJSON('regression/issue-3840.fixture.js', ['--forbid-only'], function(
-      err,
-      res
-    ) {
-      if (err) {
-        done(err);
-        return;
-      }
-      expect(res, 'to have failed with error', onlyErrorMessage);
-      done();
-    });
-  });
 });
