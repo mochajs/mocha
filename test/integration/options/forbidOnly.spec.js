@@ -125,7 +125,7 @@ describe('--forbid-only', function() {
     );
   });
 
-  it.only('should fail even if before has "skip"', function(done) {
+  it('should fail even if before has "skip"', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only-before');
     runMochaJSON(fixture, args, function(err, res) {
       if (err) {
@@ -139,7 +139,7 @@ describe('--forbid-only', function() {
 
   it('should fail even if beforeEach has "skip"', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only-before-each');
-    runMochaJSON(fixture, ['--forbid-only'], function(err, res) {
+    runMochaJSON(fixture, args, function(err, res) {
       if (err) {
         done(err);
         return;
