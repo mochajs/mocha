@@ -58,8 +58,8 @@ process.removeListener = function(e, fn) {
 
 process.on = function(e, fn) {
   if (e === 'uncaughtException') {
-    global.onerror = function(err, url, line) {
-      fn(new Error(err + ' (' + url + ':' + line + ')'));
+    global.onerror = function(msg, url, line, col, err) {
+      fn(err || new Error(msg + ' (' + url + ':' + line + ')'));
       return !mocha.options.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
