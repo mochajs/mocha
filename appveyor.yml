@@ -12,7 +12,7 @@ shallow_clone: true
 clone_depth: 1
 environment:
   matrix:
-    - nodejs_version: '11'
+    - nodejs_version: '12'
     - nodejs_version: '10'
     - nodejs_version: '8'
     - nodejs_version: '6'
@@ -35,7 +35,14 @@ install:
   ## Node-related installs
   - ps: Add-AppveyorMessage "Installing Node..."
   - set PATH=%APPDATA%\npm;C:\MinGW\bin;%PATH%
-  - ps: Install-Product node $env:nodejs_version x64
+  ## Prefer pre-installed Node versions, with fallback to manual update
+  - ps: |
+      try {
+      Install-Product node $env:nodejs_version $env:platform
+      } catch {
+      Add-AppveyorMessage "  install failed - attempting manual update..."
+      Update-NodeJsInstallation (Get-NodeJsLatestBuild $env:nodejs_version) $env:platform
+      }
   - ps: Add-AppveyorMessage "Installing npm..."
   - npm install -g npm
   ## Mocha-related package installs

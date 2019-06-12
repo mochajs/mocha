@@ -11,10 +11,11 @@ stages:
 
 # defaults
 language: node_js
-node_js: '11'
+node_js: '12'
 addons:
   apt:
     packages:
+      # Growl
       - libnotify-bin
 # `nvm install` happens before the cache is restored, which means
 # we must install our own npm elsewhere (`~/npm`)
@@ -49,6 +50,8 @@ jobs:
       node_js: '6'
 
     - script: npm start test.bundle test.browser
+      # XXX: update when canvas supplies a prebuilt binary for Node.js v12.x
+      node_js: 10
       install: npm ci # we need the native modules here
       addons:
         artifacts:
