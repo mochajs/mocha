@@ -145,11 +145,7 @@ module.exports = config => {
           pattern: 'test/browser-specific/fixtures/esm.fixture.mjs',
           type: 'module'
         },
-        {pattern: 'test/browser-specific/esm.spec.mjs', type: 'module'},
-        {
-          pattern: 'test/browser-specific/uncaught-exception.spec.mjs',
-          type: 'module'
-        }
+        {pattern: 'test/browser-specific/esm.spec.mjs', type: 'module'}
       ];
       break;
     default:
