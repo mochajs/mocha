@@ -5,7 +5,6 @@ var chai = require('chai');
 var sinon = require('sinon');
 var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-var Base = reporters.Base;
 var AssertionError = assert.AssertionError;
 var Base = reporters.Base;
 var chaiExpect = chai.expect;
