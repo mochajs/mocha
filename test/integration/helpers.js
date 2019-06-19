@@ -113,39 +113,6 @@ module.exports = {
       opts
     );
   },
-  /**
-   * Invokes the mocha binary with the given arguments fixture using
-   * the JSON reporter. Returns the child process and a promise for the
-   * results of running the command. The result includes the **raw**
-   * string output, as well as exit code.
-   *
-   * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
-   * want it as part of the result output.
-   *
-   * @param {string[]} args - Array of args
-   * @param {Object} [opts] - Opts for `spawn()`
-   * @returns {[ChildProcess|Promise<Result>]}
-   */
-  runMochaJSONRawAsync: function(args, opts) {
-    args = args || [];
-
-    let childProcess;
-    const resultPromise = new Promise((resolve, reject) => {
-      childProcess = invokeSubMocha(
-        [...args, '--reporter', 'json'],
-        function(err, resRaw) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(resRaw);
-          }
-        },
-        opts
-      );
-    });
-
-    return [childProcess, resultPromise];
-  },
 
   /**
    * regular expression used for splitting lines based on new line / dot symbol.
@@ -173,6 +140,8 @@ module.exports = {
    * @param {Object} [opts] - Options for `spawn()`
    */
   invokeMocha: invokeMocha,
+
+  invokeMochaAsync: invokeMochaAsync,
 
   /**
    * Resolves the path to a fixture to the full path.
@@ -225,6 +194,37 @@ function invokeMocha(args, fn, opts) {
     fn,
     opts
   );
+}
+
+/**
+ * Invokes the mocha binary with the given arguments. Returns the
+ * child process and a promise for the results of running the
+ * command. The promise resolves when the child process exits. The
+ * result includes the **raw** string output, as well as exit code.
+ *
+ * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
+ * want it as part of the result output.
+ *
+ * @param {string[]} args - Array of args
+ * @param {Object} [opts] - Opts for `spawn()`
+ * @returns {[ChildProcess|Promise<Result>]}
+ */
+function invokeMochaAsync(args, opts) {
+  let mochaProcess;
+  const resultPromise = new Promise((resolve, reject) => {
+    mochaProcess = _spawnMochaWithListeners(
+      defaultArgs([MOCHA_EXECUTABLE].concat(args)),
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      },
+      opts
+    );
+  });
+  return [mochaProcess, resultPromise];
 }
 
 function invokeSubMocha(args, fn, opts) {

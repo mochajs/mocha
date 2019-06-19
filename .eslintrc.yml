@@ -79,3 +79,12 @@ overrides:
     parserOptions:
       ecmaVersion: 6
       sourceType: module
+
+  - files:
+      - lib/reporters/*.js
+    rules:
+      no-restricted-syntax:
+        - error
+        # disallow Reporters using `console.log()`
+        - selector: 'CallExpression[callee.object.name=console][callee.property.name=log]'
+          message: &GH-3604 See https://github.com/mochajs/mocha/issues/3604

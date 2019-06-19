@@ -3,14 +3,14 @@
 'use strict';
 
 /**
- * This wrapper executable checks for known node flags and appends them when found, before invoking the "real" _mocha(1) executable.
+ * This wrapper executable checks for known node flags and appends them when found,
+ * before invoking the "real" executable (`lib/cli/cli.js`)
  *
  * @module bin/mocha
  * @private
  */
 
 const {deprecate, warn} = require('../lib/utils');
-const {spawn} = require('child_process');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -22,7 +22,6 @@ const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
 const nodeEnv = require('node-environment-flags');
 
-const mochaPath = require.resolve('./_mocha');
 const mochaArgs = {};
 const nodeArgs = {};
 
@@ -118,32 +117,39 @@ if (nodeArgs.gc) {
   delete nodeArgs.gc;
 }
 
-debug('final node args', nodeArgs);
+if (Object.keys(nodeArgs).length) {
+  const {spawn} = require('child_process');
+  const mochaPath = require.resolve('../lib/cli/cli.js');
 
-const args = [].concat(
-  unparseNodeFlags(nodeArgs),
-  mochaPath,
-  unparse(mochaArgs, {alias: aliases})
-);
+  debug('final node args', nodeArgs);
 
-debug(`exec ${process.execPath} w/ args:`, args);
+  const args = [].concat(
+    unparseNodeFlags(nodeArgs),
+    mochaPath,
+    unparse(mochaArgs, {alias: aliases})
+  );
 
-const proc = spawn(process.execPath, args, {
-  stdio: 'inherit'
-});
+  debug(`exec ${process.execPath} w/ args:`, args);
 
-proc.on('exit', (code, signal) => {
-  process.on('exit', () => {
-    if (signal) {
-      process.kill(process.pid, signal);
-    } else {
-      process.exit(code);
-    }
+  const proc = spawn(process.execPath, args, {
+    stdio: 'inherit'
   });
-});
 
-// terminate children.
-process.on('SIGINT', () => {
-  proc.kill('SIGINT'); // calls runner.abort()
-  proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
-});
+  proc.on('exit', (code, signal) => {
+    process.on('exit', () => {
+      if (signal) {
+        process.kill(process.pid, signal);
+      } else {
+        process.exit(code);
+      }
+    });
+  });
+
+  // terminate children.
+  process.on('SIGINT', () => {
+    proc.kill('SIGINT'); // calls runner.abort()
+    proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+  });
+} else {
+  require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
+}
