@@ -172,6 +172,11 @@ describe('lib/utils', function() {
       var fn = 'async () => { /* code */ }';
       expect(utils.clean(fn), 'to be', '/* code */');
     });
+
+    it('should format async arrow functions with implicit return', function() {
+      var fn = 'async () => 3 + code.valueOf()';
+      expect(utils.clean(fn), 'to be', '3 + code.valueOf()');
+    });
   });
 
   describe('stringify', function() {
