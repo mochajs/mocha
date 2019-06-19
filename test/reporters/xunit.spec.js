@@ -277,14 +277,14 @@ describe('XUnit reporter', function() {
     });
 
     describe('when output directed to console', function() {
-      it("should call 'console.log' with line", function() {
+      it("should call 'Base.consoleLog' with line", function() {
         // :TODO: XUnit needs a trivially testable means to force console.log()
         var realProcess = process;
         process = false; // eslint-disable-line no-native-reassign, no-global-assign
 
         var xunit = new XUnit(runner);
         var fakeThis = {fileStream: false};
-        var consoleLogStub = sinon.stub(console, 'log');
+        var consoleLogStub = sinon.stub(Base, 'consoleLog');
         xunit.write.call(fakeThis, expectedLine);
         consoleLogStub.restore();
 

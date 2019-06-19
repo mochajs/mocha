@@ -5,7 +5,6 @@ var chai = require('chai');
 var sinon = require('sinon');
 var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-
 var AssertionError = assert.AssertionError;
 var Base = reporters.Base;
 var chaiExpect = chai.expect;
@@ -416,5 +415,28 @@ describe('Base reporter', function() {
 
     var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
+  });
+
+  describe('when reporter output immune to user test changes', function() {
+    var sandbox;
+    var baseConsoleLog;
+
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+      sandbox.stub(console, 'log');
+      baseConsoleLog = sandbox.stub(Base, 'consoleLog');
+    });
+
+    it('should let you stub out console.log without effecting reporters output', function() {
+      Base.list([]);
+      baseConsoleLog.restore();
+
+      expect(baseConsoleLog, 'was called');
+      expect(console.log, 'was not called');
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
   });
 });
