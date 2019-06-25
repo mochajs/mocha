@@ -115,6 +115,20 @@ describe('--watch', function() {
         expect(results[1].failures, 'to have length', 1);
       });
     });
+
+    // Regression test for https://github.com/mochajs/mocha/issues/2027
+    it('respects --fgrep on re-runs', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('options/grep', testFile);
+
+      return runMochaWatch([testFile, '--fgrep', 'match'], this.tempDir, () => {
+        touchFile(testFile);
+      }).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].tests, 'to have length', 2);
+        expect(results[1].tests, 'to have length', 2);
+      });
+    });
   });
 });
 
@@ -160,7 +174,7 @@ function touchFile(file) {
 }
 
 /**
- * Synchronously eplace all substrings matched by `pattern` with
+ * Synchronously replace all substrings matched by `pattern` with
  * `replacement` in the file’s content.
  */
 function replaceFileContents(file, pattern, replacement) {
@@ -170,8 +184,8 @@ function replaceFileContents(file, pattern, replacement) {
 }
 
 /**
- * Synchronously copy a fixture to the given destion file path. Creates
- * parent directories of the destination path if necessary.
+ * Synchronously copy a fixture to the given destination file path.
+ * Creates parent directories of the destination path if necessary.
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = helpers.resolveFixturePath(fixtureName);
