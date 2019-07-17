@@ -33,6 +33,10 @@
 - #3919: Update CI config files to use Node-12.x (@plroebuck)
 - #3892: Rework reporter tests (@plroebuck)
 - #3872: Rename `--exclude` to `--ignore` and create alias (@boneskull)
+- #3963: Hide stacktrace when cli args are missing (@outsideris)
+- #3956: Do not redeclare variable in docs array example (@DanielRuf)
+- #3957: Remove duplicate line-height property in `mocha.css` (@DanielRuf)
+- #3960: Don't re-initialize grep option on watch re-run (@geigerzaehler)
 
 # 6.1.4 / 2019-04-18
 
@@ -224,10 +228,10 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Use `--no-config` or `--no-package` to completely disable loading of configuration via RC file and `package.json`, respectively
   - Configurations are merged as applicable using the priority list:
     1. Command-line arguments
-    1. RC file
-    1. `package.json`
-    1. `mocha.opts`
-    1. Mocha's own defaults
+    2. RC file
+    3. `package.json`
+    4. `mocha.opts`
+    5. Mocha's own defaults
   - Check out these [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
 
 - Node/V8 flag support in `mocha` executable:
