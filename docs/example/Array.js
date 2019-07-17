@@ -13,7 +13,7 @@ describe('Array', function(){
       var arr = [];
       var n = arr.push('foo');
       expect(n).to.equal(1);
-      var n = arr.push('bar');
+      n = arr.push('bar');
       expect(n).to.equal(2);
     })
 
@@ -39,7 +39,7 @@ describe('Array', function(){
       var arr = [];
       var n = arr.unshift('foo');
       expect(n).to.equal(1);
-      var n = arr.unshift('bar');
+      n = arr.unshift('bar');
       expect(n).to.equal(2);
     })
 
@@ -71,3 +71,4 @@ describe('Array', function(){
     })
   })
 })
+
