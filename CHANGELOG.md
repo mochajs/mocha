@@ -2,41 +2,41 @@
 
 ## :tada: Enhancements
 
-- #3827: Do not fork child-process if no Node flags are present (@boneskull)
-- #3725: Base reporter store ref to console.log, see [mocha/wiki](https://github.com/mochajs/mocha/wiki/HOW-TO:-Correctly-stub-stdout) (@craigtaub)
+- [#3827](https://github.com/mochajs/mocha/issues/3827): Do not fork child-process if no Node flags are present ([**@boneskull**](https://github.com/boneskull))
+- [#3725](https://github.com/mochajs/mocha/issues/3725): Base reporter store ref to console.log, see [mocha/wiki](https://github.com/mochajs/mocha/wiki/HOW-TO:-Correctly-stub-stdout) ([**@craigtaub**](https://github.com/craigtaub))
 
 ## :bug: Fixes
 
-- #3942: Fix "No test files found" Error when file is passed via `--file` (@gabegorelick)
-- #3914: Modify Mocha constructor to accept options `global` or `globals` (@pascalpp)
-- #3894: Fix parsing of config files with `_mocha` binary (@juergba)
-- #3834: Fix CLI parsing with default values (@boneskull, @juergba)
-- #3831: Fix `--timeout`/`--slow` string values and duplicate arguments (@boneskull, @juergba)
+- [#3942](https://github.com/mochajs/mocha/issues/3942): Fix "No test files found" Error when file is passed via `--file` ([**@gabegorelick**](https://github.com/gabegorelick))
+- [#3914](https://github.com/mochajs/mocha/issues/3914): Modify Mocha constructor to accept options `global` or `globals` ([**@pascalpp**](https://github.com/pascalpp))
+- [#3894](https://github.com/mochajs/mocha/issues/3894): Fix parsing of config files with `_mocha` binary ([**@juergba**](https://github.com/juergba))
+- [#3834](https://github.com/mochajs/mocha/issues/3834): Fix CLI parsing with default values ([**@boneskull**](https://github.com/boneskull), [**@juergba**](https://github.com/juergba))
+- [#3831](https://github.com/mochajs/mocha/issues/3831): Fix `--timeout`/`--slow` string values and duplicate arguments ([**@boneskull**](https://github.com/boneskull), [**@juergba**](https://github.com/juergba))
 
 ## :book: Documentation
 
-- #3906: Document option to define custom report name for XUnit reporter (@pkuczynski)
-- #3889: Adds doc links for mocha-examples (@craigtaub)
-- #3887: Fix broken links (@toyjhlee)
-- #3841: Fix anchors to configuration section (@trescube)
+- [#3906](https://github.com/mochajs/mocha/issues/3906): Document option to define custom report name for XUnit reporter ([**@pkuczynski**](https://github.com/pkuczynski))
+- [#3889](https://github.com/mochajs/mocha/issues/3889): Adds doc links for mocha-examples ([**@craigtaub**](https://github.com/craigtaub))
+- [#3887](https://github.com/mochajs/mocha/issues/3887): Fix broken links ([**@toyjhlee**](https://github.com/toyjhlee))
+- [#3841](https://github.com/mochajs/mocha/issues/3841): Fix anchors to configuration section ([**@trescube**](https://github.com/trescube))
 
 ## :mag: Coverage
 
-- #3915, #3929: Increase tests coverage for `--watch` options (@geigerzaehler)
+- [#3915](https://github.com/mochajs/mocha/issues/3915), [#3929](https://github.com/mochajs/mocha/issues/3929): Increase tests coverage for `--watch` options ([**@geigerzaehler**](https://github.com/geigerzaehler))
 
 ## :nut_and_bolt: Other
 
-- #3953: Collect test files later, prepares improvements to the `--watch` mode behavior (@geigerzaehler)
-- #3939: Upgrade for npm audit (@boneskull)
-- #3930: Extract `runWatch` into separate module (@geigerzaehler)
-- #3922: Add `mocha.min.js` file to stacktrace filter (@brian-lagerman)
-- #3919: Update CI config files to use Node-12.x (@plroebuck)
-- #3892: Rework reporter tests (@plroebuck)
-- #3872: Rename `--exclude` to `--ignore` and create alias (@boneskull)
-- #3963: Hide stacktrace when cli args are missing (@outsideris)
-- #3956: Do not redeclare variable in docs array example (@DanielRuf)
-- #3957: Remove duplicate line-height property in `mocha.css` (@DanielRuf)
-- #3960: Don't re-initialize grep option on watch re-run (@geigerzaehler)
+- [#3953](https://github.com/mochajs/mocha/issues/3953): Collect test files later, prepares improvements to the `--watch` mode behavior ([**@geigerzaehler**](https://github.com/geigerzaehler))
+- [#3939](https://github.com/mochajs/mocha/issues/3939): Upgrade for npm audit ([**@boneskull**](https://github.com/boneskull))
+- [#3930](https://github.com/mochajs/mocha/issues/3930): Extract `runWatch` into separate module ([**@geigerzaehler**](https://github.com/geigerzaehler))
+- [#3922](https://github.com/mochajs/mocha/issues/3922): Add `mocha.min.js` file to stacktrace filter ([**@brian-lagerman**](https://github.com/brian-lagerman))
+- [#3919](https://github.com/mochajs/mocha/issues/3919): Update CI config files to use Node-12.x ([**@plroebuck**](https://github.com/plroebuck))
+- [#3892](https://github.com/mochajs/mocha/issues/3892): Rework reporter tests ([**@plroebuck**](https://github.com/plroebuck))
+- [#3872](https://github.com/mochajs/mocha/issues/3872): Rename `--exclude` to `--ignore` and create alias ([**@boneskull**](https://github.com/boneskull))
+- [#3963](https://github.com/mochajs/mocha/issues/3963): Hide stacktrace when cli args are missing ([**@outsideris**](https://github.com/outsideris))
+- [#3956](https://github.com/mochajs/mocha/issues/3956): Do not redeclare variable in docs array example ([**@DanielRuf**](https://github.com/DanielRuf))
+- [#3957](https://github.com/mochajs/mocha/issues/3957): Remove duplicate line-height property in `mocha.css` ([**@DanielRuf**](https://github.com/DanielRuf))
+- [#3960](https://github.com/mochajs/mocha/issues/3960): Don't re-initialize grep option on watch re-run ([**@geigerzaehler**](https://github.com/geigerzaehler))
 
 # 6.1.4 / 2019-04-18
 
