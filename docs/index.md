@@ -1176,7 +1176,7 @@ Requires either `--grep` or `--fgrep` (but not both).
 
 ### `--debug, --inspect, --debug-brk, --inspect-brk, debug, inspect`
 
-> _BREAKING CHANGE in v6.0.0; `-d` is no longer an alias for `--debug`._ > _Other updates in v6.0.0:_ > _In versions of Node.js implementing `--inspect` and `--inspect-brk`, `--debug` and `--debug-brk` are respectively aliases for these two options._ > _Likewise, `debug` (not `--debug`) is an alias for `inspect` (not `--inspect`) in Node.js versions where `debug` is deprecated._
+> _BREAKING CHANGE in v6.0.0; `-d` is no longer an alias for `--debug`. Other updates in v6.0.0: In versions of Node.js implementing `--inspect` and `--inspect-brk`, `--debug` and `--debug-brk` are respectively aliases for these two options. Likewise, `debug` (not `--debug`) is an alias for `inspect` (not `--inspect`) in Node.js versions where `debug` is deprecated._
 
 Enables Node.js' debugger or inspector.
 
@@ -1637,7 +1637,7 @@ In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control form
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
-- **`package.json`**: Create a `mocha` property in your project's `package.json`.
+- **package.json**: Create a `mocha` property in your project's `package.json`.
 
 Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
 
