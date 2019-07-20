@@ -199,6 +199,17 @@ img.screenshot {
   max-width: 100%;
 }
 
+#matomoLogo {
+    display: block; 
+    height: 176px;
+}
+
+.sponsorship {
+    display: flex; 
+    justify-content: center;
+	margin-bottom: 60px;
+}
+
 footer {
   background-color: #eee;
   border-top: 1px solid #ddd;
