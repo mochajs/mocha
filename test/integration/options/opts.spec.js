@@ -10,6 +10,24 @@ describe('--opts', function() {
   var args = [];
   var fixture = path.join('options', 'opts');
 
+  it('should print a deprecation warning', function(done) {
+    var mochaOpts = path.join('test', 'opts', 'mocha.opts');
+    args = [resolvePath(fixture), '--opts', mochaOpts];
+    invokeMocha(
+      args,
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(res, 'to have passed');
+        expect(res.output, 'to contain', 'mocha.opts is DEPRECATED');
+        done();
+      },
+      'pipe'
+    );
+  });
+
   it('should work despite nonexistent default options file', function(done) {
     args = [];
     runMochaJSON(fixture, args, function(err, res) {
