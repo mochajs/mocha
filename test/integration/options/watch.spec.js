@@ -53,8 +53,8 @@ describe('--watch', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('__default__', testFile);
 
-      return runMochaWatch([testFile], this.tempDir, () => {
-        process.stdin.write('rs\n');
+      return runMochaWatch([testFile], this.tempDir, mochaProcess => {
+        mochaProcess.stdin.write('rs\n');
       }).then(results => {
         expect(results, 'to have length', 2);
       });
@@ -155,11 +155,11 @@ describe('--watch', function() {
 function runMochaWatch(args, cwd, change) {
   const [mochaProcess, resultPromise] = helpers.invokeMochaAsync(
     [...args, '--watch', '--reporter', 'json'],
-    {cwd}
+    {cwd, stdio: 'pipe'}
   );
 
   return sleep(1000)
-    .then(() => change())
+    .then(() => change(mochaProcess))
     .then(() => sleep(1000))
     .then(() => {
       mochaProcess.kill('SIGINT');
