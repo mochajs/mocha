@@ -10,6 +10,7 @@
  * @private
  */
 
+const esmRequire = require('esm')(module);
 const {deprecate, warn} = require('../lib/utils');
 const {loadOptions} = require('../lib/cli/options');
 const {
@@ -151,5 +152,5 @@ if (Object.keys(nodeArgs).length) {
     proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
   });
 } else {
-  require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
+  esmRequire('../lib/cli').main(unparse(mochaArgs, {alias: aliases}));
 }
