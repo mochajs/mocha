@@ -152,5 +152,5 @@ if (Object.keys(nodeArgs).length) {
     proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
   });
 } else {
-  esmRequire('../lib/cli').main(unparse(mochaArgs, {alias: aliases}));
+  esmRequire('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
 }
