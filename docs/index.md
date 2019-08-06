@@ -1080,15 +1080,13 @@ Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (
 
 By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
 
-### `--extension <ext>, --watch-extensions <ext>`
-
-> _Updated in v6.0.0. Previously `--watch-extensions`, but now expanded to affect general test file loading behavior. `--watch-extensions` is now an alias_
+### `--extension <ext>`
 
 Files having this extension will be considered test files. Defaults to `js`.
 
-Affects `--watch` behavior.
-
 Specifying `--extension` will _remove_ `.js` as a test file extension; use `--extension js` to re-add it. For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
+
+The option can be given multiple times. The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`
 
 ### `--file <file|directory|glob>`
 
@@ -1133,9 +1131,31 @@ Sort test files (by absolute path) using [Array.prototype.sort][mdn-array-sort].
 
 ### `--watch, -w`
 
-Executes tests on changes to JavaScript in the current working directory (and once initially).
+Rerun tests on file changes.
 
-By default, only files with extension `.js` are watched. Use `--extension` to change this behavior.
+The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
+
+### `--watch-files <file|directory|glob>`
+
+> _New in v7.0.0_
+
+List of paths or globs to watch when `--watch` is set. If a file matching the given glob changes or is added or removed mocha will rerun all tests.
+
+If the path is a directory all files and subdirectories will be watched.
+
+By default all files in the current directory having one of the extensions provided by `--extension` and not contained in the `node_modules` or `.git` folders are watched.
+
+The option can be given multiple times. The option accepts a comma-delimited list: `--watch-files a,b` is equivalent to `--watch-files a --watch-files b`
+
+### `--watch-ignore <file|directory|glob>`
+
+> _New in v7.0.0_
+
+List of paths or globs to exclude from watching. Defaults to `node_modules` and `.git`.
+
+To exclude all files in a directory it is preferable to use `foo/bar` instead of `foo/bar/**/*`. The latter will still watch the directory `foo/bar` but will ignore all changes to the content of that directory.
+
+The option can be given multiple times. The option accepts a comma-delimited list: `--watch-ignore a,b` is equivalent to `--watch-ignore a --watch-ignore b`
 
 ### `--fgrep <string>, -f <string>`
 
