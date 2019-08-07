@@ -80,9 +80,6 @@ jobs:
     - <<: *smoke
       node_js: '8'
 
-    - <<: *smoke
-      node_js: '6'
-
     - stage: precache
       script: true
 
