@@ -892,8 +892,8 @@ Positional Arguments
 Other Options
   --help, -h     Show usage information & exit                         [boolean]
   --version, -V  Show version number & exit                            [boolean]
-  --interfaces   List built-in user interfaces & exit                  [boolean]
-  --reporters    List built-in reporters & exit                        [boolean]
+  --list-interfaces   List built-in user interfaces & exit                  [boolean]
+  --list-reporters    List built-in reporters & exit                        [boolean]
 
 Mocha Resources
     Chat: https://gitter.im/mochajs/mocha

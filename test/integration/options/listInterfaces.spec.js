@@ -5,7 +5,7 @@ var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
 var interfaces = require('../../../lib/mocha').interfaces;
 
-describe('--interfaces', function() {
+describe('--list-interfaces', function() {
   it('should dump a list of all interfaces with descriptions', function(done) {
     var expected = Object.keys(interfaces)
       .filter(function(name) {
@@ -18,7 +18,7 @@ describe('--interfaces', function() {
         };
       });
 
-    invokeMocha(['--interfaces'], function(err, result) {
+    invokeMocha(['--list-interfaces'], function(err, result) {
       if (err) {
         return done(err);
       }
