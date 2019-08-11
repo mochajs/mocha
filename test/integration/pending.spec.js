@@ -59,13 +59,14 @@ describe('pending', function() {
       it('should immediately skip the spec and run all others', function(done) {
         run('pending/skip-sync-spec.fixture.js', args, function(err, res) {
           if (err) {
-            done(err);
-            return;
+            return done(err);
           }
-          assert.strictEqual(res.stats.pending, 1);
-          assert.strictEqual(res.stats.passes, 1);
-          assert.strictEqual(res.stats.failures, 0);
-          assert.strictEqual(res.code, 0);
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 1)
+            .and('to have pending test order', 'should skip immediately')
+            .and('to have passed test count', 1)
+            .and('to have passed tests', 'should run other tests in suite');
           done();
         });
       });
@@ -192,13 +193,14 @@ describe('pending', function() {
       it('should immediately skip the spec and run all others', function(done) {
         run('pending/skip-async-spec.fixture.js', args, function(err, res) {
           if (err) {
-            done(err);
-            return;
+            return done(err);
           }
-          assert.strictEqual(res.stats.pending, 1);
-          assert.strictEqual(res.stats.passes, 1);
-          assert.strictEqual(res.stats.failures, 0);
-          assert.strictEqual(res.code, 0);
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 1)
+            .and('to have pending test order', 'should skip async')
+            .and('to have passed test count', 1)
+            .and('to have passed tests', 'should run other tests in suite');
           done();
         });
       });
