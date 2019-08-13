@@ -117,6 +117,16 @@ if (nodeArgs.gc) {
   delete nodeArgs.gc;
 }
 
+// --require/-r is treated as Mocha flag except when 'esm' is preloaded
+if (mochaArgs.require && mochaArgs.require.includes('esm')) {
+  nodeArgs.require = ['esm'];
+  mochaArgs.require = mochaArgs.require.filter(mod => mod !== 'esm');
+  if (!mochaArgs.require.length) {
+    delete mochaArgs.require;
+  }
+  delete mochaArgs.r;
+}
+
 if (Object.keys(nodeArgs).length) {
   const {spawn} = require('child_process');
   const mochaPath = require.resolve('../lib/cli/cli.js');
