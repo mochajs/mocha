@@ -55,7 +55,7 @@ Original text courtesy of the Speak Up! project and Django Project.
 
 ## QUESTIONS?
 
-If you have questions, please see the FAQ. If that doesn’t answer your questions, feel free to email conduct@js.foundation.
+If you have questions, please see the FAQ. If that doesn’t answer your questions, feel free to email report@lists.openjsf.org.
 
 # OpenJS Foundation Code of Conduct
 
