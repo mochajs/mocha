@@ -276,7 +276,7 @@ module.exports = {
       },
       linkcheck: {
         script:
-          'hyperlink -ri --canonicalroot https://mochajs.org docs/_site/index.html'
+          "hyperlink -ri --canonicalroot https://mochajs.org docs/_site/index.html --todo 'id=\"line'"
       },
       postbuild: {
         script:
