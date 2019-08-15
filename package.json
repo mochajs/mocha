@@ -539,7 +539,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.8.3",
     "@mocha/contributors": "^1.0.4",
-    "@mocha/docdash": "^2.1.1",
+    "@mocha/docdash": "^2.1.2",
     "assetgraph-builder": "^6.10.1",
     "autoprefixer": "^9.6.0",
     "browserify": "^16.2.3",
