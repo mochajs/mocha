@@ -596,7 +596,7 @@
     "watchify": "^3.11.1"
   },
   "files": [
-    "bin/{*mocha,options.js}",
+    "bin/*mocha",
     "assets/growl/*.png",
     "lib/**/*.{js,html,json}",
     "index.js",
