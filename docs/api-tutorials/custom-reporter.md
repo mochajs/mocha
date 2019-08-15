@@ -117,4 +117,4 @@ The event names are exported from the `constants` property of `Mocha.Runner`:
 [hook]: /api/hook.html
 [suite]: /api/suite.html
 [base]: /api/mocha.reporters.base.html
-[delay]: /#delayed-root-suite.html
+[delay]: /#delayed-root-suite
