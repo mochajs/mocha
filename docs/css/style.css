@@ -76,16 +76,23 @@ nav.badges a + a {
 
 .image-list {
   overflow: hidden;
+  text-align: center;
 }
 
 .image-list a {
-  float: left;
+  display: inline-block;
   margin: 6px;
 }
 
 .image-list a img {
   display: block;
   height: 64px;
+}
+
+.faded-images {
+  background-color: #ddd;
+  border-radius: 20px;
+  box-shadow: 0px 0px 8px 8px #ddd;
 }
 
 .faded-images img {
