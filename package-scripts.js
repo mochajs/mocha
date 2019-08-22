@@ -276,7 +276,7 @@ module.exports = {
       },
       linkcheck: {
         script:
-          "hyperlink -ri --canonicalroot https://mochajs.org docs/_site/index.html --skip 'id=\"line'"
+          'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html'
       },
       postbuild: {
         script:
