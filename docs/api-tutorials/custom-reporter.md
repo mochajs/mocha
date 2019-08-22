@@ -77,44 +77,37 @@ For further examples, the built-in reporter implementations are the [best place 
 
 ## The `Base` Reporter Class
 
-[Base] is an "abstract" class. It contains console-specific settings and utilities, commonly used by built-in reporters. Browsing the built-in reporter implementations, you may often see static properties of [Base] referenced.
+[Base]{@link Mocha.reporters.Base} is an "abstract" class. It contains console-specific settings and utilities, commonly used by built-in reporters. Browsing the built-in reporter implementations, you may often see static properties of [Base]{@link Mocha.reporters.Base} referenced.
 
-It's often useful--but not necessary--for a custom reporter to extend [Base].
+It's often useful--but not necessary--for a custom reporter to extend [Base]{@link Mocha.reporters.Base}.
 
 ## Statistics
 
-Mocha adds a `stats` property of type [StatsCollector](/api/module-lib_stats-collector.html) to the reporter's `Runner` instance (passed as first argument to constructor).
+Mocha adds a `stats` property of type {@link StatsCollector} to the reporter's `Runner` instance (passed as first argument to constructor).
 
 ## Events
 
-A reporter should listen for events emitted from the `runner` (a singleton instance of [Runner]).
+A reporter should listen for events emitted from the `runner` (a singleton instance of {@link Runner}).
 
 The event names are exported from the `constants` property of `Mocha.Runner`:
 
-| Constant             | Event Name  | Event Arguments | Description                                                                                 |
-| -------------------- | ----------- | --------------- | ------------------------------------------------------------------------------------------- |
-| `EVENT_RUN_BEGIN`    | `start`     | _(n/a)_         | Execution will begin.                                                                       |
-| `EVENT_RUN_END`      | `end`       | _(n/a)_         | All [Suite]s, [Test]s and [Hook]s have completed execution.                                 |
-| `EVENT_DELAY_BEGIN`  | `waiting`   | _(n/a)_         | Waiting for `global.run()` to be called; only emitted when [delay] option is `true`.        |
-| `EVENT_DELAY_END`    | `ready`     | _(n/a)_         | User called `global.run()` and the root suite is ready to execute.                          |
-| `EVENT_SUITE_BEGIN`  | `suite`     | `Suite`         | The [Hook]s and [Test]s within a [Suite] will be executed, including any nested [Suite]s.   |
-| `EVENT_SUITE_END`    | `suite end` | `Suite`         | The [Hook]s, [Test]s, and nested [Suite]s within a [Suite] have completed execution.        |
-| `EVENT_HOOK_BEGIN`   | `hook`      | `Hook`          | A [Hook] will be executed.                                                                  |
-| `EVENT_HOOK_END`     | `hook end`  | `Hook`          | A [Hook] has completed execution.                                                           |
-| `EVENT_TEST_BEGIN`   | `test`      | `Test`          | A [Test] will be executed.                                                                  |
-| `EVENT_TEST_END`     | `test end`  | `Test`          | A [Test] has completed execution.                                                           |
-| `EVENT_TEST_FAIL`    | `fail`      | `Test`, `Error` | A [Test] has failed or thrown an exception.                                                 |
-| `EVENT_TEST_PASS`    | `pass`      | `Test`          | A [Test] has passed.                                                                        |
-| `EVENT_TEST_PENDING` | `pending`   | `Test`          | A [Test] was skipped.                                                                       |
-| `EVENT_TEST_RETRY`   | `retry`     | `Test`, `Error` | A [Test] failed, but is about to be retried; only emitted if the `retry` option is nonzero. |
+| Constant             | Event Name  | Event Arguments | Description                                                                                                                          |
+| -------------------- | ----------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `EVENT_RUN_BEGIN`    | `start`     | _(n/a)_         | Execution will begin.                                                                                                                |
+| `EVENT_RUN_END`      | `end`       | _(n/a)_         | All [Suites]{@link Suite}, [Tests]{@link Test} and [Hooks]{@link Hook} have completed execution.                                     |
+| `EVENT_DELAY_BEGIN`  | `waiting`   | _(n/a)_         | Waiting for `global.run()` to be called; only emitted when [delay](/#delayed-root-suite) option is `true`.                           |
+| `EVENT_DELAY_END`    | `ready`     | _(n/a)_         | User called `global.run()` and the root suite is ready to execute.                                                                   |
+| `EVENT_SUITE_BEGIN`  | `suite`     | `Suite`         | The [Hooks]{@link Hook} and [Tests]{@link Test} within a {@link Suite} will be executed, including any nested [Suites]{@link Suite}. |
+| `EVENT_SUITE_END`    | `suite end` | `Suite`         | The [Hooks]{@link Hook}, [Tests]{@link Test}, and nested [Suites]{@link Suite} within a {@link Suite} have completed execution.      |
+| `EVENT_HOOK_BEGIN`   | `hook`      | `Hook`          | A {@link Hook} will be executed.                                                                                                     |
+| `EVENT_HOOK_END`     | `hook end`  | `Hook`          | A {@link Hook} has completed execution.                                                                                              |
+| `EVENT_TEST_BEGIN`   | `test`      | `Test`          | A {@link Test} will be executed.                                                                                                     |
+| `EVENT_TEST_END`     | `test end`  | `Test`          | A {@link Test} has completed execution.                                                                                              |
+| `EVENT_TEST_FAIL`    | `fail`      | `Test`, `Error` | A {@link Test} has failed or thrown an exception.                                                                                    |
+| `EVENT_TEST_PASS`    | `pass`      | `Test`          | A {@link Test} has passed.                                                                                                           |
+| `EVENT_TEST_PENDING` | `pending`   | `Test`          | A {@link Test} was skipped.                                                                                                          |
+| `EVENT_TEST_RETRY`   | `retry`     | `Test`, `Error` | A {@link Test} failed, but is about to be retried; only emitted if the `retry` option is nonzero.                                    |
 
 **Please use these constants** instead of the event names in your own reporter! This will ensure compatibility with future versions of Mocha.
 
-> It's important to understand that all `Suite` callbacks will be run _before_ the [Runner] emits `EVENT_RUN_BEGIN`. Hooks and tests, however, won't run until _after_ the [Runner] emits `EVENT_RUN_BEGIN`.
-
-[runner]: /api/runner.html
-[test]: /api/test.html
-[hook]: /api/hook.html
-[suite]: /api/suite.html
-[base]: /api/mocha.reporters.base.html
-[delay]: /#delayed-root-suite.html
+> It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests, however, won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.
