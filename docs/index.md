@@ -1065,7 +1065,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 ### `--opts <path>`
 
-> _Updated in v6.0.0; added `--no-opts`._
+> _Deprecated._
 
 Specify a path to [`mocha.opts`](#mochaopts).
 
@@ -1636,14 +1636,14 @@ tests as shown below:
 
 > _New in v6.0.0_
 
-In addition to supporting the legacy [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+In addition to supporting the deprecated [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
 
 - **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
 - **package.json**: Create a `mocha` property in your project's `package.json`.
 
-Mocha suggests using one of the above strategies for configuration instead of the legacy `mocha.opts` format.
+Mocha suggests using one of the above strategies for configuration instead of the deprecated `mocha.opts` format.
 
 ### Custom Locations
 
@@ -1693,7 +1693,7 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 
 ## `mocha.opts`
 
-> _Updated in v6.0.0; `mocha.opts` is now considered "legacy" &mdash; though not yet deprecated &mdash; and we recommend using a configuration file instead._
+> _`mocha.opts` file support is DEPRECATED and will be removed from a future version of Mocha. We recommend using a configuration file instead._
 
 Mocha will attempt to load `"./test/mocha.opts"` as a run-control file of sorts.
 
