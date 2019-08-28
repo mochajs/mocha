@@ -1099,7 +1099,7 @@ Specifying `--extension` will _remove_ `.js` as a test file extension; use `--ex
 
 ### `--file <file|directory|glob>`
 
-Explicitly _include_ a test file to be loaded before other test files files. Multiple uses of `--file` are allowed, and will be loaded in order given.
+Explicitly _include_ a test file to be loaded before other test files. Multiple uses of `--file` are allowed, and will be loaded in order given.
 
 Useful if you want to declare, for example, hooks to be run before every test across all other test files.
 
