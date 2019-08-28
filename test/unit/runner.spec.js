@@ -23,6 +23,7 @@ describe('Runner', function() {
   beforeEach(function() {
     suite = new Suite('Suite', 'root');
     runner = new Runner(suite);
+    runner.checkLeaks = true;
     sandbox = sinon.createSandbox();
   });
 
