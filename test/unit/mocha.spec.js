@@ -20,9 +20,10 @@ describe('Mocha', function() {
     beforeEach(function() {
       sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
       sandbox.stub(Mocha.prototype, 'globals').returnsThis();
+      sandbox.stub(Mocha.prototype, 'useInlineDiffs').returnsThis();
     });
 
-    describe('when "timeout" option is `undefined`', function() {
+    describe('when "options.timeout" is `undefined`', function() {
       it('should not attempt to set timeout', function() {
         // eslint-disable-next-line no-new
         new Mocha({timeout: undefined});
@@ -30,7 +31,7 @@ describe('Mocha', function() {
       });
     });
 
-    describe('when "timeout" option is `false`', function() {
+    describe('when "options.timeout" is `false`', function() {
       it('should set a timeout of 0', function() {
         // eslint-disable-next-line no-new
         new Mocha({timeout: false});
@@ -46,6 +47,16 @@ describe('Mocha', function() {
         new Mocha({global: ['singular']});
         expect(Mocha.prototype.globals, 'to have a call satisfying', [
           ['singular']
+        ]).and('was called once');
+      });
+    });
+
+    describe('when "options.inlineDiffs" is `undefined`', function() {
+      it('should set inlineDiffs to `true`', function() {
+        // eslint-disable-next-line no-new
+        new Mocha({inlineDiffs: true});
+        expect(Mocha.prototype.useInlineDiffs, 'to have a call satisfying', [
+          true
         ]).and('was called once');
       });
     });
@@ -100,6 +111,19 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.delay(), 'to be', mocha);
+    });
+  });
+
+  describe('#enableTimeouts()', function() {
+    it('should set the suite._enableTimeouts to true if no argument', function() {
+      var mocha = new Mocha(opts);
+      mocha.enableTimeouts();
+      expect(mocha.suite._enableTimeouts, 'to be', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.enableTimeouts(), 'to be', mocha);
     });
   });
 
@@ -197,6 +221,31 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.growl(), 'to be', mocha);
+    });
+  });
+
+  describe('#hideDiff()', function() {
+    it('should set the diff option to false when param equals true', function() {
+      var mocha = new Mocha(opts);
+      mocha.hideDiff(true);
+      expect(mocha.options, 'to have property', 'diff', false);
+    });
+
+    it('should set the diff option to true when param equals false', function() {
+      var mocha = new Mocha(opts);
+      mocha.hideDiff(false);
+      expect(mocha.options, 'to have property', 'diff', true);
+    });
+
+    it('should set the diff option to true when the param is undefined', function() {
+      var mocha = new Mocha(opts);
+      mocha.hideDiff();
+      expect(mocha.options, 'to have property', 'diff', true);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.hideDiff(), 'to be', mocha);
     });
   });
 
@@ -300,6 +349,25 @@ describe('Mocha', function() {
           }
         }, 'not to throw');
       });
+    });
+  });
+
+  describe('#useColors()', function() {
+    it('should set the color option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.useColors(true);
+      expect(mocha.options, 'to have property', 'color', true);
+    });
+
+    it('should not create the color property', function() {
+      var mocha = new Mocha(opts);
+      mocha.useColors();
+      expect(mocha.options, 'not to have property', 'color');
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.useColors(), 'to be', mocha);
     });
   });
 
