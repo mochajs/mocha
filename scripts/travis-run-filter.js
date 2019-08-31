@@ -12,21 +12,21 @@ try {
     .slice(0, -1);
 
   const testRelatedFilePatterns = [
-    'scripts/test-runner-filter.js',
-    'bin/**/*',
+    'scripts/travis-run-filter.js',
     'lib/**/*',
     'test/**/*',
+    'bin/**/*',
     '.mocharc.yml',
-    '.wallaby.js',
-    'index.js',
-    'package.json',
-    'package-lock.json',
-    'package-scripts.json',
     '.nycrc',
     '.travis.yml',
+    '.wallaby.js',
     'browser-entry.js',
+    'index.js',
     'karma.conf.js',
-    'mocha.*'
+    'mocha.*',
+    'package.json',
+    'package-lock.json',
+    'package-scripts.json'
   ];
 
   const shouldRunTest = changedFiles.some(filePath =>
@@ -43,6 +43,6 @@ try {
   console.log(
     'Caught an error while checking git diff against test file patterns:'
   );
-  console.log(err);
+  console.error(err);
   console.log('Running the full test suite as a consequence');
 }
