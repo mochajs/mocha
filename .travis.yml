@@ -51,6 +51,7 @@ jobs:
     - install: npm ci # we need the native modules here
       before_script: node scripts/travis-run-filter.js || travis_terminate 0
       script: npm start test.bundle test.browser
+      # XXX: update when canvas supplies a prebuilt binary for Node.js v12.x
       node_js: 10
       addons:
         artifacts:
