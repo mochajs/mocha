@@ -10,7 +10,7 @@
  * @private
  */
 
-const {deprecate, warn} = require('../lib/utils');
+const {deprecate} = require('../lib/utils');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -20,7 +20,6 @@ const {
 const unparse = require('yargs-unparser');
 const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
-const nodeEnv = require('node-environment-flags');
 
 const mochaArgs = {};
 const nodeArgs = {};
@@ -63,50 +62,18 @@ Object.keys(opts).forEach(opt => {
 
 // Native debugger handling
 // see https://nodejs.org/api/debugger.html#debugger_debugger
-// look for 'debug' or 'inspect' that would launch this debugger,
+// look for 'inspect' or 'debug' that would launch this debugger,
 // remove it from Mocha's opts and prepend it to Node's opts.
-// also coerce depending on Node.js version.
 // A deprecation warning will be printed by node, if applicable.
 // (mochaArgs._ are "positional" arguments, not prefixed with - or --)
-if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
-  const command = mochaArgs._.shift();
-  disableTimeouts(command);
-  // don't conflict with inspector
-  ['debug', 'inspect', 'debug-brk', 'inspect-brk']
-    .filter(opt => opt in nodeArgs || opt in mochaArgs)
-    .forEach(opt => {
-      warn(`command "${command}" provided; --${opt} ignored`);
-      delete nodeArgs[opt];
-      delete mochaArgs[opt];
-    });
-  nodeArgs._ = [
-    parseInt(
-      process.version
-        .slice(1)
-        .split('.')
-        .shift(),
-      10
-    ) >= 8
-      ? 'inspect'
-      : 'debug'
-  ];
+if (mochaArgs._) {
+  const i = mochaArgs._.findIndex(val => val === 'inspect' || val === 'debug');
+  if (i > -1) {
+    const [command] = mochaArgs._.splice(i, 1);
+    disableTimeouts('inspect');
+    nodeArgs._ = [command];
+  }
 }
-
-// allow --debug to invoke --inspect on Node.js v8 or newer.
-['debug', 'debug-brk']
-  .filter(opt => opt in nodeArgs && !nodeEnv.has(opt))
-  .forEach(opt => {
-    const newOpt = opt === 'debug' ? 'inspect' : 'inspect-brk';
-    warn(
-      `"--${opt}" is not available in Node.js ${
-        process.version
-      }; use "--${newOpt}" instead.`
-    );
-    nodeArgs[newOpt] = nodeArgs[opt];
-    mochaArgs.timeout = false;
-    debug(`--${opt} -> ${newOpt}`);
-    delete nodeArgs[opt];
-  });
 
 // historical
 if (nodeArgs.gc) {
