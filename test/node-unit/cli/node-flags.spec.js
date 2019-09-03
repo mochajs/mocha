@@ -86,10 +86,8 @@ describe('node-flags', function() {
   });
 
   describe('impliesNoTimeouts()', function() {
-    it('should return true for debug/inspect flags', function() {
-      expect(impliesNoTimeouts('debug'), 'to be true');
+    it('should return true for inspect flags', function() {
       expect(impliesNoTimeouts('inspect'), 'to be true');
-      expect(impliesNoTimeouts('debug-brk'), 'to be true');
       expect(impliesNoTimeouts('inspect-brk'), 'to be true');
     });
   });
