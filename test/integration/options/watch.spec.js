@@ -137,6 +137,24 @@ describe('--watch', function() {
       });
     });
 
+    it('reruns test when file starting with . and matching --extension is changed', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, '.file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [testFile, '--extension', 'xyz,js'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
     it('ignores files in "node_modules" and ".git" by default', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('__default__', testFile);
