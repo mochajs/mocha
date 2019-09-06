@@ -16,7 +16,8 @@ const proxyLoadOptions = ({
 } = {}) =>
   rewiremock.proxy(modulePath, r => ({
     fs: r.with({readFileSync}).directChildOnly(),
-    [mocharcPath]: defaults,
+    // tests fail when `defaults` is assigned directly
+    [mocharcPath]: Object.assign({}, defaults),
     'find-up': r
       .by(() => (findupSync ? {sync: findupSync} : {}))
       .directChildOnly(),
@@ -25,8 +26,6 @@ const proxyLoadOptions = ({
 
 const defaults = {
   timeout: 1000,
-  timeouts: 1000,
-  t: 1000,
   opts: '/default/path/to/mocha.opts',
   extension: ['js']
 };
@@ -247,7 +246,7 @@ describe('options', function() {
               result,
               'to equal',
               Object.assign({_: []}, defaults, {
-                'check-leaks': false,
+                checkLeaks: false,
                 config: false,
                 opts: false,
                 package: false,
@@ -422,7 +421,7 @@ describe('options', function() {
               result,
               'to equal',
               Object.assign({_: []}, defaults, {
-                'check-leaks': true,
+                checkLeaks: true,
                 config: false,
                 opts: false,
                 package: false,
@@ -471,7 +470,7 @@ describe('options', function() {
               result,
               'to equal',
               Object.assign({_: ['foobar.spec.js']}, defaults, {
-                'check-leaks': true,
+                checkLeaks: true,
                 config: false,
                 opts: false,
                 package: false,
