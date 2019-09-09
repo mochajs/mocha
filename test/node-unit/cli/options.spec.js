@@ -28,8 +28,7 @@ const defaults = {
   timeouts: 1000,
   t: 1000,
   opts: '/default/path/to/mocha.opts',
-  extension: ['js'],
-  'watch-extensions': ['js']
+  extension: ['js']
 };
 
 describe('options', function() {
