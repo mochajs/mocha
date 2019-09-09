@@ -116,30 +116,6 @@ describe('file utils', function() {
     });
   });
 
-  describe('.files', function() {
-    it('should return broken symlink file path', function() {
-      if (!symlinkSupported) {
-        return this.skip();
-      }
-      expect(
-        utils.files(tmpDir, ['js']),
-        'to contain',
-        tmpFile('mocha-utils-link.js'),
-        tmpFile('mocha-utils.js')
-      ).and('to have length', 2);
-
-      expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', true);
-
-      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
-
-      expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', false);
-
-      expect(utils.files(tmpDir, ['js']), 'to equal', [
-        tmpFile('mocha-utils-link.js')
-      ]);
-    });
-  });
-
   afterEach(removeTempDir);
 
   function makeTempDir() {
