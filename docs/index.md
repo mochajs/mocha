@@ -1275,6 +1275,8 @@ suite('Array', function() {
 
 The **Exports** interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
+**caution:** You can't use **Exports** interface when you run Mocha on the browser environment like Chromium and Firefox.
+
 ```js
 module.exports = {
   before: function() {
@@ -1491,6 +1493,10 @@ Examples:
 
 Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.
 
+### Interface
+
+you can use **Exports** interface, when you run Mocha on the node command line. On the contrary, you can't use **Exports** interface, when you run Mocha on the browser environment like Chromium and Firefox.
+
 ### Browser-specific methods
 
 The following method(s) _only_ function in a browser context:
@@ -1661,10 +1667,10 @@ To skip looking for config files, use `--no-config`. Likewise, use `--no-package
 If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for &mdash; and use &mdash; only one. The priority is:
 
 1. `.mocharc.js`
-1. `.mocharc.yaml`
-1. `.mocharc.yml`
-1. `.mocharc.jsonc`
-1. `.mocharc.json`
+2. `.mocharc.yaml`
+3. `.mocharc.yml`
+4. `.mocharc.jsonc`
+5. `.mocharc.json`
 
 ### Merging
 
