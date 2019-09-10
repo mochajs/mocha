@@ -22,27 +22,36 @@
     <header id="_header">
       <h1>
         <a href="/">
-          <img
-            id="mocha-logo"
-            src="/images/mocha-logo.svg"
-            alt="Mocha logo"
-          />
+          <img id="mocha-logo" src="/images/mocha-logo.svg" alt="Mocha logo" />
         </a>
       </h1>
       <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
     </header>
 
     <main id="content">{{ content }}</main>
-	
-	<aside class="sponsorship">
-		<a href="https://matomo.org/" rel="external noopener" target="_blank">
-			<img 
-				id="matomoLogo"
-				src="images/matomo-logo.png?trim"
-				alt="Matomo logo"
-			/>
-		</a>
-	</aside>
+
+    <aside class="sponsorship">
+      <a href="https://matomo.org/" rel="external noopener" target="_blank">
+        <img
+          id="matomoLogo"
+          src="images/matomo-logo.png?trim"
+          alt="Matomo logo"
+        />
+      </a>
+      <a
+        title="Mocha is an OpenJS Foundation Project"
+        href="https://openjsf.org"
+        rel="external noopener"
+        target="_blank"
+      >
+        <img
+          src="/images/openjsf-logo.svg"
+          width="300"
+          height="94"
+          alt="OpenJS Foundation Logo"
+        />
+      </a>
+    </aside>
 
     <footer>
       <div>
@@ -50,7 +59,8 @@
         is licensed under a
         <a
           rel="license external noopener"
-          href="https://creativecommons.org/licenses/by/4.0/">
+          href="https://creativecommons.org/licenses/by/4.0/"
+        >
           Creative Commons Attribution 4.0 International License</a
         >.
         <dl class="dl-inline last-modified">
@@ -58,7 +68,8 @@
           <dd>
             <time
               itemprop="lastModified"
-              datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+              datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
+            >
               {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
             </time>
           </dd>
