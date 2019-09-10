@@ -1932,7 +1932,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 
-<!-- AUTO-GENERATED-CONTENT:START (manifest:template=[Gitter]: ${gitter}) -->
+<!-- AUTO-GENERATED-CONTENT:START (manifest:template=[gitter]: ${gitter}) -->
 
 [gitter]: https://gitter.im/mochajs/mocha
 
