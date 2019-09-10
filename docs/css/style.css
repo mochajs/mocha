@@ -174,10 +174,10 @@ code {
   line-height: 1.8;
 }
 
-:not(pre)>code {
+:not(pre) > code {
   background-color: #f5f2f0;
   border-radius: 3px;
-  padding: .2em .4em;
+  padding: 0.2em 0.4em;
 }
 
 pre {
@@ -200,14 +200,19 @@ img.screenshot {
 }
 
 #matomoLogo {
-    display: block; 
-    height: 176px;
+  display: block;
+  height: 176px;
 }
 
 .sponsorship {
-    display: flex; 
-    justify-content: center;
-	margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+  align-items: center;
+}
+
+.sponsorship a {
+  padding: 0 40px;
 }
 
 footer {
