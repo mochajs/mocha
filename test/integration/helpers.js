@@ -296,7 +296,7 @@ function getSummary(res) {
 
     pattern = new RegExp('  (\\d+) ' + type + '\\s');
     match = pattern.exec(res.output);
-    summary[type] = match ? parseInt(match, 10) : 0;
+    summary[type] = match ? (match | 0) : 0;
 
     return summary;
   }, res);

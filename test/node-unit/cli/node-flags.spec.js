@@ -36,7 +36,7 @@ describe('node-flags', function() {
         expect(isNodeFlag('preserve-symlinks'), 'to be true');
         expect(isNodeFlag('preserve-symlinks-main'), 'to be true');
         // Node >= v12 both flags exist in process.allowedNodeEnvironmentFlags
-        const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
+        const nodeVersion = (process.version.match(/^v(\d+)\./)[1] | 0);
         expect(
           isNodeFlag('preserve_symlinks'),
           nodeVersion >= 12 ? 'to be true' : 'to be false'
