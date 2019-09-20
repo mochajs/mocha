@@ -831,15 +831,16 @@ describe('Runner', function() {
               ]).and('was called once');
             });
 
-            it('should notify run has ended', function() {
+            it('should abort the runner without emitting end event', function() {
               expect(
                 function() {
                   runner.uncaught(err);
                 },
-                'to emit from',
+                'not to emit from',
                 runner,
                 'end'
               );
+              expect(runner._abort, 'to be', true);
             });
           });
 

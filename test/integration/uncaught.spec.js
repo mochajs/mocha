@@ -50,23 +50,16 @@ describe('uncaught exceptions', function() {
   it('handles uncaught exceptions from which Mocha cannot recover', function(done) {
     run('uncaught-fatal.fixture.js', args, function(err, res) {
       if (err) {
-        done(err);
-        return;
+        return done(err);
       }
-      assert.strictEqual(res.stats.pending, 0);
-      assert.strictEqual(res.stats.passes, 1);
-      assert.strictEqual(res.stats.failures, 1);
 
-      assert.strictEqual(
-        res.failures[0].title,
-        'should bail if a successful test asynchronously fails'
-      );
-      assert.strictEqual(
-        res.passes[0].title,
-        'should bail if a successful test asynchronously fails'
-      );
+      var testName = 'should bail if a successful test asynchronously fails';
+      expect(res, 'to have failed')
+        .and('to have passed test count', 1)
+        .and('to have failed test count', 1)
+        .and('to have passed test', testName)
+        .and('to have failed test', testName);
 
-      assert.strictEqual(res.code, 1);
       done();
     });
   });
