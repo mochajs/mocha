@@ -1569,7 +1569,7 @@ mocha.setup({
 // Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
 mocha.setup({
   ui: 'tdd',
-  ignoreLeaks: true,
+  checkLeaks: false, // default
   asyncOnly: true
 });
 ```
