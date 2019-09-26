@@ -71,3 +71,22 @@ describe('uncaught exceptions', function() {
     });
   });
 });
+
+describe('unhandled rejections', function() {
+  it('handles unhandled rejections from async specs', function(done) {
+    run('unhandled.fixture.js', args, function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 0);
+      assert.strictEqual(res.stats.failures, 3);
+
+      assert.strictEqual(res.code, 3);
+
+      done();
+    });
+  });
+});
