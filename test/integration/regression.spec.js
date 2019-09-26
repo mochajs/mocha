@@ -4,22 +4,17 @@ var run = require('./helpers').runMocha;
 var runJSON = require('./helpers').runMochaJSON;
 
 describe('regressions', function() {
-  it('issue-1327: should run all 3 specs exactly once', function(done) {
+  it('issue-1327: should run the first test and then bail', function(done) {
     var args = [];
-    run('regression/issue-1327.fixture.js', args, function(err, res) {
-      var occurences = function(str) {
-        var pattern = new RegExp(str, 'g');
-        return (res.output.match(pattern) || []).length;
-      };
-
+    runJSON('regression/issue-1327.fixture.js', args, function(err, res) {
       if (err) {
-        done(err);
-        return;
+        return done(err);
       }
-      expect(res, 'to have failed');
-      expect(occurences('testbody1'), 'to be', 1);
-      expect(occurences('testbody2'), 'to be', 1);
-      expect(occurences('testbody3'), 'to be', 1);
+      expect(res, 'to have failed')
+        .and('to have passed test count', 1)
+        .and('to have failed test count', 1)
+        .and('to have passed test', 'test 1')
+        .and('to have failed test', 'test 1');
       done();
     });
   });
