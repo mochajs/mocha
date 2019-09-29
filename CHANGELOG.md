@@ -1,3 +1,20 @@
+# 6.2.1 / 2019-09-29
+
+## :bug: Fixes
+
+- #3955: tty.getWindowSize is not a function inside a "worker_threads" worker (@1999)
+- #3970: remove extraGlobals() (@juergba)
+- #3984: Update yargs-unparser to v1.6.0 (@juergba)
+- #3983: Package 'esm': spawn child-process for correct loading (@juergba)
+- #3986: Update yargs to v13.3.0 and yargs-parser to v13.1.1 (@juergba)
+
+## :book: Documentation
+
+- #3886: fix styles on mochajs.org (@outsideris)
+- #3966: Remove jsdoc index.html placeholder from eleventy file structure and fix broken link in jsdoc tutorial (@Munter)
+- #3765: Add Matomo to website (@MarioDiaz98)
+- #3947: Clarify effect of .skip() (@oliversalzburg)
+
 # 6.2.0 / 2019-07-18
 
 ## :tada: Enhancements
@@ -228,10 +245,10 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Use `--no-config` or `--no-package` to completely disable loading of configuration via RC file and `package.json`, respectively
   - Configurations are merged as applicable using the priority list:
     1. Command-line arguments
-    1. RC file
-    1. `package.json`
-    1. `mocha.opts`
-    1. Mocha's own defaults
+    2. RC file
+    3. `package.json`
+    4. `mocha.opts`
+    5. Mocha's own defaults
   - Check out these [example config files](https://github.com/mochajs/mocha/tree/master/example/config)
 
 - Node/V8 flag support in `mocha` executable:
