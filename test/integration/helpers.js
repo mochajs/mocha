@@ -299,7 +299,7 @@ function _spawnMochaWithListeners(args, fn, opts) {
 }
 
 function resolveFixturePath(fixture) {
-  if (path.extname(fixture) !== '.js') {
+  if (path.extname(fixture) !== '.js' && path.extname(fixture) !== '.mjs') {
     fixture += '.fixture.js';
   }
   return path.join('test', 'integration', 'fixtures', fixture);

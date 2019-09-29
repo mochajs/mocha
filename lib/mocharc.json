@@ -1,6 +1,6 @@
 {
   "diff": true,
-  "extension": ["js"],
+  "extension": ["js", "cjs", "mjs"],
   "opts": "./test/mocha.opts",
   "package": "./package.json",
   "reporter": "spec",

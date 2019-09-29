@@ -12,9 +12,11 @@ describe('suite w/no callback', function() {
         if (err) {
           return done(err);
         }
-        var pattern = new RegExp('TypeError', 'g');
-        var result = res.output.match(pattern) || [];
-        expect(result, 'to have length', 2);
+        expect(
+          res.output,
+          'to match',
+          /no callback was supplied. Supply a callback/
+        );
         done();
       },
       {stdio: 'pipe'}
