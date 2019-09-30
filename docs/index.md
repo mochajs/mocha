@@ -1667,10 +1667,10 @@ To skip looking for config files, use `--no-config`. Likewise, use `--no-package
 If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for &mdash; and use &mdash; only one. The priority is:
 
 1. `.mocharc.js`
-2. `.mocharc.yaml`
-3. `.mocharc.yml`
-4. `.mocharc.jsonc`
-5. `.mocharc.json`
+1. `.mocharc.yaml`
+1. `.mocharc.yml`
+1. `.mocharc.jsonc`
+1. `.mocharc.json`
 
 ### Merging
 
