@@ -1422,7 +1422,7 @@ The "JSON" reporter outputs a single large JSON object when the tests have compl
 
 ### JSON Stream
 
-The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
+The "JSONStream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
 ![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
