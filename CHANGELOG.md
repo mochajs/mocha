@@ -1,3 +1,20 @@
+# 6.2.1 / 2019-09-29
+
+## :bug: Fixes
+
+- [#3955](https://github.com/mochajs/mocha/issues/3955): tty.getWindowSize is not a function inside a "worker_threads" worker ([**@1999**](https://github.com/1999))
+- [#3970](https://github.com/mochajs/mocha/issues/3970): remove extraGlobals() ([**@juergba**](https://github.com/juergba))
+- [#3984](https://github.com/mochajs/mocha/issues/3984): Update yargs-unparser to v1.6.0 ([**@juergba**](https://github.com/juergba))
+- [#3983](https://github.com/mochajs/mocha/issues/3983): Package 'esm': spawn child-process for correct loading ([**@juergba**](https://github.com/juergba))
+- [#3986](https://github.com/mochajs/mocha/issues/3986): Update yargs to v13.3.0 and yargs-parser to v13.1.1 ([**@juergba**](https://github.com/juergba))
+
+## :book: Documentation
+
+- [#3886](https://github.com/mochajs/mocha/issues/3886): fix styles on mochajs.org ([**@outsideris**](https://github.com/outsideris))
+- [#3966](https://github.com/mochajs/mocha/issues/3966): Remove jsdoc index.html placeholder from eleventy file structure and fix broken link in jsdoc tutorial ([**@Munter**](https://github.com/Munter))
+- [#3765](https://github.com/mochajs/mocha/issues/3765): Add Matomo to website ([**@MarioDiaz98**](https://github.com/MarioDiaz98))
+- [#3947](https://github.com/mochajs/mocha/issues/3947): Clarify effect of .skip() ([**@oliversalzburg**](https://github.com/oliversalzburg))
+
 # 6.2.0 / 2019-07-18
 
 ## :tada: Enhancements
