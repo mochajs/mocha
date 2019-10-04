@@ -19,7 +19,7 @@ _So you wanna build the site?_
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should _not_ be included in the build.
 - `docs/_dist` is where the deployed site lives. `docs/_site` is essentially a build step. These directories are _not_ under version control.
-- If you get the error message below when running `npm start docs`, follow [this guide](https://www.npmjs.com/package/gm) to install GraphicsMagick.
+- If you get the error message below when running `npm start docs`, follow [this guide](https://www.npmjs.com/package/gm) to install GraphicsMagick or ImageMagick.
 
 ```console
 ⚠ WARN: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data
