@@ -23,7 +23,7 @@ _So you wanna build the site?_
 
 ## License
 
-:copyright: 2016-2018 [JS Foundation](https://js.foundation) and contributors.
+:copyright: 2016-2018 [OpenJS Foundation](https://openjsf.org/) and contributors.
 
 Content licensed [CC-BY-4.0](https://raw.githubusercontent.com/mochajs/mocha/master/docs/LICENSE-CC-BY-4.0).
 

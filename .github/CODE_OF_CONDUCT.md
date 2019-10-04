@@ -25,7 +25,7 @@ community, so you might not be communicating in someone else’s primary languag
 
 Not all of us will agree all the time, but disagreement is no excuse for poor behavior and poor manners. We might all
 experience some frustration now and then, but we cannot allow that frustration to turn into a personal attack. It’s important
-to remember that a community where people feel uncomfortable or threatened is not a productive one. Members of the JS Foundation
+to remember that a community where people feel uncomfortable or threatened is not a productive one. Members of the OpenJS Foundation
 community should be respectful when dealing with other members as well as with people outside the JS Foundation community.
 
 ## Be careful in the words that you choose
