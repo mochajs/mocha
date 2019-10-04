@@ -30,50 +30,141 @@
 
     <main id="content">{{ content }}</main>
 
-    <aside class="sponsorship">
-      <a href="https://matomo.org/" rel="external noopener" target="_blank">
-        <img
-          id="matomoLogo"
-          src="images/matomo-logo.png?trim"
-          alt="Matomo logo"
-        />
-      </a>
-      <a
-        title="Mocha is an OpenJS Foundation Project"
-        href="https://openjsf.org"
-        rel="external noopener"
-        target="_blank"
-      >
-        <img
-          src="/images/openjsf-logo.svg"
-          width="300"
-          height="94"
-          alt="OpenJS Foundation Logo"
-        />
-      </a>
+    <aside>
+      <div>
+        <span>Support</span>
+        <div class="sponsorship">
+          <a
+            href="https://www.jetbrains.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              id="jetbrains-logo"
+              title="Jetbrains"
+              src="images/jetbrains-logo.png"
+              alt="Jetbrains Logo"
+            />
+          </a>
+          <a
+            href="https://wallabyjs.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              id="wallabyjs-logo"
+              title="Wallaby Js"
+              src="images/wallabyJs-logo.png"
+              alt="WallabyJs Logo"
+            />
+          </a>
+          <a
+            href="https://saucelabs.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              title="Saucelabs"
+              src="images/saucelabs-logo.png"
+              alt="Saucelabs Logo"
+            />
+          </a>
+        </div>
+        <span>Usage</span>
+        <div class="sponsorship">
+          <a href="https://matomo.org/" rel="external noopener" target="_blank">
+            <img
+              title="Mamoto"
+              src="images/matomo-logo.png?trim"
+              alt="Matomo Logo"
+            />
+          </a>
+          <a
+            href="https://coveralls.io"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              title="Coveralls"
+              src="images/coveralls-logo.png"
+              alt="Coveralls Logo"
+            />
+          </a>
+          <a
+            href="https://travis-ci.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              title="Travis CI"
+              src="images/travisCi-logo.png"
+              alt="Travis CI Logo"
+            />
+          </a>
+          <a
+            href="https://www.appveyor.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              title="AppVeyor"
+              src="images/appVeyor-logo.png"
+              alt="AppVeyor Logo"
+            />
+          </a>
+          <a
+            href="https://www.netlify.com/"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              title="Netlify"
+              src="https://opencollective.com/mochajs/sponsor/8/avatar.jpg"
+              alt="Netlify Logo"
+            />
+          </a>
+        </div>
+      </div>
     </aside>
 
     <footer>
-      <div>
-        <a rel="home" href="https://mochajs.org/">mochajs.org</a>
-        is licensed under a
-        <a
-          rel="license external noopener"
-          href="https://creativecommons.org/licenses/by/4.0/"
-        >
-          Creative Commons Attribution 4.0 International License</a
-        >.
-        <dl class="dl-inline last-modified">
-          <dt>Last updated</dt>
-          <dd>
-            <time
-              itemprop="lastModified"
-              datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
-            >
-              {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
-            </time>
-          </dd>
-        </dl>
+      <div class="footer-box">
+        <div class="footer-logo">
+          <a
+            title="Mocha is an OpenJS Foundation Project"
+            href="https://openjsf.org"
+            rel="external noopener"
+            target="_blank"
+          >
+            <img
+              src="images/openjsf-logo.svg"
+              width="150px"
+              height="47px"
+              alt="OpenJS Foundation Logo"
+            />
+          </a>
+        </div>
+        <div class="footer-content">
+          <a rel="home" href="https://mochajs.org/">mochajs.org</a>
+          is licensed under a
+          <a
+            rel="license external noopener"
+            href="https://creativecommons.org/licenses/by/4.0/"
+          >
+            Creative Commons Attribution 4.0 International License</a
+          >.
+          <dl class="dl-inline last-modified">
+            <dt>Last updated</dt>
+            <dd>
+              <time
+                itemprop="lastModified"
+                datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
+              >
+                {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
+              </time>
+            </dd>
+          </dl>
+        </div>
       </div>
     </footer>
   </body>

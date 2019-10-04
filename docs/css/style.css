@@ -199,21 +199,50 @@ img.screenshot {
   max-width: 100%;
 }
 
-#matomoLogo {
-  display: block;
-  height: 176px;
+#jetbrains-logo{
+  width: 140px;
+}
+
+#wallabyjs-logo{
+  width: 100px;
 }
 
 .sponsorship {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 60px;
-  align-items: center;
+  display: inline-flex;
+  margin-bottom: 40px;
+  flex-flow: row wrap;
+}
+
+.sponsorship img{
+  display: block;
+  width: 160px;
 }
 
 .sponsorship a {
-  padding: 0 40px;
+  padding: 10px 30px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
+
+aside {
+  margin: 0 auto 20px;
+  max-width: 920px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+aside span{
+  background-color: #8d6748;
+  border-radius: 0.3em;
+  color: #ffffff;
+  display: block;
+  padding: 3px;
+  margin-bottom: 30px;
+  width: 180px;
+  font-size: 14px;
+  text-align: center;
+}
+
 
 footer {
   background-color: #eee;
@@ -226,6 +255,17 @@ footer div {
   color: #888;
   font-size: 0.8em;
   margin-right: 30px;
+}
+
+.footer-box{
+  display: flex;
+}
+.footer-logo{
+  flex: none;
+  margin-left: 70px;
+}
+.footer-content{
+  margin-left: auto;
 }
 
 .last-modified {
