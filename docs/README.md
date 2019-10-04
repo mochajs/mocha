@@ -24,7 +24,7 @@ _So you wanna build the site?_
 ```console
 ⚠ WARN: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data
 (node:45255) UnhandledPromiseRejectionWarning: Error: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data
-    at Socket.stdout.on.once (/Users/temp/Downloads/exercise2/mocha/node_modules/express-processimage/lib/getFilterInfosAndTargetContentTypeFromQueryString.js:821:31)
+    at Socket.stdout.on.once (/Users/username/mocha/node_modules/express-processimage/lib/getFilterInfosAndTargetContentTypeFromQueryString.js:821:31)
     at Object.onceWrapper (events.js:286:20)
     at Socket.emit (events.js:203:15)
     at endReadableNT (_stream_readable.js:1145:12)
