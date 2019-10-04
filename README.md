@@ -103,3 +103,27 @@ Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors
 [MIT](LICENSE)
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
+
+## Foundation
+
+Mocha belongs to [Open JS Foundation](https://openjsf.org).
+<br><br>
+<a href="https://openjsf.org" target="_blank"><img alt="OpenJs" src="https://openjsf.org/wp-content/uploads/sites/84/2019/03/openjsf-color.svg" width="300px" ><img></a>
+
+## Support
+
+If you want to support your service to the project, contact [maintainers](https://gitter.im/mochajs/contributors) on Gitter.
+<br><br>
+<a href="https://www.jetbrains.com/" target="_blank"><img alt="Jetbrains" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/jetbrains-logo.png" height="140px" ><img></a>
+<a href="https://wallabyjs.com/" target="_blank"><img alt="Wallaby Js" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/wallabyJs-logo.png" height="120px" ><img></a>
+<a href="https://saucelabs.com/" target="_blank"><img alt="Soucelabs Js" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/saucelabs-logo.png" width="300px" ><img></a>
+
+## Usage
+
+Here are the services we consume to make mocha.
+<br><br>
+<a href="https://matomo.org/" target="_blank"><img alt="Matomo" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/matomo-logo.png" width="155px" ><img></a>
+<a href="https://travis-ci.com/" target="_blank"><img alt="Travis CI" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/travisCi-logo.png" width="190px" ><img></a>
+<a href="https://www.appveyor.com/" target="_blank"><img alt="Appveyor" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/appVeyor-logo.png" width="280" ><img></a>
+<a href="https://www.netlify.com/" target="_blank"><img alt="Netlify" src="https://opencollective.com/mochajs/sponsor/8/avatar.jpg"><img></a>
+<a href="https://coveralls.io" target="_blank"><img alt="Coveralls" src="https://raw.githubusercontent.com/mochajs/mocha/master/docs/images/coveralls-logo.png" width="160px" ><img></a>
