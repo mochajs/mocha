@@ -21,7 +21,7 @@ _So you wanna build the site?_
 - `docs/_dist` is where the deployed site lives. `docs/_site` is essentially a build step. These directories are _not_ under version control.
 - If you get the error message below when running `npm start docs`, follow [this guide](https://www.npmjs.com/package/gm) to install GraphicsMagick.
 
-```
+```console
 ⚠ WARN: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data
 (node:45255) UnhandledPromiseRejectionWarning: Error: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data
     at Socket.stdout.on.once (/Users/temp/Downloads/exercise2/mocha/node_modules/express-processimage/lib/getFilterInfosAndTargetContentTypeFromQueryString.js:821:31)
