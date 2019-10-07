@@ -2,6 +2,7 @@
 
 var path = require('path').posix;
 var helpers = require('../helpers');
+var invokeMocha = helpers.invokeMocha;
 var runMochaJSON = helpers.runMochaJSON;
 var resolvePath = helpers.resolveFixturePath;
 
@@ -63,5 +64,22 @@ describe('--file', function() {
       expect(res, 'to have passed').and('to have passed test count', 1);
       done();
     });
+  });
+
+  it('should fail if the file can not be found', function(done) {
+    args = ['--file', 'non-existent'];
+
+    invokeMocha(
+      args,
+      function(err, result) {
+        if (err) {
+          return done(err);
+        }
+        expect(result, 'to have failed');
+        expect(result.output, 'to match', /Cannot find file/i);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
   });
 });
