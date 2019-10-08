@@ -4,7 +4,6 @@ var Mocha = require('../../lib/mocha');
 var Runnable = Mocha.Runnable;
 var Suite = Mocha.Suite;
 var sinon = require('sinon');
-var Pending = require('../../lib/pending');
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
@@ -644,13 +643,14 @@ describe('Runnable(title, fn)', function() {
     });
 
     describe('if async', function() {
-      it('this.skip() should call callback with Pending', function(done) {
+      it('this.skip() should set runnable to pending', function(done) {
         var runnable = new Runnable('foo', function(done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
         });
         runnable.run(function(err) {
-          expect(err.constructor, 'to be', Pending);
+          expect(err, 'to be undefined');
+          expect(runnable.pending, 'to be true');
           done();
         });
       });
@@ -663,8 +663,10 @@ describe('Runnable(title, fn)', function() {
           aborted = false;
         });
         runnable.run(function() {
-          expect(aborted, 'to be true');
-          done();
+          process.nextTick(function() {
+            expect(aborted, 'to be true');
+            done();
+          });
         });
       });
     });
