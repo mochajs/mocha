@@ -523,6 +523,7 @@
     "growl": "1.10.5",
     "he": "1.2.0",
     "js-yaml": "3.13.1",
+    "json2yaml": "^1.1.0",
     "log-symbols": "2.2.0",
     "minimatch": "3.0.4",
     "mkdirp": "0.5.1",
