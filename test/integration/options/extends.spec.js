@@ -4,7 +4,7 @@ var path = require('path').posix;
 var helpers = require('../helpers');
 var invokeMocha = helpers.invokeMocha;
 
-describe.only('--extends', function() {
+describe('--extends', function() {
   var fixture = {
     config: path.join(
       'test',
