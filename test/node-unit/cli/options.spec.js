@@ -76,17 +76,20 @@ describe('options', function() {
         });
       });
 
-      it('should return an object containing positional args, defaults, and anti-reloading flags', function() {
+      it('should return an object containing positional args, and anti-reloading flags', function() {
         expect(
           loadOptions(),
           'to equal',
-          Object.assign({}, defaults, {
-            _: [],
-            config: false,
-            opts: false,
-            package: false,
-            retries: '3'
-          })
+          Object.assign(
+            {},
+            {
+              _: [],
+              config: false,
+              opts: false,
+              package: false,
+              retries: '3'
+            }
+          )
         );
       });
     });
@@ -196,7 +199,6 @@ describe('options', function() {
                 {
                   _: ['foobar.spec.js']
                 },
-                defaults,
                 {
                   config: false,
                   opts: false,
@@ -242,17 +244,20 @@ describe('options', function() {
             result = loadOptions('--no-opts');
           });
 
-          it('should return parsed args, default config, config file, and package.json', function() {
+          it('should return parsed args, config file, and package.json', function() {
             expect(
               result,
               'to equal',
-              Object.assign({_: []}, defaults, {
-                'check-leaks': false,
-                config: false,
-                opts: false,
-                package: false,
-                retries: 3
-              })
+              Object.assign(
+                {_: []},
+                {
+                  'check-leaks': false,
+                  config: false,
+                  opts: false,
+                  package: false,
+                  retries: 3
+                }
+              )
             );
           });
 
@@ -300,7 +305,6 @@ describe('options', function() {
                 {
                   _: []
                 },
-                defaults,
                 {
                   config: false,
                   opts: false,
@@ -381,7 +385,6 @@ describe('options', function() {
                 {
                   _: ['foobar.spec.js']
                 },
-                defaults,
                 {
                   config: false,
                   opts: false,
@@ -417,17 +420,20 @@ describe('options', function() {
             result = loadOptions('--no-package');
           });
 
-          it('should return parsed args, default config, package.json and mocha.opts', function() {
+          it('should return parsed args, package.json and mocha.opts', function() {
             expect(
               result,
               'to equal',
-              Object.assign({_: []}, defaults, {
-                'check-leaks': true,
-                config: false,
-                opts: false,
-                package: false,
-                retries: '3'
-              })
+              Object.assign(
+                {_: []},
+                {
+                  'check-leaks': true,
+                  config: false,
+                  opts: false,
+                  package: false,
+                  retries: '3'
+                }
+              )
             );
           });
 
@@ -466,17 +472,20 @@ describe('options', function() {
             result = loadOptions('--no-config');
           });
 
-          it('should return parsed args, default config, package.json and mocha.opts', function() {
+          it('should return parsed args, package.json and mocha.opts', function() {
             expect(
               result,
               'to equal',
-              Object.assign({_: ['foobar.spec.js']}, defaults, {
-                'check-leaks': true,
-                config: false,
-                opts: false,
-                package: false,
-                retries: '3'
-              })
+              Object.assign(
+                {_: ['foobar.spec.js']},
+                {
+                  'check-leaks': true,
+                  config: false,
+                  opts: false,
+                  package: false,
+                  retries: '3'
+                }
+              )
             );
           });
 
@@ -715,54 +724,6 @@ describe('options', function() {
           it(`should return basic parsed arguments and flag`, function() {
             expect(loadOptions(`--${arg}`), 'to equal', {_: [], [arg]: true});
           });
-        });
-      });
-    });
-
-    describe('"extension" handling', function() {
-      describe('when user supplies "extension" option', function() {
-        let result;
-
-        beforeEach(function() {
-          readFileSync = sandbox.stub();
-          readFileSync.onFirstCall().throws();
-          findConfig = sandbox.stub().returns('/some/.mocharc.json');
-          loadConfig = sandbox.stub().returns({extension: ['tsx']});
-          findupSync = sandbox.stub();
-          loadOptions = proxyLoadOptions({
-            readFileSync,
-            findConfig,
-            loadConfig,
-            findupSync
-          });
-          result = loadOptions(['--extension', 'ts']);
-        });
-
-        it('should not concatenate the default value', function() {
-          expect(result, 'to have property', 'extension', ['ts', 'tsx']);
-        });
-      });
-
-      describe('when user does not supply "extension" option', function() {
-        let result;
-
-        beforeEach(function() {
-          readFileSync = sandbox.stub();
-          readFileSync.onFirstCall().throws();
-          findConfig = sandbox.stub().returns('/some/.mocharc.json');
-          loadConfig = sandbox.stub().returns({});
-          findupSync = sandbox.stub();
-          loadOptions = proxyLoadOptions({
-            readFileSync,
-            findConfig,
-            loadConfig,
-            findupSync
-          });
-          result = loadOptions();
-        });
-
-        it('should retain the default', function() {
-          expect(result, 'to have property', 'extension', ['js']);
         });
       });
     });
