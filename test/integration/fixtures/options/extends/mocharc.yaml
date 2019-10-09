@@ -1,0 +1,1 @@
+extends: 'test/integration/fixtures/options/extends/mocha-extends.json'
