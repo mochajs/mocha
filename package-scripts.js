@@ -299,8 +299,26 @@ module.exports = {
         }
       },
       watch: {
-        script: 'nps docs.preprocess && eleventy --serve',
-        description: 'Watch docs for changes & build'
+        default: {
+          script:
+            'nps docs.watch.build && concurrently "nps docs.watch.rebuild" "nps docs.watch.server"',
+          description: 'Watch for changes & rebuild & serve docs',
+          hiddenFromHelp: true
+        },
+        build: {
+          script: 'eleventy && jsdoc -c jsdoc.conf.json',
+          description: 'Build docs'
+        },
+        rebuild: {
+          script:
+            'chokidar "docs/**/*" -i "docs/_dist" -i "docs/_site" -c "nps docs.watch.build"',
+          description: 'Watch for changes and rebuild docs'
+        },
+        server: {
+          script:
+            'browser-sync start --server docs/_site --files "docs/_site/**/*"',
+          description: 'Serve docs'
+        }
       },
       api: {
         script: 'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json',
