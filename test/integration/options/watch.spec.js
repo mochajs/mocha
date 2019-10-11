@@ -267,6 +267,19 @@ describe('--watch', function() {
         expect(results[1].tests, 'to have length', 2);
       });
     });
+
+    it('check global variable leaks when test reruns', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('options/watch/test-global-leak', testFile);
+
+      return runMochaWatch([testFile, '--check-leaks'], this.tempDir, () => {
+        touchFile(testFile);
+      }).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].failures, 'to have length', 1); // first leaks detection
+        expect(results[1].failures, 'to have length', 1); // second leaks detection
+      });
+    });
   });
 });
 
