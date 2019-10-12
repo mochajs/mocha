@@ -674,7 +674,7 @@ Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and h
 
 You can choose to retry failed tests up to a certain number of times. This feature is designed to handle end-to-end tests (functional tests/Selenium...) where resources cannot be easily mocked/stubbed. **It's not recommended to use this feature for unit tests**.
 
-This feature does re-run `beforeEach/afterEach` hooks but not `before/after` hooks.
+This feature does re-run a failed test and its corresponding `beforeEach/afterEach` hooks, but not `before/after` hooks. `this.retries()` has no effect on failing hooks.
 
 **NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks][selenium-webdriver-testing] for `Promise` chain).
 
@@ -739,7 +739,7 @@ $ mocha
 
 <h2 id="test-duration">Test duration</h2>
 
-Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the "spec" reporter:
+Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the SPEC reporter:
 
 ![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -813,7 +813,7 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 ## Diffs
 
-Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library. Mocha will attempt to display the difference between what was expected, and what the assertion actually saw. Here's an example of a "string" diff:
+Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library. Mocha will attempt to display the difference between what was expected, and what the assertion actually saw. Here's an example of a "string" diff using `--inline-diffs`:
 
 ![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -1068,7 +1068,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 ### `--opts <path>`
 
-> _Deprecated._
+> _Deprecated in v7.0.0._
 
 Specify a path to [`mocha.opts`](#mochaopts).
 
@@ -1598,11 +1598,18 @@ mocha.setup({
   ui: 'tdd'
 });
 
-// Use "tdd" interface, check global leaks, and force all tests to be asynchronous
+// Examples of options:
 mocha.setup({
-  ui: 'tdd',
+  asyncOnly: true,
+  bail: true,
   checkLeaks: true,
-  asyncOnly: true
+  forbidOnly: true,
+  forbidPending: true,
+  global: ['MyLib'],
+  retries: 3,
+  slow: '100',
+  timeout: '2000',
+  ui: 'bdd'
 });
 ```
 
@@ -1623,7 +1630,7 @@ If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting
 
-The "html" reporter is the default reporter when running Mocha in the browser. It looks like this:
+The HTML reporter is the default reporter when running Mocha in the browser. It looks like this:
 
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
