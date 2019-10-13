@@ -554,6 +554,7 @@
     "acorn": "^7.0.0",
     "assetgraph-builder": "^6.10.1",
     "autoprefixer": "^9.6.0",
+    "browser-sync": "^2.26.7",
     "browserify": "^16.2.3",
     "browserify-package-json": "^1.0.1",
     "chai": "^4.2.0",
