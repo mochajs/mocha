@@ -132,5 +132,14 @@ describe('node-flags', function() {
         ['--v8-numeric-one=1', '--v8-boolean-one', '--v8-numeric-two=2']
       );
     });
+
+    it('should special-case "--require"', function() {
+      // note the only way for this to happen IN REAL LIFE is if you use "--require esm";
+      // mocha eats all --require args otherwise.
+      expect(unparseNodeFlags({require: 'mcrib'}), 'to equal', [
+        '--require',
+        'mcrib'
+      ]);
+    });
   });
 });
