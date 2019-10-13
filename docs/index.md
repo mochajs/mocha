@@ -88,13 +88,13 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 Install with [npm][] globally:
 
-```sh
+```bash
 $ npm install --global mocha
 ```
 
 or as a development dependency for your project:
 
-```sh
+```bash
 $ npm install --save-dev mocha
 ```
 
@@ -102,7 +102,7 @@ $ npm install --save-dev mocha
 
 ## Getting Started
 
-```sh
+```bash
 $ npm install mocha
 $ mkdir test
 $ $EDITOR test/test.js # or open with your favorite editor
@@ -123,7 +123,7 @@ describe('Array', function() {
 
 Back in the terminal:
 
-```sh
+```bash
 $ ./node_modules/mocha/bin/mocha
 
   Array
@@ -144,7 +144,7 @@ Set up a test script in package.json:
 
 Then run tests with:
 
-```sh
+```bash
 $ npm test
 ```
 
@@ -203,7 +203,7 @@ it('double done', function(done) {
 
 Running the above test will give you the below error message:
 
-```sh
+```bash
 $ ./node_modules/.bin/mocha mocha.test.js
 
 
@@ -728,7 +728,7 @@ describe('add()', function() {
 
 The above code will produce a suite with three specs:
 
-```sh
+```bash
 $ mocha
 
   add()
@@ -1621,7 +1621,7 @@ Instructions for doing so can be found [here][mocha-wiki-growl].
 
 Enable Mocha's desktop notifications as follows:
 
-```sh
+```bash
 $ mocha --growl
 ```
 
@@ -1740,7 +1740,7 @@ As such, actual command-line arguments will take precedence over the defaults.
 
 For example, suppose you have the following `mocha.opts` file:
 
-```sh
+```bash
 # mocha.opts
   --require should
   --reporter dot
@@ -1752,7 +1752,7 @@ library, and use `bdd` as the interface. With this, you may then invoke `mocha`
 with additional arguments, here changing the reporter to `list` and setting the
 slow threshold to half a second:
 
-```sh
+```bash
 $ mocha --reporter list --slow 500
 ```
 
@@ -1766,13 +1766,13 @@ your tests in `test/` folder. If you want to include subdirectories, pass the
 
 To configure where `mocha` looks for tests, you may pass your own glob:
 
-```sh
+```bash
 $ mocha --recursive "./spec/*.js"
 ```
 
 Some shells support recursive matching by using the globstar (`**`) wildcard. Bash >= 4.3 supports this with the [`globstar` option][bash-globbing] which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH][zsh-globbing] and [Fish][fish-globbing] support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
 
-```sh
+```bash
 $ mocha "./spec/**/*.js"
 ```
 
@@ -1857,7 +1857,7 @@ Real live example code:
 
 To run Mocha's tests, you will need GNU Make or compatible; Cygwin should work.
 
-```sh
+```bash
 $ cd /path/to/mocha
 $ npm install
 $ npm test
