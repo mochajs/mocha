@@ -869,17 +869,19 @@ Configuration
   --package  Path to package.json for config                            [string]
 
 File Handling
-  --extension, --watch-extensions  File extension(s) to load and/or watch
-                                                           [array] [default: js]
-  --file                           Specify file(s) to be loaded prior to root
-                                   suite execution     [array] [default: (none)]
-  --ignore, --exclude              Ignore file(s) or glob pattern(s)
+  --extension          File extension(s) to load           [array] [default: js]
+  --file               Specify file(s) to be loaded prior to root suite
+                       execution                       [array] [default: (none)]
+  --ignore, --exclude  Ignore file(s) or glob pattern(s)
                                                        [array] [default: (none)]
-  --recursive                      Look for tests in subdirectories    [boolean]
-  --require, -r                    Require module      [array] [default: (none)]
-  --sort, -S                       Sort test files                     [boolean]
-  --watch, -w                      Watch files in the current working directory
-                                   for changes                         [boolean]
+  --recursive          Look for tests in subdirectories                [boolean]
+  --require, -r        Require module                  [array] [default: (none)]
+  --sort, -S           Sort test files                                 [boolean]
+  --watch, -w          Watch files in the current working directory for changes
+                                                                       [boolean]
+  --watch-files        List of paths or globs to watch                   [array]
+  --watch-ignore       List of paths or globs to exclude from watching
+                                      [array] [default: ["node_modules",".git"]]
 
 Test Filters
   --fgrep, -f   Only run tests containing this string                   [string]
@@ -1566,23 +1568,32 @@ mocha.setup({
   ui: 'tdd'
 });
 
-// Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
+// Use "tdd" interface, check global leaks, and force all tests to be asynchronous
 mocha.setup({
   ui: 'tdd',
-  checkLeaks: false, // default
+  checkLeaks: true,
   asyncOnly: true
 });
 ```
 
 ### Browser-specific Option(s)
 
-The following option(s) _only_ function in a browser context:
+Browser Mocha supports many, but not all [cli options](#command-line-usage).  
+To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
 
-`noHighlighting`: If set to `true`, do not attempt to use syntax highlighting on output test code.
+#### Options that differ slightly from [cli options](#command-line-usage):
+
+`reporter` _{string|constructor}_  
+You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
+
+#### Options that _only_ function in browser context:
+
+`noHighlighting` _{boolean}_  
+If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting
 
-The "HTML" reporter is what you see when running Mocha in the browser. It looks like this:
+The "html" reporter is the default reporter when running Mocha in the browser. It looks like this:
 
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
