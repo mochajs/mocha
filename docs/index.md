@@ -868,17 +868,16 @@ Configuration
   --package  Path to package.json for config                            [string]
 
 File Handling
-  --ignore, --exclude              Ignore file(s) or glob pattern(s)
+  --file               Specify file(s) to be loaded prior to root suite
+                       execution                       [array] [default: (none)]
+  --ignore, --exclude  Ignore file(s) or glob pattern(s)
                                                        [array] [default: (none)]
   --extension, --watch-extensions  File extension(s) to load and/or watch
-                                                           [array] [default: js]
-  --file                           Specify file(s) to be loaded prior to root
-                                   suite execution     [array] [default: (none)]
-  --recursive                      Look for tests in subdirectories    [boolean]
-  --require, -r                    Require module      [array] [default: (none)]
-  --sort, -S                       Sort test files                     [boolean]
-  --watch, -w                      Watch files in the current working directory
-                                   for changes                         [boolean]
+  --recursive          Look for tests in subdirectories                [boolean]
+  --require, -r        Require module                  [array] [default: (none)]
+  --sort, -S           Sort test files                                 [boolean]
+  --watch, -w          Watch files in the current working directory for changes
+                                                                       [boolean]
 
 Test Filters
   --fgrep, -f   Only run tests containing this string                   [string]
@@ -1095,7 +1094,7 @@ Files having this extension will be considered test files. Defaults to `js`.
 
 Affects `--watch` behavior.
 
-Specifying `--extension` will _remove_ `.js` as a test file extension; use `--extension js` to re-add it. For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
+The option can be given multiple times. The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`
 
 ### `--file <file|directory|glob>`
 
@@ -1106,6 +1105,8 @@ Useful if you want to declare, for example, hooks to be run before every test ac
 Files specified this way are not affected by `--sort` or `--recursive`.
 
 Files specified in this way should contain one or more suites, tests or hooks. If this is not the case, consider `--require` instead.
+
+### `--ignore <file|directory|glob>, --exclude <file|directory|glob>,`
 
 ### `--recursive`
 
@@ -1131,6 +1132,8 @@ Note you cannot use `--require` to set a global `beforeEach()` hook, for example
 Sort test files (by absolute path) using [Array.prototype.sort][mdn-array-sort].
 
 ### `--watch, -w`
+
+Rerun tests on file changes.
 
 Executes tests on changes to JavaScript in the current working directory (and once initially).
 
@@ -1545,23 +1548,32 @@ mocha.setup({
   ui: 'tdd'
 });
 
-// Use "tdd" interface, ignore leaks, and force all tests to be asynchronous
+// Use "tdd" interface, check global leaks, and force all tests to be asynchronous
 mocha.setup({
   ui: 'tdd',
-  ignoreLeaks: true,
+  checkLeaks: true,
   asyncOnly: true
 });
 ```
 
 ### Browser-specific Option(s)
 
-The following option(s) _only_ function in a browser context:
+Browser Mocha supports many, but not all [cli options](#command-line-usage).  
+To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
 
-`noHighlighting`: If set to `true`, do not attempt to use syntax highlighting on output test code.
+#### Options that differ slightly from [cli options](#command-line-usage):
+
+`reporter` _{string|constructor}_  
+You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
+
+#### Options that _only_ function in browser context:
+
+`noHighlighting` _{boolean}_  
+If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting
 
-The "HTML" reporter is what you see when running Mocha in the browser. It looks like this:
+The "html" reporter is the default reporter when running Mocha in the browser. It looks like this:
 
 ![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
