@@ -30,9 +30,6 @@ exports.writeFile = {
     })
 };
 exports.writeConfig = (type, content) => {
-  content = {
-    reporter: 'dot'
-  };
   if (type === 'yaml') {
     this.writeFile.yaml(content);
   } else if (type === 'yml') {
