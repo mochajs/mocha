@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -130,6 +130,7 @@
     "Di Wu <dwu@palantir.com>",
     "Dina Berry <dfberry@users.noreply.github.com>",
     "Diogo Monteiro <diogo.gmt@gmail.com>",
+    "Dmitrii Sorin <info@staypositive.ru>",
     "Dmitriy Simushev <simushevds@gmail.com>",
     "Dmitry Shirokov <deadrunk@gmail.com>",
     "Dmitry Sorin <info@staypositive.ru>",
@@ -294,6 +295,7 @@
     "Marc Kuo <kuomarc2@gmail.com>",
     "Marc Udoff <mlucool@gmail.com>",
     "Marcello Bastea-Forte <marcello@cellosoft.com>",
+    "Mario Díaz Ceñera <46492068+MarioDiaz98@users.noreply.github.com>",
     "Mark Banner <standard8@mozilla.com>",
     "Mark Owsiak <mark.owsiak@gmail.com>",
     "Markus Tacker <m@coderbyheart.com>",
@@ -338,6 +340,7 @@
     "Noshir Patel <nosh@blackpiano.com>",
     "not-an-aardvark <not-an-aardvark@users.noreply.github.com>",
     "OlegTsyba <oleg.tsyba.ua@gmail.com>",
+    "Oliver Salzburg <oliver.salzburg@gmail.com>",
     "olsonpm <olsonpm@users.noreply.github.com>",
     "omardelarosa <thedelarosa@gmail.com>",
     "Oscar Godson <oscargodson@outlook.com>",

@@ -417,6 +417,22 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
+  it('should list multiple Errors per test', function() {
+    var err = new Error('First Error');
+    err.multiple = [new Error('Second Error - same test')];
+    var test = makeTest(err);
+
+    list([test, test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(
+      errOut,
+      'to contain',
+      'Error: First Error',
+      'Error: Second Error - same test'
+    );
+  });
+
   describe('when reporter output immune to user test changes', function() {
     var sandbox;
     var baseConsoleLog;
