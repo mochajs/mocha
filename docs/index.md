@@ -1588,8 +1588,17 @@ You can pass a reporter's name or a custom reporter's constructor. You can find 
 
 #### Options that _only_ function in browser context:
 
-`noHighlighting` _{boolean}_  
-If set to `true`, do not attempt to use syntax highlighting on output test code.
+> _`BREAKING CHANGE in v7.0.0; noHighlighting` is DEPRECATED. We recommend using `reporterOptions.highlight` instead._
+
+`reporterOptions.highlight` _{boolean}_
+
+If set to `false`, do not attempt to use syntax highlighting on output test code.
+
+```js
+reporterOptions: {
+  highlight: false;
+}
+```
 
 ### Reporting
 
