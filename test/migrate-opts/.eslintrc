@@ -1,0 +1,9 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 2017
+    }, 
+    "rules": {
+        "no-unused-expression": false, 
+        "no-unused-vars": 0
+    }   
+}
