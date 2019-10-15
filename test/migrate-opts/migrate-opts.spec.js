@@ -17,8 +17,6 @@ const isFileCreate = path => {
 describe('Test migrate-opts.js script', () => {
   it('should be create file json', async () => {
     const isFile = await isFileCreate(_path);
-    // expect(2).to.equal(2);
-    // expect(isFile).to.be.true;
     expect(isFile).to.equal(true);
     fs.unlinkSync(_path);
   });
