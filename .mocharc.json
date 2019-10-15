@@ -1,8 +1,0 @@
-{
-  "_": [],
-  "reporter": "dot",
-  "R": "dot",
-  "growl": true,
-  "G": true,
-  "extension": ["mjs", "js"]
-}
