@@ -130,12 +130,6 @@ mocha.setup = function(opts) {
   }
   for (var opt in opts) {
     if (opts.hasOwnProperty(opt)) {
-      if (opt === 'noHighlighting' && opt) {
-        require('./lib/utils').deprecate(
-          'noHighlighting is deprecated; provide {reporterOption: {highlight: false}} to mocha.setup().'
-        );
-      }
-
       if (opt === 'reporterOptions') {
         this.options.reporterOptions = opts[opt];
       } else {
