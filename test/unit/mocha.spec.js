@@ -300,6 +300,28 @@ describe('Mocha', function() {
       );
     });
 
+    it('should set the reporterOptions.highlight to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.noHighlighting(true);
+      expect(
+        mocha.options.reporterOptions,
+        'to have property',
+        'highlight',
+        false
+      );
+    });
+
+    it('should set the reporterOptions.highlight to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.noHighlighting(false);
+      expect(
+        mocha.options.reporterOptions,
+        'to have property',
+        'highlight',
+        true
+      );
+    });
+
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.noHighlighting(), 'to be', mocha);
