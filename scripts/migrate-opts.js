@@ -14,31 +14,40 @@ const jsonfile = require('jsonfile');
 const beautify = require('js-beautify').js;
 const fs = require('fs');
 const loadMochaOpts = require('../lib/cli/options.js').loadMochaOpts;
-const setJsType = content =>
+exports.setJsType = content =>
   beautify(`(module.exports = ${JSON.stringify(content)})`);
 const setYamlType = content => YAML.stringify(content);
-const writeFile = {
-  yaml: content => fs.writeFileSync(`.mocharc.yaml`, setYamlType(content)),
-  yml: content => fs.writeFileSync(`.mocharc.yml`, setYamlType(content)),
-  js: content => fs.writeFileSync(`.mocharc.js`, setJsType(content)),
-  json: content => jsonfile.writeFileSync(`.mocharc.json`, content, {spaces: 1})
+exports.writeFile = {
+  yaml: (content, _path = process.cwd()) =>
+    fs.writeFileSync(path.join(_path, `.mocharc.yaml`), setYamlType(content)),
+  yml: (content, _path = process.cwd()) =>
+    fs.writeFileSync(path.join(_path, `.mocharc.yml`), setYamlType(content)),
+  js: (content, _path = process.cwd()) =>
+    fs.writeFileSync(path.join(_path, `.mocharc.js`), this.setJsType(content)),
+  json: (content, _path = process.cwd()) =>
+    jsonfile.writeFileSync(path.join(_path, `.mocharc.json`), content, {
+      spaces: 1
+    })
 };
-const writeConfig = (type, content) => {
+exports.writeConfig = (type, content) => {
+  content = {
+    reporter: 'dot'
+  };
   if (type === 'yaml') {
-    writeFile.yaml(content);
+    this.writeFile.yaml(content);
   } else if (type === 'yml') {
-    writeFile.yml(content);
+    this.writeFile.yml(content);
   } else if (type === 'js') {
-    writeFile.js(content);
+    this.writeFile.js(content);
   } else {
-    writeFile.json(content);
+    this.writeFile.json(content);
   }
   return content;
 };
 
 const init = (filepath, type) => {
   const content = loadMochaOpts({opts: filepath});
-  writeConfig(type, content);
+  this.writeConfig(type, content);
 };
 exports.command = 'migrate-opts';
 
