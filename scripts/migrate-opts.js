@@ -14,25 +14,15 @@ const jsonfile = require('jsonfile');
 const beautify = require('js-beautify').js;
 const fs = require('fs');
 const loadMochaOpts = require('../lib/cli/options.js').loadMochaOpts;
-const wrapper = fn => {
-  try {
-    fn();
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 const setJsType = content =>
   beautify(`(module.exports = ${JSON.stringify(content)})`);
 const setYamlType = content => YAML.stringify(content);
 const writeFile = {
-  yaml: content =>
-    wrapper(fs.writeFileSync(`.mocharc.yaml`, setYamlType(content))),
-  yml: content =>
-    wrapper(fs.writeFileSync(`.mocharc.yml`, setYamlType(content))),
-  js: content => wrapper(fs.writeFileSync(`.mocharc.js`, setJsType(content))),
-  json: content =>
-    wrapper(jsonfile.writeFileSync(`.mocharc.json`, content, {spaces: 1}))
+  yaml: content => fs.writeFileSync(`.mocharc.yaml`, setYamlType(content)),
+  yml: content => fs.writeFileSync(`.mocharc.yml`, setYamlType(content)),
+  js: content => fs.writeFileSync(`.mocharc.js`, setJsType(content)),
+  json: content => jsonfile.writeFileSync(`.mocharc.json`, content, {spaces: 1})
 };
 const writeConfig = (type, content) => {
   if (type === 'yaml') {
