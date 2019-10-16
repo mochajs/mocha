@@ -19,8 +19,7 @@ describe('Mocha', function() {
   describe('constructor', function() {
     beforeEach(function() {
       sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
-      sandbox.stub(Mocha.prototype, 'globals').returnsThis();
-      sandbox.stub(Mocha.prototype, 'useInlineDiffs').returnsThis();
+      sandbox.stub(Mocha.prototype, 'global').returnsThis();
     });
 
     describe('when "options.timeout" is `undefined`', function() {
@@ -42,21 +41,11 @@ describe('Mocha', function() {
     });
 
     describe('when "options.global" is provided', function() {
-      it('should pass "options.global" to #globals()', function() {
+      it('should pass "options.global" to #global()', function() {
         // eslint-disable-next-line no-new
         new Mocha({global: ['singular']});
-        expect(Mocha.prototype.globals, 'to have a call satisfying', [
+        expect(Mocha.prototype.global, 'to have a call satisfying', [
           ['singular']
-        ]).and('was called once');
-      });
-    });
-
-    describe('when "options.inlineDiffs" is `undefined`', function() {
-      it('should set inlineDiffs to `true`', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({inlineDiffs: true});
-        expect(Mocha.prototype.useInlineDiffs, 'to have a call satisfying', [
-          true
         ]).and('was called once');
       });
     });
@@ -140,7 +129,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#globals()', function() {
+  describe('#global()', function() {
     it('should be an empty array initially', function() {
       var mocha = new Mocha();
       expect(mocha.options.global, 'to be empty');
@@ -148,19 +137,19 @@ describe('Mocha', function() {
 
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
-      expect(mocha.globals(), 'to be', mocha);
+      expect(mocha.global(), 'to be', mocha);
     });
 
     describe('when argument is invalid', function() {
       it('should not modify the whitelist when given empty string', function() {
         var mocha = new Mocha(opts);
-        mocha.globals('');
+        mocha.global('');
         expect(mocha.options.global, 'to be empty');
       });
 
       it('should not modify the whitelist when given empty array', function() {
         var mocha = new Mocha(opts);
-        mocha.globals([]);
+        mocha.global([]);
         expect(mocha.options.global, 'to be empty');
       });
     });
@@ -172,7 +161,7 @@ describe('Mocha', function() {
 
       it('should add string to the whitelist', function() {
         var mocha = new Mocha(opts);
-        mocha.globals(elem);
+        mocha.global(elem);
         expect(mocha.options.global, 'to contain', elem);
         expect(mocha.options.global, 'to have length', 1);
       });
@@ -180,15 +169,15 @@ describe('Mocha', function() {
       it('should add contents of string array to the whitelist', function() {
         var mocha = new Mocha(opts);
         var elems = [elem, elem2];
-        mocha.globals(elems);
+        mocha.global(elems);
         expect(mocha.options.global, 'to contain', elem, elem2);
         expect(mocha.options.global, 'to have length', elems.length);
       });
 
       it('should not have duplicates', function() {
-        var mocha = new Mocha({globals: [elem, elem2]});
+        var mocha = new Mocha({global: [elem, elem2]});
         var elems = [elem, elem2, elem3];
-        mocha.globals(elems);
+        mocha.global(elems);
         expect(mocha.options.global, 'to contain', elem, elem2, elem3);
         expect(mocha.options.global, 'to have length', elems.length);
       });
