@@ -1,3 +1,18 @@
+# 6.2.2 / 2019-10-18
+
+## :bug: Fixes
+
+- #4025: Fix duplicate `EVENT_RUN_END` events upon uncaught exception (@juergba)
+- #4051: Fix "unhide" function in `html` reporter (browser) (@pec9399)
+- #4063: Fix use of [esm](https://npm.im/esm) in Node.js v8.x (@boneskull)
+- #4033: Fix output when multiple async exceptions are thrown (@juergba)
+
+## :book: Documentation
+
+- #4046: Site accessibility fixes (@Mia-jeong)
+- #4026: Update docs for custom reporters in browser (@Lindsay-Needs-Sleep)
+- #3971: Adopt new OpenJS Foundation Code of Conduct (@craigtaub)
+
 # 6.2.1 / 2019-09-29
 
 ## :bug: Fixes
