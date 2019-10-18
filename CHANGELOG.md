@@ -2,16 +2,16 @@
 
 ## :bug: Fixes
 
-- #4025: Fix duplicate `EVENT_RUN_END` events upon uncaught exception (@juergba)
-- #4051: Fix "unhide" function in `html` reporter (browser) (@pec9399)
-- #4063: Fix use of [esm](https://npm.im/esm) in Node.js v8.x (@boneskull)
-- #4033: Fix output when multiple async exceptions are thrown (@juergba)
+- [#4025](https://github.com/mochajs/mocha/issues/4025): Fix duplicate `EVENT_RUN_END` events upon uncaught exception ([**@juergba**](https://github.com/juergba))
+- [#4051](https://github.com/mochajs/mocha/issues/4051): Fix "unhide" function in `html` reporter (browser) ([**@pec9399**](https://github.com/pec9399))
+- [#4063](https://github.com/mochajs/mocha/issues/4063): Fix use of [esm](https://npm.im/esm) in Node.js v8.x ([**@boneskull**](https://github.com/boneskull))
+- [#4033](https://github.com/mochajs/mocha/issues/4033): Fix output when multiple async exceptions are thrown ([**@juergba**](https://github.com/juergba))
 
 ## :book: Documentation
 
-- #4046: Site accessibility fixes (@Mia-jeong)
-- #4026: Update docs for custom reporters in browser (@Lindsay-Needs-Sleep)
-- #3971: Adopt new OpenJS Foundation Code of Conduct (@craigtaub)
+- [#4046](https://github.com/mochajs/mocha/issues/4046): Site accessibility fixes ([**@Mia-jeong**](https://github.com/Mia-jeong))
+- [#4026](https://github.com/mochajs/mocha/issues/4026): Update docs for custom reporters in browser ([**@Lindsay-Needs-Sleep**](https://github.com/Lindsay-Needs-Sleep))
+- [#3971](https://github.com/mochajs/mocha/issues/3971): Adopt new OpenJS Foundation Code of Conduct ([**@craigtaub**](https://github.com/craigtaub))
 
 # 6.2.1 / 2019-09-29
 

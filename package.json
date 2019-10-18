@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -147,6 +147,7 @@
     "Enric Pallerols <enric@pallerols.cat>",
     "Erik Eng <mail@ptz0n.se>",
     "Eugene Tiutiunnyk <eugene.tiutiunnyk@lookout.com>",
+    "EunChan Park <pec9399@naver.com>",
     "Fabio M. Costa <fabiomcosta@gmail.com>",
     "Fábio Santos <fabiosantosart@gmail.com>",
     "Fagner Brack <github3@fagnermartins.com>",
@@ -286,6 +287,7 @@
     "László Bácsi <lackac@lackac.hu>",
     "Laurence Rowe <lrowe@netflix.com>",
     "Liam Newman <bitwiseman@gmail.com>",
+    "Lindsay-Needs-Sleep <51773923+Lindsay-Needs-Sleep@users.noreply.github.com>",
     "Linus Unnebäck <linus@folkdatorn.se>",
     "lodr <salva@unoyunodiez.com>",
     "Long Ho <longlho@users.noreply.github.com>",
@@ -312,6 +314,7 @@
     "Max Goodman <c@chromakode.com>",
     "Maximilian Antoni <mail@maxantoni.de>",
     "Merrick Christensen <merrick.christensen@gmail.com>",
+    "Mia <miajeongdev@gmail.com>",
     "Michael Demmer <demmer@jut.io>",
     "Michael Jackson <mjijackson@gmail.com>",
     "Michael Olson <mwolson@member.fsf.org>",
