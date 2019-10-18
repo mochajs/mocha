@@ -835,6 +835,8 @@ Rules & Behavior
   --allow-uncaught           Allow uncaught errors to propagate        [boolean]
   --async-only, -A           Require all tests to use a callback (async) or
                              return a Promise                          [boolean]
+  --overspec                 Allow overspec'd tests. Disable promise checking on
+                             callback style tests.                     [boolean]
   --bail, -b                 Abort ("bail") after first test failure   [boolean]
   --check-leaks              Check for global variable leaks           [boolean]
   --delay                    Delay initial execution of root suite     [boolean]
@@ -916,6 +918,10 @@ This flag is useful when debugging particularly difficult-to-track exceptions.
 ### `--async-only, -A`
 
 Enforce a rule that tests must be written in "async" style, meaning each test provides a `done` callback or returns a `Promise`. Non-compliant tests will be marked as failures.
+
+### `--overspec`
+
+Allow overspec'd tests. Disable checking for promises returned from tests that have an arity of one (that take a `done` callback function). Allows use of `done` callback in tests that are defined as `async function`. Useful for mixing async await and callback style tests.
 
 ### `--bail, -b`
 
