@@ -1,7 +1,6 @@
 'use strict';
 
 var run = require('./helpers').runMocha;
-var runJSON = require('./helpers').runMochaJSON;
 var args = [];
 
 describe('suite w/no callback', function() {
@@ -25,10 +24,7 @@ describe('suite w/no callback', function() {
 
 describe('skipped suite w/no callback', function() {
   it('should not throw an error when a callback for skipped suite is not supplied', function(done) {
-    runJSON('suite/suite-skipped-no-callback.fixture.js', args, function(
-      err,
-      res
-    ) {
+    run('suite/suite-skipped-no-callback.fixture.js', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -42,10 +38,7 @@ describe('skipped suite w/no callback', function() {
 
 describe('skipped suite w/ callback', function() {
   it('should not throw an error when a callback for skipped suite is supplied', function(done) {
-    runJSON('suite/suite-skipped-callback.fixture.js', args, function(
-      err,
-      res
-    ) {
+    run('suite/suite-skipped-callback.fixture.js', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -59,7 +52,7 @@ describe('skipped suite w/ callback', function() {
 
 describe('suite returning a value', function() {
   it('should not give a deprecation warning for suite callback returning a value', function(done) {
-    runJSON(
+    run(
       'suite/suite-returning-value.fixture.js',
       args,
       function(err, res) {
