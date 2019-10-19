@@ -263,6 +263,10 @@ module.exports = {
       description:
         'Output HTML coverage report to coverage/index.html (run tests with COVERAGE=1 first)'
     },
+    'unit-coverage-report': {
+      script: 'nyc nps test.node.unit && nyc report --reporter=text',
+      description: 'Output unit test coverage report to text'
+    },
     docs: {
       default: {
         script:
