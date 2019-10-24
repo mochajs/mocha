@@ -1,4 +1,3 @@
-
 describe('Array', function(){
   describe('.push()', function(){
     it('should append a value', function(){
@@ -71,4 +70,3 @@ describe('Array', function(){
     })
   })
 })
-

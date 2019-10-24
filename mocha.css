@@ -257,6 +257,18 @@ body {
   letter-spacing: 1px;
 }
 
+#progress-bar{
+  border: solid  #00e600;
+  padding: 25px 25px 25px 25px;
+  background-color: #00e600;
+}
+
+#progress-bar.error {
+  border: solid  #c00;
+  padding: 25px 25px 25px 25px;
+  background-color: #c00;
+}
+
 #mocha-stats {
   position: fixed;
   top: 15px;
@@ -281,10 +293,12 @@ body {
   -moz-box-shadow: none;
   box-shadow: none;
   background-color: initial;
+  color: gray;
 }
 
 #mocha-stats em {
   color: black;
+
 }
 
 #mocha-stats a {
