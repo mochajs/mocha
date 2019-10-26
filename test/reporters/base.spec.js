@@ -376,7 +376,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it("should use 'inspect' if 'message' is not set", function() {
+  it("should use 'inspect()' first when generating an error message", function() {
     var err = {
       showDiff: false,
       inspect: function() {
@@ -391,7 +391,20 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     an error happened');
   });
 
-  it("should set an empty message if neither 'message' nor 'inspect' is set", function() {
+  it("should use message if 'inspect()' is not set", function() {
+    var err = {
+      showDiff: false,
+      message: 'foo\nbar'
+    };
+    var test = makeTest(err);
+
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(errOut, 'to be', '1) test title:\n     foo\nbar');
+  });
+
+  it("should set an empty message if neither 'inspect()', nor message is set", function() {
     var err = {
       showDiff: false
     };
