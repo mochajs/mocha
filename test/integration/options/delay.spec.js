@@ -25,7 +25,10 @@ describe('--delay', function() {
 
   it('should execute exclusive tests only', function(done) {
     var fixture = path.join('options', 'delay-only');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args.concat(['--no-forbid-only']), function(
+      err,
+      res
+    ) {
       if (err) {
         return done(err);
       }
