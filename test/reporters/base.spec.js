@@ -1,5 +1,6 @@
 'use strict';
 
+var util = require('util');
 var assert = require('assert');
 var chai = require('chai');
 var sinon = require('sinon');
@@ -376,7 +377,22 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it("should use 'inspect()' first when generating an error message", function() {
+  it("should use 'util.inspect.custom()' first when generating an error message", function() {
+    var err = {
+      showDiff: false
+    };
+    err[util.inspect.custom] = function() {
+      return 'Error: catch me if you can';
+    };
+    var test = makeTest(err);
+
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(errOut, 'to be', '1) test title:\n     Error: catch me if you can');
+  });
+
+  it("should use 'inspect()' if 'util.inspect.custom()' is not set", function() {
     var err = {
       showDiff: false,
       inspect: function() {
@@ -391,7 +407,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     an error happened');
   });
 
-  it("should use message if 'inspect()' is not set", function() {
+  it("should use message if neither 'util.inspect.custom()', nor 'inspect()' is set", function() {
     var err = {
       showDiff: false,
       message: 'foo\nbar'
@@ -404,7 +420,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     foo\nbar');
   });
 
-  it("should set an empty message if neither 'inspect()', nor message is set", function() {
+  it("should set an empty message if neither 'util.inspect.custom()', nor 'inspect()', nor message is set", function() {
     var err = {
       showDiff: false
     };
