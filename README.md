@@ -56,7 +56,7 @@
 
 ## Sponsors
 
-Does your company use Mocha?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone. Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org) - who doesn't want a little extra exposure? [Here's the info](https://opencollective.com/mochajs#sponsor).
+Does your company use Mocha?  Ask your manager or marketing team if your company would be interested in supporting our project.  Support will allow the maintainers to dedicate more time for maintenance and new features for everyone. Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org) - who doesn't want a little extra exposure?  [Here's the info](https://opencollective.com/mochajs#sponsor).
 
 [![MochaJS Sponsor](https://opencollective.com/mochajs/sponsor/0/avatar)](https://opencollective.com/mochajs/sponsor/0/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/sponsor/1/avatar)](https://opencollective.com/mochajs/sponsor/1/website)
