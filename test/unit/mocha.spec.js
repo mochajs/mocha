@@ -19,8 +19,7 @@ describe('Mocha', function() {
   describe('constructor', function() {
     beforeEach(function() {
       sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
-      sandbox.stub(Mocha.prototype, 'globals').returnsThis();
-      sandbox.stub(Mocha.prototype, 'useInlineDiffs').returnsThis();
+      sandbox.stub(Mocha.prototype, 'global').returnsThis();
     });
 
     describe('when "options.timeout" is `undefined`', function() {
@@ -42,21 +41,11 @@ describe('Mocha', function() {
     });
 
     describe('when "options.global" is provided', function() {
-      it('should pass "options.global" to #globals()', function() {
+      it('should pass "options.global" to #global()', function() {
         // eslint-disable-next-line no-new
         new Mocha({global: ['singular']});
-        expect(Mocha.prototype.globals, 'to have a call satisfying', [
+        expect(Mocha.prototype.global, 'to have a call satisfying', [
           ['singular']
-        ]).and('was called once');
-      });
-    });
-
-    describe('when "options.inlineDiffs" is `undefined`', function() {
-      it('should set inlineDiffs to `true`', function() {
-        // eslint-disable-next-line no-new
-        new Mocha({inlineDiffs: true});
-        expect(Mocha.prototype.useInlineDiffs, 'to have a call satisfying', [
-          true
         ]).and('was called once');
       });
     });
@@ -69,9 +58,34 @@ describe('Mocha', function() {
       expect(mocha.options, 'to have property', 'allowUncaught', true);
     });
 
+    it('should set the allowUncaught option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.allowUncaught(false);
+      expect(mocha.options, 'to have property', 'allowUncaught', false);
+    });
+
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.allowUncaught(), 'to be', mocha);
+    });
+  });
+
+  describe('#asyncOnly()', function() {
+    it('should set the asyncOnly option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.asyncOnly();
+      expect(mocha.options, 'to have property', 'asyncOnly', true);
+    });
+
+    it('should set the asyncOnly option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.asyncOnly(false);
+      expect(mocha.options, 'to have property', 'asyncOnly', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.asyncOnly(), 'to be', mocha);
     });
   });
 
@@ -80,6 +94,12 @@ describe('Mocha', function() {
       var mocha = new Mocha(opts);
       mocha.bail();
       expect(mocha.suite._bail, 'to be', true);
+    });
+
+    it('should set the suite._bail to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.bail(false);
+      expect(mocha.suite._bail, 'to be', false);
     });
 
     it('should be chainable', function() {
@@ -95,9 +115,34 @@ describe('Mocha', function() {
       expect(mocha.options, 'to have property', 'checkLeaks', true);
     });
 
+    it('should set the checkLeaks option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.checkLeaks(false);
+      expect(mocha.options, 'to have property', 'checkLeaks', false);
+    });
+
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.checkLeaks(), 'to be', mocha);
+    });
+  });
+
+  describe('#color()', function() {
+    it('should set the color option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.color();
+      expect(mocha.options, 'to have property', 'color', true);
+    });
+
+    it('should set the color option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.color(false);
+      expect(mocha.options, 'to have property', 'color', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.color(), 'to be', mocha);
     });
   });
 
@@ -127,11 +172,74 @@ describe('Mocha', function() {
     });
   });
 
+  describe('#diff()', function() {
+    it('should set the diff option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.diff();
+      expect(mocha.options, 'to have property', 'diff', true);
+    });
+
+    it('should set the diff option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.diff(false);
+      expect(mocha.options, 'to have property', 'diff', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.diff(), 'to be', mocha);
+    });
+  });
+
+  describe('#forbidOnly()', function() {
+    it('should set the forbidOnly option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidOnly();
+      expect(mocha.options, 'to have property', 'forbidOnly', true);
+    });
+
+    it('should set the forbidOnly option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidOnly(false);
+      expect(mocha.options, 'to have property', 'forbidOnly', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.forbidOnly(), 'to be', mocha);
+    });
+  });
+
+  describe('#forbidPending()', function() {
+    it('should set the forbidPending option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidPending();
+      expect(mocha.options, 'to have property', 'forbidPending', true);
+    });
+
+    it('should set the forbidPending option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidPending(false);
+      expect(mocha.options, 'to have property', 'forbidPending', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.forbidPending(), 'to be', mocha);
+    });
+  });
+
   describe('#fullTrace()', function() {
     it('should set the fullTrace option to true', function() {
       var mocha = new Mocha(opts);
       mocha.fullTrace();
       expect(mocha.options, 'to have property', 'fullTrace', true);
+    });
+
+    it('should set the fullTrace option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.fullTrace(false);
+      expect(mocha.options, 'to have property', 'fullTrace', false);
     });
 
     it('should be chainable', function() {
@@ -140,7 +248,7 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#globals()', function() {
+  describe('#global()', function() {
     it('should be an empty array initially', function() {
       var mocha = new Mocha();
       expect(mocha.options.global, 'to be empty');
@@ -148,19 +256,19 @@ describe('Mocha', function() {
 
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
-      expect(mocha.globals(), 'to be', mocha);
+      expect(mocha.global(), 'to be', mocha);
     });
 
     describe('when argument is invalid', function() {
       it('should not modify the whitelist when given empty string', function() {
         var mocha = new Mocha(opts);
-        mocha.globals('');
+        mocha.global('');
         expect(mocha.options.global, 'to be empty');
       });
 
       it('should not modify the whitelist when given empty array', function() {
         var mocha = new Mocha(opts);
-        mocha.globals([]);
+        mocha.global([]);
         expect(mocha.options.global, 'to be empty');
       });
     });
@@ -172,7 +280,7 @@ describe('Mocha', function() {
 
       it('should add string to the whitelist', function() {
         var mocha = new Mocha(opts);
-        mocha.globals(elem);
+        mocha.global(elem);
         expect(mocha.options.global, 'to contain', elem);
         expect(mocha.options.global, 'to have length', 1);
       });
@@ -180,15 +288,15 @@ describe('Mocha', function() {
       it('should add contents of string array to the whitelist', function() {
         var mocha = new Mocha(opts);
         var elems = [elem, elem2];
-        mocha.globals(elems);
+        mocha.global(elems);
         expect(mocha.options.global, 'to contain', elem, elem2);
         expect(mocha.options.global, 'to have length', elems.length);
       });
 
       it('should not have duplicates', function() {
-        var mocha = new Mocha({globals: [elem, elem2]});
+        var mocha = new Mocha({global: [elem, elem2]});
         var elems = [elem, elem2, elem3];
-        mocha.globals(elems);
+        mocha.global(elems);
         expect(mocha.options.global, 'to contain', elem, elem2, elem3);
         expect(mocha.options.global, 'to have length', elems.length);
       });
@@ -271,6 +379,25 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.ignoreLeaks(), 'to be', mocha);
+    });
+  });
+
+  describe('#inlineDiffs()', function() {
+    it('should set the inlineDiffs option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.inlineDiffs();
+      expect(mocha.options, 'to have property', 'inlineDiffs', true);
+    });
+
+    it('should set the inlineDiffs option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.inlineDiffs(false);
+      expect(mocha.options, 'to have property', 'inlineDiffs', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.inlineDiffs(), 'to be', mocha);
     });
   });
 
