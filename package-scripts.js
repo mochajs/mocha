@@ -77,6 +77,7 @@ module.exports = {
             'test.node.exports',
             'test.node.unit',
             'test.node.integration',
+            'test.node.migrateOpts',
             'test.node.jsapi',
             'test.node.requires',
             'test.node.reporters',
@@ -126,6 +127,11 @@ module.exports = {
             '--opts test/opts/mocha.opts test/opts/opts.spec.js --no-config'
           ),
           description: 'Run tests concerning mocha.opts',
+          hiddenFromHelp: true
+        },
+        migrateOpts: {
+          script: test('migrateOpts', 'test/migrate-opts'),
+          description: 'Run tests concerning migrate mocha.opts script',
           hiddenFromHelp: true
         },
         jsapi: {
