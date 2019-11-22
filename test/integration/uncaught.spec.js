@@ -63,4 +63,27 @@ describe('uncaught exceptions', function() {
       done();
     });
   });
+
+  it('handles uncaught exceptions within pending tests', function(done) {
+    run('uncaught-pending.fixture.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, 'to have failed')
+        .and('to have passed test count', 3)
+        .and('to have pending test count', 1)
+        .and('to have failed test count', 1)
+        .and(
+          'to have passed test',
+          'test1',
+          'test3 - should run',
+          'test4 - should run'
+        )
+        .and('to have pending test order', 'test2')
+        .and('to have failed test', 'test2');
+
+      done();
+    });
+  });
 });
