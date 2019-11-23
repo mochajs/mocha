@@ -23,6 +23,7 @@ describe('Runner', function() {
   beforeEach(function() {
     suite = new Suite('Suite', 'root');
     runner = new Runner(suite);
+    runner.checkLeaks = true;
     sandbox = sinon.createSandbox();
   });
 
@@ -810,9 +811,9 @@ describe('Runner', function() {
               sandbox.stub(runnable, 'isPending').returns(true);
             });
 
-            it('should not attempt to fail', function() {
+            it('should attempt to fail', function() {
               runner.uncaught(err);
-              expect(runner.fail, 'was not called');
+              expect(runner.fail, 'was called once');
             });
           });
 
@@ -830,15 +831,16 @@ describe('Runner', function() {
               ]).and('was called once');
             });
 
-            it('should notify run has ended', function() {
+            it('should abort the runner without emitting end event', function() {
               expect(
                 function() {
                   runner.uncaught(err);
                 },
-                'to emit from',
+                'not to emit from',
                 runner,
                 'end'
               );
+              expect(runner._abort, 'to be', true);
             });
           });
 

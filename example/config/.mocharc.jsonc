@@ -5,10 +5,13 @@
 {
   "diff": true,
   "extension": ["js"],
-  "opts": "./test/mocha.opts",
+  "opts": false,
   "package": /* 📦 */ "./package.json",
   "reporter": /* 📋 */ "spec",
   "slow": 75,
   "timeout": 2000,
-  "ui": "bdd"
+  "ui": "bdd",
+  // Camel-casing options are also accepted
+  "watchFiles": ["lib/**/*.js", "test/**/*.js"],
+  "watchIgnore": ["lib/vendor"]
 }

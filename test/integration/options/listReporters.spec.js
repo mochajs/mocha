@@ -5,7 +5,7 @@ var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
 var reporters = require('../../../lib/mocha').reporters;
 
-describe('--reporters', function() {
+describe('--list-reporters', function() {
   it('should dump a list of all reporters with descriptions', function(done) {
     var expected = Object.keys(reporters)
       .filter(function(name) {
@@ -21,7 +21,7 @@ describe('--reporters', function() {
         };
       });
 
-    invokeMocha(['--reporters'], function(err, result) {
+    invokeMocha(['--list-reporters'], function(err, result) {
       if (err) {
         return done(err);
       }

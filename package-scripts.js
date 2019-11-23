@@ -23,7 +23,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' -o mocha.js`,
+      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' --ignore chokidar -o mocha.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -266,13 +266,17 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.prebuild && nps docs.api && eleventy && nps docs.postbuild',
+          'nps docs.prebuild && nps docs.api && eleventy && nps docs.linkcheck && nps docs.postbuild',
         description: 'Build documentation'
       },
       prebuild: {
         script: 'rimraf docs/_dist docs/_site && nps docs.preprocess',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
+      },
+      linkcheck: {
+        script:
+          'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html'
       },
       postbuild: {
         script:

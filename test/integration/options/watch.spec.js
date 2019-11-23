@@ -31,7 +31,95 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file matching extension is touched', function() {
+    it('reruns test when file matching --watch-files changes', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, 'dir/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [testFile, '--watch-files', 'dir/*.xyz'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results.length, 'to equal', 2);
+      });
+    });
+
+    it('reruns test when file matching --watch-files is added', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, 'lib/file.xyz');
+      return runMochaWatch(
+        [testFile, '--watch-files', '**/*.xyz'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file matching --watch-files is removed', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, 'lib/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [testFile, '--watch-files', 'lib/**/*.xyz'],
+        this.tempDir,
+        () => {
+          fs.removeSync(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('does not rerun test when file not matching --watch-files is changed', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, 'dir/file.js');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [testFile, '--watch-files', 'dir/*.xyz'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results.length, 'to equal', 1);
+      });
+    });
+
+    it('picks up new test files when they are added', function() {
+      const testFile = path.join(this.tempDir, 'test/a.js');
+      copyFixture('__default__', testFile);
+
+      return runMochaWatch(
+        ['test/**/*.js', '--watch-files', 'test/**/*.js'],
+        this.tempDir,
+        () => {
+          const addedTestFile = path.join(this.tempDir, 'test/b.js');
+          copyFixture('passing', addedTestFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].passes, 'to have length', 1);
+        expect(results[1].passes, 'to have length', 3);
+      });
+    });
+
+    it('reruns test when file matching --extension is changed', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('__default__', testFile);
 
@@ -49,13 +137,31 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when "rs\\n" typed', function() {
+    it('reruns when "rs\\n" typed', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('__default__', testFile);
 
       return runMochaWatch([testFile], this.tempDir, mochaProcess => {
         mochaProcess.stdin.write('rs\n');
       }).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file starting with . and matching --extension is changed', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, '.file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [testFile, '--extension', 'xyz,js'],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
         expect(results, 'to have length', 2);
       });
     });
@@ -86,17 +192,45 @@ describe('--watch', function() {
       });
     });
 
+    it('ignores files matching --watch-ignore', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      const watchedFile = path.join(this.tempDir, 'dir/file-to-ignore.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatch(
+        [
+          testFile,
+          '--watch-files',
+          'dir/*.xyz',
+          '--watch-ignore',
+          'dir/*ignore*'
+        ],
+        this.tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results.length, 'to equal', 1);
+      });
+    });
+
     it('reloads test files when they change', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('options/watch/test-file-change', testFile);
 
-      return runMochaWatch([testFile], this.tempDir, () => {
-        replaceFileContents(
-          testFile,
-          'testShouldFail = true',
-          'testShouldFail = false'
-        );
-      }).then(results => {
+      return runMochaWatch(
+        [testFile, '--watch-files', '**/*.js'],
+        this.tempDir,
+        () => {
+          replaceFileContents(
+            testFile,
+            'testShouldFail = true',
+            'testShouldFail = false'
+          );
+        }
+      ).then(results => {
         expect(results, 'to have length', 2);
         expect(results[0].passes, 'to have length', 0);
         expect(results[0].failures, 'to have length', 1);
@@ -112,13 +246,17 @@ describe('--watch', function() {
       const dependency = path.join(this.tempDir, 'lib', 'dependency.js');
       copyFixture('options/watch/dependency', dependency);
 
-      return runMochaWatch([testFile], this.tempDir, () => {
-        replaceFileContents(
-          dependency,
-          'module.exports.testShouldFail = false',
-          'module.exports.testShouldFail = true'
-        );
-      }).then(results => {
+      return runMochaWatch(
+        [testFile, '--watch-files', 'lib/**/*.js'],
+        this.tempDir,
+        () => {
+          replaceFileContents(
+            dependency,
+            'module.exports.testShouldFail = false',
+            'module.exports.testShouldFail = true'
+          );
+        }
+      ).then(results => {
         expect(results, 'to have length', 2);
         expect(results[0].passes, 'to have length', 1);
         expect(results[0].failures, 'to have length', 0);

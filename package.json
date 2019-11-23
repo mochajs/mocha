@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "6.2.0",
+  "version": "6.2.2",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -9,6 +9,10 @@
     "tdd",
     "tap"
   ],
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/mochajs"
+  },
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "contributors": [
     "38elements <mh19820223@gmail.com>",
@@ -130,6 +134,7 @@
     "Di Wu <dwu@palantir.com>",
     "Dina Berry <dfberry@users.noreply.github.com>",
     "Diogo Monteiro <diogo.gmt@gmail.com>",
+    "Dmitrii Sorin <info@staypositive.ru>",
     "Dmitriy Simushev <simushevds@gmail.com>",
     "Dmitry Shirokov <deadrunk@gmail.com>",
     "Dmitry Sorin <info@staypositive.ru>",
@@ -146,6 +151,7 @@
     "Enric Pallerols <enric@pallerols.cat>",
     "Erik Eng <mail@ptz0n.se>",
     "Eugene Tiutiunnyk <eugene.tiutiunnyk@lookout.com>",
+    "EunChan Park <pec9399@naver.com>",
     "Fabio M. Costa <fabiomcosta@gmail.com>",
     "Fábio Santos <fabiosantosart@gmail.com>",
     "Fagner Brack <github3@fagnermartins.com>",
@@ -285,6 +291,7 @@
     "László Bácsi <lackac@lackac.hu>",
     "Laurence Rowe <lrowe@netflix.com>",
     "Liam Newman <bitwiseman@gmail.com>",
+    "Lindsay-Needs-Sleep <51773923+Lindsay-Needs-Sleep@users.noreply.github.com>",
     "Linus Unnebäck <linus@folkdatorn.se>",
     "lodr <salva@unoyunodiez.com>",
     "Long Ho <longlho@users.noreply.github.com>",
@@ -294,6 +301,7 @@
     "Marc Kuo <kuomarc2@gmail.com>",
     "Marc Udoff <mlucool@gmail.com>",
     "Marcello Bastea-Forte <marcello@cellosoft.com>",
+    "Mario Díaz Ceñera <46492068+MarioDiaz98@users.noreply.github.com>",
     "Mark Banner <standard8@mozilla.com>",
     "Mark Owsiak <mark.owsiak@gmail.com>",
     "Markus Tacker <m@coderbyheart.com>",
@@ -310,6 +318,7 @@
     "Max Goodman <c@chromakode.com>",
     "Maximilian Antoni <mail@maxantoni.de>",
     "Merrick Christensen <merrick.christensen@gmail.com>",
+    "Mia <miajeongdev@gmail.com>",
     "Michael Demmer <demmer@jut.io>",
     "Michael Jackson <mjijackson@gmail.com>",
     "Michael Olson <mwolson@member.fsf.org>",
@@ -338,6 +347,7 @@
     "Noshir Patel <nosh@blackpiano.com>",
     "not-an-aardvark <not-an-aardvark@users.noreply.github.com>",
     "OlegTsyba <oleg.tsyba.ua@gmail.com>",
+    "Oliver Salzburg <oliver.salzburg@gmail.com>",
     "olsonpm <olsonpm@users.noreply.github.com>",
     "omardelarosa <thedelarosa@gmail.com>",
     "Oscar Godson <oscargodson@outlook.com>",
@@ -503,7 +513,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 8.0.0"
   },
   "scripts": {
     "prepublishOnly": "nps test clean build",
@@ -514,6 +524,7 @@
   "dependencies": {
     "ansi-colors": "3.2.3",
     "browser-stdout": "1.3.1",
+    "chokidar": "3.0.2",
     "debug": "3.2.6",
     "diff": "3.5.0",
     "escape-string-regexp": "1.0.5",
@@ -532,14 +543,15 @@
     "supports-color": "6.0.0",
     "which": "1.3.1",
     "wide-align": "1.1.3",
-    "yargs": "13.2.2",
-    "yargs-parser": "13.0.0",
-    "yargs-unparser": "1.5.0"
+    "yargs": "13.3.0",
+    "yargs-parser": "13.1.1",
+    "yargs-unparser": "1.6.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.8.3",
     "@mocha/contributors": "^1.0.4",
-    "@mocha/docdash": "^2.1.1",
+    "@mocha/docdash": "^2.1.2",
+    "acorn": "^7.0.0",
     "assetgraph-builder": "^6.10.1",
     "autoprefixer": "^9.6.0",
     "browserify": "^16.2.3",
@@ -560,7 +572,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "fs-extra": "^8.0.1",
     "husky": "^1.3.1",
-    "jsdoc": "^3.6.2",
+    "hyperlink": "^4.3.1",
+    "jsdoc": "^3.6.3",
     "karma": "^4.1.0",
     "karma-browserify": "^6.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -596,7 +609,7 @@
     "watchify": "^3.11.1"
   },
   "files": [
-    "bin/{*mocha,options.js}",
+    "bin/*mocha",
     "assets/growl/*.png",
     "lib/**/*.{js,html,json}",
     "index.js",
@@ -616,7 +629,8 @@
     "fs": false,
     "glob": false,
     "path": false,
-    "supports-color": false
+    "supports-color": false,
+    "chokidar": false
   },
   "prettier": {
     "singleQuote": true,

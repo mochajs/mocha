@@ -1,3 +1,35 @@
+# 6.2.2 / 2019-10-18
+
+## :bug: Fixes
+
+- [#4025](https://github.com/mochajs/mocha/issues/4025): Fix duplicate `EVENT_RUN_END` events upon uncaught exception ([**@juergba**](https://github.com/juergba))
+- [#4051](https://github.com/mochajs/mocha/issues/4051): Fix "unhide" function in `html` reporter (browser) ([**@pec9399**](https://github.com/pec9399))
+- [#4063](https://github.com/mochajs/mocha/issues/4063): Fix use of [esm](https://npm.im/esm) in Node.js v8.x ([**@boneskull**](https://github.com/boneskull))
+- [#4033](https://github.com/mochajs/mocha/issues/4033): Fix output when multiple async exceptions are thrown ([**@juergba**](https://github.com/juergba))
+
+## :book: Documentation
+
+- [#4046](https://github.com/mochajs/mocha/issues/4046): Site accessibility fixes ([**@Mia-jeong**](https://github.com/Mia-jeong))
+- [#4026](https://github.com/mochajs/mocha/issues/4026): Update docs for custom reporters in browser ([**@Lindsay-Needs-Sleep**](https://github.com/Lindsay-Needs-Sleep))
+- [#3971](https://github.com/mochajs/mocha/issues/3971): Adopt new OpenJS Foundation Code of Conduct ([**@craigtaub**](https://github.com/craigtaub))
+
+# 6.2.1 / 2019-09-29
+
+## :bug: Fixes
+
+- [#3955](https://github.com/mochajs/mocha/issues/3955): tty.getWindowSize is not a function inside a "worker_threads" worker ([**@1999**](https://github.com/1999))
+- [#3970](https://github.com/mochajs/mocha/issues/3970): remove extraGlobals() ([**@juergba**](https://github.com/juergba))
+- [#3984](https://github.com/mochajs/mocha/issues/3984): Update yargs-unparser to v1.6.0 ([**@juergba**](https://github.com/juergba))
+- [#3983](https://github.com/mochajs/mocha/issues/3983): Package 'esm': spawn child-process for correct loading ([**@juergba**](https://github.com/juergba))
+- [#3986](https://github.com/mochajs/mocha/issues/3986): Update yargs to v13.3.0 and yargs-parser to v13.1.1 ([**@juergba**](https://github.com/juergba))
+
+## :book: Documentation
+
+- [#3886](https://github.com/mochajs/mocha/issues/3886): fix styles on mochajs.org ([**@outsideris**](https://github.com/outsideris))
+- [#3966](https://github.com/mochajs/mocha/issues/3966): Remove jsdoc index.html placeholder from eleventy file structure and fix broken link in jsdoc tutorial ([**@Munter**](https://github.com/Munter))
+- [#3765](https://github.com/mochajs/mocha/issues/3765): Add Matomo to website ([**@MarioDiaz98**](https://github.com/MarioDiaz98))
+- [#3947](https://github.com/mochajs/mocha/issues/3947): Clarify effect of .skip() ([**@oliversalzburg**](https://github.com/oliversalzburg))
+
 # 6.2.0 / 2019-07-18
 
 ## :tada: Enhancements
