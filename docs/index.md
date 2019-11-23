@@ -1137,6 +1137,8 @@ Rerun tests on file changes.
 
 The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
 
+Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut as `nodemon`).
+
 ### `--watch-files <file|directory|glob>`
 
 > _New in v7.0.0_
@@ -1578,17 +1580,17 @@ mocha.setup({
 
 ### Browser-specific Option(s)
 
-Browser Mocha supports many, but not all [cli options](#command-line-usage).  
+Browser Mocha supports many, but not all [cli options](#command-line-usage).
 To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
 
 #### Options that differ slightly from [cli options](#command-line-usage):
 
-`reporter` _{string|constructor}_  
+`reporter` _{string|constructor}_
 You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 #### Options that _only_ function in browser context:
 
-`noHighlighting` _{boolean}_  
+`noHighlighting` _{boolean}_
 If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting
