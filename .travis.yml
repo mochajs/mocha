@@ -11,7 +11,7 @@ stages:
 
 # defaults
 language: node_js
-node_js: '12'
+node_js: '13'
 addons:
   apt:
     packages:
@@ -41,6 +41,9 @@ jobs:
 
     - &node
       script: npm start test.node
+      node_js: '12'
+
+    - <<: *node
       node_js: '10'
 
     - <<: *node
@@ -73,6 +76,9 @@ jobs:
         directories:
           - ~/.npm
           - node_modules # npm install, unlike npm ci, doesn't wipe node_modules
+
+    - <<: *smoke
+      node_js: '12'
 
     - <<: *smoke
       node_js: '10'
