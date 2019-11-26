@@ -6,17 +6,17 @@
  */
 
 it('fails exactly once when a global error is thrown first', function (done) {
-  setTimeout(function () {
+  process.nextTick(function () {
     throw new Error('global error');
-  }, 0);
+  });
 });
 
 it('fails exactly once when a global error is thrown second', function (done) {
-  setTimeout(function () {
+  process.nextTick(function () {
     done(new Error('test error'));
-  }, 0);
+  });
 
-  setTimeout(function () {
+  process.nextTick(function () {
     throw new Error('global error');
-  }, 0);
+  });
 });
