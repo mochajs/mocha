@@ -206,10 +206,12 @@ describe('lib/utils', function() {
         expect(stringify(1e9), 'to be', '1000000000');
       });
 
-      it('bigints', function() {
-        expect(stringify(BigInt(1)), 'to be', '1n');
-        expect(stringify(BigInt(2)), 'to be', '2n');
-      });
+      if (typeof BigInt === 'function') {
+        it('should work with bigints when possible', function() {
+          expect(stringify(BigInt(1)), 'to be', '1n');
+          expect(stringify(BigInt(2)), 'to be', '2n');
+        });
+      }
     });
 
     describe('canonicalize example', function() {
