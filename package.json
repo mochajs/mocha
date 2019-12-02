@@ -626,11 +626,12 @@
     "./index.js": "./browser-entry.js",
     "./lib/growl.js": "./lib/browser/growl.js",
     "tty": "./lib/browser/tty.js",
+    "./lib/cli/*.js": false,
+    "chokidar": false,
     "fs": false,
     "glob": false,
     "path": false,
-    "supports-color": false,
-    "chokidar": false
+    "supports-color": false
   },
   "prettier": {
     "singleQuote": true,
