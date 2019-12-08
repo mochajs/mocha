@@ -191,6 +191,25 @@ describe('Mocha', function() {
     });
   });
 
+  describe('#forbidEmptySuite()', function() {
+    it('should set the forbidEmptySuite option to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidEmptySuite();
+      expect(mocha.options, 'to have property', 'forbidEmptySuite', true);
+    });
+
+    it('should set the forbidEmptySuite option to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.forbidEmptySuite(false);
+      expect(mocha.options, 'to have property', 'forbidEmptySuite', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.forbidEmptySuite(), 'to be', mocha);
+    });
+  });
+
   describe('#forbidOnly()', function() {
     it('should set the forbidOnly option to true', function() {
       var mocha = new Mocha(opts);

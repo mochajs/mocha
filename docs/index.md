@@ -840,6 +840,7 @@ Rules & Behavior
   --check-leaks              Check for global variable leaks           [boolean]
   --delay                    Delay initial execution of root suite     [boolean]
   --exit                     Force Mocha to quit after tests complete  [boolean]
+  --forbid-empty-suite       Fail if a test suite contains no tests    [boolean]
   --forbid-only              Fail if exclusive test(s) encountered     [boolean]
   --forbid-pending           Fail if pending test(s) encountered       [boolean]
   --global, --globals        List of allowed global variables            [array]
@@ -953,6 +954,12 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 - Use the new [`async_hooks`][node-async-hooks] API ([example][gist-async-hooks])
 - Try something like [wtfnode][npm-wtfnode]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
+
+### `--forbid-empty-suite`
+
+Enforce a rule that test suites must define at least one test, either directly or in an inner suite.
+
+`--forbid-empty-suite` causes Mocha to fail when an empty suite is encountered.
 
 ### `--forbid-only`
 
