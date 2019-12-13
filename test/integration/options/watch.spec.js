@@ -137,6 +137,17 @@ describe('--watch', function() {
       });
     });
 
+    it('reruns when "rs\\n" typed', function() {
+      const testFile = path.join(this.tempDir, 'test.js');
+      copyFixture('__default__', testFile);
+
+      return runMochaWatch([testFile], this.tempDir, mochaProcess => {
+        mochaProcess.stdin.write('rs\n');
+      }).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
     it('reruns test when file starting with . and matching --extension is changed', function() {
       const testFile = path.join(this.tempDir, 'test.js');
       copyFixture('__default__', testFile);
@@ -282,11 +293,11 @@ describe('--watch', function() {
 function runMochaWatch(args, cwd, change) {
   const [mochaProcess, resultPromise] = helpers.invokeMochaAsync(
     [...args, '--watch', '--reporter', 'json'],
-    {cwd}
+    {cwd, stdio: 'pipe'}
   );
 
   return sleep(1000)
-    .then(() => change())
+    .then(() => change(mochaProcess))
     .then(() => sleep(1000))
     .then(() => {
       mochaProcess.kill('SIGINT');

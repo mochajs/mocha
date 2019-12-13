@@ -1137,6 +1137,8 @@ Rerun tests on file changes.
 
 The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
 
+Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut as `nodemon`).
+
 ### `--watch-files <file|directory|glob>`
 
 > _New in v7.0.0_
