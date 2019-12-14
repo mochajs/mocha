@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var chai = require('chai');
+var util = require('util');
 var sinon = require('sinon');
 var helpers = require('./helpers');
 var reporters = require('../../').reporters;
@@ -366,22 +367,38 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it("should use 'inspect' if 'message' is not set", function() {
-    var err = {
-      showDiff: false,
-      inspect: function() {
-        return 'an error happened';
-      }
+  it("should use 'util.inspect.custom' if err is including util.inspect.custom parameter", function() {
+    var err = new Error('test');
+    err.showDiff = false;
+    err[util.inspect.custom] = function() {
+      return 'Custom Formatted Error';
     };
+
     var test = makeTest(err);
 
     list([test]);
 
     var errOut = stdout.join('\n').trim();
-    expect(errOut, 'to be', '1) test title:\n     an error happened');
+    expect(errOut, 'to contain', 'Custom Formatted Error');
   });
 
-  it("should set an empty message if neither 'message' nor 'inspect' is set", function() {
+  it("should use 'inspect' if 'util.inspect.custom' is not set", function() {
+    var err = new Error('test');
+    err.showDiff = false;
+    err.inspect = function() {
+      return 'Inspect Error';
+    };
+
+    var test = makeTest(err);
+
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+
+    expect(errOut, 'to contain', 'Inspect Error');
+  });
+
+  it("should set an empty message if 'util.inspect.custom' and 'inspect' and 'message' is not set", function() {
     var err = {
       showDiff: false
     };
