@@ -1376,24 +1376,32 @@ Mocha reporters adjust to the terminal window, and always disable ANSI-escape co
 
 ### Spec
 
-This is the default reporter. The "spec" reporter outputs a hierarchical view nested just as the test cases are.
+**Enable Names:** `Spec`, `spec`
+
+The Spec reporter outputs a hierarchical view nested just as the test cases are.
 
 ![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 ![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Dot Matrix
 
-The dot matrix (or "dot") reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
+**Enable Names:** `Dot`, `dot`
+
+The Dot Matrix reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
 
 ![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Nyan
 
-The "nyan" reporter is exactly what you might expect:
+**Enable Names:** `Nyan`, `nyan`
+
+The Nyan reporter is exactly what you might expect:
 
 ![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### TAP
+
+**Enable Names:** `TAP`, `tap`
 
 The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
@@ -1401,44 +1409,58 @@ The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
 ### Landing Strip
 
-The Landing Strip (`landing`) reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
+**Enable Names:** `Landing`, `landing`
+
+The Landing Strip reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
 ![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 ![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### List
 
-The "list" reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
+**Enable Names:** `List`, `list`
+
+The List reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
 ![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Progress
 
-The "progress" reporter implements a simple progress-bar:
+**Enable Names:** `Progress`, `progress`
+
+The Progress reporter implements a simple progress-bar:
 
 ![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON
 
-The "JSON" reporter outputs a single large JSON object when the tests have completed (failures or not).
+**Enable Names:** `JSON`, `json`
+
+The JSON reporter outputs a single large JSON object when the tests have completed (failures or not).
 
 ![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON Stream
 
-The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
+**Enable Names:** `JSONStream`, `json-stream`
+
+The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
 ![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Min
 
-The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
+**Enable Names:** `Min`, `min`
+
+The Min reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
 ![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Doc
 
-The "doc" reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
+**Enable Names:** `Doc`, `doc`
+
+The Doc reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
 ![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -1485,14 +1507,18 @@ View SuperAgent's [Makefile][superagent-makefile] for reference.
 
 ### Markdown
 
-The "markdown" reporter generates a markdown TOC and body for your test suite.
+**Enable Names:** `Markdown`, `markdown`
+
+The Markdown reporter generates a markdown TOC and body for your test suite.
 This is great if you want to use the tests as documentation within a Github
 wiki page, or a markdown file in the repository that Github can render. For
 example, here is the Connect [test output][connect-test-output].
 
 ### XUnit
 
-The `xunit` reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
+**Enable Names:** `XUnit`, `xunit`
+
+The XUnit reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
 
 By default, it will output to the console. To write directly to a file, use `--reporter-options output=filename.xml`.
 
