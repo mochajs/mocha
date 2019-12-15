@@ -54,11 +54,13 @@ const trimV8Option = value =>
 Object.keys(opts).forEach(opt => {
   if (isNodeFlag(opt)) {
     nodeArgs[trimV8Option(opt)] = opts[opt];
-    disableTimeouts(opt);
   } else {
     mochaArgs[opt] = opts[opt];
   }
 });
+
+// disable 'timeout' for debugFlags
+Object.keys(nodeArgs).forEach(opt => disableTimeouts(opt));
 
 // Native debugger handling
 // see https://nodejs.org/api/debugger.html#debugger_debugger
