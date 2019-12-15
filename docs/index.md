@@ -1883,14 +1883,14 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/babel
+[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
 [example-express-test]: https://github.com/visionmedia/express/tree/master/test
 [example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
 [example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
 [example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/third-party-reporter
-[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/typescript
+[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
