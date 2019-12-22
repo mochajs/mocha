@@ -350,6 +350,42 @@ describe('XUnit reporter', function() {
           '</failure></testcase>';
         expect(expectedWrite, 'to be', expectedTag);
       });
+
+      it('should handle non-string diff values', function() {
+        var runner = new EventEmitter();
+        createStatsCollector(runner);
+        var xunit = new XUnit(runner);
+
+        var expectedTest = {
+          state: STATE_FAILED,
+          title: expectedTitle,
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
+          duration: 1000,
+          err: {
+            actual: 1,
+            expected: 2,
+            message: expectedMessage,
+            stack: expectedStack
+          }
+        };
+
+        sandbox.stub(xunit, 'write').callsFake(function(str) {
+          expectedWrite += str;
+        });
+
+        runner.emit(EVENT_TEST_FAIL, expectedTest, expectedTest.err);
+        runner.emit(EVENT_RUN_END);
+        sandbox.restore();
+
+        var expectedDiff =
+          '\n      + expected - actual\n\n      -1\n      +2\n      ';
+
+        expect(expectedWrite, 'to contain', expectedDiff);
+      });
     });
 
     describe('on test pending', function() {
