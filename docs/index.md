@@ -1917,7 +1917,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
 [example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
-[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/third-party-reporter
+[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/packages/third-party-reporter
 [example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
