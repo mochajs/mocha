@@ -1535,6 +1535,8 @@ Examples:
 
 ### HTML Reporter
 
+Alias: None
+
 **The HTML reporter is not intended for use on the command-line.**
 
 ## Running Mocha in the Browser
