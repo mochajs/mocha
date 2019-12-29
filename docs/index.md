@@ -1376,16 +1376,16 @@ Mocha reporters adjust to the terminal window, and always disable ANSI-escape co
 
 ### Spec
 
-**Enable Names:** `Spec`, `spec`
+Alias: `Spec`, `spec`
 
-The Spec reporter outputs a hierarchical view nested just as the test cases are.
+This is the default reporter. The Spec reporter outputs a hierarchical view nested just as the test cases are.
 
 ![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 ![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Dot Matrix
 
-**Enable Names:** `Dot`, `dot`
+Alias: `Dot`, `dot`
 
 The Dot Matrix reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
 
@@ -1393,7 +1393,7 @@ The Dot Matrix reporter is simply a series of characters which represent test ca
 
 ### Nyan
 
-**Enable Names:** `Nyan`, `nyan`
+Alias: `Nyan`, `nyan`
 
 The Nyan reporter is exactly what you might expect:
 
@@ -1401,7 +1401,7 @@ The Nyan reporter is exactly what you might expect:
 
 ### TAP
 
-**Enable Names:** `TAP`, `tap`
+Alias: `TAP`, `tap`
 
 The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
@@ -1409,7 +1409,7 @@ The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
 ### Landing Strip
 
-**Enable Names:** `Landing`, `landing`
+Alias: `Landing`, `landing`
 
 The Landing Strip reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
@@ -1418,7 +1418,7 @@ The Landing Strip reporter is a gimmicky test reporter simulating a plane landin
 
 ### List
 
-**Enable Names:** `List`, `list`
+Alias: `List`, `list`
 
 The List reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
@@ -1426,7 +1426,7 @@ The List reporter outputs a simple specifications list as test cases pass or fai
 
 ### Progress
 
-**Enable Names:** `Progress`, `progress`
+Alias: `Progress`, `progress`
 
 The Progress reporter implements a simple progress-bar:
 
@@ -1434,7 +1434,7 @@ The Progress reporter implements a simple progress-bar:
 
 ### JSON
 
-**Enable Names:** `JSON`, `json`
+Alias: `JSON`, `json`
 
 The JSON reporter outputs a single large JSON object when the tests have completed (failures or not).
 
@@ -1442,7 +1442,7 @@ The JSON reporter outputs a single large JSON object when the tests have complet
 
 ### JSON Stream
 
-**Enable Names:** `JSONStream`, `json-stream`
+Alias: `JSONStream`, `json-stream`
 
 The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
@@ -1450,7 +1450,7 @@ The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, 
 
 ### Min
 
-**Enable Names:** `Min`, `min`
+Alias: `Min`, `min`
 
 The Min reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
@@ -1458,7 +1458,7 @@ The Min reporter displays the summary only, while still outputting errors on fai
 
 ### Doc
 
-**Enable Names:** `Doc`, `doc`
+Alias: `Doc`, `doc`
 
 The Doc reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
@@ -1507,7 +1507,7 @@ View SuperAgent's [Makefile][superagent-makefile] for reference.
 
 ### Markdown
 
-**Enable Names:** `Markdown`, `markdown`
+Alias: `Markdown`, `markdown`
 
 The Markdown reporter generates a markdown TOC and body for your test suite.
 This is great if you want to use the tests as documentation within a Github
@@ -1516,7 +1516,7 @@ example, here is the Connect [test output][connect-test-output].
 
 ### XUnit
 
-**Enable Names:** `XUnit`, `xunit`
+Alias: `XUnit`, `xunit`
 
 The XUnit reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
 
