@@ -73,24 +73,23 @@ describe('pending', function() {
     });
 
     describe('in after', function() {
-      it('should run all tests', function(done) {
-        runMocha(
-          'pending/skip-sync-after.fixture.js',
-          args,
-          function(err, res) {
-            if (err) {
-              return done(err);
-            }
-            expect(res, 'to have passed').and('to satisfy', {
-              passing: 3,
-              failing: 0,
-              pending: 0,
-              output: expect.it('to contain', '"after all" hook is DEPRECATED')
-            });
-            done();
-          },
-          'pipe'
-        );
+      it('should throw, but run all tests', function(done) {
+        run('pending/skip-sync-after.fixture.js', args, function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', '`this.skip` forbidden')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 0)
+            .and('to have passed test count', 3)
+            .and(
+              'to have passed test order',
+              'should run this test-1',
+              'should run this test-2',
+              'should run this test-3'
+            );
+          done();
+        });
       });
     });
 

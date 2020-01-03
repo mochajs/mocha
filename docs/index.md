@@ -666,9 +666,9 @@ describe('outer', function() {
 });
 ```
 
-Skipping a test within an "after all" hook is deprecated and will throw an exception in a future version of Mocha. Use a return statement or other means to abort hook execution.
+> _Updated in v7.0.0. Skipping a test within an "after all" hook is disallowed and will throw an exception. Use a return statement or other means to abort hook execution._
 
-> Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
+Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
 ## Retry Tests
 
