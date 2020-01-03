@@ -1520,9 +1520,9 @@ Alias: `XUnit`, `xunit`
 
 The XUnit reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
 
-By default, it will output to the console. To write directly to a file, use `--reporter-options output=filename.xml`.
+By default, it will output to the console. To write directly to a file, use `--reporter-option output=filename.xml`.
 
-To specify custom report title, use `--reporter-options suiteName="Custom name"`.
+To specify custom report title, use `--reporter-option suiteName="Custom name"`.
 
 ### Third-Party Reporters
 
@@ -1535,7 +1535,7 @@ Examples:
 
 ### HTML Reporter
 
-Alias: None
+Alias: `HTML`, `html`
 
 **The HTML reporter is not intended for use on the command-line.**
 
