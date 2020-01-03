@@ -3,13 +3,12 @@ extends:
   - semistandard
   - plugin:prettier/recommended
 env:
-  node: yes
-  browser: yes
+  node: true
+  browser: true
 parserOptions:
   ecmaVersion: 5
   ecmaFeatures:
-    globalReturn: no
-    jsx: no
+    jsx: false
   sourceType: script
 rules:
   strict:
@@ -31,14 +30,14 @@ overrides:
     parserOptions:
       ecmaVersion: 2017
     env:
-      browser: no
+      browser: false
 
   - files:
       - test/**/*.{js,mjs}
     env:
-      mocha: yes
+      mocha: true
     globals:
-      expect: no
+      expect: readonly
   - files:
       - bin/*
       - lib/**/*.js
