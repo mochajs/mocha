@@ -1,3 +1,62 @@
+# 7.0.0 / 2020-01-05
+
+## :boom: Breaking Changes
+
+- #3885: **Drop Node.js v6.x support** (@mojosoeun)
+- #3890: Remove Node.js debug-related flags `--debug`/`--debug-brk` and deprecate `debug` argument (@juergba)
+- #3962: Changes to command-line options (@ParkSB):
+  - `--list-interfaces` replaces `--interfaces`
+  - `--list-reporters` replaces `--reporters`
+- Hook pattern of `this.skip()` (@juergba):
+  - #3859: When conditionally skipping in a `it` test, related `afterEach` hooks are now executed
+  - #3741: When conditionally skipping in a `beforeEach` hook, subsequent inner `beforeEach` hooks are now skipped and related `afterEach` hooks are executed
+  - #4136: Disallow `this.skip()` within `after` hooks
+- #3967: Remove deprecated `getOptions()` and `lib/cli/options.js` (@juergba)
+- #4083: Uncaught exception in `pending` test: don't swallow, but retrospectively fail the test for correct exit code (@juergba)
+- #4004: Align `Mocha` constructor's option names with command-line options (@juergba)
+
+## :tada: Enhancements
+
+- #3980: Refactor and improve `--watch` mode with chokidar (@geigerzaehler):
+  - adds command-line options `--watch-files` and `--watch-ignore`
+  - removes `--watch-extensions`
+- #3979: Type "rs\n" to restart tests (@broofa)
+
+## :fax: Deprecations
+
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
+
+- #3968: Deprecate legacy configuration via `mocha.opts` (@juergba)
+
+## :bug: Fixes
+
+- #4125: Fix timeout handling with `--inspect-brk`/`--inspect` (@juergba)
+- #4070: `Mocha` constructor: improve browser setup (@juergba)
+- #4068: XUnit reporter should handle exceptions during diff generation (@rgroothuijsen)
+- #4030: Fix `--allow-uncaught` with `this.skip()` (@juergba)
+
+## :mag: Coverage
+
+- #4109: Add Node.js v13.x to CI test matrix (@juergba)
+
+## :book: Documentation
+
+- #4129: Fix broken links (@SaeromB)
+- #4127: Add reporter alias names to docs (@khg0712)
+- #4101: Clarify invalid usage of `done()` (@jgehrcke)
+- #4092: Replace `:coffee:` with emoji ☕️ (@pzrq)
+- #4088: Initial draft of project charter (@boneskull)
+- #4066: Change `sh` to `bash` for code block in docs/index.md (@HyunSangHan)
+- #4045: Update README.md concerning GraphicsMagick installation (@HyunSangHan)
+- #3988: Fix sponsors background color for readability (@outsideris)
+
+## :nut_and_bolt: Other
+
+- #4118: Update node-environment-flags to 1.0.6 (@kylef)
+- #4097: Add GH Funding Metadata (@SheetJSDev)
+- #4089: Add funding information to `package.json` (@Munter)
+- #4077: Improve integration tests (@soobing)
+
 # 6.2.2 / 2019-10-18
 
 ## :bug: Fixes
