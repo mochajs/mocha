@@ -9,7 +9,7 @@ describe('esm', function() {
     run(
       'esm/esm-success.fixture.mjs',
       utils.supportsEsModules(true)
-        ? []
+        ? ['--no-warnings']
         : ['--experimental-modules', '--no-warnings'],
       function(err, result) {
         if (err) {
