@@ -209,9 +209,17 @@ img.screenshot {
   max-width: 100%;
 }
 
-#matomoLogo {
+.sponsorship a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsorship a img {
   display: block;
-  height: 176px;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .sponsorship {
@@ -228,18 +236,39 @@ img.screenshot {
 footer {
   background-color: #eee;
   border-top: 1px solid #ddd;
-  padding: 50px 0;
-  text-align: right;
-}
-
-footer div {
+  padding: 50px 30px;
   color: #888;
   font-size: 0.8em;
-  margin-right: 30px;
 }
 
-.last-modified {
+#last-modified {
+  text-align: right;
   font-style: italic;
+  font-size: 0.7em;
+}
+
+#copyright-notice {
+  max-width: 66%;
+}
+
+#openjsf-links {
+  margin: 0;
+  padding: 0;
+  box-sizing: initial;
+  columns: initial;
+}
+
+#openjsf-links li {
+  display: inline; /* displays list horizontally */
+  border: none;
+  list-style: none;
+  margin: initial;
+  padding: initial;
+}
+
+/* displays each list item with a "|" between */
+#openjsf-links li + li:before {
+  content: ' | ';
 }
 
 .dl-inline dt,
@@ -257,6 +286,27 @@ footer div {
   display: block;
 }
 
+blockquote {
+  border-left: 1px solid #eee;
+  padding: 10px;
+}
+
+@media all and (max-width: 900px) {
+  #copyright-notice {
+    max-width: initial;
+  }
+
+  #openjsf-links {
+    width: 50%;
+    column-count: 2;
+    column-rule: 1px solid #dedede;
+  }
+
+  #openjsf-links li + li:before {
+    content: initial;
+  }
+}
+
 @media all and (max-width: 600px) {
   #tag {
     margin-top: 0;
@@ -272,9 +322,14 @@ footer div {
     margin: 20px -11px;
     padding: 10px;
   }
-}
 
-blockquote {
-  border-left: 1px solid #eee;
-  padding: 10px;
+  /* this list is too long for smaller displays */
+  #openjsf-links {
+    width: 100%;
+    columns: initial;
+  }
+
+  #openjsf-links li {
+    display: block;
+  }
 }
