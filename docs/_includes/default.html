@@ -31,18 +31,13 @@
     <main id="content">{{ content }}</main>
 
     <aside class="sponsorship">
-      <a href="https://matomo.org/" rel="external noopener" target="_blank">
-        <img
-          id="matomoLogo"
-          src="images/matomo-logo.png?trim"
-          alt="Matomo logo"
-        />
+      <a href="https://matomo.org/" rel="external noopener">
+        <img src="images/matomo-logo.png?trim" alt="Matomo logo" />
       </a>
       <a
         title="Mocha is an OpenJS Foundation Project"
         href="https://openjsf.org"
         rel="external noopener"
-        target="_blank"
       >
         <img
           src="/images/openjsf-logo.svg"
@@ -54,27 +49,99 @@
     </aside>
 
     <footer>
-      <div>
-        <a rel="home" href="https://mochajs.org/">mochajs.org</a>
-        is licensed under a
+      <div id="copyright-notice">
+        <a rel="home" href="https://mochajs.org/">mochajs.org</a> is licensed
+        under a
         <a
           rel="license external noopener"
           href="https://creativecommons.org/licenses/by/4.0/"
-        >
-          Creative Commons Attribution 4.0 International License</a
+          >Creative Commons Attribution 4.0 International License</a
         >.
-        <dl class="dl-inline last-modified">
-          <dt>Last updated</dt>
-          <dd>
-            <time
-              itemprop="lastModified"
-              datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
-            >
-              {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
-            </time>
-          </dd>
-        </dl>
+
+        <p>
+          Copyright
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >
+          and Mocha contributors. All rights reserved. The
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >
+          has registered trademarks and uses trademarks. For a list of
+          trademarks of the
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >, please see our
+          <a
+            href="https://trademark-policy.openjsf.org/"
+            rel="external noopener"
+            >Trademark Policy</a
+          >
+          and
+          <a href="https://trademark-list.openjsf.org/" rel="external noopener"
+            >Trademark List</a
+          >. Trademarks and logos not indicated on the
+          <a href="https://trademark-list.openjsf.org" rel="external noopener"
+            >list of OpenJS Foundation trademarks</a
+          >
+          are trademarks™ or registered® trademarks of their respective holders.
+          Use of them does not imply any affiliation with or endorsement by
+          them.
+        </p>
       </div>
+
+      <ul id="openjsf-links">
+        <li>
+          <a href="https://openjsf.org/" rel="external noopener"
+            >The OpenJS Foundation</a
+          >
+        </li>
+        <li>
+          <a href="https://terms-of-use.openjsf.org/" rel="external noopener"
+            >Terms of Use</a
+          >
+        </li>
+        <li>
+          <a href="https://privacy-policy.openjsf.org/" rel="external noopener"
+            >Privacy Policy</a
+          >
+        </li>
+        <li>
+          <a href="https://bylaws.openjsf.org/" rel="external noopener"
+            >OpenJS Foundation Bylaws</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://trademark-policy.openjsf.org/"
+            rel="external noopener"
+            >Trademark Policy</a
+          >
+        </li>
+        <li>
+          <a href="https://trademark-list.openjsf.org/" rel="external noopener"
+            >Trademark List</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.linuxfoundation.org/cookies/"
+            rel="external noopener"
+            >Cookie Policy</a
+          >
+        </li>
+      </ul>
+      <dl id="last-modified" class="dl-inline">
+        <dt>Last updated</dt>
+        <dd>
+          <time
+            itemprop="lastModified"
+            datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
+          >
+            {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
+          </time>
+        </dd>
+      </dl>
     </footer>
   </body>
 </html>
