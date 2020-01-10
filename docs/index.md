@@ -1955,8 +1955,8 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [npm-glob]: https://www.npmjs.com/package/glob
 [npm-growl]: https://npm.im/growl
 [npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
-[npm-mochawesome]: https://www.npmjs.com/package/mochawesome
-[npm-should.js]: https://npm.im/should.js
+[npm-mochawesome]: https://npm.im/mochawesome
+[npm-should.js]: https://npm.im/should
 [npm-supports-color]: https://npm.im/supports-color
 [npm-ts-node]: https://npm.im/ts-node
 [npm-wtfnode]: https://npm.im/wtfnode
