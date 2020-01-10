@@ -1,3 +1,24 @@
+# 7.0.0-esm1 / 2020-01-12
+
+**This is an experimental release** based on v7.0.0: `npm i mocha@7.0.0-esm1`
+
+## :tada: Enhancements
+
+#4038: Add Node.js native ESM support (@giltayar)
+
+Enables Mocha to load ECMAScript Modules test files, also valid for `--file` option.
+
+Limitations:
+
+- Node.js only v12.11.0 and above
+- Node.js below v13.2.0, you must set `--experimental-modules` option
+- ESM not (yet) supported for:
+  - `--watch` mode
+  - `--require` option
+  - `--reporter` custom reporters
+  - `--ui` custom interfaces
+  - `mocharc` configuration file
+
 # 7.0.0 / 2020-01-05
 
 ## :boom: Breaking Changes
