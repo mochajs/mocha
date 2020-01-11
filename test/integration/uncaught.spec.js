@@ -86,4 +86,16 @@ describe('uncaught exceptions', function() {
       done();
     });
   });
+
+  it('removes uncaught exceptions handlers correctly', function(done) {
+    run('uncaught/listeners.fixture.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, 'to have passed').and('to have passed test count', 0);
+
+      done();
+    });
+  });
 });
