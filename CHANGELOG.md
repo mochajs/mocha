@@ -4,7 +4,7 @@
 
 ## :tada: Enhancements
 
-#4038: Add Node.js native ESM support (@giltayar)
+[#4038](https://github.com/mochajs/mocha/issues/4038): Add Node.js native ESM support ([**@giltayar**](https://github.com/giltayar))
 
 Enables Mocha to load ECMAScript Modules test files, also valid for `--file` option.
 

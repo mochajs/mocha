@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "7.0.0",
+  "version": "7.0.0-esm1",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -179,6 +179,7 @@
     "Gavin Mogan <GavinM@airg.com>",
     "gaye <gaye@mozilla.com>",
     "gigadude <gigadude@users.noreply.github.com>",
+    "Gil Tayar <gil@tayar.org>",
     "Giovanni Bassi <giggio@giggio.net>",
     "gizemkeser <44727928+gizemkeser@users.noreply.github.com>",
     "Glen Huang <curvedmark@gmail.com>",
