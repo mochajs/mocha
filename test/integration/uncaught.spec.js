@@ -17,7 +17,7 @@ describe('uncaught exceptions', function() {
 
       assert.strictEqual(
         res.failures[0].fullTitle,
-        'uncaught "before each" hook'
+        'uncaught "before each" hook for "test"'
       );
       assert.strictEqual(res.code, 1);
       done();
