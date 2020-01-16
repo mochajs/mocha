@@ -3,6 +3,7 @@
 var path = require('path');
 var sinon = require('sinon');
 var Mocha = require('../../lib/mocha');
+var Pending = require('../../lib/pending');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
@@ -445,6 +446,13 @@ describe('Runner', function() {
     });
   });
 
+  describe('.runTest(fn)', function() {
+    it('should return when no tests to run', function() {
+      runner.test = undefined;
+      expect(runner.runTest(noop), 'to be undefined');
+    });
+  });
+
   describe('allowUncaught', function() {
     it('should allow unhandled errors to propagate through', function() {
       var newRunner = new Runner(suite);
@@ -691,6 +699,20 @@ describe('Runner', function() {
       sandbox.stub(runner, 'fail');
     });
 
+    describe('when allow-uncaught is set to true', function() {
+      it('should propagate error and throw', function() {
+        var err = new Error('should rethrow err');
+        runner.allowUncaught = true;
+        expect(
+          function() {
+            runner.uncaught(err);
+          },
+          'to throw',
+          'should rethrow err'
+        );
+      });
+    });
+
     describe('when provided an object argument', function() {
       describe('when argument is not an Error', function() {
         var err;
@@ -711,6 +733,13 @@ describe('Runner', function() {
               uncaught: true
             })
           ]).and('was called once');
+        });
+      });
+
+      describe('when argument is a Pending', function() {
+        it('should ignore argument and return', function() {
+          var err = new Pending();
+          expect(runner.uncaught(err), 'to be undefined');
         });
       });
 
