@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "types": [],
+    "target": "ES2015",
+    "module": "CommonJS"
   }
 }

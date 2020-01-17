@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["lib"],
   "compilerOptions": {
     "rootDir": "lib",
     "declarationDir": "types",
@@ -9,6 +9,9 @@
     "emitDeclarationOnly": true,
     "sourceMap": true,
     "declarationMap": true,
-    "newLine": "lf"
+    "newLine": "lf",
+
+    "target": "ES2015",
+    "types": ["node"]
   }
 }

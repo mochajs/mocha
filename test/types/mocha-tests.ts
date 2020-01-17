@@ -1,3 +1,5 @@
+/// <reference types="mocha/globals" />
+
 import {
     after as importedAfter,
     before as importedBefore,

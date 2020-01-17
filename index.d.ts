@@ -1,1 +1,2 @@
-export = import('./types/mocha');
+import * as Mocha from './types/mocha';
+export = Mocha;
