@@ -670,6 +670,20 @@ describe('Runnable(title, fn)', function() {
         });
       });
     });
+
+    describe('when fn is not a function', function() {
+      it('should throw an error', function() {
+        var runnable = new Runnable('foo', 4);
+
+        runnable.run(function(err) {
+          expect(
+            err.message,
+            'to be',
+            'A runnable must be passed a function as its second argument.'
+          );
+        });
+      });
+    });
   });
 
   describe('#isFailed()', function() {
