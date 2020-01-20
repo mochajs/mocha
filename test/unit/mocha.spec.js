@@ -446,6 +446,30 @@ describe('Mocha', function() {
       var mocha = new Mocha(opts);
       expect(mocha.reporter(), 'to be', mocha);
     });
+
+    it('should keep reporterOption on options', function() {
+      var mocha = new Mocha({
+        reporter: 'spec',
+        reporterOption: {
+          foo: 'bar'
+        }
+      });
+      expect(mocha.options.reporterOption, 'to have property', 'foo', 'bar');
+      // To support the legacy property name that can be used by reporters
+      expect(mocha.options.reporterOptions, 'to have property', 'foo', 'bar');
+    });
+
+    it('should support legacy reporterOptions', function() {
+      var mocha = new Mocha({
+        reporter: 'spec',
+        reporterOptions: {
+          foo: 'bar'
+        }
+      });
+      expect(mocha.options.reporterOption, 'to have property', 'foo', 'bar');
+      // To support the legacy property name that can be used by reporters
+      expect(mocha.options.reporterOptions, 'to have property', 'foo', 'bar');
+    });
   });
 
   describe('#run(fn)', function() {
