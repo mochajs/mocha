@@ -1,9 +1,12 @@
 'use strict';
 
 var assert = require('assert');
-var run = require('./helpers').runMochaJSON;
-var runMocha = require('./helpers').runMocha;
-var splitRegExp = require('./helpers').splitRegExp;
+var helpers = require('./helpers');
+var run = helpers.runMochaJSON;
+var runMocha = helpers.runMocha;
+var splitRegExp = helpers.splitRegExp;
+var invokeNode = helpers.invokeNode;
+var toJSONRunResult = helpers.toJSONRunResult;
 var args = [];
 
 describe('pending', function() {
@@ -320,6 +323,23 @@ describe('pending', function() {
             .and('to have passed test count', 0);
           done();
         });
+      });
+    });
+  });
+
+  describe('programmatic usage', function() {
+    it('should skip the test by listening to test event', function(done) {
+      var path = require.resolve('./fixtures/pending/programmatic.fixture.js');
+      invokeNode([path], function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        var result = toJSONRunResult(res);
+        expect(result, 'to have passed')
+          .and('to have passed test count', 0)
+          .and('to have pending test count', 1)
+          .and('to have pending test order', 'should succeed');
+        done();
       });
     });
   });
