@@ -46,9 +46,6 @@ jobs:
     - <<: *node
       node_js: '10'
 
-    - <<: *node
-      node_js: '8'
-
     - script: npm start test.bundle test.browser
       # XXX: update when canvas supplies a prebuilt binary for Node.js v12.x
       node_js: 10
@@ -82,9 +79,6 @@ jobs:
 
     - <<: *smoke
       node_js: '10'
-
-    - <<: *smoke
-      node_js: '8'
 
     - stage: precache
       script: true

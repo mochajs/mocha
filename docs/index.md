@@ -98,7 +98,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> As of v7.0.0, Mocha requires Node.js v8.0.0 or newer.
+> As of v8.0.0, Mocha requires Node.js v10.0.0 or newer.
 
 ## Getting Started
 
@@ -1608,17 +1608,17 @@ mocha.setup({
 
 ### Browser-specific Option(s)
 
-Browser Mocha supports many, but not all [cli options](#command-line-usage).  
+Browser Mocha supports many, but not all [cli options](#command-line-usage).
 To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
 
 #### Options that differ slightly from [cli options](#command-line-usage):
 
-`reporter` _{string|constructor}_  
+`reporter` _{string|constructor}_
 You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 #### Options that _only_ function in browser context:
 
-`noHighlighting` _{boolean}_  
+`noHighlighting` _{boolean}_
 If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting

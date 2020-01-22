@@ -42,7 +42,7 @@ Follow these steps to get going. If you are having trouble, don't be afraid to [
 
 > PRO TIP: After `npm install`, run `npm start` to see a list of commands which can be run with `npm start <command>` (powered by [nps](https://npm.im/nps)).
 
-1. [Install Node.js 8.x or newer](https://nodejs.org/en/download/).
+1. [Install Node.js 10.x or newer](https://nodejs.org/en/download/).
    - If you're new to installing Node, a tool like [nvm](https://github.com/creationix/nvm#install-script) can help you manage multiple version installations.
    - You will need [Google Chrome](https://www.google.com/chrome/) to run browser-based tests locally.
 1. Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
