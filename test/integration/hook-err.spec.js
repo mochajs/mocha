@@ -194,7 +194,10 @@ describe('hook error handling', function() {
       run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle())
     );
     it('should verify results', function() {
-      expect(lines, 'to equal', ['1) spec 2', '"before all" hook:']);
+      expect(lines, 'to equal', [
+        '1) spec 2',
+        '"before all" hook for "skipped":'
+      ]);
     });
   });
 
