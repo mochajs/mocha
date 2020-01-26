@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "simple, flexible, fun test framework",
   "keywords": [
     "mocha",
@@ -105,6 +105,7 @@
     "Chris Buckley <chris@cmbuckley.co.uk>",
     "Chris Lamb <chris@chris-lamb.co.uk>",
     "Christian <me@rndm.de>",
+    "Christian Holm <christian@peakon.com>",
     "Christoffer Hallas <christoffer.hallas@gmail.com>",
     "Christoph Neuroth <christoph.neuroth@gmail.com>",
     "Christopher Hiller <boneskull@boneskull.com>",
@@ -291,6 +292,7 @@
     "Kunal Nagpal <kunagpal@users.noreply.github.com>",
     "Kyle Fuller <kyle@fuller.li>",
     "Kyle Mitchell <kyle@kemitchell.com>",
+    "KyoungWan <kyngwan@gmail.com>",
     "lakmeer <lakmeerkravid@gmail.com>",
     "Lane Kelly <lanekelly16@gmail.com>",
     "László Bácsi <lackac@lackac.hu>",
@@ -503,6 +505,7 @@
     "Yuest Wang <yuestwang@gmail.com>",
     "yuitest <yuitest@cjhat.net>",
     "zhiyelee <zhiyelee@gmail.com>",
+    "Zirak <zirakertan@gmail.com>",
     "Zsolt Takács <zsolt@takacs.cc>",
     "现充 <qixiang.cqx@alibaba-inc.com>"
   ],
