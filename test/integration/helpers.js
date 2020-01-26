@@ -143,6 +143,8 @@ module.exports = {
 
   invokeMochaAsync: invokeMochaAsync,
 
+  invokeNode: invokeNode,
+
   /**
    * Resolves the path to a fixture to the full path.
    */
@@ -225,6 +227,19 @@ function invokeMochaAsync(args, opts) {
     );
   });
   return [mochaProcess, resultPromise];
+}
+
+/**
+ * Invokes Node without Mocha binary with the given arguments,
+ * when Mocha is used programmatically.
+ */
+function invokeNode(args, fn, opts) {
+  if (typeof args === 'function') {
+    opts = fn;
+    fn = args;
+    args = [];
+  }
+  return _spawnMochaWithListeners(args, fn, opts);
 }
 
 function invokeSubMocha(args, fn, opts) {
