@@ -2,19 +2,19 @@
 
 ## :bug: Fixes
 
-- #4165: Fix exception when skipping tests programmatically (@juergba)
-- #4153: Restore backwards compatibility for `reporterOptions` (@holm)
-- #4150: Fix recovery of an open test upon uncaught exception (@juergba)
-- #4147: Fix regression of leaking uncaught exception handler (@juergba)
+- [#4165](https://github.com/mochajs/mocha/issues/4165): Fix exception when skipping tests programmatically ([**@juergba**](https://github.com/juergba))
+- [#4153](https://github.com/mochajs/mocha/issues/4153): Restore backwards compatibility for `reporterOptions` ([**@holm**](https://github.com/holm))
+- [#4150](https://github.com/mochajs/mocha/issues/4150): Fix recovery of an open test upon uncaught exception ([**@juergba**](https://github.com/juergba))
+- [#4147](https://github.com/mochajs/mocha/issues/4147): Fix regression of leaking uncaught exception handler ([**@juergba**](https://github.com/juergba))
 
 ## :book: Documentation
 
-- #4146: Update copyright & trademark notices per OJSF (@boneskull)
-- #4140: Fix broken links (@KyoungWan)
+- [#4146](https://github.com/mochajs/mocha/issues/4146): Update copyright & trademark notices per OJSF ([**@boneskull**](https://github.com/boneskull))
+- [#4140](https://github.com/mochajs/mocha/issues/4140): Fix broken links ([**@KyoungWan**](https://github.com/KyoungWan))
 
 ## :nut_and_bolt: Other
 
-- #4133: Print more descriptive error message (@Zirak)
+- [#4133](https://github.com/mochajs/mocha/issues/4133): Print more descriptive error message ([**@Zirak**](https://github.com/Zirak))
 
 # 7.0.0 / 2020-01-05
 
