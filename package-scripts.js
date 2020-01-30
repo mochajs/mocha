@@ -308,7 +308,7 @@ module.exports = {
       }
     },
     updateAuthors: {
-      script: 'scripts/update-authors.js',
+      script: 'node scripts/update-authors.js',
       description: 'Update list of AUTHORS'
     },
     linkifyChangelog: {
