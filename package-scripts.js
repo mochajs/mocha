@@ -307,9 +307,9 @@ module.exports = {
         description: 'Build API docs'
       }
     },
-    updateContributors: {
-      script: 'contributors',
-      description: 'Update list of contributors in package.json'
+    updateAuthors: {
+      script: 'node scripts/update-authors.js',
+      description: 'Update list of AUTHORS'
     },
     linkifyChangelog: {
       script: 'node scripts/linkify-changelog.js',
@@ -317,7 +317,7 @@ module.exports = {
     },
     version: {
       script:
-        'nps updateContributors && nps linkifyChangelog && git add -A ./package.json ./CHANGELOG.md',
+        'nps updateAuthors && nps linkifyChangelog && git add -A ./AUTHORS ./CHANGELOG.md',
       description: 'Tasks to perform when `npm version` is run'
     }
   }
