@@ -416,10 +416,37 @@ describe('Mocha', function() {
 
   describe('#noHighlighting()', function() {
     // :NOTE: Browser-only option...
-    it('should set the noHighlighting option to true', function() {
+    it('should set the reporterOptions.highlight to false', function() {
       var mocha = new Mocha(opts);
       mocha.noHighlighting();
-      expect(mocha.options, 'to have property', 'noHighlighting', true);
+      expect(
+        mocha.options.reporterOptions,
+        'to have property',
+        'highlight',
+        false
+      );
+    });
+
+    it('should set the reporterOptions.highlight to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.noHighlighting(true);
+      expect(
+        mocha.options.reporterOptions,
+        'to have property',
+        'highlight',
+        false
+      );
+    });
+
+    it('should set the reporterOptions.highlight to true', function() {
+      var mocha = new Mocha(opts);
+      mocha.noHighlighting(false);
+      expect(
+        mocha.options.reporterOptions,
+        'to have property',
+        'highlight',
+        true
+      );
     });
 
     it('should be chainable', function() {
