@@ -76,7 +76,6 @@ describe('--file', function() {
           return done(err);
         }
         expect(result, 'to have failed');
-        expect(result.output, 'to match', /Cannot find file/i);
         done();
       },
       {stdio: 'pipe'}
