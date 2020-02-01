@@ -47,7 +47,7 @@ rl.on('line', line => {
   const match = line.match(authorRe);
   if (!match) return;
 
-  let {author, email} = match.groups;
+  const {author, email} = match.groups;
 
   if (seen.has(email) || excludeEmails.includes(email)) {
     return;
