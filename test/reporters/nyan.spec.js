@@ -192,13 +192,9 @@ describe('Nyan reporter', function() {
         };
 
         try {
-          try {
-            nyanCat.draw.call(fakeThis);
-          } finally {
-            sandbox.restore();
-          }
-        } catch (err) {
-          throw err; // Rethrow
+          nyanCat.draw.call(fakeThis);
+        } finally {
+          sandbox.restore();
         }
 
         var expectedArray = [
@@ -239,13 +235,9 @@ describe('Nyan reporter', function() {
         };
 
         try {
-          try {
-            nyanCat.draw.call(fakeThis);
-          } finally {
-            sandbox.restore();
-          }
-        } catch (err) {
-          throw err; // Rethrow
+          nyanCat.draw.call(fakeThis);
+        } finally {
+          sandbox.restore();
         }
 
         var expectedArray = [
@@ -286,13 +278,9 @@ describe('Nyan reporter', function() {
       var expectedNumber = 25;
 
       try {
-        try {
-          nyanCat.cursorDown(expectedNumber);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.cursorDown(expectedNumber);
+      } finally {
+        sandbox.restore();
       }
 
       var expectedArray = ['\u001b[' + expectedNumber + 'B'];
@@ -319,13 +307,9 @@ describe('Nyan reporter', function() {
       var expectedNumber = 25;
 
       try {
-        try {
-          nyanCat.cursorUp(expectedNumber);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.cursorUp(expectedNumber);
+      } finally {
+        sandbox.restore();
       }
 
       var expectedArray = ['\u001b[' + expectedNumber + 'A'];
@@ -495,13 +479,9 @@ describe('Nyan reporter', function() {
       };
 
       try {
-        try {
-          nyanCat.drawScoreboard.call(fakeThis);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.drawScoreboard.call(fakeThis);
+      } finally {
+        sandbox.restore();
       }
 
       var expectedArray = [
@@ -532,13 +512,9 @@ describe('Nyan reporter', function() {
       };
 
       try {
-        try {
-          nyanCat.drawScoreboard.call(fakeThis);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.drawScoreboard.call(fakeThis);
+      } finally {
+        sandbox.restore();
       }
 
       expect(fakeThis.cursorUp.calledWith(expectedNumberOfLines), 'to be true');
@@ -573,13 +549,9 @@ describe('Nyan reporter', function() {
       };
 
       try {
-        try {
-          nyanCat.drawRainbow.call(fakeThis);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.drawRainbow.call(fakeThis);
+      } finally {
+        sandbox.restore();
       }
 
       var expectedArray = [
@@ -607,13 +579,9 @@ describe('Nyan reporter', function() {
       };
 
       try {
-        try {
-          nyanCat.drawRainbow.call(fakeThis);
-        } finally {
-          sandbox.restore();
-        }
-      } catch (err) {
-        throw err; // Rethrow
+        nyanCat.drawRainbow.call(fakeThis);
+      } finally {
+        sandbox.restore();
       }
 
       expect(expectedCursorArgument, 'to be', expectedNumberOfLines);
