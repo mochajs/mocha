@@ -149,7 +149,11 @@ describe('Runner', function() {
         return;
       }
       // verify that the prop isn't enumerable
-      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', false);
+      expect(
+        Object.prototype.propertyIsEnumerable.call(global, 'XMLHttpRequest'),
+        'to be',
+        false
+      );
 
       // create a new runner and keep a reference to the test.
       var test = new Test('im a test about bears', noop);
@@ -158,7 +162,11 @@ describe('Runner', function() {
 
       // make the prop enumerable again.
       global.XMLHttpRequest = noop;
-      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', true);
+      expect(
+        Object.prototype.propertyIsEnumerable.call(global, 'XMLHttpRequest'),
+        'to be',
+        true
+      );
 
       // verify the test hasn't failed.
       newRunner.checkGlobals(test);

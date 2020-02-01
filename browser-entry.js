@@ -129,7 +129,7 @@ mocha.setup = function(opts) {
     opts = {ui: opts};
   }
   for (var opt in opts) {
-    if (opts.hasOwnProperty(opt)) {
+    if (Object.prototype.hasOwnProperty.call(opts, opt)) {
       this[opt](opts[opt]);
     }
   }
