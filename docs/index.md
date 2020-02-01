@@ -970,7 +970,7 @@ By default, Mocha looks for a `package.json` in the current working directory or
 > _New in Node.js v12.12.0_
 
 If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
-is passed to Node.js, source-maps will be collected and used to provide acurate stack traces for transpiled code:
+is passed to Node.js, source-maps will be collected and used to provide accurate stack traces for transpiled code:
 
 ```bash
 Error: cool
