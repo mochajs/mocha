@@ -26,6 +26,17 @@ describe('Errors', function() {
       code: 'ERR_MOCHA_FILE_NOT_FOUND'
     });
   });
+  it('should include expected code in thrown not existing errors', function() {
+    var directory = ['/lib/dir'];
+    var errorMessage = '' + directory + ' are not files';
+    var throwError = function() {
+      throw errors.createParameterIsNotAFile(errorMessage);
+    };
+    expect(throwError, 'to throw', {
+      message: errorMessage,
+      code: 'ERR_MOCHA_PARAMETER_IS_NOT_A_FILE'
+    });
+  });
 
   var invalidExceptionErrorMessage = 'invalid message';
   it('should include expected code in thrown not existing errors', function() {
