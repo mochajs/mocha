@@ -709,6 +709,8 @@ describe('Runner', function() {
 
     describe('when allow-uncaught is set to true', function() {
       it('should propagate error and throw', function() {
+        if (process.browser) this.skip();
+
         var err = new Error('should rethrow err');
         runner.allowUncaught = true;
         expect(
