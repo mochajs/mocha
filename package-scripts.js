@@ -23,7 +23,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' --ignore chokidar -o mocha.js`,
+      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore './lib/cli/*.js' --ignore 'chokidar' --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' -o mocha.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -307,9 +307,9 @@ module.exports = {
         description: 'Build API docs'
       }
     },
-    updateContributors: {
-      script: 'contributors',
-      description: 'Update list of contributors in package.json'
+    updateAuthors: {
+      script: 'node scripts/update-authors.js',
+      description: 'Update list of AUTHORS'
     },
     linkifyChangelog: {
       script: 'node scripts/linkify-changelog.js',
@@ -317,7 +317,7 @@ module.exports = {
     },
     version: {
       script:
-        'nps updateContributors && nps linkifyChangelog && git add -A ./package.json ./CHANGELOG.md',
+        'nps updateAuthors && nps linkifyChangelog && git add -A ./AUTHORS ./CHANGELOG.md',
       description: 'Tasks to perform when `npm version` is run'
     }
   }

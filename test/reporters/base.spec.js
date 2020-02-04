@@ -17,13 +17,9 @@ describe('Base reporter', function() {
 
   function list(tests) {
     try {
-      try {
-        Base.list(tests);
-      } finally {
-        sandbox.restore();
-      }
-    } catch (err) {
-      throw err; // Rethrow
+      Base.list(tests);
+    } finally {
+      sandbox.restore();
     }
   }
 
@@ -31,13 +27,9 @@ describe('Base reporter', function() {
     var diffStr;
 
     try {
-      try {
-        diffStr = Base.generateDiff(actual, expected);
-      } finally {
-        sandbox.restore();
-      }
-    } catch (err) {
-      throw err; // Rethrow
+      diffStr = Base.generateDiff(actual, expected);
+    } finally {
+      sandbox.restore();
     }
 
     return diffStr;

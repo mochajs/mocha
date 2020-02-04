@@ -2,10 +2,31 @@
 
 var path = require('path').posix;
 var helpers = require('../helpers');
+var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 
 describe('--allow-uncaught', function() {
   var args = ['--allow-uncaught'];
+
+  it('should throw an uncaught error and exit process', function(done) {
+    var fixture = path.join('options', 'allow-uncaught', 'propagate');
+    runMocha(
+      fixture,
+      args,
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(res.code, 'to be greater than', 0);
+        expect(res.output, 'to contain', 'Error: Uncaught error after test1');
+        expect(res.passing, 'to be', 0);
+        expect(res.failing, 'to be', 0);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
 
   it('should run with conditional `this.skip()`', function(done) {
     var fixture = path.join('options', 'allow-uncaught', 'this-skip-it');

@@ -1,9 +1,12 @@
 'use strict';
 
 var assert = require('assert');
-var run = require('./helpers').runMochaJSON;
-var runMocha = require('./helpers').runMocha;
-var splitRegExp = require('./helpers').splitRegExp;
+var helpers = require('./helpers');
+var run = helpers.runMochaJSON;
+var runMocha = helpers.runMocha;
+var splitRegExp = helpers.splitRegExp;
+var invokeNode = helpers.invokeNode;
+var toJSONRunResult = helpers.toJSONRunResult;
 var args = [];
 
 describe('pending', function() {
@@ -73,24 +76,23 @@ describe('pending', function() {
     });
 
     describe('in after', function() {
-      it('should run all tests', function(done) {
-        runMocha(
-          'pending/skip-sync-after.fixture.js',
-          args,
-          function(err, res) {
-            if (err) {
-              return done(err);
-            }
-            expect(res, 'to have passed').and('to satisfy', {
-              passing: 3,
-              failing: 0,
-              pending: 0,
-              output: expect.it('to contain', '"after all" hook is DEPRECATED')
-            });
-            done();
-          },
-          'pipe'
-        );
+      it('should throw, but run all tests', function(done) {
+        run('pending/skip-sync-after.fixture.js', args, function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', '`this.skip` forbidden')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 0)
+            .and('to have passed test count', 3)
+            .and(
+              'to have passed test order',
+              'should run this test-1',
+              'should run this test-2',
+              'should run this test-3'
+            );
+          done();
+        });
       });
     });
 
@@ -170,18 +172,40 @@ describe('pending', function() {
 
     describe('in beforeEach', function() {
       it('should skip all suite specs', function(done) {
-        run('pending/skip-sync-beforeEach.fixture.js', args, function(
-          err,
-          res
-        ) {
+        var fixture = 'pending/skip-sync-beforeEach.fixture.js';
+        run(fixture, args, function(err, res) {
           if (err) {
-            done(err);
-            return;
+            return done(err);
           }
-          assert.strictEqual(res.stats.pending, 2);
-          assert.strictEqual(res.stats.passes, 0);
-          assert.strictEqual(res.stats.failures, 0);
-          assert.strictEqual(res.code, 0);
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 3)
+            .and(
+              'to have pending test order',
+              'should skip this test-1',
+              'should skip this test-2',
+              'should skip this test-3'
+            )
+            .and('to have passed test count', 0);
+          done();
+        });
+      });
+      it('should skip only two suite specs', function(done) {
+        var fixture = 'pending/skip-sync-beforeEach-cond.fixture.js';
+        run(fixture, args, function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 2)
+            .and(
+              'to have pending test order',
+              'should skip this test-1',
+              'should skip this test-3'
+            )
+            .and('to have passed test count', 1)
+            .and('to have passed test', 'should run this test-2');
           done();
         });
       });
@@ -287,8 +311,8 @@ describe('pending', function() {
           if (err) {
             return done(err);
           }
-          expect(res, 'to have passed')
-            .and('to have passed test count', 0)
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
             .and('to have pending test count', 3)
             .and(
               'to have pending test order',
@@ -296,9 +320,26 @@ describe('pending', function() {
               'should skip this test-2',
               'should skip this test-3'
             )
-            .and('to have failed test count', 0);
+            .and('to have passed test count', 0);
           done();
         });
+      });
+    });
+  });
+
+  describe('programmatic usage', function() {
+    it('should skip the test by listening to test event', function(done) {
+      var path = require.resolve('./fixtures/pending/programmatic.fixture.js');
+      invokeNode([path], function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        var result = toJSONRunResult(res);
+        expect(result, 'to have passed')
+          .and('to have passed test count', 0)
+          .and('to have pending test count', 1)
+          .and('to have pending test order', 'should succeed');
+        done();
       });
     });
   });

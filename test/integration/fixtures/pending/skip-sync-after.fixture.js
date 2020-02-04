@@ -3,9 +3,8 @@
 describe('skip in after', function () {
   it('should run this test-1', function () {});
 
-  after('should print DeprecationWarning', function () {
+  after('should throw "this.skip forbidden"', function () {
     this.skip();
-    throw new Error('never throws this error');
   });
 
   describe('inner suite', function () {

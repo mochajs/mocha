@@ -17,7 +17,7 @@ describe('uncaught exceptions', function() {
 
       assert.strictEqual(
         res.failures[0].fullTitle,
-        'uncaught "before each" hook'
+        'uncaught "before each" hook for "test"'
       );
       assert.strictEqual(res.code, 1);
       done();
@@ -59,6 +59,68 @@ describe('uncaught exceptions', function() {
         .and('to have failed test count', 1)
         .and('to have passed test', testName)
         .and('to have failed test', testName);
+
+      done();
+    });
+  });
+
+  it('handles uncaught exceptions within pending tests', function(done) {
+    run('uncaught-pending.fixture.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, 'to have failed')
+        .and('to have passed test count', 3)
+        .and('to have pending test count', 1)
+        .and('to have failed test count', 1)
+        .and(
+          'to have passed test',
+          'test1',
+          'test3 - should run',
+          'test4 - should run'
+        )
+        .and('to have pending test order', 'test2')
+        .and('to have failed test', 'test2');
+
+      done();
+    });
+  });
+
+  it('handles uncaught exceptions within open tests', function(done) {
+    run('uncaught/recover.fixture.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(
+        res,
+        'to have failed with error',
+        'Whoops!',
+        'Whoops!', // JSON reporter does not show the second error message
+        'should get upto here and throw'
+      )
+        .and('to have passed test count', 2)
+        .and('to have failed test count', 3)
+        .and('to have passed test', 'should wait 15ms', 'test 3')
+        .and(
+          'to have failed test',
+          'throw delayed error',
+          'throw delayed error',
+          '"after all" hook for "test 3"'
+        );
+
+      done();
+    });
+  });
+
+  it('removes uncaught exceptions handlers correctly', function(done) {
+    run('uncaught/listeners.fixture.js', args, function(err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, 'to have passed').and('to have passed test count', 0);
 
       done();
     });

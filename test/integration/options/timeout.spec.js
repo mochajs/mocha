@@ -49,4 +49,19 @@ describe('--timeout', function() {
       done();
     });
   });
+
+  it('should disable timeout with --inspect', function(done) {
+    var fixture = 'options/slow-test';
+    runMochaJSON(fixture, ['--inspect', '--timeout', '200'], function(
+      err,
+      res
+    ) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res, 'to have passed').and('to have passed test count', 2);
+      done();
+    });
+  });
 });

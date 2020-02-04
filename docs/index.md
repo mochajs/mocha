@@ -88,13 +88,13 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 Install with [npm][] globally:
 
-```sh
+```bash
 $ npm install --global mocha
 ```
 
 or as a development dependency for your project:
 
-```sh
+```bash
 $ npm install --save-dev mocha
 ```
 
@@ -102,7 +102,7 @@ $ npm install --save-dev mocha
 
 ## Getting Started
 
-```sh
+```bash
 $ npm install mocha
 $ mkdir test
 $ $EDITOR test/test.js # or open with your favorite editor
@@ -123,7 +123,7 @@ describe('Array', function() {
 
 Back in the terminal:
 
-```sh
+```bash
 $ ./node_modules/mocha/bin/mocha
 
   Array
@@ -144,7 +144,7 @@ Set up a test script in package.json:
 
 Then run tests with:
 
-```sh
+```bash
 $ npm test
 ```
 
@@ -203,7 +203,7 @@ it('double done', function(done) {
 
 Running the above test will give you the below error message:
 
-```sh
+```bash
 $ ./node_modules/.bin/mocha mocha.test.js
 
 
@@ -234,7 +234,7 @@ Mocha allows you to use any assertion library you wish. In the above example, we
 
 ## Asynchronous Code
 
-Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else will cause a failed test.
+Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
 
 ```js
 describe('User', function() {
@@ -666,9 +666,9 @@ describe('outer', function() {
 });
 ```
 
-Skipping a test within an "after all" hook is deprecated and will throw an exception in a future version of Mocha. Use a return statement or other means to abort hook execution.
+> _Updated in v7.0.0. Skipping a test within an "after all" hook is disallowed and will throw an exception. Use a return statement or other means to abort hook execution._
 
-> Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
+Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
 ## Retry Tests
 
@@ -728,7 +728,7 @@ describe('add()', function() {
 
 The above code will produce a suite with three specs:
 
-```sh
+```bash
 $ mocha
 
   add()
@@ -1137,6 +1137,8 @@ Rerun tests on file changes.
 
 The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
 
+Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut as `nodemon`).
+
 ### `--watch-files <file|directory|glob>`
 
 > _New in v7.0.0_
@@ -1374,24 +1376,32 @@ Mocha reporters adjust to the terminal window, and always disable ANSI-escape co
 
 ### Spec
 
-This is the default reporter. The "spec" reporter outputs a hierarchical view nested just as the test cases are.
+Alias: `Spec`, `spec`
+
+This is the default reporter. The Spec reporter outputs a hierarchical view nested just as the test cases are.
 
 ![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 ![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Dot Matrix
 
-The dot matrix (or "dot") reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
+Alias: `Dot`, `dot`
+
+The Dot Matrix reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
 
 ![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Nyan
 
-The "nyan" reporter is exactly what you might expect:
+Alias: `Nyan`, `nyan`
+
+The Nyan reporter is exactly what you might expect:
 
 ![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### TAP
+
+Alias: `TAP`, `tap`
 
 The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
@@ -1399,44 +1409,58 @@ The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
 ### Landing Strip
 
-The Landing Strip (`landing`) reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
+Alias: `Landing`, `landing`
+
+The Landing Strip reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
 ![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 ![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### List
 
-The "list" reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
+Alias: `List`, `list`
+
+The List reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
 ![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Progress
 
-The "progress" reporter implements a simple progress-bar:
+Alias: `Progress`, `progress`
+
+The Progress reporter implements a simple progress-bar:
 
 ![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON
 
-The "JSON" reporter outputs a single large JSON object when the tests have completed (failures or not).
+Alias: `JSON`, `json`
+
+The JSON reporter outputs a single large JSON object when the tests have completed (failures or not).
 
 ![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### JSON Stream
 
-The "JSON stream" reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
+Alias: `JSONStream`, `json-stream`
+
+The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
 ![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Min
 
-The "min" reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
+Alias: `Min`, `min`
+
+The Min reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
 ![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
 ### Doc
 
-The "doc" reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
+Alias: `Doc`, `doc`
+
+The Doc reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
 ![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -1483,18 +1507,22 @@ View SuperAgent's [Makefile][superagent-makefile] for reference.
 
 ### Markdown
 
-The "markdown" reporter generates a markdown TOC and body for your test suite.
+Alias: `Markdown`, `markdown`
+
+The Markdown reporter generates a markdown TOC and body for your test suite.
 This is great if you want to use the tests as documentation within a Github
 wiki page, or a markdown file in the repository that Github can render. For
 example, here is the Connect [test output][connect-test-output].
 
 ### XUnit
 
-The `xunit` reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
+Alias: `XUnit`, `xunit`
 
-By default, it will output to the console. To write directly to a file, use `--reporter-options output=filename.xml`.
+The XUnit reporter is also available. It outputs an XUnit-compatible XML document, often applicable in CI servers.
 
-To specify custom report title, use `--reporter-options suiteName="Custom name"`.
+By default, it will output to the console. To write directly to a file, use `--reporter-option output=filename.xml`.
+
+To specify custom report title, use `--reporter-option suiteName="Custom name"`.
 
 ### Third-Party Reporters
 
@@ -1506,6 +1534,8 @@ Examples:
 - our [working example][example-third-party-reporter]
 
 ### HTML Reporter
+
+Alias: `HTML`, `html`
 
 **The HTML reporter is not intended for use on the command-line.**
 
@@ -1621,7 +1651,7 @@ Instructions for doing so can be found [here][mocha-wiki-growl].
 
 Enable Mocha's desktop notifications as follows:
 
-```sh
+```bash
 $ mocha --growl
 ```
 
@@ -1740,7 +1770,7 @@ As such, actual command-line arguments will take precedence over the defaults.
 
 For example, suppose you have the following `mocha.opts` file:
 
-```sh
+```bash
 # mocha.opts
   --require should
   --reporter dot
@@ -1752,7 +1782,7 @@ library, and use `bdd` as the interface. With this, you may then invoke `mocha`
 with additional arguments, here changing the reporter to `list` and setting the
 slow threshold to half a second:
 
-```sh
+```bash
 $ mocha --reporter list --slow 500
 ```
 
@@ -1766,13 +1796,13 @@ your tests in `test/` folder. If you want to include subdirectories, pass the
 
 To configure where `mocha` looks for tests, you may pass your own glob:
 
-```sh
+```bash
 $ mocha --recursive "./spec/*.js"
 ```
 
 Some shells support recursive matching by using the globstar (`**`) wildcard. Bash >= 4.3 supports this with the [`globstar` option][bash-globbing] which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH][zsh-globbing] and [Fish][fish-globbing] support this by default). With recursive matching enabled, the following is the same as passing `--recursive`:
 
-```sh
+```bash
 $ mocha "./spec/**/*.js"
 ```
 
@@ -1857,7 +1887,7 @@ Real live example code:
 
 To run Mocha's tests, you will need GNU Make or compatible; Cygwin should work.
 
-```sh
+```bash
 $ cd /path/to/mocha
 $ npm install
 $ npm test
@@ -1881,14 +1911,14 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/babel
+[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
 [example-express-test]: https://github.com/visionmedia/express/tree/master/test
 [example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
 [example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
-[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/third-party-reporter
-[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/typescript
+[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/packages/third-party-reporter
+[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
@@ -1925,8 +1955,8 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [npm-glob]: https://www.npmjs.com/package/glob
 [npm-growl]: https://npm.im/growl
 [npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
-[npm-mochawesome]: https://www.npmjs.com/package/mochawesome
-[npm-should.js]: https://npm.im/should.js
+[npm-mochawesome]: https://npm.im/mochawesome
+[npm-should.js]: https://npm.im/should
 [npm-supports-color]: https://npm.im/supports-color
 [npm-ts-node]: https://npm.im/ts-node
 [npm-wtfnode]: https://npm.im/wtfnode

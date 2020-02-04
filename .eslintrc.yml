@@ -3,13 +3,12 @@ extends:
   - semistandard
   - plugin:prettier/recommended
 env:
-  node: yes
-  browser: yes
+  node: true
+  browser: true
 parserOptions:
   ecmaVersion: 5
   ecmaFeatures:
-    globalReturn: no
-    jsx: no
+    jsx: false
   sourceType: script
 rules:
   strict:
@@ -29,16 +28,16 @@ overrides:
       - test/integration/helpers.js
       - lib/growl.js
     parserOptions:
-      ecmaVersion: 6
+      ecmaVersion: 2017
     env:
-      browser: no
+      browser: false
 
   - files:
       - test/**/*.{js,mjs}
     env:
-      mocha: yes
+      mocha: true
     globals:
-      expect: no
+      expect: readonly
   - files:
       - bin/*
       - lib/**/*.js
@@ -77,7 +76,7 @@ overrides:
   - files:
       - test/**/*.mjs
     parserOptions:
-      ecmaVersion: 6
+      ecmaVersion: 2017
       sourceType: module
 
   - files:
