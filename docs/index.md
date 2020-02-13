@@ -24,7 +24,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [javascript API for running tests](#more-information)
 - proper exit status for CI support etc
 - [auto-detects and disables coloring for non-ttys](#reporters)
-- [maps uncaught exceptions to the correct test case](#browser-specific-methods)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
@@ -666,7 +665,7 @@ describe('outer', function() {
 });
 ```
 
-> _Updated in v7.0.0. Skipping a test within an "after all" hook is disallowed and will throw an exception. Use a return statement or other means to abort hook execution._
+> _Updated in v7.0.0:_ skipping a test within an "after all" hook is disallowed and will throw an exception. Use a return statement or other means to abort hook execution.
 
 Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.
 
@@ -1543,12 +1542,6 @@ Alias: `HTML`, `html`
 
 Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.
 
-### Browser-specific methods
-
-The following method(s) _only_ function in a browser context:
-
-`mocha.allowUncaught()` : If called, uncaught errors will not be absorbed by the error handler.
-
 A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the **BDD** interface before loading the test scripts, running them `onload` with `mocha.run()`.
 
 ```html
@@ -1600,6 +1593,7 @@ mocha.setup({
 
 // Examples of options:
 mocha.setup({
+  allowUncaught: true,
   asyncOnly: true,
   bail: true,
   checkLeaks: true,
