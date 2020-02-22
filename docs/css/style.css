@@ -251,6 +251,10 @@ footer {
   max-width: 66%;
 }
 
+#external-links {
+  position: relative;
+}
+
 #openjsf-links {
   margin: 0;
   padding: 0;
@@ -269,6 +273,12 @@ footer {
 /* displays each list item with a "|" between */
 #openjsf-links li + li:before {
   content: ' | ';
+}
+
+#external-links .netlify-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 .dl-inline dt,
@@ -291,7 +301,7 @@ blockquote {
   padding: 10px;
 }
 
-@media all and (max-width: 900px) {
+@media all and (max-width: 960px) {
   #copyright-notice {
     max-width: initial;
   }
