@@ -9,5 +9,5 @@ describe('spec 2', function () {
       throw new Error('before hook error');
     });
   });
-  it('skipped');
+  it('not skipped', function () { });
 });
