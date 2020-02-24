@@ -1,0 +1,4 @@
+--reporter dot  
+--growl
+--extension mjs
+--extension js
