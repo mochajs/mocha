@@ -4,6 +4,7 @@ docs/_dist
 mocha.js
 .karma/
 !lib/mocha.js
+/types
 
 #########################################
 # NON-MOCHA STUFF GOES BELOW THIS THING #

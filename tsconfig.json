@@ -1,0 +1,17 @@
+{
+  "include": ["lib"],
+  "compilerOptions": {
+    "rootDir": "lib",
+    "declarationDir": "types",
+    "allowJs": true,
+    "checkJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "newLine": "lf",
+
+    "target": "ES2015",
+    "types": ["node"]
+  }
+}
