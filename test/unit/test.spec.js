@@ -41,6 +41,12 @@ describe('Test', function() {
       expect(this._test.clone().currentRetry(), 'to be', 1);
     });
 
+    it('should add/keep the retriedTest value', function() {
+      var clone1 = this._test.clone();
+      expect(clone1.retriedTest(), 'to be', this._test);
+      expect(clone1.clone().retriedTest(), 'to be', this._test);
+    });
+
     it('should copy the globals value', function() {
       expect(this._test.clone().globals(), 'not to be empty');
     });
