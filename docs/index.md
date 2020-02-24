@@ -39,6 +39,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [mocha.opts file support](#-opts-path)
 - clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
+- [node native ES modules support](#nodejs-native-esm-support)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
@@ -70,6 +71,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [Command-Line Usage](#command-line-usage)
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
+- [Node.JS native ESM support](#nodejs-native-esm-support)
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
 - [Desktop Notification Support](#desktop-notification-support)
 - [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
@@ -354,11 +356,11 @@ With its default "BDD"-style interface, Mocha provides the hooks `before()`, `af
 ```js
 describe('hooks', function() {
   before(function() {
-    // runs before all tests in this block
+    // runs once before the first test in this block
   });
 
   after(function() {
-    // runs after all tests in this block
+    // runs once after the last test in this block
   });
 
   beforeEach(function() {
@@ -868,7 +870,8 @@ Configuration
   --package  Path to package.json for config                            [string]
 
 File Handling
-  --extension          File extension(s) to load           [array] [default: js]
+  --extension          File extension(s) to load
+                                           [array] [default: ["js","cjs","mjs"]]
   --file               Specify file(s) to be loaded prior to root suite
                        execution                       [array] [default: (none)]
   --ignore, --exclude  Ignore file(s) or glob pattern(s)
@@ -1538,6 +1541,42 @@ Alias: `HTML`, `html`
 
 **The HTML reporter is not intended for use on the command-line.**
 
+## Node.JS native ESM support
+
+> _New in v7.1.0_
+
+Mocha supports writing your tests as ES modules, and not just using CommonJS. For example:
+
+```js
+// test.mjs
+import {add} from './add.mjs';
+import assert from 'assert';
+
+it('should add to numbers from an es module', () => {
+  assert.equal(add(3, 5), 8);
+});
+```
+
+To enable this you don't need to do anything special. Write your test file as an ES module. In Node.js
+this means either ending the file with a `.mjs` extension, or, if you want to use the regular `.js` extension, by
+adding `"type": "module"` to your `package.json`.
+More information can be found in the [Node.js documentation](https://nodejs.org/api/esm.html).
+
+> Mocha supports ES modules only from Node.js v12.11.0 and above. To enable this in versions smaller than 13.2.0, you need to add `--experimental-modules` when running
+> Mocha. From version 13.2.0 of Node.js, you can use ES modules without any flags.
+
+### Current Limitations
+
+Node.JS native ESM support still has status: **Stability: 1 - Experimental**
+
+- [Watch mode](#-watch-w) does not support ES Module test files
+- [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
+  can only be CommonJS files
+- [Required modules](#-require-module-r-module) can only be CommonJS files
+- [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`mocharc.js` or `mocharc.cjs`)
+- When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files
+- Node.JS native ESM support does not work with [esm][npm-esm] module
+
 ## Running Mocha in the Browser
 
 Mocha runs in the browser. Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.
@@ -1609,17 +1648,17 @@ mocha.setup({
 
 ### Browser-specific Option(s)
 
-Browser Mocha supports many, but not all [cli options](#command-line-usage).  
+Browser Mocha supports many, but not all [cli options](#command-line-usage).
 To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
 
 #### Options that differ slightly from [cli options](#command-line-usage):
 
-`reporter` _{string|constructor}_  
+`reporter` _{string|constructor}_
 You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 #### Options that _only_ function in browser context:
 
-`noHighlighting` _{boolean}_  
+`noHighlighting` _{boolean}_
 If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 ### Reporting
@@ -1701,7 +1740,8 @@ tests as shown below:
 
 In addition to supporting the deprecated [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
 
-- **JavaScript**: Create a `.mocharc.js` in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
+- **JavaScript**: Create a `.mocharc.js` (or `mocharc.cjs` when using [`"type"="module"`](#nodejs-native-esm-support) in your `package.json`)
+  in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
 - **package.json**: Create a `mocha` property in your project's `package.json`.

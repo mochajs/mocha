@@ -31,7 +31,14 @@ overrides:
       ecmaVersion: 2017
     env:
       browser: false
-
+  - files:
+      - esm-utils.js
+    parserOptions:
+      ecmaVersion: 2018
+      sourceType: module
+    parser: babel-eslint
+    env:
+      browser: false
   - files:
       - test/**/*.{js,mjs}
     env:

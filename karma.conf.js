@@ -35,6 +35,7 @@ module.exports = config => {
           .ignore('chokidar')
           .ignore('fs')
           .ignore('glob')
+          .ignore('./lib/esm-utils.js')
           .ignore('path')
           .ignore('supports-color')
           .on('bundled', (err, content) => {
