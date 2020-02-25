@@ -1,3 +1,31 @@
+# 7.1.0 / 2020-02-26
+
+## :tada: Enhancements
+
+#4038: Add Node.js native ESM support (@giltayar)
+
+Mocha supports writing your test files as ES modules:
+
+- Node.js only v12.11.0 and above
+- Node.js below v13.2.0, you must set `--experimental-modules` option
+- current limitations: please check our [documentation](https://mochajs.org/#nodejs-native-esm-support)
+- for programmatic usage: see [API: loadFilesAsync()](https://mochajs.org/api/mocha#loadFilesAsync)
+
+**Note:** Node.JS native [ECMAScript Modules](https://nodejs.org/api/esm.html) implementation has status: **Stability: 1 - Experimental**
+
+## :bug: Fixes
+
+- #4181: Programmatic API cannot access retried test objects (@juergba)
+- #4174: Browser: fix `allowUncaught` option (@juergba)
+
+## :book: Documentation
+
+- #4058: Manage author list in AUTHORS instead of `package.json` (@outsideris)
+
+## :nut_and_bolt: Other
+
+- #4138: Upgrade ESLint v6.8 (@kaicataldo)
+
 # 7.0.1 / 2020-01-25
 
 ## :bug: Fixes
