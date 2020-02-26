@@ -2,7 +2,7 @@
 
 ## :tada: Enhancements
 
-#4038: Add Node.js native ESM support (@giltayar)
+[#4038](https://github.com/mochajs/mocha/issues/4038): Add Node.js native ESM support ([**@giltayar**](https://github.com/giltayar))
 
 Mocha supports writing your test files as ES modules:
 
@@ -15,16 +15,16 @@ Mocha supports writing your test files as ES modules:
 
 ## :bug: Fixes
 
-- #4181: Programmatic API cannot access retried test objects (@juergba)
-- #4174: Browser: fix `allowUncaught` option (@juergba)
+- [#4181](https://github.com/mochajs/mocha/issues/4181): Programmatic API cannot access retried test objects ([**@juergba**](https://github.com/juergba))
+- [#4174](https://github.com/mochajs/mocha/issues/4174): Browser: fix `allowUncaught` option ([**@juergba**](https://github.com/juergba))
 
 ## :book: Documentation
 
-- #4058: Manage author list in AUTHORS instead of `package.json` (@outsideris)
+- [#4058](https://github.com/mochajs/mocha/issues/4058): Manage author list in AUTHORS instead of `package.json` ([**@outsideris**](https://github.com/outsideris))
 
 ## :nut_and_bolt: Other
 
-- #4138: Upgrade ESLint v6.8 (@kaicataldo)
+- [#4138](https://github.com/mochajs/mocha/issues/4138): Upgrade ESLint v6.8 ([**@kaicataldo**](https://github.com/kaicataldo))
 
 # 7.0.1 / 2020-01-25
 
