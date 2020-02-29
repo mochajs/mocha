@@ -93,9 +93,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       return function(event, callback) {
         if (event === ifStr1) {
           callback(expectedSuite);
-        } else if (event === ifStr2) {
-          callback();
-        } else if (event === ifStr3) {
+        } else if (event === ifStr2 || event === ifStr3) {
           callback();
         }
       };
@@ -123,9 +121,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         test = arg1;
         if (event === ifStr1) {
           callback(test, {});
-        } else if (event === ifStr2) {
-          callback(test);
-        } else if (event === ifStr3) {
+        } else if (event === ifStr2 || event === ifStr3) {
           callback(test);
         }
       };
