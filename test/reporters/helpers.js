@@ -84,8 +84,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       return function(event, callback) {
         if (event === ifStr1) {
           callback();
-        }
-        if (event === ifStr2) {
+        } else if (event === ifStr2) {
           callback(test);
         }
       };
@@ -94,11 +93,9 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       return function(event, callback) {
         if (event === ifStr1) {
           callback(expectedSuite);
-        }
-        if (event === ifStr2) {
+        } else if (event === ifStr2) {
           callback();
-        }
-        if (event === ifStr3) {
+        } else if (event === ifStr3) {
           callback();
         }
       };
@@ -107,8 +104,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       return function(event, callback) {
         if (event === ifStr1) {
           callback(test);
-        }
-        if (event === ifStr2) {
+        } else if (event === ifStr2) {
           callback();
         }
       };
@@ -118,8 +114,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       return function(event, callback) {
         if (event === ifStr1) {
           callback();
-        }
-        if (event === ifStr2) {
+        } else if (event === ifStr2) {
           callback(test, error);
         }
       };
@@ -128,11 +123,9 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         test = arg1;
         if (event === ifStr1) {
           callback(test, {});
-        }
-        if (event === ifStr2) {
+        } else if (event === ifStr2) {
           callback(test);
-        }
-        if (event === ifStr3) {
+        } else if (event === ifStr3) {
           callback(test);
         }
       };
