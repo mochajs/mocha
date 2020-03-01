@@ -64,8 +64,8 @@
     "supports-color": "6.0.0",
     "which": "1.3.1",
     "wide-align": "1.1.3",
-    "yargs": "^15.2.0",
-    "yargs-parser": "^17.1.0",
+    "yargs": "15.2.0",
+    "yargs-parser": "17.1.0",
     "yargs-unparser": "1.6.0"
   },
   "devDependencies": {
