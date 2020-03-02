@@ -126,7 +126,7 @@ describe('TAP reporter', function() {
               message: expectedErrorMessage
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -163,7 +163,7 @@ describe('TAP reporter', function() {
               stack: expectedStack
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -194,7 +194,7 @@ describe('TAP reporter', function() {
               message: expectedErrorMessage
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -230,7 +230,7 @@ describe('TAP reporter', function() {
             var test = createTest();
             var error = {};
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -390,7 +390,7 @@ describe('TAP reporter', function() {
               message: expectedErrorMessage
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -430,7 +430,7 @@ describe('TAP reporter', function() {
               stack: expectedStack
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -464,7 +464,7 @@ describe('TAP reporter', function() {
               message: expectedErrorMessage
             };
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,
@@ -504,7 +504,7 @@ describe('TAP reporter', function() {
             var test = createTest();
             var error = {};
             var runner = createMockRunner(
-              'test end fail',
+              'end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
               null,

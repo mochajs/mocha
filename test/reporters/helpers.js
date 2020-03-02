@@ -106,7 +106,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
           callback();
         }
       };
-    case 'test end fail':
+    case 'end fail':
       test = arg1;
       var error = arg2;
       return function(event, callback) {
