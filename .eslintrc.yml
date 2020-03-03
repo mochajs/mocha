@@ -16,17 +16,20 @@ rules:
     - safe
 overrides:
   - files:
-      - scripts/**/*.js
-      - package-scripts.js
-      - karma.conf.js
-      - .wallaby.js
-      - .eleventy.js
-      - bin/*
-      - lib/cli/**/*.js
-      - test/node-unit/**/*.js
-      - test/integration/options/watch.spec.js
-      - test/integration/helpers.js
-      - lib/growl.js
+      - 'scripts/**/*.js'
+      - 'package-scripts.js'
+      - 'karma.conf.js'
+      - '.wallaby.js'
+      - '.eleventy.js'
+      - 'bin/*'
+      - 'lib/cli/**/*.js'
+      - 'test/node-unit/**/*.js'
+      - 'test/integration/options/watch.spec.js'
+      - 'test/integration/helpers.js'
+      - 'lib/growl.js'
+      - 'lib/buffered-runner.js'
+      - 'lib/worker.js'
+      - 'lib/reporters/buffered.js'
     parserOptions:
       ecmaVersion: 2018
     env:
