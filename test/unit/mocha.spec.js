@@ -487,6 +487,16 @@ describe('Mocha', function() {
       }, 'not to throw');
     });
 
+    it('should catch the `start` event if no tests are provided', function(done) {
+      var mocha = new Mocha(opts);
+      mocha.run().on('start', done);
+    });
+
+    it('should catch the `end` event if no tests are provided', function(done) {
+      var mocha = new Mocha(opts);
+      mocha.run().on('end', done);
+    });
+
     describe('#reporter("xunit")#run(fn)', function() {
       // :TBD: Why does specifying reporter differentiate this test from preceding one
       it('should not raise errors if callback was not provided', function() {
