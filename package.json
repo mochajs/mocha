@@ -34,7 +34,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 10.0.0"
   },
   "scripts": {
     "prepublishOnly": "nps test clean build",

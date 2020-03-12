@@ -28,7 +28,7 @@ overrides:
       - test/integration/helpers.js
       - lib/growl.js
     parserOptions:
-      ecmaVersion: 2017
+      ecmaVersion: 2018
     env:
       browser: false
   - files:
@@ -83,7 +83,7 @@ overrides:
   - files:
       - test/**/*.mjs
     parserOptions:
-      ecmaVersion: 2017
+      ecmaVersion: 2018
       sourceType: module
 
   - files:
