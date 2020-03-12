@@ -151,7 +151,10 @@
     "fs": false,
     "glob": false,
     "path": false,
-    "supports-color": false
+    "supports-color": false,
+    "./lib/serializer.js": false,
+    "./lib/reporters/buffered.js": false,
+    "./lib/buffered-reporter.js": false
   },
   "prettier": {
     "singleQuote": true,
