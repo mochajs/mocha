@@ -332,56 +332,6 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#hideDiff()', function() {
-    it('should set the diff option to false when param equals true', function() {
-      var mocha = new Mocha(opts);
-      mocha.hideDiff(true);
-      expect(mocha.options, 'to have property', 'diff', false);
-    });
-
-    it('should set the diff option to true when param equals false', function() {
-      var mocha = new Mocha(opts);
-      mocha.hideDiff(false);
-      expect(mocha.options, 'to have property', 'diff', true);
-    });
-
-    it('should set the diff option to true when the param is undefined', function() {
-      var mocha = new Mocha(opts);
-      mocha.hideDiff();
-      expect(mocha.options, 'to have property', 'diff', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.hideDiff(), 'to be', mocha);
-    });
-  });
-
-  describe('#ignoreLeaks()', function() {
-    it('should set the checkLeaks option to false when param equals true', function() {
-      var mocha = new Mocha(opts);
-      mocha.ignoreLeaks(true);
-      expect(mocha.options, 'to have property', 'checkLeaks', false);
-    });
-
-    it('should set the checkLeaks option to true when param equals false', function() {
-      var mocha = new Mocha(opts);
-      mocha.ignoreLeaks(false);
-      expect(mocha.options, 'to have property', 'checkLeaks', true);
-    });
-
-    it('should set the checkLeaks option to true when the param is undefined', function() {
-      var mocha = new Mocha(opts);
-      mocha.ignoreLeaks();
-      expect(mocha.options, 'to have property', 'checkLeaks', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.ignoreLeaks(), 'to be', mocha);
-    });
-  });
-
   describe('#inlineDiffs()', function() {
     it('should set the inlineDiffs option to true', function() {
       var mocha = new Mocha(opts);
@@ -510,50 +460,6 @@ describe('Mocha', function() {
           }
         }, 'not to throw');
       });
-    });
-  });
-
-  describe('#useColors()', function() {
-    it('should set the color option to true', function() {
-      var mocha = new Mocha(opts);
-      mocha.useColors(true);
-      expect(mocha.options, 'to have property', 'color', true);
-    });
-
-    it('should not create the color property', function() {
-      var mocha = new Mocha(opts);
-      mocha.useColors();
-      expect(mocha.options, 'not to have property', 'color');
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.useColors(), 'to be', mocha);
-    });
-  });
-
-  describe('#useInlineDiffs()', function() {
-    it('should set the inlineDiffs option to true when param equals true', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs(true);
-      expect(mocha.options, 'to have property', 'inlineDiffs', true);
-    });
-
-    it('should set the inlineDiffs option to false when param equals false', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs(false);
-      expect(mocha.options, 'to have property', 'inlineDiffs', false);
-    });
-
-    it('should set the inlineDiffs option to false when the param is undefined', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs();
-      expect(mocha.options, 'to have property', 'inlineDiffs', false);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.useInlineDiffs(), 'to be', mocha);
     });
   });
 });
