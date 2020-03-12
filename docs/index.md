@@ -36,7 +36,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- [mocha.opts file support](#-opts-path)
 - clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
@@ -75,7 +74,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [Running Mocha in the Browser](#running-mocha-in-the-browser)
 - [Desktop Notification Support](#desktop-notification-support)
 - [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
-- [`mocha.opts`](#mochaopts)
 - [The `test/` Directory](#the-test-directory)
 - [Error Codes](#error-codes)
 - [Editor Plugins](#editor-plugins)
@@ -865,8 +863,6 @@ Reporting & Output
 
 Configuration
   --config   Path to config file           [string] [default: (nearest rc file)]
-  --opts     Path to `mocha.opts` (DEPRECATED)
-                                         [string] [default: "./test/mocha.opts"]
   --package  Path to package.json for config                            [string]
 
 File Handling
@@ -1070,11 +1066,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 ### `--opts <path>`
 
-> _Deprecated in v7.0.0._
-
-Specify a path to [`mocha.opts`](#mochaopts).
-
-By default, Mocha looks for a `mocha.opts` in `test/mocha.opts`; use `--no-opts` to suppress this behavior.
+> _Removed in v8.0.0. Please use [configuration file](#configuring-mocha-nodejs) instead._
 
 ### `--package <path>`
 
@@ -1738,15 +1730,13 @@ tests as shown below:
 
 > _New in v6.0.0_
 
-In addition to supporting the deprecated [`mocha.opts`](#mochaopts) run-control format, Mocha now supports configuration files, typical of modern command-line tools, in several formats:
+Mocha supports configuration files, typical of modern command-line tools, in several formats:
 
 - **JavaScript**: Create a `.mocharc.js` (or `mocharc.cjs` when using [`"type"="module"`](#nodejs-native-esm-support) in your `package.json`)
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
 - **package.json**: Create a `mocha` property in your project's `package.json`.
-
-Mocha suggests using one of the above strategies for configuration instead of the deprecated `mocha.opts` format.
 
 ### Custom Locations
 
@@ -1770,12 +1760,11 @@ If no custom path was given, and if there are multiple configuration files in th
 
 ### Merging
 
-Mocha will also _merge_ any options found in `package.json` _and_ `mocha.opts` into its run-time configuration. In case of conflict, the priority is:
+Mocha will also _merge_ any options found in `package.json` into its run-time configuration. In case of conflict, the priority is:
 
 1. Arguments specified on command-line
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
-1. `mocha.opts`
 
 Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priorty configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
 
@@ -1790,44 +1779,9 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 - For options containing a dash (`-`), the option name can be specified using camelCase.
 - Aliases are valid names, e.g., `R` instead of `reporter`.
 - Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
-- Flags to `node` are _also_ supported in configuration files, like in `mocha.opts`. Use caution, as these can vary between versions of Node.js!
+- Flags to `node` are _also_ supported in configuration files. Use caution, as these can vary between versions of Node.js!
 
 **For more configuration examples, see the [`example/config`][example-mocha-config] directory on GitHub.**
-
-## `mocha.opts`
-
-> _`mocha.opts` file support is DEPRECATED and will be removed from a future version of Mocha. We recommend using a configuration file instead._
-
-Mocha will attempt to load `"./test/mocha.opts"` as a run-control file of sorts.
-
-Beginning-of-line comment support is available; any line _starting_ with a
-hash (`#`) symbol will be considered a comment. Blank lines may also be used.
-Any other line will be treated as a command-line argument (along with any
-associated option value) to be used as a default setting. Settings should be
-specified one per line.
-
-The lines in this file are prepended to any actual command-line arguments.
-As such, actual command-line arguments will take precedence over the defaults.
-
-For example, suppose you have the following `mocha.opts` file:
-
-```bash
-# mocha.opts
-  --require should
-  --reporter dot
-  --ui bdd
-```
-
-The settings above will default the reporter to `dot`, require the `should`
-library, and use `bdd` as the interface. With this, you may then invoke `mocha`
-with additional arguments, here changing the reporter to `list` and setting the
-slow threshold to half a second:
-
-```bash
-$ mocha --reporter list --slow 500
-```
-
-To ignore your `mocha.opts`, use the `--no-opts` option.
 
 ## The `test/` Directory
 
