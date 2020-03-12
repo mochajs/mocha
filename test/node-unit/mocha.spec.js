@@ -28,6 +28,7 @@ describe('Mocha', function() {
 
   describe('#loadFiles', function() {
     it('should load all files from the files array', function() {
+      this.timeout(1000);
       const mocha = new Mocha(opts);
 
       testFiles.forEach(mocha.addFile, mocha);
