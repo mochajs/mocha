@@ -4,7 +4,7 @@ var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
 var Base = require('../../lib/reporters/base');
-
+var debug = require('debug')('mocha:tests:integratin:helpers');
 var DEFAULT_FIXTURE = resolveFixturePath('__default__');
 var MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
 var _MOCHA_EXECUTABLE = require.resolve('../../bin/_mocha');
@@ -47,7 +47,7 @@ module.exports = {
     args = args || [];
 
     invokeSubMocha(
-      args.concat(['-C', path]),
+      args.concat(path),
       function(err, res) {
         if (err) {
           return fn(err);
@@ -182,7 +182,17 @@ function toJSONRunResult(result) {
  * @returns string[]
  */
 function defaultArgs(args) {
-  return !args || !args.length ? ['--file', DEFAULT_FIXTURE] : args;
+  var newArgs = (!args || !args.length
+    ? ['--file', DEFAULT_FIXTURE]
+    : args
+  ).concat(['--no-color']);
+  if (!newArgs.some(arg => /--bail/.test(arg))) {
+    newArgs.push('--no-bail');
+  }
+  if (!newArgs.some(arg => /--parallel/.test(arg))) {
+    newArgs.push('--no-parallel');
+  }
+  return newArgs;
 }
 
 function invokeMocha(args, fn, opts) {
@@ -248,6 +258,7 @@ function invokeSubMocha(args, fn, opts) {
     fn = args;
     args = [];
   }
+  debug(defaultArgs([_MOCHA_EXECUTABLE].concat(args)));
   return _spawnMochaWithListeners(
     defaultArgs([_MOCHA_EXECUTABLE].concat(args)),
     fn,
