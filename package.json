@@ -154,7 +154,8 @@
     "supports-color": false,
     "./lib/serializer.js": false,
     "./lib/reporters/buffered.js": false,
-    "./lib/buffered-reporter.js": false
+    "./lib/buffered-reporter.js": false,
+    "./lib/worker.js": false
   },
   "prettier": {
     "singleQuote": true,
