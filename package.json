@@ -34,7 +34,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": ">= 10.0.0"
+    "node": ">= 10.12.0"
   },
   "scripts": {
     "prepublishOnly": "nps test clean build",
@@ -56,7 +56,6 @@
     "js-yaml": "3.13.1",
     "log-symbols": "3.0.0",
     "minimatch": "3.0.4",
-    "mkdirp": "0.5.3",
     "ms": "2.1.1",
     "node-environment-flags": "1.0.6",
     "object.assign": "4.1.0",

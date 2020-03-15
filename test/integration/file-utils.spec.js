@@ -4,7 +4,6 @@ var utils = require('../../lib/utils');
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
-var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 
 describe('file utils', function() {
@@ -119,7 +118,7 @@ describe('file utils', function() {
   afterEach(removeTempDir);
 
   function makeTempDir() {
-    mkdirp.sync(tmpDir);
+    fs.mkdirSync(tmpDir, {recursive: true});
   }
 
   function removeTempDir() {
