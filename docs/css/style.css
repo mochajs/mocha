@@ -231,6 +231,7 @@ img.screenshot {
 
 .sponsorship a {
   padding: 0 40px;
+  text-decoration: none;
 }
 
 footer {
@@ -299,6 +300,23 @@ footer {
 blockquote {
   border-left: 1px solid #eee;
   padding: 10px;
+}
+
+figure#wallaby-logo {
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+}
+figure#wallaby-logo figcaption {
+  margin-top: 10px;
+  display: block;
+  font-family: 'Open Sans', -apple-system, system-ui, 'Segoe UI', Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2c2c2c;
+  -webkit-font-smoothing: antialiased;
 }
 
 @media all and (max-width: 960px) {
