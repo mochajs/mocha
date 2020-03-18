@@ -4,7 +4,7 @@ var format = require('util').format;
 var spawn = require('cross-spawn').spawn;
 var path = require('path');
 var Base = require('../../lib/reporters/base');
-var debug = require('debug')('mocha:tests:integratin:helpers');
+var debug = require('debug')('mocha:tests:integration:helpers');
 var DEFAULT_FIXTURE = resolveFixturePath('__default__');
 var MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
 var _MOCHA_EXECUTABLE = require.resolve('../../bin/_mocha');
@@ -287,6 +287,7 @@ function _spawnMochaWithListeners(args, fn, opts) {
     },
     opts || {}
   );
+  debug('spawning: %s', [process.execPath].concat(args).join(' '));
   var mocha = spawn(process.execPath, args, opts);
   var listener = function(data) {
     output += data;
