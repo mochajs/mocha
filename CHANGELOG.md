@@ -1,3 +1,17 @@
+# 7.1.1 / 2020-03-18
+
+## :lock: Security Fixes
+
+- #4204: Update dependencies mkdirp, yargs-parser and yargs (@juergba)
+
+## :bug: Fixes
+
+- #3660: Fix `runner` listening to `start` and `end` events (@juergba)
+
+## :book: Documentation
+
+- #4190: Show Netlify badge on footer (@outsideris)
+
 # 7.1.0 / 2020-02-26
 
 ## :tada: Enhancements
