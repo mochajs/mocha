@@ -2,15 +2,15 @@
 
 ## :lock: Security Fixes
 
-- #4204: Update dependencies mkdirp, yargs-parser and yargs (@juergba)
+- [#4204](https://github.com/mochajs/mocha/issues/4204): Update dependencies mkdirp, yargs-parser and yargs ([**@juergba**](https://github.com/juergba))
 
 ## :bug: Fixes
 
-- #3660: Fix `runner` listening to `start` and `end` events (@juergba)
+- [#3660](https://github.com/mochajs/mocha/issues/3660): Fix `runner` listening to `start` and `end` events ([**@juergba**](https://github.com/juergba))
 
 ## :book: Documentation
 
-- #4190: Show Netlify badge on footer (@outsideris)
+- [#4190](https://github.com/mochajs/mocha/issues/4190): Show Netlify badge on footer ([**@outsideris**](https://github.com/outsideris))
 
 # 7.1.0 / 2020-02-26
 
