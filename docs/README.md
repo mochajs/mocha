@@ -6,7 +6,7 @@ _So you wanna build the site?_
 
 ## Prerequisites
 
-- Node.js v10.x or greater
+- Node.js v10.12.0 or greater
 
 ## Development
 

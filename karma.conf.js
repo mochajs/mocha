@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const os = require('os');
 const baseBundleDirpath = path.join(__dirname, '.karma');
 
@@ -111,7 +110,7 @@ module.exports = config => {
         console.error('No SauceLabs credentials present');
       }
     }
-    mkdirp.sync(bundleDirpath);
+    fs.mkdirSync(bundleDirpath, {recursive: true});
   } else {
     console.error('CI mode disabled');
   }
