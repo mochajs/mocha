@@ -4,7 +4,6 @@ var EventEmitter = require('events').EventEmitter;
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
-var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var sinon = require('sinon');
 var createStatsCollector = require('../../lib/stats-collector');
@@ -51,12 +50,12 @@ describe('XUnit reporter', function() {
     };
 
     describe('when fileStream can be created', function() {
-      var mkdirpSync;
+      var fsMkdirSync;
       var fsCreateWriteStream;
 
       beforeEach(function() {
         sandbox = sinon.createSandbox();
-        mkdirpSync = sandbox.stub(mkdirp, 'sync');
+        fsMkdirSync = sandbox.stub(fs, 'mkdirSync');
         fsCreateWriteStream = sandbox.stub(fs, 'createWriteStream');
       });
 
@@ -67,7 +66,13 @@ describe('XUnit reporter', function() {
         XUnit.call(fakeThis, runner, options);
 
         var expectedDirectory = path.dirname(expectedOutput);
-        expect(mkdirpSync.calledWith(expectedDirectory), 'to be true');
+        expect(
+          fsMkdirSync.calledWith(expectedDirectory, {
+            recursive: true
+          }),
+          'to be true'
+        );
+
         expect(fsCreateWriteStream.calledWith(expectedOutput), 'to be true');
       });
 
