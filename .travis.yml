@@ -47,8 +47,7 @@ jobs:
       node_js: '10'
 
     - script: npm start test.bundle test.browser
-      # XXX: update when canvas supplies a prebuilt binary for Node.js v12.x
-      node_js: 10
+      node_js: 12
       install: npm ci # we need the native modules here
       addons:
         artifacts:
