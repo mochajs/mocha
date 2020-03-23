@@ -58,7 +58,7 @@ describe('options', function() {
   describe('loadOptions()', function() {
     describe('when no parameter provided', function() {
       beforeEach(function() {
-        this.timeout(500);
+        this.timeout(1000);
         readFileSync = sandbox.stub();
         readFileSync.onFirstCall().returns('{}');
         findConfig = sandbox.stub().returns('/some/.mocharc.json');
