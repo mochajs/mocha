@@ -36,7 +36,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- [mocha.opts file support](#-opts-path)
 - [source-map support](#--enable-source-maps)
 - clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
