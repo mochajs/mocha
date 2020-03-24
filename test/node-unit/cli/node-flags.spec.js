@@ -1,6 +1,6 @@
 'use strict';
 
-const nodeEnvFlags = require('node-environment-flags');
+const nodeEnvFlags = process.allowedNodeEnvironmentFlags;
 const {
   isNodeFlag,
   impliesNoTimeouts,
