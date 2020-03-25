@@ -117,6 +117,12 @@ These are _soft_-deprecated, and will emit a warning upon use. Support will be r
 - [#4089](https://github.com/mochajs/mocha/issues/4089): Add funding information to `package.json` ([**@Munter**](https://github.com/Munter))
 - [#4077](https://github.com/mochajs/mocha/issues/4077): Improve integration tests ([**@soobing**](https://github.com/soobing))
 
+# 6.2.3 / 2020-03-25
+
+## :lock: Security Fixes
+
+- [848d6fb8](https://github.com/mochajs/mocha/commit/848d6fb8feef659564b296db457312d38176910d): Update dependencies mkdirp, yargs-parser and yargs ([**@juergba**](https://github.com/juergba))
+
 # 6.2.2 / 2019-10-18
 
 ## :bug: Fixes
