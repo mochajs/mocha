@@ -98,9 +98,7 @@ if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
   .forEach(opt => {
     const newOpt = opt === 'debug' ? 'inspect' : 'inspect-brk';
     warn(
-      `"--${opt}" is not available in Node.js ${
-        process.version
-      }; use "--${newOpt}" instead.`
+      `"--${opt}" is not available in Node.js ${process.version}; use "--${newOpt}" instead.`
     );
     nodeArgs[newOpt] = nodeArgs[opt];
     mochaArgs.timeout = false;

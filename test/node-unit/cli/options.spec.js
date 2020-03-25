@@ -209,13 +209,14 @@ describe('options', function() {
           });
 
           it('should have attempted to load two files', function() {
-            expect(readFileSync, 'was called times', 2).and(
-              'to have calls satisfying',
-              [
-                {args: ['/some/package.json', 'utf8']},
-                {args: ['/path/to/mocha.opts', 'utf8']}
-              ]
-            );
+            expect(
+              readFileSync,
+              'was called times',
+              2
+            ).and('to have calls satisfying', [
+              {args: ['/some/package.json', 'utf8']},
+              {args: ['/path/to/mocha.opts', 'utf8']}
+            ]);
           });
 
           it('should set opts = false', function() {
@@ -258,10 +259,14 @@ describe('options', function() {
           });
 
           it('should not attempt to read any mocha.opts', function() {
-            expect(readFileSync, 'was called times', 1).and(
-              'to have all calls satisfying',
-              ['/some/package.json', 'utf8']
-            );
+            expect(
+              readFileSync,
+              'was called times',
+              1
+            ).and('to have all calls satisfying', [
+              '/some/package.json',
+              'utf8'
+            ]);
           });
 
           it('should set opts = false', function() {
