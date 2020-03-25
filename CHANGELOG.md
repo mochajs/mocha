@@ -2,7 +2,7 @@
 
 ## :lock: Security Fixes
 
-- [848d6fb8](https://github.com/mochajs/mocha/commit/848d6fb8feef659564b296db457312d38176910d): Update dependencies mkdirp, yargs-parser and yargs (@juergba)
+- [848d6fb8](https://github.com/mochajs/mocha/commit/848d6fb8feef659564b296db457312d38176910d): Update dependencies mkdirp, yargs-parser and yargs ([**@juergba**](https://github.com/juergba))
 
 # 6.2.2 / 2019-10-18
 
