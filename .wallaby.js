@@ -36,7 +36,7 @@ module.exports = () => {
       // running mocha instance is not the same as mocha under test,
       // running mocha is the project's source code mocha, mocha under test is instrumented version of the source code
       const runningMocha = wallaby.testFramework;
-      runningMocha.timeout(200);
+      runningMocha.timeout(1000);
       // to expose it/describe etc. on the mocha under test
       const MochaUnderTest = require('./');
       const mochaUnderTest = new MochaUnderTest();

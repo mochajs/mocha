@@ -530,23 +530,11 @@ describe('serializer', function() {
       // the following two tests should be combined into one, but not sure how to express
       // as a single assertion
 
-      it('should add a `__type` prop', function() {
+      it('should add a readonly `__type` prop', function() {
         expect(
           new SerializableWorkerResult(),
-          'to have property',
-          '__type',
-          'SerializableWorkerResult'
-        );
-      });
-
-      it('should not allow writing to the `__type` prop', function() {
-        const result = new SerializableWorkerResult();
-        expect(
-          () => {
-            result.__type = 'a bird';
-          },
-          'to throw',
-          TypeError
+          'to have readonly property',
+          '__type'
         );
       });
     });
