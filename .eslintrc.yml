@@ -31,6 +31,7 @@ overrides:
       - 'lib/worker.js'
       - 'lib/reporters/buffered.js'
       - 'lib/serializer.js'
+      - 'test/reporters/buffered.spec.js'
     parserOptions:
       ecmaVersion: 2018
     env:
