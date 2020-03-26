@@ -40,12 +40,10 @@ describe('options', function() {
 
   beforeEach(function() {
     sandbox = createSandbox();
-    rewiremock.enable();
   });
 
   afterEach(function() {
     sandbox.restore();
-    rewiremock.disable();
   });
 
   /**

@@ -23,7 +23,6 @@ describe('buffered-runner', function() {
 
     beforeEach(function() {
       sandbox = createSandbox();
-      rewiremock.enable();
 
       suite = new Suite('a root suite', {}, true);
 
@@ -514,10 +513,6 @@ describe('buffered-runner', function() {
           });
         });
       });
-    });
-
-    afterEach(function() {
-      rewiremock.disable();
     });
   });
 });

@@ -53,12 +53,10 @@ describe('Buffered', function() {
         '../../lib/reporters/base': class MockBase {}
       }
     );
-    rewiremock.enable();
   });
 
   afterEach(function() {
     sandbox.restore();
-    rewiremock.disable();
   });
 
   describe('constructor', function() {
