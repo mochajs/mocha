@@ -333,7 +333,7 @@ exports.mixinMochaAssertions = function(expect) {
       }
     )
     .addAssertion(
-      '<RawRunResult|JSONRunResult> to have [exit] code <number>',
+      '<RawResult|RawRunResult|JSONRunResult> to have [exit] code <number>',
       function(expect, result, code) {
         expect(result.code, 'to be', code);
       }
