@@ -140,8 +140,21 @@ describe('serializer', function() {
           });
         });
 
+        describe('when passed an object containing an object with a `serialize` method', function() {
+          it('should call the `serialize` method', function() {
+            const stub = sandbox.stub();
+            const obj = {
+              nested: {
+                serialize: stub
+              }
+            };
+            SerializableEvent.create('some-event', obj).serialize();
+            expect(stub, 'was called once');
+          });
+        });
+
         describe('when passed an object containing a non-`serialize` method', function() {
-          it('should remove functions', function() {
+          it('should remove the method', function() {
             const obj = {
               func: () => {}
             };
