@@ -4,6 +4,6 @@ global:
   - okGlobalA,okGlobalB
   - okGlobalC
   - callback*
-timeout: 500
+timeout: 1000
 parallel: true
 # bail: true
