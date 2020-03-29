@@ -239,14 +239,13 @@ function toJSONRunResult(result) {
  * @returns string[]
  */
 function defaultArgs(args) {
-  var newArgs = (!args || !args.length
-    ? ['--file', DEFAULT_FIXTURE]
-    : args
-  ).concat(['--no-color']);
-  if (!newArgs.some(arg => /--bail/.test(arg))) {
+  var newArgs = (!args || !args.length ? [DEFAULT_FIXTURE] : args).concat([
+    '--no-color'
+  ]);
+  if (!newArgs.some(arg => /--(no-)?bail/.test(arg))) {
     newArgs.push('--no-bail');
   }
-  if (!newArgs.some(arg => /--parallel/.test(arg))) {
+  if (!newArgs.some(arg => /--(no-)?parallel/.test(arg))) {
     newArgs.push('--no-parallel');
   }
   return newArgs;
@@ -360,7 +359,8 @@ function _spawnMochaWithListeners(args, fn, opts) {
     fn(null, {
       output: output,
       code: code,
-      args: args
+      args: args,
+      command: args.join(' ')
     });
   });
 
