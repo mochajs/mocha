@@ -6,17 +6,51 @@ var runMochaAsync = helpers.runMochaAsync;
 var invokeMochaAsync = helpers.invokeMochaAsync;
 
 describe('--parallel', function() {
-  it('should not appear fundamentally different than without', function() {
-    return expect(
-      runMochaAsync(path.join('options', 'parallel', 'test-*.fixture.js'), [
-        '--parallel'
-      ]),
-      'when fulfilled',
-      'to have failed'
-    )
-      .and('when fulfilled', 'to have passed test count', 2)
-      .and('when fulfilled', 'to have pending test count', 1)
-      .and('when fulfilled', 'to have failed test count', 2);
+  describe('when used with CJS tests', function() {
+    it('should have the same result as with --no-parallel', function() {
+      this.timeout(5000);
+      return runMochaAsync(
+        path.join('options', 'parallel', 'test-*.fixture.js'),
+        ['--no-parallel']
+      ).then(function(expected) {
+        return expect(
+          runMochaAsync(path.join('options', 'parallel', 'test-*.fixture.js'), [
+            '--parallel'
+          ]),
+          'to be fulfilled with value satisfying',
+          {
+            passing: expected.passing,
+            failing: expected.failing,
+            pending: expected.pending,
+            code: expected.code
+          }
+        );
+      });
+    });
+  });
+
+  describe('when used with ESM tests', function() {
+    it('should have the same result as with --no-parallel', function() {
+      this.timeout(5000);
+      return runMochaAsync(
+        path.join(__dirname, '..', 'fixtures', 'esm', '*.fixture.mjs'),
+        ['--no-parallel']
+      ).then(function(expected) {
+        return expect(
+          runMochaAsync(
+            path.join(__dirname, '..', 'fixtures', 'esm', '*.fixture.mjs'),
+            ['--parallel']
+          ),
+          'to be fulfilled with value satisfying',
+          {
+            passing: expected.passing,
+            failing: expected.failing,
+            pending: expected.pending,
+            code: expected.code
+          }
+        );
+      });
+    });
   });
 
   describe('when used with --retries', function() {
