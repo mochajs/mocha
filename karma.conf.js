@@ -30,9 +30,9 @@ module.exports = config => {
     browserify: {
       debug: true,
       configure: function configure(b) {
-        b.ignore('chokidar')
+        b.ignore('./lib/cli/*.js')
           .ignore('fs')
-          .ignore('glob')
+          .ignore('./lib/esm-utils.js')
           .ignore('path')
           .ignore('supports-color')
           .ignore('./lib/esm-utils.js')

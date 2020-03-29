@@ -157,7 +157,6 @@
     "./index.js": "./browser-entry.js",
     "./lib/nodejs/growl.js": "./lib/browser/growl.js",
     "fs": false,
-    "glob": false,
     "path": false,
     "supports-color": false,
     "./lib/nodejs/serializer.js": false,
