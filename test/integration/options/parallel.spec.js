@@ -53,4 +53,22 @@ describe('--parallel', function() {
       ).and('when fulfilled', 'to have exit code', 1);
     });
   });
+
+  describe('when used with --file', function() {
+    it('should error out', function() {
+      return expect(
+        invokeMochaAsync(
+          [
+            '--file',
+            path.join('options', 'parallel', 'test-a.fixture.js'),
+            '--parallel'
+          ],
+          'pipe'
+        )[1],
+        'when fulfilled',
+        'to contain output',
+        /mutually exclusive with --file/
+      );
+    });
+  });
 });
