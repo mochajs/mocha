@@ -1,5 +1,5 @@
 'use strict';
-
+var Mocha = require('../../../lib/mocha');
 var path = require('path');
 var helpers = require('../helpers');
 var runMochaAsync = helpers.runMochaAsync;
@@ -71,4 +71,64 @@ describe('--parallel', function() {
       );
     });
   });
+
+  describe('when used with --bail', function() {
+    it('should skip some tests', function() {
+      return runMochaAsync(
+        path.join('options', 'parallel', 'test-*.fixture.js'),
+        ['--parallel', '--bail']
+      ).then(function(result) {
+        // we don't know _exactly_ how many tests will be skipped here
+        // due to the --bail, but the number of tests completed should be
+        // less than the total, which is 5.
+        return expect(
+          result.passing + result.pending + result.failing,
+          'to be less than',
+          5
+        );
+      });
+    });
+
+    it('should fail', function() {
+      return expect(
+        runMochaAsync(path.join('options', 'parallel', 'test-*.fixture.js'), [
+          '--parallel',
+          '--bail'
+        ]),
+        'when fulfilled',
+        'to have failed'
+      );
+    });
+  });
+
+  // each reporter name is duplicated; one is in all lower-case
+  Object.keys(Mocha.reporters)
+    .filter(function(name) {
+      return /^[a-z]/.test(name);
+    })
+    .forEach(function(reporter) {
+      describe('when used with --reporter=' + reporter, function() {
+        it('should have the same result as run with --no-parallel', function() {
+          this.timeout(5000);
+          return runMochaAsync(
+            path.join('options', 'parallel', 'test-*.fixture.js'),
+            ['--reporter', reporter, '--no-parallel']
+          ).then(function(expected) {
+            return expect(
+              runMochaAsync(
+                path.join('options', 'parallel', 'test-*.fixture.js'),
+                ['--reporter', reporter, '--parallel']
+              ),
+              'to be fulfilled with value satisfying',
+              {
+                passing: expected.passing,
+                failing: expected.failing,
+                pending: expected.pending,
+                code: expected.code
+              }
+            );
+          });
+        });
+      });
+    });
 });
