@@ -1,6 +1,5 @@
 'use strict';
 
-const {loadConfig, parsers, CONFIG_FILES} = require('../../../lib/cli/config');
 const {createSandbox} = require('sinon');
 const rewiremock = require('rewiremock/node');
 
@@ -17,6 +16,17 @@ describe('cli/config', function() {
   });
 
   describe('loadConfig()', function() {
+    let parsers;
+    let loadConfig;
+
+    beforeEach(function() {
+      const config = rewiremock.proxy(
+        require.resolve('../../../lib/cli/config')
+      );
+      parsers = config.parsers;
+      loadConfig = config.loadConfig;
+    });
+
     describe('when parsing succeeds', function() {
       beforeEach(function() {
         sandbox.stub(parsers, 'yaml').returns(config);
@@ -105,15 +115,18 @@ describe('cli/config', function() {
   describe('findConfig()', function() {
     let findup;
     let findConfig;
+    let CONFIG_FILES;
 
     beforeEach(function() {
       findup = {sync: sandbox.stub().returns('/some/path/.mocharc.js')};
-      findConfig = rewiremock.proxy(
+      const config = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
         r => ({
           'find-up': r.by(() => findup)
         })
-      ).findConfig;
+      );
+      findConfig = config.findConfig;
+      CONFIG_FILES = config.CONFIG_FILES;
     });
 
     it('should look for one of the config files using findup-sync', function() {

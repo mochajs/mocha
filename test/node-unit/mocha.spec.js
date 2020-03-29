@@ -1,28 +1,24 @@
 'use strict';
 
-const path = require('path');
 const Mocha = require('../../lib/mocha');
 const utils = require('../../lib/utils');
 
 describe('Mocha', function() {
   const opts = {reporter: utils.noop}; // no output
-  const testFiles = [
-    __filename,
-    path.join(__dirname, 'cli', 'config.spec.js'),
-    path.join(__dirname, 'cli', 'run.spec.js')
-  ];
-  const resolvedTestFiles = testFiles.map(require.resolve);
 
   describe('#addFile', function() {
     it('should add the given file to the files array', function() {
       const mocha = new Mocha(opts);
-      mocha.addFile(__filename);
-      expect(mocha.files, 'to have length', 1).and('to contain', __filename);
+      mocha.addFile('some-file.js');
+      expect(mocha.files, 'to have length', 1).and(
+        'to contain',
+        'some-file.js'
+      );
     });
 
     it('should be chainable', function() {
       const mocha = new Mocha(opts);
-      expect(mocha.addFile(__filename), 'to be', mocha);
+      expect(mocha.addFile('some-file.js'), 'to be', mocha);
     });
   });
 
@@ -31,9 +27,11 @@ describe('Mocha', function() {
       this.timeout(1000);
       const mocha = new Mocha(opts);
 
-      testFiles.forEach(mocha.addFile, mocha);
+      mocha.addFile(require.resolve('../../package.json'));
       mocha.loadFiles();
-      expect(require.cache, 'to have keys', resolvedTestFiles);
+      expect(require.cache, 'to have keys', [
+        require.resolve('../../package.json')
+      ]);
     });
 
     it('should execute the optional callback if given', function() {
@@ -58,11 +56,12 @@ describe('Mocha', function() {
   describe('#unloadFiles', function() {
     it('should unload all test files from cache', function() {
       const mocha = new Mocha(opts);
-
-      testFiles.forEach(mocha.addFile, mocha);
+      mocha.addFile(require.resolve('../../package.json'));
       mocha.loadFiles();
       mocha.unloadFiles();
-      expect(require.cache, 'not to have keys', resolvedTestFiles);
+      expect(require.cache, 'not to have keys', [
+        require.resolve('../../package.json')
+      ]);
     });
 
     it('should be chainable', function() {
