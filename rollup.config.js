@@ -28,7 +28,7 @@ export default {
     }),
     commonjs(),
     globals({
-      global: false
+      // global: false
     }),
     builtins(),
     nodeResolve({
