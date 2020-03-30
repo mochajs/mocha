@@ -34,7 +34,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore "./lib/esm-utils.js"  --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' -o mocha.js`,
+      script: `rollup -c`,
       description: 'Build browser bundle'
     },
     lint: {
