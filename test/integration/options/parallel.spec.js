@@ -156,7 +156,7 @@ describe('--parallel', function() {
   // each reporter name is duplicated; one is in all lower-case
   Object.keys(Mocha.reporters)
     .filter(function(name) {
-      return /^[a-z]/.test(name);
+      return name !== 'base' && /^[a-z]/.test(name);
     })
     .forEach(function(reporter) {
       describe('when used with --reporter=' + reporter, function() {
