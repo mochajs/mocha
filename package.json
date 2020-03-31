@@ -163,6 +163,7 @@
   "browser": {
     "./index.js": "./browser-entry.js",
     "./lib/nodejs/growl.js": "./lib/browser/growl.js",
+    "./lib/esm-utils.js": false,
     "fs": false,
     "path": false,
     "supports-color": false,
