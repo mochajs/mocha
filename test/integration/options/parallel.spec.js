@@ -106,6 +106,24 @@ describe('--parallel', function() {
     });
   });
 
+  describe('when used with --sort', function() {
+    it('should error out', function() {
+      return expect(
+        invokeMochaAsync(
+          [
+            '--sort',
+            path.join('options', 'parallel', 'test-*.fixture.js'),
+            '--parallel'
+          ],
+          'pipe'
+        )[1],
+        'when fulfilled',
+        'to contain output',
+        /mutually exclusive with --sort/
+      );
+    });
+  });
+
   describe('when used with --bail', function() {
     it('should skip some tests', function() {
       return runMochaAsync(
