@@ -5,7 +5,8 @@ const {
   EVENT_RUN_BEGIN,
   EVENT_TEST_PASS,
   EVENT_TEST_FAIL,
-  EVENT_SUITE_END
+  EVENT_SUITE_END,
+  EVENT_SUITE_BEGIN
 } = require('../../lib/runner').constants;
 const rewiremock = require('rewiremock/node');
 const BUFFERED_RUNNER_PATH = require.resolve('../../lib/buffered-runner.js');
@@ -34,7 +35,8 @@ describe('buffered-runner', function() {
         proxy: sandbox.stub().resolves({
           run
         }),
-        terminate
+        terminate,
+        stats: sandbox.stub().returns({})
       });
       BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, () => ({
         workerpool: {
@@ -74,7 +76,7 @@ describe('buffered-runner', function() {
             const opts = {};
             run.withArgs('some-file.js', opts).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', opts).resolves({
-              failures: 0,
+              failureCount: 0,
               events: [
                 {
                   eventName: EVENT_TEST_PASS,
@@ -114,7 +116,7 @@ describe('buffered-runner', function() {
             const err = new Error('whoops');
             run.withArgs('some-file.js', opts).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', opts).resolves({
-              failures: 0,
+              failureCount: 0,
               events: [
                 {
                   eventName: EVENT_TEST_PASS,
@@ -187,12 +189,19 @@ describe('buffered-runner', function() {
           });
         });
 
-        describe('when provided global bail flag', function() {
+        describe('when suite should bail', function() {
           describe('when no event contains an error', function() {
             it('should not force-terminate', function(done) {
               run.resolves({
-                failures: 0,
+                failureCount: 0,
                 events: [
+                  {
+                    eventName: EVENT_SUITE_BEGIN,
+                    data: {
+                      title: 'some suite',
+                      _bail: true
+                    }
+                  },
                   {
                     eventName: EVENT_TEST_PASS,
                     data: {
@@ -202,7 +211,8 @@ describe('buffered-runner', function() {
                   {
                     eventName: EVENT_SUITE_END,
                     data: {
-                      title: 'some suite'
+                      title: 'some suite',
+                      _bail: true
                     }
                   }
                 ]
@@ -217,7 +227,7 @@ describe('buffered-runner', function() {
                 },
                 {
                   files: ['some-file.js', 'some-other-file.js'],
-                  opts: {bail: true}
+                  opts: {}
                 }
               );
             });
@@ -226,14 +236,21 @@ describe('buffered-runner', function() {
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {bail: true};
+                const opts = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
                 run.withArgs('some-file.js', opts).resolves({
-                  failures: 1,
+                  failureCount: 1,
                   events: [
+                    {
+                      eventName: EVENT_SUITE_BEGIN,
+                      data: {
+                        title: 'some suite',
+                        _bail: true
+                      }
+                    },
                     {
                       eventName: EVENT_TEST_FAIL,
                       data: {
@@ -244,7 +261,8 @@ describe('buffered-runner', function() {
                     {
                       eventName: EVENT_SUITE_END,
                       data: {
-                        title: 'some suite'
+                        title: 'some suite',
+                        _bail: true
                       }
                     }
                   ]
@@ -268,14 +286,21 @@ describe('buffered-runner', function() {
             });
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {bail: true};
+                const opts = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
                 run.withArgs('some-file.js', opts).resolves({
-                  failures: 1,
+                  failureCount: 1,
                   events: [
+                    {
+                      eventName: EVENT_SUITE_BEGIN,
+                      data: {
+                        title: 'some suite',
+                        _bail: true
+                      }
+                    },
                     {
                       eventName: EVENT_TEST_FAIL,
                       data: {
@@ -286,14 +311,21 @@ describe('buffered-runner', function() {
                     {
                       eventName: EVENT_SUITE_END,
                       data: {
-                        title: 'some suite'
+                        title: 'some suite',
+                        _bail: true
                       }
                     }
                   ]
                 });
                 run.withArgs('some-other-file.js', opts).resolves({
-                  failures: 0,
+                  failureCount: 0,
                   events: [
+                    {
+                      eventName: EVENT_SUITE_BEGIN,
+                      data: {
+                        title: 'some suite'
+                      }
+                    },
                     {
                       eventName: EVENT_TEST_PASS,
                       data: {
@@ -331,7 +363,7 @@ describe('buffered-runner', function() {
           describe('when no event contains an error', function() {
             it('should not force-terminate', function(done) {
               run.resolves({
-                failures: 0,
+                failureCount: 0,
                 events: [
                   {
                     eventName: EVENT_TEST_PASS,
@@ -372,7 +404,7 @@ describe('buffered-runner', function() {
                   message: 'oh no'
                 };
                 run.withArgs('some-file.js', opts).resolves({
-                  failures: 1,
+                  failureCount: 1,
                   events: [
                     {
                       eventName: EVENT_TEST_FAIL,
@@ -415,7 +447,7 @@ describe('buffered-runner', function() {
                   message: 'oh no'
                 };
                 run.withArgs('some-file.js', opts).resolves({
-                  failures: 1,
+                  failureCount: 1,
                   events: [
                     {
                       eventName: EVENT_TEST_FAIL,
@@ -434,7 +466,7 @@ describe('buffered-runner', function() {
                   ]
                 });
                 run.withArgs('some-other-file.js', opts).resolves({
-                  failures: 0,
+                  failureCount: 0,
                   events: [
                     {
                       eventName: EVENT_TEST_PASS,
@@ -475,7 +507,7 @@ describe('buffered-runner', function() {
                   message: 'oh no'
                 };
                 run.withArgs('some-file.js', opts).resolves({
-                  failures: 1,
+                  failureCount: 1,
                   events: [
                     {
                       eventName: EVENT_TEST_FAIL,

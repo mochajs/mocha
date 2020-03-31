@@ -153,6 +153,28 @@ describe('--parallel', function() {
     });
   });
 
+  describe('when encountering a "bail" in context', function() {
+    it('should skip some tests', function() {
+      return runMochaAsync('options/parallel/bail', ['--parallel']).then(
+        function(result) {
+          return expect(
+            result.passing + result.pending + result.failing,
+            'to be less than',
+            2
+          );
+        }
+      );
+    });
+
+    it('should fail', function() {
+      return expect(
+        runMochaAsync('options/parallel/bail', ['--parallel', '--bail']),
+        'when fulfilled',
+        'to have failed'
+      );
+    });
+  });
+
   // each reporter name is duplicated; one is in all lower-case
   Object.keys(Mocha.reporters)
     .filter(function(name) {
