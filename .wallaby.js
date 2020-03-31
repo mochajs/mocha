@@ -47,17 +47,17 @@ module.exports = () => {
         mochaUnderTest
       );
       // to make test/node-unit/color.spec.js pass, we need to run mocha in the project's folder context
-      const childProcess = require('child_process');
-      const execFile = childProcess.execFile;
-      childProcess.execFile = function() {
-        let opts = arguments[2];
-        if (typeof opts === 'function') {
-          opts = {};
-          Array.prototype.splice.call(arguments, 2, 0, opts);
-        }
-        opts.cwd = wallaby.localProjectDir;
-        return execFile.apply(this, arguments);
-      };
+      // const childProcess = require('child_process');
+      // const execFile = childProcess.execFile;
+      // childProcess.execFile = function() {
+      //   let opts = arguments[2];
+      //   if (typeof opts === 'function') {
+      //     opts = {};
+      //     Array.prototype.splice.call(arguments, 2, 0, opts);
+      //   }
+      //   opts.cwd = wallaby.localProjectDir;
+      //   return execFile.apply(this, arguments);
+      // };
       require('./test/setup');
     },
     debug: true
