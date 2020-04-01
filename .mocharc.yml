@@ -1,9 +1,8 @@
-require: test/setup
-ui: bdd
+require: 'test/setup'
+ui: 'bdd'
 global:
-  - okGlobalA,okGlobalB
-  - okGlobalC
-  - callback*
+  - 'okGlobalA,okGlobalB'
+  - 'okGlobalC'
+  - 'callback*'
 timeout: 1000
 parallel: true
-# bail: true
