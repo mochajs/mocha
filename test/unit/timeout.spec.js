@@ -14,7 +14,7 @@ describe('timeouts', function() {
   });
 
   it('should allow overriding per-test', function(done) {
-    this.timeout(200);
+    this.timeout(1500);
     setTimeout(function() {
       done();
     }, 50);
