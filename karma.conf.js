@@ -30,30 +30,18 @@ module.exports = config => {
     browserify: {
       debug: true,
       configure: function configure(b) {
-        b.ignore('./lib/cli/*.js')
-          .ignore('fs')
-          .ignore('./lib/esm-utils.js')
-          .ignore('path')
-          .ignore('supports-color')
-          .ignore('./lib/esm-utils.js')
-          .ignore('./lib/cli/*.js')
-          .ignore('./lib/nodejs/serializer.js')
-          .ignore('./lib/nodejs/worker.js')
-          .ignore('./lib/nodejs/buffered-worker-pool.js')
-          .ignore('./lib/nodejs/parallel-buffered-runner.js')
-          .ignore('./lib/nodejs/reporters/parallel-buffered.js')
-          .on('bundled', (err, content) => {
-            if (err) {
-              throw err;
-            }
-            if (bundleDirpath) {
-              // write bundle to directory for debugging
-              fs.writeFileSync(
-                path.join(bundleDirpath, `mocha.${Date.now()}.js`),
-                content
-              );
-            }
-          });
+        b.on('bundled', (err, content) => {
+          if (err) {
+            throw err;
+          }
+          if (bundleDirpath) {
+            // write bundle to directory for debugging
+            fs.writeFileSync(
+              path.join(bundleDirpath, `mocha.${Date.now()}.js`),
+              content
+            );
+          }
+        });
       }
     },
     reporters: ['mocha'],
