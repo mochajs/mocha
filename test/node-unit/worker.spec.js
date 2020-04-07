@@ -182,5 +182,7 @@ describe('worker', function() {
 
   afterEach(function() {
     sandbox.restore();
+    // this is needed due to `require.cache` getting dumped in watch mode
+    process.removeAllListeners('beforeExit');
   });
 });
