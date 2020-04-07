@@ -1,4 +1,4 @@
-# This is an example Mocha config containing every Mocha option plus others
+# This is an example Mocha config containing every Mocha option plus others.
 allow-uncaught: false
 async-only: false
 bail: false
@@ -28,6 +28,9 @@ ignore:
 inline-diffs: false
 # needs to be used with grep or fgrep
 # invert: false
+jobs: 1
+package: './package.json'
+parallel: false
 recursive: false
 reporter: 'spec'
 reporter-option:
@@ -35,10 +38,12 @@ reporter-option:
   - 'baz=quux'
 require: '@babel/register'
 retries: 1
-slow: 75
+slow: '75'
 sort: false
-spec: 'test/**/*.spec.js' # the positional arguments!
-timeout: false # same as "no-timeout: true" or "timeout: 0"
+spec:
+  - 'test/**/*.spec.js' # the positional arguments!
+timeout: '2000' # same as "timeout: '2s'"
+# timeout: false # same as "no-timeout: true" or "timeout: 0"
 trace-warnings: true # node flags ok
 ui: 'bdd'
 v8-stack-trace-limit: 100 # V8 flags are prepended with "v8-"
