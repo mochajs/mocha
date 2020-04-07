@@ -467,7 +467,7 @@
     "growl": "1.10.5",
     "he": "1.1.1",
     "minimatch": "3.0.4",
-    "mkdirp": "0.5.1",
+    "mkdirp": "0.5.5",
     "supports-color": "5.4.0"
   },
   "devDependencies": {
