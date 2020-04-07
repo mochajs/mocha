@@ -55,15 +55,15 @@ describe('buffered-runner', function() {
 
         // the purpose of this is to ensure that--despite using `Promise`s
         // internally--`BufferedRunner#run` does not return a `Promise`.
-        it('should return `undefined`', function(done) {
-          expect(runner.run(done, {files: [], opts: {}}), 'to be undefined');
+        it('should be chainable', function(done) {
+          expect(runner.run(done, {files: [], options: {}}), 'to be', runner);
         });
 
         it('should emit `EVENT_RUN_BEGIN`', async function() {
           return expect(
             () =>
               new Promise(resolve => {
-                runner.run(resolve, {files: [], opts: {}});
+                runner.run(resolve, {files: [], options: {}});
               }),
             'to emit from',
             runner,
@@ -73,9 +73,9 @@ describe('buffered-runner', function() {
 
         describe('when a worker fails', function() {
           it('should cleanly force-terminate the thread pool', function(done) {
-            const opts = {};
-            run.withArgs('some-file.js', opts).rejects(new Error('whoops'));
-            run.withArgs('some-other-file.js', opts).resolves({
+            const options = {};
+            run.withArgs('some-file.js', options).rejects(new Error('whoops'));
+            run.withArgs('some-other-file.js', options).resolves({
               failureCount: 0,
               events: [
                 {
@@ -105,17 +105,17 @@ describe('buffered-runner', function() {
               },
               {
                 files: ['some-file.js', 'some-other-file.js'],
-                opts
+                options
               }
             );
           });
 
           it('should delegate to Runner#uncaught', function(done) {
-            const opts = {};
+            const options = {};
             sandbox.spy(runner, 'uncaught');
             const err = new Error('whoops');
-            run.withArgs('some-file.js', opts).rejects(new Error('whoops'));
-            run.withArgs('some-other-file.js', opts).resolves({
+            run.withArgs('some-file.js', options).rejects(new Error('whoops'));
+            run.withArgs('some-other-file.js', options).resolves({
               failureCount: 0,
               events: [
                 {
@@ -140,7 +140,7 @@ describe('buffered-runner', function() {
               },
               {
                 files: ['some-file.js', 'some-other-file.js'],
-                opts
+                options
               }
             );
           });
@@ -160,7 +160,7 @@ describe('buffered-runner', function() {
                 });
                 done();
               },
-              {files: [], opts: {}}
+              {files: [], options: {}}
             );
           });
         });
@@ -181,7 +181,7 @@ describe('buffered-runner', function() {
               },
               {
                 files: [],
-                opts: {
+                options: {
                   jobs: 2
                 }
               }
@@ -227,7 +227,7 @@ describe('buffered-runner', function() {
                 },
                 {
                   files: ['some-file.js', 'some-other-file.js'],
-                  opts: {}
+                  options: {}
                 }
               );
             });
@@ -236,12 +236,12 @@ describe('buffered-runner', function() {
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {};
+                const options = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
-                run.withArgs('some-file.js', opts).resolves({
+                run.withArgs('some-file.js', options).resolves({
                   failureCount: 1,
                   events: [
                     {
@@ -267,7 +267,7 @@ describe('buffered-runner', function() {
                     }
                   ]
                 });
-                run.withArgs('some-other-file.js', opts).rejects();
+                run.withArgs('some-other-file.js', options).rejects();
 
                 runner.run(
                   () => {
@@ -279,19 +279,19 @@ describe('buffered-runner', function() {
                   },
                   {
                     files: ['some-file.js', 'some-other-file.js'],
-                    opts
+                    options
                   }
                 );
               });
             });
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {};
+                const options = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
-                run.withArgs('some-file.js', opts).resolves({
+                run.withArgs('some-file.js', options).resolves({
                   failureCount: 1,
                   events: [
                     {
@@ -317,7 +317,7 @@ describe('buffered-runner', function() {
                     }
                   ]
                 });
-                run.withArgs('some-other-file.js', opts).resolves({
+                run.withArgs('some-other-file.js', options).resolves({
                   failureCount: 0,
                   events: [
                     {
@@ -351,7 +351,7 @@ describe('buffered-runner', function() {
                   },
                   {
                     files: ['some-file.js', 'some-other-file.js'],
-                    opts
+                    options
                   }
                 );
               });
@@ -390,7 +390,7 @@ describe('buffered-runner', function() {
                 },
                 {
                   files: ['some-file.js', 'some-other-file.js'],
-                  opts: {}
+                  options: {}
                 }
               );
             });
@@ -398,12 +398,12 @@ describe('buffered-runner', function() {
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {bail: true};
+                const options = {bail: true};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
-                run.withArgs('some-file.js', opts).resolves({
+                run.withArgs('some-file.js', options).resolves({
                   failureCount: 1,
                   events: [
                     {
@@ -421,7 +421,7 @@ describe('buffered-runner', function() {
                     }
                   ]
                 });
-                run.withArgs('some-other-file.js', opts).rejects();
+                run.withArgs('some-other-file.js', options).rejects();
 
                 runner.run(
                   () => {
@@ -433,7 +433,7 @@ describe('buffered-runner', function() {
                   },
                   {
                     files: ['some-file.js', 'some-other-file.js'],
-                    opts
+                    options
                   }
                 );
               });
@@ -441,12 +441,12 @@ describe('buffered-runner', function() {
 
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {};
+                const options = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
-                run.withArgs('some-file.js', opts).resolves({
+                run.withArgs('some-file.js', options).resolves({
                   failureCount: 1,
                   events: [
                     {
@@ -465,7 +465,7 @@ describe('buffered-runner', function() {
                     }
                   ]
                 });
-                run.withArgs('some-other-file.js', opts).resolves({
+                run.withArgs('some-other-file.js', options).resolves({
                   failureCount: 0,
                   events: [
                     {
@@ -493,7 +493,7 @@ describe('buffered-runner', function() {
                   },
                   {
                     files: ['some-file.js', 'some-other-file.js'],
-                    opts
+                    options
                   }
                 );
               });
@@ -501,12 +501,12 @@ describe('buffered-runner', function() {
 
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const opts = {};
+                const options = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
                 };
-                run.withArgs('some-file.js', opts).resolves({
+                run.withArgs('some-file.js', options).resolves({
                   failureCount: 1,
                   events: [
                     {
@@ -525,7 +525,7 @@ describe('buffered-runner', function() {
                     }
                   ]
                 });
-                run.withArgs('some-other-file.js', opts).rejects();
+                run.withArgs('some-other-file.js', options).rejects();
 
                 runner.run(
                   () => {
@@ -537,7 +537,7 @@ describe('buffered-runner', function() {
                   },
                   {
                     files: ['some-file.js', 'some-other-file.js'],
-                    opts
+                    options
                   }
                 );
               });
