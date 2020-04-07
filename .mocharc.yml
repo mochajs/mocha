@@ -6,3 +6,7 @@ global:
   - 'callback*'
 timeout: 1000
 parallel: true
+watch-ignore:
+  - '.*'
+  - 'docs/_dist/**'
+  - 'node_modules'
