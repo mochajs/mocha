@@ -173,7 +173,7 @@ function runMochaJSON(fixturePath, args, fn, opts) {
  *
  * If you need more granular control, try {@link invokeMochaAsync} instead.
  *
- * @param {string} fixturePath - Path to (or name of, or basename of) fixture `.js` file
+ * @param {string} fixturePath - Path to (or name of, or basename of) fixture file
  * @param {Options} [args] - Command-line arguments to the `mocha` executable
  * @param {Object} [opts] - Options for `child_process.spawn`.
  * @returns {Promise<Summary>}
@@ -194,6 +194,12 @@ function runMochaAsync(fixturePath, args, opts) {
   });
 }
 
+/**
+ * Like {@link runMochaJSON}, but returns a `Promise`.
+ * @param {string} fixturePath - Path to (or name of, or basename of) fixture file
+ * @param {Options} [args] - Command-line args
+ * @param {Object} [opts] - Options for `child_process.spawn`
+ */
 function runMochaJSONAsync(fixturePath, args, opts) {
   return new Promise(function(resolve, reject) {
     runMochaJSON(
@@ -218,9 +224,13 @@ function runMochaJSONAsync(fixturePath, args, opts) {
  */
 function toJSONRunResult(result) {
   var code = result.code;
-  result = JSON.parse(result.output);
-  result.code = code;
-  return result;
+  try {
+    result = JSON.parse(result.output);
+    result.code = code;
+    return result;
+  } catch (err) {
+    throw new Error(err.message);
+  }
 }
 
 /**
@@ -333,16 +343,20 @@ function invokeSubMocha(args, fn, opts) {
  */
 function _spawnMochaWithListeners(args, fn, opts) {
   var output = '';
+  opts = opts || {};
   if (opts === 'pipe') {
     opts = {stdio: 'pipe'};
   }
   opts = Object.assign(
     {
       cwd: process.cwd(),
-      stdio: ['ignore', 'pipe', 'ignore']
+      stdio: ['ignore', 'pipe', 'inherit']
     },
-    opts || {}
+    opts
   );
+  // prevent DEBUG from borking STDERR when piping.
+  // delete opts.env.DEBUG;
+
   debug('spawning: %s', [process.execPath].concat(args).join(' '));
   var mocha = spawn(process.execPath, args, opts);
   var listener = function(data) {
