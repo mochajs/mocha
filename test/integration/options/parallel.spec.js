@@ -5,6 +5,38 @@ var helpers = require('../helpers');
 var runMochaAsync = helpers.runMochaAsync;
 var invokeMochaAsync = helpers.invokeMochaAsync;
 
+function compareReporters(reporter) {
+  this.timeout(5000);
+  return runMochaAsync(path.join('options', 'parallel', 'test-a.fixture.js'), [
+    '--reporter',
+    reporter,
+    '--no-parallel'
+  ]).then(function(expected) {
+    expected.output = expected.output.replace(/\d+ms/g, /100ms/);
+    return runMochaAsync(
+      path.join('options', 'parallel', 'test-a.fixture.js'),
+      ['--reporter', reporter, '--parallel']
+    ).then(function(actual) {
+      actual.output = actual.output.replace(/\d+ms/g, /100ms/);
+      return [actual, expected];
+    });
+  });
+}
+
+function runGenericReporterTest(reporter) {
+  return compareReporters.call(this, reporter).then(function(result) {
+    var expected = result.shift();
+    var actual = result.shift();
+    return expect(actual, 'to satisfy', {
+      passing: expected.passing,
+      failing: expected.failing,
+      pending: expected.pending,
+      code: expected.code,
+      output: expected.output
+    });
+  });
+}
+
 describe('--parallel', function() {
   describe('when used with CJS tests', function() {
     it('should have the same result as with --no-parallel', function() {
@@ -32,15 +64,11 @@ describe('--parallel', function() {
   describe('when used with ESM tests', function() {
     it('should have the same result as with --no-parallel', function() {
       this.timeout(5000);
-      return runMochaAsync(
-        path.join(__dirname, '..', 'fixtures', 'esm', '*.fixture.mjs'),
-        ['--no-parallel']
-      ).then(function(expected) {
+      return runMochaAsync(path.join('esm', '*.fixture.mjs'), [
+        '--no-parallel'
+      ]).then(function(expected) {
         return expect(
-          runMochaAsync(
-            path.join(__dirname, '..', 'fixtures', 'esm', '*.fixture.mjs'),
-            ['--parallel']
-          ),
+          runMochaAsync(path.join('esm', '*.fixture.mjs'), ['--parallel']),
           'to be fulfilled with value satisfying',
           {
             passing: expected.passing,
@@ -175,34 +203,210 @@ describe('--parallel', function() {
     });
   });
 
-  // each reporter name is duplicated; one is in all lower-case
-  Object.keys(Mocha.reporters)
-    .filter(function(name) {
-      return name !== 'base' && /^[a-z]/.test(name);
-    })
-    .forEach(function(reporter) {
-      describe('when used with --reporter=' + reporter, function() {
-        it('should have the same result as run with --no-parallel', function() {
-          this.timeout(5000);
-          return runMochaAsync(
-            path.join('options', 'parallel', 'test-*.fixture.js'),
-            ['--reporter', reporter, '--no-parallel']
-          ).then(function(expected) {
-            return expect(
-              runMochaAsync(
+  describe('reporter equivalence', function() {
+    // each reporter name is duplicated; one is in all lower-case
+    // 'base' is abstract, 'html' is browser-only, and 'progress' & `markdown` are incompatible
+    var DENY = ['progress', 'base', 'html', 'markdown'];
+    Object.keys(Mocha.reporters)
+      .filter(function(name) {
+        return /^[a-z]/.test(name) && DENY.indexOf(name) === -1;
+      })
+      .forEach(function(reporter) {
+        describe(
+          'when multiple test files run with --reporter=' + reporter,
+          function() {
+            it('should have the same result as when run with --no-parallel', function() {
+              // note that the output may not be in the same order, as running file
+              // order is non-deterministic in parallel mode
+              this.timeout(5000);
+              return runMochaAsync(
                 path.join('options', 'parallel', 'test-*.fixture.js'),
-                ['--reporter', reporter, '--parallel']
-              ),
-              'to be fulfilled with value satisfying',
-              {
-                passing: expected.passing,
-                failing: expected.failing,
-                pending: expected.pending,
-                code: expected.code
-              }
-            );
-          });
+                ['--reporter', reporter, '--no-parallel']
+              ).then(function(expected) {
+                return expect(
+                  runMochaAsync(
+                    path.join('options', 'parallel', 'test-*.fixture.js'),
+                    ['--reporter', reporter, '--parallel']
+                  ),
+                  'to be fulfilled with value satisfying',
+                  {
+                    passing: expected.passing,
+                    failing: expected.failing,
+                    pending: expected.pending,
+                    code: expected.code
+                  }
+                );
+              });
+            });
+          }
+        );
+      });
+  });
+
+  describe('when a single test file is run with --reporter=dot', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'dot');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=doc', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'doc');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=tap', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'tap');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=list', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'list');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=min', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'min');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=spec', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'spec');
+    });
+  });
+
+  describe('when used with --reporter=nyan', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'nyan');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=markdown', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'markdown');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=landing', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      return runGenericReporterTest.call(this, 'landing');
+    });
+  });
+
+  describe('when a single test file is run with --reporter=progress', function() {
+    it('should fail due to incompatibility', function() {
+      return expect(
+        invokeMochaAsync(
+          [
+            require.resolve('../fixtures/options/parallel/test-a.fixture.js'),
+            '--reporter=progress',
+            '--parallel'
+          ],
+          'pipe'
+        )[1],
+        'when fulfilled',
+        'to have failed'
+      ).and('when fulfilled', 'to contain output', /mutually exclusive/);
+    });
+  });
+
+  describe('when a single test file is run with --reporter=markdown', function() {
+    it('should fail due to incompatibility', function() {
+      return expect(
+        invokeMochaAsync(
+          [
+            require.resolve('../fixtures/options/parallel/test-a.fixture.js'),
+            '--reporter=markdown',
+            '--parallel'
+          ],
+          'pipe'
+        )[1],
+        'when fulfilled',
+        'to have failed'
+      ).and('when fulfilled', 'to contain output', /mutually exclusive/);
+    });
+  });
+
+  describe('when a single test file is run with --reporter=json', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      // this one has some timings/durations that we can safely ignore
+      return compareReporters.call(this, 'json').then(function(result) {
+        var expected = result.shift();
+        expected.output = JSON.parse(expected.output);
+        var actual = result.shift();
+        actual.output = JSON.parse(actual.output);
+        return expect(actual, 'to satisfy', {
+          passing: expected.passing,
+          failing: expected.failing,
+          pending: expected.pending,
+          code: expected.code,
+          output: {
+            stats: {
+              suites: expected.output.stats.suites,
+              tests: expected.output.stats.tests,
+              passes: expected.output.stats.passes,
+              pending: expected.output.stats.pending,
+              failures: expected.output.stats.failures
+            },
+            tests: expected.tests
+          }
         });
       });
     });
+  });
+
+  describe('when a single test file is run with --reporter=json-stream', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      // this one has some timings/durations that we can safely ignore
+      return compareReporters.call(this, 'json-stream').then(function(result) {
+        var expected = result.shift();
+        expected.output = JSON.parse(expected.output);
+        var actual = result.shift();
+        actual.output = JSON.parse(actual.output);
+        return expect(actual, 'to satisfy', {
+          passing: expected.passing,
+          failing: expected.failing,
+          pending: expected.pending,
+          code: expected.code,
+          output: {
+            stats: {
+              suites: expected.output.stats.suites,
+              tests: expected.output.stats.tests,
+              passes: expected.output.stats.passes,
+              pending: expected.output.stats.pending,
+              failures: expected.output.stats.failures
+            },
+            tests: expected.tests
+          }
+        });
+      });
+    });
+  });
+
+  describe('when a single test file is run with --reporter=xunit', function() {
+    it('should have the same output as when run with --no-parallel', function() {
+      // durations need replacing
+      return compareReporters.call(this, 'xunit').then(function(result) {
+        var expected = result.shift();
+        expected.output = expected.output
+          .replace(/time=".+?"/g, 'time="0.5"')
+          .replace(/timestamp=".+?"/g, 'timestamp="some-timestamp');
+        var actual = result.shift();
+        actual.output = actual.output
+          .replace(/time=".+?"/g, 'time="0.5"')
+          .replace(/timestamp=".+?"/g, 'timestamp="some-timestamp');
+        return expect(actual, 'to satisfy', {
+          passing: expected.passing,
+          failing: expected.failing,
+          pending: expected.pending,
+          code: expected.code,
+          output: expected.output
+        });
+      });
+    });
+  });
 });
