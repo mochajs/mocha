@@ -12,8 +12,11 @@ const path = require('path');
 function test(testName, mochaParams) {
   const coverageCommand = `nyc --no-clean --report-dir coverage/reports/${testName}`;
   const mochaCommand = `node ${path.join('bin', 'mocha')}`; // Include 'node' and path.join for Windows compatibility
-  if (process.env.CI && !/^only-/.test(testName)) {
-    mochaParams += ' --forbid-only';
+  if (process.env.CI) {
+    if (!/^only-/.test(testName)) {
+      mochaParams += ' --forbid-only';
+    }
+    mochaParams += ' --color';
   }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
