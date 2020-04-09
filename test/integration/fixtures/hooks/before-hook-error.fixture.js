@@ -2,18 +2,11 @@
 
 describe('spec 1', function () {
   before(function () {
-    console.log('before');
     throw new Error('before hook error');
   });
-  it('should not be called because of error in before hook', function () {
-    console.log('test 1');
-  });
-  it('should not be called because of error in before hook', function () {
-    console.log('test 2');
-  });
+  it('should not run test-1', function () { });
+  it('should not run test-2', function () { });
 });
 describe('spec 2', function () {
-  it('should be called, because hook error was in a sibling suite', function () {
-    console.log('test 3');
-  });
+  it('should run test-3', function () { });
 });

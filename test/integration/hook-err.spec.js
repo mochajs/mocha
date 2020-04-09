@@ -9,72 +9,161 @@ var bang = require('../../lib/reporters/base').symbols.bang;
 describe('hook error handling', function() {
   var lines;
 
-  describe('before hook error', function() {
-    before(run('hooks/before-hook-error.fixture.js'));
-    it('should verify results', function() {
-      expect(lines, 'to equal', ['before', bang + 'test 3']);
-    });
-  });
+  describe('synchronous hook', function() {
+    describe('in before', function() {
+      it('before hook error', function(done) {
+        var fixture = 'hooks/before-hook-error.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook error')
+            .and('to have test count', 3)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 2)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-3')
+            .and(
+              'to have skipped test order',
+              'should not run test-1',
+              'should not run test-2'
+            )
+            .and(
+              'to have failed test',
+              '"before all" hook for "should not run test-1"'
+            );
+          done();
+        });
+      });
 
-  describe('before hook error tip', function() {
-    before(run('hooks/before-hook-error-tip.fixture.js', onlyErrorTitle()));
-    it('should verify results', function() {
-      expect(lines, 'to equal', [
-        '1) spec 2',
-        '"before all" hook for "skipped":'
-      ]);
-    });
-  });
+      it('before hook error tip', function(done) {
+        var fixture = 'hooks/before-hook-error-tip.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook error')
+            .and('to have test count', 2)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 1)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-1')
+            .and('to have skipped test order', 'should not run test-2')
+            .and(
+              'to have failed test',
+              '"before all" hook for "should not run test-2"'
+            );
+          done();
+        });
+      });
 
-  describe('before hook root error', function() {
-    it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-root-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
-        if (err) {
-          return done(err);
-        }
-        expect(res, 'to have failed with error', 'before hook root error')
-          .and('to have failed test', '"before all" hook in "{root}"')
-          .and('to have passed test count', 0);
-        done();
+      it('before hook root error', function(done) {
+        var fixture = 'hooks/before-hook-root-error.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook root error')
+            .and('to have test count', 1)
+            .and('to have passed test count', 0)
+            .and('to have skipped test count', 1)
+            .and('to have failed test count', 1)
+            .and('to have skipped test order', 'should not be called')
+            .and('to have failed test', '"before all" hook in "{root}"');
+          done();
+        });
+      });
+
+      it('before hook nested error', function(done) {
+        var fixture = 'hooks/before-hook-nested-error.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook nested error')
+            .and('to have test count', 2)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 1)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-1')
+            .and('to have skipped test order', 'should not run nested test-2')
+            .and(
+              'to have failed test',
+              '"before all" hook for "should not run nested test-2"'
+            );
+          done();
+        });
+      });
+
+      it('before hook deepnested error', function(done) {
+        var fixture = 'hooks/before-hook-deepnested-error.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook nested error')
+            .and('to have test count', 2)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 1)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-1')
+            .and(
+              'to have skipped test order',
+              'should not run deepnested test-2'
+            )
+            .and('to have failed test', '"before all" hook in "nested spec 2"');
+          done();
+        });
       });
     });
   });
 
-  describe('before hook nested error', function() {
-    it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-nested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
-        if (err) {
-          return done(err);
-        }
-        expect(res, 'to have failed with error', 'before hook nested error')
-          .and(
-            'to have failed test',
-            '"before all" hook for "it nested - this title should be used"'
-          )
-          .and('to have passed test count', 1)
-          .and('to have passed test', 'should pass');
-        done();
+  describe('asynchronous hook', function() {
+    describe('in before', function() {
+      it('before hook error', function(done) {
+        var fixture = 'hooks/before-hook-async-error.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook error')
+            .and('to have test count', 3)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 2)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-3')
+            .and(
+              'to have skipped test order',
+              'should not run test-1',
+              'should not run test-2'
+            )
+            .and(
+              'to have failed test',
+              '"before all" hook for "should not run test-1"'
+            );
+          done();
+        });
       });
-    });
-  });
 
-  describe('before hook deepnested error', function() {
-    it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-deepnested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
-        if (err) {
-          return done(err);
-        }
-        expect(res, 'to have failed with error', 'before hook nested error')
-          .and(
-            'to have failed test',
-            '"before all" hook in "spec 2 nested - this title should be used"'
-          )
-          .and('to have passed test count', 1)
-          .and('to have passed test', 'should pass');
-        done();
+      it('before hook error tip', function(done) {
+        var fixture = 'hooks/before-hook-async-error-tip.fixture.js';
+        runMochaJSON(fixture, [], function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'before hook error')
+            .and('to have test count', 2)
+            .and('to have passed test count', 1)
+            .and('to have skipped test count', 1)
+            .and('to have failed test count', 1)
+            .and('to have passed test', 'should run test-1')
+            .and('to have skipped test order', 'should not run test-2')
+            .and(
+              'to have failed test',
+              '"before all" hook for "should not run test-2"'
+            );
+          done();
+        });
       });
     });
   });
@@ -182,25 +271,6 @@ describe('hook error handling', function() {
     });
   });
 
-  describe('async - before hook error', function() {
-    before(run('hooks/before-hook-async-error.fixture.js'));
-    it('should verify results', function() {
-      expect(lines, 'to equal', ['before', bang + 'test 3']);
-    });
-  });
-
-  describe('async - before hook error tip', function() {
-    before(
-      run('hooks/before-hook-async-error-tip.fixture.js', onlyErrorTitle())
-    );
-    it('should verify results', function() {
-      expect(lines, 'to equal', [
-        '1) spec 2',
-        '"before all" hook for "skipped":'
-      ]);
-    });
-  });
-
   describe('async - before each hook error', function() {
     before(run('hooks/beforeEach-hook-async-error.fixture.js'));
     it('should verify results', function() {
@@ -282,19 +352,5 @@ function onlyConsoleOutput() {
       foundSummary = !!/\(\d+ms\)/.exec(line);
     }
     return !foundSummary && line.length > 0;
-  };
-}
-
-function onlyErrorTitle(line) {
-  var foundErrorTitle = false;
-  var foundError = false;
-  return function(line) {
-    if (!foundErrorTitle) {
-      foundErrorTitle = !!/^1\)/.exec(line);
-    }
-    if (!foundError) {
-      foundError = /Error:/.exec(line);
-    }
-    return foundErrorTitle && !foundError;
   };
 }

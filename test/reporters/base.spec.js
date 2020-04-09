@@ -426,25 +426,43 @@ describe('Base reporter', function() {
   });
 
   describe('when reporter output immune to user test changes', function() {
-    var sandbox;
     var baseConsoleLog;
 
     beforeEach(function() {
-      sandbox = sinon.createSandbox();
       sandbox.stub(console, 'log');
       baseConsoleLog = sandbox.stub(Base, 'consoleLog');
     });
 
     it('should let you stub out console.log without effecting reporters output', function() {
       Base.list([]);
-      baseConsoleLog.restore();
 
       expect(baseConsoleLog, 'was called');
       expect(console.log, 'was not called');
+      sandbox.restore();
+    });
+  });
+
+  describe('epilogue', function() {
+    it('should include "pending" count', function() {
+      var ctx = {stats: {passes: 0, pending: 2, skipped: 0, duration: 12}};
+      var epilogue = Base.prototype.epilogue.bind(ctx);
+
+      epilogue();
+      sandbox.restore();
+
+      var out = stdout.join('\n').trim();
+      expect(out, 'to contain', '2 pending').and('not to contain', 'skipped');
     });
 
-    afterEach(function() {
+    it('should include "skipped" count', function() {
+      var ctx = {stats: {passes: 0, pending: 0, skipped: 3, duration: 12}};
+      var epilogue = Base.prototype.epilogue.bind(ctx);
+
+      epilogue();
       sandbox.restore();
+
+      var out = stdout.join('\n').trim();
+      expect(out, 'to contain', '3 skipped').and('not to contain', 'pending');
     });
   });
 });

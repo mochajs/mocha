@@ -15,15 +15,16 @@ module.exports = {
    * Invokes the mocha binary for the given fixture with color output disabled.
    * Accepts an array of additional command line args to pass. The callback is
    * invoked with a summary of the run, in addition to its output. The summary
-   * includes the number of passing, pending, and failing tests, as well as the
-   * exit code. Useful for testing different reporters.
+   * includes the number of passing, pending, skipped and failing tests, as well
+   * as the exit code. Useful for testing different reporters.
    *
    * By default, `STDERR` is ignored. Pass `{stdio: 'pipe'}` as `opts` if you
    * want it.
    * Example response:
    * {
-   *   pending: 0,
    *   passing: 0,
+   *   pending: 0,
+   *   skipped: 0,
    *   failing: 1,
    *   code:    1,
    *   output:  '...'
@@ -307,13 +308,17 @@ function resolveFixturePath(fixture) {
 }
 
 function getSummary(res) {
-  return ['passing', 'pending', 'failing'].reduce(function(summary, type) {
+  return ['passing', 'pending', 'skipped', 'failing'].reduce(function(
+    summary,
+    type
+  ) {
     var pattern, match;
 
-    pattern = new RegExp('  (\\d+) ' + type + '\\s');
+    pattern = new RegExp('  (\\d+) (?:/ \\d+ )?' + type + '\\s');
     match = pattern.exec(res.output);
     summary[type] = match ? parseInt(match, 10) : 0;
 
     return summary;
-  }, res);
+  },
+  res);
 }

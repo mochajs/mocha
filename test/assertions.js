@@ -35,6 +35,7 @@ exports.mixinMochaAssertions = function(expect) {
           typeof v.passing === 'number' &&
           typeof v.failing === 'number' &&
           typeof v.pending === 'number' &&
+          typeof v.skipped === 'number' &&
           typeof v.output === 'string' &&
           typeof v.code === 'number'
         );
@@ -141,6 +142,12 @@ exports.mixinMochaAssertions = function(expect) {
       '<JSONRunResult> [not] to have pending [test] count <number>',
       function(expect, result, count) {
         expect(result.stats.pending, '[not] to be', count);
+      }
+    )
+    .addAssertion(
+      '<JSONRunResult> [not] to have skipped [test] count <number>',
+      function(expect, result, count) {
+        expect(result.stats.skipped, '[not] to be', count);
       }
     )
     .addAssertion(
@@ -266,12 +273,23 @@ exports.mixinMochaAssertions = function(expect) {
         );
       }
     )
-    .addAssertion('<JSONRunResult> [not] to have pending tests', function(
-      expect,
-      result
-    ) {
-      expect(result.stats.pending, '[not] to be greater than', 0);
-    })
+    .addAssertion(
+      '<JSONRunResult> [not] to have skipped test order <array>',
+      function(expect, result, titles) {
+        expect(result, '[not] to have test order', 'skipped', titles);
+      }
+    )
+    .addAssertion(
+      '<JSONRunResult> [not] to have skipped test order <string+>',
+      function(expect, result, titles) {
+        expect(
+          result,
+          '[not] to have test order',
+          'skipped',
+          Array.prototype.slice.call(arguments, 2)
+        );
+      }
+    )
     .addAssertion('<JSONRunResult> [not] to have passed tests', function(
       expect,
       result
@@ -283,6 +301,18 @@ exports.mixinMochaAssertions = function(expect) {
       result
     ) {
       expect(result.stats.failed, '[not] to be greater than', 0);
+    })
+    .addAssertion('<JSONRunResult> [not] to have pending tests', function(
+      expect,
+      result
+    ) {
+      expect(result.stats.pending, '[not] to be greater than', 0);
+    })
+    .addAssertion('<JSONRunResult> [not] to have skipped tests', function(
+      expect,
+      result
+    ) {
+      expect(result.stats.skipped, '[not] to be greater than', 0);
     })
     .addAssertion('<JSONRunResult> [not] to have tests', function(
       expect,

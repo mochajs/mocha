@@ -11,10 +11,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         './*.js',
         function(results) {
-          expect(
-            results.stdout,
+          expect(results.stdout, 'to contain', '["start",{"total":1}]').and(
             'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            '["pass",{"title":"should find this glob/test"'
           );
         },
         done
@@ -39,8 +38,11 @@ describe('globbing', function() {
       testGlob.shouldFail(
         './*-none.js ./*-none-twice.js',
         function(results) {
-          expect(results.stderr, 'to contain', 'Error: No test files found');
-          expect(results.stderr, 'not to contain', '*-none');
+          expect(
+            results.stderr,
+            'to contain',
+            'Error: No test files found'
+          ).and('not to contain', '*-none');
         },
         done
       );
@@ -50,10 +52,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         './*.js ./*-none.js',
         function(results) {
-          expect(
-            results.stdout,
+          expect(results.stdout, 'to contain', '["start",{"total":1}]').and(
             'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            '["pass",{"title":"should find this glob/test"'
           );
           expect(
             results.stderr,
@@ -71,10 +72,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         '"./*.js"',
         function(results) {
-          expect(
-            results.stdout,
+          expect(results.stdout, 'to contain', '["start",{"total":1}]').and(
             'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            '["pass",{"title":"should find this glob/test"'
           );
         },
         done
@@ -109,10 +109,9 @@ describe('globbing', function() {
       testGlob.shouldSucceed(
         '"./*.js" "./*-none.js"',
         function(results) {
-          expect(
-            results.stdout,
+          expect(results.stdout, 'to contain', '["start",{"total":1}]').and(
             'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            '["pass",{"title":"should find this glob/test"'
           );
           expect(
             results.stderr,
@@ -129,11 +128,15 @@ describe('globbing', function() {
         testGlob.shouldSucceed(
           '"./**/*.js"',
           function(results) {
-            expect(
-              results.stdout,
-              'to contain',
-              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
-            );
+            expect(results.stdout, 'to contain', '["start",{"total":2}]')
+              .and(
+                'to contain',
+                '["pass",{"title":"should find this glob/test"'
+              )
+              .and(
+                'to contain',
+                '["pass",{"title":"should find this glob/nested/test"'
+              );
           },
           done
         );
@@ -157,11 +160,15 @@ describe('globbing', function() {
         testGlob.shouldSucceed(
           '"./**/*.js" "./**/*-none.js"',
           function(results) {
-            expect(
-              results.stdout,
-              'to contain',
-              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
-            );
+            expect(results.stdout, 'to contain', '["start",{"total":2}]')
+              .and(
+                'to contain',
+                '["pass",{"title":"should find this glob/test"'
+              )
+              .and(
+                'to contain',
+                '["pass",{"title":"should find this glob/nested/test"'
+              );
             expect(
               results.stderr,
               'to contain',
@@ -187,13 +194,6 @@ var testGlob = {
   })
 };
 
-var isFlakeyNode = (function() {
-  var version = process.versions.node.split('.');
-  return (
-    version[0] === '0' && version[1] === '10' && process.platform === 'win32'
-  );
-})();
-
 function execMochaWith(validate) {
   return function execMocha(glob, assertOn, done) {
     exec(
@@ -206,12 +206,8 @@ function execMochaWith(validate) {
       function(error, stdout, stderr) {
         try {
           validate(error, stderr);
-          if (isFlakeyNode && error && stderr === '') {
-            execMocha(glob, assertOn, done);
-          } else {
-            assertOn({stdout: stdout, stderr: stderr});
-            done();
-          }
+          assertOn({stdout: stdout, stderr: stderr});
+          done();
         } catch (assertion) {
           done(assertion);
         }

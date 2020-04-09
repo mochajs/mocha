@@ -60,6 +60,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     case 'pending test':
+    case 'skipped test':
     case 'pass':
     case 'fail':
     case 'suite':

@@ -22,7 +22,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [test coverage reporting](#wallabyjs)
 - [string diff support](#diffs)
 - [javascript API for running tests](#more-information)
-- proper exit status for CI support etc
 - [auto-detects and disables coloring for non-ttys](#reporters)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
@@ -36,7 +35,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
@@ -449,9 +447,43 @@ setTimeout(function() {
 }, 5000);
 ```
 
+### Failing Hooks
+
+Upon a failing `before` hook all tests in the current suite and also its nested suites will be skipped. Skipped tests are included in the test results and marked as **skipped**. A skipped test is not considered a failed test.
+
+```js
+describe('outer', function() {
+  before(function() {
+    throw new Error('Exception in before hook');
+  });
+
+  it('should skip this outer test', function() {
+    // will be skipped and listed as 'skipped'
+  });
+
+  after(function() {
+    // will be executed
+  });
+
+  describe('inner', function() {
+    before(function() {
+      // will be skipped
+    });
+
+    it('should skip this inner test', function() {
+      // will be skipped and listed as 'skipped'
+    });
+
+    after(function() {
+      // will be skipped
+    });
+  });
+});
+```
+
 ## Pending Tests
 
-"Pending"--as in "someone should write these test cases eventually"--test-cases are simply those _without_ a callback:
+"Pending" - as in "someone should write these test cases eventually" - test-cases are simply those _without_ a callback:
 
 ```js
 describe('Array', function() {
@@ -462,7 +494,9 @@ describe('Array', function() {
 });
 ```
 
-Pending tests will be included in the test results, and marked as pending. A pending test is not considered a failed test.
+By appending `.skip()`, you may also tell Mocha to ignore a test: [inclusive tests](#inclusive-tests).
+
+Pending tests will be included in the test results, and marked as **pending**. A pending test is not considered a failed test.
 
 ## Exclusive Tests
 
@@ -1641,7 +1675,7 @@ mocha.setup({
 ### Browser-specific Option(s)
 
 Browser Mocha supports many, but not all [cli options](#command-line-usage).
-To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (eg. `check-leaks` to `checkLeaks`).
+To use a [cli option](#command-line-usage) that contains a "-", please convert the option to camel-case, (e.g. `check-leaks` to `checkLeaks`).
 
 #### Options that differ slightly from [cli options](#command-line-usage):
 
