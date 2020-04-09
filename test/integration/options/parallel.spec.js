@@ -205,8 +205,8 @@ describe('--parallel', function() {
 
   describe('reporter equivalence', function() {
     // each reporter name is duplicated; one is in all lower-case
-    // 'base' is abstract, 'html' is browser-only, and 'progress' & `markdown` are incompatible
-    var DENY = ['progress', 'base', 'html', 'markdown'];
+    // 'base' is abstract, 'html' is browser-only, others are incompatible
+    var DENY = ['progress', 'base', 'html', 'markdown', 'json-stream'];
     Object.keys(Mocha.reporters)
       .filter(function(name) {
         return /^[a-z]/.test(name) && DENY.indexOf(name) === -1;
@@ -285,12 +285,6 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when a single test file is run with --reporter=markdown', function() {
-    it('should have the same output as when run with --no-parallel', function() {
-      return runGenericReporterTest.call(this, 'markdown');
-    });
-  });
-
   describe('when a single test file is run with --reporter=landing', function() {
     it('should have the same output as when run with --no-parallel', function() {
       return runGenericReporterTest.call(this, 'landing');
@@ -331,38 +325,27 @@ describe('--parallel', function() {
     });
   });
 
+  describe('when a single test file is run with --reporter=json-stream', function() {
+    it('should fail due to incompatibility', function() {
+      return expect(
+        invokeMochaAsync(
+          [
+            require.resolve('../fixtures/options/parallel/test-a.fixture.js'),
+            '--reporter=json-stream',
+            '--parallel'
+          ],
+          'pipe'
+        )[1],
+        'when fulfilled',
+        'to have failed'
+      ).and('when fulfilled', 'to contain output', /mutually exclusive/);
+    });
+  });
+
   describe('when a single test file is run with --reporter=json', function() {
     it('should have the same output as when run with --no-parallel', function() {
       // this one has some timings/durations that we can safely ignore
       return compareReporters.call(this, 'json').then(function(result) {
-        var expected = result.shift();
-        expected.output = JSON.parse(expected.output);
-        var actual = result.shift();
-        actual.output = JSON.parse(actual.output);
-        return expect(actual, 'to satisfy', {
-          passing: expected.passing,
-          failing: expected.failing,
-          pending: expected.pending,
-          code: expected.code,
-          output: {
-            stats: {
-              suites: expected.output.stats.suites,
-              tests: expected.output.stats.tests,
-              passes: expected.output.stats.passes,
-              pending: expected.output.stats.pending,
-              failures: expected.output.stats.failures
-            },
-            tests: expected.tests
-          }
-        });
-      });
-    });
-  });
-
-  describe('when a single test file is run with --reporter=json-stream', function() {
-    it('should have the same output as when run with --no-parallel', function() {
-      // this one has some timings/durations that we can safely ignore
-      return compareReporters.call(this, 'json-stream').then(function(result) {
         var expected = result.shift();
         expected.output = JSON.parse(expected.output);
         var actual = result.shift();
