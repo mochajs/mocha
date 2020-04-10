@@ -49,7 +49,8 @@ describe('worker', function() {
 
       runHelpers = {
         handleRequires: sandbox.stub(),
-        validatePlugin: sandbox.stub()
+        validatePlugin: sandbox.stub(),
+        loadRootHooks: sandbox.stub().resolves()
       };
 
       worker = rewiremock.proxy(WORKER_PATH, {
