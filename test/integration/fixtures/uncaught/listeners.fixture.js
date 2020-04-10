@@ -3,8 +3,8 @@
 const assert = require('assert');
 const mocha = require("../../../../lib/mocha");
 
-// keep this under 10 to avoid warning
-for (let i = 0; i < 9; i++) {
+// keep this low to avoid warning
+for (let i = 0; i < 5; i++) {
   const r = new mocha.Runner(new mocha.Suite("" + i, undefined));
   r.run();
 }

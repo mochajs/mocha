@@ -1,19 +1,34 @@
 'use strict';
 
-var path = require('path');
 var helpers = require('../helpers');
 var runMochaAsync = helpers.runMochaAsync;
 
 describe('--jobs', function() {
-  it('should not work without --parallel', function() {
-    return expect(
-      runMochaAsync(
-        path.join('options', 'parallel', '*.fixture.js'),
-        ['--jobs', '3'],
-        'pipe'
-      ),
-      'to be fulfilled with value satisfying',
-      {output: /Missing\s+dependent\s+arguments[^]\s+jobs\s+->\s+parallel/i}
-    );
+  describe('when set to a number less than 2', function() {
+    it('should run tests in serial', function() {
+      return expect(
+        runMochaAsync(
+          'options/jobs/fail-in-parallel',
+          ['--parallel', '--jobs', '1'],
+          'pipe'
+        ),
+        'when fulfilled',
+        'to have passed'
+      );
+    });
+  });
+
+  describe('when set to a number greater than 1', function() {
+    it('should run tests in parallel', function() {
+      return expect(
+        runMochaAsync(
+          'options/jobs/fail-in-parallel',
+          ['--parallel', '--jobs', '2'],
+          'pipe'
+        ),
+        'when fulfilled',
+        'to have failed'
+      );
+    });
   });
 });

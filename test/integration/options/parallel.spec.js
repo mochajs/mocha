@@ -4,6 +4,7 @@ var path = require('path');
 var helpers = require('../helpers');
 var runMochaAsync = helpers.runMochaAsync;
 var invokeMochaAsync = helpers.invokeMochaAsync;
+var utils = require('../../../lib/utils');
 
 function compareReporters(reporter) {
   this.timeout(5000);
@@ -38,6 +39,37 @@ function runGenericReporterTest(reporter) {
 }
 
 describe('--parallel', function() {
+  describe('when a test has a syntax error', function() {
+    describe('when there is only a single test file', function() {
+      it('should fail gracefully', function() {
+        return expect(
+          runMochaAsync('options/parallel/syntax-err', ['--parallel']),
+          'when fulfilled',
+          'to have failed with output',
+          /SyntaxError/
+        );
+      });
+    });
+
+    describe('when there are multiple test files', function() {
+      it('should fail gracefully', function() {
+        return expect(
+          invokeMochaAsync(
+            [
+              require.resolve(
+                '../fixtures/options/parallel/syntax-err.fixture.js'
+              ),
+              '--parallel'
+            ],
+            'pipe'
+          )[1],
+          'when fulfilled',
+          'to have failed'
+        );
+      });
+    });
+  });
+
   describe('when used with CJS tests', function() {
     it('should have the same result as with --no-parallel', function() {
       this.timeout(5000);
@@ -62,6 +94,10 @@ describe('--parallel', function() {
   });
 
   describe('when used with ESM tests', function() {
+    before(function() {
+      if (!utils.supportsEsModules()) this.skip();
+    });
+
     it('should have the same result as with --no-parallel', function() {
       this.timeout(5000);
       return runMochaAsync(path.join('esm', '*.fixture.mjs'), [

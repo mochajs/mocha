@@ -72,7 +72,7 @@ describe('buffered-runner', function() {
         });
 
         describe('when a worker fails', function() {
-          it('should cleanly force-terminate the thread pool', function(done) {
+          it('should recover', function(done) {
             const options = {};
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', options).resolves({
@@ -95,12 +95,7 @@ describe('buffered-runner', function() {
 
             runner.run(
               () => {
-                expect(terminate, 'to have calls satisfying', [
-                  {
-                    args: [true]
-                  },
-                  {args: []}
-                ]).and('was called twice');
+                expect(terminate, 'to have calls satisfying', [{args: []}]);
                 done();
               },
               {
@@ -398,7 +393,7 @@ describe('buffered-runner', function() {
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {bail: true};
+                const options = {};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -416,7 +411,8 @@ describe('buffered-runner', function() {
                     {
                       eventName: EVENT_SUITE_END,
                       data: {
-                        title: 'some suite'
+                        title: 'some suite',
+                        _bail: true
                       }
                     }
                   ]

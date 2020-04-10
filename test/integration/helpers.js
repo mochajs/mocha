@@ -350,12 +350,13 @@ function _spawnMochaWithListeners(args, fn, opts) {
   opts = Object.assign(
     {
       cwd: process.cwd(),
-      stdio: ['ignore', 'pipe', 'inherit']
+      stdio: ['ignore', 'pipe', 'inherit'],
+      env: Object.assign({}, process.env)
     },
     opts
   );
   // prevent DEBUG from borking STDERR when piping.
-  // delete opts.env.DEBUG;
+  delete opts.env.DEBUG;
 
   debug('spawning: %s', [process.execPath].concat(args).join(' '));
   var mocha = spawn(process.execPath, args, opts);
