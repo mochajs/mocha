@@ -1,13 +1,13 @@
 'use strict';
 
 describe('spec 1', function () {
-  it('should pass', function () { });
-  describe('spec 2 nested - this title should be used', function () {
+  it('should run test-1', function () { });
+  describe('nested spec 2', function () {
     before(function() {
       throw new Error('before hook nested error');
     });
-    describe('spec 3 nested', function () { 
-      it('it nested - this title should not be used', function () { });
+    describe('deepnested spec 3', function () { 
+      it('should not run deepnested test-2', function () { });
     });
   });
 });
