@@ -78,12 +78,56 @@ describe('run helper functions', function() {
   });
 
   describe('validatePlugin()', function() {
-    it('should disallow an array of module names', function() {
-      expect(
-        () => validatePlugin({foo: ['bar']}, 'foo'),
-        'to throw a',
-        TypeError
-      );
+    describe('when used with "reporter" key', function() {
+      it('should disallow an array of names', function() {
+        expect(
+          () => validatePlugin({reporter: ['bar']}, 'reporter'),
+          'to throw',
+          {
+            code: 'ERR_MOCHA_INVALID_REPORTER',
+            message: /can only be specified once/i
+          }
+        );
+      });
+
+      it('should fail to recognize an unknown reporter', function() {
+        expect(
+          () => validatePlugin({reporter: 'bar'}, 'reporter'),
+          'to throw',
+          {code: 'ERR_MOCHA_INVALID_REPORTER', message: /cannot find module/i}
+        );
+      });
+    });
+
+    describe('when used with an "interfaces" key', function() {
+      it('should disallow an array of names', function() {
+        expect(
+          () => validatePlugin({interface: ['bar']}, 'interface'),
+          'to throw',
+          {
+            code: 'ERR_MOCHA_INVALID_INTERFACE',
+            message: /can only be specified once/i
+          }
+        );
+      });
+
+      it('should fail to recognize an unknown interface', function() {
+        expect(
+          () => validatePlugin({interface: 'bar'}, 'interface'),
+          'to throw',
+          {code: 'ERR_MOCHA_INVALID_INTERFACE', message: /cannot find module/i}
+        );
+      });
+    });
+
+    describe('when used with an unknown plugin type', function() {
+      it('should fail', function() {
+        expect(
+          () => validatePlugin({frog: ['bar']}, 'frog'),
+          'to throw',
+          /unknown plugin/i
+        );
+      });
     });
   });
 
