@@ -74,11 +74,7 @@ describe('--require', function() {
         ])[1],
         'when fulfilled',
         'to contain output',
-        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2\n/
-      ).and(
-        'when fulfilled',
-        'to contain output',
-        /afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2\n/
+        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2[^]+afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2/
       );
     });
 
