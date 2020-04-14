@@ -103,7 +103,11 @@ describe('--require', function() {
         ])[1],
         'when fulfilled',
         'to contain output',
-        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2\nafterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2\n\n {2}✓ should have some root hooks\nbeforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2\nafterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2\n\n {2}✓ should also have some root hooks/
+        /(beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2[^]+){2}/
+      ).and(
+        'when fulfilled',
+        'to contain output',
+        /(afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2[^]+){2}/
       );
     });
   });
