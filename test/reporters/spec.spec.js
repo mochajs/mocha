@@ -14,6 +14,7 @@ var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+var EVENT_TEST_SKIPPED = events.EVENT_TEST_SKIPPED;
 
 describe('Spec reporter', function() {
   var runReporter = makeRunReporter(Spec);
@@ -60,6 +61,27 @@ describe('Spec reporter', function() {
         var runner = createMockRunner(
           'pending test',
           EVENT_TEST_PENDING,
+          null,
+          null,
+          suite
+        );
+        var options = {};
+        var stdout = runReporter({epilogue: noop}, runner, options);
+        sandbox.restore();
+
+        var expectedArray = ['  - ' + expectedTitle + '\n'];
+        expect(stdout, 'to equal', expectedArray);
+      });
+    });
+
+    describe("on 'skipped' event", function() {
+      it('should return title', function() {
+        var suite = {
+          title: expectedTitle
+        };
+        var runner = createMockRunner(
+          'skipped test',
+          EVENT_TEST_SKIPPED,
           null,
           null,
           suite

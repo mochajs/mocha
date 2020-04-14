@@ -80,6 +80,26 @@ describe('JSON reporter', function() {
     });
   });
 
+  it('should have 1 test skipped', function(done) {
+    suite.skipped = true;
+    suite.addTest(new Test(testTitle, noop));
+
+    runner.run(function(failureCount) {
+      sandbox.restore();
+      expect(runner, 'to satisfy', {
+        testResults: {
+          skipped: [
+            {
+              title: testTitle
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
+      done();
+    });
+  });
+
   it('should handle circular objects in errors', function(done) {
     var testTitle = 'json test 1';
     function CircleError() {
