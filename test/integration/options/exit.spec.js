@@ -12,8 +12,7 @@ describe('--exit', function() {
   var mocha;
 
   function killSubprocess() {
-    mocha.kill('SIGINT');
-    mocha.kill('SIGTERM');
+    mocha.kill('SIGKILL');
   }
 
   // these two handlers deal with a ctrl-c on command-line
