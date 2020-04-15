@@ -108,7 +108,9 @@ if (Object.keys(nodeArgs).length) {
     unparse(mochaArgs, {alias: aliases})
   );
 
-  debug(`exec ${process.execPath} w/ args:`, args);
+  debug(
+    `forking child process via command: ${process.execPath} ${args.join(' ')}`
+  );
 
   const proc = spawn(process.execPath, args, {
     stdio: 'inherit'
@@ -128,6 +130,7 @@ if (Object.keys(nodeArgs).length) {
   process.on('SIGINT', () => {
     // XXX: a previous comment said this would abort the runner, but I can't see that it does
     // anything with the default runner.
+    debug('main process caught SIGINT');
     proc.kill('SIGINT');
     // if running in parallel mode, we will have a proper SIGINT handler, so the below won't
     // be needed.
@@ -138,10 +141,12 @@ if (Object.keys(nodeArgs).length) {
       } else {
         // using SIGKILL won't cleanly close the output streams, which can result
         // in cut-off text or a befouled terminal.
+        debug('sending SIGTERM to child process');
         proc.kill('SIGTERM');
       }
     }
   });
 } else {
+  debug('running Mocha in-process');
   require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
 }
