@@ -345,18 +345,20 @@ function _spawnMochaWithListeners(args, fn, opts) {
   var output = '';
   opts = opts || {};
   if (opts === 'pipe') {
-    opts = {stdio: 'pipe'};
+    opts = {stdio: ['inherit', 'pipe', 'pipe']};
   }
+  var env = Object.assign({}, process.env);
+  // prevent DEBUG from borking STDERR when piping, unless explicitly set via `opts`
+  delete env.DEBUG;
+
   opts = Object.assign(
     {
       cwd: process.cwd(),
-      stdio: ['ignore', 'pipe', 'inherit'],
-      env: Object.assign({}, process.env)
+      stdio: ['inherit', 'pipe', 'inherit'],
+      env: env
     },
     opts
   );
-  // prevent DEBUG from borking STDERR when piping.
-  delete opts.env.DEBUG;
 
   debug('spawning: %s', [process.execPath].concat(args).join(' '));
   var mocha = spawn(process.execPath, args, opts);
