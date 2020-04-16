@@ -267,7 +267,7 @@ describe('buffered-runner', function() {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: [true]}, // this is the pool force-terminating
+                      {args: []}, // this is the pool force-terminating
                       {args: []} // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
@@ -339,7 +339,7 @@ describe('buffered-runner', function() {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: [true]}, // this is the pool force-terminating
+                      {args: []}, // this is the pool force-terminating
                       {args: []} // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
@@ -422,7 +422,7 @@ describe('buffered-runner', function() {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: [true]}, // this is the pool force-terminating
+                      {args: []}, // this is the pool force-terminating
                       {args: []} // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
@@ -482,7 +482,7 @@ describe('buffered-runner', function() {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: [true]}, // this is the pool force-terminating
+                      {args: []}, // this is the pool force-terminating
                       {args: []} // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
@@ -526,7 +526,7 @@ describe('buffered-runner', function() {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: [true]}, // this is the pool force-terminating
+                      {args: []}, // this is the pool force-terminating
                       {args: []} // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
