@@ -20,12 +20,14 @@ describe('buffered-runner', function() {
     let terminate;
     let BufferedRunner;
     let suite;
+    let warn;
     let cpuCount;
 
     beforeEach(function() {
       sandbox = createSandbox();
       cpuCount = 1;
       suite = new Suite('a root suite', {}, true);
+      warn = sandbox.stub();
 
       // tests will want to further define the behavior of these.
       run = sandbox.stub();
@@ -38,13 +40,14 @@ describe('buffered-runner', function() {
         terminate,
         stats: sandbox.stub().returns({})
       });
-      BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, () => ({
+      BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, r => ({
         workerpool: {
           pool
         },
         os: {
           cpus: sandbox.stub().callsFake(() => new Array(cpuCount))
-        }
+        },
+        [require.resolve('../../lib/utils')]: r.with({warn}).callThrough()
       }));
     });
 
@@ -188,6 +191,46 @@ describe('buffered-runner', function() {
                 }
               }
             );
+          });
+
+          describe('when the max job count exceeds the CPU count', function() {
+            it('should warn', function(done) {
+              run.resolves({failureCount: 0, events: []});
+              runner.run(
+                () => {
+                  expect(warn, 'to have a call satisfying', [
+                    /only enough cores available/
+                  ]);
+                  done();
+                },
+                {
+                  files: [],
+                  options: {jobs: 16}
+                }
+              );
+            });
+          });
+
+          describe('when there are not enough CPU cores', function() {
+            beforeEach(function() {
+              cpuCount = 2;
+            });
+
+            it('should warn', function(done) {
+              run.resolves({failureCount: 0, events: []});
+              runner.run(
+                () => {
+                  expect(warn, 'to have a call satisfying', [
+                    /avoid --parallel on this machine/
+                  ]);
+                  done();
+                },
+                {
+                  files: [],
+                  options: {jobs: 4}
+                }
+              );
+            });
           });
         });
 
