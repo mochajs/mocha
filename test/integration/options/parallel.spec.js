@@ -94,17 +94,27 @@ describe('--parallel', function() {
   });
 
   describe('when used with ESM tests', function() {
+    var esmArgs =
+      Number(process.versions.node.split('.')[0]) >= 13
+        ? []
+        : ['--experimental-modules'];
+
     before(function() {
       if (!utils.supportsEsModules()) this.skip();
     });
 
     it('should have the same result as with --no-parallel', function() {
-      this.timeout(5000);
-      return runMochaAsync(path.join('esm', '*.fixture.mjs'), [
-        '--no-parallel'
-      ]).then(function(expected) {
+      this.timeout(Math.min(this.timeout(), 5000));
+
+      return runMochaAsync(
+        path.join('esm', '*.fixture.mjs'),
+        esmArgs.concat(['--no-parallel'])
+      ).then(function(expected) {
         return expect(
-          runMochaAsync(path.join('esm', '*.fixture.mjs'), ['--parallel']),
+          runMochaAsync(
+            path.join('esm', '*.fixture.mjs'),
+            esmArgs.concat(['--parallel'])
+          ),
           'to be fulfilled with value satisfying',
           {
             passing: expected.passing,
