@@ -43,6 +43,8 @@ module.exports = {
 
   invokeNode: invokeNode,
 
+  getSummary: getSummary,
+
   /**
    * Resolves the path to a fixture to the full path.
    */

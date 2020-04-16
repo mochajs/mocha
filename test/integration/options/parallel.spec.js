@@ -4,6 +4,7 @@ var path = require('path');
 var helpers = require('../helpers');
 var runMochaAsync = helpers.runMochaAsync;
 var invokeMochaAsync = helpers.invokeMochaAsync;
+var getSummary = helpers.getSummary;
 var utils = require('../../../lib/utils');
 
 function compareReporters(reporter) {
@@ -106,23 +107,23 @@ describe('--parallel', function() {
     it('should have the same result as with --no-parallel', function() {
       this.timeout(Math.min(this.timeout(), 5000));
 
-      return runMochaAsync(
-        path.join('esm', '*.fixture.mjs'),
-        esmArgs.concat(['--no-parallel'])
-      ).then(function(expected) {
-        return expect(
-          runMochaAsync(
-            path.join('esm', '*.fixture.mjs'),
-            esmArgs.concat(['--parallel'])
-          ),
-          'to be fulfilled with value satisfying',
-          {
-            passing: expected.passing,
-            failing: expected.failing,
-            pending: expected.pending,
-            code: expected.code
-          }
-        );
+      var args = [
+        path.join(__dirname, '..', 'fixtures', 'esm', '*.fixture.mjs')
+      ].concat(esmArgs);
+      return invokeMochaAsync(args.concat('--no-parallel'))[1].then(function(
+        expected
+      ) {
+        var expectedSummary = getSummary(expected);
+        return invokeMochaAsync(args.concat('--parallel'))[1].then(function(
+          actual
+        ) {
+          var actualSummary = getSummary(actual);
+          expect(actualSummary, 'to satisfy', {
+            pending: expectedSummary.pending,
+            passing: expectedSummary.passing,
+            failing: expectedSummary.failing
+          });
+        });
       });
     });
   });
