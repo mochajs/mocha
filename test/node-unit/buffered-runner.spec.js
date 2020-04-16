@@ -1,6 +1,5 @@
 'use strict';
 
-const os = require('os');
 const {
   EVENT_RUN_BEGIN,
   EVENT_TEST_PASS,
@@ -21,10 +20,11 @@ describe('buffered-runner', function() {
     let terminate;
     let BufferedRunner;
     let suite;
+    let cpuCount;
 
     beforeEach(function() {
       sandbox = createSandbox();
-
+      cpuCount = 1;
       suite = new Suite('a root suite', {}, true);
 
       // tests will want to further define the behavior of these.
@@ -41,6 +41,9 @@ describe('buffered-runner', function() {
       BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, () => ({
         workerpool: {
           pool
+        },
+        os: {
+          cpus: sandbox.stub().callsFake(() => new Array(cpuCount))
         }
       }));
     });
@@ -149,7 +152,7 @@ describe('buffered-runner', function() {
                   args: [
                     expect.it('to be a', 'string'),
                     {
-                      maxWorkers: os.cpus().length - 1
+                      maxWorkers: Math.max(cpuCount - 1, 1)
                     }
                   ]
                 });
@@ -161,6 +164,10 @@ describe('buffered-runner', function() {
         });
 
         describe('when provided a max job count', function() {
+          beforeEach(function() {
+            cpuCount = 8;
+          });
+
           it('should use the provided max count', function(done) {
             runner.run(
               () => {
@@ -168,7 +175,7 @@ describe('buffered-runner', function() {
                   args: [
                     expect.it('to be a', 'string'),
                     {
-                      maxWorkers: 2
+                      maxWorkers: 4
                     }
                   ]
                 });
@@ -177,7 +184,7 @@ describe('buffered-runner', function() {
               {
                 files: [],
                 options: {
-                  jobs: 2
+                  jobs: 4
                 }
               }
             );
