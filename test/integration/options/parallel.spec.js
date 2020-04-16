@@ -7,7 +7,7 @@ var invokeMochaAsync = helpers.invokeMochaAsync;
 var utils = require('../../../lib/utils');
 
 function compareReporters(reporter) {
-  this.timeout(5000);
+  this.timeout(Math.max(this.timeout(), 5000));
   return runMochaAsync(path.join('options', 'parallel', 'test-a.fixture.js'), [
     '--reporter',
     reporter,
@@ -72,7 +72,7 @@ describe('--parallel', function() {
 
   describe('when used with CJS tests', function() {
     it('should have the same result as with --no-parallel', function() {
-      this.timeout(5000);
+      this.timeout(Math.max(this.timeout(), 5000));
       return runMochaAsync(
         path.join('options', 'parallel', 'test-*.fixture.js'),
         ['--no-parallel']
@@ -264,7 +264,7 @@ describe('--parallel', function() {
             it('should have the same result as when run with --no-parallel', function() {
               // note that the output may not be in the same order, as running file
               // order is non-deterministic in parallel mode
-              this.timeout(5000);
+              this.timeout(Math.max(this.timeout(), 5000));
               return runMochaAsync(
                 path.join('options', 'parallel', 'test-*.fixture.js'),
                 ['--reporter', reporter, '--no-parallel']
