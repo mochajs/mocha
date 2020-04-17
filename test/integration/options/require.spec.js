@@ -3,8 +3,8 @@
 var invokeMochaAsync = require('../helpers').invokeMochaAsync;
 
 describe('--require', function() {
-  describe('when run in serial', function() {
-    it('should allow registration of root hooks via mochaHooks object export', function() {
+  describe('when mocha run in serial mode', function() {
+    it('should run root hooks when provided via mochaHooks object export', function() {
       return expect(
         invokeMochaAsync([
           '--require=' +
@@ -21,15 +21,11 @@ describe('--require', function() {
         ])[1],
         'when fulfilled',
         'to contain output',
-        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2\n/
-      ).and(
-        'when fulfilled',
-        'to contain output',
-        /afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2\n/
+        /beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2/
       );
     });
 
-    it('should allow registration of root hooks via mochaHooks function export', function() {
+    it('should run root hooks when provided via mochaHooks function export', function() {
       return expect(
         invokeMochaAsync([
           '--require=' +
@@ -46,17 +42,13 @@ describe('--require', function() {
         ])[1],
         'when fulfilled',
         'to contain output',
-        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2\n/
-      ).and(
-        'when fulfilled',
-        'to contain output',
-        /afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2\n/
+        /beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2/
       );
     });
   });
 
-  describe('when run with --parallel', function() {
-    it('should allow registration of root hooks', function() {
+  describe('when mocha in parallel mode', function() {
+    it('should run root hooks when provided via mochaHooks object exports', function() {
       return expect(
         invokeMochaAsync([
           '--require=' +
@@ -74,37 +66,57 @@ describe('--require', function() {
         ])[1],
         'when fulfilled',
         'to contain output',
-        /beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2[^]+afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2/
+        /beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2/
       );
     });
 
-    it('should run root hooks for each job', function() {
+    it('should run root hooks when provided via mochaHooks function export', function() {
       return expect(
         invokeMochaAsync([
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-a.fixture.js'
+              '../fixtures/options/require/root-hook-defs-c.fixture.js'
             ),
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-b.fixture.js'
+              '../fixtures/options/require/root-hook-defs-d.fixture.js'
             ),
           '--parallel',
           require.resolve(
             '../fixtures/options/require/root-hook-test.fixture.js'
-          ),
-          require.resolve(
-            '../fixtures/options/require/root-hook-test-2.fixture.js'
           )
         ])[1],
         'when fulfilled',
         'to contain output',
-        /(beforeAll\nbeforeAll array 1\nbeforeAll array 2\nbeforeEach\nbeforeEach array 1\nbeforeEach array 2[^]+){2}/
-      ).and(
-        'when fulfilled',
-        'to contain output',
-        /(afterEach\nafterEach array 1\nafterEach array 2\nafterAll\nafterAll array 1\nafterAll array 2[^]+){2}/
+        /beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2/
       );
+    });
+
+    describe('when running multiple jobs', function() {
+      it('should run root hooks when provided via mochaHooks object exports for each job', function() {
+        return expect(
+          invokeMochaAsync([
+            '--require=' +
+              require.resolve(
+                '../fixtures/options/require/root-hook-defs-a.fixture.js'
+              ),
+            '--require=' +
+              require.resolve(
+                '../fixtures/options/require/root-hook-defs-b.fixture.js'
+              ),
+            '--parallel',
+            require.resolve(
+              '../fixtures/options/require/root-hook-test.fixture.js'
+            ),
+            require.resolve(
+              '../fixtures/options/require/root-hook-test-2.fixture.js'
+            )
+          ])[1],
+          'when fulfilled',
+          'to contain output',
+          /(?:beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2[\s\S]+?){2}/
+        );
+      });
     });
   });
 });
