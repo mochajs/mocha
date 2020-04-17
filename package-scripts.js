@@ -20,6 +20,10 @@ function test(testName, mochaParams) {
     }
     mochaParams += ' --color';
   }
+  // this may _actually_ be supported in the future
+  if (process.env.MOCHA_PARALLEL === '0') {
+    mochaParams += ' --no-parallel';
+  }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
   } ${mochaCommand} ${mochaParams}`.trim();
