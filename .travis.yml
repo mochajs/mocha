@@ -38,15 +38,22 @@ jobs:
   include:
     - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
+      name: 'Latest Node.js (with coverage)'
+
+    - script: MOCHA_PARALLEL=0 npm start test.node.unit
+      name: 'Latest Node.js (in serial mode)'
 
     - &node
       script: npm start test.node
       node_js: '12'
+      name: 'Node.js v12'
 
     - <<: *node
       node_js: '10'
+      name: 'Node.js v10'
 
     - script: npm start test.bundle test.browser
+      name: 'Browser'
       node_js: 12
       install: npm ci # we need the native modules here
       addons:
@@ -59,6 +66,7 @@ jobs:
 
     - stage: lint
       script: npm start lint
+      name: 'JS & Markdown'
 
     # smoke tests use default npm.
     - &smoke
@@ -66,7 +74,7 @@ jobs:
       env: null
       before_install: true
       install: npm install --production
-
+      name: 'Latest Node.js'
       script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
       cache:
         directories:
@@ -75,12 +83,15 @@ jobs:
 
     - <<: *smoke
       node_js: '12'
+      name: 'Node.js v12'
 
     - <<: *smoke
       node_js: '10'
+      name: 'Node.js v10'
 
     - stage: precache
       script: true
+      name: 'Prime cache'
 
 notifications:
   email: false
