@@ -36,7 +36,7 @@ cache:
 
 jobs:
   include:
-    - script: DEBUG=mocha:parallel* COVERAGE=1 npm start test.node
+    - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
 
     - &node
