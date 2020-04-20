@@ -19,11 +19,11 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 - [browser support](#running-mocha-in-the-browser)
 - [simple async support, including promises](#asynchronous-code)
+- [run Node.js tests in parallel](#parallel-tests)
 - [test coverage reporting](#wallabyjs)
 - [string diff support](#diffs)
-- [javascript API for running tests](#more-information)
-- proper exit status for CI support etc
-- [auto-detects and disables coloring for non-ttys](#reporters)
+- [JavaScript API for running tests](#more-information)
+- [auto-detects and disables coloring for non-TTYs](#reporters)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
@@ -36,7 +36,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
@@ -68,6 +67,8 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [Timeouts](#timeouts)
 - [Diffs](#diffs)
 - [Command-Line Usage](#command-line-usage)
+- [Parallel Tests](#parallel-tests)
+- [Root-Level Hook Plugins](#root-level-hook-plugins)
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Node.JS native ESM support](#nodejs-native-esm-support)
@@ -464,6 +465,8 @@ describe('Array', function() {
 
 Pending tests will be included in the test results, and marked as pending. A pending test is not considered a failed test.
 
+Read the [inclusive tests section](#inclusive-tests) for an example of conditionally marking a test as pending via `this.skip()`.
+
 ## Exclusive Tests
 
 The exclusivity feature allows you to run _only_ the specified suite or test-case
@@ -820,7 +823,7 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 <!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
 
-```text
+```
 
 mocha [spec..]
 
@@ -841,6 +844,10 @@ Rules & Behavior
   --forbid-only              Fail if exclusive test(s) encountered     [boolean]
   --forbid-pending           Fail if pending test(s) encountered       [boolean]
   --global, --globals        List of allowed global variables            [array]
+  --jobs, -j                 Number of concurrent jobs for --parallel; use 1 to
+                             run in serial
+                                   [number] [default: (number of CPU cores - 1)]
+  --parallel, -p             Run tests in parallel                     [boolean]
   --retries                  Retry failed tests this many times         [number]
   --slow, -s                 Specify "slow" test threshold (in milliseconds)
                                                           [string] [default: 75]
@@ -1211,6 +1218,28 @@ All of these options are mutually exclusive.
 
 Implies `--no-timeout`.
 
+### `--parallel, -p`
+
+> _New in v.8.0.0._
+
+Use the `--parallel` flag to run tests in a worker pool.
+
+Each test file will be put into a queue and executed as workers become available.
+
+**NOTICE**: `--parallel` has certain implications for Mocha's behavior which you must be aware of. Read more about [running tests in parallel](#parallel-tests).
+
+### `--jobs <count>, -j <count>`
+
+> _New in v.8.0.0._
+
+Use `--jobs <count>` to specify the _maximum_ number of processes in the worker pool.
+
+The default value is the _number of CPU cores_ less 1.
+
+Hint: Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
+
+Has no effect unless used with [`--parallel`](#-parallel-p).
+
 ### About Option Types
 
 > _Updated in v6.0.0._
@@ -1232,6 +1261,288 @@ These flags vary depending on your version of Node.js.
 Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
+
+## Parallel Tests
+
+> _New in v.8.0.0._
+
+Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](#-parallel-p) flag).
+
+Parallel tests should work out-of-the box for well-isolated unit tests. However, you must be aware of some important implications of the behavior.
+
+> _Note: Authors of third-party libraries built on top of Mocha should especially read this!_
+
+### Reporter Limitations
+
+Due to the nature of the following reporters, they cannot work when running tests in parallel:
+
+- [`markdown`](#markdown)
+- [`progress`](#progress)
+- [`json-stream`](#json-stream)
+  {:.single-column}
+
+These reporters expect Mocha to know _how many tests it plans to run_ before execution. This information is unavailable in parallel mode, as test files are loaded only when they are about to be run.
+
+In serial mode, tests results will "stream" as they occur. In parallel mode, reporter output is _buffered_; reporting will occur after each file is completed. In practice, the reporter output will appear in "chunks" (but will otherwise be identical).
+
+### Order is Non-Deterministic
+
+In parallel mode, we have no guarantees about the order in which test files will be run--or what process runs them--as it depends on the execution times of the test files.
+
+Because of this, the following options _cannot be used_ in parallel mode:
+
+- [`--file`](#--file--file-directory-glob-)
+- [`--sort`](#--sort)
+- [`--delay`](#--delay)
+  {:.single-column}
+
+### Test Duration Variability
+
+Because running tests in parallel mode uses more system resources at once, the OS may take extra time to schedule and complete some operations. For this reason, test timeouts may need to be increased either [globally](#--timeout--ms----t--ms-) or [otherwise](#timeouts).
+
+### "Bail" is "Best Effort"
+
+When used with `--bail` (or `this.bail()`) to exit after the first failure, it's likely other tests will be running at the same time. Mocha must shut down its worker processes before exiting.
+
+Likewise, subprocesses may throw uncaught exceptions. When used with `--allow-uncaught`, Mocha will "bubble" this exception to the main process, but still must shut down its processes.
+
+### Root Hooks Are Not Global
+
+> _NOTE: This only applies to test files run parallel mode_.
+
+A root-level hook is a hook in a test file which is _not defined_ within a suite. An example using the `bdd` interface:
+
+```js
+// test/setup.js
+beforeEach(function() {
+  doMySetup();
+});
+
+afterEach(function() {
+  doMyTeardown();
+});
+```
+
+When run (in the default "serial" mode) via `mocha --file "./test/setup.js" "./test/**/*.spec.js"`, `setup.js` will be executed _first_, and install the two hooks shown above for every test found in `./test/**/*.spec.js`.
+
+**When Mocha runs in parallel mode, test files do not share the same process.** Consequently, a root-level hook defined in test file _A_ won't be present in test file _B_.
+
+There are a (minimum of) two workarounds for this:
+
+1. `require('./setup.js')` or `import './setup.js'` at the top of every test file. Best avoided for those averse to boilerplate.
+1. _Recommended_: Define root-level hooks in a required file, using the new (also as of v8.0.0) [Root Hook Plugin](#root-level-hook-plugins) system.
+
+### No Browser Support
+
+Parallel mode is only available in Node.js.
+
+### Migration Checklist
+
+If you find your tests don't work properly when run with [`--parallel`](#-parallel-p), either shrug and move on, or use this handy-dandy checklist to get things working:
+
+- :white_check_mark: Ensure you are using a [supported reporter](#reporter-limitations).
+- :white_check_mark: Ensure you are not using [other unsupported flags](#order-is-non-deterministic).
+- :white_check_mark: Double-check your [config file](#configuring-mocha-nodejs); options set in config files will be merged with any command-line option.
+- :white_check_mark: Look for root-level hooks (they look like [this](#root-hooks-are-not-global)) in your tests. Move them into a [root-level hook plugin](#root-hook-plugins).
+- :white_check_mark: Do any assertion, mock, or other test libraries you're consuming use root-level hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
+- :white_check_mark: If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](#-timeout-ms-t-ms))
+- :white_check_mark: Ensure your tests do not depend on being run in a specific order.
+- :white_check_mark: Ensure your tests clean up after themselves; remove temp files, handles, sockets, etc. Don't try to share state or resources between test files.
+
+### Caveats About Testing in Parallel
+
+Some types of tests are _not_ so well-suited to run in parallel. For example, extremely timing-sensitive tests, or tests which make I/O requests to a limited pool of resources (such as opening ports, or automating browser windows, hitting a test DB, or remote server, etc.).
+
+Free-tier cloud CI services may not provide a suitable multi-core container or VM for their build agents. Regarding expected performance gains in CI: your mileage may vary. It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
+
+It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+
+## Root Hook Plugins
+
+> _New in v8.0.0._
+
+In some cases, you may want to execute a [hook](#hooks) before (or after) every test in every file. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root-level hooks (see [example above](#root-level-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode!
+
+A Root-Level Hook Plugin is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root-level hooks to be used across all test files.
+
+### Defining a Root Hook Plugin
+
+A Root Hook Plugin file is a script which exports a `mochaHooks` property.
+
+Here's a simple example, which defines a hook to run before every test (in every file). Use it via `--require test/hooks.js`:
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  }
+};
+```
+
+`beforeEach`--as you may have guessed--corresponds to a `beforeEach` in the default [`bdd`](#bdd) interface. This works with other interfaces too, _but the property names are always as follows_:
+
+- `beforeAll`:
+  - In **serial** mode (the default), run _once_, before any tests begin
+  - In **parallel** mode, run in _each file_, before any tests begin
+- `beforeEach`:
+  - In both **serial and parallel** modes, run _before every test_
+- `afterAll`:
+  - In **serial** mode (the default), run _once_, after all tests end
+  - In **parallel** mode, run in _each file_, after all tests end
+- `afterEach`:
+  - In both **serial and parallel** modes, run _after every test_
+
+{:.single-column}
+
+Note that these hook callbacks run in the usual context, so `this` is available:
+
+```js
+exports.mochaHooks = {
+  beforeAll() {
+    // skip all tests for bob
+    if (require('os').userInfo().username === 'bob') {
+      return this.skip();
+    }
+  }
+};
+```
+
+### Multiple Root Hooks in a Single Plugin
+
+Multiple root hooks can be defined in a single plugin, for organizational purposes. For example:
+
+```js
+exports.mochaHooks = {
+  beforeEach: [
+    function(done) {
+      // do something before every test,
+      // then run the next hook in this array
+    },
+    async function() {
+      // async or Promise-returning functions allowed
+    }
+  ]
+};
+```
+
+### Root Hook Plugins Can Export a Function
+
+If you need to perform some logic--such as choosing a root hook conditionally, based on the environment--`mochaHooks` can be a _function_ which returns the expected object.
+
+```js
+exports.mochaHooks = () => {
+  if (process.env.CI) {
+    // root hooks object
+    return {
+      beforeEach: [
+        function() {
+          // CI-specific beforeEach
+        },
+        function() {
+          // some other CI-specific beforeEach
+        }
+      ]
+    };
+  }
+  // root hooks object
+  return {
+    beforeEach() {
+      // regular beforeEach
+    }
+  };
+};
+```
+
+If you need to perform an async operation, `mochaHooks` can be `Promise`-returning:
+
+```js
+exports.mochaHooks = async () => {
+  const result = await checkSomething();
+  // only use a root hook if `result` is truthy
+  if (result) {
+    // root hooks object
+    return {
+      beforeEach() {
+        // something
+      }
+    };
+  }
+};
+```
+
+### Multiple Root Hook Plugins
+
+Multiple root hook plugins can be registered by using `--require` multiple times. For example, to register the root hooks in `hooks-a.js` and `hooks-b.js`, use `--require hooks-a.js --require hooks-b.js`. These will be registered (and run) _in order_.
+
+### Migrating Tests to use Root Hook Plugins
+
+To migrate your tests using root hooks to a root hook plugin:
+
+1. Find your root hooks (hooks defined outside of a suite--a `describe()` callback).
+1. Create a new file, e.g., `test/hooks.js`.
+1. _Move_ your root hooks into `test/hooks.js`.
+1. In `test/hooks.js`, make your hooks a member of an exported `mochaHooks` property.
+1. Use `--require test/hooks.js` (even better: use a [config file](#configuring-mocha-nodejs)) when running your tests.
+
+For example, given the following file, `test/test.spec.js`, containing root hooks:
+
+```js
+// test/test.spec.js
+
+beforeEach(function() {
+  // global setup for all tests
+});
+
+after(function() {
+  // one-time final cleanup
+});
+
+describe('my test suite', function() {
+  it('should have run my global setup', function() {
+    // make assertion
+  });
+});
+```
+
+Your `test/hooks.js` should contain:
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach(function() {
+    // global setup for all tests
+  }),
+  afterAll(function() {
+    // one-time final cleanup
+  })
+};
+```
+
+**Note that `after` becomes `afterAll` and `before` becomes `beforeAll`.**
+
+Your original `test/test.spec.js` should now contain:
+
+```js
+// test/test.spec.js
+
+describe('my test suite', function() {
+  it('should have run my global setup', function() {
+    // make assertion
+  });
+});
+```
+
+Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](#-parallel-p)).
+
+### Migrating a Library to use Root Hook PLugins
+
+If you're a library maintainer, and your library uses root-level hooks, you can migrate by refactoring your entry point.
+
+Your library should _always_ export a [`mochaHooks` object](#defining-a-root-hook-plugin). To maintain backwards compatibility, run your root level hooks _if and only if_ `global.beforeEach` (or other relevant hook) exists.
 
 ## Interfaces
 
