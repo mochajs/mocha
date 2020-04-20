@@ -121,7 +121,7 @@ describe('Runner', function() {
       global.foo = 'bar';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', "global leak detected: 'foo'");
+        expect(_err, 'to have message', "global leak(s) detected: 'foo'");
         delete global.foo;
         done();
       });
@@ -183,7 +183,7 @@ describe('Runner', function() {
       global.bar = 'baz';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', "global leaks detected: 'foo', 'bar'");
+        expect(_err.message, 'to be', "global leak(s) detected: 'foo', 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -217,7 +217,7 @@ describe('Runner', function() {
       global.bar = 'detect-me';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'im a test about lions');
-        expect(_err, 'to have message', "global leak detected: 'bar'");
+        expect(_err, 'to have message', "global leak(s) detected: 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -229,7 +229,7 @@ describe('Runner', function() {
       global.derp = 'bar';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'herp');
-        expect(_err, 'to have message', "global leak detected: 'derp'");
+        expect(_err, 'to have message', "global leak(s) detected: 'derp'");
         delete global.derp;
         done();
       });
