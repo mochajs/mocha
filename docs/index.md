@@ -68,7 +68,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [Diffs](#diffs)
 - [Command-Line Usage](#command-line-usage)
 - [Parallel Tests](#parallel-tests)
-- [Root-Level Hook Plugins](#root-level-hook-plugins)
+- [Root Hook Plugins](#root-hook-plugins)
 - [Interfaces](#interfaces)
 - [Reporters](#reporters)
 - [Node.JS native ESM support](#nodejs-native-esm-support)
@@ -1291,14 +1291,14 @@ In parallel mode, we have no guarantees about the order in which test files will
 
 Because of this, the following options _cannot be used_ in parallel mode:
 
-- [`--file`](#--file--file-directory-glob-)
-- [`--sort`](#--sort)
-- [`--delay`](#--delay)
+- [`--file`](#-file-filedirectoryglob)
+- [`--sort`](#-sort-s)
+- [`--delay`](#delayed-root-suite)
   {:.single-column}
 
 ### Test Duration Variability
 
-Because running tests in parallel mode uses more system resources at once, the OS may take extra time to schedule and complete some operations. For this reason, test timeouts may need to be increased either [globally](#--timeout--ms----t--ms-) or [otherwise](#timeouts).
+Because running tests in parallel mode uses more system resources at once, the OS may take extra time to schedule and complete some operations. For this reason, test timeouts may need to be increased either [globally](#-timeout-ms-t-ms) or [otherwise](#timeouts).
 
 ### "Bail" is "Best Effort"
 
@@ -1330,7 +1330,7 @@ When run (in the default "serial" mode) via `mocha --file "./test/setup.js" "./t
 There are a (minimum of) two workarounds for this:
 
 1. `require('./setup.js')` or `import './setup.js'` at the top of every test file. Best avoided for those averse to boilerplate.
-1. _Recommended_: Define root-level hooks in a required file, using the new (also as of v8.0.0) [Root Hook Plugin](#root-level-hook-plugins) system.
+1. _Recommended_: Define root-level hooks in a required file, using the new (also as of v8.0.0) [Root Hook Plugin](#root-hook-plugins) system.
 
 ### No Browser Support
 
@@ -1361,7 +1361,7 @@ It's unlikely (but not impossible) to see a performance gain from a [job count](
 
 > _New in v8.0.0._
 
-In some cases, you may want to execute a [hook](#hooks) before (or after) every test in every file. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root-level hooks (see [example above](#root-level-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode!
+In some cases, you may want to execute a [hook](#hooks) before (or after) every test in every file. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root-level hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode!
 
 A Root-Level Hook Plugin is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root-level hooks to be used across all test files.
 
