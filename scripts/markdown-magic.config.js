@@ -20,7 +20,7 @@ exports.transforms = {
   usage: (content, options) => {
     const {executable} = options;
     const flag = options.flag || '--help';
-    const header = options.header || '\n```text';
+    const header = options.header || '\n```';
     const footer = options.footer || '```\n';
     const output = stripAnsi(
       String(
