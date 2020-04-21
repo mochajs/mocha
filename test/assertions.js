@@ -118,6 +118,24 @@ exports.mixinMochaAssertions = function(expect) {
         });
       }
     )
+    .addAssertion(
+      '<RawRunResult> [not] to have failed [test] count <number>',
+      function(expect, result, count) {
+        expect(result.failing, '[not] to be', count);
+      }
+    )
+    .addAssertion(
+      '<RawRunResult> [not] to have passed [test] count <number>',
+      function(expect, result, count) {
+        expect(result.passing, '[not] to be', count);
+      }
+    )
+    .addAssertion(
+      '<RawRunResult> [not] to have pending [test] count <number>',
+      function(expect, result, count) {
+        expect(result.pending, '[not] to be', count);
+      }
+    )
     .addAssertion('<JSONRunResult> [not] to have test count <number>', function(
       expect,
       result,
@@ -315,7 +333,7 @@ exports.mixinMochaAssertions = function(expect) {
       }
     )
     .addAssertion(
-      '<RawRunResult|JSONRunResult> to have [exit] code <number>',
+      '<RawResult|RawRunResult|JSONRunResult> to have [exit] code <number>',
       function(expect, result, code) {
         expect(result.code, 'to be', code);
       }
