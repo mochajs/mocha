@@ -1,7 +1,6 @@
 'use strict';
 
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+var runMocha = require('../helpers').runMocha;
 
 describe('--exit', function() {
   var behaviors = {
@@ -9,13 +8,29 @@ describe('--exit', function() {
     disabled: '--no-exit'
   };
 
+  // subprocess
+  var mocha;
+
+  function killSubprocess() {
+    mocha.kill('SIGKILL');
+  }
+
+  // these two handlers deal with a ctrl-c on command-line
+  before(function() {
+    process.on('SIGINT', killSubprocess);
+  });
+
+  after(function() {
+    process.removeListener('SIGINT', killSubprocess);
+  });
+
   /**
    * Returns a test that executes Mocha in a subprocess with either
    * `--exit`, `--no-exit`, or default behavior.
    *
    * @param {boolean} shouldExit - Expected result; `true` if Mocha should
    *   have force-killed the process.
-   * @param {string} [behavior] - 'enabled' or 'disabled'
+   * @param {"enabled"|"disabled"} [behavior] - 'enabled' or 'disabled'; omit for default
    * @returns {Function} async function implementing the test
    */
   var runExit = function(shouldExit, behavior) {
@@ -28,8 +43,7 @@ describe('--exit', function() {
       var timeoutObj;
       var fixture = 'exit.fixture.js';
       var args = behaviors[behavior] ? [behaviors[behavior]] : [];
-
-      var mocha = runMochaJSON(fixture, args, function postmortem(err) {
+      mocha = runMocha(fixture, args, function postmortem(err) {
         clearTimeout(timeoutObj);
         if (err) {
           return done(err);
@@ -41,15 +55,13 @@ describe('--exit', function() {
       // If this callback happens, then Mocha didn't automatically exit.
       timeoutObj = setTimeout(function() {
         didExit = false;
-        // This is the only way to kill the child, afaik.
-        // After the process ends, the callback to `run()` above is handled.
-        mocha.kill('SIGINT');
+        killSubprocess();
       }, timeout - 500);
     };
   };
 
   describe('default behavior', function() {
-    it('should force exit after root suite completion', runExit(false));
+    it('should not force exit after root suite completion', runExit(false));
   });
 
   describe('when enabled', function() {
