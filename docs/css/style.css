@@ -171,12 +171,30 @@ ul {
   padding: 0 15px;
 }
 
+ul.single-column,
+ul.single-column > li > ul {
+  column-count: 1;
+  margin-top: 0;
+  padding-right: 0;
+}
+
 ul li {
   border-bottom: 1px solid #eee;
   break-inside: avoid;
   list-style: none;
   margin-top: 5px;
   padding: 5px 0;
+}
+
+ul.single-column li,
+ul.single-column li > ul > li {
+  list-style: disc;
+  padding: 0;
+  border-bottom: 0;
+}
+
+ul.single-column li > ul > li {
+  list-style: circle;
 }
 
 code {

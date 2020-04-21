@@ -102,6 +102,7 @@
     "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
     "markdown-it-attrs": "^3.0.2",
+    "markdown-it-emoji": "^1.4.0",
     "markdown-it-prism": "^2.0.5",
     "markdown-magic": "^1.0.0",
     "markdown-magic-package-json": "^2.0.1",
