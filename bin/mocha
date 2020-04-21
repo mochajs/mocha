@@ -34,7 +34,7 @@ debug('loaded opts', opts);
  */
 const disableTimeouts = value => {
   if (impliesNoTimeouts(value)) {
-    debug(`option "${value}" disabled timeouts`);
+    debug('option %s disabled timeouts', value);
     mochaArgs.timeout = 0;
     delete mochaArgs.timeouts;
     delete mochaArgs.t;
@@ -108,7 +108,11 @@ if (Object.keys(nodeArgs).length) {
     unparse(mochaArgs, {alias: aliases})
   );
 
-  debug(`exec ${process.execPath} w/ args:`, args);
+  debug(
+    'forking child process via command: %s %s',
+    process.execPath,
+    args.join(' ')
+  );
 
   const proc = spawn(process.execPath, args, {
     stdio: 'inherit'
@@ -130,5 +134,6 @@ if (Object.keys(nodeArgs).length) {
     proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
   });
 } else {
+  debug('running Mocha in-process');
   require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
 }
