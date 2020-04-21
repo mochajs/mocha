@@ -11,7 +11,7 @@ stages:
 
 # defaults
 language: node_js
-node_js: '13'
+node_js: '14'
 addons:
   apt:
     packages:
@@ -38,15 +38,24 @@ jobs:
   include:
     - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
+      name: 'Latest Node.js (with coverage)'
+
+    - &node
+      script: npm start test.node
+      node_js: '13'
+      name: 'Node.js v13'
 
     - &node
       script: npm start test.node
       node_js: '12'
+      name: 'Node.js v12'
 
     - <<: *node
       node_js: '10'
+      name: 'Node.js v10'
 
     - script: npm start test.bundle test.browser
+      name: 'Browser'
       node_js: 12
       install: npm ci # we need the native modules here
       addons:
@@ -59,6 +68,7 @@ jobs:
 
     - stage: lint
       script: npm start lint
+      name: 'JS & Markdown'
 
     # smoke tests use default npm.
     - &smoke
@@ -66,7 +76,7 @@ jobs:
       env: null
       before_install: true
       install: npm install --production
-
+      name: 'Latest Node.js'
       script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
       cache:
         directories:
@@ -75,19 +85,21 @@ jobs:
 
     - <<: *smoke
       node_js: '12'
+      name: 'Node.js v12'
 
     - <<: *smoke
       node_js: '10'
+      name: 'Node.js v10'
 
     - stage: precache
       script: true
+      name: 'Prime cache'
 
 notifications:
   email: false
-  urls:
-    # for gitter mochajs/mocha
-    - secure: fUrHenYJs+pTuLtgBRoYyrlyfVekxaIGmLWq7bhUUqBj/7p5eCkQFn13LlPht0/4WWZOiPBcdTN7tKnz3Ho7ATUJhAchvOWDUgL5gtTvOzeCHbPuCvHz/VLK6hMoPdbLA45M864NDLotfHvyh62WgQaVw9iPc80eb+umaDPrYiU=
-    # for gitter mochajs/contributors
-    - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
-  on_success: change
-  on_failure: always
+  webhooks:
+    urls:
+      # for gitter mochajs/contributors
+      - secure: rGMGYWBaZgEa9i997jJHKzjI8WxECqLi6BqsMhvstDq9EeTeXkZFVfz4r6G3Xugsk3tFwb/pDpiYo1OK36kA5arUJTCia51u4Wn+c7lHKcpef/vXztoyucvw6/jXdVm/FQz1jztYYbqdyAOWC2BV8gYvg5F8TpK05UGCe5R0bRA=
+    on_success: change
+    on_failure: always
