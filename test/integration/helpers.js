@@ -33,6 +33,7 @@ module.exports = {
    * @param {string[]} args - Extra args to mocha executable
    * @param {Function} fn - Callback
    * @param {Object} [opts] - Options for `spawn()`
+   * @returns {ChildProcess} Mocha process
    */
   runMocha: function(fixturePath, args, fn, opts) {
     if (typeof args === 'function') {
@@ -46,7 +47,7 @@ module.exports = {
     path = resolveFixturePath(fixturePath);
     args = args || [];
 
-    invokeSubMocha(
+    return invokeSubMocha(
       args.concat(['-C', path]),
       function(err, res) {
         if (err) {
