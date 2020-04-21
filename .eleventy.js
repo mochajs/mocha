@@ -31,6 +31,8 @@ module.exports = function(eleventyConfig) {
 
   markdown.use(require('markdown-it-prism'));
 
+  markdown.use(require('markdown-it-emoji'));
+
   eleventyConfig.setLibrary('md', markdown);
 
   return {
