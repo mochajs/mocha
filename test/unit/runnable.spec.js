@@ -179,6 +179,24 @@ describe('Runnable(title, fn)', function() {
     });
   });
 
+  describe('#reset', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable();
+    });
+
+    it('should reset current run state', function() {
+      run.timedOut = true;
+      this._currentRetry = 5;
+      this.pending = true;
+      run.reset();
+      expect(run.timedOut, 'to be', false);
+      expect(run._currentRetry, 'to be', 0);
+      expect(run.pending, 'to be', false);
+    });
+  });
+
   describe('.title', function() {
     it('should be present', function() {
       expect(new Runnable('foo').title, 'to be', 'foo');

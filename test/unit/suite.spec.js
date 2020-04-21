@@ -80,6 +80,30 @@ describe('Suite', function() {
     });
   });
 
+  describe('.reset()', function() {
+    beforeEach(function() {
+      this.suite = new Suite('Suite to be reset', function() {});
+    });
+
+    it('should reset the `delayed` state', function() {
+      this.suite.delayed = true;
+      this.suite.reset();
+      expect(this.suite.delayed, 'to be', false);
+    });
+
+    it('should forward reset to suites and tests', function() {
+      var childSuite = new Suite('child suite', this.suite.context);
+      var test = new Test('test', function() {});
+      this.suite.addSuite(childSuite);
+      this.suite.addTest(test);
+      var testResetStub = sandbox.stub(test, 'reset');
+      var suiteResetStub = sandbox.stub(childSuite, 'reset');
+      this.suite.reset();
+      expect(testResetStub, 'was called once');
+      expect(suiteResetStub, 'was called once');
+    });
+  });
+
   describe('.timeout()', function() {
     beforeEach(function() {
       this.suite = new Suite('A Suite');

@@ -22,6 +22,10 @@ describe('Mocha', function() {
       sandbox.stub(Mocha.prototype, 'global').returnsThis();
     });
 
+    it('should set _autoDispose to true', function() {
+      expect(new Mocha()._autoDispose, 'to be', true);
+    });
+
     describe('when "options.timeout" is `undefined`', function() {
       it('should not attempt to set timeout', function() {
         // eslint-disable-next-line no-new
@@ -86,6 +90,25 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.asyncOnly(), 'to be', mocha);
+    });
+  });
+
+  describe('#autoDispose()', function() {
+    it('should set the _autoDispose attribute', function() {
+      var mocha = new Mocha(opts);
+      mocha.autoDispose();
+      expect(mocha._autoDispose, 'to be', true);
+    });
+
+    it('should set the _autoDispose attribute to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.autoDispose(false);
+      expect(mocha._autoDispose, 'to be', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.autoDispose(), 'to be', mocha);
     });
   });
 
@@ -188,6 +211,15 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.diff(), 'to be', mocha);
+    });
+  });
+
+  describe('#dispose()', function() {
+    it('should set dispose the root suite', function() {
+      var mocha = new Mocha(opts);
+      var disposeStub = sandbox.stub(mocha.suite, 'dispose');
+      mocha.dispose();
+      expect(disposeStub, 'was called once');
     });
   });
 
@@ -445,6 +477,88 @@ describe('Mocha', function() {
     it('should catch the `end` event if no tests are provided', function(done) {
       var mocha = new Mocha(opts);
       mocha.run().on('end', done);
+    });
+
+    it('should throw if a run is in progress', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is currently running, cannot start a second test run until this one is done',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_RUNNING',
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called once');
+    });
+
+    it('should throw the instance is already disposed', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.dispose();
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `autoDispose` when you want to reuse the same mocha instance for multiple test runs.',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called times', 0);
+    });
+
+    it('should throw if a run for a second time', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      runStub.callArg(0);
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `autoDispose` when you want to reuse the same mocha instance for multiple test runs.',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called once');
+    });
+
+    it('should allow multiple runs if `autoDispose` is disabled', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.autoDispose(false);
+      mocha.run();
+      runStub.callArg(0);
+      mocha.run();
+      runStub.callArg(0);
+      expect(runStub, 'called times', 2);
+    });
+
+    it('should reset between runs', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
+      var resetStub = sandbox.stub(Mocha.Suite.prototype, 'reset');
+      mocha.autoDispose(false);
+      mocha.run();
+      runStub.callArg(0);
+      mocha.run();
+      expect(resetStub, 'was called once');
+      expect(disposeStub, 'was called once');
     });
 
     describe('#reporter("xunit")#run(fn)', function() {
