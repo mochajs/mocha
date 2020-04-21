@@ -16,5 +16,15 @@ describe('utils', function() {
         expect(utils.cwd(), 'to be', process.cwd());
       });
     });
+
+    describe('type()', function() {
+      it('should return "asyncfunction" if the parameter is an async function', function() {
+        expect(
+          utils.type(async () => {}),
+          'to be',
+          'asyncfunction'
+        );
+      });
+    });
   });
 });

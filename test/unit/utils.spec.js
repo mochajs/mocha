@@ -14,7 +14,7 @@ describe('lib/utils', function() {
     sandbox.restore();
   });
 
-  describe('clean', function() {
+  describe('clean()', function() {
     it('should remove the wrapping function declaration', function() {
       expect(
         utils.clean('function  (one, two, three)  {\n//code\n}'),
@@ -149,7 +149,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('stringify', function() {
+  describe('stringify()', function() {
     var stringify = utils.stringify;
 
     it('should return an object representation of a string created with a String constructor', function() {
@@ -525,7 +525,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('type', function() {
+  describe('type()', function() {
     /* eslint no-extend-native: off */
 
     var type = utils.type;
@@ -588,7 +588,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('isPromise', function() {
+  describe('isPromise()', function() {
     it('should return true if the value is Promise-ish', function() {
       expect(
         utils.isPromise({
@@ -612,7 +612,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('escape', function() {
+  describe('escape()', function() {
     it('replaces the usual xml suspects', function() {
       expect(utils.escape('<a<bc<d<'), 'to be', '&#x3C;a&#x3C;bc&#x3C;d&#x3C;');
       expect(utils.escape('>a>bc>d>'), 'to be', '&#x3E;a&#x3E;bc&#x3E;d&#x3E;');
@@ -634,7 +634,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('deprecate', function() {
+  describe('deprecate()', function() {
     var emitWarning;
 
     beforeEach(function() {
@@ -674,7 +674,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('warn', function() {
+  describe('warn()', function() {
     var emitWarning;
 
     beforeEach(function() {
@@ -710,13 +710,17 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('sQuote/dQuote', function() {
+  describe('sQuote()', function() {
     var str = 'xxx';
 
     it('should return its input as string wrapped in single quotes', function() {
       var expected = "'xxx'";
       expect(utils.sQuote(str), 'to be', expected);
     });
+  });
+
+  describe('dQuote()', function() {
+    var str = 'xxx';
 
     it('should return its input as string wrapped in double quotes', function() {
       var expected = '"xxx"';
@@ -724,7 +728,7 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('createMap', function() {
+  describe('createMap()', function() {
     it('should return an object with a null prototype', function() {
       expect(Object.getPrototypeOf(utils.createMap()), 'to be', null);
     });
@@ -741,6 +745,28 @@ describe('lib/utils', function() {
         'to exhaustively satisfy',
         {foo: 'bar', bar: 'baz'}
       );
+    });
+  });
+
+  describe('slug()', function() {
+    it('should convert the string to lowercase', function() {
+      expect(utils.slug('FOO'), 'to be', 'foo');
+    });
+
+    it('should convert whitespace to dashes', function() {
+      expect(
+        utils.slug('peanut butter\nand\tjelly'),
+        'to be',
+        'peanut-butter-and-jelly'
+      );
+    });
+
+    it('should strip non-alphanumeric and non-dash characters', function() {
+      expect(utils.slug('murder-hornets!!'), 'to be', 'murder-hornets');
+    });
+
+    it('should disallow consecutive dashes', function() {
+      expect(utils.slug('poppies & fritz'), 'to be', 'poppies-fritz');
     });
   });
 });
