@@ -22,8 +22,8 @@ describe('Mocha', function() {
       sandbox.stub(Mocha.prototype, 'global').returnsThis();
     });
 
-    it('should set _autoDispose to true', function() {
-      expect(new Mocha()._autoDispose, 'to be', true);
+    it('should set _cleanReferencesAfterRun to true', function() {
+      expect(new Mocha()._cleanReferencesAfterRun, 'to be', true);
     });
 
     describe('when "options.timeout" is `undefined`', function() {
@@ -93,22 +93,22 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#autoDispose()', function() {
-    it('should set the _autoDispose attribute', function() {
+  describe('#cleanReferencesAfterRun()', function() {
+    it('should set the _cleanReferencesAfterRun attribute', function() {
       var mocha = new Mocha(opts);
-      mocha.autoDispose();
-      expect(mocha._autoDispose, 'to be', true);
+      mocha.cleanReferencesAfterRun();
+      expect(mocha._cleanReferencesAfterRun, 'to be', true);
     });
 
-    it('should set the _autoDispose attribute to false', function() {
+    it('should set the _cleanReferencesAfterRun attribute to false', function() {
       var mocha = new Mocha(opts);
-      mocha.autoDispose(false);
-      expect(mocha._autoDispose, 'to be', false);
+      mocha.cleanReferencesAfterRun(false);
+      expect(mocha._cleanReferencesAfterRun, 'to be', false);
     });
 
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
-      expect(mocha.autoDispose(), 'to be', mocha);
+      expect(mocha.cleanReferencesAfterRun(), 'to be', mocha);
     });
   });
 
@@ -215,9 +215,19 @@ describe('Mocha', function() {
   });
 
   describe('#dispose()', function() {
-    it('should set dispose the root suite', function() {
+    it('should dispose the root suite', function() {
       var mocha = new Mocha(opts);
       var disposeStub = sandbox.stub(mocha.suite, 'dispose');
+      mocha.dispose();
+      expect(disposeStub, 'was called once');
+    });
+
+    it('should dispose previous test runner', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
+      mocha.run();
+      runStub.callArg(0);
       mocha.dispose();
       expect(disposeStub, 'was called once');
     });
@@ -490,7 +500,7 @@ describe('Mocha', function() {
         'to throw',
         {
           message:
-            'Mocha instance is currently running, cannot start a second test run until this one is done',
+            'Mocha instance is currently running tests, cannot start a next test run until this one is done',
           code: 'ERR_MOCHA_INSTANCE_ALREADY_RUNNING',
           instance: mocha
         }
@@ -509,8 +519,9 @@ describe('Mocha', function() {
         'to throw',
         {
           message:
-            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `autoDispose` when you want to reuse the same mocha instance for multiple test runs.',
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
           code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
+          cleanReferencesAfterRun: true,
           instance: mocha
         }
       );
@@ -529,7 +540,7 @@ describe('Mocha', function() {
         'to throw',
         {
           message:
-            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `autoDispose` when you want to reuse the same mocha instance for multiple test runs.',
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
           code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
           instance: mocha
         }
@@ -537,10 +548,10 @@ describe('Mocha', function() {
       expect(runStub, 'was called once');
     });
 
-    it('should allow multiple runs if `autoDispose` is disabled', function() {
+    it('should allow multiple runs if `cleanReferencesAfterRun` is disabled', function() {
       var mocha = new Mocha(opts);
       var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
-      mocha.autoDispose(false);
+      mocha.cleanReferencesAfterRun(false);
       mocha.run();
       runStub.callArg(0);
       mocha.run();
@@ -551,13 +562,23 @@ describe('Mocha', function() {
     it('should reset between runs', function() {
       var mocha = new Mocha(opts);
       var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
-      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
       var resetStub = sandbox.stub(Mocha.Suite.prototype, 'reset');
-      mocha.autoDispose(false);
+      mocha.cleanReferencesAfterRun(false);
       mocha.run();
       runStub.callArg(0);
       mocha.run();
       expect(resetStub, 'was called once');
+    });
+
+    it('should dispose the previous runner when the next run starts', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
+      mocha.cleanReferencesAfterRun(false);
+      mocha.run();
+      runStub.callArg(0);
+      expect(disposeStub, 'was not called');
+      mocha.run();
       expect(disposeStub, 'was called once');
     });
 
