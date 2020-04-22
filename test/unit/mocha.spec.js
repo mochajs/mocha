@@ -93,25 +93,6 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#cleanReferencesAfterRun()', function() {
-    it('should set the _cleanReferencesAfterRun attribute', function() {
-      var mocha = new Mocha(opts);
-      mocha.cleanReferencesAfterRun();
-      expect(mocha._cleanReferencesAfterRun, 'to be', true);
-    });
-
-    it('should set the _cleanReferencesAfterRun attribute to false', function() {
-      var mocha = new Mocha(opts);
-      mocha.cleanReferencesAfterRun(false);
-      expect(mocha._cleanReferencesAfterRun, 'to be', false);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.cleanReferencesAfterRun(), 'to be', mocha);
-    });
-  });
-
   describe('#bail()', function() {
     it('should set the suite._bail to true if there is no arguments', function() {
       var mocha = new Mocha(opts);
@@ -147,6 +128,25 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.checkLeaks(), 'to be', mocha);
+    });
+  });
+
+  describe('#cleanReferencesAfterRun()', function() {
+    it('should set the _cleanReferencesAfterRun attribute', function() {
+      var mocha = new Mocha(opts);
+      mocha.cleanReferencesAfterRun();
+      expect(mocha._cleanReferencesAfterRun, 'to be', true);
+    });
+
+    it('should set the _cleanReferencesAfterRun attribute to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.cleanReferencesAfterRun(false);
+      expect(mocha._cleanReferencesAfterRun, 'to be', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.cleanReferencesAfterRun(), 'to be', mocha);
     });
   });
 
@@ -595,6 +595,19 @@ describe('Mocha', function() {
           }
         }, 'not to throw');
       });
+    });
+  });
+
+  describe('#unloadFiles()', function() {
+    it('should reset referencesCleaned and allow for next run', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      runStub.callArg(0);
+      mocha.unloadFiles();
+      expect(function() {
+        mocha.run();
+      }, 'not to throw');
     });
   });
 });
