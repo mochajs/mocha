@@ -3,7 +3,7 @@
 var invokeNode = require('./helpers').invokeNode;
 
 describe('multiple runs', function(done) {
-  it('should should be allowed to run multiple times if cleanReferences is turned off', function(done) {
+  it('should be allowed to run multiple times if cleanReferences is turned off', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
     );
@@ -25,7 +25,7 @@ describe('multiple runs', function(done) {
     });
   });
 
-  it('should should not be allowed if cleanReferences is true', function(done) {
+  it('should not be allowed if cleanReferences is true', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
     );
@@ -41,7 +41,7 @@ describe('multiple runs', function(done) {
     );
   });
 
-  it('should should not be allowed if the instance is disposed', function(done) {
+  it('should not be allowed if the instance is disposed', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
     );
@@ -57,7 +57,7 @@ describe('multiple runs', function(done) {
     );
   });
 
-  it('should should not allowed to run while a previous run is in progress', function(done) {
+  it('should not allowed to run while a previous run is in progress', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/start-second-run-if-previous-is-still-running.fixture'
     );
