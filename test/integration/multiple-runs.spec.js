@@ -2,7 +2,7 @@
 
 var invokeNode = require('./helpers').invokeNode;
 
-describe.only('multiple runs', function(done) {
+describe('multiple runs', function(done) {
   it('should be allowed to run multiple times if cleanReferences is turned off', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
