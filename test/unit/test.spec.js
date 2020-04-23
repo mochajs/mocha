@@ -105,19 +105,7 @@ describe('Test', function() {
 
       test.markOnly();
 
-      expect(spy, 'was called times', 1);
-    });
-
-    it('should pass itself as an argument', function() {
-      var test = new Test('foo');
-      var spy = sandbox.spy();
-      test.parent = {
-        appendOnlyTest: spy
-      };
-
-      test.markOnly();
-
-      expect(spy.getCall(0).args[0], 'to be', test);
+      expect(spy, 'to have a call satisfying', [test]).and('was called once');
     });
   });
 });
