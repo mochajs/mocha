@@ -102,10 +102,11 @@ describe('Test', function() {
       test.parent = {
         appendOnlyTest: spy
       };
-
       test.markOnly();
 
-      expect(spy, 'to have a call satisfying', [test]).and('was called once');
+      expect(spy, 'to have a call exhaustively satisfying', [test]).and(
+        'was called once'
+      );
     });
   });
 });
