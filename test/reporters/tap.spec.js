@@ -270,6 +270,7 @@ describe('TAP reporter', function() {
             EVENT_TEST_PASS,
             test
           );
+          runner.stats.tests = 2;
           runner.suite = '';
           runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
@@ -544,6 +545,7 @@ describe('TAP reporter', function() {
             EVENT_TEST_PASS,
             test
           );
+          runner.stats.tests = 2;
           runner.suite = '';
           runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);

@@ -22,6 +22,7 @@ var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
+var STATE_PENDING = states.STATE_PENDING;
 
 describe('XUnit reporter', function() {
   var sandbox;
@@ -397,15 +398,13 @@ describe('XUnit reporter', function() {
       it('should write expected tag', function() {
         var xunit = new XUnit(runner);
         var expectedTest = {
-          isPending: function() {
-            return true;
-          },
           title: expectedTitle,
           parent: {
             fullTitle: function() {
               return expectedClassName;
             }
           },
+          state: STATE_PENDING,
           duration: 1000
         };
 
