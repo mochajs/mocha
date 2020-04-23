@@ -3,8 +3,6 @@
 var assert = require('assert');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
-var runMocha = helpers.runMocha;
-var splitRegExp = helpers.splitRegExp;
 var invokeNode = helpers.invokeNode;
 var toJSONRunResult = helpers.toJSONRunResult;
 var args = [];
@@ -111,43 +109,38 @@ describe('pending', function() {
         });
       });
       it('should run before and after hooks', function(done) {
-        runMocha(
-          'pending/skip-sync-before-hooks.fixture.js',
-          args.concat(['--reporter', 'dot']),
-          function(err, res) {
-            if (err) {
-              done(err);
-              return;
-            }
-
-            var lines = res.output
-              .split(splitRegExp)
-              .map(function(line) {
-                return line.trim();
-              })
-              .filter(function(line) {
-                return line.length;
-              })
-              .slice(0, -1);
-
-            var expected = [
-              'outer before',
-              'inner before',
-              'inner after',
-              'outer after'
-            ];
-
-            assert.strictEqual(res.pending, 2);
-            assert.strictEqual(res.passing, 2);
-            assert.strictEqual(res.failing, 0);
-            assert.strictEqual(res.code, 0);
-            expected.forEach(function(line, i) {
-              assert.strictEqual(true, lines[i].includes(line));
-            });
-
-            done();
+        run('pending/skip-sync-before-hooks.fixture.js', function(err, res) {
+          if (err) {
+            return done(err);
           }
-        );
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 2)
+            .and('to have passed test count', 2)
+            .and(
+              'to have passed test order',
+              'should run test-1',
+              'should run test-2'
+            );
+          done();
+        });
+      });
+      it('should skip all sync/async inner before/after hooks', function(done) {
+        run('pending/skip-sync-before-inner.fixture.js', function(err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 2)
+            .and('to have passed test count', 0)
+            .and(
+              'to have pending test order',
+              'should never run this outer test',
+              'should never run this inner test'
+            );
+          done();
+        });
       });
     });
 
@@ -245,43 +238,21 @@ describe('pending', function() {
         });
       });
       it('should run before and after hooks', function(done) {
-        runMocha(
-          'pending/skip-async-before-hooks.fixture.js',
-          args.concat(['--reporter', 'dot']),
-          function(err, res) {
-            if (err) {
-              done(err);
-              return;
-            }
-
-            var lines = res.output
-              .split(splitRegExp)
-              .map(function(line) {
-                return line.trim();
-              })
-              .filter(function(line) {
-                return line.length;
-              })
-              .slice(0, -1);
-
-            var expected = [
-              'outer before',
-              'inner before',
-              'inner after',
-              'outer after'
-            ];
-
-            assert.strictEqual(res.pending, 2);
-            assert.strictEqual(res.passing, 2);
-            assert.strictEqual(res.failing, 0);
-            assert.strictEqual(res.code, 0);
-            expected.forEach(function(line, i) {
-              assert.strictEqual(true, lines[i].includes(line));
-            });
-
-            done();
+        run('pending/skip-async-before-hooks.fixture.js', function(err, res) {
+          if (err) {
+            return done(err);
           }
-        );
+          expect(res, 'to have failed with error', 'should throw this error')
+            .and('to have failed test count', 1)
+            .and('to have pending test count', 2)
+            .and('to have passed test count', 2)
+            .and(
+              'to have passed test order',
+              'should run test-1',
+              'should run test-2'
+            );
+          done();
+        });
       });
     });
 
