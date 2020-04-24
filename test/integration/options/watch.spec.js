@@ -296,9 +296,9 @@ function runMochaWatch(args, cwd, change) {
     {cwd, stdio: 'pipe'}
   );
 
-  return sleep(1000)
+  return sleep(2000)
     .then(() => change(mochaProcess))
-    .then(() => sleep(1000))
+    .then(() => sleep(2000))
     .then(() => {
       mochaProcess.kill('SIGINT');
       return resultPromise;
