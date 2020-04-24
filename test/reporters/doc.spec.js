@@ -134,9 +134,11 @@ describe('Doc reporter', function() {
 
     describe("on 'pass' event", function() {
       var expectedTitle = 'some tite';
+      var expectedFile = 'testFile.spec.js';
       var expectedBody = 'some body';
       var test = {
         title: expectedTitle,
+        file: expectedFile,
         body: expectedBody,
         slow: function() {
           return '';
@@ -148,6 +150,7 @@ describe('Doc reporter', function() {
         var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <dt>' + expectedTitle + '</dt>\n',
+          '    <dt>' + expectedFile + '</dt>\n',
           '    <dd><pre><code>' + expectedBody + '</code></pre></dd>\n'
         ];
         expect(stdout, 'to equal', expectedArray);
@@ -155,18 +158,23 @@ describe('Doc reporter', function() {
 
       it('should escape title and body where necessary', function() {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
+        var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';
         test.title = unescapedTitle;
+        test.file = unescapedFile;
         test.body = unescapedBody;
 
         var expectedEscapedTitle =
           '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
+        var expectedEscapedFile =
+          '&#x3C;div&#x3E;' + expectedFile + '&#x3C;/div&#x3E;';
         var expectedEscapedBody =
           '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
         var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <dt>' + expectedEscapedTitle + '</dt>\n',
+          '    <dt>' + expectedEscapedFile + '</dt>\n',
           '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
         ];
         expect(stdout, 'to equal', expectedArray);
@@ -175,10 +183,12 @@ describe('Doc reporter', function() {
 
     describe("on 'fail' event", function() {
       var expectedTitle = 'some tite';
+      var expectedFile = 'testFile.spec.js';
       var expectedBody = 'some body';
       var expectedError = 'some error';
       var test = {
         title: expectedTitle,
+        file: expectedFile,
         body: expectedBody,
         slow: function() {
           return '';
@@ -197,6 +207,7 @@ describe('Doc reporter', function() {
         var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <dt class="error">' + expectedTitle + '</dt>\n',
+          '    <dt class="error">' + expectedFile + '</dt>\n',
           '    <dd class="error"><pre><code>' +
             expectedBody +
             '</code></pre></dd>\n',
@@ -207,13 +218,17 @@ describe('Doc reporter', function() {
 
       it('should escape title, body, and error where necessary', function() {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
+        var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';
         var unescapedError = '<div>' + expectedError + '</div>';
         test.title = unescapedTitle;
+        test.file = unescapedFile;
         test.body = unescapedBody;
 
         var expectedEscapedTitle =
           '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
+        var expectedEscapedFile =
+          '&#x3C;div&#x3E;' + expectedFile + '&#x3C;/div&#x3E;';
         var expectedEscapedBody =
           '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
         var expectedEscapedError =
@@ -229,6 +244,7 @@ describe('Doc reporter', function() {
         var stdout = runReporter(this, runner, options);
         var expectedArray = [
           '    <dt class="error">' + expectedEscapedTitle + '</dt>\n',
+          '    <dt class="error">' + expectedEscapedFile + '</dt>\n',
           '    <dd class="error"><pre><code>' +
             expectedEscapedBody +
             '</code></pre></dd>\n',
