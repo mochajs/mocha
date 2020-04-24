@@ -231,6 +231,13 @@ describe('Mocha', function() {
       mocha.dispose();
       expect(disposeStub, 'was called once');
     });
+
+    it('should unload the files', function() {
+      var mocha = new Mocha(opts);
+      var unloadFilesStub = sandbox.stub(mocha, 'unloadFiles');
+      mocha.dispose();
+      expect(unloadFilesStub, 'was called once');
+    });
   });
 
   describe('#forbidOnly()', function() {
@@ -608,6 +615,18 @@ describe('Mocha', function() {
       expect(function() {
         mocha.run();
       }, 'not to throw');
+    });
+
+    it('should not be allowed when the current instance is already disposed', function() {
+      var mocha = new Mocha(opts);
+      mocha.dispose();
+      expect(
+        function() {
+          mocha.unloadFiles();
+        },
+        'to throw',
+        'Mocha instance is already disposed, it cannot be used again.'
+      );
     });
   });
 });
