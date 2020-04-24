@@ -191,9 +191,9 @@ describe('Runnable(title, fn)', function() {
       this._currentRetry = 5;
       this.pending = true;
       run.reset();
-      expect(run.timedOut, 'to be', false);
+      expect(run.timedOut, 'to be false');
       expect(run._currentRetry, 'to be', 0);
-      expect(run.pending, 'to be', false);
+      expect(run.pending, 'to be false');
     });
   });
 

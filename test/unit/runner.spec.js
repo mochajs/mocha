@@ -25,7 +25,7 @@ describe('Runner', function() {
 
   beforeEach(function() {
     suite = new Suite('Suite', 'root');
-    runner = new Runner(suite, undefined, true);
+    runner = new Runner(suite, {cleanReferencesAfterRun: true});
     runner.checkLeaks = true;
     sandbox = sinon.createSandbox();
   });
@@ -461,7 +461,7 @@ describe('Runner', function() {
     });
 
     it('should clean references after a run', function() {
-      runner = new Runner(suite, false, true);
+      runner = new Runner(suite, {delay: false, cleanReferencesAfterRun: true});
       var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
       runner.run();
       runner.emit(EVENT_SUITE_END, suite);
@@ -469,7 +469,10 @@ describe('Runner', function() {
     });
 
     it('should not clean references after a run when `cleanReferencesAfterRun` is `false`', function() {
-      runner = new Runner(suite, false, false);
+      runner = new Runner(suite, {
+        delay: false,
+        cleanReferencesAfterRun: false
+      });
       var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
       runner.run();
       runner.emit(EVENT_SUITE_END, suite);
