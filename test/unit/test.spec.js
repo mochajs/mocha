@@ -2,6 +2,7 @@
 
 var mocha = require('../../lib/mocha');
 var Test = mocha.Test;
+var sinon = require('sinon');
 
 describe('Test', function() {
   describe('.clone()', function() {
@@ -81,6 +82,31 @@ describe('Test', function() {
         }
       };
       expect(this._test.isPending(), 'to be', true);
+    });
+  });
+
+  describe('.markOnly()', function() {
+    var sandbox;
+
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
+    it('should call appendOnlyTest on parent', function() {
+      var test = new Test('foo');
+      var spy = sandbox.spy();
+      test.parent = {
+        appendOnlyTest: spy
+      };
+      test.markOnly();
+
+      expect(spy, 'to have a call exhaustively satisfying', [test]).and(
+        'was called once'
+      );
     });
   });
 });
