@@ -5,9 +5,9 @@ var invokeNode = require('./helpers').invokeNode;
 describe('multiple runs', function(done) {
   it('should be allowed to run multiple times if cleanReferences is turned off', function(done) {
     var path = require.resolve(
-      './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
+      './fixtures/multiple-runs/run-thrice.fixture.js'
     );
-    invokeNode([path, '--no-clean-references'], function(err, res) {
+    invokeNode([path], function(err, res) {
       expect(err, 'to be null');
       expect(res.code, 'to be', 0);
       var results = JSON.parse(res.output);
@@ -27,7 +27,7 @@ describe('multiple runs', function(done) {
 
   it('should not be allowed if cleanReferences is true', function(done) {
     var path = require.resolve(
-      './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
+      './fixtures/multiple-runs/clean-references.fixture.js'
     );
     invokeNode(
       [path],
@@ -42,9 +42,7 @@ describe('multiple runs', function(done) {
   });
 
   it('should not be allowed if the instance is disposed', function(done) {
-    var path = require.resolve(
-      './fixtures/multiple-runs/multiple-runs-different-output.fixture.js'
-    );
+    var path = require.resolve('./fixtures/multiple-runs/dispose.fixture.js');
     invokeNode(
       [path, '--directly-dispose'],
       function(err, res) {
