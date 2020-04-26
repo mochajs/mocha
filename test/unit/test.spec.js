@@ -81,10 +81,8 @@ describe('Test', function() {
     });
 
     it('should reset the run state', function() {
-      this._test.state = 'pending';
       this._test.pending = true;
       this._test.reset();
-      expect(this._test, 'not to have property', 'state');
       expect(this._test.pending, 'to be', false);
     });
 

@@ -188,12 +188,17 @@ describe('Runnable(title, fn)', function() {
 
     it('should reset current run state', function() {
       run.timedOut = true;
-      this._currentRetry = 5;
-      this.pending = true;
+      run._currentRetry = 5;
+      run.pending = true;
+      run.err = new Error();
+      run.state = 'error';
+
       run.reset();
       expect(run.timedOut, 'to be false');
       expect(run._currentRetry, 'to be', 0);
       expect(run.pending, 'to be false');
+      expect(run.err, 'to be undefined');
+      expect(run.state, 'to be undefined');
     });
   });
 
