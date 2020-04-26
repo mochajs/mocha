@@ -1,3 +1,14 @@
+# 7.1.2 / 2020-04-26
+
+## :nut_and_bolt: Other
+
+- [#4251](https://github.com/mochajs/mocha/issues/4251): Prevent karma-mocha from stalling ([**@juergba**](https://github.com/juergba))
+- [#4222](https://github.com/mochajs/mocha/issues/4222): Update dependency mkdirp to v0.5.5 ([**@outsideris**](https://github.com/outsideris))
+
+## :book: Documentation
+
+- [#4208](https://github.com/mochajs/mocha/issues/4208): Add Wallaby logo to site ([**@boneskull**](https://github.com/boneskull))
+
 # 7.1.1 / 2020-03-18
 
 ## :lock: Security Fixes
