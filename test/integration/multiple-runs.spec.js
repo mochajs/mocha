@@ -55,7 +55,7 @@ describe('multiple runs', function(done) {
     );
   });
 
-  it('should not allowed to run while a previous run is in progress', function(done) {
+  it('should not be allowed to run while a previous run is in progress', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/start-second-run-if-previous-is-still-running.fixture'
     );
@@ -68,5 +68,22 @@ describe('multiple runs', function(done) {
       },
       {stdio: ['ignore', 'pipe', 'pipe']}
     );
+  });
+
+  it('should reset the hooks between runs', function(done) {
+    var path = require.resolve(
+      './fixtures/multiple-runs/multiple-runs-with-flaky-before-each.fixture'
+    );
+    invokeNode([path], function(err, res) {
+      expect(err, 'to be null');
+      expect(res.code, 'to be', 0);
+      var results = JSON.parse(res.output);
+      expect(results, 'to have length', 2);
+      expect(results[0].failures, 'to have length', 1);
+      expect(results[0].passes, 'to have length', 0);
+      expect(results[1].passes, 'to have length', 1);
+      expect(results[1].failures, 'to have length', 0);
+      done();
+    });
   });
 });

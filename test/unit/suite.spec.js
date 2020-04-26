@@ -102,6 +102,24 @@ describe('Suite', function() {
       expect(testResetStub, 'was called once');
       expect(suiteResetStub, 'was called once');
     });
+
+    it('should forward reset to all hooks', function() {
+      this.suite.beforeEach(function() {});
+      this.suite.afterEach(function() {});
+      this.suite.beforeAll(function() {});
+      this.suite.afterAll(function() {});
+      sinon.stub(this.suite.getHooks('beforeEach')[0], 'reset');
+      sinon.stub(this.suite.getHooks('afterEach')[0], 'reset');
+      sinon.stub(this.suite.getHooks('beforeAll')[0], 'reset');
+      sinon.stub(this.suite.getHooks('afterAll')[0], 'reset');
+
+      this.suite.reset();
+
+      expect(this.suite.getHooks('beforeEach')[0].reset, 'was called once');
+      expect(this.suite.getHooks('afterEach')[0].reset, 'was called once');
+      expect(this.suite.getHooks('beforeAll')[0].reset, 'was called once');
+      expect(this.suite.getHooks('afterAll')[0].reset, 'was called once');
+    });
   });
 
   describe('.timeout()', function() {
