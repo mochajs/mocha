@@ -267,7 +267,7 @@ module.exports = {
       },
       linkcheck: {
         script:
-          'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html'
+          'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html --todo "HTTP 429 Too Many Requests"'
       },
       postbuild: {
         script:
