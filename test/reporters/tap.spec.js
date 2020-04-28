@@ -14,6 +14,7 @@ var EVENT_TEST_END = events.EVENT_TEST_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+var EVENT_TEST_SKIPPED = events.EVENT_TEST_SKIPPED;
 
 describe('TAP reporter', function() {
   var runReporter = makeRunReporter(TAP);
@@ -74,6 +75,30 @@ describe('TAP reporter', function() {
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PENDING,
+            null,
+            test
+          );
+          runner.suite = '';
+          runner.grepTotal = noop;
+          stdout = runReporter({}, runner, options);
+        });
+
+        it('should write expected message including count and title', function() {
+          var expectedMessage =
+            'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
+          expect(stdout[0], 'to equal', expectedMessage);
+        });
+      });
+
+      describe("on 'skipped' event", function() {
+        var stdout = [];
+
+        before(function() {
+          var test = createTest();
+          var runner = createMockRunner(
+            'start test',
+            EVENT_TEST_END,
+            EVENT_TEST_SKIPPED,
             null,
             test
           );
@@ -271,13 +296,16 @@ describe('TAP reporter', function() {
             test
           );
           runner.stats.tests = 2;
+          runner.stats.pending = 1;
+          runner.stats.skipped = 1;
           runner.suite = '';
           runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
-        it('should write total tests, passes, and failures', function() {
+        it('should write total tests, passes, skipped and failures', function() {
           var numberOfPasses = 1;
+          var numberOfSkipped = 2;
           var numberOfFails = 1;
           var totalTests = numberOfPasses + numberOfFails;
           var expectedArray = [
@@ -285,6 +313,7 @@ describe('TAP reporter', function() {
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',
             '# pass ' + numberOfPasses + '\n',
+            '# skip ' + numberOfSkipped + '\n',
             '# fail ' + numberOfFails + '\n'
           ];
           expect(stdout, 'to equal', expectedArray);
@@ -339,6 +368,30 @@ describe('TAP reporter', function() {
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PENDING,
+            null,
+            test
+          );
+          runner.suite = '';
+          runner.grepTotal = noop;
+          stdout = runReporter({}, runner, options);
+        });
+
+        it('should write expected message including count and title', function() {
+          var expectedMessage =
+            'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
+          expect(stdout[0], 'to equal', expectedMessage);
+        });
+      });
+
+      describe("on 'skipped' event", function() {
+        var stdout;
+
+        before(function() {
+          var test = createTest();
+          var runner = createMockRunner(
+            'start test',
+            EVENT_TEST_END,
+            EVENT_TEST_SKIPPED,
             null,
             test
           );
@@ -546,13 +599,16 @@ describe('TAP reporter', function() {
             test
           );
           runner.stats.tests = 2;
+          runner.stats.pending = 1;
+          runner.stats.skipped = 1;
           runner.suite = '';
           runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
-        it('should write total tests, passes, and failures', function() {
+        it('should write total tests, passes, skipped and failures', function() {
           var numberOfPasses = 1;
+          var numberOfSkipped = 2;
           var numberOfFails = 1;
           var totalTests = numberOfPasses + numberOfFails;
           var expectedArray = [
@@ -560,6 +616,7 @@ describe('TAP reporter', function() {
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',
             '# pass ' + numberOfPasses + '\n',
+            '# skip ' + numberOfSkipped + '\n',
             '# fail ' + numberOfFails + '\n'
           ];
           expect(stdout, 'to equal', expectedArray);

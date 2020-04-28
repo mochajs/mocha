@@ -19,10 +19,12 @@ var EVENT_TEST_END = events.EVENT_TEST_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+var EVENT_TEST_SKIPPED = events.EVENT_TEST_SKIPPED;
 
 var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
 var STATE_PENDING = states.STATE_PENDING;
+var STATE_SKIPPED = states.STATE_SKIPPED;
 
 describe('XUnit reporter', function() {
   var sandbox;
@@ -149,23 +151,29 @@ describe('XUnit reporter', function() {
   });
 
   describe('event handlers', function() {
-    describe("on 'pending', 'pass' and 'fail' events", function() {
+    describe("on 'pending', 'skip', 'pass' and 'fail' events", function() {
       it("should add test to tests called on 'end' event", function() {
         var pendingTest = {
           name: 'pending',
           slow: noop
         };
-        var failTest = {
-          name: 'fail',
+        var skipTest = {
+          name: 'skip',
           slow: noop
         };
         var passTest = {
           name: 'pass',
           slow: noop
         };
+        var failTest = {
+          name: 'fail',
+          slow: noop
+        };
         runner.on = runner.once = function(event, callback) {
           if (event === EVENT_TEST_PENDING) {
             callback(pendingTest);
+          } else if (event === EVENT_TEST_SKIPPED) {
+            callback(skipTest);
           } else if (event === EVENT_TEST_PASS) {
             callback(passTest);
           } else if (event === EVENT_TEST_FAIL) {
@@ -184,7 +192,7 @@ describe('XUnit reporter', function() {
         };
         XUnit.call(fakeThis, runner);
 
-        var expectedCalledTests = [pendingTest, passTest, failTest];
+        var expectedCalledTests = [pendingTest, skipTest, passTest, failTest];
         expect(calledTests, 'to equal', expectedCalledTests);
       });
     });
@@ -405,6 +413,33 @@ describe('XUnit reporter', function() {
             }
           },
           state: STATE_PENDING,
+          duration: 1000
+        };
+
+        xunit.test.call(fakeThis, expectedTest);
+        sandbox.restore();
+
+        var expectedTag =
+          '<testcase classname="' +
+          expectedClassName +
+          '" name="' +
+          expectedTitle +
+          '" time="1"><skipped/></testcase>';
+        expect(expectedWrite, 'to be', expectedTag);
+      });
+    });
+
+    describe('on test skipped', function() {
+      it('should write expected tag', function() {
+        var xunit = new XUnit(runner);
+        var expectedTest = {
+          title: expectedTitle,
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
+          state: STATE_SKIPPED,
           duration: 1000
         };
 

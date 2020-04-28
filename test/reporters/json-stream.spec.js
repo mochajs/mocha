@@ -15,6 +15,8 @@ var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
 var EVENT_RUN_END = events.EVENT_RUN_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+var EVENT_TEST_SKIPPED = events.EVENT_TEST_SKIPPED;
 
 describe('JSON Stream reporter', function() {
   var runReporter = makeRunReporter(JSONStream);
@@ -67,6 +69,62 @@ describe('JSON Stream reporter', function() {
           stdout[0],
           'to equal',
           '["pass",{"title":' +
+            dQuote(expectedTitle) +
+            ',"fullTitle":' +
+            dQuote(expectedFullTitle) +
+            ',"duration":' +
+            expectedDuration +
+            ',"currentRetry":' +
+            currentRetry +
+            '}]\n'
+        );
+      });
+    });
+
+    describe("on 'pending' event", function() {
+      it('should write stringified test data', function() {
+        var runner = createMockRunner(
+          'pending test',
+          EVENT_TEST_PENDING,
+          null,
+          null,
+          expectedTest
+        );
+        var options = {};
+        var stdout = runReporter({}, runner, options);
+
+        expect(
+          stdout[0],
+          'to equal',
+          '["pend",{"title":' +
+            dQuote(expectedTitle) +
+            ',"fullTitle":' +
+            dQuote(expectedFullTitle) +
+            ',"duration":' +
+            expectedDuration +
+            ',"currentRetry":' +
+            currentRetry +
+            '}]\n'
+        );
+      });
+    });
+
+    describe("on 'skipped' event", function() {
+      it('should write stringified test data', function() {
+        var runner = createMockRunner(
+          'skipped test',
+          EVENT_TEST_SKIPPED,
+          null,
+          null,
+          expectedTest
+        );
+        var options = {};
+        var stdout = runReporter({}, runner, options);
+
+        expect(
+          stdout[0],
+          'to equal',
+          '["skip",{"title":' +
             dQuote(expectedTitle) +
             ',"fullTitle":' +
             dQuote(expectedFullTitle) +
