@@ -51,7 +51,6 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-
         expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
