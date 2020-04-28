@@ -34,10 +34,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -55,10 +52,7 @@ describe('--forbid-only', function() {
           return done(err);
         }
 
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -75,10 +69,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -95,10 +86,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -144,10 +132,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -164,10 +149,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
