@@ -24,7 +24,7 @@ describe('--forbid-only', function() {
     });
   });
 
-  it('should fail even if beforeEach has "skip"', function(done) {
+  it('should fail if there are tests marked only', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only');
     var spawnOpts = {stdio: 'pipe'};
     runMocha(
