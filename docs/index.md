@@ -449,7 +449,7 @@ setTimeout(function() {
 
 ### Failing Hooks
 
-Upon a failing `before` hook all tests in the current suite and also its nested suites will be skipped. Skipped tests are included in the test results and marked as **skipped**. A skipped test is not considered a failed test.
+Upon a failing "before all", "before each" or "after each" hook, all remaining tests in the current suite and also its nested suites will be skipped. Skipped tests are included in the test results and marked as **skipped**. A skipped test is not considered a failed test.
 
 ```js
 describe('outer', function() {
@@ -476,6 +476,36 @@ describe('outer', function() {
 
     after(function() {
       // will be skipped
+    });
+  });
+});
+```
+
+#### "before each" hook
+
+```js
+describe('failing "before each" hook', function() {
+  beforeEach(function() {
+    // runs and fails only once
+    throw new Error('Exception in beforeEach hook');
+  });
+
+  it('should skip this outer test', function() {
+    // will be skipped and reported as 'skipped' test
+  });
+
+  afterEach(function() {
+    /* will be executed */
+  });
+  after(function() {
+    /* will be executed */
+  });
+
+  describe('inner suite', function() {
+    // all hooks, tests and nested suites will be skipped
+
+    it('should skip this inner test', function() {
+      // will be skipped and reported as 'skipped' test
     });
   });
 });
