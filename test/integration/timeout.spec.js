@@ -18,4 +18,15 @@ describe('this.timeout()', function() {
       done();
     });
   });
+
+  it('should allow overriding per-test', function(done) {
+    run('timeout-override.fixture.js', args, function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      assert.strictEqual(res.stats.failures, 1);
+      done();
+    });
+  });
 });
