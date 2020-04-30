@@ -7,7 +7,15 @@
     "test",
     "bdd",
     "tdd",
-    "tap"
+    "tap",
+    "testing",
+    "chai",
+    "assertion",
+    "ava",
+    "jest",
+    "tape",
+    "jasmine",
+    "karma"
   ],
   "funding": {
     "type": "opencollective",
