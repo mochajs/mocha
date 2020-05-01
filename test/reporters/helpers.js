@@ -163,6 +163,7 @@ function createElements(argObj) {
 function makeExpectedTest(
   expectedTitle,
   expectedFullTitle,
+  expectedFile,
   expectedDuration,
   currentRetry,
   expectedBody
@@ -172,6 +173,7 @@ function makeExpectedTest(
     fullTitle: function() {
       return expectedFullTitle;
     },
+    file: expectedFile,
     duration: expectedDuration,
     currentRetry: function() {
       return currentRetry;
