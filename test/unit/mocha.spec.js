@@ -159,19 +159,6 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#enableTimeouts()', function() {
-    it('should set the suite._enableTimeouts to true if no argument', function() {
-      var mocha = new Mocha(opts);
-      mocha.enableTimeouts();
-      expect(mocha.suite._enableTimeouts, 'to be', true);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.enableTimeouts(), 'to be', mocha);
-    });
-  });
-
   describe('#diff()', function() {
     it('should set the diff option to true', function() {
       var mocha = new Mocha(opts);
