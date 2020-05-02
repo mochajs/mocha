@@ -810,6 +810,8 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 > In v3.0.0 or newer, a parameter passed to `this.timeout()` greater than the [maximum delay value][mdn-settimeout-maxdelay] will cause the timeout to be disabled.
 
+> As of v8.0.0, `enableTimeouts()` has been removed.
+
 ## Diffs
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library. Mocha will attempt to display the difference between what was expected, and what the assertion actually saw. Here's an example of a "string" diff using `--inline-diffs`:
