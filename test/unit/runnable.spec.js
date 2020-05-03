@@ -74,14 +74,8 @@ describe('Runnable(title, fn)', function() {
         run.timeout(MAX_TIMEOUT);
       });
       describe('given numeric value', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-      });
-
-      describe('given string timestamp', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
     });
@@ -96,14 +90,8 @@ describe('Runnable(title, fn)', function() {
       });
 
       describe('given numeric value', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-      });
-
-      describe('given string timestamp', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
     });
