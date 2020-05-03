@@ -25,7 +25,7 @@ describe('this.timeout()', function() {
         done(err);
         return;
       }
-      assert.strictEqual(res.stats.failures, 1);
+      expect(res.stats.failures, 'to be', 1);
       done();
     });
   });
