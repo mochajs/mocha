@@ -1,12 +1,11 @@
 'use strict';
 
-const {loadConfig, parsers, CONFIG_FILES} = require('../../../lib/cli/config');
 const {createSandbox} = require('sinon');
 const rewiremock = require('rewiremock/node');
 
 describe('cli/config', function() {
   let sandbox;
-  const config = {ok: true};
+  const phonyConfigObject = {ok: true};
 
   beforeEach(function() {
     sandbox = createSandbox();
@@ -17,11 +16,22 @@ describe('cli/config', function() {
   });
 
   describe('loadConfig()', function() {
+    let parsers;
+    let loadConfig;
+
+    beforeEach(function() {
+      const config = rewiremock.proxy(
+        require.resolve('../../../lib/cli/config')
+      );
+      parsers = config.parsers;
+      loadConfig = config.loadConfig;
+    });
+
     describe('when parsing succeeds', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'yaml').returns(config);
-        sandbox.stub(parsers, 'json').returns(config);
-        sandbox.stub(parsers, 'js').returns(config);
+        sandbox.stub(parsers, 'yaml').returns(phonyConfigObject);
+        sandbox.stub(parsers, 'json').returns(phonyConfigObject);
+        sandbox.stub(parsers, 'js').returns(phonyConfigObject);
       });
 
       describe('when supplied a filepath with ".yaml" extension', function() {
@@ -30,8 +40,8 @@ describe('cli/config', function() {
         it('should use the YAML parser', function() {
           loadConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
         });
       });
 
@@ -41,8 +51,8 @@ describe('cli/config', function() {
         it('should use the YAML parser', function() {
           loadConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
         });
       });
 
@@ -52,8 +62,19 @@ describe('cli/config', function() {
         it('should use the JS parser', function() {
           loadConfig(filepath);
           expect(parsers.js, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
+        });
+      });
+
+      describe('when supplied a filepath with ".cjs" extension', function() {
+        const filepath = 'foo.cjs';
+
+        it('should use the JS parser', function() {
+          loadConfig(filepath);
+          expect(parsers.js, 'to have calls satisfying', [
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
         });
       });
 
@@ -63,8 +84,8 @@ describe('cli/config', function() {
         it('should use the JSON parser', function() {
           loadConfig('foo.jsonc');
           expect(parsers.json, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
         });
       });
 
@@ -74,15 +95,15 @@ describe('cli/config', function() {
         it('should use the JSON parser', function() {
           loadConfig('foo.json');
           expect(parsers.json, 'to have calls satisfying', [
-            {args: [filepath], returned: config}
-          ]).and('was called times', 1);
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
         });
       });
     });
 
     describe('when supplied a filepath with unsupported extension', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'json').returns(config);
+        sandbox.stub(parsers, 'json').returns(phonyConfigObject);
       });
 
       it('should use the JSON parser', function() {
@@ -105,20 +126,18 @@ describe('cli/config', function() {
   describe('findConfig()', function() {
     let findup;
     let findConfig;
+    let CONFIG_FILES;
 
     beforeEach(function() {
       findup = {sync: sandbox.stub().returns('/some/path/.mocharc.js')};
-      rewiremock.enable();
-      findConfig = rewiremock.proxy(
+      const config = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
         r => ({
           'find-up': r.by(() => findup)
         })
-      ).findConfig;
-    });
-
-    afterEach(function() {
-      rewiremock.disable();
+      );
+      findConfig = config.findConfig;
+      CONFIG_FILES = config.CONFIG_FILES;
     });
 
     it('should look for one of the config files using findup-sync', function() {

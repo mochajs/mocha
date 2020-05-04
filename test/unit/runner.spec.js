@@ -416,10 +416,14 @@ describe('Runner', function() {
       hook.parent = suite;
       var err = new Error('error');
       suite.bail(false);
-      runner.on(EVENT_RUN_END, function() {
-        throw new Error('"end" was emit, but the bail is false');
-      });
-      runner.failHook(hook, err);
+      expect(
+        function() {
+          runner.failHook(hook, err);
+        },
+        'not to emit from',
+        hook,
+        EVENT_RUN_END
+      );
       done();
     });
   });

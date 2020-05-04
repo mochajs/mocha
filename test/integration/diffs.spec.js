@@ -72,7 +72,7 @@ describe('diffs', function() {
   var diffs, expected;
 
   before(function(done) {
-    run('diffs/diffs.fixture.js', ['-C'], function(err, res) {
+    run('diffs/diffs.fixture.js', [], function(err, res) {
       if (err) {
         done(err);
         return;
