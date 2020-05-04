@@ -1565,7 +1565,7 @@ Node.JS native ESM support still has status: **Stability: 1 - Experimental**
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
 - [Required modules](#-require-module-r-module) can only be CommonJS files
-- [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`mocharc.js` or `mocharc.cjs`)
+- [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
 - When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files
 - Node.JS native ESM support does not work with [esm][npm-esm] module
 
@@ -1732,7 +1732,7 @@ tests as shown below:
 
 Mocha supports configuration files, typical of modern command-line tools, in several formats:
 
-- **JavaScript**: Create a `.mocharc.js` (or `mocharc.cjs` when using [`"type"="module"`](#nodejs-native-esm-support) in your `package.json`)
+- **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](#nodejs-native-esm-support) in your `package.json`)
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.

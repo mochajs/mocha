@@ -1,8 +1,7 @@
 'use strict';
 
 before(function(done) {
-  this.timeout(100);
-  setTimeout(done, 50);
+  setTimeout(done, 100);
 });
 
 it('should work', function(done) {

@@ -11,6 +11,7 @@ describe('JSON reporter', function() {
   var suite;
   var runner;
   var testTitle = 'json test 1';
+  var testFile = 'someTest.spec.js';
   var noop = function() {};
 
   beforeEach(function() {
@@ -36,11 +37,12 @@ describe('JSON reporter', function() {
   it('should have 1 test failure', function(done) {
     var error = {message: 'oh shit'};
 
-    suite.addTest(
-      new Test(testTitle, function(done) {
-        done(new Error(error.message));
-      })
-    );
+    var test = new Test(testTitle, function(done) {
+      done(new Error(error.message));
+    });
+
+    test.file = testFile;
+    suite.addTest(test);
 
     runner.run(function(failureCount) {
       sandbox.restore();
@@ -49,6 +51,7 @@ describe('JSON reporter', function() {
           failures: [
             {
               title: testTitle,
+              file: testFile,
               err: {
                 message: error.message
               }
@@ -62,7 +65,9 @@ describe('JSON reporter', function() {
   });
 
   it('should have 1 test pending', function(done) {
-    suite.addTest(new Test(testTitle));
+    var test = new Test(testTitle);
+    test.file = testFile;
+    suite.addTest(test);
 
     runner.run(function(failureCount) {
       sandbox.restore();
@@ -70,7 +75,8 @@ describe('JSON reporter', function() {
         testResults: {
           pending: [
             {
-              title: testTitle
+              title: testTitle,
+              file: testFile
             }
           ]
         }
@@ -88,11 +94,12 @@ describe('JSON reporter', function() {
     }
     var error = new CircleError();
 
-    suite.addTest(
-      new Test(testTitle, function(done) {
-        throw error;
-      })
-    );
+    var test = new Test(testTitle, function(done) {
+      throw error;
+    });
+
+    test.file = testFile;
+    suite.addTest(test);
 
     runner.run(function(failureCount) {
       sandbox.restore();
@@ -101,6 +108,7 @@ describe('JSON reporter', function() {
           failures: [
             {
               title: testTitle,
+              file: testFile,
               err: {
                 message: error.message
               }
