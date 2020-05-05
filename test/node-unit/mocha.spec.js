@@ -6,8 +6,8 @@ const {createSandbox} = require('sinon');
 
 describe('Mocha', function() {
   const opts = {reporter: utils.noop}; // no output
-  const dumbFilepath = require.resolve('./fixtures/dumb-module');
-  const dumberFilepath = require.resolve('./fixtures/dumber-module');
+  const dumbFilepath = require.resolve('./fixtures/dumb-module.fixture.js');
+  const dumberFilepath = require.resolve('./fixtures/dumber-module.fixture.js');
 
   let mocha;
   let sandbox;
