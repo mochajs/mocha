@@ -10,7 +10,6 @@ describe('Test', function() {
       this._test = new Test('To be cloned', function() {});
       this._test._timeout = 3043;
       this._test._slow = 101;
-      this._test._enableTimeouts = true;
       this._test._retries = 3;
       this._test._currentRetry = 1;
       this._test._allowedGlobals = ['foo'];
@@ -28,10 +27,6 @@ describe('Test', function() {
 
     it('should copy the slow value', function() {
       expect(this._test.clone().slow(), 'to be', 101);
-    });
-
-    it('should copy the enableTimeouts value', function() {
-      expect(this._test.clone().enableTimeouts(), 'to be', true);
     });
 
     it('should copy the retries value', function() {
