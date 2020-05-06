@@ -8,19 +8,19 @@ var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
   describe('#timeout(ms)', function() {
-    var MIN_TIMEOUT = 0;
+    var DISABLED_TIMEOUTS = 0;
     var MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
 
     describe('when value is less than lower bound', function() {
       it('should clamp to lower bound given numeric', function() {
         var run = new Runnable();
         run.timeout(-1);
-        expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
       it('should clamp to lower bound given timestamp', function() {
         var run = new Runnable();
         run.timeout('-1 ms');
-        expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
     });
 
@@ -29,25 +29,17 @@ describe('Runnable(title, fn)', function() {
 
       beforeEach(function() {
         run = new Runnable();
-        run.timeout(MIN_TIMEOUT);
+        run.timeout(DISABLED_TIMEOUTS);
       });
       describe('given numeric value', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MIN_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the timeout value to disabled', function() {
+          expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
         });
       });
 
       describe('given string timestamp', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MIN_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the timeout value to disabled', function() {
+          expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
         });
       });
     });
@@ -65,19 +57,11 @@ describe('Runnable(title, fn)', function() {
         it('should set the timeout value', function() {
           expect(run.timeout(), 'to be', timeout);
         });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be true');
-        });
       });
 
       describe('given string timestamp', function() {
         it('should set the timeout value', function() {
           expect(run.timeout(), 'to be', timeout);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be true');
         });
       });
     });
@@ -90,22 +74,8 @@ describe('Runnable(title, fn)', function() {
         run.timeout(MAX_TIMEOUT);
       });
       describe('given numeric value', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
-        });
-      });
-
-      describe('given string timestamp', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
     });
@@ -120,32 +90,10 @@ describe('Runnable(title, fn)', function() {
       });
 
       describe('given numeric value', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
-
-      describe('given string timestamp', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
-        });
-      });
-    });
-  });
-
-  describe('#enableTimeouts(enabled)', function() {
-    it('should set enabled', function() {
-      var run = new Runnable();
-      run.enableTimeouts(false);
-      expect(run.enableTimeouts(), 'to be false');
     });
   });
 
@@ -314,7 +262,7 @@ describe('Runnable(title, fn)', function() {
           }, 2);
         });
         runnable.timeout(1);
-        runnable.enableTimeouts(false);
+        runnable.timeout(0);
         runnable.run(function(err) {
           expect(err, 'to be falsy');
           done();
@@ -721,7 +669,7 @@ describe('Runnable(title, fn)', function() {
       var runnable = new Runnable('foo', function() {});
       runnable.timeout(10);
       runnable.resetTimeout();
-      runnable.enableTimeouts(false);
+      runnable.timeout(0);
       setTimeout(function() {
         expect(runnable.timedOut, 'to be', false);
         done();

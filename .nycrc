@@ -5,6 +5,7 @@
   ],
   "exclude": [
     "coverage/**",
+    "docs/**",
     "packages/*/test{,s}/**",
     "**/*.d.ts",
     "test{,s}/**",
