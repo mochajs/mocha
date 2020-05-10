@@ -3,9 +3,9 @@
 ## Be friendly and patient
 
 We understand that everyone has different levels of experience or knowledge in many diverse fields, be it technical or
-non-technical in nature. We also have areas of knowledge we are eager to expand; we want to be a community where people
+non-technical In nature. We also have areas of knowledge we are eager to expand; we want to be a community where people
 can not only contribute, but feel comfortable to ask questions as well and learn along the way. If someone says something
-wrong, or says something accidentally offensive, respond with patience and try to keep it polite and civil. Remember that
+wrong or says something accidentally offensive, respond with patience and try to keep it polite and civil. Remember that
 we all were newbies at one point.
 
 ## Be welcoming
@@ -74,7 +74,7 @@ Refer to the section on reporting and escalation in this document for the specif
 
 For reporting issues in spaces related to a member project please use the email provided by the project for reporting. Projects handle CoC issues related to the spaces that they maintain. Projects maintainers commit to:
 
-- maintain the confidentiality with regard to the reporter of an incident
+- maintain confidentiality with regard to the reporter of an incident
 - to participate in the path for escalation as outlined in
   the section on Escalation when required.
 
