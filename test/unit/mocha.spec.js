@@ -22,6 +22,10 @@ describe('Mocha', function() {
       sandbox.stub(Mocha.prototype, 'global').returnsThis();
     });
 
+    it('should set _cleanReferencesAfterRun to true', function() {
+      expect(new Mocha()._cleanReferencesAfterRun, 'to be', true);
+    });
+
     describe('when "options.timeout" is `undefined`', function() {
       it('should not attempt to set timeout', function() {
         // eslint-disable-next-line no-new
@@ -127,6 +131,25 @@ describe('Mocha', function() {
     });
   });
 
+  describe('#cleanReferencesAfterRun()', function() {
+    it('should set the _cleanReferencesAfterRun attribute', function() {
+      var mocha = new Mocha(opts);
+      mocha.cleanReferencesAfterRun();
+      expect(mocha._cleanReferencesAfterRun, 'to be', true);
+    });
+
+    it('should set the _cleanReferencesAfterRun attribute to false', function() {
+      var mocha = new Mocha(opts);
+      mocha.cleanReferencesAfterRun(false);
+      expect(mocha._cleanReferencesAfterRun, 'to be', false);
+    });
+
+    it('should be chainable', function() {
+      var mocha = new Mocha(opts);
+      expect(mocha.cleanReferencesAfterRun(), 'to be', mocha);
+    });
+  });
+
   describe('#color()', function() {
     it('should set the color option to true', function() {
       var mocha = new Mocha(opts);
@@ -188,6 +211,32 @@ describe('Mocha', function() {
     it('should be chainable', function() {
       var mocha = new Mocha(opts);
       expect(mocha.diff(), 'to be', mocha);
+    });
+  });
+
+  describe('#dispose()', function() {
+    it('should dispose the root suite', function() {
+      var mocha = new Mocha(opts);
+      var disposeStub = sandbox.stub(mocha.suite, 'dispose');
+      mocha.dispose();
+      expect(disposeStub, 'was called once');
+    });
+
+    it('should dispose previous test runner', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
+      mocha.run();
+      runStub.callArg(0);
+      mocha.dispose();
+      expect(disposeStub, 'was called once');
+    });
+
+    it('should unload the files', function() {
+      var mocha = new Mocha(opts);
+      var unloadFilesStub = sandbox.stub(mocha, 'unloadFiles');
+      mocha.dispose();
+      expect(unloadFilesStub, 'was called once');
     });
   });
 
@@ -497,6 +546,99 @@ describe('Mocha', function() {
       mocha.run().on('end', done);
     });
 
+    it('should throw if a run is in progress', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is currently running tests, cannot start a next test run until this one is done',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_RUNNING',
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called once');
+    });
+
+    it('should throw the instance is already disposed', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.dispose();
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
+          cleanReferencesAfterRun: true,
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called times', 0);
+    });
+
+    it('should throw if a run for a second time', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      runStub.callArg(0);
+      expect(
+        function() {
+          mocha.run();
+        },
+        'to throw',
+        {
+          message:
+            'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
+          code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
+          instance: mocha
+        }
+      );
+      expect(runStub, 'was called once');
+    });
+
+    it('should allow multiple runs if `cleanReferencesAfterRun` is disabled', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.cleanReferencesAfterRun(false);
+      mocha.run();
+      runStub.callArg(0);
+      mocha.run();
+      runStub.callArg(0);
+      expect(runStub, 'called times', 2);
+    });
+
+    it('should reset between runs', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var resetStub = sandbox.stub(Mocha.Suite.prototype, 'reset');
+      mocha.cleanReferencesAfterRun(false);
+      mocha.run();
+      runStub.callArg(0);
+      mocha.run();
+      expect(resetStub, 'was called once');
+    });
+
+    it('should dispose the previous runner when the next run starts', function() {
+      var mocha = new Mocha(opts);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      var disposeStub = sandbox.stub(Mocha.Runner.prototype, 'dispose');
+      mocha.cleanReferencesAfterRun(false);
+      mocha.run();
+      runStub.callArg(0);
+      expect(disposeStub, 'was not called');
+      mocha.run();
+      expect(disposeStub, 'was called once');
+    });
+
     describe('#reporter("xunit")#run(fn)', function() {
       // :TBD: Why does specifying reporter differentiate this test from preceding one
       it('should not raise errors if callback was not provided', function() {
@@ -513,47 +655,28 @@ describe('Mocha', function() {
     });
   });
 
-  describe('#useColors()', function() {
-    it('should set the color option to true', function() {
+  describe('#unloadFiles()', function() {
+    it('should reset referencesCleaned and allow for next run', function() {
       var mocha = new Mocha(opts);
-      mocha.useColors(true);
-      expect(mocha.options, 'to have property', 'color', true);
+      var runStub = sandbox.stub(Mocha.Runner.prototype, 'run');
+      mocha.run();
+      runStub.callArg(0);
+      mocha.unloadFiles();
+      expect(function() {
+        mocha.run();
+      }, 'not to throw');
     });
 
-    it('should not create the color property', function() {
+    it('should not be allowed when the current instance is already disposed', function() {
       var mocha = new Mocha(opts);
-      mocha.useColors();
-      expect(mocha.options, 'not to have property', 'color');
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.useColors(), 'to be', mocha);
-    });
-  });
-
-  describe('#useInlineDiffs()', function() {
-    it('should set the inlineDiffs option to true when param equals true', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs(true);
-      expect(mocha.options, 'to have property', 'inlineDiffs', true);
-    });
-
-    it('should set the inlineDiffs option to false when param equals false', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs(false);
-      expect(mocha.options, 'to have property', 'inlineDiffs', false);
-    });
-
-    it('should set the inlineDiffs option to false when the param is undefined', function() {
-      var mocha = new Mocha(opts);
-      mocha.useInlineDiffs();
-      expect(mocha.options, 'to have property', 'inlineDiffs', false);
-    });
-
-    it('should be chainable', function() {
-      var mocha = new Mocha(opts);
-      expect(mocha.useInlineDiffs(), 'to be', mocha);
+      mocha.dispose();
+      expect(
+        function() {
+          mocha.unloadFiles();
+        },
+        'to throw',
+        'Mocha instance is already disposed, it cannot be used again.'
+      );
     });
   });
 });

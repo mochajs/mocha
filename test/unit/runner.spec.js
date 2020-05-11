@@ -15,6 +15,7 @@ var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
 var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
+var EVENT_SUITE_END = Runner.constants.EVENT_SUITE_END;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runner', function() {
@@ -24,7 +25,7 @@ describe('Runner', function() {
 
   beforeEach(function() {
     suite = new Suite('Suite', 'root');
-    runner = new Runner(suite);
+    runner = new Runner(suite, {cleanReferencesAfterRun: true});
     runner.checkLeaks = true;
     sandbox = sinon.createSandbox();
   });
@@ -456,12 +457,68 @@ describe('Runner', function() {
         done();
       });
     });
-
     // karma-mocha is inexplicably doing this with a Hook
     it('should not throw an exception if something emits EVENT_TEST_END with a non-Test object', function() {
       expect(function() {
         runner.emit(EVENT_TEST_END, {});
       }, 'not to throw');
+    });
+
+    it('should clean references after a run', function() {
+      runner = new Runner(suite, {delay: false, cleanReferencesAfterRun: true});
+      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      runner.run();
+      runner.emit(EVENT_SUITE_END, suite);
+      expect(cleanReferencesStub, 'was called once');
+    });
+
+    it('should not clean references after a run when `cleanReferencesAfterRun` is `false`', function() {
+      runner = new Runner(suite, {
+        delay: false,
+        cleanReferencesAfterRun: false
+      });
+      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      runner.run();
+      runner.emit(EVENT_SUITE_END, suite);
+      expect(cleanReferencesStub, 'was not called');
+    });
+  });
+
+  describe('.dispose', function() {
+    it('should remove all listeners from itself', function() {
+      runner.on('disposeShouldRemoveThis', noop);
+      runner.dispose();
+      expect(runner.listenerCount('disposeShouldRemoveThis'), 'to be', 0);
+    });
+
+    it('should remove "error" listeners from a test', function() {
+      var fn = sandbox.stub();
+      runner.test = new Test('test for dispose', fn);
+      runner.runTest(noop);
+      // sanity check
+      expect(runner.test.listenerCount('error'), 'to be', 1);
+      runner.dispose();
+      expect(runner.test.listenerCount('error'), 'to be', 0);
+    });
+
+    it('should remove "uncaughtException" listeners from the process', function() {
+      var normalUncaughtExceptionListenerCount = process.listenerCount(
+        'uncaughtException'
+      );
+      sandbox.stub();
+      runner.run(noop);
+      // sanity check
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount + 1
+      );
+      runner.dispose();
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount
+      );
     });
   });
 
