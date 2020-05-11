@@ -52,7 +52,7 @@ describe('Mocha', function() {
     reporterInstance = {};
     opts = {reporter: sandbox.stub().returns(reporterInstance)};
     Base = sandbox.stub().returns({});
-    runner = Object.assign(sandbox.createStubInstance(EventEmitter), {
+    runner = utils.assign(sandbox.createStubInstance(EventEmitter), {
       run: sandbox
         .stub()
         .callsArgAsync(0)
@@ -65,7 +65,7 @@ describe('Mocha', function() {
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     Runner.constants = {};
-    suite = Object.assign(sandbox.createStubInstance(EventEmitter), {
+    suite = utils.assign(sandbox.createStubInstance(EventEmitter), {
       slow: sandbox.stub(),
       timeout: sandbox.stub(),
       bail: sandbox.stub(),
@@ -680,8 +680,6 @@ describe('Mocha', function() {
       });
 
       describe('when the `Mocha` instance is already disposed', function() {
-        var mocha;
-
         beforeEach(function() {
           mocha.dispose();
         });
@@ -713,8 +711,6 @@ describe('Mocha', function() {
       });
 
       describe('when a run has finished and is called again', function() {
-        var mocha;
-
         beforeEach(function(done) {
           mocha.run(function() {
             runner.run.reset();
@@ -748,8 +744,6 @@ describe('Mocha', function() {
       });
 
       describe('when Mocha configured for multiple runs and multiple runs are attempted', function() {
-        var mocha;
-
         beforeEach(function() {
           mocha.cleanReferencesAfterRun(false);
         });
