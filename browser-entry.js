@@ -53,6 +53,17 @@ process.removeListener = function(e, fn) {
 };
 
 /**
+ * Implements listenerCount for 'uncaughtException'.
+ */
+
+process.listenerCount = function(name) {
+  if (name === 'uncaughtException') {
+    return uncaughtExceptionHandlers.length;
+  }
+  return 0;
+};
+
+/**
  * Implements uncaughtException listener.
  */
 

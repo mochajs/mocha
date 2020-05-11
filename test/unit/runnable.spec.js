@@ -127,6 +127,29 @@ describe('Runnable(title, fn)', function() {
     });
   });
 
+  describe('#reset', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable();
+    });
+
+    it('should reset current run state', function() {
+      run.timedOut = true;
+      run._currentRetry = 5;
+      run.pending = true;
+      run.err = new Error();
+      run.state = 'error';
+
+      run.reset();
+      expect(run.timedOut, 'to be false');
+      expect(run._currentRetry, 'to be', 0);
+      expect(run.pending, 'to be false');
+      expect(run.err, 'to be undefined');
+      expect(run.state, 'to be undefined');
+    });
+  });
+
   describe('.title', function() {
     it('should be present', function() {
       expect(new Runnable('foo').title, 'to be', 'foo');

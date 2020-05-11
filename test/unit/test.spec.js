@@ -1,10 +1,24 @@
 'use strict';
 
+var sinon = require('sinon');
 var mocha = require('../../lib/mocha');
 var Test = mocha.Test;
-var sinon = require('sinon');
+var Runnable = mocha.Runnable;
 
 describe('Test', function() {
+  /**
+   * @type {sinon.SinonSandbox}
+   */
+  var sandbox;
+
+  beforeEach(function() {
+    sandbox = sinon.createSandbox();
+  });
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   describe('.clone()', function() {
     beforeEach(function() {
       this._test = new Test('To be cloned', function() {});
@@ -53,6 +67,24 @@ describe('Test', function() {
 
     it('should copy the file value', function() {
       expect(this._test.clone().file, 'to be', 'bar');
+    });
+  });
+
+  describe('.reset()', function() {
+    beforeEach(function() {
+      this._test = new Test('Test to be reset', function() {});
+    });
+
+    it('should reset the run state', function() {
+      this._test.pending = true;
+      this._test.reset();
+      expect(this._test.pending, 'to be', false);
+    });
+
+    it('should call Runnable.reset', function() {
+      var runnableResetStub = sandbox.stub(Runnable.prototype, 'reset');
+      this._test.reset();
+      expect(runnableResetStub, 'was called once');
     });
   });
 
