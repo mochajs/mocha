@@ -638,31 +638,6 @@ describe('Suite', function() {
       });
     });
   });
-
-  describe('.markOnly()', function() {
-    var sandbox;
-
-    beforeEach(function() {
-      sandbox = sinon.createSandbox();
-    });
-
-    afterEach(function() {
-      sandbox.restore();
-    });
-
-    it('should call appendOnlySuite on parent', function() {
-      var suite = new Suite('a');
-      var spy = sandbox.spy();
-      suite.parent = {
-        appendOnlySuite: spy
-      };
-      suite.markOnly();
-
-      expect(spy, 'to have a call exhaustively satisfying', [suite]).and(
-        'was called once'
-      );
-    });
-  });
 });
 
 describe('Test', function() {
