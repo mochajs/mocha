@@ -26,13 +26,19 @@ describe('--forbid-only', function() {
 
   it('should fail if there are tests marked only', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only');
-    runMochaJSON(fixture, args, function(err, res) {
-      if (err) {
-        return done(err);
-      }
-      expect(res, 'to have failed with error', onlyErrorMessage);
-      done();
-    });
+    var spawnOpts = {stdio: 'pipe'};
+    runMocha(
+      fixture,
+      args,
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
+        done();
+      },
+      spawnOpts
+    );
   });
 
   it('should fail if there are tests in suites marked only', function(done) {
@@ -45,11 +51,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -66,10 +68,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -86,10 +85,7 @@ describe('--forbid-only', function() {
         if (err) {
           return done(err);
         }
-        expect(res, 'to satisfy', {
-          code: 1,
-          output: new RegExp(onlyErrorMessage)
-        });
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
       },
       spawnOpts
@@ -122,6 +118,40 @@ describe('--forbid-only', function() {
         expect(res, 'to have passed');
         done();
       }
+    );
+  });
+
+  it('should fail even if before has "skip"', function(done) {
+    var fixture = path.join('options', 'forbid-only', 'only-before');
+    var spawnOpts = {stdio: 'pipe'};
+    runMocha(
+      fixture,
+      args,
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
+        done();
+      },
+      spawnOpts
+    );
+  });
+
+  it('should fail even if beforeEach has "skip"', function(done) {
+    var fixture = path.join('options', 'forbid-only', 'only-before-each');
+    var spawnOpts = {stdio: 'pipe'};
+    runMocha(
+      fixture,
+      args,
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
+        done();
+      },
+      spawnOpts
     );
   });
 });
