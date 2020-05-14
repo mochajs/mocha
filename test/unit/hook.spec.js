@@ -4,7 +4,7 @@ var Mocha = require('../../lib/mocha');
 var Hook = Mocha.Hook;
 var Runnable = Mocha.Runnable;
 
-describe(Hook.name, function() {
+describe('Hook', function() {
   var hook;
 
   beforeEach(function() {
