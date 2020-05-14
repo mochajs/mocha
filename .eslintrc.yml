@@ -14,6 +14,11 @@ rules:
   strict:
     - error
     - safe
+  # disallow Object.assign
+  no-restricted-properties:
+    - error
+    - object: 'Object'
+      property: 'assign'
 overrides:
   - files:
       - scripts/**/*.js
@@ -31,6 +36,11 @@ overrides:
       ecmaVersion: 2018
     env:
       browser: false
+    rules:
+      no-restricted-properties:
+        - off
+        - object: 'Object'
+          property: 'assign'
   - files:
       - esm-utils.js
     parserOptions:
@@ -79,7 +89,6 @@ overrides:
         # disallow property access of `global.<timer>.*`
         - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
           message: *GH-237
-
   - files:
       - test/**/*.mjs
     parserOptions:
