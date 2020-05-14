@@ -26,7 +26,8 @@ describe('Mocha', function() {
       supportsEsModules: sandbox.stub().returns(false),
       warn: sandbox.stub(),
       isString: sandbox.stub(),
-      noop: sandbox.stub()
+      noop: sandbox.stub(),
+      cwd: sandbox.stub().returns(process.cwd())
     };
     stubs.suite = Object.assign(sandbox.createStubInstance(EventEmitter), {
       slow: sandbox.stub(),
@@ -106,10 +107,9 @@ describe('Mocha', function() {
     describe('reporter()', function() {
       describe('when a reporter exists relative to the cwd', function() {
         beforeEach(function() {
-          // DANGER!
-          sandbox
-            .stub(process, 'cwd')
-            .returns(path.resolve(__dirname, '..', '..', 'lib', 'reporters'));
+          stubs.utils.cwd.returns(
+            path.resolve(__dirname, '..', '..', 'lib', 'reporters')
+          );
         });
 
         it('should load from current working directory', function() {
