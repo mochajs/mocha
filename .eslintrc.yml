@@ -21,6 +21,10 @@ rules:
       property: 'assign'
 overrides:
   - files:
+      - docs/js/**/*.js
+    env:
+      node: false
+  - files:
       - scripts/**/*.js
       - package-scripts.js
       - karma.conf.js

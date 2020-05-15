@@ -1,8 +1,11 @@
 coverage/
 mocha.js
 *.fixture.js
-docs/
+docs/_site
+docs/_dist
+docs/example
 out/
 !lib/mocha.js
 test/integration/fixtures
 !.*.js
+*.min.js
