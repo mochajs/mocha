@@ -1,9 +1,9 @@
-(function () {
+(function() {
   'use strict';
 
   var imageLists = document.querySelectorAll('.image-list');
 
-  Array.prototype.forEach.call(imageLists, function (imageList) {
+  Array.prototype.forEach.call(imageLists, function(imageList) {
     var images = imageList.querySelectorAll('img');
     var counter = images.length;
 
@@ -28,5 +28,4 @@
       }
     }
   });
-
-}());
+})();
