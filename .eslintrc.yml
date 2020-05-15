@@ -36,6 +36,7 @@ overrides:
       - test/integration/options/watch.spec.js
       - test/integration/helpers.js
       - lib/growl.js
+      - docs/_data/**/*.js
     parserOptions:
       ecmaVersion: 2018
     env:

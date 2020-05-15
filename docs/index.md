@@ -8,12 +8,12 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 <nav class="badges">
   <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
-  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
   <a href="#sponsors"><img src="//opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective sponsors"></a>
+  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
 </nav>
 
-{% include backers.md %}
 {% include sponsors.md %}
+{% include backers.md %}
 
 ## Features
 
@@ -49,39 +49,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 ## Table of Contents
 
-<!-- AUTO-GENERATED-CONTENT:START (toc:maxdepth=2&bullets=-) -->
-
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Run Cycle Overview](#run-cycle-overview)
-- [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
-- [Assertions](#assertions)
-- [Asynchronous Code](#asynchronous-code)
-- [Synchronous Code](#synchronous-code)
-- [Arrow Functions](#arrow-functions)
-- [Hooks](#hooks)
-- [Pending Tests](#pending-tests)
-- [Exclusive Tests](#exclusive-tests)
-- [Inclusive Tests](#inclusive-tests)
-- [Retry Tests](#retry-tests)
-- [Dynamically Generating Tests](#dynamically-generating-tests)
-- [Timeouts](#timeouts)
-- [Diffs](#diffs)
-- [Command-Line Usage](#command-line-usage)
-- [Interfaces](#interfaces)
-- [Reporters](#reporters)
-- [Node.JS native ESM support](#nodejs-native-esm-support)
-- [Running Mocha in the Browser](#running-mocha-in-the-browser)
-- [Desktop Notification Support](#desktop-notification-support)
-- [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
-- [The `test/` Directory](#the-test-directory)
-- [Error Codes](#error-codes)
-- [Editor Plugins](#editor-plugins)
-- [Examples](#examples)
-- [Testing Mocha](#testing-mocha)
-- [More Information](#more-information)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+{{ toc }}
 
 ## Installation
 
@@ -820,92 +788,9 @@ Mocha supports the `err.expected` and `err.actual` properties of any thrown `Ass
 
 ## Command-Line Usage
 
-<!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
-
-```text
-
-mocha [spec..]
-
-Run tests with Mocha
-
-Commands
-  mocha inspect [spec..]  Run tests with Mocha                         [default]
-  mocha init <path>       create a client-side Mocha setup at <path>
-
-Rules & Behavior
-  --allow-uncaught           Allow uncaught errors to propagate        [boolean]
-  --async-only, -A           Require all tests to use a callback (async) or
-                             return a Promise                          [boolean]
-  --bail, -b                 Abort ("bail") after first test failure   [boolean]
-  --check-leaks              Check for global variable leaks           [boolean]
-  --delay                    Delay initial execution of root suite     [boolean]
-  --exit                     Force Mocha to quit after tests complete  [boolean]
-  --forbid-only              Fail if exclusive test(s) encountered     [boolean]
-  --forbid-pending           Fail if pending test(s) encountered       [boolean]
-  --global, --globals        List of allowed global variables            [array]
-  --retries                  Retry failed tests this many times         [number]
-  --slow, -s                 Specify "slow" test threshold (in milliseconds)
-                                                          [string] [default: 75]
-  --timeout, -t, --timeouts  Specify test timeout threshold (in milliseconds)
-                                                        [string] [default: 2000]
-  --ui, -u                   Specify user interface    [string] [default: "bdd"]
-
-Reporting & Output
-  --color, -c, --colors                     Force-enable color output  [boolean]
-  --diff                                    Show diff on failure
-                                                       [boolean] [default: true]
-  --full-trace                              Display full stack traces  [boolean]
-  --growl, -G                               Enable Growl notifications [boolean]
-  --inline-diffs                            Display actual/expected differences
-                                            inline within each string  [boolean]
-  --reporter, -R                            Specify reporter to use
-                                                      [string] [default: "spec"]
-  --reporter-option, --reporter-options,    Reporter-specific options
-  -O                                        (<k=v,[k1=v1,..]>)           [array]
-
-Configuration
-  --config   Path to config file           [string] [default: (nearest rc file)]
-  --package  Path to package.json for config                            [string]
-
-File Handling
-  --extension          File extension(s) to load
-                                           [array] [default: ["js","cjs","mjs"]]
-  --file               Specify file(s) to be loaded prior to root suite
-                       execution                       [array] [default: (none)]
-  --ignore, --exclude  Ignore file(s) or glob pattern(s)
-                                                       [array] [default: (none)]
-  --recursive          Look for tests in subdirectories                [boolean]
-  --require, -r        Require module                  [array] [default: (none)]
-  --sort, -S           Sort test files                                 [boolean]
-  --watch, -w          Watch files in the current working directory for changes
-                                                                       [boolean]
-  --watch-files        List of paths or globs to watch                   [array]
-  --watch-ignore       List of paths or globs to exclude from watching
-                                      [array] [default: ["node_modules",".git"]]
-
-Test Filters
-  --fgrep, -f   Only run tests containing this string                   [string]
-  --grep, -g    Only run tests matching this string or regexp           [string]
-  --invert, -i  Inverts --grep and --fgrep matches                     [boolean]
-
-Positional Arguments
-  spec  One or more files, directories, or globs to test
-                                                     [array] [default: ["test"]]
-
-Other Options
-  --help, -h         Show usage information & exit                     [boolean]
-  --version, -V      Show version number & exit                        [boolean]
-  --list-interfaces  List built-in user interfaces & exit              [boolean]
-  --list-reporters   List built-in reporters & exit                    [boolean]
-
-Mocha Resources
-    Chat: https://gitter.im/mochajs/mocha
-  GitHub: https://github.com/mochajs/mocha.git
-    Docs: https://mochajs.org/
-
 ```
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+{{ usage }}
+```
 
 ### `--allow-uncaught`
 
@@ -1969,9 +1854,3 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [wallaby.js]: https://wallabyjs.com/
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
-
-<!-- AUTO-GENERATED-CONTENT:START (manifest:template=[gitter]: ${gitter}) -->
-
-[gitter]: https://gitter.im/mochajs/mocha
-
-<!-- AUTO-GENERATED-CONTENT:END -->

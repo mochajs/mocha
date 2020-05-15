@@ -34,7 +34,7 @@ _So you wanna build the site?_
 cp: docs/_dist/_headers: No such file or directory
 ```
 
-- See `package-scripts.js` for details on what the builds are actually doing; especially see [markdown-magic](https://npm.im/markdown-magic) for how we're dynamically inserting information into `docs/index.md`.
+- See `package-scripts.js` for details on what the builds are actually doing.
 
 ## License
 
