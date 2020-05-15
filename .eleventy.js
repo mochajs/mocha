@@ -7,13 +7,13 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('docs/CNAME');
   eleventyConfig.addPassthroughCopy('docs/_headers');
   eleventyConfig.addPassthroughCopy('docs/favicon.ico');
-
   eleventyConfig.addPassthroughCopy('docs/example');
 
   /* Markdown Plugins */
   const markdown = require('markdown-it')({
     html: true,
-    linkify: true
+    linkify: true,
+    typographer: true
   });
 
   markdown.use(require('markdown-it-anchor'), {
