@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+const rollupPlugin = require('./scripts/karma-rollup-plugin');
 const baseBundleDirpath = path.join(__dirname, '.karma');
 
 const hostname = os.hostname();
@@ -18,31 +19,23 @@ const browserPlatformPairs = {
 module.exports = config => {
   let bundleDirpath;
   const cfg = {
-    frameworks: ['browserify', 'mocha'],
+    frameworks: ['rollup', 'mocha'],
     files: [
       // we use the BDD interface for all of the tests that
       // aren't interface-specific.
       'test/unit/*.spec.js'
     ],
-    preprocessors: {
-      'test/**/*.js': ['browserify']
-    },
-    browserify: {
-      debug: true,
-      configure: function configure(b) {
-        b.on('bundled', (err, content) => {
-          if (err) {
-            throw err;
-          }
-          if (bundleDirpath) {
-            // write bundle to directory for debugging
-            fs.writeFileSync(
-              path.join(bundleDirpath, `mocha.${Date.now()}.js`),
-              content
-            );
-          }
-        });
-      }
+    plugins: [
+      'karma-mocha',
+      'karma-mocha-reporter',
+      'karma-sauce-launcher',
+      'karma-chrome-launcher',
+      rollupPlugin
+    ],
+    rollup: {
+      configFile: 'rollup.config.js',
+      include: ['test/**'],
+      bundlePath: bundleDirpath
     },
     reporters: ['mocha'],
     colors: true,
