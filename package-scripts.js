@@ -261,7 +261,7 @@ module.exports = {
         description: 'Build documentation'
       },
       prebuild: {
-        script: 'rimraf docs/_dist docs/_site && nps docs.preprocess',
+        script: 'rimraf docs/_dist docs/_site',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -275,26 +275,12 @@ module.exports = {
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
-      preprocess: {
-        default: {
-          script:
-            'md-magic --config ./scripts/markdown-magic.config.js --path docs/index.md',
-          description: 'Preprocess documentation',
-          hiddenFromHelp: true
-        },
-        api: {
-          script:
-            'md-magic --config ./scripts/markdown-magic.config.js --path "docs/api-tutorials/*.md"',
-          description: 'Preprocess API documentation',
-          hiddenFromHelp: true
-        }
-      },
       watch: {
-        script: 'nps docs.preprocess && eleventy --serve',
+        script: 'eleventy --serve',
         description: 'Watch docs for changes & build'
       },
       api: {
-        script: 'nps docs.preprocess.api && jsdoc -c jsdoc.conf.json',
+        script: 'jsdoc -c jsdoc.conf.json',
         description: 'Build API docs'
       }
     },

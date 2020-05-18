@@ -6,70 +6,7 @@ For example, if `mocha-foo-reporter` was published to the npm registry, you coul
 
 If you're looking to get started quickly, here's an example of a custom reporter:
 
-<!-- AUTO-GENERATED-CONTENT:START (file:src=../../test/integration/fixtures/simple-reporter.js&header=// my-reporter.js)' -->
-
-```js
-// my-reporter.js
-'use strict';
-
-const Mocha = require('mocha');
-const {
-  EVENT_RUN_BEGIN,
-  EVENT_RUN_END,
-  EVENT_TEST_FAIL,
-  EVENT_TEST_PASS,
-  EVENT_SUITE_BEGIN,
-  EVENT_SUITE_END
-} = Mocha.Runner.constants;
-
-// this reporter outputs test results, indenting two spaces per suite
-class MyReporter {
-  constructor(runner) {
-    this._indents = 0;
-    const stats = runner.stats;
-
-    runner
-      .once(EVENT_RUN_BEGIN, () => {
-        console.log('start');
-      })
-      .on(EVENT_SUITE_BEGIN, () => {
-        this.increaseIndent();
-      })
-      .on(EVENT_SUITE_END, () => {
-        this.decreaseIndent();
-      })
-      .on(EVENT_TEST_PASS, test => {
-        // Test#fullTitle() returns the suite name(s)
-        // prepended to the test title
-        console.log(`${this.indent()}pass: ${test.fullTitle()}`);
-      })
-      .on(EVENT_TEST_FAIL, (test, err) => {
-        console.log(
-          `${this.indent()}fail: ${test.fullTitle()} - error: ${err.message}`
-        );
-      })
-      .once(EVENT_RUN_END, () => {
-        console.log(`end: ${stats.passes}/${stats.passes + stats.failures} ok`);
-      });
-  }
-
-  indent() {
-    return Array(this._indents).join('  ');
-  }
-
-  increaseIndent() {
-    this._indents++;
-  }
-
-  decreaseIndent() {
-    this._indents--;
-  }
-}
-
-module.exports = MyReporter;
-```
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+{{ files.simplereporter }}
 
 To use this reporter, execute `mocha --reporter /path/to/my-reporter.js`.
 
@@ -110,4 +47,4 @@ The event names are exported from the `constants` property of `Mocha.Runner`:
 
 **Please use these constants** instead of the event names in your own reporter! This will ensure compatibility with future versions of Mocha.
 
-> It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests, however, won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.
+> It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.

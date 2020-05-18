@@ -1,6 +1,14 @@
 'use strict';
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addPlugin(
+    require('@11ty/eleventy-plugin-inclusive-language'),
+    {
+      words:
+        'simply,obviously,basically,of course,clearly,everyone knows,however,easy'
+    }
+  );
+
   eleventyConfig.addPassthroughCopy('docs/css');
   eleventyConfig.addPassthroughCopy('docs/js');
   eleventyConfig.addPassthroughCopy('docs/images');
