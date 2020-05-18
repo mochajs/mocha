@@ -18,7 +18,8 @@ const query = `query account($limit: Int, $offset: Int, $slug: String) {
           name
           slug
           website
-          avatar: imageUrl(height:64)
+          imgUrlMed: imageUrl(height:64)
+          imgUrlSmall: imageUrl(height:32)
           type
         }
         totalDonations {
@@ -36,7 +37,8 @@ const nodeToSupporter = node => ({
   name: node.fromAccount.name,
   slug: node.fromAccount.slug,
   website: node.fromAccount.website,
-  avatar: node.fromAccount.avatar,
+  imgUrlMed: node.fromAccount.imgUrlMed,
+  imgUrlSmall: node.fromAccount.imgUrlSmall,
   firstDonation: node.createdAt,
   totalDonations: node.totalDonations.value * 100,
   type: node.fromAccount.type
@@ -97,9 +99,14 @@ module.exports = async () => {
     .sort((a, b) => b.totalDonations - a.totalDonations)
     .reduce(
       (supporters, supporter) => {
-        supporters[
-          supporter.type === 'INDIVIDUAL' ? 'backers' : 'sponsors'
-        ].push(supporter);
+        if (supporter.type === 'INDIVIDUAL') {
+          supporters.backers.push({
+            ...supporter,
+            avatar: supporter.imgUrlSmall
+          });
+        } else {
+          supporters.sponsors.push({...supporter, avatar: supporter.imgUrlMed});
+        }
         return supporters;
       },
       {sponsors: [], backers: []}

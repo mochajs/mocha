@@ -103,9 +103,10 @@ ul.image-list li img {
 }
 
 ul#backers.image-list li img {
-  width: 64px;
-  height: 64px;
-  clip-path: inset(0, 0, 64px, 64px);
+  width: 32px;
+  height: 32px;
+  /* clip images to 32x32 */
+  clip-path: inset(0, 0, 32px, 32px);
 }
 
 .faded-images img {
