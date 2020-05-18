@@ -201,7 +201,7 @@ Mocha allows you to use any assertion library you wish. In the above example, we
 
 ## Asynchronous Code
 
-Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
+By adding an argument (usually named `done`) to `it()` to a test callback, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
 
 ```js
 describe('User', function() {
@@ -217,7 +217,7 @@ describe('User', function() {
 });
 ```
 
-Alternatively, just use the `done()` callback directly (which will handle an error argument, if it exists):
+Alternatively, use the `done()` callback directly (which will handle an error argument, if it exists):
 
 ```js
 describe('User', function() {
@@ -313,7 +313,7 @@ describe('my suite', () => {
 });
 ```
 
-_If you do not need to use_ Mocha's context, lambdas should work. However, the result will be more difficult to refactor if the need eventually arises.
+_If you do not need to use_ Mocha's context, lambdas should work. Be aware that using lambdas will be more painful to refactor if the need eventually arises!
 
 ## Hooks
 
@@ -419,7 +419,7 @@ setTimeout(function() {
 
 ## Pending Tests
 
-"Pending"--as in "someone should write these test cases eventually"--test-cases are simply those _without_ a callback:
+"Pending"--as in "someone should write these test cases eventually"--test-cases are those _without_ a callback:
 
 ```js
 describe('Array', function() {
@@ -533,7 +533,7 @@ _Note_: Hooks, if present, will still be executed.
 
 ## Inclusive Tests
 
-This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to simply ignore test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an individual test:
+This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to ignore test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an individual test:
 
 ```js
 describe('Array', function() {
@@ -828,7 +828,7 @@ _Prior to_ version v4.0.0, _by default_, Mocha would force its own process to ex
 
 The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it was `--exit`.
 
-**The easiest way to "fix" the issue is to simply pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
+**The easiest way to "fix" the issue is to pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
 
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
@@ -855,7 +855,7 @@ Enforce a rule that tests may not be skipped (use of e.g., `describe.skip()`, `i
 
 Define a global variable name. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--global app --global YUI`.
 
-`--global` accepts wildcards. You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
+`--global` accepts wildcards. You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc. You can also pass in `'*'` to ignore all globals.
 
 `--global` can accept a comma-delimited list; `--global app,YUI` is equivalent to `--global app --global YUI`.
 
@@ -1128,7 +1128,7 @@ Mocha's "interface" system allows developers to choose their style of DSL. Mocha
 
 The **BDD** interface provides `describe()`, `context()`, `it()`, `specify()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
-`context()` is just an alias for `describe()`, and behaves the same way; it just provides a way to keep tests easier to read and organized. Similarly, `specify()` is an alias for `it()`.
+`context()` is just an alias for `describe()`, and behaves the same way; it provides a way to keep tests easier to read and organized. Similarly, `specify()` is an alias for `it()`.
 
 > All of the previous examples were written using the **BDD** interface.
 
@@ -1198,7 +1198,7 @@ module.exports = {
 
 ### QUnit
 
-The [QUnit][]-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+The [QUnit][]-inspired interface matches the "flat" look of QUnit, where the test suite title is defined _before_ the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
 ```js
 function ok(expr, msg) {
@@ -1268,7 +1268,7 @@ This is the default reporter. The Spec reporter outputs a hierarchical view nest
 
 Alias: `Dot`, `dot`
 
-The Dot Matrix reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
+The Dot Matrix reporter is a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
 
 ![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
 
@@ -1748,7 +1748,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 #### Features
 
 - see all tests in VS Code sidebar menu
-- run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
+- run & debug tests for each level hierarchy from all tests to a single test (and each suite)
 - auto run tests on file save
 - see tests results directly in the code editor
 

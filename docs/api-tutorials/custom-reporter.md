@@ -47,4 +47,4 @@ The event names are exported from the `constants` property of `Mocha.Runner`:
 
 **Please use these constants** instead of the event names in your own reporter! This will ensure compatibility with future versions of Mocha.
 
-> It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests, however, won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.
+> It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.
