@@ -76,6 +76,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",
+    "@11ty/eleventy-plugin-inclusive-language": "^1.0.0",
     "@mocha/docdash": "^2.1.3",
     "assetgraph-builder": "^8.0.0",
     "autoprefixer": "^9.7.4",
@@ -112,8 +113,6 @@
     "markdown-it-attrs": "^3.0.2",
     "markdown-it-emoji": "^1.4.0",
     "markdown-it-prism": "^2.0.5",
-    "markdown-magic": "^1.0.0",
-    "markdown-magic-package-json": "^2.0.1",
     "markdown-toc": "^1.2.0",
     "markdownlint-cli": "^0.22.0",
     "nps": "^5.9.12",
