@@ -12,8 +12,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
   <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
 </nav>
 
-{% include sponsors.md %}
-{% include backers.md %}
+{% include supporters.md %}
 
 ## Features
 
