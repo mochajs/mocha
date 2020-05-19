@@ -100,6 +100,7 @@
     "fs-extra": "^9.0.0",
     "husky": "^4.2.3",
     "hyperlink": "^4.4.3",
+    "image-size": "^0.8.3",
     "jsdoc": "^3.6.3",
     "karma": "^4.4.1",
     "karma-browserify": "^7.0.0",
