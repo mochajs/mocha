@@ -3,6 +3,7 @@
 
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
+const imageSize = require('image-size');
 const blacklist = new Set(require('./blacklist.json'));
 
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
@@ -111,6 +112,16 @@ module.exports = async () => {
       },
       {sponsors: [], backers: []}
     );
+
+  // Fetch images for sponsors and save their image dimensins
+  await Promise.all(
+    supporters.sponsors.map(async sponsor => {
+      for await (const chunk of needle.get(sponsor.avatar)) {
+        sponsor.dimensions = imageSize(chunk);
+        break;
+      }
+    })
+  );
 
   debug(
     'found %d valid backers and %d valid sponsors (%d total)',
