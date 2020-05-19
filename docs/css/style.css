@@ -89,6 +89,7 @@ ul.image-list li {
   margin: 0 4px 0 4px;
   max-height: 64px;
   padding: 0;
+  line-height: 0;
 }
 
 ul.image-list li a {
@@ -105,22 +106,25 @@ ul.image-list li img {
 ul#backers.image-list li img {
   width: 32px;
   height: 32px;
-  /* clip images to 32x32 */
-  clip-path: inset(0, 0, 32px, 32px);
+  overflow: hidden;
 }
 
-.faded-images img {
+.faded-image {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.faded-image.is-loaded {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s;
+}
+
+.faded-image img {
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.1s;
 }
 
-.faded-images.is-loaded img {
+.faded-image.is-loaded img {
   opacity: 1;
-}
-
-#_backers a img {
-  background: url(/images/backer-background.svg?inline) center center no-repeat;
-  width: 64px;
 }
 
 h2 {
