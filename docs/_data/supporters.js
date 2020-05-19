@@ -113,7 +113,7 @@ module.exports = async () => {
       {sponsors: [], backers: []}
     );
 
-  // Fetch images for sponsors and save their image dimensins
+  // Fetch images for sponsors and save their image dimensions
   await Promise.all(
     supporters.sponsors.map(async sponsor => {
       for await (const chunk of needle.get(sponsor.avatar)) {
