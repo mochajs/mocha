@@ -7,9 +7,9 @@ description: 'Mocha is a feature-rich JavaScript test framework running on Node.
 Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
 
 <nav class="badges">
-  <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
-  <a href="#sponsors"><img src="//opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective sponsors"></a>
-  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
+  <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" height="18" alt="Gitter"></a>
+  <a href="#sponsors"><img src="//opencollective.com/mochajs/sponsors/badge.svg" height="18" alt="OpenCollective sponsors"></a>
+  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
 </nav>
 
 {% include supporters.md %}
