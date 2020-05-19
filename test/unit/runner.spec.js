@@ -527,6 +527,26 @@ describe('Runner', function() {
       runner.emit(EVENT_SUITE_END, suite);
       expect(cleanReferencesStub, 'was not called');
     });
+
+    it('should not leak `Process.uncaughtException` listeners', function(done) {
+      var normalUncaughtExceptionListenerCount = process.listenerCount(
+        'uncaughtException'
+      );
+
+      runner.run();
+      runner.run();
+      runner.run();
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount + 1
+      );
+      done();
+    });
+
+    afterEach(function() {
+      runner.dispose();
+    });
   });
 
   describe('.dispose', function() {
@@ -550,7 +570,6 @@ describe('Runner', function() {
       var normalUncaughtExceptionListenerCount = process.listenerCount(
         'uncaughtException'
       );
-      sandbox.stub();
       runner.run(noop);
       // sanity check
       expect(
@@ -812,6 +831,16 @@ describe('Runner', function() {
 
     it('should return the Runner', function() {
       expect(runner.abort(), 'to be', runner);
+    });
+  });
+
+  describe('_uncaught()', function() {
+    describe('when called with a non-Runner context', function() {
+      it('should throw', function() {
+        expect(runner._uncaught.bind({}), 'to throw', {
+          code: errors.constants.FATAL
+        });
+      });
     });
   });
 
