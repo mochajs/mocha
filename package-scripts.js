@@ -15,6 +15,9 @@ function test(testName, mochaParams) {
   if (process.env.CI && !/^only-/.test(testName)) {
     mochaParams += ' --forbid-only';
   }
+  if (process.env.TRAVIS) {
+    mochaParams += ' --color'; // force color in travis-ci
+  }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
   } ${mochaCommand} ${mochaParams}`.trim();

@@ -377,7 +377,11 @@ describe('Runnable(title, fn)', function() {
             runnable.on('error', errorSpy).on('error', function(err) {
               process.nextTick(function() {
                 expect(errorSpy, 'was called times', 1);
-                expect(err.message, 'to be', 'done() called multiple times');
+                expect(
+                  err.message,
+                  'to match',
+                  /done\(\) called multiple times/
+                );
                 expect(callbackSpy, 'was called times', 1);
                 done();
               });
@@ -407,8 +411,8 @@ describe('Runnable(title, fn)', function() {
                 expect(errorSpy, 'was called times', 1);
                 expect(
                   err.message,
-                  'to be',
-                  "fail (and Mocha's done() called multiple times)"
+                  'to match',
+                  /done\(\) called multiple times.+received error: Error: fail/
                 );
                 expect(callbackSpy, 'was called times', 1);
                 done();
