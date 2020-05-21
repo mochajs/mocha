@@ -409,7 +409,11 @@ describe('lib/utils', function() {
     });
 
     it('should handle empty functions (with no properties)', function() {
-      expect(stringify(function() {}), 'to be', '[Function]');
+      expect(
+        stringify(function() {}),
+        'to be',
+        '[Function]'
+      );
       expect(
         stringify({foo: function() {}}),
         'to be',
