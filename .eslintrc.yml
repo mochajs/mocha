@@ -38,7 +38,7 @@ overrides:
       - lib/growl.js
       - docs/_data/**/*.js
     parserOptions:
-      ecmaVersion: 2017
+      ecmaVersion: 2018
     env:
       browser: false
     rules:
@@ -97,7 +97,7 @@ overrides:
   - files:
       - test/**/*.mjs
     parserOptions:
-      ecmaVersion: 2017
+      ecmaVersion: 2018
       sourceType: module
 
   - files:
