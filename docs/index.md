@@ -36,10 +36,10 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- [source-map support](#--enable-source-maps)
 - clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
+- [source-map support](#-enable-source-maps)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
@@ -964,19 +964,6 @@ Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (
 
 By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
 
-### `--enable-source-maps`
-
-> _New in Node.js v12.12.0_
-
-If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
-is passed to mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
-
-```bash
-Error: cool
-    at Object.<anonymous> (/Users/fake-user/bigco/nodejs-tasks/build/src/index.js:27:7)
-        -> /Users/fake-user/bigco/nodejs-tasks/src/index.ts:24:7
-```
-
 ### `--extension <ext>`
 
 Files having this extension will be considered test files. Defaults to `js`.
@@ -1127,6 +1114,19 @@ The `mocha` executable supports all applicable flags which the `node` executable
 These flags vary depending on your version of Node.js.
 
 `node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
+
+### `--enable-source-maps`
+
+> _New in Node.js v12.12.0_
+
+If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
+is passed to mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
+
+```bash
+Error: cool
+    at Object.<anonymous> (/Users/fake-user/bigco/nodejs-tasks/build/src/index.js:27:7)
+        -> /Users/fake-user/bigco/nodejs-tasks/src/index.ts:24:7
+```
 
 ### About V8 Flags
 
