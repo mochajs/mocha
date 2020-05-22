@@ -3,26 +3,25 @@
 
   var imageLists = document.querySelectorAll('.image-list');
 
-  Array.prototype.forEach.call(imageLists, function(imageList) {
-    var images = imageList.querySelectorAll('img');
-    var counter = images.length;
-
-    function onloadHandler() {
-      counter -= 1;
-
-      if (counter === 0) {
-        imageList.classList.add('is-loaded');
-      }
+  function getListItem(img) {
+    var parent = img.parentNode;
+    while (parent && parent.nodeName !== 'LI') {
+      parent = parent.parentNode;
     }
 
-    for (var i = 0; i < images.length; i += 1) {
-      if (images[i].complete) {
-        counter -= 1;
+    return parent;
+  }
 
-        if (counter === 0) {
-          imageList.classList.add('is-loaded');
-        }
-      } else {
+  function onloadHandler() {
+    getListItem(this).classList.add('is-loaded');
+  }
+
+  Array.prototype.forEach.call(imageLists, function(imageList) {
+    var images = imageList.querySelectorAll('img');
+
+    for (var i = 0; i < images.length; i += 1) {
+      if (!images[i].complete) {
+        getListItem(images[i]).classList.add('faded-image');
         images[i].onload = onloadHandler;
         images[i].onerror = onloadHandler;
       }

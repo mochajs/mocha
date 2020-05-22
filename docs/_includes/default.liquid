@@ -4,12 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>{{ title }}</title>
-    <link
-      rel="preload"
-      href="https://opencollective.com/static/images/user.svg"
-      as="image"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/prism.css" />
@@ -22,7 +16,7 @@
     <header id="_header">
       <h1>
         <a href="/">
-          <img id="mocha-logo" src="/images/mocha-logo.svg" alt="Mocha logo" />
+          <img id="mocha-logo" loading="eager" src="/images/mocha-logo.svg" alt="Mocha logo" />
         </a>
       </h1>
       <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
@@ -36,7 +30,7 @@
         rel="external noopener"
         title="Mocha is sponsored by Matomo"
       >
-        <img src="images/matomo-logo.png?trim" alt="Matomo logo" />
+        <img src="images/matomo-logo.png?trim" loading="lazy" alt="Matomo logo" />
       </a>
       <a
         title="Mocha is an OpenJS Foundation Project"
@@ -45,6 +39,7 @@
       >
         <img
           src="/images/openjsf-logo.svg"
+          loading="lazy"
           width="300"
           height="94"
           alt="OpenJS Foundation Logo"
@@ -56,7 +51,7 @@
         title="Mocha is sponsored by Wallaby"
       >
         <figure id="wallaby-logo">
-          <img src="images/wallaby-logo.png?trim" alt="Wallaby logo" />
+          <img src="images/wallaby-logo.png?trim" loading="lazy" alt="Wallaby logo" />
           <figcaption>Wallaby</figcaption>
         </figure>
       </a>
@@ -153,7 +148,7 @@
         <div class="netlify-badge">
           <a href="https://www.netlify.com">
             <img
-              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" loading="lazy"
             />
           </a>
         </div>
