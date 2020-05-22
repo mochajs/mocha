@@ -6,7 +6,7 @@ var args =
 
 describe('esm', function() {
   before(function() {
-    if (!utils.supportsEsModules()) this.skip();
+    if (!utils.supportsEsModules(true)) this.skip();
   });
 
   it('should pass a passing esm test that uses esm', function(done) {
