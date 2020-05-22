@@ -74,42 +74,57 @@ nav.badges a + a {
   margin-left: 3px;
 }
 
-.image-list {
+ul.image-list {
   overflow: hidden;
   text-align: center;
+  list-style: none;
+  column-count: 1;
+  padding: 0;
+  margin: 0;
 }
 
-.image-list a {
+ul.image-list li {
+  border-bottom: none;
   display: inline-block;
-  margin: 6px;
+  margin: 0 4px 0 4px;
+  max-height: 64px;
+  padding: 0;
+  line-height: 0;
 }
 
-.image-list a img {
+ul.image-list li a {
+  display: inline-block;
+}
+
+ul.image-list li img {
+  margin: 0;
+  padding: 0;
   display: block;
-  height: 64px;
+  max-height: 64px;
 }
 
-.faded-images {
-  background-color: #ddd;
-  border: 1px solid;
-  border-color: #ddd #ddd #ccc;
-  border-radius: 3px;
-  padding: 1em;
-  box-shadow: inset 0 0 10px #ccc;
+ul#backers.image-list li img {
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
 }
 
-.faded-images img {
+.faded-image {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.faded-image.is-loaded {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s;
+}
+
+.faded-image img {
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.1s;
 }
 
-.faded-images.is-loaded img {
+.faded-image.is-loaded img {
   opacity: 1;
-}
-
-#_backers a img {
-  background: url(/images/backer-background.svg?inline) center center no-repeat;
-  width: 64px;
 }
 
 h2 {
