@@ -77,7 +77,7 @@ jobs:
       before_install: true
       install: npm install --production
       name: 'Latest Node.js'
-      script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
+      script: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
       cache:
         directories:
           - ~/.npm
