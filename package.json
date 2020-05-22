@@ -2,6 +2,14 @@
   "name": "mocha",
   "version": "8.2.1",
   "description": "simple, flexible, fun test framework",
+  "main": "./index.js",
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.mjs"
+    },
+    "./": "./"
+  },
   "keywords": [
     "mocha",
     "test",
