@@ -77,6 +77,13 @@ process.on = function(e, fn) {
   }
 };
 
+process.listeners = function(e) {
+  if (e === 'uncaughtException') {
+    return uncaughtExceptionHandlers;
+  }
+  return [];
+};
+
 // The BDD UI is registered by default, but no UI will be functional in the
 // browser without an explicit call to the overridden `mocha.ui` (see below).
 // Ensure that this default UI does not expose its methods to the global scope.
