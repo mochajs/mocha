@@ -5,6 +5,7 @@ global:
   - 'okGlobalC'
   - 'callback*'
 timeout: 1000
+parallel: true
 watch-ignore:
   - '.*'
   - 'docs/_dist/**'
