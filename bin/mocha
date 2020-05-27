@@ -130,8 +130,23 @@ if (Object.keys(nodeArgs).length) {
 
   // terminate children.
   process.on('SIGINT', () => {
-    proc.kill('SIGINT'); // calls runner.abort()
-    proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+    // XXX: a previous comment said this would abort the runner, but I can't see that it does
+    // anything with the default runner.
+    debug('main process caught SIGINT');
+    proc.kill('SIGINT');
+    // if running in parallel mode, we will have a proper SIGINT handler, so the below won't
+    // be needed.
+    if (!args.parallel || args.jobs < 2) {
+      // win32 does not support SIGTERM, so use next best thing.
+      if (require('os').platform() === 'win32') {
+        proc.kill('SIGKILL');
+      } else {
+        // using SIGKILL won't cleanly close the output streams, which can result
+        // in cut-off text or a befouled terminal.
+        debug('sending SIGTERM to child process');
+        proc.kill('SIGTERM');
+      }
+    }
   });
 } else {
   debug('running Mocha in-process');

@@ -10,10 +10,18 @@ const path = require('path');
  * @returns {string} Command string to be executed by nps.
  */
 function test(testName, mochaParams) {
-  const coverageCommand = `nyc --no-clean --report-dir coverage/reports/${testName}`;
+  let coverageCommand = `nyc --no-clean --report-dir="coverage/reports/${testName}"`;
   const mochaCommand = `node ${path.join('bin', 'mocha')}`; // Include 'node' and path.join for Windows compatibility
-  if (process.env.CI && !/^only-/.test(testName)) {
-    mochaParams += ' --forbid-only';
+  if (process.env.CI) {
+    // suppress coverage summaries in CI to reduce noise
+    coverageCommand += ' --reporter=json';
+    if (!/^only-/.test(testName)) {
+      mochaParams += ' --forbid-only';
+    }
+  }
+  // this may _actually_ be supported in the future
+  if (process.env.MOCHA_PARALLEL === '0') {
+    mochaParams += ' --no-parallel';
   }
   if (process.env.TRAVIS) {
     mochaParams += ' --color'; // force color in travis-ci
@@ -26,7 +34,21 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js --plugin ./scripts/dedefine --ignore './lib/cli/*.js' --ignore "./lib/esm-utils.js" --ignore 'chokidar' --ignore 'fs' --ignore 'glob' --ignore 'path' --ignore 'supports-color' -o mocha.js`,
+      script: `browserify -e browser-entry.js \
+      --plugin ./scripts/dedefine \
+      --ignore 'chokidar' \
+      --ignore 'fs' \
+      --ignore 'glob' \
+      --ignore 'path' \
+      --ignore 'supports-color' \
+      --ignore './lib/cli/*.js' \
+      --ignore './lib/esm-utils.js' \
+      --ignore './lib/nodejs/serializer.js' \
+      --ignore './lib/nodejs/parallel-buffered-runner.js' \
+      --ignore './lib/nodejs/reporters/parallel-buffered.js' \
+      --ignore './lib/nodejs/worker.js' \
+      --ignore './lib/nodejs/buffered-worker-pool.js' \
+      -o mocha.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -161,19 +183,25 @@ module.exports = {
             hiddenFromHelp: true
           },
           bdd: {
-            script: test('only-bdd', '--ui bdd test/only/bdd.spec'),
+            script: test(
+              'only-bdd',
+              '--ui bdd test/only/bdd.spec --no-parallel'
+            ),
             description: 'Run Node.js "only" w/ BDD interface tests',
             hiddenFromHelp: true
           },
           tdd: {
-            script: test('only-tdd', '--ui tdd test/only/tdd.spec'),
+            script: test(
+              'only-tdd',
+              '--ui tdd test/only/tdd.spec --no-parallel'
+            ),
             description: 'Run Node.js "only" w/ TDD interface tests',
             hiddenFromHelp: true
           },
           bddRequire: {
             script: test(
               'only-bdd-require',
-              '--ui qunit test/only/bdd-require.spec'
+              '--ui qunit test/only/bdd-require.spec --no-parallel'
             ),
             description: 'Run Node.js "only" w/ QUnit interface tests',
             hiddenFromHelp: true
@@ -181,7 +209,7 @@ module.exports = {
           globalBdd: {
             script: test(
               'only-global-bdd',
-              '--ui bdd test/only/global/bdd.spec'
+              '--ui bdd test/only/global/bdd.spec --no-parallel'
             ),
             description: 'Run Node.js "global only" w/ BDD interface tests',
             hiddenFromHelp: true
@@ -189,7 +217,7 @@ module.exports = {
           globalTdd: {
             script: test(
               'only-global-tdd',
-              '--ui tdd test/only/global/tdd.spec'
+              '--ui tdd test/only/global/tdd.spec --no-parallel'
             ),
             description: 'Run Node.js "global only" w/ TDD interface tests',
             hiddenFromHelp: true
@@ -197,7 +225,7 @@ module.exports = {
           globalQunit: {
             script: test(
               'only-global-qunit',
-              '--ui qunit test/only/global/qunit.spec'
+              '--ui qunit test/only/global/qunit.spec --no-parallel'
             ),
             description: 'Run Node.js "global only" w/ QUnit interface tests',
             hiddenFromHelp: true

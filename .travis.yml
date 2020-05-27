@@ -39,7 +39,8 @@ jobs:
     - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
       name: 'Latest Node.js (with coverage)'
-
+    - script: MOCHA_PARALLEL=0 npm start test.node.unit
+      name: 'Latest Node.js (unit tests in serial mode)'
     - &node
       script: npm start test.node
       node_js: '13'
@@ -94,6 +95,9 @@ jobs:
     - stage: precache
       script: true
       name: 'Prime cache'
+
+env:
+  - 'NODE_OPTIONS="--trace-warnings"'
 
 notifications:
   email: false

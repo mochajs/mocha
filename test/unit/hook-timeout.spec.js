@@ -1,9 +1,11 @@
 'use strict';
 
-before(function(done) {
-  setTimeout(done, 100);
-});
+describe('hook timeout', function() {
+  before(function(done) {
+    setTimeout(done, 100);
+  });
 
-it('should work', function(done) {
-  done();
+  it('should work', function(done) {
+    done();
+  });
 });
