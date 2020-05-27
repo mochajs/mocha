@@ -51,7 +51,13 @@ describe('Mocha', function() {
     sandbox = sinon.createSandbox();
     reporterInstance = {};
     opts = {reporter: sandbox.stub().returns(reporterInstance)};
-    Base = sandbox.stub().returns({});
+
+    // NOTE: calling `stub(someObject, someFunction)` where `someFunction` has
+    // its own static properties WILL NOT blast those static properties!
+    Base = sandbox.stub(Mocha.reporters, 'Base').returns({});
+    sandbox.stub(Mocha.reporters, 'base').returns({});
+    sandbox.stub(Mocha.reporters, 'spec').returns({});
+
     runner = utils.assign(sandbox.createStubInstance(EventEmitter), {
       run: sandbox
         .stub()
@@ -61,7 +67,7 @@ describe('Mocha', function() {
       grep: sandbox.stub(),
       dispose: sandbox.stub()
     });
-    Runner = sandbox.stub().returns(runner);
+    Runner = sandbox.stub(Mocha, 'Runner').returns(runner);
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     Runner.constants = {};
@@ -72,18 +78,13 @@ describe('Mocha', function() {
       dispose: sandbox.stub(),
       reset: sandbox.stub()
     });
-    Suite = sandbox.stub().returns(suite);
+    Suite = sandbox.stub(Mocha, 'Suite').returns(suite);
     Suite.constants = {};
 
     sandbox.stub(utils, 'supportsEsModules').returns(false);
     sandbox.stub(utils, 'warn');
     sandbox.stub(utils, 'isString');
     sandbox.stub(utils, 'noop');
-
-    Mocha.Runner = Runner;
-    Mocha.reporters.Base = Mocha.reporters.base = Base;
-    sandbox.stub(Mocha.reporters, 'spec');
-    Mocha.Suite = Suite;
   });
 
   afterEach(function() {
@@ -101,6 +102,7 @@ describe('Mocha', function() {
       sandbox.stub(Mocha.prototype, 'global').returnsThis();
       sandbox.stub(Mocha.prototype, 'retries').returnsThis();
       sandbox.stub(Mocha.prototype, 'rootHooks').returnsThis();
+      sandbox.stub(Mocha.prototype, 'parallelMode').returnsThis();
     });
 
     it('should set _cleanReferencesAfterRun to true', function() {
@@ -160,6 +162,26 @@ describe('Mocha', function() {
         expect(Mocha.prototype.rootHooks, 'to have a call satisfying', [
           ['a root hook']
         ]).and('was called once');
+      });
+    });
+
+    describe('when `parallel` option is true', function() {
+      describe('and `jobs` option > 1', function() {
+        it('should enable parallel mode', function() {
+          // eslint-disable-next-line no-new
+          new Mocha({parallel: true, jobs: 2});
+          expect(Mocha.prototype.parallelMode, 'to have a call satisfying', [
+            true
+          ]).and('was called once');
+        });
+      });
+
+      describe('and `jobs` option <= 1', function() {
+        it('should not enable parallel mode', function() {
+          // eslint-disable-next-line no-new
+          new Mocha({parallel: true, jobs: 1});
+          expect(Mocha.prototype.parallelMode, 'was not called');
+        });
       });
     });
   });
@@ -546,7 +568,7 @@ describe('Mocha', function() {
 
         describe('when Mocha is set to lazily load files', function() {
           beforeEach(function() {
-            mocha.loadAsync = true;
+            mocha.lazyLoadFiles(true);
           });
 
           it('should not eagerly load files', function(done) {
@@ -635,7 +657,7 @@ describe('Mocha', function() {
 
           it('should configure the Base reporter', function(done) {
             mocha.run(function() {
-              expect(Base, 'to exhaustively satisfy', {
+              expect(Base, 'to satisfy', {
                 inlineDiffs: 'some value',
                 hideDiff: true,
                 useColors: 'truthy'
@@ -647,7 +669,7 @@ describe('Mocha', function() {
 
         it('should configure the Base reporter', function(done) {
           mocha.run(function() {
-            expect(Base, 'to exhaustively satisfy', {
+            expect(Base, 'to satisfy', {
               inlineDiffs: 'some value',
               hideDiff: true
             });
@@ -695,8 +717,6 @@ describe('Mocha', function() {
             },
             'to throw',
             {
-              message:
-                'Mocha instance is currently running tests, cannot start a next test run until this one is done',
               code: 'ERR_MOCHA_INSTANCE_ALREADY_RUNNING',
               instance: mocha
             }
@@ -726,8 +746,6 @@ describe('Mocha', function() {
             },
             'to throw',
             {
-              message:
-                'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
               code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
               cleanReferencesAfterRun: true,
               instance: mocha
@@ -760,8 +778,6 @@ describe('Mocha', function() {
             },
             'to throw',
             {
-              message:
-                'Mocha instance is already disposed, cannot start a new test run. Please create a new mocha instance. Be sure to set disable `cleanReferencesAfterRun` when you want to reuse the same mocha instance for multiple test runs.',
               code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED',
               instance: mocha
             }
@@ -818,23 +834,21 @@ describe('Mocha', function() {
       });
     });
 
-    describe('unloadFiles()', function() {
-      it('should reset referencesCleaned and allow for next run', function(done) {
-        mocha.run(function() {
-          mocha.unloadFiles();
-          mocha.run(done);
+    describe('parallelMode()', function() {
+      describe('when `Mocha` is running in a browser', function() {
+        beforeEach(function() {
+          sandbox.stub(utils, 'isBrowser').returns(true);
         });
-      });
 
-      it('should not be allowed when the current instance is already disposed', function() {
-        mocha.dispose();
-        expect(
-          function() {
-            mocha.unloadFiles();
-          },
-          'to throw',
-          'Mocha instance is already disposed, it cannot be used again.'
-        );
+        it('should throw', function() {
+          expect(
+            function() {
+              mocha.parallelMode();
+            },
+            'to throw',
+            {code: 'ERR_MOCHA_UNSUPPORTED'}
+          );
+        });
       });
     });
   });
