@@ -74,16 +74,11 @@ describe('--require', function() {
               require.resolve(
                 '../fixtures/options/require/root-hook-test.fixture.js'
               )
-            ],
-            {
-              env: {
-                ...process.env,
-                NODE_OPTIONS:
-                  +process.versions.node.split('.')[0] >= 13
-                    ? ''
-                    : '--experimental-modules'
-              }
-            }
+            ].concat(
+              +process.versions.node.split('.')[0] >= 13
+                ? []
+                : '--experimental-modules'
+            )
           )[1],
           'when fulfilled',
           'to contain output',
