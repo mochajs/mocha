@@ -1450,7 +1450,6 @@ Node.JS native ESM support still has status: **Stability: 1 - Experimental**
 - [Watch mode](#-watch-w) does not support ES Module test files
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
-- [Required modules](#-require-module-r-module) can only be CommonJS files
 - [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
 - When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files
 - Node.JS native ESM support does not work with [esm][npm-esm] module
