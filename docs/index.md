@@ -1007,6 +1007,8 @@ Modules required in this manner are expected to do work synchronously; Mocha won
 
 Note you cannot use `--require` to set a global `beforeEach()` hook, for example &mdash; use `--file` instead, which allows you to specify an explicit order in which test files are loaded.
 
+> As of v7.3.0, Mocha supports `--require` for [NodeJS native ESM](#nodejs-native-esm-support). There is no separate `--import` flag.
+
 ### `--sort, -S`
 
 Sort test files (by absolute path) using [Array.prototype.sort][mdn-array-sort].
