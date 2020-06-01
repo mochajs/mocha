@@ -1,6 +1,7 @@
 'use strict';
 
 var invokeMochaAsync = require('../helpers').invokeMochaAsync;
+var utils = require('../../../lib/utils');
 
 describe('--require', function() {
   describe('when mocha run in serial mode', function() {
@@ -44,6 +45,46 @@ describe('--require', function() {
         'to contain output',
         /beforeAll[\s\S]+?beforeAll array 1[\s\S]+?beforeAll array 2[\s\S]+?beforeEach[\s\S]+?beforeEach array 1[\s\S]+?beforeEach array 2[\s\S]+?afterEach[\s\S]+?afterEach array 1[\s\S]+?afterEach array 2[\s\S]+?afterAll[\s\S]+?afterAll array 1[\s\S]+?afterAll array 2/
       );
+    });
+
+    describe('support ESM when style=module or .mjs extension', function() {
+      before(function() {
+        if (!utils.supportsEsModules()) this.skip();
+      });
+
+      it('should run root hooks when provided via mochaHooks', function() {
+        return expect(
+          invokeMochaAsync(
+            [
+              '--require=' +
+                require.resolve(
+                  // as object
+                  '../fixtures/options/require/root-hook-defs-esm.fixture.mjs'
+                ),
+              '--require=' +
+                require.resolve(
+                  // as function
+                  '../fixtures/options/require/esm/root-hook-defs-esm.fixture.js'
+                ),
+              '--require=' +
+                require.resolve(
+                  // mixed with commonjs
+                  '../fixtures/options/require/root-hook-defs-a.fixture.js'
+                ),
+              require.resolve(
+                '../fixtures/options/require/root-hook-test.fixture.js'
+              )
+            ].concat(
+              +process.versions.node.split('.')[0] >= 13
+                ? []
+                : '--experimental-modules'
+            )
+          )[1],
+          'when fulfilled',
+          'to contain output',
+          /mjs beforeAll[\s\S]+?beforeAll[\s\S]+?esm beforeEach[\s\S]+?beforeEach[\s\S]+?esm afterEach[\s\S]+?afterEach[\s\S]+?mjs afterAll[\s\S]+?afterAll/
+        );
+      });
     });
   });
 
