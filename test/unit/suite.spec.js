@@ -682,8 +682,6 @@ describe('Suite', function() {
   });
 
   describe('.markOnly()', function() {
-    var sandbox;
-
     beforeEach(function() {
       sandbox = sinon.createSandbox();
     });
