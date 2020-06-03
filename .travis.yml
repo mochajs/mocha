@@ -41,10 +41,6 @@ jobs:
       name: 'Latest Node.js (with coverage)'
     - script: MOCHA_PARALLEL=0 npm start test.node.unit
       name: 'Latest Node.js (unit tests in serial mode)'
-    - &node
-      script: npm start test.node
-      node_js: '13'
-      name: 'Node.js v13'
 
     - &node
       script: npm start test.node
