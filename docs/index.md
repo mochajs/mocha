@@ -1277,9 +1277,11 @@ A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#-require-mod
 
 ### Defining a Root Hook Plugin
 
-A Root Hook Plugin file is a script which exports (via `module.exports`) a `mochaHooks` property.
+A Root Hook Plugin file is a script which exports (via `module.exports`) a `mochaHooks` property. It is loaded via `--require <file>`.
 
-Here's a simple example, which defines a root hook. Use it via `--require test/hooks.js`:
+Here's a simple example which defines a root hook, written using CJS and ESM syntax.
+
+#### With CommonJS
 
 ```js
 // test/hooks.js
@@ -1292,7 +1294,24 @@ exports.mochaHooks = {
 };
 ```
 
-`beforeEach`--as you may have guessed--corresponds to a `beforeEach` in the default [`bdd`](#bdd) interface.
+#### With ES Modules
+
+We're using the `.mjs` extension in these examples.
+
+> _Tip: If you're having trouble getting ES modules to work, refer to [the Node.js documentation](https://nodejs.org/api/esm.html)._
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  }
+};
+```
+
+> _Note: Further examples will use ESM syntax._
 
 ### Available Root Hooks
 
@@ -1313,10 +1332,12 @@ Available root hooks and their behavior:
 
 {:.single-column}
 
-The root hook callbacks run in the usual context, so `this` is available:
+As with other hooks, `this` refers to to the current context object:
 
 ```js
-exports.mochaHooks = {
+// test/hooks.mjs
+
+export const mochaHooks = {
   beforeAll() {
     // skip all tests for bob
     if (require('os').userInfo().username === 'bob') {
@@ -1331,7 +1352,9 @@ exports.mochaHooks = {
 Multiple root hooks can be defined in a single plugin, for organizational purposes. For example:
 
 ```js
-exports.mochaHooks = {
+// test/hooks.mjs
+
+export const mochaHooks = {
   beforeEach: [
     function(done) {
       // do something before every test,
@@ -1349,7 +1372,9 @@ exports.mochaHooks = {
 If you need to perform some logic--such as choosing a root hook conditionally, based on the environment--`mochaHooks` can be a _function_ which returns the expected object.
 
 ```js
-exports.mochaHooks = () => {
+// test/hooks.mjs
+
+export const mochaHooks = () => {
   if (process.env.CI) {
     // root hooks object
     return {
@@ -1375,7 +1400,9 @@ exports.mochaHooks = () => {
 If you need to perform an async operation, `mochaHooks` can be `Promise`-returning:
 
 ```js
-exports.mochaHooks = async () => {
+// test/hooks.mjs
+
+export const mochaHooks = async () => {
   const result = await checkSomething();
   // only use a root hook if `result` is truthy
   if (result) {
@@ -1423,7 +1450,7 @@ describe('my test suite', function() {
 });
 ```
 
-Your `test/hooks.js` should contain:
+Your `test/hooks.js` (for this example, a CJS module) should contain:
 
 ```js
 // test/hooks.js
