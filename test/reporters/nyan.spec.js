@@ -17,15 +17,10 @@ var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe('Nyan reporter', function() {
-  var sandbox;
   var noop = function() {};
 
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
@@ -144,7 +139,7 @@ describe('Nyan reporter', function() {
       });
 
       it('should call Base show', function() {
-        var showCursorStub = sandbox.stub(Base.cursor, 'show');
+        var showCursorStub = sinon.stub(Base.cursor, 'show');
         var fakeThis = {
           draw: noop,
           epilogue: noop,
@@ -153,7 +148,7 @@ describe('Nyan reporter', function() {
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(showCursorStub.called, 'to be true');
       });
@@ -165,7 +160,7 @@ describe('Nyan reporter', function() {
     var stdout;
 
     beforeEach(function() {
-      stdoutWriteStub = sandbox.stub(process.stdout, 'write');
+      stdoutWriteStub = sinon.stub(process.stdout, 'write');
       stdoutWriteStub.callsFake(function(chunk, encoding, cb) {
         stdout.push(chunk);
       });
@@ -194,7 +189,7 @@ describe('Nyan reporter', function() {
         try {
           nyanCat.draw.call(fakeThis);
         } finally {
-          sandbox.restore();
+          sinon.restore();
         }
 
         var expectedArray = [
@@ -237,7 +232,7 @@ describe('Nyan reporter', function() {
         try {
           nyanCat.draw.call(fakeThis);
         } finally {
-          sandbox.restore();
+          sinon.restore();
         }
 
         var expectedArray = [
@@ -264,7 +259,7 @@ describe('Nyan reporter', function() {
     var stdout;
 
     beforeEach(function() {
-      stdoutWriteStub = sandbox.stub(process.stdout, 'write');
+      stdoutWriteStub = sinon.stub(process.stdout, 'write');
       stdoutWriteStub.callsFake(function(chunk, encoding, cb) {
         stdout.push(chunk);
       });
@@ -280,7 +275,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.cursorDown(expectedNumber);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       var expectedArray = ['\u001b[' + expectedNumber + 'B'];
@@ -293,7 +288,7 @@ describe('Nyan reporter', function() {
     var stdout;
 
     beforeEach(function() {
-      stdoutWriteStub = sandbox.stub(process.stdout, 'write');
+      stdoutWriteStub = sinon.stub(process.stdout, 'write');
       stdoutWriteStub.callsFake(function(chunk, encoding, cb) {
         stdout.push(chunk);
       });
@@ -309,7 +304,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.cursorUp(expectedNumber);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       var expectedArray = ['\u001b[' + expectedNumber + 'A'];
@@ -321,11 +316,11 @@ describe('Nyan reporter', function() {
     var useColorsStub;
 
     beforeEach(function() {
-      useColorsStub = sandbox.stub(Base, 'useColors');
+      useColorsStub = sinon.stub(Base, 'useColors');
     });
 
     afterEach(function() {
-      sandbox.restore();
+      sinon.restore();
     });
 
     describe("when 'useColors' is false", function() {
@@ -340,7 +335,7 @@ describe('Nyan reporter', function() {
 
         var inputString = 'hello';
         var outputString = nyanCat.rainbowify(inputString);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedString = inputString;
         expect(outputString, 'to be', expectedString);
@@ -364,7 +359,7 @@ describe('Nyan reporter', function() {
           colorIndex: 0
         };
         var outputString = nyanCat.rainbowify.call(fakeThis, inputString);
-        sandbox.restore();
+        sinon.restore();
 
         var startCode = '\u001b[38;5;';
         var endCode = '\u001b[0m';
@@ -453,10 +448,10 @@ describe('Nyan reporter', function() {
     var stdout;
 
     beforeEach(function() {
-      sandbox.stub(Base, 'color').callsFake(function(type, n) {
+      sinon.stub(Base, 'color').callsFake(function(type, n) {
         return type + n;
       });
-      var stdoutWriteStub = sandbox.stub(process.stdout, 'write');
+      var stdoutWriteStub = sinon.stub(process.stdout, 'write');
       stdoutWriteStub.callsFake(function(chunk, encoding, cb) {
         stdout.push(chunk);
       });
@@ -481,7 +476,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.drawScoreboard.call(fakeThis);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       var expectedArray = [
@@ -514,7 +509,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.drawScoreboard.call(fakeThis);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       expect(fakeThis.cursorUp.calledWith(expectedNumberOfLines), 'to be true');
@@ -525,7 +520,7 @@ describe('Nyan reporter', function() {
     var stdout;
 
     beforeEach(function() {
-      var stdoutWriteStub = sandbox.stub(process.stdout, 'write');
+      var stdoutWriteStub = sinon.stub(process.stdout, 'write');
       stdoutWriteStub.callsFake(function(chunk, encoding, cb) {
         stdout.push(chunk);
       });
@@ -551,7 +546,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.drawRainbow.call(fakeThis);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       var expectedArray = [
@@ -581,7 +576,7 @@ describe('Nyan reporter', function() {
       try {
         nyanCat.drawRainbow.call(fakeThis);
       } finally {
-        sandbox.restore();
+        sinon.restore();
       }
 
       expect(expectedCursorArgument, 'to be', expectedNumberOfLines);

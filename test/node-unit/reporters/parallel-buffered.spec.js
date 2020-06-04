@@ -19,16 +19,14 @@ const {
   EVENT_RUN_END
 } = require('../../../lib/runner').constants;
 const {EventEmitter} = require('events');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 
 describe('ParallelBuffered', function() {
-  let sandbox;
   let runner;
   let ParallelBuffered;
 
   beforeEach(function() {
-    sandbox = createSandbox();
     runner = new EventEmitter();
     ParallelBuffered = rewiremock.proxy(
       require.resolve('../../../lib/nodejs/reporters/parallel-buffered'),
@@ -56,15 +54,15 @@ describe('ParallelBuffered', function() {
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('constructor', function() {
     it('should listen for Runner events', function() {
       // EventEmitter#once calls thru to EventEmitter#on, which
       // befouls our assertion below.
-      sandbox.stub(runner, 'once');
-      sandbox.stub(runner, 'on');
+      sinon.stub(runner, 'once');
+      sinon.stub(runner, 'on');
       // eslint-disable-next-line no-new
       new ParallelBuffered(runner);
       expect(runner.on, 'to have calls satisfying', [
@@ -83,7 +81,7 @@ describe('ParallelBuffered', function() {
     });
 
     it('should listen for Runner events expecting to occur once', function() {
-      sandbox.stub(runner, 'once');
+      sinon.stub(runner, 'once');
       // eslint-disable-next-line no-new
       new ParallelBuffered(runner);
       expect(runner.once, 'to have calls satisfying', [
@@ -172,7 +170,7 @@ describe('ParallelBuffered', function() {
         runner.emit(EVENT_TEST_PASS, test);
         runner.emit(EVENT_TEST_END, test);
         runner.emit(EVENT_SUITE_END, suite);
-        const cb = sandbox.stub();
+        const cb = sinon.stub();
         reporter.done(0, cb);
         expect(cb, 'to have a call satisfying', [
           {
@@ -221,7 +219,7 @@ describe('ParallelBuffered', function() {
         runner.emit(EVENT_TEST_PASS, test);
         runner.emit(EVENT_TEST_END, test);
         runner.emit(EVENT_SUITE_END, suite);
-        const cb = sandbox.stub();
+        const cb = sinon.stub();
         reporter.done(0, cb);
         expect(reporter.events, 'to be empty');
       });

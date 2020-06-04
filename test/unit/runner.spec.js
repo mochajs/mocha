@@ -23,7 +23,6 @@ var STATE_RUNNING = Runner.constants.STATE_RUNNING;
 var STATE_STOPPED = Runner.constants.STATE_STOPPED;
 
 describe('Runner', function() {
-  var sandbox;
   var suite;
   var runner;
 
@@ -31,11 +30,10 @@ describe('Runner', function() {
     suite = new Suite('Suite', 'root');
     runner = new Runner(suite, {cleanReferencesAfterRun: true});
     runner.checkLeaks = true;
-    sandbox = sinon.createSandbox();
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('.grep()', function() {
@@ -511,7 +509,7 @@ describe('Runner', function() {
 
     it('should clean references after a run', function() {
       runner = new Runner(suite, {delay: false, cleanReferencesAfterRun: true});
-      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      var cleanReferencesStub = sinon.stub(suite, 'cleanReferences');
       runner.run();
       runner.emit(EVENT_SUITE_END, suite);
       expect(cleanReferencesStub, 'was called once');
@@ -522,7 +520,7 @@ describe('Runner', function() {
         delay: false,
         cleanReferencesAfterRun: false
       });
-      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      var cleanReferencesStub = sinon.stub(suite, 'cleanReferences');
       runner.run();
       runner.emit(EVENT_SUITE_END, suite);
       expect(cleanReferencesStub, 'was not called');
@@ -557,7 +555,7 @@ describe('Runner', function() {
     });
 
     it('should remove "error" listeners from a test', function() {
-      var fn = sandbox.stub();
+      var fn = sinon.stub();
       runner.test = new Test('test for dispose', fn);
       runner.runTest(noop);
       // sanity check
@@ -846,7 +844,7 @@ describe('Runner', function() {
 
   describe('uncaught()', function() {
     beforeEach(function() {
-      sandbox.stub(runner, 'fail');
+      sinon.stub(runner, 'fail');
     });
 
     describe('when allow-uncaught is set to true', function() {
@@ -988,19 +986,19 @@ describe('Runner', function() {
           beforeEach(function() {
             runnable = new Runnable();
             runnable.parent = runner.suite;
-            sandbox.stub(runnable, 'clearTimeout');
+            sinon.stub(runnable, 'clearTimeout');
             runner.currentRunnable = runnable;
           });
 
           it('should clear any pending timeouts', function() {
-            runnable.callback = sandbox.fake();
+            runnable.callback = sinon.fake();
             runner.uncaught(err);
             expect(runnable.clearTimeout, 'was called times', 1);
           });
 
           describe('when current Runnable has already failed', function() {
             beforeEach(function() {
-              sandbox.stub(runnable, 'isFailed').returns(true);
+              sinon.stub(runnable, 'isFailed').returns(true);
             });
 
             it('should not attempt to fail again', function() {
@@ -1011,7 +1009,7 @@ describe('Runner', function() {
 
           describe('when current Runnable has been marked pending', function() {
             beforeEach(function() {
-              sandbox.stub(runnable, 'isPending').returns(true);
+              sinon.stub(runnable, 'isPending').returns(true);
             });
 
             it('should attempt to fail', function() {
@@ -1022,7 +1020,7 @@ describe('Runner', function() {
 
           describe('when the current Runnable has already passed', function() {
             beforeEach(function() {
-              sandbox.stub(runnable, 'isPassed').returns(true);
+              sinon.stub(runnable, 'isPassed').returns(true);
             });
 
             it('should fail with the current Runnable and the error', function() {
@@ -1053,7 +1051,7 @@ describe('Runner', function() {
                 runnable = new Test('goomba', noop);
                 runnable.parent = runner.suite;
                 runner.currentRunnable = runnable;
-                runnable.callback = sandbox.fake();
+                runnable.callback = sinon.fake();
               });
 
               it('should run callback(err) to handle failing and hooks', function() {
@@ -1093,7 +1091,7 @@ describe('Runner', function() {
                 runnable = new Hook();
                 runnable.parent = runner.suite;
                 runner.currentRunnable = runnable;
-                runnable.callback = sandbox.fake();
+                runnable.callback = sinon.fake();
               });
 
               it('should run callback(err) to handle failing hook pattern', function() {

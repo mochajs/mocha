@@ -3,24 +3,22 @@
 const serializeJavascript = require('serialize-javascript');
 const rewiremock = require('rewiremock/node');
 const {SerializableWorkerResult} = require('../../lib/nodejs/serializer');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 
 const WORKER_PATH = require.resolve('../../lib/nodejs/worker.js');
 
 describe('worker', function() {
   let worker;
-  let sandbox;
   let stubs;
 
   beforeEach(function() {
-    sandbox = createSandbox();
     stubs = {
       workerpool: {
         isMainThread: false,
-        worker: sandbox.stub()
+        worker: sinon.stub()
       }
     };
-    sandbox.spy(process, 'removeAllListeners');
+    sinon.spy(process, 'removeAllListeners');
   });
 
   describe('when run as main process', function() {
@@ -41,24 +39,24 @@ describe('worker', function() {
 
     beforeEach(function() {
       mocha = {
-        addFile: sandbox.stub().returnsThis(),
-        loadFilesAsync: sandbox.stub().resolves(),
-        run: sandbox.stub().callsArgAsync(0),
-        unloadFiles: sandbox.stub().returnsThis()
+        addFile: sinon.stub().returnsThis(),
+        loadFilesAsync: sinon.stub().resolves(),
+        run: sinon.stub().callsArgAsync(0),
+        unloadFiles: sinon.stub().returnsThis()
       };
-      stubs.Mocha = Object.assign(sandbox.stub().returns(mocha), {
-        bdd: sandbox.stub(),
+      stubs.Mocha = Object.assign(sinon.stub().returns(mocha), {
+        bdd: sinon.stub(),
         interfaces: {}
       });
 
       stubs.serializer = {
-        serialize: sandbox.stub()
+        serialize: sinon.stub()
       };
 
       stubs.runHelpers = {
-        handleRequires: sandbox.stub(),
-        validatePlugin: sandbox.stub(),
-        loadRootHooks: sandbox.stub().resolves()
+        handleRequires: sinon.stub(),
+        validatePlugin: sinon.stub(),
+        loadRootHooks: sinon.stub().resolves()
       };
 
       worker = rewiremock.proxy(WORKER_PATH, {
@@ -216,7 +214,7 @@ describe('worker', function() {
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
     // this is needed due to `require.cache` getting dumped in watch mode
     process.removeAllListeners('beforeExit');
   });

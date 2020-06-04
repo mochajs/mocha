@@ -17,22 +17,20 @@ var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe('Dot reporter', function() {
-  var sandbox;
   var windowWidthStub;
   var runReporter = makeRunReporter(Dot);
   var noop = function() {};
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    windowWidthStub = sandbox.stub(Base.window, 'width').value(0);
-    sandbox.stub(Base, 'useColors').value(false);
-    sandbox.stub(Base, 'color').callsFake(function(type, str) {
+    windowWidthStub = sinon.stub(Base.window, 'width').value(0);
+    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(Base, 'color').callsFake(function(type, str) {
       return type.replace(/ /g, '-') + '_' + str;
     });
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
@@ -41,7 +39,7 @@ describe('Dot reporter', function() {
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = ['\n'];
         expect(stdout, 'to equal', expectedArray);
@@ -58,7 +56,7 @@ describe('Dot reporter', function() {
           var runner = createMockRunner('pending', EVENT_TEST_PENDING);
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedArray = ['\n  ', 'pending_' + Base.symbols.comma];
           expect(stdout, 'to equal', expectedArray);
@@ -70,7 +68,7 @@ describe('Dot reporter', function() {
           var runner = createMockRunner('pending', EVENT_TEST_PENDING);
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedArray = ['pending_' + Base.symbols.comma];
           expect(stdout, 'to equal', expectedArray);
@@ -102,7 +100,7 @@ describe('Dot reporter', function() {
             );
             var options = {};
             var stdout = runReporter({epilogue: noop}, runner, options);
-            sandbox.restore();
+            sinon.restore();
 
             expect(test.speed, 'to equal', 'fast');
             var expectedArray = ['\n  ', 'fast_' + Base.symbols.dot];
@@ -123,7 +121,7 @@ describe('Dot reporter', function() {
             );
             var options = {};
             var stdout = runReporter({epilogue: noop}, runner, options);
-            sandbox.restore();
+            sinon.restore();
 
             expect(test.speed, 'to equal', 'fast');
             var expectedArray = ['fast_' + Base.symbols.dot];
@@ -143,7 +141,7 @@ describe('Dot reporter', function() {
             );
             var options = {};
             var stdout = runReporter({epilogue: noop}, runner, options);
-            sandbox.restore();
+            sinon.restore();
 
             expect(test.speed, 'to equal', 'medium');
             var expectedArray = ['medium_' + Base.symbols.dot];
@@ -163,7 +161,7 @@ describe('Dot reporter', function() {
             );
             var options = {};
             var stdout = runReporter({epilogue: noop}, runner, options);
-            sandbox.restore();
+            sinon.restore();
 
             expect(test.speed, 'to equal', 'slow');
             var expectedArray = ['bright-yellow_' + Base.symbols.dot];
@@ -195,7 +193,7 @@ describe('Dot reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedArray = ['\n  ', 'fail_' + Base.symbols.bang];
           expect(stdout, 'to equal', expectedArray);
@@ -213,7 +211,7 @@ describe('Dot reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedArray = ['fail_' + Base.symbols.bang];
           expect(stdout, 'to equal', expectedArray);
@@ -229,7 +227,7 @@ describe('Dot reporter', function() {
         };
         var options = {};
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(fakeThis.epilogue.called, 'to be true');
       });

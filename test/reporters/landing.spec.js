@@ -19,7 +19,6 @@ var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
 
 describe('Landing reporter', function() {
-  var sandbox;
   var runReporter = makeRunReporter(Landing);
   var resetCode = '\u001b[0m';
   var expectedArray = [
@@ -34,35 +33,34 @@ describe('Landing reporter', function() {
   ];
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
-    sandbox.stub(Base.window, 'width').value(1);
+    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(Base.window, 'width').value(1);
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
     describe("on 'start' event", function() {
       it('should write newlines', function() {
-        sandbox.stub(Base.cursor, 'hide');
+        sinon.stub(Base.cursor, 'hide');
 
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var options = {};
         var stdout = runReporter({}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(stdout[0], 'to equal', '\n\n\n  ');
       });
 
       it('should call cursor hide', function() {
-        var hideCursorStub = sandbox.stub(Base.cursor, 'hide');
+        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
 
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var options = {};
         runReporter({}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(hideCursorStub.called, 'to be true');
       });
@@ -83,7 +81,7 @@ describe('Landing reporter', function() {
           );
           var options = {};
           var stdout = runReporter({}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           expect(stdout, 'to equal', expectedArray);
         });
@@ -104,7 +102,7 @@ describe('Landing reporter', function() {
           runner.total = 12;
           var options = {};
           var stdout = runReporter({}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           expect(stdout, 'to equal', expectedArray);
         });
@@ -113,7 +111,7 @@ describe('Landing reporter', function() {
 
     describe("on 'end' event", function() {
       it('should call cursor show and epilogue', function() {
-        var showCursorStub = sandbox.stub(Base.cursor, 'show');
+        var showCursorStub = sinon.stub(Base.cursor, 'show');
 
         var fakeThis = {
           epilogue: sinon.spy()
@@ -121,7 +119,7 @@ describe('Landing reporter', function() {
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(fakeThis.epilogue.calledOnce, 'to be true');
         expect(showCursorStub.called, 'to be true');

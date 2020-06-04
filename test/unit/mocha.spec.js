@@ -12,12 +12,6 @@ describe('Mocha', function() {
   var opts;
 
   /**
-   * Sinon sandbox
-   * @see https://sinonjs.org/releases/v9.0.2/sandbox/
-   */
-  var sandbox;
-
-  /**
    * Stub `Runner` constructor; returns a stubbed `EventEmitter`
    */
   var Runner;
@@ -48,61 +42,60 @@ describe('Mocha', function() {
   var reporterInstance;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
     reporterInstance = {};
-    opts = {reporter: sandbox.stub().returns(reporterInstance)};
+    opts = {reporter: sinon.stub().returns(reporterInstance)};
 
     // NOTE: calling `stub(someObject, someFunction)` where `someFunction` has
     // its own static properties WILL NOT blast those static properties!
-    Base = sandbox.stub(Mocha.reporters, 'Base').returns({});
-    sandbox.stub(Mocha.reporters, 'base').returns({});
-    sandbox.stub(Mocha.reporters, 'spec').returns({});
+    Base = sinon.stub(Mocha.reporters, 'Base').returns({});
+    sinon.stub(Mocha.reporters, 'base').returns({});
+    sinon.stub(Mocha.reporters, 'spec').returns({});
 
-    runner = utils.assign(sandbox.createStubInstance(EventEmitter), {
-      run: sandbox
+    runner = utils.assign(sinon.createStubInstance(EventEmitter), {
+      run: sinon
         .stub()
         .callsArgAsync(0)
         .returnsThis(),
-      globals: sandbox.stub(),
-      grep: sandbox.stub(),
-      dispose: sandbox.stub()
+      globals: sinon.stub(),
+      grep: sinon.stub(),
+      dispose: sinon.stub()
     });
-    Runner = sandbox.stub(Mocha, 'Runner').returns(runner);
+    Runner = sinon.stub(Mocha, 'Runner').returns(runner);
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     Runner.constants = {};
-    suite = utils.assign(sandbox.createStubInstance(EventEmitter), {
-      slow: sandbox.stub(),
-      timeout: sandbox.stub(),
-      bail: sandbox.stub(),
-      dispose: sandbox.stub(),
-      reset: sandbox.stub()
+    suite = utils.assign(sinon.createStubInstance(EventEmitter), {
+      slow: sinon.stub(),
+      timeout: sinon.stub(),
+      bail: sinon.stub(),
+      dispose: sinon.stub(),
+      reset: sinon.stub()
     });
-    Suite = sandbox.stub(Mocha, 'Suite').returns(suite);
+    Suite = sinon.stub(Mocha, 'Suite').returns(suite);
     Suite.constants = {};
 
-    sandbox.stub(utils, 'supportsEsModules').returns(false);
-    sandbox.stub(utils, 'warn');
-    sandbox.stub(utils, 'isString');
-    sandbox.stub(utils, 'noop');
+    sinon.stub(utils, 'supportsEsModules').returns(false);
+    sinon.stub(utils, 'warn');
+    sinon.stub(utils, 'isString');
+    sinon.stub(utils, 'noop');
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('constructor', function() {
     var mocha;
 
     beforeEach(function() {
-      mocha = sandbox.createStubInstance(Mocha);
+      mocha = sinon.createStubInstance(Mocha);
       mocha.timeout.returnsThis();
       mocha.retries.returnsThis();
-      sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
-      sandbox.stub(Mocha.prototype, 'global').returnsThis();
-      sandbox.stub(Mocha.prototype, 'retries').returnsThis();
-      sandbox.stub(Mocha.prototype, 'rootHooks').returnsThis();
-      sandbox.stub(Mocha.prototype, 'parallelMode').returnsThis();
+      sinon.stub(Mocha.prototype, 'timeout').returnsThis();
+      sinon.stub(Mocha.prototype, 'global').returnsThis();
+      sinon.stub(Mocha.prototype, 'retries').returnsThis();
+      sinon.stub(Mocha.prototype, 'rootHooks').returnsThis();
+      sinon.stub(Mocha.prototype, 'parallelMode').returnsThis();
     });
 
     it('should set _cleanReferencesAfterRun to true', function() {
@@ -326,7 +319,7 @@ describe('Mocha', function() {
       });
 
       it('should unload the files', function() {
-        var unloadFilesStub = sandbox.stub(mocha, 'unloadFiles');
+        var unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
         mocha.dispose();
         expect(unloadFilesStub, 'was called once');
       });
@@ -553,7 +546,7 @@ describe('Mocha', function() {
     describe('run()', function() {
       describe('when files have been added to the Mocha instance', function() {
         beforeEach(function() {
-          sandbox.stub(mocha, 'loadFiles');
+          sinon.stub(mocha, 'loadFiles');
           mocha.addFile('some-file.js');
         });
 
@@ -633,7 +626,7 @@ describe('Mocha', function() {
       describe('when "growl" option is present', function() {
         beforeEach(function() {
           mocha.options.growl = true;
-          sandbox.stub(Mocha.prototype, '_growl').returnsThis();
+          sinon.stub(Mocha.prototype, '_growl').returnsThis();
         });
 
         it('should initialize growl support', function(done) {
@@ -693,7 +686,7 @@ describe('Mocha', function() {
 
       describe('when a reporter instance has a "done" method', function() {
         beforeEach(function() {
-          reporterInstance.done = sandbox.stub().callsArgAsync(1);
+          reporterInstance.done = sinon.stub().callsArgAsync(1);
         });
 
         it('should call the reporter "done" method', function(done) {
@@ -837,7 +830,7 @@ describe('Mocha', function() {
     describe('parallelMode()', function() {
       describe('when `Mocha` is running in a browser', function() {
         beforeEach(function() {
-          sandbox.stub(utils, 'isBrowser').returns(true);
+          sinon.stub(utils, 'isBrowser').returns(true);
         });
 
         it('should throw', function() {
