@@ -92,32 +92,37 @@ describe('--forbid-only', function() {
     );
   });
 
-  it('should succeed if suite marked only does not match grep', function(done) {
+  it('should fail if suite marked only does not match grep', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only-suite');
-    runMochaJSON(fixture, args.concat('--fgrep', 'bumble bees'), function(
-      err,
-      res
-    ) {
-      if (err) {
-        return done(err);
-      }
-      expect(res, 'to have passed');
-      done();
-    });
+    var spawnOpts = {stdio: 'pipe'};
+    runMocha(
+      fixture,
+      args.concat('--fgrep', 'bumble bees'),
+      function(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
+        done();
+      },
+      spawnOpts
+    );
   });
 
-  it('should succeed if suite marked only does not match inverted grep', function(done) {
+  it('should fail if suite marked only does not match inverted grep', function(done) {
     var fixture = path.join('options', 'forbid-only', 'only-suite');
-    runMochaJSON(
+    var spawnOpts = {stdio: 'pipe'};
+    runMocha(
       fixture,
       args.concat('--fgrep', 'suite marked with only', '--invert'),
       function(err, res) {
         if (err) {
           return done(err);
         }
-        expect(res, 'to have passed');
+        expect(res, 'to have failed with output', new RegExp(onlyErrorMessage));
         done();
-      }
+      },
+      spawnOpts
     );
   });
 
