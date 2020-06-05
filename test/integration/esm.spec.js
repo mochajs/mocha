@@ -6,7 +6,7 @@ var args =
 
 describe('esm', function() {
   before(function() {
-    if (!utils.supportsEsModules()) this.skip();
+    if (!utils.supportsEsModules(true)) this.skip();
   });
 
   it('should pass a passing esm test that uses esm', function(done) {
@@ -39,6 +39,8 @@ describe('esm', function() {
   });
 
   it('should recognize esm files ending with .js due to package.json type flag', function(done) {
+    if (!utils.supportsEsModules(false)) return this.skip();
+
     var fixture = 'esm/js-folder/esm-in-js.fixture.js';
     run(fixture, args, function(err, result) {
       if (err) {
