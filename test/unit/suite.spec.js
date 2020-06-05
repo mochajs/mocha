@@ -682,14 +682,6 @@ describe('Suite', function() {
   });
 
   describe('.markOnly()', function() {
-    beforeEach(function() {
-      sandbox = sinon.createSandbox();
-    });
-
-    afterEach(function() {
-      sandbox.restore();
-    });
-
     it('should call appendOnlySuite on parent', function() {
       var suite = new Suite('foo');
       var spy = sandbox.spy();
