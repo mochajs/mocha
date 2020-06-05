@@ -1812,6 +1812,7 @@ More information can be found in the [Node.js documentation](https://nodejs.org/
 
 > Mocha supports ES modules only from Node.js v12.11.0 and above. To enable this in versions smaller than 13.2.0, you need to add `--experimental-modules` when running
 > Mocha. From version 13.2.0 of Node.js, you can use ES modules without any flags.
+> (Mocha _will_ load ESM even in Node v10, but this is not officially supported. Use at your own risk.)
 
 ### Current Limitations
 
