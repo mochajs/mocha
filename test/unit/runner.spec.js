@@ -3,17 +3,24 @@
 var path = require('path');
 var sinon = require('sinon');
 var Mocha = require('../../lib/mocha');
+var Pending = require('../../lib/pending');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 var Runnable = Mocha.Runnable;
 var Hook = Mocha.Hook;
 var noop = Mocha.utils.noop;
+var errors = require('../../lib/errors');
 var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
 var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
+var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
+var EVENT_SUITE_END = Runner.constants.EVENT_SUITE_END;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
+var STATE_IDLE = Runner.constants.STATE_IDLE;
+var STATE_RUNNING = Runner.constants.STATE_RUNNING;
+var STATE_STOPPED = Runner.constants.STATE_STOPPED;
 
 describe('Runner', function() {
   var sandbox;
@@ -22,7 +29,8 @@ describe('Runner', function() {
 
   beforeEach(function() {
     suite = new Suite('Suite', 'root');
-    runner = new Runner(suite);
+    runner = new Runner(suite, {cleanReferencesAfterRun: true});
+    runner.checkLeaks = true;
     sandbox = sinon.createSandbox();
   });
 
@@ -118,7 +126,7 @@ describe('Runner', function() {
       global.foo = 'bar';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', "global leak detected: 'foo'");
+        expect(_err, 'to have message', "global leak(s) detected: 'foo'");
         delete global.foo;
         done();
       });
@@ -146,7 +154,11 @@ describe('Runner', function() {
         return;
       }
       // verify that the prop isn't enumerable
-      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', false);
+      expect(
+        Object.prototype.propertyIsEnumerable.call(global, 'XMLHttpRequest'),
+        'to be',
+        false
+      );
 
       // create a new runner and keep a reference to the test.
       var test = new Test('im a test about bears', noop);
@@ -155,7 +167,11 @@ describe('Runner', function() {
 
       // make the prop enumerable again.
       global.XMLHttpRequest = noop;
-      expect(global.propertyIsEnumerable('XMLHttpRequest'), 'to be', true);
+      expect(
+        Object.prototype.propertyIsEnumerable.call(global, 'XMLHttpRequest'),
+        'to be',
+        true
+      );
 
       // verify the test hasn't failed.
       newRunner.checkGlobals(test);
@@ -172,7 +188,7 @@ describe('Runner', function() {
       global.bar = 'baz';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test, 'to be', test);
-        expect(_err, 'to have message', "global leaks detected: 'foo', 'bar'");
+        expect(_err.message, 'to be', "global leak(s) detected: 'foo', 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -206,7 +222,7 @@ describe('Runner', function() {
       global.bar = 'detect-me';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'im a test about lions');
-        expect(_err, 'to have message', "global leak detected: 'bar'");
+        expect(_err, 'to have message', "global leak(s) detected: 'bar'");
         delete global.foo;
         delete global.bar;
         done();
@@ -218,7 +234,7 @@ describe('Runner', function() {
       global.derp = 'bar';
       runner.on(EVENT_TEST_FAIL, function(_test, _err) {
         expect(_test.title, 'to be', 'herp');
-        expect(_err, 'to have message', "global leak detected: 'derp'");
+        expect(_err, 'to have message', "global leak(s) detected: 'derp'");
         delete global.derp;
         done();
       });
@@ -240,8 +256,8 @@ describe('Runner', function() {
     });
   });
 
-  describe('.fail(test, err)', function() {
-    it('should increment .failures', function() {
+  describe('fail()', function() {
+    it('should increment `Runner#failures`', function() {
       expect(runner.failures, 'to be', 0);
       runner.fail(new Test('one', noop), {});
       expect(runner.failures, 'to be', 1);
@@ -249,7 +265,7 @@ describe('Runner', function() {
       expect(runner.failures, 'to be', 2);
     });
 
-    it('should set test.state to "failed"', function() {
+    it('should set `Test#state` to "failed"', function() {
       var test = new Test('some test', noop);
       runner.fail(test, 'some error');
       expect(test.state, 'to be', STATE_FAILED);
@@ -361,6 +377,47 @@ describe('Runner', function() {
       runner.fail(test, new Error());
       expect(runner.failures, 'to be', 0);
     });
+
+    describe('when Runner has stopped', function() {
+      beforeEach(function() {
+        runner.state = STATE_STOPPED;
+      });
+
+      describe('when test is not pending', function() {
+        describe('when error is the "multiple done" variety', function() {
+          it('should throw the "multiple done" error', function() {
+            var test = new Test('test', function() {});
+            suite.addTest(test);
+            var err = new Error();
+            err.code = errors.constants.MULTIPLE_DONE;
+            expect(
+              function() {
+                runner.fail(test, err);
+              },
+              'to throw',
+              err
+            );
+          });
+        });
+
+        describe('when error is not of the "multiple done" variety', function() {
+          it('should throw a "fatal" error', function() {
+            var test = new Test('test', function() {});
+            suite.addTest(test);
+            var err = new Error();
+            expect(
+              function() {
+                runner.fail(test, err);
+              },
+              'to throw',
+              {
+                code: errors.constants.FATAL
+              }
+            );
+          });
+        });
+      });
+    });
   });
 
   describe('.failHook(hook, err)', function() {
@@ -405,10 +462,14 @@ describe('Runner', function() {
       hook.parent = suite;
       var err = new Error('error');
       suite.bail(false);
-      runner.on(EVENT_RUN_END, function() {
-        throw new Error('"end" was emit, but the bail is false');
-      });
-      runner.failHook(hook, err);
+      expect(
+        function() {
+          runner.failHook(hook, err);
+        },
+        'not to emit from',
+        hook,
+        EVENT_RUN_END
+      );
       done();
     });
   });
@@ -440,6 +501,95 @@ describe('Runner', function() {
 
         done();
       });
+    });
+    // karma-mocha is inexplicably doing this with a Hook
+    it('should not throw an exception if something emits EVENT_TEST_END with a non-Test object', function() {
+      expect(function() {
+        runner.emit(EVENT_TEST_END, {});
+      }, 'not to throw');
+    });
+
+    it('should clean references after a run', function() {
+      runner = new Runner(suite, {delay: false, cleanReferencesAfterRun: true});
+      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      runner.run();
+      runner.emit(EVENT_SUITE_END, suite);
+      expect(cleanReferencesStub, 'was called once');
+    });
+
+    it('should not clean references after a run when `cleanReferencesAfterRun` is `false`', function() {
+      runner = new Runner(suite, {
+        delay: false,
+        cleanReferencesAfterRun: false
+      });
+      var cleanReferencesStub = sandbox.stub(suite, 'cleanReferences');
+      runner.run();
+      runner.emit(EVENT_SUITE_END, suite);
+      expect(cleanReferencesStub, 'was not called');
+    });
+
+    it('should not leak `Process.uncaughtException` listeners', function(done) {
+      var normalUncaughtExceptionListenerCount = process.listenerCount(
+        'uncaughtException'
+      );
+
+      runner.run();
+      runner.run();
+      runner.run();
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount + 1
+      );
+      done();
+    });
+
+    afterEach(function() {
+      runner.dispose();
+    });
+  });
+
+  describe('.dispose', function() {
+    it('should remove all listeners from itself', function() {
+      runner.on('disposeShouldRemoveThis', noop);
+      runner.dispose();
+      expect(runner.listenerCount('disposeShouldRemoveThis'), 'to be', 0);
+    });
+
+    it('should remove "error" listeners from a test', function() {
+      var fn = sandbox.stub();
+      runner.test = new Test('test for dispose', fn);
+      runner.runTest(noop);
+      // sanity check
+      expect(runner.test.listenerCount('error'), 'to be', 1);
+      runner.dispose();
+      expect(runner.test.listenerCount('error'), 'to be', 0);
+    });
+
+    it('should remove "uncaughtException" listeners from the process', function() {
+      var normalUncaughtExceptionListenerCount = process.listenerCount(
+        'uncaughtException'
+      );
+      runner.run(noop);
+      // sanity check
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount + 1
+      );
+      runner.dispose();
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount
+      );
+    });
+  });
+
+  describe('.runTest(fn)', function() {
+    it('should return when no tests to run', function() {
+      runner.test = undefined;
+      expect(runner.runTest(noop), 'to be undefined');
     });
   });
 
@@ -684,9 +834,35 @@ describe('Runner', function() {
     });
   });
 
+  describe('_uncaught()', function() {
+    describe('when called with a non-Runner context', function() {
+      it('should throw', function() {
+        expect(runner._uncaught.bind({}), 'to throw', {
+          code: errors.constants.FATAL
+        });
+      });
+    });
+  });
+
   describe('uncaught()', function() {
     beforeEach(function() {
       sandbox.stub(runner, 'fail');
+    });
+
+    describe('when allow-uncaught is set to true', function() {
+      it('should propagate error and throw', function() {
+        if (process.browser) this.skip();
+
+        var err = new Error('should rethrow err');
+        runner.allowUncaught = true;
+        expect(
+          function() {
+            runner.uncaught(err);
+          },
+          'to throw',
+          'should rethrow err'
+        );
+      });
     });
 
     describe('when provided an object argument', function() {
@@ -709,6 +885,13 @@ describe('Runner', function() {
               uncaught: true
             })
           ]).and('was called once');
+        });
+      });
+
+      describe('when argument is a Pending', function() {
+        it('should ignore argument and return', function() {
+          var err = new Pending();
+          expect(runner.uncaught(err), 'to be undefined');
         });
       });
 
@@ -740,9 +923,9 @@ describe('Runner', function() {
             ]).and('was called once');
           });
 
-          describe('when Runner has already started', function() {
+          describe('when Runner is RUNNING', function() {
             beforeEach(function() {
-              runner.started = true;
+              runner.state = STATE_RUNNING;
             });
 
             it('should not emit start/end events', function() {
@@ -757,9 +940,9 @@ describe('Runner', function() {
             });
           });
 
-          describe('when Runner has not already started', function() {
+          describe('when Runner is IDLE', function() {
             beforeEach(function() {
-              runner.started = false;
+              runner.state = STATE_IDLE;
             });
 
             it('should emit start/end events for the benefit of reporters', function() {
@@ -773,6 +956,31 @@ describe('Runner', function() {
               ).and('to emit from', runner, 'end');
             });
           });
+
+          describe('when Runner is STOPPED', function() {
+            beforeEach(function() {
+              runner.state = STATE_STOPPED;
+            });
+
+            it('should not emit start/end events, since this presumably would have already happened', function() {
+              expect(
+                function() {
+                  try {
+                    runner.uncaught(err);
+                  } catch (ignored) {}
+                },
+                'not to emit from',
+                runner,
+                'start'
+              ).and('not to emit from', runner, 'end');
+            });
+
+            it('should throw', function() {
+              expect(function() {
+                runner.uncaught(err);
+              }, 'to throw');
+            });
+          });
         });
 
         describe('when a Runnable is running or has run', function() {
@@ -782,14 +990,10 @@ describe('Runner', function() {
             runnable.parent = runner.suite;
             sandbox.stub(runnable, 'clearTimeout');
             runner.currentRunnable = runnable;
-            runner.nextSuite = sandbox.spy();
-          });
-
-          afterEach(function() {
-            delete runner.nextSuite;
           });
 
           it('should clear any pending timeouts', function() {
+            runnable.callback = sandbox.fake();
             runner.uncaught(err);
             expect(runnable.clearTimeout, 'was called times', 1);
           });
@@ -810,9 +1014,9 @@ describe('Runner', function() {
               sandbox.stub(runnable, 'isPending').returns(true);
             });
 
-            it('should not attempt to fail', function() {
+            it('should attempt to fail', function() {
               runner.uncaught(err);
-              expect(runner.fail, 'was not called');
+              expect(runner.fail, 'was called once');
             });
           });
 
@@ -830,50 +1034,45 @@ describe('Runner', function() {
               ]).and('was called once');
             });
 
-            it('should notify run has ended', function() {
+            it('should abort the runner without emitting end event', function() {
               expect(
                 function() {
                   runner.uncaught(err);
                 },
-                'to emit from',
+                'not to emit from',
                 runner,
                 'end'
               );
+              expect(runner._abort, 'to be', true);
             });
           });
 
-          describe('when the current Runnable is currently running', function() {
+          describe('when the current Runnable is still running', function() {
             describe('when the current Runnable is a Test', function() {
               beforeEach(function() {
                 runnable = new Test('goomba', noop);
                 runnable.parent = runner.suite;
                 runner.currentRunnable = runnable;
-                sandbox.stub(runner, 'hookUp');
-                runner.next = sandbox.spy();
+                runnable.callback = sandbox.fake();
               });
 
-              afterEach(function() {
-                delete runner.next;
-              });
-
-              it('should fail with the current Runnable and the error', function() {
+              it('should run callback(err) to handle failing and hooks', function() {
                 runner.uncaught(err);
 
-                expect(runner.fail, 'to have all calls satisfying', [
-                  expect.it('to be', runnable),
+                expect(runner.fail, 'was not called');
+                expect(runnable.callback, 'to have all calls satisfying', [
                   err
                 ]).and('was called once');
               });
 
-              it('should notify test has ended', function() {
+              it('should not notify test has ended', function() {
                 expect(
                   function() {
                     runner.uncaught(err);
                   },
-                  'to emit from',
+                  'not to emit from',
                   runner,
-                  'test end',
-                  runnable
+                  EVENT_TEST_END
                 );
               });
 
@@ -884,98 +1083,38 @@ describe('Runner', function() {
                   },
                   'not to emit from',
                   runner,
-                  'end'
-                );
-              });
-
-              it('should call any remaining "after each" hooks', function() {
-                runner.uncaught(err);
-                expect(runner.hookUp, 'to have all calls satisfying', [
-                  'afterEach',
-                  expect.it('to be', runner.next)
-                ]).and('was called once');
-              });
-            });
-
-            describe('when the current Runnable is a "before all" or "after all" hook', function() {
-              beforeEach(function() {
-                runnable = new Hook('', noop);
-                runnable.parent = runner.suite;
-                runner.currentRunnable = runnable;
-              });
-
-              it('should continue to the next suite', function() {
-                runner.uncaught(err);
-                expect(runner.nextSuite, 'to have all calls satisfying', [
-                  runner.suite
-                ]).and('was called once');
-              });
-
-              it('should not notify run has ended', function() {
-                expect(
-                  function() {
-                    runner.uncaught(err);
-                  },
-                  'not to emit from',
-                  runner,
-                  'end'
+                  EVENT_RUN_END
                 );
               });
             });
 
-            describe('when the current Runnable is a "before each" hook', function() {
+            describe('when the current Runnable is a Hook', function() {
               beforeEach(function() {
-                runnable = new Hook('before each', noop);
+                runnable = new Hook();
                 runnable.parent = runner.suite;
                 runner.currentRunnable = runnable;
-                runner.hookErr = sandbox.spy();
+                runnable.callback = sandbox.fake();
               });
 
-              afterEach(function() {
-                delete runner.hookErr;
-              });
-
-              it('should associate its failure with the current test', function() {
+              it('should run callback(err) to handle failing hook pattern', function() {
                 runner.uncaught(err);
-                expect(runner.hookErr, 'to have all calls satisfying', [
-                  err,
-                  runner.suite,
-                  false
+
+                expect(runner.fail, 'was not called');
+                expect(runnable.callback, 'to have all calls satisfying', [
+                  err
                 ]).and('was called once');
               });
 
-              it('should not notify run has ended', function() {
+              it('should not notify test has ended', function() {
                 expect(
                   function() {
                     runner.uncaught(err);
                   },
                   'not to emit from',
                   runner,
-                  'end'
+                  EVENT_TEST_END
                 );
               });
-            });
-
-            describe('when the current Runnable is an "after each" hook', function() {
-              beforeEach(function() {
-                runnable = new Hook('after each', noop);
-                runnable.parent = runner.suite;
-                runner.currentRunnable = runnable;
-                runner.hookErr = sandbox.spy();
-              });
-
-              afterEach(function() {
-                delete runner.hookErr;
-              });
-
-              it('should associate its failure with the current test', function() {
-                runner.uncaught(err);
-                expect(runner.hookErr, 'to have all calls satisfying', [
-                  err,
-                  runner.suite,
-                  true
-                ]).and('was called once');
-              });
 
               it('should not notify run has ended', function() {
                 expect(
@@ -984,7 +1123,7 @@ describe('Runner', function() {
                   },
                   'not to emit from',
                   runner,
-                  'end'
+                  EVENT_RUN_END
                 );
               });
             });

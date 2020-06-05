@@ -17,13 +17,9 @@ describe('Base reporter', function() {
 
   function list(tests) {
     try {
-      try {
-        Base.list(tests);
-      } finally {
-        sandbox.restore();
-      }
-    } catch (err) {
-      throw err; // Rethrow
+      Base.list(tests);
+    } finally {
+      sandbox.restore();
     }
   }
 
@@ -31,13 +27,9 @@ describe('Base reporter', function() {
     var diffStr;
 
     try {
-      try {
-        diffStr = Base.generateDiff(actual, expected);
-      } finally {
-        sandbox.restore();
-      }
-    } catch (err) {
-      throw err; // Rethrow
+      diffStr = Base.generateDiff(actual, expected);
+    } finally {
+      sandbox.restore();
     }
 
     return diffStr;
@@ -415,6 +407,22 @@ describe('Base reporter', function() {
 
     var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
+  });
+
+  it('should list multiple Errors per test', function() {
+    var err = new Error('First Error');
+    err.multiple = [new Error('Second Error - same test')];
+    var test = makeTest(err);
+
+    list([test, test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(
+      errOut,
+      'to contain',
+      'Error: First Error',
+      'Error: Second Error - same test'
+    );
   });
 
   describe('when reporter output immune to user test changes', function() {

@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
 const os = require('os');
 const baseBundleDirpath = path.join(__dirname, '.karma');
 
@@ -31,10 +30,18 @@ module.exports = config => {
     browserify: {
       debug: true,
       configure: function configure(b) {
-        b.ignore('glob')
+        b.ignore('chokidar')
           .ignore('fs')
+          .ignore('glob')
           .ignore('path')
           .ignore('supports-color')
+          .ignore('./lib/esm-utils.js')
+          .ignore('./lib/cli/*.js')
+          .ignore('./lib/nodejs/serializer.js')
+          .ignore('./lib/nodejs/worker.js')
+          .ignore('./lib/nodejs/buffered-worker-pool.js')
+          .ignore('./lib/nodejs/parallel-buffered-runner.js')
+          .ignore('./lib/nodejs/reporters/parallel-buffered.js')
           .on('bundled', (err, content) => {
             if (err) {
               throw err;
@@ -108,7 +115,7 @@ module.exports = config => {
         console.error('No SauceLabs credentials present');
       }
     }
-    mkdirp.sync(bundleDirpath);
+    fs.mkdirSync(bundleDirpath, {recursive: true});
   } else {
     console.error('CI mode disabled');
   }

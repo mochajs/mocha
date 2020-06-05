@@ -25,6 +25,7 @@ describe('a test that throws', function() {
   });
 
   afterEach(function() {
+    process.removeAllListeners('uncaughtException');
     uncaughtHandlers.forEach(function(listener) {
       process.on('uncaughtException', listener);
     });

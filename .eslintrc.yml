@@ -3,42 +3,63 @@ extends:
   - semistandard
   - plugin:prettier/recommended
 env:
-  node: yes
-  browser: yes
+  node: true
+  browser: true
 parserOptions:
   ecmaVersion: 5
   ecmaFeatures:
-    globalReturn: no
-    jsx: no
+    jsx: false
   sourceType: script
 rules:
   strict:
     - error
     - safe
+  # disallow Object.assign
+  no-restricted-properties:
+    - error
+    - object: 'Object'
+      property: 'assign'
 overrides:
   - files:
-      - scripts/**/*.js
-      - package-scripts.js
-      - karma.conf.js
-      - .wallaby.js
-      - .eleventy.js
-      - bin/*
-      - lib/cli/**/*.js
-      - test/node-unit/**/*.js
-      - test/integration/options/watch.spec.js
-      - test/integration/helpers.js
-      - lib/growl.js
-    parserOptions:
-      ecmaVersion: 6
+      - 'docs/js/**/*.js'
     env:
-      browser: no
-
+      node: false
+  - files:
+      - '.eleventy.js'
+      - '.wallaby.js'
+      - 'package-scripts.js'
+      - 'karma.conf.js'
+      - 'bin/*'
+      - 'docs/_data/**/*.js'
+      - 'lib/cli/**/*.js'
+      - 'lib/nodejs/**/*.js'
+      - 'scripts/**/*.js'
+      - 'test/integration/helpers.js'
+      - 'test/integration/options/watch.spec.js'
+      - 'test/node-unit/**/*.js'
+    parserOptions:
+      ecmaVersion: 2018
+    env:
+      browser: false
+    rules:
+      no-restricted-properties:
+        - off
+        - object: 'Object'
+          property: 'assign'
+  - files:
+      - esm-utils.js
+    parserOptions:
+      ecmaVersion: 2018
+      sourceType: module
+    parser: babel-eslint
+    env:
+      browser: false
   - files:
       - test/**/*.{js,mjs}
     env:
-      mocha: yes
+      mocha: true
     globals:
-      expect: no
+      expect: readonly
   - files:
       - bin/*
       - lib/**/*.js
@@ -73,11 +94,10 @@ overrides:
         # disallow property access of `global.<timer>.*`
         - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
           message: *GH-237
-
   - files:
       - test/**/*.mjs
     parserOptions:
-      ecmaVersion: 6
+      ecmaVersion: 2018
       sourceType: module
 
   - files:

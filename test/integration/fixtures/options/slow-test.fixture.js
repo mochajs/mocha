@@ -5,7 +5,7 @@ describe('a suite', function() {
     setTimeout(done, 500);
   });
 
-  it('should succeed in 1.5s', function(done) {
-    setTimeout(done, 1500);
+  it('should succeed in 1.1s', function(done) {
+    setTimeout(done, 1100);
   });
 });

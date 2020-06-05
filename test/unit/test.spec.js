@@ -1,15 +1,29 @@
 'use strict';
 
+var sinon = require('sinon');
 var mocha = require('../../lib/mocha');
 var Test = mocha.Test;
+var Runnable = mocha.Runnable;
 
 describe('Test', function() {
+  /**
+   * @type {sinon.SinonSandbox}
+   */
+  var sandbox;
+
+  beforeEach(function() {
+    sandbox = sinon.createSandbox();
+  });
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   describe('.clone()', function() {
     beforeEach(function() {
       this._test = new Test('To be cloned', function() {});
       this._test._timeout = 3043;
       this._test._slow = 101;
-      this._test._enableTimeouts = true;
       this._test._retries = 3;
       this._test._currentRetry = 1;
       this._test._allowedGlobals = ['foo'];
@@ -29,16 +43,18 @@ describe('Test', function() {
       expect(this._test.clone().slow(), 'to be', 101);
     });
 
-    it('should copy the enableTimeouts value', function() {
-      expect(this._test.clone().enableTimeouts(), 'to be', true);
-    });
-
     it('should copy the retries value', function() {
       expect(this._test.clone().retries(), 'to be', 3);
     });
 
     it('should copy the currentRetry value', function() {
       expect(this._test.clone().currentRetry(), 'to be', 1);
+    });
+
+    it('should add/keep the retriedTest value', function() {
+      var clone1 = this._test.clone();
+      expect(clone1.retriedTest(), 'to be', this._test);
+      expect(clone1.clone().retriedTest(), 'to be', this._test);
     });
 
     it('should copy the globals value', function() {
@@ -51,6 +67,24 @@ describe('Test', function() {
 
     it('should copy the file value', function() {
       expect(this._test.clone().file, 'to be', 'bar');
+    });
+  });
+
+  describe('.reset()', function() {
+    beforeEach(function() {
+      this._test = new Test('Test to be reset', function() {});
+    });
+
+    it('should reset the run state', function() {
+      this._test.pending = true;
+      this._test.reset();
+      expect(this._test.pending, 'to be', false);
+    });
+
+    it('should call Runnable.reset', function() {
+      var runnableResetStub = sandbox.stub(Runnable.prototype, 'reset');
+      this._test.reset();
+      expect(runnableResetStub, 'was called once');
     });
   });
 
@@ -75,6 +109,31 @@ describe('Test', function() {
         }
       };
       expect(this._test.isPending(), 'to be', true);
+    });
+  });
+
+  describe('.markOnly()', function() {
+    var sandbox;
+
+    beforeEach(function() {
+      sandbox = sinon.createSandbox();
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
+    it('should call appendOnlyTest on parent', function() {
+      var test = new Test('foo');
+      var spy = sandbox.spy();
+      test.parent = {
+        appendOnlyTest: spy
+      };
+      test.markOnly();
+
+      expect(spy, 'to have a call exhaustively satisfying', [test]).and(
+        'was called once'
+      );
     });
   });
 });

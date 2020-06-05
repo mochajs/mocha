@@ -10,7 +10,7 @@
  * @private
  */
 
-const {deprecate, warn} = require('../lib/utils');
+const {deprecate} = require('../lib/utils');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -20,7 +20,6 @@ const {
 const unparse = require('yargs-unparser');
 const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
-const nodeEnv = require('node-environment-flags');
 
 const mochaArgs = {};
 const nodeArgs = {};
@@ -35,7 +34,7 @@ debug('loaded opts', opts);
  */
 const disableTimeouts = value => {
   if (impliesNoTimeouts(value)) {
-    debug(`option "${value}" disabled timeouts`);
+    debug('option %s disabled timeouts', value);
     mochaArgs.timeout = 0;
     delete mochaArgs.timeouts;
     delete mochaArgs.t;
@@ -55,58 +54,28 @@ const trimV8Option = value =>
 Object.keys(opts).forEach(opt => {
   if (isNodeFlag(opt)) {
     nodeArgs[trimV8Option(opt)] = opts[opt];
-    disableTimeouts(opt);
   } else {
     mochaArgs[opt] = opts[opt];
   }
 });
 
+// disable 'timeout' for debugFlags
+Object.keys(nodeArgs).forEach(opt => disableTimeouts(opt));
+
 // Native debugger handling
 // see https://nodejs.org/api/debugger.html#debugger_debugger
-// look for 'debug' or 'inspect' that would launch this debugger,
+// look for 'inspect' or 'debug' that would launch this debugger,
 // remove it from Mocha's opts and prepend it to Node's opts.
-// also coerce depending on Node.js version.
 // A deprecation warning will be printed by node, if applicable.
 // (mochaArgs._ are "positional" arguments, not prefixed with - or --)
-if (/^(debug|inspect)$/.test(mochaArgs._[0])) {
-  const command = mochaArgs._.shift();
-  disableTimeouts(command);
-  // don't conflict with inspector
-  ['debug', 'inspect', 'debug-brk', 'inspect-brk']
-    .filter(opt => opt in nodeArgs || opt in mochaArgs)
-    .forEach(opt => {
-      warn(`command "${command}" provided; --${opt} ignored`);
-      delete nodeArgs[opt];
-      delete mochaArgs[opt];
-    });
-  nodeArgs._ = [
-    parseInt(
-      process.version
-        .slice(1)
-        .split('.')
-        .shift(),
-      10
-    ) >= 8
-      ? 'inspect'
-      : 'debug'
-  ];
+if (mochaArgs._) {
+  const i = mochaArgs._.findIndex(val => val === 'inspect' || val === 'debug');
+  if (i > -1) {
+    const [command] = mochaArgs._.splice(i, 1);
+    disableTimeouts('inspect');
+    nodeArgs._ = [command];
+  }
 }
-
-// allow --debug to invoke --inspect on Node.js v8 or newer.
-['debug', 'debug-brk']
-  .filter(opt => opt in nodeArgs && !nodeEnv.has(opt))
-  .forEach(opt => {
-    const newOpt = opt === 'debug' ? 'inspect' : 'inspect-brk';
-    warn(
-      `"--${opt}" is not available in Node.js ${
-        process.version
-      }; use "--${newOpt}" instead.`
-    );
-    nodeArgs[newOpt] = nodeArgs[opt];
-    mochaArgs.timeout = false;
-    debug(`--${opt} -> ${newOpt}`);
-    delete nodeArgs[opt];
-  });
 
 // historical
 if (nodeArgs.gc) {
@@ -139,7 +108,11 @@ if (Object.keys(nodeArgs).length) {
     unparse(mochaArgs, {alias: aliases})
   );
 
-  debug(`exec ${process.execPath} w/ args:`, args);
+  debug(
+    'forking child process via command: %s %s',
+    process.execPath,
+    args.join(' ')
+  );
 
   const proc = spawn(process.execPath, args, {
     stdio: 'inherit'
@@ -157,9 +130,25 @@ if (Object.keys(nodeArgs).length) {
 
   // terminate children.
   process.on('SIGINT', () => {
-    proc.kill('SIGINT'); // calls runner.abort()
-    proc.kill('SIGTERM'); // if that didn't work, we're probably in an infinite loop, so make it die.
+    // XXX: a previous comment said this would abort the runner, but I can't see that it does
+    // anything with the default runner.
+    debug('main process caught SIGINT');
+    proc.kill('SIGINT');
+    // if running in parallel mode, we will have a proper SIGINT handler, so the below won't
+    // be needed.
+    if (!args.parallel || args.jobs < 2) {
+      // win32 does not support SIGTERM, so use next best thing.
+      if (require('os').platform() === 'win32') {
+        proc.kill('SIGKILL');
+      } else {
+        // using SIGKILL won't cleanly close the output streams, which can result
+        // in cut-off text or a befouled terminal.
+        debug('sending SIGTERM to child process');
+        proc.kill('SIGTERM');
+      }
+    }
   });
 } else {
+  debug('running Mocha in-process');
   require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
 }

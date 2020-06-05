@@ -4,24 +4,23 @@ var Mocha = require('../../lib/mocha');
 var Runnable = Mocha.Runnable;
 var Suite = Mocha.Suite;
 var sinon = require('sinon');
-var Pending = require('../../lib/pending');
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
   describe('#timeout(ms)', function() {
-    var MIN_TIMEOUT = 0;
+    var DISABLED_TIMEOUTS = 0;
     var MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
 
     describe('when value is less than lower bound', function() {
       it('should clamp to lower bound given numeric', function() {
         var run = new Runnable();
         run.timeout(-1);
-        expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
       it('should clamp to lower bound given timestamp', function() {
         var run = new Runnable();
         run.timeout('-1 ms');
-        expect(run.timeout(), 'to be', MIN_TIMEOUT);
+        expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
     });
 
@@ -30,25 +29,17 @@ describe('Runnable(title, fn)', function() {
 
       beforeEach(function() {
         run = new Runnable();
-        run.timeout(MIN_TIMEOUT);
+        run.timeout(DISABLED_TIMEOUTS);
       });
       describe('given numeric value', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MIN_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the timeout value to disabled', function() {
+          expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
         });
       });
 
       describe('given string timestamp', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MIN_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the timeout value to disabled', function() {
+          expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
         });
       });
     });
@@ -66,19 +57,11 @@ describe('Runnable(title, fn)', function() {
         it('should set the timeout value', function() {
           expect(run.timeout(), 'to be', timeout);
         });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be true');
-        });
       });
 
       describe('given string timestamp', function() {
         it('should set the timeout value', function() {
           expect(run.timeout(), 'to be', timeout);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be true');
         });
       });
     });
@@ -91,22 +74,8 @@ describe('Runnable(title, fn)', function() {
         run.timeout(MAX_TIMEOUT);
       });
       describe('given numeric value', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
-        });
-      });
-
-      describe('given string timestamp', function() {
-        it('should set the timeout value', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should disable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
     });
@@ -121,32 +90,10 @@ describe('Runnable(title, fn)', function() {
       });
 
       describe('given numeric value', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
+        it('should set the disabled timeout value', function() {
+          expect(run.timeout(), 'to be', 0);
         });
       });
-
-      describe('given string timestamp', function() {
-        it('should clamp the value to max timeout', function() {
-          expect(run.timeout(), 'to be', MAX_TIMEOUT);
-        });
-
-        it('should enable timeouts', function() {
-          expect(run.enableTimeouts(), 'to be false');
-        });
-      });
-    });
-  });
-
-  describe('#enableTimeouts(enabled)', function() {
-    it('should set enabled', function() {
-      var run = new Runnable();
-      run.enableTimeouts(false);
-      expect(run.enableTimeouts(), 'to be false');
     });
   });
 
@@ -177,6 +124,29 @@ describe('Runnable(title, fn)', function() {
         run.slow('1s');
         expect(run.slow(), 'to be', 1000);
       });
+    });
+  });
+
+  describe('#reset', function() {
+    var run;
+
+    beforeEach(function() {
+      run = new Runnable();
+    });
+
+    it('should reset current run state', function() {
+      run.timedOut = true;
+      run._currentRetry = 5;
+      run.pending = true;
+      run.err = new Error();
+      run.state = 'error';
+
+      run.reset();
+      expect(run.timedOut, 'to be false');
+      expect(run._currentRetry, 'to be', 0);
+      expect(run.pending, 'to be false');
+      expect(run.err, 'to be undefined');
+      expect(run.state, 'to be undefined');
     });
   });
 
@@ -315,7 +285,7 @@ describe('Runnable(title, fn)', function() {
           }, 2);
         });
         runnable.timeout(1);
-        runnable.enableTimeouts(false);
+        runnable.timeout(0);
         runnable.run(function(err) {
           expect(err, 'to be falsy');
           done();
@@ -355,7 +325,11 @@ describe('Runnable(title, fn)', function() {
             runnable.on('error', errorSpy).on('error', function(err) {
               process.nextTick(function() {
                 expect(errorSpy, 'was called times', 1);
-                expect(err.message, 'to be', 'done() called multiple times');
+                expect(
+                  err.message,
+                  'to match',
+                  /done\(\) called multiple times/
+                );
                 expect(callbackSpy, 'was called times', 1);
                 done();
               });
@@ -385,8 +359,8 @@ describe('Runnable(title, fn)', function() {
                 expect(errorSpy, 'was called times', 1);
                 expect(
                   err.message,
-                  'to be',
-                  "fail (and Mocha's done() called multiple times)"
+                  'to match',
+                  /done\(\) called multiple times.+received error: Error: fail/
                 );
                 expect(callbackSpy, 'was called times', 1);
                 done();
@@ -644,13 +618,14 @@ describe('Runnable(title, fn)', function() {
     });
 
     describe('if async', function() {
-      it('this.skip() should call callback with Pending', function(done) {
+      it('this.skip() should set runnable to pending', function(done) {
         var runnable = new Runnable('foo', function(done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
         });
         runnable.run(function(err) {
-          expect(err.constructor, 'to be', Pending);
+          expect(err, 'to be undefined');
+          expect(runnable.pending, 'to be true');
           done();
         });
       });
@@ -663,8 +638,24 @@ describe('Runnable(title, fn)', function() {
           aborted = false;
         });
         runnable.run(function() {
-          expect(aborted, 'to be true');
-          done();
+          process.nextTick(function() {
+            expect(aborted, 'to be true');
+            done();
+          });
+        });
+      });
+    });
+
+    describe('when fn is not a function', function() {
+      it('should throw an error', function() {
+        var runnable = new Runnable('foo', 4);
+
+        runnable.run(function(err) {
+          expect(
+            err.message,
+            'to be',
+            'A runnable must be passed a function as its second argument.'
+          );
         });
       });
     });
@@ -705,7 +696,7 @@ describe('Runnable(title, fn)', function() {
       var runnable = new Runnable('foo', function() {});
       runnable.timeout(10);
       runnable.resetTimeout();
-      runnable.enableTimeouts(false);
+      runnable.timeout(0);
       setTimeout(function() {
         expect(runnable.timedOut, 'to be', false);
         done();

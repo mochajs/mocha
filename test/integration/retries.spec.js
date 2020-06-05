@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 var helpers = require('./helpers');
+var runJSON = helpers.runMochaJSON;
 var args = [];
 var bang = require('../../lib/reporters/base').symbols.bang;
 
@@ -59,25 +60,22 @@ describe('retries', function() {
   });
 
   it('should exit early if test passes', function(done) {
-    helpers.runMochaJSON('retries/early-pass.fixture.js', args, function(
-      err,
-      res
-    ) {
+    runJSON('retries/early-pass.fixture.js', args, function(err, res) {
       if (err) {
-        done(err);
-        return;
+        return done(err);
       }
-      assert.strictEqual(res.stats.passes, 1);
-      assert.strictEqual(res.stats.failures, 0);
-      assert.strictEqual(res.tests[0].currentRetry, 1);
-      assert.strictEqual(res.stats.tests, 1);
-      assert.strictEqual(res.code, 0);
+
+      expect(res, 'to have passed')
+        .and('to have passed test count', 2)
+        .and('to have failed test count', 0)
+        .and('to have retried test', 'should pass after 1 retry', 1);
+
       done();
     });
   });
 
   it('should let test override', function(done) {
-    helpers.runMochaJSON('retries/nested.fixture.js', args, function(err, res) {
+    runJSON('retries/nested.fixture.js', args, function(err, res) {
       if (err) {
         done(err);
         return;

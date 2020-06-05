@@ -20,11 +20,13 @@ describe('JSON Stream reporter', function() {
   var runReporter = makeRunReporter(JSONStream);
   var expectedTitle = 'some title';
   var expectedFullTitle = 'full title';
+  var expectedFile = 'someTest.spec.js';
   var expectedDuration = 1000;
   var currentRetry = 1;
   var expectedTest = makeExpectedTest(
     expectedTitle,
     expectedFullTitle,
+    expectedFile,
     expectedDuration,
     currentRetry
   );
@@ -70,6 +72,8 @@ describe('JSON Stream reporter', function() {
             dQuote(expectedTitle) +
             ',"fullTitle":' +
             dQuote(expectedFullTitle) +
+            ',"file":' +
+            dQuote(expectedFile) +
             ',"duration":' +
             expectedDuration +
             ',"currentRetry":' +
@@ -101,6 +105,8 @@ describe('JSON Stream reporter', function() {
               dQuote(expectedTitle) +
               ',"fullTitle":' +
               dQuote(expectedFullTitle) +
+              ',"file":' +
+              dQuote(expectedFile) +
               ',"duration":' +
               expectedDuration +
               ',"currentRetry":' +
@@ -135,6 +141,8 @@ describe('JSON Stream reporter', function() {
               dQuote(expectedTitle) +
               ',"fullTitle":' +
               dQuote(expectedFullTitle) +
+              ',"file":' +
+              dQuote(expectedFile) +
               ',"duration":' +
               expectedDuration +
               ',"currentRetry":' +

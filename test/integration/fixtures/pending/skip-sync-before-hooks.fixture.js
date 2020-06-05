@@ -1,57 +1,69 @@
 'use strict';
+var assert = require('assert');
 
-describe('outer suite', function () {
-
-  before(function () {
-    console.log('outer before');
+describe('outer suite', function() {
+  var runOrder = [];
+  before(function() {
+    runOrder.push('outer before');
   });
 
-  it('should run this test', function () { });
+  it('should run test-1', function() {
+    runOrder.push('should run test-1');
+  });
 
-  describe('inner suite', function () {
-    before(function () {
+  describe('inner suite', function() {
+    before(function() {
+      runOrder.push('inner before');
       this.skip();
     });
 
-    before(function () {
-      console.log('inner before');
+    before(function() {
+      runOrder.push('inner before-2 should not run');
     });
 
-    beforeEach(function () {
-      throw new Error('beforeEach should not run');
+    beforeEach(function() {
+      runOrder.push('beforeEach should not run');
     });
 
-    afterEach(function () {
-      throw new Error('afterEach should not run');
+    afterEach(function() {
+      runOrder.push('afterEach should not run');
     });
 
-    after(function () {
-      console.log('inner after');
+    after(function() {
+      runOrder.push('inner after');
     });
 
-    it('should never run this test', function () {
+    it('should never run this test', function() {
       throw new Error('inner suite test should not run');
     });
 
-    describe('skipped suite', function () {
-      before(function () {
-        console.log('skipped before');
+    describe('skipped suite', function() {
+      before(function() {
+        runOrder.push('skipped suite before should not run');
       });
 
-      it('should never run this test', function () {
+      it('should never run this test', function() {
         throw new Error('skipped suite test should not run');
       });
 
-      after(function () {
-        console.log('skipped after');
+      after(function() {
+        runOrder.push('skipped suite after should not run');
       });
     });
   });
 
-  it('should run this test', function () { });
+  it('should run test-2', function() {
+    runOrder.push('should run test-2');
+  });
 
-  after(function () {
-    console.log('outer after');
-  })
-
+  after(function() {
+    runOrder.push('outer after');
+    assert.deepStrictEqual(runOrder, [
+      'outer before', 
+      'should run test-1', 'should run test-2',
+      'inner before', 'inner after',
+      'outer after'
+    ]);
+    throw new Error('should throw this error');
+  });
 });

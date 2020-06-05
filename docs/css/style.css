@@ -74,32 +74,57 @@ nav.badges a + a {
   margin-left: 3px;
 }
 
-.image-list {
+ul.image-list {
+  overflow: hidden;
+  text-align: center;
+  list-style: none;
+  column-count: 1;
+  padding: 0;
+  margin: 0;
+}
+
+ul.image-list li {
+  border-bottom: none;
+  display: inline-block;
+  margin: 0 4px 0 4px;
+  max-height: 64px;
+  padding: 0;
+  line-height: 0;
+}
+
+ul.image-list li a {
+  display: inline-block;
+}
+
+ul.image-list li img {
+  margin: 0;
+  padding: 0;
+  display: block;
+  max-height: 64px;
+}
+
+ul#backers.image-list li img {
+  width: 32px;
+  height: 32px;
   overflow: hidden;
 }
 
-.image-list a {
-  float: left;
-  margin: 6px;
+.faded-image {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.image-list a img {
-  display: block;
-  height: 64px;
+.faded-image.is-loaded {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s;
 }
 
-.faded-images img {
+.faded-image img {
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.1s;
 }
 
-.faded-images.is-loaded img {
+.faded-image.is-loaded img {
   opacity: 1;
-}
-
-#_backers a img {
-  background: url(/images/backer-background.svg?inline) center center no-repeat;
-  width: 64px;
 }
 
 h2 {
@@ -161,6 +186,13 @@ ul {
   padding: 0 15px;
 }
 
+ul.single-column,
+ul.single-column > li > ul {
+  column-count: 1;
+  margin-top: 0;
+  padding-right: 0;
+}
+
 ul li {
   border-bottom: 1px solid #eee;
   break-inside: avoid;
@@ -169,15 +201,26 @@ ul li {
   padding: 5px 0;
 }
 
+ul.single-column li,
+ul.single-column li > ul > li {
+  list-style: disc;
+  padding: 0;
+  border-bottom: 0;
+}
+
+ul.single-column li > ul > li {
+  list-style: circle;
+}
+
 code {
   font: 14px monaco, monospace;
   line-height: 1.8;
 }
 
-:not(pre)>code {
+:not(pre) > code {
   background-color: #f5f2f0;
   border-radius: 3px;
-  padding: .2em .4em;
+  padding: 0.2em 0.4em;
 }
 
 pre {
@@ -199,32 +242,77 @@ img.screenshot {
   max-width: 100%;
 }
 
-#matomoLogo {
-    display: block; 
-    height: 176px;
+.sponsorship a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsorship a img {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 
 .sponsorship {
-    display: flex; 
-    justify-content: center;
-	margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+  align-items: center;
+}
+
+.sponsorship a {
+  padding: 0 40px;
+  text-decoration: none;
 }
 
 footer {
   background-color: #eee;
   border-top: 1px solid #ddd;
-  padding: 50px 0;
-  text-align: right;
-}
-
-footer div {
+  padding: 50px 30px;
   color: #888;
   font-size: 0.8em;
-  margin-right: 30px;
 }
 
-.last-modified {
+#last-modified {
+  text-align: right;
   font-style: italic;
+  font-size: 0.7em;
+}
+
+#copyright-notice {
+  max-width: 66%;
+}
+
+#external-links {
+  position: relative;
+}
+
+#openjsf-links {
+  margin: 0;
+  padding: 0;
+  box-sizing: initial;
+  columns: initial;
+}
+
+#openjsf-links li {
+  display: inline; /* displays list horizontally */
+  border: none;
+  list-style: none;
+  margin: initial;
+  padding: initial;
+}
+
+/* displays each list item with a "|" between */
+#openjsf-links li + li:before {
+  content: ' | ';
+}
+
+#external-links .netlify-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 
 .dl-inline dt,
@@ -242,6 +330,44 @@ footer div {
   display: block;
 }
 
+blockquote {
+  border-left: 1px solid #eee;
+  padding: 10px;
+}
+
+figure#wallaby-logo {
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+}
+figure#wallaby-logo figcaption {
+  margin-top: 10px;
+  display: block;
+  font-family: 'Open Sans', -apple-system, system-ui, 'Segoe UI', Oxygen, Ubuntu,
+    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 400;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #2c2c2c;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media all and (max-width: 960px) {
+  #copyright-notice {
+    max-width: initial;
+  }
+
+  #openjsf-links {
+    width: 50%;
+    column-count: 2;
+    column-rule: 1px solid #dedede;
+  }
+
+  #openjsf-links li + li:before {
+    content: initial;
+  }
+}
+
 @media all and (max-width: 600px) {
   #tag {
     margin-top: 0;
@@ -257,9 +383,14 @@ footer div {
     margin: 20px -11px;
     padding: 10px;
   }
-}
 
-blockquote {
-  border-left: 1px solid #eee;
-  padding: 10px;
+  /* this list is too long for smaller displays */
+  #openjsf-links {
+    width: 100%;
+    columns: initial;
+  }
+
+  #openjsf-links li {
+    display: block;
+  }
 }

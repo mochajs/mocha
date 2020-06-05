@@ -4,7 +4,6 @@ var EventEmitter = require('events').EventEmitter;
 var fs = require('fs');
 var os = require('os');
 var path = require('path');
-var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var sinon = require('sinon');
 var createStatsCollector = require('../../lib/stats-collector');
@@ -51,12 +50,12 @@ describe('XUnit reporter', function() {
     };
 
     describe('when fileStream can be created', function() {
-      var mkdirpSync;
+      var fsMkdirSync;
       var fsCreateWriteStream;
 
       beforeEach(function() {
         sandbox = sinon.createSandbox();
-        mkdirpSync = sandbox.stub(mkdirp, 'sync');
+        fsMkdirSync = sandbox.stub(fs, 'mkdirSync');
         fsCreateWriteStream = sandbox.stub(fs, 'createWriteStream');
       });
 
@@ -67,7 +66,13 @@ describe('XUnit reporter', function() {
         XUnit.call(fakeThis, runner, options);
 
         var expectedDirectory = path.dirname(expectedOutput);
-        expect(mkdirpSync.calledWith(expectedDirectory), 'to be true');
+        expect(
+          fsMkdirSync.calledWith(expectedDirectory, {
+            recursive: true
+          }),
+          'to be true'
+        );
+
         expect(fsCreateWriteStream.calledWith(expectedOutput), 'to be true');
       });
 
@@ -349,6 +354,42 @@ describe('XUnit reporter', function() {
           expectedStack +
           '</failure></testcase>';
         expect(expectedWrite, 'to be', expectedTag);
+      });
+
+      it('should handle non-string diff values', function() {
+        var runner = new EventEmitter();
+        createStatsCollector(runner);
+        var xunit = new XUnit(runner);
+
+        var expectedTest = {
+          state: STATE_FAILED,
+          title: expectedTitle,
+          parent: {
+            fullTitle: function() {
+              return expectedClassName;
+            }
+          },
+          duration: 1000,
+          err: {
+            actual: 1,
+            expected: 2,
+            message: expectedMessage,
+            stack: expectedStack
+          }
+        };
+
+        sandbox.stub(xunit, 'write').callsFake(function(str) {
+          expectedWrite += str;
+        });
+
+        runner.emit(EVENT_TEST_FAIL, expectedTest, expectedTest.err);
+        runner.emit(EVENT_RUN_END);
+        sandbox.restore();
+
+        var expectedDiff =
+          '\n      + expected - actual\n\n      -1\n      +2\n      ';
+
+        expect(expectedWrite, 'to contain', expectedDiff);
       });
     });
 

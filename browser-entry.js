@@ -53,6 +53,17 @@ process.removeListener = function(e, fn) {
 };
 
 /**
+ * Implements listenerCount for 'uncaughtException'.
+ */
+
+process.listenerCount = function(name) {
+  if (name === 'uncaughtException') {
+    return uncaughtExceptionHandlers.length;
+  }
+  return 0;
+};
+
+/**
  * Implements uncaughtException listener.
  */
 
@@ -60,7 +71,7 @@ process.on = function(e, fn) {
   if (e === 'uncaughtException') {
     global.onerror = function(err, url, line) {
       fn(new Error(err + ' (' + url + ':' + line + ')'));
-      return !mocha.allowUncaught;
+      return !mocha.options.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
   }
@@ -129,7 +140,7 @@ mocha.setup = function(opts) {
     opts = {ui: opts};
   }
   for (var opt in opts) {
-    if (opts.hasOwnProperty(opt)) {
+    if (Object.prototype.hasOwnProperty.call(opts, opt)) {
       this[opt](opts[opt]);
     }
   }

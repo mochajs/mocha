@@ -163,6 +163,7 @@ function createElements(argObj) {
 function makeExpectedTest(
   expectedTitle,
   expectedFullTitle,
+  expectedFile,
   expectedDuration,
   currentRetry,
   expectedBody
@@ -172,6 +173,7 @@ function makeExpectedTest(
     fullTitle: function() {
       return expectedFullTitle;
     },
+    file: expectedFile,
     duration: expectedDuration,
     currentRetry: function() {
       return currentRetry;
@@ -215,16 +217,12 @@ function createRunReporterFunction(ctor) {
     Object.setPrototypeOf(stubSelf, ctor.prototype);
 
     try {
-      try {
-        // Invoke reporter
-        ctor.call(stubSelf, runner, options);
-      } finally {
-        // Revert stream reassignment here so reporter output
-        // can't be corrupted if any test assertions throw
-        stdoutWriteStub.restore();
-      }
-    } catch (err) {
-      throw err; // Rethrow
+      // Invoke reporter
+      ctor.call(stubSelf, runner, options);
+    } finally {
+      // Revert stream reassignment here so reporter output
+      // can't be corrupted if any test assertions throw
+      stdoutWriteStub.restore();
     }
 
     return stdout;

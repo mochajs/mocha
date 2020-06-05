@@ -92,7 +92,7 @@ new AssetGraph({root: 'docs/_dist'})
       );
 
       preconnectRelations.forEach(rel => {
-        let header = `Link: <${rel.href}>; rel=preconnect`;
+        const header = `Link: <${rel.href}>; rel=preconnect`;
 
         headerMap[url].push(header);
 

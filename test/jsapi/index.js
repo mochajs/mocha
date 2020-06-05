@@ -5,7 +5,6 @@ var Mocha = require('../../');
 var mocha = new Mocha({
   ui: 'bdd',
   globals: ['okGlobalA', 'okGlobalB', 'okGlobalC', 'callback*'],
-  // ignoreLeaks: true,
   growl: true
 });
 
