@@ -562,7 +562,9 @@ describe('options', function() {
           readFileSync = sandbox.stub();
           readFileSync.onFirstCall().throws();
           findConfig = sandbox.stub().returns('/some/.mocharc.json');
-          loadConfig = sandbox.stub().returns({spec: '*.spec.js'});
+          loadConfig = sandbox
+            .stub()
+            .returns({spec: '{dirA,dirB}/**/*.spec.js'});
           findupSync = sandbox.stub();
           loadOptions = proxyLoadOptions({
             readFileSync,
@@ -573,9 +575,40 @@ describe('options', function() {
           result = loadOptions(['*.test.js']);
         });
 
-        it('should place both into the positional arguments array', function() {
-          expect(result, 'to have property', '_', ['*.test.js', '*.spec.js']);
+        it('should place both - unsplitted - into the positional arguments array', function() {
+          expect(result, 'to have property', '_', [
+            '*.test.js',
+            '{dirA,dirB}/**/*.spec.js'
+          ]);
         });
+      });
+    });
+
+    describe('"ignore" handling', function() {
+      let result;
+
+      beforeEach(function() {
+        readFileSync = sandbox.stub();
+        readFileSync.onFirstCall().throws();
+        findConfig = sandbox.stub().returns('/some/.mocharc.json');
+        loadConfig = sandbox
+          .stub()
+          .returns({ignore: '{dirA,dirB}/**/*.spec.js'});
+        findupSync = sandbox.stub();
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync
+        });
+        result = loadOptions(['--ignore', '*.test.js']);
+      });
+
+      it('should not split option values by comma', function() {
+        expect(result, 'to have property', 'ignore', [
+          '*.test.js',
+          '{dirA,dirB}/**/*.spec.js'
+        ]);
       });
     });
   });
