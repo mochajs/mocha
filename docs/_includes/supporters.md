@@ -23,7 +23,7 @@ Use Mocha at Work? Ask your manager or marketing team if they'd help [support](h
 {%- for supporter in supporters.sponsors -%}
   <li>
     {%- if supporter.website -%}
-    <a href="{{ supporter.website }}" target="_blank" rel="noopener" title="{{ supporter.name }}">
+    <a href="{{ supporter.website }}" target="_blank" rel="noopener">
     {%- endif -%}
       <style>
         .sponsor-{{ forloop.index }} {
@@ -31,7 +31,7 @@ Use Mocha at Work? Ask your manager or marketing team if they'd help [support](h
           background-image: url(/images/supporters/{{ supporter.id }}.png?sprite=sponsors);
         }
       </style>
-      <div class="sponsor sponsor-{{ forloop.index }}" aria-label="{{ supporter.name }}"></div>
+      <div class="sponsor sponsor-{{ forloop.index }}" title="{{ supporter.name }}"></div>
     {%- if supporter.website -%}
     </a>
     {%- endif -%}
@@ -47,14 +47,14 @@ Find Mocha helpful? Become a [backer](https://opencollective.com/mochajs#support
 {%- for supporter in supporters.backers -%}
   <li>
     {%- if supporter.website -%}
-    <a href="{{ supporter.website }}" target="_blank" rel="noopener" title="{{ supporter.name }}">
+    <a href="{{ supporter.website }}" target="_blank" rel="noopener">
     {%- endif -%}
       <style>
         .backer-{{ forloop.index }} {
           background-image: url(/images/supporters/{{ supporter.id }}.png?sprite=backers);
         }
       </style>
-      <div class="backer backer-{{ forloop.index }}" aria-label="{{ supporter.name }}"></div>
+      <div class="backer backer-{{ forloop.index }}" title="{{ supporter.name }}"></div>
     {%- if supporter.website -%}
     </a>
     {%- endif -%}
