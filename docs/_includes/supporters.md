@@ -7,14 +7,12 @@ Use Mocha at Work? Ask your manager or marketing team if they'd help [support](h
     -sprite-selector-for-group: sponsors;
     -sprite-location: url(/images/sprite-sponsors.png?pngquant);
     -sprite-image-format: png;
-    -sprite-padding: 1;
     height: 64px;
   }
   .backer {
     -sprite-selector-for-group: backers;
     -sprite-location: url(/images/sprite-backers.png?pngquant);
     -sprite-image-format: png;
-    -sprite-padding: 1;
     width: 32px;
     height: 32px;
   }
