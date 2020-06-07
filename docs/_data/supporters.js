@@ -106,10 +106,12 @@ module.exports = async () => {
     .reduce(
       (supporters, supporter) => {
         if (supporter.type === 'INDIVIDUAL') {
-          supporters.backers.push({
-            ...supporter,
-            avatar: supporter.imgUrlSmall
-          });
+          if (supporter.name !== 'anonymous') {
+            supporters.backers.push({
+              ...supporter,
+              avatar: supporter.imgUrlSmall
+            });
+          }
         } else {
           supporters.sponsors.push({...supporter, avatar: supporter.imgUrlMed});
         }
