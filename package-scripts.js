@@ -139,7 +139,7 @@ module.exports = {
         integration: {
           script: test(
             'integration',
-            '--timeout 10000 --slow 3750 "test/integration/**/*.spec.js"'
+            '--parallel --timeout 10000 --slow 3750 "test/integration/**/*.spec.js"'
           ),
           description: 'Run Node.js integration tests',
           hiddenFromHelp: true
