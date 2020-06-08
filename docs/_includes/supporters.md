@@ -61,5 +61,3 @@ Find Mocha helpful? Become a [backer](https://opencollective.com/mochajs#support
   </li>
 {%- endfor -%}
 </ul>
-
-<script src="/js/avatars.js"></script>
