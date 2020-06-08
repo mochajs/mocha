@@ -142,3 +142,6 @@ Temporary Items
 
 # SauceConnect
 *.sock
+
+# Local Netlify folder
+.netlify
