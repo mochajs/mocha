@@ -12,6 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Webhook Action
-        uses: joelwmale/webhook-action@1
+        uses: joelwmale/webhook-action@1.0.0
         env:
           WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}
