@@ -3,10 +3,8 @@
 
 name: Nightly mochajs.org Deploy
 on:
-  push:
-    branches: [boneskull/netlify-nightly-deploy]
-  #  schedule:
-  #  - cron: '0 0 * * *'
+  schedule:
+    - cron: '0 0 * * *'
 jobs:
   deploy:
     runs-on: ubuntu-latest
