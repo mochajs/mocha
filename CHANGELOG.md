@@ -1,3 +1,11 @@
+# 8.0.1 / 2020-06-10
+
+The obligatory patch after a major.
+
+## :bug: Fixes
+
+- [#4328]: Fix `--parallel` when combined with `--watch` (@boneskull)
+
 # 8.0.0 / 2020-06-10
 
 In this major release, Mocha adds the ability to _run tests in parallel_. Better late than never! Please note the **breaking changes** detailed below.
