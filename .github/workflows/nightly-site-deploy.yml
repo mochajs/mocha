@@ -3,8 +3,10 @@
 
 name: Nightly mochajs.org Deploy
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  push:
+    branches: [boneskull/netlify-nightly-deploy]
+  #  schedule:
+  #  - cron: '0 0 * * *'
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,4 +15,3 @@ jobs:
         uses: joelwmale/webhook-action@1
         env:
           WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}
-          
