@@ -1,3 +1,55 @@
+# 8.0.0 / 2020-06-10
+
+In this major release, Mocha adds the ability to _run tests in parallel_. Better late than never! Please note the **breaking changes** detailed below.
+
+Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](https://github.com/nicojs) to the maintenance team!
+
+## :boom: Breaking Changes
+
+- [#4164](https://github.com/mochajs/mocha/issues/4164): **Mocha v8.0.0 now requires Node.js v10.0.0 or newer.** Mocha no longer supports the Node.js v8.x line ("Carbon"), which entered End-of-Life at the end of 2019 ([**@UlisesGascon**](https://github.com/UlisesGascon))
+
+- [#4175](https://github.com/mochajs/mocha/issues/4175): Having been deprecated with a warning since v7.0.0, **`mocha.opts` is no longer supported** ([**@juergba**](https://github.com/juergba))
+
+  :sparkles: **WORKAROUND:** Replace `mocha.opts` with a [configuration file](https://mochajs.org/#configuring-mocha-nodejs).
+
+- [#4260](https://github.com/mochajs/mocha/issues/4260): Remove `enableTimeout()` (`this.enableTimeout()`) from the context object ([**@craigtaub**](https://github.com/craigtaub))
+
+  :sparkles: **WORKAROUND:** Replace usage of `this.enableTimeout(false)` in your tests with `this.timeout(0)`.
+
+- [#4315](https://github.com/mochajs/mocha/issues/4315): The `spec` option no longer supports a comma-delimited list of files ([**@juergba**](https://github.com/juergba))
+
+  :sparkles: **WORKAROUND**: Use an array instead (e.g., `"spec": "foo.js,bar.js"` becomes `"spec": ["foo.js", "bar.js"]`).
+
+- [#4309](https://github.com/mochajs/mocha/issues/4309): Drop support for Node.js v13.x line, which is now End-of-Life ([**@juergba**](https://github.com/juergba))
+
+- [#4282](https://github.com/mochajs/mocha/issues/4282): `--forbid-only` will throw an error even if exclusive tests are avoided via `--grep` or other means ([**@arvidOtt**](https://github.com/arvidOtt))
+
+- [#4223](https://github.com/mochajs/mocha/issues/4223): The context object's `skip()` (`this.skip()`) in a "before all" (`before()`) hook will no longer execute subsequent sibling hooks, in addition to hooks in child suites ([**@juergba**](https://github.com/juergba))
+
+- [#4178](https://github.com/mochajs/mocha/issues/4178): Remove previously soft-deprecated APIs ([**@wnghdcjfe**](https://github.com/wnghdcjfe)):
+  - `Mocha.prototype.ignoreLeaks()`
+  - `Mocha.prototype.useColors()`
+  - `Mocha.prototype.useInlineDiffs()`
+  - `Mocha.prototype.hideDiff()`
+
+## :tada: Enhancements
+
+- [#4245](https://github.com/mochajs/mocha/issues/4245): Add ability to run tests in parallel for Node.js (see [docs](https://mochajs.org/#parallel-tests)) ([**@boneskull**](https://github.com/boneskull))
+
+  :exclamation: See also [#4244](https://github.com/mochajs/mocha/issues/4244); [Root Hook Plugins (docs)](https://mochajs.org/#root-hook-plugins) -- _root hooks must be defined via Root Hook Plugins to work in parallel mode_
+
+- [#4304](https://github.com/mochajs/mocha/issues/4304): `--require` now works with ES modules ([**@JacobLey**](https://github.com/JacobLey))
+
+- [#4299](https://github.com/mochajs/mocha/issues/4299): In some circumstances, Mocha can run ES modules under Node.js v10 -- _use at your own risk!_ ([**@giltayar**](https://github.com/giltayar))
+
+## :book: Documentation
+
+- [#4246](https://github.com/mochajs/mocha/issues/4246): Add documentation for parallel mode and Root Hook plugins ([**@boneskull**](https://github.com/boneskull))
+
+## :bug: Fixes
+
+(All bug fixes in Mocha v8.0.0 are also breaking changes, and are listed above)
+
 # 7.2.0 / 2020-05-22
 
 ## :tada: Enhancements
