@@ -31,6 +31,19 @@ describe('--watch', function() {
       });
     });
 
+    describe('when in parallel mode', function() {
+      it('reruns test when watched test file is touched', function() {
+        const testFile = path.join(tempDir, 'test.js');
+        copyFixture('__default__', testFile);
+
+        return runMochaWatch(['--parallel', testFile], tempDir, () => {
+          touchFile(testFile);
+        }).then(results => {
+          expect(results, 'to have length', 2);
+        });
+      });
+    });
+
     it('reruns test when file matching --watch-files changes', function() {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture('__default__', testFile);
