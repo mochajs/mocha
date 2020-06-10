@@ -4,7 +4,7 @@ The obligatory patch after a major.
 
 ## :bug: Fixes
 
-- [#4328]: Fix `--parallel` when combined with `--watch` (@boneskull)
+- [#4328]&#x3A; Fix `--parallel` when combined with `--watch` ([**@boneskull**](https://github.com/boneskull))
 
 # 8.0.0 / 2020-06-10
 
