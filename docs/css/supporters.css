@@ -1,0 +1,13 @@
+.sponsor {
+  -sprite-selector-for-group: sponsors;
+  -sprite-location: url(/images/sprite-sponsors.png?pngquant);
+  -sprite-image-format: png;
+  height: 64px;
+}
+.backer {
+  -sprite-selector-for-group: backers;
+  -sprite-location: url(/images/sprite-backers.png?pngquant);
+  -sprite-image-format: png;
+  width: 32px;
+  height: 32px;
+}
