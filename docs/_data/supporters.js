@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
+const {mkdirSync} = require('fs');
+const {writeFile} = require('fs').promises;
+const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const imageSize = require('image-size');
@@ -16,6 +19,7 @@ const query = `query account($limit: Int, $offset: Int, $slug: String) {
       totalCount
       nodes {
         fromAccount {
+          id
           name
           slug
           website
@@ -35,6 +39,7 @@ const query = `query account($limit: Int, $offset: Int, $slug: String) {
 const graphqlPageSize = 1000;
 
 const nodeToSupporter = node => ({
+  id: node.fromAccount.id,
   name: node.fromAccount.name,
   slug: node.fromAccount.slug,
   website: node.fromAccount.website,
@@ -101,10 +106,12 @@ module.exports = async () => {
     .reduce(
       (supporters, supporter) => {
         if (supporter.type === 'INDIVIDUAL') {
-          supporters.backers.push({
-            ...supporter,
-            avatar: supporter.imgUrlSmall
-          });
+          if (supporter.name !== 'anonymous') {
+            supporters.backers.push({
+              ...supporter,
+              avatar: supporter.imgUrlSmall
+            });
+          }
         } else {
           supporters.sponsors.push({...supporter, avatar: supporter.imgUrlMed});
         }
@@ -113,13 +120,26 @@ module.exports = async () => {
       {sponsors: [], backers: []}
     );
 
+  const supporterImagePath = resolve(__dirname, '../images/supporters');
+
+  mkdirSync(supporterImagePath, {recursive: true});
+
   // Fetch images for sponsors and save their image dimensions
   await Promise.all(
     supporters.sponsors.map(async sponsor => {
-      for await (const chunk of needle.get(sponsor.avatar)) {
-        sponsor.dimensions = imageSize(chunk);
-        break;
-      }
+      const filePath = resolve(supporterImagePath, sponsor.id + '.png');
+      const {body} = await needle('get', sponsor.avatar);
+      sponsor.dimensions = imageSize(body);
+      await writeFile(filePath, body);
+    })
+  );
+
+  // Fetch images for backers and save their image dimensions
+  await Promise.all(
+    supporters.backers.map(async backer => {
+      const filePath = resolve(supporterImagePath, backer.id + '.png');
+      const {body} = await needle('get', backer.avatar);
+      await writeFile(filePath, body);
     })
   );
 
