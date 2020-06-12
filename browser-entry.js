@@ -9,6 +9,8 @@
 
 process.stdout = require('browser-stdout')({label: false});
 
+var parseQuery = require('./lib/browser/parseQuery');
+var highlightTags = require('./lib/browser/highlightTags');
 var Mocha = require('./lib/mocha');
 
 /**
@@ -162,7 +164,7 @@ mocha.run = function(fn) {
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(global.location.search || '');
+  var query = parseQuery(global.location.search || '');
   if (query.grep) {
     mocha.grep(query.grep);
   }
@@ -181,7 +183,7 @@ mocha.run = function(fn) {
       document.getElementById('mocha') &&
       options.noHighlighting !== true
     ) {
-      Mocha.utils.highlightTags('code');
+      highlightTags('code');
     }
     if (fn) {
       fn(err);
