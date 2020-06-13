@@ -17,7 +17,7 @@ describe('esm', function() {
         return;
       }
 
-      expect(result, 'to have passed test count', 2);
+      expect(result, 'to have passed test count', 1);
       done();
     });
   });

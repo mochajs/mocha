@@ -4,10 +4,38 @@
   "description": "simple, flexible, fun test framework",
   "main": "./index.js",
   "exports": {
-    ".": {
-      "require": "./index.js",
-      "import": "./index.mjs"
-    },
+    ".": [
+      {
+        "require": "./index.js",
+        "import": "./lib/entrypoints/index.mjs",
+        "default": "./index.js"
+      },
+      "./index.js"
+    ],
+    "./tdd": [
+      {
+        "require": "./lib/entrypoints/tdd.js",
+        "import": "./lib/entrypoints/tdd.mjs",
+        "default": "./lib/entrypoints/tdd.js"
+      },
+      "./lib/entrypoints/tdd.js"
+    ],
+    "./bdd": [
+      {
+        "require": "./lib/entrypoints/bdd.js",
+        "import": "./lib/entrypoints/bdd.mjs",
+        "default": "./lib/entrypoints/bdd.js"
+      },
+      "./lib/entrypoints/bdd.js"
+    ],
+    "./qunit": [
+      {
+        "require": "./lib/entrypoints/qunit.js",
+        "import": "./lib/entrypoints/qunit.mjs",
+        "default": "./lib/entrypoints/qunit.js"
+      },
+      "./lib/entrypoints/qunit.js"
+    ],
     "./": "./"
   },
   "keywords": [

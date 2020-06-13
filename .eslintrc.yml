@@ -51,6 +51,17 @@ overrides:
     globals:
       expect: readonly
   - files:
+      - test/interfaces/*.{js,mjs}
+      - lib/entrypoints/*.{js,mjs}
+    parserOptions:
+      ecmaVersion: 2018
+    env:
+      mocha: true
+      browser: false
+      node: true
+    globals:
+      expect: readonly
+  - files:
       - bin/*
       - lib/**/*.js
     rules:

@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const {supportsEsModules} = require('./lib/utils');
 
 /**
  * Generates a command to run mocha tests with or without test coverage
@@ -32,6 +33,28 @@ function test(testName, mochaParams) {
   return `${
     process.env.COVERAGE ? coverageCommand : ''
   } ${mochaCommand} ${mochaParams}`.trim();
+}
+
+/**
+ * Generates a command to run mocha ESM tests with or without test coverage
+ * as desired for the current runmode, but
+ * generates an empty command if Node does not support ESM with "exports" support.
+ *
+ * @param {string} testName The name of the test to be used for coverage reporting.
+ * @param {string} mochaParams Parameters for the mocha CLI to execute the desired test.
+ * @returns {string} Command string to be executed by nps.
+ */
+function testEsmWithExports(testName, mochaParams) {
+  if (supportsEsModules(false)) {
+    return test(
+      testName,
+      +process.versions.node.split('.')[0] < 13
+        ? '--experimental-modules ' + mochaParams
+        : mochaParams
+    );
+  } else {
+    return `echo ${testName} skipped because this version of Node.js does not support ESM with "exports"`;
+  }
 }
 
 module.exports = {
@@ -99,18 +122,39 @@ module.exports = {
           description: 'Run Node.js tests'
         },
         bdd: {
-          script: test('bdd', '--ui bdd test/interfaces/bdd.spec'),
+          script: test('bdd', '--ui bdd test/interfaces/bdd*.spec.js'),
           description: 'Run Node.js BDD interface tests',
           hiddenFromHelp: true
         },
+        bddEsm: {
+          script: testEsmWithExports(
+            'bddEsm',
+            '--ui bdd test/interfaces/bdd*.spec.mjs'
+          ),
+          description: 'Run Node.js BDD interface tests for ESM',
+          hiddenFromHelp: true
+        },
         tdd: {
-          script: test('tdd', '--ui tdd test/interfaces/tdd.spec'),
+          script: test('tdd', '--ui tdd test/interfaces/tdd*.spec.js'),
           description: 'Run Node.js TDD interface tests',
           hiddenFromHelp: true
         },
+        tddEsm: {
+          script: test('tddEsm', '--ui tdd test/interfaces/tdd*.spec.mjs'),
+          description: 'Run Node.js TDD interface tests for ESM',
+          hiddenFromHelp: true
+        },
         qunit: {
-          script: test('qunit', '--ui qunit test/interfaces/qunit.spec'),
+          script: test('qunit', '--ui qunit test/interfaces/qunit*.spec.js'),
           description: 'Run Node.js QUnit interace tests',
+          hiddenFromHelp: true
+        },
+        qunitEsm: {
+          script: testEsmWithExports(
+            'qunitEsm',
+            '--ui qunit test/interfaces/qunit*.spec.mjs'
+          ),
+          description: 'Run Node.js QUnit interace tests from ESM',
           hiddenFromHelp: true
         },
         exports: {
