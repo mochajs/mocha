@@ -30,9 +30,11 @@ function test(testName, mochaParams) {
   if (process.env.CI) {
     mochaParams += ' --color'; // force color in CI
   }
-  return `${
-    process.env.COVERAGE ? coverageCommand : ''
-  } ${mochaCommand} ${mochaParams}`.trim();
+  return `${process.env.COVERAGE ? coverageCommand : ''} ${mochaCommand} ${
+    +process.versions.node.split('.')[0] < 13
+      ? '--experimental-modules ' + mochaParams
+      : mochaParams
+  }`.trim();
 }
 
 /**
