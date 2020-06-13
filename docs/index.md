@@ -1523,7 +1523,7 @@ describe('my test suite', function() {
 
 Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](#-parallel-p)).
 
-### Migrating a Library to use Root Hook PLugins
+### Migrating a Library to use Root Hook Plugins
 
 If you're a library maintainer, and your library uses root hooks, you can migrate by refactoring your entry point:
 
@@ -1708,6 +1708,13 @@ describe('Array', function() {
 });
 ```
 
+If you prefer not to use globals, you can `require` (CJS) or `import` (ESM) these functions via
+the `mocha/bdd` entry point. Example:
+
+```js
+const {describe, it} = require('mocha/bdd');
+```
+
 ### TDD
 
 The **TDD** interface provides `suite()`, `test()`, `suiteSetup()`, `suiteTeardown()`, `setup()`, and `teardown()`:
@@ -1724,6 +1731,13 @@ suite('Array', function() {
     });
   });
 });
+```
+
+If you prefer not to use globals, you can `require` (CJS) or `import` (ESM) these functions via
+the `mocha/tdd` entry point. Example:
+
+```js
+const {suite, test} = require('mocha/tdd');
 ```
 
 ### Exports
@@ -1776,11 +1790,8 @@ test('#length', function() {
 });
 ```
 
-### Require
-
-The `require` interface allows you to require the `describe` and friend words directly using `require` and call them whatever you want. This interface is also useful if you want to avoid global variables in your tests.
-
-_Note_: The `require` interface cannot be run via the `node` executable, and must be run via `mocha`.
+If you prefer not to use globals, you can `require` (CJS) or `import` (ESM) these functions via
+the `mocha/qunit` entry point. Example:
 
 ```js
 var testCase = require('mocha').describe;
@@ -1796,6 +1807,55 @@ testCase('Array', function() {
   testCase('#indexOf()', function() {
     assertions('should return -1 when not present', function() {
       assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```
+
+## CommonJS and ESM entrypoints
+
+Instead of relying on the `describe`, `it`, ... globals, you can `require` (CommonJS) or `import` (ES Modules) `mocha`
+to import these functions, as described in [interfaces](#interfaces).
+
+_Note_: if you use one interface (using `--ui ...`), the other test functions from the other
+interfaces will be `undefined`.
+
+_Note_: If `require` or `import` is used to avoid the use of globals,
+the tests cannot be run via the `node` executable, and must be run via `mocha`.
+
+CommonJS example (for the default BDD interface):
+
+```js
+const {describe, before, it} = require('mocha');
+const assert = require('assert');
+
+describe('Array', function() {
+  before(function() {
+    // ...
+  });
+
+  describe('#indexOf()', function() {
+    it('should return -1 when not present', function() {
+      assert.strictEqual([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```
+
+ESM example (for the TDD interface):
+
+```js
+import {suite, setup, test} from 'mocha';
+import assert from 'assert';
+
+suite('Array', function() {
+  setup(function() {
+    // ...
+  });
+
+  suite('#indexOf()', function() {
+    test('should return -1 when not present', function() {
+      assert.strictEqual([1, 2, 3].indexOf(4), -1);
     });
   });
 });
