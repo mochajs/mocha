@@ -10,6 +10,7 @@ var Test = Mocha.Test;
 var Runnable = Mocha.Runnable;
 var Hook = Mocha.Hook;
 var noop = Mocha.utils.noop;
+var errors = require('../../lib/errors');
 var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
 var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
@@ -17,6 +18,9 @@ var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
 var EVENT_SUITE_END = Runner.constants.EVENT_SUITE_END;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
+var STATE_IDLE = Runner.constants.STATE_IDLE;
+var STATE_RUNNING = Runner.constants.STATE_RUNNING;
+var STATE_STOPPED = Runner.constants.STATE_STOPPED;
 
 describe('Runner', function() {
   var sandbox;
@@ -252,8 +256,8 @@ describe('Runner', function() {
     });
   });
 
-  describe('.fail(test, err)', function() {
-    it('should increment .failures', function() {
+  describe('fail()', function() {
+    it('should increment `Runner#failures`', function() {
       expect(runner.failures, 'to be', 0);
       runner.fail(new Test('one', noop), {});
       expect(runner.failures, 'to be', 1);
@@ -261,7 +265,7 @@ describe('Runner', function() {
       expect(runner.failures, 'to be', 2);
     });
 
-    it('should set test.state to "failed"', function() {
+    it('should set `Test#state` to "failed"', function() {
       var test = new Test('some test', noop);
       runner.fail(test, 'some error');
       expect(test.state, 'to be', STATE_FAILED);
@@ -373,6 +377,47 @@ describe('Runner', function() {
       runner.fail(test, new Error());
       expect(runner.failures, 'to be', 0);
     });
+
+    describe('when Runner has stopped', function() {
+      beforeEach(function() {
+        runner.state = STATE_STOPPED;
+      });
+
+      describe('when test is not pending', function() {
+        describe('when error is the "multiple done" variety', function() {
+          it('should throw the "multiple done" error', function() {
+            var test = new Test('test', function() {});
+            suite.addTest(test);
+            var err = new Error();
+            err.code = errors.constants.MULTIPLE_DONE;
+            expect(
+              function() {
+                runner.fail(test, err);
+              },
+              'to throw',
+              err
+            );
+          });
+        });
+
+        describe('when error is not of the "multiple done" variety', function() {
+          it('should throw a "fatal" error', function() {
+            var test = new Test('test', function() {});
+            suite.addTest(test);
+            var err = new Error();
+            expect(
+              function() {
+                runner.fail(test, err);
+              },
+              'to throw',
+              {
+                code: errors.constants.FATAL
+              }
+            );
+          });
+        });
+      });
+    });
   });
 
   describe('.failHook(hook, err)', function() {
@@ -482,6 +527,26 @@ describe('Runner', function() {
       runner.emit(EVENT_SUITE_END, suite);
       expect(cleanReferencesStub, 'was not called');
     });
+
+    it('should not leak `Process.uncaughtException` listeners', function(done) {
+      var normalUncaughtExceptionListenerCount = process.listenerCount(
+        'uncaughtException'
+      );
+
+      runner.run();
+      runner.run();
+      runner.run();
+      expect(
+        process.listenerCount('uncaughtException'),
+        'to be',
+        normalUncaughtExceptionListenerCount + 1
+      );
+      done();
+    });
+
+    afterEach(function() {
+      runner.dispose();
+    });
   });
 
   describe('.dispose', function() {
@@ -505,7 +570,6 @@ describe('Runner', function() {
       var normalUncaughtExceptionListenerCount = process.listenerCount(
         'uncaughtException'
       );
-      sandbox.stub();
       runner.run(noop);
       // sanity check
       expect(
@@ -770,6 +834,16 @@ describe('Runner', function() {
     });
   });
 
+  describe('_uncaught()', function() {
+    describe('when called with a non-Runner context', function() {
+      it('should throw', function() {
+        expect(runner._uncaught.bind({}), 'to throw', {
+          code: errors.constants.FATAL
+        });
+      });
+    });
+  });
+
   describe('uncaught()', function() {
     beforeEach(function() {
       sandbox.stub(runner, 'fail');
@@ -849,9 +923,9 @@ describe('Runner', function() {
             ]).and('was called once');
           });
 
-          describe('when Runner has already started', function() {
+          describe('when Runner is RUNNING', function() {
             beforeEach(function() {
-              runner.started = true;
+              runner.state = STATE_RUNNING;
             });
 
             it('should not emit start/end events', function() {
@@ -866,9 +940,9 @@ describe('Runner', function() {
             });
           });
 
-          describe('when Runner has not already started', function() {
+          describe('when Runner is IDLE', function() {
             beforeEach(function() {
-              runner.started = false;
+              runner.state = STATE_IDLE;
             });
 
             it('should emit start/end events for the benefit of reporters', function() {
@@ -880,6 +954,31 @@ describe('Runner', function() {
                 runner,
                 'start'
               ).and('to emit from', runner, 'end');
+            });
+          });
+
+          describe('when Runner is STOPPED', function() {
+            beforeEach(function() {
+              runner.state = STATE_STOPPED;
+            });
+
+            it('should not emit start/end events, since this presumably would have already happened', function() {
+              expect(
+                function() {
+                  try {
+                    runner.uncaught(err);
+                  } catch (ignored) {}
+                },
+                'not to emit from',
+                runner,
+                'start'
+              ).and('not to emit from', runner, 'end');
+            });
+
+            it('should throw', function() {
+              expect(function() {
+                runner.uncaught(err);
+              }, 'to throw');
             });
           });
         });

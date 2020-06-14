@@ -680,6 +680,21 @@ describe('Suite', function() {
       });
     });
   });
+
+  describe('.markOnly()', function() {
+    it('should call appendOnlySuite on parent', function() {
+      var suite = new Suite('foo');
+      var spy = sandbox.spy();
+      suite.parent = {
+        appendOnlySuite: spy
+      };
+      suite.markOnly();
+
+      expect(spy, 'to have a call exhaustively satisfying', [suite]).and(
+        'was called once'
+      );
+    });
+  });
 });
 
 describe('Test', function() {

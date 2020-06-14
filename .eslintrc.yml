@@ -14,23 +14,38 @@ rules:
   strict:
     - error
     - safe
+  # disallow Object.assign
+  no-restricted-properties:
+    - error
+    - object: 'Object'
+      property: 'assign'
 overrides:
   - files:
-      - scripts/**/*.js
-      - package-scripts.js
-      - karma.conf.js
-      - .wallaby.js
-      - .eleventy.js
-      - bin/*
-      - lib/cli/**/*.js
-      - test/node-unit/**/*.js
-      - test/integration/options/watch.spec.js
-      - test/integration/helpers.js
-      - lib/growl.js
+      - 'docs/js/**/*.js'
+    env:
+      node: false
+  - files:
+      - '.eleventy.js'
+      - '.wallaby.js'
+      - 'package-scripts.js'
+      - 'karma.conf.js'
+      - 'bin/*'
+      - 'docs/_data/**/*.js'
+      - 'lib/cli/**/*.js'
+      - 'lib/nodejs/**/*.js'
+      - 'scripts/**/*.js'
+      - 'test/integration/helpers.js'
+      - 'test/integration/options/watch.spec.js'
+      - 'test/node-unit/**/*.js'
     parserOptions:
       ecmaVersion: 2018
     env:
       browser: false
+    rules:
+      no-restricted-properties:
+        - off
+        - object: 'Object'
+          property: 'assign'
   - files:
       - esm-utils.js
     parserOptions:
@@ -79,7 +94,6 @@ overrides:
         # disallow property access of `global.<timer>.*`
         - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
           message: *GH-237
-
   - files:
       - test/**/*.mjs
     parserOptions:

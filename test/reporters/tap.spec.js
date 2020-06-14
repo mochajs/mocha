@@ -40,28 +40,16 @@ describe('TAP reporter', function() {
     describe('event handlers', function() {
       describe("on 'start' event", function() {
         var expectedSuite = 'some suite';
-        var expectedTotal = 10;
-        var expectedString;
         var stdout = [];
 
         before(function() {
           var runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
-          runner.grepTotal = function(string) {
-            expectedString = string;
-            return expectedTotal;
-          };
           stdout = runReporter({}, runner, options);
         });
 
         it('should not write a TAP specification version', function() {
           expect(stdout, 'not to contain', 'TAP version');
-        });
-
-        it('should write the number of tests that it plans to run', function() {
-          var expectedArray = ['1..' + expectedTotal + '\n'];
-          expect(stdout, 'to equal', expectedArray);
-          expect(expectedString, 'to be', expectedSuite);
         });
       });
 
@@ -78,7 +66,6 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
@@ -102,7 +89,6 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
@@ -141,7 +127,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -171,7 +156,6 @@ describe('TAP reporter', function() {
               error
             );
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -209,7 +193,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -245,7 +228,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -271,11 +253,10 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
-        it('should write total tests, passes, and failures', function() {
+        it('should write total tests, passes, failures, & plan', function() {
           var numberOfPasses = 1;
           var numberOfFails = 1;
           var totalTests = numberOfPasses + numberOfFails;
@@ -284,7 +265,8 @@ describe('TAP reporter', function() {
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',
             '# pass ' + numberOfPasses + '\n',
-            '# fail ' + numberOfFails + '\n'
+            '# fail ' + numberOfFails + '\n',
+            '1..' + totalTests + '\n'
           ];
           expect(stdout, 'to equal', expectedArray);
         });
@@ -302,17 +284,11 @@ describe('TAP reporter', function() {
     describe('event handlers', function() {
       describe("on 'start' event", function() {
         var expectedSuite = 'some suite';
-        var expectedTotal = 10;
-        var expectedString;
         var stdout;
 
         before(function() {
           var runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
-          runner.grepTotal = function(string) {
-            expectedString = string;
-            return expectedTotal;
-          };
           stdout = runReporter({}, runner, options);
         });
 
@@ -320,12 +296,6 @@ describe('TAP reporter', function() {
           var tapVersion = options.reporterOptions.tapVersion;
           var expectedFirstLine = 'TAP version ' + tapVersion + '\n';
           expect(stdout[0], 'to equal', expectedFirstLine);
-        });
-
-        it('should write the number of tests that it plans to run', function() {
-          var expectedSecondLine = '1..' + expectedTotal + '\n';
-          expect(stdout[1], 'to equal', expectedSecondLine);
-          expect(expectedString, 'to be', expectedSuite);
         });
       });
 
@@ -342,7 +312,6 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
@@ -366,7 +335,6 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
@@ -405,7 +373,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -438,7 +405,6 @@ describe('TAP reporter', function() {
               error
             );
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -479,7 +445,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -519,7 +484,6 @@ describe('TAP reporter', function() {
               }
             };
             runner.suite = '';
-            runner.grepTotal = noop;
             stdout = runReporter({}, runner, options);
           });
 
@@ -545,11 +509,10 @@ describe('TAP reporter', function() {
             test
           );
           runner.suite = '';
-          runner.grepTotal = noop;
           stdout = runReporter({}, runner, options);
         });
 
-        it('should write total tests, passes, and failures', function() {
+        it('should write total tests, passes, failures & plan', function() {
           var numberOfPasses = 1;
           var numberOfFails = 1;
           var totalTests = numberOfPasses + numberOfFails;
@@ -558,7 +521,8 @@ describe('TAP reporter', function() {
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',
             '# pass ' + numberOfPasses + '\n',
-            '# fail ' + numberOfFails + '\n'
+            '# fail ' + numberOfFails + '\n',
+            '1..' + totalTests + '\n'
           ];
           expect(stdout, 'to equal', expectedArray);
         });

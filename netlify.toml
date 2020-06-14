@@ -11,3 +11,6 @@
 [build]
   publish = "docs/_dist/"
   command = "npm start docs"
+
+[build.environment]
+  NODE_VERSION = "12"

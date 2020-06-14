@@ -7,23 +7,22 @@ description: 'Mocha is a feature-rich JavaScript test framework running on Node.
 Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
 
 <nav class="badges">
-  <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" alt="Gitter"></a>
-  <a href="#backers"><img src="//opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective backers"></a>
-  <a href="#sponsors"><img src="//opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective sponsors"></a>
+  <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" height="18" alt="Gitter"></a>
+  <a href="#sponsors"><img src="https://opencollective.com/mochajs/sponsors/badge.svg" height="18" alt="OpenCollective sponsors"></a>
+  <a href="#backers"><img src="https://opencollective.com/mochajs/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
 </nav>
 
-{% include backers.md %}
-{% include sponsors.md %}
+{% include supporters.md %}
 
 ## Features
 
 - [browser support](#running-mocha-in-the-browser)
 - [simple async support, including promises](#asynchronous-code)
+- [run Node.js tests in parallel](#parallel-tests)
 - [test coverage reporting](#wallabyjs)
 - [string diff support](#diffs)
-- [javascript API for running tests](#more-information)
-- proper exit status for CI support etc
-- [auto-detects and disables coloring for non-ttys](#reporters)
+- [JavaScript API for running tests](#more-information)
+- [auto-detects and disables coloring for non-TTYs](#reporters)
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
@@ -36,7 +35,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
 - [config file support](#-config-path)
-- clickable suite titles to filter test execution
 - [node debugger support](#-inspect-inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
@@ -49,39 +47,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 ## Table of Contents
 
-<!-- AUTO-GENERATED-CONTENT:START (toc:maxdepth=2&bullets=-) -->
-
-- [Installation](#installation)
-- [Getting Started](#getting-started)
-- [Run Cycle Overview](#run-cycle-overview)
-- [Detects Multiple Calls to `done()`](#detects-multiple-calls-to-done)
-- [Assertions](#assertions)
-- [Asynchronous Code](#asynchronous-code)
-- [Synchronous Code](#synchronous-code)
-- [Arrow Functions](#arrow-functions)
-- [Hooks](#hooks)
-- [Pending Tests](#pending-tests)
-- [Exclusive Tests](#exclusive-tests)
-- [Inclusive Tests](#inclusive-tests)
-- [Retry Tests](#retry-tests)
-- [Dynamically Generating Tests](#dynamically-generating-tests)
-- [Timeouts](#timeouts)
-- [Diffs](#diffs)
-- [Command-Line Usage](#command-line-usage)
-- [Interfaces](#interfaces)
-- [Reporters](#reporters)
-- [Node.JS native ESM support](#nodejs-native-esm-support)
-- [Running Mocha in the Browser](#running-mocha-in-the-browser)
-- [Desktop Notification Support](#desktop-notification-support)
-- [Configuring Mocha (Node.js)](#configuring-mocha-nodejs)
-- [The `test/` Directory](#the-test-directory)
-- [Error Codes](#error-codes)
-- [Editor Plugins](#editor-plugins)
-- [Examples](#examples)
-- [Testing Mocha](#testing-mocha)
-- [More Information](#more-information)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+{{ toc }}
 
 ## Installation
 
@@ -111,9 +77,9 @@ In your editor:
 
 ```js
 var assert = require('assert');
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it('should return -1 when the value is not present', function () {
       assert.equal([1, 2, 3].indexOf(4), -1);
     });
   });
@@ -152,7 +118,7 @@ $ npm test
 A brief outline on the order Mocha's components are executed.
 Worth noting that all hooks, `describe` and `it` callbacks are run in the order they are defined (i.e. found in the file).
 
-```js
+```
 run 'mocha spec.js'
 |
 spawn child process
@@ -193,7 +159,7 @@ spawn child process
 If you use callback-based async tests, Mocha will throw an error if `done()` is called multiple times. This is handy for catching accidental double callbacks.
 
 ```javascript
-it('double done', function(done) {
+it('double done', function (done) {
   // Calling `done()` twice is an error
   setImmediate(done);
   setImmediate(done);
@@ -233,14 +199,14 @@ Mocha allows you to use any assertion library you wish. In the above example, we
 
 ## Asynchronous Code
 
-Testing asynchronous code with Mocha could not be simpler! Simply invoke the callback when your test is complete. By adding a callback (usually named `done`) to `it()`, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
+By adding an argument (usually named `done`) to `it()` to a test callback, Mocha will know that it should wait for this function to be called to complete the test. This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
 
 ```js
-describe('User', function() {
-  describe('#save()', function() {
-    it('should save without error', function(done) {
+describe('User', function () {
+  describe('#save()', function () {
+    it('should save without error', function (done) {
       var user = new User('Luna');
-      user.save(function(err) {
+      user.save(function (err) {
         if (err) done(err);
         else done();
       });
@@ -249,12 +215,12 @@ describe('User', function() {
 });
 ```
 
-Alternatively, just use the `done()` callback directly (which will handle an error argument, if it exists):
+Alternatively, use the `done()` callback directly (which will handle an error argument, if it exists):
 
 ```js
-describe('User', function() {
-  describe('#save()', function() {
-    it('should save without error', function(done) {
+describe('User', function () {
+  describe('#save()', function () {
+    it('should save without error', function (done) {
       var user = new User('Luna');
       user.save(done);
     });
@@ -267,14 +233,14 @@ describe('User', function() {
 Alternately, instead of using the `done()` callback, you may return a [Promise][mdn-promise]. This is useful if the APIs you are testing return promises instead of taking callbacks:
 
 ```js
-beforeEach(function() {
-  return db.clear().then(function() {
+beforeEach(function () {
+  return db.clear().then(function () {
     return db.save([tobi, loki, jane]);
   });
 });
 
-describe('#find()', function() {
-  it('respond with matching records', function() {
+describe('#find()', function () {
+  it('respond with matching records', function () {
     return db.find({type: 'User'}).should.eventually.have.length(3);
   });
 });
@@ -288,8 +254,8 @@ In Mocha v3.0.0 and newer, returning a `Promise` _and_ calling `done()` will res
 const assert = require('assert');
 
 // antipattern
-it('should complete this test', function(done) {
-  return new Promise(function(resolve) {
+it('should complete this test', function (done) {
+  return new Promise(function (resolve) {
     assert.ok(true);
     resolve();
   }).then(done);
@@ -303,13 +269,13 @@ The above test will fail with `Error: Resolution method is overspecified. Specif
 If your JS environment supports [async / await][mdn-async], you can also write asynchronous tests like this:
 
 ```js
-beforeEach(async function() {
+beforeEach(async function () {
   await db.clear();
   await db.save([tobi, loki, jane]);
 });
 
-describe('#find()', function() {
-  it('responds with matching records', async function() {
+describe('#find()', function () {
+  it('responds with matching records', async function () {
     const users = await db.find({type: 'User'});
     users.should.have.length(3);
   });
@@ -321,9 +287,9 @@ describe('#find()', function() {
 When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it('should return -1 when the value is not present', function () {
       [1, 2, 3].indexOf(5).should.equal(-1);
       [1, 2, 3].indexOf(0).should.equal(-1);
     });
@@ -345,27 +311,27 @@ describe('my suite', () => {
 });
 ```
 
-_If you do not need to use_ Mocha's context, lambdas should work. However, the result will be more difficult to refactor if the need eventually arises.
+_If you do not need to use_ Mocha's context, lambdas should work. Be aware that using lambdas will be more painful to refactor if the need eventually arises!
 
 ## Hooks
 
 With its default "BDD"-style interface, Mocha provides the hooks `before()`, `after()`, `beforeEach()`, and `afterEach()`. These should be used to set up preconditions and clean up after your tests.
 
 ```js
-describe('hooks', function() {
-  before(function() {
+describe('hooks', function () {
+  before(function () {
     // runs once before the first test in this block
   });
 
-  after(function() {
+  after(function () {
     // runs once after the last test in this block
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     // runs before each test in this block
   });
 
-  afterEach(function() {
+  afterEach(function () {
     // runs after each test in this block
   });
 
@@ -380,7 +346,7 @@ describe('hooks', function() {
 Any hook can be invoked with an optional description, making it easier to pinpoint errors in your tests. If a hook is given a named function, that name will be used if no description is supplied.
 
 ```js
-beforeEach(function() {
+beforeEach(function () {
   // beforeEach hook
 });
 
@@ -388,7 +354,7 @@ beforeEach(function namedFun() {
   // beforeEach:namedFun
 });
 
-beforeEach('some description', function() {
+beforeEach('some description', function () {
   // beforeEach:some description
 });
 ```
@@ -398,22 +364,22 @@ beforeEach('some description', function() {
 All hooks (`before()`, `after()`, `beforeEach()`, `afterEach()`) may be sync or async as well, behaving much like a regular test-case. For example, you may wish to populate database with dummy content before each test:
 
 ```js
-describe('Connection', function() {
+describe('Connection', function () {
   var db = new Connection(),
     tobi = new User('tobi'),
     loki = new User('loki'),
     jane = new User('jane');
 
-  beforeEach(function(done) {
-    db.clear(function(err) {
+  beforeEach(function (done) {
+    db.clear(function (err) {
       if (err) return done(err);
       db.save([tobi, loki, jane], done);
     });
   });
 
-  describe('#find()', function() {
-    it('respond with matching records', function(done) {
-      db.find({type: 'User'}, function(err, res) {
+  describe('#find()', function () {
+    it('respond with matching records', function (done) {
+      db.find({type: 'User'}, function (err, res) {
         if (err) return done(err);
         res.should.have.length(3);
         done();
@@ -425,23 +391,21 @@ describe('Connection', function() {
 
 ### Root-Level Hooks
 
-You may also pick any file and add "root"-level hooks. For example, add `beforeEach()` outside of all `describe()` blocks. This will cause the callback to `beforeEach()` to run before any test case, regardless of the file it lives in (this is because Mocha has an _implied_ `describe()` block, called the "root suite").
+A hook defined at the top scope of a test file (outside of a suite) is a _root hook_.
 
-```js
-beforeEach(function() {
-  console.log('before every test in every file');
-});
-```
+As of v8.0.0, [Root Hook Plugins](#root-hook-plugins) are the preferred mechanism for setting root hooks.
 
 ### Delayed Root Suite
+
+> _WARNING: Delayed root suites are incompatible with [parallel mode](#parallel-tests)._
 
 If you need to perform asynchronous operations before any of your suites are run, you may delay the root suite. Run `mocha` with the `--delay` flag. This will attach a special callback function, `run()`, to the global context:
 
 ```js
-setTimeout(function() {
+setTimeout(function () {
   // do some setup
 
-  describe('my suite', function() {
+  describe('my suite', function () {
     // ...
   });
 
@@ -451,11 +415,11 @@ setTimeout(function() {
 
 ## Pending Tests
 
-"Pending"--as in "someone should write these test cases eventually"--test-cases are simply those _without_ a callback:
+"Pending"--as in "someone should write these test cases eventually"--test-cases are those _without_ a callback:
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
     // pending test below
     it('should return -1 when the value is not present');
   });
@@ -464,14 +428,18 @@ describe('Array', function() {
 
 Pending tests will be included in the test results, and marked as pending. A pending test is not considered a failed test.
 
+Read the [inclusive tests section](#inclusive-tests) for an example of conditionally marking a test as pending via `this.skip()`.
+
 ## Exclusive Tests
+
+> _WARNING: Exclusive tests are incompatible with [parallel mode](#parallel-tests)._
 
 The exclusivity feature allows you to run _only_ the specified suite or test-case
 by appending `.only()` to the function. Here's an example of executing only a particular suite:
 
 ```js
-describe('Array', function() {
-  describe.only('#indexOf()', function() {
+describe('Array', function () {
+  describe.only('#indexOf()', function () {
     // ...
   });
 });
@@ -482,13 +450,13 @@ _Note_: All nested suites will still be executed.
 Here's an example of executing an individual test case:
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it.only('should return -1 unless present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it.only('should return -1 unless present', function () {
       // ...
     });
 
-    it('should return the index when present', function() {
+    it('should return the index when present', function () {
       // ...
     });
   });
@@ -498,17 +466,17 @@ describe('Array', function() {
 Previous to v3.0.0, `.only()` used string matching to decide which tests to execute; this is no longer the case. In v3.0.0 or newer, `.only()` can be used multiple times to define a subset of tests to run:
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it.only('should return -1 unless present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it.only('should return -1 unless present', function () {
       // this test will be run
     });
 
-    it.only('should return the index when present', function() {
+    it.only('should return the index when present', function () {
       // this test will also be run
     });
 
-    it('should return -1 if called with a non-Array context', function() {
+    it('should return -1 if called with a non-Array context', function () {
       // this test will not be run
     });
   });
@@ -518,25 +486,25 @@ describe('Array', function() {
 You may also choose multiple suites:
 
 ```js
-describe('Array', function() {
-  describe.only('#indexOf()', function() {
-    it('should return -1 unless present', function() {
+describe('Array', function () {
+  describe.only('#indexOf()', function () {
+    it('should return -1 unless present', function () {
       // this test will be run
     });
 
-    it('should return the index when present', function() {
+    it('should return the index when present', function () {
       // this test will also be run
     });
   });
 
-  describe.only('#concat()', function() {
-    it('should return a new Array', function() {
+  describe.only('#concat()', function () {
+    it('should return a new Array', function () {
       // this test will also be run
     });
   });
 
-  describe('#slice()', function() {
-    it('should return a new Array', function() {
+  describe('#slice()', function () {
+    it('should return a new Array', function () {
       // this test will not be run
     });
   });
@@ -546,13 +514,13 @@ describe('Array', function() {
 But _tests will have precedence_:
 
 ```js
-describe('Array', function() {
-  describe.only('#indexOf()', function() {
-    it.only('should return -1 unless present', function() {
+describe('Array', function () {
+  describe.only('#indexOf()', function () {
+    it.only('should return -1 unless present', function () {
       // this test will be run
     });
 
-    it('should return the index when present', function() {
+    it('should return the index when present', function () {
       // this test will not be run
     });
   });
@@ -565,16 +533,16 @@ _Note_: Hooks, if present, will still be executed.
 
 ## Inclusive Tests
 
-This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to simply ignore test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an individual test:
+This feature is the inverse of `.only()`. By appending `.skip()`, you may tell Mocha to ignore test case(s). Anything skipped will be marked as [pending](#pending-tests), and reported as such. Here's an example of skipping an individual test:
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it.skip('should return -1 unless present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it.skip('should return -1 unless present', function () {
       // this test will not be run
     });
 
-    it('should return the index when present', function() {
+    it('should return the index when present', function () {
       // this test will be run
     });
   });
@@ -584,9 +552,9 @@ describe('Array', function() {
 You can also put `.skip()` on an entire suite. This is equivalent to appending `.skip()` onto all tests in the suite. Hooks in the suite are also skipped.
 
 ```js
-describe('Array', function() {
-  describe.skip('#indexOf()', function() {
-    it('should return -1 unless present', function() {
+describe('Array', function () {
+  describe.skip('#indexOf()', function () {
+    it('should return -1 unless present', function () {
       // this test will not be run
     });
   });
@@ -644,21 +612,21 @@ before(function() {
 This will skip all `it`, `beforeEach/afterEach`, and `describe` blocks within the suite. `before/after` hooks are skipped unless they are defined at the same level as the hook containing `this.skip()`.
 
 ```js
-describe('outer', function() {
-  before(function() {
+describe('outer', function () {
+  before(function () {
     this.skip();
   });
 
-  after(function() {
+  after(function () {
     // will be executed
   });
 
-  describe('inner', function() {
-    before(function() {
+  describe('inner', function () {
+    before(function () {
       // will be skipped
     });
 
-    after(function() {
+    after(function () {
       // will be skipped
     });
   });
@@ -678,15 +646,15 @@ This feature does re-run a failed test and its corresponding `beforeEach/afterEa
 **NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks][selenium-webdriver-testing] for `Promise` chain).
 
 ```js
-describe('retries', function() {
+describe('retries', function () {
   // Retry all tests in this suite up to 4 times
   this.retries(4);
 
-  beforeEach(function() {
+  beforeEach(function () {
     browser.get('http://www.yahoo.com');
   });
 
-  it('should succeed on the 3rd try', function() {
+  it('should succeed on the 3rd try', function () {
     // Specify this test to only retry up to 2 times
     this.retries(2);
     expect($('.foo').isDisplayed()).to.eventually.be.true;
@@ -704,20 +672,20 @@ Take the following example:
 var assert = require('chai').assert;
 
 function add() {
-  return Array.prototype.slice.call(arguments).reduce(function(prev, curr) {
+  return Array.prototype.slice.call(arguments).reduce(function (prev, curr) {
     return prev + curr;
   }, 0);
 }
 
-describe('add()', function() {
+describe('add()', function () {
   var tests = [
     {args: [1, 2], expected: 3},
     {args: [1, 2, 3], expected: 6},
-    {args: [1, 2, 3, 4], expected: 10}
+    {args: [1, 2, 3, 4], expected: 10},
   ];
 
-  tests.forEach(function(test) {
-    it('correctly adds ' + test.args.length + ' args', function() {
+  tests.forEach(function (test) {
+    it('correctly adds ' + test.args.length + ' args', function () {
       var res = add.apply(null, test.args);
       assert.equal(res, test.expected);
     });
@@ -740,7 +708,7 @@ $ mocha
 
 Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the SPEC reporter:
 
-![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![test duration](images/reporter-spec-duration.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 There are three levels of test duration (depicted in the following image):
 
@@ -748,15 +716,15 @@ There are three levels of test duration (depicted in the following image):
 2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
 3. SLOW: Tests that run exceeding the threshold will show the duration in red.
 
-![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 To tweak what's considered "slow", you can use the `slow()` method:
 
 ```js
-describe('something slow', function() {
+describe('something slow', function () {
   this.slow(300000); // five minutes
 
-  it('should take long enough for me to go make a sandwich', function() {
+  it('should take long enough for me to go make a sandwich', function () {
     // ...
   });
 });
@@ -769,14 +737,14 @@ describe('something slow', function() {
 Suite-level timeouts may be applied to entire test "suites", or disabled via `this.timeout(0)`. This will be inherited by all nested suites and test-cases that do not override the value.
 
 ```js
-describe('a suite of tests', function() {
+describe('a suite of tests', function () {
   this.timeout(500);
 
-  it('should take less than 500ms', function(done) {
+  it('should take less than 500ms', function (done) {
     setTimeout(done, 300);
   });
 
-  it('should take less than 500ms as well', function(done) {
+  it('should take less than 500ms as well', function (done) {
     setTimeout(done, 250);
   });
 });
@@ -787,7 +755,7 @@ describe('a suite of tests', function() {
 Test-specific timeouts may also be applied, or the use of `this.timeout(0)` to disable timeouts all together:
 
 ```js
-it('should take less than 500ms', function(done) {
+it('should take less than 500ms', function (done) {
   this.timeout(500);
   setTimeout(done, 300);
 });
@@ -798,8 +766,8 @@ it('should take less than 500ms', function(done) {
 Hook-level timeouts may also be applied:
 
 ```js
-describe('a suite of tests', function() {
-  beforeEach(function(done) {
+describe('a suite of tests', function () {
+  beforeEach(function (done) {
     this.timeout(3000); // A very long environment setup.
     setTimeout(done, 2500);
   });
@@ -816,96 +784,13 @@ Again, use `this.timeout(0)` to disable the timeout for a hook.
 
 Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library. Mocha will attempt to display the difference between what was expected, and what the assertion actually saw. Here's an example of a "string" diff using `--inline-diffs`:
 
-![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![string diffs](images/reporter-string-diffs.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ## Command-Line Usage
 
-<!-- AUTO-GENERATED-CONTENT:START (usage:executable=bin/mocha) -->
-
-```text
-
-mocha [spec..]
-
-Run tests with Mocha
-
-Commands
-  mocha inspect [spec..]  Run tests with Mocha                         [default]
-  mocha init <path>       create a client-side Mocha setup at <path>
-
-Rules & Behavior
-  --allow-uncaught           Allow uncaught errors to propagate        [boolean]
-  --async-only, -A           Require all tests to use a callback (async) or
-                             return a Promise                          [boolean]
-  --bail, -b                 Abort ("bail") after first test failure   [boolean]
-  --check-leaks              Check for global variable leaks           [boolean]
-  --delay                    Delay initial execution of root suite     [boolean]
-  --exit                     Force Mocha to quit after tests complete  [boolean]
-  --forbid-only              Fail if exclusive test(s) encountered     [boolean]
-  --forbid-pending           Fail if pending test(s) encountered       [boolean]
-  --global, --globals        List of allowed global variables            [array]
-  --retries                  Retry failed tests this many times         [number]
-  --slow, -s                 Specify "slow" test threshold (in milliseconds)
-                                                          [string] [default: 75]
-  --timeout, -t, --timeouts  Specify test timeout threshold (in milliseconds)
-                                                        [string] [default: 2000]
-  --ui, -u                   Specify user interface    [string] [default: "bdd"]
-
-Reporting & Output
-  --color, -c, --colors                     Force-enable color output  [boolean]
-  --diff                                    Show diff on failure
-                                                       [boolean] [default: true]
-  --full-trace                              Display full stack traces  [boolean]
-  --growl, -G                               Enable Growl notifications [boolean]
-  --inline-diffs                            Display actual/expected differences
-                                            inline within each string  [boolean]
-  --reporter, -R                            Specify reporter to use
-                                                      [string] [default: "spec"]
-  --reporter-option, --reporter-options,    Reporter-specific options
-  -O                                        (<k=v,[k1=v1,..]>)           [array]
-
-Configuration
-  --config   Path to config file           [string] [default: (nearest rc file)]
-  --package  Path to package.json for config                            [string]
-
-File Handling
-  --extension          File extension(s) to load
-                                           [array] [default: ["js","cjs","mjs"]]
-  --file               Specify file(s) to be loaded prior to root suite
-                       execution                       [array] [default: (none)]
-  --ignore, --exclude  Ignore file(s) or glob pattern(s)
-                                                       [array] [default: (none)]
-  --recursive          Look for tests in subdirectories                [boolean]
-  --require, -r        Require module                  [array] [default: (none)]
-  --sort, -S           Sort test files                                 [boolean]
-  --watch, -w          Watch files in the current working directory for changes
-                                                                       [boolean]
-  --watch-files        List of paths or globs to watch                   [array]
-  --watch-ignore       List of paths or globs to exclude from watching
-                                      [array] [default: ["node_modules",".git"]]
-
-Test Filters
-  --fgrep, -f   Only run tests containing this string                   [string]
-  --grep, -g    Only run tests matching this string or regexp           [string]
-  --invert, -i  Inverts --grep and --fgrep matches                     [boolean]
-
-Positional Arguments
-  spec  One or more files, directories, or globs to test
-                                                     [array] [default: ["test"]]
-
-Other Options
-  --help, -h         Show usage information & exit                     [boolean]
-  --version, -V      Show version number & exit                        [boolean]
-  --list-interfaces  List built-in user interfaces & exit              [boolean]
-  --list-reporters   List built-in reporters & exit                    [boolean]
-
-Mocha Resources
-    Chat: https://gitter.im/mochajs/mocha
-  GitHub: https://github.com/mochajs/mocha.git
-    Docs: https://mochajs.org/
-
 ```
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+{{ usage }}
+```
 
 ### `--allow-uncaught`
 
@@ -943,7 +828,7 @@ _Prior to_ version v4.0.0, _by default_, Mocha would force its own process to ex
 
 The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it was `--exit`.
 
-**The easiest way to "fix" the issue is to simply pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
+**The easiest way to "fix" the issue is to pass `--exit` to the Mocha process.** It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
 
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
@@ -970,7 +855,7 @@ Enforce a rule that tests may not be skipped (use of e.g., `describe.skip()`, `i
 
 Define a global variable name. For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--global app --global YUI`.
 
-`--global` accepts wildcards. You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc. You can also simply pass in `'*'` to ignore all globals.
+`--global` accepts wildcards. You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc. You can also pass in `'*'` to ignore all globals.
 
 `--global` can accept a comma-delimited list; `--global app,YUI` is equivalent to `--global app --global YUI`.
 
@@ -1088,6 +973,8 @@ The option can be given multiple times. The option accepts a comma-delimited lis
 
 ### `--file <file|directory|glob>`
 
+> _WARNING: `--file` is incompatible with [parallel mode](#parallel-tests)._
+
 Explicitly _include_ a test file to be loaded before other test files. Multiple uses of `--file` are allowed, and will be loaded in order given.
 
 Useful if you want to declare, for example, hooks to be run before every test across all other test files.
@@ -1121,9 +1008,13 @@ Require a module before loading the user interface or test files. This is useful
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
 
-Note you cannot use `--require` to set a global `beforeEach()` hook, for example &mdash; use `--file` instead, which allows you to specify an explicit order in which test files are loaded.
+**You cannot use `--require` to set hooks**. If you want to set hooks to run, e.g., before each test, use a [Root Hook Plugin](#root-hook-plugins).
+
+> As of v8.0.0, Mocha supports `--require` for [NodeJS native ESM](#nodejs-native-esm-support). There is no separate `--import` flag.
 
 ### `--sort, -S`
+
+> _WARNING: `--sort` is incompatible with [parallel mode](#parallel-tests)._
 
 Sort test files (by absolute path) using [Array.prototype.sort][mdn-array-sort].
 
@@ -1174,17 +1065,17 @@ Cause Mocha to only run tests matching the given `regexp`, which is internally c
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
 ```js
-describe('api', function() {
-  describe('GET /api/users', function() {
-    it('respond with an array of users', function() {
+describe('api', function () {
+  describe('GET /api/users', function () {
+    it('respond with an array of users', function () {
       // ...
     });
   });
 });
 
-describe('app', function() {
-  describe('GET /users', function() {
-    it('respond with an array of users', function() {
+describe('app', function () {
+  describe('GET /users', function () {
+    it('respond with an array of users', function () {
       // ...
     });
   });
@@ -1213,6 +1104,28 @@ All of these options are mutually exclusive.
 
 Implies `--no-timeout`.
 
+### `--parallel, -p`
+
+> _New in v.8.0.0._
+
+Use the `--parallel` flag to run tests in a worker pool.
+
+Each test file will be put into a queue and executed as workers become available.
+
+**NOTICE**: `--parallel` has certain implications for Mocha's behavior which you must be aware of. Read more about [running tests in parallel](#parallel-tests).
+
+### `--jobs <count>, -j <count>`
+
+> _New in v.8.0.0._
+
+Use `--jobs <count>` to specify the _maximum_ number of processes in the worker pool.
+
+The default value is the _number of CPU cores_ less 1.
+
+Hint: Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
+
+Has no effect unless used with [`--parallel`](#-parallel-p).
+
 ### About Option Types
 
 > _Updated in v6.0.0._
@@ -1235,6 +1148,351 @@ Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excludi
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
+## Parallel Tests
+
+> _New in v.8.0.0._
+
+Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](#-parallel-p) flag).
+
+Parallel tests should work out-of-the box for many use cases. However, you must be aware of some important implications of the behavior.
+
+> _Note: Authors of third-party libraries built on Mocha should read this!_
+
+### Reporter Limitations
+
+Due to the nature of the following reporters, they cannot work when running tests in parallel:
+
+- [`markdown`](#markdown)
+- [`progress`](#progress)
+- [`json-stream`](#json-stream)
+  {:.single-column}
+
+These reporters expect Mocha to know _how many tests it plans to run_ before execution. This information is unavailable in parallel mode, as test files are loaded only when they are about to be run.
+
+In serial mode, tests results will "stream" as they occur. In parallel mode, reporter output is _buffered_; reporting will occur after each file is completed. In practice, the reporter output will appear in "chunks" (but will otherwise be identical). If a test file is particularly slow, there may be a significant pause while it's running.
+
+### Exclusive Tests are Disallowed
+
+**You cannot use `it.only`, `describe.only`, `this.only()`, etc., in parallel mode.** This is for the same reason as the incompatible reporters noted above: in parallel mode, Mocha does not load all files and suites into memory before running tests.
+
+Suggested workarounds:
+
+1. Use [`--grep`](#-grep-regexp-g-regexp) or [`--fgrep`](http://localhost:8080/#-fgrep-string-f-string) instead; it's not particularly efficient, but it will work.
+1. Don't use parallel mode. Likely, you won't be running very many exclusive tests, so you won't see a great benefit from parallel mode anyhow.
+
+> _TIP: If parallel mode is defined in your config file, you can temporarily disable it on the command-line by using either the `--no-parallel` flag or reducing the job count, e.g., `--jobs=0`._
+
+### File Order is Non-Deterministic
+
+In parallel mode, Mocha does not guarantee the order in which test files will run, nor which worker process runs them.
+
+Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
+
+- [`--file`](#-file-filedirectoryglob)
+- [`--sort`](#-sort-s)
+- [`--delay`](#delayed-root-suite)
+  {:.single-column}
+
+### Test Duration Variability
+
+Running tests in parallel mode will naturally use more system resources. The OS may take extra time to schedule and complete some operations, depending on system load. For this reason, the timeouts of _individual tests_ may need to be increased either [globally](#-timeout-ms-t-ms) or [otherwise](#timeouts).
+
+### "Bail" is "Best Effort"
+
+When used with `--bail` (or `this.bail()`) to exit after the first failure, it's likely other tests will be running at the same time. Mocha must shut down its worker processes before exiting.
+
+Likewise, subprocesses may throw uncaught exceptions. When used with `--allow-uncaught`, Mocha will "bubble" this exception to the main process, but still must shut down its processes.
+
+Either way, Mocha will abort the test run "very soon."
+
+### Root Hooks Are Not Global
+
+> _NOTE: This only applies when running in parallel mode._
+
+A _root hook_ is a hook in a test file which is _not defined_ within a suite. An example using the `bdd` interface:
+
+```js
+// test/setup.js
+
+// root hook to run before every test (even in other files)
+beforeEach(function () {
+  doMySetup();
+});
+
+// root hook to run after every test (even in other files)
+afterEach(function () {
+  doMyTeardown();
+});
+```
+
+When run (in the default "serial" mode) via this command:
+
+```bash
+mocha --file "./test/setup.js" "./test/**/*.spec.js"
+```
+
+`setup.js` will be executed _first_, and install the two hooks shown above for every test found in `./test/**/*.spec.js`.
+
+**The above example does not work in parallel mode.**
+
+When Mocha runs in parallel mode, **test files do not share the same process,** nor do they share the same instance of Mocha. Consequently, a hypothetical root hook defined in test file _A_ **will not be present** in test file _B_.
+
+Here are a couple suggested workarounds:
+
+1. `require('./setup.js')` or `import './setup.js'` at the top of every test file. Best avoided for those averse to boilerplate.
+1. _Recommended_: Define root hooks in a "required" file, using the new (also as of v8.0.0) [Root Hook Plugin](#root-hook-plugins) system.
+
+### No Browser Support
+
+Parallel mode is only available in Node.js, for now.
+
+### Limited Reporter API for Third-Party Reporters
+
+Third-party reporters may encounter issues when attempting to access non-existent properties within `Test`, `Suite`, and `Hook` objects. If a third-party reporter does not work in parallel mode (but otherwise works in serial mode), please [file an issue](https://github.com/mochajs/mocha/issues/new).
+
+### Troubleshooting Parallel Mode
+
+If you find your tests don't work properly when run with [`--parallel`](#-parallel-p), either shrug and move on, or use this handy-dandy checklist to get things working:
+
+- :white_check_mark: Ensure you are using a [supported reporter](#reporter-limitations).
+- :white_check_mark: Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
+- :white_check_mark: Double-check your [config file](#configuring-mocha-nodejs); options set in config files will be merged with any command-line option.
+- :white_check_mark: Look for root hooks (they look like [this](#root-hooks-are-not-global)) in your tests. Move them into a [Root Hook Plugin](#root-hook-plugins).
+- :white_check_mark: Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
+- :white_check_mark: If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](#-timeout-ms-t-ms))
+- :white_check_mark: Ensure your tests do not depend on being run in a specific order.
+- :white_check_mark: Ensure your tests clean up after themselves; remove temp files, handles, sockets, etc. Don't try to share state or resources between test files.
+
+### Caveats About Testing in Parallel
+
+Some types of tests are _not_ so well-suited to run in parallel. For example, extremely timing-sensitive tests, or tests which make I/O requests to a limited pool of resources (such as opening ports, or automating browser windows, hitting a test DB, or remote server, etc.).
+
+Free-tier cloud CI services may not provide a suitable multi-core container or VM for their build agents. Regarding expected performance gains in CI: your mileage may vary. It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
+
+It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+
+## Root Hook Plugins
+
+> _New in v8.0.0._
+
+In some cases, you may want a [hook](#hooks) before (or after) every test in every file. These are called _root hooks_. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode! For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
+
+A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root hooks to be used across all test files.
+
+### Defining a Root Hook Plugin
+
+A Root Hook Plugin file is a script which exports (via `module.exports`) a `mochaHooks` property. It is loaded via `--require <file>`.
+
+Here's a simple example which defines a root hook, written using CJS and ESM syntax.
+
+#### With CommonJS
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  },
+};
+```
+
+#### With ES Modules
+
+We're using the `.mjs` extension in these examples.
+
+> _Tip: If you're having trouble getting ES modules to work, refer to [the Node.js documentation](https://nodejs.org/api/esm.html)._
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  },
+};
+```
+
+> _Note: Further examples will use ESM syntax._
+
+### Available Root Hooks
+
+Root hooks work with any interface, but _the property names do not change_. In other words, if you are using the `tdd` interface, `suiteSetup` maps to `beforeAll`, and `setup` maps to `beforeEach`.
+
+Available root hooks and their behavior:
+
+- `beforeAll`:
+  - In **serial** mode (Mocha's default), _before all tests begin, once only_
+  - In **parallel** mode, run _before all tests begin, for each file_
+- `beforeEach`:
+  - In **both** modes, run _before each test_
+- `afterAll`:
+  - In **serial** mode, run _after all tests end, once only_
+  - In **parallel** mode, run _after all tests end, for each file_
+- `afterEach`:
+  - In **both** modes, run _after every test_
+
+{:.single-column}
+
+As with other hooks, `this` refers to to the current context object:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeAll() {
+    // skip all tests for bob
+    if (require('os').userInfo().username === 'bob') {
+      return this.skip();
+    }
+  },
+};
+```
+
+### Multiple Root Hooks in a Single Plugin
+
+Multiple root hooks can be defined in a single plugin, for organizational purposes. For example:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeEach: [
+    function (done) {
+      // do something before every test,
+      // then run the next hook in this array
+    },
+    async function () {
+      // async or Promise-returning functions allowed
+    },
+  ],
+};
+```
+
+### Root Hook Plugins Can Export a Function
+
+If you need to perform some logic--such as choosing a root hook conditionally, based on the environment--`mochaHooks` can be a _function_ which returns the expected object.
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = () => {
+  if (process.env.CI) {
+    // root hooks object
+    return {
+      beforeEach: [
+        function () {
+          // CI-specific beforeEach
+        },
+        function () {
+          // some other CI-specific beforeEach
+        },
+      ],
+    };
+  }
+  // root hooks object
+  return {
+    beforeEach() {
+      // regular beforeEach
+    },
+  };
+};
+```
+
+If you need to perform an async operation, `mochaHooks` can be `Promise`-returning:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = async () => {
+  const result = await checkSomething();
+  // only use a root hook if `result` is truthy
+  if (result) {
+    // root hooks object
+    return {
+      beforeEach() {
+        // something
+      },
+    };
+  }
+};
+```
+
+### Multiple Root Hook Plugins
+
+Multiple root hook plugins can be registered by using `--require` multiple times. For example, to register the root hooks in `hooks-a.js` and `hooks-b.js`, use `--require hooks-a.js --require hooks-b.js`. These will be registered (and run) _in order_.
+
+### Migrating Tests to use Root Hook Plugins
+
+To migrate your tests using root hooks to a root hook plugin:
+
+1. Find your root hooks (hooks defined _outside_ of a suite--usually `describe()` callback).
+1. Create a new file, e.g., `test/hooks.js`.
+1. _Move_ your root hooks into `test/hooks.js`.
+1. In `test/hooks.js`, make your hooks a member of an exported `mochaHooks` property.
+1. Use `--require test/hooks.js` (even better: use a [config file](#configuring-mocha-nodejs) with `{"require": "test/hooks.js"}`) when running your tests.
+
+For example, given the following file, `test/test.spec.js`, containing root hooks:
+
+```js
+// test/test.spec.js
+
+beforeEach(function () {
+  // global setup for all tests
+});
+
+after(function () {
+  // one-time final cleanup
+});
+
+describe('my test suite', function () {
+  it('should have run my global setup', function () {
+    // make assertion
+  });
+});
+```
+
+Your `test/hooks.js` (for this example, a CJS module) should contain:
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach(function() {
+    // global setup for all tests
+  }),
+  afterAll(function() {
+    // one-time final cleanup
+  })
+};
+```
+
+> _NOTE: Careful! `after` becomes `afterAll` and `before` becomes `beforeAll`._
+
+Your original `test/test.spec.js` should now contain:
+
+```js
+// test/test.spec.js
+
+describe('my test suite', function () {
+  it('should have run my global setup', function () {
+    // make assertion
+  });
+});
+```
+
+Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](#-parallel-p)).
+
+### Migrating a Library to use Root Hook PLugins
+
+If you're a library maintainer, and your library uses root hooks, you can migrate by refactoring your entry point:
+
+- Your library should _always_ export a [`mochaHooks` object](#defining-a-root-hook-plugin).
+- To maintain backwards compatibility, run your root hooks _if and only if_ `global.beforeEach` (or other relevant hook) exists.
+- Instruct your users to `--require <your-package>` when running `mocha`.
+
 ## Interfaces
 
 Mocha's "interface" system allows developers to choose their style of DSL. Mocha has **BDD**, **TDD**, **Exports**, **QUnit** and **Require**-style interfaces.
@@ -1243,29 +1501,29 @@ Mocha's "interface" system allows developers to choose their style of DSL. Mocha
 
 The **BDD** interface provides `describe()`, `context()`, `it()`, `specify()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
-`context()` is just an alias for `describe()`, and behaves the same way; it just provides a way to keep tests easier to read and organized. Similarly, `specify()` is an alias for `it()`.
+`context()` is just an alias for `describe()`, and behaves the same way; it provides a way to keep tests easier to read and organized. Similarly, `specify()` is an alias for `it()`.
 
 > All of the previous examples were written using the **BDD** interface.
 
 ```js
-describe('Array', function() {
-  before(function() {
+describe('Array', function () {
+  before(function () {
     // ...
   });
 
-  describe('#indexOf()', function() {
-    context('when not present', function() {
-      it('should not throw an error', function() {
-        (function() {
+  describe('#indexOf()', function () {
+    context('when not present', function () {
+      it('should not throw an error', function () {
+        (function () {
           [1, 2, 3].indexOf(4);
         }.should.not.throw());
       });
-      it('should return -1', function() {
+      it('should return -1', function () {
         [1, 2, 3].indexOf(4).should.equal(-1);
       });
     });
-    context('when present', function() {
-      it('should return the index where the element first appears in the array', function() {
+    context('when present', function () {
+      it('should return the index where the element first appears in the array', function () {
         [1, 2, 3].indexOf(3).should.equal(2);
       });
     });
@@ -1278,13 +1536,13 @@ describe('Array', function() {
 The **TDD** interface provides `suite()`, `test()`, `suiteSetup()`, `suiteTeardown()`, `setup()`, and `teardown()`:
 
 ```js
-suite('Array', function() {
-  setup(function() {
+suite('Array', function () {
+  setup(function () {
     // ...
   });
 
-  suite('#indexOf()', function() {
-    test('should return -1 when not present', function() {
+  suite('#indexOf()', function () {
+    test('should return -1 when not present', function () {
       assert.equal(-1, [1, 2, 3].indexOf(4));
     });
   });
@@ -1297,23 +1555,23 @@ The **Exports** interface is much like Mocha's predecessor [expresso][]. The key
 
 ```js
 module.exports = {
-  before: function() {
+  before: function () {
     // ...
   },
 
   Array: {
     '#indexOf()': {
-      'should return -1 when not present': function() {
+      'should return -1 when not present': function () {
         [1, 2, 3].indexOf(4).should.equal(-1);
-      }
-    }
-  }
+      },
+    },
+  },
 };
 ```
 
 ### QUnit
 
-The [QUnit][]-inspired interface matches the "flat" look of QUnit, where the test suite title is simply defined before the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+The [QUnit][]-inspired interface matches the "flat" look of QUnit, where the test suite title is defined _before_ the test-cases. Like TDD, it uses `suite()` and `test()`, but resembling BDD, it also contains `before()`, `after()`, `beforeEach()`, and `afterEach()`.
 
 ```js
 function ok(expr, msg) {
@@ -1322,12 +1580,12 @@ function ok(expr, msg) {
 
 suite('Array');
 
-test('#length', function() {
+test('#length', function () {
   var arr = [1, 2, 3];
   ok(arr.length == 3);
 });
 
-test('#indexOf()', function() {
+test('#indexOf()', function () {
   var arr = [1, 2, 3];
   ok(arr.indexOf(1) == 0);
   ok(arr.indexOf(2) == 1);
@@ -1336,7 +1594,7 @@ test('#indexOf()', function() {
 
 suite('String');
 
-test('#length', function() {
+test('#length', function () {
   ok('foo'.length == 3);
 });
 ```
@@ -1353,13 +1611,13 @@ var pre = require('mocha').before;
 var assertions = require('mocha').it;
 var assert = require('chai').assert;
 
-testCase('Array', function() {
-  pre(function() {
+testCase('Array', function () {
+  pre(function () {
     // ...
   });
 
-  testCase('#indexOf()', function() {
-    assertions('should return -1 when not present', function() {
+  testCase('#indexOf()', function () {
+    assertions('should return -1 when not present', function () {
       assert.equal([1, 2, 3].indexOf(4), -1);
     });
   });
@@ -1376,16 +1634,16 @@ Alias: `Spec`, `spec`
 
 This is the default reporter. The Spec reporter outputs a hierarchical view nested just as the test cases are.
 
-![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
-![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![spec reporter](images/reporter-spec.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
+![spec reporter with failure](images/reporter-spec-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Dot Matrix
 
 Alias: `Dot`, `dot`
 
-The Dot Matrix reporter is simply a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
+The Dot Matrix reporter is a series of characters which represent test cases. Failures highlight in red exclamation marks (`!`), pending tests with a blue comma (`,`), and slow tests as yellow. Good if you prefer minimal output.
 
-![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![dot matrix reporter](images/reporter-dot.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Nyan
 
@@ -1393,7 +1651,7 @@ Alias: `Nyan`, `nyan`
 
 The Nyan reporter is exactly what you might expect:
 
-![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![js nyan cat reporter](images/reporter-nyan.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### TAP
 
@@ -1401,7 +1659,7 @@ Alias: `TAP`, `tap`
 
 The TAP reporter emits lines for a [Test-Anything-Protocol][] consumer.
 
-![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![test anything protocol](images/reporter-tap.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Landing Strip
 
@@ -1409,8 +1667,8 @@ Alias: `Landing`, `landing`
 
 The Landing Strip reporter is a gimmicky test reporter simulating a plane landing :) unicode ftw
 
-![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
-![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![landing strip plane reporter](images/reporter-landing.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
+![landing strip with failure](images/reporter-landing-fail.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### List
 
@@ -1418,7 +1676,7 @@ Alias: `List`, `list`
 
 The List reporter outputs a simple specifications list as test cases pass or fail, outputting the failure details at the bottom of the output.
 
-![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![list reporter](images/reporter-list.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Progress
 
@@ -1426,7 +1684,7 @@ Alias: `Progress`, `progress`
 
 The Progress reporter implements a simple progress-bar:
 
-![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![progress bar](images/reporter-progress.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### JSON
 
@@ -1434,7 +1692,7 @@ Alias: `JSON`, `json`
 
 The JSON reporter outputs a single large JSON object when the tests have completed (failures or not).
 
-![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### JSON Stream
 
@@ -1442,7 +1700,7 @@ Alias: `JSONStream`, `json-stream`
 
 The JSON Stream reporter outputs newline-delimited JSON "events" as they occur, beginning with a "start" event, followed by test passes or failures, and then the final "end" event.
 
-![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![json stream reporter](images/reporter-json-stream.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Min
 
@@ -1450,7 +1708,7 @@ Alias: `Min`, `min`
 
 The Min reporter displays the summary only, while still outputting errors on failure. This reporter works great with `--watch` as it clears the terminal in order to keep your test summary at the top.
 
-![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![min reporter](images/reporter-min.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### Doc
 
@@ -1458,14 +1716,14 @@ Alias: `Doc`, `doc`
 
 The Doc reporter outputs a hierarchical HTML body representation of your tests. Wrap it with a header, footer, and some styling, then you have some fantastic documentation!
 
-![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![doc reporter](images/reporter-doc.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 For example, suppose you have the following JavaScript:
 
 ```js
-describe('Array', function() {
-  describe('#indexOf()', function() {
-    it('should return -1 when the value is not present', function() {
+describe('Array', function () {
+  describe('#indexOf()', function () {
+    it('should return -1 when the value is not present', function () {
       [1, 2, 3].indexOf(5).should.equal(-1);
       [1, 2, 3].indexOf(0).should.equal(-1);
     });
@@ -1558,6 +1816,7 @@ More information can be found in the [Node.js documentation](https://nodejs.org/
 
 > Mocha supports ES modules only from Node.js v12.11.0 and above. To enable this in versions smaller than 13.2.0, you need to add `--experimental-modules` when running
 > Mocha. From version 13.2.0 of Node.js, you can use ES modules without any flags.
+> (Mocha _will_ load ESM even in Node v10, but this is not officially supported. Use at your own risk.)
 
 ### Current Limitations
 
@@ -1566,7 +1825,6 @@ Node.JS native ESM support still has status: **Stability: 1 - Experimental**
 - [Watch mode](#-watch-w) does not support ES Module test files
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
-- [Required modules](#-require-module-r-module) can only be CommonJS files
 - [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
 - When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files
 - Node.JS native ESM support does not work with [esm][npm-esm] module
@@ -1621,7 +1879,7 @@ mocha.setup('tdd');
 
 // This is equivalent to the above.
 mocha.setup({
-  ui: 'tdd'
+  ui: 'tdd',
 });
 
 // Examples of options:
@@ -1636,7 +1894,7 @@ mocha.setup({
   retries: 3,
   slow: '100',
   timeout: '2000',
-  ui: 'bdd'
+  ui: 'bdd',
 });
 ```
 
@@ -1659,7 +1917,7 @@ If set to `true`, do not attempt to use syntax highlighting on output test code.
 
 The HTML reporter is the default reporter when running Mocha in the browser. It looks like this:
 
-![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" lazyload="on"}
+![HTML test reporter](images/reporter-html.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 [Mochawesome][npm-mochawesome] is a great alternative to the default HTML reporter.
 
@@ -1840,7 +2098,7 @@ The [Mocha TextMate bundle][textmate-mocha] includes snippets to make writing te
 
 [JetBrains][] provides a [NodeJS plugin][jetbrains-plugin] for its suite of IDEs (IntelliJ IDEA, WebStorm, etc.), which contains a Mocha test runner, among other things.
 
-![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
+![JetBrains Mocha Runner Plugin in Action](images/jetbrains-plugin.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
 The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Plugins**, assuming your license allows it.
 
@@ -1848,13 +2106,13 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 [Wallaby.js][] is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and node.js projects.
 
-![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
+![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
 ### Emacs
 
 [Emacs][] support for running Mocha tests is available via a 3rd party package [mocha.el][emacs-mocha.el]. The package is available on MELPA, and can be installed via `M-x package-install mocha`.
 
-![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
+![Emacs Mocha Runner in Action](images/emacs.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
 ### Mocha Sidebar (VS Code)
 
@@ -1863,11 +2121,11 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 #### Features
 
 - see all tests in VS Code sidebar menu
-- run & debug tests for each level hierarchy from all tests to a single test (and each describe of course)
+- run & debug tests for each level hierarchy from all tests to a single test (and each suite)
 - auto run tests on file save
 - see tests results directly in the code editor
 
-![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" lazyload="on"}
+![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
 ## Examples
 
@@ -1969,9 +2227,3 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [wallaby.js]: https://wallabyjs.com/
 [yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
-
-<!-- AUTO-GENERATED-CONTENT:START (manifest:template=[gitter]: ${gitter}) -->
-
-[gitter]: https://gitter.im/mochajs/mocha
-
-<!-- AUTO-GENERATED-CONTENT:END -->

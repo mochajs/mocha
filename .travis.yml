@@ -39,11 +39,8 @@ jobs:
     - script: COVERAGE=1 npm start test.node
       after_success: npm start coveralls
       name: 'Latest Node.js (with coverage)'
-
-    - &node
-      script: npm start test.node
-      node_js: '13'
-      name: 'Node.js v13'
+    - script: MOCHA_PARALLEL=0 npm start test.node.unit
+      name: 'Latest Node.js (unit tests in serial mode)'
 
     - &node
       script: npm start test.node
@@ -77,7 +74,7 @@ jobs:
       before_install: true
       install: npm install --production
       name: 'Latest Node.js'
-      script: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
+      script: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
       cache:
         directories:
           - ~/.npm
@@ -94,6 +91,9 @@ jobs:
     - stage: precache
       script: true
       name: 'Prime cache'
+
+env:
+  - 'NODE_OPTIONS="--trace-warnings"'
 
 notifications:
   email: false

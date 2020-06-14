@@ -347,15 +347,13 @@ _It's easier to release often._
 1. Push `master` to `origin` with your new tag; e.g. `git push origin master --tags`
 1. Copy & paste the `CHANGELOG.md` lines to a new GitHub "release". Save release as draft.
 1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI and [AppVeyor](https://ci.appveyor.com/project/boneskull/mocha).
-1. Once the build is green, and you're satisfied with the release notes, open your draft release on GitHub, then click "publish."
+   1. Once the build is green, you'll want to trigger an update of `mochajs.org`:
+   1. _If you're doing a prerelease_, fast-forward the `next` branch to `master`, and push it. This updates [https://next.mochajs.org](https://next.mochajs.org). That's all.
+   1. _If this is NOT a prerelease_, fast-forward the `mochajs.org` branch to `master` and push it. This updates [https://mochajs.org](https://mochajs.org).
+   1. _If this is a "final" release_ (the first release of a major _after_ one or more prereleases) then remove the `next` tag from npm via `npm dist-tag rm next`.
+1. Finally, you're satisfied with the release notes, open your draft release on GitHub, then click "publish."
 1. Back in your working copy, run `npm publish`. _If you're doing a prerelease, ensure that you use `--tag=next`._
 1. Announce the update on Twitter or just tell your dog or something. New releases will be automatically tweeted by [@b0neskull](https://twitter.com/b0neskull) via a feed subscription to Mocha's "releases" page on GitHub.
-
-In addition to above, you'll need to ensure the docs at [https://mochajs.org](https://mochajs.org) are updated:
-
-1. _If you're doing a prerelease_, fast-forward the `next` branch to `master`, and push it. This updates [https://next.mochajs.org](https://next.mochajs.org). That's all.
-1. _If this is NOT a prerelease_, fast-forward the `mochajs.org` branch to `master` and push it. This updates [https://mochajs.org](https://mochajs.org).
-1. _If this is a "final" release_ (the first release of a major _after_ one or more prereleases) then remove the `next` tag from npm via `npm dist-tag rm next`.
 
 _Note: there are too many steps above._
 

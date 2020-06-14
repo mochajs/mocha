@@ -1,3 +1,94 @@
+# 8.0.1 / 2020-06-10
+
+The obligatory patch after a major.
+
+## :bug: Fixes
+
+- [#4328](https://github.com/mochajs/mocha/issues/4328): Fix `--parallel` when combined with `--watch` ([**@boneskull**](https://github.com/boneskull))
+
+# 8.0.0 / 2020-06-10
+
+In this major release, Mocha adds the ability to _run tests in parallel_. Better late than never! Please note the **breaking changes** detailed below.
+
+Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](https://github.com/nicojs) to the maintenance team!
+
+## :boom: Breaking Changes
+
+- [#4164](https://github.com/mochajs/mocha/issues/4164): **Mocha v8.0.0 now requires Node.js v10.0.0 or newer.** Mocha no longer supports the Node.js v8.x line ("Carbon"), which entered End-of-Life at the end of 2019 ([**@UlisesGascon**](https://github.com/UlisesGascon))
+
+- [#4175](https://github.com/mochajs/mocha/issues/4175): Having been deprecated with a warning since v7.0.0, **`mocha.opts` is no longer supported** ([**@juergba**](https://github.com/juergba))
+
+  :sparkles: **WORKAROUND:** Replace `mocha.opts` with a [configuration file](https://mochajs.org/#configuring-mocha-nodejs).
+
+- [#4260](https://github.com/mochajs/mocha/issues/4260): Remove `enableTimeout()` (`this.enableTimeout()`) from the context object ([**@craigtaub**](https://github.com/craigtaub))
+
+  :sparkles: **WORKAROUND:** Replace usage of `this.enableTimeout(false)` in your tests with `this.timeout(0)`.
+
+- [#4315](https://github.com/mochajs/mocha/issues/4315): The `spec` option no longer supports a comma-delimited list of files ([**@juergba**](https://github.com/juergba))
+
+  :sparkles: **WORKAROUND**: Use an array instead (e.g., `"spec": "foo.js,bar.js"` becomes `"spec": ["foo.js", "bar.js"]`).
+
+- [#4309](https://github.com/mochajs/mocha/issues/4309): Drop support for Node.js v13.x line, which is now End-of-Life ([**@juergba**](https://github.com/juergba))
+
+- [#4282](https://github.com/mochajs/mocha/issues/4282): `--forbid-only` will throw an error even if exclusive tests are avoided via `--grep` or other means ([**@arvidOtt**](https://github.com/arvidOtt))
+
+- [#4223](https://github.com/mochajs/mocha/issues/4223): The context object's `skip()` (`this.skip()`) in a "before all" (`before()`) hook will no longer execute subsequent sibling hooks, in addition to hooks in child suites ([**@juergba**](https://github.com/juergba))
+
+- [#4178](https://github.com/mochajs/mocha/issues/4178): Remove previously soft-deprecated APIs ([**@wnghdcjfe**](https://github.com/wnghdcjfe)):
+  - `Mocha.prototype.ignoreLeaks()`
+  - `Mocha.prototype.useColors()`
+  - `Mocha.prototype.useInlineDiffs()`
+  - `Mocha.prototype.hideDiff()`
+
+## :tada: Enhancements
+
+- [#4245](https://github.com/mochajs/mocha/issues/4245): Add ability to run tests in parallel for Node.js (see [docs](https://mochajs.org/#parallel-tests)) ([**@boneskull**](https://github.com/boneskull))
+
+  :exclamation: See also [#4244](https://github.com/mochajs/mocha/issues/4244); [Root Hook Plugins (docs)](https://mochajs.org/#root-hook-plugins) -- _root hooks must be defined via Root Hook Plugins to work in parallel mode_
+
+- [#4304](https://github.com/mochajs/mocha/issues/4304): `--require` now works with ES modules ([**@JacobLey**](https://github.com/JacobLey))
+
+- [#4299](https://github.com/mochajs/mocha/issues/4299): In some circumstances, Mocha can run ES modules under Node.js v10 -- _use at your own risk!_ ([**@giltayar**](https://github.com/giltayar))
+
+## :book: Documentation
+
+- [#4246](https://github.com/mochajs/mocha/issues/4246): Add documentation for parallel mode and Root Hook plugins ([**@boneskull**](https://github.com/boneskull))
+
+## :bug: Fixes
+
+(All bug fixes in Mocha v8.0.0 are also breaking changes, and are listed above)
+
+# 7.2.0 / 2020-05-22
+
+## :tada: Enhancements
+
+- [#4234](https://github.com/mochajs/mocha/issues/4234): Add ability to run tests in a mocha instance multiple times ([**@nicojs**](https://github.com/nicojs))
+- [#4219](https://github.com/mochajs/mocha/issues/4219): Exposing filename in JSON, doc, and json-stream reporters ([**@Daniel0113**](https://github.com/Daniel0113))
+- [#4244](https://github.com/mochajs/mocha/issues/4244): Add Root Hook Plugins ([**@boneskull**](https://github.com/boneskull))
+
+## :bug: Fixes
+
+- [#4258](https://github.com/mochajs/mocha/issues/4258): Fix missing dot in name of configuration file ([**@sonicdoe**](https://github.com/sonicdoe))
+- [#4194](https://github.com/mochajs/mocha/issues/4194): Check if module.paths really exists ([**@ematipico**](https://github.com/ematipico))
+- [#4256](https://github.com/mochajs/mocha/issues/4256): `--forbid-only` does not recognize `it.only` when `before` crashes ([**@arvidOtt**](https://github.com/arvidOtt))
+- [#4152](https://github.com/mochajs/mocha/issues/4152): Bug with multiple async done() calls ([**@boneskull**](https://github.com/boneskull))
+- [#4275](https://github.com/mochajs/mocha/issues/4275): Improper warnings for invalid reporters ([**@boneskull**](https://github.com/boneskull))
+- [#4288](https://github.com/mochajs/mocha/issues/4288): Broken hook.spec.js test for IE11 ([**@boneskull**](https://github.com/boneskull))
+
+## :book: Documentation
+
+- [#4081](https://github.com/mochajs/mocha/issues/4081): Insufficient white space for API docs in view on mobile ([**@HyunSangHan**](https://github.com/HyunSangHan))
+- [#4255](https://github.com/mochajs/mocha/issues/4255): Update mocha-docdash for UI fixes on API docs ([**@craigtaub**](https://github.com/craigtaub))
+- [#4235](https://github.com/mochajs/mocha/issues/4235): Enable emoji on website; enable normal ul elements ([**@boneskull**](https://github.com/boneskull))
+- [#4272](https://github.com/mochajs/mocha/issues/4272): Fetch sponsors at build time, show ALL non-skeevy sponsors ([**@boneskull**](https://github.com/boneskull))
+
+## :nut_and_bolt: Other
+
+- [#4249](https://github.com/mochajs/mocha/issues/4249): Refactoring improving encapsulation ([**@arvidOtt**](https://github.com/arvidOtt))
+- [#4242](https://github.com/mochajs/mocha/issues/4242): CI add job names, add Node.js v14 to matrix ([**@boneskull**](https://github.com/boneskull))
+- [#4237](https://github.com/mochajs/mocha/issues/4237): Refactor validatePlugins to throw coded errors ([**@boneskull**](https://github.com/boneskull))
+- [#4236](https://github.com/mochajs/mocha/issues/4236): Better debug output ([**@boneskull**](https://github.com/boneskull))
+
 # 7.1.2 / 2020-04-26
 
 ## :nut_and_bolt: Other
@@ -552,7 +643,7 @@ This release fixes a class of tests which report as _false positives_. **Certain
 
 - [#3226](https://github.com/mochajs/mocha/issues/3226): Do not swallow errors that are thrown asynchronously from passing tests ([@boneskull](https://github.com/boneskull)). Example:
 
-  \```js
+  \`\`\`js
   it('should actually fail, sorry!', function (done) {
   // passing assertion
   assert(true === true);
@@ -565,7 +656,7 @@ This release fixes a class of tests which report as _false positives_. **Certain
   throw new Error('chaos!');
   }, 100);
   });
-  \```
+  \`\`\`
 
   Previously to this version, Mocha would have _silently swallowed_ the `chaos!` exception, and you wouldn't know. Well, _now you know_. Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
 
