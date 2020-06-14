@@ -13,7 +13,7 @@ const BUFFERED_RUNNER_PATH = require.resolve(
 );
 const Suite = require('../../lib/suite');
 const Runner = require('../../lib/runner');
-var sinon = require('sinon');
+const sinon = require('sinon');
 
 describe('buffered-runner', function() {
   describe('BufferedRunner', function() {
