@@ -17,7 +17,7 @@ const {
   isNodeFlag,
   impliesNoTimeouts
 } = require('../lib/cli/node-flags');
-const unparse = require('yargs-unparser');
+const unparse = require('@care-for/yargs-unparser');
 const debug = require('debug')('mocha:cli:mocha');
 const {aliases} = require('../lib/cli/run-option-metadata');
 

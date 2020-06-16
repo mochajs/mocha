@@ -4,6 +4,8 @@ The obligatory patch after a major.
 
 ## :bug: Fixes
 
+- [#4332](https://github.com/mochajs/mocha/issues/4332): Replace `yargs-unparser` with `@care-for/yargs-unparser` to fix lodash vulnarability ([**@martinoppitz**](https://github.com/martinoppitz))
+- [#4331](https://github.com/mochajs/mocha/issues/4331): Update `serialize-javascript` to 3.1.0 ([**@martinoppitz**](https://github.com/martinoppitz))
 - [#4328](https://github.com/mochajs/mocha/issues/4328): Fix `--parallel` when combined with `--watch` ([**@boneskull**](https://github.com/boneskull))
 
 # 8.0.0 / 2020-06-10
