@@ -118,6 +118,12 @@ overrides:
     excludedFiles:
       - lib/cli/**/*.js
       - lib/browser/growl.js
+      - lib/esm-utils.js
+      - lib/nodejs/serializer.js
+      - lib/nodejs/parallel-buffered-runner.js
+      - lib/nodejs/reporters/parallel-buffered.js
+      - lib/nodejs/worker.js
+      - lib/nodejs/buffered-worker-pool.js
 
     rules:
       'compat/compat': 'error'
