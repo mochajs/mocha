@@ -1,0 +1,16 @@
+# Deploy `mochajs.org` branch nightly by hitting a netlify build URL.
+# This updates the list of supporters
+
+name: Nightly mochajs.org Deploy
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Webhook Action
+        uses: joelwmale/webhook-action@1.0.0
+        env:
+          data: ''
+          WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}
