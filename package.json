@@ -156,6 +156,7 @@
     "index.js",
     "mocha.css",
     "mocha.js",
+    "mocha.js.map",
     "browser-entry.js"
   ],
   "browserify": {
