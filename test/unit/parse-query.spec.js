@@ -1,6 +1,6 @@
 'use strict';
 
-var parseQuery = require('../../lib/browser/parseQuery');
+var parseQuery = require('../../lib/browser/parse-query');
 
 describe('parseQuery()', function() {
   it('should get queryString and return key-value object', function() {
