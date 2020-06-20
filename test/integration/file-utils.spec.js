@@ -1,6 +1,6 @@
 'use strict';
 
-var lookupFiles = require('../../lib/cli/lookupFiles');
+var lookupFiles = require('../../lib/cli/lookup-files');
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
