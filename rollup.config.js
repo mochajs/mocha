@@ -1,5 +1,3 @@
-// import {resolve} from 'path';
-
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
@@ -29,9 +27,7 @@ export default {
       keys: ['name', 'version', 'homepage', 'notifyLogo']
     }),
     commonjs(),
-    globals({
-      // global: false
-    }),
+    globals(),
     builtins(),
     nodeResolve({
       browser: true
