@@ -90,8 +90,6 @@
     "assetgraph-builder": "^8.0.1",
     "autoprefixer": "^9.7.4",
     "babel-eslint": "^10.1.0",
-    "browserify": "^16.5.0",
-    "browserify-package-json": "^1.0.1",
     "chai": "^4.2.0",
     "coffee-script": "^1.12.7",
     "coveralls": "^3.0.11",
@@ -159,11 +157,6 @@
     "mocha.js.map",
     "browser-entry.js"
   ],
-  "browserify": {
-    "transform": [
-      "./scripts/package-json-cullify"
-    ]
-  },
   "browser": {
     "./index.js": "./browser-entry.js",
     "./lib/nodejs/growl.js": "./lib/browser/growl.js",
