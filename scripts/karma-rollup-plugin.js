@@ -1,5 +1,34 @@
 'use strict';
 
+/**
+ * This Karma plugin bundles all test files into a single file for browser
+ * testing.
+ *
+ * The plugin reads the file configuration from your Karma config and replaces
+ * them with a single bundle file instead. This is done by creating a rollup
+ * bundle file at a new path, then replacing all input file glob patterns with
+ * the bundle file. Then a bundle processor transform is added to handle that
+ * specific new file. The bundle preprocessor is the one actually calling
+ * rollup with a modified config that allows for multiple entry points for a
+ * single output bundle.
+ *
+ * This is am implementation that specifically solves Mocha's use case. It
+ * does not support watch mode. It is possible that is coulkd eventually be
+ * made reusable with more work and actual testing.
+ *
+ * We do not use karma-rollup-preprocessor because at the time of
+ * implementation it had a behavior where each individual file gets bundled
+ * separately with no deduplication of dependencies across bundles. This makes
+ * the operation slow to a point where it is actively blocking a responsive
+ * feedback loop in development.
+ * See issue at https://github.com/jlmakes/karma-rollup-preprocessor/issues/49
+ *
+ * This plugin was based on the architecture of
+ * https://www.npmjs.com/package/karma-browserify in order to achieve the
+ * behavior where all input files get bundled into a single file. The code has
+ * been modified heavily to simplify and support rollup instead of browserify.
+ */
+
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -33,8 +62,6 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
     ...new Set(bundlePatterns.map(pattern => glob.sync(pattern)).flat())
   ];
 
-  // console.log({ bundleFiles });
-
   const bundleLocation = pluginConfig.bundlePath
     ? pluginConfig.bundlePath
     : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
@@ -46,7 +73,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
 
   // Remove all file match patterns that were included in bundle
   // And inject the bundle in their place.
-  // Need tu use array mutation, otherwise Karma ignores us
+  // Need to use array mutation, otherwise Karma ignores us
   let bundleInjected = false;
   for (const bundlePattern of bundlePatterns) {
     const idx = fileConfigs.findIndex(({pattern}) => pattern === bundlePattern);
@@ -65,8 +92,6 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       }
     }
   }
-
-  // console.log(fileConfigs);
 }
 
 framework.$inject = [
