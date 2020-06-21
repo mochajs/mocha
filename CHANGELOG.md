@@ -14,7 +14,7 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 
 ## :boom: Breaking Changes
 
-- [#4164](https://github.com/mochajs/mocha/issues/4164): **Mocha v8.0.0 now requires Node.js v10.0.0 or newer.** Mocha no longer supports the Node.js v8.x line ("Carbon"), which entered End-of-Life at the end of 2019 ([**@UlisesGascon**](https://github.com/UlisesGascon))
+- [#4164](https://github.com/mochajs/mocha/issues/4164): **Mocha v8.0.0 now requires Node.js v10.12.0 or newer.** Mocha no longer supports the Node.js v8.x line ("Carbon"), which entered End-of-Life at the end of 2019 ([**@UlisesGascon**](https://github.com/UlisesGascon))
 
 - [#4175](https://github.com/mochajs/mocha/issues/4175): Having been deprecated with a warning since v7.0.0, **`mocha.opts` is no longer supported** ([**@juergba**](https://github.com/juergba))
 
@@ -35,6 +35,7 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 - [#4223](https://github.com/mochajs/mocha/issues/4223): The context object's `skip()` (`this.skip()`) in a "before all" (`before()`) hook will no longer execute subsequent sibling hooks, in addition to hooks in child suites ([**@juergba**](https://github.com/juergba))
 
 - [#4178](https://github.com/mochajs/mocha/issues/4178): Remove previously soft-deprecated APIs ([**@wnghdcjfe**](https://github.com/wnghdcjfe)):
+
   - `Mocha.prototype.ignoreLeaks()`
   - `Mocha.prototype.useColors()`
   - `Mocha.prototype.useInlineDiffs()`
@@ -53,6 +54,10 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 ## :book: Documentation
 
 - [#4246](https://github.com/mochajs/mocha/issues/4246): Add documentation for parallel mode and Root Hook plugins ([**@boneskull**](https://github.com/boneskull))
+
+## :nut_and_bolt: Other
+
+- [#4200](https://github.com/mochajs/mocha/issues/4200): Drop mkdirp and replace it with fs.mkdirSync ([**@HyunSangHan**](https://github.com/HyunSangHan))
 
 ## :bug: Fixes
 
