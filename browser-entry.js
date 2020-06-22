@@ -139,7 +139,7 @@ mocha.setup = function(opts) {
   if (typeof opts === 'string') {
     opts = {ui: opts};
   }
-  if ('delay' in opts && opts['delay'] === true) {
+  if ('delay' in opts && opts.delay === true) {
     this.delay();
   }
   var self = this;
