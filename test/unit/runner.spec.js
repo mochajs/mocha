@@ -120,17 +120,23 @@ describe('Runner', function() {
       done();
     });
 
-    it('should emit "fail" when a new global is introduced', function(done) {
+    it('should emit "fail" when a new global is introduced', function() {
       var test = new Test('im a test', noop);
       runner.checkGlobals();
       global.foo = 'bar';
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_test, 'to be', test);
-        expect(_err, 'to have message', "global leak(s) detected: 'foo'");
-        delete global.foo;
-        done();
-      });
-      runner.checkGlobals(test);
+
+      expect(
+        function() {
+          runner.checkGlobals(test);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect.it('to have message', "global leak(s) detected: 'foo'")
+      );
+
+      delete global.foo;
     });
 
     it('should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed', function(done) {
