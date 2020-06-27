@@ -18,7 +18,6 @@ var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe('List reporter', function() {
-  var sandbox;
   var runReporter = makeRunReporter(List);
   var expectedTitle = 'some title';
   var expectedDuration = 100;
@@ -32,12 +31,11 @@ describe('List reporter', function() {
   };
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
+    sinon.stub(Base, 'useColors').value(false);
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
@@ -55,7 +53,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var startString = '\n';
         var testString = '    ' + expectedTitle + ': ';
@@ -78,7 +76,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(stdout[0], 'to equal', '  - ' + expectedTitle + '\n');
       });
@@ -88,7 +86,7 @@ describe('List reporter', function() {
       var crStub;
 
       beforeEach(function() {
-        crStub = sandbox.stub(Base.cursor, 'CR').callsFake(noop);
+        crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
       it('should call cursor CR', function() {
@@ -104,14 +102,14 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
 
       it('should write expected symbol, title, and duration', function() {
         var expectedOkSymbol = 'OK';
-        sandbox.stub(Base.symbols, 'ok').value(expectedOkSymbol);
+        sinon.stub(Base.symbols, 'ok').value(expectedOkSymbol);
 
         var runner = createMockRunner(
           'pass',
@@ -125,7 +123,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(
           stdout[0],
@@ -145,7 +143,7 @@ describe('List reporter', function() {
       var crStub;
 
       beforeEach(function() {
-        crStub = sandbox.stub(Base.cursor, 'CR').callsFake(noop);
+        crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
       it('should call cursor CR', function() {
@@ -161,7 +159,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
@@ -180,7 +178,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(
           stdout[0],
@@ -222,7 +220,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(typeof err.actual, 'to be', 'string');
         expect(typeof err.expected, 'to be', 'string');
@@ -237,7 +235,7 @@ describe('List reporter', function() {
           epilogue: sinon.spy()
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(fakeThis.epilogue.calledOnce, 'to be true');
       });

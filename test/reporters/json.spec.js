@@ -7,7 +7,6 @@ var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
 describe('JSON reporter', function() {
-  var sandbox;
   var suite;
   var runner;
   var testTitle = 'json test 1';
@@ -26,12 +25,11 @@ describe('JSON reporter', function() {
   });
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(process.stdout, 'write').callsFake(noop);
+    sinon.stub(process.stdout, 'write').callsFake(noop);
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   it('should have 1 test failure', function(done) {
@@ -45,7 +43,7 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [
@@ -70,7 +68,7 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           pending: [
@@ -102,7 +100,7 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [

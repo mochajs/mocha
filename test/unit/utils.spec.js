@@ -4,14 +4,8 @@ var utils = require('../../lib/utils');
 var sinon = require('sinon');
 
 describe('lib/utils', function() {
-  var sandbox;
-
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('clean()', function() {
@@ -640,9 +634,9 @@ describe('lib/utils', function() {
     beforeEach(function() {
       if (process.emitWarning) {
         emitWarning = process.emitWarning;
-        sandbox.stub(process, 'emitWarning');
+        sinon.stub(process, 'emitWarning');
       } else {
-        process.emitWarning = sandbox.spy();
+        process.emitWarning = sinon.spy();
       }
       utils.deprecate.cache = {};
     });
@@ -680,9 +674,9 @@ describe('lib/utils', function() {
     beforeEach(function() {
       if (process.emitWarning) {
         emitWarning = process.emitWarning;
-        sandbox.stub(process, 'emitWarning');
+        sinon.stub(process, 'emitWarning');
       } else {
-        process.emitWarning = sandbox.spy();
+        process.emitWarning = sinon.spy();
       }
     });
 

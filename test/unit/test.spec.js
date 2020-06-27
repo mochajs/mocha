@@ -6,17 +6,8 @@ var Test = mocha.Test;
 var Runnable = mocha.Runnable;
 
 describe('Test', function() {
-  /**
-   * @type {sinon.SinonSandbox}
-   */
-  var sandbox;
-
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('.clone()', function() {
@@ -82,7 +73,7 @@ describe('Test', function() {
     });
 
     it('should call Runnable.reset', function() {
-      var runnableResetStub = sandbox.stub(Runnable.prototype, 'reset');
+      var runnableResetStub = sinon.stub(Runnable.prototype, 'reset');
       this._test.reset();
       expect(runnableResetStub, 'was called once');
     });
@@ -113,19 +104,13 @@ describe('Test', function() {
   });
 
   describe('.markOnly()', function() {
-    var sandbox;
-
-    beforeEach(function() {
-      sandbox = sinon.createSandbox();
-    });
-
     afterEach(function() {
-      sandbox.restore();
+      sinon.restore();
     });
 
     it('should call appendOnlyTest on parent', function() {
       var test = new Test('foo');
-      var spy = sandbox.spy();
+      var spy = sinon.spy();
       test.parent = {
         appendOnlyTest: spy
       };

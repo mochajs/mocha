@@ -2,7 +2,7 @@
 
 const path = require('path');
 const rewiremock = require('rewiremock/node');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const {EventEmitter} = require('events');
 
 const MODULE_PATH = require.resolve('../../lib/mocha.js');
@@ -15,41 +15,39 @@ describe('Mocha', function() {
   let stubs;
   let opts;
   let Mocha;
-  let sandbox;
 
   beforeEach(function() {
-    sandbox = createSandbox();
-    opts = {reporter: sandbox.stub()};
+    opts = {reporter: sinon.stub()};
 
     stubs = {};
     stubs.utils = {
-      supportsEsModules: sandbox.stub().returns(false),
-      warn: sandbox.stub(),
-      isString: sandbox.stub(),
-      noop: sandbox.stub(),
-      cwd: sandbox.stub().returns(process.cwd()),
-      isBrowser: sandbox.stub().returns(false)
+      supportsEsModules: sinon.stub().returns(false),
+      warn: sinon.stub(),
+      isString: sinon.stub(),
+      noop: sinon.stub(),
+      cwd: sinon.stub().returns(process.cwd()),
+      isBrowser: sinon.stub().returns(false)
     };
-    stubs.suite = Object.assign(sandbox.createStubInstance(EventEmitter), {
-      slow: sandbox.stub(),
-      timeout: sandbox.stub(),
-      bail: sandbox.stub(),
-      reset: sandbox.stub(),
-      dispose: sandbox.stub()
+    stubs.suite = Object.assign(sinon.createStubInstance(EventEmitter), {
+      slow: sinon.stub(),
+      timeout: sinon.stub(),
+      bail: sinon.stub(),
+      reset: sinon.stub(),
+      dispose: sinon.stub()
     });
-    stubs.Suite = sandbox.stub().returns(stubs.suite);
+    stubs.Suite = sinon.stub().returns(stubs.suite);
     stubs.Suite.constants = {};
-    stubs.BufferedRunner = sandbox.stub().returns({});
-    const runner = Object.assign(sandbox.createStubInstance(EventEmitter), {
-      run: sandbox
+    stubs.BufferedRunner = sinon.stub().returns({});
+    const runner = Object.assign(sinon.createStubInstance(EventEmitter), {
+      run: sinon
         .stub()
         .callsArgAsync(0)
         .returnsThis(),
-      globals: sandbox.stub(),
-      grep: sandbox.stub(),
-      dispose: sandbox.stub()
+      globals: sinon.stub(),
+      grep: sinon.stub(),
+      dispose: sinon.stub()
     });
-    stubs.Runner = sandbox.stub().returns(runner);
+    stubs.Runner = sinon.stub().returns(runner);
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     stubs.Runner.constants = {};
@@ -67,7 +65,7 @@ describe('Mocha', function() {
   afterEach(function() {
     delete require.cache[DUMB_FIXTURE_PATH];
     delete require.cache[DUMBER_FIXTURE_PATH];
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('instance method', function() {
@@ -211,7 +209,7 @@ describe('Mocha', function() {
     describe('unloadFiles()', function() {
       it('should delegate Mocha.unloadFile() for each item in its list of files', function() {
         mocha.files = [DUMB_FIXTURE_PATH, DUMBER_FIXTURE_PATH];
-        sandbox.stub(Mocha, 'unloadFile');
+        sinon.stub(Mocha, 'unloadFile');
         mocha.unloadFiles();
         expect(Mocha.unloadFile, 'to have a call exhaustively satisfying', [
           DUMB_FIXTURE_PATH

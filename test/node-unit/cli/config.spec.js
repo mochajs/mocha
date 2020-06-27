@@ -1,18 +1,13 @@
 'use strict';
 
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 
 describe('cli/config', function() {
-  let sandbox;
   const phonyConfigObject = {ok: true};
 
-  beforeEach(function() {
-    sandbox = createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('loadConfig()', function() {
@@ -29,9 +24,9 @@ describe('cli/config', function() {
 
     describe('when parsing succeeds', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'yaml').returns(phonyConfigObject);
-        sandbox.stub(parsers, 'json').returns(phonyConfigObject);
-        sandbox.stub(parsers, 'js').returns(phonyConfigObject);
+        sinon.stub(parsers, 'yaml').returns(phonyConfigObject);
+        sinon.stub(parsers, 'json').returns(phonyConfigObject);
+        sinon.stub(parsers, 'js').returns(phonyConfigObject);
       });
 
       describe('when supplied a filepath with ".yaml" extension', function() {
@@ -103,7 +98,7 @@ describe('cli/config', function() {
 
     describe('when supplied a filepath with unsupported extension', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'json').returns(phonyConfigObject);
+        sinon.stub(parsers, 'json').returns(phonyConfigObject);
       });
 
       it('should use the JSON parser', function() {
@@ -114,7 +109,7 @@ describe('cli/config', function() {
 
     describe('when config file parsing fails', function() {
       beforeEach(function() {
-        sandbox.stub(parsers, 'yaml').throws();
+        sinon.stub(parsers, 'yaml').throws();
       });
 
       it('should throw', function() {
@@ -129,7 +124,7 @@ describe('cli/config', function() {
     let CONFIG_FILES;
 
     beforeEach(function() {
-      findup = {sync: sandbox.stub().returns('/some/path/.mocharc.js')};
+      findup = {sync: sinon.stub().returns('/some/path/.mocharc.js')};
       const config = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
         r => ({

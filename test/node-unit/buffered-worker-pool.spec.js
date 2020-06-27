@@ -1,11 +1,10 @@
 'use strict';
 
 const rewiremock = require('rewiremock/node');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 
 describe('class BufferedWorkerPool', function() {
   let BufferedWorkerPool;
-  let sandbox;
   let pool;
   let stats;
   let serializeJavascript;
@@ -13,24 +12,23 @@ describe('class BufferedWorkerPool', function() {
   let result;
 
   beforeEach(function() {
-    sandbox = createSandbox();
     stats = {totalWorkers: 10, busyWorkers: 8, idleWorkers: 2, pendingTasks: 3};
     result = {failures: 0, events: []};
     pool = {
-      terminate: sandbox.stub().resolves(),
-      exec: sandbox.stub().resolves(result),
-      stats: sandbox.stub().returns(stats)
+      terminate: sinon.stub().resolves(),
+      exec: sinon.stub().resolves(result),
+      stats: sinon.stub().returns(stats)
     };
     serializer = {
-      deserialize: sandbox.stub()
+      deserialize: sinon.stub()
     };
 
-    serializeJavascript = sandbox.spy(require('serialize-javascript'));
+    serializeJavascript = sinon.spy(require('serialize-javascript'));
     BufferedWorkerPool = rewiremock.proxy(
       require.resolve('../../lib/nodejs/buffered-worker-pool'),
       {
         workerpool: {
-          pool: sandbox.stub().returns(pool),
+          pool: sinon.stub().returns(pool),
           cpus: 8
         },
         '../../lib/nodejs/serializer': serializer,
@@ -43,7 +41,7 @@ describe('class BufferedWorkerPool', function() {
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('static method', function() {
