@@ -128,7 +128,7 @@ module.exports = async () => {
   await Promise.all(
     supporters.sponsors.map(async sponsor => {
       const filePath = resolve(supporterImagePath, sponsor.id + '.png');
-      const {body} = await needle('get', sponsor.avatar);
+      const {body} = await needle('get', encodeURI(sponsor.avatar));
       sponsor.dimensions = imageSize(body);
       await writeFile(filePath, body);
     })
@@ -138,7 +138,7 @@ module.exports = async () => {
   await Promise.all(
     supporters.backers.map(async backer => {
       const filePath = resolve(supporterImagePath, backer.id + '.png');
-      const {body} = await needle('get', backer.avatar);
+      const {body} = await needle('get', encodeURI(backer.avatar));
       await writeFile(filePath, body);
     })
   );
