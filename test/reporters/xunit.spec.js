@@ -24,7 +24,6 @@ var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
 
 describe('XUnit reporter', function() {
-  var sandbox;
   var runner;
   var noop = function() {};
 
@@ -54,9 +53,8 @@ describe('XUnit reporter', function() {
       var fsCreateWriteStream;
 
       beforeEach(function() {
-        sandbox = sinon.createSandbox();
-        fsMkdirSync = sandbox.stub(fs, 'mkdirSync');
-        fsCreateWriteStream = sandbox.stub(fs, 'createWriteStream');
+        fsMkdirSync = sinon.stub(fs, 'mkdirSync');
+        fsCreateWriteStream = sinon.stub(fs, 'createWriteStream');
       });
 
       it('should open given file for writing, recursively creating directories in pathname', function() {
@@ -77,7 +75,7 @@ describe('XUnit reporter', function() {
       });
 
       afterEach(function() {
-        sandbox.restore();
+        sinon.restore();
       });
     });
 
@@ -127,8 +125,7 @@ describe('XUnit reporter', function() {
 
       describe('when run in browser', function() {
         beforeEach(function() {
-          sandbox = sinon.createSandbox();
-          sandbox.stub(fs, 'createWriteStream').value(false);
+          sinon.stub(fs, 'createWriteStream').value(false);
         });
 
         it('should throw unsupported error', function() {
@@ -141,7 +138,7 @@ describe('XUnit reporter', function() {
         });
 
         afterEach(function() {
-          sandbox.restore();
+          sinon.restore();
         });
       });
     });
@@ -198,14 +195,13 @@ describe('XUnit reporter', function() {
     var callback;
 
     beforeEach(function() {
-      sandbox = sinon.createSandbox();
-      callback = sandbox.spy();
+      callback = sinon.spy();
     });
 
     afterEach(function() {
       callback = null;
       xunit = null;
-      sandbox.restore();
+      sinon.restore();
     });
 
     describe('when output directed to file', function() {
@@ -309,12 +305,11 @@ describe('XUnit reporter', function() {
     };
 
     beforeEach(function() {
-      sandbox = sinon.createSandbox();
-      sandbox.stub(Base, 'useColors').value(false);
+      sinon.stub(Base, 'useColors').value(false);
     });
 
     afterEach(function() {
-      sandbox.restore();
+      sinon.restore();
       expectedWrite = null;
     });
 
@@ -339,7 +334,7 @@ describe('XUnit reporter', function() {
         };
 
         xunit.test.call(fakeThis, expectedTest);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -378,13 +373,13 @@ describe('XUnit reporter', function() {
           }
         };
 
-        sandbox.stub(xunit, 'write').callsFake(function(str) {
+        sinon.stub(xunit, 'write').callsFake(function(str) {
           expectedWrite += str;
         });
 
         runner.emit(EVENT_TEST_FAIL, expectedTest, expectedTest.err);
         runner.emit(EVENT_RUN_END);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedDiff =
           '\n      + expected - actual\n\n      -1\n      +2\n      ';
@@ -410,7 +405,7 @@ describe('XUnit reporter', function() {
         };
 
         xunit.test.call(fakeThis, expectedTest);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -439,7 +434,7 @@ describe('XUnit reporter', function() {
         };
 
         xunit.test.call(fakeThis, expectedTest);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedTag =
           '<testcase classname="' +
@@ -490,7 +485,7 @@ describe('XUnit reporter', function() {
       createStatsCollector(runner);
       var xunit = new XUnit(runner);
       expectedWrite = '';
-      sandbox.stub(xunit, 'write').callsFake(function(str) {
+      sinon.stub(xunit, 'write').callsFake(function(str) {
         expectedWrite += str;
       });
 
@@ -503,7 +498,7 @@ describe('XUnit reporter', function() {
       runner.emit(EVENT_TEST_END);
       runner.emit(EVENT_RUN_END);
 
-      sandbox.restore();
+      sinon.restore();
 
       var expectedNumPass = 1;
       var expectedNumFail = 2;

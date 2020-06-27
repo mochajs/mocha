@@ -12,14 +12,13 @@ var createElements = helpers.createElements;
 var makeTest = helpers.makeTest;
 
 describe('Base reporter', function() {
-  var sandbox;
   var stdout;
 
   function list(tests) {
     try {
       Base.list(tests);
     } finally {
-      sandbox.restore();
+      sinon.restore();
     }
   }
 
@@ -29,7 +28,7 @@ describe('Base reporter', function() {
     try {
       diffStr = Base.generateDiff(actual, expected);
     } finally {
-      sandbox.restore();
+      sinon.restore();
     }
 
     return diffStr;
@@ -40,14 +39,13 @@ describe('Base reporter', function() {
   };
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
-    sandbox.stub(process.stdout, 'write').callsFake(gather);
+    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(process.stdout, 'write').callsFake(gather);
     stdout = [];
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('showDiff', function() {
@@ -103,7 +101,7 @@ describe('Base reporter', function() {
     it("should not show diffs if 'hideDiff' is true", function() {
       var test = makeTest(err);
 
-      sandbox.stub(Base, 'hideDiff').value(true);
+      sinon.stub(Base, 'hideDiff').value(true);
       list([test]);
 
       var errOut = stdout.join('\n');
@@ -136,7 +134,7 @@ describe('Base reporter', function() {
     var inlineDiffsStub;
 
     beforeEach(function() {
-      inlineDiffsStub = sandbox.stub(Base, 'inlineDiffs');
+      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs');
     });
 
     it("should generate unified diffs if 'inlineDiffs' is false", function() {
@@ -170,7 +168,7 @@ describe('Base reporter', function() {
 
   describe('inline strings diff', function() {
     beforeEach(function() {
-      sandbox.stub(Base, 'inlineDiffs').value(true);
+      sinon.stub(Base, 'inlineDiffs').value(true);
     });
 
     it("should show single line diff if 'inlineDiffs' is true", function() {
@@ -213,7 +211,7 @@ describe('Base reporter', function() {
 
   describe('unified diff', function() {
     beforeEach(function() {
-      sandbox.stub(Base, 'inlineDiffs').value(false);
+      sinon.stub(Base, 'inlineDiffs').value(false);
     });
 
     it('should separate diff hunks by two dashes', function() {
@@ -426,13 +424,11 @@ describe('Base reporter', function() {
   });
 
   describe('when reporter output immune to user test changes', function() {
-    var sandbox;
     var baseConsoleLog;
 
     beforeEach(function() {
-      sandbox = sinon.createSandbox();
-      sandbox.stub(console, 'log');
-      baseConsoleLog = sandbox.stub(Base, 'consoleLog');
+      sinon.stub(console, 'log');
+      baseConsoleLog = sinon.stub(Base, 'consoleLog');
     });
 
     it('should let you stub out console.log without effecting reporters output', function() {
@@ -444,7 +440,7 @@ describe('Base reporter', function() {
     });
 
     afterEach(function() {
-      sandbox.restore();
+      sinon.restore();
     });
   });
 });

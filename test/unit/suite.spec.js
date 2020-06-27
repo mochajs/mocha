@@ -12,13 +12,8 @@ function supportsFunctionNames() {
 }
 
 describe('Suite', function() {
-  var sandbox;
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('.clone()', function() {
@@ -96,8 +91,8 @@ describe('Suite', function() {
       var test = new Test('test', function() {});
       this.suite.addSuite(childSuite);
       this.suite.addTest(test);
-      var testResetStub = sandbox.stub(test, 'reset');
-      var suiteResetStub = sandbox.stub(childSuite, 'reset');
+      var testResetStub = sinon.stub(test, 'reset');
+      var suiteResetStub = sinon.stub(childSuite, 'reset');
       this.suite.reset();
       expect(testResetStub, 'was called once');
       expect(suiteResetStub, 'was called once');
@@ -556,7 +551,7 @@ describe('Suite', function() {
 
   describe('constructor', function() {
     beforeEach(function() {
-      sandbox.stub(utils, 'deprecate');
+      sinon.stub(utils, 'deprecate');
     });
 
     /* eslint no-new: off */
@@ -684,7 +679,7 @@ describe('Suite', function() {
   describe('.markOnly()', function() {
     it('should call appendOnlySuite on parent', function() {
       var suite = new Suite('foo');
-      var spy = sandbox.spy();
+      var spy = sinon.spy();
       suite.parent = {
         appendOnlySuite: spy
       };

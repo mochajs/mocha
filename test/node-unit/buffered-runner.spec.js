@@ -13,11 +13,10 @@ const BUFFERED_RUNNER_PATH = require.resolve(
 );
 const Suite = require('../../lib/suite');
 const Runner = require('../../lib/runner');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 
 describe('buffered-runner', function() {
   describe('BufferedRunner', function() {
-    let sandbox;
     let run;
     let BufferedWorkerPool;
     let terminate;
@@ -27,19 +26,18 @@ describe('buffered-runner', function() {
     let cpuCount;
 
     beforeEach(function() {
-      sandbox = createSandbox();
       cpuCount = 1;
       suite = new Suite('a root suite', {}, true);
-      warn = sandbox.stub();
+      warn = sinon.stub();
 
       // tests will want to further define the behavior of these.
-      run = sandbox.stub();
-      terminate = sandbox.stub();
+      run = sinon.stub();
+      terminate = sinon.stub();
       BufferedWorkerPool = {
-        create: sandbox.stub().returns({
+        create: sinon.stub().returns({
           run,
           terminate,
-          stats: sandbox.stub().returns({})
+          stats: sinon.stub().returns({})
         })
       };
       BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, r => ({
@@ -47,7 +45,7 @@ describe('buffered-runner', function() {
           BufferedWorkerPool
         },
         os: {
-          cpus: sandbox.stub().callsFake(() => new Array(cpuCount))
+          cpus: sinon.stub().callsFake(() => new Array(cpuCount))
         },
         '../../lib/utils': r.with({warn}).callThrough()
       }));
@@ -157,7 +155,7 @@ describe('buffered-runner', function() {
 
           it('should delegate to Runner#uncaught', function(done) {
             const options = {};
-            sandbox.spy(runner, 'uncaught');
+            sinon.spy(runner, 'uncaught');
             const err = new Error('whoops');
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', options).resolves({
