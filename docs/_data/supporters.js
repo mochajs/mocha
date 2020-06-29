@@ -7,7 +7,7 @@ const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const imageSize = require('image-size');
-const blacklist = new Set(require('./blacklist.json'));
+const blocklist = new Set(require('./blocklist.json'));
 
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
 
@@ -91,7 +91,7 @@ module.exports = async () => {
 
   const supporters = orders
     .map(nodeToSupporter)
-    .filter(supporter => !blacklist.has(supporter.slug))
+    .filter(supporter => !blocklist.has(supporter.slug))
     .reduce((supporters, supporter) => {
       if (uniqueSupporters.has(supporter.slug)) {
         // aggregate donation totals
