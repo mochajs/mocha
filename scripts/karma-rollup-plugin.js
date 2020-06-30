@@ -62,9 +62,13 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
     ...new Set(bundlePatterns.map(pattern => glob.sync(pattern)).flat())
   ];
 
-  const bundleLocation = pluginConfig.bundlePath
+  let bundleLocation = pluginConfig.bundlePath
     ? pluginConfig.bundlePath
     : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
+  if (process.platform === 'win32') {
+    bundleLocation = bundleLocation.replace(/\\/g, '/');
+  }
+
   fs.closeSync(fs.openSync(bundleLocation, 'w'));
   preprocessors[bundleLocation] = ['rollup'];
 
