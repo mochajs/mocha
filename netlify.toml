@@ -10,7 +10,12 @@
 
 [build]
   publish = "docs/_dist/"
-  command = "npm start docs"
+  command = "npm start docs.production"
 
 [build.environment]
   NODE_VERSION = "12"
+  RUBY_VERSION = "2.7.1"
+
+[context.deploy-preview]
+  command = "npm start docs"
+  publish = "docs/_site/"
