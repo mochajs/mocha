@@ -11,7 +11,7 @@ import visualizer from 'rollup-plugin-visualizer';
 
 import manifestFilter from './scripts/rollup-manifest-filter';
 
-export default {
+const config = {
   input: './browser-entry.js',
   output: [
     {
@@ -32,8 +32,12 @@ export default {
     nodeResolve({
       browser: true
     }),
-    visualizer(),
-
-    babel({presets: ['@babel/preset-env']})
+    babel({presets: ['@babel/preset-env'], babelHelpers: 'bundled'})
   ]
 };
+
+if (!process.env.CI) {
+  config.plugins.push(visualizer());
+}
+
+export default config;
