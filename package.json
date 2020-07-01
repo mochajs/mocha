@@ -75,7 +75,7 @@
     "workerpool": "6.0.0",
     "yargs": "13.3.2",
     "yargs-parser": "13.1.2",
-    "yargs-unparser": "1.6.0"
+    "yargs-unparser": "1.6.1"
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.10.0",
