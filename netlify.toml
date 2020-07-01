@@ -13,6 +13,7 @@
   command = "npm start docs.production"
 
 [build.environment]
+  DEBUG = "mocha:docs*"
   NODE_VERSION = "12"
   RUBY_VERSION = "2.7.1"
 
