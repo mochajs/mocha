@@ -2,6 +2,14 @@
 
 const AssetGraph = require('assetgraph');
 
+const dest = process.argv[2];
+
+if (!dest) {
+  console.error('usage: node netlify-headers.js <docs-output-dir>');
+  console.error('example: node netlify-headers.js docs/_dist');
+  process.exit(1);
+}
+
 const headers = ['Content-Security-Policy'];
 
 const resourceHintTypeMap = {
@@ -25,7 +33,7 @@ function getHeaderForRelation(rel) {
 
 console.error('Generating optimal netlify headers...');
 
-new AssetGraph({root: 'docs/_dist'})
+new AssetGraph({root: dest})
   .loadAssets('*.html')
   .populate({
     followRelations: {type: 'HtmlAnchor', crossorigin: false}
@@ -112,8 +120,7 @@ new AssetGraph({root: 'docs/_dist'})
       });
 
       console.log('');
-
-      console.error('netlify headers done!');
     });
+    console.error('netlify headers done!');
   })
   .run();

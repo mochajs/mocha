@@ -274,8 +274,12 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.prebuild && nps docs.api && eleventy && nps docs.linkcheck && nps docs.postbuild',
+          'nps docs.prebuild && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
         description: 'Build documentation'
+      },
+      production: {
+        script: 'nps docs && nps docs.postbuild',
+        description: 'Build docs for production'
       },
       prebuild: {
         script: 'rimraf docs/_dist docs/_site',
@@ -288,7 +292,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js docs/_dist >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
