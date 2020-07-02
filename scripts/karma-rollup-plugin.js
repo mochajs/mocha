@@ -34,7 +34,6 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 const rollup = require('rollup');
-const glob = require('glob');
 const minimatch = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile');
 const multiEntry = require('@rollup/plugin-multi-entry');
@@ -58,10 +57,6 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-  const bundleFiles = [
-    ...new Set(bundlePatterns.map(pattern => glob.sync(pattern)).flat())
-  ];
-
   let bundleLocation = pluginConfig.bundlePath
     ? pluginConfig.bundlePath
     : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
@@ -73,7 +68,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
   preprocessors[bundleLocation] = ['rollup'];
 
   // Save file mapping for later
-  fileMap.set(bundleLocation, bundleFiles);
+  fileMap.set(bundleLocation, bundlePatterns);
 
   // Remove all file match patterns that were included in bundle
   // And inject the bundle in their place.
