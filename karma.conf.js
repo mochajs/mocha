@@ -43,7 +43,7 @@ module.exports = config => {
     logLevel: config.LOG_INFO,
     client: {
       mocha: {
-        opts: require.resolve('./test/browser-specific/mocha.opts')
+        reporter: 'html'
       }
     },
     mochaReporter: {
