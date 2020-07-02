@@ -139,11 +139,19 @@ mocha.setup = function(opts) {
   if (typeof opts === 'string') {
     opts = {ui: opts};
   }
-  for (var opt in opts) {
-    if (Object.prototype.hasOwnProperty.call(opts, opt)) {
-      this[opt](opts[opt]);
-    }
+  if (opts.delay === true) {
+    this.delay();
   }
+  var self = this;
+  Object.keys(opts)
+    .filter(function(opt) {
+      return opt !== 'delay';
+    })
+    .forEach(function(opt) {
+      if (Object.prototype.hasOwnProperty.call(opts, opt)) {
+        self[opt](opts[opt]);
+      }
+    });
   return this;
 };
 
