@@ -9,6 +9,8 @@
 
 process.stdout = require('browser-stdout')({label: false});
 
+var parseQuery = require('./lib/browser/parse-query');
+var highlightTags = require('./lib/browser/highlight-tags');
 var Mocha = require('./lib/mocha');
 
 /**
@@ -75,6 +77,13 @@ process.on = function(e, fn) {
     };
     uncaughtExceptionHandlers.push(fn);
   }
+};
+
+process.listeners = function(e) {
+  if (e === 'uncaughtException') {
+    return uncaughtExceptionHandlers;
+  }
+  return [];
 };
 
 // The BDD UI is registered by default, but no UI will be functional in the
@@ -163,7 +172,7 @@ mocha.run = function(fn) {
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(global.location.search || '');
+  var query = parseQuery(global.location.search || '');
   if (query.grep) {
     mocha.grep(query.grep);
   }
@@ -182,7 +191,7 @@ mocha.run = function(fn) {
       document.getElementById('mocha') &&
       options.noHighlighting !== true
     ) {
-      Mocha.utils.highlightTags('code');
+      highlightTags('code');
     }
     if (fn) {
       fn(err);

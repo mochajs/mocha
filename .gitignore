@@ -3,8 +3,12 @@ docs/_site
 docs/_dist
 docs/images/supporters
 mocha.js
+mocha.js.map
 .karma/
 !lib/mocha.js
+
+# Bundle debugging
+stats.html
 
 #########################################
 # NON-MOCHA STUFF GOES BELOW THIS THING #

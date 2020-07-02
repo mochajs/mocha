@@ -34,21 +34,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js \
-      --plugin ./scripts/dedefine \
-      --ignore 'chokidar' \
-      --ignore 'fs' \
-      --ignore 'glob' \
-      --ignore 'path' \
-      --ignore 'supports-color' \
-      --ignore './lib/cli/*.js' \
-      --ignore './lib/esm-utils.js' \
-      --ignore './lib/nodejs/serializer.js' \
-      --ignore './lib/nodejs/parallel-buffered-runner.js' \
-      --ignore './lib/nodejs/reporters/parallel-buffered.js' \
-      --ignore './lib/nodejs/worker.js' \
-      --ignore './lib/nodejs/buffered-worker-pool.js' \
-      -o mocha.js`,
+      script: `rollup -c`,
       description: 'Build browser bundle'
     },
     lint: {
