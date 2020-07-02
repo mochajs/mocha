@@ -33,7 +33,14 @@ const config = {
       browser: true
     }),
     babel({presets: ['@babel/preset-env'], babelHelpers: 'bundled'})
-  ]
+  ],
+
+  onwarn: (warning, warn) => {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+
+    // Use default for everything else
+    warn(warning);
+  }
 };
 
 if (!process.env.CI) {
