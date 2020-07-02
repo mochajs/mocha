@@ -7,6 +7,7 @@ const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const imageSize = require('image-size');
+const fileType = require('file-type');
 const blocklist = new Set(require('./blocklist.json'));
 
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
@@ -84,6 +85,21 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
+/**
+ * Blank images from https://png-pixel.com/ for when OpenCollective
+ * doesn't respond with a PNG image while downloading supporter avatars
+ */
+// 64x64 #f9f9f9 png
+const blank64 = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAQAAAAAYLlVAAAAPElEQVR42u3OMQEAAAgDINc/sZfG2AMJyN5URUBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQKAdeHK9fkGpx7l4AAAAAElFTkSuQmCC',
+  'base64'
+);
+// 32x32 #f9f9f9 png
+const blank32 = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAIUlEQVR42mP8+Z+BIsA4asCoAaMGjBowasCoAaMGDDcDAC5IPyHFDzg6AAAAAElFTkSuQmCC',
+  'base64'
+);
+
 module.exports = async () => {
   const orders = await getAllOrders();
   // Deduplicating supporters with multiple orders
@@ -129,8 +145,18 @@ module.exports = async () => {
     supporters.sponsors.map(async sponsor => {
       const filePath = resolve(supporterImagePath, sponsor.id + '.png');
       const {body} = await needle('get', encodeURI(sponsor.avatar));
-      sponsor.dimensions = imageSize(body);
-      await writeFile(filePath, body);
+
+      let imageBuffer = body;
+
+      // Some times OpenCollective responds with a non-image
+      if ((await fileType.fromBuffer(body)).mime === 'image/png') {
+        sponsor.dimensions = imageSize(body);
+      } else {
+        sponsor.dimensions = {width: 64, height: 64};
+        imageBuffer = blank64;
+      }
+
+      await writeFile(filePath, imageBuffer);
     })
   );
 
@@ -139,7 +165,15 @@ module.exports = async () => {
     supporters.backers.map(async backer => {
       const filePath = resolve(supporterImagePath, backer.id + '.png');
       const {body} = await needle('get', encodeURI(backer.avatar));
-      await writeFile(filePath, body);
+
+      let imageBuffer = body;
+
+      // Some times OpenCollective responds with a non-image
+      if ((await fileType.fromBuffer(body)).mime !== 'image/png') {
+        imageBuffer = blank32;
+      }
+
+      await writeFile(filePath, imageBuffer);
     })
   );
 
