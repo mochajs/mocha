@@ -10,7 +10,7 @@ import {babel} from '@rollup/plugin-babel';
 // Debugging tools
 import visualizer from 'rollup-plugin-visualizer';
 
-import manifestFilter from './scripts/rollup-manifest-filter';
+import pickFromPackageJson from './scripts/pick-from-package-json';
 
 const externals = ['fs', 'path', 'supports-color'];
 
@@ -42,7 +42,7 @@ const config = {
 
   plugins: [
     json(),
-    manifestFilter({
+    pickFromPackageJson({
       keys: ['name', 'version', 'homepage', 'notifyLogo']
     }),
     alias({
