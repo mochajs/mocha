@@ -3,7 +3,6 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
-import alias from '@rollup/plugin-alias';
 
 import {babel} from '@rollup/plugin-babel';
 
@@ -11,8 +10,6 @@ import {babel} from '@rollup/plugin-babel';
 import visualizer from 'rollup-plugin-visualizer';
 
 import pickFromPackageJson from './scripts/pick-from-package-json';
-
-const externals = ['fs', 'path', 'supports-color'];
 
 const config = {
   input: './browser-entry.js',
@@ -24,29 +21,10 @@ const config = {
     }
   ],
 
-  external: moduleName => {
-    if (externals.includes(moduleName)) {
-      return true;
-    }
-
-    if (moduleName.includes('esm-utils')) {
-      return true;
-    }
-
-    if (moduleName.includes('nodejs')) {
-      return !moduleName.includes('growl');
-    }
-
-    return false;
-  },
-
   plugins: [
     json(),
     pickFromPackageJson({
       keys: ['name', 'version', 'homepage', 'notifyLogo']
-    }),
-    alias({
-      entries: [{find: './nodejs/growl', replacement: './browser/growl.js'}]
     }),
     commonjs(),
     globals(),
