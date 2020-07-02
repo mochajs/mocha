@@ -1,6 +1,6 @@
 'use strict';
 
-var utils = require('../../lib/utils');
+var lookupFiles = require('../../lib/cli/lookup-files');
 var fs = require('fs');
 var path = require('path');
 var os = require('os');
@@ -22,14 +22,14 @@ describe('file utils', function() {
     }
   });
 
-  describe('.lookupFiles', function() {
+  describe('lookupFiles', function() {
     it('should not return broken symlink file path', function() {
       if (!symlinkSupported) {
         return this.skip();
       }
 
       expect(
-        utils.lookupFiles(tmpDir, ['js'], false),
+        lookupFiles(tmpDir, ['js'], false),
         'to contain',
         tmpFile('mocha-utils-link.js'),
         tmpFile('mocha-utils.js')
@@ -37,13 +37,13 @@ describe('file utils', function() {
       expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', true);
       fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
       expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', false);
-      expect(utils.lookupFiles(tmpDir, ['js'], false), 'to equal', []);
+      expect(lookupFiles(tmpDir, ['js'], false), 'to equal', []);
     });
 
     it('should accept a glob "path" value', function() {
-      var res = utils
-        .lookupFiles(tmpFile('mocha-utils*'), ['js'], false)
-        .map(path.normalize.bind(path));
+      var res = lookupFiles(tmpFile('mocha-utils*'), ['js'], false).map(
+        path.normalize.bind(path)
+      );
 
       var expectedLength = 0;
       var ex = expect(res, 'to contain', tmpFile('mocha-utils.js'));
@@ -61,7 +61,7 @@ describe('file utils', function() {
       var nonJsFile = tmpFile('mocha-utils-text.txt');
       fs.writeFileSync(nonJsFile, 'yippy skippy ying yang yow');
 
-      var res = utils.lookupFiles(tmpDir, ['txt'], false);
+      var res = lookupFiles(tmpDir, ['txt'], false);
       expect(res, 'to contain', nonJsFile).and('to have length', 1);
     });
 
@@ -69,9 +69,9 @@ describe('file utils', function() {
       var TsFile = tmpFile('mocha-utils.ts');
       fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
 
-      var res = utils
-        .lookupFiles(tmpFile('mocha-utils'), ['js'], false)
-        .map(path.normalize.bind(path));
+      var res = lookupFiles(tmpFile('mocha-utils'), ['js'], false).map(
+        path.normalize.bind(path)
+      );
       expect(res, 'to contain', tmpFile('mocha-utils.js')).and(
         'to have length',
         1
@@ -82,9 +82,9 @@ describe('file utils', function() {
       var TsFile = tmpFile('mocha-utils.ts');
       fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
 
-      var res = utils
-        .lookupFiles(tmpFile('mocha-utils'), ['js', 'ts'], false)
-        .map(path.normalize.bind(path));
+      var res = lookupFiles(tmpFile('mocha-utils'), ['js', 'ts'], false).map(
+        path.normalize.bind(path)
+      );
       expect(
         res,
         'to contain',
@@ -95,7 +95,7 @@ describe('file utils', function() {
 
     it('should require the extensions parameter when looking up a file', function() {
       var dirLookup = function() {
-        return utils.lookupFiles(tmpFile('mocha-utils'), undefined, false);
+        return lookupFiles(tmpFile('mocha-utils'), undefined, false);
       };
       expect(dirLookup, 'to throw', {
         name: 'Error',
@@ -105,7 +105,7 @@ describe('file utils', function() {
 
     it('should require the extensions parameter when looking up a directory', function() {
       var dirLookup = function() {
-        return utils.lookupFiles(tmpDir, undefined, false);
+        return lookupFiles(tmpDir, undefined, false);
       };
       expect(dirLookup, 'to throw', {
         name: 'TypeError',

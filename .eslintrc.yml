@@ -5,8 +5,9 @@ extends:
 env:
   node: true
   browser: true
+  es6: true
 parserOptions:
-  ecmaVersion: 5
+  ecmaVersion: 2018
   ecmaFeatures:
     jsx: false
   sourceType: script
@@ -37,8 +38,6 @@ overrides:
       - 'test/integration/helpers.js'
       - 'test/integration/options/watch.spec.js'
       - 'test/node-unit/**/*.js'
-    parserOptions:
-      ecmaVersion: 2018
     env:
       browser: false
     rules:
@@ -48,6 +47,8 @@ overrides:
           property: 'assign'
   - files:
       - esm-utils.js
+      - rollup.config.js
+      - scripts/pick-from-package-json.js
     parserOptions:
       ecmaVersion: 2018
       sourceType: module
