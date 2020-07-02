@@ -125,18 +125,31 @@ function bundlePreprocessor(config) {
 
     const bundle = await rollup.rollup({
       input: fileMap.get(file.path),
-      plugins: [...plugins, multiEntry({exports: false})]
+      plugins: [...plugins, multiEntry({exports: false})],
+      external: ['sinon'],
+      onwarn: (warning, warn) => {
+        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+
+        // Use default for everything else
+        warn(warning);
+      }
     });
 
     const {output} = await bundle.generate({
       sourcemap: true,
-      format: 'iife'
+      format: 'iife',
+      globals: {
+        sinon: 'sinon'
+      }
     });
 
     await bundle.write({
       file: file.path,
       sourcemap: true,
-      format: 'iife'
+      format: 'iife',
+      globals: {
+        sinon: 'sinon'
+      }
     });
 
     done(null, output[0].code);

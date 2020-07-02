@@ -141,6 +141,7 @@ module.exports = config => {
   }
 
   cfg.files.unshift(
+    require.resolve('sinon/pkg/sinon.js'),
     require.resolve('unexpected/unexpected'),
     {pattern: require.resolve('unexpected/unexpected.js.map'), included: false},
     require.resolve('unexpected-sinon'),
