@@ -114,7 +114,8 @@ function bundlePreprocessor(config) {
 
   return async function(content, file, done) {
     const {options, warnings} = await configPromise;
-    const plugins = options[0].plugins || [];
+    const config = options[0];
+    const plugins = config.plugins || [];
 
     warnings.flush();
 
@@ -122,29 +123,22 @@ function bundlePreprocessor(config) {
       input: fileMap.get(file.path),
       plugins: [...plugins, multiEntry({exports: false})],
       external: ['sinon'],
-      onwarn: (warning, warn) => {
-        if (warning.code === 'CIRCULAR_DEPENDENCY') return;
-
-        // Use default for everything else
-        warn(warning);
-      }
+      onwarn: config.onwarn
     });
 
-    const {output} = await bundle.generate({
+    const sharedOutputConfig = {
       sourcemap: true,
       format: 'iife',
       globals: {
         sinon: 'sinon'
       }
-    });
+    };
+
+    const {output} = await bundle.generate(sharedOutputConfig);
 
     await bundle.write({
       file: file.path,
-      sourcemap: true,
-      format: 'iife',
-      globals: {
-        sinon: 'sinon'
-      }
+      ...sharedOutputConfig
     });
 
     done(null, output[0].code);
