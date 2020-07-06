@@ -57,9 +57,12 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-  let bundleLocation = pluginConfig.bundlePath
-    ? pluginConfig.bundlePath
-    : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
+
+  const bundleFilename = `${uuid.v4()}.rollup.js`;
+  let bundleLocation = path.resolve(
+    pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
+    bundleFilename
+  );
   if (process.platform === 'win32') {
     bundleLocation = bundleLocation.replace(/\\/g, '/');
   }
@@ -138,6 +141,7 @@ function bundlePreprocessor(config) {
     const {output} = await bundle.generate(outputConfig);
 
     await bundle.write(outputConfig);
+    console.error(`wrote bundle to ${file.path}`);
 
     done(null, output[0].code);
   };

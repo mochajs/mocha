@@ -17,7 +17,7 @@ const browserPlatformPairs = {
 };
 
 module.exports = config => {
-  let bundleDirpath;
+  let bundleDirpath = path.join(baseBundleDirpath, hostname);
   const cfg = {
     frameworks: ['rollup', 'mocha'],
     files: [
@@ -34,8 +34,7 @@ module.exports = config => {
     ],
     rollup: {
       configFile: 'rollup.config.js',
-      include: ['test/**'],
-      bundlePath: bundleDirpath
+      include: ['test/**']
     },
     reporters: ['mocha'],
     colors: true,
@@ -82,7 +81,6 @@ module.exports = config => {
       throw new Error('no browser tests should run on AppVeyor!');
     } else {
       console.error(`Local environment (${hostname}) detected`);
-      bundleDirpath = path.join(baseBundleDirpath, hostname);
       // don't need to run sauce from appveyor b/c travis does it.
       if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
         const id = `${hostname} (${Date.now()})`;
@@ -96,10 +94,13 @@ module.exports = config => {
         console.error('No SauceLabs credentials present');
       }
     }
-    fs.mkdirSync(bundleDirpath, {recursive: true});
   } else {
     console.error('CI mode disabled');
   }
+
+  fs.mkdirSync(bundleDirpath, {recursive: true});
+  console.error(`writing output bundle into ${bundleDirpath}`);
+  cfg.bundleDirPath = bundleDirpath;
 
   if (sauceConfig) {
     cfg.sauceLabs = sauceConfig;
