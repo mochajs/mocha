@@ -12,7 +12,7 @@
  * rollup with a modified config that allows for multiple entry points for a
  * single output bundle.
  *
- * This is am implementation that specifically solves Mocha's use case. It
+ * This is an implementation that specifically solves Mocha's use case. It
  * does not support watch mode. It is possible that is coulkd eventually be
  * made reusable with more work and actual testing.
  *

@@ -100,7 +100,7 @@ module.exports = config => {
 
   fs.mkdirSync(bundleDirpath, {recursive: true});
   console.error(`writing output bundle into ${bundleDirpath}`);
-  cfg.bundleDirPath = bundleDirpath;
+  cfg.rollup.bundleDirPath = bundleDirpath;
 
   if (sauceConfig) {
     cfg.sauceLabs = sauceConfig;
@@ -135,20 +135,39 @@ module.exports = config => {
         {pattern: 'test/browser-specific/esm.spec.mjs', type: 'module'}
       ];
       break;
+    case 'requirejs':
+      cfg.plugins.push('karma-requirejs');
+      cfg.frameworks.unshift('requirejs');
+      cfg.files = [
+        {
+          pattern: 'test/browser-specific/fixtures/requirejs/*.fixture.js',
+          included: false
+        },
+        'test/browser-specific/requirejs-setup.js'
+      ];
+      cfg.rollup.include = [];
+      break;
     default:
       if (cfg.sauceLabs) {
         cfg.sauceLabs.testName = 'Unit Tests';
       }
   }
 
-  cfg.files.unshift(
-    require.resolve('sinon/pkg/sinon.js'),
-    require.resolve('unexpected/unexpected'),
-    {pattern: require.resolve('unexpected/unexpected.js.map'), included: false},
-    require.resolve('unexpected-sinon'),
-    require.resolve('unexpected-eventemitter/dist/unexpected-eventemitter.js'),
-    require.resolve('./test/browser-specific/setup')
-  );
+  if (MOCHA_TEST !== 'requirejs') {
+    cfg.files.unshift(
+      require.resolve('sinon/pkg/sinon.js'),
+      require.resolve('unexpected/unexpected'),
+      {
+        pattern: require.resolve('unexpected/unexpected.js.map'),
+        included: false
+      },
+      require.resolve('unexpected-sinon'),
+      require.resolve(
+        'unexpected-eventemitter/dist/unexpected-eventemitter.js'
+      ),
+      require.resolve('./test/browser-specific/setup')
+    );
+  }
 
   config.set(cfg);
 };
