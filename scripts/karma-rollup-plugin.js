@@ -115,31 +115,29 @@ function bundlePreprocessor(config) {
   return async function(content, file, done) {
     const {options, warnings} = await configPromise;
     const config = options[0];
-    const plugins = config.plugins || [];
-
-    warnings.flush();
-
-    const bundle = await rollup.rollup({
-      input: fileMap.get(file.path),
-      plugins: [...plugins, multiEntry({exports: false})],
-      external: ['sinon'],
-      onwarn: config.onwarn
-    });
-
-    const sharedOutputConfig = {
-      sourcemap: true,
-      format: 'iife',
+    // plugins is always an array
+    const pluginConfig = [...config.plugins || [], multiEntry({exports: false})];
+    // XXX: output is always an array, but we only have one output config.
+    // if we have multiple, this code needs changing.
+    const outputConfig = {
+      ...(config.output || [])[0] || {},
+      file: file.path,
       globals: {
         sinon: 'sinon'
       }
     };
 
-    const {output} = await bundle.generate(sharedOutputConfig);
+    warnings.flush();
 
-    await bundle.write({
-      file: file.path,
-      ...sharedOutputConfig
+    const bundle = await rollup.rollup({
+      input: fileMap.get(file.path),
+      plugins: pluginConfig,
+      external: ['sinon'],
+      onwarn: config.onwarn
     });
+    const {output} = await bundle.generate(outputConfig);
+
+    await bundle.write(outputConfig);
 
     done(null, output[0].code);
   };

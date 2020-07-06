@@ -13,14 +13,12 @@ import pickFromPackageJson from './scripts/pick-from-package-json';
 
 const config = {
   input: './browser-entry.js',
-  output: [
-    {
-      file: './mocha.js',
-      format: 'iife',
-      sourcemap: true
-    }
-  ],
-
+  output: {
+    file: './mocha.js',
+    format: 'umd',
+    sourcemap: true,
+    name: 'mocha'
+  },
   plugins: [
     json(),
     pickFromPackageJson({
