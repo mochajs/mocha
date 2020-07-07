@@ -34,7 +34,6 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 const rollup = require('rollup');
-const glob = require('glob');
 const minimatch = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile');
 const multiEntry = require('@rollup/plugin-multi-entry');
@@ -58,10 +57,6 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-  const bundleFiles = [
-    ...new Set(bundlePatterns.map(pattern => glob.sync(pattern)).flat())
-  ];
-
   let bundleLocation = pluginConfig.bundlePath
     ? pluginConfig.bundlePath
     : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
@@ -73,7 +68,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
   preprocessors[bundleLocation] = ['rollup'];
 
   // Save file mapping for later
-  fileMap.set(bundleLocation, bundleFiles);
+  fileMap.set(bundleLocation, bundlePatterns);
 
   // Remove all file match patterns that were included in bundle
   // And inject the bundle in their place.
@@ -119,24 +114,31 @@ function bundlePreprocessor(config) {
 
   return async function(content, file, done) {
     const {options, warnings} = await configPromise;
-    const plugins = options[0].plugins || [];
+    const config = options[0];
+    const plugins = config.plugins || [];
 
     warnings.flush();
 
     const bundle = await rollup.rollup({
       input: fileMap.get(file.path),
-      plugins: [...plugins, multiEntry({exports: false})]
+      plugins: [...plugins, multiEntry({exports: false})],
+      external: ['sinon'],
+      onwarn: config.onwarn
     });
 
-    const {output} = await bundle.generate({
+    const sharedOutputConfig = {
       sourcemap: true,
-      format: 'iife'
-    });
+      format: 'iife',
+      globals: {
+        sinon: 'sinon'
+      }
+    };
+
+    const {output} = await bundle.generate(sharedOutputConfig);
 
     await bundle.write({
       file: file.path,
-      sourcemap: true,
-      format: 'iife'
+      ...sharedOutputConfig
     });
 
     done(null, output[0].code);
