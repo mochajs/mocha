@@ -496,11 +496,11 @@ describe('lib/utils', function() {
     if (typeof global.Symbol === 'function') {
       it('should handle Symbol', function() {
         var symbol = Symbol('value');
-        expect(stringify(symbol), 'to be', 'Symbol(value)');
+        expect(stringify(symbol), 'to match', /^Symbol\(value\)/);
         expect(
           stringify({symbol: symbol}),
-          'to be',
-          '{\n  "symbol": Symbol(value)\n}'
+          'to match',
+          /^\{\\n {2}"symbol": Symbol\(value\).*\n}/
         );
       });
     }
