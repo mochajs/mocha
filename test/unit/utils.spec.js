@@ -499,8 +499,8 @@ describe('lib/utils', function() {
         expect(stringify(symbol), 'to match', /^Symbol\(value\)/);
         expect(
           stringify({symbol: symbol}),
-          'to match',
-          /^\{\\n {2}"symbol": Symbol\(value\).*\n}/
+          'to be',
+          '{\n  "symbol": Symbol(value)\n}'
         );
       });
     }
