@@ -92,6 +92,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "coffee-script": "^1.12.7",
+    "core-js": "^3.6.5",
     "coveralls": "^3.0.11",
     "cross-env": "^6.0.3",
     "cross-spawn": "^7.0.1",

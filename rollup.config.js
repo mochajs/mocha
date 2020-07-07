@@ -30,9 +30,11 @@ const config = {
     nodeResolve({
       browser: true
     }),
-    babel({presets: ['@babel/preset-env'], babelHelpers: 'bundled'})
+    babel({
+      presets: [['@babel/preset-env', {useBuiltIns: 'usage', corejs: 3}]],
+      babelHelpers: 'bundled'
+    })
   ],
-
   onwarn: (warning, warn) => {
     if (warning.code === 'CIRCULAR_DEPENDENCY') return;
 
