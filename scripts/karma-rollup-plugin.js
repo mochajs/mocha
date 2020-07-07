@@ -57,7 +57,6 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-
   const bundleFilename = `${uuid.v4()}.rollup.js`;
   let bundleLocation = path.resolve(
     pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
@@ -119,11 +118,14 @@ function bundlePreprocessor(config) {
     const {options, warnings} = await configPromise;
     const config = options[0];
     // plugins is always an array
-    const pluginConfig = [...config.plugins || [], multiEntry({exports: false})];
+    const pluginConfig = [
+      ...(config.plugins || []),
+      multiEntry({exports: false})
+    ];
     // XXX: output is always an array, but we only have one output config.
     // if we have multiple, this code needs changing.
     const outputConfig = {
-      ...(config.output || [])[0] || {},
+      ...((config.output || [])[0] || {}),
       file: file.path,
       globals: {
         sinon: 'sinon'
