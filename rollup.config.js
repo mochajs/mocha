@@ -31,7 +31,22 @@ const config = {
       browser: true
     }),
     babel({
-      presets: [['@babel/preset-env', {useBuiltIns: 'usage', corejs: 3}]],
+      exclude: /core-js/,
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            spec: true,
+            useBuiltIns: 'usage',
+            forceAllTransforms: true,
+            corejs: {
+              version: 3,
+              proposals: false
+            }
+          }
+        ]
+      ],
       babelHelpers: 'bundled'
     })
   ],
