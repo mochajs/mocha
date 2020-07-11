@@ -1,14 +1,39 @@
 #!/usr/bin/env node
+
+/**
+ * This script gathers metdata for supporters of Mocha from OpenCollective's API by
+ * aggregating order ("donation") information.
+ *
+ * It's intended to be used with 11ty, but can be run directly.  Running directly
+ * enables debug output.
+ *
+ * - gathers logo/avatar images (they are always pngs)
+ * - gathers links
+ * - sorts by total contributions and tier
+ * - validates images
+ * - writes images to a temp dir
+ * @see https://docs.opencollective.com/help/contributing/development/api
+ */
+
 'use strict';
 
-const {mkdirSync} = require('fs');
-const {writeFile} = require('fs').promises;
+const {writeFile, mkdir} = require('fs').promises;
 const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const imageSize = require('image-size');
 const blocklist = new Set(require('./blocklist.json'));
 
+/**
+ * In addition to the blocklist, any account slug matching this regex will not
+ * be displayed on the website.
+ */
+const BLOCKED_STRINGS = /(?:vpn|[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
+
+/**
+ * The OC API endpoint
+ 
+ */
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
 
 const query = `query account($limit: Int, $offset: Int, $slug: String) {
@@ -84,17 +109,20 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
-module.exports = async () => {
+const isAllowed = ({slug}) =>
+  !blocklist.has(slug) && !BLOCKED_STRINGS.test(slug);
+
+const getSupporters = async () => {
   const orders = await getAllOrders();
   // Deduplicating supporters with multiple orders
   const uniqueSupporters = new Map();
 
   const supporters = orders
+    // turn raw query result into a better data structure
     .map(nodeToSupporter)
-    .filter(supporter => !blocklist.has(supporter.slug))
+    // aggregate total $ donated by unique supporter (using slug)
     .reduce((supporters, supporter) => {
       if (uniqueSupporters.has(supporter.slug)) {
-        // aggregate donation totals
         uniqueSupporters.get(supporter.slug).totalDonations +=
           supporter.totalDonations;
         return supporters;
@@ -102,33 +130,49 @@ module.exports = async () => {
       uniqueSupporters.set(supporter.slug, supporter);
       return [...supporters, supporter];
     }, [])
+    // discard spammy supporters
+    .filter(isAllowed)
+    // sort by total $ donated, descending
     .sort((a, b) => b.totalDonations - a.totalDonations)
+    // determine which url to use depending on tier
     .reduce(
       (supporters, supporter) => {
         if (supporter.type === 'INDIVIDUAL') {
           if (supporter.name !== 'anonymous') {
-            supporters.backers.push({
-              ...supporter,
-              avatar: supporter.imgUrlSmall
-            });
+            supporters.backers = [
+              ...supporters.backers,
+              {
+                ...supporter,
+                avatar: encodeURI(supporter.imgUrlSmall)
+              }
+            ];
           }
         } else {
-          supporters.sponsors.push({...supporter, avatar: supporter.imgUrlMed});
+          supporters.sponsors = [
+            ...supporters.sponsors,
+            {
+              ...supporter,
+              avatar: encodeURI(supporter.imgUrlMed)
+            }
+          ];
         }
         return supporters;
       },
-      {sponsors: [], backers: []}
+      {
+        sponsors: [],
+        backers: []
+      }
     );
 
   const supporterImagePath = resolve(__dirname, '../images/supporters');
 
-  mkdirSync(supporterImagePath, {recursive: true});
+  await mkdir(supporterImagePath, {recursive: true});
 
   // Fetch images for sponsors and save their image dimensions
   await Promise.all(
     supporters.sponsors.map(async sponsor => {
-      const filePath = resolve(supporterImagePath, sponsor.id + '.png');
-      const {body} = await needle('get', encodeURI(sponsor.avatar));
+      const filePath = resolve(supporterImagePath, `${sponsor.id}.png`);
+      const {body} = await needle('get', sponsor.avatar);
       sponsor.dimensions = imageSize(body);
       await writeFile(filePath, body);
     })
@@ -137,17 +181,32 @@ module.exports = async () => {
   // Fetch images for backers and save their image dimensions
   await Promise.all(
     supporters.backers.map(async backer => {
-      const filePath = resolve(supporterImagePath, backer.id + '.png');
-      const {body} = await needle('get', encodeURI(backer.avatar));
+      const filePath = resolve(supporterImagePath, `${backer.id}.png`);
+      const {body} = await needle('get', backer.avatar);
       await writeFile(filePath, body);
     })
   );
 
+  const backerCount = supporters.backers.length;
+  const sponsorCount = supporters.sponsors.length;
+  const totalValidSupportersCount = backerCount + sponsorCount;
+
   debug(
-    'found %d valid backers and %d valid sponsors (%d total)',
-    supporters.backers.length,
-    supporters.sponsors.length,
-    supporters.backers.length + supporters.sponsors.length
+    'found %d valid backers and %d valid sponsors (of %d total; %d blocked)',
+    backerCount,
+    sponsorCount,
+    totalValidSupportersCount,
+    uniqueSupporters.size - totalValidSupportersCount
   );
   return supporters;
 };
+
+module.exports = getSupporters;
+
+if (require.main === module) {
+  require('debug').enable('mocha:docs:data:supporters');
+  process.on('unhandledRejection', err => {
+    throw err;
+  });
+  getSupporters();
+}
