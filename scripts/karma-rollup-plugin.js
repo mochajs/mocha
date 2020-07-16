@@ -109,7 +109,7 @@ framework.$inject = [
 function bundlePreprocessor(config) {
   const {
     basePath,
-    rollup: {configFile}
+    rollup: {configFile, globals = {}, external = []}
   } = config;
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
@@ -127,9 +127,8 @@ function bundlePreprocessor(config) {
     const outputConfig = {
       ...((config.output || [])[0] || {}),
       file: file.path,
-      globals: {
-        sinon: 'sinon'
-      }
+      globals,
+      sourcemap: 'inline'
     };
 
     warnings.flush();
@@ -137,15 +136,15 @@ function bundlePreprocessor(config) {
     const bundle = await rollup.rollup({
       input: fileMap.get(file.path),
       plugins: pluginConfig,
-      external: ['sinon'],
+      external,
       onwarn: config.onwarn
     });
-    const {output} = await bundle.generate(outputConfig);
 
     await bundle.write(outputConfig);
     console.error(`wrote bundle to ${file.path}`);
+    const code = fs.readFileSync(outputConfig.file, 'utf8');
 
-    done(null, output[0].code);
+    done(null, code);
   };
 }
 

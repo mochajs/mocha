@@ -123,6 +123,12 @@ module.exports = config => {
   cfg = addSauceTests(cfg, sauceConfig);
   cfg = chooseTestSuite(cfg, env.MOCHA_TEST);
 
+  // include sourcemap
+  cfg = {
+    ...cfg,
+    files: [...cfg.files, {pattern: './mocha.js.map', included: false}]
+  };
+
   config.set(cfg);
 };
 
@@ -232,7 +238,22 @@ const addStandardDependencies = cfg => ({
     require.resolve('unexpected-eventemitter/dist/unexpected-eventemitter.js'),
     require.resolve('./test/browser-specific/setup'),
     ...cfg.files
-  ]
+  ],
+  rollup: {
+    ...cfg.rollup,
+    external: [
+      'sinon',
+      'unexpected',
+      'unexpected-eventemitter',
+      'unexpected-sinon'
+    ],
+    globals: {
+      sinon: 'sinon',
+      unexpected: 'weknowhow.expect',
+      'unexpected-sinon': 'weknowhow.unexpectedSinon',
+      'unexpected-eventemitter': 'unexpectedEventEmitter'
+    }
+  }
 });
 
 /**
