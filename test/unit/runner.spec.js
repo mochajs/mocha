@@ -277,42 +277,54 @@ describe('Runner', function() {
       expect(test.state, 'to be', STATE_FAILED);
     });
 
-    it('should emit "fail"', function(done) {
+    it('should emit "fail"', function() {
       var test = new Test('some other test', noop);
       var err = {};
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_test, 'to be', test);
-        expect(_err, 'to be an', Error);
-        expect(_err, 'not to be', {});
-        done();
-      });
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        expect.it('to be', test),
+        expect.it('to be an', Error).and('not to be', {})
+      );
     });
 
-    it('should emit a helpful message when failed with a string', function(done) {
+    it('should emit a helpful message when failed with a string', function() {
       var test = new Test('helpful test', noop);
       var err = 'string';
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_err, 'to be an', Error);
-        expect(
-          _err,
-          'to have message',
-          'the string "string" was thrown, throw an Error :)'
-        );
-        done();
-      });
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect
+          .it('to be an', Error)
+          .and(
+            'to have message',
+            'the string "string" was thrown, throw an Error :)'
+          )
+      );
     });
 
-    it('should emit a the error when failed with an Error instance', function(done) {
+    it('should emit a the error when failed with an Error instance', function() {
       var test = new Test('a test', noop);
       var err = new Error('an error message');
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_err, 'to be an', Error);
-        expect(_err, 'to have message', 'an error message');
-        done();
-      });
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect.it('to be an', Error).and('to have message', 'an error message')
+      );
     });
 
     it('should emit the error when failed with an Error-like object', function(done) {
@@ -326,37 +338,47 @@ describe('Runner', function() {
       runner.fail(test, err);
     });
 
-    it('should emit a helpful message when failed with an Object', function(done) {
+    it('should emit a helpful message when failed with an Object', function() {
       var test = new Test('a test', noop);
       var err = {x: 1};
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_err, 'to be an', Error);
-        expect(
-          _err,
-          'to have message',
-          'the object {\n  "x": 1\n} was thrown, throw an Error :)'
-        );
-        done();
-      });
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect
+          .it('to be an', Error)
+          .and(
+            'to have message',
+            'the object {\n  "x": 1\n} was thrown, throw an Error :)'
+          )
+      );
     });
 
-    it('should emit a helpful message when failed with an Array', function(done) {
+    it('should emit a helpful message when failed with an Array', function() {
       var test = new Test('a test', noop);
       var err = [1, 2];
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_err, 'to be an', Error);
-        expect(
-          _err,
-          'to have message',
-          'the array [\n  1\n  2\n] was thrown, throw an Error :)'
-        );
-        done();
-      });
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect
+          .it('to be an', Error)
+          .and(
+            'to have message',
+            'the array [\n  1\n  2\n] was thrown, throw an Error :)'
+          )
+      );
     });
 
-    it('should recover if the error stack is not writable', function(done) {
+    it('should recover if the error stack is not writable', function() {
       if (!Object.create) {
         this.skip();
         return;
@@ -368,12 +390,16 @@ describe('Runner', function() {
       });
       var test = new Test('a test', noop);
 
-      runner.on(EVENT_TEST_FAIL, function(_test, _err) {
-        expect(_err, 'to have message', 'not evil');
-        done();
-      });
-
-      runner.fail(test, err);
+      expect(
+        function() {
+          runner.fail(test, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        test,
+        expect.it('to have message', 'not evil')
+      );
     });
 
     it('should return and not increment failures when test is pending', function() {
@@ -451,19 +477,23 @@ describe('Runner', function() {
       expect(hook.title, 'to be', '"before each" hook for "should obey"');
     });
 
-    it('should emit "fail"', function(done) {
+    it('should emit "fail"', function() {
       var hook = new Hook();
       hook.parent = suite;
       var err = new Error('error');
-      runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
-        expect(_hook, 'to be', hook);
-        expect(_err, 'to be', err);
-        done();
-      });
-      runner.failHook(hook, err);
+      expect(
+        function() {
+          runner.failHook(hook, err);
+        },
+        'to emit from',
+        runner,
+        EVENT_TEST_FAIL,
+        expect.it('to be', hook),
+        expect.it('to be', err)
+      );
     });
 
-    it('should not emit "end" if suite bail is not true', function(done) {
+    it('should not emit "end" if suite bail is not true', function() {
       var hook = new Hook();
       hook.parent = suite;
       var err = new Error('error');
@@ -476,7 +506,6 @@ describe('Runner', function() {
         hook,
         EVENT_RUN_END
       );
-      done();
     });
   });
 
