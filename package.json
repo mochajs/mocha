@@ -57,6 +57,7 @@
     "debug": "3.2.6",
     "diff": "4.0.2",
     "escape-string-regexp": "1.0.5",
+    "eslint-plugin-compat": "^3.7.0",
     "find-up": "4.1.0",
     "glob": "7.1.6",
     "growl": "1.10.5",
@@ -180,5 +181,9 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "browserist": [
+    "ie >= 11",
+    "last 2 version"
+  ]
 }
