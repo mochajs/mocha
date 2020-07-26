@@ -254,23 +254,25 @@ describe('Runner', function() {
     });
 
     it('should augment hook title with current test title', function(done) {
-      suite.beforeEach(function() {});
+      var expectedHookTitle;
+      suite.beforeEach(function() {
+        expect(hook.title, 'to be', expectedHookTitle);
+      });
       var hook = suite._beforeEach[0];
 
       suite.addTest(new Test('should behave', noop));
       suite.addTest(new Test('should obey', noop));
-
       runner.suite = suite;
+
       runner.test = suite.tests[0];
+      expectedHookTitle = '"before each" hook for "should behave"';
       runner.hook('beforeEach', function(err) {
         if (err) return done(err);
-        expect(hook.title, 'to be', '"before each" hook for "should behave"');
 
         runner.test = suite.tests[1];
+        expectedHookTitle = '"before each" hook for "should obey"';
         runner.hook('beforeEach', function(err) {
           if (err) return done(err);
-          expect(hook.title, 'to be', '"before each" hook for "should obey"');
-
           return done();
         });
       });
