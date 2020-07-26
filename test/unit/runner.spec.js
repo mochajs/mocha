@@ -271,7 +271,7 @@ describe('Runner', function() {
           if (err) return done(err);
           expect(hook.title, 'to be', '"before each" hook for "should obey"');
 
-          done();
+          return done();
         });
       });
     });

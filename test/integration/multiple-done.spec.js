@@ -121,13 +121,13 @@ describe('multiple calls to done()', function() {
     it('correctly attributes the errors', function() {
       expect(res.failures, 'to satisfy', [
         {
-          fullTitle: 'suite "before each" hook in "suite"',
+          fullTitle: 'suite "before each" hook for "test1"',
           err: {
             message: /done\(\) called multiple times in hook <suite "before each" hook> of file.+multiple-done-before-each\.fixture\.js/
           }
         },
         {
-          fullTitle: 'suite "before each" hook in "suite"',
+          fullTitle: 'suite "before each" hook for "test2"',
           err: {
             message: /done\(\) called multiple times in hook <suite "before each" hook> of file.+multiple-done-before-each\.fixture\.js/
           }
