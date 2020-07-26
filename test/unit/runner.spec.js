@@ -252,6 +252,29 @@ describe('Runner', function() {
       runner.hook('afterEach', noop);
       runner.hook('afterAll', noop);
     });
+
+    it('should augment hook title with current test title', function(done) {
+      suite.beforeEach(function() {});
+      var hook = suite._beforeEach[0];
+
+      suite.addTest(new Test('should behave', noop));
+      suite.addTest(new Test('should obey', noop));
+
+      runner.suite = suite;
+      runner.test = suite.tests[0];
+      runner.hook('beforeEach', function(err) {
+        if (err) return done(err);
+        expect(hook.title, 'to be', '"before each" hook for "should behave"');
+
+        runner.test = suite.tests[1];
+        runner.hook('beforeEach', function(err) {
+          if (err) return done(err);
+          expect(hook.title, 'to be', '"before each" hook for "should obey"');
+
+          done();
+        });
+      });
+    });
   });
 
   describe('fail()', function() {
@@ -429,18 +452,6 @@ describe('Runner', function() {
       expect(runner.failures, 'to be', 1);
       runner.failHook(test2, new Error('error2'));
       expect(runner.failures, 'to be', 2);
-    });
-
-    it('should augment hook title with current test title', function() {
-      var hook = new Hook('"before each" hook');
-      hook.ctx = {currentTest: new Test('should behave', noop)};
-
-      runner.failHook(hook, {});
-      expect(hook.title, 'to be', '"before each" hook for "should behave"');
-
-      hook.ctx.currentTest = new Test('should obey', noop);
-      runner.failHook(hook, {});
-      expect(hook.title, 'to be', '"before each" hook for "should obey"');
     });
 
     it('should emit "fail"', function(done) {
