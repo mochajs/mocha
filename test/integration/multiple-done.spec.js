@@ -119,7 +119,7 @@ describe('multiple calls to done()', function() {
     });
 
     it('correctly attributes the errors', function() {
-      expect(res.failures[0], 'to deep equal', res.failures[1]);
+      expect(res.failures[0], 'to equal', res.failures[1]);
       expect(res.failures[0], 'to satisfy', {
         fullTitle: 'suite "before each" hook in "suite"',
         err: {
