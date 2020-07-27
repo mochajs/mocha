@@ -12,7 +12,9 @@ var Hook = Mocha.Hook;
 var noop = Mocha.utils.noop;
 var errors = require('../../lib/errors');
 var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
+var EVENT_HOOK_END = Runner.constants.EVENT_HOOK_END;
 var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
+var EVENT_TEST_PASS = Runner.constants.EVENT_TEST_PASS;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
 var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
@@ -255,9 +257,16 @@ describe('Runner', function() {
 
     it('should augment hook title with current test title', function(done) {
       var expectedHookTitle;
-      suite.beforeEach(function() {
+      function assertHookTitle() {
         expect(hook.title, 'to be', expectedHookTitle);
+      }
+      suite.beforeEach(function() {
+        assertHookTitle();
       });
+      runner.on(EVENT_HOOK_BEGIN, assertHookTitle);
+      runner.on(EVENT_HOOK_END, assertHookTitle);
+      runner.on(EVENT_TEST_FAIL, assertHookTitle);
+      runner.on(EVENT_TEST_PASS, assertHookTitle);
       var hook = suite._beforeEach[0];
 
       suite.addTest(new Test('should behave', noop));
