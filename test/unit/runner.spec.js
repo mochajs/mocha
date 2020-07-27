@@ -260,8 +260,13 @@ describe('Runner', function() {
       function assertHookTitle() {
         expect(hook.title, 'to be', expectedHookTitle);
       }
+      var failHook = false;
+      var hookError = new Error('failed hook');
       suite.beforeEach(function() {
         assertHookTitle();
+        if (failHook) {
+          throw hookError;
+        }
       });
       runner.on(EVENT_HOOK_BEGIN, assertHookTitle);
       runner.on(EVENT_HOOK_END, assertHookTitle);
@@ -276,12 +281,13 @@ describe('Runner', function() {
       runner.test = suite.tests[0];
       expectedHookTitle = '"before each" hook for "should behave"';
       runner.hook('beforeEach', function(err) {
-        if (err) return done(err);
+        if (err && err !== hookError) return done(err);
 
         runner.test = suite.tests[1];
+        failHook = true;
         expectedHookTitle = '"before each" hook for "should obey"';
         runner.hook('beforeEach', function(err) {
-          if (err) return done(err);
+          if (err && err !== hookError) return done(err);
           return done();
         });
       });
