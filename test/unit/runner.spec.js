@@ -458,16 +458,16 @@ describe('Runner', function() {
     });
   });
 
-  describe('.failHook(hook, err)', function() {
+  describe('.fail(hook, err)', function() {
     it('should increment .failures', function() {
       expect(runner.failures, 'to be', 0);
       var test1 = new Test('fail hook 1', noop);
       var test2 = new Test('fail hook 2', noop);
       suite.addTest(test1);
       suite.addTest(test2);
-      runner.failHook(test1, new Error('error1'));
+      runner.fail(test1, new Error('error1'));
       expect(runner.failures, 'to be', 1);
-      runner.failHook(test2, new Error('error2'));
+      runner.fail(test2, new Error('error2'));
       expect(runner.failures, 'to be', 2);
     });
 
@@ -480,7 +480,7 @@ describe('Runner', function() {
         expect(_err, 'to be', err);
         done();
       });
-      runner.failHook(hook, err);
+      runner.fail(hook, err);
     });
 
     it('should not emit "end" if suite bail is not true', function(done) {
@@ -490,7 +490,7 @@ describe('Runner', function() {
       suite.bail(false);
       expect(
         function() {
-          runner.failHook(hook, err);
+          runner.fail(hook, err);
         },
         'not to emit from',
         hook,
@@ -755,7 +755,7 @@ describe('Runner', function() {
           expect(_err.stack, 'to be', stack.slice(0, 3).join('\n'));
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
 
@@ -773,7 +773,7 @@ describe('Runner', function() {
           expect(_err.stack, 'to be', stack.join('\n'));
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
 
@@ -824,7 +824,7 @@ describe('Runner', function() {
           );
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
 
       it('should not hang if overlong error message is multiple lines', function(done) {
@@ -844,7 +844,7 @@ describe('Runner', function() {
           );
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
   });
