@@ -12,7 +12,7 @@
  * rollup with a modified config that allows for multiple entry points for a
  * single output bundle.
  *
- * This is am implementation that specifically solves Mocha's use case. It
+ * This is an implementation that specifically solves Mocha's use case. It
  * does not support watch mode. It is possible that is coulkd eventually be
  * made reusable with more work and actual testing.
  *
@@ -57,9 +57,11 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-  let bundleLocation = pluginConfig.bundlePath
-    ? pluginConfig.bundlePath
-    : path.resolve(os.tmpdir(), `${uuid.v4()}.rollup.js`);
+  const bundleFilename = `${uuid.v4()}.rollup.js`;
+  let bundleLocation = path.resolve(
+    pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
+    bundleFilename
+  );
   if (process.platform === 'win32') {
     bundleLocation = bundleLocation.replace(/\\/g, '/');
   }
@@ -107,7 +109,7 @@ framework.$inject = [
 function bundlePreprocessor(config) {
   const {
     basePath,
-    rollup: {configFile}
+    rollup: {configFile, globals = {}, external = []}
   } = config;
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
@@ -115,33 +117,34 @@ function bundlePreprocessor(config) {
   return async function(content, file, done) {
     const {options, warnings} = await configPromise;
     const config = options[0];
-    const plugins = config.plugins || [];
+    // plugins is always an array
+    const pluginConfig = [
+      ...(config.plugins || []),
+      multiEntry({exports: false})
+    ];
+    // XXX: output is always an array, but we only have one output config.
+    // if we have multiple, this code needs changing.
+    const outputConfig = {
+      ...((config.output || [])[0] || {}),
+      file: file.path,
+      globals,
+      sourcemap: 'inline'
+    };
 
     warnings.flush();
 
     const bundle = await rollup.rollup({
       input: fileMap.get(file.path),
-      plugins: [...plugins, multiEntry({exports: false})],
-      external: ['sinon'],
+      plugins: pluginConfig,
+      external,
       onwarn: config.onwarn
     });
 
-    const sharedOutputConfig = {
-      sourcemap: true,
-      format: 'iife',
-      globals: {
-        sinon: 'sinon'
-      }
-    };
+    await bundle.write(outputConfig);
+    console.error(`wrote bundle to ${file.path}`);
+    const code = fs.readFileSync(outputConfig.file, 'utf8');
 
-    const {output} = await bundle.generate(sharedOutputConfig);
-
-    await bundle.write({
-      file: file.path,
-      ...sharedOutputConfig
-    });
-
-    done(null, output[0].code);
+    done(null, code);
   };
 }
 

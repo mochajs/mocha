@@ -75,7 +75,7 @@ module.exports = {
     },
     test: {
       default: {
-        script: 'nps lint test.node test.browser test.bundle',
+        script: 'nps lint test.node test.browser',
         description: 'Run all linters and all tests'
       },
       node: {
@@ -221,7 +221,7 @@ module.exports = {
       browser: {
         default: {
           script:
-            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm',
+            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.requirejs',
           description: 'Run browser tests'
         },
         unit: {
@@ -247,16 +247,10 @@ module.exports = {
           script: 'cross-env MOCHA_TEST=esm nps test.browser.unit',
           description: 'Run browser ES modules support test',
           hiddenFromHelp: true
-        }
-      },
-      bundle: {
-        default: {
-          script: 'nps clean build test.bundle.amd',
-          description: 'Run bundle-related tests'
         },
-        amd: {
-          script: test('amd', 'test/bundle/amd.spec'),
-          description: 'Run AMD bundle tests',
+        requirejs: {
+          script: 'cross-env MOCHA_TEST=requirejs nps test.browser.unit',
+          description: 'Run RequireJS compat test',
           hiddenFromHelp: true
         }
       }

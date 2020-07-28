@@ -15,11 +15,6 @@ rules:
   strict:
     - error
     - safe
-  # disallow Object.assign
-  no-restricted-properties:
-    - error
-    - object: 'Object'
-      property: 'assign'
 overrides:
   - files:
       - 'docs/js/**/*.js'
