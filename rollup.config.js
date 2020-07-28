@@ -13,14 +13,12 @@ import pickFromPackageJson from './scripts/pick-from-package-json';
 
 const config = {
   input: './browser-entry.js',
-  output: [
-    {
-      file: './mocha.js',
-      format: 'iife',
-      sourcemap: true
-    }
-  ],
-
+  output: {
+    file: './mocha.js',
+    format: 'umd',
+    sourcemap: true,
+    name: 'mocha'
+  },
   plugins: [
     json(),
     pickFromPackageJson({
@@ -32,9 +30,26 @@ const config = {
     nodeResolve({
       browser: true
     }),
-    babel({presets: ['@babel/preset-env'], babelHelpers: 'bundled'})
+    babel({
+      exclude: /core-js/,
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            spec: true,
+            useBuiltIns: 'usage',
+            forceAllTransforms: true,
+            corejs: {
+              version: 3,
+              proposals: false
+            }
+          }
+        ]
+      ],
+      babelHelpers: 'bundled'
+    })
   ],
-
   onwarn: (warning, warn) => {
     if (warning.code === 'CIRCULAR_DEPENDENCY') return;
 

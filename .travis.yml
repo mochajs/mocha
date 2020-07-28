@@ -49,7 +49,7 @@ jobs:
       node_js: '10'
       name: 'Node.js v10'
 
-    - script: npm start test.bundle test.browser
+    - script: npm start test.browser
       name: 'Browser'
       node_js: 12
       install: npm ci # we need the native modules here
