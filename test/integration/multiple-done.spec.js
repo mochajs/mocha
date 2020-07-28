@@ -119,8 +119,7 @@ describe('multiple calls to done()', function() {
     });
 
     it('correctly attributes the errors', function() {
-      expect(res.failures[0], 'to equal', res.failures[1]);
-      expect(res.failures[0], 'to satisfy', {
+      expect(res.failures[0], 'to equal', res.failures[1]).and('to satisfy', {
         fullTitle: 'suite1 "before each" hook in "suite1"',
         err: {
           message: /done\(\) called multiple times in hook <suite1 "before each" hook in "suite1"> of file.+multiple-done-before-each\.fixture\.js/,
