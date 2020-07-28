@@ -1,6 +1,6 @@
 'use strict';
 
-describe('suite', function () {
+describe('suite1', function () {
   beforeEach(function (done) {
     setTimeout(done, 10);
     setTimeout(done, 20);
