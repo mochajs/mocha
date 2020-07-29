@@ -95,9 +95,9 @@ describe('multiple calls to done()', function() {
 
     it('correctly attributes the error', function() {
       expect(res.failures[0], 'to satisfy', {
-        fullTitle: 'suite "before all" hook in "suite"',
+        fullTitle: 'suite1 "before all" hook in "suite1"',
         err: {
-          message: /done\(\) called multiple times in hook <suite "before all" hook> of file.+multiple-done-before\.fixture\.js/
+          message: /done\(\) called multiple times in hook <suite1 "before all" hook in "suite1"> of file.+multiple-done-before\.fixture\.js/
         }
       });
     });
@@ -119,20 +119,17 @@ describe('multiple calls to done()', function() {
     });
 
     it('correctly attributes the errors', function() {
-      expect(res.failures, 'to satisfy', [
-        {
-          fullTitle: 'suite "before each" hook in "suite"',
-          err: {
-            message: /done\(\) called multiple times in hook <suite "before each" hook> of file.+multiple-done-before-each\.fixture\.js/
-          }
-        },
-        {
-          fullTitle: 'suite "before each" hook in "suite"',
-          err: {
-            message: /done\(\) called multiple times in hook <suite "before each" hook> of file.+multiple-done-before-each\.fixture\.js/
-          }
+      expect(res.failures[0], 'to equal', res.failures[1]).and('to satisfy', {
+        fullTitle: 'suite1 "before each" hook in "suite1"',
+        err: {
+          message: /done\(\) called multiple times in hook <suite1 "before each" hook in "suite1"> of file.+multiple-done-before-each\.fixture\.js/,
+          multiple: [
+            {
+              code: 'ERR_MOCHA_MULTIPLE_DONE'
+            }
+          ]
         }
-      ]);
+      });
     });
   });
 
