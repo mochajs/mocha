@@ -12,7 +12,9 @@ var Hook = Mocha.Hook;
 var noop = Mocha.utils.noop;
 var errors = require('../../lib/errors');
 var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
+var EVENT_HOOK_END = Runner.constants.EVENT_HOOK_END;
 var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
+var EVENT_TEST_PASS = Runner.constants.EVENT_TEST_PASS;
 var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
 var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
 var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
@@ -252,6 +254,44 @@ describe('Runner', function() {
       runner.hook('afterEach', noop);
       runner.hook('afterAll', noop);
     });
+
+    it('should augment hook title with current test title', function(done) {
+      var expectedHookTitle;
+      function assertHookTitle() {
+        expect(hook.title, 'to be', expectedHookTitle);
+      }
+      var failHook = false;
+      var hookError = new Error('failed hook');
+      suite.beforeEach(function() {
+        assertHookTitle();
+        if (failHook) {
+          throw hookError;
+        }
+      });
+      runner.on(EVENT_HOOK_BEGIN, assertHookTitle);
+      runner.on(EVENT_HOOK_END, assertHookTitle);
+      runner.on(EVENT_TEST_FAIL, assertHookTitle);
+      runner.on(EVENT_TEST_PASS, assertHookTitle);
+      var hook = suite._beforeEach[0];
+
+      suite.addTest(new Test('should behave', noop));
+      suite.addTest(new Test('should obey', noop));
+      runner.suite = suite;
+
+      runner.test = suite.tests[0];
+      expectedHookTitle = '"before each" hook for "should behave"';
+      runner.hook('beforeEach', function(err) {
+        if (err && err !== hookError) return done(err);
+
+        runner.test = suite.tests[1];
+        failHook = true;
+        expectedHookTitle = '"before each" hook for "should obey"';
+        runner.hook('beforeEach', function(err) {
+          if (err && err !== hookError) return done(err);
+          return done();
+        });
+      });
+    });
   });
 
   describe('fail()', function() {
@@ -418,29 +458,17 @@ describe('Runner', function() {
     });
   });
 
-  describe('.failHook(hook, err)', function() {
+  describe('.fail(hook, err)', function() {
     it('should increment .failures', function() {
       expect(runner.failures, 'to be', 0);
       var test1 = new Test('fail hook 1', noop);
       var test2 = new Test('fail hook 2', noop);
       suite.addTest(test1);
       suite.addTest(test2);
-      runner.failHook(test1, new Error('error1'));
+      runner.fail(test1, new Error('error1'));
       expect(runner.failures, 'to be', 1);
-      runner.failHook(test2, new Error('error2'));
+      runner.fail(test2, new Error('error2'));
       expect(runner.failures, 'to be', 2);
-    });
-
-    it('should augment hook title with current test title', function() {
-      var hook = new Hook('"before each" hook');
-      hook.ctx = {currentTest: new Test('should behave', noop)};
-
-      runner.failHook(hook, {});
-      expect(hook.title, 'to be', '"before each" hook for "should behave"');
-
-      hook.ctx.currentTest = new Test('should obey', noop);
-      runner.failHook(hook, {});
-      expect(hook.title, 'to be', '"before each" hook for "should obey"');
     });
 
     it('should emit "fail"', function(done) {
@@ -452,7 +480,7 @@ describe('Runner', function() {
         expect(_err, 'to be', err);
         done();
       });
-      runner.failHook(hook, err);
+      runner.fail(hook, err);
     });
 
     it('should not emit "end" if suite bail is not true', function(done) {
@@ -462,7 +490,7 @@ describe('Runner', function() {
       suite.bail(false);
       expect(
         function() {
-          runner.failHook(hook, err);
+          runner.fail(hook, err);
         },
         'not to emit from',
         hook,
@@ -727,7 +755,7 @@ describe('Runner', function() {
           expect(_err.stack, 'to be', stack.slice(0, 3).join('\n'));
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
 
@@ -745,7 +773,7 @@ describe('Runner', function() {
           expect(_err.stack, 'to be', stack.join('\n'));
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
 
@@ -796,7 +824,7 @@ describe('Runner', function() {
           );
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
 
       it('should not hang if overlong error message is multiple lines', function(done) {
@@ -816,7 +844,7 @@ describe('Runner', function() {
           );
           done();
         });
-        runner.failHook(hook, err);
+        runner.fail(hook, err);
       });
     });
   });
