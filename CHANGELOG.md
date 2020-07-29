@@ -1,3 +1,42 @@
+# 8.1.0 / 2020-07-29
+
+In this release, Mocha now builds its browser bundle with Rollup and Babel, which will provide the project's codebase more flexibility and consistency.
+
+While we've been diligent about backwards compatibility, it's _possible_ consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you _do_ encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug&template=bug_report.md&title=).
+
+This release **does not** drop support for IE11.
+
+Other community contributions came from [**@Devjeel**](https://github.com/Devjeel) and [**@sharath2106**](https://github.com/sharath2106). _Thank you_ to everyone who contributed to this release!
+
+> Do you read Korean? See [this guide to running parallel tests in Mocha](https://blog.outsider.ne.kr/1489), translated by our maintainer, [**@outsideris**](https://github.com/outsideris).
+
+## :tada: Enhancements
+
+- [#4287](https://github.com/mochajs/mocha/issues/4287): Use background colors with inline diffs for better visual distinction ([**@michael-brade**](https://github.com/michael-brade))
+
+## :bug: Fixes
+
+- [#4328](https://github.com/mochajs/mocha/issues/4328): Fix "watch" mode when Mocha run in parallel ([**@boneskull**](https://github.com/boneskull))
+- [#4382](https://github.com/mochajs/mocha/issues/4382): Fix root hook execution in "watch" mode ([**@indieisaconcept**](https://github.com/indieisaconcept))
+- [#4383](https://github.com/mochajs/mocha/issues/4383): Consistent auto-generated hook titles ([**@cspotcode**](https://github.com/cspotcode))
+- [#4359](https://github.com/mochajs/mocha/issues/4359): Better errors when running `mocha init` ([**@boneskull**](https://github.com/boneskull))
+- [#4341](https://github.com/mochajs/mocha/issues/4341): Fix weirdness when using `delay` option in browser ([**@craigtaub**](https://github.com/craigtaub))
+
+## :lock: Security Fixes
+
+- [#4378](https://github.com/mochajs/mocha/issues/4378), [#4333](https://github.com/mochajs/mocha/issues/4333): Update [javascript-serialize](https://npm.im/javascript-serialize) ([**@martinoppitz**](https://github.com/martinoppitz), [**@wnghdcjfe**](https://github.com/wnghdcjfe))
+- [#4354](https://github.com/mochajs/mocha/issues/4354): Update [yargs-unparser](https://npm.im/yargs-unparser) ([**@martinoppitz**](https://github.com/martinoppitz))
+
+## :book: Documentation & Website
+
+- [#4173](https://github.com/mochajs/mocha/issues/4173): Document how to use `--enable-source-maps` with Mocha ([**@bcoe**](https://github.com/bcoe))
+- [#4343](https://github.com/mochajs/mocha/issues/4343): Clean up some API docs ([**@craigtaub**](https://github.com/craigtaub))
+- [#4318](https://github.com/mochajs/mocha/issues/4318): Sponsor images are now self-hosted ([**@Munter**](https://github.com/Munter))
+
+## :nut_and_bolt: Other
+
+- [#4293](https://github.com/mochajs/mocha/issues/4293): Use Rollup and Babel in build pipeline; add source map to published files ([**@Munter**](https://github.com/Munter))
+
 # 8.0.1 / 2020-06-10
 
 The obligatory patch after a major.
