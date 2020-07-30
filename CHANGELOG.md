@@ -6,7 +6,7 @@ While we've been diligent about backwards compatibility, it's _possible_ consume
 
 This release **does not** drop support for IE11.
 
-Other community contributions came from [**@Devjeel**](https://github.com/Devjeel), @Harsha509 and [**@sharath2106**](https://github.com/sharath2106). _Thank you_ to everyone who contributed to this release!
+Other community contributions came from [**@Devjeel**](https://github.com/Devjeel), [**@Harsha509**](https://github.com/Harsha509) and [**@sharath2106**](https://github.com/sharath2106). _Thank you_ to everyone who contributed to this release!
 
 > Do you read Korean? See [this guide to running parallel tests in Mocha](https://blog.outsider.ne.kr/1489), translated by our maintainer, [**@outsideris**](https://github.com/outsideris).
 
