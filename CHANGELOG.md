@@ -2,7 +2,7 @@
 
 ## :bug: Fixes
 
-- #4394: Fix regression wherein certain reporters did not correctly detect terminal width (@boneskull)
+- [#4394](https://github.com/mochajs/mocha/issues/4394): Fix regression wherein certain reporters did not correctly detect terminal width ([**@boneskull**](https://github.com/boneskull))
 
 # 8.1.0 / 2020-07-30
 
