@@ -444,7 +444,7 @@ describe('Base reporter', function() {
     });
   });
 
-  describe.only('When there is StackTrace in the error message', function() {
+  describe('When there is StackTrace in the error message', function() {
     var baseConsoleLog;
     var err;
     var test;
