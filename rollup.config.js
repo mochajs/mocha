@@ -17,7 +17,8 @@ const config = {
     file: './mocha.js',
     format: 'umd',
     sourcemap: true,
-    name: 'mocha'
+    name: 'mocha',
+    footer: 'window.Mocha = window.mocha.Mocha;'
   },
   plugins: [
     json(),
