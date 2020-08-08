@@ -443,4 +443,40 @@ describe('Base reporter', function() {
       sinon.restore();
     });
   });
+
+  describe.only('When there is StackTrace in the error message', function() {
+    var baseConsoleLog;
+    var err;
+    var test;
+
+    beforeEach(function() {
+      baseConsoleLog = sinon.spy(Base, 'consoleLog');
+      err = {
+        message:
+          'AssertionError: foo bar\n' +
+          'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
+        stack:
+          'AssertionError: foo bar\n' +
+          'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)\n' +
+          'at Context.<anonymous> (/usr/local/dev/test.js:19:5)'
+      };
+      test = makeTest(err);
+    });
+
+    it('You should be able to remove the overlap between the message and the stacktrace.', function() {
+      var expected = [
+        '  %s) %s:\n     %s\n%s\n',
+        1,
+        'test title',
+        'AssertionError: foo bar\nat EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
+        '  at Context.<anonymous> (/usr/local/dev/test.js:19:5)'
+      ];
+      Base.list([test]);
+      assert.deepEqual(baseConsoleLog.lastCall.args, expected);
+    });
+
+    afterEach(function() {
+      baseConsoleLog.restore();
+    });
+  });
 });
