@@ -1,0 +1,42 @@
+name: Windows CI
+on: [push, pull_request]
+
+jobs:
+  smoke:
+    name: Smoke on Node.js v${{ matrix.node }}
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        node: [10, 12, 14]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --ignore-scripts
+      - run: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
+  lint:
+    name: Lint JS & Markdown
+    needs: smoke
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: npm ci --ignore-scripts
+      - run: npm start lint
+  test:
+    name: Test on Node.js v${{ matrix.node }}
+    needs: lint
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        node: [10, 12, 14]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --ignore-scripts
+      - run: npm start test.node
