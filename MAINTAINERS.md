@@ -346,7 +346,7 @@ _It's easier to release often._
    1. These changes are then added to the Git "stage" and will be added to the commit.
 1. Push `master` to `origin` with your new tag; e.g. `git push origin master --tags`
 1. Copy & paste the `CHANGELOG.md` lines to a new GitHub "release". Save release as draft.
-1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI and [AppVeyor](https://ci.appveyor.com/project/boneskull/mocha).
+1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI and [GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Windows+CI%22).
    1. Once the build is green, you'll want to trigger an update of `mochajs.org`:
    1. _If you're doing a prerelease_, fast-forward the `next` branch to `master`, and push it. This updates [https://next.mochajs.org](https://next.mochajs.org). That's all.
    1. _If this is NOT a prerelease_, fast-forward the `mochajs.org` branch to `master` and push it. This updates [https://mochajs.org](https://mochajs.org).

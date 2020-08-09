@@ -104,7 +104,7 @@ module.exports = config => {
       throw new Error('no browser tests should run on AppVeyor!');
     } else {
       console.error(`Local environment (${hostname}) detected`);
-      // don't need to run sauce from appveyor b/c travis does it.
+      // don't need to run sauce from Windows CI b/c travis does it.
       if (env.SAUCE_USERNAME || env.SAUCE_ACCESS_KEY) {
         const id = `${hostname} (${Date.now()})`;
         sauceConfig = {
