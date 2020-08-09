@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: npm ci --ignore-scripts
+      - run: npm install --production
       - run: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
   lint:
     name: Lint JS & Markdown
