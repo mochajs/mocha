@@ -1,0 +1,5 @@
+{
+  "extends": "./base.json",
+  "reporter": "html",
+  "slow": 30
+}
