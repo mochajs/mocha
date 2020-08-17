@@ -15,20 +15,9 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install --production
       - run: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
-  lint:
-    name: Lint JS & Markdown
-    needs: smoke
-    runs-on: windows-2019
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - run: npm ci --ignore-scripts
-      - run: npm start lint
   test:
     name: Test on Node.js v${{ matrix.node }}
-    needs: lint
+    needs: smoke
     runs-on: windows-2019
     strategy:
       matrix:
