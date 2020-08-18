@@ -8,7 +8,7 @@
     "static": false
   },
   "opts": {
-    "destination": "docs/_site/api",
+    "destination": "docs/api",
     "encoding": "utf8",
     "recurse": true,
     "template": "node_modules/@mocha/docdash",
