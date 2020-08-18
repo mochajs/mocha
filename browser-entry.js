@@ -210,8 +210,8 @@ Mocha.process = process;
  * Expose mocha.
  */
 
-mocha.Mocha = Mocha;
-mocha.mocha = mocha;
+global.Mocha = Mocha;
+global.mocha = mocha;
 
 // this allows test/acceptance/required-tokens.js to pass; thus,
 // you can now do `const describe = require('mocha').describe` in a
