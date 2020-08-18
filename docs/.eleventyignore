@@ -5,3 +5,6 @@ LICENSE*
 _dist/
 example/
 changelogs/
+api-tutorials/
+_site/
+

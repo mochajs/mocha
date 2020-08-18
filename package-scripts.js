@@ -268,15 +268,15 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.prebuild && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
+          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
         description: 'Build documentation'
       },
       production: {
         script: 'nps docs && nps docs.postbuild',
         description: 'Build docs for production'
       },
-      prebuild: {
-        script: 'rimraf docs/_dist docs/_site',
+      clean: {
+        script: 'rimraf docs/_dist docs/_site docs/api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
