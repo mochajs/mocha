@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * This script gathers metdata for supporters of Mocha from OpenCollective's API by
+ * This script gathers metadata for supporters of Mocha from OpenCollective's API by
  * aggregating order ("donation") information.
  *
  * It's intended to be used with 11ty, but can be run directly.  Running directly
