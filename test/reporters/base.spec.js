@@ -444,13 +444,11 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('When there is StackTrace in the error message', function() {
-    var baseConsoleLog;
-    var err;
-    var test;
+  describe.only('When there is StackTrace in the error message', function() {
+    let err;
+    let test;
 
     beforeEach(function() {
-      baseConsoleLog = sinon.spy(Base, 'consoleLog');
       err = {
         message:
           'AssertionError: foo bar\n' +
@@ -464,7 +462,7 @@ describe('Base reporter', function() {
     });
 
     it('You should be able to remove the overlap between the message and the stacktrace.', function() {
-      var expected = [
+      const expected = [
         '  %s) %s:\n     %s\n%s\n',
         1,
         'test title',
@@ -472,11 +470,7 @@ describe('Base reporter', function() {
         '  at Context.<anonymous> (/usr/local/dev/test.js:19:5)'
       ];
       Base.list([test]);
-      assert.deepEqual(baseConsoleLog.lastCall.args, expected);
-    });
-
-    afterEach(function() {
-      baseConsoleLog.restore();
+      expect(Base.consoleLog, 'when called with', expected);
     });
   });
 });
