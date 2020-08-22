@@ -91,7 +91,7 @@ _Excellent._ Here's how:
 - **Can you write ~~good~~ well?** The [documentation](https://mochajs.org) almost always needs some love. See the [doc-related issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
 - **Design your thing?** [Our site](https://mochajs.org) needs your magic touch.
 - **Familiar with Mocha's codebase?** We could use your help triaging issues and/or reviewing pull requests. Please contact an [org member](https://github.com/orgs/mochajs/people), and we'll chat.
-- **Want to build our community?** Mocha has a _lot_ of users. We could use your help bringing everyone together in peace and harmony. Please contact an [org member](https://github.com/mochajs/people).
+- **Want to build our community?** Mocha has a _lot_ of users. We could use your help bringing everyone together in peace and harmony. Please contact an [org member](https://github.com/orgs/mochajs/people).
 - **You can sell dirt to worms?** Let's raise Mocha's profile in the JavaScript and OSS communities. Please contact an [org member](https://github.com/orgs/mochajs/people)!
 - **Wait--you write unit tests for _fun_?** A PR which increases coverage is unlikely to be turned down.
 - **Are you experienced?** :guitar: If you're a seasoned Mocha user, why not help answer some questions in the [main chat room](https://gitter.im/mochajs/mocha)?
