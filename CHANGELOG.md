@@ -2,16 +2,16 @@
 
 ## :bug: Fixes
 
-- #4418: Fix command-line flag incompatibility in forthcoming Node.js v14.9.0 (@boneskull)
-- #4401: Fix missing global variable in browser (@irrationelle)
+- [#4418](https://github.com/mochajs/mocha/issues/4418): Fix command-line flag incompatibility in forthcoming Node.js v14.9.0 ([**@boneskull**](https://github.com/boneskull))
+- [#4401](https://github.com/mochajs/mocha/issues/4401): Fix missing global variable in browser ([**@irrationelle**](https://github.com/irrationelle))
 
 ## :lock: Security Fixes
 
-- #4396: Update many dependencies (@GChuf)
+- [#4396](https://github.com/mochajs/mocha/issues/4396): Update many dependencies ([**@GChuf**](https://github.com/GChuf))
 
 ## :book: Documentation
 
-- Various fixes by @sujin-park, @wwhurin & @Donghoon759
+- Various fixes by [**@sujin-park**](https://github.com/sujin-park), [**@wwhurin**](https://github.com/wwhurin) & [**@Donghoon759**](https://github.com/Donghoon759)
 
 # 8.1.1 / 2020-08-04
 
