@@ -1,3 +1,18 @@
+# 8.1.2 / 2020-08-25
+
+## :bug: Fixes
+
+- #4418: Fix command-line flag incompatibility in forthcoming Node.js v14.9.0 (@boneskull)
+- #4401: Fix missing global variable in browser (@irrationelle)
+
+## :lock: Security Fixes
+
+- #4396: Update many dependencies (@GChuf)
+
+## :book: Documentation
+
+- Various fixes by @sujin-park, @wwhurin & @Donghoon759
+
 # 8.1.1 / 2020-08-04
 
 ## :bug: Fixes
