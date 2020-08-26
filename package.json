@@ -173,7 +173,8 @@
     "./lib/nodejs/worker.js": false,
     "./lib/nodejs/buffered-worker-pool.js": false,
     "./lib/nodejs/parallel-buffered-runner.js": false,
-    "./lib/nodejs/reporters/parallel-buffered.js": false
+    "./lib/nodejs/reporters/parallel-buffered.js": false,
+    "./lib/cli/index.js": false
   },
   "prettier": {
     "singleQuote": true,
