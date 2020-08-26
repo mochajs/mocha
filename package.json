@@ -81,7 +81,7 @@
     "@11ty/eleventy": "^0.11.0",
     "@11ty/eleventy-plugin-inclusive-language": "^1.0.0",
     "@babel/preset-env": "^7.11.0",
-    "@mocha/docdash": "^3.0.0",
+    "@mocha/docdash": "^3.0.1",
     "@rollup/plugin-babel": "^5.1.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-json": "^4.1.0",
