@@ -742,4 +742,49 @@ describe('lib/utils', function() {
       expect(utils.slug('poppies & fritz'), 'to be', 'poppies-fritz');
     });
   });
+
+  describe('lookupFiles()', function() {
+    beforeEach(function() {
+      sinon.stub(utils, 'deprecate');
+    });
+
+    describe('when run in Node.js', function() {
+      before(function() {
+        if (process.browser) {
+          return this.skip();
+        }
+      });
+
+      beforeEach(function() {
+        sinon.stub(utils, 'isBrowser').returns(false);
+        sinon.stub(require('../../lib/cli'), 'lookupFiles').returns([]);
+      });
+
+      it('should print a deprecation message', function() {
+        utils.lookupFiles();
+        expect(utils.deprecate, 'was called once');
+      });
+
+      it('should delegate to new location of lookupFiles()', function() {
+        utils.lookupFiles(['foo']);
+        expect(
+          require('../../lib/cli').lookupFiles,
+          'to have a call satisfying',
+          [['foo']]
+        ).and('was called once');
+      });
+    });
+
+    describe('when run in browser', function() {
+      beforeEach(function() {
+        sinon.stub(utils, 'isBrowser').returns(true);
+      });
+
+      it('should throw', function() {
+        expect(() => utils.lookupFiles(['foo']), 'to throw', {
+          code: 'ERR_MOCHA_UNSUPPORTED'
+        });
+      });
+    });
+  });
 });
