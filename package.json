@@ -107,6 +107,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
+    "fail-on-errors-webpack-plugin": "^3.0.0",
     "fs-extra": "^9.0.1",
     "husky": "^4.2.5",
     "hyperlink": "^4.5.2",
@@ -150,7 +151,9 @@
     "update-notifier": "^4.1.0",
     "uslug": "^1.0.4",
     "uuid": "^8.3.0",
-    "watchify": "^3.11.1"
+    "watchify": "^3.11.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "files": [
     "bin/*mocha",
@@ -174,6 +177,7 @@
     "./lib/nodejs/buffered-worker-pool.js": false,
     "./lib/nodejs/parallel-buffered-runner.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
+    "./lib/nodejs/file-unloader.js": false,
     "./lib/cli/index.js": false
   },
   "prettier": {

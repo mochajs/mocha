@@ -844,5 +844,19 @@ describe('Mocha', function() {
         });
       });
     });
+
+    describe('unloadFile', function() {
+      describe('when run in a browser', function() {
+        beforeEach(function() {
+          sinon.stub(utils, 'isBrowser').returns(true);
+        });
+
+        it('should throw', function() {
+          expect(() => Mocha.unloadFile('guy-fieri.js'), 'to throw', {
+            code: 'ERR_MOCHA_UNSUPPORTED'
+          });
+        });
+      });
+    });
   });
 });
