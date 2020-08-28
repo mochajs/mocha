@@ -2,7 +2,7 @@
 
 ## :bug: Fixes
 
-- #4425: Restore `Mocha.utils.lookupFiles()` and Webpack compatibility (both broken since v8.1.0); `Mocha.utils.lookupFiles()` is now **deprecated** and will be removed in the next major revision of Mocha; use `require('mocha/lib/cli').lookupFiles` instead (@boneskull)
+- [#4425](https://github.com/mochajs/mocha/issues/4425): Restore `Mocha.utils.lookupFiles()` and Webpack compatibility (both broken since v8.1.0); `Mocha.utils.lookupFiles()` is now **deprecated** and will be removed in the next major revision of Mocha; use `require('mocha/lib/cli').lookupFiles` instead ([**@boneskull**](https://github.com/boneskull))
 
 # 8.1.2 / 2020-08-25
 
