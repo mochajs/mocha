@@ -2,14 +2,14 @@
 
 var EventEmitter = require('events').EventEmitter;
 var fs = require('fs');
-var os = require('os');
 var path = require('path');
-var rimraf = require('rimraf');
 var sinon = require('sinon');
 var createStatsCollector = require('../../lib/stats-collector');
 var events = require('../../').Runner.constants;
 var reporters = require('../../').reporters;
 var states = require('../../').Runnable.constants;
+
+const {createTempDir, touchFile} = require('../integration/helpers');
 
 var Base = reporters.Base;
 var XUnit = reporters.XUnit;
@@ -81,15 +81,21 @@ describe('XUnit reporter', function() {
 
     describe('when fileStream cannot be created', function() {
       describe('when given an invalid pathname', function() {
-        var tmpdir;
+        /**
+         * @type {string}
+         */
+        let tmpdir;
+
+        /**
+         * @type {import('../integration/helpers').RemoveTempDirCallback}
+         */
+        let cleanup;
         var invalidPath;
 
-        beforeEach(function createInvalidPath() {
-          tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'mocha-test-'));
-
-          function touch(filename) {
-            fs.closeSync(fs.openSync(filename, 'w'));
-          }
+        beforeEach(async function() {
+          const {dirpath, removeTempDir} = await createTempDir();
+          tmpdir = dirpath;
+          cleanup = removeTempDir;
 
           // Create path where file 'some-file' used as directory
           invalidPath = path.join(
@@ -97,7 +103,7 @@ describe('XUnit reporter', function() {
             'some-file',
             path.basename(expectedOutput)
           );
-          touch(path.dirname(invalidPath));
+          touchFile(path.dirname(invalidPath));
         });
 
         it('should throw system error', function() {
@@ -119,7 +125,7 @@ describe('XUnit reporter', function() {
         });
 
         afterEach(function() {
-          rimraf.sync(tmpdir);
+          cleanup();
         });
       });
 

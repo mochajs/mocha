@@ -48,6 +48,7 @@ module.exports = () => {
       );
       require('./test/setup');
     },
-    debug: true
+    debug: true,
+    runMode: 'onsave'
   };
 };

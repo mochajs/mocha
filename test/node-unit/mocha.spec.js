@@ -5,7 +5,6 @@ const rewiremock = require('rewiremock/node');
 const sinon = require('sinon');
 const {EventEmitter} = require('events');
 
-const MODULE_PATH = require.resolve('../../lib/mocha.js');
 const DUMB_FIXTURE_PATH = require.resolve('./fixtures/dumb-module.fixture.js');
 const DUMBER_FIXTURE_PATH = require.resolve(
   './fixtures/dumber-module.fixture.js'
@@ -37,12 +36,9 @@ describe('Mocha', function() {
     });
     stubs.Suite = sinon.stub().returns(stubs.suite);
     stubs.Suite.constants = {};
-    stubs.BufferedRunner = sinon.stub().returns({});
+    stubs.ParallelBufferedRunner = sinon.stub().returns({});
     const runner = Object.assign(sinon.createStubInstance(EventEmitter), {
-      run: sinon
-        .stub()
-        .callsArgAsync(0)
-        .returnsThis(),
+      runAsync: sinon.stub().resolves(0),
       globals: sinon.stub(),
       grep: sinon.stub(),
       dispose: sinon.stub()
@@ -52,12 +48,16 @@ describe('Mocha', function() {
     // we don't need the constants themselves, but the object cannot be undefined
     stubs.Runner.constants = {};
 
-    Mocha = rewiremock.proxy(MODULE_PATH, r => ({
-      '../../lib/utils.js': r.with(stubs.utils).callThrough(),
-      '../../lib/suite.js': stubs.Suite,
-      '../../lib/nodejs/parallel-buffered-runner.js': stubs.BufferedRunner,
-      '../../lib/runner.js': stubs.Runner
-    }));
+    Mocha = rewiremock.proxy(
+      () => require('../../lib/mocha'),
+      r => ({
+        '../../lib/utils.js': r.with(stubs.utils).callThrough(),
+        '../../lib/suite.js': stubs.Suite,
+        '../../lib/nodejs/parallel-buffered-runner.js':
+          stubs.ParallelBufferedRunner,
+        '../../lib/runner.js': stubs.Runner
+      })
+    );
     delete require.cache[DUMB_FIXTURE_PATH];
     delete require.cache[DUMBER_FIXTURE_PATH];
   });
@@ -84,14 +84,14 @@ describe('Mocha', function() {
         describe('when parallel mode is already enabled', function() {
           beforeEach(function() {
             mocha.options.parallel = true;
-            mocha._runnerClass = stubs.BufferedRunner;
+            mocha._runnerClass = stubs.ParallelBufferedRunner;
             mocha._lazyLoadFiles = true;
           });
 
           it('should not swap the Runner, nor change lazy loading setting', function() {
             expect(mocha.parallelMode(true), 'to satisfy', {
               options: {parallel: true},
-              _runnerClass: stubs.BufferedRunner,
+              _runnerClass: stubs.ParallelBufferedRunner,
               _lazyLoadFiles: true
             });
           });
@@ -122,13 +122,14 @@ describe('Mocha', function() {
             describe('when `Mocha` instance is in `INIT` state', function() {
               beforeEach(function() {
                 mocha._state = 'init';
-                // this is broken
-                this.skip();
               });
 
               it('should enable parallel mode', function() {
+                // FIXME: the dynamic require() call breaks the mock of
+                // `ParallelBufferedRunner` and returns the real class.
+                // don't know how to make this work or if it's even possible
                 expect(mocha.parallelMode(true), 'to satisfy', {
-                  _runnerClass: stubs.BufferedRunner,
+                  _runnerClass: expect.it('not to be', Mocha.Runner),
                   options: {
                     parallel: true
                   },
@@ -144,7 +145,7 @@ describe('Mocha', function() {
 
               it('should throw', function() {
                 expect(
-                  function() {
+                  () => {
                     mocha.parallelMode(true);
                   },
                   'to throw',

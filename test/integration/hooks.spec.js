@@ -3,7 +3,7 @@
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
 var runMochaJSON = require('./helpers').runMochaJSON;
-var splitRegExp = require('./helpers').splitRegExp;
+var SPLIT_DOT_REPORTER_REGEXP = require('./helpers').SPLIT_DOT_REPORTER_REGEXP;
 var args = ['--reporter', 'dot'];
 
 describe('hooks', function() {
@@ -17,7 +17,7 @@ describe('hooks', function() {
       }
 
       lines = res.output
-        .split(splitRegExp)
+        .split(SPLIT_DOT_REPORTER_REGEXP)
         .map(function(line) {
           return line.trim();
         })

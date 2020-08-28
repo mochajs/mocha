@@ -3,7 +3,7 @@
 var helpers = require('./helpers');
 var runMocha = helpers.runMocha;
 var runMochaJSON = require('./helpers').runMochaJSON;
-var splitRegExp = helpers.splitRegExp;
+var SPLIT_DOT_REPORTER_REGEXP = helpers.SPLIT_DOT_REPORTER_REGEXP;
 var bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('hook error handling', function() {
@@ -263,7 +263,7 @@ describe('hook error handling', function() {
         expect(err, 'to be falsy');
 
         lines = res.output
-          .split(splitRegExp)
+          .split(SPLIT_DOT_REPORTER_REGEXP)
           .map(function(line) {
             return line.trim();
           })
