@@ -10,7 +10,7 @@ describe('diffs', function() {
     const resultTests = await result.result;
     const successTests = resultTests.filter(test => test.state === 'passed');
     const failedTests = resultTests.filter(test => test.state === 'failed');
-    console.log('successTests', successTests.length);
-    console.log('failedTests', failedTests.length);
+    expect(successTests.length === 5, 'to be true');
+    expect(failedTests.length === 2, 'to be true');
   });
 });
