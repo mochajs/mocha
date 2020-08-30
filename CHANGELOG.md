@@ -9,7 +9,7 @@
 ## :bug: Fixes
 
 - [#4418](https://github.com/mochajs/mocha/issues/4418): Fix command-line flag incompatibility in forthcoming Node.js v14.9.0 ([**@boneskull**](https://github.com/boneskull))
-- [#4401](https://github.com/mochajs/mocha/issues/4401): Fix missing global variable in browser ([**@irrationelle**](https://github.com/irrationelle))
+- [#4401](https://github.com/mochajs/mocha/issues/4401): Fix missing global variable in browser ([**@irrationnelle**](https://github.com/irrationnelle))
 
 ## :lock: Security Fixes
 
