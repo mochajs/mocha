@@ -4,6 +4,7 @@ var sinon = require('sinon');
 var EventEmitter = require('events').EventEmitter;
 var Mocha = require('../../lib/mocha');
 var utils = require('../../lib/utils');
+const errors = require('../../lib/errors');
 
 describe('Mocha', function() {
   /**
@@ -76,7 +77,7 @@ describe('Mocha', function() {
     Suite.constants = {};
 
     sinon.stub(utils, 'supportsEsModules').returns(false);
-    sinon.stub(utils, 'warn');
+    sinon.stub(errors, 'warn');
     sinon.stub(utils, 'isString');
     sinon.stub(utils, 'noop');
   });

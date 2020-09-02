@@ -19,9 +19,20 @@ describe('Mocha', function() {
     opts = {reporter: sinon.stub()};
 
     stubs = {};
+    stubs.errors = {
+      warn: sinon.stub(),
+      createMochaInstanceAlreadyDisposedError: sinon
+        .stub()
+        .throws({code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}),
+      createInvalidReporterError: sinon
+        .stub()
+        .throws({code: 'ERR_MOCHA_INVALID_REPORTER'}),
+      createUnsupportedError: sinon
+        .stub()
+        .throws({code: 'ERR_MOCHA_UNSUPPORTED'})
+    };
     stubs.utils = {
       supportsEsModules: sinon.stub().returns(false),
-      warn: sinon.stub(),
       isString: sinon.stub(),
       noop: sinon.stub(),
       cwd: sinon.stub().returns(process.cwd()),
@@ -55,7 +66,8 @@ describe('Mocha', function() {
         '../../lib/suite.js': stubs.Suite,
         '../../lib/nodejs/parallel-buffered-runner.js':
           stubs.ParallelBufferedRunner,
-        '../../lib/runner.js': stubs.Runner
+        '../../lib/runner.js': stubs.Runner,
+        '../../lib/errors.js': stubs.errors
       })
     );
     delete require.cache[DUMB_FIXTURE_PATH];
@@ -260,7 +272,7 @@ describe('Mocha', function() {
               );
             } catch (ignored) {
             } finally {
-              expect(stubs.utils.warn, 'to have a call satisfying', [
+              expect(stubs.errors.warn, 'to have a call satisfying', [
                 expect.it('to match', /reporter blew up/)
               ]);
             }
@@ -297,7 +309,7 @@ describe('Mocha', function() {
               );
             } catch (ignored) {
             } finally {
-              expect(stubs.utils.warn, 'to have a call satisfying', [
+              expect(stubs.errors.warn, 'to have a call satisfying', [
                 expect.it('to match', /reporter blew up/)
               ]);
             }
@@ -321,7 +333,7 @@ describe('Mocha', function() {
             mocha.unloadFiles();
           },
           'to throw',
-          'Mocha instance is already disposed, it cannot be used again.'
+          {code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}
         );
       });
     });
