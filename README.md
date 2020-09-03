@@ -7,6 +7,8 @@
 <p align="center"><a href="http://travis-ci.org/mochajs/mocha"><img src="https://api.travis-ci.org/mochajs/mocha.svg?branch=master" alt="Build Status"></a>  <a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>  <a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield" alt="FOSSA Status"></a>  <a href="https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a>  <a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/backers/badge.svg" alt="OpenCollective"></a>  <a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/sponsors/badge.svg" alt="OpenCollective"></a>
 </p>
 
+<p align="center"><a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="NPM Version"></a>  <a href="https://github.com/mochajs/mocha"><img src="https://img.shields.io/node/v/mocha.svg" alt="Node Version"></a></p>
+
 <p align="center"><br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354"></p>
 
 ## Links
