@@ -35,9 +35,30 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install --production
       - run: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
+  prepare:
+    name: Install dependencies
+    runs-on: windows-2019
+    needs: smoke
+    steps:
+      - name: Install Growl
+        run: |
+          echo "Installing Growl..."
+          $seaURL = "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
+          $seaPath = "$($env:HOME)\GrowlInstaller.exe"
+          if (-not (Test-Path $seaPath)) {
+            $webclient = New-Object Net.WebClient
+            $webclient.DownloadFile($seaURL, $seaPath)
+          }
+          mkdir C:\GrowlInstaller | out-null
+          7z x $seaPath -oC:\GrowlInstaller | out-null
+          cmd /c start /wait msiexec /i C:\GrowlInstaller\Growl_v2.0.msi /quiet
+          $env:path = "C:\Program Files (x86)\Growl for Windows;$env:path"
+          ## Growl requires some time before it's ready to handle notifications
+          echo "Starting Growl service..."
+          Start-Process -NoNewWindow Growl
   test:
     name: Test on Node.js v${{ matrix.node }}
-    needs: smoke
+    needs: prepare
     runs-on: windows-2019
     strategy:
       matrix:
