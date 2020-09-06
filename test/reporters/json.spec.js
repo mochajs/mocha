@@ -11,6 +11,7 @@ describe('JSON reporter', function() {
   var runner;
   var testTitle = 'json test 1';
   var testFile = 'someTest.spec.js';
+  var testSpeed = 'fast';
   var noop = function() {};
 
   beforeEach(function() {
@@ -75,6 +76,32 @@ describe('JSON reporter', function() {
             {
               title: testTitle,
               file: testFile
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
+      done();
+    });
+  });
+
+  it('should have 1 test pass', function(done) {
+    var test = new Test(testTitle, function(done) {
+      done();
+    });
+
+    test.file = testFile;
+    suite.addTest(test);
+
+    runner.run(function(failureCount) {
+      sinon.restore();
+      expect(runner, 'to satisfy', {
+        testResults: {
+          passes: [
+            {
+              title: testTitle,
+              file: testFile,
+              speed: testSpeed
             }
           ]
         }
