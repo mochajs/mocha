@@ -29,7 +29,7 @@ describe('JSON Stream reporter', function() {
     expectedFullTitle,
     expectedFile,
     expectedDuration,
-    currentRetry, 
+    currentRetry,
     expectedSpeed
   );
   var expectedErrorMessage = 'error message';
@@ -81,7 +81,7 @@ describe('JSON Stream reporter', function() {
             ',"currentRetry":' +
             currentRetry +
             ',"speed":' +
-            dQuote(expectedSpeed) + 
+            dQuote(expectedSpeed) +
             '}]\n'
         );
       });
@@ -116,7 +116,7 @@ describe('JSON Stream reporter', function() {
               ',"currentRetry":' +
               currentRetry +
               ',"speed":' +
-              dQuote(expectedSpeed) + 
+              dQuote(expectedSpeed) +
               ',"err":' +
               dQuote(expectedErrorMessage) +
               ',"stack":' +
@@ -154,7 +154,7 @@ describe('JSON Stream reporter', function() {
               ',"currentRetry":' +
               currentRetry +
               ',"speed":' +
-              dQuote(expectedSpeed) + 
+              dQuote(expectedSpeed) +
               ',"err":' +
               dQuote(expectedErrorMessage) +
               ',"stack":null}]\n'
