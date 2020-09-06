@@ -82,6 +82,10 @@ describe('node-flags', function() {
         expect(isNodeFlag('use_strict'), 'to be true');
       });
 
+      it('should return true for "prof" itself', function() {
+        expect(isNodeFlag('prof'), 'to be true');
+      });
+
       it('should return true for flags starting with "--v8-"', function() {
         expect(isNodeFlag('v8-'), 'to be false');
         expect(isNodeFlag('v8-options'), 'to be false');
