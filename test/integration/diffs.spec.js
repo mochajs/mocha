@@ -13,7 +13,8 @@ var path = require('path');
  * returns {string[]}
  */
 function getDiffs(output) {
-  var diffs, i, inDiff, inStackTrace;
+  var diffs, i, inDiff, isEncountered, inStackTrace;
+  const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
 
   diffs = [];
   output.split('\n').forEach(function(line) {
@@ -23,11 +24,18 @@ function getDiffs(output) {
       i = diffs.length - 1;
       inStackTrace = false;
       inDiff = false;
+      isEncountered = false;
     } else if (!diffs.length || inStackTrace) {
       // Haven't encountered a spec yet
       // or we're in the middle of a stack trace
     } else if (line.indexOf('+ expected - actual') !== -1) {
-      inDiff = true;
+      // When node === v10, we encounter diffs twice. we need to skip the first diff for the tests.
+      if (nodeVersion === 10) {
+        inDiff = isEncountered;
+        isEncountered = !isEncountered;
+      } else {
+        inDiff = true;
+      }
     } else if (line.match(/at Context/)) {
       // At the start of a stack trace
       inStackTrace = true;
