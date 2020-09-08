@@ -4,7 +4,7 @@ var assert = require('assert');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var invokeNode = helpers.invokeNode;
-var toJSONRunResult = helpers.toJSONRunResult;
+var toJSONResult = helpers.toJSONResult;
 var args = [];
 
 describe('pending', function() {
@@ -305,7 +305,7 @@ describe('pending', function() {
         if (err) {
           return done(err);
         }
-        var result = toJSONRunResult(res);
+        var result = toJSONResult(res);
         expect(result, 'to have passed')
           .and('to have passed test count', 0)
           .and('to have pending test count', 1)

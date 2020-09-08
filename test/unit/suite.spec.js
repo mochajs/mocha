@@ -4,7 +4,7 @@ var Mocha = require('../../lib/mocha');
 var Suite = Mocha.Suite;
 var Test = Mocha.Test;
 var sinon = require('sinon');
-var utils = Mocha.utils;
+const errors = require('../../lib/errors');
 
 function supportsFunctionNames() {
   // eslint-disable-next-line no-extra-parens
@@ -551,7 +551,7 @@ describe('Suite', function() {
 
   describe('constructor', function() {
     beforeEach(function() {
-      sinon.stub(utils, 'deprecate');
+      sinon.stub(errors, 'deprecate');
     });
 
     /* eslint no-new: off */
@@ -573,7 +573,7 @@ describe('Suite', function() {
 
     it('should report listened-for deprecated events as deprecated', function() {
       new Suite('foo').on(Suite.constants.EVENT_SUITE_ADD_TEST, function() {});
-      expect(utils.deprecate, 'to have all calls satisfying', [
+      expect(errors.deprecate, 'to have a call satisfying', [
         /Event "[^"]+" is deprecated/i
       ]);
     });

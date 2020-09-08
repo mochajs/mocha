@@ -2,6 +2,7 @@ coverage/
 mocha.js
 *.fixture.js
 docs/_site
+docs/api
 docs/_dist
 docs/example
 out/

@@ -2,7 +2,7 @@
 
 var helpers = require('../helpers');
 var invokeMocha = helpers.invokeMocha;
-var toJSONRunResult = helpers.toJSONRunResult;
+var toJSONResult = helpers.toJSONResult;
 
 describe('--extension', function() {
   it('should allow comma-separated variables', function(done) {
@@ -21,7 +21,7 @@ describe('--extension', function() {
       if (err) {
         return done(err);
       }
-      expect(toJSONRunResult(res), 'to have passed').and(
+      expect(toJSONResult(res), 'to have passed').and(
         'to have passed test count',
         2
       );
