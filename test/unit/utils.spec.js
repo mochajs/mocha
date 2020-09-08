@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = require('../../lib/utils');
+const errors = require('../../lib/errors');
 var sinon = require('sinon');
 
 describe('lib/utils', function() {
@@ -607,82 +608,6 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('deprecate()', function() {
-    var emitWarning;
-
-    beforeEach(function() {
-      if (process.emitWarning) {
-        emitWarning = process.emitWarning;
-        sinon.stub(process, 'emitWarning');
-      } else {
-        process.emitWarning = sinon.spy();
-      }
-      utils.deprecate.cache = {};
-    });
-
-    afterEach(function() {
-      // if this is not set, then we created it, so we should remove it.
-      if (!emitWarning) {
-        delete process.emitWarning;
-      }
-    });
-
-    it('should coerce its parameter to a string', function() {
-      utils.deprecate(1);
-      expect(process.emitWarning, 'to have a call satisfying', [
-        '1',
-        'DeprecationWarning'
-      ]);
-    });
-
-    it('should cache the message', function() {
-      utils.deprecate('foo');
-      utils.deprecate('foo');
-      expect(process.emitWarning, 'was called times', 1);
-    });
-
-    it('should ignore falsy messages', function() {
-      utils.deprecate('');
-      expect(process.emitWarning, 'was not called');
-    });
-  });
-
-  describe('warn()', function() {
-    var emitWarning;
-
-    beforeEach(function() {
-      if (process.emitWarning) {
-        emitWarning = process.emitWarning;
-        sinon.stub(process, 'emitWarning');
-      } else {
-        process.emitWarning = sinon.spy();
-      }
-    });
-
-    afterEach(function() {
-      // if this is not set, then we created it, so we should remove it.
-      if (!emitWarning) {
-        delete process.emitWarning;
-      }
-    });
-
-    it('should call process.emitWarning', function() {
-      utils.warn('foo');
-      expect(process.emitWarning, 'was called times', 1);
-    });
-
-    it('should not cache messages', function() {
-      utils.warn('foo');
-      utils.warn('foo');
-      expect(process.emitWarning, 'was called times', 2);
-    });
-
-    it('should ignore falsy messages', function() {
-      utils.warn('');
-      expect(process.emitWarning, 'was not called');
-    });
-  });
-
   describe('sQuote()', function() {
     var str = 'xxx';
 
@@ -743,9 +668,58 @@ describe('lib/utils', function() {
     });
   });
 
+  describe('castArray()', function() {
+    describe('when provided an array value', function() {
+      it('should return a copy of the array', function() {
+        const v = ['foo', 'bar', 'baz'];
+        expect(utils.castArray(v), 'to equal', ['foo', 'bar', 'baz']).and(
+          'not to be',
+          v
+        );
+      });
+    });
+
+    describe('when provided an "arguments" value', function() {
+      it('should return an array containing the arguments', function() {
+        (function() {
+          expect(utils.castArray(arguments), 'to equal', [
+            'foo',
+            'bar',
+            'baz'
+          ]).and('not to be', arguments);
+        })('foo', 'bar', 'baz');
+      });
+    });
+
+    describe('when provided an object', function() {
+      it('should return an array containing the object only', function() {
+        const v = {foo: 'bar'};
+        expect(utils.castArray(v), 'to equal', [v]);
+      });
+    });
+
+    describe('when provided no parameters', function() {
+      it('should return an empty array', function() {
+        expect(utils.castArray(), 'to equal', []);
+      });
+    });
+
+    describe('when provided a primitive value', function() {
+      it('should return an array containing the primitive value only', function() {
+        expect(utils.castArray('butts'), 'to equal', ['butts']);
+      });
+    });
+
+    describe('when provided null', function() {
+      it('should return an array containing a null value only', function() {
+        expect(utils.castArray(null), 'to equal', [null]);
+      });
+    });
+  });
+
   describe('lookupFiles()', function() {
     beforeEach(function() {
-      sinon.stub(utils, 'deprecate');
+      sinon.stub(errors, 'deprecate');
     });
 
     describe('when run in Node.js', function() {
@@ -762,7 +736,7 @@ describe('lib/utils', function() {
 
       it('should print a deprecation message', function() {
         utils.lookupFiles();
-        expect(utils.deprecate, 'was called once');
+        expect(errors.deprecate, 'was called once');
       });
 
       it('should delegate to new location of lookupFiles()', function() {
