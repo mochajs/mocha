@@ -92,7 +92,6 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           passes: [
