@@ -98,7 +98,7 @@ describe('JSON reporter', function() {
             {
               title: testTitle,
               file: testFile,
-              speed: testSpeed
+              speed: /(slow|medium|fast)/
             }
           ]
         }
