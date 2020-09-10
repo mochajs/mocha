@@ -11,7 +11,6 @@ describe('JSON reporter', function() {
   var runner;
   var testTitle = 'json test 1';
   var testFile = 'someTest.spec.js';
-  var testSpeed = 'fast';
   var noop = function() {};
 
   beforeEach(function() {
