@@ -86,9 +86,7 @@ describe('JSON reporter', function() {
   });
 
   it('should have 1 test pass', function(done) {
-    var test = new Test(testTitle, function(done) {
-      done();
-    });
+    const test = new Test(testTitle, () => {});
 
     test.file = testFile;
     suite.addTest(test);
