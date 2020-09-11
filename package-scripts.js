@@ -158,30 +158,12 @@ module.exports = {
         only: {
           default: {
             script: `nps ${[
-              'test.node.only.bdd',
-              'test.node.only.tdd',
               'test.node.only.bddRequire',
               'test.node.only.globalBdd',
               'test.node.only.globalTdd',
               'test.node.only.globalQunit'
             ].join(' ')}   `,
             description: 'Run Node.js "only" functionality tests',
-            hiddenFromHelp: true
-          },
-          bdd: {
-            script: test(
-              'only-bdd',
-              '--ui bdd test/only/bdd.spec --no-parallel'
-            ),
-            description: 'Run Node.js "only" w/ BDD interface tests',
-            hiddenFromHelp: true
-          },
-          tdd: {
-            script: test(
-              'only-tdd',
-              '--ui tdd test/only/tdd.spec --no-parallel'
-            ),
-            description: 'Run Node.js "only" w/ TDD interface tests',
             hiddenFromHelp: true
           },
           bddRequire: {
