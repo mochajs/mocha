@@ -3,7 +3,7 @@
 var Mocha = require('../../lib/mocha');
 
 describe('diffs', function() {
-  it.skip('test', async () => {
+  it('test', async () => {
     const mocha = new Mocha();
     mocha.addFile('./test/integration/fixtures/simple.fixture.js');
     const result = await mocha.runAsync();
