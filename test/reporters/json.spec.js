@@ -84,6 +84,29 @@ describe('JSON reporter', function() {
     });
   });
 
+  it('should have 1 test pass', function(done) {
+    const test = new Test(testTitle, () => {});
+
+    test.file = testFile;
+    suite.addTest(test);
+
+    runner.run(function(failureCount) {
+      expect(runner, 'to satisfy', {
+        testResults: {
+          passes: [
+            {
+              title: testTitle,
+              file: testFile,
+              speed: /(slow|medium|fast)/
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
+      done();
+    });
+  });
+
   it('should handle circular objects in errors', function(done) {
     var testTitle = 'json test 1';
     function CircleError() {

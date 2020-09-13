@@ -23,12 +23,14 @@ describe('JSON Stream reporter', function() {
   var expectedFile = 'someTest.spec.js';
   var expectedDuration = 1000;
   var currentRetry = 1;
+  var expectedSpeed = 'fast';
   var expectedTest = makeExpectedTest(
     expectedTitle,
     expectedFullTitle,
     expectedFile,
     expectedDuration,
-    currentRetry
+    currentRetry,
+    expectedSpeed
   );
   var expectedErrorMessage = 'error message';
   var expectedErrorStack = 'error stack';
@@ -78,6 +80,8 @@ describe('JSON Stream reporter', function() {
             expectedDuration +
             ',"currentRetry":' +
             currentRetry +
+            ',"speed":' +
+            dQuote(expectedSpeed) +
             '}]\n'
         );
       });
@@ -111,6 +115,8 @@ describe('JSON Stream reporter', function() {
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
+              ',"speed":' +
+              dQuote(expectedSpeed) +
               ',"err":' +
               dQuote(expectedErrorMessage) +
               ',"stack":' +
@@ -147,6 +153,8 @@ describe('JSON Stream reporter', function() {
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
+              ',"speed":' +
+              dQuote(expectedSpeed) +
               ',"err":' +
               dQuote(expectedErrorMessage) +
               ',"stack":null}]\n'
