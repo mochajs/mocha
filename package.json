@@ -79,7 +79,9 @@
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
     "@11ty/eleventy-plugin-inclusive-language": "^1.0.0",
+    "@babel/plugin-transform-runtime": "^7.11.5",
     "@babel/preset-env": "^7.11.0",
+    "@babel/runtime-corejs3": "^7.11.2",
     "@mocha/docdash": "^3.0.1",
     "@rollup/plugin-babel": "^5.1.0",
     "@rollup/plugin-commonjs": "^14.0.0",
@@ -93,7 +95,6 @@
     "chai": "^4.2.0",
     "coffee-script": "^1.12.7",
     "configstore": "^5.0.1",
-    "core-js": "^3.6.5",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.2",
     "cross-spawn": "^7.0.3",

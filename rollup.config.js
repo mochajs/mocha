@@ -32,21 +32,9 @@ const config = {
     }),
     babel({
       exclude: /core-js/,
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            useBuiltIns: 'usage',
-            forceAllTransforms: true,
-            corejs: {
-              version: 3,
-              proposals: false
-            }
-          }
-        ]
-      ],
-      babelHelpers: 'bundled'
+      presets: [['@babel/preset-env', {modules: false}]],
+      plugins: [['@babel/plugin-transform-runtime', {corejs: 3}]],
+      babelHelpers: 'runtime'
     })
   ],
   onwarn: (warning, warn) => {
