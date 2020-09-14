@@ -123,6 +123,19 @@ module.exports = config => {
   cfg = addSauceTests(cfg, sauceConfig);
   cfg = chooseTestSuite(cfg, env.MOCHA_TEST);
 
+  // It would be very difficult to meaningfully apply trusted types to
+  // a requirejs environment, and would require changes to requirejs if so.
+  if (env.MOCHA_TEST !== 'requirejs') {
+    cfg.customHeaders = cfg.customHeaders || [];
+    // Test with native trusted types (in browsers that support them).
+    // https://w3c.github.io/webappsec-trusted-types/dist/spec/#introduction
+    cfg.customHeaders.push({
+      match: '.*',
+      name: 'Content-Security-Policy',
+      value: "require-trusted-types-for 'script';"
+    });
+  }
+
   // include sourcemap
   cfg = {
     ...cfg,
