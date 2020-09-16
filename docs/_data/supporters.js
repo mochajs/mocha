@@ -31,8 +31,20 @@ const blocklist = new Set(require('./blocklist.json'));
 const BLOCKED_STRINGS = /(?:vpn|[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
 
 /**
+ * Add a few Categories exposed by Open Collective to help moderation
+ */
+const BLOCKED_CATEGORIES = [
+  'adult',
+  'casino',
+  'credit',
+  'gambling',
+  'seo',
+  'writer'
+];
+
+/**
  * The OC API endpoint
- 
+
  */
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
 
@@ -56,6 +68,7 @@ const SUPPORTER_QUERY = `query account($limit: Int, $offset: Int, $slug: String)
           imgUrlMed: imageUrl(height:64)
           imgUrlSmall: imageUrl(height:32)
           type
+          categories
         }
         totalDonations {
           value
@@ -79,7 +92,8 @@ const nodeToSupporter = node => ({
   imgUrlSmall: node.fromAccount.imgUrlSmall,
   firstDonation: node.createdAt,
   totalDonations: node.totalDonations.value * 100,
-  type: node.fromAccount.type
+  type: node.fromAccount.type,
+  categories: node.fromAccount.categories
 });
 
 const fetchImage = async supporter => {
@@ -140,8 +154,10 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
-const isAllowed = ({slug}) =>
-  !blocklist.has(slug) && !BLOCKED_STRINGS.test(slug);
+const isAllowed = ({slug, categories}) =>
+  !blocklist.has(slug) &&
+  !BLOCKED_STRINGS.test(slug) &&
+  !categories.some(category => BLOCKED_CATEGORIES.includes(category));
 
 const getSupporters = async () => {
   const orders = await getAllOrders();
