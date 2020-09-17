@@ -32,7 +32,7 @@ const config = {
     }),
     babel({
       exclude: /core-js/,
-      presets: [['@babel/preset-env', {modules: false}]],
+      presets: [['@babel/preset-env', {modules: false, targets: {ie: 11}}]],
       plugins: [['@babel/plugin-transform-runtime', {corejs: 3}]],
       babelHelpers: 'runtime'
     })
