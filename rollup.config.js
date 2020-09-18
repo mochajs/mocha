@@ -32,14 +32,24 @@ const config = {
     }),
     babel({
       exclude: /core-js/,
-      presets: [['@babel/preset-env', {modules: false, targets: {ie: 11}}]],
-      plugins: [
+      presets: [
         [
-          '@babel/plugin-transform-runtime',
-          {corejs: {version: 3, proposals: true}}
+          '@babel/preset-env',
+          {
+            modules: false
+          }
         ]
       ],
-      babelHelpers: 'runtime'
+      plugins: [
+        [
+          'polyfill-corejs3',
+          {
+            method: 'usage-pure',
+            proposals: true
+          }
+        ]
+      ],
+      babelHelpers: 'bundled'
     })
   ],
   onwarn: (warning, warn) => {

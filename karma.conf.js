@@ -228,32 +228,14 @@ const addSauceTests = (cfg, sauceLabs) => {
 const addStandardDependencies = cfg => ({
   ...cfg,
   files: [
-    require.resolve('sinon/pkg/sinon.js'),
-    require.resolve('unexpected/unexpected'),
     {
       pattern: require.resolve('unexpected/unexpected.js.map'),
       included: false
     },
-    require.resolve('unexpected-sinon'),
-    require.resolve('unexpected-eventemitter/dist/unexpected-eventemitter.js'),
     require.resolve('./test/browser-specific/setup'),
     ...cfg.files
   ],
-  rollup: {
-    ...cfg.rollup,
-    external: [
-      'sinon',
-      'unexpected',
-      'unexpected-eventemitter',
-      'unexpected-sinon'
-    ],
-    globals: {
-      sinon: 'sinon',
-      unexpected: 'weknowhow.expect',
-      'unexpected-sinon': 'weknowhow.unexpectedSinon',
-      'unexpected-eventemitter': 'unexpectedEventEmitter'
-    }
-  }
+  rollup: cfg.rollup
 });
 
 /**
