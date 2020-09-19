@@ -1,0 +1,95 @@
+name: Windows CI
+on: [push, pull_request]
+
+jobs:
+  prepare-commit-msg:
+    name: Retrive head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      HEAD_COMMIT_MSG: ${{ steps.commitMsg.outputs.HEAD_COMMIT_MSG }}
+    steps:
+      - uses: actions/checkout@v1
+        if: github.event_name == 'pull_request'
+      - name: find commit msg for PR
+        id: commitMsg
+        if: github.event_name == 'pull_request'
+        run: echo "::set-output name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
+  check-skip:
+    name: Check to skip CI
+    needs: prepare-commit-msg
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') && !contains(needs.prepare-commit-msg.outputs.HEAD_COMMIT_MSG, '[ci skip]') }}
+    steps:
+      - run: echo "${{ github.event.head_commit.message }}"
+  smoke:
+    name: Smoke on Node.js v${{ matrix.node }}
+    needs: check-skip
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        node: [10, 12, 14]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install --production
+      - run: ./bin/mocha --no-config --reporter spec test/smoke/smoke.spec.js
+  prepare:
+    name: Install dependencies
+    runs-on: windows-2019
+    needs: smoke
+    steps:
+      - name: Cache Growl Installer
+        id: cache-growl
+        uses: actions/cache@v2
+        with:
+          path: GrowlInstaller
+          key: ${{ runner.os }}-growl-installer
+          restore-keys: |
+            ${{ runner.os }}-growl-installer
+      - name: Download Growl Installer
+        if: steps.cache-growl.outputs.cache-hit != 'true'
+        run: |
+          echo "Installing Growl..."
+          mkdir GrowlInstaller | out-null
+          $seaURL = "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
+          $seaPath = "GrowlInstaller\GrowlInstaller.exe"
+          $webclient = New-Object Net.WebClient
+          $webclient.DownloadFile($seaURL, $seaPath)
+          7z x $seaPath -oGrowlInstaller | out-null
+  test:
+    name: Test on Node.js v${{ matrix.node }}
+    needs: prepare
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        node: [10, 12, 14]
+    steps:
+      - name: Restore Growl Installer
+        uses: actions/cache@v2
+        with:
+          path: GrowlInstaller
+          key: ${{ runner.os }}-growl-installer
+          restore-keys: |
+            ${{ runner.os }}-growl-installer
+      - run: echo "::add-path::C:\Program Files (x86)\Growl for Windows"
+      - name: Install Growl
+        run: |
+          echo "Installing Growl"
+          cmd /c start /wait msiexec /i GrowlInstaller\Growl_v2.0.msi /quiet
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --ignore-scripts
+      - name: npm start test.node
+        run: |
+          echo "Starting Growl service..."
+          Start-Process -NoNewWindow Growl
+          ## Growl requires some time before it's ready to handle notifications
+          echo "Verifying Growl responding"
+          Start-Sleep -s 5
+          growlnotify test
+          echo "Staring test"
+          npm start test.node
