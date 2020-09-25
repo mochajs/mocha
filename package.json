@@ -97,7 +97,7 @@
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.2",
     "cross-spawn": "^7.0.3",
-    "eslint": "^6.8.0",
+    "eslint": "^7.8.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-semistandard": "^15.0.1",
     "eslint-config-standard": "^14.1.1",
