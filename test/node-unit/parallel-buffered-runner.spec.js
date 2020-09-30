@@ -22,12 +22,13 @@ describe('parallel-buffered-runner', function() {
     let ParallelBufferedRunner;
     let suite;
     let warn;
-    let cpuCount;
+    let fatalError;
 
     beforeEach(function() {
-      cpuCount = 1;
       suite = new Suite('a root suite', {}, true);
       warn = sinon.stub();
+
+      fatalError = new Error();
 
       // tests will want to further define the behavior of these.
       run = sinon.stub();
@@ -48,10 +49,12 @@ describe('parallel-buffered-runner', function() {
           '../../lib/nodejs/buffered-worker-pool': {
             BufferedWorkerPool
           },
-          os: {
-            cpus: sinon.stub().callsFake(() => new Array(cpuCount))
-          },
-          '../../lib/utils': r.with({warn}).callThrough()
+          '../../lib/utils': r.with({warn}).callThrough(),
+          '../../lib/errors': r
+            .with({
+              createFatalError: sinon.stub().returns(fatalError)
+            })
+            .callThrough()
         })
       );
     });
@@ -131,7 +134,7 @@ describe('parallel-buffered-runner', function() {
 
         describe('when instructed to link objects', function() {
           beforeEach(function() {
-            runner.linkPartialObjects(true);
+            runner._linkPartialObjects = true;
           });
 
           it('should create object references', function() {
@@ -184,6 +187,54 @@ describe('parallel-buffered-runner', function() {
                   .and('to have property', 'title', 'some suite')
               }
             );
+          });
+
+          describe('when event data object is missing an ID', function() {
+            it('should result in an uncaught exception', function(done) {
+              const options = {reporter: runner._workerReporter};
+              sinon.spy(runner, 'uncaught');
+              const someSuite = {
+                title: 'some suite',
+                [MOCHA_ID_PROP_NAME]: 'bar'
+              };
+
+              run.withArgs('some-file.js', options).resolves({
+                failureCount: 0,
+                events: [
+                  {
+                    eventName: EVENT_SUITE_END,
+                    data: someSuite
+                  },
+                  {
+                    eventName: EVENT_TEST_PASS,
+                    data: {
+                      title: 'some test',
+                      // note missing ID right here
+                      parent: {
+                        // this stub object points to someSuite with id 'bar'
+                        [MOCHA_ID_PROP_NAME]: 'bar'
+                      }
+                    }
+                  },
+                  {
+                    eventName: EVENT_SUITE_END,
+                    // ensure we are not passing the _same_ someSuite,
+                    // because we won't get the same one from the subprocess
+                    data: {...someSuite}
+                  }
+                ]
+              });
+
+              runner.run(
+                () => {
+                  expect(runner.uncaught, 'to have a call satisfying', [
+                    fatalError
+                  ]);
+                  done();
+                },
+                {files: ['some-file.js'], options: {}}
+              );
+            });
           });
         });
 
@@ -352,6 +403,7 @@ describe('parallel-buffered-runner', function() {
                 );
               });
             });
+
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
                 const options = {reporter: runner._workerReporter};
@@ -463,6 +515,7 @@ describe('parallel-buffered-runner', function() {
               );
             });
           });
+
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
