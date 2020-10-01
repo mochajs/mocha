@@ -549,7 +549,7 @@ describe('lib/utils', function() {
       expect(type(new Error()), 'to be', 'error');
       expect(type(global), 'to be', 'object');
       expect(type(true), 'to be', 'boolean');
-      expect(type(Buffer.from('ff', 'hex')), 'to be', 'buffer');
+      expect(type(Buffer.from('ff', 'hex')), 'to be', 'object');
       expect(type(Symbol.iterator), 'to be', 'symbol');
       expect(type(new Map()), 'to be', 'object');
       expect(type(new WeakMap()), 'to be', 'object');
