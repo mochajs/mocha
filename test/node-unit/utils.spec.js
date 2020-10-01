@@ -28,6 +28,9 @@ describe('utils', function() {
           'function'
         );
       });
+      it('should return "error" if the parameter is an Error', function() {
+        expect(utils.type(new Error('err')), 'to be', 'error');
+      });
     });
     describe('canonicalType()', function() {
       it('should return "buffer" if the parameter is a Buffer', function() {

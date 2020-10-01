@@ -543,18 +543,18 @@ describe('lib/utils', function() {
       expect(type(Infinity), 'to be', 'number');
       expect(type(null), 'to be', 'null');
       expect(type(undefined), 'to be', 'undefined');
-      expect(type(new Date()), 'to be', 'date');
-      expect(type(/foo/), 'to be', 'regexp');
+      expect(type(new Date()), 'to be', 'object');
+      expect(type(/foo/), 'to be', 'object');
       expect(type('type'), 'to be', 'string');
-      expect(type(global), 'to be', 'domwindow');
+      expect(type(new Error()), 'to be', 'error');
+      expect(type(global), 'to be', 'object');
       expect(type(true), 'to be', 'boolean');
       expect(type(Buffer.from('ff', 'hex')), 'to be', 'buffer');
-      expect(type(new Uint8Array()), 'to be', 'uint8array');
       expect(type(Symbol.iterator), 'to be', 'symbol');
-      expect(type(new Map()), 'to be', 'map');
-      expect(type(new WeakMap()), 'to be', 'weakmap');
-      expect(type(new Set()), 'to be', 'set');
-      expect(type(new WeakSet()), 'to be', 'weakset');
+      expect(type(new Map()), 'to be', 'object');
+      expect(type(new WeakMap()), 'to be', 'object');
+      expect(type(new Set()), 'to be', 'object');
+      expect(type(new WeakSet()), 'to be', 'object');
       expect(
         type(async () => {}),
         'to be',
