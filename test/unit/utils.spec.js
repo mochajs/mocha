@@ -548,6 +548,60 @@ describe('lib/utils', function() {
       expect(type('type'), 'to be', 'string');
       expect(type(global), 'to be', 'domwindow');
       expect(type(true), 'to be', 'boolean');
+      expect(type(Buffer.from('ff', 'hex')), 'to be', 'buffer');
+      expect(type(new Uint8Array()), 'to be', 'uint8array');
+      expect(type(Symbol.iterator), 'to be', 'symbol');
+      expect(type(new Map()), 'to be', 'map');
+      expect(type(new WeakMap()), 'to be', 'weakmap');
+      expect(type(new Set()), 'to be', 'set');
+      expect(type(new WeakSet()), 'to be', 'weakset');
+      expect(
+        type(async () => {}),
+        'to be',
+        'function'
+      );
+    });
+
+    describe('when toString on null or undefined stringifies window', function() {
+      it('should recognize null and undefined', function() {
+        expect(type(null), 'to be', 'null');
+        expect(type(undefined), 'to be', 'undefined');
+      });
+    });
+
+    afterEach(function() {
+      Object.prototype.toString = toString;
+    });
+  });
+
+  describe('canonicalType()', function() {
+    /* eslint no-extend-native: off */
+
+    var type = utils.canonicalType;
+    var toString = Object.prototype.toString;
+
+    beforeEach(function() {
+      // some JS engines such as PhantomJS 1.x exhibit this behavior
+      Object.prototype.toString = function() {
+        if (this === global) {
+          return '[object DOMWindow]';
+        }
+        return toString.call(this);
+      };
+    });
+
+    it('should recognize various types', function() {
+      expect(type({}), 'to be', 'object');
+      expect(type([]), 'to be', 'array');
+      expect(type(1), 'to be', 'number');
+      expect(type(Infinity), 'to be', 'number');
+      expect(type(null), 'to be', 'null');
+      expect(type(undefined), 'to be', 'undefined');
+      expect(type(new Date()), 'to be', 'date');
+      expect(type(/foo/), 'to be', 'regexp');
+      expect(type('type'), 'to be', 'string');
+      expect(type(global), 'to be', 'domwindow');
+      expect(type(true), 'to be', 'boolean');
     });
 
     describe('when toString on null or undefined stringifies window', function() {
