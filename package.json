@@ -48,7 +48,8 @@
     "prepublishOnly": "nps test clean build",
     "start": "nps",
     "test": "nps test",
-    "version": "nps version"
+    "version": "nps version",
+    "test:smoke": "node ./bin/mocha --no-config test/smoke/smoke.spec.js"
   },
   "dependencies": {
     "ansi-colors": "4.1.1",
