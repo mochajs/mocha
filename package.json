@@ -73,7 +73,7 @@
     "supports-color": "7.1.0",
     "which": "2.0.2",
     "wide-align": "1.1.3",
-    "workerpool": "6.0.0",
+    "workerpool": "6.0.2",
     "yargs": "13.3.2",
     "yargs-parser": "13.1.2",
     "yargs-unparser": "1.6.1"
@@ -130,6 +130,7 @@
     "needle": "^2.5.0",
     "nps": "^5.10.0",
     "nyc": "^15.1.0",
+    "pidtree": "^0.5.0",
     "prettier": "^1.19.1",
     "remark": "^12.0.1",
     "remark-github": "^9.0.1",
