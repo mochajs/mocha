@@ -107,7 +107,7 @@ const fetchImage = async supporter => {
       width: canvasImage.width,
       height: canvasImage.height
     };
-    debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
+    // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
     const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
     await writeFile(filePath, imageBuf);
     debug('wrote %s', filePath);
@@ -223,6 +223,7 @@ const getSupporters = async () => {
     ...supporters.sponsors.map(fetchImage),
     ...supporters.backers.map(fetchImage)
   ]);
+  debug('fetched images');
 
   invalidSupporters.forEach(supporter => {
     supporters[supporter.tier].splice(
@@ -230,6 +231,7 @@ const getSupporters = async () => {
       1
     );
   });
+  debug('tossed out invalid supporters');
 
   const backerCount = supporters.backers.length;
   const sponsorCount = supporters.sponsors.length;
@@ -243,6 +245,7 @@ const getSupporters = async () => {
     invalidSupporters.length,
     uniqueSupporters.size - totalValidSupportersCount
   );
+  debug('supporter image pull completed');
   return supporters;
 };
 
@@ -251,6 +254,7 @@ module.exports = getSupporters;
 if (require.main === module) {
   require('debug').enable('mocha:docs:data:supporters');
   process.on('unhandledRejection', err => {
+    console.error('unhandled rejection', err);
     throw err;
   });
   getSupporters();
