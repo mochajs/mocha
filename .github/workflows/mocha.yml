@@ -1,0 +1,202 @@
+name: Tests
+'on':
+  push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
+      - reopened
+  # see https://github.com/bradennapier/eslint-plus-action#handle-forked-prs
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  prepare-commit-msg:
+    name: Retrive head commit message
+    runs-on: ubuntu-latest
+    outputs:
+      HEAD_COMMIT_MSG: '${{ steps.commitMsg.outputs.HEAD_COMMIT_MSG }}'
+    steps:
+      - uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+      - name: find commit msg for PR
+        id: commitMsg
+        if: github.event_name == 'pull_request'
+        run: >-
+          echo "::set-output name=HEAD_COMMIT_MSG::$(git log --no-merges -1
+          --oneline)"
+
+  check-skip:
+    name: Check to skip CI
+    needs: prepare-commit-msg
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ !contains(github.event.head_commit.message, '[ci skip]') &&
+      !contains(needs.prepare-commit-msg.outputs.HEAD_COMMIT_MSG, '[ci skip]')
+      }}
+    steps:
+      - run: 'echo "${{ github.event.head_commit.message }}"'
+
+  smoke:
+    name: 'Smoke [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
+    needs: check-skip
+    runs-on: '${{ matrix.os }}'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-2019
+        node:
+          - 10
+          - 12
+          - 14
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '${{ matrix.node }}'
+      - run: npm install --production
+      - run: npm run test:smoke
+
+  eslint:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    needs: smoke
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bradennapier/eslint-plus-action@v3.4.2
+        with:
+          issueSummary: false
+          npmInstall: false
+
+  markdown:
+    name: Markdown Check
+    runs-on: ubuntu-latest
+    needs: smoke
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - uses: actions/checkout@v2
+      - name: 'Cache node_modules'
+        uses: actions/cache@v2
+        with:
+          path: '~/.npm'
+          key: "ubuntu-latest-node-v14-${{ hashFiles('**/package-lock.json') }}"
+          restore-keys: |
+            ubuntu-latest-node-v14-
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+      - name: 'Check Markdown'
+        run: npm start lint.markdown
+
+  test-node:
+    name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
+    needs: smoke
+    runs-on: '${{ matrix.os }}'
+    env:
+      NODE_OPTIONS: '--trace-warnings'
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-2019
+        node:
+          - 10
+          - 12
+          - 14
+        include:
+          - os: ubuntu-latest
+            node: 14
+            env:
+              COVERAGE: 1
+    steps:
+      - name: Cache Growl Installer (Windows)
+        if: "${{ matrix.os == 'windows-2019' }}"
+        id: cache-growl
+        uses: actions/cache@v2
+        with:
+          path: GrowlInstaller
+          key: '${{ runner.os }}-growl-installer'
+          restore-keys: |
+            ${{ runner.os }}-growl-installer
+      - name: Download Growl Installer (Windows)
+        if: "${{ matrix.os == 'windows-2019' && steps.cache-growl.outputs.cache-hit != 'true'}}"
+        run: >
+          echo "Downloading Growl installer..."
+
+          mkdir GrowlInstaller | out-null
+
+          $seaURL =
+          "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
+
+          $seaPath = "GrowlInstaller\GrowlInstaller.exe"
+
+          $webclient = New-Object Net.WebClient
+
+          $webclient.DownloadFile($seaURL, $seaPath)
+
+          7z x $seaPath -oGrowlInstaller | out-null
+
+          echo "Done."
+      - name: Retrieve Growl Installer (Windows)
+        if: "${{ matrix.os == 'windows-2019' }}"
+        uses: actions/cache@v2
+        with:
+          path: GrowlInstaller
+          key: '${{ runner.os }}-growl-installer'
+          restore-keys: |
+            ${{ runner.os }}-growl-installer
+      - name: Add Growl Installer to Path (Windows)
+        if: "${{ matrix.os == 'windows-2019' }}"
+        run: 'echo "::add-path::C:\Program Files (x86)\Growl for Windows"'
+      - name: Install Growl
+        if: "${{ matrix.os == 'windows-2019' }}"
+        run: |
+          echo "Installing Growl..."
+          cmd /c start /wait msiexec /i GrowlInstaller\Growl_v2.0.msi /quiet
+          echo "Done."
+      - name: Start Growl Service (Windows)
+        if: "${{ matrix.os == 'windows-2019' }}"
+        run: |
+          echo "Starting Growl service..."
+          Start-Process -NoNewWindow Growl
+          ## Growl requires some time before it's ready to handle notifications
+          echo "Verifying Growl responding"
+          Start-Sleep -s 10
+          growlnotify test
+      - name: Install libnotify-bin (Linux)
+        if: "${{ matrix.os == 'ubuntu-latest' }}"
+        run: sudo apt-get install libnotify-bin
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '${{ matrix.node }}'
+      - uses: actions/checkout@v2
+      - name: 'Cache node_modules (Linux)'
+        if: "${{ matrix.os != 'windows-2019' }}"
+        uses: actions/cache@v2
+        with:
+          path: '~/.npm'
+          key: "${{ matrix.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}"
+          restore-keys: |
+            ${{ matrix.os }}-node-v${{ matrix.node }}-
+      - name: Install Dependencies
+        run: npm ci --ignore-scripts
+      - name: Install Annotation Support
+        run: npm install mocha-github-actions-reporter
+      - name: Run All Node.js Tests
+        run: npm start test.node
+        env:
+          COVERAGE: '${{ matrix.env.COVERAGE }}'
+          MOCHA_REPORTER: mocha-github-actions-reporter
+          # this is so mocha-github-actions-reporter can find mocha
+          NODE_PATH: lib
+      - name: Generate Coverage Report (Linux + Node.js latest)
+        if: '${{ matrix.env.COVERAGE }}'
+        run: npm start coverage-report-lcov
+      - name: Upload Coverage to Coveralls (Linux + Node.js latest)
+        if: '${{ matrix.env.COVERAGE }}'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'

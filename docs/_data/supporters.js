@@ -51,6 +51,9 @@ const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
 const SPONSOR_TIER = 'sponsor';
 const BACKER_TIER = 'backer';
 
+// if this percent of fetches completes, the build will pass
+const PRODUCTION_SUCCESS_THRESHOLD = 0.8;
+
 const SUPPORTER_IMAGE_PATH = resolve(__dirname, '../images/supporters');
 
 const SUPPORTER_QUERY = `query account($limit: Int, $offset: Int, $slug: String) {
@@ -99,7 +102,10 @@ const nodeToSupporter = node => ({
 const fetchImage = async supporter => {
   try {
     const {avatar: url} = supporter;
-    const {body: imageBuf} = await needle('get', url);
+    const {body: imageBuf, headers} = await needle('get', url, {timeout: 2000});
+    if (headers['content-type'].startsWith('text/html')) {
+      throw new TypeError('received html and expected a png; outage likely');
+    }
     debug('fetched %s', url);
     const canvasImage = await loadImage(imageBuf);
     debug('ok %s', url);
@@ -107,7 +113,7 @@ const fetchImage = async supporter => {
       width: canvasImage.width,
       height: canvasImage.height
     };
-    debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
+    // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
     const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
     await writeFile(filePath, imageBuf);
     debug('wrote %s', filePath);
@@ -186,8 +192,8 @@ const getSupporters = async () => {
       (supporters, supporter) => {
         if (supporter.type === 'INDIVIDUAL') {
           if (supporter.name !== 'anonymous') {
-            supporters.backers = [
-              ...supporters.backers,
+            supporters[BACKER_TIER] = [
+              ...supporters[BACKER_TIER],
               {
                 ...supporter,
                 avatar: encodeURI(supporter.imgUrlSmall),
@@ -196,8 +202,8 @@ const getSupporters = async () => {
             ];
           }
         } else {
-          supporters.sponsors = [
-            ...supporters.sponsors,
+          supporters[SPONSOR_TIER] = [
+            ...supporters[SPONSOR_TIER],
             {
               ...supporter,
               avatar: encodeURI(supporter.imgUrlMed),
@@ -208,8 +214,8 @@ const getSupporters = async () => {
         return supporters;
       },
       {
-        sponsors: [],
-        backers: []
+        [SPONSOR_TIER]: [],
+        [BACKER_TIER]: []
       }
     );
 
@@ -220,9 +226,10 @@ const getSupporters = async () => {
 
   // Fetch images for sponsors and save their image dimensions
   await Promise.all([
-    ...supporters.sponsors.map(fetchImage),
-    ...supporters.backers.map(fetchImage)
+    ...supporters[SPONSOR_TIER].map(fetchImage),
+    ...supporters[BACKER_TIER].map(fetchImage)
   ]);
+  debug('fetched images');
 
   invalidSupporters.forEach(supporter => {
     supporters[supporter.tier].splice(
@@ -230,10 +237,12 @@ const getSupporters = async () => {
       1
     );
   });
+  debug('tossed out invalid supporters');
 
-  const backerCount = supporters.backers.length;
-  const sponsorCount = supporters.sponsors.length;
+  const backerCount = supporters[BACKER_TIER].length;
+  const sponsorCount = supporters[SPONSOR_TIER].length;
   const totalValidSupportersCount = backerCount + sponsorCount;
+  const successRate = totalValidSupportersCount / invalidSupporters.length;
 
   debug(
     'found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)',
@@ -243,6 +252,23 @@ const getSupporters = async () => {
     invalidSupporters.length,
     uniqueSupporters.size - totalValidSupportersCount
   );
+
+  if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
+    if (process.env.NETLIFY && process.env.CONTEXT !== 'deploy-preview') {
+      throw new Error(
+        `Failed to meet success threshold ${PRODUCTION_SUCCESS_THRESHOLD *
+          100}% (was ${successRate *
+          100}%) for a production deployment; refusing to deploy`
+      );
+    } else {
+      console.warn(
+        `WARNING: Success rate of ${successRate *
+          100}% fails to meet production threshold of ${PRODUCTION_SUCCESS_THRESHOLD *
+          100}%; would fail a production deployment!`
+      );
+    }
+  }
+  debug('supporter image pull completed');
   return supporters;
 };
 
