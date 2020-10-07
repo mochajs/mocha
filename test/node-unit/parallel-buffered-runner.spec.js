@@ -8,27 +8,27 @@ const {
   EVENT_SUITE_BEGIN
 } = require('../../lib/runner').constants;
 const rewiremock = require('rewiremock/node');
-const BUFFERED_RUNNER_PATH = require.resolve(
-  '../../lib/nodejs/parallel-buffered-runner.js'
-);
 const Suite = require('../../lib/suite');
 const Runner = require('../../lib/runner');
 const sinon = require('sinon');
+const {constants} = require('../../lib/utils');
+const {MOCHA_ID_PROP_NAME} = constants;
 
-describe('buffered-runner', function() {
-  describe('BufferedRunner', function() {
+describe('parallel-buffered-runner', function() {
+  describe('ParallelBufferedRunner', function() {
     let run;
     let BufferedWorkerPool;
     let terminate;
-    let BufferedRunner;
+    let ParallelBufferedRunner;
     let suite;
     let warn;
-    let cpuCount;
+    let fatalError;
 
     beforeEach(function() {
-      cpuCount = 1;
       suite = new Suite('a root suite', {}, true);
       warn = sinon.stub();
+
+      fatalError = new Error();
 
       // tests will want to further define the behavior of these.
       run = sinon.stub();
@@ -40,20 +40,33 @@ describe('buffered-runner', function() {
           stats: sinon.stub().returns({})
         })
       };
-      BufferedRunner = rewiremock.proxy(BUFFERED_RUNNER_PATH, r => ({
-        '../../lib/nodejs/buffered-worker-pool': {
-          BufferedWorkerPool
-        },
-        os: {
-          cpus: sinon.stub().callsFake(() => new Array(cpuCount))
-        },
-        '../../lib/utils': r.with({warn}).callThrough()
-      }));
+      /**
+       * @type {ParallelBufferedRunner}
+       */
+      ParallelBufferedRunner = rewiremock.proxy(
+        () => require('../../lib/nodejs/parallel-buffered-runner'),
+        r => ({
+          '../../lib/nodejs/buffered-worker-pool': {
+            BufferedWorkerPool
+          },
+          '../../lib/utils': r.with({warn}).callThrough(),
+          '../../lib/errors': r
+            .with({
+              createFatalError: sinon.stub().returns(fatalError)
+            })
+            .callThrough()
+        })
+      );
     });
 
     describe('constructor', function() {
       it('should start in "IDLE" state', function() {
-        expect(new BufferedRunner(suite), 'to have property', '_state', 'IDLE');
+        expect(
+          new ParallelBufferedRunner(suite),
+          'to have property',
+          '_state',
+          'IDLE'
+        );
       });
     });
 
@@ -61,7 +74,7 @@ describe('buffered-runner', function() {
       let runner;
 
       beforeEach(function() {
-        runner = new BufferedRunner(suite);
+        runner = new ParallelBufferedRunner(suite);
       });
 
       describe('_state', function() {
@@ -81,7 +94,7 @@ describe('buffered-runner', function() {
       let runner;
 
       beforeEach(function() {
-        runner = new BufferedRunner(suite);
+        runner = new ParallelBufferedRunner(suite);
       });
 
       describe('EVENT_RUN_END', function() {
@@ -94,11 +107,11 @@ describe('buffered-runner', function() {
     });
 
     describe('instance method', function() {
-      describe('run', function() {
+      describe('run()', function() {
         let runner;
 
         beforeEach(function() {
-          runner = new BufferedRunner(suite);
+          runner = new ParallelBufferedRunner(suite);
         });
 
         // the purpose of this is to ensure that--despite using `Promise`s
@@ -119,9 +132,115 @@ describe('buffered-runner', function() {
           );
         });
 
+        describe('when instructed to link objects', function() {
+          beforeEach(function() {
+            runner._linkPartialObjects = true;
+          });
+
+          it('should create object references', function() {
+            const options = {reporter: runner._workerReporter};
+            const someSuite = {
+              title: 'some suite',
+              [MOCHA_ID_PROP_NAME]: 'bar'
+            };
+
+            run.withArgs('some-file.js', options).resolves({
+              failureCount: 0,
+              events: [
+                {
+                  eventName: EVENT_SUITE_END,
+                  data: someSuite
+                },
+                {
+                  eventName: EVENT_TEST_PASS,
+                  data: {
+                    title: 'some test',
+                    [MOCHA_ID_PROP_NAME]: 'foo',
+                    parent: {
+                      // this stub object points to someSuite with id 'bar'
+                      [MOCHA_ID_PROP_NAME]: 'bar'
+                    }
+                  }
+                },
+                {
+                  eventName: EVENT_SUITE_END,
+                  // ensure we are not passing the _same_ someSuite,
+                  // because we won't get the same one from the subprocess
+                  data: {...someSuite}
+                }
+              ]
+            });
+
+            return expect(
+              () =>
+                new Promise(resolve => {
+                  runner.run(resolve, {files: ['some-file.js'], options: {}});
+                }),
+              'to emit from',
+              runner,
+              EVENT_TEST_PASS,
+              {
+                title: 'some test',
+                [MOCHA_ID_PROP_NAME]: 'foo',
+                parent: expect
+                  .it('to be', someSuite)
+                  .and('to have property', 'title', 'some suite')
+              }
+            );
+          });
+
+          describe('when event data object is missing an ID', function() {
+            it('should result in an uncaught exception', function(done) {
+              const options = {reporter: runner._workerReporter};
+              sinon.spy(runner, 'uncaught');
+              const someSuite = {
+                title: 'some suite',
+                [MOCHA_ID_PROP_NAME]: 'bar'
+              };
+
+              run.withArgs('some-file.js', options).resolves({
+                failureCount: 0,
+                events: [
+                  {
+                    eventName: EVENT_SUITE_END,
+                    data: someSuite
+                  },
+                  {
+                    eventName: EVENT_TEST_PASS,
+                    data: {
+                      title: 'some test',
+                      // note missing ID right here
+                      parent: {
+                        // this stub object points to someSuite with id 'bar'
+                        [MOCHA_ID_PROP_NAME]: 'bar'
+                      }
+                    }
+                  },
+                  {
+                    eventName: EVENT_SUITE_END,
+                    // ensure we are not passing the _same_ someSuite,
+                    // because we won't get the same one from the subprocess
+                    data: {...someSuite}
+                  }
+                ]
+              });
+
+              runner.run(
+                () => {
+                  expect(runner.uncaught, 'to have a call satisfying', [
+                    fatalError
+                  ]);
+                  done();
+                },
+                {files: ['some-file.js'], options: {}}
+              );
+            });
+          });
+        });
+
         describe('when a worker fails', function() {
           it('should recover', function(done) {
-            const options = {};
+            const options = {reporter: runner._workerReporter};
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', options).resolves({
               failureCount: 0,
@@ -154,7 +273,7 @@ describe('buffered-runner', function() {
           });
 
           it('should delegate to Runner#uncaught', function(done) {
-            const options = {};
+            const options = {reporter: runner._workerReporter};
             sinon.spy(runner, 'uncaught');
             const err = new Error('whoops');
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
@@ -236,7 +355,7 @@ describe('buffered-runner', function() {
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {};
+                const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -284,9 +403,10 @@ describe('buffered-runner', function() {
                 );
               });
             });
+
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {};
+                const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -395,10 +515,11 @@ describe('buffered-runner', function() {
               );
             });
           });
+
           describe('when an event contains an error and has positive failures', function() {
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {};
+                const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -442,7 +563,7 @@ describe('buffered-runner', function() {
 
             describe('when subsequent files already started running', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {};
+                const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -502,7 +623,7 @@ describe('buffered-runner', function() {
 
             describe('when subsequent files have not yet been run', function() {
               it('should cleanly terminate the thread pool', function(done) {
-                const options = {};
+                const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -544,6 +665,44 @@ describe('buffered-runner', function() {
               });
             });
           });
+        });
+      });
+
+      describe('linkPartialObjects()', function() {
+        let runner;
+
+        beforeEach(function() {
+          runner = new ParallelBufferedRunner(suite);
+        });
+
+        it('should return the runner', function() {
+          expect(runner.linkPartialObjects(), 'to be', runner);
+        });
+
+        // avoid testing implementation details; don't check _linkPartialObjects
+      });
+
+      describe('isParallelMode()', function() {
+        let runner;
+
+        beforeEach(function() {
+          runner = new ParallelBufferedRunner(suite);
+        });
+
+        it('should return true', function() {
+          expect(runner.isParallelMode(), 'to be true');
+        });
+      });
+
+      describe('workerReporter()', function() {
+        let runner;
+
+        beforeEach(function() {
+          runner = new ParallelBufferedRunner(suite);
+        });
+
+        it('should return its context', function() {
+          expect(runner.workerReporter(), 'to be', runner);
         });
       });
     });

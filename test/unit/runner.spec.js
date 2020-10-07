@@ -1,28 +1,31 @@
 'use strict';
 
-var path = require('path');
-var sinon = require('sinon');
-var Mocha = require('../../lib/mocha');
-var Pending = require('../../lib/pending');
-var Suite = Mocha.Suite;
-var Runner = Mocha.Runner;
-var Test = Mocha.Test;
-var Runnable = Mocha.Runnable;
-var Hook = Mocha.Hook;
-var noop = Mocha.utils.noop;
-var errors = require('../../lib/errors');
-var EVENT_HOOK_BEGIN = Runner.constants.EVENT_HOOK_BEGIN;
-var EVENT_HOOK_END = Runner.constants.EVENT_HOOK_END;
-var EVENT_TEST_FAIL = Runner.constants.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = Runner.constants.EVENT_TEST_PASS;
-var EVENT_TEST_RETRY = Runner.constants.EVENT_TEST_RETRY;
-var EVENT_TEST_END = Runner.constants.EVENT_TEST_END;
-var EVENT_RUN_END = Runner.constants.EVENT_RUN_END;
-var EVENT_SUITE_END = Runner.constants.EVENT_SUITE_END;
-var STATE_FAILED = Runnable.constants.STATE_FAILED;
-var STATE_IDLE = Runner.constants.STATE_IDLE;
-var STATE_RUNNING = Runner.constants.STATE_RUNNING;
-var STATE_STOPPED = Runner.constants.STATE_STOPPED;
+const path = require('path');
+const sinon = require('sinon');
+const Mocha = require('../../lib/mocha');
+const Pending = require('../../lib/pending');
+const {Suite, Runner, Test, Hook, Runnable} = Mocha;
+const {noop} = Mocha.utils;
+const {
+  FATAL,
+  MULTIPLE_DONE,
+  UNSUPPORTED
+} = require('../../lib/errors').constants;
+
+const {
+  EVENT_HOOK_BEGIN,
+  EVENT_HOOK_END,
+  EVENT_TEST_FAIL,
+  EVENT_TEST_PASS,
+  EVENT_TEST_RETRY,
+  EVENT_TEST_END,
+  EVENT_RUN_END,
+  EVENT_SUITE_END,
+  STATE_IDLE,
+  STATE_RUNNING,
+  STATE_STOPPED
+} = Runner.constants;
+const {STATE_FAILED} = Mocha.Runnable.constants;
 
 describe('Runner', function() {
   afterEach(function() {
@@ -429,7 +432,7 @@ describe('Runner', function() {
               var test = new Test('test', function() {});
               suite.addTest(test);
               var err = new Error();
-              err.code = errors.constants.MULTIPLE_DONE;
+              err.code = MULTIPLE_DONE;
               expect(
                 function() {
                   runner.fail(test, err);
@@ -451,7 +454,7 @@ describe('Runner', function() {
                 },
                 'to throw',
                 {
-                  code: errors.constants.FATAL
+                  code: FATAL
                 }
               );
             });
@@ -887,7 +890,7 @@ describe('Runner', function() {
       describe('when called with a non-Runner context', function() {
         it('should throw', function() {
           expect(runner._uncaught.bind({}), 'to throw', {
-            code: errors.constants.FATAL
+            code: FATAL
           });
         });
       });
@@ -1179,6 +1182,24 @@ describe('Runner', function() {
             });
           });
         });
+      });
+    });
+
+    describe('linkPartialObjects()', function() {
+      it('should return the Runner', function() {
+        expect(runner.linkPartialObjects(), 'to be', runner);
+      });
+    });
+
+    describe('isParallelMode()', function() {
+      it('should return false', function() {
+        expect(runner.isParallelMode(), 'to be false');
+      });
+    });
+
+    describe('workerReporter()', function() {
+      it('should throw', function() {
+        expect(() => runner.workerReporter(), 'to throw', {code: UNSUPPORTED});
       });
     });
   });

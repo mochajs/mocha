@@ -29,7 +29,7 @@ describe('ParallelBuffered', function() {
   beforeEach(function() {
     runner = new EventEmitter();
     ParallelBuffered = rewiremock.proxy(
-      require.resolve('../../../lib/nodejs/reporters/parallel-buffered'),
+      () => require('../../../lib/nodejs/reporters/parallel-buffered'),
       {
         '../../../lib/nodejs/serializer': {
           SerializableEvent: {
