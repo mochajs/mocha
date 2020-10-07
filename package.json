@@ -66,6 +66,7 @@
     "log-symbols": "4.0.0",
     "minimatch": "3.0.4",
     "ms": "2.1.2",
+    "nanoid": "3.1.12",
     "promise.allsettled": "1.0.2",
     "serialize-javascript": "4.0.0",
     "strip-json-comments": "3.0.1",
