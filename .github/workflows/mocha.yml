@@ -150,7 +150,7 @@ jobs:
             ${{ runner.os }}-growl-installer
       - name: Add Growl Installer to Path (Windows)
         if: "${{ matrix.os == 'windows-2019' }}"
-        run: 'echo "::add-path::C:\Program Files (x86)\Growl for Windows"'
+        run: 'echo "C:\Program Files (x86)\Growl for Windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8'
       - name: Install Growl
         if: "${{ matrix.os == 'windows-2019' }}"
         run: |
