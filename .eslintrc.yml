@@ -30,16 +30,10 @@ overrides:
       - 'lib/cli/**/*.js'
       - 'lib/nodejs/**/*.js'
       - 'scripts/**/*.js'
-      - 'test/integration/helpers.js'
-      - 'test/integration/options/watch.spec.js'
+      - 'test/**/*.js'
       - 'test/node-unit/**/*.js'
     env:
       browser: false
-    rules:
-      no-restricted-properties:
-        - off
-        - object: 'Object'
-          property: 'assign'
   - files:
       - esm-utils.js
       - rollup.config.js
