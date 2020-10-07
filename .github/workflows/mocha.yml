@@ -39,7 +39,7 @@ jobs:
       - run: 'echo "${{ github.event.head_commit.message }}"'
 
   smoke:
-    name: 'Smoke Test [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
+    name: 'Smoke [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
     needs: check-skip
     runs-on: '${{ matrix.os }}'
     strategy:
@@ -92,7 +92,7 @@ jobs:
         run: npm start lint.markdown
 
   test-node:
-    name: 'Test Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
+    name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
     needs: smoke
     runs-on: '${{ matrix.os }}'
     env:
