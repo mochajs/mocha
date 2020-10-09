@@ -90,7 +90,7 @@ describe('serializer', function() {
       describe('when called without `eventName`', function() {
         it('should throw "invalid arg value" error', function() {
           expect(() => new SerializableEvent(), 'to throw', {
-            code: 'ERR_MOCHA_INVALID_ARG_VALUE'
+            code: 'ERR_MOCHA_INVALID_ARG_TYPE'
           });
         });
       });
