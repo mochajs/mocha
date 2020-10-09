@@ -1,30 +1,37 @@
 'use strict';
 
-var lookupFiles = require('../../lib/cli/lookup-files');
-var fs = require('fs');
-var path = require('path');
-var os = require('os');
-var rimraf = require('rimraf');
+const lookupFiles = require('../../lib/cli/lookup-files');
+const {existsSync, symlinkSync, renameSync} = require('fs');
+const path = require('path');
+const {touchFile, createTempDir} = require('./helpers');
+
+const SYMLINK_SUPPORT = process.platform !== 'win32';
 
 describe('file utils', function() {
-  var tmpDir = path.join(os.tmpdir(), 'mocha-file-lookup');
-  var existsSync = fs.existsSync;
-  var tmpFile = path.join.bind(path, tmpDir);
-  var symlinkSupported = process.platform !== 'win32';
+  let tmpDir;
+  let removeTempDir;
+  let tmpFile;
 
-  beforeEach(function() {
-    this.timeout(2000);
-    makeTempDir();
+  beforeEach(async function() {
+    const result = await createTempDir();
+    tmpDir = result.dirpath;
+    removeTempDir = result.removeTempDir;
 
-    fs.writeFileSync(tmpFile('mocha-utils.js'), 'yippy skippy ying yang yow');
-    if (symlinkSupported) {
-      fs.symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
+    tmpFile = filepath => path.join(tmpDir, filepath);
+
+    touchFile(tmpFile('mocha-utils.js'));
+    if (SYMLINK_SUPPORT) {
+      symlinkSync(tmpFile('mocha-utils.js'), tmpFile('mocha-utils-link.js'));
     }
   });
 
-  describe('lookupFiles', function() {
+  afterEach(async function() {
+    return removeTempDir();
+  });
+
+  describe('lookupFiles()', function() {
     it('should not return broken symlink file path', function() {
-      if (!symlinkSupported) {
+      if (!SYMLINK_SUPPORT) {
         return this.skip();
       }
 
@@ -35,21 +42,23 @@ describe('file utils', function() {
         tmpFile('mocha-utils.js')
       ).and('to have length', 2);
       expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', true);
-      fs.renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
+      renameSync(tmpFile('mocha-utils.js'), tmpFile('bob'));
       expect(existsSync(tmpFile('mocha-utils-link.js')), 'to be', false);
       expect(lookupFiles(tmpDir, ['js'], false), 'to equal', []);
     });
 
     it('should accept a glob "path" value', function() {
-      var res = lookupFiles(tmpFile('mocha-utils*'), ['js'], false).map(
-        path.normalize.bind(path)
-      );
+      const res = lookupFiles(
+        tmpFile('mocha-utils*'),
+        ['js'],
+        false
+      ).map(foundFilepath => path.normalize(foundFilepath));
 
-      var expectedLength = 0;
-      var ex = expect(res, 'to contain', tmpFile('mocha-utils.js'));
+      let expectedLength = 0;
+      let ex = expect(res, 'to contain', tmpFile('mocha-utils.js'));
       expectedLength++;
 
-      if (symlinkSupported) {
+      if (SYMLINK_SUPPORT) {
         ex = ex.and('to contain', tmpFile('mocha-utils-link.js'));
         expectedLength++;
       }
@@ -57,99 +66,214 @@ describe('file utils', function() {
       ex.and('to have length', expectedLength);
     });
 
-    it('should parse extensions from extensions parameter', function() {
-      var nonJsFile = tmpFile('mocha-utils-text.txt');
-      fs.writeFileSync(nonJsFile, 'yippy skippy ying yang yow');
+    describe('when given `extension` option', function() {
+      describe('when provided a directory for the filepath', function() {
+        let filepath;
 
-      var res = lookupFiles(tmpDir, ['txt'], false);
-      expect(res, 'to contain', nonJsFile).and('to have length', 1);
-    });
+        beforeEach(async function() {
+          filepath = tmpFile('mocha-utils-text.txt');
+          touchFile(filepath);
+        });
 
-    it('should return only the ".js" file', function() {
-      var TsFile = tmpFile('mocha-utils.ts');
-      fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
+        describe('when `extension` option has leading dot', function() {
+          it('should find the file w/ the extension', function() {
+            expect(lookupFiles(tmpDir, ['.txt']), 'to equal', [filepath]);
+          });
+        });
 
-      var res = lookupFiles(tmpFile('mocha-utils'), ['js'], false).map(
-        path.normalize.bind(path)
-      );
-      expect(res, 'to contain', tmpFile('mocha-utils.js')).and(
-        'to have length',
-        1
-      );
-    });
+        describe('when `extension` option has no leading dot', function() {
+          it('should find the file w/ the extension', function() {
+            expect(lookupFiles(tmpDir, ['txt']), 'to equal', [filepath]);
+          });
+        });
 
-    it('should return ".js" and ".ts" files', function() {
-      var TsFile = tmpFile('mocha-utils.ts');
-      fs.writeFileSync(TsFile, 'yippy skippy ying yang yow');
+        describe('when directory contains file without multipart extension', function() {
+          let filepath;
 
-      var res = lookupFiles(tmpFile('mocha-utils'), ['js', 'ts'], false).map(
-        path.normalize.bind(path)
-      );
-      expect(
-        res,
-        'to contain',
-        tmpFile('mocha-utils.js'),
-        tmpFile('mocha-utils.ts')
-      ).and('to have length', 2);
-    });
+          beforeEach(function() {
+            filepath = tmpFile('mocha-utils-test.js');
+            touchFile(filepath);
+          });
 
-    it('should return ".test.js" files', function() {
-      fs.writeFileSync(
-        tmpFile('mocha-utils.test.js'),
-        'i have a multipart extension'
-      );
-      var res = lookupFiles(tmpDir, ['test.js'], false).map(
-        path.normalize.bind(path)
-      );
-      expect(res, 'to contain', tmpFile('mocha-utils.test.js')).and(
-        'to have length',
-        1
-      );
-    });
+          describe('when provided multipart `extension` option', function() {
+            describe('when `extension` option has no leading dot', function() {
+              it('should not match the filepath', function() {
+                expect(
+                  lookupFiles(tmpDir, ['test.js']).map(filepath =>
+                    path.normalize(filepath)
+                  ),
+                  'to equal',
+                  []
+                );
+              });
+            });
 
-    it('should return not return "*test.js" files', function() {
-      fs.writeFileSync(
-        tmpFile('mocha-utils-test.js'),
-        'i do not have a multipart extension'
-      );
-      var res = lookupFiles(tmpDir, ['test.js'], false).map(
-        path.normalize.bind(path)
-      );
-      expect(res, 'not to contain', tmpFile('mocha-utils-test.js')).and(
-        'to have length',
-        0
-      );
-    });
+            describe('when `extension` option has a leading dot', function() {
+              it('should not match the filepath', function() {
+                expect(
+                  lookupFiles(tmpDir, ['.test.js']).map(filepath =>
+                    path.normalize(filepath)
+                  ),
+                  'to equal',
+                  []
+                );
+              });
+            });
+          });
+        });
 
-    it('should require the extensions parameter when looking up a file', function() {
-      var dirLookup = function() {
-        return lookupFiles(tmpFile('mocha-utils'), undefined, false);
-      };
-      expect(dirLookup, 'to throw', {
-        name: 'Error',
-        code: 'ERR_MOCHA_NO_FILES_MATCH_PATTERN'
+        describe('when directory contains matching file having a multipart extension', function() {
+          let filepath;
+
+          beforeEach(function() {
+            filepath = tmpFile('mocha-utils.test.js');
+            touchFile(filepath);
+          });
+
+          describe('when provided multipart `extension` option', function() {
+            describe('when `extension` option has no leading dot', function() {
+              it('should find the matching file', function() {
+                expect(
+                  lookupFiles(tmpDir, ['test.js']).map(filepath =>
+                    path.normalize(filepath)
+                  ),
+                  'to equal',
+                  [filepath]
+                );
+              });
+            });
+
+            describe('when `extension` option has a leading dot', function() {
+              it('should find the matching file', function() {
+                expect(
+                  lookupFiles(tmpDir, ['.test.js']).map(filepath =>
+                    path.normalize(filepath)
+                  ),
+                  'to equal',
+                  [filepath]
+                );
+              });
+            });
+          });
+        });
       });
     });
 
-    it('should require the extensions parameter when looking up a directory', function() {
-      var dirLookup = function() {
-        return lookupFiles(tmpDir, undefined, false);
-      };
-      expect(dirLookup, 'to throw', {
-        name: 'TypeError',
-        code: 'ERR_MOCHA_INVALID_ARG_TYPE',
-        argument: 'extensions'
+    describe('when provided a filepath with no extension', function() {
+      let filepath;
+
+      beforeEach(async function() {
+        filepath = tmpFile('mocha-utils.ts');
+        touchFile(filepath);
+      });
+
+      describe('when `extension` option has a leading dot', function() {
+        describe('when only provided a single extension', function() {
+          it('should append provided extensions and find only the matching file', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), ['.js']).map(foundFilepath =>
+                path.normalize(foundFilepath)
+              ),
+              'to equal',
+              [tmpFile('mocha-utils.js')]
+            );
+          });
+        });
+
+        describe('when provided multiple extensions', function() {
+          it('should append provided extensions and find all matching files', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), [
+                '.js',
+                '.ts'
+              ]).map(foundFilepath => path.normalize(foundFilepath)),
+              'to contain',
+              tmpFile('mocha-utils.js'),
+              filepath
+            ).and('to have length', 2);
+          });
+        });
+      });
+
+      describe('when `extension` option has no leading dot', function() {
+        describe('when only provided a single extension', function() {
+          it('should append provided extensions and find only the matching file', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), ['js']).map(foundFilepath =>
+                path.normalize(foundFilepath)
+              ),
+              'to equal',
+              [tmpFile('mocha-utils.js')]
+            );
+          });
+        });
+
+        describe('when provided multiple extensions', function() {
+          it('should append provided extensions and find all matching files', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), [
+                'js',
+                'ts'
+              ]).map(foundFilepath => path.normalize(foundFilepath)),
+              'to contain',
+              tmpFile('mocha-utils.js'),
+              filepath
+            ).and('to have length', 2);
+          });
+        });
+      });
+
+      describe('when `extension` option is multipart', function() {
+        let filepath;
+
+        beforeEach(function() {
+          filepath = tmpFile('mocha-utils.test.js');
+          touchFile(filepath);
+        });
+
+        describe('when `extension` option has no leading dot', function() {
+          it('should append provided extension and find only the matching file', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), [
+                'test.js'
+              ]).map(foundFilepath => path.normalize(foundFilepath)),
+              'to equal',
+              [filepath]
+            );
+          });
+        });
+
+        describe('when `extension` option has leading dot', function() {
+          it('should append provided extension and find only the matching file', function() {
+            expect(
+              lookupFiles(tmpFile('mocha-utils'), [
+                '.test.js'
+              ]).map(foundFilepath => path.normalize(foundFilepath)),
+              'to equal',
+              [filepath]
+            );
+          });
+        });
+      });
+    });
+
+    describe('when no files match', function() {
+      it('should throw an exception', function() {
+        expect(() => lookupFiles(tmpFile('mocha-utils')), 'to throw', {
+          name: 'Error',
+          code: 'ERR_MOCHA_NO_FILES_MATCH_PATTERN'
+        });
+      });
+    });
+
+    describe('when looking up a directory and no extensions provided', function() {
+      it('should throw', function() {
+        expect(() => lookupFiles(tmpDir), 'to throw', {
+          name: 'TypeError',
+          code: 'ERR_MOCHA_INVALID_ARG_TYPE',
+          argument: 'extensions'
+        });
       });
     });
   });
-
-  afterEach(removeTempDir);
-
-  function makeTempDir() {
-    fs.mkdirSync(tmpDir, {recursive: true});
-  }
-
-  function removeTempDir() {
-    rimraf.sync(tmpDir);
-  }
 });
