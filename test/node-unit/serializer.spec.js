@@ -88,22 +88,18 @@ describe('serializer', function() {
   describe('SerializableEvent', function() {
     describe('constructor', function() {
       describe('when called without `eventName`', function() {
-        it('should throw', function() {
-          expect(
-            () => new SerializableEvent(),
-            'to throw',
-            /expected a non-empty `eventName`/
-          );
+        it('should throw "invalid arg value" error', function() {
+          expect(() => new SerializableEvent(), 'to throw', {
+            code: 'ERR_MOCHA_INVALID_ARG_TYPE'
+          });
         });
       });
 
       describe('when called with a non-object `rawObject`', function() {
-        it('should throw', function() {
-          expect(
-            () => new SerializableEvent('blub', 'glug'),
-            'to throw',
-            /expected object, received \[string\]/
-          );
+        it('should throw "invalid arg type" error', function() {
+          expect(() => new SerializableEvent('blub', 'glug'), 'to throw', {
+            code: 'ERR_MOCHA_INVALID_ARG_TYPE'
+          });
         });
       });
     });
