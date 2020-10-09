@@ -93,6 +93,34 @@ describe('file utils', function() {
       ).and('to have length', 2);
     });
 
+    it('should return ".test.js" files', function() {
+      fs.writeFileSync(
+        tmpFile('mocha-utils.test.js'),
+        'i have a multipart extension'
+      );
+      var res = lookupFiles(tmpDir, ['test.js'], false).map(
+        path.normalize.bind(path)
+      );
+      expect(res, 'to contain', tmpFile('mocha-utils.test.js')).and(
+        'to have length',
+        1
+      );
+    });
+
+    it('should return not return "*test.js" files', function() {
+      fs.writeFileSync(
+        tmpFile('mocha-utils-test.js'),
+        'i do not have a multipart extension'
+      );
+      var res = lookupFiles(tmpDir, ['test.js'], false).map(
+        path.normalize.bind(path)
+      );
+      expect(res, 'not to contain', tmpFile('mocha-utils-test.js')).and(
+        'to have length',
+        0
+      );
+    });
+
     it('should require the extensions parameter when looking up a file', function() {
       var dirLookup = function() {
         return lookupFiles(tmpFile('mocha-utils'), undefined, false);
