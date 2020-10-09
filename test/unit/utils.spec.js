@@ -543,6 +543,60 @@ describe('lib/utils', function() {
       expect(type(Infinity), 'to be', 'number');
       expect(type(null), 'to be', 'null');
       expect(type(undefined), 'to be', 'undefined');
+      expect(type(new Date()), 'to be', 'object');
+      expect(type(/foo/), 'to be', 'object');
+      expect(type('type'), 'to be', 'string');
+      expect(type(new Error()), 'to be', 'error');
+      expect(type(global), 'to be', 'object');
+      expect(type(true), 'to be', 'boolean');
+      expect(type(Buffer.from('ff', 'hex')), 'to be', 'object');
+      expect(type(Symbol.iterator), 'to be', 'symbol');
+      expect(type(new Map()), 'to be', 'object');
+      expect(type(new WeakMap()), 'to be', 'object');
+      expect(type(new Set()), 'to be', 'object');
+      expect(type(new WeakSet()), 'to be', 'object');
+      expect(
+        type(async () => {}),
+        'to be',
+        'function'
+      );
+    });
+
+    describe('when toString on null or undefined stringifies window', function() {
+      it('should recognize null and undefined', function() {
+        expect(type(null), 'to be', 'null');
+        expect(type(undefined), 'to be', 'undefined');
+      });
+    });
+
+    afterEach(function() {
+      Object.prototype.toString = toString;
+    });
+  });
+
+  describe('canonicalType()', function() {
+    /* eslint no-extend-native: off */
+
+    var type = utils.canonicalType;
+    var toString = Object.prototype.toString;
+
+    beforeEach(function() {
+      // some JS engines such as PhantomJS 1.x exhibit this behavior
+      Object.prototype.toString = function() {
+        if (this === global) {
+          return '[object DOMWindow]';
+        }
+        return toString.call(this);
+      };
+    });
+
+    it('should recognize various types', function() {
+      expect(type({}), 'to be', 'object');
+      expect(type([]), 'to be', 'array');
+      expect(type(1), 'to be', 'number');
+      expect(type(Infinity), 'to be', 'number');
+      expect(type(null), 'to be', 'null');
+      expect(type(undefined), 'to be', 'undefined');
       expect(type(new Date()), 'to be', 'date');
       expect(type(/foo/), 'to be', 'regexp');
       expect(type('type'), 'to be', 'string');
