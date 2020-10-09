@@ -394,3 +394,7 @@ figure#wallaby-logo figcaption {
     display: block;
   }
 }
+
+#mocha-fixture-wizard text[font-weight=bold]:hover {
+  text-decoration: underline;
+}
