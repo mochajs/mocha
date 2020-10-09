@@ -1,7 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
-import builtins from 'rollup-plugin-node-builtins';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 import globals from 'rollup-plugin-node-globals';
 
 import {babel} from '@rollup/plugin-babel';
@@ -26,7 +26,7 @@ const config = {
     }),
     commonjs(),
     globals(),
-    builtins(),
+    nodePolyfills(),
     nodeResolve({
       browser: true
     }),
