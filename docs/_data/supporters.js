@@ -99,32 +99,40 @@ const nodeToSupporter = node => ({
   categories: node.fromAccount.categories
 });
 
-const fetchImage = async supporter => {
-  try {
-    const {avatar: url} = supporter;
-    const {body: imageBuf, headers} = await needle('get', url, {timeout: 2000});
-    if (headers['content-type'].startsWith('text/html')) {
-      throw new TypeError('received html and expected a png; outage likely');
+const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
+  ? async supporter => {
+      invalidSupporters.push(supporter);
     }
-    debug('fetched %s', url);
-    const canvasImage = await loadImage(imageBuf);
-    debug('ok %s', url);
-    supporter.dimensions = {
-      width: canvasImage.width,
-      height: canvasImage.height
+  : async supporter => {
+      try {
+        const {avatar: url} = supporter;
+        const {body: imageBuf, headers} = await needle('get', url, {
+          timeout: 2000
+        });
+        if (headers['content-type'].startsWith('text/html')) {
+          throw new TypeError(
+            'received html and expected a png; outage likely'
+          );
+        }
+        debug('fetched %s', url);
+        const canvasImage = await loadImage(imageBuf);
+        debug('ok %s', url);
+        supporter.dimensions = {
+          width: canvasImage.width,
+          height: canvasImage.height
+        };
+        // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
+        const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
+        await writeFile(filePath, imageBuf);
+        debug('wrote %s', filePath);
+      } catch (err) {
+        console.error(
+          `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
+          err
+        );
+        invalidSupporters.push(supporter);
+      }
     };
-    // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
-    const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
-    await writeFile(filePath, imageBuf);
-    debug('wrote %s', filePath);
-  } catch (err) {
-    console.error(
-      `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
-      err
-    );
-    invalidSupporters.push(supporter);
-  }
-};
 
 /**
  * Retrieves donation data from OC
