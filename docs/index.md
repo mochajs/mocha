@@ -1272,7 +1272,11 @@ When Mocha runs in parallel mode, **test files do not share the same process,** 
 Here are a couple suggested workarounds:
 
 1. `require('./setup.js')` or `import './setup.js'` at the top of every test file. Best avoided for those averse to boilerplate.
-1. _Recommended_: Define root hooks in a "required" file, using the new (also as of v8.0.0) [Root Hook Plugin](#root-hook-plugins) system.
+1. _Recommended_: Define root hooks in a "required" file, using the new (also as
+   of v8.0.0) [Root Hook Plugin](#root-hook-plugins) system.
+
+If you need to run some code _once and only once_, use a [global
+fixture](#global-fixtures) instead.
 
 ### No Browser Support
 
@@ -1367,6 +1371,8 @@ Available root hooks and their behavior:
   - In **both** modes, run _after every test_
 
 {:.single-column}
+
+> _Tip: If you need to ensure code runs once and only once in any mode, use [global fixtures](#global-fixtures)._
 
 As with other hooks, `this` refers to to the current context object:
 
@@ -1656,6 +1662,13 @@ describe('my API', function() {
 ```
 
 Finally, use this command to bring it together: `mocha --require fixtures.mjs test.spec.mjs`.
+
+## Test Fixture Decision-Tree Wizard Thing
+
+This flowchart will help you decide which of [hooks], [root hook plugins] or
+[global fixtures] you should use.
+
+{% include fixture-wizard.html %}
 
 ## Interfaces
 
@@ -2395,3 +2408,4 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [global setup fixtures]: #global-setup-fixtures
 [global teardown fixtures]: #global-teardown-fixtures
 [global fixtures]: #global-fixtures
+[hooks]: #hooks
