@@ -233,10 +233,16 @@ const getSupporters = async () => {
   debug('created %s', SUPPORTER_IMAGE_PATH);
 
   // Fetch images for sponsors and save their image dimensions
-  await Promise.all([
-    ...supporters[SPONSOR_TIER].map(fetchImage),
-    ...supporters[BACKER_TIER].map(fetchImage)
-  ]);
+  try {
+    await Promise.all([
+      ...supporters[SPONSOR_TIER].map(fetchImage),
+      ...supporters[BACKER_TIER].map(fetchImage)
+    ]);
+  } catch (err) {
+    console.log('fetch error?');
+    console.log(err);
+  }
+
   debug('fetched images');
 
   invalidSupporters.forEach(supporter => {
