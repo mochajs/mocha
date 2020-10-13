@@ -52,6 +52,7 @@
     "test:smoke": "node ./bin/mocha --no-config test/smoke/smoke.spec.js"
   },
   "dependencies": {
+    "@ungap/promise-all-settled": "^1.1.2",
     "ansi-colors": "4.1.1",
     "browser-stdout": "1.3.1",
     "chokidar": "3.4.2",
@@ -67,7 +68,6 @@
     "minimatch": "3.0.4",
     "ms": "2.1.2",
     "nanoid": "3.1.12",
-    "promise.allsettled": "1.0.2",
     "serialize-javascript": "5.0.1",
     "strip-json-comments": "3.1.1",
     "supports-color": "7.2.0",
