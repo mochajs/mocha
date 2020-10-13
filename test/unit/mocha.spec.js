@@ -534,20 +534,6 @@ describe('Mocha', function() {
     });
 
     describe('reporter()', function() {
-      it('should throw reporter error if an invalid reporter is given', function() {
-        expect(
-          function() {
-            mocha.reporter('invalidReporter');
-          },
-          'to throw',
-          {
-            message: "invalid reporter 'invalidReporter'",
-            code: 'ERR_MOCHA_INVALID_REPORTER',
-            reporter: 'invalidReporter'
-          }
-        );
-      });
-
       it('should be chainable', function() {
         expect(mocha.reporter(), 'to be', mocha);
       });
@@ -574,18 +560,6 @@ describe('Mocha', function() {
         expect(mocha.options.reporterOption, 'to have property', 'foo', 'bar');
         // To support the legacy property name that can be used by reporters
         expect(mocha.options.reporterOptions, 'to have property', 'foo', 'bar');
-      });
-
-      describe('when a reporter does not exist', function() {
-        it('should throw an "invalid reporter" exception', function() {
-          expect(
-            function() {
-              mocha.reporter('no such thing');
-            },
-            'to throw',
-            {code: 'ERR_MOCHA_INVALID_REPORTER'}
-          );
-        });
       });
     });
 
