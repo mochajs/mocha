@@ -210,7 +210,7 @@ module.exports = {
           description: 'Run browser tests'
         },
         unit: {
-          script: 'cross-env NODE_PATH=. karma start --single-run',
+          script: 'cross-env NODE_PATH=. karma start --single-run --colors',
           description: 'Run browser unit tests'
         },
         bdd: {
