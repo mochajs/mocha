@@ -1,4 +1,4 @@
-# 8.2.0 / 2020-10-15
+# 8.2.0 / 2020-10-16
 
 The major feature added in v8.2.0 is addition of support for [_global fixtures_](https://mochajs.org/#global-fixtures).
 
