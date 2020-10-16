@@ -1,3 +1,59 @@
+# 8.2.0 / 2020-10-15
+
+The major feature added in v8.2.0 is addition of support for [_global fixtures_](https://mochajs.org/#global-fixtures).
+
+While Mocha has always had the ability to run setup and teardown via a hook (e.g., a `before()` at the top level of a test file) when running tests in serial, Mocha v8.0.0 added support for parallel runs. Parallel runs are _incompatible_ with this strategy; e.g., a top-level `before()` would only run for the file in which it was defined.
+
+With [global fixtures](https://mochajs.org/#global-fixtures), Mocha can now perform user-defined setup and teardown _regardless_ of mode, and these fixtures are guaranteed to run _once and only once_. This holds for parallel mode, serial mode, and even "watch" mode (the teardown will run once you hit Ctrl-C, just before Mocha finally exits). Tasks such as starting and stopping servers are well-suited to global fixtures, but not sharing resources--global fixtures do _not_ share context with your test files (but they do share context with each other).
+
+Here's a short example of usage:
+
+```js
+// fixtures.js
+
+// can be async or not
+exports.mochaGlobalSetup = async function() {
+  this.server = await startSomeServer({port: process.env.TEST_PORT});
+  console.log(`server running on port ${this.server.port}`);
+};
+
+exports.mochaGlobalTeardown = async function() {
+  // the context (`this`) is shared, but not with the test files
+  await this.server.stop();
+  console.log(`server on port ${this.server.port} stopped`);
+};
+
+// this file can contain root hook plugins as well!
+// exports.mochaHooks = { ... }
+```
+
+Fixtures are loaded with `--require`, e.g., `mocha --require fixtures.js`.
+
+For detailed information, please see the [documentation](https://mochajs.org/#global-fixtures) and this handy-dandy [flowchart](https://mochajs.org/#test-fixture-decision-tree-wizard-thing) to help understand the differences between hooks, root hook plugins, and global fixtures (and when you should use each).
+
+## :tada: Enhancements
+
+- [#4308](https://github.com/mochajs/mocha/issues/4308): Support run-once [global setup & teardown fixtures](https://mochajs.org/#global-fixtures) ([**@boneskull**](https://github.com/boneskull))
+- [#4442](https://github.com/mochajs/mocha/issues/4442): Multi-part extensions (e.g., `test.js`) now usable with `--extension` option ([**@jordanstephens**](https://github.com/jordanstephens))
+- [#4472](https://github.com/mochajs/mocha/issues/4472): Leading dots (e.g., `.js`, `.test.js`) now usable with `--extension` option ([**@boneskull**](https://github.com/boneskull))
+- [#4434](https://github.com/mochajs/mocha/issues/4434): Output of `json` reporter now contains `speed` ("fast"/"medium"/"slow") property ([**@wwhurin**](https://github.com/wwhurin))
+- [#4464](https://github.com/mochajs/mocha/issues/4464): Errors thrown by serializer in parallel mode now have error codes ([**@evaline-ju**](https://github.com/evaline-ju))
+
+_For implementors of custom reporters:_
+
+- [#4409](https://github.com/mochajs/mocha/issues/4409): Parallel mode and custom reporter improvements ([**@boneskull**](https://github.com/boneskull)):
+  - Support custom worker-process-only reporters (`Runner.prototype.workerReporter()`); reporters should subclass `ParallelBufferedReporter` in `mocha/lib/nodejs/reporters/parallel-buffered`
+  - Allow opt-in of object reference matching for "sufficiently advanced" custom reporters (`Runner.prototype.linkPartialObjects()`); use if strict object equality is needed when consuming `Runner` event data
+  - Enable detection of parallel mode (`Runner.prototype.isParallelMode()`)
+
+## :bug: Fixes
+
+- [#4476](https://github.com/mochajs/mocha/issues/4476): Workaround for profoundly bizarre issue affecting `npm` v6.x causing some of Mocha's deps to be installed when `mocha` is present in a package's `devDependencies` and `npm install --production` is run the package's working copy ([**@boneskull**](https://github.com/boneskull))
+- [#4465](https://github.com/mochajs/mocha/issues/4465): Worker processes guaranteed (as opposed to "very likely") to exit before Mocha does; fixes a problem when using `nyc` with Mocha in parallel mode ([**@boneskull**](https://github.com/boneskull))
+- [#4419](https://github.com/mochajs/mocha/issues/4419): Restore `lookupFiles()` in `mocha/lib/utils`, which was broken/missing in Mocha v8.1.0; it now prints a deprecation warning (use `const {lookupFiles} = require('mocha/lib/cli')` instead) ([**@boneskull**](https://github.com/boneskull))
+
+Thanks to [**@AviVahl**](https://github.com/AviVahl), [**@donghoon-song**](https://github.com/donghoon-song), [**@ValeriaVG**](https://github.com/ValeriaVG), [**@znarf**](https://github.com/znarf), [**@sujin-park**](https://github.com/sujin-park), and [**@majecty**](https://github.com/majecty) for other helpful contributions!
+
 # 8.1.3 / 2020-08-28
 
 ## :bug: Fixes
