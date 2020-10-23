@@ -51,6 +51,7 @@ jobs:
           - 10
           - 12
           - 14
+          - 15
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -106,6 +107,7 @@ jobs:
           - 10
           - 12
           - 14
+          - 15
         include:
           - os: ubuntu-latest
             node: 14
