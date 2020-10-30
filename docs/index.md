@@ -1533,7 +1533,7 @@ If you're a library maintainer, and your library uses root hooks, you can migrat
 
 ## Global Fixtures
 
-> New in v9.0.0
+> New in v8.2.0
 
 At first glance, _global fixtures_ seem similar to [root hooks](#root-hook-plugins). However, unlike root hooks, global fixtures:
 
