@@ -9,5 +9,5 @@ for (let i = 0; i < 5; i++) {
   r.run();
 }
 
-assert.equal(process.listenerCount('uncaughtException'), 1);
-assert.equal(process.listeners('uncaughtException')[0].name, 'uncaught');
+assert.strictEqual(process.listenerCount('uncaughtException'), 1);
+assert.strictEqual(process.listeners('uncaughtException')[0].name, 'uncaught');
