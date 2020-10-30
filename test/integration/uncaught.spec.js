@@ -198,7 +198,7 @@ describe('uncaught exceptions', function() {
     });
 
     describe('when Node is in "strict" mode', function() {
-      it('should fail', async function() {
+      it('should fail with an uncaught exception', async function() {
         const [, promise] = invokeMochaAsync(
           [
             resolveFixturePath('uncaught/unhandled'),
@@ -210,7 +210,7 @@ describe('uncaught exceptions', function() {
           promise,
           'when fulfilled',
           'to have failed with output',
-          /'ERR_UNHANDLED_REJECTION'/
+          /Error: yikes/
         );
       });
     });
