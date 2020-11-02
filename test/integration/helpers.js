@@ -415,8 +415,12 @@ async function runMochaWatchAsync(args, opts, change) {
   if (typeof opts === 'string') {
     opts = {cwd: opts};
   }
-  opts = {sleepMs: 2000, ...opts, fork: process.platform === 'win32'};
-  opts.stdio = ['pipe', 'pipe', 'inherit'];
+  opts = {
+    sleepMs: 2000,
+    stdio: ['pipe', 'pipe', 'inherit'],
+    ...opts,
+    fork: process.platform === 'win32'
+  };
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, '--watch'],
     opts
@@ -539,24 +543,25 @@ function sleep(time) {
 module.exports = {
   DEFAULT_FIXTURE,
   SPLIT_DOT_REPORTER_REGEXP,
+  copyFixture,
 
   createTempDir,
+  escapeRegExp,
+  getSummary,
   invokeMocha,
   invokeMochaAsync,
   invokeNode,
-  getSummary,
+  replaceFileContents,
   resolveFixturePath,
-  toJSONResult,
-  escapeRegExp,
   runMocha,
-  runMochaJSON,
   runMochaAsync,
+  runMochaJSON,
   runMochaJSONAsync,
   runMochaWatchAsync,
   runMochaWatchJSONAsync,
-  copyFixture,
-  touchFile,
-  replaceFileContents
+  sleep,
+  toJSONResult,
+  touchFile
 };
 
 /**
