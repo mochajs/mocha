@@ -1,3 +1,14 @@
+# 8.2.1 / 2020-11-02
+
+Fixed stuff.
+
+## :bug: Fixes
+
+- #4489: Fix problematic handling of otherwise-unhandled `Promise` rejections and erroneous "`done()` called twice" errors (@boneskull)
+- #4496: Avoid `MaxListenersExceededWarning` in watch mode (@boneskull)
+
+Also thanks to @akeating for a documentation fix!
+
 # 8.2.0 / 2020-10-16
 
 The major feature added in v8.2.0 is addition of support for [_global fixtures_](https://mochajs.org/#global-fixtures).
