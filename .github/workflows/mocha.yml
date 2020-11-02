@@ -7,9 +7,6 @@ name: Tests
       - synchronize
       - closed
       - reopened
-  # see https://github.com/bradennapier/eslint-plus-action#handle-forked-prs
-  schedule:
-    - cron: '*/15 * * * *'
 
 jobs:
   prepare-commit-msg:
