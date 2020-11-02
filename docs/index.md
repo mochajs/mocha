@@ -719,6 +719,26 @@ $ mocha
     ✓ correctly adds 4 args
 ```
 
+Tests added inside a `.forEach` handler often don't play well with editor plugins, especially with "right-click run" features.
+Another way to paramaterize tests is by generating them with a higher order function. This example is equivalent to the one above.
+
+```js
+describe('add()', function() {
+  function testAdd(test) {
+    return function () {
+      var res = add.apply(null, test.args);
+      assert.equal(res, test.expected);
+    };
+  }
+
+  it('correctly adds 2 args', testAdd({args: [1, 2], expected: 3}));
+
+  it('correctly adds 3 args', testAdd({args: [1, 2, 3], expected: 6}));
+
+  it('correctly adds 4 args', testAdd({args: [1, 2, 3, 4], expected: 10}));
+});
+```
+
 <h2 id="test-duration">Test duration</h2>
 
 Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the SPEC reporter:
