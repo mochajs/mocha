@@ -5,6 +5,8 @@ const path = require('path');
 const {
   copyFixture,
   runMochaWatchJSONAsync,
+  sleep,
+  runMochaWatchAsync,
   touchFile,
   replaceFileContents,
   createTempDir,
@@ -342,6 +344,34 @@ describe('--watch', function() {
       it('mochaHooks.beforeEach runs as expected', setupHookTest('beforeEach'));
       it('mochaHooks.afterAll runs as expected', setupHookTest('afterAll'));
       it('mochaHooks.afterEach runs as expected', setupHookTest('afterEach'));
+    });
+
+    it('should not leak event listeners', function() {
+      this.timeout(20000);
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      return expect(
+        runMochaWatchAsync(
+          [testFile],
+          {cwd: tempDir, stdio: 'pipe'},
+          async () => {
+            // we want to cause _n + 1_ reruns, which should cause the warning
+            // to occur if the listeners aren't properly destroyed
+            const iterations = new Array(process.getMaxListeners() + 1);
+            // eslint-disable-next-line no-unused-vars
+            for await (const _ of iterations) {
+              touchFile(testFile);
+              await sleep(1000);
+            }
+          }
+        ),
+        'when fulfilled',
+        'to satisfy',
+        {
+          output: expect.it('not to match', /MaxListenersExceededWarning/)
+        }
+      );
     });
   });
 });
