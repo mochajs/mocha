@@ -5,7 +5,6 @@ name: Tests
     types:
       - opened
       - synchronize
-      - closed
       - reopened
   # see https://github.com/bradennapier/eslint-plus-action#handle-forked-prs
   schedule:
