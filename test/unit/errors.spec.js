@@ -2,6 +2,7 @@
 
 var errors = require('../../lib/errors');
 const sinon = require('sinon');
+const {createNoFilesMatchPatternError} = require('../../lib/errors');
 
 describe('Errors', function() {
   afterEach(function() {
@@ -141,6 +142,31 @@ describe('Errors', function() {
     it('should ignore falsy messages', function() {
       errors.warn('');
       expect(process.emitWarning, 'was not called');
+    });
+  });
+
+  describe('isMochaError()', function() {
+    describe('when provided an Error object having a known Mocha error code', function() {
+      it('should return true', function() {
+        expect(
+          errors.isMochaError(createNoFilesMatchPatternError('derp')),
+          'to be true'
+        );
+      });
+    });
+
+    describe('when provided an Error object with a non-Mocha error code', function() {
+      it('should return false', function() {
+        const err = new Error();
+        err.code = 'ENOTEA';
+        expect(errors.isMochaError(err), 'to be false');
+      });
+    });
+
+    describe('when provided a non-error', function() {
+      it('should return false', function() {
+        expect(errors.isMochaError(), 'to be false');
+      });
     });
   });
 });
