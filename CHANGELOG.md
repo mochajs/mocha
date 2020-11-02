@@ -4,10 +4,10 @@ Fixed stuff.
 
 ## :bug: Fixes
 
-- #4489: Fix problematic handling of otherwise-unhandled `Promise` rejections and erroneous "`done()` called twice" errors (@boneskull)
-- #4496: Avoid `MaxListenersExceededWarning` in watch mode (@boneskull)
+- [#4489](https://github.com/mochajs/mocha/issues/4489): Fix problematic handling of otherwise-unhandled `Promise` rejections and erroneous "`done()` called twice" errors ([**@boneskull**](https://github.com/boneskull))
+- [#4496](https://github.com/mochajs/mocha/issues/4496): Avoid `MaxListenersExceededWarning` in watch mode ([**@boneskull**](https://github.com/boneskull))
 
-Also thanks to @akeating for a documentation fix!
+Also thanks to [**@akeating**](https://github.com/akeating) for a documentation fix!
 
 # 8.2.0 / 2020-10-16
 
