@@ -720,7 +720,7 @@ $ mocha
 ```
 
 Tests added inside a `.forEach` handler often don't play well with editor plugins, especially with "right-click run" features.
-Another way to paramaterize tests is by generating them with a higher order function. This example is equivalent to the one above.
+Another way to parameterize tests is to generate them with a closure. This following example is equivalent to the one above:
 
 ```js
 describe('add()', function() {
