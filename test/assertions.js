@@ -13,41 +13,37 @@ module.exports = {
         base: 'object',
         identify(v) {
           return (
-            v !== null &&
-            typeof v === 'object' &&
+            this.baseType.identify(v) &&
             typeof v.output === 'string' &&
             'code' in v && // may be null
-            Array.isArray(v.args)
-          );
-        }
-      })
-      .addType({
-        name: 'JSONResult',
-        base: 'object',
-        identify(v) {
-          return (
-            v !== null &&
-            typeof v === 'object' &&
-            v.stats !== null &&
-            typeof v.stats === 'object' &&
-            Array.isArray(v.failures) &&
-            typeof v.code === 'number' &&
+            Array.isArray(v.args) &&
             typeof v.command === 'string'
           );
         }
       })
       .addType({
-        name: 'SummarizedResult',
-        base: 'object',
+        name: 'JSONResult',
+        base: 'RawResult',
         identify(v) {
           return (
-            v !== null &&
-            typeof v === 'object' &&
+            this.baseType.identify(v) &&
+            typeof v.stats === 'object' &&
+            Array.isArray(v.failures) &&
+            Array.isArray(v.passes) &&
+            Array.isArray(v.tests) &&
+            Array.isArray(v.pending)
+          );
+        }
+      })
+      .addType({
+        name: 'SummarizedResult',
+        base: 'RawResult',
+        identify(v) {
+          return (
+            this.baseType.identify(v) &&
             typeof v.passing === 'number' &&
             typeof v.failing === 'number' &&
-            typeof v.pending === 'number' &&
-            typeof v.output === 'string' &&
-            typeof v.code === 'number'
+            typeof v.pending === 'number'
           );
         }
       })
