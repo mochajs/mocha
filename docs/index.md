@@ -686,8 +686,8 @@ Take the following example:
 ```js
 const assert = require('chai').assert;
 
-function add() {
-  return Array.prototype.slice.call(arguments).reduce((prev, curr) => prev + curr, 0);
+function add(...args) {
+  return args.reduce((prev, curr) => prev + curr, 0);
 }
 
 describe('add()', () => {
@@ -698,7 +698,7 @@ describe('add()', () => {
   ];
 
   tests.forEach(({args, expected}) => {
-    it('correctly adds ' + args.length + ' args', () => {
+    it(`correctly adds ${args.length} args`, function() {
       const res = add(...args);
       assert.equal(res, expected);
     });
@@ -721,8 +721,8 @@ Tests added inside a `.forEach` handler often don't play well with editor plugin
 Another way to parameterize tests is to generate them with a closure. This following example is equivalent to the one above:
 
 ```js
-describe('add()', () => {
-  const testAdd = ({args, expected}) => () => {
+describe('add()', function() {
+  const testAdd = ({args, expected}) => function() {
     const res = add(...args);
     assert.equal(res, expected);
   };
