@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 const {format} = require('util');
 const path = require('path');
 const Base = require('../../lib/reporters/base');
-const debug = require('debug')('mocha:tests:integration:helpers');
+const debug = require('debug')('mocha:test:integration:helpers');
 const touch = require('touch');
 
 /**
@@ -133,11 +133,11 @@ function runMochaJSON(fixturePath, args, done, opts) {
  * @returns {Promise<Summary>}
  */
 function runMochaAsync(fixturePath, args, opts) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     runMocha(
       fixturePath,
       args,
-      function(err, result) {
+      (err, result) => {
         if (err) {
           return reject(err);
         }
@@ -156,11 +156,11 @@ function runMochaAsync(fixturePath, args, opts) {
  * @returns {Promise<JSONResult>}
  */
 function runMochaJSONAsync(fixturePath, args, opts) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     runMochaJSON(
       fixturePath,
       args,
-      function(err, result) {
+      (err, result) => {
         if (err) {
           return reject(err);
         }
@@ -178,9 +178,8 @@ function runMochaJSONAsync(fixturePath, args, opts) {
  * @returns {JSONResult}
  */
 function toJSONResult(result) {
-  const {code, command, output} = result;
   try {
-    return {...JSON.parse(output), code, command};
+    return {...JSON.parse(result.output), ...result};
   } catch (err) {
     throw new Error(
       `Couldn't parse JSON: ${err.message}\n\nOriginal result output: ${result.output}`
@@ -383,11 +382,9 @@ function resolveFixturePath(fixture) {
  * @returns {Summary}
  */
 function getSummary(res) {
-  return ['passing', 'pending', 'failing'].reduce(function(summary, type) {
-    var pattern, match;
-
-    pattern = new RegExp('  (\\d+) ' + type + '\\s');
-    match = pattern.exec(res.output);
+  return ['passing', 'pending', 'failing'].reduce((summary, type) => {
+    const pattern = new RegExp(`  (\\d+) ${type}\\s`);
+    const match = pattern.exec(res.output);
     summary[type] = match ? parseInt(match, 10) : 0;
 
     return summary;
@@ -524,7 +521,9 @@ const createTempDir = async () => {
   return {
     dirpath,
     removeTempDir: async () => {
-      return fs.remove(dirpath);
+      if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
+        return fs.remove(dirpath);
+      }
     }
   };
 };
