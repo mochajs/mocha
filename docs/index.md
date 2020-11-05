@@ -679,18 +679,18 @@ describe('retries', function() {
 
 ## Dynamically Generating Tests
 
-Given Mocha's use of `Function.prototype.call` and function expressions to define suites and test cases, it's straightforward to generate your tests dynamically. No special syntax is required &mdash; plain ol' JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
+Given Mocha's use of function expressions to define suites and test cases, it's straightforward to generate your tests dynamically. No special syntax is required &mdash; plain ol' JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
 
 Take the following example:
 
 ```js
 const assert = require('chai').assert;
 
-function add(...args) {
+function add(args) {
   return args.reduce((prev, curr) => prev + curr, 0);
 }
 
-describe('add()', () => {
+describe('add()', function() {
   const tests = [
     {args: [1, 2], expected: 3},
     {args: [1, 2, 3], expected: 6},
@@ -699,7 +699,7 @@ describe('add()', () => {
 
   tests.forEach(({args, expected}) => {
     it(`correctly adds ${args.length} args`, function() {
-      const res = add(...args);
+      const res = add(args);
       assert.equal(res, expected);
     });
   });
@@ -722,15 +722,14 @@ Another way to parameterize tests is to generate them with a closure. This follo
 
 ```js
 describe('add()', function() {
-  const testAdd = ({args, expected}) => function() {
-    const res = add(...args);
-    assert.equal(res, expected);
-  };
+  const testAdd = ({args, expected}) =>
+    function() {
+      const res = add(args);
+      assert.equal(res, expected);
+    };
 
   it('correctly adds 2 args', testAdd({args: [1, 2], expected: 3}));
-
   it('correctly adds 3 args', testAdd({args: [1, 2, 3], expected: 6}));
-
   it('correctly adds 4 args', testAdd({args: [1, 2, 3, 4], expected: 10}));
 });
 ```
