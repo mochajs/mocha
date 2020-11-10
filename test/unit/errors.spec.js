@@ -69,6 +69,20 @@ describe('Errors', function() {
     });
   });
 
+  describe('createUnparsableFileError()', function() {
+    it('should include expected code in thrown unparsable file errors', function() {
+      expect(
+        errors.createUnparsableFileError(message, 'badFilePath'),
+        'to satisfy',
+        {
+          message: message,
+          code: 'ERR_MOCHA_UNPARSABLE_FILE',
+          reason: 'badFilePath is unparsable'
+        }
+      );
+    });
+  });
+
   describe('deprecate()', function() {
     var emitWarning;
 
