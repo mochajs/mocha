@@ -86,22 +86,13 @@ module.exports = config => {
   // configuration for CI mode
   if (env.CI) {
     console.error('CI mode enabled');
-    if (env.TRAVIS) {
-      console.error('Travis-CI detected');
-      bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, env.TRAVIS_BUILD_ID);
-      if (env.SAUCE_USERNAME && env.SAUCE_ACCESS_KEY) {
-        // correlate build/tunnel with Travis
-        sauceConfig = {
-          build: `TRAVIS #${env.TRAVIS_BUILD_NUMBER} (${env.TRAVIS_BUILD_ID})`,
-          tunnelIdentifier: env.TRAVIS_JOB_NUMBER,
-          startConnect: false
-        };
-        console.error('Configured SauceLabs');
-      } else {
-        console.error('No SauceLabs credentials present');
-      }
-    } else if (env.APPVEYOR) {
-      throw new Error('no browser tests should run on AppVeyor!');
+    if (env.GITHUB_RUN_ID) {
+      console.error('Github Actions detected');
+      bundleDirPath = path.join(
+        BASE_BUNDLE_DIR_PATH,
+        `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`
+      );
+      sauceConfig = {};
     } else {
       console.error(`Local environment (${hostname}) detected`);
       // don't need to run sauce from Windows CI b/c travis does it.
@@ -109,12 +100,13 @@ module.exports = config => {
         const id = `${hostname} (${Date.now()})`;
         sauceConfig = {
           build: id,
-          tunnelIdentifier: id,
-          startConnect: true
+          tunnelIdentifier: id
         };
         console.error('Configured SauceLabs');
       } else {
-        console.error('No SauceLabs credentials present');
+        console.error(
+          'No SauceLabs credentials present; set SAUCE_USERNAME and SAUCE_ACCESS_KEY env vars'
+        );
       }
     }
   }
@@ -199,16 +191,7 @@ const addSauceTests = (cfg, sauceLabs) => {
         ...cfg.customLaunchers,
         ...customLaunchers
       },
-      sauceLabs: {
-        ...sauceLabs,
-        public: 'public',
-        connectOptions: {
-          connectRetries: 2,
-          connectRetryTimeout: 30000,
-          detached: sauceLabs.startConnect,
-          tunnelIdentifier: sauceLabs.tunnelIdentifier
-        }
-      },
+      sauceLabs,
       concurrency: Infinity,
       retryLimit: 1,
       captureTimeout: 120000,

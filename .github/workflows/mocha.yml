@@ -198,3 +198,29 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
+  test-browser:
+    # TODO: configure to retain build artifacts in `.karma/` dir
+    name: 'Browser Tests'
+    needs: smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - uses: actions/checkout@v2
+      - name: 'Cache node_modules'
+        uses: actions/cache@v2
+        with:
+          path: '~/.npm'
+          # this key is different than above, since we are running scripts
+          # (builds, postinstall lifecycle hooks, etc.)
+          key: "ubuntu-latest-node-full-v14-${{ hashFiles('**/package-lock.json') }}"
+          restore-keys: |
+            ubuntu-latest-node-full-v14-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Browser Tests
+        run: npm start test.browser
+        env:
+          SAUCE_USERNAME: '${{secrets.SAUCE_USERNAME}}'
+          SAUCE_ACCESS_KEY: '${{secrets.SAUCE_ACCESS_KEY}}'
