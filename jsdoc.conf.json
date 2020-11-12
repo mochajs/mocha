@@ -15,7 +15,7 @@
     "tutorials": "docs/api-tutorials",
     "verbose": true
   },
-  "plugins": ["plugins/markdown"],
+  "plugins": ["./node_modules/jsdoc-ts-utils", "plugins/markdown"],
   "source": {
     "include": ["lib/", "./docs/API.md", "bin"]
   },
