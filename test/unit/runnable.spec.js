@@ -4,6 +4,7 @@ var Mocha = require('../../lib/mocha');
 var Runnable = Mocha.Runnable;
 var Suite = Mocha.Suite;
 var sinon = require('sinon');
+const {TIMEOUT} = require('../../lib/errors').constants;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function() {
@@ -476,7 +477,14 @@ describe('Runnable(title, fn)', function() {
         });
       });
 
-      it('should allow a timeout of 0');
+      it('should allow a timeout of 0', function(done) {
+        const runnable = new Runnable('foo', () => {});
+        runnable.timeout(0);
+        runnable.run(err => {
+          expect(err, 'to be falsy');
+          done();
+        });
+      });
     });
 
     describe('when fn returns a promise', function() {
@@ -577,11 +585,7 @@ describe('Runnable(title, fn)', function() {
 
           runnable.timeout(10);
           runnable.run(function(err) {
-            expect(
-              err.message,
-              'to match',
-              /Timeout of 10ms exceeded.*\(\/some\/path\)$/
-            );
+            expect(err, 'to satisfy', {code: TIMEOUT, timeout: 10});
             done();
           });
         });
@@ -607,7 +611,7 @@ describe('Runnable(title, fn)', function() {
         });
         runnable.timeout(10);
         runnable.run(function(err) {
-          expect(err.message, 'to match', /^Timeout of 10ms/);
+          expect(err, 'to satisfy', {code: TIMEOUT, timeout: 10});
           // timedOut is set *after* this callback is executed
           process.nextTick(function() {
             expect(runnable.timedOut, 'to be truthy');
@@ -635,6 +639,7 @@ describe('Runnable(title, fn)', function() {
         var runnable = new Runnable('foo', function(done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
+          /* istanbul ignore next */
           aborted = false;
         });
         runnable.run(function() {
@@ -712,6 +717,19 @@ describe('Runnable(title, fn)', function() {
 
       it('should return an Error if parameter is falsy', function() {
         expect(Runnable.toValueOrError(null), 'to be an', Error);
+      });
+    });
+  });
+
+  describe('interesting property', function() {
+    describe('id', function() {
+      it('should have a unique identifier', function() {
+        expect(new Runnable('foo', () => {}), 'to have property', 'id');
+      });
+
+      it('should have a permanent identifier', function() {
+        const runnable = new Runnable('foo', () => {});
+        expect(runnable.id, 'to be', runnable.id);
       });
     });
   });
