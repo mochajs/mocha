@@ -5,8 +5,6 @@ const rewiremock = require('rewiremock/node');
 const {SerializableWorkerResult} = require('../../lib/nodejs/serializer');
 const sinon = require('sinon');
 
-const WORKER_PATH = require.resolve('../../lib/nodejs/worker.js');
-
 describe('worker', function() {
   let worker;
   let stubs;
@@ -24,7 +22,7 @@ describe('worker', function() {
   describe('when run as main process', function() {
     it('should throw', function() {
       expect(() => {
-        rewiremock.proxy(WORKER_PATH, {
+        rewiremock.proxy(() => require('../../lib/nodejs/worker.js'), {
           workerpool: {
             isMainThread: true,
             worker: stubs.workerpool.worker
@@ -62,7 +60,7 @@ describe('worker', function() {
         aggregateRootHooks: sinon.stub().resolves()
       };
 
-      worker = rewiremock.proxy(WORKER_PATH, {
+      worker = rewiremock.proxy(() => require('../../lib/nodejs/worker.js'), {
         workerpool: stubs.workerpool,
         '../../lib/mocha': stubs.Mocha,
         '../../lib/nodejs/serializer': stubs.serializer,

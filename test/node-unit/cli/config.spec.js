@@ -126,7 +126,7 @@ describe('cli/config', function() {
     beforeEach(function() {
       findup = {sync: sinon.stub().returns('/some/path/.mocharc.js')};
       const config = rewiremock.proxy(
-        require.resolve('../../../lib/cli/config'),
+        () => require('../../../lib/cli/config'),
         r => ({
           'find-up': r.by(() => findup)
         })
