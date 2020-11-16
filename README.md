@@ -6,7 +6,6 @@
 
 <p align="center">
 <a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amaster"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=master" alt="GitHub Actions Build Status"></a>
-<a href="http://travis-ci.org/mochajs/mocha"><img src="https://api.travis-ci.org/mochajs/mocha.svg?branch=master" alt="Build Status"></a>
 <a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
 <a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield" alt="FOSSA Status"></a>
 <a href="https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a>
