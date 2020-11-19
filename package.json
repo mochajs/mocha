@@ -35,8 +35,7 @@
         "default": "./lib/entrypoints/qunit.js"
       },
       "./lib/entrypoints/qunit.js"
-    ],
-    "./": "./"
+    ]
   },
   "keywords": [
     "mocha",

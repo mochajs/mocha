@@ -1,4 +1,4 @@
-import {suite, test, before, after} from 'mocha/qunit'
+import {suite, test, before, after} from 'mocha/qunit';
 
 let beforeSetsThis = 0;
 let beforeEachSetsThis = 0;

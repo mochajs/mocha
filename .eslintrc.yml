@@ -97,6 +97,7 @@ overrides:
           message: *GH-237
   - files:
       - test/**/*.mjs
+      - lib/**/*.mjs
     parserOptions:
       ecmaVersion: 2018
       sourceType: module
