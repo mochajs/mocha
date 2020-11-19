@@ -34,8 +34,8 @@
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
-    "mocha": "./bin/mocha",
-    "_mocha": "./bin/_mocha"
+    "mocha": "bin/mocha",
+    "_mocha": "bin/_mocha"
   },
   "directories": {
     "lib": "./lib",
@@ -74,7 +74,7 @@
     "which": "2.0.2",
     "wide-align": "1.1.3",
     "workerpool": "6.0.2",
-    "yargs": "13.3.2",
+    "yargs": "16.1.1",
     "yargs-parser": "13.1.2",
     "yargs-unparser": "2.0.0"
   },
