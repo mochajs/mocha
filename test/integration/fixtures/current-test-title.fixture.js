@@ -6,13 +6,13 @@ function getTitle(ctx) {
 };
 
 before(function () {
-  assert.equal(getTitle(this), undefined);
+  assert.strictEqual(getTitle(this), undefined);
 });
 
 describe('suite A', () => {
 
   before(function () {
-    assert.equal(getTitle(this), undefined);
+    assert.strictEqual(getTitle(this), undefined);
   });
 
   describe('suite B', () => {
@@ -23,25 +23,25 @@ describe('suite A', () => {
       var lap = 0;
 
       before(function () {
-        assert.equal(getTitle(this), 'test1 C');
+        assert.strictEqual(getTitle(this), 'test1 C');
       });
       beforeEach(function () {
-        assert.equal(getTitle(this), ++lap === 1 ? 'test1 C' : 'test2 C');
+        assert.strictEqual(getTitle(this), ++lap === 1 ? 'test1 C' : 'test2 C');
       });
 
       it('test1 C', function () {});
       it('test2 C', function () {});
 
       afterEach(function () {
-        assert.equal(getTitle(this), lap === 1 ? 'test1 C' : 'test2 C');
+        assert.strictEqual(getTitle(this), lap === 1 ? 'test1 C' : 'test2 C');
       });
       after(function () {
-        assert.equal(getTitle(this), 'test2 C');
+        assert.strictEqual(getTitle(this), 'test2 C');
       });
     });
   });
 });
 
 after(function () {
-  assert.equal(getTitle(this), undefined);
+  assert.strictEqual(getTitle(this), undefined);
 });

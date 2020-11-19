@@ -16,6 +16,9 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy('docs/_headers');
   eleventyConfig.addPassthroughCopy('docs/favicon.ico');
   eleventyConfig.addPassthroughCopy('docs/example');
+  eleventyConfig.addPassthroughCopy('docs/api/images');
+  eleventyConfig.addPassthroughCopy('docs/api/scripts');
+  eleventyConfig.addPassthroughCopy('docs/api/styles');
 
   /* Markdown Plugins */
   const markdown = require('markdown-it')({
@@ -43,11 +46,12 @@ module.exports = function(eleventyConfig) {
 
   eleventyConfig.setLibrary('md', markdown);
 
+  eleventyConfig.setUseGitIgnore(false);
+
   return {
     passthroughFileCopy: true,
     dir: {
       input: 'docs',
-      includes: '_includes',
       output: 'docs/_site'
     }
   };

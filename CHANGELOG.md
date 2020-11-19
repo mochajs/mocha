@@ -1,3 +1,136 @@
+# 8.2.1 / 2020-11-02
+
+Fixed stuff.
+
+## :bug: Fixes
+
+- [#4489](https://github.com/mochajs/mocha/issues/4489): Fix problematic handling of otherwise-unhandled `Promise` rejections and erroneous "`done()` called twice" errors ([**@boneskull**](https://github.com/boneskull))
+- [#4496](https://github.com/mochajs/mocha/issues/4496): Avoid `MaxListenersExceededWarning` in watch mode ([**@boneskull**](https://github.com/boneskull))
+
+Also thanks to [**@akeating**](https://github.com/akeating) for a documentation fix!
+
+# 8.2.0 / 2020-10-16
+
+The major feature added in v8.2.0 is addition of support for [_global fixtures_](https://mochajs.org/#global-fixtures).
+
+While Mocha has always had the ability to run setup and teardown via a hook (e.g., a `before()` at the top level of a test file) when running tests in serial, Mocha v8.0.0 added support for parallel runs. Parallel runs are _incompatible_ with this strategy; e.g., a top-level `before()` would only run for the file in which it was defined.
+
+With [global fixtures](https://mochajs.org/#global-fixtures), Mocha can now perform user-defined setup and teardown _regardless_ of mode, and these fixtures are guaranteed to run _once and only once_. This holds for parallel mode, serial mode, and even "watch" mode (the teardown will run once you hit Ctrl-C, just before Mocha finally exits). Tasks such as starting and stopping servers are well-suited to global fixtures, but not sharing resources--global fixtures do _not_ share context with your test files (but they do share context with each other).
+
+Here's a short example of usage:
+
+```js
+// fixtures.js
+
+// can be async or not
+exports.mochaGlobalSetup = async function() {
+  this.server = await startSomeServer({port: process.env.TEST_PORT});
+  console.log(`server running on port ${this.server.port}`);
+};
+
+exports.mochaGlobalTeardown = async function() {
+  // the context (`this`) is shared, but not with the test files
+  await this.server.stop();
+  console.log(`server on port ${this.server.port} stopped`);
+};
+
+// this file can contain root hook plugins as well!
+// exports.mochaHooks = { ... }
+```
+
+Fixtures are loaded with `--require`, e.g., `mocha --require fixtures.js`.
+
+For detailed information, please see the [documentation](https://mochajs.org/#global-fixtures) and this handy-dandy [flowchart](https://mochajs.org/#test-fixture-decision-tree-wizard-thing) to help understand the differences between hooks, root hook plugins, and global fixtures (and when you should use each).
+
+## :tada: Enhancements
+
+- [#4308](https://github.com/mochajs/mocha/issues/4308): Support run-once [global setup & teardown fixtures](https://mochajs.org/#global-fixtures) ([**@boneskull**](https://github.com/boneskull))
+- [#4442](https://github.com/mochajs/mocha/issues/4442): Multi-part extensions (e.g., `test.js`) now usable with `--extension` option ([**@jordanstephens**](https://github.com/jordanstephens))
+- [#4472](https://github.com/mochajs/mocha/issues/4472): Leading dots (e.g., `.js`, `.test.js`) now usable with `--extension` option ([**@boneskull**](https://github.com/boneskull))
+- [#4434](https://github.com/mochajs/mocha/issues/4434): Output of `json` reporter now contains `speed` ("fast"/"medium"/"slow") property ([**@wwhurin**](https://github.com/wwhurin))
+- [#4464](https://github.com/mochajs/mocha/issues/4464): Errors thrown by serializer in parallel mode now have error codes ([**@evaline-ju**](https://github.com/evaline-ju))
+
+_For implementors of custom reporters:_
+
+- [#4409](https://github.com/mochajs/mocha/issues/4409): Parallel mode and custom reporter improvements ([**@boneskull**](https://github.com/boneskull)):
+  - Support custom worker-process-only reporters (`Runner.prototype.workerReporter()`); reporters should subclass `ParallelBufferedReporter` in `mocha/lib/nodejs/reporters/parallel-buffered`
+  - Allow opt-in of object reference matching for "sufficiently advanced" custom reporters (`Runner.prototype.linkPartialObjects()`); use if strict object equality is needed when consuming `Runner` event data
+  - Enable detection of parallel mode (`Runner.prototype.isParallelMode()`)
+
+## :bug: Fixes
+
+- [#4476](https://github.com/mochajs/mocha/issues/4476): Workaround for profoundly bizarre issue affecting `npm` v6.x causing some of Mocha's deps to be installed when `mocha` is present in a package's `devDependencies` and `npm install --production` is run the package's working copy ([**@boneskull**](https://github.com/boneskull))
+- [#4465](https://github.com/mochajs/mocha/issues/4465): Worker processes guaranteed (as opposed to "very likely") to exit before Mocha does; fixes a problem when using `nyc` with Mocha in parallel mode ([**@boneskull**](https://github.com/boneskull))
+- [#4419](https://github.com/mochajs/mocha/issues/4419): Restore `lookupFiles()` in `mocha/lib/utils`, which was broken/missing in Mocha v8.1.0; it now prints a deprecation warning (use `const {lookupFiles} = require('mocha/lib/cli')` instead) ([**@boneskull**](https://github.com/boneskull))
+
+Thanks to [**@AviVahl**](https://github.com/AviVahl), [**@donghoon-song**](https://github.com/donghoon-song), [**@ValeriaVG**](https://github.com/ValeriaVG), [**@znarf**](https://github.com/znarf), [**@sujin-park**](https://github.com/sujin-park), and [**@majecty**](https://github.com/majecty) for other helpful contributions!
+
+# 8.1.3 / 2020-08-28
+
+## :bug: Fixes
+
+- [#4425](https://github.com/mochajs/mocha/issues/4425): Restore `Mocha.utils.lookupFiles()` and Webpack compatibility (both broken since v8.1.0); `Mocha.utils.lookupFiles()` is now **deprecated** and will be removed in the next major revision of Mocha; use `require('mocha/lib/cli').lookupFiles` instead ([**@boneskull**](https://github.com/boneskull))
+
+# 8.1.2 / 2020-08-25
+
+## :bug: Fixes
+
+- [#4418](https://github.com/mochajs/mocha/issues/4418): Fix command-line flag incompatibility in forthcoming Node.js v14.9.0 ([**@boneskull**](https://github.com/boneskull))
+- [#4401](https://github.com/mochajs/mocha/issues/4401): Fix missing global variable in browser ([**@irrationnelle**](https://github.com/irrationnelle))
+
+## :lock: Security Fixes
+
+- [#4396](https://github.com/mochajs/mocha/issues/4396): Update many dependencies ([**@GChuf**](https://github.com/GChuf))
+
+## :book: Documentation
+
+- Various fixes by [**@sujin-park**](https://github.com/sujin-park), [**@wwhurin**](https://github.com/wwhurin) & [**@Donghoon759**](https://github.com/Donghoon759)
+
+# 8.1.1 / 2020-08-04
+
+## :bug: Fixes
+
+- [#4394](https://github.com/mochajs/mocha/issues/4394): Fix regression wherein certain reporters did not correctly detect terminal width ([**@boneskull**](https://github.com/boneskull))
+
+# 8.1.0 / 2020-07-30
+
+In this release, Mocha now builds its browser bundle with Rollup and Babel, which will provide the project's codebase more flexibility and consistency.
+
+While we've been diligent about backwards compatibility, it's _possible_ consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you _do_ encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug&template=bug_report.md&title=).
+
+This release **does not** drop support for IE11.
+
+Other community contributions came from [**@Devjeel**](https://github.com/Devjeel), [**@Harsha509**](https://github.com/Harsha509) and [**@sharath2106**](https://github.com/sharath2106). _Thank you_ to everyone who contributed to this release!
+
+> Do you read Korean? See [this guide to running parallel tests in Mocha](https://blog.outsider.ne.kr/1489), translated by our maintainer, [**@outsideris**](https://github.com/outsideris).
+
+## :tada: Enhancements
+
+- [#4287](https://github.com/mochajs/mocha/issues/4287): Use background colors with inline diffs for better visual distinction ([**@michael-brade**](https://github.com/michael-brade))
+
+## :bug: Fixes
+
+- [#4328](https://github.com/mochajs/mocha/issues/4328): Fix "watch" mode when Mocha run in parallel ([**@boneskull**](https://github.com/boneskull))
+- [#4382](https://github.com/mochajs/mocha/issues/4382): Fix root hook execution in "watch" mode ([**@indieisaconcept**](https://github.com/indieisaconcept))
+- [#4383](https://github.com/mochajs/mocha/issues/4383): Consistent auto-generated hook titles ([**@cspotcode**](https://github.com/cspotcode))
+- [#4359](https://github.com/mochajs/mocha/issues/4359): Better errors when running `mocha init` ([**@boneskull**](https://github.com/boneskull))
+- [#4341](https://github.com/mochajs/mocha/issues/4341): Fix weirdness when using `delay` option in browser ([**@craigtaub**](https://github.com/craigtaub))
+
+## :lock: Security Fixes
+
+- [#4378](https://github.com/mochajs/mocha/issues/4378), [#4333](https://github.com/mochajs/mocha/issues/4333): Update [javascript-serialize](https://npm.im/javascript-serialize) ([**@martinoppitz**](https://github.com/martinoppitz), [**@wnghdcjfe**](https://github.com/wnghdcjfe))
+- [#4354](https://github.com/mochajs/mocha/issues/4354): Update [yargs-unparser](https://npm.im/yargs-unparser) ([**@martinoppitz**](https://github.com/martinoppitz))
+
+## :book: Documentation & Website
+
+- [#4173](https://github.com/mochajs/mocha/issues/4173): Document how to use `--enable-source-maps` with Mocha ([**@bcoe**](https://github.com/bcoe))
+- [#4343](https://github.com/mochajs/mocha/issues/4343): Clean up some API docs ([**@craigtaub**](https://github.com/craigtaub))
+- [#4318](https://github.com/mochajs/mocha/issues/4318): Sponsor images are now self-hosted ([**@Munter**](https://github.com/Munter))
+
+## :nut_and_bolt: Other
+
+- [#4293](https://github.com/mochajs/mocha/issues/4293): Use Rollup and Babel in build pipeline; add source map to published files ([**@Munter**](https://github.com/Munter))
+
 # 8.0.1 / 2020-06-10
 
 The obligatory patch after a major.

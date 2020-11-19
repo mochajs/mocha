@@ -1,14 +1,17 @@
 'use strict';
 
-var invokeNode = require('./helpers').invokeNode;
+const {invokeNode} = require('./helpers');
 
-describe('multiple runs', function(done) {
+describe('multiple runs', function() {
   it('should be allowed to run multiple times if cleanReferences is turned off', function(done) {
     var path = require.resolve(
       './fixtures/multiple-runs/run-thrice.fixture.js'
     );
     invokeNode([path], function(err, res) {
-      expect(err, 'to be null');
+      if (err) {
+        done(err);
+        return;
+      }
       expect(res.code, 'to be', 0);
       var results = JSON.parse(res.output);
       expect(results, 'to have length', 3);
@@ -32,9 +35,15 @@ describe('multiple runs', function(done) {
     invokeNode(
       [path],
       function(err, res) {
-        expect(err, 'to be null');
-        expect(res.code, 'not to be', 0);
-        expect(res.output, 'to contain', 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED');
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, 'to have failed').and(
+          'to contain output',
+          /ERR_MOCHA_INSTANCE_ALREADY_DISPOSED/
+        );
+
         done();
       },
       {stdio: ['ignore', 'pipe', 'pipe']}
@@ -46,7 +55,10 @@ describe('multiple runs', function(done) {
     invokeNode(
       [path, '--directly-dispose'],
       function(err, res) {
-        expect(err, 'to be null');
+        if (err) {
+          done(err);
+          return;
+        }
         expect(res.code, 'not to be', 0);
         expect(res.output, 'to contain', 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED');
         done();
@@ -62,7 +74,10 @@ describe('multiple runs', function(done) {
     invokeNode(
       [path],
       function(err, res) {
-        expect(err, 'to be null');
+        if (err) {
+          done(err);
+          return;
+        }
         expect(res.output, 'to contain', 'ERR_MOCHA_INSTANCE_ALREADY_RUNNING');
         done();
       },

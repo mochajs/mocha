@@ -1,7 +1,7 @@
 'use strict';
 
 const {resolve, relative, dirname} = require('path');
-const {readFileSync} = require('fs');
+const {promises: fs} = require('fs');
 
 const PROJECT_ROOT_DIR = resolve(__dirname, '..', '..');
 const FILES = [
@@ -12,12 +12,9 @@ const FILES = [
   }
 ];
 
-const HEADER = '```js\n';
-const FOOTER = '```\n';
-
-const loadFile = (path, {header} = {}) => {
+const loadFile = async (path, {header} = {}) => {
   const relativeDir = relative(dirname(path), PROJECT_ROOT_DIR);
-  let content = readFileSync(path, 'utf-8');
+  let content = await fs.readFile(path, 'utf-8');
   // replace relative paths in `require()` to root with "mocha".
   // might not work in the general case. not gonna parse an AST for this
   // e.g. `require('../../lib/foo')` => `require('mocha/lib/foo')`
@@ -28,18 +25,19 @@ const loadFile = (path, {header} = {}) => {
       "require('mocha$1')"
     )
     .trim();
-  return `${HEADER}${header}\n\n${content}${FOOTER}`;
+  return `${header}\n\n${content}`;
 };
 
 /**
  * Loads files from disk (see `FILES` above) to be shown as data.
  * Used for embedding sources directly into pages
  */
-module.exports = () => {
-  const files = FILES.map(({path, header, slug}) => {
-    const content = loadFile(path, {header});
-    return {slug, content};
-  });
+module.exports = async () => {
+  const files = [];
+  for await (const {path, header, slug} of FILES) {
+    const content = await loadFile(path, {header});
+    files.push({slug, content});
+  }
   return files.reduce(
     (files, {slug, content}) => ({
       ...files,

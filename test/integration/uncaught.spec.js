@@ -1,14 +1,17 @@
 'use strict';
 
-var helpers = require('./helpers');
-var run = helpers.runMochaJSON;
-var runMocha = helpers.runMocha;
-var invokeNode = helpers.invokeNode;
+const {
+  runMocha,
+  runMochaJSON: run,
+  invokeMochaAsync,
+  invokeNode,
+  resolveFixturePath
+} = require('./helpers');
 var args = [];
 
 describe('uncaught exceptions', function() {
   it('handles uncaught exceptions from hooks', function(done) {
-    run('uncaught/hook.fixture.js', args, function(err, res) {
+    run('uncaught/hook', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -24,7 +27,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('handles uncaught exceptions from async specs', function(done) {
-    run('uncaught/double.fixture.js', args, function(err, res) {
+    run('uncaught/double', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -44,7 +47,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('handles uncaught exceptions from which Mocha cannot recover', function(done) {
-    run('uncaught/fatal.fixture.js', args, function(err, res) {
+    run('uncaught/fatal', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -61,7 +64,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('handles uncaught exceptions within pending tests', function(done) {
-    run('uncaught/pending.fixture.js', args, function(err, res) {
+    run('uncaught/pending', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -84,7 +87,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('handles uncaught exceptions within open tests', function(done) {
-    run('uncaught/recover.fixture.js', args, function(err, res) {
+    run('uncaught/recover', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -111,8 +114,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('removes uncaught exceptions handlers correctly', function(done) {
-    var path = require.resolve('./fixtures/uncaught/listeners.fixture.js');
-    invokeNode([path], function(err, res) {
+    invokeNode([resolveFixturePath('uncaught/listeners')], function(err, res) {
       if (err) {
         return done(err);
       }
@@ -124,7 +126,7 @@ describe('uncaught exceptions', function() {
 
   it("handles uncaught exceptions after runner's end", function(done) {
     runMocha(
-      'uncaught/after-runner.fixture.js',
+      'uncaught/after-runner',
       args,
       function(err, res) {
         if (err) {
@@ -145,7 +147,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('issue-1327: should run the first test and then bail', function(done) {
-    run('uncaught/issue-1327.fixture.js', args, function(err, res) {
+    run('uncaught/issue-1327', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -159,7 +161,7 @@ describe('uncaught exceptions', function() {
   });
 
   it('issue-1417: uncaught exceptions from async specs', function(done) {
-    run('uncaught/issue-1417.fixture.js', args, function(err, res) {
+    run('uncaught/issue-1417', args, function(err, res) {
       if (err) {
         return done(err);
       }
@@ -172,6 +174,45 @@ describe('uncaught exceptions', function() {
           'fails exactly once when a global error is thrown synchronously and done completes'
         ]);
       done();
+    });
+  });
+
+  describe('issue-4481: behavior of non-Mocha-originating unhandled rejections', function() {
+    describe('when Node is in "warn" mode', function() {
+      it('should warn', async function() {
+        const [, promise] = invokeMochaAsync(
+          [
+            resolveFixturePath('uncaught/unhandled'),
+            '--unhandled-rejections=warn'
+          ],
+          {stdio: 'pipe'}
+        );
+
+        return expect(
+          promise,
+          'when fulfilled',
+          'to have passed with output',
+          /UnhandledPromiseRejectionWarning: Error: yikes/
+        );
+      });
+    });
+
+    describe('when Node is in "strict" mode', function() {
+      it('should fail with an uncaught exception', async function() {
+        const [, promise] = invokeMochaAsync(
+          [
+            resolveFixturePath('uncaught/unhandled'),
+            '--unhandled-rejections=strict'
+          ],
+          {stdio: 'pipe'}
+        );
+        return expect(
+          promise,
+          'when fulfilled',
+          'to have failed with output',
+          /Error: yikes/
+        );
+      });
     });
   });
 });

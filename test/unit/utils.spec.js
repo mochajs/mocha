@@ -1,17 +1,12 @@
 'use strict';
 
 var utils = require('../../lib/utils');
+const errors = require('../../lib/errors');
 var sinon = require('sinon');
 
 describe('lib/utils', function() {
-  var sandbox;
-
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('clean()', function() {
@@ -502,11 +497,11 @@ describe('lib/utils', function() {
     if (typeof global.Symbol === 'function') {
       it('should handle Symbol', function() {
         var symbol = Symbol('value');
-        expect(stringify(symbol), 'to be', 'Symbol(value)');
+        expect(stringify(symbol), 'to match', /^Symbol\(value\)/);
         expect(
           stringify({symbol: symbol}),
-          'to be',
-          '{\n  "symbol": Symbol(value)\n}'
+          'to match',
+          /"symbol": Symbol\(value\)/
         );
       });
     }
@@ -548,6 +543,60 @@ describe('lib/utils', function() {
       expect(type(Infinity), 'to be', 'number');
       expect(type(null), 'to be', 'null');
       expect(type(undefined), 'to be', 'undefined');
+      expect(type(new Date()), 'to be', 'object');
+      expect(type(/foo/), 'to be', 'object');
+      expect(type('type'), 'to be', 'string');
+      expect(type(new Error()), 'to be', 'error');
+      expect(type(global), 'to be', 'object');
+      expect(type(true), 'to be', 'boolean');
+      expect(type(Buffer.from('ff', 'hex')), 'to be', 'object');
+      expect(type(Symbol.iterator), 'to be', 'symbol');
+      expect(type(new Map()), 'to be', 'object');
+      expect(type(new WeakMap()), 'to be', 'object');
+      expect(type(new Set()), 'to be', 'object');
+      expect(type(new WeakSet()), 'to be', 'object');
+      expect(
+        type(async () => {}),
+        'to be',
+        'function'
+      );
+    });
+
+    describe('when toString on null or undefined stringifies window', function() {
+      it('should recognize null and undefined', function() {
+        expect(type(null), 'to be', 'null');
+        expect(type(undefined), 'to be', 'undefined');
+      });
+    });
+
+    afterEach(function() {
+      Object.prototype.toString = toString;
+    });
+  });
+
+  describe('canonicalType()', function() {
+    /* eslint no-extend-native: off */
+
+    var type = utils.canonicalType;
+    var toString = Object.prototype.toString;
+
+    beforeEach(function() {
+      // some JS engines such as PhantomJS 1.x exhibit this behavior
+      Object.prototype.toString = function() {
+        if (this === global) {
+          return '[object DOMWindow]';
+        }
+        return toString.call(this);
+      };
+    });
+
+    it('should recognize various types', function() {
+      expect(type({}), 'to be', 'object');
+      expect(type([]), 'to be', 'array');
+      expect(type(1), 'to be', 'number');
+      expect(type(Infinity), 'to be', 'number');
+      expect(type(null), 'to be', 'null');
+      expect(type(undefined), 'to be', 'undefined');
       expect(type(new Date()), 'to be', 'date');
       expect(type(/foo/), 'to be', 'regexp');
       expect(type('type'), 'to be', 'string');
@@ -564,27 +613,6 @@ describe('lib/utils', function() {
 
     afterEach(function() {
       Object.prototype.toString = toString;
-    });
-  });
-
-  describe('parseQuery()', function() {
-    var parseQuery = utils.parseQuery;
-    it('should get queryString and return key-value object', function() {
-      expect(parseQuery('?foo=1&bar=2&baz=3'), 'to equal', {
-        foo: '1',
-        bar: '2',
-        baz: '3'
-      });
-
-      expect(parseQuery('?r1=^@(?!.*\\)$)&r2=m{2}&r3=^co.*'), 'to equal', {
-        r1: '^@(?!.*\\)$)',
-        r2: 'm{2}',
-        r3: '^co.*'
-      });
-    });
-
-    it('should parse "+" as a space', function() {
-      expect(parseQuery('?grep=foo+bar'), 'to equal', {grep: 'foo bar'});
     });
   });
 
@@ -631,82 +659,6 @@ describe('lib/utils', function() {
       );
       // Ensure we can handle non-trivial unicode characters as well
       expect(utils.escape('💩'), 'to be', '&#x1F4A9;');
-    });
-  });
-
-  describe('deprecate()', function() {
-    var emitWarning;
-
-    beforeEach(function() {
-      if (process.emitWarning) {
-        emitWarning = process.emitWarning;
-        sandbox.stub(process, 'emitWarning');
-      } else {
-        process.emitWarning = sandbox.spy();
-      }
-      utils.deprecate.cache = {};
-    });
-
-    afterEach(function() {
-      // if this is not set, then we created it, so we should remove it.
-      if (!emitWarning) {
-        delete process.emitWarning;
-      }
-    });
-
-    it('should coerce its parameter to a string', function() {
-      utils.deprecate(1);
-      expect(process.emitWarning, 'to have a call satisfying', [
-        '1',
-        'DeprecationWarning'
-      ]);
-    });
-
-    it('should cache the message', function() {
-      utils.deprecate('foo');
-      utils.deprecate('foo');
-      expect(process.emitWarning, 'was called times', 1);
-    });
-
-    it('should ignore falsy messages', function() {
-      utils.deprecate('');
-      expect(process.emitWarning, 'was not called');
-    });
-  });
-
-  describe('warn()', function() {
-    var emitWarning;
-
-    beforeEach(function() {
-      if (process.emitWarning) {
-        emitWarning = process.emitWarning;
-        sandbox.stub(process, 'emitWarning');
-      } else {
-        process.emitWarning = sandbox.spy();
-      }
-    });
-
-    afterEach(function() {
-      // if this is not set, then we created it, so we should remove it.
-      if (!emitWarning) {
-        delete process.emitWarning;
-      }
-    });
-
-    it('should call process.emitWarning', function() {
-      utils.warn('foo');
-      expect(process.emitWarning, 'was called times', 1);
-    });
-
-    it('should not cache messages', function() {
-      utils.warn('foo');
-      utils.warn('foo');
-      expect(process.emitWarning, 'was called times', 2);
-    });
-
-    it('should ignore falsy messages', function() {
-      utils.warn('');
-      expect(process.emitWarning, 'was not called');
     });
   });
 
@@ -767,6 +719,106 @@ describe('lib/utils', function() {
 
     it('should disallow consecutive dashes', function() {
       expect(utils.slug('poppies & fritz'), 'to be', 'poppies-fritz');
+    });
+  });
+
+  describe('castArray()', function() {
+    describe('when provided an array value', function() {
+      it('should return a copy of the array', function() {
+        const v = ['foo', 'bar', 'baz'];
+        expect(utils.castArray(v), 'to equal', ['foo', 'bar', 'baz']).and(
+          'not to be',
+          v
+        );
+      });
+    });
+
+    describe('when provided an "arguments" value', function() {
+      it('should return an array containing the arguments', function() {
+        (function() {
+          expect(utils.castArray(arguments), 'to equal', [
+            'foo',
+            'bar',
+            'baz'
+          ]).and('not to be', arguments);
+        })('foo', 'bar', 'baz');
+      });
+    });
+
+    describe('when provided an object', function() {
+      it('should return an array containing the object only', function() {
+        const v = {foo: 'bar'};
+        expect(utils.castArray(v), 'to equal', [v]);
+      });
+    });
+
+    describe('when provided no parameters', function() {
+      it('should return an empty array', function() {
+        expect(utils.castArray(), 'to equal', []);
+      });
+    });
+
+    describe('when provided a primitive value', function() {
+      it('should return an array containing the primitive value only', function() {
+        expect(utils.castArray('butts'), 'to equal', ['butts']);
+      });
+    });
+
+    describe('when provided null', function() {
+      it('should return an array containing a null value only', function() {
+        expect(utils.castArray(null), 'to equal', [null]);
+      });
+    });
+  });
+
+  describe('lookupFiles()', function() {
+    beforeEach(function() {
+      sinon.stub(errors, 'deprecate');
+    });
+
+    describe('when run in Node.js', function() {
+      before(function() {
+        if (process.browser) {
+          return this.skip();
+        }
+      });
+
+      beforeEach(function() {
+        sinon.stub(utils, 'isBrowser').returns(false);
+        sinon.stub(require('../../lib/cli'), 'lookupFiles').returns([]);
+      });
+
+      it('should print a deprecation message', function() {
+        utils.lookupFiles();
+        expect(errors.deprecate, 'was called once');
+      });
+
+      it('should delegate to new location of lookupFiles()', function() {
+        utils.lookupFiles(['foo']);
+        expect(
+          require('../../lib/cli').lookupFiles,
+          'to have a call satisfying',
+          [['foo']]
+        ).and('was called once');
+      });
+    });
+
+    describe('when run in browser', function() {
+      beforeEach(function() {
+        sinon.stub(utils, 'isBrowser').returns(true);
+      });
+
+      it('should throw', function() {
+        expect(() => utils.lookupFiles(['foo']), 'to throw', {
+          code: 'ERR_MOCHA_UNSUPPORTED'
+        });
+      });
+    });
+  });
+
+  describe('uniqueID()', function() {
+    it('should return a non-empty string', function() {
+      expect(utils.uniqueID(), 'to be a string').and('not to be empty');
     });
   });
 });

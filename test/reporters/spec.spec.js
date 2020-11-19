@@ -19,15 +19,13 @@ describe('Spec reporter', function() {
   var runReporter = makeRunReporter(Spec);
   var expectedTitle = 'expectedTitle';
   var noop = function() {};
-  var sandbox;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
+    sinon.stub(Base, 'useColors').value(false);
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
@@ -45,7 +43,7 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = [expectedTitle + '\n'];
         expect(stdout, 'to equal', expectedArray);
@@ -66,7 +64,7 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = ['  - ' + expectedTitle + '\n'];
         expect(stdout, 'to equal', expectedArray);
@@ -93,7 +91,7 @@ describe('Spec reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedString =
             '  ' +
@@ -127,7 +125,7 @@ describe('Spec reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedString =
             '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
@@ -151,7 +149,7 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = [
           '  ' + functionCount + ') ' + expectedTitle + '\n'

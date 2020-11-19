@@ -7,7 +7,6 @@ var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
 describe('JSON reporter', function() {
-  var sandbox;
   var suite;
   var runner;
   var testTitle = 'json test 1';
@@ -26,12 +25,11 @@ describe('JSON reporter', function() {
   });
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(process.stdout, 'write').callsFake(noop);
+    sinon.stub(process.stdout, 'write').callsFake(noop);
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   it('should have 1 test failure', function(done) {
@@ -45,7 +43,7 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [
@@ -70,13 +68,36 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           pending: [
             {
               title: testTitle,
               file: testFile
+            }
+          ]
+        }
+      });
+      expect(failureCount, 'to be', 0);
+      done();
+    });
+  });
+
+  it('should have 1 test pass', function(done) {
+    const test = new Test(testTitle, () => {});
+
+    test.file = testFile;
+    suite.addTest(test);
+
+    runner.run(function(failureCount) {
+      expect(runner, 'to satisfy', {
+        testResults: {
+          passes: [
+            {
+              title: testTitle,
+              file: testFile,
+              speed: /(slow|medium|fast)/
             }
           ]
         }
@@ -102,7 +123,7 @@ describe('JSON reporter', function() {
     suite.addTest(test);
 
     runner.run(function(failureCount) {
-      sandbox.restore();
+      sinon.restore();
       expect(runner, 'to satisfy', {
         testResults: {
           failures: [

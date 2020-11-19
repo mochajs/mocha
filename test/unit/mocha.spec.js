@@ -4,18 +4,13 @@ var sinon = require('sinon');
 var EventEmitter = require('events').EventEmitter;
 var Mocha = require('../../lib/mocha');
 var utils = require('../../lib/utils');
+const errors = require('../../lib/errors');
 
 describe('Mocha', function() {
   /**
    * Options for `Mocha` constructor
    */
   var opts;
-
-  /**
-   * Sinon sandbox
-   * @see https://sinonjs.org/releases/v9.0.2/sandbox/
-   */
-  var sandbox;
 
   /**
    * Stub `Runner` constructor; returns a stubbed `EventEmitter`
@@ -48,61 +43,67 @@ describe('Mocha', function() {
   var reporterInstance;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
     reporterInstance = {};
-    opts = {reporter: sandbox.stub().returns(reporterInstance)};
+    opts = {reporter: sinon.stub().returns(reporterInstance)};
 
     // NOTE: calling `stub(someObject, someFunction)` where `someFunction` has
     // its own static properties WILL NOT blast those static properties!
-    Base = sandbox.stub(Mocha.reporters, 'Base').returns({});
-    sandbox.stub(Mocha.reporters, 'base').returns({});
-    sandbox.stub(Mocha.reporters, 'spec').returns({});
+    Base = sinon.stub(Mocha.reporters, 'Base').returns({});
+    sinon.stub(Mocha.reporters, 'base').returns({});
+    sinon.stub(Mocha.reporters, 'spec').returns({});
 
-    runner = utils.assign(sandbox.createStubInstance(EventEmitter), {
-      run: sandbox
-        .stub()
-        .callsArgAsync(0)
-        .returnsThis(),
-      globals: sandbox.stub(),
-      grep: sandbox.stub(),
-      dispose: sandbox.stub()
-    });
-    Runner = sandbox.stub(Mocha, 'Runner').returns(runner);
+    runner = {
+      ...sinon.createStubInstance(EventEmitter),
+      runAsync: sinon.stub().resolves(0),
+      globals: sinon.stub(),
+      grep: sinon.stub(),
+      dispose: sinon.stub()
+    };
+    Runner = sinon.stub(Mocha, 'Runner').returns(runner);
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     Runner.constants = {};
-    suite = utils.assign(sandbox.createStubInstance(EventEmitter), {
-      slow: sandbox.stub(),
-      timeout: sandbox.stub(),
-      bail: sandbox.stub(),
-      dispose: sandbox.stub(),
-      reset: sandbox.stub()
-    });
-    Suite = sandbox.stub(Mocha, 'Suite').returns(suite);
+    suite = {
+      ...sinon.createStubInstance(EventEmitter),
+      slow: sinon.stub(),
+      timeout: sinon.stub(),
+      bail: sinon.stub(),
+      dispose: sinon.stub(),
+      reset: sinon.stub(),
+      beforeAll: sinon.stub(),
+      beforeEach: sinon.stub(),
+      afterAll: sinon.stub(),
+      afterEach: sinon.stub()
+    };
+    Suite = sinon.stub(Mocha, 'Suite').returns(suite);
     Suite.constants = {};
 
-    sandbox.stub(utils, 'supportsEsModules').returns(false);
-    sandbox.stub(utils, 'warn');
-    sandbox.stub(utils, 'isString');
-    sandbox.stub(utils, 'noop');
+    sinon.stub(utils, 'supportsEsModules').returns(false);
+    sinon.stub(errors, 'warn');
+    sinon.stub(utils, 'isString');
+    sinon.stub(utils, 'noop');
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('constructor', function() {
     var mocha;
 
     beforeEach(function() {
-      mocha = sandbox.createStubInstance(Mocha);
+      mocha = sinon.createStubInstance(Mocha);
       mocha.timeout.returnsThis();
       mocha.retries.returnsThis();
-      sandbox.stub(Mocha.prototype, 'timeout').returnsThis();
-      sandbox.stub(Mocha.prototype, 'global').returnsThis();
-      sandbox.stub(Mocha.prototype, 'retries').returnsThis();
-      sandbox.stub(Mocha.prototype, 'rootHooks').returnsThis();
-      sandbox.stub(Mocha.prototype, 'parallelMode').returnsThis();
+      sinon.stub(Mocha.prototype, 'timeout').returnsThis();
+      sinon.stub(Mocha.prototype, 'global').returnsThis();
+      sinon.stub(Mocha.prototype, 'retries').returnsThis();
+      sinon.stub(Mocha.prototype, 'rootHooks').returnsThis();
+      sinon.stub(Mocha.prototype, 'parallelMode').returnsThis();
+      sinon.stub(Mocha.prototype, 'globalSetup').returnsThis();
+      sinon.stub(Mocha.prototype, 'globalTeardown').returnsThis();
+      sinon.stub(Mocha.prototype, 'enableGlobalSetup').returnsThis();
+      sinon.stub(Mocha.prototype, 'enableGlobalTeardown').returnsThis();
     });
 
     it('should set _cleanReferencesAfterRun to true', function() {
@@ -181,6 +182,44 @@ describe('Mocha', function() {
           // eslint-disable-next-line no-new
           new Mocha({parallel: true, jobs: 1});
           expect(Mocha.prototype.parallelMode, 'was not called');
+        });
+      });
+
+      describe('when `globalSetup` option is present', function() {
+        it('should configure global setup fixtures', function() {
+          const globalSetup = [() => {}];
+          const mocha = new Mocha({globalSetup});
+          expect(mocha.globalSetup, 'to have a call satisfying', [
+            globalSetup
+          ]).and('was called once');
+        });
+      });
+
+      describe('when `globalTeardown` option is present', function() {
+        it('should configure global teardown fixtures', function() {
+          const globalTeardown = [() => {}];
+          const mocha = new Mocha({globalTeardown});
+          expect(mocha.globalTeardown, 'to have a call satisfying', [
+            globalTeardown
+          ]).and('was called once');
+        });
+      });
+
+      describe('when `enableGlobalSetup` option is present', function() {
+        it('should toggle global setup fixtures', function() {
+          const mocha = new Mocha({enableGlobalSetup: 1});
+          expect(mocha.enableGlobalSetup, 'to have a call satisfying', [1]).and(
+            'was called once'
+          );
+        });
+      });
+
+      describe('when `enableGlobalTeardown` option is present', function() {
+        it('should configure global teardown fixtures', function() {
+          const mocha = new Mocha({enableGlobalTeardown: 1});
+          expect(mocha.enableGlobalTeardown, 'to have a call satisfying', [
+            1
+          ]).and('was called once');
         });
       });
     });
@@ -326,7 +365,7 @@ describe('Mocha', function() {
       });
 
       it('should unload the files', function() {
-        var unloadFilesStub = sandbox.stub(mocha, 'unloadFiles');
+        var unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
         mocha.dispose();
         expect(unloadFilesStub, 'was called once');
       });
@@ -495,20 +534,6 @@ describe('Mocha', function() {
     });
 
     describe('reporter()', function() {
-      it('should throw reporter error if an invalid reporter is given', function() {
-        expect(
-          function() {
-            mocha.reporter('invalidReporter');
-          },
-          'to throw',
-          {
-            message: "invalid reporter 'invalidReporter'",
-            code: 'ERR_MOCHA_INVALID_REPORTER',
-            reporter: 'invalidReporter'
-          }
-        );
-      });
-
       it('should be chainable', function() {
         expect(mocha.reporter(), 'to be', mocha);
       });
@@ -536,24 +561,20 @@ describe('Mocha', function() {
         // To support the legacy property name that can be used by reporters
         expect(mocha.options.reporterOptions, 'to have property', 'foo', 'bar');
       });
-
-      describe('when a reporter does not exist', function() {
-        it('should throw an "invalid reporter" exception', function() {
-          expect(
-            function() {
-              mocha.reporter('no such thing');
-            },
-            'to throw',
-            {code: 'ERR_MOCHA_INVALID_REPORTER'}
-          );
-        });
-      });
     });
 
     describe('run()', function() {
+      let globalFixtureContext;
+
+      beforeEach(function() {
+        globalFixtureContext = {};
+        sinon.stub(mocha, 'runGlobalSetup').returns(globalFixtureContext);
+        sinon.stub(mocha, 'runGlobalTeardown').returns(globalFixtureContext);
+      });
+
       describe('when files have been added to the Mocha instance', function() {
         beforeEach(function() {
-          sandbox.stub(mocha, 'loadFiles');
+          sinon.stub(mocha, 'loadFiles');
           mocha.addFile('some-file.js');
         });
 
@@ -633,7 +654,7 @@ describe('Mocha', function() {
       describe('when "growl" option is present', function() {
         beforeEach(function() {
           mocha.options.growl = true;
-          sandbox.stub(Mocha.prototype, '_growl').returnsThis();
+          sinon.stub(Mocha.prototype, '_growl').returnsThis();
         });
 
         it('should initialize growl support', function(done) {
@@ -693,7 +714,7 @@ describe('Mocha', function() {
 
       describe('when a reporter instance has a "done" method', function() {
         beforeEach(function() {
-          reporterInstance.done = sandbox.stub().callsArgAsync(1);
+          reporterInstance.done = sinon.stub().callsArgAsync(1);
         });
 
         it('should call the reporter "done" method', function(done) {
@@ -723,13 +744,14 @@ describe('Mocha', function() {
           );
         });
 
-        it('should not call `Runner#run`', function(done) {
+        it('should not call `Runner#runAsync`', function(done) {
           mocha.run(done); // this is async!
           try {
             mocha.run();
           } catch (ignored) {
           } finally {
-            expect(runner.run, 'was called once');
+            // it'll be 0 or 1, depending on timing.
+            expect(runner.runAsync.callCount, 'to be less than', 2);
           }
         });
       });
@@ -753,12 +775,12 @@ describe('Mocha', function() {
           );
         });
 
-        it('should not call `Runner#run`', function() {
+        it('should not call `Runner#runAsync`', function() {
           try {
             mocha.run();
           } catch (ignored) {
           } finally {
-            expect(runner.run, 'was not called');
+            expect(runner.runAsync, 'was not called');
           }
         });
       });
@@ -766,7 +788,7 @@ describe('Mocha', function() {
       describe('when a run has finished and is called again', function() {
         beforeEach(function(done) {
           mocha.run(function() {
-            runner.run.reset();
+            runner.runAsync.reset();
             done();
           });
         });
@@ -784,12 +806,12 @@ describe('Mocha', function() {
           );
         });
 
-        it('should not call `Runner#run()`', function() {
+        it('should not call `Runner#runAsync()`', function() {
           try {
             mocha.run();
           } catch (ignored) {
           } finally {
-            expect(runner.run, 'was not called');
+            expect(runner.runAsync, 'was not called');
           }
         });
       });
@@ -805,10 +827,10 @@ describe('Mocha', function() {
           });
         });
 
-        it('should call `Runner#run` for each call', function(done) {
+        it('should call `Runner#runAsync` for each call', function(done) {
           mocha.run(function() {
             mocha.run(function() {
-              expect(runner.run, 'was called twice');
+              expect(runner.runAsync, 'was called twice');
               done();
             });
           });
@@ -832,12 +854,159 @@ describe('Mocha', function() {
           });
         });
       });
+
+      describe('when global setup fixtures enabled', function() {
+        beforeEach(function() {
+          mocha.options.enableGlobalSetup = true;
+        });
+        describe('when global setup fixtures not present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalSetupFixtures').returns(false);
+          });
+
+          it('should not run global setup fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalSetup, 'was not called');
+              done();
+            });
+          });
+        });
+
+        describe('when global setup fixtures are present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalSetupFixtures').returns(true);
+          });
+
+          it('should run global setup fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalSetup, 'to have a call satisfying', {
+                args: [expect.it('to be', runner)]
+              }).and('was called once');
+              done();
+            });
+          });
+        });
+      });
+
+      describe('when global setup fixtures disabled', function() {
+        beforeEach(function() {
+          mocha.options.enableGlobalSetup = false;
+        });
+        describe('when global setup fixtures not present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalSetupFixtures').returns(false);
+          });
+
+          it('should not run global setup fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalSetup, 'was not called');
+              done();
+            });
+          });
+        });
+
+        describe('when global setup fixtures are present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalSetupFixtures').returns(true);
+          });
+
+          it('should not run global setup fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalSetup, 'was not called');
+              done();
+            });
+          });
+        });
+      });
+
+      describe('when global teardown fixtures enabled', function() {
+        beforeEach(function() {
+          mocha.options.enableGlobalTeardown = true;
+        });
+        describe('when global teardown fixtures not present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalTeardownFixtures').returns(false);
+          });
+
+          it('should not run global teardown fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalTeardown, 'was not called');
+              done();
+            });
+          });
+        });
+
+        describe('when global teardown fixtures are present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalTeardownFixtures').returns(true);
+          });
+
+          it('should run global teardown fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalTeardown, 'to have a call satisfying', {
+                args: [expect.it('to be', runner), {context: {}}]
+              }).and('was called once');
+              done();
+            });
+          });
+
+          describe('when global setup fixtures are present and enabled', function() {
+            beforeEach(function() {
+              sinon.stub(mocha, 'hasGlobalSetupFixtures').returns(true);
+              mocha.options.enableGlobalSetup = true;
+            });
+
+            it('should use the same context as returned by `runGlobalSetup`', function(done) {
+              mocha.run(() => {
+                expect(mocha.runGlobalTeardown, 'to have a call satisfying', {
+                  args: [
+                    expect.it('to be', runner),
+                    {context: globalFixtureContext}
+                  ]
+                }).and('was called once');
+                done();
+              });
+            });
+          });
+        });
+      });
+
+      describe('when global teardown fixtures disabled', function() {
+        beforeEach(function() {
+          mocha.options.enableGlobalTeardown = false;
+        });
+        describe('when global teardown fixtures not present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalTeardownFixtures').returns(false);
+          });
+
+          it('should not run global teardown fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalTeardown, 'was not called');
+              done();
+            });
+          });
+        });
+
+        describe('when global teardown fixtures are present', function() {
+          beforeEach(function() {
+            sinon.stub(mocha, 'hasGlobalTeardownFixtures').returns(true);
+          });
+
+          it('should not run global teardown fixtures', function(done) {
+            mocha.run(() => {
+              expect(mocha.runGlobalTeardown, 'was not called');
+              done();
+            });
+          });
+        });
+      });
     });
 
     describe('parallelMode()', function() {
       describe('when `Mocha` is running in a browser', function() {
         beforeEach(function() {
-          sandbox.stub(utils, 'isBrowser').returns(true);
+          sinon.stub(utils, 'isBrowser').returns(true);
         });
 
         it('should throw', function() {
@@ -848,6 +1017,223 @@ describe('Mocha', function() {
             'to throw',
             {code: 'ERR_MOCHA_UNSUPPORTED'}
           );
+        });
+      });
+    });
+
+    describe('unloadFile()', function() {
+      describe('when run in a browser', function() {
+        beforeEach(function() {
+          sinon.stub(utils, 'isBrowser').returns(true);
+        });
+
+        it('should throw', function() {
+          expect(() => Mocha.unloadFile('guy-fieri.js'), 'to throw', {
+            code: 'ERR_MOCHA_UNSUPPORTED'
+          });
+        });
+      });
+    });
+
+    describe('_runGlobalFixtures()', function() {
+      it('should execute multiple fixtures in order', async function() {
+        const fixtures = [
+          sinon.stub().resolves('foo'),
+          sinon.stub().returns('bar')
+        ];
+        const context = await mocha._runGlobalFixtures(fixtures);
+
+        return expect(fixtures, 'to satisfy', [
+          expect.it('to have a call satisfying', {
+            thisValue: context,
+            returnValue: expect.it('to be fulfilled with', 'foo')
+          }),
+          expect.it('to have a call satisfying', {
+            thisValue: context,
+            returnValue: 'bar'
+          })
+        ]);
+      });
+    });
+
+    describe('runGlobalSetup()', function() {
+      let context;
+
+      beforeEach(function() {
+        sinon.stub(mocha, '_runGlobalFixtures').resolvesArg(1);
+        context = {};
+      });
+
+      describe('when fixture(s) are present', function() {
+        beforeEach(function() {
+          mocha.options.globalSetup = [sinon.spy()];
+        });
+
+        it('should attempt run the fixtures', async function() {
+          await mocha.runGlobalSetup(context);
+          expect(mocha._runGlobalFixtures, 'to have a call satisfying', [
+            mocha.options.globalSetup,
+            context
+          ]);
+        });
+      });
+
+      describe('when a fixture is not present', function() {
+        it('should not attempt to run fixtures', async function() {
+          await mocha.runGlobalSetup();
+          expect(mocha._runGlobalFixtures, 'was not called');
+        });
+      });
+    });
+
+    describe('runGlobalTeardown()', function() {
+      let context;
+
+      beforeEach(function() {
+        sinon.stub(mocha, '_runGlobalFixtures').resolvesArg(1);
+        context = {};
+      });
+
+      describe('when fixture(s) are present', function() {
+        beforeEach(function() {
+          mocha.options.globalTeardown = [sinon.spy()];
+        });
+
+        it('should attempt to run the fixtures', async function() {
+          await mocha.runGlobalTeardown();
+          expect(mocha._runGlobalFixtures, 'to have a call satisfying', [
+            mocha.options.globalTeardown,
+            context
+          ]);
+        });
+      });
+
+      describe('when a fixture is not present', function() {
+        it('not attempt to run the fixtures', async function() {
+          await mocha.runGlobalTeardown();
+          expect(mocha._runGlobalFixtures, 'was not called');
+        });
+      });
+    });
+
+    describe('hasGlobalSetupFixtures()', function() {
+      describe('when one or more global setup fixtures are present', function() {
+        it('should return `true`', function() {
+          mocha.options.globalSetup = [() => {}];
+          expect(mocha.hasGlobalSetupFixtures(), 'to be true');
+        });
+      });
+
+      describe('when no global setup fixtures are present', function() {
+        it('should return `false`', function() {
+          mocha.options.globalSetup = [];
+          expect(mocha.hasGlobalSetupFixtures(), 'to be false');
+        });
+      });
+    });
+
+    describe('hasGlobalTeardownFixtures()', function() {
+      describe('when one or more global teardown fixtures are present', function() {
+        it('should return `true`', function() {
+          mocha.options.globalTeardown = [() => {}];
+          expect(mocha.hasGlobalTeardownFixtures(), 'to be true');
+        });
+      });
+
+      describe('when no global teardown fixtures are present', function() {
+        it('should return `false`', function() {
+          mocha.options.globalTeardown = [];
+          expect(mocha.hasGlobalTeardownFixtures(), 'to be false');
+        });
+      });
+    });
+
+    describe('rootHooks()', function() {
+      it('should be chainable', function() {
+        expect(mocha.rootHooks(), 'to be', mocha);
+      });
+
+      describe('when provided a single "before all" hook', function() {
+        it('should attach it to the root suite', function() {
+          const beforeAll = () => {};
+          mocha.rootHooks({beforeAll});
+          expect(mocha.suite.beforeAll, 'to have a call satisfying', [
+            beforeAll
+          ]).and('was called once');
+        });
+      });
+
+      describe('when provided a single "before each" hook', function() {
+        it('should attach it to the root suite', function() {
+          const beforeEach = () => {};
+          mocha.rootHooks({beforeEach});
+          expect(mocha.suite.beforeEach, 'to have a call satisfying', [
+            beforeEach
+          ]).and('was called once');
+        });
+      });
+
+      describe('when provided a single "after all" hook', function() {
+        it('should attach it to the root suite', function() {
+          const afterAll = () => {};
+          mocha.rootHooks({afterAll});
+          expect(mocha.suite.afterAll, 'to have a call satisfying', [
+            afterAll
+          ]).and('was called once');
+        });
+      });
+
+      describe('when provided a single "after each" hook', function() {
+        it('should attach it to the root suite', function() {
+          const afterEach = () => {};
+          mocha.rootHooks({afterEach});
+          expect(mocha.suite.afterEach, 'to have a call satisfying', [
+            afterEach
+          ]).and('was called once');
+        });
+      });
+
+      describe('when provided multiple "before all" hooks', function() {
+        it('should attach each to the root suite', function() {
+          const beforeAll = [() => {}, () => {}];
+          mocha.rootHooks({beforeAll});
+          expect(mocha.suite.beforeAll, 'to have calls satisfying', [
+            [beforeAll[0]],
+            [beforeAll[1]]
+          ]).and('was called twice');
+        });
+      });
+
+      describe('when provided multiple "before each" hooks', function() {
+        it('should attach each to the root suite', function() {
+          const beforeEach = [() => {}, () => {}];
+          mocha.rootHooks({beforeEach});
+          expect(mocha.suite.beforeEach, 'to have calls satisfying', [
+            [beforeEach[0]],
+            [beforeEach[1]]
+          ]).and('was called twice');
+        });
+      });
+
+      describe('when provided multiple "after all" hooks', function() {
+        it('should attach each to the root suite', function() {
+          const afterAll = [() => {}, () => {}];
+          mocha.rootHooks({afterAll});
+          expect(mocha.suite.afterAll, 'to have calls satisfying', [
+            [afterAll[0]],
+            [afterAll[1]]
+          ]).and('was called twice');
+        });
+      });
+
+      describe('when provided multiple "after each" hooks', function() {
+        it('should attach each to the root suite', function() {
+          const afterEach = [() => {}, () => {}];
+          mocha.rootHooks({afterEach});
+          expect(mocha.suite.afterEach, 'to have calls satisfying', [
+            [afterEach[0]],
+            [afterEach[1]]
+          ]).and('was called twice');
         });
       });
     });

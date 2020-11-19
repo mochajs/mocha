@@ -14,8 +14,8 @@ describe('retries', function () {
   });
   
   it('check for updated `suite.tests`', function() {
-    assert.equal(self.tests[0]._currentRetry, 1);
+    assert.strictEqual(self.tests[0]._currentRetry, 1);
     assert.ok(self.tests[0]._retriedTest);
-    assert.equal(self.tests[0].state, 'passed');
+    assert.strictEqual(self.tests[0].state, 'passed');
   })
 });

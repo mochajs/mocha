@@ -2,10 +2,9 @@
 
 const path = require('path');
 const rewiremock = require('rewiremock/node');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const {EventEmitter} = require('events');
 
-const MODULE_PATH = require.resolve('../../lib/mocha.js');
 const DUMB_FIXTURE_PATH = require.resolve('./fixtures/dumb-module.fixture.js');
 const DUMBER_FIXTURE_PATH = require.resolve(
   './fixtures/dumber-module.fixture.js'
@@ -15,51 +14,62 @@ describe('Mocha', function() {
   let stubs;
   let opts;
   let Mocha;
-  let sandbox;
 
   beforeEach(function() {
-    sandbox = createSandbox();
-    opts = {reporter: sandbox.stub()};
+    opts = {reporter: sinon.stub()};
 
     stubs = {};
-    stubs.utils = {
-      supportsEsModules: sandbox.stub().returns(false),
-      warn: sandbox.stub(),
-      isString: sandbox.stub(),
-      noop: sandbox.stub(),
-      cwd: sandbox.stub().returns(process.cwd()),
-      isBrowser: sandbox.stub().returns(false)
-    };
-    stubs.suite = Object.assign(sandbox.createStubInstance(EventEmitter), {
-      slow: sandbox.stub(),
-      timeout: sandbox.stub(),
-      bail: sandbox.stub(),
-      reset: sandbox.stub(),
-      dispose: sandbox.stub()
-    });
-    stubs.Suite = sandbox.stub().returns(stubs.suite);
-    stubs.Suite.constants = {};
-    stubs.BufferedRunner = sandbox.stub().returns({});
-    const runner = Object.assign(sandbox.createStubInstance(EventEmitter), {
-      run: sandbox
+    stubs.errors = {
+      warn: sinon.stub(),
+      createMochaInstanceAlreadyDisposedError: sinon
         .stub()
-        .callsArgAsync(0)
-        .returnsThis(),
-      globals: sandbox.stub(),
-      grep: sandbox.stub(),
-      dispose: sandbox.stub()
+        .throws({code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}),
+      createInvalidReporterError: sinon
+        .stub()
+        .throws({code: 'ERR_MOCHA_INVALID_REPORTER'}),
+      createUnsupportedError: sinon
+        .stub()
+        .throws({code: 'ERR_MOCHA_UNSUPPORTED'})
+    };
+    stubs.utils = {
+      supportsEsModules: sinon.stub().returns(false),
+      isString: sinon.stub(),
+      noop: sinon.stub(),
+      cwd: sinon.stub().returns(process.cwd()),
+      isBrowser: sinon.stub().returns(false)
+    };
+    stubs.suite = Object.assign(sinon.createStubInstance(EventEmitter), {
+      slow: sinon.stub(),
+      timeout: sinon.stub(),
+      bail: sinon.stub(),
+      reset: sinon.stub(),
+      dispose: sinon.stub()
     });
-    stubs.Runner = sandbox.stub().returns(runner);
+    stubs.Suite = sinon.stub().returns(stubs.suite);
+    stubs.Suite.constants = {};
+    stubs.ParallelBufferedRunner = sinon.stub().returns({});
+    const runner = Object.assign(sinon.createStubInstance(EventEmitter), {
+      runAsync: sinon.stub().resolves(0),
+      globals: sinon.stub(),
+      grep: sinon.stub(),
+      dispose: sinon.stub()
+    });
+    stubs.Runner = sinon.stub().returns(runner);
     // the Runner constructor is the main export, and constants is a static prop.
     // we don't need the constants themselves, but the object cannot be undefined
     stubs.Runner.constants = {};
 
-    Mocha = rewiremock.proxy(MODULE_PATH, r => ({
-      '../../lib/utils.js': r.with(stubs.utils).callThrough(),
-      '../../lib/suite.js': stubs.Suite,
-      '../../lib/nodejs/parallel-buffered-runner.js': stubs.BufferedRunner,
-      '../../lib/runner.js': stubs.Runner
-    }));
+    Mocha = rewiremock.proxy(
+      () => require('../../lib/mocha'),
+      r => ({
+        '../../lib/utils.js': r.with(stubs.utils).callThrough(),
+        '../../lib/suite.js': stubs.Suite,
+        '../../lib/nodejs/parallel-buffered-runner.js':
+          stubs.ParallelBufferedRunner,
+        '../../lib/runner.js': stubs.Runner,
+        '../../lib/errors.js': stubs.errors
+      })
+    );
     delete require.cache[DUMB_FIXTURE_PATH];
     delete require.cache[DUMBER_FIXTURE_PATH];
   });
@@ -67,7 +77,7 @@ describe('Mocha', function() {
   afterEach(function() {
     delete require.cache[DUMB_FIXTURE_PATH];
     delete require.cache[DUMBER_FIXTURE_PATH];
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('instance method', function() {
@@ -86,14 +96,14 @@ describe('Mocha', function() {
         describe('when parallel mode is already enabled', function() {
           beforeEach(function() {
             mocha.options.parallel = true;
-            mocha._runnerClass = stubs.BufferedRunner;
+            mocha._runnerClass = stubs.ParallelBufferedRunner;
             mocha._lazyLoadFiles = true;
           });
 
           it('should not swap the Runner, nor change lazy loading setting', function() {
             expect(mocha.parallelMode(true), 'to satisfy', {
               options: {parallel: true},
-              _runnerClass: stubs.BufferedRunner,
+              _runnerClass: stubs.ParallelBufferedRunner,
               _lazyLoadFiles: true
             });
           });
@@ -124,13 +134,14 @@ describe('Mocha', function() {
             describe('when `Mocha` instance is in `INIT` state', function() {
               beforeEach(function() {
                 mocha._state = 'init';
-                // this is broken
-                this.skip();
               });
 
               it('should enable parallel mode', function() {
+                // FIXME: the dynamic require() call breaks the mock of
+                // `ParallelBufferedRunner` and returns the real class.
+                // don't know how to make this work or if it's even possible
                 expect(mocha.parallelMode(true), 'to satisfy', {
-                  _runnerClass: stubs.BufferedRunner,
+                  _runnerClass: expect.it('not to be', Mocha.Runner),
                   options: {
                     parallel: true
                   },
@@ -146,7 +157,7 @@ describe('Mocha', function() {
 
               it('should throw', function() {
                 expect(
-                  function() {
+                  () => {
                     mocha.parallelMode(true);
                   },
                   'to throw',
@@ -211,7 +222,7 @@ describe('Mocha', function() {
     describe('unloadFiles()', function() {
       it('should delegate Mocha.unloadFile() for each item in its list of files', function() {
         mocha.files = [DUMB_FIXTURE_PATH, DUMBER_FIXTURE_PATH];
-        sandbox.stub(Mocha, 'unloadFile');
+        sinon.stub(Mocha, 'unloadFile');
         mocha.unloadFiles();
         expect(Mocha.unloadFile, 'to have a call exhaustively satisfying', [
           DUMB_FIXTURE_PATH
@@ -261,7 +272,7 @@ describe('Mocha', function() {
               );
             } catch (ignored) {
             } finally {
-              expect(stubs.utils.warn, 'to have a call satisfying', [
+              expect(stubs.errors.warn, 'to have a call satisfying', [
                 expect.it('to match', /reporter blew up/)
               ]);
             }
@@ -298,7 +309,7 @@ describe('Mocha', function() {
               );
             } catch (ignored) {
             } finally {
-              expect(stubs.utils.warn, 'to have a call satisfying', [
+              expect(stubs.errors.warn, 'to have a call satisfying', [
                 expect.it('to match', /reporter blew up/)
               ]);
             }
@@ -322,7 +333,7 @@ describe('Mocha', function() {
             mocha.unloadFiles();
           },
           'to throw',
-          'Mocha instance is already disposed, it cannot be used again.'
+          {code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}
         );
       });
     });

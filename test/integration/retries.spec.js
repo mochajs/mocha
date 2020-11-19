@@ -20,7 +20,7 @@ describe('retries', function() {
         }
 
         lines = res.output
-          .split(helpers.splitRegExp)
+          .split(helpers.SPLIT_DOT_REPORTER_REGEXP)
           .map(function(line) {
             return line.trim();
           })
@@ -102,7 +102,7 @@ describe('retries', function() {
         }
 
         lines = res.output
-          .split(helpers.splitRegExp)
+          .split(helpers.SPLIT_DOT_REPORTER_REGEXP)
           .map(function(line) {
             return line.trim();
           })

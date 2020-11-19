@@ -30,21 +30,21 @@ function runMochaForHookOutput(args, opts) {
   return invokeMochaAsync(args, opts)[1].then(extractHookOutputFromResult);
 }
 
-describe('--require', function() {
+describe('root hooks', function() {
   describe('when mocha run in serial mode', function() {
     it('should run root hooks when provided via mochaHooks object export', function() {
       return expect(
         runMochaForHookOutput([
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-a.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
             ),
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-b.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-b.fixture.js'
             ),
           require.resolve(
-            '../fixtures/options/require/root-hook-test.fixture.js'
+            '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
           )
         ]),
         'to be fulfilled with',
@@ -70,14 +70,14 @@ describe('--require', function() {
         runMochaForHookOutput([
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-c.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-c.fixture.js'
             ),
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-d.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-d.fixture.js'
             ),
           require.resolve(
-            '../fixtures/options/require/root-hook-test.fixture.js'
+            '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
           )
         ]),
         'to be fulfilled with',
@@ -110,20 +110,20 @@ describe('--require', function() {
               '--require=' +
                 require.resolve(
                   // as object
-                  '../fixtures/options/require/root-hook-defs-esm.fixture.mjs'
+                  '../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.mjs'
                 ),
               '--require=' +
                 require.resolve(
                   // as function
-                  '../fixtures/options/require/esm/root-hook-defs-esm.fixture.js'
+                  '../fixtures/plugins/root-hooks/esm/root-hook-defs-esm.fixture.js'
                 ),
               '--require=' +
                 require.resolve(
                   // mixed with commonjs
-                  '../fixtures/options/require/root-hook-defs-a.fixture.js'
+                  '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
                 ),
               require.resolve(
-                '../fixtures/options/require/root-hook-test.fixture.js'
+                '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
               )
             ].concat(
               +process.versions.node.split('.')[0] >= 13
@@ -158,7 +158,7 @@ describe('--require', function() {
               '--require=' +
                 require.resolve(
                   // as object
-                  '../fixtures/options/require/root-hook-defs-esm-broken.fixture.js'
+                  '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
                 )
             ].concat(
               +process.versions.node.split('.')[0] >= 13
@@ -181,15 +181,15 @@ describe('--require', function() {
         runMochaForHookOutput([
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-a.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
             ),
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-b.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-b.fixture.js'
             ),
           '--parallel',
           require.resolve(
-            '../fixtures/options/require/root-hook-test.fixture.js'
+            '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
           )
         ]),
         'to be fulfilled with',
@@ -215,15 +215,15 @@ describe('--require', function() {
         runMochaForHookOutput([
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-c.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-c.fixture.js'
             ),
           '--require=' +
             require.resolve(
-              '../fixtures/options/require/root-hook-defs-d.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-defs-d.fixture.js'
             ),
           '--parallel',
           require.resolve(
-            '../fixtures/options/require/root-hook-test.fixture.js'
+            '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
           )
         ]),
         'to be fulfilled with',
@@ -250,18 +250,18 @@ describe('--require', function() {
           runMochaForHookOutput([
             '--require=' +
               require.resolve(
-                '../fixtures/options/require/root-hook-defs-a.fixture.js'
+                '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
               ),
             '--require=' +
               require.resolve(
-                '../fixtures/options/require/root-hook-defs-b.fixture.js'
+                '../fixtures/plugins/root-hooks/root-hook-defs-b.fixture.js'
               ),
             '--parallel',
             require.resolve(
-              '../fixtures/options/require/root-hook-test.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
             ),
             require.resolve(
-              '../fixtures/options/require/root-hook-test-2.fixture.js'
+              '../fixtures/plugins/root-hooks/root-hook-test-2.fixture.js'
             )
           ]),
           'to be fulfilled with',

@@ -23,8 +23,11 @@ function test(testName, mochaParams) {
   if (process.env.MOCHA_PARALLEL === '0') {
     mochaParams += ' --no-parallel';
   }
-  if (process.env.TRAVIS) {
-    mochaParams += ' --color'; // force color in travis-ci
+  if (process.env.MOCHA_REPORTER) {
+    mochaParams += ` --reporter=${process.env.MOCHA_REPORTER}`;
+  }
+  if (process.env.CI) {
+    mochaParams += ' --color'; // force color in CI
   }
   return `${
     process.env.COVERAGE ? coverageCommand : ''
@@ -34,21 +37,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `browserify -e browser-entry.js \
-      --plugin ./scripts/dedefine \
-      --ignore 'chokidar' \
-      --ignore 'fs' \
-      --ignore 'glob' \
-      --ignore 'path' \
-      --ignore 'supports-color' \
-      --ignore './lib/cli/*.js' \
-      --ignore './lib/esm-utils.js' \
-      --ignore './lib/nodejs/serializer.js' \
-      --ignore './lib/nodejs/parallel-buffered-runner.js' \
-      --ignore './lib/nodejs/reporters/parallel-buffered.js' \
-      --ignore './lib/nodejs/worker.js' \
-      --ignore './lib/nodejs/buffered-worker-pool.js' \
-      -o mocha.js`,
+      script: `rollup -c`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -89,7 +78,7 @@ module.exports = {
     },
     test: {
       default: {
-        script: 'nps lint test.node test.browser test.bundle',
+        script: 'nps lint test.node test.browser',
         description: 'Run all linters and all tests'
       },
       node: {
@@ -172,30 +161,12 @@ module.exports = {
         only: {
           default: {
             script: `nps ${[
-              'test.node.only.bdd',
-              'test.node.only.tdd',
               'test.node.only.bddRequire',
               'test.node.only.globalBdd',
               'test.node.only.globalTdd',
               'test.node.only.globalQunit'
             ].join(' ')}   `,
             description: 'Run Node.js "only" functionality tests',
-            hiddenFromHelp: true
-          },
-          bdd: {
-            script: test(
-              'only-bdd',
-              '--ui bdd test/only/bdd.spec --no-parallel'
-            ),
-            description: 'Run Node.js "only" w/ BDD interface tests',
-            hiddenFromHelp: true
-          },
-          tdd: {
-            script: test(
-              'only-tdd',
-              '--ui tdd test/only/tdd.spec --no-parallel'
-            ),
-            description: 'Run Node.js "only" w/ TDD interface tests',
             hiddenFromHelp: true
           },
           bddRequire: {
@@ -235,11 +206,11 @@ module.exports = {
       browser: {
         default: {
           script:
-            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm',
+            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.requirejs test.browser.webpack',
           description: 'Run browser tests'
         },
         unit: {
-          script: 'cross-env NODE_PATH=. karma start --single-run',
+          script: 'cross-env NODE_PATH=. karma start --single-run --colors',
           description: 'Run browser unit tests'
         },
         bdd: {
@@ -261,16 +232,16 @@ module.exports = {
           script: 'cross-env MOCHA_TEST=esm nps test.browser.unit',
           description: 'Run browser ES modules support test',
           hiddenFromHelp: true
-        }
-      },
-      bundle: {
-        default: {
-          script: 'nps clean build test.bundle.amd',
-          description: 'Run bundle-related tests'
         },
-        amd: {
-          script: test('amd', 'test/bundle/amd.spec'),
-          description: 'Run AMD bundle tests',
+        requirejs: {
+          script: 'cross-env MOCHA_TEST=requirejs nps test.browser.unit',
+          description: 'Run RequireJS compat test',
+          hiddenFromHelp: true
+        },
+        webpack: {
+          script:
+            'webpack --mode development --config ./test/browser-specific/fixtures/webpack/webpack.config.js',
+          description: 'Run Webpack compat test',
           hiddenFromHelp: true
         }
       }
@@ -280,6 +251,10 @@ module.exports = {
       description: 'Send code coverage report to coveralls (run during CI)',
       hiddenFromHelp: true
     },
+    'coverage-report-lcov': {
+      script: 'nyc report --reporter=lcov',
+      description: 'Write LCOV report to disk (run tests with COVERAGE=1 first)'
+    },
     'coverage-report': {
       script: 'nyc report --reporter=html',
       description:
@@ -288,11 +263,15 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.prebuild && nps docs.api && eleventy && nps docs.linkcheck && nps docs.postbuild',
+          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
         description: 'Build documentation'
       },
-      prebuild: {
-        script: 'rimraf docs/_dist docs/_site',
+      production: {
+        script: 'nps docs && nps docs.postbuild',
+        description: 'Build docs for production'
+      },
+      clean: {
+        script: 'rimraf docs/_dist docs/_site docs/api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
@@ -302,7 +281,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js >> docs/_dist/_headers',
+          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js docs/_dist >> docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },

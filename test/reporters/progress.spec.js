@@ -15,27 +15,22 @@ var EVENT_RUN_END = events.EVENT_RUN_END;
 var EVENT_TEST_END = events.EVENT_TEST_END;
 
 describe('Progress reporter', function() {
-  var sandbox;
   var runReporter = makeRunReporter(Progress);
   var noop = function() {};
 
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('event handlers', function() {
     describe("on 'start' event", function() {
       it('should call cursor hide', function() {
-        var hideCursorStub = sandbox.stub(Base.cursor, 'hide');
+        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
 
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var options = {};
         runReporter({}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(hideCursorStub.called, 'to be true');
       });
@@ -44,9 +39,9 @@ describe('Progress reporter', function() {
     describe("on 'test end' event", function() {
       describe('when line has changed', function() {
         it('should write expected progress of open and close options', function() {
-          var crCursorStub = sandbox.stub(Base.cursor, 'CR').callsFake(noop);
-          sandbox.stub(Base, 'useColors').value(false);
-          sandbox.stub(Base.window, 'width').value(5);
+          var crCursorStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
+          sinon.stub(Base, 'useColors').value(false);
+          sinon.stub(Base.window, 'width').value(5);
 
           var expectedTotal = 12;
           var expectedOpen = 'OpEn';
@@ -65,7 +60,7 @@ describe('Progress reporter', function() {
             reporterOptions: expectedOptions
           };
           var stdout = runReporter({}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedArray = [
             '\u001b[J',
@@ -82,16 +77,16 @@ describe('Progress reporter', function() {
 
       describe('when line has not changed', function() {
         it('should not write anything', function() {
-          sandbox.stub(Base, 'useColors').value(false);
-          sandbox.stub(Base.cursor, 'CR').callsFake(noop);
-          sandbox.stub(Base.window, 'width').value(-3);
+          sinon.stub(Base, 'useColors').value(false);
+          sinon.stub(Base.cursor, 'CR').callsFake(noop);
+          sinon.stub(Base.window, 'width').value(-3);
 
           var expectedTotal = 1;
           var runner = createMockRunner('test end', EVENT_TEST_END);
           runner.total = expectedTotal;
           var options = {};
           var stdout = runReporter({}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           expect(stdout, 'to equal', []);
         });
@@ -100,14 +95,14 @@ describe('Progress reporter', function() {
 
     describe("on 'end' event", function() {
       it('should call cursor show and epilogue', function() {
-        var showCursorStub = sandbox.stub(Base.cursor, 'show');
+        var showCursorStub = sinon.stub(Base.cursor, 'show');
         var fakeThis = {
           epilogue: sinon.spy()
         };
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(fakeThis.epilogue.calledOnce, 'to be true');
         expect(showCursorStub.called, 'to be true');

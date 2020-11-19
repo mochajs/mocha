@@ -17,7 +17,8 @@ module.exports = () => {
       },
       'package.json',
       'test/opts/mocha.opts',
-      'mocharc.yml'
+      'mocharc.yml',
+      '!lib/browser/growl.js'
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
@@ -48,6 +49,7 @@ module.exports = () => {
       );
       require('./test/setup');
     },
-    debug: true
+    debug: true,
+    runMode: 'onsave'
   };
 };

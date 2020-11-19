@@ -6,7 +6,10 @@ For example, if `mocha-foo-reporter` was published to the npm registry, you coul
 
 If you're looking to get started quickly, here's an example of a custom reporter:
 
+<!-- prettier-ignore -->
+```js
 {{ files.simplereporter }}
+```
 
 To use this reporter, execute `mocha --reporter /path/to/my-reporter.js`.
 

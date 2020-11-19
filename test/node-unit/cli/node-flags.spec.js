@@ -1,33 +1,40 @@
 'use strict';
 
-const nodeEnvFlags = process.allowedNodeEnvironmentFlags;
+const nodeEnvFlags = [...process.allowedNodeEnvironmentFlags];
 const {
   isNodeFlag,
   impliesNoTimeouts,
   unparseNodeFlags
 } = require('../../../lib/cli/node-flags');
 
+const {isMochaFlag} = require('../../../lib/cli/run-option-metadata');
+
 describe('node-flags', function() {
   describe('isNodeFlag()', function() {
     describe('for all allowed node environment flags', function() {
-      // NOTE: this is not stubbing nodeEnvFlags in any way, so relies on
-      // the userland polyfill to be correct.
-      nodeEnvFlags.forEach(envFlag => {
-        it(`${envFlag} should return true`, function() {
-          expect(isNodeFlag(envFlag), 'to be true');
+      nodeEnvFlags
+        .filter(flag => !isMochaFlag(flag))
+        .forEach(envFlag => {
+          it(`${envFlag} should return true`, function() {
+            expect(isNodeFlag(envFlag), 'to be true');
+          });
         });
-      });
+    });
+
+    describe('for all allowed node env flags which conflict with mocha flags', function() {
+      nodeEnvFlags
+        .filter(flag => isMochaFlag(flag))
+        .forEach(envFlag => {
+          it(`${envFlag} should return false`, function() {
+            expect(isNodeFlag(envFlag), 'to be false');
+          });
+        });
     });
 
     describe('when expecting leading dashes', function() {
       it('should require leading dashes', function() {
         expect(isNodeFlag('throw-deprecation', false), 'to be false');
         expect(isNodeFlag('--throw-deprecation', false), 'to be true');
-      });
-
-      it('should return false for --require/-r', function() {
-        expect(isNodeFlag('--require', false), 'to be false');
-        expect(isNodeFlag('-r', false), 'to be false');
       });
     });
 
@@ -131,15 +138,6 @@ describe('node-flags', function() {
         'to equal',
         ['--v8-numeric-one=1', '--v8-boolean-one', '--v8-numeric-two=2']
       );
-    });
-
-    it('should special-case "--require"', function() {
-      // note the only way for this to happen IN REAL LIFE is if you use "--require esm";
-      // mocha eats all --require args otherwise.
-      expect(unparseNodeFlags({require: 'mcrib'}), 'to equal', [
-        '--require',
-        'mcrib'
-      ]);
     });
   });
 });

@@ -9,6 +9,8 @@
 
 process.stdout = require('browser-stdout')({label: false});
 
+var parseQuery = require('./lib/browser/parse-query');
+var highlightTags = require('./lib/browser/highlight-tags');
 var Mocha = require('./lib/mocha');
 
 /**
@@ -77,6 +79,13 @@ process.on = function(e, fn) {
   }
 };
 
+process.listeners = function(e) {
+  if (e === 'uncaughtException') {
+    return uncaughtExceptionHandlers;
+  }
+  return [];
+};
+
 // The BDD UI is registered by default, but no UI will be functional in the
 // browser without an explicit call to the overridden `mocha.ui` (see below).
 // Ensure that this default UI does not expose its methods to the global scope.
@@ -139,11 +148,19 @@ mocha.setup = function(opts) {
   if (typeof opts === 'string') {
     opts = {ui: opts};
   }
-  for (var opt in opts) {
-    if (Object.prototype.hasOwnProperty.call(opts, opt)) {
-      this[opt](opts[opt]);
-    }
+  if (opts.delay === true) {
+    this.delay();
   }
+  var self = this;
+  Object.keys(opts)
+    .filter(function(opt) {
+      return opt !== 'delay';
+    })
+    .forEach(function(opt) {
+      if (Object.prototype.hasOwnProperty.call(opts, opt)) {
+        self[opt](opts[opt]);
+      }
+    });
   return this;
 };
 
@@ -155,7 +172,7 @@ mocha.run = function(fn) {
   var options = mocha.options;
   mocha.globals('location');
 
-  var query = Mocha.utils.parseQuery(global.location.search || '');
+  var query = parseQuery(global.location.search || '');
   if (query.grep) {
     mocha.grep(query.grep);
   }
@@ -174,7 +191,7 @@ mocha.run = function(fn) {
       document.getElementById('mocha') &&
       options.noHighlighting !== true
     ) {
-      Mocha.utils.highlightTags('code');
+      highlightTags('code');
     }
     if (fn) {
       fn(err);
@@ -199,4 +216,4 @@ global.mocha = mocha;
 // this allows test/acceptance/required-tokens.js to pass; thus,
 // you can now do `const describe = require('mocha').describe` in a
 // browser context (assuming browserification).  should fix #880
-module.exports = global;
+module.exports = Object.assign(mocha, global);

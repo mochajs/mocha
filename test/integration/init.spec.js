@@ -23,19 +23,39 @@ describe('init command', function() {
     } catch (ignored) {}
   });
 
-  it('should break if no path supplied', function(done) {
-    invokeMocha(
-      ['init'],
-      function(err, result) {
-        if (err) {
-          return done(err);
-        }
-        expect(result, 'to have failed');
-        expect(result.output, 'to match', /not enough non-option arguments/i);
-        done();
-      },
-      {stdio: 'pipe'}
-    );
+  describe('when no path is supplied', function() {
+    it('should fail', function(done) {
+      invokeMocha(
+        ['init'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(
+            result,
+            'to have failed with output',
+            /not enough non-option arguments/i
+          );
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
+    it('should not throw', function(done) {
+      invokeMocha(
+        ['init'],
+        function(err, result) {
+          if (err) {
+            return done(err);
+          }
+          expect(result, 'to have failed').and('not to satisfy', {
+            output: /throw/i
+          });
+          done();
+        },
+        {stdio: 'pipe'}
+      );
+    });
   });
 
   it('should create some files in the dest dir', function(done) {

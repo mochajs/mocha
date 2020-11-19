@@ -1,6 +1,6 @@
 'use strict';
 
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const {
   serialize,
   deserialize,
@@ -9,14 +9,8 @@ const {
 } = require('../../lib/nodejs/serializer');
 
 describe('serializer', function() {
-  let sandbox;
-
-  beforeEach(function() {
-    sandbox = createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   describe('function', function() {
@@ -38,7 +32,7 @@ describe('serializer', function() {
         describe('having a `serialize` method', function() {
           it('should return the result of the `serialize` method', function() {
             const serializedObj = {foo: 'bar'};
-            const obj = {serialize: sandbox.stub().returns(serializedObj)};
+            const obj = {serialize: sinon.stub().returns(serializedObj)};
             expect(serialize(obj), 'to be', serializedObj);
           });
         });
@@ -76,9 +70,7 @@ describe('serializer', function() {
 
         it('should return the result of `SerializableWorkerResult.deserialize` called on the value', function() {
           const obj = Object.assign({}, SerializableWorkerResult.create());
-          sandbox
-            .stub(SerializableWorkerResult, 'deserialize')
-            .returns('butts');
+          sinon.stub(SerializableWorkerResult, 'deserialize').returns('butts');
           deserialize(obj);
           expect(
             SerializableWorkerResult.deserialize,
@@ -96,22 +88,18 @@ describe('serializer', function() {
   describe('SerializableEvent', function() {
     describe('constructor', function() {
       describe('when called without `eventName`', function() {
-        it('should throw', function() {
-          expect(
-            () => new SerializableEvent(),
-            'to throw',
-            /expected a non-empty `eventName`/
-          );
+        it('should throw "invalid arg value" error', function() {
+          expect(() => new SerializableEvent(), 'to throw', {
+            code: 'ERR_MOCHA_INVALID_ARG_TYPE'
+          });
         });
       });
 
       describe('when called with a non-object `rawObject`', function() {
-        it('should throw', function() {
-          expect(
-            () => new SerializableEvent('blub', 'glug'),
-            'to throw',
-            /expected object, received \[string\]/
-          );
+        it('should throw "invalid arg type" error', function() {
+          expect(() => new SerializableEvent('blub', 'glug'), 'to throw', {
+            code: 'ERR_MOCHA_INVALID_ARG_TYPE'
+          });
         });
       });
     });
@@ -133,7 +121,7 @@ describe('serializer', function() {
         describe('when passed an object with a `serialize` method', function() {
           it('should call the `serialize` method', function() {
             const obj = {
-              serialize: sandbox.stub()
+              serialize: sinon.stub()
             };
             SerializableEvent.create('some-event', obj).serialize();
             expect(obj.serialize, 'was called once');
@@ -142,7 +130,7 @@ describe('serializer', function() {
 
         describe('when passed an object containing an object with a `serialize` method', function() {
           it('should call the `serialize` method', function() {
-            const stub = sandbox.stub();
+            const stub = sinon.stub();
             const obj = {
               nested: {
                 serialize: stub
@@ -400,7 +388,7 @@ describe('serializer', function() {
 
         describe('when the value data contains a prop with an array value', function() {
           beforeEach(function() {
-            sandbox.spy(SerializableEvent, '_deserializeObject');
+            sinon.spy(SerializableEvent, '_deserializeObject');
           });
 
           it('should deserialize each prop', function() {
@@ -480,7 +468,7 @@ describe('serializer', function() {
 
       describe('deserialize', function() {
         beforeEach(function() {
-          sandbox.stub(SerializableEvent, 'deserialize');
+          sinon.stub(SerializableEvent, 'deserialize');
         });
 
         it('should call SerializableEvent#deserialize on each item in its `events` prop', function() {
@@ -525,7 +513,7 @@ describe('serializer', function() {
         });
 
         it('should call `SerializableEvent#serialize` of each of its events', function() {
-          sandbox.spy(SerializableEvent.prototype, 'serialize');
+          sinon.spy(SerializableEvent.prototype, 'serialize');
           const events = [
             SerializableEvent.create('foo'),
             SerializableEvent.create('bar')

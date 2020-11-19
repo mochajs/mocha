@@ -3,24 +3,22 @@
 const serializeJavascript = require('serialize-javascript');
 const rewiremock = require('rewiremock/node');
 const {SerializableWorkerResult} = require('../../lib/nodejs/serializer');
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 
 const WORKER_PATH = require.resolve('../../lib/nodejs/worker.js');
 
 describe('worker', function() {
   let worker;
-  let sandbox;
   let stubs;
 
   beforeEach(function() {
-    sandbox = createSandbox();
     stubs = {
       workerpool: {
         isMainThread: false,
-        worker: sandbox.stub()
+        worker: sinon.stub()
       }
     };
-    sandbox.spy(process, 'removeAllListeners');
+    sinon.spy(process, 'removeAllListeners');
   });
 
   describe('when run as main process', function() {
@@ -41,31 +39,35 @@ describe('worker', function() {
 
     beforeEach(function() {
       mocha = {
-        addFile: sandbox.stub().returnsThis(),
-        loadFilesAsync: sandbox.stub().resolves(),
-        run: sandbox.stub().callsArgAsync(0),
-        unloadFiles: sandbox.stub().returnsThis()
+        addFile: sinon.stub().returnsThis(),
+        loadFilesAsync: sinon.stub().resolves(),
+        run: sinon.stub().callsArgAsync(0),
+        unloadFiles: sinon.stub().returnsThis()
       };
-      stubs.Mocha = Object.assign(sandbox.stub().returns(mocha), {
-        bdd: sandbox.stub(),
+      stubs.Mocha = Object.assign(sinon.stub().returns(mocha), {
+        bdd: sinon.stub(),
         interfaces: {}
       });
 
       stubs.serializer = {
-        serialize: sandbox.stub()
+        serialize: sinon.stub()
       };
 
       stubs.runHelpers = {
-        handleRequires: sandbox.stub(),
-        validatePlugin: sandbox.stub(),
-        loadRootHooks: sandbox.stub().resolves()
+        handleRequires: sinon.stub().resolves({}),
+        validateLegacyPlugin: sinon.stub()
+      };
+
+      stubs.plugin = {
+        aggregateRootHooks: sinon.stub().resolves()
       };
 
       worker = rewiremock.proxy(WORKER_PATH, {
         workerpool: stubs.workerpool,
         '../../lib/mocha': stubs.Mocha,
         '../../lib/nodejs/serializer': stubs.serializer,
-        '../../lib/cli/run-helpers': stubs.runHelpers
+        '../../lib/cli/run-helpers': stubs.runHelpers,
+        '../../lib/plugin-loader': stubs.plugin
       });
     });
 
@@ -148,7 +150,10 @@ describe('worker', function() {
             expect(
               stubs.runHelpers.handleRequires,
               'to have a call satisfying',
-              ['foo']
+              [
+                'foo',
+                {ignoredPlugins: ['mochaGlobalSetup', 'mochaGlobalTeardown']}
+              ]
             ).and('was called once');
           });
 
@@ -157,7 +162,7 @@ describe('worker', function() {
             await worker.run('some-file.js', serializeJavascript(argv));
 
             expect(
-              stubs.runHelpers.validatePlugin,
+              stubs.runHelpers.validateLegacyPlugin,
               'to have a call satisfying',
               [argv, 'ui', stubs.Mocha.interfaces]
             ).and('was called once');
@@ -172,6 +177,13 @@ describe('worker', function() {
             await worker.run('some-file.js');
             expect(process.removeAllListeners, 'to have a call satisfying', [
               'uncaughtException'
+            ]);
+          });
+
+          it('should remove all unhandledRejection listeners', async function() {
+            await worker.run('some-file.js');
+            expect(process.removeAllListeners, 'to have a call satisfying', [
+              'unhandledRejection'
             ]);
           });
 
@@ -206,7 +218,7 @@ describe('worker', function() {
 
               expect(stubs.runHelpers, 'to satisfy', {
                 handleRequires: expect.it('was called once'),
-                validatePlugin: expect.it('was called once')
+                validateLegacyPlugin: expect.it('was called once')
               });
             });
           });
@@ -216,7 +228,7 @@ describe('worker', function() {
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
     // this is needed due to `require.cache` getting dumped in watch mode
     process.removeAllListeners('beforeExit');
   });
