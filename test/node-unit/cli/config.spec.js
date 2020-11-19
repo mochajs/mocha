@@ -116,7 +116,7 @@ describe('cli/config', function() {
         expect(
           () => loadConfig('goo.yaml'),
           'to throw',
-          'goo.yaml is unparsable'
+          'Unable to read/parse goo.yaml: goo.yaml is unparsable'
         );
       });
     });

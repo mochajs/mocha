@@ -76,8 +76,7 @@ describe('Errors', function() {
         'to satisfy',
         {
           message: message,
-          code: 'ERR_MOCHA_UNPARSABLE_FILE',
-          reason: 'badFilePath is unparsable'
+          code: 'ERR_MOCHA_UNPARSABLE_FILE'
         }
       );
     });
