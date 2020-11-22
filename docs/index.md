@@ -211,6 +211,7 @@ Mocha allows you to use any assertion library you wish. In the above example, we
 - [chai][] - `expect()`, `assert()` and `should`-style assertions
 - [better-assert][] - C-style self-documenting `assert()`
 - [unexpected][] - "the extensible BDD assertion toolkit"
+- [earl][] - modern and type-safe assertion library for TypeScript
 
 ## Asynchronous Code
 
@@ -2341,6 +2342,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
+[earl]: https://github.com/earl-js/earl
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
 [example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
