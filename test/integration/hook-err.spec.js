@@ -1,13 +1,14 @@
 'use strict';
-
-var helpers = require('./helpers');
-var runMocha = helpers.runMocha;
-var runMochaJSON = require('./helpers').runMochaJSON;
-var SPLIT_DOT_REPORTER_REGEXP = helpers.SPLIT_DOT_REPORTER_REGEXP;
-var bang = require('../../lib/reporters/base').symbols.bang;
+const {
+  runMocha,
+  runMochaJSON,
+  runMochaJSONAsync,
+  SPLIT_DOT_REPORTER_REGEXP
+} = require('./helpers');
+const {bang} = require('../../lib/reporters/base').symbols;
 
 describe('hook error handling', function() {
-  var lines;
+  let lines;
 
   describe('before hook error', function() {
     before(run('hooks/before-hook-error.fixture.js'));
@@ -28,8 +29,7 @@ describe('hook error handling', function() {
 
   describe('before hook root error', function() {
     it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-root-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
+      runMochaJSON('hooks/before-hook-root-error', [], (err, res) => {
         if (err) {
           return done(err);
         }
@@ -43,8 +43,7 @@ describe('hook error handling', function() {
 
   describe('before hook nested error', function() {
     it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-nested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
+      runMochaJSON('hooks/before-hook-nested-error', [], (err, res) => {
         if (err) {
           return done(err);
         }
@@ -62,8 +61,7 @@ describe('hook error handling', function() {
 
   describe('before hook deepnested error', function() {
     it('should verify results', function(done) {
-      var fixture = 'hooks/before-hook-deepnested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
+      runMochaJSON('hooks/before-hook-deepnested-error', [], (err, res) => {
         if (err) {
           return done(err);
         }
@@ -80,7 +78,7 @@ describe('hook error handling', function() {
   });
 
   describe('before each hook error', function() {
-    before(run('hooks/beforeEach-hook-error.fixture.js'));
+    before(run('hooks/before-each-hook-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['before', bang + 'test 3']);
     });
@@ -95,8 +93,7 @@ describe('hook error handling', function() {
 
   describe('after hook nested error', function() {
     it('should verify results', function(done) {
-      var fixture = 'hooks/after-hook-nested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
+      runMochaJSON('hooks/after-hook-nested-error', [], (err, res) => {
         if (err) {
           return done(err);
         }
@@ -119,8 +116,7 @@ describe('hook error handling', function() {
 
   describe('after hook deepnested error', function() {
     it('should verify results', function(done) {
-      var fixture = 'hooks/after-hook-deepnested-error.fixture.js';
-      runMochaJSON(fixture, [], function(err, res) {
+      runMochaJSON('hooks/after-hook-deepnested-error', [], (err, res) => {
         if (err) {
           return done(err);
         }
@@ -141,7 +137,7 @@ describe('hook error handling', function() {
   });
 
   describe('after each hook error', function() {
-    before(run('hooks/afterEach-hook-error.fixture.js'));
+    before(run('hooks/after-each-hook-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['test 1', 'after', bang + 'test 3']);
     });
@@ -202,7 +198,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - before each hook error', function() {
-    before(run('hooks/beforeEach-hook-async-error.fixture.js'));
+    before(run('hooks/before-each-hook-async-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['before', bang + 'test 3']);
     });
@@ -216,7 +212,7 @@ describe('hook error handling', function() {
   });
 
   describe('async - after each hook error', function() {
-    before(run('hooks/afterEach-hook-async-error.fixture.js'));
+    before(run('hooks/after-each-hook-async-error.fixture.js'));
     it('should verify results', function() {
       expect(lines, 'to equal', ['test 1', 'after', bang + 'test 3']);
     });
@@ -257,27 +253,38 @@ describe('hook error handling', function() {
     });
   });
 
+  describe('"this.test.error()-style failure', function() {
+    it('should fail the associated test', async function() {
+      return expect(
+        runMochaJSONAsync('hooks/after-each-this-test-error'),
+        'when fulfilled',
+        'to have failed'
+      ).and(
+        'when fulfilled',
+        'to have failed test',
+        'fail the test from the "after each" hook should fail'
+      );
+    });
+  });
+
   function run(fnPath, outputFilter) {
-    return function(done) {
-      runMocha(fnPath, ['--reporter', 'dot'], function(err, res) {
+    return done =>
+      runMocha(fnPath, ['--reporter', 'dot'], (err, res) => {
         expect(err, 'to be falsy');
 
         lines = res.output
           .split(SPLIT_DOT_REPORTER_REGEXP)
-          .map(function(line) {
-            return line.trim();
-          })
+          .map(line => line.trim())
           .filter(outputFilter || onlyConsoleOutput());
 
         done();
       });
-    };
   }
 });
 
 function onlyConsoleOutput() {
-  var foundSummary = false;
-  return function(line) {
+  let foundSummary = false;
+  return line => {
     if (!foundSummary) {
       foundSummary = !!/\(\d+ms\)/.exec(line);
     }
@@ -286,9 +293,9 @@ function onlyConsoleOutput() {
 }
 
 function onlyErrorTitle(line) {
-  var foundErrorTitle = false;
-  var foundError = false;
-  return function(line) {
+  let foundErrorTitle = false;
+  let foundError = false;
+  return line => {
     if (!foundErrorTitle) {
       foundErrorTitle = !!/^1\)/.exec(line);
     }
