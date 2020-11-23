@@ -155,7 +155,7 @@ function runMochaAsync(fixturePath, args, opts) {
  * @param {Object} [opts] - Options for `child_process.spawn`
  * @returns {Promise<JSONResult>}
  */
-function runMochaJSONAsync(fixturePath, args, opts) {
+function runMochaJSONAsync(fixturePath, args = [], opts = {}) {
   return new Promise((resolve, reject) => {
     runMochaJSON(
       fixturePath,
