@@ -171,7 +171,12 @@ module.exports = {
             expect(
               result,
               '[not] to have a value satisfying',
-              expect.it('to have an item satisfying', {title: title})
+              expect.it(
+                'to have an item satisfying',
+                expect
+                  .it('to have property', 'title', title)
+                  .or('to have property', 'fullTitle', title)
+              )
             );
           });
         }
@@ -180,9 +185,13 @@ module.exports = {
         '<JSONResult> [not] to have failed (test|tests) <string+>',
         (expect, result, ...titles) => {
           titles.forEach(title => {
-            expect(result.failures, '[not] to have an item satisfying', {
-              title: title
-            });
+            expect(
+              result.failures,
+              '[not] to have an item satisfying',
+              expect
+                .it('to have property', 'title', title)
+                .or('to have property', 'fullTitle', title)
+            );
           });
         }
       )
