@@ -63,6 +63,32 @@ describe('reporters', function() {
         done(err);
       });
     });
+
+    it('does not include ansi escape sequences (issue: 4526)', function(done) {
+      var randomStr = crypto.randomBytes(8).toString('hex');
+      var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
+      var tmpFile = tmpDir + path.sep + 'test-issue-4526-' + randomStr + '.xml';
+
+      var args = [
+        '--reporter=xunit',
+        '--reporter-options',
+        'output=' + tmpFile
+      ];
+      var unexpectedOutput = ['&#x1B;', '&#x1b;'];
+
+      run('ansi.fixture.js', args, function(err, result) {
+        if (err) return done(err);
+
+        var xml = fs.readFileSync(tmpFile, 'utf8');
+        fs.unlinkSync(tmpFile);
+
+        unexpectedOutput.forEach(function(line) {
+          expect(xml, 'not to contain', line);
+        });
+
+        done(err);
+      });
+    });
   });
 
   describe('loader', function() {

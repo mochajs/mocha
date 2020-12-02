@@ -652,11 +652,7 @@ describe('lib/utils', function() {
     });
 
     it('replaces invalid xml characters', function() {
-      expect(
-        utils.escape('\x1B[32mfoo\x1B[0m'),
-        'to be',
-        '&#x1B;[32mfoo&#x1B;[0m'
-      );
+      expect(utils.escape('\x1B[32mfoo\x1B[0m'), 'to be', '[32mfoo[0m');
       // Ensure we can handle non-trivial unicode characters as well
       expect(utils.escape('💩'), 'to be', '&#x1F4A9;');
     });
