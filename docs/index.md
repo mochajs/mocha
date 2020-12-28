@@ -281,7 +281,7 @@ The above test will fail with `Error: Resolution method is overspecified. Specif
 
 ### Using async / await
 
-If your JS environment supports [async / await][mdn-async], you can also write asynchronous tests like this:
+If your JS environment supports [`async` / `await`][mdn-async], you can also write asynchronous tests like this:
 
 ```js
 beforeEach(async function() {
@@ -354,7 +354,7 @@ describe('hooks', function() {
 });
 ```
 
-> Tests can appear before, after, or interspersed with your hooks. Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).
+> Tests can appear before, after, or interspersed with your hooks. Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, then tests, any `afterEach()` hooks, and finally `after()` hooks (once).
 
 ### Describing Hooks
 
@@ -430,7 +430,7 @@ setTimeout(function() {
 
 ## Pending Tests
 
-"Pending"--as in "someone should write these test cases eventually"--test-cases are those _without_ a callback:
+"Pending"&mdash;as in "someone should write these test cases eventually"&mdash;test-cases are those _without_ a callback:
 
 ```js
 describe('Array', function() {
@@ -658,7 +658,7 @@ You can choose to retry failed tests up to a certain number of times. This featu
 
 This feature does re-run a failed test and its corresponding `beforeEach/afterEach` hooks, but not `before/after` hooks. `this.retries()` has no effect on failing hooks.
 
-**NOTE**: Example below was written using Selenium webdriver (which [overwrites global Mocha hooks][selenium-webdriver-testing] for `Promise` chain).
+**NOTE**: The following example was written using Selenium Webdriver (which [overwrites global Mocha hooks][selenium-webdriver-testing] for `Promise` chain).
 
 ```js
 describe('retries', function() {
@@ -727,9 +727,9 @@ Many reporters will display test duration and flag tests that are slow (default:
 
 There are three levels of test duration (depicted in the following image):
 
-1. FAST: Tests that run within half of the "slow" threshold will show the duration in green (if at all).
-2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
-3. SLOW: Tests that run exceeding the threshold will show the duration in red.
+1. **FAST:** Tests that run within half of the "slow" threshold will show the duration in green (if at all).
+2. **NORMAL:** Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
+3. **SLOW:** Tests that run exceeding the threshold will show the duration in red.
 
 ![test duration range](images/test-duration-range.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
@@ -835,7 +835,7 @@ Use this option to have Mocha check for global variables that are leaked while r
 
 > _Updated in v4.0.0._
 
-TL;DR: If your tests hang after an upgrade to Mocha v4.0.0 or newer, use `--exit` for a quick (though not necessarily recommended) fix.
+**TL;DR:** If your tests hang after an upgrade to Mocha v4.0.0 or newer, use `--exit` for a quick (though not necessarily recommended) fix.
 
 _Prior to_ version v4.0.0, _by default_, Mocha would force its own process to exit once it was finished executing all tests. This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly. Ultimately, "dirty" tests can (but not always) lead to _false positive_ or _false negative_ results.
 
@@ -856,7 +856,7 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 Enforce a rule that tests may not be exclusive (use of e.g., `describe.only()` or `it.only()` is disallowed).
 
-`--forbid-only` causes Mocha to fail when an exclusive ("only'd") test or suite is encountered, and it will abort further test execution.
+`--forbid-only` causes Mocha to fail when an exclusive ("`.only()`-ed") test or suite is encountered, and it will abort further test execution.
 
 ### `--forbid-pending`
 
@@ -886,19 +886,19 @@ Mocha does not retry test failures by default.
 
 Specify the "slow" test threshold in milliseconds. Mocha uses this to highlight test cases that are taking too long. "Slow" tests are not considered failures.
 
-Note: A test that executes for _half_ of the "slow" time will be highlighted _in yellow_ with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted _in red_.
+**Note:** A test that executes for _half_ of the "slow" time will be highlighted _in yellow_ with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted _in red_.
 
 ### `--timeout <ms>, -t <ms>`
 
 > _Update in v6.0.0: `--no-timeout` is implied when invoking Mocha using inspect flags. It is equivalent to `--timeout 0`. `--timeout 99999999` is no longer needed._
 
-Specifies the test case timeout, defaulting to two (2) seconds (2000 milliseconds). Tests taking longer than this amount of time will be marked as failed.
+Specifies the test case timeout. The default is two (2) seconds (2000 milliseconds). Tests taking longer than this amount of time will be marked as failed.
 
-To override you may pass the timeout in milliseconds, or a value with the `s` suffix, e.g., `--timeout 2s` and `--timeout 2000` are equivalent.
+To override, you may pass the timeout in milliseconds, or a value with the `s` suffix (i.e. `--timeout 2s` and `--timeout 2000` are equivalent).
 
 To disable timeouts, use `--no-timeout`.
 
-Note: synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking. Infinite loops will still be infinite loops!
+**Note:** synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking. Infinite loops will still be infinite loops!
 
 ### `--ui <name>, -u <name>`
 
@@ -1049,11 +1049,11 @@ Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut 
 
 > _New in v7.0.0_
 
-List of paths or globs to watch when `--watch` is set. If a file matching the given glob changes or is added or removed mocha will rerun all tests.
+List of paths or globs to watch when `--watch` is set. If a file matching the given glob changes or is added or removed, Mocha will rerun all tests.
 
-If the path is a directory all files and subdirectories will be watched.
+If the path is a directory, all files and subdirectories will be watched.
 
-By default all files in the current directory having one of the extensions provided by `--extension` and not contained in the `node_modules` or `.git` folders are watched.
+By default, all files in the current directory having one of the extensions provided by `--extension` and not contained in the `node_modules` or `.git` folders are watched.
 
 The option can be given multiple times. The option accepts a comma-delimited list: `--watch-files a,b` is equivalent to `--watch-files a --watch-files b`
 
@@ -1141,7 +1141,7 @@ Use `--jobs <count>` to specify the _maximum_ number of processes in the worker 
 
 The default value is the _number of CPU cores_ less 1.
 
-Hint: Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
+_(Hint: Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.)_
 
 Has no effect unless used with [`--parallel`](#-parallel-p).
 
@@ -1166,7 +1166,7 @@ These flags vary depending on your version of Node.js.
 > _New in Node.js v12.12.0_
 
 If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
-is passed to mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
+is passed to Mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
 
 ```bash
 Error: cool
@@ -1305,7 +1305,7 @@ Some types of tests are _not_ so well-suited to run in parallel. For example, ex
 
 Free-tier cloud CI services may not provide a suitable multi-core container or VM for their build agents. Regarding expected performance gains in CI: your mileage may vary. It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
 
-It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_&mdash;there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
 
 ## Root Hook Plugins
 
@@ -1411,7 +1411,7 @@ export const mochaHooks = {
 
 ### Root Hook Plugins Can Export a Function
 
-If you need to perform some logic--such as choosing a root hook conditionally, based on the environment--`mochaHooks` can be a _function_ which returns the expected object.
+If you need to perform some logic&mdash;such as choosing a root hook conditionally, based on the environment&mdash;`mochaHooks` can be a _function_ which returns the expected object.
 
 ```js
 // test/hooks.mjs
@@ -1466,8 +1466,8 @@ Multiple root hook plugins can be registered by using `--require` multiple times
 
 To migrate your tests using root hooks to a root hook plugin:
 
-1. Find your root hooks (hooks defined _outside_ of a suite--usually `describe()` callback).
-1. Create a new file, e.g., `test/hooks.js`.
+1. Find your root hooks (hooks defined _outside_ of a suite&mdash;usually `describe()` callback).
+1. Create a new file (e.g., `test/hooks.js`).
 1. _Move_ your root hooks into `test/hooks.js`.
 1. In `test/hooks.js`, make your hooks a member of an exported `mochaHooks` property.
 1. Use `--require test/hooks.js` (even better: use a [config file](#configuring-mocha-nodejs) with `{"require": "test/hooks.js"}`) when running your tests.
@@ -1571,7 +1571,7 @@ export async function mochaGlobalSetup() {
 
 To use it, load this file when running Mocha via `mocha --require fixtures.cjs` (or whatever you have named the file).
 
-> Remember: you can define "requires" in a [configuration file](#configuring-mocha-nodejs).
+> _Remember:_ You can define "requires" in a [configuration file](#configuring-mocha-nodejs).
 
 Now, before Mocha loads and runs your tests, it will execute the above global setup fixture, starting a server for testing. This won't shut _down_ the server when Mocha is done, however! To do that, use a [_global teardown fixture_](#global-teardown-fixtures).
 
@@ -1672,7 +1672,7 @@ This flowchart will help you decide which of [hooks], [root hook plugins] or
 
 ## Interfaces
 
-Mocha's "interface" system allows developers to choose their style of DSL. Mocha has **BDD**, **TDD**, **Exports**, **QUnit** and **Require**-style interfaces.
+Mocha's "interface" system allows developers to choose their style of DSL. Mocha has **BDD**, **TDD**, **Exports**, **QUnit**, and **Require**-style interfaces.
 
 ### BDD
 
@@ -2133,7 +2133,7 @@ As the Notification API evolved over time, **do not expect** the minimum
 possible browser version to necessarily work.
 
 Enable Mocha's web notifications with a slight modification to your
-client-side mocha HTML. Add a call to `mocha.growl()` prior to running your
+client-side Mocha HTML. Add a call to `mocha.growl()` prior to running your
 tests as shown below:
 
 ```html
@@ -2214,8 +2214,8 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 - Any "boolean" flag (which doesn't require a parameter, such as `--bail`), can be specified using a boolean value, e.g.: `"bail": true`.
 - Any "array"-type option (see `mocha --help` for a list) can be a single string value.
 - For options containing a dash (`-`), the option name can be specified using camelCase.
-- Aliases are valid names, e.g., `R` instead of `reporter`.
-- Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
+- Aliases are valid names (e.g., `R` instead of `reporter`).
+- Test files can be specified using `spec` (e.g., `"spec": "test/**/*.spec.js"`).
 - Flags to `node` are _also_ supported in configuration files. Use caution, as these can vary between versions of Node.js!
 
 **For more configuration examples, see the [`example/config`][example-mocha-config] directory on GitHub.**
@@ -2253,15 +2253,15 @@ _Note_: Double quotes around the glob are recommended for portability.
 
 When Mocha itself throws exception, the associated `Error` will have a `code` property. Where applicable, consumers should check the `code` property instead of string-matching against the `message` property. The following table describes these error codes:
 
-| Code                             | Description                                                  |
-| -------------------------------- | ------------------------------------------------------------ |
-| ERR_MOCHA_INVALID_ARG_TYPE       | wrong type was passed for a given argument                   |
-| ERR_MOCHA_INVALID_ARG_VALUE      | invalid or unsupported value was passed for a given argument |
-| ERR_MOCHA_INVALID_EXCEPTION      | a falsy or otherwise underspecified exception was thrown     |
-| ERR_MOCHA_INVALID_INTERFACE      | interface specified in options not found                     |
-| ERR_MOCHA_INVALID_REPORTER       | reporter specified in options not found                      |
-| ERR_MOCHA_NO_FILES_MATCH_PATTERN | test file(s) could not be found                              |
-| ERR_MOCHA_UNSUPPORTED            | requested behavior, option, or parameter is unsupported      |
+| Code                               | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| `ERR_MOCHA_INVALID_ARG_TYPE`       | wrong type was passed for a given argument                   |
+| `ERR_MOCHA_INVALID_ARG_VALUE`      | invalid or unsupported value was passed for a given argument |
+| `ERR_MOCHA_INVALID_EXCEPTION`      | a falsy or otherwise underspecified exception was thrown     |
+| `ERR_MOCHA_INVALID_INTERFACE`      | interface specified in options not found                     |
+| `ERR_MOCHA_INVALID_REPORTER`       | reporter specified in options not found                      |
+| `ERR_MOCHA_NO_FILES_MATCH_PATTERN` | test file(s) could not be found                              |
+| `ERR_MOCHA_UNSUPPORTED`            | requested behavior, option, or parameter is unsupported      |
 
 ## Editor Plugins
 
@@ -2281,7 +2281,7 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 ### Wallaby.js
 
-[Wallaby.js][] is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and node.js projects.
+[Wallaby.js][] is a continuous testing tool that enables real-time code coverage for Mocha with any assertion library in VS Code, Atom, JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.), Sublime Text and Visual Studio for both browser and Node.js projects.
 
 ![Wallaby.js in Action](images/wallaby.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
@@ -2293,14 +2293,14 @@ The plugin is titled **NodeJS**, and can be installed via **Preferences** > **Pl
 
 ### Mocha Sidebar (VS Code)
 
-[Mocha sidebar][vscode-mocha-sidebar] is the most complete mocha extension for vs code.
+[Mocha sidebar][vscode-mocha-sidebar] is the most complete Mocha extension for VS code.
 
 #### Features
 
-- see all tests in VS Code sidebar menu
-- run & debug tests for each level hierarchy from all tests to a single test (and each suite)
-- auto run tests on file save
-- see tests results directly in the code editor
+- See all tests in VS Code sidebar menu
+- Run and debug tests for each level hierarchy from all tests to a single test (and each suite)
+- Auto run tests on file save
+- See test results directly in the code editor
 
 ![mocha side bar in Action](images/mocha_side_bar.png?withoutEnlargement&resize=920,9999&pngquant){:class="screenshot" loading="lazy"}
 
