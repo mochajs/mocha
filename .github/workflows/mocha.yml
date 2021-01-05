@@ -110,15 +110,6 @@ jobs:
             env:
               COVERAGE: 1
     steps:
-      - name: Cache Growl Installer (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        id: cache-growl
-        uses: actions/cache@v2
-        with:
-          path: GrowlInstaller
-          key: '${{ runner.os }}-growl-installer'
-          restore-keys: |
-            ${{ runner.os }}-growl-installer
       - name: Download Growl Installer (Windows)
         if: "${{ matrix.os == 'windows-2019' && steps.cache-growl.outputs.cache-hit != 'true'}}"
         run: >
@@ -138,14 +129,6 @@ jobs:
           7z x $seaPath -oGrowlInstaller | out-null
 
           echo "Done."
-      - name: Retrieve Growl Installer (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        uses: actions/cache@v2
-        with:
-          path: GrowlInstaller
-          key: '${{ runner.os }}-growl-installer'
-          restore-keys: |
-            ${{ runner.os }}-growl-installer
       - name: Add Growl Installer to Path (Windows)
         if: "${{ matrix.os == 'windows-2019' }}"
         run: 'echo "C:\Program Files (x86)\Growl for Windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8'
