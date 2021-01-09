@@ -6,6 +6,8 @@ name: Tests
       - opened
       - synchronize
       - reopened
+    branches:
+      - '**:**'
 
 jobs:
   prepare-commit-msg:
