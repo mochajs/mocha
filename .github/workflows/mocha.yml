@@ -6,10 +6,13 @@ name: Tests
       - opened
       - synchronize
       - reopened
+    branches:
+      # Branches from forks have the form 'user:branch-name'
+      - '**:**'
 
 jobs:
   prepare-commit-msg:
-    name: Retrive head commit message
+    name: Retrieve head commit message
     runs-on: ubuntu-latest
     outputs:
       HEAD_COMMIT_MSG: '${{ steps.commitMsg.outputs.HEAD_COMMIT_MSG }}'
@@ -110,60 +113,60 @@ jobs:
             env:
               COVERAGE: 1
     steps:
-      - name: Cache Growl Installer (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        id: cache-growl
-        uses: actions/cache@v2
-        with:
-          path: GrowlInstaller
-          key: '${{ runner.os }}-growl-installer'
-          restore-keys: |
-            ${{ runner.os }}-growl-installer
-      - name: Download Growl Installer (Windows)
-        if: "${{ matrix.os == 'windows-2019' && steps.cache-growl.outputs.cache-hit != 'true'}}"
-        run: >
-          echo "Downloading Growl installer..."
+      # - name: Cache Growl Installer (Windows)
+      #   if: "${{ matrix.os == 'windows-2019' }}"
+      #   id: cache-growl
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: GrowlInstaller
+      #     key: '${{ runner.os }}-growl-installer'
+      #     restore-keys: |
+      #       ${{ runner.os }}-growl-installer
+      # - name: Download Growl Installer (Windows)
+      #   if: "${{ matrix.os == 'windows-2019' && steps.cache-growl.outputs.cache-hit != 'true'}}"
+      #   run: >
+      #     echo "Downloading Growl installer..."
 
-          mkdir GrowlInstaller | out-null
+      #     mkdir GrowlInstaller | out-null
 
-          $seaURL =
-          "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
+      #     $seaURL =
+      #     "https://github.com/briandunnington/growl-for-windows/releases/download/final/GrowlInstaller.exe"
 
-          $seaPath = "GrowlInstaller\GrowlInstaller.exe"
+      #     $seaPath = "GrowlInstaller\GrowlInstaller.exe"
 
-          $webclient = New-Object Net.WebClient
+      #     $webclient = New-Object Net.WebClient
 
-          $webclient.DownloadFile($seaURL, $seaPath)
+      #     $webclient.DownloadFile($seaURL, $seaPath)
 
-          7z x $seaPath -oGrowlInstaller | out-null
+      #     7z x $seaPath -oGrowlInstaller | out-null
 
-          echo "Done."
-      - name: Retrieve Growl Installer (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        uses: actions/cache@v2
-        with:
-          path: GrowlInstaller
-          key: '${{ runner.os }}-growl-installer'
-          restore-keys: |
-            ${{ runner.os }}-growl-installer
-      - name: Add Growl Installer to Path (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        run: 'echo "C:\Program Files (x86)\Growl for Windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8'
-      - name: Install Growl
-        if: "${{ matrix.os == 'windows-2019' }}"
-        run: |
-          echo "Installing Growl..."
-          cmd /c start /wait msiexec /i GrowlInstaller\Growl_v2.0.msi /quiet
-          echo "Done."
-      - name: Start Growl Service (Windows)
-        if: "${{ matrix.os == 'windows-2019' }}"
-        run: |
-          echo "Starting Growl service..."
-          Start-Process -NoNewWindow Growl
-          ## Growl requires some time before it's ready to handle notifications
-          echo "Verifying Growl responding"
-          Start-Sleep -s 10
-          growlnotify test
+      #     echo "Done."
+      # - name: Retrieve Growl Installer (Windows)
+      #   if: "${{ matrix.os == 'windows-2019' }}"
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: GrowlInstaller
+      #     key: '${{ runner.os }}-growl-installer'
+      #     restore-keys: |
+      #       ${{ runner.os }}-growl-installer
+      # - name: Add Growl Installer to Path (Windows)
+      #   if: "${{ matrix.os == 'windows-2019' }}"
+      #   run: 'echo "C:\Program Files (x86)\Growl for Windows" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8'
+      # - name: Install Growl
+      #   if: "${{ matrix.os == 'windows-2019' }}"
+      #   run: |
+      #     echo "Installing Growl..."
+      #     cmd /c start /wait msiexec /i GrowlInstaller\Growl_v2.0.msi /quiet
+      #     echo "Done."
+      # - name: Start Growl Service (Windows)
+      #   if: "${{ matrix.os == 'windows-2019' }}"
+      #   run: |
+      #     echo "Starting Growl service..."
+      #     Start-Process -NoNewWindow Growl
+      #     ## Growl requires some time before it's ready to handle notifications
+      #     echo "Verifying Growl responding"
+      #     Start-Sleep -s 10
+      #     growlnotify test
       - name: Install libnotify-bin (Linux)
         if: "${{ matrix.os == 'ubuntu-latest' }}"
         run: sudo apt-get install libnotify-bin
@@ -202,6 +205,7 @@ jobs:
     # TODO: configure to retain build artifacts in `.karma/` dir
     name: 'Browser Tests'
     needs: smoke
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
