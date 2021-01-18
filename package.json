@@ -74,8 +74,8 @@
     "which": "2.0.2",
     "wide-align": "1.1.3",
     "workerpool": "6.0.2",
-    "yargs": "13.3.2",
-    "yargs-parser": "13.1.2",
+    "yargs": "16.2.0",
+    "yargs-parser": "20.2.4",
     "yargs-unparser": "2.0.0"
   },
   "devDependencies": {
