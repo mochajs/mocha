@@ -36,8 +36,6 @@ const disableTimeouts = value => {
   if (impliesNoTimeouts(value)) {
     debug('option %s disabled timeouts', value);
     mochaArgs.timeout = 0;
-    delete mochaArgs.timeouts;
-    delete mochaArgs.t;
   }
 };
 
@@ -93,7 +91,6 @@ if (mochaArgs.require && mochaArgs.require.includes('esm')) {
   if (!mochaArgs.require.length) {
     delete mochaArgs.require;
   }
-  delete mochaArgs.r;
 }
 
 if (Object.keys(nodeArgs).length) {

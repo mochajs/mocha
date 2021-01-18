@@ -25,8 +25,6 @@ const proxyLoadOptions = ({
 
 const defaults = {
   timeout: 1000,
-  timeouts: 1000,
-  t: 1000,
   extension: ['js']
 };
 
