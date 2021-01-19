@@ -1498,12 +1498,12 @@ Your `test/hooks.js` (for this example, a CJS module) should contain:
 // test/hooks.js
 
 exports.mochaHooks = {
-  beforeEach(function() {
+  beforeEach: function() {
     // global setup for all tests
-  }),
-  afterAll(function() {
+  },
+  afterAll: function() {
     // one-time final cleanup
-  })
+  }
 };
 ```
 
