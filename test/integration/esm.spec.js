@@ -45,7 +45,10 @@ describe('esm', function() {
     const err = await runMochaAsync(fixture, args, {stdio: 'pipe'}).catch(
       err => err
     );
-    expect(err.output, 'to contain', 'SyntaxError').and('to contain', fixture);
+    expect(err.output, 'to contain', 'SyntaxError').and(
+      'to contain',
+      'esm-syntax-error.fixture.mjs'
+    );
   });
 
   it('should recognize esm files ending with .js due to package.json type flag', function(done) {
