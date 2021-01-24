@@ -1,4 +1,4 @@
-import mocha from 'mocha'
+import mocha from '../../../../index.mjs'
 import {add} from './add.mjs';
 
 mocha.it('should use a function from an esm, and fail', () => {

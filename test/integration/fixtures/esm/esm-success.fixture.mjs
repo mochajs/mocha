@@ -1,4 +1,4 @@
-import {it, before, beforeEach, after, afterEach, describe, test} from 'mocha'
+import {it, before, beforeEach, after, afterEach, describe, test} from '../../../../index.mjs'
 import {add} from './add.mjs';
 
 describe('some esm tests', () => {
