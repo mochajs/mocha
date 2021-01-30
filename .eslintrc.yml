@@ -49,6 +49,7 @@ overrides:
     env:
       mocha: true
     globals:
+      afterThis: readonly
       expect: readonly
   - files:
       - bin/*
