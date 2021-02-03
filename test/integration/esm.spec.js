@@ -1,5 +1,7 @@
 'use strict';
-var run = require('./helpers').runMochaJSON;
+var helpers = require('./helpers');
+var run = helpers.runMochaJSON;
+var runMochaAsync = helpers.runMochaAsync;
 var utils = require('../../lib/utils');
 var args =
   +process.versions.node.split('.')[0] >= 13 ? [] : ['--experimental-modules'];
@@ -36,6 +38,17 @@ describe('esm', function() {
       );
       done();
     });
+  });
+
+  it('should show file location when there is a syntax error in the test', async function() {
+    var fixture = 'esm/syntax-error/esm-syntax-error.fixture.mjs';
+    const err = await runMochaAsync(fixture, args, {stdio: 'pipe'}).catch(
+      err => err
+    );
+    expect(err.output, 'to contain', 'SyntaxError').and(
+      'to contain',
+      'esm-syntax-error.fixture.mjs'
+    );
   });
 
   it('should recognize esm files ending with .js due to package.json type flag', function(done) {
