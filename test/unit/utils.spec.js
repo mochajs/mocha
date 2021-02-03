@@ -1,3 +1,4 @@
+/* global BigInt */
 'use strict';
 
 var utils = require('../../lib/utils');
@@ -204,6 +205,13 @@ describe('lib/utils', function() {
         expect(stringify(1.2), 'to be', '1.2');
         expect(stringify(1e9), 'to be', '1000000000');
       });
+
+      if (typeof BigInt === 'function') {
+        it('should work with bigints when possible', function() {
+          expect(stringify(BigInt(1)), 'to be', '1n');
+          expect(stringify(BigInt(2)), 'to be', '2n');
+        });
+      }
     });
 
     describe('canonicalize example', function() {
