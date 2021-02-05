@@ -679,30 +679,28 @@ describe('retries', function() {
 
 ## Dynamically Generating Tests
 
-Given Mocha's use of `Function.prototype.call` and function expressions to define suites and test cases, it's straightforward to generate your tests dynamically. No special syntax is required &mdash; plain ol' JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
+Given Mocha's use of function expressions to define suites and test cases, it's straightforward to generate your tests dynamically. No special syntax is required &mdash; plain ol' JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
 
 Take the following example:
 
 ```js
-var assert = require('chai').assert;
+const assert = require('chai').assert;
 
-function add() {
-  return Array.prototype.slice.call(arguments).reduce(function(prev, curr) {
-    return prev + curr;
-  }, 0);
+function add(args) {
+  return args.reduce((prev, curr) => prev + curr, 0);
 }
 
 describe('add()', function() {
-  var tests = [
+  const tests = [
     {args: [1, 2], expected: 3},
     {args: [1, 2, 3], expected: 6},
     {args: [1, 2, 3, 4], expected: 10}
   ];
 
-  tests.forEach(function(test) {
-    it('correctly adds ' + test.args.length + ' args', function() {
-      var res = add.apply(null, test.args);
-      assert.equal(res, test.expected);
+  tests.forEach(({args, expected}) => {
+    it(`correctly adds ${args.length} args`, function() {
+      const res = add(args);
+      assert.equal(res, expected);
     });
   });
 });
@@ -717,6 +715,23 @@ $ mocha
     ✓ correctly adds 2 args
     ✓ correctly adds 3 args
     ✓ correctly adds 4 args
+```
+
+Tests added inside a `.forEach` handler often don't play well with editor plugins, especially with "right-click run" features.
+Another way to parameterize tests is to generate them with a closure. This following example is equivalent to the one above:
+
+```js
+describe('add()', function() {
+  const testAdd = ({args, expected}) =>
+    function() {
+      const res = add(args);
+      assert.equal(res, expected);
+    };
+
+  it('correctly adds 2 args', testAdd({args: [1, 2], expected: 3}));
+  it('correctly adds 3 args', testAdd({args: [1, 2, 3], expected: 6}));
+  it('correctly adds 4 args', testAdd({args: [1, 2, 3, 4], expected: 10}));
+});
 ```
 
 <h2 id="test-duration">Test duration</h2>
