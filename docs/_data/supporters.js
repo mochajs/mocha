@@ -114,6 +114,13 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
             'received html and expected a png; outage likely'
           );
         }
+        // FIXME: this image causes Unsupported image type
+        if (
+          url ===
+          'https://images.opencollective.com/codepilotai/732befb/logo/64.png'
+        ) {
+          throw new TypeError('temporary fix for build failure');
+        }
         debug('fetched %s', url);
         const canvasImage = await loadImage(imageBuf);
         debug('ok %s', url);
