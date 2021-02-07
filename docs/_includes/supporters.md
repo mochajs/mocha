@@ -3,7 +3,7 @@
 Use Mocha at Work? Ask your manager or marketing team if they'd help [support](https://opencollective.com/mochajs#support) our project. Your company's logo will also be displayed on [npmjs.com](http://npmjs.com/package/mocha) and our [GitHub repository](https://github.com/mochajs/mocha#sponsors).
 
 <ul class="image-list" id="sponsors">
-{%- for supporter in supporters.sponsors -%}
+{%- for supporter in supporters.sponsor -%}
   <li>
     {%- if supporter.website -%}
     <a href="{{ supporter.website }}" target="_blank" rel="noopener">
@@ -21,7 +21,7 @@ Use Mocha at Work? Ask your manager or marketing team if they'd help [support](h
 Find Mocha helpful? Become a [backer](https://opencollective.com/mochajs#support) and support Mocha with a monthly donation.
 
 <ul class="image-list faded-images" id="backers">
-{%- for supporter in supporters.backers -%}
+{%- for supporter in supporters.backer -%}
   <li>
     {%- if supporter.website -%}
     <a href="{{ supporter.website }}" target="_blank" rel="noopener">
