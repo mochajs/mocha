@@ -1,3 +1,28 @@
+# 8.3.0 / 2021-02-11
+
+## :tada: Enhancements
+
+- #4506: Add error code for test timeout errors (@boneskull)
+- #4112: Add BigInt support to stringify util function (@JosejeSinohui)
+
+## :bug: Fixes
+
+- #4557: Add file location when SyntaxError happens in ESM (@giltayar)
+- #4521: Fix `require` error when bundling Mocha with Webpack (@devhazem)
+
+## :book: Documentation
+
+- #4507: Add support for typescript-style docstrings (@boneskull)
+- #4503: Add GH Actions workflow status badge (@outsideris)
+- #4494: Add example of generating tests dynamically with a closure (@maxwellgerber)
+
+## :nut_and_bolt: Other
+
+- #4556: Upgrade all dependencies to latest stable (@AviVahl)
+- #4543: Update dependencies yargs and yargs-parser (@juergba)
+
+Also thanks to @outsideris and @HyunSangHan for various fixes to our website and documentation.
+
 # 8.2.1 / 2020-11-02
 
 Fixed stuff.
