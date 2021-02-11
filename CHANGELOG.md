@@ -2,26 +2,26 @@
 
 ## :tada: Enhancements
 
-- #4506: Add error code for test timeout errors (@boneskull)
-- #4112: Add BigInt support to stringify util function (@JosejeSinohui)
+- [#4506](https://github.com/mochajs/mocha/issues/4506): Add error code for test timeout errors ([**@boneskull**](https://github.com/boneskull))
+- [#4112](https://github.com/mochajs/mocha/issues/4112): Add BigInt support to stringify util function ([**@JosejeSinohui**](https://github.com/JosejeSinohui))
 
 ## :bug: Fixes
 
-- #4557: Add file location when SyntaxError happens in ESM (@giltayar)
-- #4521: Fix `require` error when bundling Mocha with Webpack (@devhazem)
+- [#4557](https://github.com/mochajs/mocha/issues/4557): Add file location when SyntaxError happens in ESM ([**@giltayar**](https://github.com/giltayar))
+- [#4521](https://github.com/mochajs/mocha/issues/4521): Fix `require` error when bundling Mocha with Webpack ([**@devhazem**](https://github.com/devhazem))
 
 ## :book: Documentation
 
-- #4507: Add support for typescript-style docstrings (@boneskull)
-- #4503: Add GH Actions workflow status badge (@outsideris)
-- #4494: Add example of generating tests dynamically with a closure (@maxwellgerber)
+- [#4507](https://github.com/mochajs/mocha/issues/4507): Add support for typescript-style docstrings ([**@boneskull**](https://github.com/boneskull))
+- [#4503](https://github.com/mochajs/mocha/issues/4503): Add GH Actions workflow status badge ([**@outsideris**](https://github.com/outsideris))
+- [#4494](https://github.com/mochajs/mocha/issues/4494): Add example of generating tests dynamically with a closure ([**@maxwellgerber**](https://github.com/maxwellgerber))
 
 ## :nut_and_bolt: Other
 
-- #4556: Upgrade all dependencies to latest stable (@AviVahl)
-- #4543: Update dependencies yargs and yargs-parser (@juergba)
+- [#4556](https://github.com/mochajs/mocha/issues/4556): Upgrade all dependencies to latest stable ([**@AviVahl**](https://github.com/AviVahl))
+- [#4543](https://github.com/mochajs/mocha/issues/4543): Update dependencies yargs and yargs-parser ([**@juergba**](https://github.com/juergba))
 
-Also thanks to @outsideris and @HyunSangHan for various fixes to our website and documentation.
+Also thanks to [**@outsideris**](https://github.com/outsideris) and [**@HyunSangHan**](https://github.com/HyunSangHan) for various fixes to our website and documentation.
 
 # 8.2.1 / 2020-11-02
 
