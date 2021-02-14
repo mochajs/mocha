@@ -3,6 +3,8 @@
 /* eslint no-unused-vars: off */
 /* eslint-env commonjs */
 
+require('regenerator-runtime/runtime');
+
 /**
  * Shim process.stdout.
  */

@@ -36,13 +36,16 @@ const config = {
         [
           '@babel/preset-env',
           {
-            modules: false,
-            useBuiltIns: 'usage',
-            forceAllTransforms: true,
-            corejs: {
-              version: 3,
-              proposals: false
-            }
+            modules: false
+          }
+        ]
+      ],
+      plugins: [
+        [
+          'polyfill-corejs3',
+          {
+            method: 'usage-pure',
+            proposals: true
           }
         ]
       ],
