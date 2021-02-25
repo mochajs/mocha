@@ -17,7 +17,8 @@ const config = {
     file: './mocha.js',
     format: 'umd',
     sourcemap: true,
-    name: 'mocha'
+    name: 'mocha',
+    intro: 'var regeneratorRuntime;'
   },
   plugins: [
     json(),
