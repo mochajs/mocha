@@ -3,6 +3,7 @@ const { afterEach,
   beforeEach,
   before,
   describe,
+  xdescribe,
   it,
   xit,
   setup,
@@ -60,10 +61,16 @@ suite('root suite', () => {
 
   describe('describe', () => {});
 
+  xdescribe('xdescribe', () => {});
+
   describe.skip('describe.skip', () => {});
 
   suite.only('suite only', () => {});
 
   suite.skip('suite.skip', () => {});
+
 });
+
+// using `run` here makes it so this suite needs to be run with `--delay` mode.
+// adding it here to test that `run` is correctly exported from mocha.
 setTimeout(run, 0);
