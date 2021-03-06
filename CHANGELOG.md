@@ -1,3 +1,10 @@
+# 8.3.1 / 2021-03-06
+
+## :bug: Fixes
+
+- #4577: Browser: fix `EvalError` caused by regenerator-runtime (@snoack)
+- #4574: ESM: allow `import` from mocha in parallel mode (@nicojs)
+
 # 8.3.0 / 2021-02-11
 
 ## :tada: Enhancements
