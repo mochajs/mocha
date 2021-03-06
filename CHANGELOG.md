@@ -2,8 +2,8 @@
 
 ## :bug: Fixes
 
-- #4577: Browser: fix `EvalError` caused by regenerator-runtime (@snoack)
-- #4574: ESM: allow `import` from mocha in parallel mode (@nicojs)
+- [#4577](https://github.com/mochajs/mocha/issues/4577): Browser: fix `EvalError` caused by regenerator-runtime ([**@snoack**](https://github.com/snoack))
+- [#4574](https://github.com/mochajs/mocha/issues/4574): ESM: allow `import` from mocha in parallel mode ([**@nicojs**](https://github.com/nicojs))
 
 # 8.3.0 / 2021-02-11
 
