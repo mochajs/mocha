@@ -29,4 +29,18 @@ describe('this.timeout()', function() {
       done();
     });
   });
+
+  it('should allow using it().timeout()', function(done) {
+    run('timeout-override-it.fixture.js', args, function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      assert.strictEqual(res.stats.pending, 0);
+      assert.strictEqual(res.stats.passes, 1);
+      assert.strictEqual(res.stats.failures, 0);
+      assert.strictEqual(res.code, 0);
+      done();
+    });
+  });
 });
