@@ -44,13 +44,13 @@ suite('root suite', () => {
   describe.only('describe only', () => {
     it('it', () => {
       console.log('running it');
-    });
+    }).timeout(1000);
     xit('it', () => {
       console.log('running xit');
     });
     it.only('it.only', () => {
       console.log('running it.only');
-    });
+    }).retries(2);
     it.skip('it.skip', () => {
       console.log('running it.skip');
     });
