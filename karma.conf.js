@@ -88,11 +88,11 @@ module.exports = config => {
     console.error('CI mode enabled');
     if (env.GITHUB_RUN_ID) {
       console.error('Github Actions detected');
-      bundleDirPath = path.join(
-        BASE_BUNDLE_DIR_PATH,
-        `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`
-      );
-      sauceConfig = {};
+      const buildId = `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`;
+      bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, buildId);
+      sauceConfig = {
+        build: buildId
+      };
     } else {
       console.error(`Local environment (${hostname}) detected`);
       // don't need to run sauce from Windows CI b/c travis does it.
@@ -170,15 +170,16 @@ const addSauceTests = (cfg, sauceLabs) => {
 
     // creates Karma `customLauncher` configs from `SAUCE_BROWSER_PLATFORM_MAP`
     const customLaunchers = sauceBrowsers.reduce((acc, sauceBrowser) => {
-      const platform = SAUCE_BROWSER_PLATFORM_MAP[sauceBrowser];
-      const [browserName, version] = sauceBrowser.split('@');
+      const platformName = SAUCE_BROWSER_PLATFORM_MAP[sauceBrowser];
+      const [browserName, browserVersion] = sauceBrowser.split('@');
       return {
         ...acc,
         [sauceBrowser]: {
           base: 'SauceLabs',
           browserName,
-          version,
-          platform
+          browserVersion,
+          platformName,
+          'sauce:options': sauceLabs
         }
       };
     }, {});
