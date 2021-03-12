@@ -2,13 +2,13 @@
 
 ## :bug: Fixes
 
-- #4599: Fix regression in `require` interface (@alexander-fenster)
+- [#4599](https://github.com/mochajs/mocha/issues/4599): Fix regression in `require` interface ([**@alexander-fenster**](https://github.com/alexander-fenster))
 
 ## :book: Documentation
 
-- #4601: Add build to GH actions run (@christian-bromann)
-- #4596: Filter active sponsors/backers (@juergba)
-- #4225: Update config file examples (@pkuczynski)
+- [#4601](https://github.com/mochajs/mocha/issues/4601): Add build to GH actions run ([**@christian-bromann**](https://github.com/christian-bromann))
+- [#4596](https://github.com/mochajs/mocha/issues/4596): Filter active sponsors/backers ([**@juergba**](https://github.com/juergba))
+- [#4225](https://github.com/mochajs/mocha/issues/4225): Update config file examples ([**@pkuczynski**](https://github.com/pkuczynski))
 
 # 8.3.1 / 2021-03-06
 
