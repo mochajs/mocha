@@ -8,8 +8,8 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 
 <nav class="badges">
   <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" height="18" alt="Gitter"></a>
-  <a href="#sponsors"><img src="https://opencollective.com/mochajs/sponsors/badge.svg" height="18" alt="OpenCollective sponsors"></a>
-  <a href="#backers"><img src="https://opencollective.com/mochajs/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
+  <a href="#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" height="18" alt="OpenCollective sponsors"></a>
+  <a href="#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
 </nav>
 
 {% include supporters.md %}
