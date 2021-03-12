@@ -1,3 +1,15 @@
+# 8.3.2 / 2021-03-12
+
+## :bug: Fixes
+
+- #4599: Fix regression in `require` interface (@alexander-fenster)
+
+## :book: Documentation
+
+- #4601: Add build to GH actions run (@christian-bromann)
+- #4596: Filter active sponsors/backers (@juergba)
+- #4225: Update config file examples (@pkuczynski)
+
 # 8.3.1 / 2021-03-06
 
 ## :bug: Fixes
