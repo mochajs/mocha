@@ -43,10 +43,7 @@ jobs:
     needs: smoke
     steps:
       - uses: actions/checkout@v2
-      - uses: bradennapier/eslint-plus-action@v3.4.2
-        with:
-          issueSummary: false
-          npmInstall: false
+      - run: npm start lint
 
   markdown:
     name: Markdown Check
