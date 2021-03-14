@@ -1,0 +1,24 @@
+name: ESLint Comment
+'on':
+  # by adding a schedule task to this workflow we will automatically
+  # begin serializing read-only runs and handling them. The cron job
+  # below is set to run every 15 minutes, GitHub will ignore anything
+  # under 10 minutes and run every 10 minutes anyway.
+  schedule:
+    - cron: '*/15 * * * *'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  eslint:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: bradennapier/eslint-plus-action@v3.4.2
+        with:
+          issueSummary: false
+          npmInstall: false
