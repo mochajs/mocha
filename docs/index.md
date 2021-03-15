@@ -2237,7 +2237,7 @@ Configurations can inherit from other modules using the `extends` keyword. See [
 
 ## The `test/` Directory
 
-By default, `mocha` looks for the glob `"./test/*.js"`, so you may want to put
+By default, `mocha` looks for the glob `"./test/*.{js,cjs,mjs}"`, so you may want to put
 your tests in `test/` folder. If you want to include subdirectories, pass the
 `--recursive` option.
 
