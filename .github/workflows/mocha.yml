@@ -55,9 +55,7 @@ jobs:
             ubuntu-latest-node-v14-
       - name: Install Dependencies
         run: npm ci --ignore-scripts
-      - name: 'Check Markdown'
-        run: npm start lint.markdown
-      - name: 'Check ESLint'
+      - name: 'Check lint'
         run: npm start lint
 
   test-node:
