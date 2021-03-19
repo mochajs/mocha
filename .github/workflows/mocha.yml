@@ -31,29 +31,18 @@ jobs:
           - 15
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: '${{ matrix.node }}'
       - run: npm install --production
       - run: npm run test:smoke
 
-  eslint:
-    name: ESLint Check
+  lint:
+    name: Linting code and markdown
     runs-on: ubuntu-latest
     needs: smoke
     steps:
-      - uses: actions/checkout@v2
-      - uses: bradennapier/eslint-plus-action@v3.4.2
-        with:
-          issueSummary: false
-          npmInstall: false
-
-  markdown:
-    name: Markdown Check
-    runs-on: ubuntu-latest
-    needs: smoke
-    steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
       - uses: actions/checkout@v2
@@ -66,8 +55,8 @@ jobs:
             ubuntu-latest-node-v14-
       - name: Install Dependencies
         run: npm ci --ignore-scripts
-      - name: 'Check Markdown'
-        run: npm start lint.markdown
+      - name: 'Check lint'
+        run: npm start lint
 
   test-node:
     name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
@@ -148,7 +137,7 @@ jobs:
       - name: Install libnotify-bin (Linux)
         if: "${{ matrix.os == 'ubuntu-latest' }}"
         run: sudo apt-get install libnotify-bin
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: '${{ matrix.node }}'
       - uses: actions/checkout@v2
@@ -186,7 +175,7 @@ jobs:
     timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
       - uses: actions/checkout@v2
