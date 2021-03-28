@@ -1,0 +1,24 @@
+name: 'Stale/close issues and PRs'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 0 * * 1,3,5'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v3
+        with:
+          days-before-stale: 120
+          days-before-close: 14
+          stale-issue-message: >
+            This issue hasn't had any recent activity, and I'm labeling it `stale`.
+            Remove the label or comment or this issue will be closed in 14 days.
+            Thanks for contributing to Mocha!
+          stale-pr-message: >
+            This PR hasn't had any recent activity, and I'm labeling it `stale`.
+            Remove the label or comment or this PR will be closed in 14 days.
+            Thanks for contributing to Mocha!'
+          exempt-issue-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,good-first-issue,help wanted,nice-to-have,qa,reporter,unconfirmed-bug,usability
+          exempt-pr-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,needs-review,nice-to-have,qa,reporter,semver-major,semver-minor,semver-patch,usability
