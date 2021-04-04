@@ -1,4 +1,4 @@
-name: Browser Tests for foked PRs
+name: Browser Tests for forked PRs
 'on':
   pull_request_target:
     types:
@@ -22,8 +22,6 @@ jobs:
         uses: actions/cache@v2
         with:
           path: '~/.npm'
-          # this key is different than above, since we are running scripts
-          # (builds, postinstall lifecycle hooks, etc.)
           key: "ubuntu-latest-node-full-v14-${{ hashFiles('**/package-lock.json') }}"
           restore-keys: |
             ubuntu-latest-node-full-v14-
