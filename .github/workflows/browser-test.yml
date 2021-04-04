@@ -1,0 +1,41 @@
+name: Browser Tests for forked PRs
+'on':
+  pull_request_target:
+    types:
+      - labeled
+
+jobs:
+  test-browser:
+    # TODO: configure to retain build artifacts in `.karma/` dir
+    name: 'Browser Tests'
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'run-browser-test')
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: 'Cache node_modules'
+        uses: actions/cache@v2
+        with:
+          path: '~/.npm'
+          key: "ubuntu-latest-node-full-v14-${{ hashFiles('**/package-lock.json') }}"
+          restore-keys: |
+            ubuntu-latest-node-full-v14-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Browser Tests
+        run: npm start test.browser
+        env:
+          SAUCE_USERNAME: '${{secrets.SAUCE_USERNAME}}'
+          SAUCE_ACCESS_KEY: '${{secrets.SAUCE_ACCESS_KEY}}'
+      - name: remove 'run-browser-test' label
+        uses: buildsville/add-remove-label@v1
+        if: ${{ always() }}
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          label: run-browser-test
+          type: remove
