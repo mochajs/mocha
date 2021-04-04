@@ -2,8 +2,7 @@
   <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
 </p>
 
-<p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
-
+<p align="center">☕️ Simple, Flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
 
 <p align="center">
 <a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amaster"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=master" alt="GitHub Actions Build Status"></a>
