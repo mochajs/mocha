@@ -1,10 +1,38 @@
+:root {
+  --color-bronze: #8c6949;
+  --color-night: #2B2D3C;
+  --color-shadow: #767677;
+  --color-sand: #EDE0D5;
+  --color-forest-green: #667F7A;
+  --color-silver: #D4D5D8;
+  --color-offwhite: #F0F2F3;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  --color-bonbon: #1BB4D4;
+  --color-tangerine: #FF5447;
+  --color-lemon: #F2AB24;
+
+  --color-bronze-dark: #745B44;
+
+  --font-body: 'HK Grotesk', Arial, Helvetica, sans-serif;
+  --font-title: 'Rockwell', 'Courier New', Courier, Georgia, Times, 'Times New Roman', serif;
+  --font-code: 'Space Mono', monospace;
+
+  --borderradius-small: 3px;
+  --borderradius-large: 16px;
+}
+
 html {
-  font: 16px/1.6 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: 16px/1.6 'HK Grotesk', Arial, Helvetica, sans-serif;;
 }
 
 body {
   border-top: 2px solid #ddd;
-  color: #2c2c2c;
+  color: var(--color-shadow);
+  background: white;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
 }
 
 @keyframes fadein {
@@ -127,25 +155,53 @@ ul#backers.image-list li img {
   opacity: 1;
 }
 
+h1 {
+  font-size: 60px;
+  color: var(--color-night);
+  font-family: var(--font-title);
+}
+
 h2 {
+  font-size: 48px;
+  color: var(--color-night);
+  font-family: var(--font-title);
+  font-weight: normal;
+
+  /* Original Styles */
   border-bottom: 1px solid #ddd;
-  font-weight: 400;
   letter-spacing: 1px;
   margin-top: 80px;
-  text-transform: uppercase;
 }
 
 h3 {
+  font-size: 32px;
+  color: var(--color-forest-green);
+  font-family: var(--font-title);
+  font-weight: normal;
+
+  /* Original Styles */
   border-bottom: 1px solid #eee;
-  font-weight: 200;
   letter-spacing: 1px;
   margin-top: 40px;
-  text-transform: uppercase;
 }
 
 h3 > code {
   font-size: 14px;
   text-transform: none;
+}
+
+h4 {
+  font-size: 24px;
+  font-family: var(--font-body);
+  color: var(--color-night);
+  font-weight: bold;
+}
+
+h5 {
+  font-weight: 18px;
+  font-family: var(--font-body);
+  color: var(--color-night);
+  font-weight: bold;
 }
 
 #content > p:first-child {
@@ -155,11 +211,11 @@ h3 > code {
 }
 
 a {
-  color: #8d6748;
+  color: var(--color-bronze);
 }
 
 a:hover {
-  color: #717171;
+  color: var(--color-bronze-dark);
 }
 
 a.direct-link {
@@ -213,22 +269,20 @@ ul.single-column li > ul > li {
 }
 
 code {
-  font: 14px monaco, monospace;
+  font-family: var(--font-code);
   line-height: 1.8;
 }
 
 :not(pre) > code {
-  background-color: #f5f2f0;
-  border-radius: 3px;
+  background-color: var(--color-offwhite);
+  border-radius: var(--borderradius-small);
   padding: 0.2em 0.4em;
 }
 
 pre {
-  background-color: #f3f3f3;
-  border: 1px solid #ddd;
-  border-bottom-color: #ccc;
-  border-radius: 3px;
-  box-shadow: inset 0 0 10px #ddd;
+  background-color: var(--color-offwhite);
+  border: 1px solid var(--color-silver);
+  border-radius: var(--borderradius-small);
   margin: 20px 0;
   overflow-x: auto;
   padding: 20px;
@@ -397,4 +451,55 @@ figure#wallaby-logo figcaption {
 
 #mocha-fixture-wizard text[font-weight=bold]:hover {
   text-decoration: underline;
+}
+
+/* New Element Styles */
+
+button, .button {
+  text-transform: uppercase;
+  padding: 2px 4px;
+  border-radius: var(--borderradius-small);
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  border: none;
+  font-size: 14px;
+  font-family: var(--font-body);
+  box-shadow: 0px 3px 6px rgba(#000000, 0.1);
+}
+
+button.button-primary {
+  background-color: var(--color-bronze);
+  color: var(--color-white);
+}
+
+button.botton-secondary {
+  background-color: var(--color-night);
+  color: var(--color-offwhite);
+}
+
+button.button-subtle {
+  background-color: var(--color-sand);
+  color: var(--color-night);
+}
+
+.card {
+  min-width: 340px;
+  padding: 2rem;
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-offwhite);
+  box-shadow: 6px 3px 20px rgba(var(--color-black), 0.1);
+}
+
+.card .card-icon {
+  height: 18px;
+  margin-right: 4px;
+}
+
+.card .card-header {
+  font-family: var(--font-title);
+  font-weight: bold;
+  margin-bottom: 0;
 }
