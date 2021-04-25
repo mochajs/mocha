@@ -47,21 +47,17 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when watched test file is crashed', function() {
+    it('reruns test when watched test file crashes', function() {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
+      replaceFileContents(testFile, 'done();', 'done((;');
+
       return runMochaWatchJSONAsync([testFile], tempDir, () => {
-        replaceFileContents(testFile, 'done();', 'done((;');
-      })
-        .then(() => {
-          return runMochaWatchJSONAsync([testFile], tempDir, () => {
-            replaceFileContents(testFile, 'done((;', 'done();');
-          });
-        })
-        .then(results => {
-          expect(results, 'to have length', 1);
-        });
+        replaceFileContents(testFile, 'done((;', 'done();');
+      }).then(results => {
+        expect(results, 'to have length', 1);
+      });
     });
 
     describe('when in parallel mode', function() {
@@ -80,17 +76,13 @@ describe('--watch', function() {
         const testFile = path.join(tempDir, 'test.js');
         copyFixture(DEFAULT_FIXTURE, testFile);
 
-        return runMochaWatchJSONAsync(['--parallel', testFile], tempDir, () => {
-          replaceFileContents(testFile, 'done();', 'done((;');
-        })
-          .then(() => {
-            return runMochaWatchJSONAsync([testFile], tempDir, () => {
-              replaceFileContents(testFile, 'done((;', 'done();');
-            });
-          })
-          .then(results => {
-            expect(results, 'to have length', 1);
-          });
+        replaceFileContents(testFile, 'done();', 'done((;');
+
+        return runMochaWatchJSONAsync([testFile], tempDir, () => {
+          replaceFileContents(testFile, 'done((;', 'done();');
+        }).then(results => {
+          expect(results, 'to have length', 1);
+        });
       });
     });
 
