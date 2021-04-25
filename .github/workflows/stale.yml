@@ -19,6 +19,6 @@ jobs:
           stale-pr-message: >
             This PR hasn't had any recent activity, and I'm labeling it `stale`.
             Remove the label or comment or this PR will be closed in 14 days.
-            Thanks for contributing to Mocha!'
+            Thanks for contributing to Mocha!
           exempt-issue-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,good-first-issue,help wanted,nice-to-have,qa,reporter,unconfirmed-bug,usability
           exempt-pr-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,needs-review,nice-to-have,qa,reporter,semver-major,semver-minor,semver-patch,usability
