@@ -3,6 +3,7 @@ docs/_site
 docs/_dist
 docs/images/supporters
 docs/api
+docs/css/main.css*
 mocha.js
 mocha.js.map
 .karma/
