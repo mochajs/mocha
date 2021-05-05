@@ -109,11 +109,15 @@ describe('cli/config', function() {
 
     describe('when config file parsing fails', function() {
       beforeEach(function() {
-        sinon.stub(parsers, 'yaml').throws();
+        sinon.stub(parsers, 'yaml').throws('goo.yaml is unparsable');
       });
 
       it('should throw', function() {
-        expect(() => loadConfig('goo.yaml'), 'to throw', /failed to parse/);
+        expect(
+          () => loadConfig('goo.yaml'),
+          'to throw',
+          'Unable to read/parse goo.yaml: goo.yaml is unparsable'
+        );
       });
     });
   });
