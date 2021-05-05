@@ -130,7 +130,7 @@ describe('options', function() {
           beforeEach(function() {
             readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().throws('yikes');
+            readFileSync.onFirstCall().throws('bad file message');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub();
@@ -148,7 +148,7 @@ describe('options', function() {
                 loadOptions('--package /something/wherever --require butts');
               },
               'to throw',
-              /unable to read\/parse/i
+              'Unable to read/parse /something/wherever: bad file message'
             );
           });
         });
