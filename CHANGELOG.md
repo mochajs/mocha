@@ -1,3 +1,21 @@
+# 8.4.0 / 2021-05-07
+
+## :tada: Enhancements
+
+- #4502: CLI file parsing errors now have error codes (@evaline-ju)
+
+## :bug: Fixes
+
+- #4614: Watch: fix crash when reloading files (@outsideris)
+
+## :book: Documentation
+
+- #4630: Add `options.require` to Mocha constructor for `root hook` plugins on parallel runs (@juergba)
+- #4617: Dynamically generating tests with `top-level await` and ESM test files (@juergba)
+- #4608: Update default file extensions (@outsideris)
+
+Also thanks to @outsideris for various improvements on our GH actions workflows.
+
 # 8.3.2 / 2021-03-12
 
 ## :bug: Fixes
