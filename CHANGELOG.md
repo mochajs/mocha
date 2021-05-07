@@ -2,19 +2,19 @@
 
 ## :tada: Enhancements
 
-- #4502: CLI file parsing errors now have error codes (@evaline-ju)
+- [#4502](https://github.com/mochajs/mocha/issues/4502): CLI file parsing errors now have error codes ([**@evaline-ju**](https://github.com/evaline-ju))
 
 ## :bug: Fixes
 
-- #4614: Watch: fix crash when reloading files (@outsideris)
+- [#4614](https://github.com/mochajs/mocha/issues/4614): Watch: fix crash when reloading files ([**@outsideris**](https://github.com/outsideris))
 
 ## :book: Documentation
 
-- #4630: Add `options.require` to Mocha constructor for `root hook` plugins on parallel runs (@juergba)
-- #4617: Dynamically generating tests with `top-level await` and ESM test files (@juergba)
-- #4608: Update default file extensions (@outsideris)
+- [#4630](https://github.com/mochajs/mocha/issues/4630): Add `options.require` to Mocha constructor for `root hook` plugins on parallel runs ([**@juergba**](https://github.com/juergba))
+- [#4617](https://github.com/mochajs/mocha/issues/4617): Dynamically generating tests with `top-level await` and ESM test files ([**@juergba**](https://github.com/juergba))
+- [#4608](https://github.com/mochajs/mocha/issues/4608): Update default file extensions ([**@outsideris**](https://github.com/outsideris))
 
-Also thanks to @outsideris for various improvements on our GH actions workflows.
+Also thanks to [**@outsideris**](https://github.com/outsideris) for various improvements on our GH actions workflows.
 
 # 8.3.2 / 2021-03-12
 
