@@ -2,7 +2,6 @@
 'use strict';
 
 var utils = require('../../lib/utils');
-const errors = require('../../lib/errors');
 var sinon = require('sinon');
 
 describe('lib/utils', function() {
@@ -775,51 +774,6 @@ describe('lib/utils', function() {
     describe('when provided null', function() {
       it('should return an array containing a null value only', function() {
         expect(utils.castArray(null), 'to equal', [null]);
-      });
-    });
-  });
-
-  describe('lookupFiles()', function() {
-    beforeEach(function() {
-      sinon.stub(errors, 'deprecate');
-    });
-
-    describe('when run in Node.js', function() {
-      before(function() {
-        if (process.browser) {
-          return this.skip();
-        }
-      });
-
-      beforeEach(function() {
-        sinon.stub(utils, 'isBrowser').returns(false);
-        sinon.stub(require('../../lib/cli'), 'lookupFiles').returns([]);
-      });
-
-      it('should print a deprecation message', function() {
-        utils.lookupFiles();
-        expect(errors.deprecate, 'was called once');
-      });
-
-      it('should delegate to new location of lookupFiles()', function() {
-        utils.lookupFiles(['foo']);
-        expect(
-          require('../../lib/cli').lookupFiles,
-          'to have a call satisfying',
-          [['foo']]
-        ).and('was called once');
-      });
-    });
-
-    describe('when run in browser', function() {
-      beforeEach(function() {
-        sinon.stub(utils, 'isBrowser').returns(true);
-      });
-
-      it('should throw', function() {
-        expect(() => utils.lookupFiles(['foo']), 'to throw', {
-          code: 'ERR_MOCHA_UNSUPPORTED'
-        });
       });
     });
   });
