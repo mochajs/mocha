@@ -42,7 +42,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": ">= 10.12.0"
+    "node": ">= 12.0.0"
   },
   "scripts": {
     "prepublishOnly": "nps test clean build",
