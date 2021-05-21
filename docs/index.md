@@ -64,7 +64,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> As of v8.0.0, Mocha requires Node.js v10.12.0 or newer.
+> As of v9.0.0, Mocha requires Node.js v12.0.0 or newer.
 
 ## Getting Started
 
@@ -116,7 +116,7 @@ $ npm test
 
 ## Run Cycle Overview
 
-> Updated for v9.0.0.
+> Updated for v8.0.0.
 
 The following is a mid-level outline of Mocha's "flow of execution" when run in Node.js; the "less important" details have been omitted.
 
