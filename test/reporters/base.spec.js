@@ -164,6 +164,34 @@ describe('Base reporter', function() {
         '      \n      actual expected\n      \n      a foobar inline diff\n      '
       );
     });
+
+    it("should truncate overly long 'actual' ", function() {
+      var actual = '';
+      var i = 0;
+      while (i++ < 120) {
+        actual += 'a foo unified diff ';
+      }
+      var expected = 'a bar unified diff';
+
+      inlineDiffsStub.value(false);
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'to match', / \.\.\. Lines skipped/);
+    });
+
+    it("should truncate overly long 'expected' ", function() {
+      var actual = 'a foo unified diff';
+      var expected = '';
+      var i = 0;
+      while (i++ < 120) {
+        expected += 'a bar unified diff ';
+      }
+
+      inlineDiffsStub.value(false);
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'to match', / \.\.\. Lines skipped/);
+    });
   });
 
   describe('inline strings diff', function() {
