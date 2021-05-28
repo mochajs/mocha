@@ -366,9 +366,10 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it("should use 'inspect' if err include 'inspect' parameter", function() {
+  it("should use 'inspect' if 'inspect' and 'message' are set", function() {
     var err = new Error('test');
     err.showDiff = false;
+    err.message = 'error message';
     err.inspect = function() {
       return 'Inspect Error';
     };
