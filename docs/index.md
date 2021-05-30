@@ -1065,7 +1065,6 @@ Require a module before loading the user interface or test files. This is useful
 
 - Test harnesses
 - Assertion libraries that augment built-ins or global scope (such as [should.js][npm-should.js])
-- Instant ECMAScript modules via [esm][npm-esm]
 - Compilers such as Babel via [@babel/register][npm-babel-register] or TypeScript via [ts-node][npm-ts-node] (using `--require ts-node/register`). See [Babel][example-babel] or [TypeScript][example-typescript] working examples.
 
 Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
@@ -2034,20 +2033,15 @@ this means either ending the file with a `.mjs` extension, or, if you want to us
 adding `"type": "module"` to your `package.json`.
 More information can be found in the [Node.js documentation](https://nodejs.org/api/esm.html).
 
-> Mocha supports ES modules only from Node.js v12.11.0 and above. To enable this in versions smaller than 13.2.0, you need to add `--experimental-modules` when running
-> Mocha. From version 13.2.0 of Node.js, you can use ES modules without any flags.
-> (Mocha _will_ load ESM even in Node v10, but this is not officially supported. Use at your own risk.)
-
 ### Current Limitations
-
-Node.JS native ESM support still has status: **Stability: 1 - Experimental**
 
 - [Watch mode](#-watch-w) does not support ES Module test files
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
 - [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
-- When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files
-- Node.JS native ESM support does not work with [esm][npm-esm] module
+- When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`,
+  hold off on using ES modules for your test files. You can switch to using `testdouble`,
+  which does support ESM.
 
 ## Running Mocha in the Browser
 
@@ -2426,7 +2420,6 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [npm]: https://npmjs.org/
 [npm-babel-register]: https://npm.im/@babel/register
 [npm-chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
-[npm-esm]: https://npm.im/esm
 [npm-glob]: https://www.npmjs.com/package/glob
 [npm-growl]: https://npm.im/growl
 [npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
