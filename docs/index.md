@@ -874,6 +874,12 @@ Use this option to have Mocha check for global variables that are leaked while r
 
 > _`--compilers` was removed in v6.0.0. See [further explanation and workarounds][mocha-wiki-compilers]._
 
+### `--dry-run`
+
+> _New in v9.0.0._
+
+Report tests without executing any of them, neither tests nor hooks.
+
 ### `--exit`
 
 > _Updated in v4.0.0._
@@ -2102,6 +2108,7 @@ mocha.setup({
   asyncOnly: true,
   bail: true,
   checkLeaks: true,
+  dryRun: true,
   forbidOnly: true,
   forbidPending: true,
   global: ['MyLib'],
