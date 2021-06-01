@@ -8,7 +8,7 @@ describe('--dry-run', function() {
   var args = ['--dry-run'];
 
   it('should only report, but not execute any test', function(done) {
-    var fixture = path.join('options/dry-run', 'dry-Run');
+    var fixture = path.join('options/dry-run', 'dry-run');
     runMochaJSON(fixture, args, function(err, res) {
       if (err) {
         return done(err);
