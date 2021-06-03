@@ -35,7 +35,7 @@
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
     "mocha": "./bin/mocha",
-    "_mocha": "./bin/_mocha"
+    "_mocha": "./bin/_mocha.js"
   },
   "directories": {
     "lib": "./lib",
