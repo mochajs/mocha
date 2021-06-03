@@ -11,6 +11,7 @@ const {
   MULTIPLE_DONE,
   UNSUPPORTED
 } = require('../../lib/errors').constants;
+const errors = require('../../lib/errors');
 
 const {
   EVENT_HOOK_BEGIN,
@@ -30,6 +31,15 @@ const {STATE_FAILED} = Mocha.Runnable.constants;
 describe('Runner', function() {
   afterEach(function() {
     sinon.restore();
+  });
+
+  describe('constructor deprecation', function() {
+    it('should print a deprecation warning', function() {
+      sinon.stub(errors, 'deprecate');
+      const suite = new Suite('Suite', 'root');
+      new Runner(suite, false); /* eslint no-new: "off" */
+      expect(errors.deprecate, 'was called once');
+    });
   });
 
   describe('instance method', function() {
