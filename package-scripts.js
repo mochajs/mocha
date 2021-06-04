@@ -263,8 +263,13 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
+          'nps docs.clean && nps docs.sass && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
         description: 'Build documentation'
+      },
+      sass: {
+        script: 'sass docs/scss/:docs/css/',
+        description: 'Compile SASS',
+        hiddenFromHelp: true
       },
       production: {
         script: 'nps docs && nps docs.postbuild',
