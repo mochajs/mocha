@@ -669,24 +669,6 @@ describe('lib/utils', function() {
     });
   });
 
-  describe('sQuote()', function() {
-    var str = 'xxx';
-
-    it('should return its input as string wrapped in single quotes', function() {
-      var expected = "'xxx'";
-      expect(utils.sQuote(str), 'to be', expected);
-    });
-  });
-
-  describe('dQuote()', function() {
-    var str = 'xxx';
-
-    it('should return its input as string wrapped in double quotes', function() {
-      var expected = '"xxx"';
-      expect(utils.dQuote(str), 'to be', expected);
-    });
-  });
-
   describe('createMap()', function() {
     it('should return an object with a null prototype', function() {
       expect(Object.getPrototypeOf(utils.createMap()), 'to be', null);

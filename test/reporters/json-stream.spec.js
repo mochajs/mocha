@@ -3,11 +3,9 @@
 var events = require('../../').Runner.constants;
 var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-var utils = require('../../lib/utils');
 
 var JSONStream = reporters.JSONStream;
 var createMockRunner = helpers.createMockRunner;
-var dQuote = utils.dQuote;
 var makeExpectedTest = helpers.makeExpectedTest;
 var makeRunReporter = helpers.createRunReporterFunction;
 
@@ -71,17 +69,17 @@ describe('JSON Stream reporter', function() {
           stdout[0],
           'to equal',
           '["pass",{"title":' +
-            dQuote(expectedTitle) +
+            `"${expectedTitle}"` +
             ',"fullTitle":' +
-            dQuote(expectedFullTitle) +
+            `"${expectedFullTitle}"` +
             ',"file":' +
-            dQuote(expectedFile) +
+            `"${expectedFile}"` +
             ',"duration":' +
             expectedDuration +
             ',"currentRetry":' +
             currentRetry +
             ',"speed":' +
-            dQuote(expectedSpeed) +
+            `"${expectedSpeed}"` +
             '}]\n'
         );
       });
@@ -106,21 +104,21 @@ describe('JSON Stream reporter', function() {
             stdout[0],
             'to equal',
             '["fail",{"title":' +
-              dQuote(expectedTitle) +
+              `"${expectedTitle}"` +
               ',"fullTitle":' +
-              dQuote(expectedFullTitle) +
+              `"${expectedFullTitle}"` +
               ',"file":' +
-              dQuote(expectedFile) +
+              `"${expectedFile}"` +
               ',"duration":' +
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
               ',"speed":' +
-              dQuote(expectedSpeed) +
+              `"${expectedSpeed}"` +
               ',"err":' +
-              dQuote(expectedErrorMessage) +
+              `"${expectedErrorMessage}"` +
               ',"stack":' +
-              dQuote(expectedErrorStack) +
+              `"${expectedErrorStack}"` +
               '}]\n'
           );
         });
@@ -144,19 +142,19 @@ describe('JSON Stream reporter', function() {
             stdout[0],
             'to equal',
             '["fail",{"title":' +
-              dQuote(expectedTitle) +
+              `"${expectedTitle}"` +
               ',"fullTitle":' +
-              dQuote(expectedFullTitle) +
+              `"${expectedFullTitle}"` +
               ',"file":' +
-              dQuote(expectedFile) +
+              `"${expectedFile}"` +
               ',"duration":' +
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
               ',"speed":' +
-              dQuote(expectedSpeed) +
+              `"${expectedSpeed}"` +
               ',"err":' +
-              dQuote(expectedErrorMessage) +
+              `"${expectedErrorMessage}"` +
               ',"stack":null}]\n'
           );
         });
