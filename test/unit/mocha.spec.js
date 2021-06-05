@@ -352,6 +352,20 @@ describe('Mocha', function() {
       });
     });
 
+    describe('dryRun()', function() {
+      it('should set the dryRun option to true', function() {
+        mocha.dryRun();
+        expect(mocha.options, 'to have property', 'dryRun', true);
+      });
+
+      describe('when provided `false` argument', function() {
+        it('should set the dryRun option to false', function() {
+          mocha.dryRun(false);
+          expect(mocha.options, 'to have property', 'dryRun', false);
+        });
+      });
+    });
+
     describe('dispose()', function() {
       it('should dispose the root suite', function() {
         mocha.dispose();
