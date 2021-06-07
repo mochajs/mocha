@@ -1,3 +1,32 @@
+# 9.0.0 / 2021-06-07
+
+## :boom: Breaking Changes
+
+- #4633: **Drop Node.js v10.x support** (@juergba)
+
+- #4635: `import`-first loading of test files (@giltayar)
+
+**Mocha is going ESM-first!** This means that it will now use ESM `import(test_file)` to load the test files, instead of the CommonJS `require(test_file)`. This is not a problem, as `import` can also load most files that `require` does. In the rare cases where this fails, it will fallback to `require(...)`. This ESM-first approach is the next step in Mocha's ESM migration, and allows ESM loaders to load and transform the test file.
+
+- #4636: Remove deprecated `utils.lookupFiles()` (@juergba)
+
+- #4638: Limit the size of `actual`/`expected` for `diff` generation (@juergba)
+
+- #4389: Refactoring: Consuming log-symbols alternate to code for win32 in reporters/base (@MoonSupport)
+
+## :tada: Enhancements
+
+- #4640: Add new option `--dry-run` (@juergba)
+
+## :bug: Fixes
+
+- #4128: Fix: control stringification of error message (@syeutyu)
+
+## :nut_and_bolt: Other
+
+- #4646: Deprecate `Runner(suite: Suite, delay: boolean)` signature (@juergba)
+- #4643: Update production dependencies (@juergba)
+
 # 8.4.0 / 2021-05-07
 
 ## :tada: Enhancements
