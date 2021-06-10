@@ -37,7 +37,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `rollup -c`,
+      script: `rollup -c ./rollup.config.js && rollup -c ./rollup_no-ie11.config.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -73,7 +73,7 @@ module.exports = {
       }
     },
     clean: {
-      script: 'rimraf mocha.js',
+      script: 'rimraf mocha.js mocha.js.map mocha-es2018.js',
       description: 'Clean browser bundle'
     },
     test: {
@@ -210,7 +210,8 @@ module.exports = {
           description: 'Run browser tests'
         },
         unit: {
-          script: 'cross-env NODE_PATH=. karma start --single-run --colors',
+          script:
+            'cross-env NODE_PATH=. karma start karma.conf.js --single-run --colors && cross-env NODE_PATH=. karma start karma_no-ie11.conf.js --single-run --colors',
           description: 'Run browser unit tests'
         },
         bdd: {

@@ -37,6 +37,7 @@ overrides:
   - files:
       - esm-utils.js
       - rollup.config.js
+      - rollup_no-ie11.config.js
       - scripts/pick-from-package-json.js
     parserOptions:
       ecmaVersion: 2018
