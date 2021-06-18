@@ -2,11 +2,11 @@
 
 ## :nut_and_bolt: Other
 
-- #4657: Browser: add separate bundle for modern browsers (@juergba)
+- [#4657](https://github.com/mochajs/mocha/issues/4657): Browser: add separate bundle for modern browsers ([**@juergba**](https://github.com/juergba))
 
 We added a separate browser bundle `mocha-es2018.js` in javascript ES2018, as we skipped the transpilation down to ES5. This is an **experimental step towards freezing Mocha's support of IE11**.
 
-- #4653: ESM: proper version check in `hasStableEsmImplementation` (@alexander-fenster)
+- [#4653](https://github.com/mochajs/mocha/issues/4653): ESM: proper version check in `hasStableEsmImplementation` ([**@alexander-fenster**](https://github.com/alexander-fenster))
 
 # 9.0.0 / 2021-06-07
 
