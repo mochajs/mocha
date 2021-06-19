@@ -1,0 +1,14 @@
+on:
+  pull_request:
+    # we use the `edited` type to detect changes to the PR title
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  link-issues:
+    runs-on: ubuntu-latest
+    name: Link issues found in PR title and commit message(s)
+    steps:
+      - id: link-issues
+        uses: boneskull/more-linked-issues-action@v0.2.1
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
