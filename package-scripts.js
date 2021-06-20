@@ -211,7 +211,7 @@ module.exports = {
         },
         unit: {
           script:
-            'cross-env NODE_PATH=. karma start karma.conf.js --single-run --colors && cross-env NODE_PATH=. karma start karma_no-ie11.conf.js --single-run --colors',
+            'cross-env NODE_PATH=. karma start karma_no-ie11.conf.js --single-run --colors && cross-env NODE_PATH=. karma start karma.conf.js --single-run --colors',
           description: 'Run browser unit tests'
         },
         bdd: {
