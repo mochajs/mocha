@@ -5,7 +5,7 @@ on:
       days:
         description: 'Number of days'
         required: true
-        default: 120
+        default: 180
 
 jobs:
   del_runs:
