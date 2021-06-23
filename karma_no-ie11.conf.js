@@ -18,6 +18,11 @@ const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;
 const hostname = os.hostname();
 
+if (fs.existsSync('./mocha.js') && fs.existsSync('./mocha-es2018.js')) {
+  fs.renameSync('./mocha.js', './mocha-es5.js');
+  fs.renameSync('./mocha-es2018.js', './mocha.js');
+}
+
 const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
   'MicrosoftEdge@latest': 'Windows 10',
