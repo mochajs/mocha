@@ -1,4 +1,5 @@
 'use strict';
+var path = require('path');
 var helpers = require('./helpers');
 var run = helpers.runMochaJSON;
 var runMochaAsync = helpers.runMochaAsync;
@@ -64,5 +65,20 @@ describe('esm', function() {
       expect(result, 'to have passed test count', 1);
       done();
     });
+  });
+
+  it('should enable requiring/loading a cjs module with "dir" as filename', async function() {
+    var fixture = 'esm/test-that-uses-dir-cjs-require.fixture.js';
+    const result = await runMochaAsync(
+      fixture,
+      [
+        ...args,
+        '--require',
+        path.resolve(__dirname, './fixtures/esm/dir-cjs-require')
+      ],
+      {stdio: 'pipe'}
+    );
+
+    expect(result, 'to have passed test count', 1);
   });
 });
