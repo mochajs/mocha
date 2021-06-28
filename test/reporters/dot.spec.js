@@ -53,7 +53,7 @@ describe('Dot reporter', function() {
         });
 
         it('should write a newline followed by a comma', function() {
-          var runner = createMockRunner('pending', EVENT_TEST_PENDING);
+          var runner = ('pending', EVENT_TEST_PENDING);
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
           sinon.restore();

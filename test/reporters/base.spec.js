@@ -50,7 +50,6 @@ describe('Base reporter', function() {
 
   describe('showDiff', function() {
     var err;
-
     beforeEach(function() {
       err = new AssertionError({actual: 'foo', expected: 'bar'});
     });
@@ -68,7 +67,6 @@ describe('Base reporter', function() {
     it("should show diffs if 'err.showDiff' is true", function() {
       err.showDiff = true;
       var test = makeTest(err);
-
       list([test]);
 
       var errOut = stdout.join('\n');

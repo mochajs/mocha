@@ -257,6 +257,22 @@ body {
   letter-spacing: 1px;
 }
 
+#progress-bar{
+  height: 15px;
+  border-radius: 5px;
+  border: solid  #00e600;
+  padding: 5px 5px 5px 5px;
+  background-color: #00e600;
+}
+
+#progress-bar.error {
+  height: 15px;
+  border-radius: 5px;
+  border: solid  #c00;
+  padding: 5px 5px 5px 5px;
+  background-color: #c00;
+}
+
 #mocha-stats {
   position: fixed;
   top: 15px;

@@ -47,7 +47,8 @@ const baseConfig = {
   files: [
     // we use the BDD interface for all of the tests that
     // aren't interface-specific.
-    'test/unit/*.spec.js'
+    'test/unit/*.spec.js',
+    'test/browser-specific/*.spec.js'
   ],
   plugins: [
     'karma-mocha',
