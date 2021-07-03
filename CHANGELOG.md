@@ -2,11 +2,11 @@
 
 ## :bug: Fixes
 
-- #4668: ESM: make `--require <dir>` work with new `import`-first loading (@giltayar)
+- [#4668](https://github.com/mochajs/mocha/issues/4668): ESM: make `--require <dir>` work with new `import`-first loading ([**@giltayar**](https://github.com/giltayar))
 
 ## :nut_and_bolt: Other
 
-- #4674: Update production dependencies (@juergba)
+- [#4674](https://github.com/mochajs/mocha/issues/4674): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
 # 9.0.1 / 2021-06-18
 
