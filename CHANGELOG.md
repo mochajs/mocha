@@ -1,3 +1,13 @@
+# 9.0.2 / 2021-07-03
+
+## :bug: Fixes
+
+- #4668: ESM: make `--require <dir>` work with new `import`-first loading (@giltayar)
+
+## :nut_and_bolt: Other
+
+- #4674: Update production dependencies (@juergba)
+
 # 9.0.1 / 2021-06-18
 
 ## :nut_and_bolt: Other
