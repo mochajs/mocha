@@ -1,8 +1,11 @@
 'use strict';
 var path = require('path');
-var helpers = require('./helpers');
-var run = helpers.runMochaJSON;
-var runMochaAsync = helpers.runMochaAsync;
+const {
+  runMochaJSON: run,
+  runMochaAsync,
+  invokeMochaAsync,
+  resolveFixturePath
+} = require('./helpers');
 var utils = require('../../lib/utils');
 var args =
   +process.versions.node.split('.')[0] >= 13 ? [] : ['--experimental-modules'];
@@ -80,5 +83,23 @@ describe('esm', function() {
     );
 
     expect(result, 'to have passed test count', 1);
+  });
+
+  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module', async function() {
+    const fixture =
+      'esm/type-module/test-that-imports-non-existing-module.fixture.js';
+
+    const [, promise] = invokeMochaAsync(
+      [resolveFixturePath(fixture), '--unhandled-rejections=warn'],
+      {stdio: 'pipe'}
+    );
+    const result = await promise;
+
+    expect(result, 'to have failed with output', /ERR_MODULE_NOT_FOUND/);
+    expect(
+      result,
+      'to have failed with output',
+      /test-that-imports-non-existing-module/
+    );
   });
 });
