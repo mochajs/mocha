@@ -1,11 +1,6 @@
 'use strict';
 var path = require('path');
-const {
-  runMochaJSON: run,
-  runMochaAsync,
-  invokeMochaAsync,
-  resolveFixturePath
-} = require('./helpers');
+const {runMochaJSON: run, runMochaAsync} = require('./helpers');
 var utils = require('../../lib/utils');
 var args =
   +process.versions.node.split('.')[0] >= 13 ? [] : ['--experimental-modules'];
@@ -89,17 +84,13 @@ describe('esm', function() {
     const fixture =
       'esm/type-module/test-that-imports-non-existing-module.fixture.js';
 
-    const [, promise] = invokeMochaAsync(
-      [resolveFixturePath(fixture), '--unhandled-rejections=warn'],
-      {stdio: 'pipe'}
-    );
-    const result = await promise;
+    const err = await runMochaAsync(fixture, ['--unhandled-rejections=warn'], {
+      stdio: 'pipe'
+    }).catch(err => err);
 
-    expect(result, 'to have failed with output', /ERR_MODULE_NOT_FOUND/);
-    expect(
-      result,
-      'to have failed with output',
-      /test-that-imports-non-existing-module/
+    expect(err.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
+      'to contain',
+      'test-that-imports-non-existing-module'
     );
   });
 });
