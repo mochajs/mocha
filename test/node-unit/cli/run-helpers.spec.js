@@ -1,6 +1,7 @@
 'use strict';
 
 const {validateLegacyPlugin, list} = require('../../../lib/cli/run-helpers');
+const Mocha = require('../../../lib/mocha');
 
 describe('helpers', function() {
   describe('validateLegacyPlugin()', function() {
@@ -25,24 +26,19 @@ describe('helpers', function() {
       });
     });
 
-    describe('when used with an "interfaces" key', function() {
+    describe('when used with an "ui" key', function() {
       it('should disallow an array of names', function() {
-        expect(
-          () => validateLegacyPlugin({interface: ['bar']}, 'interface'),
-          'to throw',
-          {
-            code: 'ERR_MOCHA_INVALID_INTERFACE',
-            message: /can only be specified once/i
-          }
-        );
+        expect(() => validateLegacyPlugin({ui: ['bar']}, 'ui'), 'to throw', {
+          code: 'ERR_MOCHA_INVALID_INTERFACE',
+          message: /can only be specified once/i
+        });
       });
 
       it('should fail to recognize an unknown interface', function() {
-        expect(
-          () => validateLegacyPlugin({interface: 'bar'}, 'interface'),
-          'to throw',
-          {code: 'ERR_MOCHA_INVALID_INTERFACE', message: /cannot find module/i}
-        );
+        expect(() => validateLegacyPlugin({ui: 'bar'}, 'ui'), 'to throw', {
+          code: 'ERR_MOCHA_INVALID_INTERFACE',
+          message: /cannot find module/i
+        });
       });
     });
 
@@ -53,6 +49,17 @@ describe('helpers', function() {
           'to throw',
           /unknown plugin/i
         );
+      });
+    });
+
+    describe('when used with a third-party interface', function() {
+      it('should add the interface to "Mocha.interfaces"', function() {
+        // let's suppose that `glob` is an interface
+        const opts = {ui: 'glob'};
+        validateLegacyPlugin(opts, 'ui', Mocha.interfaces);
+        expect(opts.ui, 'to equal', 'glob');
+        expect(Mocha.interfaces, 'to satisfy', {glob: require('glob')});
+        delete Mocha.interfaces.glob;
       });
     });
 
