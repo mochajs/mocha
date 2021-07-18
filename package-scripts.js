@@ -261,6 +261,11 @@ module.exports = {
       description:
         'Output HTML coverage report to coverage/index.html (run tests with COVERAGE=1 first)'
     },
+    coverage: {
+      script:
+        'cross-env COVERAGE=1 nps test.node && nyc report --reporter=text',
+      description: 'Output all the Node.js tests coverage report to text'
+    },
     docs: {
       default: {
         script:
