@@ -7,7 +7,7 @@ describe('utils', function() {
 
   beforeEach(function() {
     // add deps to be mocked as needed to second parameter
-    utils = rewiremock.proxy('../../lib/utils', {});
+    utils = rewiremock.proxy(() => require('../../lib/utils'), {});
   });
 
   describe('function', function() {

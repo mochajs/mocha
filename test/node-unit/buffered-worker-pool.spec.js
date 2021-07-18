@@ -25,7 +25,7 @@ describe('class BufferedWorkerPool', function() {
 
     serializeJavascript = sinon.spy(require('serialize-javascript'));
     BufferedWorkerPool = rewiremock.proxy(
-      require.resolve('../../lib/nodejs/buffered-worker-pool'),
+      () => require('../../lib/nodejs/buffered-worker-pool'),
       {
         workerpool: {
           pool: sinon.stub().returns(pool),
