@@ -42,12 +42,7 @@ describe('node-flags', function() {
       it('should return true for flags starting with "preserve-symlinks"', function() {
         expect(isNodeFlag('preserve-symlinks'), 'to be true');
         expect(isNodeFlag('preserve-symlinks-main'), 'to be true');
-        // Node >= v12 both flags exist in process.allowedNodeEnvironmentFlags
-        const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
-        expect(
-          isNodeFlag('preserve_symlinks'),
-          nodeVersion >= 12 ? 'to be true' : 'to be false'
-        );
+        expect(isNodeFlag('preserve_symlinks'), 'to be true');
       });
 
       it('should return true for flags starting with "harmony-" or "harmony_"', function() {
@@ -69,7 +64,6 @@ describe('node-flags', function() {
       it('should return true for "gc-global"', function() {
         expect(isNodeFlag('gc-global'), 'to be true');
         expect(isNodeFlag('gc_global'), 'to be true');
-        expect(isNodeFlag('gc'), 'to be true');
       });
 
       it('should return true for "es-staging"', function() {
