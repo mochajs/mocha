@@ -1015,6 +1015,15 @@ Specify an explicit path to a [configuration file](#configuring-mocha-nodejs).
 
 By default, Mocha will search for a config file if `--config` is not specified; use `--no-config` to suppress this behavior.
 
+### `--node-option <name>, -n <name>`
+
+> _New in v9.1.0._
+
+For Node.js and V8 options. Mocha forwards these options to Node.js by spawning a new child-process.<br>
+e.g. `-n require=foo -n unhandled-rejections=strict`
+
+Can also be specified as a comma-delimited list: `-n "require=foo, unhandled-rejections=strict"`
+
 ### `--opts <path>`
 
 > _Removed in v8.0.0. Please use [configuration file](#configuring-mocha-nodejs) instead._
@@ -1159,8 +1168,6 @@ Requires either `--grep` or `--fgrep` (but not both).
 
 ### `--inspect, --inspect-brk, inspect`
 
-> _BREAKING CHANGE in v7.0.0; `--debug` / `--debug-brk` are removed and `debug` is deprecated._
-
 Enables Node.js' inspector.
 
 Use `--inspect` / `--inspect-brk` to launch the V8 inspector for use with Chrome Dev Tools.
@@ -1209,6 +1216,10 @@ These flags vary depending on your version of Node.js.
 
 `node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
+> _New in v9.1.0._
+
+You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
+
 ### `--enable-source-maps`
 
 > _New in Node.js v12.12.0_
@@ -1227,6 +1238,10 @@ Error: cool
 Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
+
+> _New in v9.1.0._
+
+You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
 
 ## Parallel Tests
 
