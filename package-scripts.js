@@ -15,8 +15,8 @@ function test(testName, mochaParams) {
   if (process.env.CI) {
     // suppress coverage summaries in CI to reduce noise
     coverageCommand += ' --reporter=json';
-    if (!/^only-/.test(testName)) {
-      mochaParams += ' --forbid-only';
+    if (/^only-/.test(testName)) {
+      mochaParams += ' --no-forbid-only';
     }
   }
   // this may _actually_ be supported in the future
