@@ -22,7 +22,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       expect(lines, 'to equal', [
         '1) spec 2',
-        '"before all" hook for "skipped":'
+        '"before all" hook for "not skipped":'
       ]);
     });
   });
@@ -192,7 +192,7 @@ describe('hook error handling', function() {
     it('should verify results', function() {
       expect(lines, 'to equal', [
         '1) spec 2',
-        '"before all" hook for "skipped":'
+        '"before all" hook for "not skipped":'
       ]);
     });
   });
