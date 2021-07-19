@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+
+A demonstration of pass, pending, failing tests with syntax highlighting for test detail.
+
+This file can be deleted from the PR once satisfied with the color scheme changes.
+
+-->
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Color Scheme Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="mocha.js"></script>
+    <script src="./node_modules/chai/chai.js"></script>
+    <script>
+      expect = chai.expect;
+      mocha.setup('bdd');
+      describe("failure suite", function () {
+        it("failing test", function () {
+          // This test has semantic init, keyword, comment, string, number
+          // to test mocha light/dark color scheme when viewing test detail
+          // in the browser.
+          var o = { _value: function (arg) { return void arg }}
+          var expected = 45;
+          expect(45).to.equal(expected);
+          expect(o._value('undef')).to.equal(void should);
+          expect(o._value('undef' /* an inline comment */)).to.equal(
+            void new Date(),
+          );
+        })
+      })
+    </script>
+    <script src="test/interfaces/bdd.spec.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>

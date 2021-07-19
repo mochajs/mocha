@@ -1,5 +1,19 @@
 @charset "utf-8";
 
+/*
+  LIGHT/DARK SCHEME
+
+  I have marked every line which varies based on color scheme with a
+  comment.  This should aid in maintaining the Light/Dark color scheme
+  and to allow end users to customise it to their liking.
+
+  You can also find every line which may have a bearing on the color
+  scheme with this command:
+
+  grep -E 'color|background|opacity|border|shadow' *.css \
+  | egrep -v '(border-radius|prefers-color-scheme|transition:)'
+*/
+
 body {
   margin:0;
 }
@@ -69,11 +83,11 @@ body {
 }
 
 #mocha .test.pass.medium .duration {
-  background: #c09853;
+  background: #c09853; /* LIGHT SCHEME */
 }
 
 #mocha .test.pass.slow .duration {
-  background: #b94a48;
+  background: #b94a48; /* LIGHT SCHEME */
 }
 
 #mocha .test.pass::before {
@@ -82,17 +96,17 @@ body {
   display: block;
   float: left;
   margin-right: 5px;
-  color: #00d6b2;
+  color: #00d6b2; /* LIGHT SCHEME */
 }
 
 #mocha .test.pass .duration {
   font-size: 9px;
   margin-left: 5px;
   padding: 2px 5px;
-  color: #fff;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.2);
+  color: #fff; /* LIGHT SCHEME */
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.2); /* LIGHT SCHEME */
+  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.2); /* LIGHT SCHEME */
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.2); /* LIGHT SCHEME */
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   -ms-border-radius: 5px;
@@ -105,20 +119,20 @@ body {
 }
 
 #mocha .test.pending {
-  color: #0b97c4;
+  color: #0b97c4; /* LIGHT SCHEME */
 }
 
 #mocha .test.pending::before {
   content: '◦';
-  color: #0b97c4;
+  color: #0b97c4; /* LIGHT SCHEME */
 }
 
 #mocha .test.fail {
-  color: #c00;
+  color: #c00; /* LIGHT SCHEME */
 }
 
 #mocha .test.fail pre {
-  color: black;
+  color: black; /* LIGHT SCHEME */
 }
 
 #mocha .test.fail::before {
@@ -127,35 +141,35 @@ body {
   display: block;
   float: left;
   margin-right: 5px;
-  color: #c00;
+  color: #c00; /* LIGHT SCHEME */
 }
 
 #mocha .test pre.error {
-  color: #c00;
+  color: #c00; /* LIGHT SCHEME */
   max-height: 300px;
   overflow: auto;
 }
 
 #mocha .test .html-error {
   overflow: auto;
-  color: black;
+  color: black; /* LIGHT SCHEME */
   display: block;
   float: left;
   clear: left;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
-  border: 1px solid #eee;
+  border: 1px solid #eee; /* LIGHT SCHEME */
   max-width: 85%; /*(1)*/
   max-width: -webkit-calc(100% - 42px);
   max-width: -moz-calc(100% - 42px);
   max-width: calc(100% - 42px); /*(2)*/
   max-height: 300px;
   word-wrap: break-word;
-  border-bottom-color: #ddd;
-  -webkit-box-shadow: 0 1px 3px #eee;
-  -moz-box-shadow: 0 1px 3px #eee;
-  box-shadow: 0 1px 3px #eee;
+  border-bottom-color: #ddd; /* LIGHT SCHEME */
+  -webkit-box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
+  -moz-box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
+  box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -182,21 +196,22 @@ body {
  */
 #mocha .test pre {
   display: block;
+  overflow: auto; /* so detailed test code does not fall outside the border */
   float: left;
   clear: left;
   font: 12px/1.5 monaco, monospace;
   margin: 5px;
   padding: 15px;
-  border: 1px solid #eee;
+  border: 1px solid #eee; /* LIGHT SCHEME */
   max-width: 85%; /*(1)*/
   max-width: -webkit-calc(100% - 42px);
   max-width: -moz-calc(100% - 42px);
   max-width: calc(100% - 42px); /*(2)*/
   word-wrap: break-word;
-  border-bottom-color: #ddd;
-  -webkit-box-shadow: 0 1px 3px #eee;
-  -moz-box-shadow: 0 1px 3px #eee;
-  box-shadow: 0 1px 3px #eee;
+  border-bottom-color: #ddd; /* LIGHT SCHEME */
+  -webkit-box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
+  -moz-box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
+  box-shadow: 0 1px 3px #eee; /* LIGHT SCHEME */
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -217,7 +232,7 @@ body {
   height: 15px;
   line-height: 15px;
   text-align: center;
-  background: #eee;
+  background: #eee; /* LIGHT SCHEME */
   font-size: 15px;
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -226,8 +241,8 @@ body {
   -moz-transition:opacity 200ms;
   -o-transition:opacity 200ms;
   transition: opacity 200ms;
-  opacity: 0.3;
-  color: #888;
+  opacity: 0.3; /* LIGHT SCHEME */
+  color: #888; /* LIGHT SCHEME */
 }
 
 #mocha .test:hover a.replay {
@@ -251,7 +266,7 @@ body {
 }
 
 #mocha-error {
-  color: #c00;
+  color: #c00; /* LIGHT SCHEME */
   font-size: 1.5em;
   font-weight: 100;
   letter-spacing: 1px;
@@ -263,7 +278,7 @@ body {
   right: 10px;
   font-size: 12px;
   margin: 0;
-  color: #888;
+  color: #888; /* LIGHT SCHEME */
   z-index: 1;
 }
 
@@ -280,11 +295,11 @@ body {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  background-color: initial;
+  background-color: initial; /* LIGHT SCHEME */
 }
 
 #mocha-stats em {
-  color: black;
+  color: black; /* LIGHT SCHEME */
 }
 
 #mocha-stats a {
@@ -293,7 +308,7 @@ body {
 }
 
 #mocha-stats a:hover {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee; /* LIGHT SCHEME */
 }
 
 #mocha-stats li {
@@ -308,11 +323,11 @@ body {
   height: 40px;
 }
 
-#mocha code .comment { color: #ddd; }
-#mocha code .init { color: #2f6fad; }
-#mocha code .string { color: #5890ad; }
-#mocha code .keyword { color: #8a6343; }
-#mocha code .number { color: #2f6fad; }
+#mocha code .comment { color: #ddd;  /* LIGHT SCHEME */ }
+#mocha code .init { color: #2f6fad;  /* LIGHT SCHEME */ }
+#mocha code .string { color: #5890ad;  /* LIGHT SCHEME */ }
+#mocha code .keyword { color: #8a6343;  /* LIGHT SCHEME */ }
+#mocha code .number { color: #2f6fad;  /* LIGHT SCHEME */ }
 
 @media screen and (max-device-width: 480px) {
   #mocha {
@@ -323,3 +338,103 @@ body {
     position: absolute;
   }
 }
+
+/* DARK SCHEME */
+@media (prefers-color-scheme: dark) {
+/*
+Note: you can quickly check the light/dark color scheme change by
+enabling the @media line below, disabling the @media line above
+and resizing the window.
+@media (orientation: landscape) {
+*/
+
+html,
+body {
+  background: black; /* DARK SCHEME */
+  color: yellow; /* DARK SCHEME */
+}
+
+a {
+  color: rgb(0,0,238); /* DARK SCHEME */
+}
+
+a:visited {
+  color: rgb(0,0,215); /* DARK SCHEME */
+}
+
+#mocha h1 a,
+#mocha h1 a:visited {
+  color: yellow; /* DARK SCHEME */
+}
+
+#mocha .test.pass::before {
+  color: green; /* DARK SCHEME */
+}
+
+#mocha .test.pass .duration {
+  color: purple; /* DARK SCHEME */
+}
+
+#mocha .test.pending,
+#mocha .test.pending::before {
+  color: cyan; /* DARK SCHEME */
+}
+
+#mocha .test.fail,
+#mocha .test.fail::before,
+#mocha .test pre.error {
+  color: red !important; /* DARK SCHEME */
+}
+
+#mocha .test.fail pre,
+#mocha .test .html-error {
+  color: yellow; /* DARK SCHEME */
+}
+
+#mocha .test pre {
+  border: 1px solid #eee; /* DARK SCHEME */
+  border-bottom-color: #ddd;/* DARK SCHEME */
+  -webkit-box-shadow: 0 1px 3px #eee;/* DARK SCHEME */
+  -moz-box-shadow: 0 1px 3px #eee;/* DARK SCHEME */
+  box-shadow: 0 1px 3px #eee;/* DARK SCHEME */
+}
+
+#mocha .test a.replay {
+  background: #444; /* DARK SCHEME */
+  color: yellow; /* DARK SCHEME */
+}
+
+#mocha-error {
+  color: red; /* DARK SCHEME */
+}
+
+#mocha-stats {
+  color: yellow; /* DARK SCHEME */
+}
+
+#mocha-stats canvas {
+  background: black; /* DARK SCHEME */
+}
+
+#mocha-stats em {
+  color: white; /* DARK SCHEME */
+}
+
+#mocha-stats .passes em {
+    color: green; /* DARK SCHEME */
+}
+
+#mocha-stats .failures em {
+    color: red; /* DARK SCHEME */
+}
+
+#mocha-stats a:hover {
+  border-bottom: 1px solid yellow; /* DARK SCHEME */
+}
+
+#mocha code .comment { color: #888; /* DARK SCHEME */}
+#mocha code .init { color: #2f6fad; /* DARK SCHEME */}
+#mocha code .string { color: #5890ad; /* DARK SCHEME */}
+#mocha code .keyword { color: #8a6343; /* DARK SCHEME */}
+#mocha code .number { color: #2f6fad; /* DARK SCHEME */}
+} /* END @media DARK SChEME */
