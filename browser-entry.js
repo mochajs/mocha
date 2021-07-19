@@ -166,6 +166,10 @@ mocha.setup = function(opts) {
 
 /**
  * Run mocha, returning the Runner.
+ * Mocha does _not_ automatically run global fixtures in the browser; you must do this manually.
+ * Use {@link Mocha#globalSetup} and {@link Mocha#globalTeardown} for registration,
+ * then use {@link Mocha#runGlobalSetup} and {@link Mocha#runGlobalTeardown} to run them.
+ * @see https://mochajs.org/api/mocha#globalSetup
  */
 
 mocha.run = function(fn) {

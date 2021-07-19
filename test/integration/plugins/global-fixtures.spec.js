@@ -6,16 +6,17 @@ const {
   runMochaAsync,
   runMochaWatchAsync,
   copyFixture,
-  DEFAULT_FIXTURE,
   resolveFixturePath,
   createTempDir
 } = require('../helpers');
+
+const FIXTURE = resolveFixturePath('plugins/global-fixtures/global');
 
 describe('global setup/teardown', function() {
   describe('when mocha run in serial mode', function() {
     it('should execute global setup and teardown', async function() {
       return expect(
-        runMochaAsync(DEFAULT_FIXTURE, [
+        runMochaAsync(FIXTURE, [
           '--require',
           resolveFixturePath('plugins/global-fixtures/global-setup-teardown')
         ]),
@@ -27,47 +28,47 @@ describe('global setup/teardown', function() {
     describe('when only global teardown is supplied', function() {
       it('should run global teardown', async function() {
         return expect(
-          runMochaAsync(DEFAULT_FIXTURE, [
+          runMochaAsync(FIXTURE, [
             '--require',
             resolveFixturePath('plugins/global-fixtures/global-teardown')
           ]),
           'when fulfilled',
-          'to contain once',
-          /teardown schmeardown/
-        );
+          'to contain',
+          /test fixture loaded[\s\S]+teardown schmeardown/
+        ).and('when fulfilled', 'to contain once', /teardown schmeardown/);
       });
     });
 
     describe('when only global setup is supplied', function() {
       it('should run global setup', async function() {
         return expect(
-          runMochaAsync(DEFAULT_FIXTURE, [
+          runMochaAsync(FIXTURE, [
             '--require',
             resolveFixturePath('plugins/global-fixtures/global-setup')
           ]),
           'when fulfilled',
-          'to contain once',
-          /setup schmetup/
-        );
+          'to contain',
+          /setup schmetup[\s\S]+test fixture loaded/
+        ).and('when fulfilled', 'to contain once', /setup schmetup/);
       });
     });
 
     it('should share context', async function() {
       return expect(
-        runMochaAsync(DEFAULT_FIXTURE, [
+        runMochaAsync(FIXTURE, [
           '--require',
           resolveFixturePath('plugins/global-fixtures/global-setup-teardown')
         ]),
         'when fulfilled',
         'to contain once',
-        /setup: this\.foo = bar[\s\S]+teardown: this\.foo = bar/
+        /setup: this\.foo = bar[\s\S]+test fixture loaded[\s\S]+teardown: this\.foo = bar/
       );
     });
 
     describe('when supplied multiple functions', function() {
       it('should execute them sequentially', async function() {
         return expect(
-          runMochaAsync(DEFAULT_FIXTURE, [
+          runMochaAsync(FIXTURE, [
             '--require',
             resolveFixturePath(
               'plugins/global-fixtures/global-setup-teardown-multiple'
@@ -76,6 +77,10 @@ describe('global setup/teardown', function() {
           'when fulfilled',
           'to contain once',
           /teardown: this.foo = 3/
+        ).and(
+          'when fulfilled',
+          'to contain',
+          /test fixture loaded[\s\S]+teardown: this\.foo = 3/
         );
       });
     });
@@ -90,7 +95,7 @@ describe('global setup/teardown', function() {
         tempDir = tempInfo.dirpath;
         removeTempDir = tempInfo.removeTempDir;
         testFile = path.join(tempDir, 'test.js');
-        copyFixture(DEFAULT_FIXTURE, testFile);
+        copyFixture(FIXTURE, testFile);
       });
 
       afterEach(async function() {
@@ -187,7 +192,7 @@ describe('global setup/teardown', function() {
   describe('when mocha run in parallel mode', function() {
     it('should execute global setup and teardown', async function() {
       return expect(
-        runMochaAsync(DEFAULT_FIXTURE, [
+        runMochaAsync(FIXTURE, [
           '--parallel',
           '--require',
           resolveFixturePath('plugins/global-fixtures/global-setup-teardown')
@@ -199,7 +204,7 @@ describe('global setup/teardown', function() {
 
     it('should share context', async function() {
       return expect(
-        runMochaAsync(DEFAULT_FIXTURE, [
+        runMochaAsync(FIXTURE, [
           '--parallel',
           '--require',
           resolveFixturePath('plugins/global-fixtures/global-setup-teardown')
@@ -213,7 +218,7 @@ describe('global setup/teardown', function() {
     describe('when supplied multiple functions', function() {
       it('should execute them sequentially', async function() {
         return expect(
-          runMochaAsync(DEFAULT_FIXTURE, [
+          runMochaAsync(FIXTURE, [
             '--parallel',
             '--require',
             resolveFixturePath(
@@ -222,7 +227,7 @@ describe('global setup/teardown', function() {
           ]),
           'when fulfilled',
           'to contain once',
-          /teardown: this.foo = 3/
+          /teardown: this\.foo = 3/
         );
       });
     });
@@ -237,7 +242,7 @@ describe('global setup/teardown', function() {
         tempDir = tempInfo.dirpath;
         removeTempDir = tempInfo.removeTempDir;
         testFile = path.join(tempDir, 'test.js');
-        copyFixture(DEFAULT_FIXTURE, testFile);
+        copyFixture(FIXTURE, testFile);
       });
 
       afterEach(async function() {
@@ -285,7 +290,11 @@ describe('global setup/teardown', function() {
           ),
           'when fulfilled',
           'to contain once',
-          /teardown: this.foo = 3/
+          /teardown: this\.foo = 3/
+        ).and(
+          'when fulfilled',
+          'to contain once',
+          /(test fixture loaded[\s\S]+?){2}/
         );
       });
     });
