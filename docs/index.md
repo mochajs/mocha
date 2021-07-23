@@ -132,7 +132,7 @@ In a browser, test files are loaded by `<script>` tags, and calling `mocha.run()
    2. Otherwise, Mocha does not spawn a child process
 5. Mocha loads modules specified by `--require`
    1. If a file loaded this way contains known Mocha-specific exports (e.g., [root hook plugins]), Mocha "registers" these
-   2. If not, Mocha ignores any exports of a `--require`'d module
+   2. If not, Mocha ignores any exports of a `--require`'s module
 6. Mocha validates any custom reporters or interfaces which were loaded via `--require` or otherwise
 7. Mocha _discovers_ test files; when given no files or directories, it finds files with extensions `.js`, `.mjs` or `.cjs` in the `test` directory (but not its children), relative to the current working directory
 8. The (default) [bdd interface](#bdd) loads the test files _in no particular order_, which are given an interface-specific `global` context (this is how, e.g., `describe()` ends up as a global in a test file)
