@@ -47,6 +47,28 @@ describe('config', function() {
       expect(js, 'to equal', json);
     });
 
+    it('should rethrow error from absolute path configuration', function() {
+      function _loadConfig() {
+        loadConfig(path.join(configDir, 'mocharcWithThrowError.js'));
+      }
+
+      expect(_loadConfig, 'to throw', {
+        message: /Error from mocharcWithThrowError/
+      });
+    });
+
+    it('should rethrow error from cwd-relative path configuration', function() {
+      var relConfigDir = configDir.substring(projRootDir.length + 1);
+
+      function _loadConfig() {
+        loadConfig(path.join('.', relConfigDir, 'mocharcWithThrowError.js'));
+      }
+
+      expect(_loadConfig, 'to throw', {
+        message: /Error from mocharcWithThrowError/
+      });
+    });
+
     // In other words, path does not begin with '/', './', or '../'
     describe('when path is neither absolute or relative', function() {
       var nodeModulesDir = path.join(projRootDir, 'node_modules');
