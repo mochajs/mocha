@@ -2,11 +2,11 @@
 
 ## :bug: Fixes
 
-- #4702: Error rethrow from cwd-relative path while loading `.mocharc.js` (@kirill-golovan)
+- [#4702](https://github.com/mochajs/mocha/issues/4702): Error rethrow from cwd-relative path while loading `.mocharc.js` ([**@kirill-golovan**](https://github.com/kirill-golovan))
 
-- #4688: Usage of custom interface in parallel mode (@juergba)
+- [#4688](https://github.com/mochajs/mocha/issues/4688): Usage of custom interface in parallel mode ([**@juergba**](https://github.com/juergba))
 
-- #4687: ESM: don't swallow `MODULE_NOT_FOUND` errors in case of `type:module` (@giltayar)
+- [#4687](https://github.com/mochajs/mocha/issues/4687): ESM: don't swallow `MODULE_NOT_FOUND` errors in case of `type:module` ([**@giltayar**](https://github.com/giltayar))
 
 # 9.0.2 / 2021-07-03
 
