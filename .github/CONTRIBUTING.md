@@ -42,7 +42,7 @@ Follow these steps to get going. If you are having trouble, don't be afraid to [
 
 > PRO TIP: After `npm install`, run `npm start` to see a list of commands which can be run with `npm start <command>` (powered by [nps](https://npm.im/nps)).
 
-1. [Install Node.js 10.12.0 or newer](https://nodejs.org/en/download/).
+1. [Install Node.js 12.22.3 or newer](https://nodejs.org/en/download/).
    - If you're new to installing Node, a tool like [nvm](https://github.com/creationix/nvm#install-script) can help you manage multiple version installations.
    - You will need [Google Chrome](https://www.google.com/chrome/) to run browser-based tests locally.
 1. Follow [Github's documentation](https://help.github.com/articles/fork-a-repo/) on setting up Git, forking and cloning.
@@ -58,7 +58,7 @@ Follow these steps to get going. If you are having trouble, don't be afraid to [
    - Keep your PR focused. Don't fix two things at once; don't upgrade dependencies unless necessary.
 1. Before committing, run `npm start test`.
    - This will run both Node.js-based and browser-based tests.
-   - Ultimately, your pull request will be built on our continuous integration servers ([Travis CI](https://travis-ci.org/mochajs/mocha) and [GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Windows+CI%22)). The first step to ensuring these checks pass is to test on your own machine.
+   - Ultimately, your pull request will be built on our continuous integration servers ([GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Tests%22)). The first step to ensuring these checks pass is to test on your own machine.
    - A coverage check will be sent to [Coveralls](https://coveralls.io/github/mochajs/mocha). **A drop in code coverage % is considered a failed check**.
 1. Commit your changes.
    - Use a brief message on the first line, referencing a relevant issue (e.g. `closes #12345`).

@@ -1,3 +1,13 @@
+# 9.0.3 / 2021-07-25
+
+## :bug: Fixes
+
+- #4702: Error rethrow from cwd-relative path while loading `.mocharc.js` (@kirill-golovan)
+
+- #4688: Usage of custom interface in parallel mode (@juergba)
+
+- #4687: ESM: don't swallow `MODULE_NOT_FOUND` errors in case of `type:module` (@giltayar)
+
 # 9.0.2 / 2021-07-03
 
 ## :bug: Fixes
