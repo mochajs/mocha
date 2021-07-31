@@ -71,14 +71,13 @@ mochaArgs['node-option'] &&
 if (mochaArgs._) {
   const i = mochaArgs._.findIndex(val => val === 'inspect');
   if (i > -1) {
-    const [command] = mochaArgs._.splice(i, 1);
+    mochaArgs._.splice(i, 1);
     disableTimeouts('inspect');
-    nodeArgs._ = [command];
     hasInspect = true;
   }
 }
 
-if (mochaArgs['node-option'] || Object.keys(nodeArgs).length) {
+if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   const {spawn} = require('child_process');
   const mochaPath = require.resolve('../lib/cli/cli.js');
 
