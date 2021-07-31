@@ -26,6 +26,7 @@ module.exports = {
   'inline-diffs': false,
   // invert: false, // needs to be used with grep or fgrep
   jobs: 1,
+  'node-option': ['unhandled-rejections=strict'], // without leading "--", also V8 flags
   package: './package.json',
   parallel: false,
   recursive: false,

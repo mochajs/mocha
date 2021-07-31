@@ -10,7 +10,6 @@
  * @private
  */
 
-const {deprecate} = require('../lib/utils');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -23,6 +22,7 @@ const {aliases} = require('../lib/cli/run-option-metadata');
 
 const mochaArgs = {};
 const nodeArgs = {};
+let hasInspect = false;
 
 const opts = loadOptions(process.argv.slice(2));
 debug('loaded opts', opts);
@@ -59,48 +59,39 @@ Object.keys(opts).forEach(opt => {
 
 // disable 'timeout' for debugFlags
 Object.keys(nodeArgs).forEach(opt => disableTimeouts(opt));
+mochaArgs['node-option'] &&
+  mochaArgs['node-option'].forEach(opt => disableTimeouts(opt));
 
 // Native debugger handling
 // see https://nodejs.org/api/debugger.html#debugger_debugger
-// look for 'inspect' or 'debug' that would launch this debugger,
+// look for 'inspect' that would launch this debugger,
 // remove it from Mocha's opts and prepend it to Node's opts.
 // A deprecation warning will be printed by node, if applicable.
 // (mochaArgs._ are "positional" arguments, not prefixed with - or --)
 if (mochaArgs._) {
-  const i = mochaArgs._.findIndex(val => val === 'inspect' || val === 'debug');
+  const i = mochaArgs._.findIndex(val => val === 'inspect');
   if (i > -1) {
-    const [command] = mochaArgs._.splice(i, 1);
+    mochaArgs._.splice(i, 1);
     disableTimeouts('inspect');
-    nodeArgs._ = [command];
+    hasInspect = true;
   }
 }
 
-// historical
-if (nodeArgs.gc) {
-  deprecate(
-    '"-gc" is deprecated and will be removed from a future version of Mocha.  Use "--gc-global" instead.'
-  );
-  nodeArgs['gc-global'] = nodeArgs.gc;
-  delete nodeArgs.gc;
-}
-
-// --require/-r is treated as Mocha flag except when 'esm' is preloaded
-if (mochaArgs.require && mochaArgs.require.includes('esm')) {
-  nodeArgs.require = ['esm'];
-  mochaArgs.require = mochaArgs.require.filter(mod => mod !== 'esm');
-  if (!mochaArgs.require.length) {
-    delete mochaArgs.require;
-  }
-}
-
-if (Object.keys(nodeArgs).length) {
+if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   const {spawn} = require('child_process');
   const mochaPath = require.resolve('../lib/cli/cli.js');
 
-  debug('final node args', nodeArgs);
+  const nodeArgv =
+    (mochaArgs['node-option'] && mochaArgs['node-option'].map(v => '--' + v)) ||
+    unparseNodeFlags(nodeArgs);
+
+  if (hasInspect) nodeArgv.unshift('inspect');
+  delete mochaArgs['node-option'];
+
+  debug('final node argv', nodeArgv);
 
   const args = [].concat(
-    unparseNodeFlags(nodeArgs),
+    nodeArgv,
     mochaPath,
     unparse(mochaArgs, {alias: aliases})
   );
@@ -147,5 +138,5 @@ if (Object.keys(nodeArgs).length) {
   });
 } else {
   debug('running Mocha in-process');
-  require('../lib/cli/cli').main(unparse(mochaArgs, {alias: aliases}));
+  require('../lib/cli/cli').main([], mochaArgs);
 }
