@@ -72,6 +72,13 @@ const baseConfig = {
   mochaReporter: {
     showDiff: true
   },
+  customHeaders: [
+    {
+      match: '.*.html',
+      name: 'Content-Security-Policy',
+      value: "script-src https: 'self' 'unsafe-inline'"
+    }
+  ],
   customLaunchers: {
     ChromeDebug: {
       base: 'Chrome',
