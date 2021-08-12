@@ -265,22 +265,18 @@ describe('Mocha', function() {
     });
 
     describe('bail()', function() {
-      describe('when provided no arguments', function() {
-        it('should set the "bail" flag on the root suite', function() {
-          mocha.bail();
-          expect(suite.bail, 'to have a call satisfying', [true]).and(
-            'was called once'
-          );
-        });
+      it('should set the "bail" flag on the root suite', function() {
+        mocha.bail();
+        expect(suite.bail, 'to have a call satisfying', [true]).and(
+          'was called once'
+        );
       });
 
-      describe('when provided a falsy argument', function() {
-        it('should unset the "bail" flag on the root suite', function() {
-          mocha.bail(false);
-          expect(suite.bail, 'to have a call satisfying', [false]).and(
-            'was called once'
-          );
-        });
+      it('should unset the "bail" flag on the root suite', function() {
+        mocha.bail(false);
+        expect(suite.bail, 'to have a call satisfying', [false]).and(
+          'was called once'
+        );
       });
 
       it('should be chainable', function() {
@@ -344,25 +340,9 @@ describe('Mocha', function() {
         expect(mocha.options, 'to have property', 'diff', true);
       });
 
-      describe('when provided `false` argument', function() {
-        it('should set the diff option to false', function() {
-          mocha.diff(false);
-          expect(mocha.options, 'to have property', 'diff', false);
-        });
-      });
-    });
-
-    describe('dryRun()', function() {
-      it('should set the dryRun option to true', function() {
-        mocha.dryRun();
-        expect(mocha.options, 'to have property', 'dryRun', true);
-      });
-
-      describe('when provided `false` argument', function() {
-        it('should set the dryRun option to false', function() {
-          mocha.dryRun(false);
-          expect(mocha.options, 'to have property', 'dryRun', false);
-        });
+      it('should set the diff option to false', function() {
+        mocha.diff(false);
+        expect(mocha.options, 'to have property', 'diff', false);
       });
     });
 
@@ -382,6 +362,30 @@ describe('Mocha', function() {
         var unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
         mocha.dispose();
         expect(unloadFilesStub, 'was called once');
+      });
+    });
+
+    describe('dryRun()', function() {
+      it('should set the dryRun option to true', function() {
+        mocha.dryRun();
+        expect(mocha.options, 'to have property', 'dryRun', true);
+      });
+
+      it('should set the dryRun option to false', function() {
+        mocha.dryRun(false);
+        expect(mocha.options, 'to have property', 'dryRun', false);
+      });
+    });
+
+    describe('failZero()', function() {
+      it('should set the failZero option to true', function() {
+        mocha.failZero();
+        expect(mocha.options, 'to have property', 'failZero', true);
+      });
+
+      it('should set the failZero option to false', function() {
+        mocha.failZero(false);
+        expect(mocha.options, 'to have property', 'failZero', false);
       });
     });
 
