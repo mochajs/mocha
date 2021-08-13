@@ -937,13 +937,13 @@ Note: A test that executes for _half_ of the "slow" time will be highlighted _in
 
 ### `--timeout <ms>, -t <ms>`
 
-> _Update in v6.0.0: `--no-timeout` is implied when invoking Mocha using inspect flags. It is equivalent to `--timeout 0`. `--timeout 99999999` is no longer needed._
+> _Update in v6.0.0: `--timeout 0` is implied when invoking Mocha using inspect flags. `--timeout 99999999` is no longer needed._
 
 Specifies the test case timeout, defaulting to two (2) seconds (2000 milliseconds). Tests taking longer than this amount of time will be marked as failed.
 
 To override you may pass the timeout in milliseconds, or a value with the `s` suffix, e.g., `--timeout 2s` and `--timeout 2000` are equivalent.
 
-To disable timeouts, use `--no-timeout`.
+To disable timeouts, use `--timeout 0`.
 
 Note: synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking. Infinite loops will still be infinite loops!
 
@@ -1174,7 +1174,7 @@ Use `inspect` to launch Node.js' internal debugger.
 
 All of these options are mutually exclusive.
 
-Implies `--no-timeout`.
+Implies `--timeout 0`.
 
 ### `--parallel, -p`
 
