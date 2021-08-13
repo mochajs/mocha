@@ -8,7 +8,7 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v3
+      - uses: actions/stale@v4
         with:
           days-before-stale: 120
           days-before-close: 14
@@ -22,3 +22,4 @@ jobs:
             Thanks for contributing to Mocha!
           exempt-issue-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,good-first-issue,help wanted,nice-to-have,qa,reporter,unconfirmed-bug,usability
           exempt-pr-labels: browser,chore,confirmed-bug,developer-experience,documentation,faq,feature,future,needs-review,nice-to-have,qa,reporter,semver-major,semver-minor,semver-patch,usability
+          operations-per-run: 200
