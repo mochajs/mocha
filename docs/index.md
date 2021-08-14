@@ -1138,9 +1138,12 @@ Cause Mocha to only run tests matching the given `regexp`, which is internally c
 
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
+And another option with double quotes: `--grep "groupA|groupB"`.<br>
+And for more complex criterias: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
+
 ```js
 describe('api', function() {
-  describe('GET /api/users', function() {
+  describe('GET /api/users groupA', function() {
     it('respond with an array of users', function() {
       // ...
     });
@@ -1148,7 +1151,7 @@ describe('api', function() {
 });
 
 describe('app', function() {
-  describe('GET /users', function() {
+  describe('GET /users groupB', function() {
     it('respond with an array of users', function() {
       // ...
     });
