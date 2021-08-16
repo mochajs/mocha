@@ -8,6 +8,7 @@ delay: false
 diff: true
 exit: false # could be expressed as "no-exit: true"
 extension: ['js', 'cjs', 'mjs']
+fail-zero: true
 # fgrep and grep are mutually exclusive
 fgrep: 'something'
 file:
