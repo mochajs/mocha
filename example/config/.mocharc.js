@@ -15,6 +15,7 @@ module.exports = {
   diff: true,
   exit: false, // could be expressed as "'no-exit': true"
   extension: ['js', 'cjs', 'mjs'],
+  'fail-zero': true,
   fgrep: 'something', // fgrep and grep are mutually exclusive
   file: ['/path/to/some/file', '/path/to/some/other/file'],
   'forbid-only': false,

@@ -876,7 +876,7 @@ Use this option to have Mocha check for global variables that are leaked while r
 
 ### `--dry-run`
 
-> _New in v9.0.0._ Report tests without executing any of them, neither tests nor hooks.
+> _New in v9.0.0_ Report tests without executing any of them, neither tests nor hooks.
 
 ### `--exit`
 
@@ -898,6 +898,10 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 - Use the new [`async_hooks`][node-async-hooks] API ([example][gist-async-hooks])
 - Try something like [wtfnode][npm-wtfnode]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
+
+### `--fail-zero`
+
+> _New in v9.1.0_ Fail test run if no tests are encountered with `exit-code: 1`.
 
 ### `--forbid-only`
 
@@ -1007,7 +1011,7 @@ Can be specified as a comma-delimited list.
 
 ### `--config <path>`
 
-> _New in v6.0.0._
+> _New in v6.0.0_
 
 Specify an explicit path to a [configuration file](#configuring-mocha-nodejs).
 
@@ -1015,7 +1019,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 ### `--node-option <name>, -n <name>`
 
-> _New in v9.1.0._
+> _New in v9.1.0_
 
 For Node.js and V8 options. Mocha forwards these options to Node.js by spawning a new child-process.<br>
 The options are set without leading dashes `--`, e.g. `-n require=foo -n unhandled-rejections=strict`
@@ -1028,7 +1032,7 @@ Can also be specified as a comma-delimited list: `-n require=foo,unhandled-rejec
 
 ### `--package <path>`
 
-> _New in v6.0.0._
+> _New in v6.0.0_
 
 Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (ostensibly containing configuration in a `mocha` property).
 
@@ -1042,7 +1046,7 @@ Specifying `--extension` will _remove_ `.js` as a test file extension; use `--ex
 
 The option can be given multiple times. The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`.
 
-> _New in v8.2.0._
+> _New in v8.2.0_
 
 `--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
 
@@ -1217,7 +1221,7 @@ These flags vary depending on your version of Node.js.
 
 `node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _New in v9.1.0._ You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _New in v9.1.0_ You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
 
 ### `--enable-source-maps`
 
@@ -1238,7 +1242,7 @@ Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excludi
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _New in v9.1.0._ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _New in v9.1.0_ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
 
 ## Parallel Tests
 
@@ -1369,7 +1373,7 @@ It's unlikely (but not impossible) to see a performance gain from a [job count](
 
 ## Root Hook Plugins
 
-> _New in v8.0.0._
+> _New in v8.0.0_
 
 In some cases, you may want a [hook](#hooks) before (or after) every test in every file. These are called _root hooks_. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode! For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
 
@@ -1593,7 +1597,7 @@ If you're a library maintainer, and your library uses root hooks, you can migrat
 
 ## Global Fixtures
 
-> New in v8.2.0
+> _New in v8.2.0_
 
 At first glance, _global fixtures_ seem similar to [root hooks](#root-hook-plugins). However, unlike root hooks, global fixtures:
 
@@ -2121,6 +2125,7 @@ mocha.setup({
   bail: true,
   checkLeaks: true,
   dryRun: true,
+  failZero: true,
   forbidOnly: true,
   forbidPending: true,
   global: ['MyLib'],
