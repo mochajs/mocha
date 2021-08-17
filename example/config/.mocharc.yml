@@ -35,7 +35,7 @@ package: './package.json'
 parallel: false
 recursive: false
 reporter: 'spec'
-reporter-option:
+reporter-option: # array, not object
   - 'foo=bar'
   - 'baz=quux'
 require: '@babel/register'

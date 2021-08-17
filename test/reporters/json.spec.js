@@ -3,6 +3,7 @@
 var fs = require('fs');
 var sinon = require('sinon');
 var JSONReporter = require('../../lib/reporters/json');
+var utils = require('../../lib/utils');
 var Mocha = require('../../');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
@@ -98,6 +99,7 @@ describe('JSON reporter', function() {
       suite.addTest(test);
 
       runner.run(function(failureCount) {
+        sinon.restore();
         expect(runner, 'to satisfy', {
           testResults: {
             passes: [
@@ -150,11 +152,11 @@ describe('JSON reporter', function() {
     });
   });
 
-  describe("when 'reporterOptions.output' is provided", function() {
+  describe('when "reporterOption.output" is provided', function() {
     var expectedDirName = 'reports';
     var expectedFileName = 'reports/test-results.json';
     var options = {
-      reporterOptions: {
+      reporterOption: {
         output: expectedFileName
       }
     };
@@ -171,34 +173,61 @@ describe('JSON reporter', function() {
       suite.addTest(test);
     });
 
-    describe('when file can be created', function() {
-      it('should write test results to file', function(done) {
-        var fsMkdirSync = sinon.stub(fs, 'mkdirSync');
-        var fsWriteFileSync = sinon.stub(fs, 'writeFileSync');
+    it('should write test results to file', function(done) {
+      const fsMkdirSync = sinon.stub(fs, 'mkdirSync');
+      const fsWriteFileSync = sinon.stub(fs, 'writeFileSync');
 
-        fsWriteFileSync.callsFake(function(filename, content) {
-          var expectedJson = JSON.stringify(runner.testResults, null, 2);
-          expect(expectedFileName, 'to be', filename);
-          expect(content, 'to be', expectedJson);
-        });
+      fsWriteFileSync.callsFake(function(filename, content) {
+        const expectedJson = JSON.stringify(runner.testResults, null, 2);
+        expect(expectedFileName, 'to be', filename);
+        expect(content, 'to be', expectedJson);
+      });
 
-        runner.run(function() {
-          fsMkdirSync.calledWith(expectedDirName, {recursive: true});
-          expect(fsWriteFileSync.calledOnce, 'to be true');
-          done();
-        });
+      runner.run(function() {
+        expect(
+          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
+          'to be true'
+        );
+        expect(fsWriteFileSync.calledOnce, 'to be true');
+        done();
       });
     });
 
-    describe('when run in browser', function() {
-      it('should throw unsupported error', function() {
-        sinon.stub(fs, 'writeFileSync').value(false);
+    it('should warn and write test results to console', function(done) {
+      const fsMkdirSync = sinon.stub(fs, 'mkdirSync');
+      const fsWriteFileSync = sinon.stub(fs, 'writeFileSync');
+
+      fsWriteFileSync.throws('unable to write file');
+
+      const outLog = [];
+      const fake = chunk => outLog.push(chunk);
+      sinon.stub(process.stderr, 'write').callsFake(fake);
+      sinon.stub(process.stdout, 'write').callsFake(fake);
+
+      runner.run(function() {
+        sinon.restore();
         expect(
-          () => new JSONReporter(runner, options),
-          'to throw',
-          'file output not supported in browser'
+          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
+          'to be true'
         );
+        expect(fsWriteFileSync.calledOnce, 'to be true');
+        expect(
+          outLog[0],
+          'to contain',
+          `[mocha] writing output to "${expectedFileName}" failed:`
+        );
+        expect(outLog[1], 'to match', /"fullTitle": "JSON suite json test 1"/);
+        done();
       });
+    });
+
+    it('should throw "unsupported error" in browser', function() {
+      sinon.stub(utils, 'isBrowser').callsFake(() => true);
+      expect(
+        () => new JSONReporter(runner, options),
+        'to throw',
+        'file output not supported in browser'
+      );
     });
   });
 });
