@@ -581,6 +581,18 @@ describe('Mocha', function() {
       });
     });
 
+    describe('retryTimedOut()', function() {
+      it('should set the retryTimedOut option to true', function() {
+        mocha.retryTimedOut();
+        expect(mocha.options, 'to have property', 'retryTimedOut', true);
+      });
+
+      it('should set the retryTimedOut option to false', function() {
+        mocha.retryTimedOut(false);
+        expect(mocha.options, 'to have property', 'retryTimedOut', false);
+      });
+    });
+
     describe('run()', function() {
       let globalFixtureContext;
 
