@@ -1,3 +1,11 @@
+# 9.1.0 / 2021-08-20
+
+## :tada: Enhancements
+
+- #4716: Add new option `--fail-zero` (@juergba)
+- #4691: Add new option `--node-option` (@juergba)
+- #4607: Add output option to `JSON` reporter (@dorny)
+
 # 9.0.3 / 2021-07-25
 
 ## :bug: Fixes
