@@ -2,9 +2,9 @@
 
 ## :tada: Enhancements
 
-- #4716: Add new option `--fail-zero` (@juergba)
-- #4691: Add new option `--node-option` (@juergba)
-- #4607: Add output option to `JSON` reporter (@dorny)
+- [#4716](https://github.com/mochajs/mocha/issues/4716): Add new option `--fail-zero` ([**@juergba**](https://github.com/juergba))
+- [#4691](https://github.com/mochajs/mocha/issues/4691): Add new option `--node-option` ([**@juergba**](https://github.com/juergba))
+- [#4607](https://github.com/mochajs/mocha/issues/4607): Add output option to `JSON` reporter ([**@dorny**](https://github.com/dorny))
 
 # 9.0.3 / 2021-07-25
 
