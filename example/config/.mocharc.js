@@ -33,7 +33,7 @@ module.exports = {
   parallel: false,
   recursive: false,
   reporter: 'spec',
-  'reporter-option': ['foo=bar', 'baz=quux'],
+  'reporter-option': ['foo=bar', 'baz=quux'], // array, not object
   require: '@babel/register',
   retries: 1,
   slow: '75',
