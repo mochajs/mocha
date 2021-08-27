@@ -66,7 +66,7 @@ describe('init command', function() {
           return done(err);
         }
         expect(result, 'to have succeeded');
-        expect(fs.existsSync(path.join(tmpdir, 'mocha.css')), 'to be true');
+        expect(fs.existsSync(path.join(tmpdir, 'mocha.sass')), 'to be true');
         expect(fs.existsSync(path.join(tmpdir, 'mocha.js')), 'to be true');
         expect(fs.existsSync(path.join(tmpdir, 'tests.spec.js')), 'to be true');
         expect(fs.existsSync(path.join(tmpdir, 'index.html')), 'to be true');

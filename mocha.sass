@@ -263,8 +263,18 @@ body {
   right: 10px;
   font-size: 12px;
   margin: 0;
-  color: #888;
+  color: #1d1e1f;
   z-index: 1;
+  background-color: #00e600;
+  border: solid  #00e600;
+  border-radius: 10px;
+}
+
+#mocha-stats.fail {
+ @extend #mocha-stats;
+  border: solid  #c00;
+  background-color: #c00;
+  border-radius: 10px;
 }
 
 #mocha-stats .progress {
