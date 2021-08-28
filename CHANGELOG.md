@@ -2,7 +2,7 @@
 
 ## :bug: Fixes
 
-- #4623: `XUNIT` and `JSON` reporter crash in `parallel` mode (@curtisman)
+- [#4623](https://github.com/mochajs/mocha/issues/4623): `XUNIT` and `JSON` reporter crash in `parallel` mode ([**@curtisman**](https://github.com/curtisman))
 
 # 9.1.0 / 2021-08-20
 
