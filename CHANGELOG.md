@@ -1,3 +1,9 @@
+# 9.1.1 / 2021-08-28
+
+## :bug: Fixes
+
+- #4623: `XUNIT` and `JSON` reporter crash in `parallel` mode (@curtisman)
+
 # 9.1.0 / 2021-08-20
 
 ## :tada: Enhancements
