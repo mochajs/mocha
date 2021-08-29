@@ -6,7 +6,6 @@ const {
   getSummary,
   resolveFixturePath
 } = require('../helpers');
-const utils = require('../../../lib/utils');
 const pidtree = require('pidtree');
 
 const REPORTER_FIXTURE_PATH = resolveFixturePath('options/parallel/test-a');
@@ -108,19 +107,9 @@ describe('--parallel', function() {
   });
 
   describe('when used with ESM tests', function() {
-    const esmArgs =
-      Number(process.versions.node.split('.')[0]) >= 13
-        ? []
-        : ['--experimental-modules'];
-
-    before(function() {
-      if (!utils.supportsEsModules()) this.skip();
-    });
-
     it('should have the same result as with --no-parallel', async function() {
       const expected = getSummary(
         await invokeMochaAsync([
-          ...esmArgs,
           '--no-parallel',
           resolveFixturePath('esm/*.fixture.mjs')
         ])[1]
@@ -128,7 +117,6 @@ describe('--parallel', function() {
 
       const actual = getSummary(
         await invokeMochaAsync([
-          ...esmArgs,
           '--parallel',
           resolveFixturePath('esm/*.fixture.mjs')
         ])[1]

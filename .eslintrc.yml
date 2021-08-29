@@ -35,7 +35,7 @@ overrides:
     env:
       browser: false
   - files:
-      - esm-utils.js
+      - lib/nodejs/esm-utils.js
       - rollup.config.js
       - rollup_no-ie11.config.js
       - scripts/pick-from-package-json.js

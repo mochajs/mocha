@@ -1,15 +1,9 @@
 'use strict';
 var path = require('path');
 const {runMochaJSON: run, runMochaAsync} = require('./helpers');
-var utils = require('../../lib/utils');
-var args =
-  +process.versions.node.split('.')[0] >= 13 ? [] : ['--experimental-modules'];
+var args = [];
 
 describe('esm', function() {
-  before(function() {
-    if (!utils.supportsEsModules(true)) this.skip();
-  });
-
   it('should pass a passing esm test that uses esm', function(done) {
     var fixture = 'esm/esm-success.fixture.mjs';
     run(fixture, args, function(err, result) {
@@ -51,8 +45,6 @@ describe('esm', function() {
   });
 
   it('should recognize esm files ending with .js due to package.json type flag', function(done) {
-    if (!utils.supportsEsModules(false)) return this.skip();
-
     var fixture = 'esm/js-folder/esm-in-js.fixture.js';
     run(fixture, args, function(err, result) {
       if (err) {
@@ -69,11 +61,7 @@ describe('esm', function() {
     var fixture = 'esm/test-that-uses-dir-cjs-require.fixture.js';
     const result = await runMochaAsync(
       fixture,
-      [
-        ...args,
-        '--require',
-        path.resolve(__dirname, './fixtures/esm/dir-cjs-require')
-      ],
+      ['--require', path.resolve(__dirname, './fixtures/esm/dir-cjs-require')],
       {stdio: 'pipe'}
     );
 

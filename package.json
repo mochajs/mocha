@@ -175,17 +175,17 @@
   ],
   "browser": {
     "./index.js": "./browser-entry.js",
-    "./lib/nodejs/growl.js": "./lib/browser/growl.js",
-    "./lib/esm-utils.js": false,
+    "./lib/nodejs/growl.js": "./lib/browser/growl.js",    
     "fs": false,
     "path": false,
     "supports-color": false,
+    "./lib/nodejs/buffered-worker-pool.js": false,
+    "./lib/nodejs/esm-utils.js": false,
+    "./lib/nodejs/file-unloader.js": false,
+    "./lib/nodejs/parallel-buffered-runner.js": false,
     "./lib/nodejs/serializer.js": false,
     "./lib/nodejs/worker.js": false,
-    "./lib/nodejs/buffered-worker-pool.js": false,
-    "./lib/nodejs/parallel-buffered-runner.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
-    "./lib/nodejs/file-unloader.js": false,
     "./lib/cli/index.js": false
   },
   "prettier": {
