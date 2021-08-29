@@ -352,6 +352,16 @@ figure#wallaby-logo figcaption {
   -webkit-font-smoothing: antialiased;
 }
 
+table {
+  width: 100%;
+}
+
+table td {
+  border-top: 1px solid #eee;
+  vertical-align: top;
+  word-break: break-all;
+}
+
 @media all and (max-width: 960px) {
   #copyright-notice {
     max-width: initial;
