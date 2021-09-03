@@ -323,7 +323,7 @@ describe('lib/utils', function() {
     });
 
     it('should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values', function() {
-      var regexp = new RegExp('(?:)');
+      var regexp = /(?:)/;
       var regExpObj = {regexp: regexp};
       var regexpString = '/(?:)/';
 
