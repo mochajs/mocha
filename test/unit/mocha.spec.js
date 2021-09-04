@@ -78,7 +78,6 @@ describe('Mocha', function() {
     Suite = sinon.stub(Mocha, 'Suite').returns(suite);
     Suite.constants = {};
 
-    sinon.stub(utils, 'supportsEsModules').returns(false);
     sinon.stub(errors, 'warn');
     sinon.stub(utils, 'isString');
     sinon.stub(utils, 'noop');

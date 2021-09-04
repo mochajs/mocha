@@ -1,7 +1,6 @@
 'use strict';
 
 var invokeMochaAsync = require('../helpers').invokeMochaAsync;
-var utils = require('../../../lib/utils');
 
 /**
  * Extracts root hook log messages from run results
@@ -99,38 +98,28 @@ describe('root hooks', function() {
     });
 
     describe('support ESM when type=module or .mjs extension', function() {
-      before(function() {
-        if (!utils.supportsEsModules()) this.skip();
-      });
-
       it('should run root hooks when provided via mochaHooks', function() {
         return expect(
-          runMochaForHookOutput(
-            [
-              '--require=' +
-                require.resolve(
-                  // as object
-                  '../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.mjs'
-                ),
-              '--require=' +
-                require.resolve(
-                  // as function
-                  '../fixtures/plugins/root-hooks/esm/root-hook-defs-esm.fixture.js'
-                ),
-              '--require=' +
-                require.resolve(
-                  // mixed with commonjs
-                  '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
-                ),
+          runMochaForHookOutput([
+            '--require=' +
               require.resolve(
-                '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
-              )
-            ].concat(
-              +process.versions.node.split('.')[0] >= 13
-                ? []
-                : '--experimental-modules'
+                // as object
+                '../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.mjs'
+              ),
+            '--require=' +
+              require.resolve(
+                // as function
+                '../fixtures/plugins/root-hooks/esm/root-hook-defs-esm.fixture.js'
+              ),
+            '--require=' +
+              require.resolve(
+                // mixed with commonjs
+                '../fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js'
+              ),
+            require.resolve(
+              '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
             )
-          ),
+          ]),
           'to be fulfilled with',
           [
             'afterAll',
@@ -147,10 +136,6 @@ describe('root hooks', function() {
     });
 
     describe('support ESM via .js extension w/o type=module', function() {
-      before(function() {
-        if (!utils.supportsEsModules()) this.skip();
-      });
-
       it('should fail due to ambiguous file type', function() {
         return expect(
           invokeMochaAsync(
@@ -160,11 +145,7 @@ describe('root hooks', function() {
                   // as object
                   '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
                 )
-            ].concat(
-              +process.versions.node.split('.')[0] >= 13
-                ? []
-                : '--experimental-modules'
-            ),
+            ],
             'pipe'
           )[1],
           'when fulfilled',
