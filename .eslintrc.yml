@@ -12,6 +12,7 @@ parserOptions:
     jsx: false
   sourceType: script
 rules:
+  no-var: 0
   strict:
     - error
     - safe
@@ -42,7 +43,8 @@ overrides:
     parserOptions:
       ecmaVersion: 2018
       sourceType: module
-    parser: babel-eslint
+      requireConfigFile: false # for @babel/eslint-parser
+    parser: '@babel/eslint-parser'
     env:
       browser: false
   - files:
