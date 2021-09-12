@@ -414,18 +414,27 @@ As of v8.0.0, [Root Hook Plugins] are the preferred mechanism for setting root h
 
 > _WARNING: Delayed root suites are incompatible with [parallel mode](#parallel-tests)._
 
-If you need to perform asynchronous operations before any of your suites are run, you may delay the root suite. Run `mocha` with the `--delay` flag. This will attach a special callback function, `run()`, to the global context:
+If you need to perform asynchronous operations before any of your suites are run (e.g. for dynamically generating tests), you may delay the root suite. Run `mocha` with the `--delay` flag. This will attach a special callback function, `run()`, to the global context:
 
 ```js
-setTimeout(function() {
-  // do some setup
+const assert = require('assert');
+
+const fn = async x => { return new Promise(
+  resolve => { setTimeout(resolve, 3000, 2 * x); }
+)};
+
+// instead of an IIFE, you can use 'setImmediate' or 'nextTick' or 'setTimeout'
+(async function() {
+  const z = await fn(3);
 
   describe('my suite', function() {
-    // ...
+      it(`expected value ${z}`, function() {
+          assert.equal(z, 6);
+      });
   });
 
   run();
-}, 5000);
+})();
 ```
 
 ## Pending Tests
@@ -734,7 +743,8 @@ describe('add()', function() {
 });
 ```
 
-With `top-level await` you can collect your test data in a dynamic and asynchronous way while the test file is being loaded:
+With `top-level await` you can collect your test data in a dynamic and asynchronous way while the test file is being loaded.<br>
+See also [`--delay`](#delayed-root-suite) for CommonJS modules without `top-level await`.
 
 ```js
 // testfile.mjs
