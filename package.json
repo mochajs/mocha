@@ -174,7 +174,7 @@
   ],
   "browser": {
     "./index.js": "./browser-entry.js",
-    "./lib/nodejs/growl.js": "./lib/browser/growl.js",    
+    "./lib/nodejs/growl.js": "./lib/browser/growl.js",
     "fs": false,
     "path": false,
     "supports-color": false,
