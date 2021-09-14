@@ -288,6 +288,30 @@ describe('lib/utils', function() {
         ].join('\n');
         expect(stringify(expected), 'to be', actual);
       });
+
+      it('should represent the actual full result for document and elements', function() {
+        if (!process.browser) {
+          this.skip();
+          return;
+        }
+
+        var document = global.document;
+        var expected = {
+          document: document,
+          body: document.body,
+          div: document.createElement('div')
+        };
+        var actual = [
+          '{',
+          '  "body": {}',
+          '  "div": {}',
+          '  "document": {',
+          '    "location": "http://localhost:9876/context.html"',
+          '  }',
+          '}'
+        ].join('\n');
+        expect(stringify(expected), 'to be', actual);
+      });
     });
 
     it('should canonicalize the object', function() {
