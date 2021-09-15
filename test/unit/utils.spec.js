@@ -295,22 +295,25 @@ describe('lib/utils', function() {
           return;
         }
 
-        var document = global.document;
+        var win = global.open('');
+        var document = win.document;
+        document.body.innerHTML = '<div>foo</div>';
         var expected = {
-          document: document,
           body: document.body,
-          div: document.createElement('div')
+          div: document.createElement('div'),
+          document: document
         };
         var actual = [
           '{',
-          '  "body": {}',
-          '  "div": {}',
+          '  "body": "<body><div>foo</div></body>"',
+          '  "div": "<div></div>"',
           '  "document": {',
-          '    "location": "http://localhost:9876/context.html"',
+          '    "location": "about:blank"',
           '  }',
           '}'
         ].join('\n');
         expect(stringify(expected), 'to be', actual);
+        win.close();
       });
     });
 
