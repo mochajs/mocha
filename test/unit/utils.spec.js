@@ -297,7 +297,8 @@ describe('lib/utils', function() {
 
         var win = global.open('');
         var document = win.document;
-        document.body.innerHTML = '<div>foo</div>';
+        document.body.innerHTML = '<div class="foo">bar</div>';
+
         var expected = {
           body: document.body,
           div: document.createElement('div'),
@@ -305,7 +306,7 @@ describe('lib/utils', function() {
         };
         var actual = [
           '{',
-          '  "body": "<body><div>foo</div></body>"',
+          '  "body": "<body><div class=\\"foo\\">bar</div></body>"',
           '  "div": "<div></div>"',
           '  "document": {',
           '    "location": "about:blank"',
