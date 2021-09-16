@@ -213,32 +213,4 @@ Mocha.process = process;
 global.Mocha = Mocha;
 global.mocha = mocha;
 
-// this allows test/acceptance/required-tokens.js to pass; thus,
-// you can now do `const describe = require('mocha').describe` in a
-// browser context (assuming browserification).  should fix #880
-[
-  'Mocha',
-  'after',
-  'afterEach',
-  'before',
-  'beforeEach',
-  'context',
-  'describe',
-  'it',
-  'mocha',
-  'run',
-  'setup',
-  'specify',
-  'suite',
-  'suiteSetup',
-  'suiteTeardown',
-  'teardown',
-  'test',
-  'xcontext',
-  'xdescribe',
-  'xit',
-  'xspecify'
-].forEach(function(key) {
-  if (key in global) mocha[key] = global[key];
-});
 module.exports = mocha;
