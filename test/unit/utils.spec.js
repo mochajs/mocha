@@ -583,8 +583,6 @@ describe('lib/utils', function() {
       expect(type('type'), 'to be', 'string');
       expect(type(new Error()), 'to be', 'error');
       expect(type(global), 'to be', 'object');
-      expect(type(global.document), 'to be', 'object');
-      expect(type(global.document.body), 'to be', 'object');
       expect(type(true), 'to be', 'boolean');
       expect(type(Buffer.from('ff', 'hex')), 'to be', 'object');
       expect(type(Symbol.iterator), 'to be', 'symbol');
@@ -638,8 +636,6 @@ describe('lib/utils', function() {
       expect(type(/foo/), 'to be', 'regexp');
       expect(type('type'), 'to be', 'string');
       expect(type(global), 'to be', 'domwindow');
-      expect(type(global.document), 'to be', 'htmldocument');
-      expect(type(global.document.body), 'to be', 'htmlelement');
       expect(type(true), 'to be', 'boolean');
     });
 
