@@ -1387,7 +1387,7 @@ In some cases, you may want a [hook](#hooks) before (or after) every test in eve
 
 A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root hooks to be used across all test files.
 
-In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: beforeEach() {...} })`, also see [`mocha.setup()`](#running-mocha-in-the-browser)
+In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: {beforeEach() {...}} })`, see [`mocha.setup()`](#running-mocha-in-the-browser)
 
 ### Defining a Root Hook Plugin
 
