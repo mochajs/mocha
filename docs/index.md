@@ -429,7 +429,7 @@ const fn = async x => { return new Promise(
 
   describe('my suite', function() {
       it(`expected value ${z}`, function() {
-          assert.equal(z, 6);
+          assert.strictEqual(z, 6);
       });
   });
 
@@ -439,7 +439,7 @@ const fn = async x => { return new Promise(
 
 ## Pending Tests
 
-"Pending"--as in "someone should write these test cases eventually"--test-cases are those _without_ a callback:
+"Pending" — as in "someone should write these test cases eventually" — test-cases are those _without_ a callback:
 
 ```js
 describe('Array', function() {
@@ -752,13 +752,11 @@ import assert from 'assert';
 
 // top-level await: Node >= v14.8.0 with ESM test file
 const tests = await new Promise(resolve => {
-  setTimeout(() => {
-    resolve([
+  setTimeout(resolve, 5000, [
       {args: [1, 2], expected: 3},
       {args: [1, 2, 3], expected: 6},
       {args: [1, 2, 3, 4], expected: 10}
-    ]);
-  }, 5000);
+  ]);
 });
 
 // in suites ASYNCHRONOUS callbacks are NOT supported
@@ -1388,6 +1386,8 @@ It's unlikely (but not impossible) to see a performance gain from a [job count](
 In some cases, you may want a [hook](#hooks) before (or after) every test in every file. These are called _root hooks_. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode! For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
 
 A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root hooks to be used across all test files.
+
+In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: beforeEach() {...} })`, also see [`mocha.setup()`](#running-mocha-in-the-browser)
 
 ### Defining a Root Hook Plugin
 
@@ -2142,6 +2142,7 @@ mocha.setup({
   forbidPending: true,
   global: ['MyLib'],
   retries: 3,
+  rootHooks: { beforeEach(done) { ... done();} },
   slow: '100',
   timeout: '2000',
   ui: 'bdd'
