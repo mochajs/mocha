@@ -2,12 +2,12 @@
 
 ## :bug: Fixes
 
-- #4746: Browser: stop using all global vars in `browser-entry.js` (@PaperStrike)
+- [#4746](https://github.com/mochajs/mocha/issues/4746): Browser: stop using all global vars in `browser-entry.js` ([**@PaperStrike**](https://github.com/PaperStrike))
 
 ## :nut_and_bolt: Other
 
-- #4754: Remove dependency wide-align (@juergba)
-- #4736: ESM: remove code for Node versions <10 (@juergba)
+- [#4754](https://github.com/mochajs/mocha/issues/4754): Remove dependency wide-align ([**@juergba**](https://github.com/juergba))
+- [#4736](https://github.com/mochajs/mocha/issues/4736): ESM: remove code for Node versions &lt;10 ([**@juergba**](https://github.com/juergba))
 
 # 9.1.1 / 2021-08-28
 
