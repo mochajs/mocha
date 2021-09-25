@@ -1,3 +1,14 @@
+# 9.1.2 / 2021-09-25
+
+## :bug: Fixes
+
+- #4746: Browser: stop using all global vars in `browser-entry.js` (@PaperStrike)
+
+## :nut_and_bolt: Other
+
+- #4754: Remove dependency wide-align (@juergba)
+- #4736: ESM: remove code for Node versions <10 (@juergba)
+
 # 9.1.1 / 2021-08-28
 
 ## :bug: Fixes
