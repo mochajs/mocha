@@ -8,6 +8,7 @@
   -sprite-selector-for-group: backers;
   -sprite-location: url(/images/sprite-backers.png?pngquant);
   -sprite-image-format: png;
+  -sprite-padding: 0 10;
   width: 32px;
   height: 32px;
 }
