@@ -548,16 +548,6 @@ describe('Suite', function() {
           new Suite('Bdd suite', 'root');
         }, 'not to throw');
       });
-
-      it('should report listened-for deprecated events as deprecated', function() {
-        new Suite('foo').on(
-          Suite.constants.EVENT_SUITE_ADD_TEST,
-          function() {}
-        );
-        expect(errors.deprecate, 'to have a call satisfying', [
-          /Event "[^"]+" is deprecated/i
-        ]);
-      });
     });
 
     describe('timeout()', function() {
