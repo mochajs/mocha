@@ -29,7 +29,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [Growl support](#desktop-notification-support)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
-- [file watcher support](#min)
+- [file watcher support](#-watch-w)
 - [global variable leak detection](#-check-leaks)
 - [optionally run tests that match a regexp](#-grep-regexp-g-regexp)
 - [auto-exit to prevent "hanging" with an active loop](#-exit)
