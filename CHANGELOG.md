@@ -2,11 +2,11 @@
 
 ## :bug: Fixes
 
-- #4769: Browser: re-enable `bdd` ES6 style import (@juergba)
+- [#4769](https://github.com/mochajs/mocha/issues/4769): Browser: re-enable `bdd` ES6 style import ([**@juergba**](https://github.com/juergba))
 
 ## :nut_and_bolt: Other
 
-- #4764: Revert deprecation of `EVENT_SUITE_ADD_*` events (@beatfactor)
+- [#4764](https://github.com/mochajs/mocha/issues/4764): Revert deprecation of `EVENT_SUITE_ADD_*` events ([**@beatfactor**](https://github.com/beatfactor))
 
 # 9.1.2 / 2021-09-25
 
