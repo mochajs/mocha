@@ -1,3 +1,13 @@
+# 9.1.3 / 2021-10-15
+
+## :bug: Fixes
+
+- #4769: Browser: re-enable `bdd` ES6 style import (@juergba)
+
+## :nut_and_bolt: Other
+
+- #4764: Revert deprecation of `EVENT_SUITE_ADD_*` events (@beatfactor)
+
 # 9.1.2 / 2021-09-25
 
 ## :bug: Fixes
