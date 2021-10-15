@@ -209,8 +209,18 @@ Mocha.process = process;
 /**
  * Expose mocha.
  */
-
 global.Mocha = Mocha;
 global.mocha = mocha;
+
+// for bundlers: enable `import {describe, it} from 'mocha'`
+// `bdd` interface only
+// prettier-ignore
+[ 
+  'describe', 'context', 'it', 'specify',
+  'xdescribe', 'xcontext', 'xit', 'xspecify',
+  'before', 'beforeEach', 'afterEach', 'after'
+].forEach(function(key) {
+  mocha[key] = global[key];
+});
 
 module.exports = mocha;
