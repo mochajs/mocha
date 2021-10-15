@@ -8,5 +8,3 @@ global.expect = require('unexpected')
   .use(require('unexpected-map'))
   .use(require('unexpected-sinon'))
   .use(require('unexpected-eventemitter'));
-
-require('../../browser-entry');
