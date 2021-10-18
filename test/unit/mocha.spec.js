@@ -376,6 +376,28 @@ describe('Mocha', function () {
       });
     });
 
+    describe('failOnFailingTestSuite()', function() {
+      it('should set the failOnFailingTestSuite option to true', function() {
+        mocha.failOnFailingTestSuite();
+        expect(
+          mocha.options,
+          'to have property',
+          'failOnFailingTestSuite',
+          true
+        );
+      });
+
+      it('should set the failOnFailingTestSuite option to false', function() {
+        mocha.failOnFailingTestSuite(false);
+        expect(
+          mocha.options,
+          'to have property',
+          'failOnFailingTestSuite',
+          false
+        );
+      });
+    });
+
     describe('failZero()', function () {
       it('should set the failZero option to true', function () {
         mocha.failZero();
