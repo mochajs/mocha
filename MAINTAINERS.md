@@ -341,7 +341,7 @@ _It's easier to release often._
 1. Modify `CHANGELOG.md`; follow the existing conventions in that file. Use the "pull request" number, unless there isn't one. _You do not need to add Markdown links; this is done automatically._
    1. You can omit stuff from `CHANGELOG.md` that was done by a maintainer, but would have no interest to consumers of Mocha.
    1. If the changes aren't of interest to consumers but _were not_ made by a maintainer, reference them anyway. It's cool to give attribution!
-1. Use `npm version` (use `npm@6+`) to bump the version; see `npm version --help` for more info. (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
+1. Use `npm version` (use `npm@8+`) to bump the version; see `npm version --help` for more info. (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
    1. This command will update the list of authors (from the Git history) in `AUTHORS`, and add GitHub links to `CHANGELOG.md`.
    1. These changes are then added to the Git "stage" and will be added to the commit.
 1. Push `master` to `origin` with your new tag; e.g. `git push origin master --tags`
