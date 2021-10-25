@@ -16,7 +16,7 @@ function getDiffs(output) {
   var diffs, i, inDiff, inStackTrace;
 
   diffs = [];
-  output.split('\n').forEach(function(line) {
+  output.split('\n').forEach(function (line) {
     if (line.match(/^\s{2}\d+\)/)) {
       // New spec, e.g. "1) spec title"
       diffs.push([]);
@@ -37,9 +37,9 @@ function getDiffs(output) {
     }
   });
 
-  return diffs.map(function(diff) {
+  return diffs.map(function (diff) {
     return diff
-      .filter(function(line) {
+      .filter(function (line) {
         return line.trim().length;
       })
       .join('\n');
@@ -60,25 +60,22 @@ function getExpectedOutput() {
   return output
     .split(/\s*\/\/ DIFF/)
     .slice(1)
-    .map(function(diff) {
-      return diff
-        .split('\n')
-        .filter(Boolean)
-        .join('\n');
+    .map(function (diff) {
+      return diff.split('\n').filter(Boolean).join('\n');
     });
 }
 
-describe('diffs', function() {
+describe('diffs', function () {
   var diffs, expected;
 
-  before(function(done) {
+  before(function (done) {
     // @TODO: It should be removed when Node.js 10 LTS is not supported.
     const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
     if (nodeVersion === 10) {
       this.skip();
     }
 
-    run('diffs/diffs.fixture.js', [], function(err, res) {
+    run('diffs/diffs.fixture.js', [], function (err, res) {
       if (err) {
         done(err);
         return;
@@ -101,8 +98,8 @@ describe('diffs', function() {
     'should work with objects',
     'should show value diffs and not be affected by commas',
     'should display diff by data and not like an objects'
-  ].forEach(function(title, i) {
-    it(title, function() {
+  ].forEach(function (title, i) {
+    it(title, function () {
       expect(diffs[i], 'to be', expected[i]);
     });
   });

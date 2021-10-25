@@ -11,9 +11,9 @@ const {
   createTempDir
 } = require('../helpers');
 
-describe('global setup/teardown', function() {
-  describe('when mocha run in serial mode', function() {
-    it('should execute global setup and teardown', async function() {
+describe('global setup/teardown', function () {
+  describe('when mocha run in serial mode', function () {
+    it('should execute global setup and teardown', async function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           '--require',
@@ -24,8 +24,8 @@ describe('global setup/teardown', function() {
       );
     });
 
-    describe('when only global teardown is supplied', function() {
-      it('should run global teardown', async function() {
+    describe('when only global teardown is supplied', function () {
+      it('should run global teardown', async function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             '--require',
@@ -38,8 +38,8 @@ describe('global setup/teardown', function() {
       });
     });
 
-    describe('when only global setup is supplied', function() {
-      it('should run global setup', async function() {
+    describe('when only global setup is supplied', function () {
+      it('should run global setup', async function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             '--require',
@@ -52,7 +52,7 @@ describe('global setup/teardown', function() {
       });
     });
 
-    it('should share context', async function() {
+    it('should share context', async function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           '--require',
@@ -64,8 +64,8 @@ describe('global setup/teardown', function() {
       );
     });
 
-    describe('when supplied multiple functions', function() {
-      it('should execute them sequentially', async function() {
+    describe('when supplied multiple functions', function () {
+      it('should execute them sequentially', async function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             '--require',
@@ -80,12 +80,12 @@ describe('global setup/teardown', function() {
       });
     });
 
-    describe('when run in watch mode', function() {
+    describe('when run in watch mode', function () {
       let tempDir;
       let testFile;
       let removeTempDir;
 
-      beforeEach(async function() {
+      beforeEach(async function () {
         const tempInfo = await createTempDir();
         tempDir = tempInfo.dirpath;
         removeTempDir = tempInfo.removeTempDir;
@@ -93,13 +93,13 @@ describe('global setup/teardown', function() {
         copyFixture(DEFAULT_FIXTURE, testFile);
       });
 
-      afterEach(async function() {
+      afterEach(async function () {
         if (removeTempDir) {
           return removeTempDir();
         }
       });
 
-      it('should execute global setup and teardown', async function() {
+      it('should execute global setup and teardown', async function () {
         return expect(
           runMochaWatchAsync(
             [
@@ -119,8 +119,8 @@ describe('global setup/teardown', function() {
         );
       });
 
-      describe('when only global teardown is supplied', function() {
-        it('should run global teardown', async function() {
+      describe('when only global teardown is supplied', function () {
+        it('should run global teardown', async function () {
           return expect(
             runMochaWatchAsync(
               [
@@ -140,8 +140,8 @@ describe('global setup/teardown', function() {
         });
       });
 
-      describe('when only global setup is supplied', function() {
-        it('should run global setup', async function() {
+      describe('when only global setup is supplied', function () {
+        it('should run global setup', async function () {
           return expect(
             runMochaWatchAsync(
               [
@@ -161,7 +161,7 @@ describe('global setup/teardown', function() {
         });
       });
 
-      it('should not re-execute the global fixtures', async function() {
+      it('should not re-execute the global fixtures', async function () {
         return expect(
           runMochaWatchAsync(
             [
@@ -184,8 +184,8 @@ describe('global setup/teardown', function() {
     });
   });
 
-  describe('when mocha run in parallel mode', function() {
-    it('should execute global setup and teardown', async function() {
+  describe('when mocha run in parallel mode', function () {
+    it('should execute global setup and teardown', async function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           '--parallel',
@@ -197,7 +197,7 @@ describe('global setup/teardown', function() {
       );
     });
 
-    it('should share context', async function() {
+    it('should share context', async function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           '--parallel',
@@ -210,8 +210,8 @@ describe('global setup/teardown', function() {
       ).and('when fulfilled', 'to contain once', /teardown: this.foo = bar/);
     });
 
-    describe('when supplied multiple functions', function() {
-      it('should execute them sequentially', async function() {
+    describe('when supplied multiple functions', function () {
+      it('should execute them sequentially', async function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             '--parallel',
@@ -227,12 +227,12 @@ describe('global setup/teardown', function() {
       });
     });
 
-    describe('when run in watch mode', function() {
+    describe('when run in watch mode', function () {
       let tempDir;
       let testFile;
       let removeTempDir;
 
-      beforeEach(async function() {
+      beforeEach(async function () {
         const tempInfo = await createTempDir();
         tempDir = tempInfo.dirpath;
         removeTempDir = tempInfo.removeTempDir;
@@ -240,13 +240,13 @@ describe('global setup/teardown', function() {
         copyFixture(DEFAULT_FIXTURE, testFile);
       });
 
-      afterEach(async function() {
+      afterEach(async function () {
         if (removeTempDir) {
           return removeTempDir();
         }
       });
 
-      it('should execute global setup and teardown', async function() {
+      it('should execute global setup and teardown', async function () {
         return expect(
           runMochaWatchAsync(
             [
@@ -267,7 +267,7 @@ describe('global setup/teardown', function() {
         );
       });
 
-      it('should not re-execute the global fixtures', async function() {
+      it('should not re-execute the global fixtures', async function () {
         return expect(
           runMochaWatchAsync(
             [

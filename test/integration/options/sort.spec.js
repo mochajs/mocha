@@ -4,16 +4,16 @@ var path = require('path').posix;
 var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--sort', function() {
+describe('--sort', function () {
   var args = [];
 
-  before(function() {
+  before(function () {
     args = ['--sort'];
   });
 
-  it('should sort tests in alphabetical order', function(done) {
+  it('should sort tests in alphabetical order', function (done) {
     var fixtures = path.join('options', 'sort*');
-    runMochaJSON(fixtures, args, function(err, res) {
+    runMochaJSON(fixtures, args, function (err, res) {
       if (err) {
         done(err);
         return;

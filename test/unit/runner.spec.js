@@ -6,11 +6,8 @@ const Mocha = require('../../lib/mocha');
 const Pending = require('../../lib/pending');
 const {Suite, Runner, Test, Hook, Runnable} = Mocha;
 const {noop} = Mocha.utils;
-const {
-  FATAL,
-  MULTIPLE_DONE,
-  UNSUPPORTED
-} = require('../../lib/errors').constants;
+const {FATAL, MULTIPLE_DONE, UNSUPPORTED} =
+  require('../../lib/errors').constants;
 const errors = require('../../lib/errors');
 
 const {
@@ -28,13 +25,13 @@ const {
 } = Runner.constants;
 const {STATE_FAILED} = Mocha.Runnable.constants;
 
-describe('Runner', function() {
-  afterEach(function() {
+describe('Runner', function () {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('constructor deprecation', function() {
-    it('should print a deprecation warning', function() {
+  describe('constructor deprecation', function () {
+    it('should print a deprecation warning', function () {
       sinon.stub(errors, 'deprecate');
       const suite = new Suite('Suite', 'root');
       new Runner(suite, false); /* eslint no-new: "off" */
@@ -42,17 +39,17 @@ describe('Runner', function() {
     });
   });
 
-  describe('instance method', function() {
+  describe('instance method', function () {
     let suite;
     let runner;
-    beforeEach(function() {
+    beforeEach(function () {
       suite = new Suite('Suite', 'root');
       runner = new Runner(suite, {cleanReferencesAfterRun: true});
       runner.checkLeaks = true;
     });
 
-    describe('grep()', function() {
-      it('should update the runner.total with number of matched tests', function() {
+    describe('grep()', function () {
+      it('should update the runner.total with number of matched tests', function () {
         suite.addTest(new Test('im a test about lions', noop));
         suite.addTest(new Test('im another test about lions', noop));
         suite.addTest(new Test('im a test about bears', noop));
@@ -61,7 +58,7 @@ describe('Runner', function() {
         expect(newRunner.total, 'to be', 2);
       });
 
-      it('should update the runner.total with number of matched tests when inverted', function() {
+      it('should update the runner.total with number of matched tests when inverted', function () {
         suite.addTest(new Test('im a test about lions', noop));
         suite.addTest(new Test('im another test about lions', noop));
         suite.addTest(new Test('im a test about bears', noop));
@@ -71,8 +68,8 @@ describe('Runner', function() {
       });
     });
 
-    describe('grepTotal()', function() {
-      it('should return the total number of matched tests', function() {
+    describe('grepTotal()', function () {
+      it('should return the total number of matched tests', function () {
         suite.addTest(new Test('im a test about lions', noop));
         suite.addTest(new Test('im another test about lions', noop));
         suite.addTest(new Test('im a test about bears', noop));
@@ -80,7 +77,7 @@ describe('Runner', function() {
         expect(runner.grepTotal(suite), 'to be', 2);
       });
 
-      it('should return the total number of matched tests when inverted', function() {
+      it('should return the total number of matched tests when inverted', function () {
         suite.addTest(new Test('im a test about lions', noop));
         suite.addTest(new Test('im another test about lions', noop));
         suite.addTest(new Test('im a test about bears', noop));
@@ -88,8 +85,8 @@ describe('Runner', function() {
         expect(runner.grepTotal(suite), 'to be', 1);
       });
     });
-    describe('globalProps()', function() {
-      it('should include common non enumerable globals', function() {
+    describe('globalProps()', function () {
+      it('should include common non enumerable globals', function () {
         var props = runner.globalProps();
         expect(
           props,
@@ -104,25 +101,25 @@ describe('Runner', function() {
       });
     });
 
-    describe('globals()', function() {
-      it('should default to the known globals', function() {
+    describe('globals()', function () {
+      it('should default to the known globals', function () {
         expect(runner.globals().length, 'to be greater than', 16);
       });
 
-      it('should white-list globals', function() {
+      it('should white-list globals', function () {
         runner.globals(['foo', 'bar']);
         expect(runner.globals(), 'to contain', 'foo', 'bar');
       });
     });
 
-    describe('checkGlobals(test)', function() {
-      before(function() {
+    describe('checkGlobals(test)', function () {
+      before(function () {
         if (!Object.create) {
           this.skip();
         }
       });
 
-      it('should allow variables that match a wildcard', function(done) {
+      it('should allow variables that match a wildcard', function (done) {
         runner.globals(['foo*', 'giz*']);
         global.foo = 'baz';
         global.gizmo = 'quux';
@@ -132,11 +129,11 @@ describe('Runner', function() {
         done();
       });
 
-      it('should emit "fail" when a new global is introduced', function(done) {
+      it('should emit "fail" when a new global is introduced', function (done) {
         var test = new Test('im a test', noop);
         runner.checkGlobals();
         global.foo = 'bar';
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_test, 'to be', test);
           expect(_err, 'to have message', "global leak(s) detected: 'foo'");
           delete global.foo;
@@ -145,11 +142,11 @@ describe('Runner', function() {
         runner.checkGlobals(test);
       });
 
-      it('should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed', function(done) {
+      it('should emit "fail" when a single new disallowed global is introduced after a single extra global is allowed', function (done) {
         var doneCalled = false;
         runner.globals('good');
         global.bad = 1;
-        runner.on(EVENT_TEST_FAIL, function() {
+        runner.on(EVENT_TEST_FAIL, function () {
           delete global.bad;
           done();
           doneCalled = true;
@@ -160,7 +157,7 @@ describe('Runner', function() {
         }
       });
 
-      it('should not fail when a new common global is introduced', function() {
+      it('should not fail when a new common global is introduced', function () {
         if (process.browser) {
           this.skip();
           return;
@@ -193,12 +190,12 @@ describe('Runner', function() {
         delete global.XMLHttpRequest;
       });
 
-      it('should pluralize the error message when several are introduced', function(done) {
+      it('should pluralize the error message when several are introduced', function (done) {
         var test = new Test('im a test', noop);
         runner.checkGlobals();
         global.foo = 'bar';
         global.bar = 'baz';
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_test, 'to be', test);
           expect(
             _err.message,
@@ -212,7 +209,7 @@ describe('Runner', function() {
         runner.checkGlobals(test);
       });
 
-      it('should respect per test whitelisted globals', function() {
+      it('should respect per test whitelisted globals', function () {
         var test = new Test('im a test about lions', noop);
         test.globals(['foo']);
 
@@ -228,7 +225,7 @@ describe('Runner', function() {
         delete global.foo;
       });
 
-      it('should respect per test whitelisted globals but still detect other leaks', function(done) {
+      it('should respect per test whitelisted globals but still detect other leaks', function (done) {
         var test = new Test('im a test about lions', noop);
         test.globals(['foo']);
 
@@ -236,7 +233,7 @@ describe('Runner', function() {
 
         global.foo = 'whitelisted';
         global.bar = 'detect-me';
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_test.title, 'to be', 'im a test about lions');
           expect(_err, 'to have message', "global leak(s) detected: 'bar'");
           delete global.foo;
@@ -246,9 +243,9 @@ describe('Runner', function() {
         runner.checkGlobals(test);
       });
 
-      it('should emit "fail" when a global beginning with "d" is introduced', function(done) {
+      it('should emit "fail" when a global beginning with "d" is introduced', function (done) {
         global.derp = 'bar';
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_test.title, 'to be', 'herp');
           expect(_err, 'to have message', "global leak(s) detected: 'derp'");
           delete global.derp;
@@ -257,12 +254,12 @@ describe('Runner', function() {
         runner.checkGlobals(new Test('herp', noop));
       });
     });
-    describe('hook()', function() {
-      it('should execute hooks after failed test if suite bail is true', function(done) {
+    describe('hook()', function () {
+      it('should execute hooks after failed test if suite bail is true', function (done) {
         runner.fail(new Test('failed test', noop), new Error());
         suite.bail(true);
-        suite.afterEach(function() {
-          suite.afterAll(function() {
+        suite.afterEach(function () {
+          suite.afterAll(function () {
             done();
           });
         });
@@ -270,14 +267,14 @@ describe('Runner', function() {
         runner.hook('afterAll', noop);
       });
 
-      it('should augment hook title with current test title', function(done) {
+      it('should augment hook title with current test title', function (done) {
         var expectedHookTitle;
         function assertHookTitle() {
           expect(hook.title, 'to be', expectedHookTitle);
         }
         var failHook = false;
         var hookError = new Error('failed hook');
-        suite.beforeEach(function() {
+        suite.beforeEach(function () {
           assertHookTitle();
           if (failHook) {
             throw hookError;
@@ -295,13 +292,13 @@ describe('Runner', function() {
 
         runner.test = suite.tests[0];
         expectedHookTitle = '"before each" hook for "should behave"';
-        runner.hook('beforeEach', function(err) {
+        runner.hook('beforeEach', function (err) {
           if (err && err !== hookError) return done(err);
 
           runner.test = suite.tests[1];
           failHook = true;
           expectedHookTitle = '"before each" hook for "should obey"';
-          runner.hook('beforeEach', function(err) {
+          runner.hook('beforeEach', function (err) {
             if (err && err !== hookError) return done(err);
             return done();
           });
@@ -309,8 +306,8 @@ describe('Runner', function() {
       });
     });
 
-    describe('fail()', function() {
-      it('should increment `Runner#failures`', function() {
+    describe('fail()', function () {
+      it('should increment `Runner#failures`', function () {
         expect(runner.failures, 'to be', 0);
         runner.fail(new Test('one', noop), {});
         expect(runner.failures, 'to be', 1);
@@ -318,16 +315,16 @@ describe('Runner', function() {
         expect(runner.failures, 'to be', 2);
       });
 
-      it('should set `Test#state` to "failed"', function() {
+      it('should set `Test#state` to "failed"', function () {
         var test = new Test('some test', noop);
         runner.fail(test, 'some error');
         expect(test.state, 'to be', STATE_FAILED);
       });
 
-      it('should emit "fail"', function(done) {
+      it('should emit "fail"', function (done) {
         var test = new Test('some other test', noop);
         var err = {};
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_test, 'to be', test);
           expect(_err, 'to be an', Error);
           expect(_err, 'not to be', {});
@@ -336,10 +333,10 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should emit a helpful message when failed with a string', function(done) {
+      it('should emit a helpful message when failed with a string', function (done) {
         var test = new Test('helpful test', noop);
         var err = 'string';
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'to be an', Error);
           expect(
             _err,
@@ -351,10 +348,10 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should emit a the error when failed with an Error instance', function(done) {
+      it('should emit a the error when failed with an Error instance', function (done) {
         var test = new Test('a test', noop);
         var err = new Error('an error message');
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'to be an', Error);
           expect(_err, 'to have message', 'an error message');
           done();
@@ -362,10 +359,10 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should emit the error when failed with an Error-like object', function(done) {
+      it('should emit the error when failed with an Error-like object', function (done) {
         var test = new Test('a test', noop);
         var err = {message: 'an error message'};
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'not to be an', Error);
           expect(_err.message, 'to be', 'an error message');
           done();
@@ -373,10 +370,10 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should emit a helpful message when failed with an Object', function(done) {
+      it('should emit a helpful message when failed with an Object', function (done) {
         var test = new Test('a test', noop);
         var err = {x: 1};
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'to be an', Error);
           expect(
             _err,
@@ -388,10 +385,10 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should emit a helpful message when failed with an Array', function(done) {
+      it('should emit a helpful message when failed with an Array', function (done) {
         var test = new Test('a test', noop);
         var err = [1, 2];
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'to be an', Error);
           expect(
             _err,
@@ -403,7 +400,7 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should recover if the error stack is not writable', function(done) {
+      it('should recover if the error stack is not writable', function (done) {
         if (!Object.create) {
           this.skip();
           return;
@@ -415,7 +412,7 @@ describe('Runner', function() {
         });
         var test = new Test('a test', noop);
 
-        runner.on(EVENT_TEST_FAIL, function(_test, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_test, _err) {
           expect(_err, 'to have message', 'not evil');
           done();
         });
@@ -423,7 +420,7 @@ describe('Runner', function() {
         runner.fail(test, err);
       });
 
-      it('should return and not increment failures when test is pending', function() {
+      it('should return and not increment failures when test is pending', function () {
         var test = new Test('a test');
         suite.addTest(test);
         test.pending = true;
@@ -431,20 +428,20 @@ describe('Runner', function() {
         expect(runner.failures, 'to be', 0);
       });
 
-      describe('when Runner has stopped', function() {
-        beforeEach(function() {
+      describe('when Runner has stopped', function () {
+        beforeEach(function () {
           runner.state = STATE_STOPPED;
         });
 
-        describe('when test is not pending', function() {
-          describe('when error is the "multiple done" variety', function() {
-            it('should throw the "multiple done" error', function() {
-              var test = new Test('test', function() {});
+        describe('when test is not pending', function () {
+          describe('when error is the "multiple done" variety', function () {
+            it('should throw the "multiple done" error', function () {
+              var test = new Test('test', function () {});
               suite.addTest(test);
               var err = new Error();
               err.code = MULTIPLE_DONE;
               expect(
-                function() {
+                function () {
                   runner.fail(test, err);
                 },
                 'to throw',
@@ -453,13 +450,13 @@ describe('Runner', function() {
             });
           });
 
-          describe('when error is not of the "multiple done" variety', function() {
-            it('should throw a "fatal" error', function() {
-              var test = new Test('test', function() {});
+          describe('when error is not of the "multiple done" variety', function () {
+            it('should throw a "fatal" error', function () {
+              var test = new Test('test', function () {});
               suite.addTest(test);
               var err = new Error();
               expect(
-                function() {
+                function () {
                   runner.fail(test, err);
                 },
                 'to throw',
@@ -471,7 +468,7 @@ describe('Runner', function() {
           });
         });
       });
-      it('should increment .failures', function() {
+      it('should increment .failures', function () {
         expect(runner.failures, 'to be', 0);
         var test1 = new Test('fail hook 1', noop);
         var test2 = new Test('fail hook 2', noop);
@@ -483,11 +480,11 @@ describe('Runner', function() {
         expect(runner.failures, 'to be', 2);
       });
 
-      it('should emit "fail"', function(done) {
+      it('should emit "fail"', function (done) {
         var hook = new Hook();
         hook.parent = suite;
         var err = new Error('error');
-        runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
+        runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
           expect(_hook, 'to be', hook);
           expect(_err, 'to be', err);
           done();
@@ -495,13 +492,13 @@ describe('Runner', function() {
         runner.fail(hook, err);
       });
 
-      it('should not emit "end" if suite bail is not true', function(done) {
+      it('should not emit "end" if suite bail is not true', function (done) {
         var hook = new Hook();
         hook.parent = suite;
         var err = new Error('error');
         suite.bail(false);
         expect(
-          function() {
+          function () {
             runner.fail(hook, err);
           },
           'not to emit from',
@@ -512,13 +509,13 @@ describe('Runner', function() {
       });
     });
 
-    describe('run()', function() {
-      it('should emit "retry" when a retryable test fails', function(done) {
+    describe('run()', function () {
+      it('should emit "retry" when a retryable test fails', function (done) {
         var retries = 2;
         var retryableFails = 0;
         var err = new Error('bear error');
 
-        var test = new Test('im a test about bears', function() {
+        var test = new Test('im a test about bears', function () {
           if (retryableFails < retries) {
             throw err;
           }
@@ -527,13 +524,13 @@ describe('Runner', function() {
         suite.retries(retries);
         suite.addTest(test);
 
-        runner.on(EVENT_TEST_RETRY, function(testClone, testErr) {
+        runner.on(EVENT_TEST_RETRY, function (testClone, testErr) {
           retryableFails += 1;
           expect(testClone.title, 'to be', test.title);
           expect(testErr, 'to be', err);
         });
 
-        runner.run(function(failures) {
+        runner.run(function (failures) {
           expect(failures, 'to be', 0);
           expect(retryableFails, 'to be', retries);
 
@@ -542,13 +539,13 @@ describe('Runner', function() {
       });
 
       // karma-mocha is inexplicably doing this with a Hook
-      it('should not throw an exception if something emits EVENT_TEST_END with a non-Test object', function() {
-        expect(function() {
+      it('should not throw an exception if something emits EVENT_TEST_END with a non-Test object', function () {
+        expect(function () {
           runner.emit(EVENT_TEST_END, {});
         }, 'not to throw');
       });
 
-      it('should clean references after a run', function() {
+      it('should clean references after a run', function () {
         runner = new Runner(suite, {
           delay: false,
           cleanReferencesAfterRun: true
@@ -559,7 +556,7 @@ describe('Runner', function() {
         expect(cleanReferencesStub, 'was called once');
       });
 
-      it('should not clean references after a run when `cleanReferencesAfterRun` is `false`', function() {
+      it('should not clean references after a run when `cleanReferencesAfterRun` is `false`', function () {
         runner = new Runner(suite, {
           delay: false,
           cleanReferencesAfterRun: false
@@ -570,10 +567,9 @@ describe('Runner', function() {
         expect(cleanReferencesStub, 'was not called');
       });
 
-      it('should not leak `Process.uncaughtException` listeners', function(done) {
-        var normalUncaughtExceptionListenerCount = process.listenerCount(
-          'uncaughtException'
-        );
+      it('should not leak `Process.uncaughtException` listeners', function (done) {
+        var normalUncaughtExceptionListenerCount =
+          process.listenerCount('uncaughtException');
 
         runner.run();
         runner.run();
@@ -586,7 +582,7 @@ describe('Runner', function() {
         done();
       });
 
-      describe('stack traces', function() {
+      describe('stack traces', function () {
         var stack = [
           'AssertionError: foo bar',
           'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
@@ -601,10 +597,10 @@ describe('Runner', function() {
           'at processImmediate [as _immediateCallback] (timers.js:321:17)'
         ];
 
-        before(function() {
+        before(function () {
           // Only for Node running on Windows
           if (process.platform === 'win32') {
-            var addDrive = function(str) {
+            var addDrive = function (str) {
               var drive = 'C:';
               var pos = str.indexOf(path.posix.sep);
               return pos !== -1
@@ -612,32 +608,32 @@ describe('Runner', function() {
                 : str;
             };
 
-            var useWinPathSep = function(str) {
+            var useWinPathSep = function (str) {
               return str.split(path.posix.sep).join(path.win32.sep);
             };
 
             // Fake Windows pathnames in stacktrace
-            stack = stack.map(function(line) {
+            stack = stack.map(function (line) {
               return useWinPathSep(addDrive(line));
             });
           }
         });
 
-        describe('short', function() {
-          before(function() {
+        describe('short', function () {
+          before(function () {
             if (process.browser) {
               this.skip();
             }
           });
 
-          it('should prettify the stack-trace', function(done) {
+          it('should prettify the stack-trace', function (done) {
             var hook = new Hook();
             hook.parent = suite;
             var err = new Error();
             // Fake stack-trace
             err.stack = stack.join('\n');
 
-            runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
               expect(_err.stack, 'to be', stack.slice(0, 3).join('\n'));
               done();
             });
@@ -645,8 +641,8 @@ describe('Runner', function() {
           });
         });
 
-        describe('long', function() {
-          it('should display the full stack-trace', function(done) {
+        describe('long', function () {
+          it('should display the full stack-trace', function (done) {
             var hook = new Hook();
             hook.parent = suite;
             var err = new Error();
@@ -655,7 +651,7 @@ describe('Runner', function() {
             // Add --stack-trace option
             runner.fullStackTrace = true;
 
-            runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
               expect(_err.stack, 'to be', stack.join('\n'));
               done();
             });
@@ -663,8 +659,8 @@ describe('Runner', function() {
           });
         });
 
-        describe('ginormous', function() {
-          before(function() {
+        describe('ginormous', function () {
+          before(function () {
             if (process.browser) {
               this.skip();
             }
@@ -694,7 +690,7 @@ describe('Runner', function() {
             return data.join('\n');
           }
 
-          it('should not hang if overlong error message is single line', function(done) {
+          it('should not hang if overlong error message is single line', function (done) {
             var hook = new Hook();
             hook.parent = suite;
             var message = genOverlongSingleLineMessage();
@@ -702,7 +698,7 @@ describe('Runner', function() {
             // Fake stack-trace
             err.stack = [message].concat(stack).join('\n');
 
-            runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
               var filteredErrStack = _err.stack.split('\n').slice(1);
               expect(
                 filteredErrStack.join('\n'),
@@ -714,7 +710,7 @@ describe('Runner', function() {
             runner.fail(hook, err);
           });
 
-          it('should not hang if overlong error message is multiple lines', function(done) {
+          it('should not hang if overlong error message is multiple lines', function (done) {
             var hook = new Hook();
             hook.parent = suite;
             var message = genOverlongMultiLineMessage();
@@ -722,7 +718,7 @@ describe('Runner', function() {
             // Fake stack-trace
             err.stack = [message].concat(stack).join('\n');
 
-            runner.on(EVENT_TEST_FAIL, function(_hook, _err) {
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
               var filteredErrStack = _err.stack.split('\n').slice(-3);
               expect(
                 filteredErrStack.join('\n'),
@@ -737,19 +733,16 @@ describe('Runner', function() {
       });
     });
 
-    describe('runAsync()', function() {
-      beforeEach(function() {
-        sinon
-          .stub(runner, 'run')
-          .callsArgWithAsync(0, 42)
-          .returnsThis();
+    describe('runAsync()', function () {
+      beforeEach(function () {
+        sinon.stub(runner, 'run').callsArgWithAsync(0, 42).returnsThis();
       });
 
-      it('should return a Promise with a failure count', async function() {
+      it('should return a Promise with a failure count', async function () {
         return expect(runner.runAsync(), 'to be fulfilled with', 42);
       });
 
-      it('should pass through options to Runner#run', async function() {
+      it('should pass through options to Runner#run', async function () {
         await runner.runAsync({foo: 'bar'});
         expect(runner.run, 'to have a call satisfying', [
           expect.it('to be a function'),
@@ -758,14 +751,14 @@ describe('Runner', function() {
       });
     });
 
-    describe('dispose()', function() {
-      it('should remove all listeners from itself', function() {
+    describe('dispose()', function () {
+      it('should remove all listeners from itself', function () {
         runner.on('disposeShouldRemoveThis', noop);
         runner.dispose();
         expect(runner.listenerCount('disposeShouldRemoveThis'), 'to be', 0);
       });
 
-      it('should remove "error" listeners from a test', function() {
+      it('should remove "error" listeners from a test', function () {
         var fn = sinon.stub();
         runner.test = new Test('test for dispose', fn);
         runner.runTest(noop);
@@ -775,10 +768,9 @@ describe('Runner', function() {
         expect(runner.test.listenerCount('error'), 'to be', 0);
       });
 
-      it('should remove "uncaughtException" listeners from the process', function() {
-        var normalUncaughtExceptionListenerCount = process.listenerCount(
-          'uncaughtException'
-        );
+      it('should remove "uncaughtException" listeners from the process', function () {
+        var normalUncaughtExceptionListenerCount =
+          process.listenerCount('uncaughtException');
         runner.run(noop);
         // sanity check
         expect(
@@ -795,18 +787,18 @@ describe('Runner', function() {
       });
     });
 
-    describe('runTest()', function() {
-      it('should return when no tests to run', function() {
+    describe('runTest()', function () {
+      it('should return when no tests to run', function () {
         runner.test = undefined;
         expect(runner.runTest(noop), 'to be undefined');
       });
     });
 
-    describe('allowUncaught()', function() {
-      it('should allow unhandled errors to propagate through', function() {
+    describe('allowUncaught()', function () {
+      it('should allow unhandled errors to propagate through', function () {
         var newRunner = new Runner(suite);
         newRunner.allowUncaught = true;
-        newRunner.test = new Test('failing test', function() {
+        newRunner.test = new Test('failing test', function () {
           throw new Error('allow unhandled errors');
         });
         function fail() {
@@ -815,8 +807,8 @@ describe('Runner', function() {
         expect(fail, 'to throw', 'allow unhandled errors');
       });
 
-      it('should not allow unhandled errors in sync hooks to propagate through', function(done) {
-        suite.beforeEach(function() {
+      it('should not allow unhandled errors in sync hooks to propagate through', function (done) {
+        suite.beforeEach(function () {
           throw new Error();
         });
         var runner = new Runner(suite);
@@ -824,9 +816,9 @@ describe('Runner', function() {
 
         // We are monkey patching here with runner.once and a hook.run wrapper to effectively
         // capture thrown errors within the event loop phase where Runner.immediately executes
-        runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        runner.once(EVENT_HOOK_BEGIN, function (hook) {
           var _run = hook.run;
-          hook.run = function(fn) {
+          hook.run = function (fn) {
             function throwError() {
               _run.call(hook, fn);
             }
@@ -838,16 +830,16 @@ describe('Runner', function() {
         runner.hook('beforeEach', noop);
       });
 
-      it('should allow unhandled errors in sync hooks to propagate through', function(done) {
-        suite.beforeEach(function() {
+      it('should allow unhandled errors in sync hooks to propagate through', function (done) {
+        suite.beforeEach(function () {
           throw new Error('allow unhandled errors in sync hooks');
         });
         var runner = new Runner(suite);
         runner.allowUncaught = true;
 
-        runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        runner.once(EVENT_HOOK_BEGIN, function (hook) {
           var _run = hook.run;
-          hook.run = function(fn) {
+          hook.run = function (fn) {
             function throwError() {
               _run.call(hook, fn);
             }
@@ -860,18 +852,18 @@ describe('Runner', function() {
         runner.hook('beforeEach', noop);
       });
 
-      it('async - should allow unhandled errors in hooks to propagate through', function(done) {
+      it('async - should allow unhandled errors in hooks to propagate through', function (done) {
         // the `done` argument, although unused, it triggers the async path
         // see this.async in the Runnable constructor
-        suite.beforeEach(function(done) {
+        suite.beforeEach(function (done) {
           throw new Error('allow unhandled errors in async hooks');
         });
         var runner = new Runner(suite);
         runner.allowUncaught = true;
 
-        runner.once(EVENT_HOOK_BEGIN, function(hook) {
+        runner.once(EVENT_HOOK_BEGIN, function (hook) {
           var _run = hook.run;
-          hook.run = function(fn) {
+          hook.run = function (fn) {
             function throwError() {
               _run.call(hook, fn);
             }
@@ -885,20 +877,20 @@ describe('Runner', function() {
       });
     });
 
-    describe('abort()', function() {
-      it('should set _abort property to true', function() {
+    describe('abort()', function () {
+      it('should set _abort property to true', function () {
         runner.abort();
         expect(runner._abort, 'to be true');
       });
 
-      it('should return the Runner', function() {
+      it('should return the Runner', function () {
         expect(runner.abort(), 'to be', runner);
       });
     });
 
-    describe('_uncaught()', function() {
-      describe('when called with a non-Runner context', function() {
-        it('should throw', function() {
+    describe('_uncaught()', function () {
+      describe('when called with a non-Runner context', function () {
+        it('should throw', function () {
           expect(runner._uncaught.bind({}), 'to throw', {
             code: FATAL
           });
@@ -906,19 +898,19 @@ describe('Runner', function() {
       });
     });
 
-    describe('uncaught()', function() {
-      beforeEach(function() {
+    describe('uncaught()', function () {
+      beforeEach(function () {
         sinon.stub(runner, 'fail');
       });
 
-      describe('when allow-uncaught is set to true', function() {
-        it('should propagate error and throw', function() {
+      describe('when allow-uncaught is set to true', function () {
+        it('should propagate error and throw', function () {
           if (process.browser) this.skip();
 
           var err = new Error('should rethrow err');
           runner.allowUncaught = true;
           expect(
-            function() {
+            function () {
               runner.uncaught(err);
             },
             'to throw',
@@ -927,14 +919,14 @@ describe('Runner', function() {
         });
       });
 
-      describe('when provided an object argument', function() {
-        describe('when argument is not an Error', function() {
+      describe('when provided an object argument', function () {
+        describe('when argument is not an Error', function () {
           var err;
-          beforeEach(function() {
+          beforeEach(function () {
             err = {whatever: 'yolo'};
           });
 
-          it('should fail with a transient Runnable and a new Error coerced from the object', function() {
+          it('should fail with a transient Runnable and a new Error coerced from the object', function () {
             runner.uncaught(err);
 
             expect(runner.fail, 'to have all calls satisfying', [
@@ -950,30 +942,30 @@ describe('Runner', function() {
           });
         });
 
-        describe('when argument is a Pending', function() {
-          it('should ignore argument and return', function() {
+        describe('when argument is a Pending', function () {
+          it('should ignore argument and return', function () {
             var err = new Pending();
             expect(runner.uncaught(err), 'to be undefined');
           });
         });
 
-        describe('when argument is an Error', function() {
+        describe('when argument is an Error', function () {
           var err;
-          beforeEach(function() {
+          beforeEach(function () {
             err = new Error('sorry dave');
           });
 
-          it('should add the "uncaught" property to the Error', function() {
+          it('should add the "uncaught" property to the Error', function () {
             runner.uncaught(err);
             expect(err, 'to have property', 'uncaught', true);
           });
 
-          describe('when no Runnables are running', function() {
-            beforeEach(function() {
+          describe('when no Runnables are running', function () {
+            beforeEach(function () {
               delete runner.currentRunnable;
             });
 
-            it('should fail with a transient Runnable and the error', function() {
+            it('should fail with a transient Runnable and the error', function () {
               runner.uncaught(err);
 
               expect(runner.fail, 'to have all calls satisfying', [
@@ -985,14 +977,14 @@ describe('Runner', function() {
               ]).and('was called once');
             });
 
-            describe('when Runner is RUNNING', function() {
-              beforeEach(function() {
+            describe('when Runner is RUNNING', function () {
+              beforeEach(function () {
                 runner.state = STATE_RUNNING;
               });
 
-              it('should not emit start/end events', function() {
+              it('should not emit start/end events', function () {
                 expect(
-                  function() {
+                  function () {
                     runner.uncaught(err);
                   },
                   'not to emit from',
@@ -1002,14 +994,14 @@ describe('Runner', function() {
               });
             });
 
-            describe('when Runner is IDLE', function() {
-              beforeEach(function() {
+            describe('when Runner is IDLE', function () {
+              beforeEach(function () {
                 runner.state = STATE_IDLE;
               });
 
-              it('should emit start/end events for the benefit of reporters', function() {
+              it('should emit start/end events for the benefit of reporters', function () {
                 expect(
-                  function() {
+                  function () {
                     runner.uncaught(err);
                   },
                   'to emit from',
@@ -1019,14 +1011,14 @@ describe('Runner', function() {
               });
             });
 
-            describe('when Runner is STOPPED', function() {
-              beforeEach(function() {
+            describe('when Runner is STOPPED', function () {
+              beforeEach(function () {
                 runner.state = STATE_STOPPED;
               });
 
-              it('should not emit start/end events, since this presumably would have already happened', function() {
+              it('should not emit start/end events, since this presumably would have already happened', function () {
                 expect(
-                  function() {
+                  function () {
                     try {
                       runner.uncaught(err);
                     } catch (ignored) {}
@@ -1037,57 +1029,57 @@ describe('Runner', function() {
                 ).and('not to emit from', runner, 'end');
               });
 
-              it('should throw', function() {
-                expect(function() {
+              it('should throw', function () {
+                expect(function () {
                   runner.uncaught(err);
                 }, 'to throw');
               });
             });
           });
 
-          describe('when a Runnable is running or has run', function() {
+          describe('when a Runnable is running or has run', function () {
             var runnable;
-            beforeEach(function() {
+            beforeEach(function () {
               runnable = new Runnable();
               runnable.parent = runner.suite;
               sinon.stub(runnable, 'clearTimeout');
               runner.currentRunnable = runnable;
             });
 
-            it('should clear any pending timeouts', function() {
+            it('should clear any pending timeouts', function () {
               runnable.callback = sinon.fake();
               runner.uncaught(err);
               expect(runnable.clearTimeout, 'was called times', 1);
             });
 
-            describe('when current Runnable has already failed', function() {
-              beforeEach(function() {
+            describe('when current Runnable has already failed', function () {
+              beforeEach(function () {
                 sinon.stub(runnable, 'isFailed').returns(true);
               });
 
-              it('should not attempt to fail again', function() {
+              it('should not attempt to fail again', function () {
                 runner.uncaught(err);
                 expect(runner.fail, 'was not called');
               });
             });
 
-            describe('when current Runnable has been marked pending', function() {
-              beforeEach(function() {
+            describe('when current Runnable has been marked pending', function () {
+              beforeEach(function () {
                 sinon.stub(runnable, 'isPending').returns(true);
               });
 
-              it('should attempt to fail', function() {
+              it('should attempt to fail', function () {
                 runner.uncaught(err);
                 expect(runner.fail, 'was called once');
               });
             });
 
-            describe('when the current Runnable has already passed', function() {
-              beforeEach(function() {
+            describe('when the current Runnable has already passed', function () {
+              beforeEach(function () {
                 sinon.stub(runnable, 'isPassed').returns(true);
               });
 
-              it('should fail with the current Runnable and the error', function() {
+              it('should fail with the current Runnable and the error', function () {
                 runner.uncaught(err);
 
                 expect(runner.fail, 'to have all calls satisfying', [
@@ -1096,9 +1088,9 @@ describe('Runner', function() {
                 ]).and('was called once');
               });
 
-              it('should abort the runner without emitting end event', function() {
+              it('should abort the runner without emitting end event', function () {
                 expect(
-                  function() {
+                  function () {
                     runner.uncaught(err);
                   },
                   'not to emit from',
@@ -1109,16 +1101,16 @@ describe('Runner', function() {
               });
             });
 
-            describe('when the current Runnable is still running', function() {
-              describe('when the current Runnable is a Test', function() {
-                beforeEach(function() {
+            describe('when the current Runnable is still running', function () {
+              describe('when the current Runnable is a Test', function () {
+                beforeEach(function () {
                   runnable = new Test('goomba', noop);
                   runnable.parent = runner.suite;
                   runner.currentRunnable = runnable;
                   runnable.callback = sinon.fake();
                 });
 
-                it('should run callback(err) to handle failing and hooks', function() {
+                it('should run callback(err) to handle failing and hooks', function () {
                   runner.uncaught(err);
 
                   expect(runner.fail, 'was not called');
@@ -1127,9 +1119,9 @@ describe('Runner', function() {
                   ]).and('was called once');
                 });
 
-                it('should not notify test has ended', function() {
+                it('should not notify test has ended', function () {
                   expect(
-                    function() {
+                    function () {
                       runner.uncaught(err);
                     },
                     'not to emit from',
@@ -1138,9 +1130,9 @@ describe('Runner', function() {
                   );
                 });
 
-                it('should not notify run has ended', function() {
+                it('should not notify run has ended', function () {
                   expect(
-                    function() {
+                    function () {
                       runner.uncaught(err);
                     },
                     'not to emit from',
@@ -1150,15 +1142,15 @@ describe('Runner', function() {
                 });
               });
 
-              describe('when the current Runnable is a Hook', function() {
-                beforeEach(function() {
+              describe('when the current Runnable is a Hook', function () {
+                beforeEach(function () {
                   runnable = new Hook();
                   runnable.parent = runner.suite;
                   runner.currentRunnable = runnable;
                   runnable.callback = sinon.fake();
                 });
 
-                it('should run callback(err) to handle failing hook pattern', function() {
+                it('should run callback(err) to handle failing hook pattern', function () {
                   runner.uncaught(err);
 
                   expect(runner.fail, 'was not called');
@@ -1167,9 +1159,9 @@ describe('Runner', function() {
                   ]).and('was called once');
                 });
 
-                it('should not notify test has ended', function() {
+                it('should not notify test has ended', function () {
                   expect(
-                    function() {
+                    function () {
                       runner.uncaught(err);
                     },
                     'not to emit from',
@@ -1178,9 +1170,9 @@ describe('Runner', function() {
                   );
                 });
 
-                it('should not notify run has ended', function() {
+                it('should not notify run has ended', function () {
                   expect(
-                    function() {
+                    function () {
                       runner.uncaught(err);
                     },
                     'not to emit from',
@@ -1195,20 +1187,20 @@ describe('Runner', function() {
       });
     });
 
-    describe('linkPartialObjects()', function() {
-      it('should return the Runner', function() {
+    describe('linkPartialObjects()', function () {
+      it('should return the Runner', function () {
         expect(runner.linkPartialObjects(), 'to be', runner);
       });
     });
 
-    describe('isParallelMode()', function() {
-      it('should return false', function() {
+    describe('isParallelMode()', function () {
+      it('should return false', function () {
         expect(runner.isParallelMode(), 'to be false');
       });
     });
 
-    describe('workerReporter()', function() {
-      it('should throw', function() {
+    describe('workerReporter()', function () {
+      it('should throw', function () {
         expect(() => runner.workerReporter(), 'to throw', {code: UNSUPPORTED});
       });
     });

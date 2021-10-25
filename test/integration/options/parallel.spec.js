@@ -61,10 +61,10 @@ async function waitForChildPids(pid) {
   return childPids;
 }
 
-describe('--parallel', function() {
-  describe('when a test has a syntax error', function() {
-    describe('when there is only a single test file', function() {
-      it('should fail gracefully', async function() {
+describe('--parallel', function () {
+  describe('when a test has a syntax error', function () {
+    describe('when there is only a single test file', function () {
+      it('should fail gracefully', async function () {
         return expect(
           runMochaAsync('options/parallel/syntax-err', ['--parallel']),
           'when fulfilled',
@@ -74,8 +74,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('when there are multiple test files', function() {
-      it('should fail gracefully', async function() {
+    describe('when there are multiple test files', function () {
+      it('should fail gracefully', async function () {
         return expect(
           invokeMochaAsync(
             [resolveFixturePath('options/parallel/syntax-err'), '--parallel'],
@@ -88,8 +88,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with CJS tests', function() {
-    it('should have the same result as with --no-parallel', async function() {
+  describe('when used with CJS tests', function () {
+    it('should have the same result as with --no-parallel', async function () {
       const expected = await runMochaAsync('options/parallel/test-*', [
         '--no-parallel'
       ]);
@@ -106,8 +106,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with ESM tests', function() {
-    it('should have the same result as with --no-parallel', async function() {
+  describe('when used with ESM tests', function () {
+    it('should have the same result as with --no-parallel', async function () {
       const expected = getSummary(
         await invokeMochaAsync([
           '--no-parallel',
@@ -130,8 +130,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with --retries', function() {
-    it('should retry tests appropriately', async function() {
+  describe('when used with --retries', function () {
+    it('should retry tests appropriately', async function () {
       return expect(
         runMochaAsync('options/parallel/retries-*', ['--parallel']),
         'when fulfilled',
@@ -146,8 +146,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with --allow-uncaught', function() {
-    it('should bubble up an exception', async function() {
+  describe('when used with --allow-uncaught', function () {
+    it('should bubble up an exception', async function () {
       return expect(
         invokeMochaAsync(
           [
@@ -166,8 +166,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with --file', function() {
-    it('should error out', async function() {
+  describe('when used with --file', function () {
+    it('should error out', async function () {
       return expect(
         invokeMochaAsync(
           [
@@ -184,8 +184,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with --sort', function() {
-    it('should error out', async function() {
+  describe('when used with --sort', function () {
+    it('should error out', async function () {
       return expect(
         invokeMochaAsync(
           [
@@ -202,8 +202,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with exclusive tests', function() {
-    it('should error out', async function() {
+  describe('when used with exclusive tests', function () {
+    it('should error out', async function () {
       return expect(
         invokeMochaAsync(
           [
@@ -219,8 +219,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with --bail', function() {
-    it('should skip some tests', async function() {
+  describe('when used with --bail', function () {
+    it('should skip some tests', async function () {
       const result = await runMochaAsync('options/parallel/test-*', [
         '--parallel',
         '--bail'
@@ -235,7 +235,7 @@ describe('--parallel', function() {
       );
     });
 
-    it('should fail', async function() {
+    it('should fail', async function () {
       return expect(
         runMochaAsync('options/parallel/test-*', ['--parallel', '--bail']),
         'when fulfilled',
@@ -244,8 +244,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when encountering a "bail" in context', function() {
-    it('should skip some tests', async function() {
+  describe('when encountering a "bail" in context', function () {
+    it('should skip some tests', async function () {
       const result = await runMochaAsync('options/parallel/bail', [
         '--parallel'
       ]);
@@ -256,7 +256,7 @@ describe('--parallel', function() {
       );
     });
 
-    it('should fail', async function() {
+    it('should fail', async function () {
       return expect(
         runMochaAsync('options/parallel/bail', ['--parallel', '--bail']),
         'when fulfilled',
@@ -265,8 +265,8 @@ describe('--parallel', function() {
     });
   });
 
-  describe('when used with "grep"', function() {
-    it('should be equivalent to running in serial', async function() {
+  describe('when used with "grep"', function () {
+    it('should be equivalent to running in serial', async function () {
       const expected = await runMochaAsync('options/parallel/test-*', [
         '--no-parallel',
         '--grep="suite d"'
@@ -287,15 +287,15 @@ describe('--parallel', function() {
     });
   });
 
-  describe('reporter equivalence', function() {
+  describe('reporter equivalence', function () {
     // each reporter name is duplicated; one is in all lower-case
     // 'base' is abstract, 'html' is browser-only, others are incompatible
     const DENY = ['progress', 'base', 'html', 'markdown', 'json-stream'];
     Object.keys(Mocha.reporters)
       .filter(name => /^[a-z]/.test(name) && DENY.indexOf(name) === -1)
       .forEach(reporter => {
-        describe(`when multiple test files run with --reporter=${reporter}`, function() {
-          it('should have the same result as when run with --no-parallel', async function() {
+        describe(`when multiple test files run with --reporter=${reporter}`, function () {
+          it('should have the same result as when run with --no-parallel', async function () {
             // note that the output may not be in the same order, as running file
             // order is non-deterministic in parallel mode
             const expected = await runMochaAsync('options/parallel/test-*', [
@@ -321,56 +321,56 @@ describe('--parallel', function() {
         });
       });
 
-    describe('when a single test file is run with --reporter=dot', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=dot', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'dot');
       });
     });
 
-    describe('when a single test file is run with --reporter=doc', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=doc', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'doc');
       });
     });
 
-    describe('when a single test file is run with --reporter=tap', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=tap', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'tap');
       });
     });
 
-    describe('when a single test file is run with --reporter=list', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=list', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'list');
       });
     });
 
-    describe('when a single test file is run with --reporter=min', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=min', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'min');
       });
     });
 
-    describe('when a single test file is run with --reporter=spec', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=spec', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'spec');
       });
     });
 
-    describe('when a single test file is run with --reporter=nyan', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=nyan', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'nyan');
       });
     });
 
-    describe('when a single test file is run with --reporter=landing', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=landing', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         return assertReporterOutputEquality.call(this, 'landing');
       });
     });
 
-    describe('when a single test file is run with --reporter=progress', function() {
-      it('should fail due to incompatibility', async function() {
+    describe('when a single test file is run with --reporter=progress', function () {
+      it('should fail due to incompatibility', async function () {
         return expect(
           invokeMochaAsync(
             [
@@ -389,8 +389,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('when a single test file is run with --reporter=markdown', function() {
-      it('should fail due to incompatibility', async function() {
+    describe('when a single test file is run with --reporter=markdown', function () {
+      it('should fail due to incompatibility', async function () {
         return expect(
           invokeMochaAsync(
             [
@@ -409,8 +409,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('when a single test file is run with --reporter=json-stream', function() {
-      it('should fail due to incompatibility', async function() {
+    describe('when a single test file is run with --reporter=json-stream', function () {
+      it('should fail due to incompatibility', async function () {
         return expect(
           invokeMochaAsync(
             [
@@ -429,8 +429,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('when a single test file is run with --reporter=json', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=json', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         // this one has some timings/durations that we can safely ignore
         const {expected, actual} = await compareReporters('json');
         expected.output = JSON.parse(expected.output);
@@ -454,8 +454,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('when a single test file is run with --reporter=xunit', function() {
-      it('should have the same output as when run with --no-parallel', async function() {
+    describe('when a single test file is run with --reporter=xunit', function () {
+      it('should have the same output as when run with --no-parallel', async function () {
         // durations need replacing
         const {expected, actual} = await compareReporters('xunit');
         expected.output = expected.output
@@ -475,7 +475,7 @@ describe('--parallel', function() {
     });
   });
 
-  describe('pool shutdown', function() {
+  describe('pool shutdown', function () {
     // these are unusual and deserve some explanation. we start our mocha
     // subprocess, and in parallel mode, that subprocess spawns more
     // subprocesses. `invokeMochaAsync` returns a tuple of a `mocha`
@@ -496,8 +496,8 @@ describe('--parallel', function() {
     // still running. this behavior is dependent on `workerpool@6.0.2`, which
     // added a guarantee that terminating the pool will _wait_ until all child
     // processes have actually exited.
-    describe('during normal operation', function() {
-      it('should not leave orphaned processes around', async function() {
+    describe('during normal operation', function () {
+      it('should not leave orphaned processes around', async function () {
         const [{pid}, promise] = invokeMochaAsync([
           resolveFixturePath('options/parallel/test-*'),
           '--parallel'
@@ -521,8 +521,8 @@ describe('--parallel', function() {
       });
     });
 
-    describe('during operation with --bail', function() {
-      it('should not leave orphaned processes around', async function() {
+    describe('during operation with --bail', function () {
+      it('should not leave orphaned processes around', async function () {
         const [{pid}, promise] = invokeMochaAsync([
           resolveFixturePath('options/parallel/test-*'),
           '--bail',

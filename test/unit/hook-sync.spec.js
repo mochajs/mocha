@@ -1,30 +1,30 @@
 'use strict';
 
-describe('serial', function() {
+describe('serial', function () {
   var calls = [];
 
-  beforeEach(function() {
+  beforeEach(function () {
     calls.push('parent before');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     calls.push('parent after');
   });
 
-  describe('hooks', function() {
-    beforeEach(function() {
+  describe('hooks', function () {
+    beforeEach(function () {
       calls.push('before');
       if (this.currentTest) {
         calls.push('before test ' + this.currentTest.title);
       }
     });
 
-    it('one', function() {
+    it('one', function () {
       expect(calls, 'to equal', ['parent before', 'before', 'before test one']);
       calls.push('one');
     });
 
-    it('two', function() {
+    it('two', function () {
       expect(calls, 'to equal', [
         'parent before',
         'before',
@@ -40,7 +40,7 @@ describe('serial', function() {
       calls.push('two');
     });
 
-    it('three', function() {
+    it('three', function () {
       expect(calls, 'to equal', [
         'parent before',
         'before',
@@ -63,7 +63,7 @@ describe('serial', function() {
       calls.push('three');
     });
 
-    afterEach(function() {
+    afterEach(function () {
       calls.push('after');
       if (this.currentTest) {
         calls.push(
@@ -72,7 +72,7 @@ describe('serial', function() {
       }
     });
 
-    after(function() {
+    after(function () {
       expect(calls, 'to equal', [
         'parent before',
         'before',

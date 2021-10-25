@@ -4,12 +4,12 @@ var path = require('path').posix;
 var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--dry-run', function() {
+describe('--dry-run', function () {
   var args = ['--dry-run'];
 
-  it('should only report, but not execute any test', function(done) {
+  it('should only report, but not execute any test', function (done) {
     var fixture = path.join('options/dry-run', 'dry-run');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }

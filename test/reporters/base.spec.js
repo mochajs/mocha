@@ -11,7 +11,7 @@ var chaiExpect = chai.expect;
 var createElements = helpers.createElements;
 var makeTest = helpers.makeTest;
 
-describe('Base reporter', function() {
+describe('Base reporter', function () {
   var stdout;
 
   function list(tests) {
@@ -34,28 +34,28 @@ describe('Base reporter', function() {
     return diffStr;
   }
 
-  var gather = function(chunk, encoding, cb) {
+  var gather = function (chunk, encoding, cb) {
     stdout.push(chunk);
   };
 
-  beforeEach(function() {
+  beforeEach(function () {
     sinon.stub(Base, 'useColors').value(false);
     sinon.stub(process.stdout, 'write').callsFake(gather);
     stdout = [];
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('showDiff', function() {
+  describe('showDiff', function () {
     var err;
 
-    beforeEach(function() {
+    beforeEach(function () {
       err = new AssertionError({actual: 'foo', expected: 'bar'});
     });
 
-    it('should show diffs by default', function() {
+    it('should show diffs by default', function () {
       var test = makeTest(err);
 
       list([test]);
@@ -65,7 +65,7 @@ describe('Base reporter', function() {
       expect(errOut, 'to match', /\+ expected/);
     });
 
-    it("should show diffs if 'err.showDiff' is true", function() {
+    it("should show diffs if 'err.showDiff' is true", function () {
       err.showDiff = true;
       var test = makeTest(err);
 
@@ -76,7 +76,7 @@ describe('Base reporter', function() {
       expect(errOut, 'to match', /\+ expected/);
     });
 
-    it("should not show diffs if 'err.showDiff' is false", function() {
+    it("should not show diffs if 'err.showDiff' is false", function () {
       err.showDiff = false;
       var test = makeTest(err);
 
@@ -87,7 +87,7 @@ describe('Base reporter', function() {
       expect(errOut, 'not to match', /\+ expected/);
     });
 
-    it("should not show diffs if 'expected' is not defined", function() {
+    it("should not show diffs if 'expected' is not defined", function () {
       var _err = new Error('ouch');
       var test = makeTest(_err);
 
@@ -98,7 +98,7 @@ describe('Base reporter', function() {
       expect(errOut, 'not to match', /\+ expected/);
     });
 
-    it("should not show diffs if 'hideDiff' is true", function() {
+    it("should not show diffs if 'hideDiff' is true", function () {
       var test = makeTest(err);
 
       sinon.stub(Base, 'hideDiff').value(true);
@@ -110,9 +110,9 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('getting two strings', function() {
+  describe('getting two strings', function () {
     // Fix regression V1.2.1(see: issue #1241)
-    it('should show strings diff as is', function() {
+    it('should show strings diff as is', function () {
       var err = new Error('test');
       err.actual = 'foo\nbar';
       err.expected = 'foo\nbaz';
@@ -130,14 +130,14 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('diff generation', function() {
+  describe('diff generation', function () {
     var inlineDiffsStub;
 
-    beforeEach(function() {
+    beforeEach(function () {
       inlineDiffsStub = sinon.stub(Base, 'inlineDiffs');
     });
 
-    it("should generate unified diffs if 'inlineDiffs' is false", function() {
+    it("should generate unified diffs if 'inlineDiffs' is false", function () {
       var actual = 'a foo unified diff';
       var expected = 'a bar unified diff';
 
@@ -151,7 +151,7 @@ describe('Base reporter', function() {
       );
     });
 
-    it("should generate inline diffs if 'inlineDiffs' is true", function() {
+    it("should generate inline diffs if 'inlineDiffs' is true", function () {
       var actual = 'a foo inline diff';
       var expected = 'a bar inline diff';
 
@@ -165,7 +165,7 @@ describe('Base reporter', function() {
       );
     });
 
-    it("should truncate overly long 'actual' ", function() {
+    it("should truncate overly long 'actual' ", function () {
       var actual = '';
       var i = 0;
       while (i++ < 120) {
@@ -179,7 +179,7 @@ describe('Base reporter', function() {
       expect(output, 'to match', / \.\.\. Lines skipped/);
     });
 
-    it("should truncate overly long 'expected' ", function() {
+    it("should truncate overly long 'expected' ", function () {
       var actual = 'a foo unified diff';
       var expected = '';
       var i = 0;
@@ -194,12 +194,12 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('inline strings diff', function() {
-    beforeEach(function() {
+  describe('inline strings diff', function () {
+    beforeEach(function () {
       sinon.stub(Base, 'inlineDiffs').value(true);
     });
 
-    it("should show single line diff if 'inlineDiffs' is true", function() {
+    it("should show single line diff if 'inlineDiffs' is true", function () {
       var err = new Error('test');
       err.actual = 'a foo inline diff';
       err.expected = 'a bar inline diff';
@@ -215,7 +215,7 @@ describe('Base reporter', function() {
       expect(errOut, 'to match', /expected/);
     });
 
-    it('should split lines if string has more than 4 line breaks', function() {
+    it('should split lines if string has more than 4 line breaks', function () {
       var err = new Error('test');
       err.actual = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
       err.expected = 'a\nbar\ninline\ndiff\nwith\nmultiple lines';
@@ -237,12 +237,12 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('unified diff', function() {
-    beforeEach(function() {
+  describe('unified diff', function () {
+    beforeEach(function () {
       sinon.stub(Base, 'inlineDiffs').value(false);
     });
 
-    it('should separate diff hunks by two dashes', function() {
+    it('should separate diff hunks by two dashes', function () {
       var err = new Error('test');
       err.actual = createElements({from: 2, to: 11});
       err.expected = createElements({from: 1, to: 10});
@@ -272,13 +272,13 @@ describe('Base reporter', function() {
         /actual/
       ];
 
-      regexesToMatch.forEach(function(aRegex) {
+      regexesToMatch.forEach(function (aRegex) {
         expect(errOut, 'to match', aRegex);
       });
     });
   });
 
-  it('should stringify objects', function() {
+  it('should stringify objects', function () {
     var err = new Error('test');
     err.actual = {key: 'a1'};
     err.expected = {key: 'e1'};
@@ -294,7 +294,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to match', /\+ expected/);
   });
 
-  it('should stringify Object.create(null)', function() {
+  it('should stringify Object.create(null)', function () {
     var err = new Error('test');
 
     err.actual = Object.create(null);
@@ -313,7 +313,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to match', /\+ expected/);
   });
 
-  it('should handle error messages that are not strings', function() {
+  it('should handle error messages that are not strings', function () {
     try {
       assert(false, true);
     } catch (err) {
@@ -332,7 +332,7 @@ describe('Base reporter', function() {
     }
   });
 
-  it("should interpret 'chai' module custom error messages", function() {
+  it("should interpret 'chai' module custom error messages", function () {
     var actual = 43;
     var expected = 42;
 
@@ -355,7 +355,7 @@ describe('Base reporter', function() {
     }
   });
 
-  it("should interpret 'assert' module custom error messages", function() {
+  it("should interpret 'assert' module custom error messages", function () {
     var actual = 43;
     var expected = 42;
 
@@ -380,7 +380,7 @@ describe('Base reporter', function() {
     }
   });
 
-  it('should remove message from stack', function() {
+  it('should remove message from stack', function () {
     var err = {
       message: 'Error',
       stack: 'Error\nfoo\nbar',
@@ -394,11 +394,11 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it("should use 'inspect' if 'inspect' and 'message' are set", function() {
+  it("should use 'inspect' if 'inspect' and 'message' are set", function () {
     var err = new Error('test');
     err.showDiff = false;
     err.message = 'error message';
-    err.inspect = function() {
+    err.inspect = function () {
       return 'Inspect Error';
     };
 
@@ -411,7 +411,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to contain', 'Inspect Error');
   });
 
-  it("should set an empty message if neither 'inspect' nor 'message' is set", function() {
+  it("should set an empty message if neither 'inspect' nor 'message' is set", function () {
     var err = {
       showDiff: false
     };
@@ -423,7 +423,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:');
   });
 
-  it('should not modify stack if it does not contain message', function() {
+  it('should not modify stack if it does not contain message', function () {
     var err = {
       message: 'Error',
       stack: 'foo\nbar',
@@ -437,7 +437,7 @@ describe('Base reporter', function() {
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it('should list multiple Errors per test', function() {
+  it('should list multiple Errors per test', function () {
     var err = new Error('First Error');
     err.multiple = [new Error('Second Error - same test')];
     var test = makeTest(err);
@@ -453,15 +453,15 @@ describe('Base reporter', function() {
     );
   });
 
-  describe('when reporter output immune to user test changes', function() {
+  describe('when reporter output immune to user test changes', function () {
     var baseConsoleLog;
 
-    beforeEach(function() {
+    beforeEach(function () {
       sinon.stub(console, 'log');
       baseConsoleLog = sinon.stub(Base, 'consoleLog');
     });
 
-    it('should let you stub out console.log without effecting reporters output', function() {
+    it('should let you stub out console.log without effecting reporters output', function () {
       Base.list([]);
       baseConsoleLog.restore();
 
@@ -469,7 +469,7 @@ describe('Base reporter', function() {
       expect(console.log, 'was not called');
     });
 
-    afterEach(function() {
+    afterEach(function () {
       sinon.restore();
     });
   });

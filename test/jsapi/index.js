@@ -20,6 +20,6 @@ mocha.addFile('test/unit/duration.spec.js');
 mocha.addFile('test/unit/globals.spec.js');
 mocha.addFile('test/unit/timeout.spec.js');
 
-mocha.run(function() {
+mocha.run(function () {
   console.log('done');
 });

@@ -13,18 +13,18 @@ var EVENT_SUITE_END = events.EVENT_SUITE_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
-describe('Doc reporter', function() {
+describe('Doc reporter', function () {
   var runner;
   var options = {};
   var runReporter = makeRunReporter(Doc);
 
-  afterEach(function() {
+  afterEach(function () {
     runner = null;
   });
 
-  describe('event handlers', function() {
-    describe("on 'suite' event", function() {
-      describe('when suite root does not exist', function() {
+  describe('event handlers', function () {
+    describe("on 'suite' event", function () {
+      describe('when suite root does not exist', function () {
         var expectedTitle = 'expectedTitle';
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
         var suite = {
@@ -32,7 +32,7 @@ describe('Doc reporter', function() {
           title: expectedTitle
         };
 
-        it('should log html with indents and expected title', function() {
+        it('should log html with indents and expected title', function () {
           runner = createMockRunner(
             'suite',
             EVENT_SUITE_BEGIN,
@@ -49,7 +49,7 @@ describe('Doc reporter', function() {
           expect(stdout, 'to equal', expectedArray);
         });
 
-        it('should escape title where necessary', function() {
+        it('should escape title where necessary', function () {
           var suite = {
             root: false,
             title: unescapedTitle
@@ -74,12 +74,12 @@ describe('Doc reporter', function() {
         });
       });
 
-      describe('when suite root exists', function() {
+      describe('when suite root exists', function () {
         var suite = {
           root: true
         };
 
-        it('should not log any html', function() {
+        it('should not log any html', function () {
           runner = createMockRunner(
             'suite',
             EVENT_SUITE_BEGIN,
@@ -93,13 +93,13 @@ describe('Doc reporter', function() {
       });
     });
 
-    describe("on 'suite end' event", function() {
-      describe('when suite root does not exist', function() {
+    describe("on 'suite end' event", function () {
+      describe('when suite root does not exist', function () {
         var suite = {
           root: false
         };
 
-        it('should log expected html with indents', function() {
+        it('should log expected html with indents', function () {
           runner = createMockRunner(
             'suite end',
             EVENT_SUITE_END,
@@ -113,12 +113,12 @@ describe('Doc reporter', function() {
         });
       });
 
-      describe('when suite root exists', function() {
+      describe('when suite root exists', function () {
         var suite = {
           root: true
         };
 
-        it('should not log any html', function() {
+        it('should not log any html', function () {
           runner = createMockRunner(
             'suite end',
             EVENT_SUITE_END,
@@ -132,7 +132,7 @@ describe('Doc reporter', function() {
       });
     });
 
-    describe("on 'pass' event", function() {
+    describe("on 'pass' event", function () {
       var expectedTitle = 'some tite';
       var expectedFile = 'testFile.spec.js';
       var expectedBody = 'some body';
@@ -140,12 +140,12 @@ describe('Doc reporter', function() {
         title: expectedTitle,
         file: expectedFile,
         body: expectedBody,
-        slow: function() {
+        slow: function () {
           return '';
         }
       };
 
-      it('should log html with indents, expected title, and body', function() {
+      it('should log html with indents, expected title, and body', function () {
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
         var stdout = runReporter(this, runner, options);
         var expectedArray = [
@@ -156,7 +156,7 @@ describe('Doc reporter', function() {
         expect(stdout, 'to equal', expectedArray);
       });
 
-      it('should escape title and body where necessary', function() {
+      it('should escape title and body where necessary', function () {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
         var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';
@@ -181,7 +181,7 @@ describe('Doc reporter', function() {
       });
     });
 
-    describe("on 'fail' event", function() {
+    describe("on 'fail' event", function () {
       var expectedTitle = 'some tite';
       var expectedFile = 'testFile.spec.js';
       var expectedBody = 'some body';
@@ -190,12 +190,12 @@ describe('Doc reporter', function() {
         title: expectedTitle,
         file: expectedFile,
         body: expectedBody,
-        slow: function() {
+        slow: function () {
           return '';
         }
       };
 
-      it('should log html with indents, expected title, body, and error', function() {
+      it('should log html with indents, expected title, body, and error', function () {
         runner = createMockRunner(
           'fail two args',
           EVENT_TEST_FAIL,
@@ -216,7 +216,7 @@ describe('Doc reporter', function() {
         expect(stdout, 'to equal', expectedArray);
       });
 
-      it('should escape title, body, and error where necessary', function() {
+      it('should escape title, body, and error where necessary', function () {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
         var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';

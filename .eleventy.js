@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(
     require('@11ty/eleventy-plugin-inclusive-language'),
     {
