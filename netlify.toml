@@ -14,7 +14,7 @@
 
 [build.environment]
   DEBUG = "mocha:docs*"
-  NODE_VERSION = "12"
+  NODE_VERSION = "16"
   RUBY_VERSION = "2.7.1"
 
 [context.deploy-preview]
