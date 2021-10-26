@@ -28,14 +28,14 @@ const defaults = {
   extension: ['js']
 };
 
-describe('options', function() {
+describe('options', function () {
   let readFileSync;
   let findupSync;
   let loadOptions;
   let findConfig;
   let loadConfig;
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
@@ -46,9 +46,9 @@ describe('options', function() {
    * 3. `mocha` prop of `package.json`
    * 4. default rc
    */
-  describe('loadOptions()', function() {
-    describe('when no parameter provided', function() {
-      beforeEach(function() {
+  describe('loadOptions()', function () {
+    describe('when no parameter provided', function () {
+      beforeEach(function () {
         this.timeout(1000);
         readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{}');
@@ -64,7 +64,7 @@ describe('options', function() {
         });
       });
 
-      it('should return an object containing positional args, defaults, and anti-reloading flags', function() {
+      it('should return an object containing positional args, defaults, and anti-reloading flags', function () {
         expect(
           loadOptions(),
           'to equal',
@@ -77,12 +77,12 @@ describe('options', function() {
       });
     });
 
-    describe('when parameter provided', function() {
-      describe('package.json', function() {
-        describe('when path to package.json (`--package <path>`) is valid', function() {
+    describe('when parameter provided', function () {
+      describe('package.json', function () {
+        describe('when path to package.json (`--package <path>`) is valid', function () {
           let result;
 
-          beforeEach(function() {
+          beforeEach(function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
@@ -99,7 +99,7 @@ describe('options', function() {
             result = loadOptions(['--package', filepath]);
           });
 
-          it('should return merged options incl. package.json opts', function() {
+          it('should return merged options incl. package.json opts', function () {
             expect(
               result,
               'to equal',
@@ -117,17 +117,17 @@ describe('options', function() {
             );
           });
 
-          it('should not try to find a package.json', function() {
+          it('should not try to find a package.json', function () {
             expect(findupSync, 'was not called');
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
 
-        describe('when path to package.json (`--package <path>`) is invalid', function() {
-          beforeEach(function() {
+        describe('when path to package.json (`--package <path>`) is invalid', function () {
+          beforeEach(function () {
             readFileSync = sinon.stub();
             // package.json
             readFileSync.onFirstCall().throws('bad file message');
@@ -142,7 +142,7 @@ describe('options', function() {
             });
           });
 
-          it('should throw', function() {
+          it('should throw', function () {
             expect(
               () => {
                 loadOptions('--package /something/wherever --require butts');
@@ -153,10 +153,10 @@ describe('options', function() {
           });
         });
 
-        describe('when path to package.json unspecified', function() {
+        describe('when path to package.json unspecified', function () {
           let result;
 
-          beforeEach(function() {
+          beforeEach(function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
@@ -175,7 +175,7 @@ describe('options', function() {
             result = loadOptions();
           });
 
-          it('should return merged options incl. found package.json', function() {
+          it('should return merged options incl. found package.json', function () {
             expect(
               result,
               'to equal',
@@ -193,14 +193,14 @@ describe('options', function() {
             );
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
 
-        describe('when called with package = false (`--no-package`)', function() {
+        describe('when called with package = false (`--no-package`)', function () {
           let result;
-          beforeEach(function() {
+          beforeEach(function () {
             readFileSync = sinon.stub();
             readFileSync.onFirstCall().returns('{}');
             findConfig = sinon.stub().returns('/some/path/to/.mocharc.json');
@@ -217,7 +217,7 @@ describe('options', function() {
             result = loadOptions('--no-diff --no-package');
           });
 
-          it('should return parsed args and default config', function() {
+          it('should return parsed args and default config', function () {
             expect(
               result,
               'to equal',
@@ -230,20 +230,20 @@ describe('options', function() {
             );
           });
 
-          it('should not look for package.json', function() {
+          it('should not look for package.json', function () {
             expect(findupSync, 'was not called');
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
       });
 
-      describe('rc file', function() {
-        describe('when called with config = false (`--no-config`)', function() {
+      describe('rc file', function () {
+        describe('when called with config = false (`--no-config`)', function () {
           let result;
-          beforeEach(function() {
+          beforeEach(function () {
             readFileSync = sinon.stub();
             readFileSync
               .onFirstCall()
@@ -264,7 +264,7 @@ describe('options', function() {
             result = loadOptions('--no-diff --no-config');
           });
 
-          it('should return parsed args, default config and package.json', function() {
+          it('should return parsed args, default config and package.json', function () {
             expect(
               result,
               'to equal',
@@ -277,23 +277,23 @@ describe('options', function() {
             );
           });
 
-          it('should not attempt to load a config file', function() {
+          it('should not attempt to load a config file', function () {
             expect(loadConfig, 'was not called');
           });
 
-          it('should not attempt to find a config file', function() {
+          it('should not attempt to find a config file', function () {
             expect(findConfig, 'was not called');
           });
 
-          it('should set config = false', function() {
+          it('should set config = false', function () {
             expect(loadOptions(), 'to have property', 'config', false);
           });
         });
 
-        describe('when path to config (`--config <path>`) is invalid', function() {
+        describe('when path to config (`--config <path>`) is invalid', function () {
           let config;
 
-          beforeEach(function() {
+          beforeEach(function () {
             readFileSync = sinon.stub();
             config = '/some/.mocharc.json';
             readFileSync.onFirstCall().returns('{}');
@@ -309,21 +309,21 @@ describe('options', function() {
             });
           });
 
-          it('should not look for a config', function() {
+          it('should not look for a config', function () {
             try {
               loadOptions(`--config ${config}`);
             } catch (ignored) {}
             expect(findConfig, 'was not called');
           });
 
-          it('should attempt to load file at path', function() {
+          it('should attempt to load file at path', function () {
             try {
               loadOptions(`--config ${config}`);
             } catch (ignored) {}
             expect(loadConfig, 'to have a call satisfying', [config]);
           });
 
-          it('should throw to warn the user', function() {
+          it('should throw to warn the user', function () {
             expect(
               () => {
                 loadOptions(`--config ${config}`);
@@ -334,11 +334,11 @@ describe('options', function() {
           });
         });
 
-        describe('when called with unspecified config', function() {
-          describe('when an rc file would be found', function() {
+        describe('when called with unspecified config', function () {
+          describe('when an rc file would be found', function () {
             let result;
 
-            beforeEach(function() {
+            beforeEach(function () {
               readFileSync = sinon.stub();
               readFileSync.onFirstCall().returns('{}');
               readFileSync.onSecondCall().throws();
@@ -356,25 +356,25 @@ describe('options', function() {
               result = loadOptions();
             });
 
-            it('should look for a config', function() {
+            it('should look for a config', function () {
               expect(findConfig, 'was called');
             });
 
-            it('should attempt to load file at found path', function() {
+            it('should attempt to load file at found path', function () {
               expect(loadConfig, 'to have a call satisfying', [
                 '/some/.mocharc.json'
               ]);
             });
 
-            it('should set config = false', function() {
+            it('should set config = false', function () {
               expect(result, 'to have property', 'config', false);
             });
           });
 
-          describe('when an rc file would not be found', function() {
+          describe('when an rc file would not be found', function () {
             let result;
 
-            beforeEach(function() {
+            beforeEach(function () {
               readFileSync = sinon.stub();
               readFileSync.onFirstCall().returns('{}');
               readFileSync.onSecondCall().throws();
@@ -392,15 +392,15 @@ describe('options', function() {
               result = loadOptions();
             });
 
-            it('should look for a config', function() {
+            it('should look for a config', function () {
               expect(findConfig, 'was called');
             });
 
-            it('should not attempt to load a config file', function() {
+            it('should not attempt to load a config file', function () {
               expect(loadConfig, 'was not called');
             });
 
-            it('should set config = false', function() {
+            it('should set config = false', function () {
               expect(result, 'to have property', 'config', false);
             });
           });
@@ -408,8 +408,8 @@ describe('options', function() {
       });
     });
 
-    describe('config priority', function() {
-      it('should prioritize package.json over defaults', function() {
+    describe('config priority', function () {
+      it('should prioritize package.json over defaults', function () {
         readFileSync = sinon.stub();
         readFileSync
           .onFirstCall()
@@ -434,7 +434,7 @@ describe('options', function() {
         });
       });
 
-      it('should prioritize rc file over package.json', function() {
+      it('should prioritize rc file over package.json', function () {
         readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{"mocha": {"timeout": 700}}');
         readFileSync.onSecondCall().returns('--timeout 800');
@@ -452,7 +452,7 @@ describe('options', function() {
         expect(loadOptions(), 'to have property', 'timeout', 600);
       });
 
-      it('should prioritize args over rc file', function() {
+      it('should prioritize args over rc file', function () {
         readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{"mocha": {"timeout": 700}}');
         readFileSync.onSecondCall().returns('--timeout 800');
@@ -476,8 +476,8 @@ describe('options', function() {
       });
     });
 
-    describe('when called with a one-and-done arg', function() {
-      beforeEach(function() {
+    describe('when called with a one-and-done arg', function () {
+      beforeEach(function () {
         readFileSync = sinon.stub();
         findConfig = sinon.stub();
         loadConfig = sinon.stub();
@@ -491,19 +491,19 @@ describe('options', function() {
       });
 
       ONE_AND_DONE_ARGS.forEach(arg => {
-        describe(`"${arg}"`, function() {
-          it(`should return basic parsed arguments and flag`, function() {
+        describe(`"${arg}"`, function () {
+          it(`should return basic parsed arguments and flag`, function () {
             expect(loadOptions(`--${arg}`), 'to equal', {_: [], [arg]: true});
           });
         });
       });
     });
 
-    describe('"extension" handling', function() {
-      describe('when user supplies "extension" option', function() {
+    describe('"extension" handling', function () {
+      describe('when user supplies "extension" option', function () {
         let result;
 
-        beforeEach(function() {
+        beforeEach(function () {
           readFileSync = sinon.stub();
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
@@ -518,15 +518,15 @@ describe('options', function() {
           result = loadOptions(['--extension', 'ts']);
         });
 
-        it('should not concatenate the default value', function() {
+        it('should not concatenate the default value', function () {
           expect(result, 'to have property', 'extension', ['ts', 'tsx']);
         });
       });
 
-      describe('when user does not supply "extension" option', function() {
+      describe('when user does not supply "extension" option', function () {
         let result;
 
-        beforeEach(function() {
+        beforeEach(function () {
           readFileSync = sinon.stub();
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
@@ -541,17 +541,17 @@ describe('options', function() {
           result = loadOptions();
         });
 
-        it('should retain the default', function() {
+        it('should retain the default', function () {
           expect(result, 'to have property', 'extension', ['js']);
         });
       });
     });
 
-    describe('"spec" handling', function() {
-      describe('when user supplies "spec" in config and positional arguments', function() {
+    describe('"spec" handling', function () {
+      describe('when user supplies "spec" in config and positional arguments', function () {
         let result;
 
-        beforeEach(function() {
+        beforeEach(function () {
           readFileSync = sinon.stub();
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
@@ -566,7 +566,7 @@ describe('options', function() {
           result = loadOptions(['*.test.js']);
         });
 
-        it('should place both - unsplitted - into the positional arguments array', function() {
+        it('should place both - unsplitted - into the positional arguments array', function () {
           expect(result, 'to have property', '_', [
             '*.test.js',
             '{dirA,dirB}/**/*.spec.js'
@@ -575,10 +575,10 @@ describe('options', function() {
       });
     });
 
-    describe('"ignore" handling', function() {
+    describe('"ignore" handling', function () {
       let result;
 
-      beforeEach(function() {
+      beforeEach(function () {
         readFileSync = sinon.stub();
         readFileSync.onFirstCall().throws();
         findConfig = sinon.stub().returns('/some/.mocharc.json');
@@ -593,7 +593,7 @@ describe('options', function() {
         result = loadOptions(['--ignore', '*.test.js']);
       });
 
-      it('should not split option values by comma', function() {
+      it('should not split option values by comma', function () {
         expect(result, 'to have property', 'ignore', [
           '*.test.js',
           '{dirA,dirB}/**/*.spec.js'

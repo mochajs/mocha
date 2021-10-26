@@ -3,13 +3,13 @@
 var runMocha = require('../helpers').runMocha;
 var path = require('path');
 
-describe('--reporter-option', function() {
-  describe('when given options w/ invalid format', function() {
-    it('should display an error', function(done) {
+describe('--reporter-option', function () {
+  describe('when given options w/ invalid format', function () {
+    it('should display an error', function (done) {
       runMocha(
         'passing.fixture.js',
         ['--reporter-option', 'foo=bar=baz'],
-        function(err, res) {
+        function (err, res) {
           if (err) {
             return done(err);
           }
@@ -23,7 +23,7 @@ describe('--reporter-option', function() {
       );
     });
 
-    it('should allow comma-separated values', function(done) {
+    it('should allow comma-separated values', function (done) {
       runMocha(
         'passing.fixture.js',
         [
@@ -38,7 +38,7 @@ describe('--reporter-option', function() {
           '--reporter-option',
           'foo=bar,baz=quux'
         ],
-        function(err, res) {
+        function (err, res) {
           if (err) {
             return done(err);
           }
@@ -52,7 +52,7 @@ describe('--reporter-option', function() {
       );
     });
 
-    it('should allow repeated options', function(done) {
+    it('should allow repeated options', function (done) {
       runMocha(
         'passing.fixture.js',
         [
@@ -69,7 +69,7 @@ describe('--reporter-option', function() {
           '--reporter-option',
           'baz=quux'
         ],
-        function(err, res) {
+        function (err, res) {
           if (err) {
             return done(err);
           }

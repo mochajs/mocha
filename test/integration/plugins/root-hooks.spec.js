@@ -12,7 +12,7 @@ function extractHookOutputFromResult(res) {
   return res.output
     .trim()
     .split('\n')
-    .filter(function(line) {
+    .filter(function (line) {
       // every line that begins with whitespace (e.g., the test name) should be ignored;
       // we just want the console.log messages
       return /^\S/.test(line);
@@ -29,9 +29,9 @@ function runMochaForHookOutput(args, opts) {
   return invokeMochaAsync(args, opts)[1].then(extractHookOutputFromResult);
 }
 
-describe('root hooks', function() {
-  describe('when mocha run in serial mode', function() {
-    it('should run root hooks when provided via mochaHooks object export', function() {
+describe('root hooks', function () {
+  describe('when mocha run in serial mode', function () {
+    it('should run root hooks when provided via mochaHooks object export', function () {
       return expect(
         runMochaForHookOutput([
           '--require=' +
@@ -64,7 +64,7 @@ describe('root hooks', function() {
       );
     });
 
-    it('should run root hooks when provided via mochaHooks function export', function() {
+    it('should run root hooks when provided via mochaHooks function export', function () {
       return expect(
         runMochaForHookOutput([
           '--require=' +
@@ -97,8 +97,8 @@ describe('root hooks', function() {
       );
     });
 
-    describe('support ESM when type=module or .mjs extension', function() {
-      it('should run root hooks when provided via mochaHooks', function() {
+    describe('support ESM when type=module or .mjs extension', function () {
+      it('should run root hooks when provided via mochaHooks', function () {
         return expect(
           runMochaForHookOutput([
             '--require=' +
@@ -135,8 +135,8 @@ describe('root hooks', function() {
       });
     });
 
-    describe('support ESM via .js extension w/o type=module', function() {
-      it('should fail due to ambiguous file type', function() {
+    describe('support ESM via .js extension w/o type=module', function () {
+      it('should fail due to ambiguous file type', function () {
         return expect(
           invokeMochaAsync(
             [
@@ -156,8 +156,8 @@ describe('root hooks', function() {
     });
   });
 
-  describe('when mocha in parallel mode', function() {
-    it('should run root hooks when provided via mochaHooks object exports', function() {
+  describe('when mocha in parallel mode', function () {
+    it('should run root hooks when provided via mochaHooks object exports', function () {
       return expect(
         runMochaForHookOutput([
           '--require=' +
@@ -191,7 +191,7 @@ describe('root hooks', function() {
       );
     });
 
-    it('should run root hooks when provided via mochaHooks function export', function() {
+    it('should run root hooks when provided via mochaHooks function export', function () {
       return expect(
         runMochaForHookOutput([
           '--require=' +
@@ -225,8 +225,8 @@ describe('root hooks', function() {
       );
     });
 
-    describe('when running multiple jobs', function() {
-      it('should run root hooks when provided via mochaHooks object exports for each job', function() {
+    describe('when running multiple jobs', function () {
+      it('should run root hooks when provided via mochaHooks object exports for each job', function () {
         return expect(
           runMochaForHookOutput([
             '--require=' +

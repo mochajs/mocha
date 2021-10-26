@@ -130,7 +130,7 @@
     "nps": "^5.10.0",
     "nyc": "^15.1.0",
     "pidtree": "^0.5.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.4.1",
     "regenerator-runtime": "0.13.7",
     "remark": "^14.0.1",
     "remark-github": "^11.1.1",
@@ -187,9 +187,11 @@
     "./lib/cli/index.js": false
   },
   "prettier": {
-    "singleQuote": true,
+    "arrowParens": "avoid",
     "bracketSpacing": false,
-    "endOfLine": "auto"
+    "endOfLine": "auto",
+    "singleQuote": true,
+    "trailingComma": "none"
   },
   "gitter": "https://gitter.im/mochajs/mocha",
   "husky": {

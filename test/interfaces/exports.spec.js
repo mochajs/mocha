@@ -3,11 +3,11 @@
 var calls = [];
 
 exports.Array = {
-  before: function() {
+  before: function () {
     calls.push('before');
   },
 
-  after: function() {
+  after: function () {
     calls.push('after');
     expect(calls, 'to equal', [
       'before',
@@ -22,21 +22,21 @@ exports.Array = {
   },
 
   '#indexOf()': {
-    beforeEach: function() {
+    beforeEach: function () {
       calls.push('before each');
     },
 
-    afterEach: function() {
+    afterEach: function () {
       calls.push('after each');
     },
 
-    'should return -1 when the value is not present': function() {
+    'should return -1 when the value is not present': function () {
       calls.push('one');
       expect([1, 2, 3].indexOf(5), 'to be', -1);
       expect([1, 2, 3].indexOf(0), 'to be', -1);
     },
 
-    'should return the correct index when the value is present': function() {
+    'should return the correct index when the value is present': function () {
       calls.push('two');
       expect([1, 2, 3].indexOf(1), 'to be', 0);
       expect([1, 2, 3].indexOf(2), 'to be', 1);

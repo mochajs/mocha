@@ -7,11 +7,11 @@ const sinon = require('sinon');
 
 const WORKER_PATH = require.resolve('../../lib/nodejs/worker.js');
 
-describe('worker', function() {
+describe('worker', function () {
   let worker;
   let stubs;
 
-  beforeEach(function() {
+  beforeEach(function () {
     stubs = {
       workerpool: {
         isMainThread: false,
@@ -21,8 +21,8 @@ describe('worker', function() {
     sinon.spy(process, 'removeAllListeners');
   });
 
-  describe('when run as main process', function() {
-    it('should throw', function() {
+  describe('when run as main process', function () {
+    it('should throw', function () {
       expect(() => {
         rewiremock.proxy(WORKER_PATH, {
           workerpool: {
@@ -34,10 +34,10 @@ describe('worker', function() {
     });
   });
 
-  describe('when run as worker process', function() {
+  describe('when run as worker process', function () {
     let mocha;
 
-    beforeEach(function() {
+    beforeEach(function () {
       mocha = {
         addFile: sinon.stub().returnsThis(),
         loadFilesAsync: sinon.stub().resolves(),
@@ -71,24 +71,24 @@ describe('worker', function() {
       });
     });
 
-    it('should register itself with workerpool', function() {
+    it('should register itself with workerpool', function () {
       expect(stubs.workerpool.worker, 'to have a call satisfying', [
         {run: worker.run}
       ]);
     });
 
-    describe('function', function() {
-      describe('run()', function() {
-        describe('when called without arguments', function() {
-          it('should reject', async function() {
+    describe('function', function () {
+      describe('run()', function () {
+        describe('when called without arguments', function () {
+          it('should reject', async function () {
             return expect(worker.run, 'to be rejected with error satisfying', {
               code: 'ERR_MOCHA_INVALID_ARG_TYPE'
             });
           });
         });
 
-        describe('when passed a non-string `options` value', function() {
-          it('should reject', async function() {
+        describe('when passed a non-string `options` value', function () {
+          it('should reject', async function () {
             return expect(
               () => worker.run('foo.js', 42),
               'to be rejected with error satisfying',
@@ -99,8 +99,8 @@ describe('worker', function() {
           });
         });
 
-        describe('when passed an invalid string `options` value', function() {
-          it('should reject', async function() {
+        describe('when passed an invalid string `options` value', function () {
+          it('should reject', async function () {
             return expect(
               () => worker.run('foo.js', 'tomfoolery'),
               'to be rejected with error satisfying',
@@ -111,8 +111,8 @@ describe('worker', function() {
           });
         });
 
-        describe('when called with empty "filepath" argument', function() {
-          it('should reject', async function() {
+        describe('when called with empty "filepath" argument', function () {
+          it('should reject', async function () {
             return expect(
               () => worker.run(''),
               'to be rejected with error satisfying',
@@ -123,8 +123,8 @@ describe('worker', function() {
           });
         });
 
-        describe('when the file at "filepath" argument is unloadable', function() {
-          it('should reject', async function() {
+        describe('when the file at "filepath" argument is unloadable', function () {
+          it('should reject', async function () {
             mocha.loadFilesAsync.rejects();
             return expect(
               () => worker.run('some-non-existent-file.js'),
@@ -133,16 +133,16 @@ describe('worker', function() {
           });
         });
 
-        describe('when the file at "filepath" is loadable', function() {
+        describe('when the file at "filepath" is loadable', function () {
           let result;
-          beforeEach(function() {
+          beforeEach(function () {
             result = SerializableWorkerResult.create();
 
             mocha.loadFilesAsync.resolves();
             mocha.run.yields(result);
           });
 
-          it('should handle "--require"', async function() {
+          it('should handle "--require"', async function () {
             await worker.run(
               'some-file.js',
               serializeJavascript({require: 'foo'})
@@ -157,7 +157,7 @@ describe('worker', function() {
             ).and('was called once');
           });
 
-          it('should handle "--ui"', async function() {
+          it('should handle "--ui"', async function () {
             const argv = {foo: 'bar'};
             await worker.run('some-file.js', serializeJavascript(argv));
 
@@ -168,31 +168,31 @@ describe('worker', function() {
             ).and('was called once');
           });
 
-          it('should call Mocha#run', async function() {
+          it('should call Mocha#run', async function () {
             await worker.run('some-file.js');
             expect(mocha.run, 'was called once');
           });
 
-          it('should remove all uncaughtException listeners', async function() {
+          it('should remove all uncaughtException listeners', async function () {
             await worker.run('some-file.js');
             expect(process.removeAllListeners, 'to have a call satisfying', [
               'uncaughtException'
             ]);
           });
 
-          it('should remove all unhandledRejection listeners', async function() {
+          it('should remove all unhandledRejection listeners', async function () {
             await worker.run('some-file.js');
             expect(process.removeAllListeners, 'to have a call satisfying', [
               'unhandledRejection'
             ]);
           });
 
-          describe('when serialization succeeds', function() {
-            beforeEach(function() {
+          describe('when serialization succeeds', function () {
+            beforeEach(function () {
               stubs.serializer.serialize.returnsArg(0);
             });
 
-            it('should resolve with a SerializedWorkerResult', async function() {
+            it('should resolve with a SerializedWorkerResult', async function () {
               return expect(
                 worker.run('some-file.js'),
                 'to be fulfilled with',
@@ -201,18 +201,18 @@ describe('worker', function() {
             });
           });
 
-          describe('when serialization fails', function() {
-            beforeEach(function() {
+          describe('when serialization fails', function () {
+            beforeEach(function () {
               stubs.serializer.serialize.throws();
             });
 
-            it('should reject', async function() {
+            it('should reject', async function () {
               return expect(worker.run('some-file.js'), 'to be rejected');
             });
           });
 
-          describe('when run twice', function() {
-            it('should initialize only once', async function() {
+          describe('when run twice', function () {
+            it('should initialize only once', async function () {
               await worker.run('some-file.js');
               await worker.run('some-other-file.js');
 
@@ -227,7 +227,7 @@ describe('worker', function() {
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
     // this is needed due to `require.cache` getting dumped in watch mode
     process.removeAllListeners('beforeExit');

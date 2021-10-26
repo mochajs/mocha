@@ -114,7 +114,7 @@ function bundlePreprocessor(config) {
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
 
-  return async function(content, file, done) {
+  return async function (content, file, done) {
     const {options, warnings} = await configPromise;
     const config = options[0];
     // plugins is always an array

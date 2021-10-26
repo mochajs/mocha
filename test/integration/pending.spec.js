@@ -7,10 +7,10 @@ var invokeNode = helpers.invokeNode;
 var toJSONResult = helpers.toJSONResult;
 var args = [];
 
-describe('pending', function() {
-  describe('pending specs', function() {
-    it('should be created by omitting a function', function(done) {
-      run('pending/spec.fixture.js', args, function(err, res) {
+describe('pending', function () {
+  describe('pending specs', function () {
+    it('should be created by omitting a function', function (done) {
+      run('pending/spec.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
           return;
@@ -22,8 +22,8 @@ describe('pending', function() {
         done();
       });
     });
-    it('should return the test object when used via shorthand methods', function(done) {
-      run('pending/skip-shorthand.fixture.js', args, function(err, res) {
+    it('should return the test object when used via shorthand methods', function (done) {
+      run('pending/skip-shorthand.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
           return;
@@ -35,8 +35,8 @@ describe('pending', function() {
         done();
       });
     });
-    it('should keep hierarchies of suites', function(done) {
-      run('pending/skip-hierarchy.fixture.js', args, function(err, res) {
+    it('should keep hierarchies of suites', function (done) {
+      run('pending/skip-hierarchy.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
           return;
@@ -55,10 +55,10 @@ describe('pending', function() {
     });
   });
 
-  describe('synchronous skip()', function() {
-    describe('in spec', function() {
-      it('should immediately skip the spec and run all others', function(done) {
-        run('pending/skip-sync-spec.fixture.js', args, function(err, res) {
+  describe('synchronous skip()', function () {
+    describe('in spec', function () {
+      it('should immediately skip the spec and run all others', function (done) {
+        run('pending/skip-sync-spec.fixture.js', args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -73,9 +73,9 @@ describe('pending', function() {
       });
     });
 
-    describe('in after', function() {
-      it('should throw, but run all tests', function(done) {
-        run('pending/skip-sync-after.fixture.js', args, function(err, res) {
+    describe('in after', function () {
+      it('should throw, but run all tests', function (done) {
+        run('pending/skip-sync-after.fixture.js', args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -94,9 +94,9 @@ describe('pending', function() {
       });
     });
 
-    describe('in before', function() {
-      it('should skip all suite specs', function(done) {
-        run('pending/skip-sync-before.fixture.js', args, function(err, res) {
+    describe('in before', function () {
+      it('should skip all suite specs', function (done) {
+        run('pending/skip-sync-before.fixture.js', args, function (err, res) {
           if (err) {
             done(err);
             return;
@@ -108,8 +108,8 @@ describe('pending', function() {
           done();
         });
       });
-      it('should run before and after hooks', function(done) {
-        run('pending/skip-sync-before-hooks.fixture.js', function(err, res) {
+      it('should run before and after hooks', function (done) {
+        run('pending/skip-sync-before-hooks.fixture.js', function (err, res) {
           if (err) {
             return done(err);
           }
@@ -125,8 +125,8 @@ describe('pending', function() {
           done();
         });
       });
-      it('should skip all sync/async inner before/after hooks', function(done) {
-        run('pending/skip-sync-before-inner.fixture.js', function(err, res) {
+      it('should skip all sync/async inner before/after hooks', function (done) {
+        run('pending/skip-sync-before-inner.fixture.js', function (err, res) {
           if (err) {
             return done(err);
           }
@@ -144,29 +144,30 @@ describe('pending', function() {
       });
     });
 
-    describe('in before with nested describe', function() {
-      it('should skip all suite specs, even if nested', function(done) {
-        run('pending/skip-sync-before-nested.fixture.js', args, function(
-          err,
-          res
-        ) {
-          if (err) {
-            done(err);
-            return;
+    describe('in before with nested describe', function () {
+      it('should skip all suite specs, even if nested', function (done) {
+        run(
+          'pending/skip-sync-before-nested.fixture.js',
+          args,
+          function (err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            assert.strictEqual(res.stats.pending, 3);
+            assert.strictEqual(res.stats.passes, 0);
+            assert.strictEqual(res.stats.failures, 0);
+            assert.strictEqual(res.code, 0);
+            done();
           }
-          assert.strictEqual(res.stats.pending, 3);
-          assert.strictEqual(res.stats.passes, 0);
-          assert.strictEqual(res.stats.failures, 0);
-          assert.strictEqual(res.code, 0);
-          done();
-        });
+        );
       });
     });
 
-    describe('in beforeEach', function() {
-      it('should skip all suite specs', function(done) {
+    describe('in beforeEach', function () {
+      it('should skip all suite specs', function (done) {
         var fixture = 'pending/skip-sync-beforeEach.fixture.js';
-        run(fixture, args, function(err, res) {
+        run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -183,9 +184,9 @@ describe('pending', function() {
           done();
         });
       });
-      it('should skip only two suite specs', function(done) {
+      it('should skip only two suite specs', function (done) {
         var fixture = 'pending/skip-sync-beforeEach-cond.fixture.js';
-        run(fixture, args, function(err, res) {
+        run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -205,10 +206,10 @@ describe('pending', function() {
     });
   });
 
-  describe('asynchronous skip()', function() {
-    describe('in spec', function() {
-      it('should immediately skip the spec and run all others', function(done) {
-        run('pending/skip-async-spec.fixture.js', args, function(err, res) {
+  describe('asynchronous skip()', function () {
+    describe('in spec', function () {
+      it('should immediately skip the spec and run all others', function (done) {
+        run('pending/skip-async-spec.fixture.js', args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -223,9 +224,9 @@ describe('pending', function() {
       });
     });
 
-    describe('in before', function() {
-      it('should skip all suite specs', function(done) {
-        run('pending/skip-async-before.fixture.js', args, function(err, res) {
+    describe('in before', function () {
+      it('should skip all suite specs', function (done) {
+        run('pending/skip-async-before.fixture.js', args, function (err, res) {
           if (err) {
             done(err);
             return;
@@ -237,8 +238,8 @@ describe('pending', function() {
           done();
         });
       });
-      it('should run before and after hooks', function(done) {
-        run('pending/skip-async-before-hooks.fixture.js', function(err, res) {
+      it('should run before and after hooks', function (done) {
+        run('pending/skip-async-before-hooks.fixture.js', function (err, res) {
           if (err) {
             return done(err);
           }
@@ -256,29 +257,30 @@ describe('pending', function() {
       });
     });
 
-    describe('in before with nested describe', function() {
-      it('should skip all suite specs, even if nested', function(done) {
-        run('pending/skip-async-before-nested.fixture.js', args, function(
-          err,
-          res
-        ) {
-          if (err) {
-            done(err);
-            return;
+    describe('in before with nested describe', function () {
+      it('should skip all suite specs, even if nested', function (done) {
+        run(
+          'pending/skip-async-before-nested.fixture.js',
+          args,
+          function (err, res) {
+            if (err) {
+              done(err);
+              return;
+            }
+            assert.strictEqual(res.stats.pending, 3);
+            assert.strictEqual(res.stats.passes, 0);
+            assert.strictEqual(res.stats.failures, 0);
+            assert.strictEqual(res.code, 0);
+            done();
           }
-          assert.strictEqual(res.stats.pending, 3);
-          assert.strictEqual(res.stats.passes, 0);
-          assert.strictEqual(res.stats.failures, 0);
-          assert.strictEqual(res.code, 0);
-          done();
-        });
+        );
       });
     });
 
-    describe('in beforeEach', function() {
-      it('should skip all suite specs', function(done) {
+    describe('in beforeEach', function () {
+      it('should skip all suite specs', function (done) {
         var fixture = 'pending/skip-async-beforeEach.fixture.js';
-        run(fixture, args, function(err, res) {
+        run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
           }
@@ -298,10 +300,10 @@ describe('pending', function() {
     });
   });
 
-  describe('programmatic usage', function() {
-    it('should skip the test by listening to test event', function(done) {
+  describe('programmatic usage', function () {
+    it('should skip the test by listening to test event', function (done) {
       var path = require.resolve('./fixtures/pending/programmatic.fixture.js');
-      invokeNode([path], function(err, res) {
+      invokeNode([path], function (err, res) {
         if (err) {
           return done(err);
         }

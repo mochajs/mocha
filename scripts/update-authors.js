@@ -38,7 +38,8 @@ const excludeEmails = [
 // `Co-authored-by:` in the message body. Both have been used in the past
 // to indicate multiple authors per commit, with the latter standardized
 // by GitHub now.
-const authorRe = /(^Author:|^Co-authored-by:)\s+(?<author>[^<]+)\s+(?<email><[^>]+>)/i;
+const authorRe =
+  /(^Author:|^Co-authored-by:)\s+(?<author>[^<]+)\s+(?<email><[^>]+>)/i;
 
 rl.on('line', line => {
   const match = line.match(authorRe);

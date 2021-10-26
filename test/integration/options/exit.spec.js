@@ -2,7 +2,7 @@
 
 var runMocha = require('../helpers').runMocha;
 
-describe('--exit', function() {
+describe('--exit', function () {
   var behaviors = {
     enabled: '--exit',
     disabled: '--no-exit'
@@ -16,11 +16,11 @@ describe('--exit', function() {
   }
 
   // these two handlers deal with a ctrl-c on command-line
-  before(function() {
+  before(function () {
     process.on('SIGINT', killSubprocess);
   });
 
-  after(function() {
+  after(function () {
     process.removeListener('SIGINT', killSubprocess);
   });
 
@@ -33,8 +33,8 @@ describe('--exit', function() {
    * @param {"enabled"|"disabled"} [behavior] - 'enabled' or 'disabled'; omit for default
    * @returns {Function} async function implementing the test
    */
-  var runExit = function(shouldExit, behavior) {
-    return function(done) {
+  var runExit = function (shouldExit, behavior) {
+    return function (done) {
       var timeout = this.timeout();
       this.timeout(0);
       this.slow(Infinity);
@@ -53,25 +53,25 @@ describe('--exit', function() {
       });
 
       // If this callback happens, then Mocha didn't automatically exit.
-      timeoutObj = setTimeout(function() {
+      timeoutObj = setTimeout(function () {
         didExit = false;
         killSubprocess();
       }, timeout - 500);
     };
   };
 
-  describe('default behavior', function() {
+  describe('default behavior', function () {
     it('should not force exit after root suite completion', runExit(false));
   });
 
-  describe('when enabled', function() {
+  describe('when enabled', function () {
     it(
       'should force exit after root suite completion',
       runExit(true, 'enabled')
     );
   });
 
-  describe('when disabled', function() {
+  describe('when disabled', function () {
     it(
       'should not force exit after root suite completion',
       runExit(false, 'disabled')

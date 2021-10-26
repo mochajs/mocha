@@ -14,7 +14,7 @@ var EVENT_RUN_END = events.EVENT_RUN_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
-describe('JSON Stream reporter', function() {
+describe('JSON Stream reporter', function () {
   var runReporter = makeRunReporter(JSONStream);
   var expectedTitle = 'some title';
   var expectedFullTitle = 'full title';
@@ -36,9 +36,9 @@ describe('JSON Stream reporter', function() {
     message: expectedErrorMessage
   };
 
-  describe('event handlers', function() {
-    describe("on 'start' event", function() {
-      it('should write stringified start with expected total', function() {
+  describe('event handlers', function () {
+    describe("on 'start' event", function () {
+      it('should write stringified start with expected total', function () {
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var expectedTotal = 12;
         runner.total = expectedTotal;
@@ -53,8 +53,8 @@ describe('JSON Stream reporter', function() {
       });
     });
 
-    describe("on 'pass' event", function() {
-      it('should write stringified test data', function() {
+    describe("on 'pass' event", function () {
+      it('should write stringified test data', function () {
         var runner = createMockRunner(
           'pass',
           EVENT_TEST_PASS,
@@ -85,9 +85,9 @@ describe('JSON Stream reporter', function() {
       });
     });
 
-    describe("on 'fail' event", function() {
-      describe('when error stack exists', function() {
-        it('should write stringified test data with error data', function() {
+    describe("on 'fail' event", function () {
+      describe('when error stack exists', function () {
+        it('should write stringified test data with error data', function () {
           expectedError.stack = expectedErrorStack;
           var runner = createMockRunner(
             'fail two args',
@@ -124,8 +124,8 @@ describe('JSON Stream reporter', function() {
         });
       });
 
-      describe('when error stack does not exist', function() {
-        it('should write stringified test data with error data', function() {
+      describe('when error stack does not exist', function () {
+        it('should write stringified test data with error data', function () {
           expectedError.stack = null;
           var runner = createMockRunner(
             'fail two args',
@@ -161,8 +161,8 @@ describe('JSON Stream reporter', function() {
       });
     });
 
-    describe("on 'end' event", function() {
-      it('should write summary statistics', function() {
+    describe("on 'end' event", function () {
+      it('should write summary statistics', function () {
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         var stdout = runReporter(this, runner, options);
