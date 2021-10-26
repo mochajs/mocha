@@ -97,7 +97,6 @@
     "core-js": "^3.16.3",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.2",
-    "cross-spawn": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-semistandard": "^16.0.0",
