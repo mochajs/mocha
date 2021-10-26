@@ -3,8 +3,8 @@
 var exec = require('child_process').exec;
 var path = require('path');
 
-describe('globbing like --compilers', function() {
-  it('should find a file of each type', function(done) {
+describe('globbing like --compilers', function () {
+  it('should find a file of each type', function (done) {
     exec(
       '"' +
         process.execPath +
@@ -12,7 +12,7 @@ describe('globbing like --compilers', function() {
         path.join('bin', 'mocha') +
         '" -R json --require coffee-script/register --require test/compiler-fixtures/foo.fixture "test/compiler/*.@(coffee|foo)"',
       {cwd: path.join(__dirname, '..', '..')},
-      function(error, stdout) {
+      function (error, stdout) {
         if (error && !stdout) {
           return done(error);
         }

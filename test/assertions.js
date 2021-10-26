@@ -308,7 +308,7 @@ module.exports = {
       )
       .addAssertion(
         '<JSONResult> [not] to have failed with (error|errors) <any+>',
-        function(expect, result, ...errors) {
+        function (expect, result, ...errors) {
           errors.forEach(error => {
             expect(result, '[not] to have failed').and('[not] to satisfy', {
               failures: expect.it('to have an item satisfying', {

@@ -14,17 +14,17 @@ var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
 var EVENT_RUN_END = events.EVENT_RUN_END;
 var EVENT_TEST_END = events.EVENT_TEST_END;
 
-describe('Progress reporter', function() {
+describe('Progress reporter', function () {
   var runReporter = makeRunReporter(Progress);
-  var noop = function() {};
+  var noop = function () {};
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('event handlers', function() {
-    describe("on 'start' event", function() {
-      it('should call cursor hide', function() {
+  describe('event handlers', function () {
+    describe("on 'start' event", function () {
+      it('should call cursor hide', function () {
         var hideCursorStub = sinon.stub(Base.cursor, 'hide');
 
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
@@ -36,9 +36,9 @@ describe('Progress reporter', function() {
       });
     });
 
-    describe("on 'test end' event", function() {
-      describe('when line has changed', function() {
-        it('should write expected progress of open and close options', function() {
+    describe("on 'test end' event", function () {
+      describe('when line has changed', function () {
+        it('should write expected progress of open and close options', function () {
           var crCursorStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
           sinon.stub(Base, 'useColors').value(false);
           sinon.stub(Base.window, 'width').value(5);
@@ -75,8 +75,8 @@ describe('Progress reporter', function() {
         });
       });
 
-      describe('when line has not changed', function() {
-        it('should not write anything', function() {
+      describe('when line has not changed', function () {
+        it('should not write anything', function () {
           sinon.stub(Base, 'useColors').value(false);
           sinon.stub(Base.cursor, 'CR').callsFake(noop);
           sinon.stub(Base.window, 'width').value(-3);
@@ -93,8 +93,8 @@ describe('Progress reporter', function() {
       });
     });
 
-    describe("on 'end' event", function() {
-      it('should call cursor show and epilogue', function() {
+    describe("on 'end' event", function () {
+      it('should call cursor show and epilogue', function () {
         var showCursorStub = sinon.stub(Base.cursor, 'show');
         var fakeThis = {
           epilogue: sinon.spy()

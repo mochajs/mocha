@@ -4,13 +4,13 @@ var path = require('path').posix;
 var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--retries', function() {
+describe('--retries', function () {
   var args = [];
 
-  it('should retry test failures after a certain threshold', function(done) {
+  it('should retry test failures after a certain threshold', function (done) {
     args = ['--retries', '3'];
     var fixture = path.join('options', 'retries');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }

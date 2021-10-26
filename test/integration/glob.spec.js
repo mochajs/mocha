@@ -5,12 +5,12 @@ var path = require('path');
 
 var node = '"' + process.execPath + '"';
 
-describe('globbing', function() {
-  describe('by the shell', function() {
-    it('should find the first level test', function(done) {
+describe('globbing', function () {
+  describe('by the shell', function () {
+    it('should find the first level test', function (done) {
       testGlob.shouldSucceed(
         './*.js',
-        function(results) {
+        function (results) {
           expect(
             results.stdout,
             'to contain',
@@ -21,10 +21,10 @@ describe('globbing', function() {
       );
     });
 
-    it('should not find a non-matching pattern', function(done) {
+    it('should not find a non-matching pattern', function (done) {
       testGlob.shouldFail(
         './*-none.js',
-        function(results) {
+        function (results) {
           expect(
             results.stderr,
             'to contain',
@@ -35,10 +35,10 @@ describe('globbing', function() {
       );
     });
 
-    it('should handle multiple non-matching patterns', function(done) {
+    it('should handle multiple non-matching patterns', function (done) {
       testGlob.shouldFail(
         './*-none.js ./*-none-twice.js',
-        function(results) {
+        function (results) {
           expect(results.stderr, 'to contain', 'Error: No test files found');
           expect(results.stderr, 'not to contain', '*-none');
         },
@@ -46,10 +46,10 @@ describe('globbing', function() {
       );
     });
 
-    it('should handle both matching and non-matching patterns in the same command', function(done) {
+    it('should handle both matching and non-matching patterns in the same command', function (done) {
       testGlob.shouldSucceed(
         './*.js ./*-none.js',
-        function(results) {
+        function (results) {
           expect(
             results.stdout,
             'to contain',
@@ -66,11 +66,11 @@ describe('globbing', function() {
     });
   });
 
-  describe('by Mocha', function() {
-    it('should find the first level test', function(done) {
+  describe('by Mocha', function () {
+    it('should find the first level test', function (done) {
       testGlob.shouldSucceed(
         '"./*.js"',
-        function(results) {
+        function (results) {
           expect(
             results.stdout,
             'to contain',
@@ -81,10 +81,10 @@ describe('globbing', function() {
       );
     });
 
-    it('should not find a non-matching pattern', function(done) {
+    it('should not find a non-matching pattern', function (done) {
       testGlob.shouldFail(
         '"./*-none.js"',
-        function(results) {
+        function (results) {
           expect(
             results.stderr,
             'to contain',
@@ -95,20 +95,20 @@ describe('globbing', function() {
       );
     });
 
-    it('should handle multiple non-matching patterns', function(done) {
+    it('should handle multiple non-matching patterns', function (done) {
       testGlob.shouldFail(
         '"./*-none.js" "./*-none-twice.js"',
-        function(results) {
+        function (results) {
           expect(results.stderr, 'to contain', 'Error: No test files found');
         },
         done
       );
     });
 
-    it('should handle both matching and non-matching patterns in the same command', function(done) {
+    it('should handle both matching and non-matching patterns in the same command', function (done) {
       testGlob.shouldSucceed(
         '"./*.js" "./*-none.js"',
-        function(results) {
+        function (results) {
           expect(
             results.stdout,
             'to contain',
@@ -124,11 +124,11 @@ describe('globbing', function() {
       );
     });
 
-    describe('double-starred', function() {
-      it('should find the tests on multiple levels', function(done) {
+    describe('double-starred', function () {
+      it('should find the tests on multiple levels', function (done) {
         testGlob.shouldSucceed(
           '"./**/*.js"',
-          function(results) {
+          function (results) {
             expect(
               results.stdout,
               'to contain',
@@ -139,10 +139,10 @@ describe('globbing', function() {
         );
       });
 
-      it('should not find a non-matching pattern', function(done) {
+      it('should not find a non-matching pattern', function (done) {
         testGlob.shouldFail(
           '"./**/*-none.js"',
-          function(results) {
+          function (results) {
             expect(
               results.stderr,
               'to contain',
@@ -153,10 +153,10 @@ describe('globbing', function() {
         );
       });
 
-      it('should handle both matching and non-matching patterns in the same command', function(done) {
+      it('should handle both matching and non-matching patterns in the same command', function (done) {
         testGlob.shouldSucceed(
           '"./**/*.js" "./**/*-none.js"',
-          function(results) {
+          function (results) {
             expect(
               results.stdout,
               'to contain',
@@ -187,7 +187,7 @@ var testGlob = {
   })
 };
 
-var isFlakeyNode = (function() {
+var isFlakeyNode = (function () {
   var version = process.versions.node.split('.');
   return (
     version[0] === '0' && version[1] === '10' && process.platform === 'win32'
@@ -203,7 +203,7 @@ function execMochaWith(validate) {
         '" -R json-stream --no-config ' +
         glob,
       {cwd: path.join(__dirname, 'fixtures', 'glob')},
-      function(error, stdout, stderr) {
+      function (error, stdout, stderr) {
         try {
           validate(error, stderr);
           if (isFlakeyNode && error && stderr === '') {

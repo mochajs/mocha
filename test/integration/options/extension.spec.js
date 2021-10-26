@@ -4,8 +4,8 @@ var helpers = require('../helpers');
 var invokeMocha = helpers.invokeMocha;
 var toJSONResult = helpers.toJSONResult;
 
-describe('--extension', function() {
-  it('should allow comma-separated variables', function(done) {
+describe('--extension', function () {
+  it('should allow comma-separated variables', function (done) {
     var args = [
       '--require',
       'coffee-script/register',
@@ -17,7 +17,7 @@ describe('--extension', function() {
       'js,coffee',
       'test/integration/fixtures/options/extension'
     ];
-    invokeMocha(args, function(err, res) {
+    invokeMocha(args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -29,7 +29,7 @@ describe('--extension', function() {
     });
   });
 
-  it('should allow extensions beginning with a dot', function(done) {
+  it('should allow extensions beginning with a dot', function (done) {
     var args = [
       '--require',
       'coffee-script/register',
@@ -41,7 +41,7 @@ describe('--extension', function() {
       '.js',
       'test/integration/fixtures/options/extension'
     ];
-    invokeMocha(args, function(err, res) {
+    invokeMocha(args, function (err, res) {
       if (err) {
         return done(err);
       }

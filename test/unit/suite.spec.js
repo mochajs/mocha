@@ -10,16 +10,16 @@ function supportsFunctionNames() {
   return function foo() {}.name === 'foo';
 }
 
-describe('Suite', function() {
-  afterEach(function() {
+describe('Suite', function () {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('instance method', function() {
+  describe('instance method', function () {
     let suite;
 
-    describe('clone()', function() {
-      beforeEach(function() {
+    describe('clone()', function () {
+      beforeEach(function () {
         suite = new Suite('To be cloned', {}, true);
         suite._timeout = 3043;
         suite._slow = 101;
@@ -32,7 +32,7 @@ describe('Suite', function() {
         suite._afterAll.push(5);
       });
 
-      it('should clone the Suite, omitting children', function() {
+      it('should clone the Suite, omitting children', function () {
         expect(suite.clone(), 'to satisfy', {
           title: 'To be cloned',
           _timeout: 3043,
@@ -49,20 +49,20 @@ describe('Suite', function() {
       });
     });
 
-    describe('reset()', function() {
-      beforeEach(function() {
-        suite = new Suite('Suite to be reset', function() {});
+    describe('reset()', function () {
+      beforeEach(function () {
+        suite = new Suite('Suite to be reset', function () {});
       });
 
-      it('should reset the `delayed` state', function() {
+      it('should reset the `delayed` state', function () {
         suite.delayed = true;
         suite.reset();
         expect(suite.delayed, 'to be', false);
       });
 
-      it('should forward reset to suites and tests', function() {
+      it('should forward reset to suites and tests', function () {
         const childSuite = new Suite('child suite', suite.context);
-        const test = new Test('test', function() {});
+        const test = new Test('test', function () {});
         suite.addSuite(childSuite);
         suite.addTest(test);
         const testResetStub = sinon.stub(test, 'reset');
@@ -72,11 +72,11 @@ describe('Suite', function() {
         expect(suiteResetStub, 'was called once');
       });
 
-      it('should forward reset to all hooks', function() {
-        suite.beforeEach(function() {});
-        suite.afterEach(function() {});
-        suite.beforeAll(function() {});
-        suite.afterAll(function() {});
+      it('should forward reset to all hooks', function () {
+        suite.beforeEach(function () {});
+        suite.afterEach(function () {});
+        suite.beforeAll(function () {});
+        suite.afterAll(function () {});
         sinon.stub(suite.getHooks('beforeEach')[0], 'reset');
         sinon.stub(suite.getHooks('afterEach')[0], 'reset');
         sinon.stub(suite.getHooks('beforeAll')[0], 'reset');
@@ -91,79 +91,79 @@ describe('Suite', function() {
       });
     });
 
-    describe('timeout()', function() {
-      beforeEach(function() {
+    describe('timeout()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when no argument is passed', function() {
-        it('should return the timeout value', function() {
+      describe('when no argument is passed', function () {
+        it('should return the timeout value', function () {
           expect(suite.timeout(), 'to be', 2000);
         });
       });
 
-      describe('when argument is passed', function() {
-        it('should return the Suite object', function() {
+      describe('when argument is passed', function () {
+        it('should return the Suite object', function () {
           const newSuite = suite.timeout(5000);
           expect(newSuite.timeout(), 'to be', 5000);
         });
       });
     });
 
-    describe('slow()', function() {
-      beforeEach(function() {
+    describe('slow()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when given a string', function() {
-        it('should parse it', function() {
+      describe('when given a string', function () {
+        it('should parse it', function () {
           suite.slow('5 seconds');
           expect(suite.slow(), 'to be', 5000);
         });
       });
 
-      describe('when no argument is passed', function() {
-        it('should return the slow value', function() {
+      describe('when no argument is passed', function () {
+        it('should return the slow value', function () {
           expect(suite.slow(), 'to be', 75);
         });
       });
 
-      describe('when argument is passed', function() {
-        it('should return the Suite object', function() {
+      describe('when argument is passed', function () {
+        it('should return the Suite object', function () {
           const newSuite = suite.slow(5000);
           expect(newSuite.slow(), 'to be', 5000);
         });
       });
     });
 
-    describe('bail()', function() {
-      beforeEach(function() {
+    describe('bail()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
         suite._bail = true;
       });
 
-      describe('when no argument is passed', function() {
-        it('should return the bail value', function() {
+      describe('when no argument is passed', function () {
+        it('should return the bail value', function () {
           expect(suite.bail(), 'to be', true);
         });
       });
 
-      describe('when argument is passed', function() {
-        it('should return the Suite object', function() {
+      describe('when argument is passed', function () {
+        it('should return the Suite object', function () {
           const newSuite = suite.bail(false);
           expect(newSuite.bail(), 'to be', false);
         });
       });
     });
 
-    describe('beforeAll()', function() {
-      beforeEach(function() {
+    describe('beforeAll()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('wraps the passed in function in a Hook', function() {
-        it('adds it to _beforeAll', function() {
-          const fn = function() {};
+      describe('wraps the passed in function in a Hook', function () {
+        it('adds it to _beforeAll', function () {
+          const fn = function () {};
           suite.beforeAll(fn);
 
           expect(suite._beforeAll, 'to have length', 1);
@@ -172,8 +172,8 @@ describe('Suite', function() {
           expect(beforeAllItem.fn, 'to be', fn);
         });
 
-        it('appends title to hook', function() {
-          const fn = function() {};
+        it('appends title to hook', function () {
+          const fn = function () {};
           suite.beforeAll('test', fn);
 
           expect(suite._beforeAll, 'to have length', 1);
@@ -182,7 +182,7 @@ describe('Suite', function() {
           expect(beforeAllItem.fn, 'to be', fn);
         });
 
-        it('uses function name if available', function() {
+        it('uses function name if available', function () {
           if (!supportsFunctionNames()) {
             this.skip();
             return;
@@ -196,14 +196,14 @@ describe('Suite', function() {
       });
     });
 
-    describe('afterAll()', function() {
-      beforeEach(function() {
+    describe('afterAll()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('wraps the passed in function in a Hook', function() {
-        it('adds it to _afterAll', function() {
-          const fn = function() {};
+      describe('wraps the passed in function in a Hook', function () {
+        it('adds it to _afterAll', function () {
+          const fn = function () {};
           suite.afterAll(fn);
 
           expect(suite._afterAll, 'to have length', 1);
@@ -211,8 +211,8 @@ describe('Suite', function() {
           expect(afterAllItem.title, 'to match', /^"after all" hook/);
           expect(afterAllItem.fn, 'to be', fn);
         });
-        it('appends title to hook', function() {
-          const fn = function() {};
+        it('appends title to hook', function () {
+          const fn = function () {};
           suite.afterAll('test', fn);
 
           expect(suite._afterAll, 'to have length', 1);
@@ -221,7 +221,7 @@ describe('Suite', function() {
           expect(beforeAllItem.fn, 'to be', fn);
         });
 
-        it('uses function name if available', function() {
+        it('uses function name if available', function () {
           if (!supportsFunctionNames()) {
             this.skip();
             return;
@@ -235,16 +235,16 @@ describe('Suite', function() {
       });
     });
 
-    describe('beforeEach()', function() {
+    describe('beforeEach()', function () {
       let suite;
 
-      beforeEach(function() {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('wraps the passed in function in a Hook', function() {
-        it('adds it to _beforeEach', function() {
-          const fn = function() {};
+      describe('wraps the passed in function in a Hook', function () {
+        it('adds it to _beforeEach', function () {
+          const fn = function () {};
           suite.beforeEach(fn);
 
           expect(suite._beforeEach, 'to have length', 1);
@@ -253,8 +253,8 @@ describe('Suite', function() {
           expect(beforeEachItem.fn, 'to be', fn);
         });
 
-        it('appends title to hook', function() {
-          const fn = function() {};
+        it('appends title to hook', function () {
+          const fn = function () {};
           suite.beforeEach('test', fn);
 
           expect(suite._beforeEach, 'to have length', 1);
@@ -263,7 +263,7 @@ describe('Suite', function() {
           expect(beforeAllItem.fn, 'to be', fn);
         });
 
-        it('uses function name if available', function() {
+        it('uses function name if available', function () {
           if (!supportsFunctionNames()) {
             this.skip();
             return;
@@ -276,26 +276,26 @@ describe('Suite', function() {
         });
       });
 
-      describe('when the suite is pending', function() {
-        beforeEach(function() {
+      describe('when the suite is pending', function () {
+        beforeEach(function () {
           suite.pending = true;
         });
 
-        it('should not create a hook', function() {
-          suite.beforeEach(function() {});
+        it('should not create a hook', function () {
+          suite.beforeEach(function () {});
           expect(suite._beforeEach, 'to be empty');
         });
       });
     });
 
-    describe('afterEach()', function() {
-      beforeEach(function() {
+    describe('afterEach()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('wraps the passed in function in a Hook', function() {
-        it('adds it to _afterEach', function() {
-          const fn = function() {};
+      describe('wraps the passed in function in a Hook', function () {
+        it('adds it to _afterEach', function () {
+          const fn = function () {};
           suite.afterEach(fn);
 
           expect(suite._afterEach, 'to have length', 1);
@@ -304,8 +304,8 @@ describe('Suite', function() {
           expect(afterEachItem.fn, 'to be', fn);
         });
 
-        it('appends title to hook', function() {
-          const fn = function() {};
+        it('appends title to hook', function () {
+          const fn = function () {};
           suite.afterEach('test', fn);
 
           expect(suite._afterEach, 'to have length', 1);
@@ -314,7 +314,7 @@ describe('Suite', function() {
           expect(beforeAllItem.fn, 'to be', fn);
         });
 
-        it('uses function name if available', function() {
+        it('uses function name if available', function () {
           if (!supportsFunctionNames()) {
             this.skip();
             return;
@@ -328,23 +328,23 @@ describe('Suite', function() {
       });
     });
 
-    describe('create()', function() {
+    describe('create()', function () {
       let first;
       let second;
 
-      before(function() {
+      before(function () {
         first = new Suite('Root suite', {}, true);
         second = new Suite('RottenRoot suite', {}, true);
         first.addSuite(second);
       });
 
-      it('does not create a second root suite', function() {
+      it('does not create a second root suite', function () {
         expect(second.parent, 'to be', first);
         expect(first.root, 'to be', true);
         expect(second.root, 'to be', false);
       });
 
-      it('does not denote the root suite by being titleless', function() {
+      it('does not denote the root suite by being titleless', function () {
         const emptyTitleSuite = Suite.create(second, '');
         expect(emptyTitleSuite.parent, 'to be', second);
         expect(emptyTitleSuite.root, 'to be', false);
@@ -352,11 +352,11 @@ describe('Suite', function() {
       });
     });
 
-    describe('addSuite()', function() {
+    describe('addSuite()', function () {
       let first;
       let second;
 
-      beforeEach(function() {
+      beforeEach(function () {
         first = new Suite('First suite');
         first.timeout(4002);
         first.slow(200);
@@ -364,65 +364,65 @@ describe('Suite', function() {
         first.addSuite(second);
       });
 
-      it('sets the parent on the added Suite', function() {
+      it('sets the parent on the added Suite', function () {
         expect(second.parent, 'to be', first);
       });
 
-      it('copies the timeout value', function() {
+      it('copies the timeout value', function () {
         expect(second.timeout(), 'to be', 4002);
       });
 
-      it('copies the slow value', function() {
+      it('copies the slow value', function () {
         expect(second.slow(), 'to be', 200);
       });
 
-      it('adds the suite to the suites collection', function() {
+      it('adds the suite to the suites collection', function () {
         expect(first.suites, 'to have length', 1);
         expect(first.suites[0], 'to be', second);
       });
 
-      it('treats suite as pending if its parent is pending', function() {
+      it('treats suite as pending if its parent is pending', function () {
         first.pending = true;
         expect(second.isPending(), 'to be', true);
       });
     });
 
-    describe('addTest()', function() {
+    describe('addTest()', function () {
       let test;
 
-      beforeEach(function() {
+      beforeEach(function () {
         suite = new Suite('A Suite', new Context());
         suite.timeout(4002);
         test = new Test('test');
         suite.addTest(test);
       });
 
-      it('sets the parent on the added test', function() {
+      it('sets the parent on the added test', function () {
         expect(test.parent, 'to be', suite);
       });
 
-      it('copies the timeout value', function() {
+      it('copies the timeout value', function () {
         expect(test.timeout(), 'to be', 4002);
       });
 
-      it('adds the test to the tests collection', function() {
+      it('adds the test to the tests collection', function () {
         expect(suite.tests, 'to satisfy', [test]).and('to have length', 1);
       });
     });
 
-    describe('fullTitle()', function() {
-      beforeEach(function() {
+    describe('fullTitle()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when there is no parent', function() {
-        it('returns the suite title', function() {
+      describe('when there is no parent', function () {
+        it('returns the suite title', function () {
           expect(suite.fullTitle(), 'to be', 'A Suite');
         });
       });
 
-      describe('when there is a parent', function() {
-        it("returns the combination of parent's and suite's title", function() {
+      describe('when there is a parent', function () {
+        it("returns the combination of parent's and suite's title", function () {
           const parentSuite = new Suite('I am a parent');
           parentSuite.addSuite(suite);
           expect(suite.fullTitle(), 'to be', 'I am a parent A Suite');
@@ -430,28 +430,28 @@ describe('Suite', function() {
       });
     });
 
-    describe('titlePath()', function() {
-      beforeEach(function() {
+    describe('titlePath()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when there is no parent', function() {
-        it('returns the suite title', function() {
+      describe('when there is no parent', function () {
+        it('returns the suite title', function () {
           expect(suite.titlePath(), 'to equal', ['A Suite']);
         });
       });
 
-      describe('when there is a parent', function() {
-        describe('the parent is the root suite', function() {
-          it('returns the suite title', function() {
+      describe('when there is a parent', function () {
+        describe('the parent is the root suite', function () {
+          it('returns the suite title', function () {
             const rootSuite = new Suite('', {}, true);
             rootSuite.addSuite(suite);
             expect(suite.titlePath(), 'to equal', ['A Suite']);
           });
         });
 
-        describe('the parent is not the root suite', function() {
-          it("returns the concatenation of parent's and suite's title", function() {
+        describe('the parent is not the root suite', function () {
+          it("returns the concatenation of parent's and suite's title", function () {
             const parentSuite = new Suite('I am a parent');
             parentSuite.addSuite(suite);
             expect(suite.titlePath(), 'to equal', ['I am a parent', 'A Suite']);
@@ -460,19 +460,19 @@ describe('Suite', function() {
       });
     });
 
-    describe('total()', function() {
-      beforeEach(function() {
+    describe('total()', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when there are no nested suites or tests', function() {
-        it('should return 0', function() {
+      describe('when there are no nested suites or tests', function () {
+        it('should return 0', function () {
           expect(suite.total(), 'to be', 0);
         });
       });
 
-      describe('when there are several tests in the suite', function() {
-        it('should return the number', function() {
+      describe('when there are several tests in the suite', function () {
+        it('should return the number', function () {
           suite.addTest(new Test('a child test'));
           suite.addTest(new Test('another child test'));
           expect(suite.total(), 'to be', 2);
@@ -480,13 +480,13 @@ describe('Suite', function() {
       });
     });
 
-    describe('eachTest(fn)', function() {
-      beforeEach(function() {
+    describe('eachTest(fn)', function () {
+      beforeEach(function () {
         suite = new Suite('A Suite');
       });
 
-      describe('when there are no nested suites or tests', function() {
-        it('should return 0', function() {
+      describe('when there are no nested suites or tests', function () {
+        it('should return 0', function () {
           let n = 0;
           function fn() {
             n++;
@@ -496,8 +496,8 @@ describe('Suite', function() {
         });
       });
 
-      describe('when there are several tests in the suite', function() {
-        it('should return the number', function() {
+      describe('when there are several tests in the suite', function () {
+        it('should return the number', function () {
           suite.addTest(new Test('a child test'));
           suite.addTest(new Test('another child test'));
 
@@ -510,8 +510,8 @@ describe('Suite', function() {
         });
       });
 
-      describe('when there are several levels of nested suites', function() {
-        it('should return the number', function() {
+      describe('when there are several levels of nested suites', function () {
+        it('should return the number', function () {
           suite.addTest(new Test('a child test'));
           const childSuite = new Suite('a child suite');
           childSuite.addTest(new Test('a test in a child suite'));
@@ -527,39 +527,39 @@ describe('Suite', function() {
       });
     });
 
-    describe('constructor', function() {
-      beforeEach(function() {
+    describe('constructor', function () {
+      beforeEach(function () {
         sinon.stub(errors, 'deprecate');
       });
 
       /* eslint no-new: off */
-      it("should throw an error if the title isn't a string", function() {
-        expect(function() {
+      it("should throw an error if the title isn't a string", function () {
+        expect(function () {
           new Suite(undefined, 'root');
         }, 'to throw');
 
-        expect(function() {
-          new Suite(function() {}, 'root');
+        expect(function () {
+          new Suite(function () {}, 'root');
         }, 'to throw');
       });
 
-      it('should not throw if the title is a string', function() {
-        expect(function() {
+      it('should not throw if the title is a string', function () {
+        expect(function () {
           new Suite('Bdd suite', 'root');
         }, 'not to throw');
       });
     });
 
-    describe('timeout()', function() {
-      it('should convert a string to milliseconds', function() {
+    describe('timeout()', function () {
+      it('should convert a string to milliseconds', function () {
         const suite = new Suite('some suite');
         suite.timeout('100');
         expect(suite.timeout(), 'to be', 100);
       });
     });
 
-    describe('hasOnly()', function() {
-      it('should return true if a test has `only`', function() {
+    describe('hasOnly()', function () {
+      it('should return true if a test has `only`', function () {
         const suite = new Suite('foo');
         const test = new Test('bar');
 
@@ -568,7 +568,7 @@ describe('Suite', function() {
         expect(suite.hasOnly(), 'to be', true);
       });
 
-      it('should return true if a suite has `only`', function() {
+      it('should return true if a suite has `only`', function () {
         const suite = new Suite('foo');
         const nested = new Suite('bar');
 
@@ -577,7 +577,7 @@ describe('Suite', function() {
         expect(suite.hasOnly(), 'to be', true);
       });
 
-      it('should return true if nested suite has `only`', function() {
+      it('should return true if nested suite has `only`', function () {
         const suite = new Suite('foo');
         const nested = new Suite('bar');
         const test = new Test('baz');
@@ -589,7 +589,7 @@ describe('Suite', function() {
         expect(suite.hasOnly(), 'to be', true);
       });
 
-      it('should return false if no suite or test is marked `only`', function() {
+      it('should return false if no suite or test is marked `only`', function () {
         const suite = new Suite('foo');
         const nested = new Suite('bar');
         const test = new Test('baz');
@@ -601,8 +601,8 @@ describe('Suite', function() {
       });
     });
 
-    describe('filterOnly()', function() {
-      it('should filter out all other tests and suites if a test has `only`', function() {
+    describe('filterOnly()', function () {
+      it('should filter out all other tests and suites if a test has `only`', function () {
         const suite = new Suite('a');
         const nested = new Suite('b');
         const test = new Test('c');
@@ -622,7 +622,7 @@ describe('Suite', function() {
         });
       });
 
-      it('should filter out all other tests and suites if a suite has `only`', function() {
+      it('should filter out all other tests and suites if a suite has `only`', function () {
         const suite = new Suite('a');
         const nested1 = new Suite('b');
         const nested2 = new Suite('c');
@@ -647,8 +647,8 @@ describe('Suite', function() {
       });
     });
 
-    describe('markOnly()', function() {
-      it('should call appendOnlySuite on parent', function() {
+    describe('markOnly()', function () {
+      it('should call appendOnlySuite on parent', function () {
         const suite = new Suite('foo');
         const spy = sinon.spy();
         suite.parent = {
@@ -664,21 +664,21 @@ describe('Suite', function() {
   });
 });
 
-describe('Test', function() {
-  describe('initialization', function() {
-    it("should throw an error if the title isn't a string", function() {
-      expect(function() {
-        new Test(function() {});
+describe('Test', function () {
+  describe('initialization', function () {
+    it("should throw an error if the title isn't a string", function () {
+      expect(function () {
+        new Test(function () {});
       }, 'to throw');
 
       expect(() => {
-        new Test(undefined, function() {});
+        new Test(undefined, function () {});
       }, 'to throw');
     });
 
-    it('should not throw if the title is a string', function() {
-      expect(function() {
-        new Test('test-case', function() {});
+    it('should not throw if the title is a string', function () {
+      expect(function () {
+        new Test('test-case', function () {});
       }, 'not to throw');
     });
   });

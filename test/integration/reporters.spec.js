@@ -6,33 +6,34 @@ var crypto = require('crypto');
 var path = require('path');
 var run = require('./helpers').runMocha;
 
-describe('reporters', function() {
-  describe('markdown', function() {
+describe('reporters', function () {
+  describe('markdown', function () {
     var res;
 
-    before(function(done) {
-      run('passing.fixture.js', ['--reporter', 'markdown'], function(
-        err,
-        result
-      ) {
-        res = result;
-        done(err);
-      });
+    before(function (done) {
+      run(
+        'passing.fixture.js',
+        ['--reporter', 'markdown'],
+        function (err, result) {
+          res = result;
+          done(err);
+        }
+      );
     });
 
-    it('does not exceed maximum callstack (issue: 1875)', function() {
+    it('does not exceed maximum callstack (issue: 1875)', function () {
       expect(res.output, 'not to contain', 'RangeError');
     });
 
-    it('contains spec src', function() {
+    it('contains spec src', function () {
       var src = ['```js', 'assert(true);', '```'].join('\n');
 
       expect(res.output, 'to contain', src);
     });
   });
 
-  describe('xunit', function() {
-    it('prints test cases with --reporter-options output (issue: 1864)', function(done) {
+  describe('xunit', function () {
+    it('prints test cases with --reporter-options output (issue: 1864)', function (done) {
       var randomStr = crypto.randomBytes(8).toString('hex');
       var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
@@ -48,13 +49,13 @@ describe('reporters', function() {
         '</testsuite>'
       ];
 
-      run('passing.fixture.js', args, function(err, result) {
+      run('passing.fixture.js', args, function (err, result) {
         if (err) return done(err);
 
         var xml = fs.readFileSync(tmpFile, 'utf8');
         fs.unlinkSync(tmpFile);
 
-        expectedOutput.forEach(function(line) {
+        expectedOutput.forEach(function (line) {
           expect(xml, 'to contain', line);
         });
 
@@ -63,14 +64,14 @@ describe('reporters', function() {
     });
   });
 
-  describe('loader', function() {
-    it('loads a reporter from a path relative to the current working directory', function(done) {
+  describe('loader', function () {
+    it('loads a reporter from a path relative to the current working directory', function (done) {
       var reporterAtARelativePath =
         'test/integration/fixtures/simple-reporter.js';
 
       var args = ['--reporter=' + reporterAtARelativePath];
 
-      run('passing.fixture.js', args, function(err, result) {
+      run('passing.fixture.js', args, function (err, result) {
         if (err) {
           done(err);
           return;
@@ -80,7 +81,7 @@ describe('reporters', function() {
       });
     });
 
-    it('loads a reporter from an absolute path', function(done) {
+    it('loads a reporter from an absolute path', function (done) {
       // Generates an absolute path string
       var reporterAtAnAbsolutePath = path.join(
         process.cwd(),
@@ -89,7 +90,7 @@ describe('reporters', function() {
 
       var args = ['--reporter=' + reporterAtAnAbsolutePath];
 
-      run('passing.fixture.js', args, function(err, result) {
+      run('passing.fixture.js', args, function (err, result) {
         if (err) {
           done(err);
           return;
@@ -100,28 +101,28 @@ describe('reporters', function() {
     });
   });
 
-  describe('tap', function() {
-    var not = function(predicate) {
-      return function() {
+  describe('tap', function () {
+    var not = function (predicate) {
+      return function () {
         return !predicate.apply(this, arguments);
       };
     };
-    var versionPredicate = function(line) {
+    var versionPredicate = function (line) {
       return line.match(/^TAP version \d+$/) != null;
     };
-    var planPredicate = function(line) {
+    var planPredicate = function (line) {
       return line.match(/^1\.\.\d+$/) != null;
     };
-    var testLinePredicate = function(line) {
+    var testLinePredicate = function (line) {
       return line.match(/^not ok/) != null || line.match(/^ok/) != null;
     };
-    var diagnosticPredicate = function(line) {
+    var diagnosticPredicate = function (line) {
       return line.match(/^#/) != null;
     };
-    var bailOutPredicate = function(line) {
+    var bailOutPredicate = function (line) {
       return line.match(/^Bail out!/) != null;
     };
-    var anythingElsePredicate = function(line) {
+    var anythingElsePredicate = function (line) {
       return (
         versionPredicate(line) === false &&
         planPredicate(line) === false &&
@@ -131,12 +132,12 @@ describe('reporters', function() {
       );
     };
 
-    describe('produces valid TAP v13 output', function() {
-      var runFixtureAndValidateOutput = function(fixture, expected) {
-        it('for ' + fixture, function(done) {
+    describe('produces valid TAP v13 output', function () {
+      var runFixtureAndValidateOutput = function (fixture, expected) {
+        it('for ' + fixture, function (done) {
           var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
-          run(fixture, args, function(err, res) {
+          run(fixture, args, function (err, res) {
             if (err) {
               done(err);
               return;
@@ -157,7 +158,7 @@ describe('reporters', function() {
             // plan must appear once
             expect(outputLines, 'to contain', expectedPlan);
             expect(
-              outputLines.filter(function(l) {
+              outputLines.filter(function (l) {
                 return l === expectedPlan;
               }),
               'to have length',
@@ -170,11 +171,8 @@ describe('reporters', function() {
             var lastTestLine =
               outputLines.length -
               1 -
-              outputLines
-                .slice()
-                .reverse()
-                .findIndex(testLinePredicate);
-            var planLine = outputLines.findIndex(function(line) {
+              outputLines.slice().reverse().findIndex(testLinePredicate);
+            var planLine = outputLines.findIndex(function (line) {
               return line === expectedPlan;
             });
             expect(
@@ -196,7 +194,7 @@ describe('reporters', function() {
       });
     });
 
-    it('should fail if given invalid `tapVersion`', function(done) {
+    it('should fail if given invalid `tapVersion`', function (done) {
       var invalidTapVersion = 'nosuch';
       var args = [
         '--reporter=tap',
@@ -207,7 +205,7 @@ describe('reporters', function() {
       run(
         'reporters.fixture.js',
         args,
-        function(err, res) {
+        function (err, res) {
           if (err) {
             done(err);
             return;
@@ -224,10 +222,10 @@ describe('reporters', function() {
       );
     });
 
-    it('places exceptions correctly in YAML blocks', function(done) {
+    it('places exceptions correctly in YAML blocks', function (done) {
       var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
-      run('reporters.fixture.js', args, function(err, res) {
+      run('reporters.fixture.js', args, function (err, res) {
         if (err) {
           done(err);
           return;
