@@ -32,6 +32,7 @@ jobs:
           - 12
           - 14
           - 16
+          - 17
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -47,15 +48,15 @@ jobs:
     steps:
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - uses: actions/checkout@v2
       - name: 'Cache node_modules'
         uses: actions/cache@v2
         with:
           path: '~/.npm'
-          key: "ubuntu-latest-node-v14-${{ hashFiles('**/package-lock.json') }}"
+          key: "ubuntu-latest-node-v16-${{ hashFiles('**/package-lock.json') }}"
           restore-keys: |
-            ubuntu-latest-node-v14-
+            ubuntu-latest-node-v16-
       - name: Install Dependencies
         run: npm ci --ignore-scripts
       - name: 'Check lint'
@@ -76,9 +77,10 @@ jobs:
           - 12
           - 14
           - 16
+          - 17
         include:
           - os: ubuntu-latest
-            node: 14
+            node: 16
             env:
               COVERAGE: 1
     steps:
@@ -181,7 +183,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 16
       - uses: actions/checkout@v2
       - name: 'Cache node_modules'
         uses: actions/cache@v2
@@ -189,9 +191,9 @@ jobs:
           path: '~/.npm'
           # this key is different than above, since we are running scripts
           # (builds, postinstall lifecycle hooks, etc.)
-          key: "ubuntu-latest-node-full-v14-${{ hashFiles('**/package-lock.json') }}"
+          key: "ubuntu-latest-node-full-v16-${{ hashFiles('**/package-lock.json') }}"
           restore-keys: |
-            ubuntu-latest-node-full-v14-
+            ubuntu-latest-node-full-v16-
       - name: Install Dependencies
         run: npm ci
       - name: Run Browser Tests
