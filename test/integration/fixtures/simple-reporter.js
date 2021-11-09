@@ -1,28 +1,57 @@
 'use strict';
 
-var baseReporter = require('../../../lib/reporters/base');
-module.exports = simplereporter;
+const Mocha = require('../../..');
+const {
+  EVENT_RUN_BEGIN,
+  EVENT_RUN_END,
+  EVENT_TEST_FAIL,
+  EVENT_TEST_PASS,
+  EVENT_SUITE_BEGIN,
+  EVENT_SUITE_END
+} = Mocha.Runner.constants;
 
-function simplereporter(runner) {
-  baseReporter.call(this, runner);
+// this reporter outputs test results, indenting two spaces per suite
+class MyReporter {
+  constructor(runner) {
+    this._indents = 0;
+    const stats = runner.stats;
 
-  runner.on('suite', function(suite) {
-    console.log("on('suite') called");
-  });
+    runner
+      .once(EVENT_RUN_BEGIN, () => {
+        console.log('start');
+      })
+      .on(EVENT_SUITE_BEGIN, () => {
+        this.increaseIndent();
+      })
+      .on(EVENT_SUITE_END, () => {
+        this.decreaseIndent();
+      })
+      .on(EVENT_TEST_PASS, test => {
+        // Test#fullTitle() returns the suite name(s)
+        // prepended to the test title
+        console.log(`${this.indent()}pass: ${test.fullTitle()}`);
+      })
+      .on(EVENT_TEST_FAIL, (test, err) => {
+        console.log(
+          `${this.indent()}fail: ${test.fullTitle()} - error: ${err.message}`
+        );
+      })
+      .once(EVENT_RUN_END, () => {
+        console.log(`end: ${stats.passes}/${stats.passes + stats.failures} ok`);
+      });
+  }
 
-  runner.on('fail', function(test, err) {
-    console.log("on('fail') called");
-  });
+  indent() {
+    return Array(this._indents).join('  ');
+  }
 
-  runner.on('pass', function(test) {
-    console.log("on('pass') called");
-  });
+  increaseIndent() {
+    this._indents++;
+  }
 
-  runner.on('test end', function(test, err) {
-    console.log("on('test end') called");
-  });
-
-  runner.on('end', function() {
-    console.log("on('end') called");
-  });
+  decreaseIndent() {
+    this._indents--;
+  }
 }
+
+module.exports = MyReporter;

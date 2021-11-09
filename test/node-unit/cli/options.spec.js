@@ -1,6 +1,6 @@
 'use strict';
 
-const {createSandbox} = require('sinon');
+const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 const {ONE_AND_DONE_ARGS} = require('../../../lib/cli/one-and-dones');
 
@@ -10,40 +10,33 @@ const configPath = require.resolve('../../../lib/cli/config');
 
 const proxyLoadOptions = ({
   readFileSync = {},
-  findupSync = {},
+  findupSync = null,
   findConfig = {},
   loadConfig = {}
 } = {}) =>
   rewiremock.proxy(modulePath, r => ({
     fs: r.with({readFileSync}).directChildOnly(),
     [mocharcPath]: defaults,
-    'findup-sync': r.by(() => findupSync).directChildOnly(),
+    'find-up': r
+      .by(() => (findupSync ? {sync: findupSync} : {}))
+      .directChildOnly(),
     [configPath]: r.with({findConfig, loadConfig}).directChildOnly()
   })).loadOptions;
 
 const defaults = {
   timeout: 1000,
-  timeouts: 1000,
-  t: 1000,
-  opts: '/default/path/to/mocha.opts'
+  extension: ['js']
 };
 
-describe('options', function() {
-  let sandbox;
+describe('options', function () {
   let readFileSync;
   let findupSync;
   let loadOptions;
   let findConfig;
   let loadConfig;
 
-  beforeEach(function() {
-    sandbox = createSandbox();
-    rewiremock.enable();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-    rewiremock.disable();
+  afterEach(function () {
+    sinon.restore();
   });
 
   /**
@@ -51,18 +44,17 @@ describe('options', function() {
    * 1. Command-line args
    * 2. RC file (`.mocharc.js`, `.mocharc.ya?ml`, `mocharc.json`)
    * 3. `mocha` prop of `package.json`
-   * 4. `mocha.opts`
-   * 5. default rc
+   * 4. default rc
    */
-  describe('loadOptions()', function() {
-    describe('when no parameter provided', function() {
-      beforeEach(function() {
-        readFileSync = sandbox.stub();
+  describe('loadOptions()', function () {
+    describe('when no parameter provided', function () {
+      beforeEach(function () {
+        this.timeout(1000);
+        readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{}');
-        readFileSync.onSecondCall().returns('--retries 3');
-        findConfig = sandbox.stub().returns('/some/.mocharc.json');
-        loadConfig = sandbox.stub().returns({});
-        findupSync = sandbox.stub().returns('/some/package.json');
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -72,214 +64,32 @@ describe('options', function() {
         });
       });
 
-      it('should return an object containing positional args, defaults, and anti-reloading flags', function() {
+      it('should return an object containing positional args, defaults, and anti-reloading flags', function () {
         expect(
           loadOptions(),
           'to equal',
           Object.assign({}, defaults, {
             _: [],
             config: false,
-            opts: false,
-            package: false,
-            retries: 3
+            package: false
           })
         );
       });
     });
 
-    describe('when parameter provided', function() {
-      describe('mocha.opts', function() {
-        describe('when path to mocha.opts (`--opts <path>`) is invalid', function() {
-          describe('when path is not default', function() {
-            let opts;
-
-            beforeEach(function() {
-              opts = '/some/other/path/to/mocha.opts';
-              readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('{}');
-              readFileSync.onSecondCall().throws();
-              findConfig = sandbox.stub().returns('/some/.mocharc.json');
-              loadConfig = sandbox.stub().returns({});
-              findupSync = sandbox.stub().returns('/some/package.json');
-
-              loadOptions = proxyLoadOptions({
-                readFileSync,
-                findConfig,
-                loadConfig,
-                findupSync
-              });
-            });
-
-            it('should attempt to load file at path', function() {
-              try {
-                loadOptions(`--opts ${opts}`);
-              } catch (ignored) {}
-              expect(readFileSync, 'to have a call satisfying', [opts, 'utf8']);
-            });
-
-            it('should throw', function() {
-              expect(
-                () => {
-                  loadOptions(`--opts ${opts}`);
-                },
-                'to throw',
-                /unable to read/i
-              );
-            });
-          });
-
-          describe('when path to mocha.opts is unspecified', function() {
-            let result;
-
-            beforeEach(function() {
-              readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('{}');
-              readFileSync.onSecondCall().returns('{}');
-              readFileSync.onThirdCall().throws();
-              findConfig = sandbox.stub().returns('/some/.mocharc.json');
-              loadConfig = sandbox.stub().returns({});
-              findupSync = sandbox.stub().returns('/some/package.json');
-
-              loadOptions = proxyLoadOptions({
-                readFileSync,
-                findConfig,
-                loadConfig,
-                findupSync
-              });
-
-              result = loadOptions();
-            });
-
-            it('should attempt to load default mocha.opts', function() {
-              expect(readFileSync, 'to have a call satisfying', [
-                defaults.opts,
-                'utf8'
-              ]);
-            });
-
-            it('should set opts = false', function() {
-              expect(result, 'to have property', 'opts', false);
-            });
-          });
-        });
-
-        describe('when path to mocha.opts (`--opts <path>`) is valid', function() {
+    describe('when parameter provided', function () {
+      describe('package.json', function () {
+        describe('when path to package.json (`--package <path>`) is valid', function () {
           let result;
 
-          beforeEach(function() {
-            const filepath = '/path/to/mocha.opts';
-            readFileSync = sandbox.stub();
-            // package.json
-            readFileSync.onFirstCall().throws();
-            // mocha.opts
-            readFileSync.onSecondCall().returns('--retries 3');
-            findConfig = sandbox.stub().returns('/some/.mocharc.json');
-            loadConfig = sandbox.stub().returns({});
-            findupSync = sandbox.stub().returns('/some/package.json');
-            loadOptions = proxyLoadOptions({
-              readFileSync,
-              findConfig,
-              loadConfig,
-              findupSync
-            });
-            result = loadOptions(['--opts', filepath]);
-          });
-
-          it('should return merged options incl. mocha.opts', function() {
-            expect(
-              result,
-              'to equal',
-              Object.assign(
-                {
-                  _: []
-                },
-                defaults,
-                {
-                  config: false,
-                  opts: false,
-                  package: false,
-                  retries: 3
-                }
-              )
-            );
-          });
-
-          it('should have attempted to load two files', function() {
-            expect(readFileSync, 'was called times', 2).and(
-              'to have calls satisfying',
-              [
-                {args: ['/some/package.json', 'utf8']},
-                {args: ['/path/to/mocha.opts', 'utf8']}
-              ]
-            );
-          });
-
-          it('should set opts = false', function() {
-            expect(result, 'to have property', 'opts', false);
-          });
-        });
-
-        describe('when called with opts = false (`--no-opts`)', function() {
-          let result;
-          beforeEach(function() {
-            readFileSync = sandbox
-              .stub()
-              .returns('{"mocha": {"check-leaks": false}}');
-            findConfig = sandbox.stub().returns('/some/.mocharc.json');
-            loadConfig = sandbox.stub().returns({retries: 3});
-            findupSync = sandbox.stub().returns('/some/package.json');
-
-            loadOptions = proxyLoadOptions({
-              readFileSync,
-              findConfig,
-              loadConfig,
-              findupSync
-            });
-
-            result = loadOptions('--no-opts');
-          });
-
-          it('should return parsed args, default config, config file, and package.json', function() {
-            expect(
-              result,
-              'to equal',
-              Object.assign({_: []}, defaults, {
-                'check-leaks': false,
-                config: false,
-                opts: false,
-                package: false,
-                retries: 3
-              })
-            );
-          });
-
-          it('should not attempt to read any mocha.opts', function() {
-            expect(readFileSync, 'was called times', 1).and(
-              'to have all calls satisfying',
-              ['/some/package.json', 'utf8']
-            );
-          });
-
-          it('should set opts = false', function() {
-            expect(result, 'to have property', 'opts', false);
-          });
-        });
-      });
-
-      describe('package.json', function() {
-        describe('when path to package.json (`--package <path>`) is valid', function() {
-          let result;
-
-          beforeEach(function() {
+          beforeEach(function () {
             const filepath = '/some/package.json';
-            readFileSync = sandbox.stub();
+            readFileSync = sinon.stub();
             // package.json
             readFileSync.onFirstCall().returns('{"mocha": {"retries": 3}}');
-            // mocha.opts
-            readFileSync.onSecondCall().throws();
-            findConfig = sandbox.stub().returns('/some/.mocharc.json');
-            loadConfig = sandbox.stub().returns({});
-            findupSync = sandbox.stub();
+            findConfig = sinon.stub().returns('/some/.mocharc.json');
+            loadConfig = sinon.stub().returns({});
+            findupSync = sinon.stub();
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
@@ -289,7 +99,7 @@ describe('options', function() {
             result = loadOptions(['--package', filepath]);
           });
 
-          it('should return merged options incl. package.json opts', function() {
+          it('should return merged options incl. package.json opts', function () {
             expect(
               result,
               'to equal',
@@ -300,7 +110,6 @@ describe('options', function() {
                 defaults,
                 {
                   config: false,
-                  opts: false,
                   package: false,
                   retries: 3
                 }
@@ -308,25 +117,23 @@ describe('options', function() {
             );
           });
 
-          it('should not try to find a package.json', function() {
+          it('should not try to find a package.json', function () {
             expect(findupSync, 'was not called');
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
 
-        describe('when path to package.json (`--package <path>`) is invalid', function() {
-          beforeEach(function() {
-            readFileSync = sandbox.stub();
+        describe('when path to package.json (`--package <path>`) is invalid', function () {
+          beforeEach(function () {
+            readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().throws('yikes');
-            // mocha.opts
-            readFileSync.onSecondCall().throws();
-            findConfig = sandbox.stub().returns('/some/.mocharc.json');
-            loadConfig = sandbox.stub().returns({});
-            findupSync = sandbox.stub();
+            readFileSync.onFirstCall().throws('bad file message');
+            findConfig = sinon.stub().returns('/some/.mocharc.json');
+            loadConfig = sinon.stub().returns({});
+            findupSync = sinon.stub();
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
@@ -335,30 +142,30 @@ describe('options', function() {
             });
           });
 
-          it('should throw', function() {
+          it('should throw', function () {
             expect(
               () => {
                 loadOptions('--package /something/wherever --require butts');
               },
               'to throw',
-              /unable to read\/parse/i
+              'Unable to read/parse /something/wherever: bad file message'
             );
           });
         });
 
-        describe('when path to package.json unspecified', function() {
+        describe('when path to package.json unspecified', function () {
           let result;
 
-          beforeEach(function() {
+          beforeEach(function () {
             const filepath = '/some/package.json';
-            readFileSync = sandbox.stub();
+            readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().returns('{"mocha": {"retries": 3}}');
-            // mocha.opts
-            readFileSync.onSecondCall().throws();
-            findConfig = sandbox.stub().returns('/some/.mocharc.json');
-            loadConfig = sandbox.stub().returns({});
-            findupSync = sandbox.stub().returns(filepath);
+            readFileSync
+              .onFirstCall()
+              .returns('{"mocha": {"retries": 3, "_": ["foobar.spec.js"]}}');
+            findConfig = sinon.stub().returns('/some/.mocharc.json');
+            loadConfig = sinon.stub().returns({});
+            findupSync = sinon.stub().returns(filepath);
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
@@ -368,18 +175,17 @@ describe('options', function() {
             result = loadOptions();
           });
 
-          it('should return merged options incl. found package.json', function() {
+          it('should return merged options incl. found package.json', function () {
             expect(
               result,
               'to equal',
               Object.assign(
                 {
-                  _: []
+                  _: ['foobar.spec.js']
                 },
                 defaults,
                 {
                   config: false,
-                  opts: false,
                   package: false,
                   retries: 3
                 }
@@ -387,20 +193,19 @@ describe('options', function() {
             );
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
 
-        describe('when called with package = false (`--no-package`)', function() {
+        describe('when called with package = false (`--no-package`)', function () {
           let result;
-          beforeEach(function() {
-            readFileSync = sandbox.stub();
-
-            readFileSync.onFirstCall().returns('--retries 3');
-            findConfig = sandbox.stub().returns('/some/path/to/.mocharc.json');
-            loadConfig = sandbox.stub().returns({'check-leaks': true});
-            findupSync = sandbox.stub().returns('/some/package.json');
+          beforeEach(function () {
+            readFileSync = sinon.stub();
+            readFileSync.onFirstCall().returns('{}');
+            findConfig = sinon.stub().returns('/some/path/to/.mocharc.json');
+            loadConfig = sinon.stub().returns({'check-leaks': true});
+            findupSync = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
@@ -409,45 +214,45 @@ describe('options', function() {
               findupSync
             });
 
-            result = loadOptions('--no-package');
+            result = loadOptions('--no-diff --no-package');
           });
 
-          it('should return parsed args, default config, package.json and mocha.opts', function() {
+          it('should return parsed args and default config', function () {
             expect(
               result,
               'to equal',
               Object.assign({_: []}, defaults, {
+                diff: false,
                 'check-leaks': true,
                 config: false,
-                opts: false,
-                package: false,
-                retries: 3
+                package: false
               })
             );
           });
 
-          it('should not look for package.json', function() {
+          it('should not look for package.json', function () {
             expect(findupSync, 'was not called');
           });
 
-          it('should set package = false', function() {
+          it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
           });
         });
       });
 
-      describe('rc file', function() {
-        describe('when called with config = false (`--no-config`)', function() {
+      describe('rc file', function () {
+        describe('when called with config = false (`--no-config`)', function () {
           let result;
-          beforeEach(function() {
-            readFileSync = sandbox.stub();
+          beforeEach(function () {
+            readFileSync = sinon.stub();
             readFileSync
               .onFirstCall()
-              .returns('{"mocha": {"check-leaks": true}}');
-            readFileSync.onSecondCall().returns('--retries 3');
-            findConfig = sandbox.stub();
-            loadConfig = sandbox.stub();
-            findupSync = sandbox.stub().returns('/some/package.json');
+              .returns(
+                '{"mocha": {"check-leaks": true, "_": ["foobar.spec.js"]}}'
+              );
+            findConfig = sinon.stub();
+            loadConfig = sinon.stub();
+            findupSync = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
@@ -456,47 +261,45 @@ describe('options', function() {
               findupSync
             });
 
-            result = loadOptions('--no-config');
+            result = loadOptions('--no-diff --no-config');
           });
 
-          it('should return parsed args, default config, package.json and mocha.opts', function() {
+          it('should return parsed args, default config and package.json', function () {
             expect(
               result,
               'to equal',
-              Object.assign({_: []}, defaults, {
+              Object.assign({_: ['foobar.spec.js']}, defaults, {
+                diff: false,
                 'check-leaks': true,
                 config: false,
-                opts: false,
-                package: false,
-                retries: 3
+                package: false
               })
             );
           });
 
-          it('should not attempt to load a config file', function() {
+          it('should not attempt to load a config file', function () {
             expect(loadConfig, 'was not called');
           });
 
-          it('should not attempt to find a config file', function() {
+          it('should not attempt to find a config file', function () {
             expect(findConfig, 'was not called');
           });
 
-          it('should set config = false', function() {
+          it('should set config = false', function () {
             expect(loadOptions(), 'to have property', 'config', false);
           });
         });
 
-        describe('when path to config (`--config <path>`) is invalid', function() {
+        describe('when path to config (`--config <path>`) is invalid', function () {
           let config;
 
-          beforeEach(function() {
-            readFileSync = sandbox.stub();
+          beforeEach(function () {
+            readFileSync = sinon.stub();
             config = '/some/.mocharc.json';
-            readFileSync.onFirstCall().returns('--retries 3');
-            readFileSync.onSecondCall().returns('{}');
-            findConfig = sandbox.stub();
-            loadConfig = sandbox.stub().throws('Error', 'failed to parse');
-            findupSync = sandbox.stub().returns('/some/package.json');
+            readFileSync.onFirstCall().returns('{}');
+            findConfig = sinon.stub();
+            loadConfig = sinon.stub().throws('Error', 'failed to parse');
+            findupSync = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
@@ -506,21 +309,21 @@ describe('options', function() {
             });
           });
 
-          it('should not look for a config', function() {
+          it('should not look for a config', function () {
             try {
               loadOptions(`--config ${config}`);
             } catch (ignored) {}
             expect(findConfig, 'was not called');
           });
 
-          it('should attempt to load file at path', function() {
+          it('should attempt to load file at path', function () {
             try {
               loadOptions(`--config ${config}`);
             } catch (ignored) {}
             expect(loadConfig, 'to have a call satisfying', [config]);
           });
 
-          it('should throw to warn the user', function() {
+          it('should throw to warn the user', function () {
             expect(
               () => {
                 loadOptions(`--config ${config}`);
@@ -531,17 +334,17 @@ describe('options', function() {
           });
         });
 
-        describe('when called with unspecified config', function() {
-          describe('when an rc file would be found', function() {
+        describe('when called with unspecified config', function () {
+          describe('when an rc file would be found', function () {
             let result;
 
-            beforeEach(function() {
-              readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('--retries 3');
-              readFileSync.onSecondCall().returns('{}');
-              findConfig = sandbox.stub().returns('/some/.mocharc.json');
-              loadConfig = sandbox.stub().returns({});
-              findupSync = sandbox.stub().returns('/some/package.json');
+            beforeEach(function () {
+              readFileSync = sinon.stub();
+              readFileSync.onFirstCall().returns('{}');
+              readFileSync.onSecondCall().throws();
+              findConfig = sinon.stub().returns('/some/.mocharc.json');
+              loadConfig = sinon.stub().returns({});
+              findupSync = sinon.stub().returns('/some/package.json');
 
               loadOptions = proxyLoadOptions({
                 readFileSync,
@@ -553,31 +356,31 @@ describe('options', function() {
               result = loadOptions();
             });
 
-            it('should look for a config', function() {
+            it('should look for a config', function () {
               expect(findConfig, 'was called');
             });
 
-            it('should attempt to load file at found path', function() {
+            it('should attempt to load file at found path', function () {
               expect(loadConfig, 'to have a call satisfying', [
                 '/some/.mocharc.json'
               ]);
             });
 
-            it('should set config = false', function() {
+            it('should set config = false', function () {
               expect(result, 'to have property', 'config', false);
             });
           });
 
-          describe('when an rc file would not be found', function() {
+          describe('when an rc file would not be found', function () {
             let result;
 
-            beforeEach(function() {
-              readFileSync = sandbox.stub();
-              readFileSync.onFirstCall().returns('--retries 3');
-              readFileSync.onSecondCall().returns('{}');
-              findConfig = sandbox.stub().returns(null);
-              loadConfig = sandbox.stub().returns({});
-              findupSync = sandbox.stub().returns('/some/package.json');
+            beforeEach(function () {
+              readFileSync = sinon.stub();
+              readFileSync.onFirstCall().returns('{}');
+              readFileSync.onSecondCall().throws();
+              findConfig = sinon.stub().returns(null);
+              loadConfig = sinon.stub().returns({});
+              findupSync = sinon.stub().returns('/some/package.json');
 
               loadOptions = proxyLoadOptions({
                 readFileSync,
@@ -589,15 +392,15 @@ describe('options', function() {
               result = loadOptions();
             });
 
-            it('should look for a config', function() {
+            it('should look for a config', function () {
               expect(findConfig, 'was called');
             });
 
-            it('should not attempt to load a config file', function() {
+            it('should not attempt to load a config file', function () {
               expect(loadConfig, 'was not called');
             });
 
-            it('should set config = false', function() {
+            it('should set config = false', function () {
               expect(result, 'to have property', 'config', false);
             });
           });
@@ -605,34 +408,17 @@ describe('options', function() {
       });
     });
 
-    describe('config priority', function() {
-      it('should prioritize mocha.opts over defaults', function() {
-        readFileSync = sandbox.stub();
-        readFileSync.onFirstCall().returns('{}');
-        readFileSync.onSecondCall().returns('--timeout 800 --require foo');
-        findConfig = sandbox.stub().returns('/some/.mocharc.json');
-        loadConfig = sandbox.stub().returns({});
-        findupSync = sandbox.stub().returns('/some/package.json');
-
-        loadOptions = proxyLoadOptions({
-          readFileSync,
-          findConfig,
-          loadConfig,
-          findupSync
-        });
-
-        expect(loadOptions(), 'to satisfy', {timeout: 800, require: ['foo']});
-      });
-
-      it('should prioritize package.json over mocha.opts', function() {
-        readFileSync = sandbox.stub();
+    describe('config priority', function () {
+      it('should prioritize package.json over defaults', function () {
+        readFileSync = sinon.stub();
         readFileSync
           .onFirstCall()
-          .returns('{"mocha": {"timeout": 700, "require": "bar"}}');
-        readFileSync.onSecondCall().returns('--timeout 800 --require foo');
-        findConfig = sandbox.stub().returns('/some/.mocharc.json');
-        loadConfig = sandbox.stub().returns({});
-        findupSync = sandbox.stub().returns('/some/package.json');
+          .returns(
+            '{"mocha": {"timeout": 700, "require": "bar", "extension": "ts"}}'
+          );
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -643,17 +429,18 @@ describe('options', function() {
 
         expect(loadOptions(), 'to satisfy', {
           timeout: 700,
-          require: ['bar', 'foo']
+          require: ['bar'],
+          extension: ['ts']
         });
       });
 
-      it('should prioritize rc file over package.json', function() {
-        readFileSync = sandbox.stub();
+      it('should prioritize rc file over package.json', function () {
+        readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{"mocha": {"timeout": 700}}');
         readFileSync.onSecondCall().returns('--timeout 800');
-        findConfig = sandbox.stub().returns('/some/.mocharc.json');
-        loadConfig = sandbox.stub().returns({timeout: 600});
-        findupSync = sandbox.stub().returns('/some/package.json');
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({timeout: 600});
+        findupSync = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -665,13 +452,13 @@ describe('options', function() {
         expect(loadOptions(), 'to have property', 'timeout', 600);
       });
 
-      it('should prioritize args over rc file', function() {
-        readFileSync = sandbox.stub();
+      it('should prioritize args over rc file', function () {
+        readFileSync = sinon.stub();
         readFileSync.onFirstCall().returns('{"mocha": {"timeout": 700}}');
         readFileSync.onSecondCall().returns('--timeout 800');
-        findConfig = sandbox.stub().returns('/some/.mocharc.json');
-        loadConfig = sandbox.stub().returns({timeout: 600});
-        findupSync = sandbox.stub().returns('/some/package.json');
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({timeout: 600});
+        findupSync = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -684,17 +471,17 @@ describe('options', function() {
           loadOptions('--timeout 500'),
           'to have property',
           'timeout',
-          500
+          '500'
         );
       });
     });
 
-    describe('when called with a one-and-done arg', function() {
-      beforeEach(function() {
-        readFileSync = sandbox.stub();
-        findConfig = sandbox.stub();
-        loadConfig = sandbox.stub();
-        findupSync = sandbox.stub();
+    describe('when called with a one-and-done arg', function () {
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        findConfig = sinon.stub();
+        loadConfig = sinon.stub();
+        findupSync = sinon.stub();
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
@@ -704,11 +491,113 @@ describe('options', function() {
       });
 
       ONE_AND_DONE_ARGS.forEach(arg => {
-        describe(`"${arg}"`, function() {
-          it(`should return basic parsed arguments and flag`, function() {
+        describe(`"${arg}"`, function () {
+          it(`should return basic parsed arguments and flag`, function () {
             expect(loadOptions(`--${arg}`), 'to equal', {_: [], [arg]: true});
           });
         });
+      });
+    });
+
+    describe('"extension" handling', function () {
+      describe('when user supplies "extension" option', function () {
+        let result;
+
+        beforeEach(function () {
+          readFileSync = sinon.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sinon.stub().returns('/some/.mocharc.json');
+          loadConfig = sinon.stub().returns({extension: ['tsx']});
+          findupSync = sinon.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions(['--extension', 'ts']);
+        });
+
+        it('should not concatenate the default value', function () {
+          expect(result, 'to have property', 'extension', ['ts', 'tsx']);
+        });
+      });
+
+      describe('when user does not supply "extension" option', function () {
+        let result;
+
+        beforeEach(function () {
+          readFileSync = sinon.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sinon.stub().returns('/some/.mocharc.json');
+          loadConfig = sinon.stub().returns({});
+          findupSync = sinon.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions();
+        });
+
+        it('should retain the default', function () {
+          expect(result, 'to have property', 'extension', ['js']);
+        });
+      });
+    });
+
+    describe('"spec" handling', function () {
+      describe('when user supplies "spec" in config and positional arguments', function () {
+        let result;
+
+        beforeEach(function () {
+          readFileSync = sinon.stub();
+          readFileSync.onFirstCall().throws();
+          findConfig = sinon.stub().returns('/some/.mocharc.json');
+          loadConfig = sinon.stub().returns({spec: '{dirA,dirB}/**/*.spec.js'});
+          findupSync = sinon.stub();
+          loadOptions = proxyLoadOptions({
+            readFileSync,
+            findConfig,
+            loadConfig,
+            findupSync
+          });
+          result = loadOptions(['*.test.js']);
+        });
+
+        it('should place both - unsplitted - into the positional arguments array', function () {
+          expect(result, 'to have property', '_', [
+            '*.test.js',
+            '{dirA,dirB}/**/*.spec.js'
+          ]);
+        });
+      });
+    });
+
+    describe('"ignore" handling', function () {
+      let result;
+
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        readFileSync.onFirstCall().throws();
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({ignore: '{dirA,dirB}/**/*.spec.js'});
+        findupSync = sinon.stub();
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync
+        });
+        result = loadOptions(['--ignore', '*.test.js']);
+      });
+
+      it('should not split option values by comma', function () {
+        expect(result, 'to have property', 'ignore', [
+          '*.test.js',
+          '{dirA,dirB}/**/*.spec.js'
+        ]);
       });
     });
   });

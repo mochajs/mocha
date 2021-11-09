@@ -1,124 +1,127 @@
 'use strict';
 
 var assert = require('assert');
-var chaiExpect = require('chai').expect;
-var Base = require('../../lib/reporters/base');
+var chai = require('chai');
+var sinon = require('sinon');
+var helpers = require('./helpers');
+var reporters = require('../../').reporters;
 var AssertionError = assert.AssertionError;
-var makeTest = require('./helpers').makeTest;
-var createElements = require('./helpers').createElements;
+var Base = reporters.Base;
+var chaiExpect = chai.expect;
+var createElements = helpers.createElements;
+var makeTest = helpers.makeTest;
 
-describe('Base reporter', function() {
+describe('Base reporter', function () {
   var stdout;
-  var stdoutWrite;
-  var useColors;
-  var err;
-  var errOut;
-  var test;
 
   function list(tests) {
-    Base.useColors = false;
-    var retval = Base.list(tests);
-    Base.useColors = useColors;
-    return retval;
+    try {
+      Base.list(tests);
+    } finally {
+      sinon.restore();
+    }
   }
 
   function generateDiff(actual, expected) {
-    Base.useColors = false;
-    var retval = Base.generateDiff(actual, expected);
-    Base.useColors = useColors;
-    return retval;
+    var diffStr;
+
+    try {
+      diffStr = Base.generateDiff(actual, expected);
+    } finally {
+      sinon.restore();
+    }
+
+    return diffStr;
   }
 
-  beforeEach(function() {
-    useColors = Base.useColors;
+  var gather = function (chunk, encoding, cb) {
+    stdout.push(chunk);
+  };
+
+  beforeEach(function () {
+    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(process.stdout, 'write').callsFake(gather);
     stdout = [];
-    stdoutWrite = process.stdout.write;
-    process.stdout.write = function(string, enc, callback) {
-      stdout.push(string);
-      stdoutWrite.call(process.stdout, string, enc, callback);
-    };
   });
 
-  afterEach(function() {
-    process.stdout.write = stdoutWrite;
+  afterEach(function () {
+    sinon.restore();
   });
 
-  describe('showDiff', function() {
-    beforeEach(function() {
+  describe('showDiff', function () {
+    var err;
+
+    beforeEach(function () {
       err = new AssertionError({actual: 'foo', expected: 'bar'});
     });
 
-    it('should show diffs by default', function() {
-      test = makeTest(err);
+    it('should show diffs by default', function () {
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /- actual/);
       expect(errOut, 'to match', /\+ expected/);
     });
 
-    it('should show diffs if property set to `true`', function() {
+    it("should show diffs if 'err.showDiff' is true", function () {
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /- actual/);
       expect(errOut, 'to match', /\+ expected/);
     });
 
-    it('should not show diffs when showDiff property set to `false`', function() {
+    it("should not show diffs if 'err.showDiff' is false", function () {
       err.showDiff = false;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'not to match', /- actual/);
       expect(errOut, 'not to match', /\+ expected/);
     });
 
-    it('should not show diffs when expected is not defined', function() {
-      err = new Error('ouch');
-
-      test = makeTest(err);
+    it("should not show diffs if 'expected' is not defined", function () {
+      var _err = new Error('ouch');
+      var test = makeTest(_err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'not to match', /- actual/);
       expect(errOut, 'not to match', /\+ expected/);
     });
 
-    it('should not show diffs when hideDiff is set', function() {
-      test = makeTest(err);
+    it("should not show diffs if 'hideDiff' is true", function () {
+      var test = makeTest(err);
 
-      Base.hideDiff = true;
+      sinon.stub(Base, 'hideDiff').value(true);
       list([test]);
-      Base.hideDiff = false; // Revert to original value
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'not to match', /- actual/);
       expect(errOut, 'not to match', /\+ expected/);
     });
   });
 
-  describe('Getting two strings', function() {
+  describe('getting two strings', function () {
     // Fix regression V1.2.1(see: issue #1241)
-    it('should show strings diff as is', function() {
-      err = new Error('test');
-
+    it('should show strings diff as is', function () {
+      var err = new Error('test');
       err.actual = 'foo\nbar';
       err.expected = 'foo\nbaz';
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
-
+      var errOut = stdout.join('\n');
       expect(errOut, 'not to match', /"foo\\nbar"/);
       expect(errOut, 'to match', /foo/).and('to match', /bar/);
       expect(errOut, 'to match', /test/);
@@ -127,26 +130,19 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('Diff generation', function() {
-    var oldInlineDiffs;
-    var actual;
-    var expected;
-    var output;
+  describe('diff generation', function () {
+    var inlineDiffsStub;
 
-    beforeEach(function() {
-      oldInlineDiffs = Base.inlineDiffs;
+    beforeEach(function () {
+      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs');
     });
 
-    afterEach(function() {
-      Base.inlineDiffs = oldInlineDiffs;
-    });
+    it("should generate unified diffs if 'inlineDiffs' is false", function () {
+      var actual = 'a foo unified diff';
+      var expected = 'a bar unified diff';
 
-    it('should generate unified diffs if `inlineDiff === false`', function() {
-      actual = 'a foo unified diff';
-      expected = 'a bar unified diff';
-
-      Base.inlineDiffs = false;
-      output = generateDiff(actual, expected);
+      inlineDiffsStub.value(false);
+      var output = generateDiff(actual, expected);
 
       expect(
         output,
@@ -155,12 +151,12 @@ describe('Base reporter', function() {
       );
     });
 
-    it('should generate inline diffs if `inlineDiffs === true`', function() {
-      actual = 'a foo inline diff';
-      expected = 'a bar inline diff';
+    it("should generate inline diffs if 'inlineDiffs' is true", function () {
+      var actual = 'a foo inline diff';
+      var expected = 'a bar inline diff';
 
-      Base.inlineDiffs = true;
-      output = generateDiff(actual, expected);
+      inlineDiffsStub.value(true);
+      var output = generateDiff(actual, expected);
 
       expect(
         output,
@@ -168,41 +164,67 @@ describe('Base reporter', function() {
         '      \n      actual expected\n      \n      a foobar inline diff\n      '
       );
     });
+
+    it("should truncate overly long 'actual' ", function () {
+      var actual = '';
+      var i = 0;
+      while (i++ < 120) {
+        actual += 'a foo unified diff ';
+      }
+      var expected = 'a bar unified diff';
+
+      inlineDiffsStub.value(false);
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'to match', / \.\.\. Lines skipped/);
+    });
+
+    it("should truncate overly long 'expected' ", function () {
+      var actual = 'a foo unified diff';
+      var expected = '';
+      var i = 0;
+      while (i++ < 120) {
+        expected += 'a bar unified diff ';
+      }
+
+      inlineDiffsStub.value(false);
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'to match', / \.\.\. Lines skipped/);
+    });
   });
 
-  describe('Inline strings diff', function() {
-    it('should show single line diff if property set to `true`', function() {
-      err = new Error('test');
+  describe('inline strings diff', function () {
+    beforeEach(function () {
+      sinon.stub(Base, 'inlineDiffs').value(true);
+    });
 
+    it("should show single line diff if 'inlineDiffs' is true", function () {
+      var err = new Error('test');
       err.actual = 'a foo inline diff';
       err.expected = 'a bar inline diff';
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
-      Base.inlineDiffs = true;
       list([test]);
 
-      errOut = stdout.join('\n');
-
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /a foobar inline diff/);
       expect(errOut, 'to match', /test/);
       expect(errOut, 'to match', /actual/);
       expect(errOut, 'to match', /expected/);
     });
 
-    it('should split lines when string has more than 4 line breaks', function() {
-      err = new Error('test');
-
+    it('should split lines if string has more than 4 line breaks', function () {
+      var err = new Error('test');
       err.actual = 'a\nfoo\ninline\ndiff\nwith\nmultiple lines';
       err.expected = 'a\nbar\ninline\ndiff\nwith\nmultiple lines';
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
-      Base.inlineDiffs = true;
       list([test]);
 
-      errOut = stdout.join('\n');
-
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /1 \| a/);
       expect(errOut, 'to match', /2 \| foobar/);
       expect(errOut, 'to match', /3 \| inline/);
@@ -215,21 +237,21 @@ describe('Base reporter', function() {
     });
   });
 
-  describe('unified diff reporter', function() {
-    beforeEach(function() {
-      err = new Error('test');
+  describe('unified diff', function () {
+    beforeEach(function () {
+      sinon.stub(Base, 'inlineDiffs').value(false);
     });
 
-    it('should separate diff hunks by two dashes', function() {
+    it('should separate diff hunks by two dashes', function () {
+      var err = new Error('test');
       err.actual = createElements({from: 2, to: 11});
       err.expected = createElements({from: 1, to: 10});
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
-      Base.inlineDiffs = false;
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
 
       var regexesToMatch = [
         /\[/,
@@ -250,60 +272,59 @@ describe('Base reporter', function() {
         /actual/
       ];
 
-      regexesToMatch.forEach(function(aRegex) {
+      regexesToMatch.forEach(function (aRegex) {
         expect(errOut, 'to match', aRegex);
       });
     });
   });
 
-  it('should stringify objects', function() {
-    err = new Error('test');
-
+  it('should stringify objects', function () {
+    var err = new Error('test');
     err.actual = {key: 'a1'};
     err.expected = {key: 'e1'};
     err.showDiff = true;
-    test = makeTest(err);
+    var test = makeTest(err);
 
     list([test]);
 
-    errOut = stdout.join('\n');
+    var errOut = stdout.join('\n');
     expect(errOut, 'to match', /"key"/);
     expect(errOut, 'to match', /test/);
     expect(errOut, 'to match', /- actual/);
     expect(errOut, 'to match', /\+ expected/);
   });
 
-  it('should stringify Object.create(null)', function() {
-    err = new Error('test');
+  it('should stringify Object.create(null)', function () {
+    var err = new Error('test');
 
     err.actual = Object.create(null);
     err.actual.hasOwnProperty = 1;
     err.expected = Object.create(null);
     err.expected.hasOwnProperty = 2;
     err.showDiff = true;
-    test = makeTest(err);
+    var test = makeTest(err);
 
     list([test]);
 
-    errOut = stdout.join('\n');
+    var errOut = stdout.join('\n');
     expect(errOut, 'to match', /"hasOwnProperty"/);
     expect(errOut, 'to match', /test/);
     expect(errOut, 'to match', /- actual/);
     expect(errOut, 'to match', /\+ expected/);
   });
 
-  it('should handle error messages that are not strings', function() {
+  it('should handle error messages that are not strings', function () {
     try {
       assert(false, true);
     } catch (err) {
       err.actual = false;
       err.expected = true;
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /\+true/);
       expect(errOut, 'to match', /-false/);
       expect(errOut, 'to match', /- actual/);
@@ -311,18 +332,21 @@ describe('Base reporter', function() {
     }
   });
 
-  it('should interpret Chai custom error messages', function() {
+  it("should interpret 'chai' module custom error messages", function () {
+    var actual = 43;
+    var expected = 42;
+
     try {
-      chaiExpect(43, 'custom error message').to.equal(42);
+      chaiExpect(actual, 'custom error message').to.equal(expected);
     } catch (err) {
-      err.actual = 43;
-      err.expected = 42;
+      err.actual = actual;
+      err.expected = expected;
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /custom error message\n/)
         .and('to match', /\+42/)
         .and('to match', /-43/)
@@ -331,20 +355,23 @@ describe('Base reporter', function() {
     }
   });
 
-  it('should interpret assert module custom error messages', function() {
+  it("should interpret 'assert' module custom error messages", function () {
+    var actual = 43;
+    var expected = 42;
+
     try {
-      assert.strictEqual(43, 42, 'custom error message');
+      assert.strictEqual(actual, expected, 'custom error message');
       // AssertionError: custom error message: expected 43 to equal 42.
       // assert.equal(43, 42, 'custom error message: expected 43 to equal 42.');
     } catch (err) {
-      err.actual = 43;
-      err.expected = 42;
+      err.actual = actual;
+      err.expected = expected;
       err.showDiff = true;
-      test = makeTest(err);
+      var test = makeTest(err);
 
       list([test]);
 
-      errOut = stdout.join('\n');
+      var errOut = stdout.join('\n');
       expect(errOut, 'to match', /custom error message\n/);
       expect(errOut, 'to match', /\+42/);
       expect(errOut, 'to match', /-43/);
@@ -353,54 +380,97 @@ describe('Base reporter', function() {
     }
   });
 
-  it('should remove message from stack', function() {
-    err = {
+  it('should remove message from stack', function () {
+    var err = {
       message: 'Error',
       stack: 'Error\nfoo\nbar',
       showDiff: false
     };
-    test = makeTest(err);
+    var test = makeTest(err);
 
     list([test]);
 
-    errOut = stdout.join('\n').trim();
+    var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
   });
 
-  it('should use the inspect() property if `message` is not set', function() {
-    err = {
-      showDiff: false,
-      inspect: function() {
-        return 'an error happened';
-      }
+  it("should use 'inspect' if 'inspect' and 'message' are set", function () {
+    var err = new Error('test');
+    err.showDiff = false;
+    err.message = 'error message';
+    err.inspect = function () {
+      return 'Inspect Error';
     };
-    test = makeTest(err);
+
+    var test = makeTest(err);
+
     list([test]);
-    errOut = stdout.join('\n').trim();
-    expect(errOut, 'to be', '1) test title:\n     an error happened');
+
+    var errOut = stdout.join('\n').trim();
+
+    expect(errOut, 'to contain', 'Inspect Error');
   });
 
-  it('should set an empty message if `message` and `inspect()` are not set', function() {
-    err = {
+  it("should set an empty message if neither 'inspect' nor 'message' is set", function () {
+    var err = {
       showDiff: false
     };
-    test = makeTest(err);
+    var test = makeTest(err);
+
     list([test]);
-    errOut = stdout.join('\n').trim();
+
+    var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:');
   });
 
-  it('should not modify stack if it does not contain message', function() {
-    err = {
+  it('should not modify stack if it does not contain message', function () {
+    var err = {
       message: 'Error',
       stack: 'foo\nbar',
       showDiff: false
     };
-    test = makeTest(err);
+    var test = makeTest(err);
 
     list([test]);
 
-    errOut = stdout.join('\n').trim();
+    var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
+  });
+
+  it('should list multiple Errors per test', function () {
+    var err = new Error('First Error');
+    err.multiple = [new Error('Second Error - same test')];
+    var test = makeTest(err);
+
+    list([test, test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(
+      errOut,
+      'to contain',
+      'Error: First Error',
+      'Error: Second Error - same test'
+    );
+  });
+
+  describe('when reporter output immune to user test changes', function () {
+    var baseConsoleLog;
+
+    beforeEach(function () {
+      sinon.stub(console, 'log');
+      baseConsoleLog = sinon.stub(Base, 'consoleLog');
+    });
+
+    it('should let you stub out console.log without effecting reporters output', function () {
+      Base.list([]);
+      baseConsoleLog.restore();
+
+      expect(baseConsoleLog, 'was called');
+      expect(console.log, 'was not called');
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
   });
 });

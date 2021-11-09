@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/css/normalize.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/supporters.css" />
+    <link rel="stylesheet" href="/css/prism.css" />
+    <link rel="icon" href="favicon.ico" />
+
+    <!--[if lt IE 9]> <script src="js/html5shiv.min.js"></script> <![endif]-->
+  </head>
+
+  <body>
+    <header id="_header">
+      <h1>
+        <a href="/">
+          <img id="mocha-logo" loading="eager" src="/images/mocha-logo.svg" alt="Mocha logo" />
+        </a>
+      </h1>
+      <p id="tag"><em>simple</em>, <em>flexible</em>, <em>fun</em></p>
+    </header>
+
+    <main id="content">{{ content }}</main>
+
+    <aside class="sponsorship">
+      <a
+        href="https://matomo.org/"
+        rel="external noopener"
+        title="Mocha is sponsored by Matomo"
+      >
+        <img src="images/matomo-logo.png?trim" loading="lazy" alt="Matomo logo" />
+      </a>
+      <a
+        title="Mocha is an OpenJS Foundation Project"
+        href="https://openjsf.org"
+        rel="external noopener"
+      >
+        <img
+          src="/images/openjsf-logo.svg"
+          loading="lazy"
+          width="300"
+          height="94"
+          alt="OpenJS Foundation Logo"
+        />
+      </a>
+      <a
+        href="https://wallabyjs.com"
+        rel="external noopener"
+        title="Mocha is sponsored by Wallaby"
+      >
+        <figure id="wallaby-logo">
+          <img src="images/wallaby-logo.png" loading="lazy" alt="Wallaby logo" />
+          <figcaption>Wallaby</figcaption>
+        </figure>
+      </a>
+    </aside>
+
+    <footer>
+      <div id="copyright-notice">
+        <a rel="home" href="https://mochajs.org/">mochajs.org</a> is licensed
+        under a
+        <a
+          rel="license external noopener"
+          href="https://creativecommons.org/licenses/by/4.0/"
+          >Creative Commons Attribution 4.0 International License</a
+        >.
+
+        <p>
+          Copyright
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >
+          and Mocha contributors. All rights reserved. The
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >
+          has registered trademarks and uses trademarks. For a list of
+          trademarks of the
+          <a href="https://openjsf.org" rel="external noopener"
+            >OpenJS Foundation</a
+          >, please see our
+          <a
+            href="https://trademark-policy.openjsf.org/"
+            rel="external noopener"
+            >Trademark Policy</a
+          >
+          and
+          <a href="https://trademark-list.openjsf.org/" rel="external noopener"
+            >Trademark List</a
+          >. Trademarks and logos not indicated on the
+          <a href="https://trademark-list.openjsf.org" rel="external noopener"
+            >list of OpenJS Foundation trademarks</a
+          >
+          are trademarks™ or registered® trademarks of their respective holders.
+          Use of them does not imply any affiliation with or endorsement by
+          them.
+        </p>
+      </div>
+
+      <div id="external-links">
+        <ul id="openjsf-links">
+          <li>
+            <a href="https://openjsf.org/" rel="external noopener"
+              >The OpenJS Foundation</a
+            >
+          </li>
+          <li>
+            <a href="https://terms-of-use.openjsf.org/" rel="external noopener"
+              >Terms of Use</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://privacy-policy.openjsf.org/"
+              rel="external noopener"
+              >Privacy Policy</a
+            >
+          </li>
+          <li>
+            <a href="https://bylaws.openjsf.org/" rel="external noopener"
+              >OpenJS Foundation Bylaws</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://trademark-policy.openjsf.org/"
+              rel="external noopener"
+              >Trademark Policy</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://trademark-list.openjsf.org/"
+              rel="external noopener"
+              >Trademark List</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.linuxfoundation.org/cookies/"
+              rel="external noopener"
+              >Cookie Policy</a
+            >
+          </li>
+        </ul>
+        <div class="netlify-badge">
+          <a href="https://www.netlify.com">
+            <img
+              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" loading="lazy"
+            />
+          </a>
+        </div>
+      </div>
+      <dl id="last-modified" class="dl-inline">
+        <dt>Last updated</dt>
+        <dd>
+          <time
+            itemprop="lastModified"
+            datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
+          >
+            {{ 'now' | date: '%a %b %d %H:%M:%S %Y' }}
+          </time>
+        </dd>
+      </dl>
+    </footer>
+  </body>
+</html>

@@ -1,9 +1,16 @@
 # Mocha-specific
 docs/_site
 docs/_dist
+docs/images/supporters
+docs/api
 mocha.js
+mocha.js.map
+mocha-es2018.js
 .karma/
 !lib/mocha.js
+
+# Bundle debugging
+stats.html
 
 #########################################
 # NON-MOCHA STUFF GOES BELOW THIS THING #
@@ -141,3 +148,6 @@ Temporary Items
 
 # SauceConnect
 *.sock
+
+# Local Netlify folder
+.netlify

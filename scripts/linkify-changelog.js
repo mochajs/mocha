@@ -16,7 +16,7 @@ writeFileSync(
     .data('settings', {
       listItemIndent: '1',
       incrementListMarker: false,
-      gfm: false,
+      gfm: true,
       entities: false
     })
     .use([require('remark-inline-links'), require('remark-github')])

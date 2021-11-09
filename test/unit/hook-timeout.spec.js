@@ -1,10 +1,11 @@
 'use strict';
 
-before(function(done) {
-  this.timeout(100);
-  setTimeout(done, 50);
-});
+describe('hook timeout', function () {
+  before(function (done) {
+    setTimeout(done, 100);
+  });
 
-it('should work', function(done) {
-  done();
+  it('should work', function (done) {
+    done();
+  });
 });

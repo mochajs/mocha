@@ -4,16 +4,16 @@ var path = require('path').posix;
 var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--delay', function() {
+describe('--delay', function () {
   var args = [];
 
-  before(function() {
+  before(function () {
     args = ['--delay'];
   });
 
-  it('should run the generated test suite', function(done) {
+  it('should run the generated test suite', function (done) {
     var fixture = path.join('options', 'delay');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -23,9 +23,9 @@ describe('--delay', function() {
     });
   });
 
-  it('should execute exclusive tests only', function(done) {
+  it('should execute exclusive tests only', function (done) {
     var fixture = path.join('options', 'delay-only');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -41,9 +41,9 @@ describe('--delay', function() {
     });
   });
 
-  it('should throw an error if the test suite failed to run', function(done) {
+  it('should throw an error if the test suite failed to run', function (done) {
     var fixture = path.join('options', 'delay-fail');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }

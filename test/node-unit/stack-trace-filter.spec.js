@@ -3,18 +3,18 @@
 var path = require('path');
 var utils = require('../../lib/utils');
 
-describe('stackTraceFilter()', function() {
-  describe('on node', function() {
+describe('stackTraceFilter()', function () {
+  describe('on node', function () {
     var filter = utils.stackTraceFilter();
 
-    describe('on POSIX OS', function() {
-      before(function() {
+    describe('on POSIX OS', function () {
+      before(function () {
         if (path.sep !== '/') {
           this.skip();
         }
       });
 
-      it('should get a stack-trace as a string and prettify it', function() {
+      it('should get a stack-trace as a string and prettify it', function () {
         var stack = [
           'AssertionError: foo bar',
           'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
@@ -47,7 +47,7 @@ describe('stackTraceFilter()', function() {
         expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
       });
 
-      it('does not ignore other bower_components and components', function() {
+      it('does not ignore other bower_components and components', function () {
         var stack = [
           'Error: failed',
           'at assert (index.html:11:26)',
@@ -66,7 +66,7 @@ describe('stackTraceFilter()', function() {
         expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
       });
 
-      it('should replace absolute with relative paths', function() {
+      it('should replace absolute with relative paths', function () {
         var stack = [
           'Error: ' + process.cwd() + '/bla.js has a problem',
           'at foo (' + process.cwd() + '/foo/index.js:13:226)',
@@ -82,7 +82,7 @@ describe('stackTraceFilter()', function() {
         expect(filter(stack.join('\n')), 'to be', expected.join('\n'));
       });
 
-      it('should not replace absolute path which has cwd as infix', function() {
+      it('should not replace absolute path which has cwd as infix', function () {
         var stack = [
           'Error: /www' + process.cwd() + '/bla.js has a problem',
           'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
@@ -99,14 +99,14 @@ describe('stackTraceFilter()', function() {
       });
     });
 
-    describe('on Windows', function() {
-      before(function() {
+    describe('on Windows', function () {
+      before(function () {
         if (path.sep === '/') {
           this.skip();
         }
       });
 
-      it('should work on Windows', function() {
+      it('should work on Windows', function () {
         var stack = [
           'Error: failed',
           'at Context.<anonymous> (C:\\Users\\ishida\\src\\test\\test\\mytest.js:5:9)',
@@ -124,14 +124,14 @@ describe('stackTraceFilter()', function() {
     });
   });
 
-  describe('on browser', function() {
+  describe('on browser', function () {
     var filter;
-    before(function() {
+    before(function () {
       global.document = true;
       global.location = {href: 'localhost:3000/foo/bar/index.html'};
       filter = utils.stackTraceFilter();
     });
-    it('does not strip out other bower_components', function() {
+    it('does not strip out other bower_components', function () {
       var stack = [
         'Error: failed',
         'at assert (index.html:11:26)',
@@ -147,7 +147,7 @@ describe('stackTraceFilter()', function() {
       expect(filter(stack.join('\n')), 'to be', stack.slice(0, 7).join('\n'));
     });
 
-    after(function() {
+    after(function () {
       delete global.document;
       delete global.location;
     });

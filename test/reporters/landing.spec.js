@@ -1,18 +1,25 @@
 'use strict';
 
+var sinon = require('sinon');
+var events = require('../../').Runner.constants;
+var helpers = require('./helpers');
 var reporters = require('../../').reporters;
-var Landing = reporters.Landing;
+var states = require('../../').Runnable.constants;
+
 var Base = reporters.Base;
+var Landing = reporters.Landing;
+var createMockRunner = helpers.createMockRunner;
+var makeRunReporter = helpers.createRunReporterFunction;
 
-var createMockRunner = require('./helpers').createMockRunner;
-var makeRunReporter = require('./helpers.js').createRunReporterFunction;
+var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+var EVENT_RUN_END = events.EVENT_RUN_END;
+var EVENT_TEST_END = events.EVENT_TEST_END;
 
-describe('Landing reporter', function() {
-  var runner;
-  var options = {};
+var STATE_FAILED = states.STATE_FAILED;
+var STATE_PASSED = states.STATE_PASSED;
+
+describe('Landing reporter', function () {
   var runReporter = makeRunReporter(Landing);
-  var useColors;
-  var windowWidth;
   var resetCode = '\u001b[0m';
   var expectedArray = [
     '\u001b[1D\u001b[2A',
@@ -25,94 +32,98 @@ describe('Landing reporter', function() {
     resetCode
   ];
 
-  beforeEach(function() {
-    useColors = Base.useColors;
-    Base.useColors = false;
-    windowWidth = Base.window.width;
-    Base.window.width = 1;
+  beforeEach(function () {
+    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(Base.window, 'width').value(1);
   });
 
-  afterEach(function() {
-    Base.useColors = useColors;
-    Base.window.width = windowWidth;
-    runner = undefined;
+  afterEach(function () {
+    sinon.restore();
   });
 
-  describe('on start', function() {
-    it('should write new lines', function() {
-      var cachedCursor = Base.cursor;
-      Base.cursor.hide = function() {};
-      runner = createMockRunner('start', 'start');
-      var stdout = runReporter({}, runner, options);
+  describe('event handlers', function () {
+    describe("on 'start' event", function () {
+      it('should write newlines', function () {
+        sinon.stub(Base.cursor, 'hide');
 
-      expect(stdout[0], 'to equal', '\n\n\n  ');
-      Base.cursor = cachedCursor;
-    });
-
-    it('should call cursor hide', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorHide = false;
-      Base.cursor.hide = function() {
-        calledCursorHide = true;
-      };
-      runner = createMockRunner('start', 'start');
-      runReporter({}, runner, options);
-      expect(calledCursorHide, 'to be', true);
-
-      Base.cursor = cachedCursor;
-    });
-  });
-
-  describe('on test end', function() {
-    describe('if test has failed', function() {
-      it('should write expected landing strip', function() {
-        var test = {
-          state: 'failed'
-        };
-        runner = createMockRunner('test end', 'test end', null, null, test);
-        runner.total = 12;
+        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var options = {};
         var stdout = runReporter({}, runner, options);
+        sinon.restore();
 
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout[0], 'to equal', '\n\n\n  ');
+      });
+
+      it('should call cursor hide', function () {
+        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
+
+        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var options = {};
+        runReporter({}, runner, options);
+        sinon.restore();
+
+        expect(hideCursorStub.called, 'to be true');
       });
     });
-    describe('if test has not failed', function() {
-      it('should write expected landing strip', function() {
-        var test = {
-          state: 'success'
-        };
-        runner = createMockRunner('test end', 'test end', null, null, test);
 
-        var stdout = runReporter({}, runner, options);
+    describe("on 'test end' event", function () {
+      describe('when test passes', function () {
+        it('should write expected landing strip', function () {
+          var test = {
+            state: STATE_PASSED
+          };
+          var runner = createMockRunner(
+            'test end',
+            EVENT_TEST_END,
+            null,
+            null,
+            test
+          );
+          var options = {};
+          var stdout = runReporter({}, runner, options);
+          sinon.restore();
 
-        expect(stdout, 'to equal', expectedArray);
+          expect(stdout, 'to equal', expectedArray);
+        });
+      });
+
+      describe('when test fails', function () {
+        it('should write expected landing strip', function () {
+          var test = {
+            state: STATE_FAILED
+          };
+          var runner = createMockRunner(
+            'test end',
+            EVENT_TEST_END,
+            null,
+            null,
+            test
+          );
+          runner.total = 12;
+          var options = {};
+          var stdout = runReporter({}, runner, options);
+          sinon.restore();
+
+          expect(stdout, 'to equal', expectedArray);
+        });
       });
     });
-  });
-  describe('on end', function() {
-    it('should call cursor show and epilogue', function() {
-      var cachedCursor = Base.cursor;
-      var calledCursorShow = false;
-      Base.cursor.show = function() {
-        calledCursorShow = true;
-      };
-      runner = createMockRunner('end', 'end');
 
-      var calledEpilogue = false;
-      runReporter(
-        {
-          epilogue: function() {
-            calledEpilogue = true;
-          }
-        },
-        runner,
-        options
-      );
+    describe("on 'end' event", function () {
+      it('should call cursor show and epilogue', function () {
+        var showCursorStub = sinon.stub(Base.cursor, 'show');
 
-      expect(calledEpilogue, 'to be', true);
-      expect(calledCursorShow, 'to be', true);
+        var fakeThis = {
+          epilogue: sinon.spy()
+        };
+        var runner = createMockRunner('end', EVENT_RUN_END);
+        var options = {};
+        runReporter(fakeThis, runner, options);
+        sinon.restore();
 
-      Base.cursor = cachedCursor;
+        expect(fakeThis.epilogue.calledOnce, 'to be true');
+        expect(showCursorStub.called, 'to be true');
+      });
     });
   });
 });
