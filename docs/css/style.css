@@ -242,31 +242,6 @@ img.screenshot {
   max-width: 100%;
 }
 
-.sponsorship a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.sponsorship a img {
-  display: block;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-}
-
-.sponsorship {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 60px;
-  align-items: center;
-}
-
-.sponsorship a {
-  padding: 0 40px;
-  text-decoration: none;
-}
-
 footer {
   background-color: #eee;
   border-top: 1px solid #ddd;
@@ -315,6 +290,28 @@ footer {
   bottom: 0;
 }
 
+.sponsorship {
+  display: flex;
+  align-items: center;
+}
+
+.sponsorship a {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+@media all and (max-width: 400px) {
+  .sponsorship {
+    display: block;
+  }
+
+  .sponsorship a {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
 .dl-inline dt,
 .dl-inline dd {
   display: inline;
@@ -333,23 +330,6 @@ footer {
 blockquote {
   border-left: 1px solid #eee;
   padding: 10px;
-}
-
-figure#wallaby-logo {
-  vertical-align: top;
-  display: inline-block;
-  text-align: center;
-}
-figure#wallaby-logo figcaption {
-  margin-top: 10px;
-  display: block;
-  font-family: 'Open Sans', -apple-system, system-ui, 'Segoe UI', Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #2c2c2c;
-  -webkit-font-smoothing: antialiased;
 }
 
 table {
