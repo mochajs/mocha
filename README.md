@@ -65,6 +65,6 @@ Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors
 
 ## License
 
-Copyright 2011-2021 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/master/LICENSE).
+Copyright 2011-2022 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/master/LICENSE).
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
