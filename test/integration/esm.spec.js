@@ -81,4 +81,25 @@ describe('esm', function () {
       'test-that-imports-non-existing-module'
     );
   });
+
+  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module with a loader', async function () {
+    const fixture =
+      'esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts';
+
+    const err = await runMochaAsync(
+      fixture,
+      [
+        '--unhandled-rejections=warn',
+        '--loader=./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs'
+      ],
+      {
+        stdio: 'pipe'
+      }
+    ).catch(err => err);
+
+    expect(err.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
+      'to contain',
+      'non-existent-package'
+    );
+  });
 });

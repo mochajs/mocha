@@ -368,7 +368,11 @@ function createSubprocess(args, done, opts = {}) {
  * @returns {string} Resolved filepath
  */
 function resolveFixturePath(fixture) {
-  if (path.extname(fixture) !== '.js' && path.extname(fixture) !== '.mjs') {
+  if (
+    path.extname(fixture) !== '.js' &&
+    path.extname(fixture) !== '.mjs' &&
+    path.extname(fixture) !== '.ts'
+  ) {
     fixture += '.fixture.js';
   }
   return path.isAbsolute(fixture)
