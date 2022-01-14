@@ -1,3 +1,13 @@
+# 9.1.4 / 2022-01-14
+
+## :bug: Fixes
+
+- #4807: `import` throws wrong error if loader is used (@giltayar)
+
+## :nut_and_bolt: Other
+
+- #4777: Add Node v17 to CI test matrix (@outsideris)
+
 # 9.1.3 / 2021-10-15
 
 ## :bug: Fixes
