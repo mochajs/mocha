@@ -2,11 +2,11 @@
 
 ## :bug: Fixes
 
-- #4807: `import` throws wrong error if loader is used (@giltayar)
+- [#4807](https://github.com/mochajs/mocha/issues/4807): `import` throws wrong error if loader is used ([**@giltayar**](https://github.com/giltayar))
 
 ## :nut_and_bolt: Other
 
-- #4777: Add Node v17 to CI test matrix (@outsideris)
+- [#4777](https://github.com/mochajs/mocha/issues/4777): Add Node v17 to CI test matrix ([**@outsideris**](https://github.com/outsideris))
 
 # 9.1.3 / 2021-10-15
 
