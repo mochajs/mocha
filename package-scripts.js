@@ -300,7 +300,7 @@ module.exports = {
       description: 'Update list of AUTHORS'
     },
     linkifyChangelog: {
-      script: 'node scripts/linkify-changelog.js',
+      script: 'node scripts/linkify-changelog.mjs',
       description: 'Add/update GitHub links in CHANGELOG.md'
     },
     version: {
