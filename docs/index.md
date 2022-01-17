@@ -1379,6 +1379,12 @@ Free-tier cloud CI services may not provide a suitable multi-core container or V
 
 It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
 
+### Parallel Mode Worker IDs
+
+> _New in v9.2.0_
+
+Each process launched by parallel mode is assigned a unique id, from 0 for the first process to be launched, to N-1 for the Nth process. This worker id may be accessed in tests via the environment variable `MOCHA_WORKER_ID`. It can be used for example to assign a different database, service port, etc for each test process.
+
 ## Root Hook Plugins
 
 > _New in v8.0.0_
