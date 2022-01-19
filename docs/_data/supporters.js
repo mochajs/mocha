@@ -18,7 +18,7 @@
 'use strict';
 
 const {loadImage} = require('canvas');
-const {writeFile, mkdir, rmdir} = require('fs').promises;
+const {writeFile, mkdir, rm} = require('fs').promises;
 const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
@@ -225,7 +225,7 @@ const getSupporters = async () => {
       }
     );
 
-  await rmdir(SUPPORTER_IMAGE_PATH, {recursive: true});
+  await rm(SUPPORTER_IMAGE_PATH, {recursive: true, force: true});
   debug('blasted %s', SUPPORTER_IMAGE_PATH);
   await mkdir(SUPPORTER_IMAGE_PATH, {recursive: true});
   debug('created %s', SUPPORTER_IMAGE_PATH);
