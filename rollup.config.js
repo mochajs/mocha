@@ -7,7 +7,7 @@ import globals from 'rollup-plugin-node-globals';
 import {babel} from '@rollup/plugin-babel';
 
 // Debugging tools
-import visualizer from 'rollup-plugin-visualizer';
+import {visualizer} from 'rollup-plugin-visualizer';
 
 import pickFromPackageJson from './scripts/pick-from-package-json';
 import {version} from './package.json';
