@@ -2,11 +2,11 @@
 
 ## :tada: Enhancements
 
-- #4813: Parallel: assign each worker a worker-id (@forty)
+- [#4813](https://github.com/mochajs/mocha/issues/4813): Parallel: assign each worker a worker-id ([**@forty**](https://github.com/forty))
 
 ## :nut\_and\_bolt: Other
 
-- #4818: Update production dependencies (@juergba)
+- [#4818](https://github.com/mochajs/mocha/issues/4818): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
 # 9.1.4 / 2022-01-14
 
@@ -272,7 +272,7 @@ Thanks to [**@AviVahl**](https://github.com/AviVahl), [**@donghoon-song**](https
 
 In this release, Mocha now builds its browser bundle with Rollup and Babel, which will provide the project's codebase more flexibility and consistency.
 
-While we've been diligent about backwards compatibility, it's *possible* consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you *do* encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug\&template=bug\_report.md\&title=).
+While we've been diligent about backwards compatibility, it's *possible* consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you *do* encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug\&template=bug_report.md\&title=).
 
 This release **does not** drop support for IE11.
 
