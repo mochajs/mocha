@@ -1,3 +1,13 @@
+# 9.2.0 / 2022-01-24
+
+## :tada: Enhancements
+
+- #4813: Parallel: assign each worker a worker-id (@forty)
+
+## :nut\_and\_bolt: Other
+
+- #4818: Update production dependencies (@juergba)
+
 # 9.1.4 / 2022-01-14
 
 ## :bug: Fixes
