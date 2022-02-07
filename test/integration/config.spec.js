@@ -5,6 +5,7 @@
 
 var fs = require('fs');
 var path = require('path');
+const {constants} = require('../../lib/errors');
 var loadConfig = require('../../lib/cli/config').loadConfig;
 
 describe('config', function () {
@@ -45,6 +46,28 @@ describe('config', function () {
 
       expect(_loadConfig, 'not to throw');
       expect(js, 'to equal', json);
+    });
+
+    it('should throw module not found error from absolute path configuration', function () {
+      function _loadConfig() {
+        loadConfig(path.join(configDir, 'mocharcWithInvalidImport.js'));
+      }
+
+      expect(_loadConfig, 'to throw', {
+        code: constants.MODULE_NOT_FOUND
+      });
+    });
+
+    it('should throw module not found error from relative path configuration', function () {
+      var relConfigDir = configDir.substring(projRootDir.length + 1);
+
+      function _loadConfig() {
+        loadConfig(path.join('.', relConfigDir, 'mocharcWithInvalidImport.js'));
+      }
+
+      expect(_loadConfig, 'to throw', {
+        code: constants.MODULE_NOT_FOUND
+      });
     });
 
     it('should rethrow error from absolute path configuration', function () {

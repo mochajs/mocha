@@ -1,7 +1,6 @@
 'use strict';
 
-throw new Error('Error from mocharcWithThrowError');
-
+require('invalidImport.js');
 // a comment
 module.exports = {
   require: ['foo', 'bar'],
