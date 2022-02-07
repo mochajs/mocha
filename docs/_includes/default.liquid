@@ -25,38 +25,14 @@
 
     <main id="content">{{ content }}</main>
 
-    <aside class="sponsorship">
-      <a
-        href="https://matomo.org/"
-        rel="external noopener"
-        title="Mocha is sponsored by Matomo"
-      >
-        <img src="images/matomo-logo.png?trim" loading="lazy" alt="Matomo logo" />
+    <div class="sponsorship">
+      <a href="https://matomo.org/" rel="external noopener" title="Mocha is sponsored by Matomo">
+        <img src="images/matomo-logo.png?trim" loading="lazy" width="100" alt="Matomo logo">
       </a>
-      <a
-        title="Mocha is an OpenJS Foundation Project"
-        href="https://openjsf.org"
-        rel="external noopener"
-      >
-        <img
-          src="/images/openjsf-logo.svg"
-          loading="lazy"
-          width="300"
-          height="94"
-          alt="OpenJS Foundation Logo"
-        />
+      <a href="https://wallabyjs.com" rel="external noopener" title="Mocha is sponsored by Wallaby" id="wallaby-logo">
+        <img src="https://wallabyjs.com/assets/img/logoWithText.svg" loading="lazy" width="140" alt="Wallaby logo">
       </a>
-      <a
-        href="https://wallabyjs.com"
-        rel="external noopener"
-        title="Mocha is sponsored by Wallaby"
-      >
-        <figure id="wallaby-logo">
-          <img src="images/wallaby-logo.png" loading="lazy" alt="Wallaby logo" />
-          <figcaption>Wallaby</figcaption>
-        </figure>
-      </a>
-    </aside>
+    </div>
 
     <footer>
       <div id="copyright-notice">
@@ -98,6 +74,12 @@
           Use of them does not imply any affiliation with or endorsement by
           them.
         </p>
+      </div>
+
+      <div class="openjsf-logo">
+        <a title="Mocha is an OpenJS Foundation Project" href="https://openjsf.org" rel="external noopener" >
+          <img src="/images/openjsf-logo.svg" loading="lazy" width="120" alt="OpenJS Foundation Logo">
+        </a>
       </div>
 
       <div id="external-links">
@@ -148,9 +130,7 @@
         </ul>
         <div class="netlify-badge">
           <a href="https://www.netlify.com">
-            <img
-              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" loading="lazy"
-            />
+            <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" loading="lazy">
           </a>
         </div>
       </div>
