@@ -495,11 +495,13 @@ describe('Base reporter', function () {
     };
     var test = makeTest(err);
 
-    Base.list([test]);
+    list([test]);
 
     var errOut = stdout.join('\n').trim();
-    errOut.should.equal(
-      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause Stack'
+    expect(
+      errOut,
+      'to be',
+      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: Cause2\n  abc\n  xyz'
     );
   });
 
