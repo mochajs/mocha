@@ -477,6 +477,32 @@ describe('Base reporter', function () {
     expect(errOut, 'to be', '1) test title:');
   });
 
+  it('should append any error cause trail to stack traces', function () {
+    var err = {
+      message: 'Error',
+      stack: 'Error\nfoo\nbar',
+      showDiff: false,
+      cause: {
+        message: 'Cause1',
+        stack: 'Cause1\nbar\nfoo',
+        showDiff: false,
+        cause: {
+          message: 'Cause2',
+          stack: 'Cause2\nabc\nxyz',
+          showDiff: false
+        }
+      }
+    };
+    var test = makeTest(err);
+
+    Base.list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    errOut.should.equal(
+      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause Stack'
+    );
+  });
+
   it('should not modify stack if it does not contain message', function () {
     var err = {
       message: 'Error',
