@@ -135,18 +135,15 @@ describe('Base reporter', function () {
 
   describe('diff generation', function () {
     var inlineDiffsStub;
-    var maxDiffSizeStub;
 
     beforeEach(function () {
-      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs');
-      maxDiffSizeStub = sinon.stub(Base, 'maxDiffSize');
+      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs').value(false);
     });
 
     it("should generate unified diffs if 'inlineDiffs' is false", function () {
       var actual = 'a foo unified diff';
       var expected = 'a bar unified diff';
 
-      inlineDiffsStub.value(false);
       var output = generateDiff(actual, expected);
 
       expect(
@@ -178,7 +175,6 @@ describe('Base reporter', function () {
       }
       var expected = 'a bar unified diff';
 
-      inlineDiffsStub.value(false);
       var output = generateDiff(actual, expected);
 
       expect(output, 'to match', /output truncated/);
@@ -192,27 +188,26 @@ describe('Base reporter', function () {
         expected += 'a bar unified diff ';
       }
 
-      inlineDiffsStub.value(false);
       var output = generateDiff(actual, expected);
 
       expect(output, 'to match', /output truncated/);
     });
 
-    it("should not truncate overly long 'actual' if maxDiffSize is zero", function () {
+    it("should not truncate overly long 'actual' if maxDiffSize=0", function () {
       var actual = '';
       var i = 0;
       while (i++ < 120) {
         actual += 'a bar unified diff ';
       }
-
       var expected = 'b foo unified diff';
-      inlineDiffsStub.value(false);
-      maxDiffSizeStub.value(0);
+
+      sinon.stub(Base, 'maxDiffSize').value(0);
       var output = generateDiff(actual, expected);
 
       expect(output, 'not to match', /output truncated/);
     });
-    it("should not truncate overly long 'expected' if maxDiffSize is zero", function () {
+
+    it("should not truncate overly long 'expected' if maxDiffSize=0", function () {
       var actual = 'a foo unified diff';
       var expected = '';
       var i = 0;
@@ -220,8 +215,7 @@ describe('Base reporter', function () {
         expected += 'a bar unified diff ';
       }
 
-      inlineDiffsStub.value(false);
-      maxDiffSizeStub.value(0);
+      sinon.stub(Base, 'maxDiffSize').value(0);
       var output = generateDiff(actual, expected);
 
       expect(output, 'not to match', /output truncated/);
@@ -309,6 +303,32 @@ describe('Base reporter', function () {
       regexesToMatch.forEach(function (aRegex) {
         expect(errOut, 'to match', aRegex);
       });
+    });
+  });
+
+  describe("when 'reporterOption.maxDiffSize' is provided", function () {
+    var origSize;
+
+    beforeEach(function () {
+      sinon.restore();
+      origSize = Base.maxDiffSize;
+    });
+
+    afterEach(function () {
+      Base.maxDiffSize = origSize;
+    });
+
+    it("should set 'Base.maxDiffSize' used for truncating diffs", function () {
+      var options = {
+        reporterOption: {
+          maxDiffSize: 4
+        }
+      };
+      var suite = new Suite('Dummy suite', 'root');
+      var runner = new Runner(suite);
+      // eslint-disable-next-line no-unused-vars
+      var base = new Base(runner, options);
+      expect(Base.maxDiffSize, 'to be', 4);
     });
   });
 
@@ -491,6 +511,7 @@ describe('Base reporter', function () {
     var baseConsoleLog;
 
     beforeEach(function () {
+      sinon.restore();
       sinon.stub(console, 'log');
       baseConsoleLog = sinon.stub(Base, 'consoleLog');
     });
@@ -502,24 +523,5 @@ describe('Base reporter', function () {
       expect(baseConsoleLog, 'was called');
       expect(console.log, 'was not called');
     });
-
-    afterEach(function () {
-      sinon.restore();
-    });
-  });
-});
-describe('when "reporterOption.maxDiffSize" is provided', function () {
-  it('should be the effective value used for tuncating diffs', function () {
-    var options = {
-      reporterOption: {
-        maxDiffSize: 4
-      }
-    };
-    var mocha = new Mocha();
-    var suite = new Suite('Dummy suite', 'root');
-    var runner = new Runner(suite);
-    // eslint-disable-next-line no-unused-vars
-    var mochaReporter = new mocha._reporter(runner, options);
-    expect(Base.maxDiffSize, 'to be', 4);
   });
 });
