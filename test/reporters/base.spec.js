@@ -10,6 +10,9 @@ var Base = reporters.Base;
 var chaiExpect = chai.expect;
 var createElements = helpers.createElements;
 var makeTest = helpers.makeTest;
+var Mocha = require('../../');
+var Suite = Mocha.Suite;
+var Runner = Mocha.Runner;
 
 describe('Base reporter', function () {
   var stdout;
@@ -134,14 +137,13 @@ describe('Base reporter', function () {
     var inlineDiffsStub;
 
     beforeEach(function () {
-      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs');
+      inlineDiffsStub = sinon.stub(Base, 'inlineDiffs').value(false);
     });
 
     it("should generate unified diffs if 'inlineDiffs' is false", function () {
       var actual = 'a foo unified diff';
       var expected = 'a bar unified diff';
 
-      inlineDiffsStub.value(false);
       var output = generateDiff(actual, expected);
 
       expect(
@@ -168,18 +170,44 @@ describe('Base reporter', function () {
     it("should truncate overly long 'actual' ", function () {
       var actual = '';
       var i = 0;
-      while (i++ < 120) {
+      while (i++ < 500) {
         actual += 'a foo unified diff ';
       }
       var expected = 'a bar unified diff';
 
-      inlineDiffsStub.value(false);
       var output = generateDiff(actual, expected);
 
-      expect(output, 'to match', / \.\.\. Lines skipped/);
+      expect(output, 'to match', /output truncated/);
     });
 
     it("should truncate overly long 'expected' ", function () {
+      var actual = 'a foo unified diff';
+      var expected = '';
+      var i = 0;
+      while (i++ < 500) {
+        expected += 'a bar unified diff ';
+      }
+
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'to match', /output truncated/);
+    });
+
+    it("should not truncate overly long 'actual' if maxDiffSize=0", function () {
+      var actual = '';
+      var i = 0;
+      while (i++ < 120) {
+        actual += 'a bar unified diff ';
+      }
+      var expected = 'b foo unified diff';
+
+      sinon.stub(Base, 'maxDiffSize').value(0);
+      var output = generateDiff(actual, expected);
+
+      expect(output, 'not to match', /output truncated/);
+    });
+
+    it("should not truncate overly long 'expected' if maxDiffSize=0", function () {
       var actual = 'a foo unified diff';
       var expected = '';
       var i = 0;
@@ -187,10 +215,10 @@ describe('Base reporter', function () {
         expected += 'a bar unified diff ';
       }
 
-      inlineDiffsStub.value(false);
+      sinon.stub(Base, 'maxDiffSize').value(0);
       var output = generateDiff(actual, expected);
 
-      expect(output, 'to match', / \.\.\. Lines skipped/);
+      expect(output, 'not to match', /output truncated/);
     });
   });
 
@@ -275,6 +303,32 @@ describe('Base reporter', function () {
       regexesToMatch.forEach(function (aRegex) {
         expect(errOut, 'to match', aRegex);
       });
+    });
+  });
+
+  describe("when 'reporterOption.maxDiffSize' is provided", function () {
+    var origSize;
+
+    beforeEach(function () {
+      sinon.restore();
+      origSize = Base.maxDiffSize;
+    });
+
+    afterEach(function () {
+      Base.maxDiffSize = origSize;
+    });
+
+    it("should set 'Base.maxDiffSize' used for truncating diffs", function () {
+      var options = {
+        reporterOption: {
+          maxDiffSize: 4
+        }
+      };
+      var suite = new Suite('Dummy suite', 'root');
+      var runner = new Runner(suite);
+      // eslint-disable-next-line no-unused-vars
+      var base = new Base(runner, options);
+      expect(Base.maxDiffSize, 'to be', 4);
     });
   });
 
@@ -457,6 +511,7 @@ describe('Base reporter', function () {
     var baseConsoleLog;
 
     beforeEach(function () {
+      sinon.restore();
       sinon.stub(console, 'log');
       baseConsoleLog = sinon.stub(Base, 'consoleLog');
     });
@@ -467,10 +522,6 @@ describe('Base reporter', function () {
 
       expect(baseConsoleLog, 'was called');
       expect(console.log, 'was not called');
-    });
-
-    afterEach(function () {
-      sinon.restore();
     });
   });
 });
