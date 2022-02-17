@@ -211,6 +211,7 @@ Mocha allows you to use any assertion library you wish. In the above example, we
 - [chai][] - `expect()`, `assert()` and `should`-style assertions
 - [better-assert][] - C-style self-documenting `assert()`
 - [unexpected][] - "the extensible BDD assertion toolkit"
+- [expect][] - The `expect` function that ships with Jest (except snapshots)
 
 ## Asynchronous Code
 
@@ -2444,6 +2445,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/packages/third-party-reporter
 [example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
+[expect]: https://jestjs.io/docs/expect
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
 [fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
