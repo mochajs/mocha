@@ -2,6 +2,7 @@
 
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
+const {parsers} = require('../../../lib/cli/config');
 
 describe('cli/config', function () {
   const phonyConfigObject = {ok: true};
@@ -152,6 +153,25 @@ describe('cli/config', function () {
       expect(findup, 'to have a call satisfying', {
         args: [CONFIG_FILES, {cwd: '/some/path/'}],
         returned: '/some/path/.mocharc.js'
+      });
+    });
+  });
+
+  describe('parsers()', function () {
+    it('should print error message for faulty require', function () {
+      // Fixture exists, but fails loading.
+      // Prints correct error message without using fallback path.
+      expect(
+        () => parsers.js(require.resolve('./fixtures/bad-require.fixture.js')),
+        'to throw',
+        {message: /Cannot find module 'fake'/, code: 'MODULE_NOT_FOUND'}
+      );
+    });
+
+    it('should print error message for non-existing file', function () {
+      expect(() => parsers.js('not-existing.js'), 'to throw', {
+        message: /Cannot find module 'not-existing.js'/,
+        code: 'MODULE_NOT_FOUND'
       });
     });
   });
