@@ -2,9 +2,9 @@
 
 ## :bug: Fixes
 
-- #4832: Loading of config files throws wrong error (@juergba)
+- [#4832](https://github.com/mochajs/mocha/issues/4832): Loading of config files throws wrong error ([**@juergba**](https://github.com/juergba))
 
-- #4799: Reporter: configurable `maxDiffSize` reporter-option (@norla)
+- [#4799](https://github.com/mochajs/mocha/issues/4799): Reporter: configurable `maxDiffSize` reporter-option ([**@norla**](https://github.com/norla))
 
 # 9.2.0 / 2022-01-24
 
