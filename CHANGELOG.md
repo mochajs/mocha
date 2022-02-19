@@ -1,3 +1,11 @@
+# 9.2.1 / 2022-02-19
+
+## :bug: Fixes
+
+- #4832: Loading of config files throws wrong error (@juergba)
+
+- #4799: Reporter: configurable `maxDiffSize` reporter-option (@norla)
+
 # 9.2.0 / 2022-01-24
 
 ## :tada: Enhancements
