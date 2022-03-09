@@ -17,7 +17,7 @@ module.exports = {
   plugins: [
     new FailOnErrorsPlugin({
       failOnErrors: true,
-      failOnWarnings: true
+      failOnWarnings: false
     })
   ]
 };
