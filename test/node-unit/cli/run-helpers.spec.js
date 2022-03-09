@@ -77,6 +77,23 @@ describe('helpers', function () {
           {message: /wonky/, code: 'ERR_MOCHA_INVALID_REPORTER'}
         );
       });
+
+      it('should fail and report the original "MODULE_NOT_FOUND" error.message', function () {
+        expect(
+          () =>
+            validateLegacyPlugin(
+              {
+                reporter: require.resolve('./fixtures/bad-require.fixture.js')
+              },
+              'reporter'
+            ),
+          'to throw',
+          {
+            message: /Error: Cannot find module 'fake'/,
+            code: 'ERR_MOCHA_INVALID_REPORTER'
+          }
+        );
+      });
     });
   });
 
