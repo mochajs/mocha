@@ -1,3 +1,15 @@
+# 9.2.2 / 2022-03-11
+
+## :bug: Fixes
+
+- #4842: Loading of reporter throws wrong error (@juergba)
+
+- #4839: `dry-run`: prevent potential call-stack crash (@juergba)
+
+## :nut\_and\_bolt: Other
+
+- #4843: Update production dependencies (@juergba)
+
 # 9.2.1 / 2022-02-19
 
 ## :bug: Fixes
