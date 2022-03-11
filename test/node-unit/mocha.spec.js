@@ -246,44 +246,7 @@ describe('Mocha', function () {
 
         it('should load from current working directory', function () {
           expect(function () {
-            mocha.reporter('./spec.js');
-          }, 'not to throw');
-        });
-
-        describe('when the reporter throws upon load', function () {
-          it('should throw "invalid reporter" exception', function () {
-            expect(
-              function () {
-                mocha.reporter(
-                  '../../test/node-unit/fixtures/wonky-reporter.fixture.js'
-                );
-              },
-              'to throw',
-              {
-                code: 'ERR_MOCHA_INVALID_REPORTER'
-              }
-            );
-          });
-
-          it('should warn about the error before throwing', function () {
-            try {
-              mocha.reporter(
-                '../../test/node-unit/fixtures/wonky-reporter.fixture.js'
-              );
-            } catch (ignored) {
-            } finally {
-              expect(stubs.errors.warn, 'to have a call satisfying', [
-                expect.it('to match', /reporter blew up/)
-              ]);
-            }
-          });
-        });
-      });
-
-      describe('when a reporter exists relative to the "mocha" module path', function () {
-        it('should load from module path', function () {
-          expect(function () {
-            mocha.reporter('./reporters/spec');
+            mocha.reporter('./lib/reporters/spec.js');
           }, 'not to throw');
         });
 
@@ -301,18 +264,29 @@ describe('Mocha', function () {
               }
             );
           });
+        });
+      });
 
-          it('should warn about the error before throwing', function () {
-            try {
-              mocha.reporter(
-                './test/node-unit/fixtures/wonky-reporter.fixture.js'
-              );
-            } catch (ignored) {
-            } finally {
-              expect(stubs.errors.warn, 'to have a call satisfying', [
-                expect.it('to match', /reporter blew up/)
-              ]);
-            }
+      describe('when a reporter exists relative to the "mocha" module path', function () {
+        it('should load from module path', function () {
+          expect(function () {
+            mocha.reporter('./reporters/spec');
+          }, 'not to throw');
+        });
+
+        describe('when the reporter throws upon load', function () {
+          it('should throw "invalid reporter" exception', function () {
+            expect(
+              function () {
+                mocha.reporter(
+                  '../test/node-unit/fixtures/wonky-reporter.fixture.js'
+                );
+              },
+              'to throw',
+              {
+                code: 'ERR_MOCHA_INVALID_REPORTER'
+              }
+            );
           });
         });
       });
