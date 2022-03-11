@@ -2,13 +2,13 @@
 
 ## :bug: Fixes
 
-- #4842: Loading of reporter throws wrong error (@juergba)
+- [#4842](https://github.com/mochajs/mocha/issues/4842): Loading of reporter throws wrong error ([**@juergba**](https://github.com/juergba))
 
-- #4839: `dry-run`: prevent potential call-stack crash (@juergba)
+- [#4839](https://github.com/mochajs/mocha/issues/4839): `dry-run`: prevent potential call-stack crash ([**@juergba**](https://github.com/juergba))
 
 ## :nut\_and\_bolt: Other
 
-- #4843: Update production dependencies (@juergba)
+- [#4843](https://github.com/mochajs/mocha/issues/4843): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
 # 9.2.1 / 2022-02-19
 
