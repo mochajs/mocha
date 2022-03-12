@@ -1,4 +1,4 @@
-node >= 12
+node >= 14
 last 2 Chrome versions
 last 2 Edge versions
 last 2 Firefox versions
