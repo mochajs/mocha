@@ -12,7 +12,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
   <a href="#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
 </nav>
 
-{% include supporters.md %}
+{% include 'supporters.md' %}
 
 ## Features
 
@@ -1760,7 +1760,7 @@ Finally, use this command to bring it together: `mocha --require fixtures.mjs te
 This flowchart will help you decide which of [hooks], [root hook plugins] or
 [global fixtures] you should use.
 
-{% include fixture-wizard.html %}
+{% include 'fixture-wizard.html' %}
 
 ## Interfaces
 
