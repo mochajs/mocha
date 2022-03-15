@@ -1,10 +1,8 @@
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import globals from 'rollup-plugin-node-globals';
-
-import {babel} from '@rollup/plugin-babel';
 
 // Debugging tools
 import {visualizer} from 'rollup-plugin-visualizer';
@@ -19,8 +17,7 @@ const config = {
     format: 'umd',
     sourcemap: true,
     name: 'mocha',
-    banner: `// mocha@${version} transpiled to javascript ES5`,
-    intro: 'var regeneratorRuntime;'
+    banner: `// mocha@${version} in javascript ES2018`
   },
   plugins: [
     json(),
@@ -32,24 +29,6 @@ const config = {
     nodePolyfills(),
     nodeResolve({
       browser: true
-    }),
-    babel({
-      exclude: /core-js/,
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            useBuiltIns: 'usage',
-            forceAllTransforms: true,
-            corejs: {
-              version: 3,
-              proposals: false
-            }
-          }
-        ]
-      ],
-      babelHelpers: 'bundled'
     })
   ],
   onwarn: (warning, warn) => {
