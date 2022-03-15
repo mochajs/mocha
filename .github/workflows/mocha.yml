@@ -29,7 +29,6 @@ jobs:
           - ubuntu-latest
           - windows-2019
         node:
-          - 12
           - 14
           - 16
           - 17
@@ -74,7 +73,6 @@ jobs:
           - ubuntu-latest
           - windows-2019
         node:
-          - 12
           - 14
           - 16
           - 17

@@ -64,7 +64,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> As of v9.0.0, Mocha requires Node.js v12.0.0 or newer.
+> As of v10.0.0, Mocha requires Node.js v14.0.0 or newer.
 
 ## Getting Started
 
