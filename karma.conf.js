@@ -33,7 +33,7 @@ const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
   'MicrosoftEdge@latest': 'Windows 10',
   'firefox@latest': 'Windows 10',
-  'safari@latest': 'macOS 10.13'
+  'safari@latest': 'macOS 10.15'
 };
 
 const baseConfig = {
