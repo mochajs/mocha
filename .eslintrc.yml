@@ -88,7 +88,7 @@ overrides:
         - selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
           message: *GH-237
   - files:
-      - test/**/*.mjs
+      - ./**/*.mjs
     parserOptions:
       ecmaVersion: 2018
       sourceType: module

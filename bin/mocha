@@ -10,6 +10,8 @@
  * @private
  */
 
+const path = require('path');
+const getPackageType = require('get-package-type');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -26,6 +28,23 @@ let hasInspect = false;
 
 const opts = loadOptions(process.argv.slice(2));
 debug('loaded opts', opts);
+
+if (
+  opts.watch &&
+  ((opts.require && opts.require.find(str => str.endsWith('.mjs'))) ||
+    // `getPackageType()` only supports files, not folders. A trick to pass in a
+    // folder is to append '/.' to cwd, but `path.join()` would resolve it, so:
+    getPackageType.sync(`${process.cwd()}${path.sep}.`) === 'module')
+) {
+  nodeArgs['no-warnings'] = true;
+  nodeArgs['experimental-loader'] = path.resolve(
+    __dirname,
+    '..',
+    'lib',
+    'nodejs',
+    'esm-loader.mjs'
+  );
+}
 
 /**
  * Given option/command `value`, disable timeouts if applicable
