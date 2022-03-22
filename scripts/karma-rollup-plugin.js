@@ -13,8 +13,8 @@
  * single output bundle.
  *
  * This is an implementation that specifically solves Mocha's use case. It
- * does not support watch mode. It is possible that is coulkd eventually be
- * made reusable with more work and actual testing.
+ * does not support watch mode. It possibly could be made reusable with
+ * more work and actual testing.
  *
  * We do not use karma-rollup-preprocessor because at the time of
  * implementation it had a behavior where each individual file gets bundled
@@ -35,7 +35,7 @@ const path = require('path');
 const uuid = require('uuid');
 const rollup = require('rollup');
 const minimatch = require('minimatch');
-const loadConfigFile = require('rollup/dist/loadConfigFile');
+const loadConfigFile = require('rollup/dist/loadConfigFile.js');
 const multiEntry = require('@rollup/plugin-multi-entry');
 
 const fileMap = new Map();

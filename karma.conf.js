@@ -29,17 +29,11 @@ const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;
 const hostname = os.hostname();
 
-if (fs.existsSync('./mocha.js') && fs.existsSync('./mocha-es5.js')) {
-  fs.renameSync('./mocha.js', './mocha-es2018.js');
-  fs.renameSync('./mocha-es5.js', './mocha.js');
-}
-
 const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
   'MicrosoftEdge@latest': 'Windows 10',
-  'internet explorer@latest': 'Windows 10',
   'firefox@latest': 'Windows 10',
-  'safari@latest': 'macOS 10.13'
+  'safari@latest': 'macOS 10.15'
 };
 
 const baseConfig = {
@@ -72,13 +66,6 @@ const baseConfig = {
   mochaReporter: {
     showDiff: true
   },
-  customHeaders: [
-    {
-      match: '.*.html',
-      name: 'Content-Security-Policy',
-      value: "script-src https: 'self' 'unsafe-inline'"
-    }
-  ],
   customLaunchers: {
     ChromeDebug: {
       base: 'Chrome',
