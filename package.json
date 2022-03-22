@@ -92,7 +92,7 @@
     "autoprefixer": "^9.8.6",
     "canvas": "^2.9.0",
     "chai": "^4.3.4",
-    "coffee-script": "^1.12.7",
+    "coffeescript": "^2.6.1",
     "configstore": "^5.0.1",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.2",
