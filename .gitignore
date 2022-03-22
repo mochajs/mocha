@@ -5,7 +5,6 @@ docs/images/supporters
 docs/api
 mocha.js
 mocha.js.map
-mocha-es2018.js
 .karma/
 !lib/mocha.js
 
