@@ -142,7 +142,7 @@ module.exports = {
           script: test(
             'requires',
             [
-              '--require coffee-script/register',
+              '--require coffeescript/register',
               '--require test/require/a.js',
               '--require test/require/b.coffee',
               '--require test/require/c.js',
