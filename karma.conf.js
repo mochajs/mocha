@@ -269,7 +269,6 @@ const addSauceLabsTestName = (testName, cfg) =>
  * - `tdd` - `tdd`-specific tests
  * - `qunit` - `qunit`-specific tests
  * - `esm` - ESM-specific tests
- * - `requirejs` - RequireJS-specific tests
  *
  * Since we can't change Mocha's interface on-the-fly, tests for specific interfaces
  * must be run in isolation.
@@ -297,10 +296,6 @@ const chooseTestSuite = (cfg, value) => {
     case 'esm':
       return addStandardDependencies({
         ...addSauceLabsTestName('ESM Integration Tests', cfg),
-        // just run against ChromeHeadless, since other browsers may not
-        // support ESM.
-        // XXX: remove following line when dropping IE11
-        browsers: ['ChromeHeadless'],
         files: [
           {
             pattern: 'test/browser-specific/fixtures/esm.fixture.mjs',
@@ -312,26 +307,6 @@ const chooseTestSuite = (cfg, value) => {
           }
         ]
       });
-    case 'requirejs':
-      // no standard deps because I'm too lazy to figure out how to make
-      // them work with RequireJS. not important anyway
-      return {
-        ...addSauceLabsTestName('RequireJS Tests', cfg),
-        plugins: [...cfg.plugins, 'karma-requirejs'],
-        frameworks: ['requirejs', ...cfg.frameworks],
-        files: [
-          {
-            pattern: 'test/browser-specific/fixtures/requirejs/*.fixture.js',
-            included: false
-          },
-          'test/browser-specific/requirejs-setup.js'
-        ],
-        // this skips bundling the above tests & fixtures
-        rollup: {
-          ...cfg.rollup,
-          include: []
-        }
-      };
     default:
       return addStandardDependencies({
         ...addSauceLabsTestName('Unit Tests', cfg)
