@@ -27,4 +27,16 @@ describe('--dry-run', function () {
       done();
     });
   });
+
+  it('should pass without "RangeError: maximum call stack size exceeded"', function (done) {
+    var fixture = path.join('options/dry-run', 'stack-size');
+    runMochaJSON(fixture, args, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, 'to have passed test count', 400);
+      done();
+    });
+  });
 });

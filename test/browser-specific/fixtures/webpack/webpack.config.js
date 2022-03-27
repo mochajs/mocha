@@ -10,14 +10,14 @@ console.error('output dir: %s', outputPath);
 
 module.exports = {
   entry: require.resolve('./webpack.fixture.mjs'),
-  target: 'browserslist:last 2 Chrome versions or IE 11',
+  target: 'browserslist:last 2 Chrome versions',
   output: {
     path: outputPath
   },
   plugins: [
     new FailOnErrorsPlugin({
       failOnErrors: true,
-      failOnWarnings: true
+      failOnWarnings: false
     })
   ]
 };
