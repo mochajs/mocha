@@ -206,7 +206,7 @@ module.exports = {
       browser: {
         default: {
           script:
-            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.requirejs test.browser.webpack',
+            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.webpack',
           description: 'Run browser tests'
         },
         unit: {
@@ -232,11 +232,6 @@ module.exports = {
         esm: {
           script: 'cross-env MOCHA_TEST=esm nps test.browser.unit',
           description: 'Run browser ES modules support test',
-          hiddenFromHelp: true
-        },
-        requirejs: {
-          script: 'cross-env MOCHA_TEST=requirejs nps test.browser.unit',
-          description: 'Run RequireJS compat test',
           hiddenFromHelp: true
         },
         webpack: {
