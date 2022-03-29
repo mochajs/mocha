@@ -47,7 +47,7 @@ describe('Context Siblings', function () {
     });
   });
 
-  describe('sibling verifiction', function () {
+  describe('sibling verification', function () {
     beforeEach(function () {
       this.calls.push('before sibling');
     });
