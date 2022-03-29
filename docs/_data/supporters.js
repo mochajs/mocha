@@ -52,7 +52,7 @@ const SPONSOR_TIER = 'sponsors';
 const BACKER_TIER = 'backers';
 
 // if this percent of fetches completes, the build will pass
-const PRODUCTION_SUCCESS_THRESHOLD = 0.8;
+const PRODUCTION_SUCCESS_THRESHOLD = 0.9;
 
 const SUPPORTER_IMAGE_PATH = resolve(__dirname, '../images/supporters');
 
@@ -107,7 +107,7 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
       try {
         const {avatar: url} = supporter;
         const {body: imageBuf, headers} = await needle('get', url, {
-          timeout: 2000
+          open_timeout: 30000
         });
         if (headers['content-type'].startsWith('text/html')) {
           throw new TypeError(
@@ -247,16 +247,16 @@ const getSupporters = async () => {
 
   const backerCount = supporters[BACKER_TIER].length;
   const sponsorCount = supporters[SPONSOR_TIER].length;
-  const totalValidSupportersCount = backerCount + sponsorCount;
-  const successRate = totalValidSupportersCount / invalidSupporters.length;
+  const totalSupportersCount = backerCount + sponsorCount;
+  const successRate = 1 - invalidSupporters.length / totalSupportersCount;
 
   debug(
     'found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)',
     backerCount,
     sponsorCount,
-    totalValidSupportersCount,
+    totalSupportersCount,
     invalidSupporters.length,
-    uniqueSupporters.size - totalValidSupportersCount
+    uniqueSupporters.size - totalSupportersCount
   );
 
   if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
