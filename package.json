@@ -36,7 +36,7 @@
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
-    "mocha": "./bin/mocha",
+    "mocha": "./bin/mocha.js",
     "_mocha": "./bin/_mocha"
   },
   "directories": {
@@ -155,7 +155,7 @@
     "webpack-cli": "^4.9.1"
   },
   "files": [
-    "bin/*mocha",
+    "bin/*mocha*",
     "assets/growl/*.png",
     "lib/**/*.{js,html,json}",
     "index.js",
