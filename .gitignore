@@ -6,6 +6,7 @@ docs/api
 mocha.js
 mocha.js.map
 .karma/
+!bin/mocha.js
 !lib/mocha.js
 
 # Bundle debugging
