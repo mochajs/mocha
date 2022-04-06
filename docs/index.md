@@ -1084,11 +1084,12 @@ Files specified in this way should contain one or more suites, tests or hooks. I
 
 ### `--ignore <file|directory|glob>, --exclude <file|directory|glob>,`
 
-Explicitly ignore (exclude) one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.
+Explicitly ignore one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.<br>
+Can be specified multiple times.
+
+> _New in v10.0.0:_ In Windows always use forward-slashes `/` as path separator.
 
 Files specified using `--file` _are not affected_ by this option.
-
-Can be specified multiple times.
 
 ### `--recursive`
 
