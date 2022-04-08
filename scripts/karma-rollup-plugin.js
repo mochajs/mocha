@@ -53,7 +53,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
     .map(fileConfig => fileConfig.pattern)
     .filter(filePath =>
       includePatterns.some(includePattern =>
-        minimatch(filePath, includePattern)
+        minimatch(filePath, includePattern.replace(/\\/g, '/'))
       )
     );
 
