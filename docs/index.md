@@ -26,7 +26,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [async test timeout support](#delayed-root-suite)
 - [test retry support](#retry-tests)
 - [test-specific timeouts](#test-level)
-- [Growl support](#desktop-notification-support)
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
@@ -998,12 +997,6 @@ A value of 0 indicates no limit, default is 8192 characters.
 Enable "full" stack traces. By default, Mocha attempts to distill stack traces into less noisy (though still useful) output.
 
 This flag is helpful when debugging a suspected issue within Mocha or Node.js itself.
-
-### `--growl, -G`
-
-Enable [Growl][] (or OS-level notifications where available).
-
-Requires extra software to be installed; see the [growl module's docs][npm-growl] for more information.
 
 ### `--inline-diffs`
 
@@ -2191,71 +2184,6 @@ The HTML reporter is the default reporter when running Mocha in the browser. It 
 
 [Mochawesome][npm-mochawesome] is a great alternative to the default HTML reporter.
 
-## Desktop Notification Support
-
-Desktop notifications allow asynchronous communication of events without
-forcing you to react to a notification immediately. Their appearance
-and specific functionality vary across platforms. They typically disappear
-automatically after a short delay, but their content is often stored in some
-manner that allows you to access past notifications.
-
-[Growl][] was an early notification system implementation for OS X and Windows,
-hence, the name of Mocha's `--growl` option.
-
-Once enabled, when your root suite completes test execution, a desktop
-notification should appear informing you whether your tests passed or failed.
-
-### Node-based notifications
-
-In order to use desktop notifications with the command-line interface (CLI),
-you **must** first install some platform-specific prerequisite software.
-Instructions for doing so can be found [here][mocha-wiki-growl].
-
-Enable Mocha's desktop notifications as follows:
-
-```bash
-$ mocha --growl
-```
-
-### Browser-based notifications
-
-Web notification support is being made available for current versions of
-modern browsers. Ensure your browser version supports both
-[promises][caniuse-promises] and [web notifications][caniuse-notifications].
-As the Notification API evolved over time, **do not expect** the minimum
-possible browser version to necessarily work.
-
-Enable Mocha's web notifications with a slight modification to your
-client-side mocha HTML. Add a call to `mocha.growl()` prior to running your
-tests as shown below:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Mocha Tests</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
-  </head>
-  <body>
-    <div id="mocha"></div>
-
-    <script src="https://unpkg.com/chai/chai.js"></script>
-    <script src="https://unpkg.com/mocha/mocha.js"></script>
-
-    <script class="mocha-init">
-      mocha.setup('bdd');
-      mocha.growl(); // <-- Enables web notifications
-    </script>
-    <script src="test.spec.js"></script>
-    <script class="mocha-exec">
-      mocha.run();
-    </script>
-  </body>
-</html>
-```
-
 ## Configuring Mocha (Node.js)
 
 > _New in v6.0.0_
@@ -2422,8 +2350,7 @@ $ npm test
 
 In addition to chatting with us on [Gitter][gitter-mocha], for additional information such as using
 spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki][mocha-wiki] on GitHub.
-For discussions join the [Google Group][google-mocha]. For a running example of Mocha, view
-[example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
+For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
 [//]: # 'Cross reference section'
@@ -2452,8 +2379,6 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [gist-async-hooks]: https://git.io/vdlNM
 [gist-globbing-tutorial]: https://gist.github.com/reggi/475793ea1846affbcfe8
 [gitter-mocha]: https://gitter.im/mochajs/mocha
-[google-mocha]: https://groups.google.com/group/mochajs
-[growl]: http://growl.info/
 [jetbrains]: https://www.jetbrains.com/
 [jetbrains-plugin]: https://www.jetbrains.com/idea/features/nodejs.html
 [mdn-array-sort]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
@@ -2467,7 +2392,6 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
 [mocha-wiki-compilers]: https://github.com/mochajs/mocha/wiki/compilers-deprecation
-[mocha-wiki-growl]: https://github.com/mochajs/mocha/wiki/Growl-Notifications
 [mocha-wiki-more-reporters]: https://github.com/mochajs/mocha/wiki/Third-party-reporters
 [node.js]: https://nodejs.org/
 [node-assert]: https://nodejs.org/api/assert.html
@@ -2477,7 +2401,6 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [npm-babel-register]: https://npm.im/@babel/register
 [npm-chai-as-promised]: https://www.npmjs.com/package/chai-as-promised
 [npm-glob]: https://www.npmjs.com/package/glob
-[npm-growl]: https://npm.im/growl
 [npm-mocha-lcov-reporter]: https://npm.im/mocha-lcov-reporter
 [npm-mochawesome]: https://npm.im/mochawesome
 [npm-should.js]: https://npm.im/should
