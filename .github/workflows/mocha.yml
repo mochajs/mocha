@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - '**'
+      - '!mochajs.org'
     tags-ignore:
       - '**'
   pull_request:
@@ -86,10 +87,15 @@ jobs:
         with:
           node-version: '${{ matrix.node }}'
       - uses: actions/checkout@v2
+      - name: Get npm cache directory in Windows
+        id: npm-cache
+        if: "${{ matrix.os == 'windows-2019' }}"
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
       - name: 'Cache node_modules'
         uses: actions/cache@v2
         with:
-          path: '~/.npm'
+          path: ${{ matrix.os == 'ubuntu-latest' && '~/.npm' || steps.npm-cache.outputs.dir }}
           key: "${{ matrix.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}"
           restore-keys: |
             ${{ matrix.os }}-node-v${{ matrix.node }}-
