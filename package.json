@@ -63,7 +63,6 @@
     "escape-string-regexp": "4.0.0",
     "find-up": "5.0.0",
     "glob": "7.2.0",
-    "growl": "1.10.5",
     "he": "1.2.0",
     "js-yaml": "4.1.0",
     "log-symbols": "4.1.0",
@@ -73,7 +72,6 @@
     "serialize-javascript": "6.0.0",
     "strip-json-comments": "3.1.1",
     "supports-color": "8.1.1",
-    "which": "2.0.2",
     "workerpool": "6.2.0",
     "yargs": "16.2.0",
     "yargs-parser": "20.2.4",
@@ -156,7 +154,6 @@
   },
   "files": [
     "bin/*mocha*",
-    "assets/growl/*.png",
     "lib/**/*.{js,html,json}",
     "index.js",
     "mocha.css",
@@ -166,7 +163,6 @@
   ],
   "browser": {
     "./index.js": "./browser-entry.js",
-    "./lib/nodejs/growl.js": "./lib/browser/growl.js",
     "fs": false,
     "path": false,
     "supports-color": false,
