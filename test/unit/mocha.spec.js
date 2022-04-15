@@ -485,32 +485,6 @@ describe('Mocha', function () {
       });
     });
 
-    describe('growl()', function () {
-      describe('if capable of notifications', function () {
-        it('should set the growl option to true', function () {
-          mocha.isGrowlCapable = function forceEnable() {
-            return true;
-          };
-          mocha.growl();
-          expect(mocha.options, 'to have property', 'growl', true);
-        });
-      });
-
-      describe('if not capable of notifications', function () {
-        it('should set the growl option to false', function () {
-          mocha.isGrowlCapable = function forceDisable() {
-            return false;
-          };
-          mocha.growl();
-          expect(mocha.options, 'to have property', 'growl', false);
-        });
-      });
-
-      it('should be chainable', function () {
-        expect(mocha.growl(), 'to be', mocha);
-      });
-    });
-
     describe('inlineDiffs()', function () {
       it('should set the inlineDiffs option to true', function () {
         mocha.inlineDiffs();
@@ -664,20 +638,6 @@ describe('Mocha', function () {
               ]).and('was called once');
               done();
             });
-          });
-        });
-      });
-
-      describe('when "growl" option is present', function () {
-        beforeEach(function () {
-          mocha.options.growl = true;
-          sinon.stub(Mocha.prototype, '_growl').returnsThis();
-        });
-
-        it('should initialize growl support', function (done) {
-          mocha.run(function () {
-            expect(mocha._growl, 'to have a call satisfying', [runner]);
-            done();
           });
         });
       });
