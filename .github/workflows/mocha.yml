@@ -4,13 +4,12 @@ on:
     branches:
       - '**'
       - '!mochajs.org'
+    paths-ignore: ['*.md', 'docs/**']
     tags-ignore:
       - '**'
   pull_request:
-    types:
-      - opened
-      - synchronize
-      - reopened
+    types: [opened, synchronize, reopened]
+    paths-ignore: ['*.md', 'docs/**']
 
 jobs:
   prevent-double-run:
@@ -20,6 +19,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - run: 'echo run Tests'
+
   smoke:
     name: 'Smoke [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
     needs: prevent-double-run
@@ -118,6 +118,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
+
   test-browser:
     # TODO: configure to retain build artifacts in `.karma/` dir
     name: 'Browser Tests'
