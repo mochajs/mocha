@@ -1287,7 +1287,7 @@ In serial mode, tests results will "stream" as they occur. In parallel mode, rep
 
 Suggested workarounds:
 
-1. Use [`--grep`](#-grep-regexp-g-regexp) or [`--fgrep`](http://localhost:8080/#-fgrep-string-f-string) instead; it's not particularly efficient, but it will work.
+1. Use [`--grep`](#-grep-regexp-g-regexp) or [`--fgrep`](#-fgrep-string-f-string) instead; it's not particularly efficient, but it will work.
 1. Don't use parallel mode. Likely, you won't be running very many exclusive tests, so you won't see a great benefit from parallel mode anyhow.
 
 > _TIP: If parallel mode is defined in your config file, you can temporarily disable it on the command-line by using either the `--no-parallel` flag or reducing the job count, e.g., `--jobs=0`._
