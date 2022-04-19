@@ -13,16 +13,28 @@ on:
 
 jobs:
   prevent-double-run:
+    # skip 'push' event when an open PR exists
     name: Prevent double run
     runs-on: ubuntu-latest
-    # Run 'pull-request' event only on external PRs from forked repos.
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    outputs:
+      pr-id: ${{ steps.findPr.outputs.number }}
     steps:
-      - run: 'echo run Tests'
+    - name: Check event pull_request
+      if: github.event_name == 'pull_request'
+      run: 'echo pull_request: run workflow'
+    - uses: actions/checkout@v2
+      if: github.event_name == 'push'
+    - name: Check event push
+      id: findPr
+      if: github.event_name == 'push'      
+      uses: jwalton/gh-find-current-pr@v1
+      with:
+        state: open
 
   smoke:
     name: 'Smoke [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
     needs: prevent-double-run
+    if: needs.prevent-double-run.outputs.pr-id == ''
     runs-on: '${{ matrix.os }}'
     strategy:
       matrix:
@@ -89,7 +101,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Get npm cache directory in Windows
         id: npm-cache
-        if: "${{ matrix.os == 'windows-2019' }}"
+        if: ${{ matrix.os == 'windows-2019' }}
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
       - name: 'Cache node_modules'
@@ -111,22 +123,21 @@ jobs:
           # this is so mocha-github-actions-reporter can find mocha
           NODE_PATH: lib
       - name: Generate Coverage Report (Linux + Node.js latest)
-        if: '${{ matrix.env.COVERAGE }}'
+        if: ${{ matrix.env.COVERAGE }}
         run: npm start coverage-report-lcov
       - name: Upload Coverage to Coveralls (Linux + Node.js latest)
-        if: '${{ matrix.env.COVERAGE }}'
+        if: ${{ matrix.env.COVERAGE }}
         uses: coverallsapp/github-action@master
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
 
   test-browser:
-    # TODO: configure to retain build artifacts in `.karma/` dir
     name: 'Browser Tests'
     needs: smoke
-    timeout-minutes: 20
     runs-on: ubuntu-latest
-    # Run 'push' event only because of sauce labs token
-    if: github.event_name == 'push'
+    timeout-minutes: 20
+    # Don't run forked 'pull_request' without saucelabs token
+    if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
     steps:
       - uses: actions/setup-node@v2
         with:
@@ -146,5 +157,5 @@ jobs:
       - name: Run Browser Tests
         run: npm start test.browser
         env:
-          SAUCE_USERNAME: '${{secrets.SAUCE_USERNAME}}'
-          SAUCE_ACCESS_KEY: '${{secrets.SAUCE_ACCESS_KEY}}'
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
