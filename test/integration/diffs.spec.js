@@ -69,12 +69,6 @@ describe('diffs', function () {
   var diffs, expected;
 
   before(function (done) {
-    // @TODO: It should be removed when Node.js 10 LTS is not supported.
-    const nodeVersion = parseInt(process.version.match(/^v(\d+)\./)[1], 10);
-    if (nodeVersion === 10) {
-      this.skip();
-    }
-
     run('diffs/diffs.fixture.js', [], function (err, res) {
       if (err) {
         done(err);
