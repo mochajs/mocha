@@ -187,13 +187,6 @@ var testGlob = {
   })
 };
 
-var isFlakeyNode = (function () {
-  var version = process.versions.node.split('.');
-  return (
-    version[0] === '0' && version[1] === '10' && process.platform === 'win32'
-  );
-})();
-
 function execMochaWith(validate) {
   return function execMocha(glob, assertOn, done) {
     exec(
@@ -206,12 +199,8 @@ function execMochaWith(validate) {
       function (error, stdout, stderr) {
         try {
           validate(error, stderr);
-          if (isFlakeyNode && error && stderr === '') {
-            execMocha(glob, assertOn, done);
-          } else {
-            assertOn({stdout: stdout, stderr: stderr});
-            done();
-          }
+          assertOn({stdout: stdout, stderr: stderr});
+          done();
         } catch (assertion) {
           done(assertion);
         }
