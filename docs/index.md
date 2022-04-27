@@ -2376,7 +2376,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [expresso]: https://github.com/tj/expresso
 [fish-globbing]: https://fishshell.com/docs/current/#expand-wildcard
 [github-mocha]: https://github.com/mochajs/mocha
-[gist-async-hooks]: https://git.io/vdlNM
+[gist-async-hooks]: https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843
 [gist-globbing-tutorial]: https://gist.github.com/reggi/475793ea1846affbcfe8
 [gitter-mocha]: https://gitter.im/mochajs/mocha
 [jetbrains]: https://www.jetbrains.com/
