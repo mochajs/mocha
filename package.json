@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "9.2.2",
+  "version": "10.0.0",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
@@ -36,7 +36,7 @@
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
-    "mocha": "./bin/mocha",
+    "mocha": "./bin/mocha.js",
     "_mocha": "./bin/_mocha"
   },
   "directories": {
@@ -58,23 +58,21 @@
     "ansi-colors": "4.1.1",
     "browser-stdout": "1.3.1",
     "chokidar": "3.5.3",
-    "debug": "4.3.3",
+    "debug": "4.3.4",
     "diff": "5.0.0",
     "escape-string-regexp": "4.0.0",
     "find-up": "5.0.0",
     "glob": "7.2.0",
-    "growl": "1.10.5",
     "he": "1.2.0",
     "js-yaml": "4.1.0",
     "log-symbols": "4.1.0",
-    "minimatch": "4.2.1",
+    "minimatch": "5.0.1",
     "ms": "2.1.3",
-    "nanoid": "3.3.1",
+    "nanoid": "3.3.3",
     "serialize-javascript": "6.0.0",
     "strip-json-comments": "3.1.1",
     "supports-color": "8.1.1",
-    "which": "2.0.2",
-    "workerpool": "6.2.0",
+    "workerpool": "6.2.1",
     "yargs": "16.2.0",
     "yargs-parser": "20.2.4",
     "yargs-unparser": "2.0.0"
@@ -155,8 +153,7 @@
     "webpack-cli": "^4.9.1"
   },
   "files": [
-    "bin/*mocha",
-    "assets/growl/*.png",
+    "bin/*mocha*",
     "lib/**/*.{js,html,json}",
     "index.js",
     "mocha.css",
@@ -166,7 +163,6 @@
   ],
   "browser": {
     "./index.js": "./browser-entry.js",
-    "./lib/nodejs/growl.js": "./lib/browser/growl.js",
     "fs": false,
     "path": false,
     "supports-color": false,

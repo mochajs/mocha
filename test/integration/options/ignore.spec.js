@@ -30,7 +30,10 @@ describe('--ignore', function () {
     var fixtures = path.join('options', 'ignore', '*');
     runMochaTest(
       fixtures,
-      ['--ignore', resolvePath(path.join('options', 'ignore', 'fail'))],
+      [
+        '--ignore',
+        resolvePath(path.join('options', 'ignore', 'fail')).replace(/\\/g, '/')
+      ],
       function (res) {
         expect(res, 'to have passed')
           .and('to have run test', 'should find this test')
@@ -60,9 +63,12 @@ describe('--ignore', function () {
       fixtures,
       [
         '--ignore',
-        resolvePath(path.join('options', 'ignore', 'fail')),
+        resolvePath(path.join('options', 'ignore', 'fail')).replace(/\\/g, '/'),
         '--ignore',
-        resolvePath(path.join('options', 'ignore', 'nested', 'fail'))
+        resolvePath(path.join('options', 'ignore', 'nested', 'fail')).replace(
+          /\\/g,
+          '/'
+        )
       ],
       function (res) {
         expect(res, 'to have passed')
