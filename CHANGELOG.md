@@ -1,3 +1,31 @@
+# 10.0.0 / 2022-05-01
+
+## :boom: Breaking Changes
+
+- #4845: **Drop Node.js v12.x support** (@juergba)
+
+- #4848: Drop Internet-Explorer-11 support (@juergba)
+
+- #4857: Drop AMD/RequireJS support (@juergba)
+
+- #4866: Drop Growl notification support (@juergba)
+
+- #4863: Rename executable `bin/mocha` to `bin/mocha.js` (@juergba)
+
+- #4865: `--ignore` option in Windows: upgrade Minimatch (@juergba)
+
+- #4861: Remove deprecated `Runner` signature (@juergba)
+
+## :nut\_and\_bolt: Other
+
+- #4878: Update production dependencies (@juergba)
+
+- #4876: Add Node.js v18 to CI test matrix (@outsideris)
+
+- #4852: Replace deprecated `String.prototype.substr()` (@CommanderRoot)
+
+Also thanks to @ea2305 and @SukkaW for improvements to our documentation.
+
 # 9.2.2 / 2022-03-11
 
 ## :bug: Fixes
