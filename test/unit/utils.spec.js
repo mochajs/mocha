@@ -2,6 +2,8 @@
 'use strict';
 
 var utils = require('../../lib/utils');
+const esmUtils = require('../../lib/nodejs/esm-utils');
+const Path = require('node:path');
 var sinon = require('sinon');
 
 describe('lib/utils', function () {
@@ -286,6 +288,22 @@ describe('lib/utils', function () {
           '  "zero": -0',
           '}'
         ].join('\n');
+        expect(stringify(expected), 'to be', actual);
+      });
+
+      it('should represent modules', async function () {
+        const expected = await esmUtils.requireOrImport(
+          Path.join(__dirname, './fixtures/module.mjs')
+        );
+        const actual = [
+          '{',
+          '  "[Symbol.toStringTag]": "Module"',
+          '  "bar": true',
+          '  "default": 123',
+          '  "foo": "abc"',
+          '}'
+        ].join('\n');
+
         expect(stringify(expected), 'to be', actual);
       });
     });
