@@ -49,7 +49,7 @@ Does your company use Mocha? Ask your manager or marketing team if your company 
 You might want to know that:
 
 - Mocha is one of the _most-depended-upon_ modules on npm (source: [libraries.io](https://libraries.io/search?order=desc&platforms=NPM&sort=dependents_count)), and
-- Mocha is an _independent_ open-source project, maintained exclusively by volunteers.
+- Mocha is an _'independent'_ open-source project, maintained exclusively by volunteers.
 
 You might want to help:
 
