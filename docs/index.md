@@ -54,7 +54,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 Install with [npm][] globally:
 
 ```bash
-$ npm install --global mocha
+$ npm install --location=global mocha
 ```
 
 or as a development dependency for your project:
