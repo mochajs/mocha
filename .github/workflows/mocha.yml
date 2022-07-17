@@ -22,7 +22,7 @@ jobs:
       - name: Check event pull_request
         if: github.event_name == 'pull_request'
         run: 'echo pull_request: run workflow'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: github.event_name == 'push'
       - name: Check event push
         id: findPr
@@ -63,7 +63,7 @@ jobs:
           node-version: 16
       - uses: actions/checkout@v3
       - name: 'Cache node_modules'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '~/.npm'
           key: "ubuntu-latest-node-v16-${{ hashFiles('**/package-lock.json') }}"
