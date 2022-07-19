@@ -22,7 +22,7 @@ jobs:
       - name: Check event pull_request
         if: github.event_name == 'pull_request'
         run: 'echo pull_request: run workflow'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: github.event_name == 'push'
       - name: Check event push
         id: findPr
@@ -46,8 +46,8 @@ jobs:
           - 16
           - 18
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '${{ matrix.node }}'
       - run: npm install --production
@@ -58,12 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: smoke
     steps:
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 'Cache node_modules'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '~/.npm'
           key: "ubuntu-latest-node-v16-${{ hashFiles('**/package-lock.json') }}"
@@ -95,17 +95,17 @@ jobs:
             env:
               COVERAGE: 1
     steps:
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: '${{ matrix.node }}'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get npm cache directory in Windows
         id: npm-cache
         if: ${{ matrix.os == 'windows-2019' }}
         run: |
           echo "::set-output name=dir::$(npm config get cache)"
       - name: 'Cache node_modules'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ matrix.os == 'ubuntu-latest' && '~/.npm' || steps.npm-cache.outputs.dir }}
           key: "${{ matrix.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}"
@@ -139,12 +139,12 @@ jobs:
     # Don't run forked 'pull_request' without saucelabs token
     if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
     steps:
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: 'Cache node_modules'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: '~/.npm'
           # this key is different than above, since we are running scripts
