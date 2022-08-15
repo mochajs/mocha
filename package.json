@@ -73,7 +73,7 @@
     "supports-color": "8.1.1",
     "workerpool": "6.2.1",
     "yargs": "17.5.1",
-    "yargs-parser": "20.2.4",
+    "yargs-parser": "21.1.1",
     "yargs-unparser": "2.0.0"
   },
   "devDependencies": {
