@@ -22,7 +22,6 @@ describe('--list-interfaces', function () {
       if (err) {
         return done(err);
       }
-
       expect(result.code, 'to be', 0);
       expected.forEach(function (ui) {
         expect(
