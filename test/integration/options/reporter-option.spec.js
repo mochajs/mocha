@@ -44,7 +44,7 @@ describe('--reporter-option', function () {
           }
           expect(res, 'to have passed').and(
             'to contain output',
-            /["foo":"bar","baz":"quux"]/
+            /{"foo":"bar","baz":"quux"}/
           );
           done();
         },
@@ -75,7 +75,7 @@ describe('--reporter-option', function () {
           }
           expect(res, 'to have passed').and(
             'to contain output',
-            /["foo":"bar","baz":"quux"]/
+            /{"foo":"bar","baz":"quux"}/
           );
           done();
         },
