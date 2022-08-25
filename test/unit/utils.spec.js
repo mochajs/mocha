@@ -142,6 +142,12 @@ describe('lib/utils', function () {
       var fn = '() => foo()';
       expect(utils.clean(fn), 'to be', 'foo()');
     });
+
+    it('should prevent ReDoS attack', function () {
+      this.timeout(100);
+      var attackFn = 'function' + ' '.repeat(20000);
+      expect(utils.clean(attackFn), 'to be', 'function');
+    });
   });
 
   describe('stringify()', function () {
