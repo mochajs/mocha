@@ -72,3 +72,24 @@ describe('suite returning a value', function () {
     );
   });
 });
+
+describe('suite w/async callback', function () {
+  it('should print a helpful deprecation message when a callback for suite is async', function (done) {
+    run(
+      'suite/suite-async-callback.fixture.js',
+      args,
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(
+          res.output,
+          'to match',
+          /Asynchronous suites are not supported, use a synchronous callback instead./
+        );
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
+});
