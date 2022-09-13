@@ -1,3 +1,3 @@
 'use strict';
 
-describe('a suite without an async callback', async function () {});
+describe('a suite with an async callback', async function () {});
