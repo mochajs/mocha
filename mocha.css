@@ -297,7 +297,7 @@ body {
 }
 
 #mocha .test:hover a.replay {
-  box-shadow: 0 0 1px inset var(--mocha-test-replay-bg-color);
+  box-shadow: 0 0 1px inset var(--mocha-test-replay-color);
   opacity: 1;
 }
 
