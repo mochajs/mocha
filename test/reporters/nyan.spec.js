@@ -386,7 +386,7 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 0,
-          trajectories: trajectories
+          trajectories
         });
 
         expect(expectedSegment, 'to be', '_');
@@ -414,7 +414,7 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 0,
-          trajectories: trajectories
+          trajectories
         });
 
         expect(trajectories, 'to equal', expectedTrajectories);
@@ -436,7 +436,7 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 5,
-          trajectories: trajectories
+          trajectories
         });
 
         expect(expectedSegment, 'to equal', '-');
@@ -469,7 +469,7 @@ describe('Nyan reporter', function () {
 
       var fakeThis = {
         cursorUp: noop,
-        stats: {passes: passes, pending: pending, failures: failures},
+        stats: {passes, pending, failures},
         numberOfLines: 4
       };
 
@@ -538,7 +538,7 @@ describe('Nyan reporter', function () {
       var nyanCat = new NyanCat(runner, options);
       var fakeThis = {
         cursorUp: noop,
-        trajectories: trajectories,
+        trajectories,
         scoreboardWidth: expectedWidth,
         numberOfLines: 1
       };
