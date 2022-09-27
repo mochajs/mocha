@@ -324,7 +324,7 @@ describe('lib/utils', function () {
 
     it('should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values', function () {
       var regexp = /(?:)/;
-      var regExpObj = {regexp: regexp};
+      var regExpObj = {regexp};
       var regexpString = '/(?:)/';
 
       expect(
@@ -335,14 +335,14 @@ describe('lib/utils', function () {
       expect(stringify(regexp), 'to be', regexpString);
 
       var number = 1;
-      var numberObj = {number: number};
+      var numberObj = {number};
       var numberString = '1';
 
       expect(stringify(numberObj), 'to be', '{\n  "number": ' + number + '\n}');
       expect(stringify(number), 'to be', numberString);
 
       var boolean = false;
-      var booleanObj = {boolean: boolean};
+      var booleanObj = {boolean};
       var booleanString = 'false';
 
       expect(
@@ -353,7 +353,7 @@ describe('lib/utils', function () {
       expect(stringify(boolean), 'to be', booleanString);
 
       var string = 'sneepy';
-      var stringObj = {string: string};
+      var stringObj = {string};
 
       expect(
         stringify(stringObj),
@@ -372,7 +372,7 @@ describe('lib/utils', function () {
 
     it('should handle arrays', function () {
       var array = ['dave', 'dave', 'dave', 'dave'];
-      var arrayObj = {array: array};
+      var arrayObj = {array};
       var arrayString = '    "dave"\n    "dave"\n    "dave"\n    "dave"';
 
       expect(
@@ -389,7 +389,7 @@ describe('lib/utils', function () {
 
     it('should handle functions', function () {
       var fn = function () {};
-      var fnObj = {fn: fn};
+      var fnObj = {fn};
       var fnString = '[Function]';
 
       expect(stringify(fnObj), 'to be', '{\n  "fn": ' + fnString + '\n}');
@@ -482,7 +482,7 @@ describe('lib/utils', function () {
       var date = new Date(0);
       expect(stringify(date), 'to be', '[Date: 1970-01-01T00:00:00.000Z]');
       expect(
-        stringify({date: date}),
+        stringify({date}),
         'to be',
         '{\n  "date": [Date: 1970-01-01T00:00:00.000Z]\n}'
       );
@@ -505,11 +505,7 @@ describe('lib/utils', function () {
       it('should handle Symbol', function () {
         var symbol = Symbol('value');
         expect(stringify(symbol), 'to match', /^Symbol\(value\)/);
-        expect(
-          stringify({symbol: symbol}),
-          'to match',
-          /"symbol": Symbol\(value\)/
-        );
+        expect(stringify({symbol}), 'to match', /"symbol": Symbol\(value\)/);
       });
     }
 

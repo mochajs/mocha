@@ -199,7 +199,7 @@ function execMochaWith(validate) {
       function (error, stdout, stderr) {
         try {
           validate(error, stderr);
-          assertOn({stdout: stdout, stderr: stderr});
+          assertOn({stdout, stderr});
           done();
         } catch (assertion) {
           done(assertion);
