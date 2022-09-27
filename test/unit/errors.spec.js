@@ -17,7 +17,7 @@ describe('Errors', function () {
         errors.createInvalidReporterError(message, 'badReporter'),
         'to satisfy',
         {
-          message: message,
+          message,
           code: 'ERR_MOCHA_INVALID_REPORTER',
           reporter: 'badReporter'
         }
@@ -31,7 +31,7 @@ describe('Errors', function () {
         errors.createInvalidInterfaceError(message, 'badUi'),
         'to satisfy',
         {
-          message: message,
+          message,
           code: 'ERR_MOCHA_INVALID_INTERFACE',
           interface: 'badUi'
         }
@@ -75,7 +75,7 @@ describe('Errors', function () {
         errors.createUnparsableFileError(message, 'badFilePath'),
         'to satisfy',
         {
-          message: message,
+          message,
           code: 'ERR_MOCHA_UNPARSABLE_FILE'
         }
       );

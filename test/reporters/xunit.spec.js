@@ -264,7 +264,7 @@ describe('XUnit reporter', function () {
 
       it("should call 'fileStream.write' with line and newline", function () {
         var xunit = new XUnit(runner);
-        var fakeThis = {fileStream: fileStream};
+        var fakeThis = {fileStream};
         xunit.write.call(fakeThis, expectedLine);
 
         expect(fileStream.write.calledWith(expectedLine + '\n'), 'to be true');
