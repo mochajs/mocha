@@ -1,3 +1,16 @@
+# 10.1.0 / 2022-10-16
+
+## :tada: Enhancements
+
+- #4896: Browser: add support for `prefers-color-scheme: dark` (@greggman)
+
+## :nut\_and\_bolt: Other
+
+- #4912: Browser: increase contrast for replay buttons (@JoshuaKGoldberg)
+- #4905: Use standard `Promise.allSettled` instead of polyfill (@outsideris)
+- #4899: Upgrade official GitHub actions to latest (@ddzz)
+- #4770: Fix regex in function `clean`(@yetingli)
+
 # 10.0.0 / 2022-05-01
 
 ## :boom: Breaking Changes
