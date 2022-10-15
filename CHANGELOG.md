@@ -2,14 +2,14 @@
 
 ## :tada: Enhancements
 
-- #4896: Browser: add support for `prefers-color-scheme: dark` (@greggman)
+- [#4896](https://github.com/mochajs/mocha/issues/4896): Browser: add support for `prefers-color-scheme: dark` ([**@greggman**](https://github.com/greggman))
 
 ## :nut\_and\_bolt: Other
 
-- #4912: Browser: increase contrast for replay buttons (@JoshuaKGoldberg)
-- #4905: Use standard `Promise.allSettled` instead of polyfill (@outsideris)
-- #4899: Upgrade official GitHub actions to latest (@ddzz)
-- #4770: Fix regex in function `clean`(@yetingli)
+- [#4912](https://github.com/mochajs/mocha/issues/4912): Browser: increase contrast for replay buttons ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#4905](https://github.com/mochajs/mocha/issues/4905): Use standard `Promise.allSettled` instead of polyfill ([**@outsideris**](https://github.com/outsideris))
+- [#4899](https://github.com/mochajs/mocha/issues/4899): Upgrade official GitHub actions to latest ([**@ddzz**](https://github.com/ddzz))
+- [#4770](https://github.com/mochajs/mocha/issues/4770): Fix regex in function `clean`([**@yetingli**](https://github.com/yetingli))
 
 # 10.0.0 / 2022-05-01
 
