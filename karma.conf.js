@@ -90,7 +90,8 @@ module.exports = config => {
       const buildId = `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`;
       bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, buildId);
       sauceConfig = {
-        build: buildId
+        build: buildId,
+        geckodriverVersion: '0.30.0' // temporary workaround for firefox
       };
     } else {
       console.error(`Local environment (${hostname}) detected`);
