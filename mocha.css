@@ -193,7 +193,7 @@ body {
   display: block;
   float: left;
   margin-right: 5px;
-  color: var(--mocha-pass-icon-color);
+  color: var(--mocha-test-fail-icon-color);
 }
 
 #mocha .test pre.error {
