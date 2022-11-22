@@ -48,6 +48,9 @@ describe('Mocha', function () {
     stubs.Suite = sinon.stub().returns(stubs.suite);
     stubs.Suite.constants = {};
     stubs.ParallelBufferedRunner = sinon.stub().returns({});
+    stubs.esmUtils = {
+      loadFilesAsync: sinon.stub()
+    };
     const runner = Object.assign(sinon.createStubInstance(EventEmitter), {
       runAsync: sinon.stub().resolves(0),
       globals: sinon.stub(),
@@ -66,6 +69,7 @@ describe('Mocha', function () {
         '../../lib/suite.js': stubs.Suite,
         '../../lib/nodejs/parallel-buffered-runner.js':
           stubs.ParallelBufferedRunner,
+        '../../lib/nodejs/esm-utils': stubs.esmUtils,
         '../../lib/runner.js': stubs.Runner,
         '../../lib/errors.js': stubs.errors
       })
@@ -216,6 +220,21 @@ describe('Mocha', function () {
         expect(cb => {
           mocha.loadFiles(cb);
         }, 'to call the callback');
+      });
+    });
+
+    describe('loadFilesAsync()', function () {
+      it('shoud pass esmDecorator to actual load function', async function () {
+        const esmDecorator = x => `${x}?foo=bar`;
+
+        await mocha.loadFilesAsync({esmDecorator});
+
+        expect(stubs.esmUtils.loadFilesAsync, 'was called once');
+        expect(
+          stubs.esmUtils.loadFilesAsync.firstCall.args[3],
+          'to be',
+          esmDecorator
+        );
       });
     });
 
