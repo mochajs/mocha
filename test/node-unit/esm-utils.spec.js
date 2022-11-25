@@ -2,6 +2,7 @@
 
 const esmUtils = require('../../lib/nodejs/esm-utils');
 const sinon = require('sinon');
+const url = require('url');
 
 describe('esm-utils', function () {
   beforeEach(function () {
@@ -23,7 +24,7 @@ describe('esm-utils', function () {
       expect(
         esmUtils.doImport.firstCall.args[0].toString(),
         'to be',
-        'file:///foo/bar.mjs'
+        url.pathToFileURL('/foo/bar.mjs').toString()
       );
     });
 
@@ -38,7 +39,7 @@ describe('esm-utils', function () {
       expect(
         esmUtils.doImport.firstCall.args[0].toString(),
         'to be',
-        'file:///foo/bar.mjs?foo=bar'
+        `${url.pathToFileURL('/foo/bar.mjs').toString()}?foo=bar`
       );
     });
   });
