@@ -2,15 +2,15 @@
 
 ## :tada: Enhancements
 
-- #4945: API: add possibility to decorate ESM name before import (@j0tunn)
+- [#4945](https://github.com/mochajs/mocha/issues/4945): API: add possibility to decorate ESM name before import ([**@j0tunn**](https://github.com/j0tunn))
 
 ## :bug: Fixes
 
-- #4946: Browser: color of failed test icon (@kleisauke)
+- [#4946](https://github.com/mochajs/mocha/issues/4946): Browser: color of failed test icon ([**@kleisauke**](https://github.com/kleisauke))
 
 ## :book: Documentation
 
-- #4944: Remove duplicated header (@PauloGoncalvesBH)
+- [#4944](https://github.com/mochajs/mocha/issues/4944): Remove duplicated header ([**@PauloGoncalvesBH**](https://github.com/PauloGoncalvesBH))
 
 # 10.1.0 / 2022-10-16
 
