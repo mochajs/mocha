@@ -1,3 +1,17 @@
+# 10.2.0 / 2022-12-11
+
+## :tada: Enhancements
+
+- #4945: API: add possibility to decorate ESM name before import (@j0tunn)
+
+## :bug: Fixes
+
+- #4946: Browser: color of failed test icon (@kleisauke)
+
+## :book: Documentation
+
+- #4944: Remove duplicated header (@PauloGoncalvesBH)
+
 # 10.1.0 / 2022-10-16
 
 ## :tada: Enhancements
