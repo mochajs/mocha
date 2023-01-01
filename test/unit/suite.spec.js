@@ -647,6 +647,28 @@ describe('Suite', function () {
       });
     });
 
+    describe('filterByShard()', function () {
+      it('should filter out all tests that are not in the current shard', function () {
+        const suite = new Suite('a');
+        const nested = new Suite('b');
+        const test = new Test('c');
+        const test2 = new Test('d');
+
+        suite.suites.push(nested);
+        suite.tests.push(test);
+        suite.tests.push(test2);
+
+        suite.filterByShard(1, {totalShards: 2, testNum: 0});
+
+        expect(suite, 'to satisfy', {
+          suites: expect.it('to be empty'),
+          tests: expect
+            .it('to have length', 1)
+            .and('to have an item satisfying', {title: 'Shard #1 Test #1: c'})
+        });
+      });
+    });
+
     describe('markOnly()', function () {
       it('should call appendOnlySuite on parent', function () {
         const suite = new Suite('foo');
