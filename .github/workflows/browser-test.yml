@@ -33,7 +33,7 @@ jobs:
           SAUCE_USERNAME: '${{secrets.SAUCE_USERNAME}}'
           SAUCE_ACCESS_KEY: '${{secrets.SAUCE_ACCESS_KEY}}'
       - name: remove 'run-browser-test' label
-        uses: buildsville/add-remove-label@v1
+        uses: buildsville/add-remove-label@v2.0.0
         if: ${{ always() }}
         with:
           token: ${{secrets.GITHUB_TOKEN}}

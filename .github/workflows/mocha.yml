@@ -103,7 +103,7 @@ jobs:
         id: npm-cache
         if: ${{ matrix.os == 'windows-2019' }}
         run: |
-          echo "::set-output name=dir::$(npm config get cache)"
+          echo "dir=$(npm config get cache)" >> $env:GITHUB_OUTPUT
       - name: 'Cache node_modules'
         uses: actions/cache@v3
         with:
