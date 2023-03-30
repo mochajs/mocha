@@ -61,7 +61,7 @@
     "diff": "5.0.0",
     "escape-string-regexp": "4.0.0",
     "find-up": "5.0.0",
-    "glob": "7.2.0",
+    "glob": "8.1.0",
     "he": "1.2.0",
     "js-yaml": "4.1.0",
     "log-symbols": "4.1.0",
