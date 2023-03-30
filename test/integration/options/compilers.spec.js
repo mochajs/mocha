@@ -6,7 +6,7 @@ var invokeMocha = helpers.invokeMocha;
 describe('--compilers', function () {
   it('should report deprecation', function (done) {
     invokeMocha(
-      ['--compilers', 'coffee:coffee-script/register'],
+      ['--compilers', 'coffee:coffeescript/register'],
       function (err, res) {
         if (err) {
           return done(err);
