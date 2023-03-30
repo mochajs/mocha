@@ -45,6 +45,7 @@ jobs:
           - 14
           - 16
           - 18
+          - 19
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -89,6 +90,7 @@ jobs:
           - 14
           - 16
           - 18
+          - 19
         include:
           - os: ubuntu-latest
             node: 16

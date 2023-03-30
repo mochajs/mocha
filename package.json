@@ -27,10 +27,6 @@
   "bugs": {
     "url": "https://github.com/mochajs/mocha/issues/"
   },
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/mochajs"
-  },
   "gitter": "https://gitter.im/mochajs/mocha",
   "homepage": "https://mochajs.org/",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
