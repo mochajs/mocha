@@ -357,6 +357,45 @@ describe('XUnit reporter', function () {
         expect(expectedWrite, 'to be', expectedTag);
       });
 
+      it('should write well-formed XML', function () {
+        var xunit = new XUnit(runner);
+        var inputMessage = '\x1Bsome message';
+        expectedMessage = '&#xFFFD;some message';
+        var expectedTest = {
+          state: STATE_FAILED,
+          title: expectedTitle,
+          parent: {
+            fullTitle: function () {
+              return expectedClassName;
+            }
+          },
+          duration: 1000,
+          err: {
+            actual: 'foo',
+            expected: 'bar',
+            message: inputMessage,
+            stack: expectedStack
+          }
+        };
+
+        xunit.test.call(fakeThis, expectedTest);
+        sinon.restore();
+
+        var expectedTag =
+          '<testcase classname="' +
+          expectedClassName +
+          '" name="' +
+          expectedTitle +
+          '" time="1"><failure>' +
+          expectedMessage +
+          '\n' +
+          expectedDiff +
+          '\n' +
+          expectedStack +
+          '</failure></testcase>';
+        expect(expectedWrite, 'to be', expectedTag);
+      });
+
       it('should handle non-string diff values', function () {
         var runner = new EventEmitter();
         createStatsCollector(runner);
