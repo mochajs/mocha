@@ -46,6 +46,7 @@ jobs:
           - 16
           - 18
           - 19
+          - 20
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -91,6 +92,7 @@ jobs:
           - 16
           - 18
           - 19
+          - 20
         include:
           - os: ubuntu-latest
             node: 16
@@ -143,7 +145,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - uses: actions/checkout@v3
       - name: 'Cache node_modules'
         uses: actions/cache@v3
@@ -151,9 +153,9 @@ jobs:
           path: '~/.npm'
           # this key is different than above, since we are running scripts
           # (builds, postinstall lifecycle hooks, etc.)
-          key: "ubuntu-latest-node-full-v16-${{ hashFiles('**/package-lock.json') }}"
+          key: "ubuntu-latest-node-full-v20-${{ hashFiles('**/package-lock.json') }}"
           restore-keys: |
-            ubuntu-latest-node-full-v16-
+            ubuntu-latest-node-full-v20-
       - name: Install Dependencies
         run: npm ci
       - name: Run Browser Tests
