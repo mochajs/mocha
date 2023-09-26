@@ -96,7 +96,7 @@ jobs:
           - 20
         include:
           - os: ubuntu-latest
-            node: 16
+            node: 20
             env:
               COVERAGE: 1
     steps:
