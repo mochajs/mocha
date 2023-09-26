@@ -17,8 +17,7 @@ jobs:
     name: Prevent double run
     runs-on: ubuntu-latest
     outputs:
-      # pr-id: ${{ steps.findPr.outputs.number }}
-      pr-id: ''
+      pr-id: ${{ steps.findPr.outputs.number }}
     steps:
       - name: Check event pull_request
         if: github.event_name == 'pull_request'
