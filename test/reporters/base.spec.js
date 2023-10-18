@@ -507,21 +507,34 @@ describe('Base reporter', function () {
     );
   });
 
-  describe('when reporter output immune to user test changes', function () {
-    var baseConsoleLog;
+  it('should list all the errors within an AggregateError', function () {
+    var err1 = new Error('1');
+    var err2 = new Error('2');
+    var aggErr = new AggregateError([err1, err2], '2 errors');
 
-    beforeEach(function () {
-      sinon.restore();
-      sinon.stub(console, 'log');
-      baseConsoleLog = sinon.stub(Base, 'consoleLog');
-    });
+    var test = makeTest(aggErr);
+    list([test]);
 
-    it('should let you stub out console.log without effecting reporters output', function () {
-      Base.list([]);
-      baseConsoleLog.restore();
+    var errOut = stdout.join('\n').trim();
 
-      expect(baseConsoleLog, 'was called');
-      expect(console.log, 'was not called');
-    });
+    expect(errOut, 'to contain', '1) Error 1:', '2) Error 2:');
+  });
+});
+
+describe('when reporter output immune to user test changes', function () {
+  var baseConsoleLog;
+
+  beforeEach(function () {
+    sinon.restore();
+    sinon.stub(console, 'log');
+    baseConsoleLog = sinon.stub(Base, 'consoleLog');
+  });
+
+  it('should let you stub out console.log without effecting reporters output', function () {
+    Base.list([]);
+    baseConsoleLog.restore();
+
+    expect(baseConsoleLog, 'was called');
+    expect(console.log, 'was not called');
   });
 });
