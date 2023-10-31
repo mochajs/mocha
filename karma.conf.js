@@ -90,7 +90,7 @@ module.exports = config => {
       const buildId = `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`;
       bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, buildId);
       sauceConfig = {
-        build: buildId,
+        build: buildId
       };
     } else {
       console.error(`Local environment (${hostname}) detected`);
@@ -201,7 +201,6 @@ const addSauceTests = (cfg, sauceLabs) => {
       captureTimeout: 120000,
       browserNoActivityTimeout: 20000
     };
-    console.log(JSON.stringify(result))
     return result;
   }
   return {...cfg};
