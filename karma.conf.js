@@ -182,7 +182,7 @@ const addSauceTests = (cfg, sauceLabs) => {
         }
       };
       if (browserName === 'firefox') {
-        result[sauceBrowser]['moz:debuggerAddress'] = true;
+        result[sauceBrowser]['sauce:options']['moz:debuggerAddress'] = true;
       }
       return result;
     }, {});
@@ -202,6 +202,7 @@ const addSauceTests = (cfg, sauceLabs) => {
       browserNoActivityTimeout: 20000
     };
     console.log(JSON.stringify(result))
+    return result;
   }
   return {...cfg};
 };
