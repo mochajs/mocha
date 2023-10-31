@@ -187,7 +187,7 @@ const addSauceTests = (cfg, sauceLabs) => {
       return result;
     }, {});
 
-    return {
+    const result = {
       ...cfg,
       reporters: [...cfg.reporters, 'saucelabs'],
       browsers: [...cfg.browsers, ...sauceBrowsers],
@@ -201,6 +201,7 @@ const addSauceTests = (cfg, sauceLabs) => {
       captureTimeout: 120000,
       browserNoActivityTimeout: 20000
     };
+    console.log(JSON.stringify(result))
   }
   return {...cfg};
 };
