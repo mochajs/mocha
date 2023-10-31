@@ -67,6 +67,10 @@ const baseConfig = {
     showDiff: true
   },
   customLaunchers: {
+    FirefoxDebug: {
+    base: "Firefox",
+    "moz:debuggerAddress": true
+    },
     ChromeDebug: {
       base: 'Chrome',
       flags: ['--remote-debugging-port=9333']
