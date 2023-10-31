@@ -67,10 +67,6 @@ const baseConfig = {
     showDiff: true
   },
   customLaunchers: {
-    FirefoxDebug: {
-    base: "Firefox",
-    "moz:debuggerAddress": true
-    },
     ChromeDebug: {
       base: 'Chrome',
       flags: ['--remote-debugging-port=9333']
@@ -95,7 +91,6 @@ module.exports = config => {
       bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, buildId);
       sauceConfig = {
         build: buildId,
-        geckodriverVersion: '0.30.0' // temporary workaround for firefox
       };
     } else {
       console.error(`Local environment (${hostname}) detected`);
@@ -176,7 +171,7 @@ const addSauceTests = (cfg, sauceLabs) => {
     const customLaunchers = sauceBrowsers.reduce((acc, sauceBrowser) => {
       const platformName = SAUCE_BROWSER_PLATFORM_MAP[sauceBrowser];
       const [browserName, browserVersion] = sauceBrowser.split('@');
-      return {
+      const result = {
         ...acc,
         [sauceBrowser]: {
           base: 'SauceLabs',
@@ -186,6 +181,10 @@ const addSauceTests = (cfg, sauceLabs) => {
           'sauce:options': sauceLabs
         }
       };
+      if (browserName === 'firefox') {
+        result[sauceBrowser]['moz:debuggerAddress'] = true;
+      }
+      return result;
     }, {});
 
     return {
