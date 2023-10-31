@@ -28,6 +28,7 @@ const rollupPlugin = require('./scripts/karma-rollup-plugin');
 const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;
 const hostname = os.hostname();
+const BROWSER = env.BROWSER;
 
 const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
@@ -119,6 +120,13 @@ module.exports = config => {
     ...cfg,
     files: [...cfg.files, {pattern: './mocha.js.map', included: false}]
   };
+
+  if (BROWSER) {
+    cfg = {
+      ...cfg,
+      browsers: [BROWSER]
+    };
+  }
 
   config.set(cfg);
 };

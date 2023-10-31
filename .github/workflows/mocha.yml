@@ -137,8 +137,8 @@ jobs:
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
 
-  test-browser:
-    name: 'Browser Tests'
+  test-browser-local:
+    name: Browser Test [ChromeHeadless]
     needs: smoke
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -163,5 +163,43 @@ jobs:
       - name: Run Browser Tests
         run: npm start test.browser
         env:
+          BROWSER: ChromeHeadless
+
+  test-browser-saucelabs:
+    name: Browser Tests on SauceLabs [${{ matrix.browser }}]
+    needs:
+      - smoke
+      - test-browser-local
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        browser:
+          - firefox@latest
+          - chrome@latest
+          - MicrosoftEdge@latest
+          - safari@latest
+    # Don't run forked 'pull_request' without saucelabs token
+    if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: 'Cache node_modules'
+        uses: actions/cache@v3
+        with:
+          path: '~/.npm'
+          # this key is different than above, since we are running scripts
+          # (builds, postinstall lifecycle hooks, etc.)
+          key: "ubuntu-latest-node-full-lts-${{ hashFiles('**/package-lock.json') }}"
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Browser Tests
+        run: npm start test.browser
+        env:
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+          BROWSER: ${{ matrix.browser }}
