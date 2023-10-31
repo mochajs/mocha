@@ -4,6 +4,7 @@ on:
     inputs:
       days:
         description: 'Number of days'
+        type: number
         required: true
         default: 180
 
