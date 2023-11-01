@@ -140,7 +140,6 @@
     "unexpected-sinon": "^10.11.2",
     "update-notifier": "^4.1.0",
     "uslug": "^1.0.4",
-    "uuid": "^8.3.0",
     "webpack": "^5.67.0",
     "webpack-cli": "^4.9.1"
   },
