@@ -517,7 +517,7 @@ describe('Base reporter', function () {
 
     var errOut = stdout.join('\n').trim();
 
-    expect(errOut, 'to contain', '1) Error 1:', '2) Error 2:');
+    expect(errOut, 'to contain', ' Error: 1', 'Error: 2');
   });
 });
 
