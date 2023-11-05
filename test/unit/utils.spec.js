@@ -760,5 +760,8 @@ describe('lib/utils', function () {
     it('should return a non-empty string', function () {
       expect(utils.uniqueID(), 'to be a string').and('not to be empty');
     });
+    it('should have length of 21', function () {
+      expect(utils.uniqueID().length, 'to equal', 21);
+    });
   });
 });
