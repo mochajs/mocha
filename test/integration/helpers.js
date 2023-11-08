@@ -495,6 +495,7 @@ function touchFile(filepath) {
     fs.closeSync(fd);
   }
 }
+
 /**
  * Synchronously replace all substrings matched by `pattern` with
  * `replacement` in the contents of file at `filepath`
