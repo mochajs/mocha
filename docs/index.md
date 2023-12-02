@@ -2415,7 +2415,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [unexpected]: https://unexpected.js.org/
 [vscode-mocha-sidebar]: https://marketplace.visualstudio.com/items?itemName=maty.vscode-mocha-sidebar
 [wallaby.js]: https://wallabyjs.com/
-[yargs-configobject-extends]: http://yargs.js.org/docs/#api-configobject-extends-keyword
+[yargs-configobject-extends]: http://yargs.js.org/docs/#api-reference-configobject-extends-keyword
 [zsh-globbing]: http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing
 [root hook plugins]: #root-hook-plugins
 [global setup fixtures]: #global-setup-fixtures
