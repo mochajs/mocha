@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
+  <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework logo"/>
 </p>
 
 <p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
@@ -22,10 +22,11 @@
 
 ## Links
 
-- **[Documentation](https://mochajs.org/)**
+- **[Documentation](https://mochajs.org)**
 - **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md)**
 - [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md)
 - [Contributing](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+- [Development](https://github.com/mochajs/mocha/blob/master/.github/DEVELOPMENT.md)
 - [Gitter Chatroom](https://gitter.im/mochajs/mocha) (ask questions here!)
 - [Issue Tracker](https://github.com/mochajs/mocha/issues)
 
@@ -37,7 +38,10 @@
 
 ## Sponsors
 
-Does your company use Mocha? Ask your manager or marketing team if your company would be interested in supporting our project. Support will allow the maintainers to dedicate more time for maintenance and new features for everyone. Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org#sponsors) - who doesn't want a little extra exposure? [Here's the info](https://opencollective.com/mochajs).
+Does your company use Mocha? Ask your manager or marketing team if your company would be interested in supporting our project.
+Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.
+Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org#sponsors) - who doesn't want a little extra exposure?
+[Here's the info](https://opencollective.com/mochajs).
 
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/0/avatar)](https://opencollective.com/mochajs/tiers/sponsors/0/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/1/avatar)](https://opencollective.com/mochajs/tiers/sponsors/1/website)
