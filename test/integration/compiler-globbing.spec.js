@@ -10,7 +10,7 @@ describe('globbing like --compilers', function () {
         process.execPath +
         '" "' +
         path.join('bin', 'mocha') +
-        '" -R json --require coffee-script/register --require test/compiler-fixtures/foo.fixture "test/compiler/*.@(coffee|foo)"',
+        '" -R json --require coffeescript/register --require test/compiler-fixtures/foo.fixture "test/compiler/*.@(coffee|foo)"',
       {cwd: path.join(__dirname, '..', '..')},
       function (error, stdout) {
         if (error && !stdout) {

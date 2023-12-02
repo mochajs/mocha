@@ -990,8 +990,6 @@ It can however make the output harder to interpret when comparing large strings.
 
 A value of 0 indicates no limit, default is 8192 characters.
 
-## Command-Line Usage
-
 ### `--full-trace`
 
 Enable "full" stack traces. By default, Mocha attempts to distill stack traces into less noisy (though still useful) output.

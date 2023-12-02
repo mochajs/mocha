@@ -1,3 +1,30 @@
+# 10.2.0 / 2022-12-11
+
+## :tada: Enhancements
+
+- [#4945](https://github.com/mochajs/mocha/issues/4945): API: add possibility to decorate ESM name before import ([**@j0tunn**](https://github.com/j0tunn))
+
+## :bug: Fixes
+
+- [#4946](https://github.com/mochajs/mocha/issues/4946): Browser: color of failed test icon ([**@kleisauke**](https://github.com/kleisauke))
+
+## :book: Documentation
+
+- [#4944](https://github.com/mochajs/mocha/issues/4944): Remove duplicated header ([**@PauloGoncalvesBH**](https://github.com/PauloGoncalvesBH))
+
+# 10.1.0 / 2022-10-16
+
+## :tada: Enhancements
+
+- [#4896](https://github.com/mochajs/mocha/issues/4896): Browser: add support for `prefers-color-scheme: dark` ([**@greggman**](https://github.com/greggman))
+
+## :nut\_and\_bolt: Other
+
+- [#4912](https://github.com/mochajs/mocha/issues/4912): Browser: increase contrast for replay buttons ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#4905](https://github.com/mochajs/mocha/issues/4905): Use standard `Promise.allSettled` instead of polyfill ([**@outsideris**](https://github.com/outsideris))
+- [#4899](https://github.com/mochajs/mocha/issues/4899): Upgrade official GitHub actions to latest ([**@ddzz**](https://github.com/ddzz))
+- [#4770](https://github.com/mochajs/mocha/issues/4770): Fix regex in function `clean`([**@yetingli**](https://github.com/yetingli))
+
 # 10.0.0 / 2022-05-01
 
 ## :boom: Breaking Changes
