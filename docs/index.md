@@ -89,7 +89,7 @@ describe('Array', function () {
 Back in the terminal:
 
 ```bash
-$ ./node_modules/mocha/bin/mocha
+$ ./node_modules/mocha/bin/mocha.js
 
   Array
     #indexOf()
