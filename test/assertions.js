@@ -109,7 +109,7 @@ module.exports = {
         (expect, result, output) => {
           expect(result, '[not] to satisfy', {
             code: expect.it('to be greater than', 0),
-            output: output
+            output
           });
         }
       )
@@ -118,7 +118,7 @@ module.exports = {
         (expect, result, output) => {
           expect(result, '[not] to satisfy', {
             code: 0,
-            output: output
+            output
           });
         }
       )
@@ -214,7 +214,7 @@ module.exports = {
         (expect, result, ...titles) => {
           titles.forEach(title => {
             expect(result.passes, '[not] to have an item satisfying', {
-              title: title
+              title
             });
           });
         }
@@ -226,7 +226,7 @@ module.exports = {
             result[state].slice(0, titles.length),
             '[not] to satisfy',
             titles.map(title => {
-              return typeof title === 'string' ? {title: title} : title;
+              return typeof title === 'string' ? {title} : title;
             })
           );
         }
@@ -292,7 +292,7 @@ module.exports = {
         '<JSONResult> [not] to have retried test <string>',
         (expect, result, title) => {
           expect(result.tests, '[not] to have an item satisfying', {
-            title: title,
+            title,
             currentRetry: expect.it('to be positive')
           });
         }
@@ -301,7 +301,7 @@ module.exports = {
         '<JSONResult> [not] to have retried test <string> <number>',
         (expect, result, title, count) => {
           expect(result.tests, '[not] to have an item satisfying', {
-            title: title,
+            title,
             currentRetry: count
           });
         }

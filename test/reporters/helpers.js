@@ -145,7 +145,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
 
 function makeTest(err) {
   return {
-    err: err,
+    err,
     titlePath: function () {
       return ['test title'];
     }
@@ -232,9 +232,9 @@ function createRunReporterFunction(ctor) {
 }
 
 module.exports = {
-  createElements: createElements,
-  createMockRunner: createMockRunner,
-  createRunReporterFunction: createRunReporterFunction,
-  makeExpectedTest: makeExpectedTest,
-  makeTest: makeTest
+  createElements,
+  createMockRunner,
+  createRunReporterFunction,
+  makeExpectedTest,
+  makeTest
 };
