@@ -292,6 +292,11 @@ describe('lib/utils', function () {
       });
 
       it('should represent modules', async function () {
+        if (process.browser) {
+          // Current rollup config cannot `import()`
+          this.skip();
+          return;
+        }
         const expected = await esmUtils.requireOrImport(
           Path.join(__dirname, './fixtures/module.mjs')
         );
