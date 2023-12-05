@@ -103,7 +103,7 @@ Then:
    - You can add an "upstream" remote repo using `git remote add upstream https://github.com/mochajs/mocha.git && git fetch upstream`.
    - Navigate to your `master` branch using `git checkout master`.
    - Pull changes from `upstream` using `git pull upstream master`.
-   - If any changes were pulled in, rebase your branch onto `master` by switching back to your branch (`git checkout <your-branch>`) then rebasing using `git rebase master`.
+   - If any changes were pulled in, update your branch from `master` by switching back to your branch (`git checkout <your-branch>`) then merging using `git merge master`.
 1. Push your changes to your fork; `git push origin`.
 1. In your browser, navigate to [mochajs/mocha](https://github.com/mochajs/mocha).
    You should see a notification about your recent changes in your fork's branch, with a (green?) button to create a pull request.
@@ -123,11 +123,6 @@ Now that the pull request exists, some tasks will be run on it:
 1. Continuous integration checks will run against your changes.
    The result of these checks will be displayed on your PR.
    - If the checks fail, you must address those before the PR is accepted.
-   - GitHub will indicate if there's a conflict.
-     If this happens, you will need to [rebase](https://help.github.com/articles/about-git-rebase) your branch onto the `master` branch of the source repository.
-     **Do not `git merge`**.
-   - (Optional) [Squash](https://help.github.com/articles/about-pull-request-merges/#squash-and-merge-your-pull-request-commits) your changesets.
-     If you have multiple changesets in your PR, they will be squashed upon PR acceptance by the Mocha team.
 1. Be patient while your PR is reviewed.
    This can take a while.
    We may request changes, but don't be afraid to question them.
