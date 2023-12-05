@@ -7,7 +7,7 @@ description: 'Mocha is a feature-rich JavaScript test framework running on Node.
 Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
 
 <nav class="badges">
-  <a href="https://gitter.im/mochajs/mocha"><img src="/images/join-chat.svg" height="18" alt="Gitter"></a>
+  <a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" height="18" src="https://img.shields.io/badge/chat-Discord-5765F2.svg" /></a>
   <a href="#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" height="18" alt="OpenCollective sponsors"></a>
   <a href="#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" height="18" alt="OpenCollective backers"></a>
 </nav>
@@ -1777,7 +1777,7 @@ describe('Array', function () {
       it('should not throw an error', function () {
         (function () {
           [1, 2, 3].indexOf(4);
-        }.should.not.throw());
+        }).should.not.throw();
       });
       it('should return -1', function () {
         [1, 2, 3].indexOf(4).should.equal(-1);
@@ -2346,7 +2346,7 @@ $ npm test
 
 ## More Information
 
-In addition to chatting with us on [Gitter][gitter-mocha], for additional information such as using
+In addition to chatting with us on [our Discord][discord-mocha], for additional information such as using
 spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki][mocha-wiki] on GitHub.
 For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
@@ -2359,6 +2359,7 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
+[discord-mocha]: https://discord.gg/KeDn2uXhER
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
 [example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
@@ -2376,7 +2377,6 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [github-mocha]: https://github.com/mochajs/mocha
 [gist-async-hooks]: https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843
 [gist-globbing-tutorial]: https://gist.github.com/reggi/475793ea1846affbcfe8
-[gitter-mocha]: https://gitter.im/mochajs/mocha
 [jetbrains]: https://www.jetbrains.com/
 [jetbrains-plugin]: https://www.jetbrains.com/idea/features/nodejs.html
 [mdn-array-sort]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort

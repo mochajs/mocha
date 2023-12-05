@@ -28,9 +28,9 @@ A user interacts with the software, web site, documentation, etc., which these c
 As a user, you're expected to follow the [code of conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) when interacting in Mocha's "official" social spaces.
 This includes:
 
-- Any chatroom under the `mochajs` organization on Gitter
+- Any channel under the `mochajs` Discord
 - Any project under the `mochajs` organization on GitHub
-- Any future social, in-person or online events which Mocha might organize
+- Any future social, in-person, or online events which Mocha might organize
 
 ### Contributor
 
@@ -43,7 +43,7 @@ Contributions include (but are not limited to):
 
 1. Reporting bugs which follow the reporting guidelines
 1. Suggesting and debating enhancements that have wide applicability
-1. Helping others with Mocha-related questions on [Gitter](https://gitter.im/mochajs/mocha), [StackOverflow](https://stackoverflow.com), Google groups, or other sites
+1. Helping others with Mocha-related questions on [our Discord](https://discord.gg/KeDn2uXhER), [StackOverflow](https://stackoverflow.com), or other sites
 1. Sending pull requests which fix bugs, improve documentation, improve developer experience, improve code quality, and/or implement requested enhancements
 1. Reviewing code on pull requests
 1. Providing design assets
@@ -148,8 +148,8 @@ The rest of the team won't wait on feedback that isn't necessarily forthcoming!
 
 ## Communication
 
-Maintainers will mainly gather in [the mochajs/contributors channel](https://gitter.im/mochajs/contributors).
-This is a _public_ channel, and _anyone_ can join.
+Maintainers will mainly gather in the [Mocha Discord](https://discord.gg/KeDn2uXhER).
+This is a _public_ Discord, and _anyone_ can join.
 Videoconference (or audio) calls may happen on a regular or irregular basis, as schedules allow.
 This is mainly because we have Real Lives and time zones suck.
 
@@ -425,4 +425,4 @@ Expense transparency is built in to OpenCollective.
 
 ---
 
-Questions? Ask in the [contributors' chat room](https://gitter.im/mochajs/contributors)!
+Questions? Ask in the [Mocha Discord](https://discord.gg/KeDn2uXhER)!

@@ -4,7 +4,7 @@
 
 ## ❓ Got a Question?
 
-If you have a question about using Mocha, please use the [mailing list](https://groups.google.com/group/mochajs), [StackOverflow](https://stackoverflow.com), or ask the friendly people in our [chat room](https://gitter.im/mochajs/mocha).
+If you have a question about using Mocha, please use the [mailing list](https://groups.google.com/group/mochajs), [StackOverflow](https://stackoverflow.com), or ask the friendly people in [our Discord](https://discord.gg/KeDn2uXhER).
 
 ## ✏️ Filing Issues
 
@@ -70,7 +70,7 @@ _Excellent._ Here's how:
   We could use your help bringing everyone together in peace and harmony.
   Please contact an [org member](https://github.com/orgs/mochajs/people).
 - **Do you write unit tests for _fun_?** A PR which increases coverage is unlikely to be turned down.
-- **Are you experienced?** 🎸 If you're a seasoned Mocha user, why not help answer some questions in the [main chat room](https://gitter.im/mochajs/mocha)?
+- **Are you experienced?** 🎸 If you're a seasoned Mocha user, why not help answer some questions in [our Discord's `#help` channel](https://discord.gg/KeDn2uXhER)?
 
 ## 👞 Contributing Code: Step-by-Step
 
@@ -133,4 +133,4 @@ Now that the pull request exists, some tasks will be run on it:
    The PR will be updated, and CI will re-run.
 1. Once you've addressed all the feedback you can, [re-request review on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews#re-requesting-a-review).
 
-Join us in the [contributors' chat](https://gitter.im/mochajs/contributors)!
+Join us in [our Discord](https://discord.gg/KeDn2uXhER)!

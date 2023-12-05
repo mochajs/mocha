@@ -6,9 +6,9 @@ contact_links:
   - name: Documentation Website > APIs
     about: If you're using Mocha's API, see also the website's API docs.
     url: https://mochajs.org/api
-  - name: Gitter Chat
-    about: Our chat room is the right place for quick informal questions.
-    url: http://gitter.im/mochajs/mocha
+  - name: Discord
+    about: Our Discord is the right place for quick informal questions.
+    url: https://discord.gg/KeDn2uXhER
   - name: StackOverflow
     about: For more questions, see the `mocha` tag on StackOverflow.
     url: https://stackoverflow.com/questions/tagged/mocha
