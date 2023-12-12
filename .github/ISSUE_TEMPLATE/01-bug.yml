@@ -9,6 +9,7 @@ body:
           required: true
         - label: I have 'smoke tested' the code to be tested by running it outside the real test suite to get a better sense of whether the problem is in the code under test, my usage of Mocha, or Mocha itself.
           required: true
+        - label: I want to provide a PR to resolve this
     type: checkboxes
   - attributes:
       description: What did you expect to happen?

@@ -7,6 +7,7 @@ body:
           required: true
         - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
           required: true
+        - label: I want to provide a PR to resolve this
     type: checkboxes
   - attributes:
       description: What would you like to report?
