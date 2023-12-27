@@ -19,7 +19,7 @@ This includes bugs, feature requests, and improvements to documentation.
 Sorry!
 It happens to the best of us.
 
-Please [file an issue using the bug report template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=unconfirmed-bug&projects=&template=bug_report.md) with _as much detail as possible_ to help us reproduce and diagnose the bug.
+Please [file an issue using the bug report template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=type%3A+bug&projects=&template=01-bug.yml&title=%F0%9F%90%9B+Bug%3A+%3Cshort+description+of+the+bug%3E) with _as much detail as possible_ to help us reproduce and diagnose the bug.
 Most importantly:
 
 - Let us know _how_ you're running Mocha (options, flags, environment, browser or Node.js, etc.).
@@ -31,7 +31,7 @@ If you don't within a few weeks, your issue will be closed for inactivity.
 
 ### ❗️ Propose a Change
 
-Please [file an issue using the feature request template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=feature&projects=&template=feature_request.md&title=).
+Please [file an issue using the feature request template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=type%3A+feature&projects=&template=03-feature-request.yml&title=%F0%9F%9A%80+Feature%3A+%3Cshort+description+of+the+feature%3E).
 Most importantly:
 
 - Let us know _what_ the proposed change is, in as much detail as you can
