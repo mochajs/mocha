@@ -57,8 +57,8 @@ You might want to know that:
 
 You might want to help:
 
-- New to contributing to Mocha? Check out this list of [good first issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3Agood-first-issue)
-- Mocha could use a hand with [these issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+- New to contributing to Mocha? Check out this list of [good first issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+- Mocha could use a hand with [these issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
 - The [maintainer's handbook](https://github.com/mochajs/mocha/blob/master/MAINTAINERS.md) explains how things get done
 
 Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXhER) if you want to help with:

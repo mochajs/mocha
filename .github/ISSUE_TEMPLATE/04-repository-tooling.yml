@@ -27,4 +27,4 @@ description: Report a bug or request an enhancement in the Mocha repository's in
 labels:
   - "area: repository-tooling"
 name: 🛠 Repository Tooling
-title: "🛠 Repository Tooling: <short description of the change>"
+title: "🛠 Repo: <short description of the change>"
