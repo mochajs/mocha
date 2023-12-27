@@ -1,40 +1,13 @@
-### Requirements
+<!-- 👋 Hi, thanks for sending a PR to mocha! 💖.
+Please fill out all fields below and make sure each item is true and [x] checked.
+Otherwise we may not be able to review your PR. -->
 
-* Filling out the template is required. Any pull request that does not include enough information to be reviewed in a timely manner may be closed at the maintainers' discretion.
-* All new code requires tests to ensure against regressions.
+## PR Checklist
 
-### Description of the Change
+- [ ] Addresses an existing open issue: fixes #000
+- [ ] That issue was marked as [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
+- [ ] Steps in [CONTRIBUTING.md](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md) were taken
 
-<!--
+## Overview
 
-We must be able to understand the design of your change from this description. Keep in mind that the maintainers and/or community members reviewing this PR may not be familiar with the subsystem. Please be verbose.
-
--->
-
-### Alternate Designs
-
-<!-- Explain what other alternates were considered and why the proposed version was selected -->
-
-### Why should this be in core?
-
-<!-- Explain why this functionality should be in mocha as opposed to its own package -->
-
-### Benefits
-
-<!-- What benefits will be realized by the code change? -->
-
-### Possible Drawbacks
-
-<!-- What are the possible side-effects or negative impacts of the code change? -->
-
-### Applicable issues
-
-<!--
-* Enter any applicable Issues here.
-
-* Mocha follows semantic versioning: http://semver.org
-
-* Is this a breaking change (major release)?
-* Is it an enhancement (minor release)?
-* Is it a bug fix, or does it not impact production code (patch release)?
--->
+<!-- Description of what is changed and how the code change does that. -->
