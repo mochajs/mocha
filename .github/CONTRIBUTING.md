@@ -59,10 +59,10 @@ We ask you please keep these goals in mind when making or proposing changes.
 
 _Excellent._ Here's how:
 
-- **Handy with JavaScript?** Please check out the issues labeled [`help wanted`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or [`good-first-issue`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Agood-first-issue).
+- **Handy with JavaScript?** Please check out the issues labeled [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or [`good first issue`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+).
   Try `npx good-first-issue mocha`!
 - **Can you write ~~good~~ well?** The [documentation](https://mochajs.org) almost always needs some love.
-  See the [doc-related issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3Adocumentation).
+  See the [doc-related issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+documentation%22).
 - **Design your thing?** [Our site](https://mochajs.org) needs your magic touch.
 - **Familiar with Mocha's codebase?** We could use your help triaging issues and/or reviewing pull requests.
   Please contact an [org member](https://github.com/orgs/mochajs/people), and we'll chat.
