@@ -104,7 +104,7 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "karma-sauce-launcher": "^4.1.4",
+    "karma-sauce-launcher": "^4.3.6",
     "lint-staged": "^10.2.11",
     "markdown-it": "^14.0.0",
     "markdown-it-anchor": "^8.6.7",
