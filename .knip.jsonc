@@ -1,0 +1,19 @@
+{
+  "$schema": "https://unpkg.com/knip@2/schema.json",
+  "entry": [
+    "bin/mocha.js!",
+    "bin/_mocha!",
+    "browser-entry.js!",
+    "index.js!",
+    ".eleventy.js",
+    "karma.conf.js",
+    "package-scripts.js"
+  ],
+  "ignoreDependencies": [
+    "karma-mocha",
+    "karma-mocha-reporter"
+  ],
+  "mocha": {
+    "entry": ["test/**/*.{js,ts,mjs,cjs}"]
+  }
+}
