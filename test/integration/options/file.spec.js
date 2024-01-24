@@ -1,9 +1,11 @@
 'use strict';
 
 var path = require('path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
-var resolvePath = helpers.resolveFixturePath;
+const {
+  runMochaJSON,
+  resolveFixturePath: resolvePath,
+  runMocha
+} = require('../helpers');
 
 describe('--file', function () {
   var args = [];
@@ -63,5 +65,24 @@ describe('--file', function () {
       expect(res, 'to have passed').and('to have passed test count', 1);
       done();
     });
+  });
+
+  it('should throw an ERR_MODULE_NOT_FOUND if a nonexistent file is specified', function (done) {
+    runMocha(
+      'esm/type-module/test-that-imports-non-existing-module.fixture.js',
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(res.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
+          'to contain',
+          'test-that-imports-non-existing-module'
+        );
+        done();
+      },
+      {stdio: 'pipe'}
+    );
   });
 });
