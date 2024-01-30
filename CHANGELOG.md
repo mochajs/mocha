@@ -1,3 +1,28 @@
+# 10.3.0-prerelease / 2024-01-18
+
+This is a prerelease version to test our ability to release.
+Other than removing or updating dependencies, it contains no intended user-facing changes.
+
+## :nut_and_bolt: Other
+
+- [#5069](https://github.com/mochajs/mocha/pull/5069): chore: remove unnecessary canvas dependency ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5068](https://github.com/mochajs/mocha/pull/5068): fix: add alt text to Built with Netlify badge ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5056](https://github.com/mochajs/mocha/pull/5056): chore: inline nyan reporter's write function ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5050](https://github.com/mochajs/mocha/pull/5050): docs: touchups to labels and a template title post-revamp ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5038](https://github.com/mochajs/mocha/pull/5038): docs: overhaul contributing and maintenance docs for end-of-year 2023 ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5029](https://github.com/mochajs/mocha/pull/5029): chore: remove stale workflow ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5024](https://github.com/mochajs/mocha/pull/5024): chore: remove nanoid as dependency ([**@Uzlopak**](https://github.com/Uzlopak))
+- [#5023](https://github.com/mochajs/mocha/pull/5023): chore: remove touch as dev dependency ([**@Uzlopak**](https://github.com/Uzlopak))
+- [#5022](https://github.com/mochajs/mocha/pull/5022): chore: remove uuid dev dependency ([**@Uzlopak**](https://github.com/Uzlopak))
+- [#5021](https://github.com/mochajs/mocha/pull/5021): update can-i-use ([**@Uzlopak**](https://github.com/Uzlopak))
+- [#5020](https://github.com/mochajs/mocha/pull/5020): chore: fix the ci ([**@Uzlopak**](https://github.com/Uzlopak))
+- [#4974](https://github.com/mochajs/mocha/pull/4974): Add Node v19 to test matrix ([**@juergba**](https://github.com/juergba))
+- [#4970](https://github.com/mochajs/mocha/pull/4970): fix [#4837](https://github.com/mochajs/mocha/issues/4837) Update glob due to vulnerability in dep ([**@jb2311**](https://github.com/jb2311))
+- [#4962](https://github.com/mochajs/mocha/pull/4962): Fix deprecated warn gh actions ([**@outsideris**](https://github.com/outsideris))
+- [#4927](https://github.com/mochajs/mocha/pull/4927): docs: use mocha.js instead of mocha in the example run ([**@nikolas**](https://github.com/nikolas))
+- [#4918](https://github.com/mochajs/mocha/pull/4918): docs: fix fragment ID for yargs' "extends" documentation ([**@Spencer-Doak**](https://github.com/Spencer-Doak))
+- [#4886](https://github.com/mochajs/mocha/pull/4886): docs: fix jsdoc return type of titlePath method ([**@F3n67u**](https://github.com/F3n67u))
+
 # 10.2.0 / 2022-12-11
 
 ## :tada: Enhancements
@@ -18,7 +43,7 @@
 
 - [#4896](https://github.com/mochajs/mocha/issues/4896): Browser: add support for `prefers-color-scheme: dark` ([**@greggman**](https://github.com/greggman))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4912](https://github.com/mochajs/mocha/issues/4912): Browser: increase contrast for replay buttons ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
 - [#4905](https://github.com/mochajs/mocha/issues/4905): Use standard `Promise.allSettled` instead of polyfill ([**@outsideris**](https://github.com/outsideris))
@@ -43,7 +68,7 @@
 
 - [#4861](https://github.com/mochajs/mocha/issues/4861): Remove deprecated `Runner` signature ([**@juergba**](https://github.com/juergba))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4878](https://github.com/mochajs/mocha/issues/4878): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
@@ -61,7 +86,7 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4839](https://github.com/mochajs/mocha/issues/4839): `dry-run`: prevent potential call-stack crash ([**@juergba**](https://github.com/juergba))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4843](https://github.com/mochajs/mocha/issues/4843): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
@@ -79,7 +104,7 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4813](https://github.com/mochajs/mocha/issues/4813): Parallel: assign each worker a worker-id ([**@forty**](https://github.com/forty))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4818](https://github.com/mochajs/mocha/issues/4818): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
@@ -89,7 +114,7 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4807](https://github.com/mochajs/mocha/issues/4807): `import` throws wrong error if loader is used ([**@giltayar**](https://github.com/giltayar))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4777](https://github.com/mochajs/mocha/issues/4777): Add Node v17 to CI test matrix ([**@outsideris**](https://github.com/outsideris))
 
@@ -99,7 +124,7 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4769](https://github.com/mochajs/mocha/issues/4769): Browser: re-enable `bdd` ES6 style import ([**@juergba**](https://github.com/juergba))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4764](https://github.com/mochajs/mocha/issues/4764): Revert deprecation of `EVENT_SUITE_ADD_*` events ([**@beatfactor**](https://github.com/beatfactor))
 
@@ -109,7 +134,7 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4746](https://github.com/mochajs/mocha/issues/4746): Browser: stop using all global vars in `browser-entry.js` ([**@PaperStrike**](https://github.com/PaperStrike))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4754](https://github.com/mochajs/mocha/issues/4754): Remove dependency wide-align ([**@juergba**](https://github.com/juergba))
 - [#4736](https://github.com/mochajs/mocha/issues/4736): ESM: remove code for Node versions <10 ([**@juergba**](https://github.com/juergba))
@@ -144,13 +169,13 @@ Also thanks to [**@ea2305**](https://github.com/ea2305) and [**@SukkaW**](https:
 
 - [#4668](https://github.com/mochajs/mocha/issues/4668): ESM: make `--require <dir>` work with new `import`-first loading ([**@giltayar**](https://github.com/giltayar))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4674](https://github.com/mochajs/mocha/issues/4674): Update production dependencies ([**@juergba**](https://github.com/juergba))
 
 # 9.0.1 / 2021-06-18
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4657](https://github.com/mochajs/mocha/issues/4657): Browser: add separate bundle for modern browsers ([**@juergba**](https://github.com/juergba))
 
@@ -182,7 +207,7 @@ We added a separate browser bundle `mocha-es2018.js` in javascript ES2018, as we
 
 - [#4128](https://github.com/mochajs/mocha/issues/4128): Fix: control stringification of error message ([**@syeutyu**](https://github.com/syeutyu))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4646](https://github.com/mochajs/mocha/issues/4646): Deprecate `Runner(suite: Suite, delay: boolean)` signature ([**@juergba**](https://github.com/juergba))
 - [#4643](https://github.com/mochajs/mocha/issues/4643): Update production dependencies ([**@juergba**](https://github.com/juergba))
@@ -242,7 +267,7 @@ Also thanks to [**@outsideris**](https://github.com/outsideris) for various impr
 - [#4503](https://github.com/mochajs/mocha/issues/4503): Add GH Actions workflow status badge ([**@outsideris**](https://github.com/outsideris))
 - [#4494](https://github.com/mochajs/mocha/issues/4494): Add example of generating tests dynamically with a closure ([**@maxwellgerber**](https://github.com/maxwellgerber))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4556](https://github.com/mochajs/mocha/issues/4556): Upgrade all dependencies to latest stable ([**@AviVahl**](https://github.com/AviVahl))
 - [#4543](https://github.com/mochajs/mocha/issues/4543): Update dependencies yargs and yargs-parser ([**@juergba**](https://github.com/juergba))
@@ -262,11 +287,11 @@ Also thanks to [**@akeating**](https://github.com/akeating) for a documentation 
 
 # 8.2.0 / 2020-10-16
 
-The major feature added in v8.2.0 is addition of support for [*global fixtures*](https://mochajs.org/#global-fixtures).
+The major feature added in v8.2.0 is addition of support for [_global fixtures_](https://mochajs.org/#global-fixtures).
 
-While Mocha has always had the ability to run setup and teardown via a hook (e.g., a `before()` at the top level of a test file) when running tests in serial, Mocha v8.0.0 added support for parallel runs. Parallel runs are *incompatible* with this strategy; e.g., a top-level `before()` would only run for the file in which it was defined.
+While Mocha has always had the ability to run setup and teardown via a hook (e.g., a `before()` at the top level of a test file) when running tests in serial, Mocha v8.0.0 added support for parallel runs. Parallel runs are _incompatible_ with this strategy; e.g., a top-level `before()` would only run for the file in which it was defined.
 
-With [global fixtures](https://mochajs.org/#global-fixtures), Mocha can now perform user-defined setup and teardown *regardless* of mode, and these fixtures are guaranteed to run *once and only once*. This holds for parallel mode, serial mode, and even "watch" mode (the teardown will run once you hit Ctrl-C, just before Mocha finally exits). Tasks such as starting and stopping servers are well-suited to global fixtures, but not sharing resources--global fixtures do *not* share context with your test files (but they do share context with each other).
+With [global fixtures](https://mochajs.org/#global-fixtures), Mocha can now perform user-defined setup and teardown _regardless_ of mode, and these fixtures are guaranteed to run _once and only once_. This holds for parallel mode, serial mode, and even "watch" mode (the teardown will run once you hit Ctrl-C, just before Mocha finally exits). Tasks such as starting and stopping servers are well-suited to global fixtures, but not sharing resources--global fixtures do _not_ share context with your test files (but they do share context with each other).
 
 Here's a short example of usage:
 
@@ -274,12 +299,12 @@ Here's a short example of usage:
 // fixtures.js
 
 // can be async or not
-exports.mochaGlobalSetup = async function() {
+exports.mochaGlobalSetup = async function () {
   this.server = await startSomeServer({port: process.env.TEST_PORT});
   console.log(`server running on port ${this.server.port}`);
 };
 
-exports.mochaGlobalTeardown = async function() {
+exports.mochaGlobalTeardown = async function () {
   // the context (`this`) is shared, but not with the test files
   await this.server.stop();
   console.log(`server on port ${this.server.port} stopped`);
@@ -301,7 +326,7 @@ For detailed information, please see the [documentation](https://mochajs.org/#gl
 - [#4434](https://github.com/mochajs/mocha/issues/4434): Output of `json` reporter now contains `speed` ("fast"/"medium"/"slow") property ([**@wwhurin**](https://github.com/wwhurin))
 - [#4464](https://github.com/mochajs/mocha/issues/4464): Errors thrown by serializer in parallel mode now have error codes ([**@evaline-ju**](https://github.com/evaline-ju))
 
-*For implementors of custom reporters:*
+_For implementors of custom reporters:_
 
 - [#4409](https://github.com/mochajs/mocha/issues/4409): Parallel mode and custom reporter improvements ([**@boneskull**](https://github.com/boneskull)):
   - Support custom worker-process-only reporters (`Runner.prototype.workerReporter()`); reporters should subclass `ParallelBufferedReporter` in `mocha/lib/nodejs/reporters/parallel-buffered`
@@ -347,11 +372,11 @@ Thanks to [**@AviVahl**](https://github.com/AviVahl), [**@donghoon-song**](https
 
 In this release, Mocha now builds its browser bundle with Rollup and Babel, which will provide the project's codebase more flexibility and consistency.
 
-While we've been diligent about backwards compatibility, it's *possible* consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you *do* encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug\&template=bug_report.md\&title=).
+While we've been diligent about backwards compatibility, it's _possible_ consumers of the browser bundle will encounter differences (other than an increase in the bundle size). If you _do_ encounter an issue with the build, please [report it here](https://github.com/mochajs/mocha/issues/new?labels=unconfirmed-bug&template=bug_report.md&title=).
 
 This release **does not** drop support for IE11.
 
-Other community contributions came from [**@Devjeel**](https://github.com/Devjeel), [**@Harsha509**](https://github.com/Harsha509) and [**@sharath2106**](https://github.com/sharath2106). *Thank you* to everyone who contributed to this release!
+Other community contributions came from [**@Devjeel**](https://github.com/Devjeel), [**@Harsha509**](https://github.com/Harsha509) and [**@sharath2106**](https://github.com/sharath2106). _Thank you_ to everyone who contributed to this release!
 
 > Do you read Korean? See [this guide to running parallel tests in Mocha](https://blog.outsider.ne.kr/1489), translated by our maintainer, [**@outsideris**](https://github.com/outsideris).
 
@@ -378,7 +403,7 @@ Other community contributions came from [**@Devjeel**](https://github.com/Devjee
 - [#4343](https://github.com/mochajs/mocha/issues/4343): Clean up some API docs ([**@craigtaub**](https://github.com/craigtaub))
 - [#4318](https://github.com/mochajs/mocha/issues/4318): Sponsor images are now self-hosted ([**@Munter**](https://github.com/Munter))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4293](https://github.com/mochajs/mocha/issues/4293): Use Rollup and Babel in build pipeline; add source map to published files ([**@Munter**](https://github.com/Munter))
 
@@ -392,7 +417,7 @@ The obligatory patch after a major.
 
 # 8.0.0 / 2020-06-10
 
-In this major release, Mocha adds the ability to *run tests in parallel*. Better late than never! Please note the **breaking changes** detailed below.
+In this major release, Mocha adds the ability to _run tests in parallel_. Better late than never! Please note the **breaking changes** detailed below.
 
 Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](https://github.com/nicojs) to the maintenance team!
 
@@ -429,17 +454,17 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 
 - [#4245](https://github.com/mochajs/mocha/issues/4245): Add ability to run tests in parallel for Node.js (see [docs](https://mochajs.org/#parallel-tests)) ([**@boneskull**](https://github.com/boneskull))
 
-  :exclamation: See also [#4244](https://github.com/mochajs/mocha/issues/4244); [Root Hook Plugins (docs)](https://mochajs.org/#root-hook-plugins) -- *root hooks must be defined via Root Hook Plugins to work in parallel mode*
+  :exclamation: See also [#4244](https://github.com/mochajs/mocha/issues/4244); [Root Hook Plugins (docs)](https://mochajs.org/#root-hook-plugins) -- _root hooks must be defined via Root Hook Plugins to work in parallel mode_
 
 - [#4304](https://github.com/mochajs/mocha/issues/4304): `--require` now works with ES modules ([**@JacobLey**](https://github.com/JacobLey))
 
-- [#4299](https://github.com/mochajs/mocha/issues/4299): In some circumstances, Mocha can run ES modules under Node.js v10 -- *use at your own risk!* ([**@giltayar**](https://github.com/giltayar))
+- [#4299](https://github.com/mochajs/mocha/issues/4299): In some circumstances, Mocha can run ES modules under Node.js v10 -- _use at your own risk!_ ([**@giltayar**](https://github.com/giltayar))
 
 ## :book: Documentation
 
 - [#4246](https://github.com/mochajs/mocha/issues/4246): Add documentation for parallel mode and Root Hook plugins ([**@boneskull**](https://github.com/boneskull))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4200](https://github.com/mochajs/mocha/issues/4200): Drop mkdirp and replace it with fs.mkdirSync ([**@HyunSangHan**](https://github.com/HyunSangHan))
 
@@ -471,7 +496,7 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 - [#4235](https://github.com/mochajs/mocha/issues/4235): Enable emoji on website; enable normal ul elements ([**@boneskull**](https://github.com/boneskull))
 - [#4272](https://github.com/mochajs/mocha/issues/4272): Fetch sponsors at build time, show ALL non-skeevy sponsors ([**@boneskull**](https://github.com/boneskull))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4249](https://github.com/mochajs/mocha/issues/4249): Refactoring improving encapsulation ([**@arvidOtt**](https://github.com/arvidOtt))
 - [#4242](https://github.com/mochajs/mocha/issues/4242): CI add job names, add Node.js v14 to matrix ([**@boneskull**](https://github.com/boneskull))
@@ -480,7 +505,7 @@ Let's welcome [**@giltayar**](https://github.com/giltayar) and [**@nicojs**](htt
 
 # 7.1.2 / 2020-04-26
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4251](https://github.com/mochajs/mocha/issues/4251): Prevent karma-mocha from stalling ([**@juergba**](https://github.com/juergba))
 - [#4222](https://github.com/mochajs/mocha/issues/4222): Update dependency mkdirp to v0.5.5 ([**@outsideris**](https://github.com/outsideris))
@@ -527,7 +552,7 @@ Mocha supports writing your test files as ES modules:
 
 - [#4058](https://github.com/mochajs/mocha/issues/4058): Manage author list in AUTHORS instead of `package.json` ([**@outsideris**](https://github.com/outsideris))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4138](https://github.com/mochajs/mocha/issues/4138): Upgrade ESLint v6.8 ([**@kaicataldo**](https://github.com/kaicataldo))
 
@@ -545,7 +570,7 @@ Mocha supports writing your test files as ES modules:
 - [#4146](https://github.com/mochajs/mocha/issues/4146): Update copyright & trademark notices per OJSF ([**@boneskull**](https://github.com/boneskull))
 - [#4140](https://github.com/mochajs/mocha/issues/4140): Fix broken links ([**@KyoungWan**](https://github.com/KyoungWan))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4133](https://github.com/mochajs/mocha/issues/4133): Print more descriptive error message ([**@Zirak**](https://github.com/Zirak))
 
@@ -575,7 +600,7 @@ Mocha supports writing your test files as ES modules:
 
 ## :fax: Deprecations
 
-These are *soft*-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
 
 - [#3968](https://github.com/mochajs/mocha/issues/3968): Deprecate legacy configuration via `mocha.opts` ([**@juergba**](https://github.com/juergba))
 
@@ -601,7 +626,7 @@ These are *soft*-deprecated, and will emit a warning upon use. Support will be r
 - [#4045](https://github.com/mochajs/mocha/issues/4045): Update README.md concerning GraphicsMagick installation ([**@HyunSangHan**](https://github.com/HyunSangHan))
 - [#3988](https://github.com/mochajs/mocha/issues/3988): Fix sponsors background color for readability ([**@outsideris**](https://github.com/outsideris))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#4118](https://github.com/mochajs/mocha/issues/4118): Update node-environment-flags to 1.0.6 ([**@kylef**](https://github.com/kylef))
 - [#4097](https://github.com/mochajs/mocha/issues/4097): Add GH Funding Metadata ([**@SheetJSDev**](https://github.com/SheetJSDev))
@@ -633,7 +658,7 @@ These are *soft*-deprecated, and will emit a warning upon use. Support will be r
 
 ## :bug: Fixes
 
-- [#3955](https://github.com/mochajs/mocha/issues/3955): tty.getWindowSize is not a function inside a "worker\_threads" worker ([**@1999**](https://github.com/1999))
+- [#3955](https://github.com/mochajs/mocha/issues/3955): tty.getWindowSize is not a function inside a "worker_threads" worker ([**@1999**](https://github.com/1999))
 - [#3970](https://github.com/mochajs/mocha/issues/3970): remove extraGlobals() ([**@juergba**](https://github.com/juergba))
 - [#3984](https://github.com/mochajs/mocha/issues/3984): Update yargs-unparser to v1.6.0 ([**@juergba**](https://github.com/juergba))
 - [#3983](https://github.com/mochajs/mocha/issues/3983): Package 'esm': spawn child-process for correct loading ([**@juergba**](https://github.com/juergba))
@@ -672,7 +697,7 @@ These are *soft*-deprecated, and will emit a warning upon use. Support will be r
 
 - [#3915](https://github.com/mochajs/mocha/issues/3915), [#3929](https://github.com/mochajs/mocha/issues/3929): Increase tests coverage for `--watch` options ([**@geigerzaehler**](https://github.com/geigerzaehler))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3953](https://github.com/mochajs/mocha/issues/3953): Collect test files later, prepares improvements to the `--watch` mode behavior ([**@geigerzaehler**](https://github.com/geigerzaehler))
 - [#3939](https://github.com/mochajs/mocha/issues/3939): Upgrade for npm audit ([**@boneskull**](https://github.com/boneskull))
@@ -724,7 +749,7 @@ These are *soft*-deprecated, and will emit a warning upon use. Support will be r
 
 ## :fax: Deprecations
 
-These are *soft*-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
 
 - [#3719](https://github.com/mochajs/mocha/issues/3719): Deprecate `this.skip()` for "after all" hooks ([**@juergba**](https://github.com/juergba))
 
@@ -750,7 +775,7 @@ and some regressions:
 - [#3807](https://github.com/mochajs/mocha/issues/3807): Mocha website HTML tweaks ([**@plroebuck**](https://github.com/plroebuck))
 - [#3793](https://github.com/mochajs/mocha/issues/3793): Update config file example ".mocharc.yml" ([**@cspotcode**](https://github.com/cspotcode))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3830](https://github.com/mochajs/mocha/issues/3830): Replace dependency "findup-sync" with "find-up" for faster startup ([**@cspotcode**](https://github.com/cspotcode))
 - [#3799](https://github.com/mochajs/mocha/issues/3799): Update devDependencies to fix many npm vulnerabilities ([**@XhmikosR**](https://github.com/XhmikosR))
@@ -775,7 +800,7 @@ These issues were regressions.
 - [#3754](https://github.com/mochajs/mocha/issues/3754): Mocha again finds `test.js` when run without arguments ([**@plroebuck**](https://github.com/plroebuck))
 - [#3756](https://github.com/mochajs/mocha/issues/3756): Mocha again supports third-party interfaces via `--ui` ([**@boneskull**](https://github.com/boneskull))
 - [#3755](https://github.com/mochajs/mocha/issues/3755): Fix broken `--watch` ([**@boneskull**](https://github.com/boneskull))
-- [#3759](https://github.com/mochajs/mocha/issues/3759): Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; *returning a non-`undefined` value from a `describe` callback is no longer considered deprecated* ([**@boneskull**](https://github.com/boneskull))
+- [#3759](https://github.com/mochajs/mocha/issues/3759): Fix unwelcome deprecation notice when Mocha run against languages (CoffeeScript) with implicit return statements; _returning a non-`undefined` value from a `describe` callback is no longer considered deprecated_ ([**@boneskull**](https://github.com/boneskull))
 
 ## :book: Documentation
 
@@ -811,7 +836,7 @@ These issues were regressions.
 
 - [#3652](https://github.com/mochajs/mocha/issues/3652): Switch from Jekyll to Eleventy ([**@Munter**](https://github.com/Munter))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3677](https://github.com/mochajs/mocha/issues/3677): Add error objects for createUnsupportedError and createInvalidExceptionError ([**@boneskull**](https://github.com/boneskull))
 - [#3733](https://github.com/mochajs/mocha/issues/3733): Removed unnecessary processing in post-processing hook ([**@wanseob**](https://github.com/wanseob))
@@ -841,7 +866,7 @@ Welcome [**@plroebuck**](https://github.com/plroebuck), [**@craigtaub**](https:/
   - `-d` is no longer an alias for `--debug`; `-d` is currently ignored
   - [#3275](https://github.com/mochajs/mocha/issues/3275): `--watch-extensions` no longer implies `js`; it must be explicitly added ([**@TheDancingCode**](https://github.com/TheDancingCode))
 - [#2908](https://github.com/mochajs/mocha/issues/2908): `tap` reporter emits error messages ([**@chrmod**](https://github.com/chrmod))
-- [#2819](https://github.com/mochajs/mocha/issues/2819): When conditionally skipping in a `before` hook, subsequent `before` hooks *and* tests in nested suites are now skipped ([**@bannmoore**](https://github.com/bannmoore))
+- [#2819](https://github.com/mochajs/mocha/issues/2819): When conditionally skipping in a `before` hook, subsequent `before` hooks _and_ tests in nested suites are now skipped ([**@bannmoore**](https://github.com/bannmoore))
 - [#627](https://github.com/mochajs/mocha/issues/627): Emit filepath in "timeout exceeded" exceptions where applicable ([**@boneskull**](https://github.com/boneskull))
 - [#3556](https://github.com/mochajs/mocha/issues/3556): `lib/template.html` has moved to `lib/browser/template.html` ([**@boneskull**](https://github.com/boneskull))
 - [#2576](https://github.com/mochajs/mocha/issues/2576): An exception is now thrown if Mocha fails to parse or find a `mocha.opts` at a user-specified path ([**@plroebuck**](https://github.com/plroebuck))
@@ -850,7 +875,7 @@ Welcome [**@plroebuck**](https://github.com/plroebuck), [**@craigtaub**](https:/
 
 ## :fax: Deprecations
 
-These are *soft*-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
+These are _soft_-deprecated, and will emit a warning upon use. Support will be removed in (likely) the next major version of Mocha:
 
 - `-gc` users should use `--gc-global` instead
 - Consumers of the function exported by `bin/options` should now use the `loadMochaOpts` or `loadOptions` (preferred) functions exported by the `lib/cli/options` module
@@ -887,7 +912,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
   - Support all allowed `node` flags as supported by the running version of `node` (also thanks to [**@demurgos**](https://github.com/demurgos))
   - Support any V8 flag by prepending `--v8-` to the flag name
   - All flags are also supported via config files, `package.json` properties, or `mocha.opts`
-  - Debug-related flags (e.g., `--inspect`) now *imply* `--no-timeouts`
+  - Debug-related flags (e.g., `--inspect`) now _imply_ `--no-timeouts`
   - Use of e.g., `--debug` will automatically invoke `--inspect` if supported by running version of `node`
 
 - Support negation of any Mocha-specific command-line flag by prepending `--no-` to the flag name
@@ -896,7 +921,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - `Mocha` constructor supports all options
 
-- `--extension` is now an alias for `--watch-extensions` and affects *non-watch-mode* test runs as well. For example, to run *only* `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
+- `--extension` is now an alias for `--watch-extensions` and affects _non-watch-mode_ test runs as well. For example, to run _only_ `test/*.coffee` (not `test/*.js`), you can do `mocha --require coffee-script/register --extensions coffee`.
 
 - [#3552](https://github.com/mochajs/mocha/issues/3552): `tap` reporter is now TAP13-capable ([**@plroebuck**](https://github.com/plroebuck) & [**@mollstam**](https://github.com/mollstam))
 
@@ -934,7 +959,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 - [#2819](https://github.com/mochajs/mocha/issues/2819): Update docs around skips and hooks ([**@bannmoore**](https://github.com/bannmoore))
 - Many improvements by [**@outsideris**](https://github.com/outsideris)
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3557](https://github.com/mochajs/mocha/issues/3557): Use `ms` userland module instead of hand-rolled solution ([**@gizemkeser**](https://github.com/gizemkeser))
 - Many CI fixes and other refactors by [**@plroebuck**](https://github.com/plroebuck)
@@ -954,7 +979,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 
 - [#3328](https://github.com/mochajs/mocha/pull/3328): Mocha-flavored [API docs](https://mochajs.org/api/)! ([@Munter](https://github.com/munter))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3330](https://github.com/mochajs/mocha/pull/3330): Use `Buffer.from()` ([@harrysarson](https://github.com/harrysarson))
 - [#3295](https://github.com/mochajs/mocha/pull/3295): Remove redundant folder ([@DavNej](https://github.com/DajNev))
@@ -981,7 +1006,7 @@ Enhancements introduced in [#3556](https://github.com/mochajs/mocha/issues/3556)
 - [#3323](https://github.com/mochajs/mocha/pull/3323): Publish actual [API documentation](https://mochajs.org/api/)! ([@dfberry](https://github.com/dfberry), [@Munter](https://github.com/munter))
 - [#3299](https://github.com/mochajs/mocha/pull/3299): Improve docs around exclusive tests ([@nicgirault](https://github.com/nicgirault))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3302](https://github.com/mochajs/mocha/pull/3302), [#3308](https://github.com/mochajs/mocha/pull/3308), [#3310](https://github.com/mochajs/mocha/pull/3310), [#3315](https://github.com/mochajs/mocha/pull/3315), [#3316](https://github.com/mochajs/mocha/pull/3316): Build matrix improvements ([more info](https://boneskull.com/mocha-and-travis-ci-build-stages/)) ([@outsideris](https://github.com/outsideris), [@boneskull](https://github.com/boneskull))
 - [#3272](https://github.com/mochajs/mocha/pull/3272): Refactor reporter tests ([@jMuzsik](https://github.com/jMuzsik))
@@ -1000,7 +1025,7 @@ Welcome [@outsideris](https://github.com/outsideris) to the team!
 - [#3133](https://github.com/mochajs/mocha/issues/3133): Improve docs regarding "pending" behavior ([@ematicipo](https://github.com/ematicipo))
 - [#3276](https://github.com/mochajs/mocha/pull/3276), [#3274](https://github.com/mochajs/mocha/pull/3274): Fix broken stuff in `CHANGELOG.md` ([@tagoro9](https://github.com/tagoro9), [@honzajavorek](https://github.com/honzajavorek))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3208](https://github.com/mochajs/mocha/issues/3208): Improve test coverage for AMD users ([@outsideris](https://github.com/outsideris))
 - [#3267](https://github.com/mochajs/mocha/pull/3267): Remove vestiges of PhantomJS from CI ([@anishkny](https://github.com/anishkny))
@@ -1020,13 +1045,13 @@ This patch features a fix to address a potential "low severity" [ReDoS vulnerabi
 
 - [#3266](https://github.com/mochajs/mocha/pull/3266): Bump `diff` to v3.5.0 ([@anishkny](https://github.com/anishkny))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3011](https://github.com/mochajs/mocha/issues/3011): Expose `generateDiff()` in `Base` reporter ([@harrysarson](https://github.com/harrysarson))
 
 # 5.0.2 / 2018-03-05
 
-This release fixes a class of tests which report as *false positives*. **Certain tests will now break**, though they would have previously been reported as passing. Details below. Sorry for the inconvenience!
+This release fixes a class of tests which report as _false positives_. **Certain tests will now break**, though they would have previously been reported as passing. Details below. Sorry for the inconvenience!
 
 ## :bug: Fixes
 
@@ -1047,13 +1072,13 @@ This release fixes a class of tests which report as *false positives*. **Certain
   });
   \`\`\`
 
-  Previously to this version, Mocha would have *silently swallowed* the `chaos!` exception, and you wouldn't know. Well, *now you know*. Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
+  Previously to this version, Mocha would have _silently swallowed_ the `chaos!` exception, and you wouldn't know. Well, _now you know_. Mocha cannot recover from this gracefully, so it will exit with a nonzero code.
 
-  **Maintainers of external reporters**: *If* a test of this class is encountered, the `Runner` instance will emit the `end` event *twice*; you *may* need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
+  **Maintainers of external reporters**: _If_ a test of this class is encountered, the `Runner` instance will emit the `end` event _twice_; you _may_ need to change your reporter to use `runner.once('end')` intead of `runner.on('end')`.
 
 - [#3093](https://github.com/mochajs/mocha/issues/3093): Fix stack trace reformatting problem ([@outsideris](https://github.com/outsideris))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3248](https://github.com/mochajs/mocha/issues/3248): Update `browser-stdout` to v1.3.1 ([@honzajavorek](https://github.com/honzajavorek))
 
@@ -1074,14 +1099,14 @@ Special thanks to [Wallaby.js](https://wallabyjs.com) for their continued suppor
 - [#3212](https://github.com/mochajs/mocha/pull/3212): Update [Wallaby.js](https://wallabyjs.com)-related docs ([@ArtemGovorov](https://github.com/ArtemGovorov))
 - [#3205](https://github.com/mochajs/mocha/pull/3205): Remove outdated cruft ([@boneskull](https://github.com/boneskull))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3224](https://github.com/mochajs/mocha/pull/3224): Add proper Wallaby.js config ([@ArtemGovorov](https://github.com/ArtemGovorov))
 - [#3230](https://github.com/mochajs/mocha/pull/3230): Update copyright year ([@josephlin55555](https://github.com/josephlin55555))
 
 # 5.0.0 / 2018-01-17
 
-Mocha starts off 2018 right by again dropping support for *unmaintained rubbish*.
+Mocha starts off 2018 right by again dropping support for _unmaintained rubbish_.
 
 Welcome [@vkarpov15](https://github.com/vkarpov15) to the team!
 
@@ -1112,7 +1137,7 @@ Welcome [@vkarpov15](https://github.com/vkarpov15) to the team!
 - [#3177](https://github.com/mochajs/mocha/pull/3177): Tweak `README.md` organization ([@xxczaki](https://github.com/xxczaki))
 - Misc updates ([@boneskull](https://github.com/boneskull))
 
-## :nut\_and\_bolt: Other
+## :nut_and_bolt: Other
 
 - [#3118](https://github.com/mochajs/mocha/issues/3118): Move TextMate Integration to [its own repo](https://github.com/mochajs/mocha.tmbundle) ([@Bamieh](https://github.com/Bamieh))
 - [#3185](https://github.com/mochajs/mocha/issues/3185): Add Node.js v9 to build matrix; remove v7 ([@xxczaki](https://github.com/xxczaki))
