@@ -67,7 +67,7 @@ describe('--file', function () {
     });
   });
 
-  it('should throw an ERR_MODULE_NOT_FOUND if a nonexistent file is specified', function (done) {
+  it('should log a warning if a nonexistent file is specified', function (done) {
     runMocha(
       'esm/type-module/test-that-imports-non-existing-module.fixture.js',
       ['--file'],
@@ -76,7 +76,7 @@ describe('--file', function () {
           return done(err);
         }
 
-        expect(res.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
+        expect(res.output, 'to contain', 'Warning: Cannot find test file').and(
           'to contain',
           'test-that-imports-non-existing-module'
         );
