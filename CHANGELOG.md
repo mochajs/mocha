@@ -1,3 +1,7 @@
+# 10.3.0 / 2024-02-08
+
+This is a stable release equivalent to [10.30.0-prerelease](#1030-prerelease--2024-01-18).
+
 # 10.3.0-prerelease / 2024-01-18
 
 This is a prerelease version to test our ability to release.
