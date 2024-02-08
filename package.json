@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "10.3.0-preminor.0",
+  "version": "10.3.0",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
