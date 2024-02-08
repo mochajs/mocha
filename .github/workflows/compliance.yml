@@ -1,0 +1,23 @@
+jobs:
+  compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mtfoley/pr-compliance-action@main
+        with:
+          body-auto-close: false
+          ignore-team-members: false
+
+name: Compliance
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - edited
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  pull-requests: write
