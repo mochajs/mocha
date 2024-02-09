@@ -211,8 +211,8 @@ For all issues, apply the following labels based on which area(s) the issue pert
 - `area: async`: Issues around Mocha's asynchronous usage
 - `area: browser`: Issues unique to a browser environment
 - `area: parallel`: Issues around Mocha's parallel mode
-- `area: qa`: Issues around Mocha's own test suite
 - `area: reporter`: Usually concerning Mocha's output
+- `area: repository tooling`: Issues around Mocha's CI, own test suite, or other internal tooling
 - `area: security`: Involving vulnerabilities, actual or potential
 - `area: windows`: Windows-specific issues, particularly around path discrepancies
 
@@ -221,13 +221,14 @@ Additionally:
 - `good first issue`: If the implementation is likely doable by someone who's never contributed to Mocha (or potentially any other open source project) before
 - `status: duplicate`: If an equivalent issue was already filed, add this label, close as not planned, and comment with something like `duplicate of #<other-issue-number>`
 - `status: in discussion`: Add this whenever the issue is blocked on community input and/or deeper discussions
+- `status: in triage`: Added on new issues; re-add this whenever the issue is awaiting maintainer attention
 - `status: waiting for author`: Add this whenever the issue is blocked on something from the author
 
 ### 🐛 Bugs
 
 Bug reports should include a way to reproduce the issue that someone who is not deeply familiar with Mocha can work with locally.
 
-Depending on that reproduction, add the following label(s) in addition to the auto-added `type: bug`:
+Depending on that reproduction, remove `status: in triage` and add the following label(s) in addition to the auto-added `type: bug`:
 
 - If the bug is valid and reproduction works: add `status: accepting prs`
 - If the bug might be valid but the reproduction isn't workable:
@@ -244,14 +245,14 @@ Depending on that reproduction, add the following label(s) in addition to the au
 
 Documentation reports should clearly indicate a gap or problem that should be addressed in documentation.
 Triage documentation issues similar to bugs and/or feature requests - documentation is its own form of product area.
-Keep the auto-added `area: documentation` label.
+Remove `status: in triage` and keep the auto-added `area: documentation` label.
 
 ### 🚀 Features
 
 Feature requests should include a compelling reason why we should spend the maintenance time on the feature.
 Given that Mocha is prioritizing stability over growth, this can be a high bar.
 
-Depending on the reasoning, add the following label(s) in addition to the auto-added `type: feature`:
+Depending on the reasoning, remove `status: in triage` and add the following label(s) in addition to the auto-added `type: feature`:
 
 - If the reasoning is valid and seems worth the maintenance cost: add `status: accepting prs`
 - If the reasoning is unclear:
@@ -268,12 +269,12 @@ Depending on the reasoning, add the following label(s) in addition to the auto-a
 
 Issues filed about improvements to Mocha's internal development processes.
 These can be more informally discussed by maintainers.
-Keep the auto-added `area: repository tooling`.
+Remove `status: in triage` and keep the auto-added `area: repository tooling`.
 
 ### ❓ Questions
 
 Our issue tracker is not the right place to ask questions.
-If an issue is filed that seems like it's more of a question, add the `type: question` label, politely direct the user to the [❓ Got a Question?](./.github/CONTRIBUTING.md#❓-got-a-question) section, and close the issue as not planned.
+If an issue is filed that seems like it's more of a question, remove `status: in triage`, add the `type: question` label, politely direct the user to the [❓ Got a Question?](./.github/CONTRIBUTING.md#❓-got-a-question) section, and close the issue as not planned.
 
 If it's _not_ a Mocha problem (people tend not to believe this), you may want to show a counter-example.
 It's often helpful to direct the issue author to the responsible project, if you can determine what that is.
@@ -405,7 +406,6 @@ _It's easier to release often._
 1. Back in your working copy, run `npm publish`.
    _If you're doing a prerelease, ensure that you use `--tag=next`._
 1. Announce the update on Twitter or just tell your dog or something.
-   New releases will be automatically tweeted by [@b0neskull](https://twitter.com/b0neskull) via a feed subscription to Mocha's "releases" page on GitHub.
 
 _Note: there are too many steps above._
 
