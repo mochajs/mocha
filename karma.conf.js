@@ -28,6 +28,7 @@ const rollupPlugin = require('./scripts/karma-rollup-plugin');
 const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;
 const hostname = os.hostname();
+const BROWSER = env.BROWSER;
 
 const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
@@ -90,8 +91,7 @@ module.exports = config => {
       const buildId = `github-${env.GITHUB_RUN_ID}_${env.GITHUB_RUN_NUMBER}`;
       bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, buildId);
       sauceConfig = {
-        build: buildId,
-        geckodriverVersion: '0.30.0' // temporary workaround for firefox
+        build: buildId
       };
     } else {
       console.error(`Local environment (${hostname}) detected`);
@@ -120,6 +120,13 @@ module.exports = config => {
     ...cfg,
     files: [...cfg.files, {pattern: './mocha.js.map', included: false}]
   };
+
+  if (BROWSER) {
+    cfg = {
+      ...cfg,
+      browsers: [BROWSER]
+    };
+  }
 
   config.set(cfg);
 };
@@ -172,7 +179,7 @@ const addSauceTests = (cfg, sauceLabs) => {
     const customLaunchers = sauceBrowsers.reduce((acc, sauceBrowser) => {
       const platformName = SAUCE_BROWSER_PLATFORM_MAP[sauceBrowser];
       const [browserName, browserVersion] = sauceBrowser.split('@');
-      return {
+      const result = {
         ...acc,
         [sauceBrowser]: {
           base: 'SauceLabs',
@@ -182,9 +189,13 @@ const addSauceTests = (cfg, sauceLabs) => {
           'sauce:options': sauceLabs
         }
       };
+      if (browserName === 'firefox') {
+        result[sauceBrowser]['sauce:options']['moz:debuggerAddress'] = true;
+      }
+      return result;
     }, {});
 
-    return {
+    const result = {
       ...cfg,
       reporters: [...cfg.reporters, 'saucelabs'],
       browsers: [...cfg.browsers, ...sauceBrowsers],
@@ -198,6 +209,7 @@ const addSauceTests = (cfg, sauceLabs) => {
       captureTimeout: 120000,
       browserNoActivityTimeout: 20000
     };
+    return result;
   }
   return {...cfg};
 };

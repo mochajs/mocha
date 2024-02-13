@@ -32,7 +32,7 @@
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const uuid = require('uuid');
+const {randomUUID} = require('crypto');
 const rollup = require('rollup');
 const minimatch = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile.js');
@@ -57,7 +57,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
       )
     );
 
-  const bundleFilename = `${uuid.v4()}.rollup.js`;
+  const bundleFilename = `${randomUUID()}.rollup.js`;
   let bundleLocation = path.resolve(
     pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
     bundleFilename

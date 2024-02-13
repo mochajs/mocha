@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation Website
+    about: Please read our documentation website before filing new issues.
+    url: https://mochajs.org
+  - name: Documentation Website > APIs
+    about: If you're using Mocha's API, see also the website's API docs.
+    url: https://mochajs.org/api
+  - name: Discord
+    about: Our Discord is the right place for quick informal questions.
+    url: https://discord.gg/KeDn2uXhER
+  - name: StackOverflow
+    about: For more questions, see the `mocha` tag on StackOverflow.
+    url: https://stackoverflow.com/questions/tagged/mocha

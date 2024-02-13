@@ -7,7 +7,6 @@ const {format} = require('util');
 const path = require('path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
-const touch = require('touch');
 
 /**
  * Path to `mocha` executable
@@ -479,6 +478,8 @@ async function runMochaWatchJSONAsync(args, opts, change) {
   );
 }
 
+const touchRef = new Date();
+
 /**
  * Synchronously touch a file. Creates
  * the file and all its parent directories if necessary.
@@ -487,7 +488,12 @@ async function runMochaWatchJSONAsync(args, opts, change) {
  */
 function touchFile(filepath) {
   fs.ensureDirSync(path.dirname(filepath));
-  touch.sync(filepath);
+  try {
+    fs.utimesSync(filepath, touchRef, touchRef);
+  } catch (e) {
+    const fd = fs.openSync(filepath, 'a');
+    fs.closeSync(fd);
+  }
 }
 
 /**
