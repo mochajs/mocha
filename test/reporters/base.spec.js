@@ -505,6 +505,32 @@ describe('Base reporter', function () {
     );
   });
 
+  it('should not get stuck in a hypothetical circular error cause trail', function () {
+    var err1 = {
+      message: 'Error',
+      stack: 'Error\nfoo\nbar',
+      showDiff: false,
+    };
+    var err2 = {
+      message: 'Cause1',
+      stack: 'Cause1\nbar\nfoo',
+      showDiff: false,
+      cause: err1
+    }
+    err1.cause = err2;
+
+    var test = makeTest(err1);
+
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+    expect(
+      errOut,
+      'to be',
+      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: <circular>'
+    );
+  });
+
   it('should not modify stack if it does not contain message', function () {
     var err = {
       message: 'Error',
