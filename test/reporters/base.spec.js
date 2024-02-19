@@ -477,60 +477,6 @@ describe('Base reporter', function () {
     expect(errOut, 'to be', '1) test title:');
   });
 
-  it('should append any error cause trail to stack traces', function () {
-    var err = {
-      message: 'Error',
-      stack: 'Error\nfoo\nbar',
-      showDiff: false,
-      cause: {
-        message: 'Cause1',
-        stack: 'Cause1\nbar\nfoo',
-        showDiff: false,
-        cause: {
-          message: 'Cause2',
-          stack: 'Cause2\nabc\nxyz',
-          showDiff: false
-        }
-      }
-    };
-    var test = makeTest(err);
-
-    list([test]);
-
-    var errOut = stdout.join('\n').trim();
-    expect(
-      errOut,
-      'to be',
-      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: Cause2\n  abc\n  xyz'
-    );
-  });
-
-  it('should not get stuck in a hypothetical circular error cause trail', function () {
-    var err1 = {
-      message: 'Error',
-      stack: 'Error\nfoo\nbar',
-      showDiff: false,
-    };
-    var err2 = {
-      message: 'Cause1',
-      stack: 'Cause1\nbar\nfoo',
-      showDiff: false,
-      cause: err1
-    }
-    err1.cause = err2;
-
-    var test = makeTest(err1);
-
-    list([test]);
-
-    var errOut = stdout.join('\n').trim();
-    expect(
-      errOut,
-      'to be',
-      '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: <circular>'
-    );
-  });
-
   it('should not modify stack if it does not contain message', function () {
     var err = {
       message: 'Error',
@@ -543,6 +489,108 @@ describe('Base reporter', function () {
 
     var errOut = stdout.join('\n').trim();
     expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
+  });
+
+  describe('error causes', function () {
+    it('should append any error cause trail to stack traces', function () {
+      var err = {
+        message: 'Error',
+        stack: 'Error\nfoo\nbar',
+        showDiff: false,
+        cause: {
+          message: 'Cause1',
+          stack: 'Cause1\nbar\nfoo',
+          showDiff: false,
+          cause: {
+            message: 'Cause2',
+            stack: 'Cause2\nabc\nxyz',
+            showDiff: false
+          }
+        }
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join('\n').trim();
+      expect(
+        errOut,
+        'to be',
+        '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: Cause2\n  abc\n  xyz'
+      );
+    });
+
+    it('should not get stuck in a hypothetical circular error cause trail', function () {
+      var err1 = {
+        message: 'Error',
+        stack: 'Error\nfoo\nbar',
+        showDiff: false,
+      };
+      var err2 = {
+        message: 'Cause1',
+        stack: 'Cause1\nbar\nfoo',
+        showDiff: false,
+        cause: err1
+      }
+      err1.cause = err2;
+
+      var test = makeTest(err1);
+
+      list([test]);
+
+      var errOut = stdout.join('\n').trim();
+      expect(
+        errOut,
+        'to be',
+        '1) test title:\n     Error\n  foo\n  bar\n     Caused by: Cause1\n  bar\n  foo\n     Caused by: <circular>'
+      );
+    });
+
+    it("should set an empty cause if neither 'inspect' nor 'message' is set", function () {
+      var err = {
+        message: 'Error',
+        stack: 'Error\nfoo\nbar',
+        showDiff: false,
+        cause: {
+          showDiff: false,
+        }
+      };
+
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join('\n').trim();
+      expect(
+        errOut,
+        'to be',
+        '1) test title:\n     Error\n  foo\n  bar\n     Caused by:'
+      );
+    });
+
+    it('should not add cause trail if error does not contain message', function () {
+      var err = {
+        message: 'Error',
+        stack: 'foo\nbar',
+        showDiff: false,
+        cause: {
+          message: 'Cause1',
+          stack: 'Cause1\nbar\nfoo',
+          showDiff: false,
+          cause: {
+            message: 'Cause2',
+            stack: 'Cause2\nabc\nxyz',
+            showDiff: false
+          }
+        }
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join('\n').trim();
+      expect(errOut, 'to be', '1) test title:\n     Error\n  foo\n  bar');
+    });
   });
 
   it('should list multiple Errors per test', function () {
