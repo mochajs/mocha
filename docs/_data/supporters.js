@@ -17,6 +17,7 @@
 
 'use strict';
 
+const {loadImage} = require('canvas');
 const {writeFile, mkdir, rm} = require('fs').promises;
 const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
@@ -114,6 +115,13 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
           );
         }
         debug('fetched %s', url);
+        const canvasImage = await loadImage(imageBuf);
+        debug('ok %s', url);
+        supporter.dimensions = {
+          width: canvasImage.width,
+          height: canvasImage.height
+        };
+        // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
         const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
         await writeFile(filePath, imageBuf);
         debug('wrote %s', filePath);
