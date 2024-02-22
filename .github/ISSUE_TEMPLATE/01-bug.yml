@@ -41,6 +41,7 @@ body:
     type: textarea
 description: Report a bug trying to run the code
 labels:
-  - "type: bug"
+  - 'status: in triage'
+  - 'type: bug'
 name: 🐛 Bug
-title: "🐛 Bug: <short description of the bug>"
+title: '🐛 Bug: <short description of the bug>'
