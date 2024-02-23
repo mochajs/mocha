@@ -21,6 +21,7 @@ body:
     type: textarea
 description: Report a typo or missing area of documentation
 labels:
-  - "area: documentation"
+  - 'area: documentation'
+  - 'status: in triage'
 name: 📝 Docs
-title: "📝 Docs: <short description of the request>"
+title: '📝 Docs: <short description of the request>'
