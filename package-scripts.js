@@ -259,7 +259,7 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
+          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck',
         description: 'Build documentation'
       },
       production: {
@@ -277,7 +277,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js docs/_dist >> docs/_dist/_headers',
+          'node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
