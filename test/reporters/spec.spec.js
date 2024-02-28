@@ -15,24 +15,22 @@ var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-describe('Spec reporter', function() {
+describe('Spec reporter', function () {
   var runReporter = makeRunReporter(Spec);
   var expectedTitle = 'expectedTitle';
-  var noop = function() {};
-  var sandbox;
+  var noop = function () {};
 
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
+  beforeEach(function () {
+    sinon.stub(Base, 'useColors').value(false);
   });
 
-  afterEach(function() {
-    sandbox.restore();
+  afterEach(function () {
+    sinon.restore();
   });
 
-  describe('event handlers', function() {
-    describe("on 'suite' event", function() {
-      it('should return title', function() {
+  describe('event handlers', function () {
+    describe("on 'suite' event", function () {
+      it('should return title', function () {
         var suite = {
           title: expectedTitle
         };
@@ -45,15 +43,15 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = [expectedTitle + '\n'];
         expect(stdout, 'to equal', expectedArray);
       });
     });
 
-    describe("on 'pending' event", function() {
-      it('should return title', function() {
+    describe("on 'pending' event", function () {
+      it('should return title', function () {
         var suite = {
           title: expectedTitle
         };
@@ -66,21 +64,21 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = ['  - ' + expectedTitle + '\n'];
         expect(stdout, 'to equal', expectedArray);
       });
     });
 
-    describe("on 'pass' event", function() {
-      describe('when test speed is slow', function() {
-        it('should return expected tick, title, and duration', function() {
+    describe("on 'pass' event", function () {
+      describe('when test speed is slow', function () {
+        it('should return expected tick, title, and duration', function () {
           var expectedDuration = 2;
           var test = {
             title: expectedTitle,
             duration: expectedDuration,
-            slow: function() {
+            slow: function () {
               return 1;
             }
           };
@@ -93,7 +91,7 @@ describe('Spec reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedString =
             '  ' +
@@ -108,13 +106,13 @@ describe('Spec reporter', function() {
         });
       });
 
-      describe('when test speed is fast', function() {
-        it('should return expected tick, title without a duration', function() {
+      describe('when test speed is fast', function () {
+        it('should return expected tick, title without a duration', function () {
           var expectedDuration = 1;
           var test = {
             title: expectedTitle,
             duration: expectedDuration,
-            slow: function() {
+            slow: function () {
               return 2;
             }
           };
@@ -127,7 +125,7 @@ describe('Spec reporter', function() {
           );
           var options = {};
           var stdout = runReporter({epilogue: noop}, runner, options);
-          sandbox.restore();
+          sinon.restore();
 
           var expectedString =
             '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
@@ -136,8 +134,8 @@ describe('Spec reporter', function() {
       });
     });
 
-    describe("on 'fail' event", function() {
-      it('should return title and function count', function() {
+    describe("on 'fail' event", function () {
+      it('should return title and function count', function () {
         var functionCount = 1;
         var test = {
           title: expectedTitle
@@ -151,7 +149,7 @@ describe('Spec reporter', function() {
         );
         var options = {};
         var stdout = runReporter({epilogue: noop}, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var expectedArray = [
           '  ' + functionCount + ') ' + expectedTitle + '\n'

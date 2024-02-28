@@ -3,12 +3,12 @@
 var assert = require('assert');
 var runMocha = require('./helpers').runMocha;
 var runMochaJSON = require('./helpers').runMochaJSON;
-var splitRegExp = require('./helpers').splitRegExp;
+var SPLIT_DOT_REPORTER_REGEXP = require('./helpers').SPLIT_DOT_REPORTER_REGEXP;
 var args = ['--reporter', 'dot'];
 
-describe('hooks', function() {
-  it('are ran in correct order', function(done) {
-    runMocha('cascade.fixture.js', args, function(err, res) {
+describe('hooks', function () {
+  it('are ran in correct order', function (done) {
+    runMocha('cascade.fixture.js', args, function (err, res) {
       var lines, expected;
 
       if (err) {
@@ -17,11 +17,11 @@ describe('hooks', function() {
       }
 
       lines = res.output
-        .split(splitRegExp)
-        .map(function(line) {
+        .split(SPLIT_DOT_REPORTER_REGEXP)
+        .map(function (line) {
           return line.trim();
         })
-        .filter(function(line) {
+        .filter(function (line) {
           return line.length;
         })
         .slice(0, -1);
@@ -42,7 +42,7 @@ describe('hooks', function() {
         'after one'
       ];
 
-      expected.forEach(function(line, i) {
+      expected.forEach(function (line, i) {
         assert.strictEqual(lines[i], line);
       });
 
@@ -51,8 +51,8 @@ describe('hooks', function() {
     });
   });
 
-  it('current test title of all hooks', function(done) {
-    runMochaJSON('current-test-title.fixture.js', [], function(err, res) {
+  it('current test title of all hooks', function (done) {
+    runMochaJSON('current-test-title.fixture.js', [], function (err, res) {
       if (err) {
         return done(err);
       }

@@ -12,13 +12,13 @@ var makeRunReporter = helpers.createRunReporterFunction;
 var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
 var EVENT_RUN_END = events.EVENT_RUN_END;
 
-describe('Min reporter', function() {
+describe('Min reporter', function () {
   var runReporter = makeRunReporter(Min);
-  var noop = function() {};
+  var noop = function () {};
 
-  describe('event handlers', function() {
-    describe("on 'start' event", function() {
-      it('should clear screen then set cursor position', function() {
+  describe('event handlers', function () {
+    describe("on 'start' event", function () {
+      it('should clear screen then set cursor position', function () {
         var runner = createMockRunner('start', EVENT_RUN_BEGIN);
         var options = {};
         var fakeThis = {
@@ -31,8 +31,8 @@ describe('Min reporter', function() {
       });
     });
 
-    describe("on 'end' event", function() {
-      it('should call epilogue', function() {
+    describe("on 'end' event", function () {
+      it('should call epilogue', function () {
         var fakeThis = {
           epilogue: sinon.stub().callsFake(noop)
         };

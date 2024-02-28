@@ -2,12 +2,12 @@
 
 var invokeMocha = require('./helpers').invokeMocha;
 
-describe('invalid arguments', function() {
-  describe('when argument is missing required value', function() {
-    it('should exit with failure', function(done) {
+describe('invalid arguments', function () {
+  describe('when argument is missing required value', function () {
+    it('should exit with failure', function (done) {
       invokeMocha(
         ['--ui'],
-        function(err, result) {
+        function (err, result) {
           if (err) {
             return done(err);
           }

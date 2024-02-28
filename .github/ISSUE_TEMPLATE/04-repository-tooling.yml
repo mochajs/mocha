@@ -1,0 +1,31 @@
+body:
+  - attributes:
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      label: Tooling Suggestion Checklist
+      options:
+        - label: I have tried restarting my IDE and the issue persists.
+          required: true
+        - label: I have pulled the latest `master` branch of the repository.
+          required: true
+        - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+          required: true
+        - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
+          required: true
+        - label: I want to provide a PR to resolve this
+    type: checkboxes
+  - attributes:
+      description: What did you expect to be able to do?
+      label: Overview
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: Any additional info you'd like to provide.
+      label: Additional Info
+    type: textarea
+description: Report a bug or request an enhancement in the Mocha repository's internal tooling
+labels:
+  - 'area: repository tooling'
+  - 'status: in triage'
+name: 🛠 Repository Tooling
+title: '🛠 Repo: <short description of the change>'

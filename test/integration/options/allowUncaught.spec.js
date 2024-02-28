@@ -5,15 +5,15 @@ var helpers = require('../helpers');
 var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--allow-uncaught', function() {
+describe('--allow-uncaught', function () {
   var args = ['--allow-uncaught'];
 
-  it('should throw an uncaught error and exit process', function(done) {
+  it('should throw an uncaught error and exit process', function (done) {
     var fixture = path.join('options', 'allow-uncaught', 'propagate');
     runMocha(
       fixture,
       args,
-      function(err, res) {
+      function (err, res) {
         if (err) {
           return done(err);
         }
@@ -28,9 +28,9 @@ describe('--allow-uncaught', function() {
     );
   });
 
-  it('should run with conditional `this.skip()`', function(done) {
+  it('should run with conditional `this.skip()`', function (done) {
     var fixture = path.join('options', 'allow-uncaught', 'this-skip-it');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }

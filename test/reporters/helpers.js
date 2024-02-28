@@ -54,7 +54,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'start':
     case 'pending':
     case 'end':
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -66,7 +66,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'suite end':
     case 'test end':
       test = arg1;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
@@ -74,14 +74,14 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'fail two args':
       test = arg1;
       var expectedError = arg2;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test, expectedError);
         }
       };
     case 'start test':
       test = arg1;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -91,7 +91,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       };
     case 'suite suite end':
       var expectedSuite = arg1;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(expectedSuite);
         }
@@ -104,7 +104,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
       };
     case 'pass end':
       test = arg1;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
@@ -115,7 +115,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     case 'test end fail':
       test = arg1;
       var error = arg2;
-      return function(event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
@@ -124,7 +124,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         }
       };
     case 'fail end pass':
-      return function(event, callback) {
+      return function (event, callback) {
         test = arg1;
         if (event === ifStr1) {
           callback(test, {});
@@ -145,8 +145,8 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
 
 function makeTest(err) {
   return {
-    err: err,
-    titlePath: function() {
+    err,
+    titlePath: function () {
       return ['test title'];
     }
   };
@@ -163,20 +163,22 @@ function createElements(argObj) {
 function makeExpectedTest(
   expectedTitle,
   expectedFullTitle,
+  expectedFile,
   expectedDuration,
   currentRetry,
   expectedBody
 ) {
   return {
     title: expectedTitle,
-    fullTitle: function() {
+    fullTitle: function () {
       return expectedFullTitle;
     },
+    file: expectedFile,
     duration: expectedDuration,
-    currentRetry: function() {
+    currentRetry: function () {
       return currentRetry;
     },
-    slow: function() {}
+    slow: function () {}
   };
 }
 
@@ -196,12 +198,12 @@ function createRunReporterFunction(ctor) {
    * @param {boolean} [tee=false] - Whether to echo output to screen
    * @return {string[]} Lines of output written to `stdout`
    */
-  var runReporter = function(stubSelf, runner, options, tee) {
+  var runReporter = function (stubSelf, runner, options, tee) {
     var origStdoutWrite = process.stdout.write;
     var stdoutWriteStub = sinon.stub(process.stdout, 'write');
     var stdout = [];
 
-    var gather = function(chunk, enc, callback) {
+    var gather = function (chunk, enc, callback) {
       stdout.push(chunk);
       if (tee) {
         origStdoutWrite.call(process.stdout, chunk);
@@ -230,9 +232,9 @@ function createRunReporterFunction(ctor) {
 }
 
 module.exports = {
-  createElements: createElements,
-  createMockRunner: createMockRunner,
-  createRunReporterFunction: createRunReporterFunction,
-  makeExpectedTest: makeExpectedTest,
-  makeTest: makeTest
+  createElements,
+  createMockRunner,
+  createRunReporterFunction,
+  makeExpectedTest,
+  makeTest
 };

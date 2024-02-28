@@ -13,25 +13,25 @@ var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
 var EVENT_SUITE_END = events.EVENT_SUITE_END;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
-describe('Markdown reporter', function() {
+describe('Markdown reporter', function () {
   var runReporter = makeRunReporter(Markdown);
   var expectedTitle = 'expected title';
   var expectedFullTitle = 'full title';
   var sluggedFullTitle = 'full-title';
-  var noop = function() {};
+  var noop = function () {};
 
-  describe('event handlers', function() {
-    describe("on 'suite' event", function() {
-      it("should write expected slugged titles on 'end' event", function() {
+  describe('event handlers', function () {
+    describe("on 'suite' event", function () {
+      it("should write expected slugged titles on 'end' event", function () {
         var expectedSuite = {
           title: expectedTitle,
-          fullTitle: function() {
+          fullTitle: function () {
             return expectedFullTitle;
           },
           suites: [
             {
               title: expectedTitle,
-              fullTitle: function() {
+              fullTitle: function () {
                 return expectedFullTitle;
               },
               suites: []
@@ -67,11 +67,11 @@ describe('Markdown reporter', function() {
       });
     });
 
-    describe("on 'pass' event", function() {
-      it("should write test code inside js code block, on 'end' event", function() {
+    describe("on 'pass' event", function () {
+      it("should write test code inside js code block, on 'end' event", function () {
         var expectedSuite = {
           title: expectedTitle,
-          fullTitle: function() {
+          fullTitle: function () {
             return expectedFullTitle;
           },
           suites: []
@@ -81,11 +81,11 @@ describe('Markdown reporter', function() {
         var expectedBody = 'some body';
         var expectedTest = {
           title: expectedTitle,
-          fullTitle: function() {
+          fullTitle: function () {
             return expectedFullTitle;
           },
           duration: expectedDuration,
-          currentRetry: function() {
+          currentRetry: function () {
             return currentRetry;
           },
           slow: noop,

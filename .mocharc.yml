@@ -1,7 +1,14 @@
-require: test/setup
-ui: bdd
+require: 'test/setup'
+ui: 'bdd'
 global:
-  - okGlobalA,okGlobalB
-  - okGlobalC
-  - callback*
-timeout: 300
+  - 'okGlobalA,okGlobalB'
+  - 'okGlobalC'
+  - 'callback*'
+timeout: 1000
+watch-ignore:
+  - '.*'
+  - 'docs/_dist/**'
+  - 'docs/_site/**'
+  - 'node_modules'
+  - 'coverage'
+  - 'cache'

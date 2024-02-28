@@ -17,32 +17,30 @@ var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-describe('List reporter', function() {
-  var sandbox;
+describe('List reporter', function () {
   var runReporter = makeRunReporter(List);
   var expectedTitle = 'some title';
   var expectedDuration = 100;
-  var noop = function() {};
+  var noop = function () {};
   var test = {
-    fullTitle: function() {
+    fullTitle: function () {
       return expectedTitle;
     },
     duration: expectedDuration,
     slow: noop
   };
 
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-    sandbox.stub(Base, 'useColors').value(false);
+  beforeEach(function () {
+    sinon.stub(Base, 'useColors').value(false);
   });
 
-  afterEach(function() {
-    sandbox.restore();
+  afterEach(function () {
+    sinon.restore();
   });
 
-  describe('event handlers', function() {
-    describe("on 'start' and 'test' events", function() {
-      it('should write expected newline and title', function() {
+  describe('event handlers', function () {
+    describe("on 'start' and 'test' events", function () {
+      it('should write expected newline and title', function () {
         var runner = createMockRunner(
           'start test',
           EVENT_RUN_BEGIN,
@@ -55,7 +53,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         var startString = '\n';
         var testString = '    ' + expectedTitle + ': ';
@@ -64,8 +62,8 @@ describe('List reporter', function() {
       });
     });
 
-    describe("on 'pending' event", function() {
-      it('should write expected title', function() {
+    describe("on 'pending' event", function () {
+      it('should write expected title', function () {
         var runner = createMockRunner(
           'pending test',
           EVENT_TEST_PENDING,
@@ -78,20 +76,20 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(stdout[0], 'to equal', '  - ' + expectedTitle + '\n');
       });
     });
 
-    describe("on 'pass' event", function() {
+    describe("on 'pass' event", function () {
       var crStub;
 
-      beforeEach(function() {
-        crStub = sandbox.stub(Base.cursor, 'CR').callsFake(noop);
+      beforeEach(function () {
+        crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
-      it('should call cursor CR', function() {
+      it('should call cursor CR', function () {
         var runner = createMockRunner(
           'pass',
           EVENT_TEST_PASS,
@@ -104,14 +102,14 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
 
-      it('should write expected symbol, title, and duration', function() {
+      it('should write expected symbol, title, and duration', function () {
         var expectedOkSymbol = 'OK';
-        sandbox.stub(Base.symbols, 'ok').value(expectedOkSymbol);
+        sinon.stub(Base.symbols, 'ok').value(expectedOkSymbol);
 
         var runner = createMockRunner(
           'pass',
@@ -125,7 +123,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(
           stdout[0],
@@ -141,14 +139,14 @@ describe('List reporter', function() {
       });
     });
 
-    describe("on 'fail' event", function() {
+    describe("on 'fail' event", function () {
       var crStub;
 
-      beforeEach(function() {
-        crStub = sandbox.stub(Base.cursor, 'CR').callsFake(noop);
+      beforeEach(function () {
+        crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
-      it('should call cursor CR', function() {
+      it('should call cursor CR', function () {
         var runner = createMockRunner(
           'fail',
           EVENT_TEST_FAIL,
@@ -161,12 +159,12 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
 
-      it('should write expected error number and title', function() {
+      it('should write expected error number and title', function () {
         var expectedErrorCount = 1;
         var runner = createMockRunner(
           'fail',
@@ -180,7 +178,7 @@ describe('List reporter', function() {
           epilogue: noop
         };
         var stdout = runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(
           stdout[0],
@@ -189,7 +187,7 @@ describe('List reporter', function() {
         );
       });
 
-      it('should immediately construct fail strings', function() {
+      it('should immediately construct fail strings', function () {
         var actual = {a: 'actual'};
         var expected = {a: 'expected'};
         var checked = false;
@@ -203,7 +201,7 @@ describe('List reporter', function() {
           null,
           test
         );
-        runner.on = runner.once = function(event, callback) {
+        runner.on = runner.once = function (event, callback) {
           if (
             !checked &&
             event === 'fail' &&
@@ -222,22 +220,22 @@ describe('List reporter', function() {
           epilogue: noop
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(typeof err.actual, 'to be', 'string');
         expect(typeof err.expected, 'to be', 'string');
       });
     });
 
-    describe("on 'end' event", function() {
-      it('should call epilogue', function() {
+    describe("on 'end' event", function () {
+      it('should call epilogue', function () {
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         var fakeThis = {
           epilogue: sinon.spy()
         };
         runReporter(fakeThis, runner, options);
-        sandbox.restore();
+        sinon.restore();
 
         expect(fakeThis.epilogue.calledOnce, 'to be true');
       });

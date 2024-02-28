@@ -1,0 +1,39 @@
+body:
+  - attributes:
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      label: Feature Request Checklist
+      options:
+        - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+          required: true
+        - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
+          required: true
+        - label: I want to provide a PR to resolve this
+    type: checkboxes
+  - attributes:
+      description: What is the feature gap or problem you'd like to address?
+      label: Overview
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: How would you like to solve this need?
+      label: Suggested Solution
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: What other features or solutions have you also considered?
+      label: Alternatives
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: Any additional info you'd like to provide.
+      label: Additional Info
+    type: textarea
+description: Request that a new feature be added or an existing feature improved
+labels:
+  - 'status: in triage'
+  - 'type: feature'
+name: 🚀 Feature
+title: '🚀 Feature: <short description of the feature>'

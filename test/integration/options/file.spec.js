@@ -5,7 +5,7 @@ var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 var resolvePath = helpers.resolveFixturePath;
 
-describe('--file', function() {
+describe('--file', function () {
   var args = [];
   var fixtures = {
     alpha: path.join('options', 'file-alpha'),
@@ -13,11 +13,11 @@ describe('--file', function() {
     theta: path.join('options', 'file-theta')
   };
 
-  it('should run tests passed via file first', function(done) {
+  it('should run tests passed via file first', function (done) {
     args = ['--file', resolvePath(fixtures.alpha)];
 
     var fixture = fixtures.beta;
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -28,7 +28,7 @@ describe('--file', function() {
     });
   });
 
-  it('should run multiple tests passed via file first', function(done) {
+  it('should run multiple tests passed via file first', function (done) {
     args = [
       '--file',
       resolvePath(fixtures.alpha),
@@ -37,7 +37,7 @@ describe('--file', function() {
     ];
 
     var fixture = fixtures.theta;
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -53,10 +53,10 @@ describe('--file', function() {
     });
   });
 
-  it('should support having no other test files', function(done) {
+  it('should support having no other test files', function (done) {
     args = ['--file', resolvePath(fixtures.alpha)];
 
-    runMochaJSON('filethatdoesnotexist.js', args, function(err, res) {
+    runMochaJSON('filethatdoesnotexist.js', args, function (err, res) {
       if (err) {
         return done(err);
       }

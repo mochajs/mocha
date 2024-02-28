@@ -12,19 +12,19 @@ describe('diffs', function () {
   it('should display a diff for small strings', function () {
     actual = 'foo rar baz';
     expected = 'foo bar baz';
-    assert.equal(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 
   it('should display a diff of canonicalized objects', function () {
     actual = { name: 'travis j', age: 23 };
     expected = { age: 23, name: 'travis' };
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 
   it('should display a diff for medium strings', function () {
     actual = 'foo bar baz\nfoo rar baz\nfoo bar raz';
     expected = 'foo bar baz\nfoo bar baz\nfoo bar baz';
-    assert.equal(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 
   it('should display a diff for entire object dumps', function () {
@@ -44,13 +44,13 @@ describe('diffs', function () {
         country: 'us'
       }
     };
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 
   it('should display a diff for multi-line strings', function () {
     actual = 'one two three\nfour zzzz six\nseven eight nine';
     expected = 'one two three\nfour five six\nseven eight nine';
-    assert.equal(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 
   it('should display a diff for entire object dumps', function () {
@@ -70,17 +70,17 @@ describe('diffs', function () {
         country: 'us'
       }
     };
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 
   it('should display a full-comparison with escaped special characters', function () {
     actual = 'one\ttab\ntwo\t\t\ttabs';
     expected = 'one\ttab\ntwo\t\ttabs';
-    assert.equal(actual, expected);
+    assert.strictEqual(actual, expected);
   });
 
   it('should display a word diff for large strings', function () {
-    assert.equal(cssin, cssout);
+    assert.strictEqual(cssin, cssout);
   });
 
   it('should work with objects', function () {
@@ -98,18 +98,18 @@ describe('diffs', function () {
       age: 2
     };
 
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 
   it('should show value diffs and not be affected by commas', function () {
     actual = { a: 123 };
     expected = { a: 123, b: 456 };
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 
   it('should display diff by data and not like an objects', function () {
     actual = Buffer.from([0x01]);
     expected = Buffer.from([0x02]);
-    assert.deepEqual(actual, expected);
+    assert.deepStrictEqual(actual, expected);
   });
 });

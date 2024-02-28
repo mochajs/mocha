@@ -1,0 +1,11 @@
+node >= 14
+last 2 Chrome versions
+last 2 Edge versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Opera versions
+unreleased Chrome versions
+unreleased Edge versions
+unreleased Firefox versions
+unreleased Safari versions
+unreleased Opera versions
