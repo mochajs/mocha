@@ -17,7 +17,8 @@ module.exports = () => {
       },
       'package.json',
       'test/opts/mocha.opts',
-      'mocharc.yml'
+      'mocharc.yml',
+      '!lib/browser/growl.js'
     ],
     filesWithNoCoverageCalculated: [
       'test/**/*.fixture.js',
@@ -36,7 +37,7 @@ module.exports = () => {
       // running mocha instance is not the same as mocha under test,
       // running mocha is the project's source code mocha, mocha under test is instrumented version of the source code
       const runningMocha = wallaby.testFramework;
-      runningMocha.timeout(200);
+      runningMocha.timeout(1000);
       // to expose it/describe etc. on the mocha under test
       const MochaUnderTest = require('./');
       const mochaUnderTest = new MochaUnderTest();
@@ -46,20 +47,9 @@ module.exports = () => {
         '',
         mochaUnderTest
       );
-      // to make test/node-unit/color.spec.js pass, we need to run mocha in the project's folder context
-      const childProcess = require('child_process');
-      const execFile = childProcess.execFile;
-      childProcess.execFile = function() {
-        let opts = arguments[2];
-        if (typeof opts === 'function') {
-          opts = {};
-          Array.prototype.splice.call(arguments, 2, 0, opts);
-        }
-        opts.cwd = wallaby.localProjectDir;
-        return execFile.apply(this, arguments);
-      };
       require('./test/setup');
     },
-    debug: true
+    debug: true,
+    runMode: 'onsave'
   };
 };

@@ -5,17 +5,17 @@ var helpers = require('../helpers');
 var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 
-describe('--forbid-pending', function() {
+describe('--forbid-pending', function () {
   var args = [];
   var pendingErrorMessage = 'Pending test forbidden';
 
-  before(function() {
+  before(function () {
     args = ['--forbid-pending'];
   });
 
-  it('should succeed if there are only passed tests', function(done) {
+  it('should succeed if there are only passed tests', function (done) {
     var fixture = path.join('options', 'forbid-pending', 'passed');
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -24,13 +24,13 @@ describe('--forbid-pending', function() {
     });
   });
 
-  it('should fail if there are tests in suites marked skip', function(done) {
+  it('should fail if there are tests in suites marked skip', function (done) {
     var fixture = path.join('options', 'forbid-pending', 'skip-suite');
     var spawnOpts = {stdio: 'pipe'};
     runMocha(
       fixture,
       args,
-      function(err, res) {
+      function (err, res) {
         if (err) {
           return done(err);
         }
@@ -44,13 +44,13 @@ describe('--forbid-pending', function() {
     );
   });
 
-  it('should fail if there is empty suite marked pending', function(done) {
+  it('should fail if there is empty suite marked pending', function (done) {
     var fixture = path.join('options', 'forbid-pending', 'skip-empty-suite');
     var spawnOpts = {stdio: 'pipe'};
     runMocha(
       fixture,
       args,
-      function(err, res) {
+      function (err, res) {
         if (err) {
           return done(err);
         }
@@ -72,14 +72,14 @@ describe('--forbid-pending', function() {
     'should fail if before calls `skip()`': 'before-this-skip'
   };
 
-  Object.keys(forbidPendingFailureTests).forEach(function(title) {
-    it(title, function(done) {
+  Object.keys(forbidPendingFailureTests).forEach(function (title) {
+    it(title, function (done) {
       var fixture = path.join(
         'options',
         'forbid-pending',
         forbidPendingFailureTests[title]
       );
-      runMochaJSON(fixture, args, function(err, res) {
+      runMochaJSON(fixture, args, function (err, res) {
         if (err) {
           return done(err);
         }

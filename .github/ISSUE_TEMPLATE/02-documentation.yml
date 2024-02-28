@@ -1,0 +1,27 @@
+body:
+  - attributes:
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      label: Documentation Request Checklist
+      options:
+        - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+          required: true
+        - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
+          required: true
+        - label: I want to provide a PR to resolve this
+    type: checkboxes
+  - attributes:
+      description: What would you like to report?
+      label: Overview
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: Any additional info you'd like to provide.
+      label: Additional Info
+    type: textarea
+description: Report a typo or missing area of documentation
+labels:
+  - 'area: documentation'
+  - 'status: in triage'
+name: 📝 Docs
+title: '📝 Docs: <short description of the request>'

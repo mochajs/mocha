@@ -1,0 +1,47 @@
+body:
+  - attributes:
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      label: Bug Report Checklist
+      options:
+        - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+          required: true
+        - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
+          required: true
+        - label: I have 'smoke tested' the code to be tested by running it outside the real test suite to get a better sense of whether the problem is in the code under test, my usage of Mocha, or Mocha itself.
+          required: true
+        - label: I want to provide a PR to resolve this
+    type: checkboxes
+  - attributes:
+      description: What did you expect to happen?
+      label: Expected
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: What happened instead?
+      label: Actual
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: Detail the steps necessary to reproduce the problem. To get the fastest support, create an [MCVE](https://stackoverflow.com/help/mcve) and upload it to GitHub.
+      label: Minimal, Reproducible Example
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: What do `mocha --version`, `node_modules/.bin/mocha --version`, and `node --version` output? What name and version of browser/environment, shell, and any other related modules such as transpilers are you using?.
+      label: Versions
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: Any additional info you'd like to provide.
+      label: Additional Info
+    type: textarea
+description: Report a bug trying to run the code
+labels:
+  - 'status: in triage'
+  - 'type: bug'
+name: 🐛 Bug
+title: '🐛 Bug: <short description of the bug>'
