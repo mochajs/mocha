@@ -517,7 +517,44 @@ describe('Base reporter', function () {
 
     var errOut = stdout.join('\n').trim();
 
-    expect(errOut, 'to contain', ' Error: 1', 'Error: 2');
+    // Handle removing system's specific error callStack
+    errOut = errOut
+      .split('\n')
+      .filter(line => !line.trim().startsWith('at '))
+      .join('\n')
+      .replace(/\n/g, '');
+
+    var expectedFormat = `1) :     ${aggErr.name}: ${aggErr.message}  1) :     ${err1.name}: ${err1.message}  2) :     ${err2.name}: ${err2.message}`;
+
+    expect(errOut, 'to equal', expectedFormat);
+  });
+
+  it('should handle Aggregate Error Objects with 0 errors properly', function () {
+    var aggErr = new AggregateError([], ' 0 errors');
+
+    var test = makeTest(aggErr);
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+
+    var expectedFormat = aggErr.name + ': ' + aggErr.message;
+
+    expect(errOut, 'to contain', expectedFormat);
+  });
+
+  it('should handle non-Error types properly', function () {
+    var nonError = {name: 'NotAnError', message: 'This is not an error object'};
+    var aggErr = new AggregateError([nonError]);
+
+    var test = makeTest(aggErr);
+    list([test]);
+
+    assert.strictEqual(aggErr.errors.length, 1, 'Should contain one error');
+    assert.strictEqual(
+      aggErr.errors[0],
+      nonError,
+      'The non-Error object should be preserved in the errors array'
+    );
   });
 });
 
