@@ -2333,8 +2333,8 @@ $ mocha "./spec/**/*.js"
 
 [You should _always_ quote your globs in npm scripts][article-globbing]. If you
 use double quotes or single quotes, the [`node-glob`][npm-glob] module will
-handle its expansion. Single quotes are not supported on Windows, so you should
-avoid them. Note that UNIX shells will perform
+handle its expansion. Single quotes are not supported on Windows.
+Note that UNIX shells will perform
 [parameter expansion](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_02_03)
 within double quotes, so avoid using a dollar sign or backslash in any of your
 paths if you want to support UNIX.
