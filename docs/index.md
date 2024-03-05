@@ -298,7 +298,7 @@ describe('#find()', function () {
 
 ### Limitations of asynchronous callbacks
 
-You can use all three asynchronous patterns (`done`, `Promise`, and `async`/`await`) in callbacks for `it()` and for all hooks (`before()`, `after()`, `beforeEach()`, `afterEach()`), but `describe()` will not work correctly with an asynchronous callback -- it must be synchronous. This is because, in the "parsing" cycle all `describe` callbacks are excecuted and the test hierarchy (`runner`) is created, before any tests are run.
+You can use all three asynchronous patterns (`done`, `Promise`, and `async`/`await`) in callbacks for `it()` and for all hooks (`before()`, `after()`, `beforeEach()`, `afterEach()`), but `describe()` will not work correctly with an asynchronous callback -- it must be synchronous. This is because in the "parsing" cycle all `describe` callbacks are executed and the test hierarchy (`runner`) is created before any tests are run.
 
 ## Synchronous Code
 
