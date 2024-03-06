@@ -12,19 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'run-browser-test')
     steps:
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
-      - uses: actions/checkout@v3
+          node-version: lts/*
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
       - name: 'Cache node_modules'
         uses: actions/cache@v3
         with:
           path: '~/.npm'
-          key: "ubuntu-latest-node-full-v16-${{ hashFiles('**/package-lock.json') }}"
-          restore-keys: |
-            ubuntu-latest-node-full-v16-
+          key: "ubuntu-latest-node-full-lts-${{ hashFiles('**/package-lock.json') }}"
       - name: Install Dependencies
         run: npm ci
       - name: Run Browser Tests
