@@ -180,19 +180,19 @@ a.direct-link {
 
 ul {
   box-sizing: content-box;
-  margin-top: 20px;
-  padding: 0 15px;
 }
 
 ul.two-column {
   column-count: 2;
   column-gap: 30px;
+  margin-top: 20px;
+  padding: 0 15px;
 }
 
 ul.single-column,
 ul.single-column > li > ul {
   margin-top: 0;
-  padding-right: 0;
+  padding: 0 0 0 15px;
 }
 
 ul li {
