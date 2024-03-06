@@ -49,6 +49,7 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 ## Table of Contents
 
 {{ toc }}
+{:.two-column}
 
 ## Installation
 

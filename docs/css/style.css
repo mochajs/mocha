@@ -184,7 +184,6 @@ ul {
   padding: 0 15px;
 }
 
-h2#table-of-contents + ul,
 ul.two-column {
   column-count: 2;
   column-gap: 30px;
