@@ -629,6 +629,22 @@ describe('Runner', function () {
             });
             runner.fail(hook, err);
           });
+
+          it('should prettify stack-traces in error cause trail', function (done) {
+            var hook = new Hook();
+            hook.parent = suite;
+            var causeErr = new Error();
+            // Fake stack-trace
+            causeErr.stack = stack.join('\n');
+            var err = new Error();
+            err.cause = causeErr;
+
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
+              expect(_err.cause.stack, 'to be', stack.slice(0, 3).join('\n'));
+              done();
+            });
+            runner.fail(hook, err);
+          });
         });
 
         describe('long', function () {
@@ -643,6 +659,24 @@ describe('Runner', function () {
 
             runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
               expect(_err.stack, 'to be', stack.join('\n'));
+              done();
+            });
+            runner.fail(hook, err);
+          });
+
+          it('should display full stack-traces in error cause trail', function (done) {
+            var hook = new Hook();
+            hook.parent = suite;
+            var causeErr = new Error();
+            // Fake stack-trace
+            causeErr.stack = stack.join('\n');
+            var err = new Error();
+            err.cause = causeErr;
+            // Add --stack-trace option
+            runner.fullStackTrace = true;
+
+            runner.on(EVENT_TEST_FAIL, function (_hook, _err) {
+              expect(_err.cause.stack, 'to be', stack.join('\n'));
               done();
             });
             runner.fail(hook, err);
