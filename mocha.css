@@ -334,20 +334,47 @@ body {
   z-index: 1;
 }
 
-#mocha-stats .progress {
+#mocha-stats .progress-contain {
   float: right;
-  padding-top: 0;
+  padding: 0;
+}
 
-  /**
-   * Set safe initial values, so mochas .progress does not inherit these
-   * properties from Bootstrap .progress (which causes .progress height to
-   * equal line height set in Bootstrap).
-   */
-  height: auto;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  background-color: initial;
+#mocha-stats .progress-element {
+  visibility: hidden;
+  width: 40px;
+  height: 20px;
+  position: absolute;
+  top: 11px; /* padding */
+  display: block;
+}
+
+#mocha-stats .progress-text {
+  text-align: center;
+  position: absolute;
+  width: 40px;
+  display: block;
+  top: 11px; /* padding */
+}
+
+#mocha-stats .progress-ring {
+  width: 40px;
+  height: 40px;
+}
+
+#mocha-stats .ring-whole, #mocha-stats .ring-highlight {
+  cx: 20px; /* half of width */
+  cy: 20px; /* half of height */
+  r: 19px; /* radius - stroke */
+  fill: var(--mocha-bg-color);
+  stroke-width: 2px;
+}
+
+#mocha-stats .ring-whole {
+  stroke: var(--mocha-stats-color);
+}
+
+#mocha-stats .ring-highlight {
+  stroke: var(--mocha-stats-em-color);
 }
 
 #mocha-stats em {
