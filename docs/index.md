@@ -2333,7 +2333,7 @@ $ mocha "./spec/**/*.js"
 
 You should _always_ quote your globs in npm scripts. If you
 use quotes, the [`node-glob`][npm-glob] module will
-handle its expansion. To support popular platforms, you must
+handle its expansion. For maximum compatibility,
 surround the entire expression with double quotes and refrain
 from `$`, `"`, `^`, and `\` within your expression.
 
