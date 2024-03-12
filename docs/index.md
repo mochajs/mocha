@@ -2331,13 +2331,11 @@ Some shells support recursive matching by using the globstar (`**`) wildcard. Ba
 $ mocha "./spec/**/*.js"
 ```
 
-[You should _always_ quote your globs in npm scripts][article-globbing]. If you
-use double quotes or single quotes, the [`node-glob`][npm-glob] module will
-handle its expansion. Single quotes are not supported on Windows.
-Note that UNIX shells will perform
-[parameter expansion](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_02_03)
-within double quotes, so avoid using a dollar sign or backslash in any of your
-paths if you want to support UNIX.
+You should _always_ quote your globs in npm scripts. If you
+use quotes, the [`node-glob`][npm-glob] module will
+handle its expansion. To support popular platforms, you must
+surround the entire expression with double quotes and refrain
+from `$`, `"`, `^`, and `\` within your expression.
 
 See this [tutorial][gist-globbing-tutorial] on using globs.
 
@@ -2430,7 +2428,6 @@ For discussions join the [Google Group][google-mocha]. For a running example of 
 or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 
 [//]: # 'Cross reference section'
-[article-globbing]: https://medium.com/@jakubsynowiec/you-should-always-quote-your-globs-in-npm-scripts-621887a2a784
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 [better-assert]: https://github.com/visionmedia/better-assert
 [caniuse-notifications]: https://caniuse.com/#feat=notifications
