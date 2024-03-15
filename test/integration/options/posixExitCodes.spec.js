@@ -4,7 +4,6 @@ var helpers = require('../helpers');
 var runMocha = helpers.runMocha;
 
 describe('--posix-exit-codes', function () {
-  // subprocess
   var mocha;
 
   function killSubprocess() {
