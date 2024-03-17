@@ -30,6 +30,7 @@ describe('XUnit reporter', function () {
   var expectedLine = 'some-line';
   var expectedClassName = 'fullTitle';
   var expectedTitle = 'some title';
+  var expectedFile = 'testFile.spec.js';
   var expectedMessage = 'some message';
   var expectedDiff =
     '\n      + expected - actual\n\n      -foo\n      +bar\n      ';
@@ -325,6 +326,7 @@ describe('XUnit reporter', function () {
         var expectedTest = {
           state: STATE_FAILED,
           title: expectedTitle,
+          file: expectedFile,
           parent: {
             fullTitle: function () {
               return expectedClassName;
@@ -347,6 +349,8 @@ describe('XUnit reporter', function () {
           expectedClassName +
           '" name="' +
           expectedTitle +
+          '" file="' +
+          expectedFile +
           '" time="1"><failure>' +
           expectedMessage +
           '\n' +
@@ -365,6 +369,7 @@ describe('XUnit reporter', function () {
         var expectedTest = {
           state: STATE_FAILED,
           title: expectedTitle,
+          file: expectedFile,
           parent: {
             fullTitle: function () {
               return expectedClassName;
@@ -402,6 +407,7 @@ describe('XUnit reporter', function () {
             return true;
           },
           title: expectedTitle,
+          file: expectedFile,
           parent: {
             fullTitle: function () {
               return expectedClassName;
@@ -418,6 +424,8 @@ describe('XUnit reporter', function () {
           expectedClassName +
           '" name="' +
           expectedTitle +
+          '" file="' +
+          expectedFile +
           '" time="1"><skipped/></testcase>';
         expect(expectedWrite, 'to be', expectedTag);
       });
@@ -431,6 +439,7 @@ describe('XUnit reporter', function () {
             return false;
           },
           title: expectedTitle,
+          file: expectedFile,
           parent: {
             fullTitle: function () {
               return expectedClassName;
@@ -447,6 +456,8 @@ describe('XUnit reporter', function () {
           expectedClassName +
           '" name="' +
           expectedTitle +
+          '" file="' +
+          expectedFile +
           '" time="0"/>';
         expect(expectedWrite, 'to be', expectedTag);
       });
