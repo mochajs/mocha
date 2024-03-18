@@ -936,6 +936,10 @@ Define a global variable name. For example, suppose your app deliberately expose
 
 By using this option in conjunction with `--check-leaks`, you can specify a whitelist of known global variables that you _expect_ to leak into global scope.
 
+### `--posix-exit-codes`
+
+Exits with standard POSIX exit codes instead of the number of faled tests.
+
 ### `--retries <n>`
 
 Retries failed tests `n` times.
