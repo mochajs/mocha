@@ -110,9 +110,10 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   proc.on('exit', (code, signal) => {
     process.on('exit', () => {
       if (signal) {
+        const numericSignal =
+          typeof signal === 'string' ? os.constants.signals[signal] : signal;
         if (mochaArgs['posix-exit-codes'] === true) {
-          process.exitCode = 128 + os.constants.signals[signal];
-          process.exit(process.exitCode);
+          process.exit(128 + numericSignal);
         } else {
           process.kill(process.pid, signal);
         }
