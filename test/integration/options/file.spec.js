@@ -77,10 +77,11 @@ describe('--file', function () {
           return done(err);
         }
 
-        expect(res.output, 'to contain', 'Warning: Cannot find test file').and(
+        expect(
+          res.output,
           'to contain',
-          nonexistentTestFileArg
-        );
+          'Warning: Cannot find any files matching pattern'
+        ).and('to contain', nonexistentTestFileArg);
         done();
       },
       {stdio: 'pipe'}
