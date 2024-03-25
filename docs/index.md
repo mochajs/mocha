@@ -965,7 +965,7 @@ By using this option in conjunction with `--check-leaks`, you can specify a whit
 
 ### `--posix-exit-codes`
 
-Exits with standard POSIX exit codes instead of the number of faled tests.
+Exits with standard POSIX exit codes instead of the number of failed tests.
 
 ### `--retries <n>`
 
