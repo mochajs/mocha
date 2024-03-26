@@ -1,5 +1,32 @@
 # Changelog
 
+## 10.4.0 / 2024-03-26
+
+### :tada: Enhancements
+
+- [#4829](https://github.com/mochajs/mocha/pull/4829) feat: include `.cause` stacks in the error stack traces ([**@voxpelli**](https://github.com/voxpelli))
+- [#4985](https://github.com/mochajs/mocha/pull/4985) feat: add file path to xunit reporter ([**@bmish**](https://github.com/bmish))
+
+### :bug: Fixes
+
+- [#5074](https://github.com/mochajs/mocha/pull/5074) fix: harden error handling in `lib/cli/run.js` ([**@stalet**](https://github.com/stalet))
+
+### :nut_and_bolt: Other
+
+- [#5077](https://github.com/mochajs/mocha/pull/5077) chore: add mtfoley/pr-compliance-action ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5060](https://github.com/mochajs/mocha/pull/5060) chore: migrate ESLint config to flat config ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5095](https://github.com/mochajs/mocha/pull/5095) chore: revert [#5069](https://github.com/mochajs/mocha/pull/5069) to restore Netlify builds ([**@voxpelli**](https://github.com/voxpelli))
+- [#5097](https://github.com/mochajs/mocha/pull/5097) docs: add sponsored to sponsorship link rels ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5093](https://github.com/mochajs/mocha/pull/5093) chore: add 'status: in triage' label to issue templates and docs ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5083](https://github.com/mochajs/mocha/pull/5083) docs: fix CHANGELOG.md headings to start with a root-level h1 ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5100](https://github.com/mochajs/mocha/pull/5100) chore: fix header generation and production build crashes  ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5104](https://github.com/mochajs/mocha/pull/5104) chore: bump ESLint ecmaVersion to 2020 ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5116](https://github.com/mochajs/mocha/pull/5116) fix: eleventy template builds crash with 'unexpected token at ": string, msg..."' ([**@LcsK**](https://github.com/LcsK))
+- [#4869](https://github.com/mochajs/mocha/pull/4869) docs: fix documentation concerning glob expansion on UNIX ([**@binki**](https://github.com/binki))
+- [#5122](https://github.com/mochajs/mocha/pull/5122) test: fix xunit integration test ([**@voxpelli**](https://github.com/voxpelli))
+- [#5123](https://github.com/mochajs/mocha/pull/5123) chore: activate dependabot for workflows ([**@voxpelli**](https://github.com/voxpelli))
+- [#5125](https://github.com/mochajs/mocha/pull/5125) build(deps): bump the github-actions group with 2 updates ([**@dependabot**](https://github.com/dependabot))
+
 ## 10.3.0 / 2024-02-08
 
 This is a stable release equivalent to [10.30.0-prerelease](#1030-prerelease--2024-01-18).
