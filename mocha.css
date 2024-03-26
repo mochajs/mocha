@@ -331,7 +331,8 @@ body {
 }
 
 #mocha-stats {
-  --ring-size: 40px;
+  --ring-container-size: 40px;
+  --ring-size: 39px;
   --ring-radius: calc(var(--ring-size) / 2);
 
   position: fixed;
@@ -349,7 +350,7 @@ body {
 }
 
 #mocha-stats :is(.progress-element, .progress-text) {
-  width: var(--ring-size);
+  width: var(--ring-container-size);
   display: block;
   top: 12px;
   position: absolute;
@@ -357,7 +358,7 @@ body {
 
 #mocha-stats .progress-element {
   visibility: hidden;
-  height: calc(var(--ring-size) / 2);
+  height: calc(var(--ring-container-size) / 2);
 }
 
 #mocha-stats .progress-text {
@@ -369,14 +370,15 @@ body {
 }
 
 #mocha-stats .progress-ring {
-  width: var(--ring-size);
-  height: var(--ring-size);
+  width: var(--ring-container-size);
+  height: var(--ring-container-size);
 }
 
 #mocha-stats :is(.ring-flatlight, .ring-highlight) {
-  --stroke-thickness: 1px;
-  cx: var(--ring-radius);
-  cy: var(--ring-radius);
+  --stroke-thickness: 1.65px;
+  --center: calc(var(--ring-container-size) / 2);
+  cx: var(--center);
+  cy: var(--center);
   r: calc(var(--ring-radius) - calc(var(--stroke-thickness) / 2));
   fill: hsla(0, 0%, 0%, 0);
   stroke-width: var(--stroke-thickness);
