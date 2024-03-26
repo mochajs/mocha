@@ -145,6 +145,7 @@ describe('Runnable(title, fn)', function () {
       run.reset();
       expect(run.timedOut, 'to be false');
       expect(run._currentRetry, 'to be', 0);
+      expect(run._currentRepeat, 'to be', 1);
       expect(run.pending, 'to be false');
       expect(run.err, 'to be undefined');
       expect(run.state, 'to be undefined');
@@ -214,6 +215,14 @@ describe('Runnable(title, fn)', function () {
       var run = new Runnable();
       run.retries(1);
       expect(run.retries(), 'to be', 1);
+    });
+  });
+
+  describe('#repeats(n)', function () {
+    it('should set the number of repeats', function () {
+      var run = new Runnable();
+      run.repeats(3);
+      expect(run.repeats(), 'to be', 3);
     });
   });
 
