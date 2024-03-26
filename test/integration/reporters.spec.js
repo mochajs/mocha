@@ -211,7 +211,7 @@ describe('reporters', function () {
             return;
           }
 
-          var pattern = `^Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
+          var pattern = `Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
           expect(res, 'to satisfy', {
             code: 1,
             output: new RegExp(pattern, 'm')
