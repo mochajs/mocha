@@ -67,6 +67,19 @@ describe('--file', function () {
     });
   });
 
+  it('should run esm tests passed via file', function (done) {
+    const esmFile = 'collect-files.fixture.mjs';
+    const testArgs = ['--file', resolvePath(esmFile)];
+
+    runMochaJSON(esmFile, testArgs, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+      expect(res, 'to have passed');
+      done();
+    });
+  });
+
   it('should log a warning if a nonexistent file is specified', function (done) {
     const nonexistentTestFileArg = 'nonexistent.test.ts';
     runMocha(
@@ -80,8 +93,52 @@ describe('--file', function () {
         expect(
           res.output,
           'to contain',
-          'Warning: Cannot find any files matching pattern'
+          `Warning: Cannot find any files matching pattern`
         ).and('to contain', nonexistentTestFileArg);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
+
+  it('should provide warning for nonexistent cjs file extensions', function (done) {
+    const nonexistentCjsArg = 'nonexistent.test.js';
+
+    runMocha(
+      nonexistentCjsArg,
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(
+          res.output,
+          'to contain',
+          `Warning: Cannot find any files matching pattern`
+        ).and('to contain', nonexistentCjsArg);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
+
+  it('should provide warning for nonexistent esm file extensions', function (done) {
+    const nonexistentEsmArg = 'nonexistent.test.mjs';
+
+    runMocha(
+      nonexistentEsmArg,
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(
+          res.output,
+          'to contain',
+          `Warning: Cannot find any files matching pattern`
+        ).and('to contain', nonexistentEsmArg);
         done();
       },
       {stdio: 'pipe'}
