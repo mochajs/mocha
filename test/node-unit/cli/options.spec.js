@@ -42,9 +42,10 @@ describe('options', function () {
   /**
    * Order of priority:
    * 1. Command-line args
-   * 2. RC file (`.mocharc.js`, `.mocharc.ya?ml`, `mocharc.json`)
-   * 3. `mocha` prop of `package.json`
-   * 4. default rc
+   * 2. `MOCHA_OPTIONS` environment variable
+   * 3. RC file (`.mocharc.js`, `.mocharc.ya?ml`, `mocharc.json`)
+   * 4. `mocha` prop of `package.json`
+   * 5. default rc
    */
   describe('loadOptions()', function () {
     describe('when no parameter provided', function () {
@@ -408,6 +409,30 @@ describe('options', function () {
       });
     });
 
+    describe('env options', function () {
+      it('should parse flags from MOCHA_OPTIONS', function () {
+        readFileSync = sinon.stub().onFirstCall().returns('{}');
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns('/some/package.json');
+        sinon
+          .stub(process, 'env')
+          .value({MOCHA_OPTIONS: '--retries 42 --color'});
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync
+        });
+
+        expect(loadOptions(), 'to satisfy', {
+          retries: 42,
+          color: true
+        });
+      });
+    });
+
     describe('config priority', function () {
       it('should prioritize package.json over defaults', function () {
         readFileSync = sinon.stub();
@@ -473,6 +498,27 @@ describe('options', function () {
           'timeout',
           '500'
         );
+      });
+
+      it('should prioritize env over rc file', function () {
+        readFileSync = sinon.stub();
+        readFileSync.onFirstCall().returns('{}');
+        readFileSync.onSecondCall().returns('');
+        findConfig = sinon.stub().returns('/some/.mocharc.json');
+        loadConfig = sinon.stub().returns({retries: 300});
+        findupSync = sinon.stub().returns('/some/package.json');
+        sinon
+          .stub(process, 'env')
+          .value({MOCHA_OPTIONS: '--retries 800 --color'});
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync
+        });
+
+        expect(loadOptions(), 'to have property', 'retries', 800);
       });
     });
 
