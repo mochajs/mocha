@@ -44,8 +44,8 @@ describe('reporters', function () {
         'output=' + tmpFile
       ];
       var expectedOutput = [
-        '<testcase classname="suite" name="test1" time="',
-        '<testcase classname="suite" name="test2" time="',
+        '<testcase classname="suite" name="test1" file="',
+        '<testcase classname="suite" name="test2" file="',
         '</testsuite>'
       ];
 
