@@ -44,10 +44,12 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [before, after, before each, after each hooks](#hooks)
 - [arbitrary transpiler support (coffee-script etc)](#-compilers)
 - [TextMate bundle](#textmate)
+  {:.two-column}
 
 ## Table of Contents
 
 {{ toc }}
+{:.two-column}
 
 ## Installation
 
