@@ -12,7 +12,7 @@ name: Compliance
 on:
   pull_request:
     branches:
-      - master
+      - main
     types:
       - edited
       - opened

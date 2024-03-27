@@ -99,11 +99,11 @@ Then:
    - Add detail in subsequent lines.
    - A pre-commit hook will run which automatically formats your staged changes (and fixes any problems it can) with ESLint and Prettier.
      If ESLint fails to fix an issue, your commit will fail and you will need to manually correct the problem.
-1. <a name="up-to-date"/> (Optional) Ensure you are up-to-date with Mocha's `master` branch:
+1. <a name="up-to-date"/> (Optional) Ensure you are up-to-date with Mocha's `main` branch:
    - You can add an "upstream" remote repo using `git remote add upstream https://github.com/mochajs/mocha.git && git fetch upstream`.
-   - Navigate to your `master` branch using `git checkout master`.
-   - Pull changes from `upstream` using `git pull upstream master`.
-   - If any changes were pulled in, update your branch from `master` by switching back to your branch (`git checkout <your-branch>`) then merging using `git merge master`.
+   - Navigate to your `main` branch using `git checkout main`.
+   - Pull changes from `upstream` using `git pull upstream main`.
+   - If any changes were pulled in, update your branch from `main` by switching back to your branch (`git checkout <your-branch>`) then merging using `git merge main`.
 1. Push your changes to your fork; `git push origin`.
 1. In your browser, navigate to [mochajs/mocha](https://github.com/mochajs/mocha).
    You should see a notification about your recent changes in your fork's branch, with a (green?) button to create a pull request.
@@ -126,7 +126,7 @@ Now that the pull request exists, some tasks will be run on it:
 1. Be patient while your PR is reviewed.
    This can take a while.
    We may request changes, but don't be afraid to question them.
-1. Your PR might become conflicted with the code in `master`.
+1. Your PR might become conflicted with the code in `main`.
    If this is the case, you will need to [update your PR](#up-to-date) and resolve your conflicts.
 1. You don't need to make a new PR to any needed changes.
    Instead, commit on top of your changes, and push these to your fork's branch.
