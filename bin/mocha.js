@@ -10,6 +10,7 @@
  * @private
  */
 
+const os = require('os');
 const {loadOptions} = require('../lib/cli/options');
 const {
   unparseNodeFlags,
@@ -109,7 +110,13 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   proc.on('exit', (code, signal) => {
     process.on('exit', () => {
       if (signal) {
-        process.kill(process.pid, signal);
+        const numericSignal =
+          typeof signal === 'string' ? os.constants.signals[signal] : signal;
+        if (mochaArgs['posix-exit-codes'] === true) {
+          process.exit(128 + numericSignal);
+        } else {
+          process.kill(process.pid, signal);
+        }
       } else {
         process.exit(code);
       }
@@ -126,7 +133,7 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
     // be needed.
     if (!args.parallel || args.jobs < 2) {
       // win32 does not support SIGTERM, so use next best thing.
-      if (require('os').platform() === 'win32') {
+      if (os.platform() === 'win32') {
         proc.kill('SIGKILL');
       } else {
         // using SIGKILL won't cleanly close the output streams, which can result
