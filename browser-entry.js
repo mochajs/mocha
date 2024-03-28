@@ -71,8 +71,8 @@ process.listenerCount = function (name) {
 
 process.on = function (e, fn) {
   if (e === 'uncaughtException') {
-    global.onerror = function (err, url, line) {
-      fn(new Error(err + ' (' + url + ':' + line + ')'));
+    global.onerror = function (msg, url, line, col, err) {
+      fn(err || new Error(msg + ' (' + url + ':' + line + ':' + col + ')'));
       return !mocha.options.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
