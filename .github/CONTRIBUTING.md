@@ -79,10 +79,10 @@ Then:
 
 ### 🎋 Initial Creation
 
+1. Make sure the issue is labeled with [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+accepting+prs%22)
 1. Create a new branch in your working copy.
-   Give your branch a descriptive name, such as `issue/12345`: `git checkout -b issue/12345`.
 1. Make your changes and add them via `git add`.
-   - Your changes will likely be somewhere in `lib/`, `bin/` or `browser-entry.js` (if your changes are browser-specific).
+   - Your changes will likely be somewhere in `lib/`, `bin/`, or (if your changes are browser-specific) `browser-entry.js`.
    - Unit and/or integration **tests are required** for any code change.
      These live in `test/`.
    - **Do not modify** the root `mocha.js` file directly; it is automatically generated.
