@@ -42,5 +42,17 @@ describe('--posix-exit-codes', function () {
         done();
       });
     });
+
+    it('should exit with the number of failed tests', function (done) {
+      var fixture = 'failing.fixture.js'; // one failing test
+      var args = ['--no-warnings'];
+      runMocha(fixture, args, function postmortem(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res.code, 'to be', 1);
+        done();
+      });
+    });
   });
 });
