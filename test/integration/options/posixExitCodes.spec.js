@@ -4,7 +4,7 @@ var helpers = require('../helpers');
 var runMocha = helpers.runMocha;
 
 describe('--posix-exit-codes', function () {
-  describe('when enabled with node options', function () {
+  describe('when enabled, and with node options', function () {
     var args = ['--no-warnings', '--posix-exit-codes'];
 
     it('should exit with code 134 on SIGABRT', function (done) {
@@ -28,9 +28,20 @@ describe('--posix-exit-codes', function () {
         done();
       });
     });
+
+    it('should exit with code 0 even if there are test failures', function (done) {
+      var fixture = 'failing.fixture.js';
+      runMocha(fixture, args, function postmortem(err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res.code, 'to be', 0);
+        done();
+      });
+    });
   });
 
-  describe('when not enabled with node options', function () {
+  describe('when not enabled, and with node options', function () {
     it('should exit with code null on SIGABRT', function (done) {
       var fixture = 'signals-sigabrt.fixture.js';
       var args = ['--no-warnings'];
