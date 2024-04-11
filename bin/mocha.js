@@ -118,7 +118,7 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
           process.kill(process.pid, signal);
         }
       } else {
-        process.exit(code);
+        process.exit((mochaArgs['posix-exit-codes'] === true) ? 0 : code);
       }
     });
   });
