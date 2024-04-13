@@ -2218,6 +2218,12 @@ If no custom path was given, and if there are multiple configuration files in th
 
 The `MOCHA_OPTIONS` environment variable may be used to specify command line arguments. These arguments take priority over those found in configuration files.
 
+For example, setting the `bail` and `retries` options:
+
+```bash
+$ MOCHA_OPTIONS="--bail --retries 3" mocha
+```
+
 ### Merging
 
 Mocha will also _merge_ any options found in `package.json` into its run-time configuration. In case of conflict, the priority is:
