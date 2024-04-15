@@ -940,6 +940,14 @@ By using this option in conjunction with `--check-leaks`, you can specify a whit
 
 Exits with standard POSIX exit codes instead of the number of failed tests.
 
+Those exit codes are:
+
+* `0`: if all tests passed
+* `1`: if any test failed
+* `128 + <signal>` if given a signal, such as:
+  * 134: `SIGABRT` (`128 + 6`)
+  * 143: `SIGTERM` (`128 + 15`)
+
 ### `--retries <n>`
 
 Retries failed tests `n` times.
