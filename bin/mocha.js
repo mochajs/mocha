@@ -23,6 +23,9 @@ const {aliases} = require('../lib/cli/run-option-metadata');
 
 const mochaArgs = {};
 const nodeArgs = {};
+const EXIT_SUCCESS = 0;
+const EXIT_FAILURE = 1;
+const SIGNAL_OFFSET= 128;
 let hasInspect = false;
 
 const opts = loadOptions(process.argv.slice(2));
@@ -113,12 +116,14 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
         const numericSignal =
           typeof signal === 'string' ? os.constants.signals[signal] : signal;
         if (mochaArgs['posix-exit-codes'] === true) {
-          process.exit(128 + numericSignal);
+          process.exit(SIGNAL_OFFSET + numericSignal);
         } else {
           process.kill(process.pid, signal);
         }
+      } else if (code !== 0 && mochaArgs['posix-exit-codes'] === true) {
+        process.exit(EXIT_FAILURE);
       } else {
-        process.exit((mochaArgs['posix-exit-codes'] === true) ? 0 : code);
+        process.exit(code);
       }
     });
   });
