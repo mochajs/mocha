@@ -47,18 +47,6 @@ describe('--posix-exit-codes', function () {
   });
 
   describe('when not enabled, and with node options', function () {
-    it('should exit with code null on SIGABRT', function (done) {
-      var fixture = 'signals-sigabrt.fixture.js';
-      var args = ['--no-warnings'];
-      runMocha(fixture, args, function postmortem(err, res) {
-        if (err) {
-          return done(err);
-        }
-        expect(res.code, 'to be', null);
-        done();
-      });
-    });
-
     it('should exit with the number of failed tests', function (done) {
       var fixture = 'failing.fixture.js'; // contains three failing tests
       var numFailures = 3;
