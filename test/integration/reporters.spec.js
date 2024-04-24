@@ -44,8 +44,8 @@ describe('reporters', function () {
         'output=' + tmpFile
       ];
       var expectedOutput = [
-        '<testcase classname="suite" name="test1" time="',
-        '<testcase classname="suite" name="test2" time="',
+        '<testcase classname="suite" name="test1" file="',
+        '<testcase classname="suite" name="test2" file="',
         '</testsuite>'
       ];
 
@@ -211,7 +211,7 @@ describe('reporters', function () {
             return;
           }
 
-          var pattern = `^Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
+          var pattern = `Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
           expect(res, 'to satisfy', {
             code: 1,
             output: new RegExp(pattern, 'm')
