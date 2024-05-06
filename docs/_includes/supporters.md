@@ -6,7 +6,7 @@ Use Mocha at Work? Ask your manager or marketing team if they'd help [support](h
 {%- for supporter in supporters.sponsors -%}
   <li>
     {%- if supporter.website -%}
-    <a href="{{ supporter.website }}" target="_blank" rel="noopener">
+    <a href="{{ supporter.website }}" target="_blank" rel="noopener sponsored">
     {%- endif -%}
       <div class="sponsor" title="{{ supporter.name }}" style="width: {{ supporter.dimensions.width }}px; background-image: url(/images/supporters/{{ supporter.id }}.png?sprite=sponsors)"></div>
     {%- if supporter.website -%}
@@ -24,7 +24,7 @@ Find Mocha helpful? Become a [backer](https://opencollective.com/mochajs#support
 {%- for supporter in supporters.backers -%}
   <li>
     {%- if supporter.website -%}
-    <a href="{{ supporter.website }}" target="_blank" rel="noopener">
+    <a href="{{ supporter.website }}" target="_blank" rel="noopener sponsored">
     {%- endif -%}
       <div class="backer backer-{{ forloop.index }}" title="{{ supporter.name }}" style="background-image: url(/images/supporters/{{ supporter.id }}.png?sprite=backers)"></div>
     {%- if supporter.website -%}

@@ -37,7 +37,7 @@ function test(testName, mochaParams) {
 module.exports = {
   scripts: {
     build: {
-      script: `rollup -c`,
+      script: `rollup -c ./rollup.config.js`,
       description: 'Build browser bundle'
     },
     lint: {
@@ -73,7 +73,7 @@ module.exports = {
       }
     },
     clean: {
-      script: 'rimraf mocha.js',
+      script: 'rimraf mocha.js mocha.js.map',
       description: 'Clean browser bundle'
     },
     test: {
@@ -110,7 +110,7 @@ module.exports = {
         },
         qunit: {
           script: test('qunit', '--ui qunit test/interfaces/qunit.spec'),
-          description: 'Run Node.js QUnit interace tests',
+          description: 'Run Node.js QUnit interface tests',
           hiddenFromHelp: true
         },
         exports: {
@@ -121,7 +121,7 @@ module.exports = {
         unit: {
           script: test(
             'unit',
-            '"test/unit/*.spec.js" "test/node-unit/**/*.spec.js" --growl'
+            '"test/unit/*.spec.js" "test/node-unit/**/*.spec.js"'
           ),
           description: 'Run Node.js unit tests'
         },
@@ -142,7 +142,7 @@ module.exports = {
           script: test(
             'requires',
             [
-              '--require coffee-script/register',
+              '--require coffeescript/register',
               '--require test/require/a.js',
               '--require test/require/b.coffee',
               '--require test/require/c.js',
@@ -206,11 +206,12 @@ module.exports = {
       browser: {
         default: {
           script:
-            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.requirejs test.browser.webpack',
+            'nps clean build test.browser.unit test.browser.bdd test.browser.tdd test.browser.qunit test.browser.esm test.browser.webpack',
           description: 'Run browser tests'
         },
         unit: {
-          script: 'cross-env NODE_PATH=. karma start --single-run --colors',
+          script:
+            'cross-env NODE_PATH=. karma start ./karma.conf.js --single-run --colors',
           description: 'Run browser unit tests'
         },
         bdd: {
@@ -231,11 +232,6 @@ module.exports = {
         esm: {
           script: 'cross-env MOCHA_TEST=esm nps test.browser.unit',
           description: 'Run browser ES modules support test',
-          hiddenFromHelp: true
-        },
-        requirejs: {
-          script: 'cross-env MOCHA_TEST=requirejs nps test.browser.unit',
-          description: 'Run RequireJS compat test',
           hiddenFromHelp: true
         },
         webpack: {
@@ -263,7 +259,7 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck && node scripts/netlify-headers.js docs/_site >> docs/_site/_headers',
+          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck',
         description: 'Build documentation'
       },
       production: {
@@ -281,7 +277,7 @@ module.exports = {
       },
       postbuild: {
         script:
-          'buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers && node scripts/netlify-headers.js docs/_dist >> docs/_dist/_headers',
+          'node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers',
         description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
@@ -299,7 +295,7 @@ module.exports = {
       description: 'Update list of AUTHORS'
     },
     linkifyChangelog: {
-      script: 'node scripts/linkify-changelog.js',
+      script: 'node scripts/linkify-changelog.mjs',
       description: 'Add/update GitHub links in CHANGELOG.md'
     },
     version: {

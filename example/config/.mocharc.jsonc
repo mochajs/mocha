@@ -4,13 +4,12 @@
 // project's `package.json`.
 {
   "diff": true,
-  "extension": ["js"],
+  "extension": ["js","cjs","mjs"],
   "package": /* 📦 */ "./package.json",
   "reporter": /* 📋 */ "spec",
-  "slow": 75,
-  "timeout": 2000,
+  "slow": "75",
+  "timeout": "2000",
   "ui": "bdd",
-  // Camel-casing options are also accepted
-  "watchFiles": ["lib/**/*.js", "test/**/*.js"],
-  "watchIgnore": ["lib/vendor"]
+  "watch-files": ["lib/**/*.js", "test/**/*.js"],
+  "watch-ignore": ["lib/vendor"]
 }

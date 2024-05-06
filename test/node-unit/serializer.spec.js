@@ -8,29 +8,29 @@ const {
   SerializableWorkerResult
 } = require('../../lib/nodejs/serializer');
 
-describe('serializer', function() {
-  afterEach(function() {
+describe('serializer', function () {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('function', function() {
-    describe('serialize', function() {
-      describe('when passed a non-object value', function() {
-        it('should return the value', function() {
+  describe('function', function () {
+    describe('serialize', function () {
+      describe('when passed a non-object value', function () {
+        it('should return the value', function () {
           expect(serialize('knees & toes'), 'to be', 'knees & toes');
         });
       });
 
-      describe('when passed an object value', function() {
-        describe('w/o a `serialize` method', function() {
-          it('should return the value', function() {
+      describe('when passed an object value', function () {
+        describe('w/o a `serialize` method', function () {
+          it('should return the value', function () {
             const obj = {};
             expect(serialize(obj), 'to be', obj);
           });
         });
 
-        describe('having a `serialize` method', function() {
-          it('should return the result of the `serialize` method', function() {
+        describe('having a `serialize` method', function () {
+          it('should return the result of the `serialize` method', function () {
             const serializedObj = {foo: 'bar'};
             const obj = {serialize: sinon.stub().returns(serializedObj)};
             expect(serialize(obj), 'to be', serializedObj);
@@ -38,37 +38,37 @@ describe('serializer', function() {
         });
       });
 
-      describe('when not passed anything', function() {
-        it('should return `undefined`', function() {
+      describe('when not passed anything', function () {
+        it('should return `undefined`', function () {
           expect(serialize(), 'to be undefined');
         });
       });
     });
 
-    describe('deserialize', function() {
-      describe('when passed nothing', function() {
-        it('should return `undefined`', function() {
+    describe('deserialize', function () {
+      describe('when passed nothing', function () {
+        it('should return `undefined`', function () {
           expect(deserialize(), 'to be undefined');
         });
       });
 
-      describe('when passed a non-object value', function() {
-        it('should return the value', function() {
+      describe('when passed a non-object value', function () {
+        it('should return the value', function () {
           expect(deserialize(500), 'to be', 500);
         });
       });
 
-      describe('when passed an object value which is not a SerializedWorkerResult', function() {
-        it('should return the value', function() {
+      describe('when passed an object value which is not a SerializedWorkerResult', function () {
+        it('should return the value', function () {
           const obj = {};
           expect(deserialize(obj), 'to be', obj);
         });
       });
 
-      describe('when passed a SerializedWorkerResult object', function() {
+      describe('when passed a SerializedWorkerResult object', function () {
         // note that SerializedWorkerResult is an interface (typedef), not a class.
 
-        it('should return the result of `SerializableWorkerResult.deserialize` called on the value', function() {
+        it('should return the result of `SerializableWorkerResult.deserialize` called on the value', function () {
           const obj = Object.assign({}, SerializableWorkerResult.create());
           sinon.stub(SerializableWorkerResult, 'deserialize').returns('butts');
           deserialize(obj);
@@ -85,18 +85,18 @@ describe('serializer', function() {
     });
   });
 
-  describe('SerializableEvent', function() {
-    describe('constructor', function() {
-      describe('when called without `eventName`', function() {
-        it('should throw "invalid arg value" error', function() {
+  describe('SerializableEvent', function () {
+    describe('constructor', function () {
+      describe('when called without `eventName`', function () {
+        it('should throw "invalid arg value" error', function () {
           expect(() => new SerializableEvent(), 'to throw', {
             code: 'ERR_MOCHA_INVALID_ARG_TYPE'
           });
         });
       });
 
-      describe('when called with a non-object `rawObject`', function() {
-        it('should throw "invalid arg type" error', function() {
+      describe('when called with a non-object `rawObject`', function () {
+        it('should throw "invalid arg type" error', function () {
           expect(() => new SerializableEvent('blub', 'glug'), 'to throw', {
             code: 'ERR_MOCHA_INVALID_ARG_TYPE'
           });
@@ -104,22 +104,22 @@ describe('serializer', function() {
       });
     });
 
-    describe('instance method', function() {
-      describe('serialize', function() {
-        it('should mutate the instance in-place', function() {
+    describe('instance method', function () {
+      describe('serialize', function () {
+        it('should mutate the instance in-place', function () {
           const evt = SerializableEvent.create('foo');
           expect(evt.serialize(), 'to be', evt);
         });
 
-        it('should freeze the instance', function() {
+        it('should freeze the instance', function () {
           expect(
             Object.isFrozen(SerializableEvent.create('foo').serialize()),
             'to be true'
           );
         });
 
-        describe('when passed an object with a `serialize` method', function() {
-          it('should call the `serialize` method', function() {
+        describe('when passed an object with a `serialize` method', function () {
+          it('should call the `serialize` method', function () {
             const obj = {
               serialize: sinon.stub()
             };
@@ -128,8 +128,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object containing an object with a `serialize` method', function() {
-          it('should call the `serialize` method', function() {
+        describe('when passed an object containing an object with a `serialize` method', function () {
+          it('should call the `serialize` method', function () {
             const stub = sinon.stub();
             const obj = {
               nested: {
@@ -141,8 +141,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object containing a non-`serialize` method', function() {
-          it('should remove the method', function() {
+        describe('when passed an object containing a non-`serialize` method', function () {
+          it('should remove the method', function () {
             const obj = {
               func: () => {}
             };
@@ -157,8 +157,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object containing an array', function() {
-          it('should serialize the array', function() {
+        describe('when passed an object containing an array', function () {
+          it('should serialize the array', function () {
             const obj = {
               list: [{herp: 'derp'}, {bing: 'bong'}]
             };
@@ -170,8 +170,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an error', function() {
-          it('should serialize the error', function() {
+        describe('when passed an error', function () {
+          it('should serialize the error', function () {
             const obj = {};
             const err = new Error('monkeypants');
             expect(
@@ -189,7 +189,7 @@ describe('serializer', function() {
             );
           });
 
-          it('should retain own props', function() {
+          it('should retain own props', function () {
             const obj = {};
             const err = new Error('monkeypants');
             err.code = 'MONKEY';
@@ -209,7 +209,7 @@ describe('serializer', function() {
             );
           });
 
-          it('should not retain not-own props', function() {
+          it('should not retain not-own props', function () {
             const obj = {};
             const err = new Error('monkeypants');
             // eslint-disable-next-line no-proto
@@ -230,8 +230,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object containing a top-level prop with an Error value', function() {
-          it('should serialize the Error', function() {
+        describe('when passed an object containing a top-level prop with an Error value', function () {
+          it('should serialize the Error', function () {
             const obj = {
               monkeyError: new Error('pantsmonkey')
             };
@@ -248,8 +248,8 @@ describe('serializer', function() {
             });
           });
         });
-        describe('when passed an object containing a nested prop with an Error value', function() {
-          it('should serialize the Error', function() {
+        describe('when passed an object containing a nested prop with an Error value', function () {
+          it('should serialize the Error', function () {
             const obj = {
               nestedObj: {
                 monkeyError: new Error('pantsmonkey')
@@ -273,25 +273,25 @@ describe('serializer', function() {
       });
     });
 
-    describe('static method', function() {
-      describe('deserialize', function() {
-        describe('when passed a falsy parameter', function() {
-          it('should throw "invalid arg type" error', function() {
+    describe('static method', function () {
+      describe('deserialize', function () {
+        describe('when passed a falsy parameter', function () {
+          it('should throw "invalid arg type" error', function () {
             expect(SerializableEvent.deserialize, 'to throw', {
               code: 'ERR_MOCHA_INVALID_ARG_TYPE'
             });
           });
         });
 
-        it('should return a new object w/ null prototype', function() {
+        it('should return a new object w/ null prototype', function () {
           const obj = {bob: 'bob'};
           expect(SerializableEvent.deserialize(obj), 'to satisfy', obj)
             .and('not to equal', obj)
             .and('not to have property', 'constructor');
         });
 
-        describe('when passed value contains `data` prop', function() {
-          it('should ignore __proto__', function() {
+        describe('when passed value contains `data` prop', function () {
+          it('should ignore __proto__', function () {
             const obj = {
               data: Object.create(null)
             };
@@ -304,8 +304,8 @@ describe('serializer', function() {
             expect(SerializableEvent.deserialize(obj), 'to equal', expected);
           });
 
-          describe('when `data` prop contains a nested serialized Error prop', function() {
-            it('should create an Error instance from the nested serialized Error prop', function() {
+          describe('when `data` prop contains a nested serialized Error prop', function () {
+            it('should create an Error instance from the nested serialized Error prop', function () {
               const message = 'problems!';
               const stack = 'problem instructions';
               const code = 'EIEIO';
@@ -336,8 +336,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed value contains an `error` prop', function() {
-          it('should create an Error instance from the prop', function() {
+        describe('when passed value contains an `error` prop', function () {
+          it('should create an Error instance from the prop', function () {
             const message = 'problems!';
             const stack = 'problem instructions';
             const code = 'EIEIO';
@@ -363,13 +363,13 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed value data contains a prop beginning with "$$"', function() {
+        describe('when passed value data contains a prop beginning with "$$"', function () {
           let result;
 
-          beforeEach(function() {
+          beforeEach(function () {
             result = SerializableEvent.deserialize({data: {$$foo: 'bar'}});
           });
-          it('should create a new prop having a function value', function() {
+          it('should create a new prop having a function value', function () {
             expect(result, 'to satisfy', {
               data: {
                 foo: expect.it('to be a function')
@@ -377,21 +377,21 @@ describe('serializer', function() {
             });
           });
 
-          it('should create a new prop returning the original value', function() {
+          it('should create a new prop returning the original value', function () {
             expect(result.data.foo(), 'to equal', 'bar');
           });
 
-          it('should remove the prop with the "$$" prefix', function() {
+          it('should remove the prop with the "$$" prefix', function () {
             expect(result, 'not to have property', '$$foo');
           });
         });
 
-        describe('when the value data contains a prop with an array value', function() {
-          beforeEach(function() {
+        describe('when the value data contains a prop with an array value', function () {
+          beforeEach(function () {
             sinon.spy(SerializableEvent, '_deserializeObject');
           });
 
-          it('should deserialize each prop', function() {
+          it('should deserialize each prop', function () {
             const obj = {data: {foo: [{bar: 'baz'}]}};
             SerializableEvent.deserialize(obj);
             expect(
@@ -405,8 +405,8 @@ describe('serializer', function() {
         });
       });
 
-      describe('create', function() {
-        it('should instantiate a SerializableEvent', function() {
+      describe('create', function () {
+        it('should instantiate a SerializableEvent', function () {
           expect(
             SerializableEvent.create('some-event'),
             'to be a',
@@ -417,10 +417,10 @@ describe('serializer', function() {
     });
   });
 
-  describe('SerializableWorkerResult', function() {
-    describe('static method', function() {
-      describe('create', function() {
-        it('should return a new SerializableWorkerResult instance', function() {
+  describe('SerializableWorkerResult', function () {
+    describe('static method', function () {
+      describe('create', function () {
+        it('should return a new SerializableWorkerResult instance', function () {
           expect(
             SerializableWorkerResult.create(),
             'to be a',
@@ -429,9 +429,9 @@ describe('serializer', function() {
         });
       });
 
-      describe('isSerializedWorkerResult', function() {
-        describe('when passed an instance', function() {
-          it('should return `true`', function() {
+      describe('isSerializedWorkerResult', function () {
+        describe('when passed an instance', function () {
+          it('should return `true`', function () {
             expect(
               SerializableWorkerResult.isSerializedWorkerResult(
                 new SerializableWorkerResult()
@@ -441,8 +441,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object with an appropriate `__type` prop', function() {
-          it('should return `true`', function() {
+        describe('when passed an object with an appropriate `__type` prop', function () {
+          it('should return `true`', function () {
             // this is the most likely use-case, as the object is transmitted over IPC
             // and loses its prototype
             const original = new SerializableWorkerResult();
@@ -454,8 +454,8 @@ describe('serializer', function() {
           });
         });
 
-        describe('when passed an object without an appropriate `__type` prop', function() {
-          it('should return `false`', function() {
+        describe('when passed an object without an appropriate `__type` prop', function () {
+          it('should return `false`', function () {
             expect(
               SerializableWorkerResult.isSerializedWorkerResult({
                 mister: 'mister'
@@ -466,12 +466,12 @@ describe('serializer', function() {
         });
       });
 
-      describe('deserialize', function() {
-        beforeEach(function() {
+      describe('deserialize', function () {
+        beforeEach(function () {
           sinon.stub(SerializableEvent, 'deserialize');
         });
 
-        it('should call SerializableEvent#deserialize on each item in its `events` prop', function() {
+        it('should call SerializableEvent#deserialize on each item in its `events` prop', function () {
           const result = Object.assign(
             {},
             SerializableWorkerResult.create([
@@ -486,7 +486,7 @@ describe('serializer', function() {
           ]);
         });
 
-        it('should return the deserialized value', function() {
+        it('should return the deserialized value', function () {
           const result = Object.assign(
             {},
             SerializableWorkerResult.create([
@@ -503,16 +503,16 @@ describe('serializer', function() {
       });
     });
 
-    describe('instance method', function() {
-      describe('serialize', function() {
-        it('should return a read-only value', function() {
+    describe('instance method', function () {
+      describe('serialize', function () {
+        it('should return a read-only value', function () {
           expect(
             Object.isFrozen(SerializableWorkerResult.create().serialize()),
             'to be true'
           );
         });
 
-        it('should call `SerializableEvent#serialize` of each of its events', function() {
+        it('should call `SerializableEvent#serialize` of each of its events', function () {
           sinon.spy(SerializableEvent.prototype, 'serialize');
           const events = [
             SerializableEvent.create('foo'),
@@ -527,11 +527,11 @@ describe('serializer', function() {
         });
       });
     });
-    describe('constructor', function() {
+    describe('constructor', function () {
       // the following two tests should be combined into one, but not sure how to express
       // as a single assertion
 
-      it('should add a readonly `__type` prop', function() {
+      it('should add a readonly `__type` prop', function () {
         expect(
           new SerializableWorkerResult(),
           'to have readonly property',

@@ -5,7 +5,7 @@ var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 var resolvePath = helpers.resolveFixturePath;
 
-describe('--ignore', function() {
+describe('--ignore', function () {
   /*
    * Runs mocha in {path} with the given args.
    * Calls handleResult with the result.
@@ -16,7 +16,7 @@ describe('--ignore', function() {
    * @param {function} done
    */
   function runMochaTest(fixture, args, handleResult, done) {
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -26,12 +26,15 @@ describe('--ignore', function() {
     });
   }
 
-  it('should ignore specific files', function(done) {
+  it('should ignore specific files', function (done) {
     var fixtures = path.join('options', 'ignore', '*');
     runMochaTest(
       fixtures,
-      ['--ignore', resolvePath(path.join('options', 'ignore', 'fail'))],
-      function(res) {
+      [
+        '--ignore',
+        resolvePath(path.join('options', 'ignore', 'fail')).replace(/\\/g, '/')
+      ],
+      function (res) {
         expect(res, 'to have passed')
           .and('to have run test', 'should find this test')
           .and('not to have pending tests');
@@ -40,12 +43,12 @@ describe('--ignore', function() {
     );
   });
 
-  it('should ignore globbed files', function(done) {
+  it('should ignore globbed files', function (done) {
     var fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
       ['--ignore', '**/fail.fixture.js'],
-      function(res) {
+      function (res) {
         expect(res, 'to have passed')
           .and('not to have pending tests')
           .and('to have passed test count', 2);
@@ -54,17 +57,20 @@ describe('--ignore', function() {
     );
   });
 
-  it('should ignore multiple patterns', function(done) {
+  it('should ignore multiple patterns', function (done) {
     var fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
       [
         '--ignore',
-        resolvePath(path.join('options', 'ignore', 'fail')),
+        resolvePath(path.join('options', 'ignore', 'fail')).replace(/\\/g, '/'),
         '--ignore',
-        resolvePath(path.join('options', 'ignore', 'nested', 'fail'))
+        resolvePath(path.join('options', 'ignore', 'nested', 'fail')).replace(
+          /\\/g,
+          '/'
+        )
       ],
-      function(res) {
+      function (res) {
         expect(res, 'to have passed')
           .and('not to have pending tests')
           .and('to have passed test count', 2);

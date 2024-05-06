@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * This script gathers metadata for supporters of Mocha from OpenCollective's API by
- * aggregating order ("donation") information.
+ * This script gathers metadata for active supporters of Mocha from OpenCollective's
+ * API by aggregating order ("donation") information.
  *
- * It's intended to be used with 11ty, but can be run directly.  Running directly
+ * It's intended to be used with 11ty, but can be run directly. Running directly
  * enables debug output.
  *
  * - gathers logo/avatar images (they are always pngs)
  * - gathers links
- * - sorts by total contributions and tier
+ * - sorts by tier and total contributions
  * - validates images
  * - writes images to a temp dir
  * @see https://docs.opencollective.com/help/contributing/development/api
@@ -18,7 +18,7 @@
 'use strict';
 
 const {loadImage} = require('canvas');
-const {writeFile, mkdir, rmdir} = require('fs').promises;
+const {writeFile, mkdir, rm} = require('fs').promises;
 const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
@@ -28,7 +28,7 @@ const blocklist = new Set(require('./blocklist.json'));
  * In addition to the blocklist, any account slug matching this regex will not
  * be displayed on the website.
  */
-const BLOCKED_STRINGS = /(?:vpn|[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
+const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -48,17 +48,17 @@ const BLOCKED_CATEGORIES = [
  */
 const API_ENDPOINT = 'https://api.opencollective.com/graphql/v2';
 
-const SPONSOR_TIER = 'sponsor';
-const BACKER_TIER = 'backer';
+const SPONSOR_TIER = 'sponsors';
+const BACKER_TIER = 'backers';
 
 // if this percent of fetches completes, the build will pass
-const PRODUCTION_SUCCESS_THRESHOLD = 0.8;
+const PRODUCTION_SUCCESS_THRESHOLD = 0.9;
 
 const SUPPORTER_IMAGE_PATH = resolve(__dirname, '../images/supporters');
 
 const SUPPORTER_QUERY = `query account($limit: Int, $offset: Int, $slug: String) {
   account(slug: $slug) {
-    orders(limit: $limit, offset: $offset) {
+    orders(limit: $limit, offset: $offset, status: ACTIVE, filter: INCOMING) {
       limit
       offset
       totalCount
@@ -73,9 +73,8 @@ const SUPPORTER_QUERY = `query account($limit: Int, $offset: Int, $slug: String)
           type
           categories
         }
-        totalDonations {
-          value
-        }
+        tier { slug }
+        totalDonations { value }
         createdAt
       }
     }
@@ -93,10 +92,11 @@ const nodeToSupporter = node => ({
   website: node.fromAccount.website,
   imgUrlMed: node.fromAccount.imgUrlMed,
   imgUrlSmall: node.fromAccount.imgUrlSmall,
-  firstDonation: node.createdAt,
-  totalDonations: node.totalDonations.value * 100,
   type: node.fromAccount.type,
-  categories: node.fromAccount.categories
+  categories: node.fromAccount.categories,
+  tier: (node.tier && node.tier.slug) || BACKER_TIER,
+  totalDonations: node.totalDonations.value * 100,
+  firstDonation: node.createdAt
 });
 
 const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
@@ -107,7 +107,7 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
       try {
         const {avatar: url} = supporter;
         const {body: imageBuf, headers} = await needle('get', url, {
-          timeout: 2000
+          open_timeout: 30000
         });
         if (headers['content-type'].startsWith('text/html')) {
           throw new TypeError(
@@ -198,14 +198,13 @@ const getSupporters = async () => {
     // determine which url to use depending on tier
     .reduce(
       (supporters, supporter) => {
-        if (supporter.type === 'INDIVIDUAL') {
+        if (supporter.tier === BACKER_TIER) {
           if (supporter.name !== 'anonymous') {
             supporters[BACKER_TIER] = [
               ...supporters[BACKER_TIER],
               {
                 ...supporter,
-                avatar: encodeURI(supporter.imgUrlSmall),
-                tier: BACKER_TIER
+                avatar: encodeURI(supporter.imgUrlSmall)
               }
             ];
           }
@@ -214,8 +213,7 @@ const getSupporters = async () => {
             ...supporters[SPONSOR_TIER],
             {
               ...supporter,
-              avatar: encodeURI(supporter.imgUrlMed),
-              tier: SPONSOR_TIER
+              avatar: encodeURI(supporter.imgUrlMed)
             }
           ];
         }
@@ -227,7 +225,7 @@ const getSupporters = async () => {
       }
     );
 
-  await rmdir(SUPPORTER_IMAGE_PATH, {recursive: true});
+  await rm(SUPPORTER_IMAGE_PATH, {recursive: true, force: true});
   debug('blasted %s', SUPPORTER_IMAGE_PATH);
   await mkdir(SUPPORTER_IMAGE_PATH, {recursive: true});
   debug('created %s', SUPPORTER_IMAGE_PATH);
@@ -249,30 +247,34 @@ const getSupporters = async () => {
 
   const backerCount = supporters[BACKER_TIER].length;
   const sponsorCount = supporters[SPONSOR_TIER].length;
-  const totalValidSupportersCount = backerCount + sponsorCount;
-  const successRate = totalValidSupportersCount / invalidSupporters.length;
+  const totalSupportersCount = backerCount + sponsorCount;
+  const successRate = 1 - invalidSupporters.length / totalSupportersCount;
 
   debug(
     'found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)',
     backerCount,
     sponsorCount,
-    totalValidSupportersCount,
+    totalSupportersCount,
     invalidSupporters.length,
-    uniqueSupporters.size - totalValidSupportersCount
+    uniqueSupporters.size - totalSupportersCount
   );
 
   if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
     if (process.env.NETLIFY && process.env.CONTEXT !== 'deploy-preview') {
       throw new Error(
-        `Failed to meet success threshold ${PRODUCTION_SUCCESS_THRESHOLD *
-          100}% (was ${successRate *
-          100}%) for a production deployment; refusing to deploy`
+        `Failed to meet success threshold ${
+          PRODUCTION_SUCCESS_THRESHOLD * 100
+        }% (was ${
+          successRate * 100
+        }%) for a production deployment; refusing to deploy`
       );
     } else {
       console.warn(
-        `WARNING: Success rate of ${successRate *
-          100}% fails to meet production threshold of ${PRODUCTION_SUCCESS_THRESHOLD *
-          100}%; would fail a production deployment!`
+        `WARNING: Success rate of ${
+          successRate * 100
+        }% fails to meet production threshold of ${
+          PRODUCTION_SUCCESS_THRESHOLD * 100
+        }%; would fail a production deployment!`
       );
     }
   }

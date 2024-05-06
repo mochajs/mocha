@@ -13,8 +13,8 @@
  * single output bundle.
  *
  * This is an implementation that specifically solves Mocha's use case. It
- * does not support watch mode. It is possible that is coulkd eventually be
- * made reusable with more work and actual testing.
+ * does not support watch mode. It possibly could be made reusable with
+ * more work and actual testing.
  *
  * We do not use karma-rollup-preprocessor because at the time of
  * implementation it had a behavior where each individual file gets bundled
@@ -32,10 +32,10 @@
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
-const uuid = require('uuid');
+const {randomUUID} = require('crypto');
 const rollup = require('rollup');
 const minimatch = require('minimatch');
-const loadConfigFile = require('rollup/dist/loadConfigFile');
+const loadConfigFile = require('rollup/dist/loadConfigFile.js');
 const multiEntry = require('@rollup/plugin-multi-entry');
 
 const fileMap = new Map();
@@ -53,11 +53,11 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
     .map(fileConfig => fileConfig.pattern)
     .filter(filePath =>
       includePatterns.some(includePattern =>
-        minimatch(filePath, includePattern)
+        minimatch(filePath, includePattern.replace(/\\/g, '/'))
       )
     );
 
-  const bundleFilename = `${uuid.v4()}.rollup.js`;
+  const bundleFilename = `${randomUUID()}.rollup.js`;
   let bundleLocation = path.resolve(
     pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
     bundleFilename
@@ -114,7 +114,7 @@ function bundlePreprocessor(config) {
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
 
-  return async function(content, file, done) {
+  return async function (content, file, done) {
     const {options, warnings} = await configPromise;
     const config = options[0];
     // plugins is always an array

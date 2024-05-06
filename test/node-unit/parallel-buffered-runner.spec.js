@@ -14,8 +14,8 @@ const sinon = require('sinon');
 const {constants} = require('../../lib/utils');
 const {MOCHA_ID_PROP_NAME} = constants;
 
-describe('parallel-buffered-runner', function() {
-  describe('ParallelBufferedRunner', function() {
+describe('parallel-buffered-runner', function () {
+  describe('ParallelBufferedRunner', function () {
     let run;
     let BufferedWorkerPool;
     let terminate;
@@ -24,7 +24,7 @@ describe('parallel-buffered-runner', function() {
     let warn;
     let fatalError;
 
-    beforeEach(function() {
+    beforeEach(function () {
       suite = new Suite('a root suite', {}, true);
       warn = sinon.stub();
 
@@ -59,8 +59,8 @@ describe('parallel-buffered-runner', function() {
       );
     });
 
-    describe('constructor', function() {
-      it('should start in "IDLE" state', function() {
+    describe('constructor', function () {
+      it('should start in "IDLE" state', function () {
         expect(
           new ParallelBufferedRunner(suite),
           'to have property',
@@ -70,15 +70,15 @@ describe('parallel-buffered-runner', function() {
       });
     });
 
-    describe('instance property', function() {
+    describe('instance property', function () {
       let runner;
 
-      beforeEach(function() {
+      beforeEach(function () {
         runner = new ParallelBufferedRunner(suite);
       });
 
-      describe('_state', function() {
-        it('should disallow an invalid state transition', function() {
+      describe('_state', function () {
+        it('should disallow an invalid state transition', function () {
           expect(
             () => {
               runner._state = 'BAILED';
@@ -90,15 +90,15 @@ describe('parallel-buffered-runner', function() {
       });
     });
 
-    describe('event', function() {
+    describe('event', function () {
       let runner;
 
-      beforeEach(function() {
+      beforeEach(function () {
         runner = new ParallelBufferedRunner(suite);
       });
 
-      describe('EVENT_RUN_END', function() {
-        it('should change the state to COMPLETE', function() {
+      describe('EVENT_RUN_END', function () {
+        it('should change the state to COMPLETE', function () {
           runner._state = 'RUNNING';
           runner.emit(Runner.constants.EVENT_RUN_END);
           expect(runner._state, 'to be', 'COMPLETE');
@@ -106,21 +106,21 @@ describe('parallel-buffered-runner', function() {
       });
     });
 
-    describe('instance method', function() {
-      describe('run()', function() {
+    describe('instance method', function () {
+      describe('run()', function () {
         let runner;
 
-        beforeEach(function() {
+        beforeEach(function () {
           runner = new ParallelBufferedRunner(suite);
         });
 
         // the purpose of this is to ensure that--despite using `Promise`s
         // internally--`BufferedRunner#run` does not return a `Promise`.
-        it('should be chainable', function(done) {
+        it('should be chainable', function (done) {
           expect(runner.run(done, {files: [], options: {}}), 'to be', runner);
         });
 
-        it('should emit `EVENT_RUN_BEGIN`', async function() {
+        it('should emit `EVENT_RUN_BEGIN`', async function () {
           return expect(
             () =>
               new Promise(resolve => {
@@ -132,12 +132,12 @@ describe('parallel-buffered-runner', function() {
           );
         });
 
-        describe('when instructed to link objects', function() {
-          beforeEach(function() {
+        describe('when instructed to link objects', function () {
+          beforeEach(function () {
             runner._linkPartialObjects = true;
           });
 
-          it('should create object references', function() {
+          it('should create object references', function () {
             const options = {reporter: runner._workerReporter};
             const someSuite = {
               title: 'some suite',
@@ -189,8 +189,8 @@ describe('parallel-buffered-runner', function() {
             );
           });
 
-          describe('when event data object is missing an ID', function() {
-            it('should result in an uncaught exception', function(done) {
+          describe('when event data object is missing an ID', function () {
+            it('should result in an uncaught exception', function (done) {
               const options = {reporter: runner._workerReporter};
               sinon.spy(runner, 'uncaught');
               const someSuite = {
@@ -238,8 +238,8 @@ describe('parallel-buffered-runner', function() {
           });
         });
 
-        describe('when a worker fails', function() {
-          it('should recover', function(done) {
+        describe('when a worker fails', function () {
+          it('should recover', function (done) {
             const options = {reporter: runner._workerReporter};
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', options).resolves({
@@ -272,7 +272,7 @@ describe('parallel-buffered-runner', function() {
             );
           });
 
-          it('should delegate to Runner#uncaught', function(done) {
+          it('should delegate to Runner#uncaught', function (done) {
             const options = {reporter: runner._workerReporter};
             sinon.spy(runner, 'uncaught');
             const err = new Error('whoops');
@@ -308,9 +308,9 @@ describe('parallel-buffered-runner', function() {
           });
         });
 
-        describe('when suite should bail', function() {
-          describe('when no event contains an error', function() {
-            it('should not force-terminate', function(done) {
+        describe('when suite should bail', function () {
+          describe('when no event contains an error', function () {
+            it('should not force-terminate', function (done) {
               run.resolves({
                 failureCount: 0,
                 events: [
@@ -352,9 +352,9 @@ describe('parallel-buffered-runner', function() {
             });
           });
 
-          describe('when an event contains an error and has positive failures', function() {
-            describe('when subsequent files have not yet been run', function() {
-              it('should cleanly terminate the thread pool', function(done) {
+          describe('when an event contains an error and has positive failures', function () {
+            describe('when subsequent files have not yet been run', function () {
+              it('should cleanly terminate the thread pool', function (done) {
                 const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
@@ -404,8 +404,8 @@ describe('parallel-buffered-runner', function() {
               });
             });
 
-            describe('when subsequent files already started running', function() {
-              it('should cleanly terminate the thread pool', function(done) {
+            describe('when subsequent files already started running', function () {
+              it('should cleanly terminate the thread pool', function (done) {
                 const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
@@ -479,9 +479,9 @@ describe('parallel-buffered-runner', function() {
           });
         });
 
-        describe('when a suite has a bail flag', function() {
-          describe('when no event contains an error', function() {
-            it('should not force-terminate', function(done) {
+        describe('when a suite has a bail flag', function () {
+          describe('when no event contains an error', function () {
+            it('should not force-terminate', function (done) {
               run.resolves({
                 failureCount: 0,
                 events: [
@@ -516,9 +516,9 @@ describe('parallel-buffered-runner', function() {
             });
           });
 
-          describe('when an event contains an error and has positive failures', function() {
-            describe('when subsequent files have not yet been run', function() {
-              it('should cleanly terminate the thread pool', function(done) {
+          describe('when an event contains an error and has positive failures', function () {
+            describe('when subsequent files have not yet been run', function () {
+              it('should cleanly terminate the thread pool', function (done) {
                 const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
@@ -561,8 +561,8 @@ describe('parallel-buffered-runner', function() {
               });
             });
 
-            describe('when subsequent files already started running', function() {
-              it('should cleanly terminate the thread pool', function(done) {
+            describe('when subsequent files already started running', function () {
+              it('should cleanly terminate the thread pool', function (done) {
                 const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
@@ -621,8 +621,8 @@ describe('parallel-buffered-runner', function() {
               });
             });
 
-            describe('when subsequent files have not yet been run', function() {
-              it('should cleanly terminate the thread pool', function(done) {
+            describe('when subsequent files have not yet been run', function () {
+              it('should cleanly terminate the thread pool', function (done) {
                 const options = {reporter: runner._workerReporter};
                 const err = {
                   __type: 'Error',
@@ -668,40 +668,40 @@ describe('parallel-buffered-runner', function() {
         });
       });
 
-      describe('linkPartialObjects()', function() {
+      describe('linkPartialObjects()', function () {
         let runner;
 
-        beforeEach(function() {
+        beforeEach(function () {
           runner = new ParallelBufferedRunner(suite);
         });
 
-        it('should return the runner', function() {
+        it('should return the runner', function () {
           expect(runner.linkPartialObjects(), 'to be', runner);
         });
 
         // avoid testing implementation details; don't check _linkPartialObjects
       });
 
-      describe('isParallelMode()', function() {
+      describe('isParallelMode()', function () {
         let runner;
 
-        beforeEach(function() {
+        beforeEach(function () {
           runner = new ParallelBufferedRunner(suite);
         });
 
-        it('should return true', function() {
+        it('should return true', function () {
           expect(runner.isParallelMode(), 'to be true');
         });
       });
 
-      describe('workerReporter()', function() {
+      describe('workerReporter()', function () {
         let runner;
 
-        beforeEach(function() {
+        beforeEach(function () {
           runner = new ParallelBufferedRunner(suite);
         });
 
-        it('should return its context', function() {
+        it('should return its context', function () {
           expect(runner.workerReporter(), 'to be', runner);
         });
       });

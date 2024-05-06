@@ -40,12 +40,12 @@ var originalOnerrorHandler = global.onerror;
  * Revert to original onerror handler if previously defined.
  */
 
-process.removeListener = function(e, fn) {
+process.removeListener = function (e, fn) {
   if (e === 'uncaughtException') {
     if (originalOnerrorHandler) {
       global.onerror = originalOnerrorHandler;
     } else {
-      global.onerror = function() {};
+      global.onerror = function () {};
     }
     var i = uncaughtExceptionHandlers.indexOf(fn);
     if (i !== -1) {
@@ -58,7 +58,7 @@ process.removeListener = function(e, fn) {
  * Implements listenerCount for 'uncaughtException'.
  */
 
-process.listenerCount = function(name) {
+process.listenerCount = function (name) {
   if (name === 'uncaughtException') {
     return uncaughtExceptionHandlers.length;
   }
@@ -69,9 +69,9 @@ process.listenerCount = function(name) {
  * Implements uncaughtException listener.
  */
 
-process.on = function(e, fn) {
+process.on = function (e, fn) {
   if (e === 'uncaughtException') {
-    global.onerror = function(err, url, line) {
+    global.onerror = function (err, url, line) {
       fn(new Error(err + ' (' + url + ':' + line + ')'));
       return !mocha.options.allowUncaught;
     };
@@ -79,7 +79,7 @@ process.on = function(e, fn) {
   }
 };
 
-process.listeners = function(e) {
+process.listeners = function (e) {
   if (e === 'uncaughtException') {
     return uncaughtExceptionHandlers;
   }
@@ -110,7 +110,7 @@ function timeslice() {
  * High-performance override of Runner.immediately.
  */
 
-Mocha.Runner.immediately = function(callback) {
+Mocha.Runner.immediately = function (callback) {
   immediateQueue.push(callback);
   if (!immediateTimeout) {
     immediateTimeout = setTimeout(timeslice, 0);
@@ -122,8 +122,8 @@ Mocha.Runner.immediately = function(callback) {
  * This is useful when running tests in a browser because window.onerror will
  * only receive the 'message' attribute of the Error.
  */
-mocha.throwError = function(err) {
-  uncaughtExceptionHandlers.forEach(function(fn) {
+mocha.throwError = function (err) {
+  uncaughtExceptionHandlers.forEach(function (fn) {
     fn(err);
   });
   throw err;
@@ -134,7 +134,7 @@ mocha.throwError = function(err) {
  * Normally this would happen in Mocha.prototype.loadFiles.
  */
 
-mocha.ui = function(ui) {
+mocha.ui = function (ui) {
   Mocha.prototype.ui.call(this, ui);
   this.suite.emit('pre-require', global, null, this);
   return this;
@@ -144,7 +144,7 @@ mocha.ui = function(ui) {
  * Setup mocha with the given setting options.
  */
 
-mocha.setup = function(opts) {
+mocha.setup = function (opts) {
   if (typeof opts === 'string') {
     opts = {ui: opts};
   }
@@ -153,10 +153,10 @@ mocha.setup = function(opts) {
   }
   var self = this;
   Object.keys(opts)
-    .filter(function(opt) {
+    .filter(function (opt) {
       return opt !== 'delay';
     })
-    .forEach(function(opt) {
+    .forEach(function (opt) {
       if (Object.prototype.hasOwnProperty.call(opts, opt)) {
         self[opt](opts[opt]);
       }
@@ -168,7 +168,7 @@ mocha.setup = function(opts) {
  * Run mocha, returning the Runner.
  */
 
-mocha.run = function(fn) {
+mocha.run = function (fn) {
   var options = mocha.options;
   mocha.globals('location');
 
@@ -183,7 +183,7 @@ mocha.run = function(fn) {
     mocha.invert();
   }
 
-  return Mocha.prototype.run.call(mocha, function(err) {
+  return Mocha.prototype.run.call(mocha, function (err) {
     // The DOM Document is not available in Web Workers.
     var document = global.document;
     if (
@@ -209,11 +209,18 @@ Mocha.process = process;
 /**
  * Expose mocha.
  */
-
 global.Mocha = Mocha;
 global.mocha = mocha;
 
-// this allows test/acceptance/required-tokens.js to pass; thus,
-// you can now do `const describe = require('mocha').describe` in a
-// browser context (assuming browserification).  should fix #880
-module.exports = Object.assign(mocha, global);
+// for bundlers: enable `import {describe, it} from 'mocha'`
+// `bdd` interface only
+// prettier-ignore
+[ 
+  'describe', 'context', 'it', 'specify',
+  'xdescribe', 'xcontext', 'xit', 'xspecify',
+  'before', 'beforeEach', 'afterEach', 'after'
+].forEach(function(key) {
+  mocha[key] = global[key];
+});
+
+module.exports = mocha;
