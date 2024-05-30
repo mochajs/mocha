@@ -54,8 +54,11 @@ describe('worker', function () {
       };
 
       stubs.runHelpers = {
-        handleRequires: sinon.stub().resolves({}),
         validateLegacyPlugin: sinon.stub()
+      };
+
+      stubs.handleRequires = {
+        handleRequires: sinon.stub().resolves({})
       };
 
       stubs.plugin = {
@@ -67,6 +70,7 @@ describe('worker', function () {
         '../../lib/mocha': stubs.Mocha,
         '../../lib/nodejs/serializer': stubs.serializer,
         '../../lib/cli/run-helpers': stubs.runHelpers,
+        '../../lib/cli/handle-requires': stubs.handleRequires,
         '../../lib/plugin-loader': stubs.plugin
       });
     });
@@ -148,7 +152,7 @@ describe('worker', function () {
               serializeJavascript({require: 'foo'})
             );
             expect(
-              stubs.runHelpers.handleRequires,
+              stubs.handleRequires.handleRequires,
               'to have a call satisfying',
               [
                 'foo',
@@ -217,8 +221,10 @@ describe('worker', function () {
               await worker.run('some-other-file.js');
 
               expect(stubs.runHelpers, 'to satisfy', {
-                handleRequires: expect.it('was called once'),
                 validateLegacyPlugin: expect.it('was called once')
+              });
+              expect(stubs.handleRequires, 'to satisfy', {
+                handleRequires: expect.it('was called once')
               });
             });
           });
