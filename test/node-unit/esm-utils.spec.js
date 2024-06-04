@@ -11,6 +11,7 @@ describe('esm-utils', function () {
 
   afterEach(function () {
     sinon.restore();
+    esmUtils.setCacheBusterKey('');
   });
 
   describe('loadFilesAsync()', function () {
@@ -40,6 +41,23 @@ describe('esm-utils', function () {
         esmUtils.doImport.firstCall.args[0].toString(),
         'to be',
         `${url.pathToFileURL('/foo/bar.mjs').toString()}?foo=bar`
+      );
+    });
+
+    it('should decorate imported module with passed decorator - with cache buster key', async function () {
+      esmUtils.setCacheBusterKey('1234');
+
+      await esmUtils.loadFilesAsync(
+        ['/foo/bar.mjs'],
+        () => {},
+        () => {},
+        x => `${x}?foo=bar`
+      );
+
+      expect(
+        esmUtils.doImport.firstCall.args[0].toString(),
+        'to be',
+        `${url.pathToFileURL('/foo/bar.mjs').toString()}?foo=bar&cache=1234`
       );
     });
   });
