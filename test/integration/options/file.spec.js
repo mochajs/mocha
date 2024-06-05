@@ -80,7 +80,7 @@ describe('--file', function () {
     });
   });
 
-  it('should log a warning if a nonexistent file is specified', function (done) {
+  it('should log a warning if a nonexistent file with an unknown extension is specified', function (done) {
     const nonexistentTestFileArg = 'nonexistent.test.ts';
     runMocha(
       nonexistentTestFileArg,
@@ -101,7 +101,7 @@ describe('--file', function () {
     );
   });
 
-  it('should provide warning for nonexistent cjs file extensions', function (done) {
+  it('should provide warning for nonexistent js file extensions', function (done) {
     const nonexistentCjsArg = 'nonexistent.test.js';
 
     runMocha(
