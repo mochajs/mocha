@@ -63,7 +63,7 @@ describe('reporters', function () {
       });
     });
 
-    it('does not include ansi escape sequences (issue: 4526)', function(done) {
+    it('does not include ansi escape sequences', function(done) {
       var randomStr = crypto.randomBytes(8).toString('hex');
       var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
       var tmpFile = tmpDir + path.sep + 'test-issue-4526-' + randomStr + '.xml';
