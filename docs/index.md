@@ -1460,7 +1460,7 @@ Available root hooks and their behavior:
 
 > _Tip: If you need to ensure code runs once and only once in any mode, use [global fixtures](#global-fixtures)._
 
-As with other hooks, `this` refers to to the current context object:
+As with other hooks, `this` refers to the current context object:
 
 ```js
 // test/hooks.mjs
@@ -2216,11 +2216,22 @@ If no custom path was given, and if there are multiple configuration files in th
 1. `.mocharc.jsonc`
 1. `.mocharc.json`
 
+### Environment Variables
+
+The `MOCHA_OPTIONS` environment variable may be used to specify command line arguments. These arguments take priority over those found in configuration files.
+
+For example, setting the `bail` and `retries` options:
+
+```bash
+$ MOCHA_OPTIONS="--bail --retries 3" mocha
+```
+
 ### Merging
 
 Mocha will also _merge_ any options found in `package.json` into its run-time configuration. In case of conflict, the priority is:
 
 1. Arguments specified on command-line
+1. Arguments specified in `MOCHA_OPTIONS` environment variable.
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
 
