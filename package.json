@@ -64,7 +64,7 @@
     "test": "run-s lint test:*",
     "version:linkify-changelog": "node scripts/linkify-changelog.mjs",
     "version:update-authors": "node scripts/update-authors.js",
-    "version": "run-p version:*"
+    "version": "run-p version:* && git add -A ./AUTHORS ./CHANGELOG.md"
   },
   "dependencies": {
     "ansi-colors": "4.1.1",
