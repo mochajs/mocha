@@ -64,7 +64,7 @@ module.exports = {
       },
       qunit: {
         script: test('qunit', '--ui qunit test/interfaces/qunit.spec'),
-        description: 'Run Node.js QUnit interace tests',
+        description: 'Run Node.js QUnit interface tests',
         hiddenFromHelp: true
       },
       exports: {
