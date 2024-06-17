@@ -70,7 +70,7 @@ jobs:
         with:
           persist-credentials: false
       - name: 'Cache node_modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: '~/.npm'
           key: "ubuntu-latest-node-lts-${{ hashFiles('**/package-lock.json') }}"
@@ -113,7 +113,7 @@ jobs:
         run: |
           echo "dir=$(npm config get cache)" >> $env:GITHUB_OUTPUT
       - name: 'Cache node_modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ matrix.os == 'ubuntu-latest' && '~/.npm' || steps.npm-cache.outputs.dir }}
           key: "${{ matrix.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}"
@@ -152,7 +152,7 @@ jobs:
         with:
           persist-credentials: false
       - name: 'Cache node_modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: '~/.npm'
           # this key is different than above, since we are running scripts
@@ -189,7 +189,7 @@ jobs:
         with:
           persist-credentials: false
       - name: 'Cache node_modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: '~/.npm'
           # this key is different than above, since we are running scripts

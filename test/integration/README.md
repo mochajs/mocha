@@ -31,7 +31,7 @@ The `helpers.js` module contains many functions to handle the common cases of sp
 By default, all of these helpers run with the following options:
 
 - `--no-color`: it's easier to make assertions about output w/o having to deal w/ ANSI escape codes
-- `--no-bail`: overrides a configuration file w/ `bail: true`; providing `--bail` to the arguments list will supress this (useful when testing `--bail`!)
+- `--no-bail`: overrides a configuration file w/ `bail: true`; providing `--bail` to the arguments list will suppress this (useful when testing `--bail`!)
 - `--no-parallel`: overrides a configuration file w/ `parallel: true`; providing `--parallel` to the arguments list will suppress this
 
 ## Environment Variables Which Do Stuff

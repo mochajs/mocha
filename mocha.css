@@ -22,6 +22,9 @@
   --mocha-stats-color: #888;
   --mocha-stats-em-color: #000;
   --mocha-stats-hover-color: #eee;
+  --mocha-progress-ring-color: #eee;
+  --mocha-progress-ring-highlight-color: #9f9f9f;
+  --mocha-progress-text-color: #000;
   --mocha-error-color: #c00;
 
   --mocha-code-comment:  #ddd;
@@ -54,6 +57,9 @@
      --mocha-stats-color: #aaa;
      --mocha-stats-em-color: #fff;
      --mocha-stats-hover-color: #444;
+     --mocha-progress-ring-color: #444;
+     --mocha-progress-ring-highlight-color: #888;
+     --mocha-progress-text-color: #fff;
      --mocha-error-color: #f44;
 
      --mocha-code-comment: #ddd;
@@ -325,6 +331,10 @@ body {
 }
 
 #mocha-stats {
+  --ring-container-size: 40px;
+  --ring-size: 39px;
+  --ring-radius: calc(var(--ring-size) / 2);
+
   position: fixed;
   top: 15px;
   right: 10px;
@@ -334,20 +344,52 @@ body {
   z-index: 1;
 }
 
-#mocha-stats .progress {
+#mocha-stats .progress-contain {
   float: right;
-  padding-top: 0;
+  padding: 0;
+}
 
-  /**
-   * Set safe initial values, so mochas .progress does not inherit these
-   * properties from Bootstrap .progress (which causes .progress height to
-   * equal line height set in Bootstrap).
-   */
-  height: auto;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  background-color: initial;
+#mocha-stats :is(.progress-element, .progress-text) {
+  width: var(--ring-container-size);
+  display: block;
+  top: 12px;
+  position: absolute;
+}
+
+#mocha-stats .progress-element {
+  visibility: hidden;
+  height: calc(var(--ring-container-size) / 2);
+}
+
+#mocha-stats .progress-text {
+  text-align: center;
+  text-overflow: clip;
+  overflow: hidden;
+  color: var(--mocha-stats-em-color);
+  font-size: 11px;
+}
+
+#mocha-stats .progress-ring {
+  width: var(--ring-container-size);
+  height: var(--ring-container-size);
+}
+
+#mocha-stats :is(.ring-flatlight, .ring-highlight) {
+  --stroke-thickness: 1.65px;
+  --center: calc(var(--ring-container-size) / 2);
+  cx: var(--center);
+  cy: var(--center);
+  r: calc(var(--ring-radius) - calc(var(--stroke-thickness) / 2));
+  fill: hsla(0, 0%, 0%, 0);
+  stroke-width: var(--stroke-thickness);
+}
+
+#mocha-stats .ring-flatlight {
+  stroke: var(--mocha-progress-ring-color);
+}
+
+#mocha-stats .ring-highlight {
+  stroke: var(--mocha-progress-ring-highlight-color);
 }
 
 #mocha-stats em {
@@ -368,11 +410,6 @@ body {
   margin: 0 5px;
   list-style: none;
   padding-top: 11px;
-}
-
-#mocha-stats canvas {
-  width: 40px;
-  height: 40px;
 }
 
 #mocha code .comment { color: var(--mocha-code-comment); }
