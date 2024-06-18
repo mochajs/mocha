@@ -1061,7 +1061,7 @@ The option can be given multiple times. The option accepts a comma-delimited lis
 
 `--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
 
-### `--file <file|directory|glob>`
+### `--file <file>`
 
 > _WARNING: `--file` is incompatible with [parallel mode](#parallel-tests)._
 
