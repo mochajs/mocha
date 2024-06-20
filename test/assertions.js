@@ -147,6 +147,12 @@ module.exports = {
         }
       )
       .addAssertion(
+        '<JSONResult> [not] to have suite count <number>',
+        (expect, result, count) => {
+          expect(result.stats.suites, '[not] to be', count);
+        }
+      )
+      .addAssertion(
         '<JSONResult> [not] to have failed [test] count <number>',
         (expect, result, count) => {
           expect(result.stats.failures, '[not] to be', count);
