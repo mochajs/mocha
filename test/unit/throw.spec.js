@@ -14,13 +14,11 @@ var STATE_FAILED = Runnable.constants.STATE_FAILED;
 describe('a test that throws', function () {
   var suite;
   var runner;
-  var sandbox;
   var uncaughtHandlers;
 
   beforeEach(function () {
     suite = new Suite('Suite', 'root');
     runner = new Runner(suite);
-    sandbox = sinon.createSandbox();
 
     // see https://github.com/mochajs/mocha/pull/2983#issuecomment-350428522
     uncaughtHandlers = process.listeners('uncaughtException') || [];
