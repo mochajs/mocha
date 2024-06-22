@@ -30,6 +30,7 @@ describe('a test that throws', function () {
     uncaughtHandlers.forEach(function (listener) {
       process.on('uncaughtException', listener);
     });
+    sinon.restore(); 
   });
 
   describe('non-extensible', function () {
@@ -183,7 +184,7 @@ describe('a test that throws', function () {
       });
       suite.addTest(test);
       runner = new Runner(suite);
-      sandbox.stub(runner, 'fail');
+      sinon.stub(runner, 'fail');
 
       runner.on(EVENT_RUN_END, function() {
         try {
