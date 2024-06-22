@@ -2363,7 +2363,7 @@ $ npm test
 In addition to chatting with us on [our Discord][discord-mocha], for additional information such as using
 spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki][mocha-wiki] on GitHub.
 For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
-or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
+or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 
 [//]: # 'Cross reference section'
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
@@ -2375,14 +2375,14 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [discord-mocha]: https://discord.gg/KeDn2uXhER
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
+[example-babel]: https://github.com/mochajs/mocha-examples/tree/main/packages/babel
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
 [example-express-test]: https://github.com/visionmedia/express/tree/master/test
-[example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
-[example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
+[example-mocha-test]: https://github.com/mochajs/mocha/tree/main/test
+[example-mocha-config]: https://github.com/mochajs/mocha/tree/main/example/config
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
-[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/packages/third-party-reporter
-[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
+[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/main/packages/third-party-reporter
+[example-typescript]: https://github.com/mochajs/mocha-examples/tree/main/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso
