@@ -316,6 +316,71 @@ describe('--watch', function () {
       });
     });
 
+    // Regression test for https://github.com/mochajs/mocha/issues/5149
+    it('reloads all required dependencies between runs', function () {
+      const testFile = path.join(tempDir, 'test-mutating-dependency.js');
+      copyFixture('options/watch/test-mutating-dependency', testFile);
+
+      const dependency = path.join(tempDir, 'lib', 'dependency-with-state.js');
+      copyFixture('options/watch/dependency-with-state', dependency);
+
+      // Notice we are watching only the test file, skipping the dependency file.
+      // This is a simplification of a scenario where there's an unwatched file somewhere in the dependency tree
+      // that is mutated between runs, and not properly reset.
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'test-mutating-dependency.js'],
+        tempDir,
+        () => {
+          replaceFileContents(
+            testFile,
+            '// Will pass 1st run, fail on subsequent ones',
+            '// Will pass 1st run, fail on subsequent runs'
+          );
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+        expect(results[0].passes, 'to have length', 1);
+        expect(results[0].failures, 'to have length', 0);
+        expect(results[1].passes, 'to have length', 1);
+        expect(results[1].failures, 'to have length', 0);
+      });
+    });
+
+    // Regression test for https://github.com/mochajs/mocha/issues/5149
+    it('reloads all required dependencies between runs when mutated from a hook', function () {
+      const testFile = path.join(
+        tempDir,
+        'test-with-hook-mutated-dependency.js'
+      );
+      copyFixture('options/watch/test-with-hook-mutated-dependency', testFile);
+
+      const dependency = path.join(tempDir, 'lib', 'dependency-with-state.js');
+      copyFixture('options/watch/dependency-with-state', dependency);
+
+      const hookFile = path.join(tempDir, 'hook-mutating-dependency.js');
+      copyFixture('options/watch/hook-mutating-dependency', hookFile);
+
+      return runMochaWatchJSONAsync(
+        [
+          testFile,
+          '--require',
+          hookFile,
+          '--watch-files',
+          'test-with-hook-mutated-dependency.js'
+        ],
+        tempDir,
+        () => {
+          touchFile(testFile);
+        }
+      ).then(results => {
+        expect(results.length, 'to equal', 2);
+        expect(results[0].passes, 'to have length', 1);
+        expect(results[0].failures, 'to have length', 0);
+        expect(results[1].passes, 'to have length', 1);
+        expect(results[1].failures, 'to have length', 0);
+      });
+    });
+
     // Regression test for https://github.com/mochajs/mocha/issues/2027
     it('respects --fgrep on re-runs', async function () {
       const testFile = path.join(tempDir, 'test.js');
