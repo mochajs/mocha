@@ -1,5 +1,23 @@
 # Changelog
 
+## 10.5.0 / 2024-05-24
+
+### :tada: Enhancements
+
+* [#5015](https://github.com/mochajs/mocha/pull/5015) feat: use \<progress\> and \<svg\> for browser progress indicator instead of \<canvas\> ([**@yourWaifu**](https://github.com/yourWaifu))
+* [#5143](https://github.com/mochajs/mocha/pull/5143) feat: allow using any 3.x chokidar dependencies ([**@simhnna**](https://github.com/simhnna))
+* [#4835](https://github.com/mochajs/mocha/pull/4835) feat: add MOCHA_OPTIONS env variable ([**@icholy**](https://github.com/icholy))
+
+### :bug: Fixes
+
+* [#5107](https://github.com/mochajs/mocha/pull/5107) fix: include stack in browser uncaught error reporting ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+
+### :nut_and_bolt: Other
+
+* [#5110](https://github.com/mochajs/mocha/pull/5110) chore: switch two-column list styles to be opt-in ([**@marjys**](https://github.com/marjys))
+* [#5135](https://github.com/mochajs/mocha/pull/5135) chore: fix some typos in comments ([**@StevenMia**](https://github.com/StevenMia))
+* [#5130](https://github.com/mochajs/mocha/pull/5130) chore: rename 'master' to 'main' in docs and tooling ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+
 ## 10.4.0 / 2024-03-26
 
 ### :tada: Enhancements
