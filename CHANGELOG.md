@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.5.1 / 2024-05-24
+
+### :bug: Fixes
+
+- [#5086](https://github.com/mochajs/mocha/pull/5086) fix: Add error handling for nonexistent file case with --file option ([**@khoaHyh**](https://github.com/khoaHyh))
+
 ## 10.5.0 / 2024-05-24
 
 ### :tada: Enhancements
