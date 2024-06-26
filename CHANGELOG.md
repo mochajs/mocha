@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.5.2 / 2024-05-25
+
+### :bug: Fixes
+
+- [#5032](https://github.com/mochajs/mocha/pull/5032) fix: better tracking of seen objects in error serialization ([**@sam-super**](https://github.com/sam-super))
+
 ## 10.5.1 / 2024-05-24
 
 ### :bug: Fixes
