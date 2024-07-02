@@ -100,4 +100,4 @@ This is a foundation-wide team established to manage escalation when a reporter 
 In order to escalate to the CoCP send an email to `"coc-escalation@lists.openjsf.org`.
 
 For more information, refer to the full
-[Code of Conduct governance document](https://github.com/openjs-foundation/cross-project-council/blob/master/FOUNDATION_CODE_OF_CONDUCT_REQUIREMENTS.md).
+[Code of Conduct governance document](https://github.com/openjs-foundation/cross-project-council/tree/main/proposals/approved/CODE_OF_CONDUCT).
