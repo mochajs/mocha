@@ -1063,7 +1063,7 @@ The option can be given multiple times. The option accepts a comma-delimited lis
 
 `--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
 
-### `--file <file|directory|glob>`
+### `--file <file>`
 
 > _WARNING: `--file` is incompatible with [parallel mode](#parallel-tests)._
 
@@ -1298,7 +1298,7 @@ In parallel mode, Mocha does not guarantee the order in which test files will ru
 
 Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
 
-- [`--file`](#-file-filedirectoryglob)
+- [`--file`](#-file-file)
 - [`--sort`](#-sort-s)
 - [`--delay`](#delayed-root-suite)
   {:.single-column}
