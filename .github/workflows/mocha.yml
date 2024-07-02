@@ -56,7 +56,7 @@ jobs:
         with:
           node-version: '${{ matrix.node }}'
       - run: npm install --production
-      - run: npm run test:smoke
+      - run: npm run test-smoke
 
   lint:
     name: Linting code and markdown
