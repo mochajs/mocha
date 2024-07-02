@@ -1,18 +1,18 @@
 # Changelog
 
-## 10.5.2 / 2024-05-25
+## 10.5.2 / 2024-06-25
 
 ### :bug: Fixes
 
 - [#5032](https://github.com/mochajs/mocha/pull/5032) fix: better tracking of seen objects in error serialization ([**@sam-super**](https://github.com/sam-super))
 
-## 10.5.1 / 2024-05-24
+## 10.5.1 / 2024-06-24
 
 ### :bug: Fixes
 
 - [#5086](https://github.com/mochajs/mocha/pull/5086) fix: Add error handling for nonexistent file case with --file option ([**@khoaHyh**](https://github.com/khoaHyh))
 
-## 10.5.0 / 2024-05-24
+## 10.5.0 / 2024-06-24
 
 ### :tada: Enhancements
 
