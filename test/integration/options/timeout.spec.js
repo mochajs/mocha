@@ -83,4 +83,15 @@ describe('--timeout', function () {
       }
     );
   });
+
+  it("should complete tests having unref'd async behavior", function(done) {
+    runMochaJSON('options/timeout-unref', ['--timeout', '0'], function(err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res, 'to have passed').and('to have passed test count', 1);
+      done();
+    });
+  });
 });

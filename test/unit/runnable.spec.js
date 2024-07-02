@@ -702,6 +702,7 @@ describe('Runnable(title, fn)', function () {
       runnable.timeout(10);
       runnable.resetTimeout();
       runnable.timeout(0);
+      runnable.run();
       setTimeout(function () {
         expect(runnable.timedOut, 'to be', false);
         done();
