@@ -1,5 +1,15 @@
 # Changelog
 
+## 10.6.0 / 2024-07-02
+
+### :tada: Enhancements
+
+- [#5150](https://github.com/mochajs/mocha/pull/5150) feat: allow ^ versions for character encoding packages ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5151](https://github.com/mochajs/mocha/pull/5151) feat: allow ^ versions for file matching packages ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5152](https://github.com/mochajs/mocha/pull/5152) feat: allow ^ versions for yargs packages ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5153](https://github.com/mochajs/mocha/pull/5153) feat: allow ^ versions for data serialization packages ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+- [#5154](https://github.com/mochajs/mocha/pull/5154) feat: allow ^ versions for miscellaneous packages ([**@JoshuaKGoldberg**](https://github.com/JoshuaKGoldberg))
+
 ## 10.5.2 / 2024-06-25
 
 ### :bug: Fixes
