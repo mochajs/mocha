@@ -298,6 +298,11 @@ describe('#find()', function () {
 });
 ```
 
+### Limitations of asynchronous callbacks
+
+You can use all asynchronous callbacks (`done`, `Promise`, and `async`/`await`) in callbacks for `it()`, `before()`, `after()`, `beforeEach()`, `afterEach()`) but not `describe()` -- it must be synchronous.
+See [#5046](https://github.com/mochajs/mocha/pull/5046) for more information.
+
 ## Synchronous Code
 
 When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
