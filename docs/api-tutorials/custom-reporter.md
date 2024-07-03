@@ -13,7 +13,7 @@ If you're looking to get started quickly, here's an example of a custom reporter
 
 To use this reporter, execute `mocha --reporter /path/to/my-reporter.js`.
 
-For further examples, the built-in reporter implementations are the [best place to look](https://github.com/mochajs/mocha/tree/master/lib/reporters). The [integration tests](https://github.com/mochajs/mocha/tree/master/test/reporters) may also be helpful.
+For further examples, the built-in reporter implementations are the [best place to look](https://github.com/mochajs/mocha/tree/main/lib/reporters). The [integration tests](https://github.com/mochajs/mocha/tree/main/test/reporters) may also be helpful.
 
 ## The `Base` Reporter Class
 

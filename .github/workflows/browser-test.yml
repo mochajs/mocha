@@ -20,7 +20,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: 'Cache node_modules'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: '~/.npm'
           key: "ubuntu-latest-node-full-lts-${{ hashFiles('**/package-lock.json') }}"
@@ -32,7 +32,7 @@ jobs:
           SAUCE_USERNAME: '${{secrets.SAUCE_USERNAME}}'
           SAUCE_ACCESS_KEY: '${{secrets.SAUCE_ACCESS_KEY}}'
       - name: remove 'run-browser-test' label
-        uses: buildsville/add-remove-label@v2.0.0
+        uses: buildsville/add-remove-label@v2.0.1
         if: ${{ always() }}
         with:
           token: ${{secrets.GITHUB_TOKEN}}
