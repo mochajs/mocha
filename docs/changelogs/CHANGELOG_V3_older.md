@@ -789,7 +789,7 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 
 # 1.10.0 / 2013-05-21
 
-- add add better globbing support for windows via `glob` module
+- add better globbing support for windows via `glob` module
 - add support to pass through flags such as --debug-brk=1234. Closes [#852](https://github.com/mochajs/mocha/issues/852)
 - add test.only, test.skip to qunit interface
 - change to always use word-based diffs for now. Closes [#733](https://github.com/mochajs/mocha/issues/733)

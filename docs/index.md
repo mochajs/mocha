@@ -44,10 +44,12 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [before, after, before each, after each hooks](#hooks)
 - [arbitrary transpiler support (coffee-script etc)](#-compilers)
 - [TextMate bundle](#textmate)
+  {:.two-column}
 
 ## Table of Contents
 
 {{ toc }}
+{:.two-column}
 
 ## Installation
 
@@ -295,6 +297,11 @@ describe('#find()', function () {
   });
 });
 ```
+
+### Limitations of asynchronous callbacks
+
+You can use all asynchronous callbacks (`done`, `Promise`, and `async`/`await`) in callbacks for `it()`, `before()`, `after()`, `beforeEach()`, `afterEach()`) but not `describe()` -- it must be synchronous.
+See [#5046](https://github.com/mochajs/mocha/pull/5046) for more information.
 
 ## Synchronous Code
 
@@ -1061,7 +1068,7 @@ The option can be given multiple times. The option accepts a comma-delimited lis
 
 `--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
 
-### `--file <file|directory|glob>`
+### `--file <file>`
 
 > _WARNING: `--file` is incompatible with [parallel mode](#parallel-tests)._
 
@@ -1296,7 +1303,7 @@ In parallel mode, Mocha does not guarantee the order in which test files will ru
 
 Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
 
-- [`--file`](#-file-filedirectoryglob)
+- [`--file`](#-file-file)
 - [`--sort`](#-sort-s)
 - [`--delay`](#delayed-root-suite)
   {:.single-column}
@@ -1458,7 +1465,7 @@ Available root hooks and their behavior:
 
 > _Tip: If you need to ensure code runs once and only once in any mode, use [global fixtures](#global-fixtures)._
 
-As with other hooks, `this` refers to to the current context object:
+As with other hooks, `this` refers to the current context object:
 
 ```js
 // test/hooks.mjs
@@ -2214,11 +2221,22 @@ If no custom path was given, and if there are multiple configuration files in th
 1. `.mocharc.jsonc`
 1. `.mocharc.json`
 
+### Environment Variables
+
+The `MOCHA_OPTIONS` environment variable may be used to specify command line arguments. These arguments take priority over those found in configuration files.
+
+For example, setting the `bail` and `retries` options:
+
+```bash
+$ MOCHA_OPTIONS="--bail --retries 3" mocha
+```
+
 ### Merging
 
 Mocha will also _merge_ any options found in `package.json` into its run-time configuration. In case of conflict, the priority is:
 
 1. Arguments specified on command-line
+1. Arguments specified in `MOCHA_OPTIONS` environment variable.
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
 
@@ -2350,7 +2368,7 @@ $ npm test
 In addition to chatting with us on [our Discord][discord-mocha], for additional information such as using
 spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki][mocha-wiki] on GitHub.
 For a running example of Mocha, view [example/tests.html](example/tests.html). For the JavaScript API, view the [API documentation](api/)
-or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
+or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 
 [//]: # 'Cross reference section'
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
@@ -2362,14 +2380,14 @@ or the [source](https://github.com/mochajs/mocha/blob/master/lib/mocha.js).
 [discord-mocha]: https://discord.gg/KeDn2uXhER
 [emacs]: https://www.gnu.org/software/emacs/
 [emacs-mocha.el]: https://github.com/scottaj/mocha.el
-[example-babel]: https://github.com/mochajs/mocha-examples/tree/master/packages/babel
+[example-babel]: https://github.com/mochajs/mocha-examples/tree/main/packages/babel
 [example-connect-test]: https://github.com/senchalabs/connect/tree/master/test
 [example-express-test]: https://github.com/visionmedia/express/tree/master/test
-[example-mocha-test]: https://github.com/mochajs/mocha/tree/master/test
-[example-mocha-config]: https://github.com/mochajs/mocha/tree/master/example/config
+[example-mocha-test]: https://github.com/mochajs/mocha/tree/main/test
+[example-mocha-config]: https://github.com/mochajs/mocha/tree/main/example/config
 [example-superagent-test]: https://github.com/visionmedia/superagent/tree/master/test/node
-[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/master/packages/third-party-reporter
-[example-typescript]: https://github.com/mochajs/mocha-examples/tree/master/packages/typescript
+[example-third-party-reporter]: https://github.com/mochajs/mocha-examples/tree/main/packages/third-party-reporter
+[example-typescript]: https://github.com/mochajs/mocha-examples/tree/main/packages/typescript
 [example-websocket.io-test]: https://github.com/LearnBoost/websocket.io/tree/master/test
 [expect.js]: https://github.com/LearnBoost/expect.js
 [expresso]: https://github.com/tj/expresso

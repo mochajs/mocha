@@ -40,6 +40,6 @@ cp: docs/_dist/_headers: No such file or directory
 
 :copyright: 2016-2018 [JS Foundation](https://js.foundation) and contributors.
 
-Content licensed [CC-BY-4.0](https://raw.githubusercontent.com/mochajs/mocha/master/docs/LICENSE-CC-BY-4.0).
+Content licensed [CC-BY-4.0](https://raw.githubusercontent.com/mochajs/mocha/main/docs/LICENSE-CC-BY-4.0).
 
-Code licensed [MIT](https://raw.githubusercontent.com/mochajs/mocha/master/LICENSE-MIT).
+Code licensed [MIT](https://raw.githubusercontent.com/mochajs/mocha/main/LICENSE-MIT).

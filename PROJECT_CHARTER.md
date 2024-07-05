@@ -32,7 +32,7 @@ The **Mocha** project is part of the [OpenJS Foundation], which operates transpa
   - Command-line execution and options
   - Browser-based execution and options
   - [Project administration](https://github.com/mochajs/admin)
-  - [Contribution guide](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
+  - [Contribution guide](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
 - General support for multiple levels of tests, including (but not limited to):
   - Unit tests
   - Integration tests
@@ -72,7 +72,7 @@ Changes to the following **cannot** unilaterally be applied by project leadershi
 
 - Mocha's Project Charter (this document)
 - Mocha's [Code of Conduct]
-- Mocha's licenses: [MIT](https://github.com/mochajs/mocha/blob/master/LICENSE) (for code) and [CC-BY-4.0](https://github.com/mochajs/mocha/blob/master/docs/LICENSE-CC-BY-4.0) (for documentation/website)
+- Mocha's licenses: [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE) (for code) and [CC-BY-4.0](https://github.com/mochajs/mocha/blob/main/docs/LICENSE-CC-BY-4.0) (for documentation/website)
 
 ### §3.1: Other Formal Project Relationships
 
@@ -103,5 +103,5 @@ Section Intentionally Left Blank
 Section Intentionally Left Blank
 
 [openjs foundation]: https://openjsf.org
-[maintainers.md]: https://github.com/mochajs/mocha/blob/master/MAINTAINERS.md
-[code of conduct]: https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md
+[maintainers.md]: https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md
+[code of conduct]: https://github.com/mochajs/mocha/blob/main/.github/CODE_OF_CONDUCT.md
