@@ -4,7 +4,7 @@
 
 ## ❓ Got a Question?
 
-If you have a question about using Mocha, please use the [mailing list](https://groups.google.com/group/mochajs), [StackOverflow](https://stackoverflow.com), or ask the friendly people in [our Discord](https://discord.gg/KeDn2uXhER).
+If you have a question about using Mocha, please use [StackOverflow](https://stackoverflow.com) or ask the friendly people in [our Discord](https://discord.gg/KeDn2uXhER).
 
 ## ✏️ Filing Issues
 
