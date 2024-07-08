@@ -229,5 +229,19 @@ describe('JSON reporter', function () {
         'file output not supported in browser'
       );
     });
+
+    it('should set options.indentation correctly', function () {
+      var options = {indentation: 4};
+      var mochaReporter = new mocha._reporter(runner, options);
+
+      expect(mochaReporter.options.indentation, 'to be', 4);
+    });
+
+    it('should set options.indentation correctly with a tab', function () {
+      var options = {indentation: '\t'};
+      var mochaReporter = new mocha._reporter(runner, options);
+
+      expect(mochaReporter.options.indentation, 'to be', '\t');
+    });
   });
 });
