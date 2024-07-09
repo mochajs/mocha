@@ -7,6 +7,9 @@ const {format} = require('util');
 const path = require('path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
+const EXIT_SUCCESS = 0;
+const EXIT_FAILURE = 1;
+const SIGNAL_OFFSET = 128;
 
 /**
  * Path to `mocha` executable
@@ -59,6 +62,7 @@ function runMocha(fixturePath, args, done, opts = {}) {
     args = [];
   }
 
+  debugger;
   return invokeMocha(
     [...args, resolveFixturePath(fixturePath)],
     (err, res) => {
@@ -232,6 +236,7 @@ function invokeMocha(args, done, opts = {}) {
     done = args;
     args = [];
   }
+  debugger;
   return createSubprocess(
     defaultArgs([MOCHA_EXECUTABLE].concat(args)),
     done,
@@ -321,6 +326,7 @@ function createSubprocess(args, done, opts = {}) {
   /**
    * @type {import('child_process').ChildProcess}
    */
+  debugger; // check args here for '--posix-exit-code'
   let mocha;
   if (opts.fork) {
     const {fork} = require('child_process');
@@ -346,15 +352,33 @@ function createSubprocess(args, done, opts = {}) {
   if (mocha.stderr) {
     mocha.stderr.on('data', listener);
   }
-  mocha.on('error', done);
+  mocha.on('error', (arg1, arg2) => {
+    debugger;
+    done(arg1, arg2);
+  });
 
   mocha.on('close', code => {
+    debugger;
     done(null, {
       output,
       code,
       args,
       command: args.join(' ')
     });
+  });
+
+  mocha.on('exit', (code, signal) => {
+    // emulate node's behavior for setting exit code on fatal signal. This allows
+    // unit tests to see the same exit code as running mocha on the command line.
+    console.warn(
+      `helpers.ts::mocha.on('exit'): entering with code ${code} and signal ${signal}`
+    );
+    if (signal) {
+      mocha.exitCode =
+        typeof signal == 'string'
+          ? os.constants.signals[signal] + SIGNAL_OFFSET
+          : signal;
+    }
   });
 
   return mocha;

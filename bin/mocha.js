@@ -25,7 +25,7 @@ const mochaArgs = {};
 const nodeArgs = {};
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
-const SIGNAL_OFFSET= 128;
+const SIGNAL_OFFSET = 128;
 let hasInspect = false;
 
 const opts = loadOptions(process.argv.slice(2));
@@ -112,6 +112,9 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
 
   proc.on('exit', (code, signal) => {
     process.on('exit', () => {
+      console.warn(
+        `bin/mocha.js::proc.on('exit'): entering with code ${code} and signal ${signal}.`
+      );
       if (signal) {
         const numericSignal =
           typeof signal === 'string' ? os.constants.signals[signal] : signal;
@@ -121,8 +124,14 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
           process.kill(process.pid, signal);
         }
       } else if (code !== 0 && mochaArgs['posix-exit-codes'] === true) {
+        console.warn(
+          `bin/mocha.js::proc.on('exit'): non-zero exit code receive; posix-exit-code set; exiting with code ${EXIT_FAILURE}`
+        );
         process.exit(EXIT_FAILURE);
       } else {
+        console.warn(
+          `bin/mocha.js::proc.on('exit'): non-zero exit code; posix-exit-codes not set; exiting with code ${code}`
+        );
         process.exit(code);
       }
     });
@@ -150,5 +159,6 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   });
 } else {
   debug('running Mocha in-process');
+  console.warn('running Mocha in-process');
   require('../lib/cli/cli').main([], mochaArgs);
 }
