@@ -25,7 +25,7 @@ const mochaArgs = {};
 const nodeArgs = {};
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
-const SIGNAL_OFFSET= 128;
+const SIGNAL_OFFSET = 128;
 let hasInspect = false;
 
 const opts = loadOptions(process.argv.slice(2));
