@@ -263,7 +263,7 @@ module.exports = {
         description: 'Build documentation'
       },
       production: {
-        script: 'nps docs && nps docs.postbuild',
+        script: 'nps docs',
         description: 'Build docs for production'
       },
       clean: {
