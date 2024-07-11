@@ -267,19 +267,13 @@ module.exports = {
         description: 'Build docs for production'
       },
       clean: {
-        script: 'rimraf docs/_dist docs/_site docs/api',
+        script: 'rimraf docs/_site docs/api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
       },
       linkcheck: {
         script:
           'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html --todo "HTTP 429 Too Many Requests"'
-      },
-      postbuild: {
-        script:
-          'node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers',
-        description: 'Post-process docs after build',
-        hiddenFromHelp: true
       },
       watch: {
         script: 'eleventy --serve',

@@ -7,7 +7,6 @@ global:
 timeout: 1000
 watch-ignore:
   - '.*'
-  - 'docs/_dist/**'
   - 'docs/_site/**'
   - 'node_modules'
   - 'coverage'

@@ -9,7 +9,7 @@
 #    that is where we will look for package.json/.nvmrc/etc not repo root!
 
 [build]
-  publish = "docs/_dist/"
+  publish = "docs/_site"
   command = "npm start docs.production"
 
 [build.environment]
