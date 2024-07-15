@@ -59,6 +59,7 @@ jobs:
           - 16
           - 18
           - 20
+          - 22
         include:
           - os: ubuntu-latest
             node: 16
