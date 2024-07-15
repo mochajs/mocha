@@ -28,8 +28,7 @@ permissions:
   contents: read
 
 jobs:
-  resolve_inputs:
-    name: Resolving inputs
+  resolve-inputs:
     runs-on: ubuntu-latest
     outputs:
       browsers: ${{ steps.split-browsers.outputs.splitted }}
@@ -47,17 +46,17 @@ jobs:
         run: echo "splitted=$(echo '${{ inputs.os }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
 
   script:
-    name: ${{ inputs.npm-script }}${{ needs.resolve_inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve_inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve_inputs.outputs.os && format(' on {0}', matrix.os) }}
+    name: ${{ inputs.npm-script }}${{ needs.resolve-inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve-inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve-inputs.outputs.os && format(' on {0}', matrix.os) }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     needs:
-      - resolve_inputs
+      - resolve-inputs
     strategy:
       fail-fast: false
       matrix:
-        node_version: ${{ fromJson(needs.resolve_inputs.outputs.nodeVersions || '["lts/*"]') }}
-        os: ${{ fromJson(needs.resolve_inputs.outputs.os || '["ubuntu-latest"]') }}
-        browser: ${{ fromJson(needs.resolve_inputs.outputs.browsers || '[""]') }}
+        node_version: ${{ fromJson(needs.resolve-inputs.outputs.nodeVersions || '["lts/*"]') }}
+        os: ${{ fromJson(needs.resolve-inputs.outputs.os || '["ubuntu-latest"]') }}
+        browser: ${{ fromJson(needs.resolve-inputs.outputs.browsers || '[""]') }}
     steps:
       - uses: actions/checkout@v4
         with:
