@@ -30,4 +30,17 @@ describe('parallel run', () => {
     assert.strictEqual(result.stats.failures, 0);
     assert.strictEqual(result.stats.passes, 3);
   });
+
+  it('should correctly handle circular references in an exception', async () => {
+    const result = await runMochaJSONAsync('parallel/circular-error.mjs', [
+      '--parallel',
+      '--jobs',
+      '2',
+      require.resolve('./fixtures/parallel/testworkerid1.mjs')
+    ]);
+    assert.strictEqual(result.stats.failures, 1);
+    assert.strictEqual(result.stats.passes, 1);
+    assert.strictEqual(result.failures[0].err.message, 'Foo');
+    assert.strictEqual(result.failures[0].err.foo.props[0], '[Circular]');
+  });
 });

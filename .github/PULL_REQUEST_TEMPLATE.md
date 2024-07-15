@@ -6,7 +6,7 @@ Otherwise we may not be able to review your PR. -->
 
 - [ ] Addresses an existing open issue: fixes #000
 - [ ] That issue was marked as [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
-- [ ] Steps in [CONTRIBUTING.md](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md) were taken
+- [ ] Steps in [CONTRIBUTING.md](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md) were taken
 
 ## Overview
 

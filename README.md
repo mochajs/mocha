@@ -5,9 +5,8 @@
 <p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
 
 <p align="center">
-<a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amaster"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=master" alt="GitHub Actions Build Status"></a>
+<a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amain"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=main" alt="GitHub Actions Build Status"></a>
 <a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
-<a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield" alt="FOSSA Status"></a>
 <a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/chat-Discord-5765F2.svg" /></a>
 <a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
 <a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
@@ -23,10 +22,10 @@
 ## Links
 
 - **[Documentation](https://mochajs.org)**
-- **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md)**
-- [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md)
-- [Contributing](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
-- [Development](https://github.com/mochajs/mocha/blob/master/.github/DEVELOPMENT.md)
+- **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/main/CHANGELOG.md)**
+- [Code of Conduct](https://github.com/mochajs/mocha/blob/main/.github/CODE_OF_CONDUCT.md)
+- [Contributing](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
+- [Development](https://github.com/mochajs/mocha/blob/main/.github/DEVELOPMENT.md)
 - [Discord](https://discord.gg/KeDn2uXhER) (ask questions here!)
 - [Issue Tracker](https://github.com/mochajs/mocha/issues)
 
@@ -59,7 +58,7 @@ You might want to help:
 
 - New to contributing to Mocha? Check out this list of [good first issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 - Mocha could use a hand with [these issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
-- The [maintainer's handbook](https://github.com/mochajs/mocha/blob/master/MAINTAINERS.md) explains how things get done
+- The [maintainer's handbook](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md) explains how things get done
 
 Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXhER) if you want to help with:
 
@@ -69,6 +68,6 @@ Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXh
 
 ## License
 
-Copyright 2011-2022 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/master/LICENSE).
+Copyright 2011-2022 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
