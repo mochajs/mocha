@@ -75,7 +75,7 @@ jobs:
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       - name: Generate coverage report
         if: always() && inputs.coverage
-        run: npx --no nyc report --reporter=lcov
+        run: npm start coverage-report-lcov
       - name: Coveralls Parallel
         if: always() && inputs.coverage
         uses: coverallsapp/github-action@v2
