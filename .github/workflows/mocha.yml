@@ -62,7 +62,7 @@ jobs:
           - 22
         include:
           - os: ubuntu-latest
-            node: 16
+            node: lts/*
             env:
               COVERAGE: 1
     steps:
