@@ -29,7 +29,7 @@ jobs:
     uses: ./.github/workflows/npm-script.yml
     with:
       browsers: ChromeHeadless
-      npm-script: test.browser
+      npm-script: test:browser
 
   test-browser-saucelabs:
     # Don't run forked 'pull_request' without saucelabs token
@@ -41,7 +41,7 @@ jobs:
     secrets: inherit
     with:
       browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
-      npm-script: test.browser
+      npm-script: test:browser
 
   test-node:
     name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'

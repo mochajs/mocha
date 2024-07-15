@@ -63,7 +63,7 @@ jobs:
           node-version: ${{ matrix.node_version }}
           cache: 'npm'
       - run: npm ci --ignore-scripts
-      - run: npm start ${{ inputs.npm-script }}
+      - run: npm run ${{ inputs.npm-script }}
         env:
           BROWSER: ${{ matrix.browser }}
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
