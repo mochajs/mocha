@@ -92,6 +92,6 @@ jobs:
         run: npm start coverage-report-lcov
       - name: Upload Coverage to Coveralls (Linux + Node.js latest)
         if: ${{ matrix.env.COVERAGE }}
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@643bc37
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
