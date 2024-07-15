@@ -51,9 +51,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: ${{ needs.resolve_inputs.outputs.nodeVersions && fromJson(needs.resolve_inputs.outputs.nodeVersions) || 'lts/*' }}
-        os: ${{ needs.resolve_inputs.outputs.os && fromJson(needs.resolve_inputs.outputs.os) || 'ubuntu-latest' }}
-        browser: ${{ needs.resolve_inputs.outputs.browsers && fromJson(needs.resolve_inputs.outputs.browsers) }}
+        node_version: ${{ fromJson(needs.resolve_inputs.outputs.nodeVersions || '["lts/*"]') }}
+        os: ${{ fromJson(needs.resolve_inputs.outputs.os || '["ubuntu-latest"]') }}
+        browser: ${{ fromJson(needs.resolve_inputs.outputs.browsers || '[]') }}
     steps:
       - uses: actions/checkout@v4
         with:
