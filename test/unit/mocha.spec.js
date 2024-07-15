@@ -376,24 +376,24 @@ describe('Mocha', function () {
       });
     });
 
-    describe('failOnFailingTestSuite()', function() {
-      it('should set the failOnFailingTestSuite option to true', function() {
-        mocha.failOnFailingTestSuite();
+    describe('passOnFailingTestSuite()', function() {
+      it('should set the passOnFailingTestSuite option to false', function() {
+        mocha.passOnFailingTestSuite();
         expect(
           mocha.options,
           'to have property',
-          'failOnFailingTestSuite',
-          true
+          'passOnFailingTestSuite',
+          false
         );
       });
 
-      it('should set the failOnFailingTestSuite option to false', function() {
-        mocha.failOnFailingTestSuite(false);
+      it('should set the passOnFailingTestSuite option to true', function() {
+        mocha.passOnFailingTestSuite(true);
         expect(
           mocha.options,
           'to have property',
-          'failOnFailingTestSuite',
-          false
+          'passOnFailingTestSuite',
+          true
         );
       });
     });
