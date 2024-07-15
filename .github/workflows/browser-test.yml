@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: remove 'run-browser-test' label
-        uses: buildsville/add-remove-label@ac59c9f
+        uses: buildsville/add-remove-label@ac59c9f0aeb66eb12d6366eb1d69ec1906e9ef9a
         with:
           token: ${{secrets.GITHUB_TOKEN}}
           label: run-browser-test
