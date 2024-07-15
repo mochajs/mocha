@@ -55,7 +55,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '${{ matrix.node }}'
-      - run: npm install --production
+      - run: npm ci --production
       - run: npm run test:smoke
 
   lint:
