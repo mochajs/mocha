@@ -11,6 +11,9 @@ on:
     types: [opened, synchronize, reopened]
     paths-ignore: ['*.md', 'docs/**']
 
+permissions:
+  contents: read
+
 jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
