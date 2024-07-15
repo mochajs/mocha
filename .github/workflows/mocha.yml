@@ -47,51 +47,11 @@ jobs:
       npm-script: test:browser
 
   test-node:
-    name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
+    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    uses: ./.github/workflows/npm-script.yml
     needs: smoke
-    runs-on: '${{ matrix.os }}'
-    env:
-      NODE_OPTIONS: '--trace-warnings'
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-2019
-        node:
-          - 14
-          - 16
-          - 18
-          - 20
-          - 22
-        include:
-          - os: ubuntu-latest
-            node: lts/*
-            env:
-              COVERAGE: 1
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '${{ matrix.node }}'
-          cache: 'npm'
-      - name: Install Dependencies
-        run: npm ci --ignore-scripts
-      - name: Install Annotation Support
-        run: npm install mocha-github-actions-reporter
-      - name: Run All Node.js Tests
-        run: npm start test.node
-        env:
-          COVERAGE: '${{ matrix.env.COVERAGE }}'
-          MOCHA_REPORTER: mocha-github-actions-reporter
-          # this is so mocha-github-actions-reporter can find mocha
-          NODE_PATH: lib
-      - name: Generate Coverage Report (Linux + Node.js latest)
-        if: ${{ matrix.env.COVERAGE }}
-        run: npm start coverage-report-lcov
-      - name: Upload Coverage to Coveralls (Linux + Node.js latest)
-        if: ${{ matrix.env.COVERAGE }}
-        uses: coverallsapp/github-action@643bc37
-        with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
+    with:
+      os: 'ubuntu-latest,windows-2019'
+      node-versions: '14,16,18,20,22'
+      npm-script: test:node
+      coverage: true

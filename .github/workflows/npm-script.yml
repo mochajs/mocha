@@ -19,6 +19,10 @@ on:
         description: 'A comma separated list of operating systems to test on.'
         required: false
         type: string
+      coverage:
+        description: 'Whether to set up coverage reporting or not'
+        required: false
+        type: boolean
 
 permissions:
   contents: read
@@ -43,7 +47,7 @@ jobs:
         run: echo "splitted=$(echo '${{ inputs.os }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
 
   script:
-    name: ${{ needs.resolve_inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ inputs.npm-script }}${{ needs.resolve_inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve_inputs.outputs.os && format(' on {0}', matrix.os) }}
+    name: ${{ inputs.npm-script }}${{ needs.resolve_inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve_inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve_inputs.outputs.os && format(' on {0}', matrix.os) }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     needs:
@@ -66,7 +70,26 @@ jobs:
       - run: npm run ${{ inputs.npm-script }}
         env:
           BROWSER: ${{ matrix.browser }}
+          COVERAGE: ${{ inputs.coverage && '1'}}
+          NODE_OPTIONS: '--trace-warnings'
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+      - name: Generate coverage report
+        if: always() && inputs.coverage
+        run: npx --no nyc report --reporter=lcov
+      - name: Coveralls Parallel
+        if: always() && inputs.coverage
+        uses: coverallsapp/github-action@v2
+        with:
+          flag-name: run-${{ join(matrix.*, '-') }}
+          parallel: true
 
-
+  upload-coverage:
+    needs: script
+    if: always() && inputs.coverage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
