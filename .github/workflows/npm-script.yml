@@ -53,7 +53,7 @@ jobs:
       matrix:
         node_version: ${{ fromJson(needs.resolve_inputs.outputs.nodeVersions || '["lts/*"]') }}
         os: ${{ fromJson(needs.resolve_inputs.outputs.os || '["ubuntu-latest"]') }}
-        browser: ${{ fromJson(needs.resolve_inputs.outputs.browsers || '[]') }}
+        browser: ${{ fromJson(needs.resolve_inputs.outputs.browsers || '[""]') }}
     steps:
       - uses: actions/checkout@v4
         with:
