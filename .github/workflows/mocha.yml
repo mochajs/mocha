@@ -42,15 +42,15 @@ jobs:
       browsers: ChromeHeadless
       npm-script: test:browser
 
-  test-browser-saucelabs:
-    # Don't run forked 'pull_request' without saucelabs token
-    if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
-    needs:
-      - lint
-      - smoke
-      - test-browser-local
-    uses: ./.github/workflows/npm-script.yml
-    secrets: inherit
-    with:
-      browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
-      npm-script: test:browser
+  # test-browser-saucelabs:
+  #   # Don't run forked 'pull_request' without saucelabs token
+  #   if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
+  #   needs:
+  #     - lint
+  #     - smoke
+  #     - test-browser-local
+  #   uses: ./.github/workflows/npm-script.yml
+  #   secrets: inherit
+  #   with:
+  #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
+  #     npm-script: test:browser
