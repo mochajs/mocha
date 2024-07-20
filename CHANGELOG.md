@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.7.0 / 2024-07-20
+
+### :tada: Enhancements
+
+- [#4771](https://github.com/mochajs/mocha/pull/4771) feat: add option to not fail on failing test suite ([**@ilgonmic**](https://github.com/ilgonmic))
+
 ## 10.6.1 / 2024-07-20
 
 ### :bug: Fixes

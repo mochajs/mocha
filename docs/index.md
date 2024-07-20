@@ -917,11 +917,15 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 ### `--pass-on-failing-test-suite`
 
+> _New in v10.7.0_
+
 If set to `true`, Mocha returns exit code `0` even if there are failed tests during run.
 
 ### `--fail-zero`
 
-> _New in v9.1.0_ Fail test run if no tests are encountered with `exit-code: 1`.
+> _New in v9.1.0_
+
+Fail test run if no tests are encountered with `exit-code: 1`.
 
 ### `--forbid-only`
 
