@@ -915,6 +915,10 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 - Try something like [wtfnode][npm-wtfnode]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
+### `--pass-on-failing-test-suite`
+
+If set to `true`, Mocha returns exit code `0` even if there are failed tests during run.
+
 ### `--fail-zero`
 
 > _New in v9.1.0_ Fail test run if no tests are encountered with `exit-code: 1`.
