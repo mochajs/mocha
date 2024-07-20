@@ -917,7 +917,7 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 ### `--pass-on-failing-test-suite`
 
-If set on true, Mocha returns zero code even if there are failed tests during run.
+If set to `true`, Mocha returns exit code `0` even if there are failed tests during run.
 
 ### `--fail-zero`
 
