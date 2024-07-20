@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "10.6.0",
+  "version": "10.6.1",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
@@ -92,7 +92,6 @@
     "fail-on-errors-webpack-plugin": "^3.0.0",
     "fs-extra": "^10.0.0",
     "globals": "^13.24.0",
-    "hyperlink": "^5.0.4",
     "jsdoc": "^3.6.7",
     "jsdoc-ts-utils": "^2.0.1",
     "karma": "^6.4.2",
