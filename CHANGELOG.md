@@ -1,5 +1,12 @@
 # Changelog
 
+## 10.6.1 / 2024-07-20
+
+### :bug: Fixes
+
+- [#3825](https://github.com/mochajs/mocha/pull/3825) fix: do not exit when only unref'd timer is present in test code ([**@boneskull**](https://github.com/boneskull))
+- [#5040](https://github.com/mochajs/mocha/pull/5040) fix: support canonical module ([**@JacobLey**](https://github.com/JacobLey))
+
 ## 10.6.0 / 2024-07-02
 
 ### :tada: Enhancements
