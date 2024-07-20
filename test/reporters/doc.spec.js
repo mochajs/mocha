@@ -6,7 +6,7 @@ var reporters = require('../../').reporters;
 
 var Doc = reporters.Doc;
 var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+var createRunReporterFunction = helpers.createRunReporterFunction;
 
 var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
 var EVENT_SUITE_END = events.EVENT_SUITE_END;
@@ -16,7 +16,7 @@ var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 describe('Doc reporter', function () {
   var runner;
   var options = {};
-  var runReporter = makeRunReporter(Doc);
+  var runReporter = createRunReporterFunction(Doc);
 
   afterEach(function () {
     runner = null;
@@ -32,7 +32,7 @@ describe('Doc reporter', function () {
           title: expectedTitle
         };
 
-        it('should log html with indents and expected title', function () {
+        it('should log html with indents and expected title', async function () {
           runner = createMockRunner(
             'suite',
             EVENT_SUITE_BEGIN,
@@ -40,7 +40,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          var {stdout} = await runReporter({}, runner, options);
           var expectedArray = [
             '    <section class="suite">\n',
             '      <h1>' + expectedTitle + '</h1>\n',
@@ -49,7 +49,7 @@ describe('Doc reporter', function () {
           expect(stdout, 'to equal', expectedArray);
         });
 
-        it('should escape title where necessary', function () {
+        it('should escape title where necessary', async function () {
           var suite = {
             root: false,
             title: unescapedTitle
@@ -64,7 +64,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          var {stdout} = await runReporter({}, runner, options);
           var expectedArray = [
             '    <section class="suite">\n',
             '      <h1>' + expectedTitle + '</h1>\n',
@@ -79,7 +79,7 @@ describe('Doc reporter', function () {
           root: true
         };
 
-        it('should not log any html', function () {
+        it('should not log any html', async function () {
           runner = createMockRunner(
             'suite',
             EVENT_SUITE_BEGIN,
@@ -87,7 +87,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          var {stdout} = await runReporter({}, runner, options);
           expect(stdout, 'to be empty');
         });
       });
@@ -99,7 +99,7 @@ describe('Doc reporter', function () {
           root: false
         };
 
-        it('should log expected html with indents', function () {
+        it('should log expected html with indents', async function () {
           runner = createMockRunner(
             'suite end',
             EVENT_SUITE_END,
@@ -107,7 +107,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          var {stdout} = await runReporter({}, runner, options);
           var expectedArray = ['  </dl>\n', '</section>\n'];
           expect(stdout, 'to equal', expectedArray);
         });
@@ -118,7 +118,7 @@ describe('Doc reporter', function () {
           root: true
         };
 
-        it('should not log any html', function () {
+        it('should not log any html', async function () {
           runner = createMockRunner(
             'suite end',
             EVENT_SUITE_END,
@@ -126,7 +126,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          var {stdout} = await runReporter({}, runner, options);
           expect(stdout, 'to be empty');
         });
       });
@@ -145,9 +145,9 @@ describe('Doc reporter', function () {
         }
       };
 
-      it('should log html with indents, expected title, and body', function () {
+      it('should log html with indents, expected title, and body', async function () {
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
-        var stdout = runReporter(this, runner, options);
+        var {stdout} = await runReporter({}, runner, options);
         var expectedArray = [
           '    <dt>' + expectedTitle + '</dt>\n',
           '    <dt>' + expectedFile + '</dt>\n',
@@ -156,7 +156,7 @@ describe('Doc reporter', function () {
         expect(stdout, 'to equal', expectedArray);
       });
 
-      it('should escape title and body where necessary', function () {
+      it('should escape title and body where necessary', async function () {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
         var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';
@@ -171,7 +171,7 @@ describe('Doc reporter', function () {
         var expectedEscapedBody =
           '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
-        var stdout = runReporter(this, runner, options);
+        var {stdout} = await runReporter({}, runner, options);
         var expectedArray = [
           '    <dt>' + expectedEscapedTitle + '</dt>\n',
           '    <dt>' + expectedEscapedFile + '</dt>\n',
@@ -195,7 +195,7 @@ describe('Doc reporter', function () {
         }
       };
 
-      it('should log html with indents, expected title, body, and error', function () {
+      it('should log html with indents, expected title, body, and error', async function () {
         runner = createMockRunner(
           'fail two args',
           EVENT_TEST_FAIL,
@@ -204,7 +204,7 @@ describe('Doc reporter', function () {
           test,
           expectedError
         );
-        var stdout = runReporter(this, runner, options);
+        var {stdout} = await runReporter({}, runner, options);
         var expectedArray = [
           '    <dt class="error">' + expectedTitle + '</dt>\n',
           '    <dt class="error">' + expectedFile + '</dt>\n',
@@ -216,7 +216,7 @@ describe('Doc reporter', function () {
         expect(stdout, 'to equal', expectedArray);
       });
 
-      it('should escape title, body, and error where necessary', function () {
+      it('should escape title, body, and error where necessary', async function () {
         var unescapedTitle = '<div>' + expectedTitle + '</div>';
         var unescapedFile = '<div>' + expectedFile + '</div>';
         var unescapedBody = '<div>' + expectedBody + '</div>';
@@ -241,7 +241,7 @@ describe('Doc reporter', function () {
           test,
           unescapedError
         );
-        var stdout = runReporter(this, runner, options);
+        var {stdout} = await runReporter({}, runner, options);
         var expectedArray = [
           '    <dt class="error">' + expectedEscapedTitle + '</dt>\n',
           '    <dt class="error">' + expectedEscapedFile + '</dt>\n',

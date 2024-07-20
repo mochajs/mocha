@@ -30,7 +30,7 @@ describe('Spec reporter', function () {
 
   describe('event handlers', function () {
     describe("on 'suite' event", function () {
-      it('should return title', function () {
+      it('should return title', async function () {
         var suite = {
           title: expectedTitle
         };
@@ -42,7 +42,7 @@ describe('Spec reporter', function () {
           suite
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var {stdout} = await runReporter({epilogue: noop}, runner, options);
         sinon.restore();
 
         var expectedArray = [expectedTitle + '\n'];
@@ -51,7 +51,7 @@ describe('Spec reporter', function () {
     });
 
     describe("on 'pending' event", function () {
-      it('should return title', function () {
+      it('should return title', async function () {
         var suite = {
           title: expectedTitle
         };
@@ -63,7 +63,7 @@ describe('Spec reporter', function () {
           suite
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var {stdout} = await runReporter({epilogue: noop}, runner, options);
         sinon.restore();
 
         var expectedArray = ['  - ' + expectedTitle + '\n'];
@@ -73,7 +73,7 @@ describe('Spec reporter', function () {
 
     describe("on 'pass' event", function () {
       describe('when test speed is slow', function () {
-        it('should return expected tick, title, and duration', function () {
+        it('should return expected tick, title, and duration', async function () {
           var expectedDuration = 2;
           var test = {
             title: expectedTitle,
@@ -90,7 +90,7 @@ describe('Spec reporter', function () {
             test
           );
           var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          var {stdout} = await runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
           var expectedString =
@@ -107,7 +107,7 @@ describe('Spec reporter', function () {
       });
 
       describe('when test speed is fast', function () {
-        it('should return expected tick, title without a duration', function () {
+        it('should return expected tick, title without a duration', async function () {
           var expectedDuration = 1;
           var test = {
             title: expectedTitle,
@@ -124,7 +124,7 @@ describe('Spec reporter', function () {
             test
           );
           var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          var {stdout} = await runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
           var expectedString =
@@ -135,7 +135,7 @@ describe('Spec reporter', function () {
     });
 
     describe("on 'fail' event", function () {
-      it('should return title and function count', function () {
+      it('should return title and function count', async function () {
         var functionCount = 1;
         var test = {
           title: expectedTitle
@@ -148,7 +148,7 @@ describe('Spec reporter', function () {
           test
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var {stdout} = await runReporter({epilogue: noop}, runner, options);
         sinon.restore();
 
         var expectedArray = [

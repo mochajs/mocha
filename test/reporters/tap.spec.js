@@ -42,10 +42,10 @@ describe('TAP reporter', function () {
         var expectedSuite = 'some suite';
         var stdout = [];
 
-        before(function () {
+        before(async function () {
           var runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should not write a TAP specification version', function () {
@@ -56,7 +56,7 @@ describe('TAP reporter', function () {
       describe("on 'pending' event", function () {
         var stdout = [];
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'start test',
@@ -66,7 +66,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write expected message including count and title', function () {
@@ -79,7 +79,7 @@ describe('TAP reporter', function () {
       describe("on 'pass' event", function () {
         var stdout;
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'start test',
@@ -89,7 +89,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write expected message including count and title', function () {
@@ -106,7 +106,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has only message", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               message: expectedErrorMessage
@@ -127,7 +127,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message and error message', function () {
@@ -142,7 +142,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has only stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               stack: expectedStack
@@ -156,7 +156,7 @@ describe('TAP reporter', function () {
               error
             );
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message and stack', function () {
@@ -171,7 +171,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has both message and stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               stack: expectedStack,
@@ -193,7 +193,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message, error message, and stack', function () {
@@ -209,7 +209,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has neither message nor stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {};
             var runner = createMockRunner(
@@ -228,7 +228,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message only', function () {
@@ -243,7 +243,7 @@ describe('TAP reporter', function () {
       describe("on 'end' event", function () {
         var stdout;
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'fail end pass',
@@ -253,7 +253,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write total tests, passes, failures, & plan', function () {
@@ -286,10 +286,10 @@ describe('TAP reporter', function () {
         var expectedSuite = 'some suite';
         var stdout;
 
-        before(function () {
+        before(async function () {
           var runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write the TAP specification version', function () {
@@ -302,7 +302,7 @@ describe('TAP reporter', function () {
       describe("on 'pending' event", function () {
         var stdout;
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'start test',
@@ -312,7 +312,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write expected message including count and title', function () {
@@ -325,7 +325,7 @@ describe('TAP reporter', function () {
       describe("on 'pass' event", function () {
         var stdout;
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'start test',
@@ -335,7 +335,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write expected message including count and title', function () {
@@ -352,7 +352,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has only message", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               message: expectedErrorMessage
@@ -373,7 +373,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message and error message', function () {
@@ -391,7 +391,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has only stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               stack: expectedStack
@@ -405,7 +405,7 @@ describe('TAP reporter', function () {
               error
             );
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message and stack', function () {
@@ -423,7 +423,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has both message and stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {
               stack: expectedStack,
@@ -445,7 +445,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message, error message, and stack', function () {
@@ -465,7 +465,7 @@ describe('TAP reporter', function () {
         describe("when 'error' has neither message nor stack", function () {
           var stdout;
 
-          before(function () {
+          before(async function () {
             var test = createTest();
             var error = {};
             var runner = createMockRunner(
@@ -484,7 +484,7 @@ describe('TAP reporter', function () {
               }
             };
             runner.suite = '';
-            stdout = runReporter({}, runner, options);
+            ({ stdout } = await runReporter({}, runner, options));
           });
 
           it('should write expected message only', function () {
@@ -499,7 +499,7 @@ describe('TAP reporter', function () {
       describe("on 'end' event", function () {
         var stdout;
 
-        before(function () {
+        before(async function () {
           var test = createTest();
           var runner = createMockRunner(
             'fail end pass',
@@ -509,7 +509,7 @@ describe('TAP reporter', function () {
             test
           );
           runner.suite = '';
-          stdout = runReporter({}, runner, options);
+          ({ stdout } = await runReporter({}, runner, options));
         });
 
         it('should write total tests, passes, failures & plan', function () {

@@ -40,7 +40,7 @@ describe('List reporter', function () {
 
   describe('event handlers', function () {
     describe("on 'start' and 'test' events", function () {
-      it('should write expected newline and title', function () {
+      it('should write expected newline and title', async function () {
         var runner = createMockRunner(
           'start test',
           EVENT_RUN_BEGIN,
@@ -52,7 +52,7 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        var {stdout} = await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         var startString = '\n';
@@ -63,7 +63,7 @@ describe('List reporter', function () {
     });
 
     describe("on 'pending' event", function () {
-      it('should write expected title', function () {
+      it('should write expected title', async function () {
         var runner = createMockRunner(
           'pending test',
           EVENT_TEST_PENDING,
@@ -75,7 +75,7 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        var {stdout} = await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(stdout[0], 'to equal', '  - ' + expectedTitle + '\n');
@@ -89,7 +89,7 @@ describe('List reporter', function () {
         crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
-      it('should call cursor CR', function () {
+      it('should call cursor CR', async function () {
         var runner = createMockRunner(
           'pass',
           EVENT_TEST_PASS,
@@ -101,13 +101,13 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
 
-      it('should write expected symbol, title, and duration', function () {
+      it('should write expected symbol, title, and duration', async function () {
         var expectedOkSymbol = 'OK';
         sinon.stub(Base.symbols, 'ok').value(expectedOkSymbol);
 
@@ -122,7 +122,7 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        var {stdout} = await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(
@@ -146,7 +146,7 @@ describe('List reporter', function () {
         crStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
       });
 
-      it('should call cursor CR', function () {
+      it('should call cursor CR', async function () {
         var runner = createMockRunner(
           'fail',
           EVENT_TEST_FAIL,
@@ -158,13 +158,13 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(crStub.called, 'to be true');
       });
 
-      it('should write expected error number and title', function () {
+      it('should write expected error number and title', async function () {
         var expectedErrorCount = 1;
         var runner = createMockRunner(
           'fail',
@@ -177,7 +177,7 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        var {stdout} = await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(
@@ -187,7 +187,7 @@ describe('List reporter', function () {
         );
       });
 
-      it('should immediately construct fail strings', function () {
+      it('should immediately construct fail strings', async function () {
         var actual = {a: 'actual'};
         var expected = {a: 'expected'};
         var checked = false;
@@ -219,7 +219,7 @@ describe('List reporter', function () {
         var fakeThis = {
           epilogue: noop
         };
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(typeof err.actual, 'to be', 'string');
@@ -228,13 +228,13 @@ describe('List reporter', function () {
     });
 
     describe("on 'end' event", function () {
-      it('should call epilogue', function () {
+      it('should call epilogue', async function () {
         var runner = createMockRunner('end', EVENT_RUN_END);
         var options = {};
         var fakeThis = {
           epilogue: sinon.spy()
         };
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(fakeThis.epilogue.calledOnce, 'to be true');
