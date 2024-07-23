@@ -46,6 +46,10 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [TextMate bundle](#textmate)
   {:.two-column}
 
+## Running Mocha
+
+Mocha can be run in various environments, including Node.js and browsers. While most interfaces such as BDD and TDD are fully supported, please note that the "exports" interface does not work in browser environments due to how browsers handle module exports. Refer to the [Interfaces](./API.md#exports-interface) and [Browser Support](./browser-support.md) documentation for more details.
+
 ## Table of Contents
 
 {{ toc }}
