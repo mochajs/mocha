@@ -2,7 +2,7 @@ jobs:
   compliance:
     runs-on: ubuntu-latest
     steps:
-      - uses: mtfoley/pr-compliance-action@main
+      - uses: mtfoley/pr-compliance-action@11b664f0fcf2c4ce954f05ccfcaab6e52b529f86
         with:
           body-auto-close: false
           ignore-team-members: false
