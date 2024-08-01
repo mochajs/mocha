@@ -157,10 +157,10 @@ module.exports = {
         }
       }
     },
-    // 'coverage-report-lcov': {
-    //   script: 'nyc report --reporter=lcov',
-    //   description: 'Write LCOV report to disk (run tests with COVERAGE=1 first)'
-    // },
+    'coverage-report-lcov': {
+      script: 'nyc report --reporter=lcov',
+      description: 'Write LCOV report to disk (run tests with COVERAGE=1 first)'
+    },
     // 'coverage-report': {
     //   script: 'nyc report --reporter=html',
     //   description:
