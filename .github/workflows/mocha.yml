@@ -22,8 +22,7 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      os: 'ubuntu-latest,windows-2019'
-      node-versions: '14,16,18,20,22'
+      node-versions: '14,22,lts/*'
       npm-script: test-smoke
 
   test-node:
