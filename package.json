@@ -48,6 +48,8 @@
     "start": "nps",
     "test": "nps test",
     "version": "nps version",
+    "test:browser": "nps test.browser",
+    "test:node": "nps test.node",
     "test:smoke": "node ./bin/mocha --no-config test/smoke/smoke.spec.js"
   },
   "dependencies": {
