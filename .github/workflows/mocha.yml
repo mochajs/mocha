@@ -30,11 +30,35 @@ jobs:
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: smoke
+    strategy:
+      fail-fast: false
+      matrix:
+        test-part:
+          - bdd
+          - tdd
+          - qunit
+          - exports
+          - unit
+          - integration
+          - jsapi
+          - requires
+          - reporters
+          - only
     with:
       os: 'ubuntu-latest,windows-2019'
       node-versions: '14,16,18,20,22'
-      npm-script: test-node
+      npm-script: test-node:${{ matrix.test-part }}
       coverage: true
+
+  test-node-upload-coverage:
+    needs: test-node
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
 
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
