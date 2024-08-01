@@ -62,7 +62,7 @@
     "test-node:qunit": "nps testNode.qunit",
     "test-node:exports": "nps testNode.exports",
     "test-node:unit": "nps testNode.unit",
-    "test-node:integration": "nps testNode.integration",
+    "test-node:integration": "run-s clean build && nps testNode.integration",
     "test-node:jsapi": "nps testNode.jsapi",
     "test-node:requires": "nps testNode.requires",
     "test-node:reporters": "nps testNode.reporters",
