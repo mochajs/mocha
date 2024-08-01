@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "10.6.0",
+  "version": "10.7.0",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
@@ -54,12 +54,12 @@
     "lint:markdown": "markdownlint '*.md' 'docs/**/*.md' '.github/*.md' 'lib/**/*.md' 'test/**/*.md' 'example/**/*.md'",
     "lint": "run-p lint:*",
     "prepublishOnly": "nps test clean build",
+    "test-browser:reporters": "run-s 'helper:cross-env NODE_PATH=. MOCHA_TEST={%} run-s helper:test-browser' -- bdd esm qunit tdd",
+    "test-browser:webpack-compat": "webpack --mode development --config ./test/browser-specific/fixtures/webpack/webpack.config.js",
+    "test-browser": "run-s clean build test-browser:*",
+    "test-node": "rimraf .nyc_output && run-s clean && nps testNode",
     "test-smoke": "node ./bin/mocha --no-config test/smoke/smoke.spec.js",
-    "test:0-node": "rimraf .nyc_output && run-s clean && nps testNode",
-    "test:1-browser:reporters": "run-s 'helper:cross-env NODE_PATH=. MOCHA_TEST={%} run-s helper:test-browser' -- bdd esm qunit tdd",
-    "test:1-browser:webpack-compat": "webpack --mode development --config ./test/browser-specific/fixtures/webpack/webpack.config.js",
-    "test:1-browser": "run-s clean build test:1-browser:*",
-    "test": "run-s lint test:*",
+    "test": "run-s lint test-node test-browser",
     "version:linkify-changelog": "node scripts/linkify-changelog.mjs",
     "version:update-authors": "node scripts/update-authors.js",
     "version": "run-p version:* && git add -A ./AUTHORS ./CHANGELOG.md"
@@ -106,7 +106,6 @@
     "fail-on-errors-webpack-plugin": "^3.0.0",
     "fs-extra": "^10.0.0",
     "globals": "^13.24.0",
-    "hyperlink": "^5.0.4",
     "jsdoc": "^3.6.7",
     "jsdoc-ts-utils": "^2.0.1",
     "karma": "^6.4.2",

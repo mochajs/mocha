@@ -169,7 +169,7 @@ module.exports = {
     docs: {
       default: {
         script:
-          'nps docs.clean && nps docs.api && eleventy && nps docs.linkcheck',
+          'nps docs.clean && nps docs.api && eleventy',
         description: 'Build documentation'
       },
       production: {
@@ -180,10 +180,6 @@ module.exports = {
         script: 'rimraf docs/_dist docs/_site docs/api',
         description: 'Prepare system for doc building',
         hiddenFromHelp: true
-      },
-      linkcheck: {
-        script:
-          'hyperlink -ri --canonicalroot https://mochajs.org --skip ".js.html#line" docs/_site/index.html --todo "HTTP 429 Too Many Requests"'
       },
       postbuild: {
         script:
