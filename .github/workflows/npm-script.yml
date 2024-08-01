@@ -80,5 +80,5 @@ jobs:
         if: always() && inputs.coverage
         uses: coverallsapp/github-action@v2
         with:
-          flag-name: run-${{ join(matrix.*, '-') }}
+          flag-name: run-${{ inputs.npm-script }}-${{ join(matrix.*, '-') }}
           parallel: true
