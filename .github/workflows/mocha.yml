@@ -25,10 +25,31 @@ jobs:
       node-versions: '14,22,lts/*'
       npm-script: test-smoke
 
-  test-node:
+  test-node-lts:
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: smoke
+    strategy:
+      fail-fast: false
+      matrix:
+        test-part:
+          - bdd
+          - tdd
+          - qunit
+          - exports
+          - unit
+          - integration
+          - jsapi
+          - requires
+          - reporters
+          - only
+    with:
+      npm-script: test-node:${{ matrix.test-part }}
+
+  test-node-all:
+    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    uses: ./.github/workflows/npm-script.yml
+    needs: test-node-lts
     strategy:
       fail-fast: false
       matrix:
@@ -50,7 +71,7 @@ jobs:
       coverage: true
 
   test-node-upload-coverage:
-    needs: test-node
+    needs: test-node-all
     if: always()
     runs-on: ubuntu-latest
     steps:
