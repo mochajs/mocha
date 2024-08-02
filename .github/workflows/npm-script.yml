@@ -70,6 +70,7 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
+          FORCE_COLOR: 3
           NODE_OPTIONS: '--trace-warnings'
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
