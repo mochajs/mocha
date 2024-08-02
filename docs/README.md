@@ -11,15 +11,15 @@ _So you wanna build the site?_
 ## Development
 
 1. Run `npm install` from working copy root to get Node.js deps.
-1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
-1. To rebuild the site _once_, execute `npm start docs`.
+1. To serve the site and rebuild as changes are made, execute `npm run docs-watch`.
+1. To rebuild the site _once_, execute `npm run docs`.
 
 ### Notes
 
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should _not_ be included in the build.
 - `docs/_dist` is where the deployed site lives. `docs/_site` is essentially a build step. These directories are _not_ under version control.
-- If you get the error message below when running `npm start docs`, follow [this guide](https://www.npmjs.com/package/gm) to install GraphicsMagick or ImageMagick.
+- If you get the error message below when running `npm run docs`, follow [this guide](https://www.npmjs.com/package/gm) to install GraphicsMagick or ImageMagick.
 
 ```console
 ⚠ WARN: docs/_site/images/matomo-logo.png: Error executing Stream: The gm stream ended without emitting any data

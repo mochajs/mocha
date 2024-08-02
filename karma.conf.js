@@ -80,7 +80,7 @@ module.exports = config => {
   let cfg = {...baseConfig};
 
   // TO RUN AGAINST SAUCELABS LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm start test.browser`
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm run test-browser`
   let sauceConfig;
 
   // configuration for CI mode
