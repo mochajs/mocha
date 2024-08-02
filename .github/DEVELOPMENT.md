@@ -17,4 +17,3 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
    - Some optional dependencies may fail; you can safely ignore these unless you are trying to build the documentation.
    - If you're sick of seeing the failures, run `npm install --ignore-scripts`.
 
-> PRO TIP: After `npm install`, run `npm start` to see a list of commands which can be run with `npm start <command>` (powered by [nps](https://npm.im/nps)).

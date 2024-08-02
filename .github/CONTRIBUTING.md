@@ -88,7 +88,7 @@ Then:
    - **Do not modify** the root `mocha.js` file directly; it is automatically generated.
    - Keep your PR focused.
      Don't fix two things at once; don't upgrade dependencies unless necessary.
-1. Before committing, run `npm start test`.
+1. Before committing, run `npm test`.
    - This will run both Node.js-based and browser-based tests.
    - Ultimately, your pull request will be built on our continuous integration servers ([GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Tests%22)).
      The first step to ensuring these checks pass is to test on your own machine.
