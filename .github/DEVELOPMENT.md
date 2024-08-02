@@ -16,4 +16,3 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
    - Do not use `yarn install` or `pnpm install`.
    - Some optional dependencies may fail; you can safely ignore these unless you are trying to build the documentation.
    - If you're sick of seeing the failures, run `npm install --ignore-scripts`.
-
