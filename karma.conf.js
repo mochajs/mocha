@@ -110,7 +110,6 @@ module.exports = config => {
       }
     }
   }
-  console.log('MOCHA_TEST', env.MOCHA_TEST);
 
   cfg = createBundleDir(cfg, bundleDirPath);
   cfg = addSauceTests(cfg, sauceConfig);
