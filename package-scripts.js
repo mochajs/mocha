@@ -263,18 +263,12 @@ module.exports = {
         description: 'Build documentation'
       },
       production: {
-        script: 'nps docs && nps docs.postbuild',
+        script: 'nps docs',
         description: 'Build docs for production'
       },
       clean: {
-        script: 'rimraf docs/_dist docs/_site docs/api',
+        script: 'rimraf docs/_site docs/api',
         description: 'Prepare system for doc building',
-        hiddenFromHelp: true
-      },
-      postbuild: {
-        script:
-          'node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers',
-        description: 'Post-process docs after build',
         hiddenFromHelp: true
       },
       watch: {
