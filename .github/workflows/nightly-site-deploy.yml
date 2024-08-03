@@ -2,15 +2,20 @@
 # This updates the list of supporters
 
 name: Nightly mochajs.org Deploy
+
 on:
   schedule:
     - cron: '0 0 * * *'
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Webhook Action
-        uses: joelwmale/webhook-action@2.3.2
+        uses: joelwmale/webhook-action@448a17bf857ead98546cfbdbe3b9d4cf979dda95
         env:
           data: ''
           WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}
