@@ -45,9 +45,7 @@
   "scripts": {
     "build": "rollup -c ./rollup.config.js",
     "clean": "rimraf mocha.js mocha.js.map",
-    "docs-clean": "rimraf docs/_dist docs/_site docs/api",
-    "docs-postbuild": "node node_modules/assetgraph-builder/bin/buildProduction docs/_site/index.html --outroot docs/_dist --canonicalroot https://mochajs.org/ --optimizeimages --svgo --inlinehtmlimage 9400 --inlinehtmlscript 0 --asyncscripts && cp docs/_headers docs/_dist/_headers",
-    "docs-production": "run-s docs docs-postbuild",
+    "docs-clean": "rimraf docs/_site docs/api",
     "docs-watch": "eleventy --serve",
     "docs:api": "jsdoc -c jsdoc.conf.json",
     "docs:site": "eleventy",
