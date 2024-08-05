@@ -11,15 +11,14 @@ _So you wanna build the site?_
 ## Development
 
 1. Run `npm install` from working copy root to get Node.js deps.
-1. To serve the site and rebuild as changes are made, execute `npm start docs.watch`.
-1. To rebuild the site _once_, execute `npm start docs`.
+1. To serve the site and rebuild as changes are made, execute `npm run docs-watch`.
+1. To rebuild the site _once_, execute `npm run docs`.
 
 ### Notes
 
 - The content lives in `docs/index.md`; everything else is markup, scripts, assets, etc.
 - This file (`docs/README.md`) should _not_ be included in the build.
 - `docs/_site_` is where the deployed site lives. This directories are _not_ under version control.
-- See `package-scripts.js` for details on what the builds are actually doing.
 
 ## License
 
