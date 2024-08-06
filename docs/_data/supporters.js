@@ -27,7 +27,7 @@ const blocklist = new Set(require('./blocklist.json'));
  * In addition to the blocklist, any account slug matching this regex will not
  * be displayed on the website.
  */
-const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
+const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|follow|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -38,7 +38,8 @@ const BLOCKED_CATEGORIES = [
   'credit',
   'gambling',
   'seo',
-  'writer'
+  'writer',
+  'review'
 ];
 
 /**
@@ -160,10 +161,21 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
-const isAllowed = ({slug, categories}) =>
-  !blocklist.has(slug) &&
-  !BLOCKED_STRINGS.test(slug) &&
-  !categories.some(category => BLOCKED_CATEGORIES.includes(category));
+const isAllowed = ({name, slug, website, categories}) => {
+  const allowed = !blocklist.has(slug) &&
+    !BLOCKED_STRINGS.test(name) &&
+    !BLOCKED_STRINGS.test(slug) &&
+    !BLOCKED_STRINGS.test(website) &&
+    !categories.some(category => BLOCKED_CATEGORIES.includes(category));
+
+  if (!allowed) {
+    debug('filtering %o', {categories, name, slug, website});
+  } else {
+    // debug('keeping %o', {categories, name, slug, website}, BLOCKED_STRINGS.test(website));
+  }
+
+  return allowed;
+};
 
 const getSupporters = async () => {
   const orders = await getAllOrders();
