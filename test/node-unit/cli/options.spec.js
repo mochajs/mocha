@@ -199,6 +199,37 @@ describe('options', function () {
           });
         });
 
+        describe('when path to package.json unspecified and package.json exists but is invalid', function () {
+          beforeEach(function () {
+            const filepath = '/some/package.json';
+            readFileSync = sinon.stub();
+            // package.json
+            readFileSync
+              .onFirstCall()
+              // Note the extra comma
+              .returns('{"mocha": {"retries": 3, "_": ["foobar.spec.js"],}}');
+            findConfig = sinon.stub().returns('/some/.mocharc.json');
+            loadConfig = sinon.stub().returns({});
+            findupSync = sinon.stub().returns(filepath);
+            loadOptions = proxyLoadOptions({
+              readFileSync,
+              findConfig,
+              loadConfig,
+              findupSync
+            });
+          });
+
+          it('should throw', function () {
+            expect(
+              () => {
+                loadOptions();
+              },
+              'to throw',
+              'Unable to parse /some/package.json: SyntaxError: Expected double-quoted property name in JSON at position 49'
+            );
+          });
+        });
+
         describe('when called with package = false (`--no-package`)', function () {
           let result;
           beforeEach(function () {
