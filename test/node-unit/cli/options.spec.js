@@ -318,7 +318,7 @@ describe('options', function () {
           });
 
           it('should set config = false', function () {
-            expect(loadOptions(), 'to have property', 'config', false);
+            expect(result, 'to have property', 'config', false);
           });
         });
 
