@@ -46,8 +46,6 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.setLibrary('md', markdown);
 
-  eleventyConfig.setUseGitIgnore(false);
-
   return {
     passthroughFileCopy: true,
     dir: {
