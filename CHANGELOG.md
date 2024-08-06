@@ -1,5 +1,17 @@
 # Changelog
 
+## [10.7.2](https://github.com/mochajs/mocha/compare/v10.7.1...v10.7.2) (2024-08-06)
+
+
+### 📚 Documentation
+
+* improve filtering ([#5191](https://github.com/mochajs/mocha/issues/5191)) ([1ac5b55](https://github.com/mochajs/mocha/commit/1ac5b552e3f32694d349023cb7f6196ba92b180e))
+
+
+### 🧹 Chores
+
+* fix failing markdown linting ([#5193](https://github.com/mochajs/mocha/issues/5193)) ([7e7a2ec](https://github.com/mochajs/mocha/commit/7e7a2ecb9bf8daba7e885a880bd8314b7b6fe07d))
+
 ## [10.7.1](https://github.com/mochajs/mocha/compare/v10.7.0...v10.7.1) (2024-08-06)
 
 
