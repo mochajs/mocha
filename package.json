@@ -55,7 +55,7 @@
     "format": "run-s format:*",
     "lint:knip": "knip --cache",
     "lint:code": "eslint . 'bin/*' --max-warnings 0",
-    "lint:markdown": "markdownlint '*.md' 'docs/**/*.md' '.github/*.md' 'lib/**/*.md' 'test/**/*.md' 'example/**/*.md'",
+    "lint:markdown": "markdownlint '*.md' 'docs/**/*.md' '.github/*.md' 'lib/**/*.md' 'test/**/*.md' 'example/**/*.md' -i CHANGELOG.md",
     "lint": "run-p lint:*",
     "prepublishOnly": "run-s test clean build",
     "test-browser-run": "cross-env NODE_PATH=. karma start ./karma.conf.js --single-run",
