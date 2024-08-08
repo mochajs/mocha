@@ -288,6 +288,44 @@ describe('lib/utils', function () {
         ].join('\n');
         expect(stringify(expected), 'to be', actual);
       });
+
+      describe('should represent null prototypes', function () {
+        it('With explicit names', function () {
+          const foo = Object.create(null, {
+            [Symbol.toStringTag]: {value: 'Foo'},
+            bing: {get: () => 'bong', enumerable: true}
+          });
+          const expected = [
+            '{',
+            '  "[Symbol.toStringTag]": "Foo"',
+            '  "bing": "bong"',
+            '}'
+          ].join('\n');
+
+          expect(stringify(foo), 'to be', expected);
+        });
+
+        it('Without names', function () {
+          const unnamed = {
+            bing: 'bong',
+            abc: 123
+          };
+          unnamed.self = unnamed;
+          const expected = [
+            '{',
+            '  "abc": 123',
+            '  "bing": "bong"',
+            '  "self": [Circular]',
+            '}'
+          ].join('\n');
+
+          expect(
+            stringify(Object.setPrototypeOf(unnamed, null)),
+            'to be',
+            expected
+          );
+        });
+      });
     });
 
     it('should canonicalize the object', function () {

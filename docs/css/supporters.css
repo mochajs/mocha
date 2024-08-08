@@ -1,14 +1,21 @@
-.sponsor {
-  -sprite-selector-for-group: sponsors;
-  -sprite-location: url(/images/sprite-sponsors.png?pngquant);
-  -sprite-image-format: png;
-  height: 64px;
+.image-list-wide a,
+.image-list-wide li {
+  width: 100%;
 }
+
+.backer,
+.sponsor {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.sponsor {
+  height: 64px;
+  width: 100%;
+}
+
 .backer {
-  -sprite-selector-for-group: backers;
-  -sprite-location: url(/images/sprite-backers.png?pngquant);
-  -sprite-image-format: png;
-  -sprite-padding: 0 10;
   width: 32px;
   height: 32px;
 }

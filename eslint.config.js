@@ -150,6 +150,8 @@ module.exports = [
       'docs/{_dist,_site,api,example}/**',
       'out/**',
       'test/integration/fixtures/**',
+      '.karma/**',
+      'mocha.js'
     ],
   }
 ];
