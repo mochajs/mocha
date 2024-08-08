@@ -230,7 +230,7 @@ describe('JSON reporter', function () {
       );
     });
 
-    it('should set options.indentation correctly', function () {
+    it('should set options.indentation with a number', function () {
       var options = {indentation: 4};
       var mochaReporter = new mocha._reporter(runner, options);
 

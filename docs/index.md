@@ -1970,6 +1970,8 @@ The JSON reporter outputs a single large JSON object when the tests have complet
 
 By default, it will output to the console. To write directly to a file, use `--reporter-option output=filename.json`.
 
+The indentation of the JSON reporter can be set with --reporter-option indentation=Number. Number being any integer. Alternatively, you can set the indentation to a tab character using --reporter-option indentation='\t'.
+
 ![json reporter](images/reporter-json.png?withoutEnlargement&resize=920,9999){:class="screenshot" loading="lazy"}
 
 ### JSON Stream
