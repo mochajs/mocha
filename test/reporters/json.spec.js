@@ -230,4 +230,33 @@ describe('JSON reporter', function () {
       );
     });
   });
+
+  describe('when "reporterOption.targetObject" is provided', function () {
+    var theObject = {};
+
+    var options = {
+      reporterOption: {
+        targetObject: theObject
+      }
+    };
+
+    beforeEach(function () {
+      /* eslint no-unused-vars: off */
+      var mochaReporter = new mocha._reporter(runner, options);
+    });
+
+    beforeEach(function () {
+      // Add one test to suite to avoid assertions against empty test results
+      var test = new Test(testTitle, () => {});
+      test.file = testFile;
+      suite.addTest(test);
+    });
+
+    it('should write test results to the object', function (done) {
+      runner.run(function () {
+        expect(theObject, 'not to be empty');
+        done();
+      });
+    });
+  });
 });
