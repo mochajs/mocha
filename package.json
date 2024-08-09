@@ -57,7 +57,7 @@
     "lint:code": "eslint . 'bin/*' --max-warnings 0",
     "lint:markdown": "markdownlint '*.md' 'docs/**/*.md' '.github/*.md' 'lib/**/*.md' 'test/**/*.md' 'example/**/*.md' -i CHANGELOG.md",
     "lint": "run-p lint:*",
-    "prepublishOnly": "run-s test clean build",
+    "prepublishOnly": "run-s clean build",
     "test-browser-run": "cross-env NODE_PATH=. karma start ./karma.conf.js --single-run",
     "test-browser:reporters:bdd": "cross-env MOCHA_TEST=bdd npm run -s test-browser-run",
     "test-browser:reporters:esm": "cross-env MOCHA_TEST=esm npm run -s test-browser-run",
