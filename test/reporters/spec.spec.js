@@ -101,7 +101,7 @@ describe('Spec reporter', function () {
             ' (' +
             expectedDuration +
             'ms)' +
-            '\n';
+            ' \n';
           expect(stdout[0], 'to be', expectedString);
         });
       });
@@ -128,7 +128,7 @@ describe('Spec reporter', function () {
           sinon.restore();
 
           var expectedString =
-            '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
+            '  ' + Base.symbols.ok + ' ' + expectedTitle + ' \n';
           expect(stdout[0], 'to be', expectedString);
         });
       });
