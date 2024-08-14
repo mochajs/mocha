@@ -298,6 +298,11 @@ describe('#find()', function () {
 });
 ```
 
+### Limitations of asynchronous callbacks
+
+You can use all asynchronous callbacks (`done`, `Promise`, and `async`/`await`) in callbacks for `it()`, `before()`, `after()`, `beforeEach()`, `afterEach()`) but not `describe()` -- it must be synchronous.
+See [#5046](https://github.com/mochajs/mocha/pull/5046) for more information.
+
 ## Synchronous Code
 
 When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
@@ -910,9 +915,17 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 - Try something like [wtfnode][npm-wtfnode]
 - Use [`.only`](#exclusive-tests) until you find the test that causes Mocha to hang
 
+### `--pass-on-failing-test-suite`
+
+> _New in v10.7.0_
+
+If set to `true`, Mocha returns exit code `0` even if there are failed tests during run.
+
 ### `--fail-zero`
 
-> _New in v9.1.0_ Fail test run if no tests are encountered with `exit-code: 1`.
+> _New in v9.1.0_
+
+Fail test run if no tests are encountered with `exit-code: 1`.
 
 ### `--forbid-only`
 

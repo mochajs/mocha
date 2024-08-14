@@ -1,5 +1,51 @@
 # Changelog
 
+## [10.7.3](https://github.com/mochajs/mocha/compare/v10.7.2...v10.7.3) (2024-08-09)
+
+
+### 🩹 Fixes
+
+* make release-please build work ([#5194](https://github.com/mochajs/mocha/issues/5194)) ([afd66ef](https://github.com/mochajs/mocha/commit/afd66ef3df20fab51ce38b97216c09108e5c2bfd))
+
+## [10.7.2](https://github.com/mochajs/mocha/compare/v10.7.1...v10.7.2) (2024-08-06)
+
+
+### 📚 Documentation
+
+* improve filtering ([#5191](https://github.com/mochajs/mocha/issues/5191)) ([1ac5b55](https://github.com/mochajs/mocha/commit/1ac5b552e3f32694d349023cb7f6196ba92b180e))
+
+
+### 🧹 Chores
+
+* fix failing markdown linting ([#5193](https://github.com/mochajs/mocha/issues/5193)) ([7e7a2ec](https://github.com/mochajs/mocha/commit/7e7a2ecb9bf8daba7e885a880bd8314b7b6fe07d))
+
+## [10.7.1](https://github.com/mochajs/mocha/compare/v10.7.0...v10.7.1) (2024-08-06)
+
+
+### 🩹 Fixes
+
+* crash with --parallel and --retries both enabled ([#5173](https://github.com/mochajs/mocha/issues/5173)) ([d7013dd](https://github.com/mochajs/mocha/commit/d7013ddb1099cfafe66a1af9640370998290e62c))
+
+
+### 🧹 Chores
+
+* add knip to validate included dependencies ([5c2989f](https://github.com/mochajs/mocha/commit/5c2989fcc7ae17618d9db16d7c99e23dfb1d38ee))
+* more fully remove assetgraph-builder and canvas ([#5175](https://github.com/mochajs/mocha/issues/5175)) ([1883c41](https://github.com/mochajs/mocha/commit/1883c41a49fad009bd407efc1bece3a5c75fd10a))
+* replace `nps` with npm scripts ([#5128](https://github.com/mochajs/mocha/issues/5128)) ([c44653a](https://github.com/mochajs/mocha/commit/c44653a3a04b8418ec24a942fa7513a4673f3667)), closes [#5126](https://github.com/mochajs/mocha/issues/5126)
+
+## 10.7.0 / 2024-07-20
+
+### :tada: Enhancements
+
+- [#4771](https://github.com/mochajs/mocha/pull/4771) feat: add option to not fail on failing test suite ([**@ilgonmic**](https://github.com/ilgonmic))
+
+## 10.6.1 / 2024-07-20
+
+### :bug: Fixes
+
+- [#3825](https://github.com/mochajs/mocha/pull/3825) fix: do not exit when only unref'd timer is present in test code ([**@boneskull**](https://github.com/boneskull))
+- [#5040](https://github.com/mochajs/mocha/pull/5040) fix: support canonical module ([**@JacobLey**](https://github.com/JacobLey))
+
 ## 10.6.0 / 2024-07-02
 
 ### :tada: Enhancements
