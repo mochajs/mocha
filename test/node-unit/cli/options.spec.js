@@ -149,7 +149,7 @@ describe('options', function () {
                 loadOptions('--package /something/wherever --require butts');
               },
               'to throw',
-              'Unable to read/parse /something/wherever: bad file message'
+              'Unable to read /something/wherever: bad file message'
             );
           });
         });
