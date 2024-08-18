@@ -46,10 +46,6 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [TextMate bundle](#textmate)
   {:.two-column}
 
-## Running Mocha
-
-Mocha can be run in various environments, including Node.js and browsers. While most interfaces such as BDD and TDD are fully supported, please note that the "exports" interface does not work in browser environments due to how browsers handle module exports. Refer to the [Interfaces](./API.md#exports-interface) and [Browser Support](./browser-support.md) documentation for more details.
-
 ## Table of Contents
 
 {{ toc }}
@@ -1830,6 +1826,10 @@ suite('Array', function () {
 ```
 
 ### Exports
+
+The `exports` interface allows for organizing tests in a modular fashion. It is particularly useful in larger projects where test suites can be segmented into different files.
+
+**Note**: The `exports` interface is not supported in browser environments. This limitation arises because browsers handle module exports differently from Node.js. If you intend to run tests in a browser, consider using the BDD or TDD interfaces, which are fully supported.
 
 The **Exports** interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
