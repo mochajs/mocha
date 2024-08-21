@@ -18,6 +18,7 @@
 <a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/Chat-Discord-5765F2.svg" /></a>
 <a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
 <a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
+[![Collective Funds Guidelines v0.1](https://img.shields.io/badge/collective_funds_guidelines-v0.1-D8E8D4?style=flat&labelColor=3A6457)](https://github.com/collective-funds/guidelines)
 
 </div>
 
