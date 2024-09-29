@@ -141,6 +141,7 @@ describe('root hooks', function () {
           '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
         const noDetectModuleRegex = /SyntaxError: Unexpected token/;
         const detectModuleRegex = /Cannot require\(\) ES Module/;
+
         it('with --no-experimental-detect-module', function () {
           return expect(
             invokeMochaAsync(
