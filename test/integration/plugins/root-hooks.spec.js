@@ -137,16 +137,16 @@ describe('root hooks', function () {
 
     describe('support ESM via .js extension w/o type=module', function () {
       describe('should fail due to ambiguous file type', function () {
-        it('with --no-experimental-detect-module', function () {          
+        it('with --no-experimental-detect-module', function () {
           return expect(
             invokeMochaAsync(
               [
                 '--require=' +
-                require.resolve(
-                  // as object
-                  '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
-                ),
-                "--no-experimental-detect-module",
+                  require.resolve(
+                    // as object
+                    '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
+                  ),
+                '--no-experimental-detect-module'
               ],
               'pipe'
             )[1],
@@ -155,24 +155,28 @@ describe('root hooks', function () {
             /SyntaxError: Unexpected token/
           );
         });
-        
-        it('with --experimental-detect-module', function () {          
+
+        it('with --experimental-detect-module', function () {
+          // flag was introduced in Node 21.1.0
+          const expectedRegex =
+            process.version >= 'v21.1.0'
+              ? /Cannot require\(\) ES Module/
+              : /SyntaxError: Unexpected token/;
           return expect(
             invokeMochaAsync(
               [
                 '--require=' +
-                require.resolve(
-                  // as object
-                  '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
-                ),
-                "--experimental-detect-module",
+                  require.resolve(
+                    // as object
+                    '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
+                  ),
+                '--experimental-detect-module'
               ],
               'pipe'
             )[1],
             'when fulfilled',
             'to contain output',
-            // todo fix based on what version of Node is being used
-            /(Cannot require\(\) ES Module)|(SyntaxError: Unexpected token)/
+            expectedRegex
           );
         });
       });
