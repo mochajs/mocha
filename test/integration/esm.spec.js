@@ -1,18 +1,12 @@
 'use strict';
 var path = require('path');
 const {runMochaJSON: run, runMochaAsync} = require('./helpers');
-var utils = require('../../lib/utils');
-var args =
-  +process.versions.node.split('.')[0] >= 13 ? [] : ['--experimental-modules'];
+var args = [];
 
-describe('esm', function() {
-  before(function() {
-    if (!utils.supportsEsModules(true)) this.skip();
-  });
-
-  it('should pass a passing esm test that uses esm', function(done) {
+describe('esm', function () {
+  it('should pass a passing esm test that uses esm', function (done) {
     var fixture = 'esm/esm-success.fixture.mjs';
-    run(fixture, args, function(err, result) {
+    run(fixture, args, function (err, result) {
       if (err) {
         done(err);
         return;
@@ -23,9 +17,9 @@ describe('esm', function() {
     });
   });
 
-  it('should fail a failing esm test that uses esm', function(done) {
+  it('should fail a failing esm test that uses esm', function (done) {
     var fixture = 'esm/esm-failure.fixture.mjs';
-    run(fixture, args, function(err, result) {
+    run(fixture, args, function (err, result) {
       if (err) {
         done(err);
         return;
@@ -39,7 +33,7 @@ describe('esm', function() {
     });
   });
 
-  it('should show file location when there is a syntax error in the test', async function() {
+  it('should show file location when there is a syntax error in the test', async function () {
     var fixture = 'esm/syntax-error/esm-syntax-error.fixture.mjs';
     const err = await runMochaAsync(fixture, args, {stdio: 'pipe'}).catch(
       err => err
@@ -50,11 +44,9 @@ describe('esm', function() {
     );
   });
 
-  it('should recognize esm files ending with .js due to package.json type flag', function(done) {
-    if (!utils.supportsEsModules(false)) return this.skip();
-
+  it('should recognize esm files ending with .js due to package.json type flag', function (done) {
     var fixture = 'esm/js-folder/esm-in-js.fixture.js';
-    run(fixture, args, function(err, result) {
+    run(fixture, args, function (err, result) {
       if (err) {
         done(err);
         return;
@@ -65,22 +57,18 @@ describe('esm', function() {
     });
   });
 
-  it('should enable requiring/loading a cjs module with "dir" as filename', async function() {
+  it('should enable requiring/loading a cjs module with "dir" as filename', async function () {
     var fixture = 'esm/test-that-uses-dir-cjs-require.fixture.js';
     const result = await runMochaAsync(
       fixture,
-      [
-        ...args,
-        '--require',
-        path.resolve(__dirname, './fixtures/esm/dir-cjs-require')
-      ],
+      ['--require', path.resolve(__dirname, './fixtures/esm/dir-cjs-require')],
       {stdio: 'pipe'}
     );
 
     expect(result, 'to have passed test count', 1);
   });
 
-  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module', async function() {
+  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module', async function () {
     const fixture =
       'esm/type-module/test-that-imports-non-existing-module.fixture.js';
 
@@ -91,6 +79,27 @@ describe('esm', function() {
     expect(err.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
       'to contain',
       'test-that-imports-non-existing-module'
+    );
+  });
+
+  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module with a loader', async function () {
+    const fixture =
+      'esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts';
+
+    const err = await runMochaAsync(
+      fixture,
+      [
+        '--unhandled-rejections=warn',
+        '--loader=./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs'
+      ],
+      {
+        stdio: 'pipe'
+      }
+    ).catch(err => err);
+
+    expect(err.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
+      'to contain',
+      'non-existent-package'
     );
   });
 });

@@ -22,11 +22,11 @@ const {EventEmitter} = require('events');
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 
-describe('ParallelBuffered', function() {
+describe('ParallelBuffered', function () {
   let runner;
   let ParallelBuffered;
 
-  beforeEach(function() {
+  beforeEach(function () {
     runner = new EventEmitter();
     ParallelBuffered = rewiremock.proxy(
       () => require('../../../lib/nodejs/reporters/parallel-buffered'),
@@ -53,12 +53,12 @@ describe('ParallelBuffered', function() {
     );
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
-  describe('constructor', function() {
-    it('should listen for Runner events', function() {
+  describe('constructor', function () {
+    it('should listen for Runner events', function () {
       // EventEmitter#once calls thru to EventEmitter#on, which
       // befouls our assertion below.
       sinon.stub(runner, 'once');
@@ -80,7 +80,7 @@ describe('ParallelBuffered', function() {
       ]);
     });
 
-    it('should listen for Runner events expecting to occur once', function() {
+    it('should listen for Runner events expecting to occur once', function () {
       sinon.stub(runner, 'once');
       // eslint-disable-next-line no-new
       new ParallelBuffered(runner);
@@ -92,22 +92,22 @@ describe('ParallelBuffered', function() {
     });
   });
 
-  describe('event', function() {
+  describe('event', function () {
     let reporter;
 
-    beforeEach(function() {
+    beforeEach(function () {
       reporter = new ParallelBuffered(runner);
     });
 
-    describe('on EVENT_RUN_END', function() {
-      it('should remove all listeners', function() {
+    describe('on EVENT_RUN_END', function () {
+      it('should remove all listeners', function () {
         runner.emit(EVENT_RUN_END);
         expect(runner.listeners(), 'to be empty');
       });
     });
 
-    describe('on any other event listened for', function() {
-      it('should populate its `events` array with SerializableEvents', function() {
+    describe('on any other event listened for', function () {
+      it('should populate its `events` array with SerializableEvents', function () {
         const suite = {
           title: 'some suite'
         };
@@ -150,15 +150,15 @@ describe('ParallelBuffered', function() {
     });
   });
 
-  describe('instance method', function() {
+  describe('instance method', function () {
     let reporter;
 
-    beforeEach(function() {
+    beforeEach(function () {
       reporter = new ParallelBuffered(runner);
     });
 
-    describe('done', function() {
-      it('should execute its callback with a SerializableWorkerResult', function() {
+    describe('done', function () {
+      it('should execute its callback with a SerializableWorkerResult', function () {
         const suite = {
           title: 'some suite'
         };
@@ -207,7 +207,7 @@ describe('ParallelBuffered', function() {
         ]);
       });
 
-      it('should reset its `events` prop', function() {
+      it('should reset its `events` prop', function () {
         const suite = {
           title: 'some suite'
         };

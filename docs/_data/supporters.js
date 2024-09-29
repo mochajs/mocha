@@ -17,8 +17,7 @@
 
 'use strict';
 
-const {loadImage} = require('canvas');
-const {writeFile, mkdir, rmdir} = require('fs').promises;
+const {writeFile, mkdir, rm} = require('fs').promises;
 const {resolve} = require('path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
@@ -28,7 +27,7 @@ const blocklist = new Set(require('./blocklist.json'));
  * In addition to the blocklist, any account slug matching this regex will not
  * be displayed on the website.
  */
-const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slots|gambl(?:e|ing)|crypto)/i;
+const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|follow|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -39,7 +38,8 @@ const BLOCKED_CATEGORIES = [
   'credit',
   'gambling',
   'seo',
-  'writer'
+  'writer',
+  'review'
 ];
 
 /**
@@ -52,7 +52,7 @@ const SPONSOR_TIER = 'sponsors';
 const BACKER_TIER = 'backers';
 
 // if this percent of fetches completes, the build will pass
-const PRODUCTION_SUCCESS_THRESHOLD = 0.8;
+const PRODUCTION_SUCCESS_THRESHOLD = 0.9;
 
 const SUPPORTER_IMAGE_PATH = resolve(__dirname, '../images/supporters');
 
@@ -107,7 +107,7 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
       try {
         const {avatar: url} = supporter;
         const {body: imageBuf, headers} = await needle('get', url, {
-          timeout: 2000
+          open_timeout: 30000
         });
         if (headers['content-type'].startsWith('text/html')) {
           throw new TypeError(
@@ -115,13 +115,6 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
           );
         }
         debug('fetched %s', url);
-        const canvasImage = await loadImage(imageBuf);
-        debug('ok %s', url);
-        supporter.dimensions = {
-          width: canvasImage.width,
-          height: canvasImage.height
-        };
-        // debug('dimensions %s %dw %dh', url, canvasImage.width, canvasImage.height);
         const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
         await writeFile(filePath, imageBuf);
         debug('wrote %s', filePath);
@@ -168,10 +161,21 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
-const isAllowed = ({slug, categories}) =>
-  !blocklist.has(slug) &&
-  !BLOCKED_STRINGS.test(slug) &&
-  !categories.some(category => BLOCKED_CATEGORIES.includes(category));
+const isAllowed = ({name, slug, website, categories}) => {
+  const allowed = !blocklist.has(slug) &&
+    !BLOCKED_STRINGS.test(name) &&
+    !BLOCKED_STRINGS.test(slug) &&
+    !BLOCKED_STRINGS.test(website) &&
+    !categories.some(category => BLOCKED_CATEGORIES.includes(category));
+
+  if (!allowed) {
+    debug('filtering %o', {categories, name, slug, website});
+  } else {
+    // debug('keeping %o', {categories, name, slug, website}, BLOCKED_STRINGS.test(website));
+  }
+
+  return allowed;
+};
 
 const getSupporters = async () => {
   const orders = await getAllOrders();
@@ -225,7 +229,7 @@ const getSupporters = async () => {
       }
     );
 
-  await rmdir(SUPPORTER_IMAGE_PATH, {recursive: true});
+  await rm(SUPPORTER_IMAGE_PATH, {recursive: true, force: true});
   debug('blasted %s', SUPPORTER_IMAGE_PATH);
   await mkdir(SUPPORTER_IMAGE_PATH, {recursive: true});
   debug('created %s', SUPPORTER_IMAGE_PATH);
@@ -247,30 +251,34 @@ const getSupporters = async () => {
 
   const backerCount = supporters[BACKER_TIER].length;
   const sponsorCount = supporters[SPONSOR_TIER].length;
-  const totalValidSupportersCount = backerCount + sponsorCount;
-  const successRate = totalValidSupportersCount / invalidSupporters.length;
+  const totalSupportersCount = backerCount + sponsorCount;
+  const successRate = 1 - invalidSupporters.length / totalSupportersCount;
 
   debug(
     'found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)',
     backerCount,
     sponsorCount,
-    totalValidSupportersCount,
+    totalSupportersCount,
     invalidSupporters.length,
-    uniqueSupporters.size - totalValidSupportersCount
+    uniqueSupporters.size - totalSupportersCount
   );
 
   if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
     if (process.env.NETLIFY && process.env.CONTEXT !== 'deploy-preview') {
       throw new Error(
-        `Failed to meet success threshold ${PRODUCTION_SUCCESS_THRESHOLD *
-          100}% (was ${successRate *
-          100}%) for a production deployment; refusing to deploy`
+        `Failed to meet success threshold ${
+          PRODUCTION_SUCCESS_THRESHOLD * 100
+        }% (was ${
+          successRate * 100
+        }%) for a production deployment; refusing to deploy`
       );
     } else {
       console.warn(
-        `WARNING: Success rate of ${successRate *
-          100}% fails to meet production threshold of ${PRODUCTION_SUCCESS_THRESHOLD *
-          100}%; would fail a production deployment!`
+        `WARNING: Success rate of ${
+          successRate * 100
+        }% fails to meet production threshold of ${
+          PRODUCTION_SUCCESS_THRESHOLD * 100
+        }%; would fail a production deployment!`
       );
     }
   }

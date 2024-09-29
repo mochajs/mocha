@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(
     require('@11ty/eleventy-plugin-inclusive-language'),
     {
@@ -45,8 +45,6 @@ module.exports = function(eleventyConfig) {
   markdown.use(require('markdown-it-emoji'));
 
   eleventyConfig.setLibrary('md', markdown);
-
-  eleventyConfig.setUseGitIgnore(false);
 
   return {
     passthroughFileCopy: true,

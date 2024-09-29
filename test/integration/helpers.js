@@ -7,7 +7,6 @@ const {format} = require('util');
 const path = require('path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
-const touch = require('touch');
 
 /**
  * Path to `mocha` executable
@@ -297,7 +296,7 @@ function invokeNode(args, done, opts = {}) {
  *
  * @param {string[]} args - Path to executable and arguments
  * @param {RawResultCallback} done - Callback
- * @param {Object|string} [opts] - Options to `cross-spawn` or `child_process.fork` or 'pipe' for shortcut to `{stdio: pipe}`
+ * @param {Object|string} [opts] - Options to `child_process` or 'pipe' for shortcut to `{stdio: pipe}`
  * @param {boolean} [opts.fork] - If `true`, use `child_process.fork` instead
  * @returns {import('child_process').ChildProcess}
  */
@@ -334,7 +333,7 @@ function createSubprocess(args, done, opts = {}) {
     debug('forking: %s', args.join(' '));
     mocha = fork(args[0], args.slice(1), opts);
   } else {
-    const {spawn} = require('cross-spawn');
+    const {spawn} = require('child_process');
     debug('spawning: %s', [process.execPath].concat(args).join(' '));
     mocha = spawn(process.execPath, args, opts);
   }
@@ -368,7 +367,11 @@ function createSubprocess(args, done, opts = {}) {
  * @returns {string} Resolved filepath
  */
 function resolveFixturePath(fixture) {
-  if (path.extname(fixture) !== '.js' && path.extname(fixture) !== '.mjs') {
+  if (
+    path.extname(fixture) !== '.js' &&
+    path.extname(fixture) !== '.mjs' &&
+    path.extname(fixture) !== '.ts'
+  ) {
     fixture += '.fixture.js';
   }
   return path.isAbsolute(fixture)
@@ -400,11 +403,11 @@ function getSummary(res) {
  * and waits until the second test run has been completed. Mocha is
  * killed and the result is returned.
  *
- * On Windows, this will call `child_process.fork()` instead of `cross-spawn.spawn()`.
+ * On Windows, this will call `child_process.fork()` instead of `spawn()`.
  *
  * **Exit code will always be 0**
  * @param {string[]} args - Array of argument strings
- * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `cross-spawn.spawn` or `child_process.fork`
+ * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process`
  * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
  * @returns {Promise<RawResult>}
  */
@@ -451,11 +454,11 @@ async function runMochaWatchAsync(args, opts, change) {
  * and waits until the second test run has been completed. Mocha is
  * killed and the result is returned.
  *
- * On Windows, this will call `child_process.fork()` instead of `cross-spawn.spawn()`.
+ * On Windows, this will call `child_process.fork()` instead of `spawn()`.
  *
  * **Exit code will always be 0**
  * @param {string[]} args - Array of argument strings
- * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `cross-spawn.spawn` or `child_process.fork`
+ * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process`
  * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
  * @returns {Promise<JSONResult>}
  */
@@ -475,6 +478,8 @@ async function runMochaWatchJSONAsync(args, opts, change) {
   );
 }
 
+const touchRef = new Date();
+
 /**
  * Synchronously touch a file. Creates
  * the file and all its parent directories if necessary.
@@ -483,7 +488,12 @@ async function runMochaWatchJSONAsync(args, opts, change) {
  */
 function touchFile(filepath) {
   fs.ensureDirSync(path.dirname(filepath));
-  touch.sync(filepath);
+  try {
+    fs.utimesSync(filepath, touchRef, touchRef);
+  } catch (e) {
+    const fd = fs.openSync(filepath, 'a');
+    fs.closeSync(fd);
+  }
 }
 
 /**

@@ -1,32 +1,35 @@
 <p align="center">
-  <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework"/>
+  <img src="assets/mocha-logo.svg" alt="Mocha test framework logo"/>
 </p>
 
 <p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
 
-<p align="center">
-<a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amaster"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=master" alt="GitHub Actions Build Status"></a>
-<a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
-<a href="https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_shield"><img src="https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=shield" alt="FOSSA Status"></a>
-<a href="https://gitter.im/mochajs/mocha?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a>
-<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective"></a>
-<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective"></a>
-</p>
+<div align="center">
 
-<p align="center">
 <a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="NPM Version"></a>
 <a href="https://github.com/mochajs/mocha"><img src="https://img.shields.io/node/v/mocha.svg" alt="Node Version"></a>
-</p>
+[![GitHub Actions Build Status](https://github.com/mochajs/mocha/actions/workflows/mocha.yml/badge.svg)](https://github.com/mochajs/mocha/actions/workflows/mocha.yml)
+<a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
 
-<p align="center"><br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354"></p>
+</div>
+
+<div align="center">
+
+<a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/Chat-Discord-5765F2.svg" /></a>
+<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
+<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
+[![Collective Funds Guidelines v0.1](https://img.shields.io/badge/collective_funds_guidelines-v0.1-D8E8D4?style=flat&labelColor=3A6457)](https://github.com/collective-funds/guidelines)
+
+</div>
 
 ## Links
 
-- **[Documentation](https://mochajs.org/)**
-- **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/master/CHANGELOG.md)**
-- [Code of Conduct](https://github.com/mochajs/mocha/blob/master/.github/CODE_OF_CONDUCT.md)
-- [Contributing](https://github.com/mochajs/mocha/blob/master/.github/CONTRIBUTING.md)
-- [Gitter Chatroom](https://gitter.im/mochajs/mocha) (ask questions here!)
+- **[Documentation](https://mochajs.org)**
+- **[Release Notes / History / Changes](https://github.com/mochajs/mocha/blob/main/CHANGELOG.md)**
+- [Code of Conduct](https://github.com/mochajs/mocha/blob/main/.github/CODE_OF_CONDUCT.md)
+- [Contributing](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
+- [Development](https://github.com/mochajs/mocha/blob/main/.github/DEVELOPMENT.md)
+- [Discord](https://discord.gg/KeDn2uXhER) (ask questions here!)
 - [Issue Tracker](https://github.com/mochajs/mocha/issues)
 
 ## Backers
@@ -37,7 +40,10 @@
 
 ## Sponsors
 
-Does your company use Mocha? Ask your manager or marketing team if your company would be interested in supporting our project. Support will allow the maintainers to dedicate more time for maintenance and new features for everyone. Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org#sponsors) - who doesn't want a little extra exposure? [Here's the info](https://opencollective.com/mochajs).
+Does your company use Mocha? Ask your manager or marketing team if your company would be interested in supporting our project.
+Support will allow the maintainers to dedicate more time for maintenance and new features for everyone.
+Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha#readme) and on [our site](https://mochajs.org#sponsors) - who doesn't want a little extra exposure?
+[Here's the info](https://opencollective.com/mochajs).
 
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/0/avatar)](https://opencollective.com/mochajs/tiers/sponsors/0/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/1/avatar)](https://opencollective.com/mochajs/tiers/sponsors/1/website)
@@ -53,11 +59,11 @@ You might want to know that:
 
 You might want to help:
 
-- New to contributing to Mocha? Check out this list of [good first issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3Agood-first-issue)
-- Mocha could use a hand with [these issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-- The [maintainer's handbook](https://github.com/mochajs/mocha/blob/master/MAINTAINERS.md) explains how things get done
+- New to contributing to Mocha? Check out this list of [good first issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
+- Mocha could use a hand with [these issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
+- The [maintainer's handbook](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md) explains how things get done
 
-Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors) on Gitter if you want to help with:
+Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXhER) if you want to help with:
 
 - Triaging issues, answering questions
 - Review, merging, and closing pull requests
@@ -65,6 +71,4 @@ Finally, come [chat with the maintainers](https://gitter.im/mochajs/contributors
 
 ## License
 
-Copyright 2011-2021 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/master/LICENSE).
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
+Copyright 2011-2024 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).

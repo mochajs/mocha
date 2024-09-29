@@ -1,11 +1,13 @@
 'use strict';
 
 var path = require('path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
-var resolvePath = helpers.resolveFixturePath;
+const {
+  runMochaJSON,
+  resolveFixturePath: resolvePath,
+  runMocha
+} = require('../helpers');
 
-describe('--file', function() {
+describe('--file', function () {
   var args = [];
   var fixtures = {
     alpha: path.join('options', 'file-alpha'),
@@ -13,11 +15,11 @@ describe('--file', function() {
     theta: path.join('options', 'file-theta')
   };
 
-  it('should run tests passed via file first', function(done) {
+  it('should run tests passed via file first', function (done) {
     args = ['--file', resolvePath(fixtures.alpha)];
 
     var fixture = fixtures.beta;
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -28,7 +30,7 @@ describe('--file', function() {
     });
   });
 
-  it('should run multiple tests passed via file first', function(done) {
+  it('should run multiple tests passed via file first', function (done) {
     args = [
       '--file',
       resolvePath(fixtures.alpha),
@@ -37,7 +39,7 @@ describe('--file', function() {
     ];
 
     var fixture = fixtures.theta;
-    runMochaJSON(fixture, args, function(err, res) {
+    runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -53,15 +55,93 @@ describe('--file', function() {
     });
   });
 
-  it('should support having no other test files', function(done) {
+  it('should support having no other test files', function (done) {
     args = ['--file', resolvePath(fixtures.alpha)];
 
-    runMochaJSON('filethatdoesnotexist.js', args, function(err, res) {
+    runMochaJSON('filethatdoesnotexist.js', args, function (err, res) {
       if (err) {
         return done(err);
       }
       expect(res, 'to have passed').and('to have passed test count', 1);
       done();
     });
+  });
+
+  it('should run esm tests passed via file', function (done) {
+    const esmFile = 'collect-files.fixture.mjs';
+    const testArgs = ['--file', resolvePath(esmFile)];
+
+    runMochaJSON(esmFile, testArgs, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+      expect(res, 'to have passed');
+      done();
+    });
+  });
+
+  it('should log a warning if a nonexistent file with an unknown extension is specified', function (done) {
+    const nonexistentTestFileArg = 'nonexistent.test.ts';
+    runMocha(
+      nonexistentTestFileArg,
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(
+          res.output,
+          'to contain',
+          `Warning: Cannot find any files matching pattern`
+        ).and('to contain', nonexistentTestFileArg);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
+
+  it('should provide warning for nonexistent js file extensions', function (done) {
+    const nonexistentCjsArg = 'nonexistent.test.js';
+
+    runMocha(
+      nonexistentCjsArg,
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(
+          res.output,
+          'to contain',
+          `Warning: Cannot find any files matching pattern`
+        ).and('to contain', nonexistentCjsArg);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
+  });
+
+  it('should provide warning for nonexistent esm file extensions', function (done) {
+    const nonexistentEsmArg = 'nonexistent.test.mjs';
+
+    runMocha(
+      nonexistentEsmArg,
+      ['--file'],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+
+        expect(
+          res.output,
+          'to contain',
+          `Warning: Cannot find any files matching pattern`
+        ).and('to contain', nonexistentEsmArg);
+        done();
+      },
+      {stdio: 'pipe'}
+    );
   });
 });

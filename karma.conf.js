@@ -28,18 +28,13 @@ const rollupPlugin = require('./scripts/karma-rollup-plugin');
 const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;
 const hostname = os.hostname();
-
-if (fs.existsSync('./mocha.js') && fs.existsSync('./mocha-es5.js')) {
-  fs.renameSync('./mocha.js', './mocha-es2018.js');
-  fs.renameSync('./mocha-es5.js', './mocha.js');
-}
+const BROWSER = env.BROWSER;
 
 const SAUCE_BROWSER_PLATFORM_MAP = {
   'chrome@latest': 'Windows 10',
   'MicrosoftEdge@latest': 'Windows 10',
-  'internet explorer@latest': 'Windows 10',
   'firefox@latest': 'Windows 10',
-  'safari@latest': 'macOS 10.13'
+  'safari@latest': 'macOS 10.15'
 };
 
 const baseConfig = {
@@ -72,13 +67,6 @@ const baseConfig = {
   mochaReporter: {
     showDiff: true
   },
-  customHeaders: [
-    {
-      match: '.*.html',
-      name: 'Content-Security-Policy',
-      value: "script-src https: 'self' 'unsafe-inline'"
-    }
-  ],
   customLaunchers: {
     ChromeDebug: {
       base: 'Chrome',
@@ -92,7 +80,7 @@ module.exports = config => {
   let cfg = {...baseConfig};
 
   // TO RUN AGAINST SAUCELABS LOCALLY, execute:
-  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm start test.browser`
+  // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm run test-browser`
   let sauceConfig;
 
   // configuration for CI mode
@@ -132,6 +120,13 @@ module.exports = config => {
     ...cfg,
     files: [...cfg.files, {pattern: './mocha.js.map', included: false}]
   };
+
+  if (BROWSER) {
+    cfg = {
+      ...cfg,
+      browsers: [BROWSER]
+    };
+  }
 
   config.set(cfg);
 };
@@ -184,7 +179,7 @@ const addSauceTests = (cfg, sauceLabs) => {
     const customLaunchers = sauceBrowsers.reduce((acc, sauceBrowser) => {
       const platformName = SAUCE_BROWSER_PLATFORM_MAP[sauceBrowser];
       const [browserName, browserVersion] = sauceBrowser.split('@');
-      return {
+      const result = {
         ...acc,
         [sauceBrowser]: {
           base: 'SauceLabs',
@@ -194,9 +189,13 @@ const addSauceTests = (cfg, sauceLabs) => {
           'sauce:options': sauceLabs
         }
       };
+      if (browserName === 'firefox') {
+        result[sauceBrowser]['sauce:options']['moz:debuggerAddress'] = true;
+      }
+      return result;
     }, {});
 
-    return {
+    const result = {
       ...cfg,
       reporters: [...cfg.reporters, 'saucelabs'],
       browsers: [...cfg.browsers, ...sauceBrowsers],
@@ -210,6 +209,7 @@ const addSauceTests = (cfg, sauceLabs) => {
       captureTimeout: 120000,
       browserNoActivityTimeout: 20000
     };
+    return result;
   }
   return {...cfg};
 };
@@ -282,7 +282,6 @@ const addSauceLabsTestName = (testName, cfg) =>
  * - `tdd` - `tdd`-specific tests
  * - `qunit` - `qunit`-specific tests
  * - `esm` - ESM-specific tests
- * - `requirejs` - RequireJS-specific tests
  *
  * Since we can't change Mocha's interface on-the-fly, tests for specific interfaces
  * must be run in isolation.
@@ -310,10 +309,6 @@ const chooseTestSuite = (cfg, value) => {
     case 'esm':
       return addStandardDependencies({
         ...addSauceLabsTestName('ESM Integration Tests', cfg),
-        // just run against ChromeHeadless, since other browsers may not
-        // support ESM.
-        // XXX: remove following line when dropping IE11
-        browsers: ['ChromeHeadless'],
         files: [
           {
             pattern: 'test/browser-specific/fixtures/esm.fixture.mjs',
@@ -325,26 +320,6 @@ const chooseTestSuite = (cfg, value) => {
           }
         ]
       });
-    case 'requirejs':
-      // no standard deps because I'm too lazy to figure out how to make
-      // them work with RequireJS. not important anyway
-      return {
-        ...addSauceLabsTestName('RequireJS Tests', cfg),
-        plugins: [...cfg.plugins, 'karma-requirejs'],
-        frameworks: ['requirejs', ...cfg.frameworks],
-        files: [
-          {
-            pattern: 'test/browser-specific/fixtures/requirejs/*.fixture.js',
-            included: false
-          },
-          'test/browser-specific/requirejs-setup.js'
-        ],
-        // this skips bundling the above tests & fixtures
-        rollup: {
-          ...cfg.rollup,
-          include: []
-        }
-      };
     default:
       return addStandardDependencies({
         ...addSauceLabsTestName('Unit Tests', cfg)

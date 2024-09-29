@@ -13,8 +13,8 @@ const {
   DEFAULT_FIXTURE
 } = require('../helpers');
 
-describe('--watch', function() {
-  describe('when enabled', function() {
+describe('--watch', function () {
+  describe('when enabled', function () {
     /**
      * @type {string}
      */
@@ -26,17 +26,17 @@ describe('--watch', function() {
 
     this.slow(5000);
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       const {dirpath, removeTempDir} = await createTempDir();
       tempDir = dirpath;
       cleanup = removeTempDir;
     });
 
-    afterEach(function() {
+    afterEach(function () {
       cleanup();
     });
 
-    it('reruns test when watched test file is touched', function() {
+    it('reruns test when watched test file is touched', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -47,7 +47,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when watched test file crashes', function() {
+    it('reruns test when watched test file crashes', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -60,8 +60,8 @@ describe('--watch', function() {
       });
     });
 
-    describe('when in parallel mode', function() {
-      it('reruns test when watched test file is touched', function() {
+    describe('when in parallel mode', function () {
+      it('reruns test when watched test file is touched', function () {
         const testFile = path.join(tempDir, 'test.js');
         copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -72,7 +72,7 @@ describe('--watch', function() {
         });
       });
 
-      it('reruns test when watched test file is crashed', function() {
+      it('reruns test when watched test file is crashed', function () {
         const testFile = path.join(tempDir, 'test.js');
         copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -86,7 +86,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file matching --watch-files changes', function() {
+    it('reruns test when file matching --watch-files changes', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -104,7 +104,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file matching --watch-files is added', function() {
+    it('reruns test when file matching --watch-files is added', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -120,7 +120,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file matching --watch-files is removed', function() {
+    it('reruns test when file matching --watch-files is removed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -138,7 +138,7 @@ describe('--watch', function() {
       });
     });
 
-    it('does not rerun test when file not matching --watch-files is changed', function() {
+    it('does not rerun test when file not matching --watch-files is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -156,7 +156,7 @@ describe('--watch', function() {
       });
     });
 
-    it('picks up new test files when they are added', function() {
+    it('picks up new test files when they are added', function () {
       const testFile = path.join(tempDir, 'test/a.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -174,7 +174,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file matching --extension is changed', function() {
+    it('reruns test when file matching --extension is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -192,7 +192,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns when "rs\\n" typed', function() {
+    it('reruns when "rs\\n" typed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -203,7 +203,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reruns test when file starting with . and matching --extension is changed', function() {
+    it('reruns test when file starting with . and matching --extension is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -221,7 +221,7 @@ describe('--watch', function() {
       });
     });
 
-    it('ignores files in "node_modules" and ".git" by default', function() {
+    it('ignores files in "node_modules" and ".git" by default', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -243,7 +243,7 @@ describe('--watch', function() {
       });
     });
 
-    it('ignores files matching --watch-ignore', function() {
+    it('ignores files matching --watch-ignore', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
@@ -267,7 +267,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reloads test files when they change', function() {
+    it('reloads test files when they change', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture('options/watch/test-file-change', testFile);
 
@@ -290,7 +290,7 @@ describe('--watch', function() {
       });
     });
 
-    it('reloads test dependencies when they change', function() {
+    it('reloads test dependencies when they change', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture('options/watch/test-with-dependency', testFile);
 
@@ -317,7 +317,7 @@ describe('--watch', function() {
     });
 
     // Regression test for https://github.com/mochajs/mocha/issues/2027
-    it('respects --fgrep on re-runs', async function() {
+    it('respects --fgrep on re-runs', async function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture('options/grep', testFile);
 
@@ -335,7 +335,7 @@ describe('--watch', function() {
       );
     });
 
-    describe('with required hooks', function() {
+    describe('with required hooks', function () {
       /**
        * Helper for setting up hook tests
        *
@@ -343,7 +343,7 @@ describe('--watch', function() {
        * @return {function}
        */
       function setupHookTest(hookName) {
-        return function() {
+        return function () {
           const testFile = path.join(tempDir, 'test.js');
           const hookFile = path.join(tempDir, 'hook.js');
 
@@ -372,7 +372,7 @@ describe('--watch', function() {
       it('mochaHooks.afterEach runs as expected', setupHookTest('afterEach'));
     });
 
-    it('should not leak event listeners', function() {
+    it('should not leak event listeners', function () {
       this.timeout(20000);
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);

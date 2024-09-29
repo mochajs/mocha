@@ -2,11 +2,11 @@
 
 var invokeMocha = require('../helpers').invokeMocha;
 
-describe('--opts', function() {
-  it('should report deprecation', function(done) {
+describe('--opts', function () {
+  it('should report deprecation', function (done) {
     invokeMocha(
       ['--opts', './test/mocha.opts'],
-      function(err, res) {
+      function (err, res) {
         if (err) {
           return done(err);
         }

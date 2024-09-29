@@ -9,14 +9,14 @@
 #    that is where we will look for package.json/.nvmrc/etc not repo root!
 
 [build]
-  publish = "docs/_dist/"
-  command = "npm start docs.production"
+  command = "npm run docs"
+  publish = "docs/_site/"
 
 [build.environment]
   DEBUG = "mocha:docs*"
-  NODE_VERSION = "12"
-  RUBY_VERSION = "2.7.1"
+  NODE_VERSION = "16"
+  RUBY_VERSION = "2.7.2"
 
 [context.deploy-preview]
-  command = "npm start docs"
+  command = "npm run docs"
   publish = "docs/_site/"
