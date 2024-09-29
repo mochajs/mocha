@@ -137,39 +137,35 @@ describe('root hooks', function () {
 
     describe('support ESM via .js extension w/o type=module', function () {
       describe('should fail due to ambiguous file type', function () {
+        const filename =
+          '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
+        const noDetectModuleRegex = /SyntaxError: Unexpected token/;
+        const detectModuleRegex = /Cannot require\(\) ES Module/;
         it('with --no-experimental-detect-module', function () {
           return expect(
             invokeMochaAsync(
               [
-                '--require=' +
-                  require.resolve(
-                    // as object
-                    '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
-                  ),
+                '--require=' + require.resolve(filename), // as object
                 '--no-experimental-detect-module'
               ],
               'pipe'
             )[1],
             'when fulfilled',
             'to contain output',
-            /SyntaxError: Unexpected token/
+            noDetectModuleRegex
           );
         });
 
         it('with --experimental-detect-module', function () {
-          // flag was introduced in Node 21.1.0
+          // --experimental-detect-module was introduced in Node 21.1.0
           const expectedRegex =
             process.version >= 'v21.1.0'
-              ? /Cannot require\(\) ES Module/
-              : /SyntaxError: Unexpected token/;
+              ? detectModuleRegex
+              : noDetectModuleRegex;
           return expect(
             invokeMochaAsync(
               [
-                '--require=' +
-                  require.resolve(
-                    // as object
-                    '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
-                  ),
+                '--require=' + require.resolve(filename), // as object
                 '--experimental-detect-module'
               ],
               'pipe'
