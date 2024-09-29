@@ -174,7 +174,7 @@
     "bin/*mocha*",
     "lib/**/*.{js,html,json}",
     "index.js",
-    "mocha.sass",
+    "mocha.css",
     "mocha.js",
     "mocha.js.map",
     "browser-entry.js"
