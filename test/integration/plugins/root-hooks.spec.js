@@ -136,22 +136,44 @@ describe('root hooks', function () {
     });
 
     describe('support ESM via .js extension w/o type=module', function () {
-      it('should fail due to ambiguous file type', function () {
-        return expect(
-          invokeMochaAsync(
-            [
-              '--require=' +
+      describe('should fail due to ambiguous file type', function () {
+        it('with --no-experimental-detect-module', function () {          
+          return expect(
+            invokeMochaAsync(
+              [
+                '--require=' +
                 require.resolve(
                   // as object
                   '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
-                )
-            ],
-            'pipe'
-          )[1],
-          'when fulfilled',
-          'to contain output',
-          /SyntaxError: Unexpected token/
-        );
+                ),
+                "--no-experimental-detect-module",
+              ],
+              'pipe'
+            )[1],
+            'when fulfilled',
+            'to contain output',
+            /SyntaxError: Unexpected token/
+          );
+        });
+        
+        it('with --experimental-detect-module', function () {          
+          return expect(
+            invokeMochaAsync(
+              [
+                '--require=' +
+                require.resolve(
+                  // as object
+                  '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js'
+                ),
+                "--experimental-detect-module",
+              ],
+              'pipe'
+            )[1],
+            'when fulfilled',
+            'to contain output',
+            /Cannot require\(\) ES Module/
+          );
+        });
       });
     });
   });
