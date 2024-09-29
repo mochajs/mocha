@@ -171,7 +171,8 @@ describe('root hooks', function () {
             )[1],
             'when fulfilled',
             'to contain output',
-            /Cannot require\(\) ES Module/
+            // todo fix based on what version of Node is being used
+            /(Cannot require\(\) ES Module)|(SyntaxError: Unexpected token)/
           );
         });
       });
