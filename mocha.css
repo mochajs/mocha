@@ -359,9 +359,7 @@ ul#mocha-stats {
 }
 
 #mocha-stats.fail {
-  border: solid;
   border-color: var(--mocha-test-fail-border-color);
-  border-radius: 10px;
 }
 
 #mocha-stats .fail {
