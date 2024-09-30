@@ -4,6 +4,7 @@
   --mocha-color: #000;
   --mocha-bg-color: #fff;
   --mocha-pass-icon-color: #00d6b2;
+  --mocha-pass-border-color: #00d6b2;
   --mocha-pass-color: #fff;
   --mocha-pass-shadow-color: rgba(0,0,0,.2);
   --mocha-pass-mediump-color: #c09853;
@@ -12,6 +13,7 @@
   --mocha-test-pending-icon-color: #0b97c4;
   --mocha-test-fail-color: #c00;
   --mocha-test-fail-icon-color: #c00;
+  --mocha-test-fail-border-color: #c00;
   --mocha-test-fail-pre-color: #000;
   --mocha-test-fail-pre-error-color: #c00;
   --mocha-test-html-error-color: #000;
@@ -39,6 +41,7 @@
      --mocha-color: #fff;
      --mocha-bg-color: #222;
      --mocha-pass-icon-color: #00d6b2;
+     --mocha-pass-border-color: #00d6b2;
      --mocha-pass-color: #222;
      --mocha-pass-shadow-color: rgba(255,255,255,.2);
      --mocha-pass-mediump-color: #f1be67;
@@ -47,6 +50,7 @@
      --mocha-test-pending-icon-color: #0b97c4;
      --mocha-test-fail-color: #f44;
      --mocha-test-fail-icon-color: #f44;
+     --mocha-test-fail-border-color: #f44;
      --mocha-test-fail-pre-color: #fff;
      --mocha-test-fail-pre-error-color: #f44;
      --mocha-test-html-error-color: #fff;
@@ -307,6 +311,10 @@ body {
   opacity: 1;
 }
 
+ul#mocha-report {
+  padding-top: 1px; /* optical alignment below the status bar */
+}
+
 #mocha-report.pass .test.fail {
   display: none;
 }
@@ -342,15 +350,26 @@ body {
   margin: 0;
   color: var(--mocha-stats-color);
   z-index: 1;
-  border-color: #00e600;
-  border: solid;
+  border: solid var(--mocha-pass-border-color);
   border-radius: 10px;
+}
+
+ul#mocha-stats {
+  padding-top: 5px; /* centers the progress circle */
 }
 
 #mocha-stats.fail {
   border: solid;
-  border-color: #c00;
+  border-color: var(--mocha-test-fail-border-color);
   border-radius: 10px;
+}
+
+#mocha-stats .fail {
+  color: var(--mocha-test-fail-icon-color);
+}
+
+#mocha-stats .pass {
+  color: var(--mocha-pass-icon-color);
 }
 
 #mocha-stats .progress-contain {
@@ -361,7 +380,7 @@ body {
 #mocha-stats :is(.progress-element, .progress-text) {
   width: var(--ring-container-size);
   display: block;
-  top: 12px;
+  top: 17px;
   position: absolute;
 }
 
