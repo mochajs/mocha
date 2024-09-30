@@ -15,16 +15,13 @@
       mocha.setup('bdd');
     </script>
     <script>
-      // todo `expect is not defined` error, reverting anyway
       describe('example', function () {
-        it('should pass', function (done) {
-          expect(1).to.equal(1);
-          done();
+        it('should pass', function () {
+          return;
         });
 
-        it('should fail', function (done) {
-          expect(1).to.equal(2);
-          done();
+        it('should fail', function () {
+          throw new Error('fail');
         });
       });
     </script>
