@@ -1,18 +1,33 @@
+<!-- todo revert to main, just easier to test this way -->
+<!-- run `npm run build` then open this page in the browser -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Mocha</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="mocha.css" />
+    <link rel="stylesheet" href="../../mocha.css" />
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="mocha.js"></script>
+    <script src="../../mocha.js"></script>
     <script>
       mocha.setup('bdd');
     </script>
-    <script src="tests.spec.js"></script>
+    <script>
+      // todo `expect is not defined` error, reverting anyway
+      describe('example', function () {
+        it('should pass', function (done) {
+          expect(1).to.equal(1);
+          done();
+        });
+
+        it('should fail', function (done) {
+          expect(1).to.equal(2);
+          done();
+        });
+      });
+    </script>
     <script>
       mocha.run();
     </script>

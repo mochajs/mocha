@@ -342,14 +342,14 @@ body {
   margin: 0;
   color: var(--mocha-stats-color);
   z-index: 1;
-  background-color: #00e600;
-  border: solid  #00e600;
+  border-color: #00e600;
+  border: solid;
   border-radius: 10px;
 }
 
 #mocha-stats.fail {
-  border: solid  #c00;
-  background-color: #c00;
+  border: solid;
+  border-color: #c00;
   border-radius: 10px;
 }
 
