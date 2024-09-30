@@ -347,12 +347,11 @@ body {
   border-radius: 10px;
 }
 
-/* #mocha-stats.fail {
- @extend #mocha-stats;
+#mocha-stats.fail {
   border: solid  #c00;
   background-color: #c00;
   border-radius: 10px;
-} */
+}
 
 #mocha-stats .progress-contain {
   float: right;
