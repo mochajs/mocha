@@ -350,8 +350,6 @@ ul#mocha-report {
   margin: 0;
   color: var(--mocha-stats-color);
   z-index: 1;
-  border: solid var(--mocha-pass-border-color);
-  border-radius: 10px;
 }
 
 ul#mocha-stats {
@@ -359,7 +357,8 @@ ul#mocha-stats {
 }
 
 #mocha-stats.fail {
-  border-color: var(--mocha-test-fail-border-color);
+  border: solid var(--mocha-test-fail-border-color);
+  border-radius: 10px;
 }
 
 #mocha-stats .fail {
