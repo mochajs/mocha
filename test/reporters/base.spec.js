@@ -609,21 +609,71 @@ describe('Base reporter', function () {
     );
   });
 
-  describe('when reporter output immune to user test changes', function () {
-    var baseConsoleLog;
+  it('should list all the errors within an AggregateError', function () {
+    var err1 = new Error('1');
+    var err2 = new Error('2');
+    var aggErr = new AggregateError([err1, err2], '2 errors');
 
-    beforeEach(function () {
-      sinon.restore();
-      sinon.stub(console, 'log');
-      baseConsoleLog = sinon.stub(Base, 'consoleLog');
-    });
+    var test = makeTest(aggErr);
+    list([test]);
 
-    it('should let you stub out console.log without effecting reporters output', function () {
-      Base.list([]);
-      baseConsoleLog.restore();
+    var errOut = stdout.join('\n').trim();
 
-      expect(baseConsoleLog, 'was called');
-      expect(console.log, 'was not called');
-    });
+    // Handle removing system's specific error callStack
+    errOut = errOut
+      .split('\n')
+      .filter(line => !line.trim().startsWith('at '))
+      .join('\n')
+      .replace(/\n/g, '');
+
+    var expectedFormat = `1) :     ${aggErr.name}: ${aggErr.message}  1) :     ${err1.name}: ${err1.message}  2) :     ${err2.name}: ${err2.message}`;
+
+    expect(errOut, 'to equal', expectedFormat);
+  });
+
+  it('should handle Aggregate Error Objects with 0 errors properly', function () {
+    var aggErr = new AggregateError([], ' 0 errors');
+
+    var test = makeTest(aggErr);
+    list([test]);
+
+    var errOut = stdout.join('\n').trim();
+
+    var expectedFormat = aggErr.name + ': ' + aggErr.message;
+
+    expect(errOut, 'to contain', expectedFormat);
+  });
+
+  it('should handle non-Error types properly', function () {
+    var nonError = {name: 'NotAnError', message: 'This is not an error object'};
+    var aggErr = new AggregateError([nonError]);
+
+    var test = makeTest(aggErr);
+    list([test]);
+
+    assert.strictEqual(aggErr.errors.length, 1, 'Should contain one error');
+    assert.strictEqual(
+      aggErr.errors[0],
+      nonError,
+      'The non-Error object should be preserved in the errors array'
+    );
+  });
+});
+
+describe('when reporter output immune to user test changes', function () {
+  var baseConsoleLog;
+
+  beforeEach(function () {
+    sinon.restore();
+    sinon.stub(console, 'log');
+    baseConsoleLog = sinon.stub(Base, 'consoleLog');
+  });
+
+  it('should let you stub out console.log without effecting reporters output', function () {
+    Base.list([]);
+    baseConsoleLog.restore();
+
+    expect(baseConsoleLog, 'was called');
+    expect(console.log, 'was not called');
   });
 });
