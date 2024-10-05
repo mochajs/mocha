@@ -25,7 +25,8 @@
     "karma-mocha-reporter",
     "karma-mocha",
     "karma-sauce-launcher",
-    "non-existent-package"
+    "non-existent-package",
+    "prettier"
   ],
   "mocha": {
     "entry": ["test/**/*.{js,ts,mjs,cjs}"]
