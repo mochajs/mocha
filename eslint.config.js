@@ -151,7 +151,8 @@ module.exports = [
       'out/**',
       'test/integration/fixtures/**',
       '.karma/**',
-      'mocha.js'
+      'mocha.js',
+      'mocha.mjs'
     ],
   }
 ];

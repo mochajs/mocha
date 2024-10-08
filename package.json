@@ -177,6 +177,8 @@
     "mocha.css",
     "mocha.js",
     "mocha.js.map",
+    "mocha.mjs",
+    "mocha.mjs.map",
     "browser-entry.js"
   ],
   "browser": {
