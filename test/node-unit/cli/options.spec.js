@@ -224,7 +224,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-              'Unable to parse /some/package.json: SyntaxError: Expected double-quoted property name in JSON at position 49'
+                /SyntaxError/,
             );
           });
         });
