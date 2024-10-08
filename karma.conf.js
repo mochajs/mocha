@@ -317,6 +317,10 @@ const chooseTestSuite = (cfg, value) => {
           {
             pattern: 'test/browser-specific/esm.spec.mjs',
             type: 'module'
+          },
+          {
+            pattern: 'test/browser-specific/esm-build.spec.mjs',
+            type: 'module'
           }
         ]
       });
