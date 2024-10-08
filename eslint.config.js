@@ -152,7 +152,7 @@ module.exports = [
       'test/integration/fixtures/**',
       '.karma/**',
       'mocha.js',
-      'mocha.mjs'
+      'esm/mocha.js'
     ],
   }
 ];

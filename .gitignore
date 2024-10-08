@@ -4,8 +4,9 @@ docs/images/supporters
 docs/api
 mocha.js
 mocha.js.map
-mocha.mjs
-mocha.mjs.map
+esm/mocha.js
+esm/mocha.js.map
+esm/package.json
 .karma/
 !bin/mocha.js
 !lib/mocha.js

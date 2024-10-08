@@ -43,7 +43,7 @@
     "node": ">= 14.0.0"
   },
   "scripts": {
-    "build": "rollup -c ./rollup.config.js",
+    "build": "rollup -c ./rollup.config.js && echo '{\"type\":\"module\"}' > esm/package.json",
     "clean": "rimraf mocha.js mocha.js.map",
     "docs-clean": "rimraf docs/_site docs/api",
     "docs-watch": "eleventy --serve",
@@ -177,8 +177,9 @@
     "mocha.css",
     "mocha.js",
     "mocha.js.map",
-    "mocha.mjs",
-    "mocha.mjs.map",
+    "esm/mocha.js",
+    "esm/mocha.js.map",
+    "esm/package.json",
     "browser-entry.js"
   ],
   "browser": {

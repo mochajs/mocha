@@ -14,7 +14,7 @@ function getConfig (format) {
   const config = {
     input: './browser-entry.js',
     output: {
-      file: `./mocha${format === 'esm' ? '.mjs' : '.js'}`,
+      file: format === 'esm' ? './esm/mocha.js' : './mocha.js',
       format,
       sourcemap: true,
       name: 'mocha',
