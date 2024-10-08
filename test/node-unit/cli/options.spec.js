@@ -206,8 +206,7 @@ describe('options', function () {
             // package.json
             readFileSync
               .onFirstCall()
-              // Note the extra comma
-              .returns('{"mocha": {"retries": 3, "_": ["foobar.spec.js"],}}');
+              .returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
