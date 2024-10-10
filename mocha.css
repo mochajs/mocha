@@ -360,7 +360,6 @@ body {
   color: var(--mocha-pass-icon-color);
 }
 
-
 #mocha-stats .progress-contain {
   float: right;
   padding: 0;
