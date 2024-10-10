@@ -3,7 +3,7 @@
 :root {
   --mocha-color: #000;
   --mocha-bg-color: #fff;
-  --mocha-pass-icon-color: #00d6b2;
+  --mocha-pass-icon-color: #007f6a;
   --mocha-pass-color: #fff;
   --mocha-pass-shadow-color: rgba(0, 0, 0, 0.2);
   --mocha-pass-mediump-color: #c09853;
