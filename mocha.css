@@ -344,6 +344,23 @@ body {
   z-index: 1;
 }
 
+#mocha-stats.fail li.result {
+  color: var(--mocha-test-fail-color);
+}
+
+#mocha-stats.fail li.failures {
+  color: var(--mocha-test-fail-color);
+}
+
+#mocha-stats.pass li.result {
+  color: var(--mocha-pass-icon-color);
+}
+
+#mocha-stats.pass li.passes {
+  color: var(--mocha-pass-icon-color);
+}
+
+
 #mocha-stats .progress-contain {
   float: right;
   padding: 0;
