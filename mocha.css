@@ -366,6 +366,7 @@ body {
   color: var(--mocha-test-pass-color);
 }
 
+
 #mocha-stats .progress-contain {
   float: right;
   padding: 0;
