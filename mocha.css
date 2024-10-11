@@ -350,11 +350,19 @@ body {
   color: var(--mocha-test-fail-color);
 }
 
+#mocha-stats.fail li.failures em {
+  color: var(--mocha-test-fail-color);
+}
+
 #mocha-stats.pass li.result {
   color: var(--mocha-test-pass-color);
 }
 
 #mocha-stats.pass li.passes {
+  color: var(--mocha-test-pass-color);
+}
+
+#mocha-stats.pass li.passes em {
   color: var(--mocha-test-pass-color);
 }
 
