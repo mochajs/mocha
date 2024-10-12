@@ -349,7 +349,8 @@ body {
   padding: 0;
 }
 
-#mocha-stats :is(.progress-element, .progress-text) {
+#mocha-stats .progress-element,
+#mocha-stats .progress-text {
   width: var(--ring-container-size);
   display: block;
   top: 12px;
@@ -374,7 +375,8 @@ body {
   height: var(--ring-container-size);
 }
 
-#mocha-stats :is(.ring-flatlight, .ring-highlight) {
+#mocha-stats .ring-flatlight,
+#mocha-stats .ring-highlight {
   --stroke-thickness: 1.65px;
   --center: calc(var(--ring-container-size) / 2);
   cx: var(--center);
