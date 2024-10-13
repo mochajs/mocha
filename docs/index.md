@@ -2120,7 +2120,7 @@ A typical setup might look something like the following, where we call `mocha.se
   <body>
     <div id="mocha"></div>
 
-    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/chai@4/chai.js"></script>
     <script src="https://unpkg.com/mocha/mocha.js"></script>
 
     <script class="mocha-init">
