@@ -17,6 +17,8 @@ describe('Test', function () {
       this._test._slow = 101;
       this._test._retries = 3;
       this._test._currentRetry = 1;
+      this._test._repeats = 3;
+      this._test._currentRepeat = 1;
       this._test._allowedGlobals = ['foo'];
       this._test.parent = 'foo';
       this._test.file = 'bar';
@@ -46,6 +48,14 @@ describe('Test', function () {
       var clone1 = this._test.clone();
       expect(clone1.retriedTest(), 'to be', this._test);
       expect(clone1.clone().retriedTest(), 'to be', this._test);
+    });
+
+    it('should copy the repeats value', function () {
+      expect(this._test.clone().repeats(), 'to be', 3);
+    });
+
+    it('should copy the currentRepeat value', function () {
+      expect(this._test.clone().currentRepeat(), 'to be', 1);
     });
 
     it('should copy the globals value', function () {

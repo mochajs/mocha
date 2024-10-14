@@ -146,6 +146,22 @@ describe('--parallel', function () {
     });
   });
 
+  describe('when used with --repeats', function () {
+    it('should repeat tests appropriately', async function () {
+      return expect(
+        runMochaAsync('options/parallel/repeats*', ['--parallel']),
+        'when fulfilled',
+        'to satisfy',
+        expect
+          .it('to have failed')
+          .and('to have passed test count', 1)
+          .and('to have pending test count', 0)
+          .and('to have failed test count', 1)
+          .and('to contain output', /RUN: 2/)
+      );
+    });
+  });
+
   describe('when used with --allow-uncaught', function () {
     it('should bubble up an exception', async function () {
       return expect(
