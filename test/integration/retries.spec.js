@@ -134,4 +134,37 @@ describe('retries', function () {
       }
     );
   });
+
+  it('should return current retry count out of total retry count', function (done) {
+    helpers.runMocha(
+      'retries/early-pass.fixture.js',
+      ['--reporter', 'spec'],
+      function (err, res) {
+        var lines, expected;
+
+        if (err) {
+          done(err);
+          return;
+        }
+
+        lines = res.output
+          .split(helpers.SPLIT_DOT_REPORTER_REGEXP)
+          .map(function (line) {
+            return line.trim();
+          })
+          .filter(function (line) {
+            return line.length;
+          })
+          .slice(0, -1);
+
+        var retryPattern = /\(retry x\d+\)/;
+
+        var actual = lines[1].match(retryPattern)[0];
+        var expected = '(retry x1)';
+
+        assert.equal(actual, expected);
+        done();
+      }
+    );
+  });
 });
