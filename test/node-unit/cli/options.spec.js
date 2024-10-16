@@ -149,7 +149,7 @@ describe('options', function () {
                 loadOptions('--package /something/wherever --require butts');
               },
               'to throw',
-              'Unable to read/parse /something/wherever: bad file message'
+              'Unable to read /something/wherever: bad file message'
             );
           });
         });
@@ -196,6 +196,36 @@ describe('options', function () {
 
           it('should set package = false', function () {
             expect(result, 'to have property', 'package', false);
+          });
+        });
+
+        describe('when path to package.json unspecified and package.json exists but is invalid', function () {
+          beforeEach(function () {
+            const filepath = '/some/package.json';
+            readFileSync = sinon.stub();
+            // package.json
+            readFileSync
+              .onFirstCall()
+              .returns('{definitely-invalid');
+            findConfig = sinon.stub().returns('/some/.mocharc.json');
+            loadConfig = sinon.stub().returns({});
+            findupSync = sinon.stub().returns(filepath);
+            loadOptions = proxyLoadOptions({
+              readFileSync,
+              findConfig,
+              loadConfig,
+              findupSync
+            });
+          });
+
+          it('should throw', function () {
+            expect(
+              () => {
+                loadOptions();
+              },
+              'to throw',
+                /SyntaxError/,
+            );
           });
         });
 
@@ -287,7 +317,7 @@ describe('options', function () {
           });
 
           it('should set config = false', function () {
-            expect(loadOptions(), 'to have property', 'config', false);
+            expect(result, 'to have property', 'config', false);
           });
         });
 
