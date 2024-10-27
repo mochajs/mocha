@@ -1170,7 +1170,7 @@ Cause Mocha to only run tests matching the given `regexp`, which is internally c
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
 And another option with double quotes: `--grep "groupA|groupB"`.<br>
-And for more complex criterias: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
+And for more complex criteria: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
 
 ```js
 describe('api', function () {
@@ -2248,7 +2248,7 @@ Mocha will also _merge_ any options found in `package.json` into its run-time co
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
 
-Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priorty configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priority configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
 
 ### Extending Configuration
 
