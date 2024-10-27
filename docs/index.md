@@ -2434,7 +2434,7 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [qunit]: https://qunitjs.com/
 [selenium-webdriver-testing]: https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js
 [should.js]: https://github.com/shouldjs/should.js
-[superagent-docs-test]: https://visionmedia.github.io/superagent/docs/test.html
+[superagent-docs-test]: https://ladjs.github.io/superagent/docs/test.html
 [superagent-makefile]: https://github.com/visionmedia/superagent/blob/master/Makefile
 [test-anything-protocol]: https://en.wikipedia.org/wiki/Test_Anything_Protocol
 [textmate-mocha]: https://github.com/mochajs/mocha.tmbundle
