@@ -1,5 +1,14 @@
 # Changelog
 
+## [10.8.1](https://github.com/mochajs/mocha/compare/v10.8.0...v10.8.1) (2024-10-29)
+
+
+### 🩹 Fixes
+
+* handle case of invalid package.json with no explicit config ([#5198](https://github.com/mochajs/mocha/issues/5198)) ([f72bc17](https://github.com/mochajs/mocha/commit/f72bc17cb44164bcfff7abc83d0d37d99a061104))
+* Typos on mochajs.org ([#5237](https://github.com/mochajs/mocha/issues/5237)) ([d8ca270](https://github.com/mochajs/mocha/commit/d8ca270a960554c9d5c5fbf264e89d668d01ff0d))
+* use accurate test links in HTML reporter ([#5228](https://github.com/mochajs/mocha/issues/5228)) ([68803b6](https://github.com/mochajs/mocha/commit/68803b685d55dcccc51fa6ccfd27701cda4e26ed))
+
 ## [10.8.0](https://github.com/mochajs/mocha/compare/v10.7.3...v10.8.0) (2024-10-29)
 
 
