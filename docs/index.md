@@ -334,6 +334,17 @@ describe('my suite', () => {
 
 _If you do not need to use_ Mocha's context, lambdas should work. Be aware that using lambdas will be more painful to refactor if the need eventually arises!
 
+Alternatively, you can override certain context variables, such as test timeouts, by chain-calling methods of the created tests and/or hooks:
+
+```js
+describe('my suite', () => {
+  beforeEach(() => {}).timeout(1000);
+  it('my test', () => {
+    assert.ok(true);
+  }).timeout(1000);
+}).timeout(1000);
+```
+
 ## Hooks
 
 With its default "BDD"-style interface, Mocha provides the hooks `before()`, `after()`, `beforeEach()`, and `afterEach()`. These should be used to set up preconditions and clean up after your tests.
