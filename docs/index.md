@@ -1827,7 +1827,11 @@ suite('Array', function () {
 
 ### Exports
 
-The **Exports** interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
+The **Exports** interface allows for organizing tests in a modular fashion. It is particularly useful in larger projects where test suites can be segmented into different files.
+
+**Note**: The Exports interface is not supported in browser environments. This limitation arises because browsers handle module exports differently from Node.js. If you intend to run tests in a browser, consider using the BDD or TDD interfaces, which are fully supported.
+
+The Exports interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
 ```js
 module.exports = {
