@@ -1,23 +1,26 @@
 <p align="center">
-  <img src="https://cldup.com/xFVFxOioAU.svg" alt="Mocha test framework logo"/>
+  <img src="assets/mocha-logo.svg" alt="Mocha test framework logo"/>
 </p>
 
 <p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
 
-<p align="center">
-<a href="https://github.com/mochajs/mocha/actions?query=workflow%3ATests+branch%3Amain"><img src="https://github.com/mochajs/mocha/workflows/Tests/badge.svg?branch=main" alt="GitHub Actions Build Status"></a>
-<a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
-<a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/chat-Discord-5765F2.svg" /></a>
-<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
-<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
-</p>
+<div align="center">
 
-<p align="center">
 <a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="NPM Version"></a>
 <a href="https://github.com/mochajs/mocha"><img src="https://img.shields.io/node/v/mocha.svg" alt="Node Version"></a>
-</p>
+[![GitHub Actions Build Status](https://github.com/mochajs/mocha/actions/workflows/mocha.yml/badge.svg)](https://github.com/mochajs/mocha/actions/workflows/mocha.yml)
+<a href="https://coveralls.io/github/mochajs/mocha"><img src="https://coveralls.io/repos/github/mochajs/mocha/badge.svg" alt="Coverage Status"></a>
 
-<p align="center"><br><img alt="Mocha Browser Support h/t SauceLabs" src="https://saucelabs.com/browser-matrix/mochajs.svg" width="354"></p>
+</div>
+
+<div align="center">
+
+<a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/Chat-Discord-5765F2.svg" /></a>
+<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
+<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
+[![Collective Funds Guidelines v0.1](https://img.shields.io/badge/collective_funds_guidelines-v0.1-D8E8D4?style=flat&labelColor=3A6457)](https://github.com/collective-funds/guidelines)
+
+</div>
 
 ## Links
 
@@ -68,6 +71,4 @@ Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXh
 
 ## License
 
-Copyright 2011-2022 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha.svg?type=large)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2Fmochajs%2Fmocha?ref=badge_large)
+Copyright 2011-2024 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
