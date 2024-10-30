@@ -1,5 +1,28 @@
 # Changelog
 
+## [10.8.2](https://github.com/mochajs/mocha/compare/v10.8.1...v10.8.2) (2024-10-30)
+
+
+### 🩹 Fixes
+
+* support errors with circular dependencies in object values with --parallel ([#5212](https://github.com/mochajs/mocha/issues/5212)) ([ba0fefe](https://github.com/mochajs/mocha/commit/ba0fefe10b08a689cf49edc3818026938aa3a240))
+* test link in html reporter ([#5224](https://github.com/mochajs/mocha/issues/5224)) ([f054acc](https://github.com/mochajs/mocha/commit/f054acc1f60714bbe00ad1ab270fb4977836d045))
+
+
+### 📚 Documentation
+
+* indicate 'exports' interface does not work in browsers ([#5181](https://github.com/mochajs/mocha/issues/5181)) ([14e640e](https://github.com/mochajs/mocha/commit/14e640ee49718d587779a9594b18f3796c42cf2a))
+
+
+### 🧹 Chores
+
+* fix docs builds by re-adding eleventy and ignoring gitignore again ([#5240](https://github.com/mochajs/mocha/issues/5240)) ([881e3b0](https://github.com/mochajs/mocha/commit/881e3b0ca2e24284aab2a04f63639a0aa9e0ad1b))
+
+
+### 🤖 Automation
+
+* **deps:** bump the github-actions group with 1 update ([#5132](https://github.com/mochajs/mocha/issues/5132)) ([e536ab2](https://github.com/mochajs/mocha/commit/e536ab25b308774e3103006c044cb996a2e17c87))
+
 ## [10.8.1](https://github.com/mochajs/mocha/compare/v10.8.0...v10.8.1) (2024-10-29)
 
 
