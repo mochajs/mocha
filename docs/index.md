@@ -1170,7 +1170,7 @@ Cause Mocha to only run tests matching the given `regexp`, which is internally c
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
 And another option with double quotes: `--grep "groupA|groupB"`.<br>
-And for more complex criterias: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
+And for more complex criteria: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
 
 ```js
 describe('api', function () {
@@ -1827,7 +1827,11 @@ suite('Array', function () {
 
 ### Exports
 
-The **Exports** interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
+The **Exports** interface allows for organizing tests in a modular fashion. It is particularly useful in larger projects where test suites can be segmented into different files.
+
+**Note**: The Exports interface is not supported in browser environments. This limitation arises because browsers handle module exports differently from Node.js. If you intend to run tests in a browser, consider using the BDD or TDD interfaces, which are fully supported.
+
+The Exports interface is much like Mocha's predecessor [expresso][]. The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
 
 ```js
 module.exports = {
@@ -2120,7 +2124,7 @@ A typical setup might look something like the following, where we call `mocha.se
   <body>
     <div id="mocha"></div>
 
-    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/chai@4/chai.js"></script>
     <script src="https://unpkg.com/mocha/mocha.js"></script>
 
     <script class="mocha-init">
@@ -2248,7 +2252,7 @@ Mocha will also _merge_ any options found in `package.json` into its run-time co
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
 
-Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priorty configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priority configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
 
 ### Extending Configuration
 
@@ -2434,7 +2438,7 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [qunit]: https://qunitjs.com/
 [selenium-webdriver-testing]: https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js
 [should.js]: https://github.com/shouldjs/should.js
-[superagent-docs-test]: https://visionmedia.github.io/superagent/docs/test.html
+[superagent-docs-test]: https://ladjs.github.io/superagent/docs/test.html
 [superagent-makefile]: https://github.com/visionmedia/superagent/blob/master/Makefile
 [test-anything-protocol]: https://en.wikipedia.org/wiki/Test_Anything_Protocol
 [textmate-mocha]: https://github.com/mochajs/mocha.tmbundle

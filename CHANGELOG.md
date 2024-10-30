@@ -1,5 +1,62 @@
 # Changelog
 
+## [10.8.2](https://github.com/mochajs/mocha/compare/v10.8.1...v10.8.2) (2024-10-30)
+
+
+### 🩹 Fixes
+
+* support errors with circular dependencies in object values with --parallel ([#5212](https://github.com/mochajs/mocha/issues/5212)) ([ba0fefe](https://github.com/mochajs/mocha/commit/ba0fefe10b08a689cf49edc3818026938aa3a240))
+* test link in html reporter ([#5224](https://github.com/mochajs/mocha/issues/5224)) ([f054acc](https://github.com/mochajs/mocha/commit/f054acc1f60714bbe00ad1ab270fb4977836d045))
+
+
+### 📚 Documentation
+
+* indicate 'exports' interface does not work in browsers ([#5181](https://github.com/mochajs/mocha/issues/5181)) ([14e640e](https://github.com/mochajs/mocha/commit/14e640ee49718d587779a9594b18f3796c42cf2a))
+
+
+### 🧹 Chores
+
+* fix docs builds by re-adding eleventy and ignoring gitignore again ([#5240](https://github.com/mochajs/mocha/issues/5240)) ([881e3b0](https://github.com/mochajs/mocha/commit/881e3b0ca2e24284aab2a04f63639a0aa9e0ad1b))
+
+
+### 🤖 Automation
+
+* **deps:** bump the github-actions group with 1 update ([#5132](https://github.com/mochajs/mocha/issues/5132)) ([e536ab2](https://github.com/mochajs/mocha/commit/e536ab25b308774e3103006c044cb996a2e17c87))
+
+## [10.8.1](https://github.com/mochajs/mocha/compare/v10.8.0...v10.8.1) (2024-10-29)
+
+
+### 🩹 Fixes
+
+* handle case of invalid package.json with no explicit config ([#5198](https://github.com/mochajs/mocha/issues/5198)) ([f72bc17](https://github.com/mochajs/mocha/commit/f72bc17cb44164bcfff7abc83d0d37d99a061104))
+* Typos on mochajs.org ([#5237](https://github.com/mochajs/mocha/issues/5237)) ([d8ca270](https://github.com/mochajs/mocha/commit/d8ca270a960554c9d5c5fbf264e89d668d01ff0d))
+* use accurate test links in HTML reporter ([#5228](https://github.com/mochajs/mocha/issues/5228)) ([68803b6](https://github.com/mochajs/mocha/commit/68803b685d55dcccc51fa6ccfd27701cda4e26ed))
+
+## [10.8.0](https://github.com/mochajs/mocha/compare/v10.7.3...v10.8.0) (2024-10-29)
+
+
+### 🌟 Features
+
+* highlight browser failures ([#5222](https://github.com/mochajs/mocha/issues/5222)) ([8ff4845](https://github.com/mochajs/mocha/commit/8ff48453a8b12d9cacf56b0c0c544c8256af64c7))
+
+
+### 🩹 Fixes
+
+* remove `:is()` from `mocha.css` to support older browsers ([#5225](https://github.com/mochajs/mocha/issues/5225)) ([#5227](https://github.com/mochajs/mocha/issues/5227)) ([0a24b58](https://github.com/mochajs/mocha/commit/0a24b58477ea8ad146afc798930800b02c08790a))
+
+
+### 📚 Documentation
+
+* add `SECURITY.md` pointing to Tidelift ([#5210](https://github.com/mochajs/mocha/issues/5210)) ([bd7e63a](https://github.com/mochajs/mocha/commit/bd7e63a1f6d98535ce1ed1ecdb57b3e4db8a33c5))
+* adopt Collective Funds Guidelines 0.1 ([#5199](https://github.com/mochajs/mocha/issues/5199)) ([2b03d86](https://github.com/mochajs/mocha/commit/2b03d865eec63d627ff229e07d777f25061260d4))
+* update README, LICENSE and fix outdated ([#5197](https://github.com/mochajs/mocha/issues/5197)) ([1203e0e](https://github.com/mochajs/mocha/commit/1203e0ed739bbbf12166078738357fdb29a8c000))
+
+
+### 🧹 Chores
+
+* fix npm scripts on windows ([#5219](https://github.com/mochajs/mocha/issues/5219)) ([1173da0](https://github.com/mochajs/mocha/commit/1173da0bf614e8d2a826687802ee8cbe8671ccf1))
+* remove trailing whitespace in SECURITY.md ([7563e59](https://github.com/mochajs/mocha/commit/7563e59ae3c78ada305d26eadb86998ab54342da))
+
 ## [10.7.3](https://github.com/mochajs/mocha/compare/v10.7.2...v10.7.3) (2024-08-09)
 
 
