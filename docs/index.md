@@ -341,7 +341,7 @@ describe('my suite', () => {
   beforeEach(() => {}).timeout(1000);
   it('my test', () => {
     assert.ok(true);
-  }).timeout(1000); // should set the timeout of this test to 1000 ms; instead will fail
+  }).timeout(1000);
 }).timeout(1000);
 ```
 
