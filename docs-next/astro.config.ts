@@ -110,7 +110,7 @@ export default defineConfig({
         },
         {
           label: "API",
-          link: "../api",
+          link: "https://mochajs.org/api",
         },
       ],
       social: {
