@@ -1,0 +1,127 @@
+---
+description: Describing test cases that should not be run yet.
+title: Inclusive Tests
+---
+
+This feature is the inverse of `.only()`.
+By appending `.skip()`, you may tell Mocha to ignore test case(s).
+Anything skipped will be marked as [pending](./pending-tests), and reported as such.
+Here's an example of skipping an individual test:
+
+```js
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    it.skip("should return -1 unless present", function () {
+      // this test will not be run
+    });
+
+    it("should return the index when present", function () {
+      // this test will be run
+    });
+  });
+});
+```
+
+You can also put `.skip()` on an entire suite.
+This is equivalent to appending `.skip()` onto all tests in the suite.
+Hooks in the suite are also skipped.
+
+```js
+describe("Array", function () {
+  describe.skip("#indexOf()", function () {
+    it("should return -1 unless present", function () {
+      // this test will not be run
+    });
+  });
+});
+```
+
+_Note_: Code in skipped suites, that is placed outside of hooks or tests is still executed, as mocha will still invoke the suite function to build up the suite structure for visualization.
+
+:::tip[Best practice]
+Use `.skip()` instead of commenting tests out.
+:::
+
+You may also skip _at runtime_ using `this.skip()`.
+If a test needs an environment or configuration which cannot be detected beforehand, a runtime skip is appropriate.
+For example:
+
+```js
+it('should only test in the correct environment', function() {
+  if (/* check test environment */) {
+    // make assertions
+  } else {
+    this.skip();
+  }
+});
+```
+
+The above test will be reported as [pending](./pending-tests).
+It's also important to note that calling `this.skip()` will effectively _abort_ the test.
+
+:::tip[Best practice]
+To avoid confusion, do not execute further instructions in a test or hook after calling `this.skip()`.
+:::
+
+Contrast the above test with the following code:
+
+```js
+it('should only test in the correct environment', function() {
+  if (/* check test environment */) {
+    // make assertions
+  } else {
+    // do nothing
+  }
+});
+```
+
+Because this test _does nothing_, it will be reported as _passing_.
+
+:::tip[Best practice]
+Don't do nothing!
+A test should make an assertion or use `this.skip()`.
+:::
+
+To skip _multiple_ tests in this manner, use `this.skip()` in a "before all" hook:
+
+```js
+before(function() {
+  if (/* check test environment */) {
+    // setup code
+  } else {
+    this.skip();
+  }
+});
+```
+
+This will skip all `it`, `beforeEach/afterEach`, and `describe` blocks within the suite.
+`before/after` hooks are skipped unless they are defined at the same level as the hook containing `this.skip()`.
+
+```js
+describe("outer", function () {
+  before(function () {
+    this.skip();
+  });
+
+  after(function () {
+    // will be executed
+  });
+
+  describe("inner", function () {
+    before(function () {
+      // will be skipped
+    });
+
+    after(function () {
+      // will be skipped
+    });
+  });
+});
+```
+
+:::note[Updated in v7.0.0]
+Skipping a test within an "after all" hook is disallowed and will throw an exception.
+Use a return statement or other means to abort hook execution.
+:::
+
+Before Mocha v3.0.0, `this.skip()` was not supported in asynchronous tests and hooks.

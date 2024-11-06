@@ -1,0 +1,20 @@
+---
+description: Describing test cases with names that don't yet have a callback.
+title: Pending Tests
+---
+
+"Pending" — as in "someone should write these test cases eventually" — test-cases are those _without_ a callback:
+
+```js
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    // pending test below
+    it("should return -1 when the value is not present");
+  });
+});
+```
+
+Pending tests will be included in the test results, and marked as pending.
+A pending test is not considered a failed test.
+
+Read the [inclusive tests section](./inclusive-tests) for an example of conditionally marking a test as pending via `this.skip()`.

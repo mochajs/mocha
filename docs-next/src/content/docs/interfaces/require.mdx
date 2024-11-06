@@ -1,0 +1,30 @@
+---
+description: The QUnit test interface for Mocha.
+title: QUnit
+---
+
+The `require` interface allows you to require the `describe` and friend words directly using `require` and call them whatever you want.
+This interface is also useful if you want to avoid global variables in your tests.
+
+:::note
+The `require` interface cannot be run via the `node` executable, and must be run via `mocha`.
+:::
+
+```js
+var testCase = require("mocha").describe;
+var pre = require("mocha").before;
+var assertions = require("mocha").it;
+var assert = require("chai").assert;
+
+testCase("Array", function () {
+  pre(function () {
+    // ...
+  });
+
+  testCase("#indexOf()", function () {
+    assertions("should return -1 when not present", function () {
+      assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```

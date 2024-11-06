@@ -1,0 +1,89 @@
+---
+description: Describing tests cases based on dynamic data.
+title: Dynamic Tests
+---
+
+Given Mocha's use of function expressions to define suites and test cases, it's straightforward to generate your tests dynamically.
+No special syntax is required &mdash; plain old JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
+
+Take the following example:
+
+```js
+const assert = require("assert");
+
+function add(args) {
+  return args.reduce((prev, curr) => prev + curr, 0);
+}
+
+describe("add()", function () {
+  const tests = [
+    { args: [1, 2], expected: 3 },
+    { args: [1, 2, 3], expected: 6 },
+    { args: [1, 2, 3, 4], expected: 10 },
+  ];
+
+  tests.forEach(({ args, expected }) => {
+    it(`correctly adds ${args.length} args`, function () {
+      const res = add(args);
+      assert.strictEqual(res, expected);
+    });
+  });
+});
+```
+
+The above code will produce a suite with three specs:
+
+```bash
+$ mocha
+
+  add()
+    ✓ correctly adds 2 args
+    ✓ correctly adds 3 args
+    ✓ correctly adds 4 args
+```
+
+Tests added inside a `.forEach` handler often don't play well with editor plugins, especially with "right-click run" features.
+Another way to parameterize tests is to generate them with a closure.
+This following example is equivalent to the one above:
+
+```js
+describe("add()", function () {
+  const testAdd = ({ args, expected }) =>
+    function () {
+      const res = add(args);
+      assert.strictEqual(res, expected);
+    };
+
+  it("correctly adds 2 args", testAdd({ args: [1, 2], expected: 3 }));
+  it("correctly adds 3 args", testAdd({ args: [1, 2, 3], expected: 6 }));
+  it("correctly adds 4 args", testAdd({ args: [1, 2, 3, 4], expected: 10 }));
+});
+```
+
+With `top-level await` you can collect your test data in a dynamic and asynchronous way while the test file is being loaded.
+
+See also [`--delay`](../features/hooks#delayed-root-suite) for CommonJS modules without `top-level await`.
+
+```js
+// testfile.mjs
+import assert from "assert";
+
+// top-level await: Node >= v14.8.0 with ESM test file
+const tests = await new Promise((resolve) => {
+  setTimeout(resolve, 5000, [
+    { args: [1, 2], expected: 3 },
+    { args: [1, 2, 3], expected: 6 },
+    { args: [1, 2, 3, 4], expected: 10 },
+  ]);
+});
+
+// in suites ASYNCHRONOUS callbacks are NOT supported
+describe("add()", function () {
+  tests.forEach(({ args, expected }) => {
+    it(`correctly adds ${args.length} args`, function () {
+      const res = args.reduce((sum, curr) => sum + curr, 0);
+      assert.strictEqual(res, expected);
+    });
+  });
+});
+```
