@@ -4,7 +4,7 @@ import starlight from "@astrojs/starlight";
 console.log(process.env);
 
 export default defineConfig({
-  base: "/next",
+  ...(!process.env.NETLIFY_BUILD_BASE && { base: "/next" }),
   integrations: [
     starlight({
       components: {
