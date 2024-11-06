@@ -5,7 +5,7 @@ import logo from "./mocha-logo.svg";
 ---
 
 <h1 class="page-title">
-  <Image alt="Mocha" class="mocha-logo" height={256} width={256} src={logo} />
+  <Image alt="Mocha" class="mocha-logo"  src={logo} />
   <span class="tags">classic, reliable, trusted</span>
 </h1>
 
@@ -30,15 +30,19 @@ import logo from "./mocha-logo.svg";
     }
   }
 
-  .mocha-logo {
-    z-index: 1;
-  }
-
   .page-title {
+    --logoSize: 12rem;
     align-items: center;
     display: flex;
     flex-direction: column;
   }
+
+  .mocha-logo {
+    height: var(--logoSize);
+    width: var(--logoSize);
+    z-index: 1;
+  }
+
 
   .tags {
     animation:
@@ -65,6 +69,7 @@ import logo from "./mocha-logo.svg";
 
     .page-title {
       flex-direction: row;
+      --logoSize: 16rem;
     }
   }
 </style>
