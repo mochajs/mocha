@@ -1,6 +1,8 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
+console.log(process.env);
+
 export default defineConfig({
   base: "/next",
   integrations: [
