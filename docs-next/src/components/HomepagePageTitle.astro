@@ -22,11 +22,11 @@ import logo from "./mocha-logo.svg";
 
   @keyframes slideright {
     from {
-      transform: translateX(-45px);
+      transform: translateY(-2rem);
     }
 
     to {
-      transform: translateX(0);
+      transform: translateY(0);
     }
   }
 
@@ -37,7 +37,7 @@ import logo from "./mocha-logo.svg";
   .page-title {
     align-items: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
   }
 
   .tags {
@@ -50,5 +50,21 @@ import logo from "./mocha-logo.svg";
     font-weight: 200;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
+  }
+
+  @media (width >= 1000px) {
+    @keyframes slideright {
+      from {
+        transform: translateX(-3rem);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .page-title {
+      flex-direction: row;
+    }
   }
 </style>
