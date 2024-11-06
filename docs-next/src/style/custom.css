@@ -3,13 +3,16 @@
   --sl-font: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   /* Color bases */
+  --sl-color-mocha-vibrant: #c6b4a5;
   --sl-color-mocha-light: #8d6748;
   --sl-color-mocha-dark: #6a4728;
 
   /* Dark mode colors. */
-  --sl-color-accent-low: #2c2119;
+  --sl-color-accent-low: #534134;
   --sl-color-accent-high: #d4c6bb;
+  --sl-color-accent-text: var(--sl-color-mocha-vibrant);
   --sl-color-accent: var(--sl-color-mocha-light);
+  --sl-color-text-accent: var(--sl-color-mocha-vibrant);
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #f3ecea;
   --sl-color-gray-2: #cfc6c4;
@@ -28,6 +31,7 @@
 :root[data-theme="light"] {
   --sl-color-accent-low: #dfd5cc;
   --sl-color-accent-high: #3f2e21;
+  --sl-color-accent-text: var(--sl-color-accent-high);
   --sl-color-accent: var(--sl-color-mocha-dark);
   --sl-color-white: #1d1715;
   --sl-color-gray-1: #302321;
