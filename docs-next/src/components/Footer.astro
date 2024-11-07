@@ -128,84 +128,91 @@ import openJsfLogo from "./openjsf-logo.svg";
       </dl>
     </div>
   </div>
+</footer>
 
-  <style>
-    footer {
-      color: var(--sl-color-gray-3);
-      font-size: 0.8em;
-      display: flex;
-      gap: 1rem;
-      flex-direction: column;
-    }
+<style>
+  footer {
+    color: var(--sl-color-gray-3);
+    font-size: 0.8em;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
 
-    footer a {
-      color: var(--sl-color-accent-text);
-    }
+  footer a {
+    color: var(--sl-color-accent-text);
+  }
 
-    footer p {
-      margin-bottom: 1rem;
-    }
+  footer p {
+    margin-bottom: 1rem;
+  }
 
+  #copyright-notice {
+    border-top: 1px solid var(--sl-color-accent-low);
+    padding-top: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  #external-links {
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .openjsf-logo {
+    margin-bottom: 0.5rem;
+  }
+
+  #openjsf-links {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--sl-color-accent-low);
+    font-size: 0.9em;
+    list-style: none;
+    max-width: 35rem;
+    padding-left: 0;
+  }
+
+  #openjsf-links li {
+    display: inline-block;
+    padding: 0.15rem 0.5rem 0.15rem 0;
+  }
+
+  .build-credits {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0 1rem;
+  }
+
+  .dl-inline dt,
+  .dl-inline dd {
+    display: inline;
+    margin: 0;
+  }
+
+  .dl-inline dt:after {
+    content: ": ";
+  }
+
+  .dl-inline dd + dt:before {
+    content: "";
+    display: block;
+  }
+
+  #last-modified {
+    font-style: italic;
+    font-size: 0.8em;
+    white-space: nowrap;
+  }
+
+  @media (width >= 819px) {
     .footer-bottom {
       align-items: end;
       display: flex;
     }
 
-    #copyright-notice {
-      border-top: 1px solid var(--sl-color-accent-low);
-      padding-top: 2.5rem;
-      margin-top: 1.5rem;
-    }
-
-    #external-links {
-      gap: 1rem;
-      width: 100%;
-    }
-
-    .openjsf-logo {
-      margin-bottom: 0.5rem;
-    }
-
-    #openjsf-links {
-      column-count: 2;
-      column-gap: 2rem;
-      column-rule: 1px solid var(--sl-color-accent-low);
-      font-size: 0.9em;
-      list-style: none;
-      max-width: 35rem;
-      padding-left: 0;
-    }
-
-    #openjsf-links li {
-      display: inline-block;
-      padding: 0.15rem 0.5rem 0.15rem 0;
-    }
-
     .build-credits {
-      display: flex;
-      flex-direction: column;
+      margin: 0;
       text-align: right;
     }
-
-    .dl-inline dt,
-    .dl-inline dd {
-      display: inline;
-      margin: 0;
-    }
-
-    .dl-inline dt:after {
-      content: ": ";
-    }
-
-    .dl-inline dd + dt:before {
-      content: "";
-      display: block;
-    }
-
-    #last-modified {
-      font-style: italic;
-      font-size: 0.8em;
-      white-space: nowrap;
-    }
-  </style>
-</footer>
+  }
+</style>
