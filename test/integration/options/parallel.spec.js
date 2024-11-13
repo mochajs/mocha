@@ -92,7 +92,6 @@ describe('--parallel', function () {
     it('should have the same result as with --no-parallel', async function () {
       const expected = await runMochaAsync('options/parallel/test-*', [
         '--no-parallel',
-        '--sort'
       ]);
       return expect(
         runMochaAsync('options/parallel/test-*', ['--parallel']),
@@ -303,7 +302,6 @@ describe('--parallel', function () {
               '--reporter',
               reporter,
               '--no-parallel',
-              '--sort'
             ]);
             return expect(
               runMochaAsync('options/parallel/test-*', [
