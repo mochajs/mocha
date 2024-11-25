@@ -204,9 +204,7 @@ describe('options', function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
-            readFileSync
-              .onFirstCall()
-              .returns('{definitely-invalid');
+            readFileSync.onFirstCall().returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
@@ -224,7 +222,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-                /SyntaxError/,
+              /SyntaxError/
             );
           });
         });
@@ -674,6 +672,49 @@ describe('options', function () {
           '*.test.js',
           '{dirA,dirB}/**/*.spec.js'
         ]);
+      });
+    });
+
+    describe('"numerical arguments"', function () {
+      const numericalArg = 123;
+
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        findConfig = sinon.stub();
+        loadConfig = sinon.stub();
+        findupSync = sinon.stub();
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync
+        });
+      });
+
+      it('throws error when numerical option is passed to cli', function () {
+        expect(() => loadOptions(`${numericalArg}`), 'to throw', {
+          message: `Invalid option ${numericalArg} passed to mocha cli`
+        });
+      });
+
+      it('throws error when numerical argument is passed to mocha flag that does not accept numerical value', function () {
+        expect(() => loadOptions(`--delay ${numericalArg}`), 'to throw', {
+          message: `Invalid option ${numericalArg} passed to mocha cli`
+        });
+      });
+
+      it('does not throw error if numerical value is passed to a compatible mocha flag', function () {
+        expect(() => loadOptions(`--retries ${numericalArg}`), 'not to throw');
+      });
+
+      it('does not throw error if numerical value is passed to a node options', function () {
+        expect(
+          () =>
+            loadOptions(
+              `--secure-heap-min=${numericalArg} --conditions=${numericalArg}`
+            ),
+          'not to throw'
+        );
       });
     });
   });
