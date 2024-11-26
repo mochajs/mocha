@@ -934,7 +934,7 @@ If set to `true`, Mocha returns exit code `0` even if there are failed tests dur
 
 ### `--fail-zero`
 
-> _Since in v9.1.0_
+> _Since v9.1.0_
 
 Fail test run if no tests are encountered with `exit-code: 1`.
 
