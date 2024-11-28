@@ -204,7 +204,9 @@ describe('options', function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().returns('{definitely-invalid');
+            readFileSync
+              .onFirstCall()
+              .returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
@@ -222,7 +224,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-              /SyntaxError/
+                /SyntaxError/,
             );
           });
         });
