@@ -1,6 +1,6 @@
 # Changelog
 
-## [11.1.0](https://github.com/mochajs/mocha/compare/v11.0.0...v11.1.0) (2024-12-02)
+## [11.0.1](https://github.com/mochajs/mocha/compare/v11.0.0...v11.0.1) (2024-12-02)
 
 
 ### 🌟 Features
