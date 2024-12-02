@@ -1,5 +1,17 @@
 # Changelog
 
+## [11.0.1](https://github.com/mochajs/mocha/compare/v11.0.0...v11.0.1) (2024-12-02)
+
+
+### 🌟 Features
+
+* bumped glob dependency from 8 to 10 ([#5250](https://github.com/mochajs/mocha/issues/5250)) ([43c3157](https://github.com/mochajs/mocha/commit/43c3157c6ef4f2d4bfecf3ad3a42479fd64187b8))
+
+
+### 📚 Documentation
+
+* fix examples for `linkPartialObjects` methods ([#5255](https://github.com/mochajs/mocha/issues/5255)) ([34e0e52](https://github.com/mochajs/mocha/commit/34e0e52e047a9119aeae9cb5b660a8438656a1e0))
+
 ## [11.0.0](https://github.com/mochajs/mocha/compare/v10.8.2...v11.0.0) (2024-11-11)
 
 ### ⚠ BREAKING CHANGES
