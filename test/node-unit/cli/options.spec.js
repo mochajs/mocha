@@ -204,9 +204,7 @@ describe('options', function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
-            readFileSync
-              .onFirstCall()
-              .returns('{definitely-invalid');
+            readFileSync.onFirstCall().returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
@@ -224,7 +222,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-                /SyntaxError/,
+              /SyntaxError/
             );
           });
         });
@@ -677,8 +675,8 @@ describe('options', function () {
       });
     });
 
-    describe('"numerical arguments"', function () {
-      const numericalArg = 123;
+    describe('"numeric arguments"', function () {
+      const numericArg = 123;
 
       beforeEach(function () {
         readFileSync = sinon.stub();
@@ -693,27 +691,27 @@ describe('options', function () {
         });
       });
 
-      it('throws error when numerical option is passed to cli', function () {
-        expect(() => loadOptions(`${numericalArg}`), 'to throw', {
-          message: `Invalid option ${numericalArg} passed to mocha cli`
+      it('throws error when numeric option is passed to cli', function () {
+        expect(() => loadOptions(`${numericArg}`), 'to throw', {
+          message: `Invalid option ${numericArg} passed to mocha cli`
         });
       });
 
-      it('throws error when numerical argument is passed to mocha flag that does not accept numerical value', function () {
-        expect(() => loadOptions(`--delay ${numericalArg}`), 'to throw', {
-          message: `Invalid option ${numericalArg} passed to mocha cli`
+      it('throws error when numeric argument is passed to mocha flag that does not accept numeric value', function () {
+        expect(() => loadOptions(`--delay ${numericArg}`), 'to throw', {
+          message: `Invalid option ${numericArg} passed to mocha cli`
         });
       });
 
-      it('does not throw error if numerical value is passed to a compatible mocha flag', function () {
-        expect(() => loadOptions(`--retries ${numericalArg}`), 'not to throw');
+      it('does not throw error if numeric value is passed to a compatible mocha flag', function () {
+        expect(() => loadOptions(`--retries ${numericArg}`), 'not to throw');
       });
 
-      it('does not throw error if numerical value is passed to a node options', function () {
+      it('does not throw error if numeric value is passed to a node options', function () {
         expect(
           () =>
             loadOptions(
-              `--secure-heap-min=${numericalArg} --conditions=${numericalArg}`
+              `--secure-heap-min=${numericArg} --conditions=${numericArg}`
             ),
           'not to throw'
         );
