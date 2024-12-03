@@ -3,6 +3,7 @@
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 const {ONE_AND_DONE_ARGS} = require('../../../lib/cli/one-and-dones');
+const {constants} = require('../../../lib/errors');
 
 const modulePath = require.resolve('../../../lib/cli/options');
 const mocharcPath = require.resolve('../../../lib/mocharc.json');
@@ -204,7 +205,9 @@ describe('options', function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().returns('{definitely-invalid');
+            readFileSync
+              .onFirstCall()
+              .returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
@@ -222,7 +225,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-              /SyntaxError/
+                /SyntaxError/,
             );
           });
         });
@@ -292,7 +295,6 @@ describe('options', function () {
 
             result = loadOptions('--no-diff --no-config');
           });
-
           it('should return parsed args, default config and package.json', function () {
             expect(
               result,
@@ -524,7 +526,7 @@ describe('options', function () {
           loadOptions('--timeout 500'),
           'to have property',
           'timeout',
-          '500'
+          500
         );
       });
 
@@ -678,6 +680,23 @@ describe('options', function () {
     describe('"numeric arguments"', function () {
       const numericArg = 123;
 
+      const unsupportedError = arg => {
+        return {
+          message: `Option ${arg} is unsupported by the mocha cli`,
+          code: constants.UNSUPPORTED
+        };
+      };
+
+      const invalidArgError = (flag, arg, expectedType = 'string') => {
+        return {
+          message: `Mocha flag '--${flag}' given invalid option: '${arg}'`,
+          code: constants.INVALID_ARG_TYPE,
+          argument: arg,
+          actual: 'number',
+          expected: expectedType
+        };
+      };
+
       beforeEach(function () {
         readFileSync = sinon.stub();
         findConfig = sinon.stub();
@@ -691,16 +710,51 @@ describe('options', function () {
         });
       });
 
-      it('throws error when numeric option is passed to cli', function () {
-        expect(() => loadOptions(`${numericArg}`), 'to throw', {
-          message: `Invalid option ${numericArg} passed to mocha cli`
-        });
+      it('throws UNSUPPORTED error when numeric option is passed to cli', function () {
+        expect(
+          () => loadOptions(`${numericArg}`),
+          'to throw',
+          unsupportedError(numericArg)
+        );
       });
 
-      it('throws error when numeric argument is passed to mocha flag that does not accept numeric value', function () {
-        expect(() => loadOptions(`--delay ${numericArg}`), 'to throw', {
-          message: `Invalid option ${numericArg} passed to mocha cli`
-        });
+      it('throws INVALID_ARG_TYPE error when numeric argument is passed to mocha flag that does not accept numeric value', function () {
+        const flag = '--delay';
+        expect(
+          () => loadOptions(`${flag} ${numericArg}`),
+          'to throw',
+          invalidArgError(flag, numericArg, 'boolean')
+        );
+      });
+
+      it('throws INVALID_ARG_TYPE error when incompatible flag does not have preceding "--"', function () {
+        const flag = 'delay';
+        expect(
+          () => loadOptions(`${flag} ${numericArg}`),
+          'to throw',
+          invalidArgError(flag, numericArg, 'boolean')
+        );
+      });
+
+      it('shows correct flag in error when multiple mocha flags have numeric values', function () {
+        const flag = '--delay';
+        expect(
+          () =>
+            loadOptions(
+              `--timeout ${numericArg} ${flag} ${numericArg} --retries ${numericArg}`
+            ),
+          'to throw',
+          invalidArgError(flag, numericArg, 'boolean')
+        );
+      });
+
+      it('throws UNSUPPORTED error when numeric arg is passed to unsupported flag', function () {
+        const invalidFlag = 'foo';
+        expect(
+          () => loadOptions(`${invalidFlag} ${numericArg}`),
+          'to throw',
+          unsupportedError(numericArg)
+        );
       });
 
       it('does not throw error if numeric value is passed to a compatible mocha flag', function () {

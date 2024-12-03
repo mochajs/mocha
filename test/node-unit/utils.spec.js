@@ -45,5 +45,16 @@ describe('utils', function () {
         );
       });
     });
+    describe('isNumeric()', function () {
+      it('returns true for a number type', function () {
+        expect(utils.isNumeric(42), 'to equal', true);
+      });
+      it('returns true for a string that can be parsed as a number', function () {
+        expect(utils.isNumeric('42'), 'to equal', true);
+      });
+      it('returns false for a string that cannot be parsed as a number', function () {
+        expect(utils.isNumeric('foo'), 'to equal', false);
+      });
+    });
   });
 });
