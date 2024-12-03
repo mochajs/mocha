@@ -148,6 +148,7 @@ module.exports = [
       '**/*.{fixture,min}.{js,mjs}',
       'coverage/**',
       'docs/{_dist,_site,api,example}/**',
+      'docs-next/dist/**',
       'out/**',
       'test/integration/fixtures/**',
       '.karma/**',

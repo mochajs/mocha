@@ -1,0 +1,113 @@
+---
+description: Testing asynchronous code with Mocha
+title: Asynchronous Code
+---
+
+By adding an argument (usually named `done`) to `it()` to a test callback, Mocha will know that it should wait for this function to be called to complete the test.
+This callback accepts both an `Error` instance (or subclass thereof) _or_ a falsy value; anything else is invalid usage and throws an error (usually causing a failed test).
+
+```js
+describe("User", function () {
+  describe("#save()", function () {
+    it("should save without error", function (done) {
+      var user = new User("Luna");
+      user.save(function (err) {
+        if (err) done(err);
+        else done();
+      });
+    });
+  });
+});
+```
+
+Alternatively, use the `done()` callback directly (which will handle an error argument, if it exists):
+
+```js
+describe("User", function () {
+  describe("#save()", function () {
+    it("should save without error", function (done) {
+      var user = new User("Luna");
+      user.save(done);
+    });
+  });
+});
+```
+
+## Working with Promises
+
+Alternately, instead of using the `done()` callback, you may return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+This is useful if the APIs you are testing return promises instead of taking callbacks:
+
+```js
+beforeEach(function () {
+  return db.clear().then(function () {
+    return db.save([tobi, loki, jane]);
+  });
+});
+
+describe("#find()", function () {
+  it("respond with matching records", function () {
+    return db.find({ type: "User" }).should.eventually.have.length(3);
+  });
+});
+```
+
+:::note
+The latter example uses [Chai as Promised](https://www.npmjs.com/package/chai-as-promised) for fluent promise assertions.
+:::
+
+In Mocha v3.0.0 and newer, returning a `Promise` _and_ calling `done()` will result in an exception, as this is generally a mistake:
+
+```js
+const assert = require("assert");
+
+// antipattern
+it("should complete this test", function (done) {
+  return new Promise(function (resolve) {
+    assert.ok(true);
+    resolve();
+  }).then(done);
+});
+```
+
+The above test will fail with `Error: Resolution method is overspecified.
+Specify a callback *or* return a Promise; not both.
+In versions older than v3.0.0, the call to `done()` is effectively ignored.
+
+## Using async / await
+
+If your JS environment supports [async / await](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/async_function), you can also write asynchronous tests like this:
+
+```js
+beforeEach(async function () {
+  await db.clear();
+  await db.save([tobi, loki, jane]);
+});
+
+describe("#find()", function () {
+  it("responds with matching records", async function () {
+    const users = await db.find({ type: "User" });
+    users.should.have.length(3);
+  });
+});
+```
+
+## Limitations of asynchronous callbacks
+
+You can use all asynchronous callbacks (`done`, `Promise`, and `async`/`await`) in callbacks for `it()`, `before()`, `after()`, `beforeEach()`, `afterEach()`) but not `describe()` -- it must be synchronous.
+See [#5046](https://github.com/mochajs/mocha/pull/5046) for more information.
+
+## Synchronous Code
+
+When testing synchronous code, omit the callback and Mocha will automatically continue on to the next test.
+
+```js
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    it("should return -1 when the value is not present", function () {
+      [1, 2, 3].indexOf(5).should.equal(-1);
+      [1, 2, 3].indexOf(0).should.equal(-1);
+    });
+  });
+});
+```

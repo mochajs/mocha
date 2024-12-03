@@ -1,0 +1,11 @@
+---
+import type { Props } from '@astrojs/starlight/props'
+import Default from '@astrojs/starlight/components/Head.astro'
+
+import thumbnail from "./mocha-thumbnail.svg";
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<meta property="og:image" content={thumbnail.src} />
+<meta name="twitter:image" content={thumbnail.src} />

@@ -1,0 +1,40 @@
+---
+description: The BDD (Behavior-Driven-Design) test interface for Mocha.
+title: BDD
+---
+
+The **BDD** interface provides `describe()`, `context()`, `it()`, `specify()`, `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+
+`context()` is just an alias for `describe()`, and behaves the same way; it provides a way to keep tests easier to read and organized.
+Similarly, `specify()` is an alias for `it()`.
+
+:::note
+All of the previous examples were written using the **BDD** interface.
+:::
+
+```js
+describe("Array", function () {
+  before(function () {
+    // ...
+  });
+
+  describe("#indexOf()", function () {
+    context("when not present", function () {
+      it("should not throw an error", function () {
+        (function () {
+          [1, 2, 3].indexOf(4);
+        }).should.not.throw();
+      });
+      it("should return -1", function () {
+        [1, 2, 3].indexOf(4).should.equal(-1);
+      });
+    });
+
+    context("when present", function () {
+      it("should return the index where the element first appears in the array", function () {
+        [1, 2, 3].indexOf(3).should.equal(2);
+      });
+    });
+  });
+});
+```

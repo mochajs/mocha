@@ -1,0 +1,32 @@
+---
+description: The Exports test interface for Mocha.
+title: Exports
+---
+
+The **Exports** interface allows for organizing tests in a modular fashion.
+It is particularly useful in larger projects where test suites can be segmented into different files.
+
+:::note
+The Exports interface is not supported in browser environments.
+This limitation arises because browsers handle module exports differently from Node.js.
+If you intend to run tests in a browser, consider using the BDD or TDD interfaces, which are fully supported.
+:::
+
+The Exports interface is much like Mocha's predecessor [expresso](https://github.com/tj/expresso).
+The keys `before`, `after`, `beforeEach`, and `afterEach` are special-cased, object values are suites, and function values are test-cases:
+
+```js
+module.exports = {
+  before: function () {
+    // ...
+  },
+
+  Array: {
+    "#indexOf()": {
+      "should return -1 when not present": function () {
+        [1, 2, 3].indexOf(4).should.equal(-1);
+      },
+    },
+  },
+};
+```

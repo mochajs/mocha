@@ -1,0 +1,53 @@
+---
+import { Image } from "astro:assets";
+import Discord from "./discord.svg";
+
+const badges = [
+  {
+    href: "http://npmjs.com/package/mocha",
+    alt: "npm version",
+    src: "https://img.shields.io/npm/v/mocha",
+  },
+  {
+    href: "https://discord.gg/KeDn2uXhER",
+    alt: "Chat - Discord",
+    src: Discord,
+  },
+  {
+    href: "#sponsors",
+    alt: "OpenCollective sponsors",
+    src: "https://opencollective.com/mochajs/tiers/sponsors/badge.svg",
+  },
+  {
+    href: "#backers",
+    alt: "OpenCollective backers",
+    src: "https://opencollective.com/mochajs/tiers/backers/badge.svg",
+  },
+];
+---
+
+<div class="badges">
+  {
+    badges.map((badge) => (
+      <a href={badge.href}>
+        {typeof badge.src === "string" ? (
+          <img alt={badge.alt} src={badge.src} />
+        ) : (
+          <Image alt={badge.alt} src={badge.src} height="20" width="84" />
+        )}
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .badges {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .badges img {
+    width: 84px;
+    height: 20px;
+  }
+</style>

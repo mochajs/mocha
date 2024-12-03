@@ -283,6 +283,14 @@ const getSupporters = async () => {
     }
   }
   debug('supporter image pull completed');
+
+  // TODO: For now, this supporters.js script is used both in the classic docs (docs/) and next (docs-next/).
+  // Eventually, we'll sunset the classic docs and only have docs-next.
+  // At that point we'll have supporters.js only used for writing files.
+  if (process.argv.includes('--write-supporters-json')) {
+    await mkdir("src/content/data", { recursive: true });
+    await writeFile('src/content/data/supporters.json', JSON.stringify(supporters, null, 4));
+  }
   return supporters;
 };
 

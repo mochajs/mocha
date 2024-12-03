@@ -1,0 +1,218 @@
+---
+import { Image } from "astro:assets";
+
+import openJsfLogo from "./openjsf-logo.svg";
+---
+
+<footer>
+  <div id="copyright-notice">
+    <p>
+      <a rel="home" href="https://mochajs.org/">mochajs.org</a> is licensed under
+      a
+      <a
+        href="https://creativecommons.org/licenses/by/4.0/"
+        rel="license external noopener"
+      >
+        Creative Commons Attribution 4.0 International License</a
+      >.
+    </p>
+
+    <p>
+      Copyright
+      <a href="https://openjsf.org" rel="external noopener">
+        OpenJS Foundation</a
+      >
+      and Mocha contributors. All rights reserved. The
+      <a href="https://openjsf.org" rel="external noopener">
+        OpenJS Foundation</a
+      >
+      has registered trademarks and uses trademarks. For a list of trademarks of
+      the
+      <a href="https://openjsf.org" rel="external noopener">
+        OpenJS Foundation</a
+      >, please see our
+      <a href="https://trademark-policy.openjsf.org/" rel="external noopener">
+        Trademark Policy</a
+      >
+      and
+      <a href="https://trademark-list.openjsf.org/" rel="external noopener">
+        Trademark List</a
+      >. Trademarks and logos not indicated on the
+      <a href="https://trademark-list.openjsf.org" rel="external noopener">
+        list of OpenJS Foundation trademarks</a
+      >
+      are trademarks™ or registered® trademarks of their respective holders. Use
+      of them does not imply any affiliation with or endorsement by them.
+    </p>
+  </div>
+
+  <div class="footer-bottom">
+    <div id="external-links">
+      <div class="openjsf-logo">
+        <a
+          title="Mocha is an OpenJS Foundation Project"
+          href="https://openjsf.org"
+          rel="external noopener"
+        >
+          <Image
+            alt="OpenJS Foundation Logo"
+            loading="lazy"
+            src={openJsfLogo}
+            width="120"
+          />
+        </a>
+      </div>
+
+      <ul id="openjsf-links">
+        <li>
+          <a href="https://openjsf.org/" rel="external noopener"
+            >The OpenJS Foundation</a
+          >
+        </li>
+        <li>
+          <a href="https://terms-of-use.openjsf.org/" rel="external noopener"
+            >Terms of Use</a
+          >
+        </li>
+        <li>
+          <a href="https://privacy-policy.openjsf.org/" rel="external noopener"
+            >Privacy Policy</a
+          >
+        </li>
+        <li>
+          <a href="https://bylaws.openjsf.org/" rel="external noopener"
+            >OpenJS Foundation Bylaws</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://trademark-policy.openjsf.org/"
+            rel="external noopener">Trademark Policy</a
+          >
+        </li>
+        <li>
+          <a href="https://trademark-list.openjsf.org/" rel="external noopener"
+            >Trademark List</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://www.linuxfoundation.org/cookies/"
+            rel="external noopener">Cookie Policy</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <div class="build-credits">
+      <div id="netlify-badge">
+        <a href="https://www.netlify.com">
+          <img
+            alt="Built with Netlify (Netlify logo)"
+            loading="lazy"
+            src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+          />
+        </a>
+      </div>
+
+      <dl id="last-modified" class="dl-inline">
+        <dt>Last updated</dt>
+        <dd>
+          <time
+            itemprop="lastModified"
+            datetime="{{ 'now' | date: '%Y-%m-%dT%H:%M:%SZ' }}"
+          >
+            {new Date().toUTCString()}
+          </time>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    color: var(--sl-color-gray-3);
+    font-size: 0.8em;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+  }
+
+  footer a {
+    color: var(--sl-color-accent-text);
+  }
+
+  footer p {
+    margin-bottom: 1rem;
+  }
+
+  #copyright-notice {
+    border-top: 1px solid var(--sl-color-accent-low);
+    padding-top: 2.5rem;
+    margin-top: 1.5rem;
+  }
+
+  #external-links {
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .openjsf-logo {
+    margin-bottom: 0.5rem;
+  }
+
+  #openjsf-links {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--sl-color-accent-low);
+    font-size: 0.9em;
+    list-style: none;
+    max-width: 35rem;
+    padding-left: 0;
+  }
+
+  #openjsf-links li {
+    display: inline-block;
+    padding: 0.15rem 0.5rem 0.15rem 0;
+  }
+
+  .build-credits {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0 1rem;
+  }
+
+  .dl-inline dt,
+  .dl-inline dd {
+    display: inline;
+    margin: 0;
+  }
+
+  .dl-inline dt:after {
+    content: ": ";
+  }
+
+  .dl-inline dd + dt:before {
+    content: "";
+    display: block;
+  }
+
+  #last-modified {
+    font-style: italic;
+    font-size: 0.8em;
+    white-space: nowrap;
+  }
+
+  @media (width >= 819px) {
+    .footer-bottom {
+      align-items: end;
+      display: flex;
+    }
+
+    .build-credits {
+      margin: 0;
+      text-align: right;
+    }
+  }
+</style>

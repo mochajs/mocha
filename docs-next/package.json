@@ -1,0 +1,25 @@
+{
+  "name": "docs-next",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "docs": "cd ..; npm i; cd docs-next; npm run generate; npm run build",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.28.4",
+    "astro": "^4.15.3",
+    "astro-og-canvas": "^0.5.4",
+    "debug": "^4.3.7",
+    "needle": "^3.3.1",
+    "sharp": "^0.32.5",
+    "starlight-package-managers": "^0.7.0",
+    "typescript": "^5.6.3"
+  }
+}

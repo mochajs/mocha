@@ -1,0 +1,625 @@
+---
+title: Command-Line Usage
+description: Running Mocha in your terminal.
+---
+
+Running `npx mocha --help` will show the full list of available commands:
+
+```plaintext
+mocha [spec..]
+
+Run tests with Mocha
+
+Commands
+  mocha inspect [spec..]  Run tests with Mocha                         [default]
+  mocha init <path>       create a client-side Mocha setup at <path>
+
+Rules & Behavior
+      --allow-uncaught              Allow uncaught errors to propagate [boolean]
+  -A, --async-only                  Require all tests to use a callback (async)
+                                    or return a Promise                [boolean]
+  -b, --bail                        Abort ("bail") after first test failure
+                                                                       [boolean]
+      --check-leaks                 Check for global variable leaks    [boolean]
+      --delay                       Delay initial execution of root suite
+                                                                       [boolean]
+      --dry-run                     Report tests without executing them[boolean]
+      --exit                        Force Mocha to quit after tests complete
+                                                                       [boolean]
+      --pass-on-failing-test-suite  Not fail test run if tests were failed
+                                                      [boolean] [default: false]
+      --fail-zero                   Fail test run if no test(s) encountered
+                                                                       [boolean]
+      --forbid-only                 Fail if exclusive test(s) encountered
+                                                                       [boolean]
+      --forbid-pending              Fail if pending test(s) encountered[boolean]
+      --global, --globals           List of allowed global variables     [array]
+  -j, --jobs                        Number of concurrent jobs for --parallel;
+                                    use 1 to run in serial
+                                   [number] [default: (number of CPU cores - 1)]
+  -p, --parallel                    Run tests in parallel              [boolean]
+      --retries                     Retry failed tests this many times  [number]
+  -s, --slow                        Specify "slow" test threshold (in
+                                    milliseconds)         [string] [default: 75]
+  -t, --timeout, --timeouts         Specify test timeout threshold (in
+                                    milliseconds)       [string] [default: 2000]
+  -u, --ui                          Specify user interface
+                                                       [string] [default: "bdd"]
+
+Reporting & Output
+  -c, --color, --colors                     Force-enable color output  [boolean]
+      --diff                                Show diff on failure
+                                                       [boolean] [default: true]
+      --full-trace                          Display full stack traces  [boolean]
+      --inline-diffs                        Display actual/expected differences
+                                            inline within each string  [boolean]
+  -R, --reporter                            Specify reporter to use
+                                                      [string] [default: "spec"]
+  -O, --reporter-option,                    Reporter-specific options
+  --reporter-options                        (<k=v,[k1=v1,..]>)           [array]
+
+Configuration
+      --config       Path to config file   [string] [default: (nearest rc file)]
+  -n, --node-option  Node or V8 option (no leading "--")                 [array]
+      --package      Path to package.json for config                    [string]
+
+File Handling
+      --extension          File extension(s) to load
+                                           [array] [default: ["js","cjs","mjs"]]
+      --file               Specify file(s) to be loaded prior to root suite
+                           execution                   [array] [default: (none)]
+      --ignore, --exclude  Ignore file(s) or glob pattern(s)
+                                                       [array] [default: (none)]
+      --recursive          Look for tests in subdirectories            [boolean]
+  -r, --require            Require module              [array] [default: (none)]
+  -S, --sort               Sort test files                             [boolean]
+  -w, --watch              Watch files in the current working directory for
+                           changes                                     [boolean]
+      --watch-files        List of paths or globs to watch               [array]
+      --watch-ignore       List of paths or globs to exclude from watching
+                                      [array] [default: ["node_modules",".git"]]
+
+Test Filters
+  -f, --fgrep   Only run tests containing this string                   [string]
+  -g, --grep    Only run tests matching this string or regexp           [string]
+  -i, --invert  Inverts --grep and --fgrep matches                     [boolean]
+
+Positional Arguments
+  spec  One or more files, directories, or globs to test
+                                                     [array] [default: ["test"]]
+
+Other Options
+  -h, --help             Show usage information & exit                 [boolean]
+  -V, --version          Show version number & exit                    [boolean]
+      --list-interfaces  List built-in user interfaces & exit          [boolean]
+      --list-reporters   List built-in reporters & exit                [boolean]
+
+Mocha Resources
+    Chat: https://discord.gg/KeDn2uXhER
+  GitHub: https://github.com/mochajs/mocha.git
+    Docs: https://mochajs.org/
+```
+
+## Rules & Behavior
+
+### `--allow-uncaught`
+
+By default, Mocha will attempt to trap uncaught exceptions thrown from running tests and report these as test failures.
+Use `--allow-uncaught` to disable this behavior and allow uncaught exceptions to propagate.
+Will typically cause the process to crash.
+
+This flag is useful when debugging particularly difficult-to-track exceptions.
+
+### `--async-only, -A`
+
+Enforce a rule that tests must be written in "async" style, meaning each test provides a `done` callback or returns a `Promise`.
+Non-compliant tests will be marked as failures.
+
+### `--bail, -b`
+
+Causes Mocha to stop running tests after the first test failure it encounters.
+Corresponding "after each" and "after all" hooks are executed for potential cleanup.
+
+`--bail` does _not_ imply `--exit`.
+
+### `--check-leaks`
+
+Use this option to have Mocha check for global variables that are leaked while running tests.
+Specify globals that are acceptable via the `--global` option (for example: `--check-leaks --global jQuery --global MyLib`).
+
+### `--compilers`
+
+:::note
+`--compilers` was removed in v6.0.0.
+See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/compilers-deprecation).
+:::
+
+### `--delay`
+
+Delay initial execution of root suite.
+
+See [Delayed Root Suite](../features/hooks#delayed-root-suite).
+
+### `--dry-run`
+
+:::note[New in v9.0.0]
+:::
+
+Report tests without executing any of them, neither tests nor hooks.
+
+### `--exit`
+
+:::note[Updated in v4.0.0]
+TL;DR: If your tests hang after an upgrade to Mocha v4.0.0 or newer, use `--exit` for a quick (though not necessarily recommended) fix.
+:::
+
+_Prior to_ version v4.0.0, _by default_, Mocha would force its own process to exit once it was finished executing all tests.
+This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.
+Ultimately, "dirty" tests can (but not always) lead to _false positive_ or _false negative_ results.
+
+"Hanging" most often manifests itself if a server is still listening on a port, or a socket is still open, etc.
+It can also be something like a runaway `setInterval()`, or even an errant `Promise` that never fulfilled.
+
+The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it was `--exit`.
+
+**The easiest way to "fix" the issue is to pass `--exit` to the Mocha process.**
+It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
+
+To ensure your tests aren't leaving messes around, here are some ideas to get started:
+
+- See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector)
+- Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843))
+- Try something like [wtfnode](https://npm.im/wtfnode)
+- Use [`.only`](../declaring/exclusive-tests) until you find the test that causes Mocha to hang
+
+### `--pass-on-failing-test-suite`
+
+:::note[New in v10.7.0]
+:::
+
+If set to `true`, Mocha returns exit code `0` even if there are failed tests during the run.
+
+### `--fail-zero`
+
+:::note[New in v9.1.0]
+:::
+
+Fail test run if no tests are encountered with `exit-code: 1`.
+
+### `--forbid-only`
+
+Enforce a rule that tests may not be exclusive (use of e.g., `describe.only()` or `it.only()` is disallowed).
+
+`--forbid-only` causes Mocha to fail when an exclusive ("only'd") test or suite is encountered, and it will abort further test execution.
+
+### `--forbid-pending`
+
+Enforce a rule that tests may not be skipped (use of e.g., `describe.skip()`, `it.skip()`, or `this.skip()` anywhere is disallowed).
+
+`--forbid-pending` causes Mocha to fail when a skipped ("pending") test or suite is encountered, and it will abort further test execution.
+
+### `--global <variable-name>`
+
+:::note[Updated in v6.0.0]
+The option is `--global` and `--globals` is now an alias.
+:::
+
+Define a global variable name.
+For example, suppose your app deliberately exposes a global named `app` and `YUI`, you may want to add `--global app --global YUI`.
+
+`--global` accepts wildcards.
+You could do `--global '*bar'` and it would match `foobar`, `barbar`, etc.
+You can also pass in `'*'` to ignore all globals.
+
+`--global` can accept a comma-delimited list; `--global app,YUI` is equivalent to `--global app --global YUI`.
+
+By using this option in conjunction with `--check-leaks`, you can specify an allowlist of known global variables that you _expect_ to leak into global scope.
+
+### `--jobs <count>, -j <count>`
+
+:::note[New in v8.0.0]
+:::
+
+Use `--jobs <count>` to specify the _maximum_ number of processes in the worker pool.
+
+The default value is the _number of CPU cores_ less 1.
+
+:::tip
+Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
+:::
+
+Has no effect unless used with [`--parallel`](#--parallel--p).
+
+### `--parallel, -p`
+
+:::note[New in v8.0.0]
+:::
+
+Use the `--parallel` flag to run tests in a worker pool.
+
+Each test file will be put into a queue and executed as workers become available.
+
+:::caution
+`--parallel` has certain implications for Mocha's behavior which you must be aware of.
+Read more about [running tests in parallel](../features/parallel-mode).
+:::
+
+### `--retries <n>`
+
+Retries failed tests `n` times.
+
+Mocha does not retry test failures by default.
+
+### `--slow <ms>, -s <ms>`
+
+Specify the "slow" test threshold in milliseconds.
+Mocha uses this to highlight test cases that are taking too long.
+"Slow" tests are not considered failures.
+
+:::note
+A test that executes for _half_ of the "slow" time will be highlighted _in yellow_ with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted _in red_.
+:::
+
+### `--timeout <ms>, -t <ms>`
+
+:::note[Updated in v6.0.0]
+`--timeout 0` is implied when invoking Mocha using inspect flags.
+`--timeout 99999999` is no longer needed.
+:::
+
+Specifies the test case timeout, defaulting to two (2) seconds (2000 milliseconds).
+Tests taking longer than this amount of time will be marked as failed.
+
+To override you may pass the timeout in milliseconds, or a value with the `s` suffix, e.g., `--timeout 2s` and `--timeout 2000` are equivalent.
+
+To disable timeouts, use `--timeout 0`.
+
+:::note
+Synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking.
+Infinite loops will still be infinite loops!
+:::
+
+### `--ui <name>, -u <name>`
+
+The `--ui` option lets you specify the interface to use, defaulting to `bdd`.
+
+## Reporting & Output
+
+### `--color, -c, --colors`
+
+:::note[Updated in v6.0.0]
+`--colors` is now an alias for `--color`.
+:::
+
+"Force" color output to be enabled, or alternatively force it to be disabled via `--no-color`.
+By default, Mocha uses the [supports-color](https://npm.im/supports-color) module to decide.
+
+In some cases, color output will be explicitly suppressed by certain reporters outputting in a machine-readable format.
+
+### `--diff`
+
+When possible, show the difference between expected and actual values when an assertion failure is encountered.
+
+This flag is unusual in that it **defaults to `true`**; use `--no-diff` to suppress Mocha's own diff output.
+
+Some assertion libraries will supply their own diffs, in which case Mocha's will not be used, regardless of the default value.
+
+Mocha's own diff output does not conform to any known standards, and is designed to be human-readable.
+
+:::note[New in v9.2.1]
+:::
+
+By default strings are truncated to 8192 characters before generating a diff.
+This is to prevent performance problems with large strings.
+
+It can however make the output harder to interpret when comparing large strings.
+Therefore it is possible to configure this value using `--reporter-option maxDiffSize=[number]`.
+
+A value of 0 indicates no limit, default is 8192 characters.
+
+### `--full-trace`
+
+Enable "full" stack traces.
+By default, Mocha attempts to distill stack traces into less noisy (though still useful) output.
+
+This flag is helpful when debugging a suspected issue within Mocha or Node.js itself.
+
+### `--inline-diffs`
+
+Enable "inline" diffs, an alternative output for diffing strings.
+
+Useful when working with large strings.
+
+Does nothing if an assertion library supplies its own diff output.
+
+### `--reporter <name>, -R <name>`
+
+Specify the reporter that will be used, defaulting to `spec`.
+
+Allows use of third-party reporters.
+For example, [mocha-lcov-reporter](https://npm.im/mocha-lcov-reporter) may be used with `--reporter mocha-lcov-reporter` after it has been installed.
+
+### `--reporter-option <option>, -O <option>, --reporter-options <option>`
+
+:::note[Updated in v6.0.0]
+Can be specified multiple times.
+`--reporter-options` is now an alias for `--reporter-option`.
+:::
+
+Provide options specific to a reporter in `<key>=<value>` format, e.g., `--reporter tap --reporter-option tapVersion=13`.
+
+Not all reporters accept options.
+
+Can be specified as a comma-delimited list.
+
+## Configuration
+
+### `--config <path>`
+
+:::note[New in v6.0.0]
+:::
+
+Specify an explicit path to a [configuration file](./configuring).
+
+By default, Mocha will search for a config file if `--config` is not specified; use `--no-config` to suppress this behavior.
+
+### `--node-option <name>, -n <name>`
+
+:::note[New in v9.1.0]
+:::
+
+For Node.js and V8 options.
+Mocha forwards these options to Node.js by spawning a new child-process.
+
+The options are set without leading dashes `--`, e.g. `-n require=foo -n unhandled-rejections=strict`
+
+Can also be specified as a comma-delimited list: `-n require=foo,unhandled-rejections=strict`
+
+### `--opts <path>`
+
+:::note[Removed in v8.0.0]
+Please use [configuration file](./configuring) instead.
+:::
+
+### `--package <path>`
+
+:::note[New in v6.0.0]
+:::
+
+Specify an explicit path to a [`package.json` file](./configuring) (ostensibly containing configuration in a `mocha` property).
+
+By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
+
+## File Handling
+
+### `--extension <ext>`
+
+Files having this extension will be considered test files.
+Defaults to `js`.
+
+Specifying `--extension` will _remove_ `.js` as a test file extension; use `--extension js` to re-add it.
+For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
+
+The option can be given multiple times.
+The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`.
+
+:::note[New in v8.2.0]
+:::
+
+`--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
+
+### `--file <file>`
+
+:::caution
+`--file` is incompatible with [parallel mode](../features/parallel-mode).
+:::
+
+Explicitly _include_ a test file to be loaded before other test files.
+Multiple uses of `--file` are allowed, and will be loaded in order given.
+
+Useful if you want to declare, for example, hooks to be run before every test across all other test files.
+
+Files specified this way are not affected by `--sort` or `--recursive`.
+
+Files specified in this way should contain one or more suites, tests or hooks.
+If this is not the case, consider `--require` instead.
+
+### `--ignore <file|directory|glob>, --exclude <file|directory|glob>,`
+
+Explicitly ignore one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.
+
+Can be specified multiple times.
+
+:::note[New in v10.0.0]
+In Windows always use forward-slashes `/` as path separator.
+:::
+
+Files specified using `--file` _are not affected_ by this option.
+
+### `--recursive`
+
+When looking for test files, recurse into subdirectories.
+
+See `--extension` for defining which files are considered test files.
+
+### `--require <module>, -r <module>`
+
+Require a module before loading the user interface or test files.
+This is useful for:
+
+- Test harnesses
+- Assertion libraries that augment built-ins or global scope (such as [should.js](https://npm.im/should))
+- Compilers such as Babel via [@babel/register](https://npm.im/@babel/register) or TypeScript via [ts-node](https://npm.im/ts-node) (using `--require ts-node/register`).
+  See [Babel](https://github.com/mochajs/mocha-examples/tree/main/packages/babel) or [TypeScript](https://github.com/mochajs/mocha-examples/tree/main/packages/typescript) working examples.
+
+Modules required in this manner are expected to do work synchronously; Mocha won't wait for async tasks in a required module to finish.
+
+:::caution
+**You cannot use `--require` to set hooks**.
+If you want to set hooks to run, e.g., before each test, use a [Root Hook Plugin](../features/root-hook-plugins).
+:::
+
+:::note
+As of v8.0.0, Mocha supports `--require` for [NodeJS native ESM](../explainers/nodejs-native-esm-support).
+There is no separate `--import` flag.
+:::
+
+### `--sort, -S`
+
+:::caution
+`--sort` is incompatible with [parallel mode](../features/parallel-mode).
+:::
+
+Sort test files (by absolute path) using [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
+
+### `--watch, -w`
+
+Rerun tests on file changes.
+
+The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
+
+Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut as `nodemon`).
+
+### `--watch-files <file|directory|glob>`
+
+:::note[New in v7.0.0]
+:::
+
+List of paths or globs to watch when `--watch` is set.
+If a file matching the given glob changes or is added or removed mocha will rerun all tests.
+
+If the path is a directory all files and subdirectories will be watched.
+
+By default all files in the current directory having one of the extensions provided by `--extension` and not contained in the `node_modules` or `.git` folders are watched.
+
+The option can be given multiple times.
+The option accepts a comma-delimited list: `--watch-files a,b` is equivalent to `--watch-files a --watch-files b`.
+
+### `--watch-ignore <file|directory|glob>`
+
+:::note[New in v7.0.0]
+:::
+
+List of paths or globs to exclude from watching.
+Defaults to `node_modules` and `.git`.
+
+To exclude all files in a directory it is preferable to use `foo/bar` instead of `foo/bar/**/*`.
+The latter will still watch the directory `foo/bar` but will ignore all changes to the content of that directory.
+
+The option can be given multiple times.
+The option accepts a comma-delimited list: `--watch-ignore a,b` is equivalent to `--watch-ignore a --watch-ignore b`.
+
+## Test Filters
+
+### `--fgrep <string>, -f <string>`
+
+:::caution[Breaking change in v6.0.0]
+Now mutually exclusive with `--grep`.
+:::
+
+Cause Mocha to only run tests having titles containing the given `string`.
+
+Mutually exclusive with `--grep`.
+
+### `--grep <regexp>, -g <regexp>`
+
+:::caution[Breaking change in v6.0.0]
+Now mutually exclusive with `--fgrep`.
+:::
+
+Cause Mocha to only run tests matching the given `regexp`, which is internally compiled to a [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Regexp).
+
+Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other.
+The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
+
+And another option with double quotes: `--grep "groupA|groupB"`.
+
+And for more complex criteria: `--grep "/get/i"`.
+Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`.
+Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
+
+```js
+describe("api", function () {
+  describe("GET /api/users groupA", function () {
+    it("respond with an array of users", function () {
+      // ...
+    });
+  });
+});
+
+describe("app", function () {
+  describe("GET /users groupB", function () {
+    it("respond with an array of users", function () {
+      // ...
+    });
+  });
+});
+```
+
+Mutually exclusive with `--fgrep`.
+
+### `--invert`
+
+Use the _inverse_ of the match specified by `--grep` or `fgrep`.
+
+Requires either `--grep` or `--fgrep` (but not both).
+
+## Other Options
+
+### `--inspect, --inspect-brk, inspect`
+
+Enables Node.js' inspector.
+
+Use `--inspect` / `--inspect-brk` to launch the V8 inspector for use with Chrome Dev Tools.
+
+Use `inspect` to launch Node.js' internal debugger.
+
+All of these options are mutually exclusive.
+
+Implies `--timeout 0`.
+
+## About Option Types
+
+:::note[Updated in v6.0.0]
+:::
+
+Each flag annotated of type `[boolean]` in Mocha's `--help` output can be _negated_ by prepending `--no-` to the flag name.
+For example, `--no-color` will disable Mocha's color output, which is enabled by default.
+
+Unless otherwise noted, _all_ boolean flags default to `false`.
+
+## About `node` Flags
+
+The `mocha` executable supports all applicable flags which the `node` executable supports.
+
+These flags vary depending on your version of Node.js.
+
+`node` flags can be defined in Mocha's [configuration](./configuring).
+
+:::note[New in v9.1.0]
+You can also pass `node` flags to Node.js using [`--node-option`](#--node-option-name--n-name).
+:::
+
+### `--enable-source-maps`
+
+:::note[New in vNode.js v12.12.0]
+:::
+
+If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
+is passed to Mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
+
+```bash
+Error: cool
+    at Object.<anonymous> (/Users/fake-user/bigco/nodejs-tasks/build/src/index.js:27:7)
+        -> /Users/fake-user/bigco/nodejs-tasks/src/index.ts:24:7
+```
+
+## About V8 Flags
+
+Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
+
+V8 flags can be defined in Mocha's [configuration](./configuring).
+
+:::note[New in v9.1.0]
+You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#--node-option-name--n-name).
+:::
