@@ -55,6 +55,15 @@ describe('utils', function () {
       it('returns false for a string that cannot be parsed as a number', function () {
         expect(utils.isNumeric('foo'), 'to equal', false);
       });
+      it('returns false for empty string', function () {
+        expect(utils.isNumeric(''), 'to equal', false);
+      });
+      it('returns false for empty string with many whitespaces', function () {
+        expect(utils.isNumeric('    '), 'to equal', false);
+      });
+      it('returns true for stringified zero', function () {
+        expect(utils.isNumeric('0'), 'to equal', true);
+      });
     });
   });
 });
