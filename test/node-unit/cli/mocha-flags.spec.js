@@ -7,9 +7,9 @@ const {
 
 describe('mocha-flags', function () {
   describe('expectedTypeForFlag()', function () {
-    it('returns expected type for all mocha flags', function () {
-      Object.entries(types).forEach(([dataType, flags]) => {
-        flags.forEach(flag => {
+    Object.entries(types).forEach(([dataType, flags]) => {
+      flags.forEach(flag => {
+        it(`returns expected ${flag}'s type as ${dataType}`, function () {
           expect(expectedTypeForFlag(flag), 'to equal', dataType);
         });
       });

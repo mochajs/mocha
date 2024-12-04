@@ -295,6 +295,7 @@ describe('options', function () {
 
             result = loadOptions('--no-diff --no-config');
           });
+
           it('should return parsed args, default config and package.json', function () {
             expect(
               result,
