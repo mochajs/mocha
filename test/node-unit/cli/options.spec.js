@@ -527,7 +527,7 @@ describe('options', function () {
           loadOptions('--timeout 500'),
           'to have property',
           'timeout',
-          500
+          '500'
         );
       });
 
