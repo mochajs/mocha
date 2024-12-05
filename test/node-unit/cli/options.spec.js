@@ -690,7 +690,7 @@ describe('options', function () {
 
       const invalidArgError = (flag, arg, expectedType = 'string') => {
         return {
-          message: `Mocha flag '--${flag}' given invalid option: '${arg}'`,
+          message: `Mocha flag '${flag}' given invalid option: '${arg}'`,
           code: constants.INVALID_ARG_TYPE,
           argument: arg,
           actual: 'number',
