@@ -771,6 +771,14 @@ describe('options', function () {
           'not to throw'
         );
       });
+
+      it('does not throw error if numeric value is passed to string flag', function () {
+        expect(() => loadOptions(`--grep ${numericArg}`), 'not to throw');
+      });
+
+      it('does not throw error if numeric value is passed to an array flag', function () {
+        expect(() => loadOptions(`--spec ${numericArg}`), 'not to throw');
+      });
     });
   });
 });
