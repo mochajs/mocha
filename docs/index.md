@@ -1008,7 +1008,7 @@ Some assertion libraries will supply their own diffs, in which case Mocha's will
 
 Mocha's own diff output does not conform to any known standards, and is designed to be human-readable.
 
-> _Since in v9.2.1_
+> _Since v9.2.1_
 
 By default strings are truncated to 8192 characters before generating a diff. This is to prevent performance problems with large strings.
 
