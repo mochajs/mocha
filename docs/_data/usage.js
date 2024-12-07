@@ -1,6 +1,6 @@
 'use strict';
 
-const stripAnsi = require('strip-ansi');
+const {stripVTControlCharacters} = require('util');
 const {resolve} = require('path');
 const {execSync} = require('child_process');
 
@@ -11,7 +11,7 @@ const flag = '--help';
  * Return the output of `mocha --help` for display
  */
 module.exports = () => {
-  return stripAnsi(
+  return stripVTControlCharacters(
     String(
       execSync(`"${process.execPath}" ${executable} ${flag}`, {
         cwd: resolve(__dirname, '..')
