@@ -40,6 +40,7 @@ reporter-option: # array, not object
   - 'baz=quux'
 require: '@babel/register'
 retries: 1
+repeats: 1
 slow: '75'
 sort: false
 spec:

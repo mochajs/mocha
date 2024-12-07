@@ -95,4 +95,10 @@ describe('methods', function () {
       expect(this.retries(), 'to be', -1);
     });
   });
+
+  describe('repeats', function () {
+    it('should return the number of repeats', function () {
+      expect(this.repeats(), 'to be', 1);
+    });
+  });
 });
