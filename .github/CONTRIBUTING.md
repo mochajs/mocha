@@ -59,7 +59,7 @@ We ask you please keep these goals in mind when making or proposing changes.
 
 _Excellent._ Here's how:
 
-- **Handy with JavaScript?** Please check out the issues labeled [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or [`good first issue`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+).
+- **Handy with JavaScript?** Please check out the issues labeled [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+accepting+prs%22) or [`good first issue`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+).
   Try `npx good-first-issue mocha`!
 - **Can you write ~~good~~ well?** The [documentation](https://mochajs.org) almost always needs some love.
   See the [doc-related issues](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22area%3A+documentation%22).
