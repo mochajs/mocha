@@ -1,94 +1,124 @@
 # Changelog
 
-## [10.8.2](https://github.com/mochajs/mocha/compare/v10.8.1...v10.8.2) (2024-10-30)
+## [11.0.2](https://github.com/mochajs/mocha/compare/v11.0.1...v11.0.2) (2024-12-09)
 
 
 ### 🩹 Fixes
 
-* support errors with circular dependencies in object values with --parallel ([#5212](https://github.com/mochajs/mocha/issues/5212)) ([ba0fefe](https://github.com/mochajs/mocha/commit/ba0fefe10b08a689cf49edc3818026938aa3a240))
-* test link in html reporter ([#5224](https://github.com/mochajs/mocha/issues/5224)) ([f054acc](https://github.com/mochajs/mocha/commit/f054acc1f60714bbe00ad1ab270fb4977836d045))
+* catch exceptions setting Error.stackTraceLimit ([#5254](https://github.com/mochajs/mocha/issues/5254)) ([259f8f8](https://github.com/mochajs/mocha/commit/259f8f8ba5709b5d84fa66e17cd10560a11f45c9))
+* error handling for unexpected numeric arguments passed to cli ([#5263](https://github.com/mochajs/mocha/issues/5263)) ([210d658](https://github.com/mochajs/mocha/commit/210d658678a2ec3b6f85c59d4b300b4722671099))
 
 
 ### 📚 Documentation
 
-* indicate 'exports' interface does not work in browsers ([#5181](https://github.com/mochajs/mocha/issues/5181)) ([14e640e](https://github.com/mochajs/mocha/commit/14e640ee49718d587779a9594b18f3796c42cf2a))
+* correct outdated `status: accepting prs` link ([#5268](https://github.com/mochajs/mocha/issues/5268)) ([f729cd0](https://github.com/mochajs/mocha/commit/f729cd09b61bb598409f19b3c76b9e9536812237))
+* replace "New in" with "Since" in version annotations ([#5262](https://github.com/mochajs/mocha/issues/5262)) ([6f10d12](https://github.com/mochajs/mocha/commit/6f10d12c6c6dfa4df7d5221a3ce688f687aaf320))
 
-
-### 🧹 Chores
-
-* fix docs builds by re-adding eleventy and ignoring gitignore again ([#5240](https://github.com/mochajs/mocha/issues/5240)) ([881e3b0](https://github.com/mochajs/mocha/commit/881e3b0ca2e24284aab2a04f63639a0aa9e0ad1b))
-
-
-### 🤖 Automation
-
-* **deps:** bump the github-actions group with 1 update ([#5132](https://github.com/mochajs/mocha/issues/5132)) ([e536ab2](https://github.com/mochajs/mocha/commit/e536ab25b308774e3103006c044cb996a2e17c87))
-
-## [10.8.1](https://github.com/mochajs/mocha/compare/v10.8.0...v10.8.1) (2024-10-29)
-
-
-### 🩹 Fixes
-
-* handle case of invalid package.json with no explicit config ([#5198](https://github.com/mochajs/mocha/issues/5198)) ([f72bc17](https://github.com/mochajs/mocha/commit/f72bc17cb44164bcfff7abc83d0d37d99a061104))
-* Typos on mochajs.org ([#5237](https://github.com/mochajs/mocha/issues/5237)) ([d8ca270](https://github.com/mochajs/mocha/commit/d8ca270a960554c9d5c5fbf264e89d668d01ff0d))
-* use accurate test links in HTML reporter ([#5228](https://github.com/mochajs/mocha/issues/5228)) ([68803b6](https://github.com/mochajs/mocha/commit/68803b685d55dcccc51fa6ccfd27701cda4e26ed))
-
-## [10.8.0](https://github.com/mochajs/mocha/compare/v10.7.3...v10.8.0) (2024-10-29)
+## [11.0.1](https://github.com/mochajs/mocha/compare/v11.0.0...v11.0.1) (2024-12-02)
 
 
 ### 🌟 Features
 
-* highlight browser failures ([#5222](https://github.com/mochajs/mocha/issues/5222)) ([8ff4845](https://github.com/mochajs/mocha/commit/8ff48453a8b12d9cacf56b0c0c544c8256af64c7))
-
-
-### 🩹 Fixes
-
-* remove `:is()` from `mocha.css` to support older browsers ([#5225](https://github.com/mochajs/mocha/issues/5225)) ([#5227](https://github.com/mochajs/mocha/issues/5227)) ([0a24b58](https://github.com/mochajs/mocha/commit/0a24b58477ea8ad146afc798930800b02c08790a))
+* bumped glob dependency from 8 to 10 ([#5250](https://github.com/mochajs/mocha/issues/5250)) ([43c3157](https://github.com/mochajs/mocha/commit/43c3157c6ef4f2d4bfecf3ad3a42479fd64187b8))
 
 
 ### 📚 Documentation
 
-* add `SECURITY.md` pointing to Tidelift ([#5210](https://github.com/mochajs/mocha/issues/5210)) ([bd7e63a](https://github.com/mochajs/mocha/commit/bd7e63a1f6d98535ce1ed1ecdb57b3e4db8a33c5))
-* adopt Collective Funds Guidelines 0.1 ([#5199](https://github.com/mochajs/mocha/issues/5199)) ([2b03d86](https://github.com/mochajs/mocha/commit/2b03d865eec63d627ff229e07d777f25061260d4))
-* update README, LICENSE and fix outdated ([#5197](https://github.com/mochajs/mocha/issues/5197)) ([1203e0e](https://github.com/mochajs/mocha/commit/1203e0ed739bbbf12166078738357fdb29a8c000))
+* fix examples for `linkPartialObjects` methods ([#5255](https://github.com/mochajs/mocha/issues/5255)) ([34e0e52](https://github.com/mochajs/mocha/commit/34e0e52e047a9119aeae9cb5b660a8438656a1e0))
 
+## [11.0.0](https://github.com/mochajs/mocha/compare/v10.8.2...v11.0.0) (2024-11-11)
+
+### ⚠ BREAKING CHANGES
+
+- adapt new engine range for Mocha 11 ([#5216](https://github.com/mochajs/mocha/issues/5216))
+
+### 🌟 Features
+
+- allow calling hook methods ([#5231](https://github.com/mochajs/mocha/issues/5231)) ([e3da641](https://github.com/mochajs/mocha/commit/e3da641b08bed20f12df524fc64cb9579f980c1e))
+
+### 🩹 Fixes
+
+- adapt new engine range for Mocha 11 ([#5216](https://github.com/mochajs/mocha/issues/5216)) ([80da25a](https://github.com/mochajs/mocha/commit/80da25a4132ca50d3ad35087cb62c9b0f8fc946a))
+
+### 📚 Documentation
+
+- downgrade example/tests chai to 4.5.0 ([#5245](https://github.com/mochajs/mocha/issues/5245)) ([eac87e1](https://github.com/mochajs/mocha/commit/eac87e10f49207a9b388f87d77d198583c6f889a))
+
+## [10.8.2](https://github.com/mochajs/mocha/compare/v10.8.1...v10.8.2) (2024-10-30)
+
+### 🩹 Fixes
+
+- support errors with circular dependencies in object values with --parallel ([#5212](https://github.com/mochajs/mocha/issues/5212)) ([ba0fefe](https://github.com/mochajs/mocha/commit/ba0fefe10b08a689cf49edc3818026938aa3a240))
+- test link in html reporter ([#5224](https://github.com/mochajs/mocha/issues/5224)) ([f054acc](https://github.com/mochajs/mocha/commit/f054acc1f60714bbe00ad1ab270fb4977836d045))
+
+### 📚 Documentation
+
+- indicate 'exports' interface does not work in browsers ([#5181](https://github.com/mochajs/mocha/issues/5181)) ([14e640e](https://github.com/mochajs/mocha/commit/14e640ee49718d587779a9594b18f3796c42cf2a))
 
 ### 🧹 Chores
 
-* fix npm scripts on windows ([#5219](https://github.com/mochajs/mocha/issues/5219)) ([1173da0](https://github.com/mochajs/mocha/commit/1173da0bf614e8d2a826687802ee8cbe8671ccf1))
-* remove trailing whitespace in SECURITY.md ([7563e59](https://github.com/mochajs/mocha/commit/7563e59ae3c78ada305d26eadb86998ab54342da))
+- fix docs builds by re-adding eleventy and ignoring gitignore again ([#5240](https://github.com/mochajs/mocha/issues/5240)) ([881e3b0](https://github.com/mochajs/mocha/commit/881e3b0ca2e24284aab2a04f63639a0aa9e0ad1b))
+
+### 🤖 Automation
+
+- **deps:** bump the github-actions group with 1 update ([#5132](https://github.com/mochajs/mocha/issues/5132)) ([e536ab2](https://github.com/mochajs/mocha/commit/e536ab25b308774e3103006c044cb996a2e17c87))
+
+## [10.8.1](https://github.com/mochajs/mocha/compare/v10.8.0...v10.8.1) (2024-10-29)
+
+### 🩹 Fixes
+
+- handle case of invalid package.json with no explicit config ([#5198](https://github.com/mochajs/mocha/issues/5198)) ([f72bc17](https://github.com/mochajs/mocha/commit/f72bc17cb44164bcfff7abc83d0d37d99a061104))
+- Typos on mochajs.org ([#5237](https://github.com/mochajs/mocha/issues/5237)) ([d8ca270](https://github.com/mochajs/mocha/commit/d8ca270a960554c9d5c5fbf264e89d668d01ff0d))
+- use accurate test links in HTML reporter ([#5228](https://github.com/mochajs/mocha/issues/5228)) ([68803b6](https://github.com/mochajs/mocha/commit/68803b685d55dcccc51fa6ccfd27701cda4e26ed))
+
+## [10.8.0](https://github.com/mochajs/mocha/compare/v10.7.3...v10.8.0) (2024-10-29)
+
+### 🌟 Features
+
+- highlight browser failures ([#5222](https://github.com/mochajs/mocha/issues/5222)) ([8ff4845](https://github.com/mochajs/mocha/commit/8ff48453a8b12d9cacf56b0c0c544c8256af64c7))
+
+### 🩹 Fixes
+
+- remove `:is()` from `mocha.css` to support older browsers ([#5225](https://github.com/mochajs/mocha/issues/5225)) ([#5227](https://github.com/mochajs/mocha/issues/5227)) ([0a24b58](https://github.com/mochajs/mocha/commit/0a24b58477ea8ad146afc798930800b02c08790a))
+
+### 📚 Documentation
+
+- add `SECURITY.md` pointing to Tidelift ([#5210](https://github.com/mochajs/mocha/issues/5210)) ([bd7e63a](https://github.com/mochajs/mocha/commit/bd7e63a1f6d98535ce1ed1ecdb57b3e4db8a33c5))
+- adopt Collective Funds Guidelines 0.1 ([#5199](https://github.com/mochajs/mocha/issues/5199)) ([2b03d86](https://github.com/mochajs/mocha/commit/2b03d865eec63d627ff229e07d777f25061260d4))
+- update README, LICENSE and fix outdated ([#5197](https://github.com/mochajs/mocha/issues/5197)) ([1203e0e](https://github.com/mochajs/mocha/commit/1203e0ed739bbbf12166078738357fdb29a8c000))
+
+### 🧹 Chores
+
+- fix npm scripts on windows ([#5219](https://github.com/mochajs/mocha/issues/5219)) ([1173da0](https://github.com/mochajs/mocha/commit/1173da0bf614e8d2a826687802ee8cbe8671ccf1))
+- remove trailing whitespace in SECURITY.md ([7563e59](https://github.com/mochajs/mocha/commit/7563e59ae3c78ada305d26eadb86998ab54342da))
 
 ## [10.7.3](https://github.com/mochajs/mocha/compare/v10.7.2...v10.7.3) (2024-08-09)
 
-
 ### 🩹 Fixes
 
-* make release-please build work ([#5194](https://github.com/mochajs/mocha/issues/5194)) ([afd66ef](https://github.com/mochajs/mocha/commit/afd66ef3df20fab51ce38b97216c09108e5c2bfd))
+- make release-please build work ([#5194](https://github.com/mochajs/mocha/issues/5194)) ([afd66ef](https://github.com/mochajs/mocha/commit/afd66ef3df20fab51ce38b97216c09108e5c2bfd))
 
 ## [10.7.2](https://github.com/mochajs/mocha/compare/v10.7.1...v10.7.2) (2024-08-06)
 
-
 ### 📚 Documentation
 
-* improve filtering ([#5191](https://github.com/mochajs/mocha/issues/5191)) ([1ac5b55](https://github.com/mochajs/mocha/commit/1ac5b552e3f32694d349023cb7f6196ba92b180e))
-
+- improve filtering ([#5191](https://github.com/mochajs/mocha/issues/5191)) ([1ac5b55](https://github.com/mochajs/mocha/commit/1ac5b552e3f32694d349023cb7f6196ba92b180e))
 
 ### 🧹 Chores
 
-* fix failing markdown linting ([#5193](https://github.com/mochajs/mocha/issues/5193)) ([7e7a2ec](https://github.com/mochajs/mocha/commit/7e7a2ecb9bf8daba7e885a880bd8314b7b6fe07d))
+- fix failing markdown linting ([#5193](https://github.com/mochajs/mocha/issues/5193)) ([7e7a2ec](https://github.com/mochajs/mocha/commit/7e7a2ecb9bf8daba7e885a880bd8314b7b6fe07d))
 
 ## [10.7.1](https://github.com/mochajs/mocha/compare/v10.7.0...v10.7.1) (2024-08-06)
 
-
 ### 🩹 Fixes
 
-* crash with --parallel and --retries both enabled ([#5173](https://github.com/mochajs/mocha/issues/5173)) ([d7013dd](https://github.com/mochajs/mocha/commit/d7013ddb1099cfafe66a1af9640370998290e62c))
-
+- crash with --parallel and --retries both enabled ([#5173](https://github.com/mochajs/mocha/issues/5173)) ([d7013dd](https://github.com/mochajs/mocha/commit/d7013ddb1099cfafe66a1af9640370998290e62c))
 
 ### 🧹 Chores
 
-* add knip to validate included dependencies ([5c2989f](https://github.com/mochajs/mocha/commit/5c2989fcc7ae17618d9db16d7c99e23dfb1d38ee))
-* more fully remove assetgraph-builder and canvas ([#5175](https://github.com/mochajs/mocha/issues/5175)) ([1883c41](https://github.com/mochajs/mocha/commit/1883c41a49fad009bd407efc1bece3a5c75fd10a))
-* replace `nps` with npm scripts ([#5128](https://github.com/mochajs/mocha/issues/5128)) ([c44653a](https://github.com/mochajs/mocha/commit/c44653a3a04b8418ec24a942fa7513a4673f3667)), closes [#5126](https://github.com/mochajs/mocha/issues/5126)
+- add knip to validate included dependencies ([5c2989f](https://github.com/mochajs/mocha/commit/5c2989fcc7ae17618d9db16d7c99e23dfb1d38ee))
+- more fully remove assetgraph-builder and canvas ([#5175](https://github.com/mochajs/mocha/issues/5175)) ([1883c41](https://github.com/mochajs/mocha/commit/1883c41a49fad009bd407efc1bece3a5c75fd10a))
+- replace `nps` with npm scripts ([#5128](https://github.com/mochajs/mocha/issues/5128)) ([c44653a](https://github.com/mochajs/mocha/commit/c44653a3a04b8418ec24a942fa7513a4673f3667)), closes [#5126](https://github.com/mochajs/mocha/issues/5126)
 
 ## 10.7.0 / 2024-07-20
 

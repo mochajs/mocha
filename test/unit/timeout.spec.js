@@ -70,5 +70,31 @@ describe('timeouts', function () {
         });
       });
     });
+
+    describe('chaining calls', function () {
+      before(function (done) {
+        setTimeout(function () {
+          done();
+        }, 50);
+      }).timeout(1500);
+
+      it('should allow overriding via chaining', function (done) {
+        setTimeout(function () {
+          done();
+        }, 50);
+      }).timeout(1500);
+
+      describe('suite-level', function () {
+        it('should work with timeout(0)', function (done) {
+          setTimeout(done, 1);
+        });
+
+        describe('nested suite', function () {
+          it('should work with timeout(0)', function (done) {
+            setTimeout(done, 1);
+          });
+        });
+      }).timeout(1000);
+    });
   });
 });
