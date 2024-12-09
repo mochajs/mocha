@@ -903,7 +903,7 @@ Use this option to have Mocha check for global variables that are leaked while r
 
 ### `--dry-run`
 
-> _New in v9.0.0_ Report tests without executing any of them, neither tests nor hooks.
+> _Since v9.0.0_ Report tests without executing any of them, neither tests nor hooks.
 
 ### `--exit`
 
@@ -928,13 +928,13 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 ### `--pass-on-failing-test-suite`
 
-> _New in v10.7.0_
+> _Since v10.7.0_
 
 If set to `true`, Mocha returns exit code `0` even if there are failed tests during run.
 
 ### `--fail-zero`
 
-> _New in v9.1.0_
+> _Since v9.1.0_
 
 Fail test run if no tests are encountered with `exit-code: 1`.
 
@@ -1008,7 +1008,7 @@ Some assertion libraries will supply their own diffs, in which case Mocha's will
 
 Mocha's own diff output does not conform to any known standards, and is designed to be human-readable.
 
-> _New in v9.2.1_
+> _Since v9.2.1_
 
 By default strings are truncated to 8192 characters before generating a diff. This is to prevent performance problems with large strings.
 
@@ -1048,7 +1048,7 @@ Can be specified as a comma-delimited list.
 
 ### `--config <path>`
 
-> _New in v6.0.0_
+> _Since v6.0.0_
 
 Specify an explicit path to a [configuration file](#configuring-mocha-nodejs).
 
@@ -1056,7 +1056,7 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 ### `--node-option <name>, -n <name>`
 
-> _New in v9.1.0_
+> _Since v9.1.0_
 
 For Node.js and V8 options. Mocha forwards these options to Node.js by spawning a new child-process.<br>
 The options are set without leading dashes `--`, e.g. `-n require=foo -n unhandled-rejections=strict`
@@ -1069,7 +1069,7 @@ Can also be specified as a comma-delimited list: `-n require=foo,unhandled-rejec
 
 ### `--package <path>`
 
-> _New in v6.0.0_
+> _Since v6.0.0_
 
 Specify an explicit path to a [`package.json` file](#configuring-mocha-nodejs) (ostensibly containing configuration in a `mocha` property).
 
@@ -1083,7 +1083,7 @@ Specifying `--extension` will _remove_ `.js` as a test file extension; use `--ex
 
 The option can be given multiple times. The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`.
 
-> _New in v8.2.0_
+> _Since v8.2.0_
 
 `--extension` now supports multipart extensions (e.g., `spec.js`), leading dots (`.js`) and combinations thereof (`.spec.js`);
 
@@ -1104,7 +1104,7 @@ Files specified in this way should contain one or more suites, tests or hooks. I
 Explicitly ignore one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.<br>
 Can be specified multiple times.
 
-> _New in v10.0.0:_ In Windows always use forward-slashes `/` as path separator.
+> _Since v10.0.0:_ In Windows always use forward-slashes `/` as path separator.
 
 Files specified using `--file` _are not affected_ by this option.
 
@@ -1144,7 +1144,7 @@ Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut 
 
 ### `--watch-files <file|directory|glob>`
 
-> _New in v7.0.0_
+> _Since v7.0.0_
 
 List of paths or globs to watch when `--watch` is set. If a file matching the given glob changes or is added or removed mocha will rerun all tests.
 
@@ -1156,7 +1156,7 @@ The option can be given multiple times. The option accepts a comma-delimited lis
 
 ### `--watch-ignore <file|directory|glob>`
 
-> _New in v7.0.0_
+> _Since v7.0.0_
 
 List of paths or globs to exclude from watching. Defaults to `node_modules` and `.git`.
 
@@ -1223,7 +1223,7 @@ Implies `--timeout 0`.
 
 ### `--parallel, -p`
 
-> _New in v.8.0.0._
+> _Since v.8.0.0._
 
 Use the `--parallel` flag to run tests in a worker pool.
 
@@ -1233,7 +1233,7 @@ Each test file will be put into a queue and executed as workers become available
 
 ### `--jobs <count>, -j <count>`
 
-> _New in v.8.0.0._
+> _Since v.8.0.0._
 
 Use `--jobs <count>` to specify the _maximum_ number of processes in the worker pool.
 
@@ -1259,11 +1259,11 @@ These flags vary depending on your version of Node.js.
 
 `node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _New in v9.1.0_ You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _Since v9.1.0_ You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
 
 ### `--enable-source-maps`
 
-> _New in Node.js v12.12.0_
+> _Since Node.js v12.12.0_
 
 If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
 is passed to mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
@@ -1280,11 +1280,11 @@ Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excludi
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _New in v9.1.0_ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _Since v9.1.0_ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
 
 ## Parallel Tests
 
-> _New in v.8.0.0._
+> _Since v.8.0.0._
 
 Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](#-parallel-p) flag).
 
@@ -1411,13 +1411,13 @@ It's unlikely (but not impossible) to see a performance gain from a [job count](
 
 ### Parallel Mode Worker IDs
 
-> _New in v9.2.0_
+> _Since v9.2.0_
 
 Each process launched by parallel mode is assigned a unique id, from 0 for the first process to be launched, to N-1 for the Nth process. This worker id may be accessed in tests via the environment variable `MOCHA_WORKER_ID`. It can be used for example to assign a different database, service port, etc for each test process.
 
 ## Root Hook Plugins
 
-> _New in v8.0.0_
+> _Since v8.0.0_
 
 In some cases, you may want a [hook](#hooks) before (or after) every test in every file. These are called _root hooks_. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode! For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
 
@@ -1643,7 +1643,7 @@ If you're a library maintainer, and your library uses root hooks, you can migrat
 
 ## Global Fixtures
 
-> _New in v8.2.0_
+> _Since v8.2.0_
 
 At first glance, _global fixtures_ seem similar to [root hooks](#root-hook-plugins). However, unlike root hooks, global fixtures:
 
@@ -2088,7 +2088,7 @@ Alias: `HTML`, `html`
 
 ## Node.JS native ESM support
 
-> _New in v7.1.0_
+> _Since v7.1.0_
 
 Mocha supports writing your tests as ES modules, and not just using CommonJS. For example:
 
@@ -2214,7 +2214,7 @@ The HTML reporter is the default reporter when running Mocha in the browser. It 
 
 ## Configuring Mocha (Node.js)
 
-> _New in v6.0.0_
+> _Since v6.0.0_
 
 Mocha supports configuration files, typical of modern command-line tools, in several formats:
 
@@ -2310,7 +2310,7 @@ _Note_: Double quotes around the glob are recommended for portability.
 
 ## Error Codes
 
-> _New in v6.0.0_
+> _Since v6.0.0_
 
 When Mocha itself throws exception, the associated `Error` will have a `code` property. Where applicable, consumers should check the `code` property instead of string-matching against the `message` property. The following table describes these error codes:
 
