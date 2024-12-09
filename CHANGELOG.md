@@ -1,5 +1,19 @@
 # Changelog
 
+## [11.0.2](https://github.com/mochajs/mocha/compare/v11.0.1...v11.0.2) (2024-12-09)
+
+
+### 🩹 Fixes
+
+* catch exceptions setting Error.stackTraceLimit ([#5254](https://github.com/mochajs/mocha/issues/5254)) ([259f8f8](https://github.com/mochajs/mocha/commit/259f8f8ba5709b5d84fa66e17cd10560a11f45c9))
+* error handling for unexpected numeric arguments passed to cli ([#5263](https://github.com/mochajs/mocha/issues/5263)) ([210d658](https://github.com/mochajs/mocha/commit/210d658678a2ec3b6f85c59d4b300b4722671099))
+
+
+### 📚 Documentation
+
+* correct outdated `status: accepting prs` link ([#5268](https://github.com/mochajs/mocha/issues/5268)) ([f729cd0](https://github.com/mochajs/mocha/commit/f729cd09b61bb598409f19b3c76b9e9536812237))
+* replace "New in" with "Since" in version annotations ([#5262](https://github.com/mochajs/mocha/issues/5262)) ([6f10d12](https://github.com/mochajs/mocha/commit/6f10d12c6c6dfa4df7d5221a3ce688f687aaf320))
+
 ## [11.0.1](https://github.com/mochajs/mocha/compare/v11.0.0...v11.0.1) (2024-12-02)
 
 
