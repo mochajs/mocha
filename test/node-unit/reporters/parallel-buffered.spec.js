@@ -102,7 +102,7 @@ describe('ParallelBuffered', function () {
     describe('on EVENT_RUN_END', function () {
       it('should remove all listeners', function () {
         runner.emit(EVENT_RUN_END);
-        expect(runner.listeners(), 'to be empty');
+        expect(runner.listenerCount(EVENT_RUN_END), 'to equal', 0);
       });
     });
 

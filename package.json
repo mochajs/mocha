@@ -91,10 +91,10 @@
     "test": "run-s lint test-node test-browser",
     "version:linkify-changelog": "node scripts/linkify-changelog.mjs",
     "version:update-authors": "node scripts/update-authors.js",
-    "version": "run-p version:* && git add -A ./AUTHORS ./CHANGELOG.md"
+    "version": "run-p version:* && git add -A ./AUTHORS ./CHANGELOG.md",
+    "mention-contributors": "node scripts/mention-contributors.mjs"
   },
   "dependencies": {
-    "@octokit/rest": "^21.0.2",
     "ansi-colors": "^4.1.3",
     "browser-stdout": "^1.3.1",
     "chokidar": "^3.5.3",

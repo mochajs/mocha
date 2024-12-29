@@ -1,8 +1,5 @@
-'use strict';
-
 import { Octokit } from "octokit";
 import fs from "node:fs";
-import { date } from "zod";
 import { console } from "node:inspector";
 
 const token = process.env.GITHUB_TOKEN || "";
