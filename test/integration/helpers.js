@@ -1,10 +1,10 @@
 'use strict';
 
 const escapeRegExp = require('escape-string-regexp');
-const os = require('os');
+const os = require('node:os');
 const fs = require('fs-extra');
-const {format} = require('util');
-const path = require('path');
+const {format} = require('node:util');
+const path = require('node:path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
 
@@ -323,7 +323,7 @@ function createSubprocess(args, done, opts = {}) {
    */
   let mocha;
   if (opts.fork) {
-    const {fork} = require('child_process');
+    const {fork} = require('node:child_process');
     // to use ipc, we need a fourth item in `stdio` array.
     // opts.stdio is usually an array of length 3, but it could be smaller
     // (pad with `null`)
@@ -333,7 +333,7 @@ function createSubprocess(args, done, opts = {}) {
     debug('forking: %s', args.join(' '));
     mocha = fork(args[0], args.slice(1), opts);
   } else {
-    const {spawn} = require('child_process');
+    const {spawn} = require('node:child_process');
     debug('spawning: %s', [process.execPath].concat(args).join(' '));
     mocha = spawn(process.execPath, args, opts);
   }

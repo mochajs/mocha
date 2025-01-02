@@ -21,9 +21,9 @@
  */
 
 'use strict';
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
+const fs = require('node:fs');
+const path = require('node:path');
+const os = require('node:os');
 const rollupPlugin = require('./scripts/karma-rollup-plugin');
 const BASE_BUNDLE_DIR_PATH = path.join(__dirname, '.karma');
 const env = process.env;

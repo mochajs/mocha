@@ -1,8 +1,8 @@
 'use strict';
 
 const markdownToc = require('markdown-toc');
-const {readFileSync} = require('fs');
-const {resolve} = require('path');
+const {readFileSync} = require('node:fs');
+const {resolve} = require('node:path');
 
 const IGNORED_HEADINGS_REGEXP = /Features|Table of Contents|Backers|Sponsors/i;
 const DOCUMENT_PATH = resolve(__dirname, '..', 'index.md');

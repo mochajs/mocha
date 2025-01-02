@@ -17,8 +17,8 @@
 
 'use strict';
 
-const {writeFile, mkdir, rm} = require('fs').promises;
-const {resolve} = require('path');
+const {writeFile, mkdir, rm} = require('node:fs').promises;
+const {resolve} = require('node:path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const blocklist = new Set(require('./blocklist.json'));

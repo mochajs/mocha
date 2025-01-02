@@ -2,8 +2,8 @@
 
 var helpers = require('./helpers');
 var run = helpers.runMocha;
-var fs = require('fs');
-var path = require('path');
+var fs = require('node:fs');
+var path = require('node:path');
 
 /**
  * Returns an array of diffs corresponding to exceptions thrown from specs,

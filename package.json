@@ -128,6 +128,7 @@
     "coffeescript": "^2.6.1",
     "cross-env": "^7.0.2",
     "eslint": "^8.56.0",
+    "eslint-plugin-n": "^17.15.1",
     "fail-on-errors-webpack-plugin": "^3.0.0",
     "fs-extra": "^10.0.0",
     "globals": "^13.24.0",

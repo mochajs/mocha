@@ -1,7 +1,7 @@
 'use strict';
 
-var exec = require('child_process').exec;
-var path = require('path');
+var exec = require('node:child_process').exec;
+var path = require('node:path');
 
 describe('globbing like --compilers', function () {
   it('should find a file of each type', function (done) {

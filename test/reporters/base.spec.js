@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert');
+var assert = require('node:assert');
 var chai = require('chai');
 var sinon = require('sinon');
 var helpers = require('./helpers');

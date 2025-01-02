@@ -1,6 +1,7 @@
 "use strict";
 
 const js = require('@eslint/js');
+const n = require('eslint-plugin-n')
 const globals = require('globals');
 
 const messages = {
@@ -11,6 +12,7 @@ const messages = {
 module.exports = [
   {
     ...js.configs.recommended,
+    ...n.configs['flat/recommended-script'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: {
@@ -20,6 +22,7 @@ module.exports = [
       sourceType: 'script'
     },
     rules: {
+      'n/prefer-node-protocol': 'error',
       'no-var': 'off',
       strict: ['error', 'global']
     }

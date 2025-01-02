@@ -1,9 +1,9 @@
 'use strict';
 
-var os = require('os');
-var fs = require('fs');
-var crypto = require('crypto');
-var path = require('path');
+var os = require('node:os');
+var fs = require('node:fs');
+var crypto = require('node:crypto');
+var path = require('node:path');
 var run = require('./helpers').runMocha;
 
 describe('reporters', function () {

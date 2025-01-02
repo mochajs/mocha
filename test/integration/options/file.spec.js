@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path').posix;
+var path = require('node:path').posix;
 const {
   runMochaJSON,
   resolveFixturePath: resolvePath,

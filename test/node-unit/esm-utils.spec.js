@@ -2,7 +2,7 @@
 
 const esmUtils = require('../../lib/nodejs/esm-utils');
 const sinon = require('sinon');
-const url = require('url');
+const url = require('node:url');
 
 describe('esm-utils', function () {
   beforeEach(function () {

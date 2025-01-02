@@ -78,7 +78,7 @@ if (mochaArgs._) {
 }
 
 if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
-  const {spawn} = require('child_process');
+  const {spawn} = require('node:child_process');
   const mochaPath = require.resolve('../lib/cli/cli.js');
 
   const nodeArgv =
@@ -126,7 +126,7 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
     // be needed.
     if (!args.parallel || args.jobs < 2) {
       // win32 does not support SIGTERM, so use next best thing.
-      if (require('os').platform() === 'win32') {
+      if (require('node:os').platform() === 'win32') {
         proc.kill('SIGKILL');
       } else {
         // using SIGKILL won't cleanly close the output streams, which can result
