@@ -1,5 +1,13 @@
 # Changelog
 
+## [11.1.1](https://github.com/mochajs/mocha/compare/v11.1.0...v11.1.1) (2025-01-02)
+
+
+### 🧹 Chores
+
+* pin node-lts tests to 22.11.0 ([#5279](https://github.com/mochajs/mocha/issues/5279)) ([664e1f4](https://github.com/mochajs/mocha/commit/664e1f49f7ae214a9666c90f388407e9fa100309))
+* replace `fs-extra` with newer `fs` built-ins ([#5284](https://github.com/mochajs/mocha/issues/5284)) ([75dcf8c](https://github.com/mochajs/mocha/commit/75dcf8c6c40ed1ce134ae5e174b6f4c4ca4d8c42))
+
 ## [11.1.0](https://github.com/mochajs/mocha/compare/v11.0.2...v11.1.0) (2025-01-02)
 
 
