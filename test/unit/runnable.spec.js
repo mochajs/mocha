@@ -173,7 +173,7 @@ describe('Runnable(title, fn)', function () {
     var run;
 
     beforeEach(function () {
-      run = new Runnable('foo', function (done) {});
+      run = new Runnable('foo', function () {});
     });
 
     it('should be .async', function () {
@@ -387,7 +387,7 @@ describe('Runnable(title, fn)', function () {
         });
 
         it('should not throw its own exception if passed a non-object', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             /* eslint no-throw-literal: off */
             throw null;
           });
@@ -401,7 +401,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function () {
         it('throws an error when it is allowed', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             throw new Error('fail');
           });
           runnable.allowUncaught = true;
@@ -465,7 +465,7 @@ describe('Runnable(title, fn)', function () {
 
       it('should allow updating the timeout', function (done) {
         var spy = sinon.spy();
-        var runnable = new Runnable('foo', function (done) {
+        var runnable = new Runnable('foo', function () {
           setTimeout(spy, 1);
           setTimeout(spy, 100);
         });
@@ -509,7 +509,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when the promise is fulfilled with a value', function () {
         var fulfilledPromise = {
-          then: function (fulfilled, rejected) {
+          then: function (fulfilled) {
             setTimeout(function () {
               fulfilled({});
             });
@@ -531,7 +531,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is rejected', function () {
         var expectedErr = new Error('fail');
         var rejectedPromise = {
-          then: function (fulfilled, rejected) {
+          then: function (_fulfilled, rejected) {
             setTimeout(function () {
               rejected(expectedErr);
             });
@@ -553,7 +553,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is rejected without a reason', function () {
         var expectedErr = new Error('Promise rejected with no or falsy reason');
         var rejectedPromise = {
-          then: function (fulfilled, rejected) {
+          then: function (_fulfilled, rejected) {
             setTimeout(function () {
               rejected();
             });
@@ -623,7 +623,7 @@ describe('Runnable(title, fn)', function () {
 
     describe('if async', function () {
       it('this.skip() should set runnable to pending', function (done) {
-        var runnable = new Runnable('foo', function (done) {
+        var runnable = new Runnable('foo', function () {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
         });
@@ -636,7 +636,7 @@ describe('Runnable(title, fn)', function () {
 
       it('this.skip() should halt synchronous execution', function (done) {
         var aborted = true;
-        var runnable = new Runnable('foo', function (done) {
+        var runnable = new Runnable('foo', function () {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
           /* istanbul ignore next */

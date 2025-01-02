@@ -510,7 +510,7 @@ describe('--parallel', function () {
               let pids = null;
               try {
                 pids = await pidtree(childPid, {root: true});
-              } catch (ignored) {}
+              } catch {}
               return pids;
             })
           ),
@@ -536,7 +536,7 @@ describe('--parallel', function () {
               let pids = null;
               try {
                 pids = await pidtree(childPid, {root: true});
-              } catch (ignored) {}
+              } catch {}
               return pids;
             })
           ),

@@ -9,8 +9,8 @@ const messages = {
 };
 
 module.exports = [
+  js.configs.recommended,
   {
-    ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2020,
       globals: {
@@ -20,6 +20,8 @@ module.exports = [
       sourceType: 'script'
     },
     rules: {
+      'no-empty': 'off',
+      'no-redeclare': 'off',
       'no-var': 'off',
       strict: ['error', 'global']
     }
