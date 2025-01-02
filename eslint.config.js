@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const js = require('@eslint/js');
 const n = require('eslint-plugin-n');
@@ -53,7 +53,7 @@ module.exports = [
     ],
     languageOptions: {
       globals: globals.node,
-      ecmaVersion: 2020
+      ecmaVersion: 2020,
     }
   },
   {
@@ -81,8 +81,8 @@ module.exports = [
   {
     files: ['test/**/*.mjs'],
     languageOptions: {
-      sourceType: 'module'
-    }
+      sourceType: "module"
+    },
   },
   {
     files: ['bin/*', 'lib/**/*.js'],
@@ -119,25 +119,21 @@ module.exports = [
         }
       ],
       'no-restricted-modules': ['error', 'timers'],
-      'no-restricted-syntax': [
-        'error',
+      "no-restricted-syntax": ['error',
         // disallow `global.setTimeout()`, `global.setInterval()`, etc.
         {
           message: messages.gh237,
-          selector:
-            'CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]'
+          selector: 'CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]'
         },
         // disallow `new global.Date()`
         {
           message: messages.gh237,
-          selector:
-            'NewExpression[callee.object.name=global][callee.property.name=Date]'
+          selector: 'NewExpression[callee.object.name=global][callee.property.name=Date]'
         },
         // disallow property access of `global.<timer>.*`
         {
           message: messages.gh237,
-          selector:
-            '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
+          selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
         }
       ]
     }
@@ -145,13 +141,11 @@ module.exports = [
   {
     files: ['lib/reporters/*.js'],
     rules: {
-      'no-restricted-syntax': [
-        'error',
+      'no-restricted-syntax': ['error',
         // disallow Reporters using `console.log()`
         {
           message: messages.gh3604,
-          selector:
-            'CallExpression[callee.object.name=console][callee.property.name=log]'
+          selector: 'CallExpression[callee.object.name=console][callee.property.name=log]'
         }
       ]
     }
@@ -165,6 +159,6 @@ module.exports = [
       'test/integration/fixtures/**',
       '.karma/**',
       'mocha.js'
-    ]
+    ],
   }
 ];
