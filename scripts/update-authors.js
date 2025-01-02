@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 // original comes from https://github.com/nodejs/node/blob/master/tools/update-authors.js
 
 // Usage: tools/update-author.js [--dry]

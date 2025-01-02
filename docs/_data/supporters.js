@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * This script gathers metadata for active supporters of Mocha from OpenCollective's
  * API by aggregating order ("donation") information.
