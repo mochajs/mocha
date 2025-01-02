@@ -165,8 +165,7 @@ function makeExpectedTest(
   expectedFullTitle,
   expectedFile,
   expectedDuration,
-  currentRetry,
-  expectedBody
+  currentRetry
 ) {
   return {
     title: expectedTitle,
@@ -203,7 +202,7 @@ function createRunReporterFunction(ctor) {
     var stdoutWriteStub = sinon.stub(process.stdout, 'write');
     var stdout = [];
 
-    var gather = function (chunk, enc, callback) {
+    var gather = function (chunk) {
       stdout.push(chunk);
       if (tee) {
         origStdoutWrite.call(process.stdout, chunk);

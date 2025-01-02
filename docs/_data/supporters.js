@@ -139,6 +139,7 @@ const getAllOrders = async (slug = 'mochajs') => {
   const variables = {limit: GRAPHQL_PAGE_SIZE, offset: 0, slug};
 
   // Handling pagination if necessary (2 pages for ~1400 results in May 2019)
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const result = await needle(
       'post',

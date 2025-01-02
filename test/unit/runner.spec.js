@@ -879,7 +879,7 @@ describe('Runner', function () {
       it('async - should allow unhandled errors in hooks to propagate through', function (done) {
         // the `done` argument, although unused, it triggers the async path
         // see this.async in the Runnable constructor
-        suite.beforeEach(function (done) {
+        suite.beforeEach(function () {
           throw new Error('allow unhandled errors in async hooks');
         });
         var runner = new Runner(suite);
@@ -1045,7 +1045,7 @@ describe('Runner', function () {
                   function () {
                     try {
                       runner.uncaught(err);
-                    } catch (ignored) {}
+                    } catch {}
                   },
                   'not to emit from',
                   runner,

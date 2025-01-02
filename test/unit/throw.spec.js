@@ -30,7 +30,7 @@ describe('a test that throws', function () {
     uncaughtHandlers.forEach(function (listener) {
       process.on('uncaughtException', listener);
     });
-    sinon.restore(); 
+    sinon.restore();
   });
 
   describe('non-extensible', function () {
@@ -49,7 +49,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing sync and test is async', function (done) {
-      var test = new Test('im async and throw string sync', function (done2) {
+      var test = new Test('im async and throw string sync', function () {
         throw 'non-extensible';
       });
       suite.addTest(test);
@@ -63,7 +63,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing async and test is async', function (done) {
-      var test = new Test('im async and throw string async', function (done2) {
+      var test = new Test('im async and throw string async', function () {
         process.nextTick(function () {
           throw 'non-extensible';
         });
@@ -95,9 +95,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing sync and test is async', function (done) {
-      var test = new Test('im async and throw undefined sync', function (
-        done2
-      ) {
+      var test = new Test('im async and throw undefined sync', function () {
         throw undefined;
       });
       suite.addTest(test);
@@ -111,9 +109,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing async and test is async', function (done) {
-      var test = new Test('im async and throw undefined async', function (
-        done2
-      ) {
+      var test = new Test('im async and throw undefined async', function () {
         process.nextTick(function () {
           throw undefined;
         });
@@ -145,7 +141,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing sync and test is async', function (done) {
-      var test = new Test('im async and throw null sync', function (done2) {
+      var test = new Test('im async and throw null sync', function () {
         throw null;
       });
       suite.addTest(test);
@@ -159,7 +155,7 @@ describe('a test that throws', function () {
     });
 
     it('should not pass if throwing async and test is async', function (done) {
-      var test = new Test('im async and throw null async', function (done2) {
+      var test = new Test('im async and throw null async', function () {
         process.nextTick(function () {
           throw null;
         });
@@ -175,9 +171,9 @@ describe('a test that throws', function () {
     });
   });
 
-  describe('stack', function() {
+  describe('stack', function () {
     it('should include the stack when throwing async', function(done) {
-      var test = new Test('im async and throw null async', function(done2) {
+      var test = new Test('im async and throw null async', function() {
         process.nextTick(function throwError() {
           throw new Error('test error');
         });

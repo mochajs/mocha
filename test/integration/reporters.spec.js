@@ -49,7 +49,7 @@ describe('reporters', function () {
         '</testsuite>'
       ];
 
-      run('passing.fixture.js', args, function (err, result) {
+      run('passing.fixture.js', args, function (err) {
         if (err) return done(err);
 
         var xml = fs.readFileSync(tmpFile, 'utf8');
