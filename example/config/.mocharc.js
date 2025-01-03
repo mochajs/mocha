@@ -36,6 +36,7 @@ module.exports = {
   'reporter-option': ['foo=bar', 'baz=quux'], // array, not object
   require: '@babel/register',
   retries: 1,
+  repeats: 1,
   slow: '75',
   sort: false,
   spec: ['test/**/*.spec.js'], // the positional arguments!

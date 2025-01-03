@@ -166,6 +166,7 @@ function makeExpectedTest(
   expectedFile,
   expectedDuration,
   currentRetry,
+  currentRepeat,
   expectedBody
 ) {
   return {
@@ -177,6 +178,9 @@ function makeExpectedTest(
     duration: expectedDuration,
     currentRetry: function () {
       return currentRetry;
+    },
+    currentRepeat: function () {
+      return currentRepeat;
     },
     slow: function () {}
   };

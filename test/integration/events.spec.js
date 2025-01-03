@@ -58,6 +58,25 @@ describe('event order', function () {
     });
   });
 
+  describe('--repeats test case', function () {
+    it('should assert --repeats event order', function (done) {
+      runMochaJSON(
+        'runner/events-repeats.fixture.js',
+        ['--repeats', '2'],
+        function (err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res, 'to have passed')
+            .and('to have failed test count', 0)
+            .and('to have passed test count', 1);
+          done();
+        }
+      );
+    });
+  });
+
   describe('--delay test case', function () {
     it('should assert --delay event order', function (done) {
       runMochaJSON(
