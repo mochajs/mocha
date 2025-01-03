@@ -1,0 +1,123 @@
+---
+description: Extensibility hooks for the Mocha BDD interface.
+title: Hooks
+---
+
+With its default "BDD"-style interface, Mocha provides the hooks `before()`, `after()`, `beforeEach()`, and `afterEach()`.
+These should be used to set up preconditions and clean up after your tests.
+
+```js
+describe("hooks", function () {
+  before(function () {
+    // runs once before the first test in this block
+  });
+
+  after(function () {
+    // runs once after the last test in this block
+  });
+
+  beforeEach(function () {
+    // runs before each test in this block
+  });
+
+  afterEach(function () {
+    // runs after each test in this block
+  });
+
+  // test cases
+});
+```
+
+:::note
+Tests can appear before, after, or interspersed with your hooks.
+Hooks will run in the order they are defined, as appropriate; all `before()` hooks run (once), then any `beforeEach()` hooks, tests, any `afterEach()` hooks, and finally `after()` hooks (once).
+:::
+
+## Describing Hooks
+
+Any hook can be invoked with an optional description, making it easier to pinpoint errors in your tests.
+If a hook is given a named function, that name will be used if no description is supplied.
+
+```js
+beforeEach(function () {
+  // beforeEach hook
+});
+
+beforeEach(function namedFun() {
+  // beforeEach:namedFun
+});
+
+beforeEach("some description", function () {
+  // beforeEach:some description
+});
+```
+
+## Asynchronous Hooks
+
+All hooks (`before()`, `after()`, `beforeEach()`, `afterEach()`) may be sync or async as well, behaving much like a regular test-case.
+For example, you may wish to populate database with dummy content before each test:
+
+```js
+describe("Connection", function () {
+  var db = new Connection(),
+    tobi = new User("tobi"),
+    loki = new User("loki"),
+    jane = new User("jane");
+
+  beforeEach(function (done) {
+    db.clear(function (err) {
+      if (err) return done(err);
+      db.save([tobi, loki, jane], done);
+    });
+  });
+
+  describe("#find()", function () {
+    it("respond with matching records", function (done) {
+      db.find({ type: "User" }, function (err, res) {
+        if (err) return done(err);
+        res.should.have.length(3);
+        done();
+      });
+    });
+  });
+});
+```
+
+## Root-Level Hooks
+
+A hook defined at the top scope of a test file (outside of a suite) is a _root hook_.
+
+As of v8.0.0, [Root Hook Plugins](./root-hook-plugins) are the preferred mechanism for setting root hooks.
+
+## Delayed Root Suite
+
+:::caution
+Delayed root suites are incompatible with [parallel mode](./parallel-mode).
+:::
+
+If you need to perform asynchronous operations before any of your suites are run (e.g. for dynamically generating tests), you may delay the root suite.
+Run `mocha` with the `--delay` flag.
+This will attach a special callback function, `run()`, to the global context:
+
+```js
+const assert = require("assert");
+
+const fn = async (x) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 3000, 2 * x);
+  });
+};
+
+// instead of an IIFE, you can use 'setImmediate' or 'nextTick' or 'setTimeout'
+(async function () {
+  const z = await fn(3);
+
+  describe("my suite", function () {
+    it(`expected value ${z}`, function () {
+      assert.strictEqual(z, 6);
+    });
+  });
+
+  run();
+})();
+```

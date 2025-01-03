@@ -1,0 +1,112 @@
+---
+description: Describing test cases that should be run to the exclusion of other tests.
+title: Exclusive Tests
+---
+
+:::caution
+Exclusive tests are incompatible with [parallel mode](../features/parallel-mode).
+:::
+
+The exclusivity feature allows you to run _only_ the specified suite or test-case
+by appending `.only()` to the function.
+Here's an example of executing only a particular suite:
+
+```js
+describe("Array", function () {
+  describe.only("#indexOf()", function () {
+    // ...
+  });
+});
+```
+
+_Note_: All nested suites will still be executed.
+
+Here's an example of executing an individual test case:
+
+```js
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    it.only("should return -1 unless present", function () {
+      // ...
+    });
+
+    it("should return the index when present", function () {
+      // ...
+    });
+  });
+});
+```
+
+Previous to v3.0.0, `.only()` used string matching to decide which tests to execute; this is no longer the case.
+In v3.0.0 or newer, `.only()` can be used multiple times to define a subset of tests to run:
+
+```js
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    it.only("should return -1 unless present", function () {
+      // this test will be run
+    });
+
+    it.only("should return the index when present", function () {
+      // this test will also be run
+    });
+
+    it("should return -1 if called with a non-Array context", function () {
+      // this test will not be run
+    });
+  });
+});
+```
+
+You may also choose multiple suites:
+
+```js
+describe("Array", function () {
+  describe.only("#indexOf()", function () {
+    it("should return -1 unless present", function () {
+      // this test will be run
+    });
+
+    it("should return the index when present", function () {
+      // this test will also be run
+    });
+  });
+
+  describe.only("#concat()", function () {
+    it("should return a new Array", function () {
+      // this test will also be run
+    });
+  });
+
+  describe("#slice()", function () {
+    it("should return a new Array", function () {
+      // this test will not be run
+    });
+  });
+});
+```
+
+But _tests will have precedence_:
+
+```js
+describe("Array", function () {
+  describe.only("#indexOf()", function () {
+    it.only("should return -1 unless present", function () {
+      // this test will be run
+    });
+
+    it("should return the index when present", function () {
+      // this test will not be run
+    });
+  });
+});
+```
+
+:::note
+Hooks, if present, will still be executed.
+:::
+
+:::tip
+Be mindful not to commit usages of `.only()` to version control, unless you really mean it!
+To do so one can run mocha with the option `--forbid-only` in the continuous integration test command (or in a git precommit hook).
+:::

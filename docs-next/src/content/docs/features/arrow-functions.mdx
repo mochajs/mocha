@@ -1,0 +1,32 @@
+---
+description: Working with arrow functions, aka "lambdas".
+title: Arrow Functions
+---
+
+Passing [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions) (aka "lambdas") to Mocha is discouraged.
+Lambdas lexically bind `this` and cannot access the Mocha context.
+For example, the following code will fail:
+
+```js
+describe("my suite", () => {
+  it("my test", () => {
+    // should set the timeout of this test to 1000 ms; instead will fail
+    this.timeout(1000);
+    assert.ok(true);
+  });
+});
+```
+
+_If you do not need to use_ Mocha's context, lambdas should work.
+Be aware that using lambdas will be more painful to refactor if the need eventually arises!
+
+Alternatively, you can override certain context variables, such as test timeouts, by chain-calling methods of the created tests and/or hooks:
+
+```js
+describe("my suite", () => {
+  beforeEach(() => {}).timeout(1000);
+  it("my test", () => {
+    assert.ok(true);
+  }).timeout(1000);
+}).timeout(1000);
+```

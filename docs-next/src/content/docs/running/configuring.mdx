@@ -1,0 +1,80 @@
+---
+description: Configuration options and files across several formats.
+title: Configuring Mocha (Node.js)
+---
+
+:::note[New in v6.0.0]
+:::
+
+Mocha supports configuration files, typical of modern command-line tools, in several formats:
+
+- **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](../explainers/nodejs-native-esm-support) in your `package.json`)
+  in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
+- **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
+- **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory.
+  Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
+- **package.json**: Create a `mocha` property in your project's `package.json`.
+
+## Custom Locations
+
+You can specify a custom location for your configuration file with the `--config <path>` option.
+Mocha will use the file's extension to determine how to parse the file, and will assume JSON if unknown.
+
+You can specify a custom `package.json` location as well, using the `--package <path>` option.
+
+## Ignoring Config Files
+
+To skip looking for config files, use `--no-config`.
+Likewise, use `--no-package` to stop Mocha from looking for configuration in a `package.json`.
+
+## Priorities
+
+If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for &mdash; and use &mdash; only one.
+The priority is:
+
+1. `.mocharc.js`
+1. `.mocharc.yaml`
+1. `.mocharc.yml`
+1. `.mocharc.jsonc`
+1. `.mocharc.json`
+
+## Environment Variables
+
+The `MOCHA_OPTIONS` environment variable may be used to specify command line arguments.
+These arguments take priority over those found in configuration files.
+
+For example, setting the `bail` and `retries` options:
+
+```bash
+$ MOCHA_OPTIONS="--bail --retries 3" mocha
+```
+
+## Merging
+
+Mocha will also _merge_ any options found in `package.json` into its run-time configuration.
+In case of conflict, the priority is:
+
+1. Arguments specified on command-line
+1. Arguments specified in `MOCHA_OPTIONS` environment variable.
+1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
+1. `mocha` property of `package.json`
+
+Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priority configuration sources appearing earlier in the list.
+For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+
+## Extending Configuration
+
+Configurations can inherit from other modules using the `extends` keyword.
+See [here](http://yargs.js.org/docs/#api-reference-configobject-extends-keyword) for more information.
+
+## Configuration Format
+
+- Any "boolean" flag (which doesn't require a parameter, such as `--bail`), can be specified using a boolean value, e.g.: `"bail": true`.
+- Any "array"-type option (see `mocha --help` for a list) can be a single string value.
+- For options containing a dash (`-`), the option name can be specified using camelCase.
+- Aliases are valid names, e.g., `R` instead of `reporter`.
+- Test files can be specified using `spec`, e.g., `"spec": "test/**/*.spec.js"`.
+- Flags to `node` are _also_ supported in configuration files.
+  Use caution, as these can vary between versions of Node.js!
+
+**For more configuration examples, see the [`example/config`](https://github.com/mochajs/mocha/tree/main/example/config) directory on GitHub.**

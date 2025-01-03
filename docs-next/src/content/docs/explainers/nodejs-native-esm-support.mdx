@@ -1,0 +1,33 @@
+---
+description: A mid-level outline of Mocha's "flow of execution".
+title: Node.js Native ESM Support
+---
+
+:::note[New in v7.1.0]
+:::
+
+Mocha supports writing your tests as ES modules, and not just using CommonJS.
+For example:
+
+```js
+// test.mjs
+import { add } from "./add.mjs";
+import assert from "assert";
+
+it("should add to numbers from an es module", () => {
+  assert.equal(add(3, 5), 8);
+});
+```
+
+To enable this you don't need to do anything special.
+Write your test file as an ES module.
+In Node.js this means either ending the file with a `.mjs` extension, or, if you want to use the regular `.js` extension, by adding `"type": "module"` to your `package.json`.
+More information can be found in the [Node.js documentation](https://nodejs.org/api/esm.html).
+
+### Current Limitations
+
+- [Watch mode](../running/cli#--watch--w) does not support ES Module test files
+- [Custom reporters](../reporters/third-party) and [custom interfaces](../interfaces/third-party) can only be CommonJS files
+- [Configuration file](../running/configuring) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
+- When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`, hold off on using ES modules for your test files.
+  You can switch to using `testdouble`, which does support ESM.

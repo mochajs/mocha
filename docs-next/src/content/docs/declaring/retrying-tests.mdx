@@ -1,0 +1,32 @@
+---
+description: Describing test cases that should retry on failure.
+title: Retry Tests
+---
+
+You can choose to retry failed tests up to a certain number of times.
+This feature is designed to handle end-to-end tests (functional tests/Selenium...) where resources cannot be easily mocked/stubbed.
+**It's not recommended to use this feature for unit tests**.
+
+This feature does re-run a failed test and its corresponding `beforeEach/afterEach` hooks, but not `before/after` hooks.
+`this.retries()` has no effect on failing hooks.
+
+:::note
+Example below was written using Selenium webdriver (which [overwrites global Mocha hooks](https://github.com/SeleniumHQ/selenium/blob/c10e8a955883f004452cdde18096d70738397788/javascript/node/selenium-webdriver/testing/index.js) for `Promise` chain).
+:::
+
+```js
+describe("retries", function () {
+  // Retry all tests in this suite up to 4 times
+  this.retries(4);
+
+  beforeEach(function () {
+    browser.get("http://www.yahoo.com");
+  });
+
+  it("should succeed by the 3rd try", function () {
+    // Specify this test to only retry up to 2 times
+    this.retries(2);
+    expect($(".foo").isDisplayed()).to.eventually.be.true;
+  });
+});
+```

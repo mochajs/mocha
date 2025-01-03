@@ -1,0 +1,163 @@
+---
+description: Running test simultaneously across different cores.
+title: Parallel Mode
+---
+
+:::note[New in v8.0.0]
+:::
+
+Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](../running/cli#--parallel--p) flag).
+
+Parallel tests should work out-of-the box for many use cases.
+However, you must be aware of some important implications of the behavior.
+
+:::note
+Authors of third-party libraries built on Mocha should read this!
+:::
+
+## Reporter Limitations
+
+Due to the nature of the following reporters, they cannot work when running tests in parallel:
+
+- [`json-stream`](../reporters/json-stream)
+- [`markdown`](../reporters/markdown)
+- [`progress`](../reporters/progress)
+
+These reporters expect Mocha to know _how many tests it plans to run_ before execution.
+This information is unavailable in parallel mode, as test files are loaded only when they are about to be run.
+
+In serial mode, tests results will "stream" as they occur.
+In parallel mode, reporter output is _buffered_; reporting will occur after each file is completed.
+In practice, the reporter output will appear in "chunks" (but will otherwise be identical).
+If a test file is particularly slow, there may be a significant pause while it's running.
+
+## Exclusive Tests are Disallowed
+
+**You cannot use `it.only`, `describe.only`, `this.only()`, etc., in parallel mode.**
+This is for the same reason as the incompatible reporters noted above: in parallel mode, Mocha does not load all files and suites into memory before running tests.
+
+Suggested workarounds:
+
+1. Use [`--grep`](../running/cli#--grep-regexp--g-regexp) or [`--fgrep`](../running/cli#--fgrep-string--f-string) instead; it's not particularly efficient, but it will work.
+1. Don't use parallel mode.
+   Likely, you won't be running very many exclusive tests, so you won't see a great benefit from parallel mode anyhow.
+
+:::tip
+If parallel mode is defined in your config file, you can temporarily disable it on the command-line by using either the `--no-parallel` flag or reducing the job count, e.g., `--jobs=0`.\_
+:::
+
+## File Order is Non-Deterministic
+
+In parallel mode, Mocha does not guarantee the order in which test files will run, nor which worker process runs them.
+
+Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
+
+- [`--file`](../running/cli#--file-file)
+- [`--sort`](../running/cli#--sort--s)
+- [`--delay`](../running/cli#--delay)
+
+## Test Duration Variability
+
+Running tests in parallel mode will naturally use more system resources.
+The OS may take extra time to schedule and complete some operations, depending on system load.
+For this reason, the timeouts of _individual tests_ may need to be increased either [globally](../running/cli#--timeout-ms--t-ms) or [otherwise](./timeouts).
+
+## "Bail" is "Best Effort"
+
+When used with `--bail` (or `this.bail()`) to exit after the first failure, it's likely other tests will be running at the same time.
+Mocha must shut down its worker processes before exiting.
+
+Likewise, subprocesses may throw uncaught exceptions.
+When used with `--allow-uncaught`, Mocha will "bubble" this exception to the main process, but still must shut down its processes.
+
+Either way, Mocha will abort the test run "very soon."
+
+## Root Hooks Are Not Global
+
+:::note
+This only applies when running in parallel mode.
+:::
+
+A _root hook_ is a hook in a test file which is _not defined_ within a suite.
+An example using the `bdd` interface:
+
+```js
+// test/setup.js
+
+// root hook to run before every test (even in other files)
+beforeEach(function () {
+  doMySetup();
+});
+
+// root hook to run after every test (even in other files)
+afterEach(function () {
+  doMyTeardown();
+});
+```
+
+When run (in the default "serial" mode) via this command:
+
+```bash
+mocha --file "./test/setup.js" "./test/**/*.spec.js"
+```
+
+`setup.js` will be executed _first_, and install the two hooks shown above for every test found in `./test/**/*.spec.js`.
+
+**The above example does not work in parallel mode.**
+
+When Mocha runs in parallel mode, **test files do not share the same process,** nor do they share the same instance of Mocha.
+Consequently, a hypothetical root hook defined in test file _A_ **will not be present** in test file _B_.
+
+Here are a couple suggested workarounds:
+
+1. `require('./setup.js')` or `import './setup.js'` at the top of every test file.
+   Best avoided for those averse to boilerplate.
+1. _Recommended_: Define root hooks in a "required" file, using the new (also as
+   of v8.0.0) [Root Hook Plugin](./root-hook-plugins) system.
+
+If you need to run some code _once and only once_, use a [global fixture](./global-fixtures) instead.
+
+## No Browser Support
+
+Parallel mode is only available in Node.js, for now.
+
+## Limited Reporter API for Third-Party Reporters
+
+Third-party reporters may encounter issues when attempting to access non-existent properties within `Test`, `Suite`, and `Hook` objects.
+If a third-party reporter does not work in parallel mode (but otherwise works in serial mode), please [file an issue](https://github.com/mochajs/mocha/issues/new).
+
+## Troubleshooting Parallel Mode
+
+If you find your tests don't work properly when run with [`--parallel`](../running/cli#--parallel--p), either shrug and move on, or use this handy-dandy checklist to get things working:
+
+- ✅ Ensure you are using a [supported reporter](#reporter-limitations).
+- ✅ Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
+- ✅ Double-check your [config file](../running/configuring); options set in config files will be merged with any command-line option.
+- ✅ Look for root hooks (they look like [this](#root-hooks-are-not-global)) in your tests.
+  Move them into a [Root Hook Plugin](./root-hook-plugins).
+- ✅ Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
+- ✅ If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](../running/cli#--timeout-ms--t-ms))
+- ✅ Ensure your tests do not depend on being run in a specific order.
+- ✅ Ensure your tests clean up after themselves; remove temp files, handles, sockets, etc.
+  Don't try to share state or resources between test files.
+
+## Caveats About Testing in Parallel
+
+Some types of tests are _not_ so well-suited to run in parallel.
+For example, extremely timing-sensitive tests, or tests which make I/O requests to a limited pool of resources (such as opening ports, or automating browser windows, hitting a test DB, or remote server, etc.).
+
+Free-tier cloud CI services may not provide a suitable multi-core container or VM for their build agents.
+Regarding expected performance gains in CI: your mileage may vary.
+It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
+
+It's unlikely (but not impossible) to see a performance gain from a [job count](../running/cli#--jobs-count--j-count) _greater than_ the number of available CPU cores.
+That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+
+## Parallel Mode Worker IDs
+
+:::note[New in v9.2.0]
+:::
+
+Each process launched by parallel mode is assigned a unique id, from 0 for the first process to be launched, to N-1 for the Nth process.
+This worker id may be accessed in tests via the environment variable `MOCHA_WORKER_ID`.
+It can be used for example to assign a different database, service port, etc for each test process.

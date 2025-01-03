@@ -1,0 +1,57 @@
+---
+description: The classic, reliable, trusted JavaScript test framework for Node.js & the Browser. ☕
+head:
+  - content: Mocha | Classic, reliable, trusted. ☕
+    tag: title
+title: Mocha
+---
+
+import { LinkButton } from "@astrojs/starlight/components";
+import { Image } from "astro:assets";
+
+import supporters from "../data/supporters.json";
+import Badges from "../../components/Badges.astro";
+import Supporters from "../../components/Supporters.astro";
+
+:::note[New Site Preview]
+Hello!
+Welcome to this preview of a revamped **mochajs.org** docs site!
+
+This is an early stage WIP preview.
+If you see any **bugs** or **typos** _that aren't on [mochajs.org](https://mochajs.org)_, please mention them on [docs: add new website using Astro Starlight](https://github.com/mochajs/mocha/pull/5246).
+Thanks!
+🤎
+:::
+
+<Badges />
+
+Mocha is a feature-rich JavaScript test framework running on [Node.js](https://nodejs.org) and in the browser, making asynchronous testing _straightforward_ and _fun_.
+Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases.
+
+<LinkButton href="/getting-started">Get Started</LinkButton>
+<LinkButton href="/running/configuring" variant="secondary">
+  Configuration Reference
+</LinkButton>
+
+## Sponsors
+
+Use Mocha at work?
+Ask your manager or marketing team if they'd help [support](https://opencollective.com/mochajs#support) our project.
+Your company's logo will also be displayed on [npmjs.com](http://npmjs.com/package/mocha) and our [GitHub repository](https://github.com/mochajs/mocha#sponsors).
+
+<Supporters size="medium" data={supporters.sponsors} />
+
+## Backers
+
+Find Mocha helpful?
+Become a [backer](https://opencollective.com/mochajs#support) and support Mocha with a monthly donation.
+
+<Supporters size="small" data={supporters.backers} />
+
+## More Information
+
+In addition to chatting with us on [our Discord](https://discord.gg/KeDn2uXhER), for additional information such as using
+spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](https://github.com/mochajs/mocha/wiki) on GitHub.
+For a running example of Mocha, view [example/tests.html](https://mochajs.org/example/tests.html).
+
+For the JavaScript API, view the [API documentation](/api) or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).

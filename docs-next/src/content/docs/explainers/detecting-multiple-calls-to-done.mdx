@@ -1,0 +1,36 @@
+---
+description: Why Mocha determines if the done() callback in a test was called multiple times.
+title: Detecting Multiple Calls to done()
+---
+
+If you use callback-based async tests, Mocha will throw an error if `done()` is called multiple times.
+This is handy for catching accidental double callbacks.
+
+```javascript
+it("double done", function (done) {
+  // Calling `done()` twice is an error
+  setImmediate(done);
+  setImmediate(done);
+});
+```
+
+Running the above test will give you the below error message:
+
+```bash
+$ ./node_modules/.bin/mocha mocha.test.js
+
+
+  ✓ double done
+  1) double done
+
+  1 passing (6ms)
+  1 failing
+
+  1) double done:
+     Error: done() called multiple times
+      at Object.<anonymous> (mocha.test.js:1:63)
+      at require (internal/module.js:11:18)
+      at Array.forEach (<anonymous>)
+      at startup (bootstrap_node.js:187:16)
+      at bootstrap_node.js:608:3
+```

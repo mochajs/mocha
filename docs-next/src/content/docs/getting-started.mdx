@@ -1,0 +1,86 @@
+---
+title: Getting Started
+description: Set up Mocha and start testing your code.
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+## 1. Installation
+
+First, install the [`mocha` package](https://www.npmjs.com/package/mocha) as a devDependency using your favorite package manager:
+
+<PackageManagers dev type="add" pkg="mocha" />
+
+:::note
+As of v10.0.0, Mocha requires [Node.js](https://nodejs.org) v14.0.0 or newer.
+:::
+
+## 2. Test File
+
+Create the following `example.test.js` file under a `test/` directory:
+
+```js
+// test/example.test.js
+import { assert } from "node:assert";
+
+describe("Array", function () {
+  describe("#indexOf()", function () {
+    it("should return -1 when the value is not present", function () {
+      assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```
+
+## 3. Running Mocha
+
+Now, run `npx mocha` to execute the Mocha package on the newly created test file:
+
+```shell
+npx mocha
+```
+
+You should see passing output like:
+
+```plaintext
+
+  Array
+    #indexOf()
+      ✓ should return -1 when the value is not present
+
+  1 passing (9ms)
+```
+
+### Optional: `test` script
+
+Most projects include a [`package.json` `"test"` script](https://docs.npmjs.com/cli/commands/npm-test):
+
+```json
+// package.json
+{
+  "scripts": {
+    "test": "mocha"
+  }
+}
+```
+
+You can then run that script with your favorite package manager:
+
+<PackageManagers type="run" pkg="test" />
+
+## Next Steps
+
+See:
+
+- [CLI](./running/cli) for the commands you can pass to `mocha`
+- [Configuring](./running/configuring) for creating a persistent test configuration file
+- [Editor Plugins](./running/editor-plugins) for improving the Mocha experience in your editor
+
+You can see real live live example code in our example repositories:
+
+- [Mocha examples](https://github.com/mochajs/mocha-examples)
+- [Express](https://github.com/visionmedia/express/tree/master/test)
+- [Connect](https://github.com/senchalabs/connect/tree/master/test)
+- [SuperAgent](https://github.com/visionmedia/superagent/tree/master/test/node)
+- [WebSocket.io](https://github.com/LearnBoost/websocket.io/tree/master/test)
+- [Mocha tests](https://github.com/mochajs/mocha/tree/main/test)

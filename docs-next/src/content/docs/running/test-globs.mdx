@@ -1,0 +1,29 @@
+---
+description: Configuring how Mocha finds test files.
+title: Test Globs
+---
+
+By default, `mocha` looks for the glob `"./test/*.{js,cjs,mjs}"`, so you may want to put your tests in `test/` folder.
+If you want to include subdirectories, pass the `--recursive` option.
+
+To configure where `mocha` looks for tests, you may pass your own glob:
+
+```bash
+$ mocha --recursive "./spec/*.js"
+```
+
+Some shells support recursive matching by using the globstar (`**`) wildcard.
+Bash >= 4.3 supports this with the [`globstar` option](https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html) which [must be enabled](https://github.com/mochajs/mocha/pull/3348#issuecomment-383937247) to get the same results as passing the `--recursive` option ([ZSH](http://zsh.sourceforge.net/Doc/Release/Expansion.html#Recursive-Globbing) and [Fish](https://fishshell.com/docs/current/#expand-wildcard) support this by default).
+With recursive matching enabled, the following is the same as passing `--recursive`:
+
+```bash
+$ mocha "./spec/**/*.js"
+```
+
+You should _always_ quote your globs in npm scripts.
+If you use quotes, the [`glob`](https://www.npmjs.com/package/glob) module will handle its expansion.
+For maximum compatibility, surround the entire expression with double quotes and refrain from `$`, `"`, `^`, and `\` within your expression.
+
+See this [tutorial](https://gist.github.com/reggi/475793ea1846affbcfe8) on using globs.
+
+_Note_: Double quotes around the glob are recommended for portability.
