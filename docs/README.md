@@ -7,6 +7,7 @@ _So you wanna build the site?_
 ## Development
 
 1. Run `npm install` / `npm ci` from working copy root to get Node.js deps.
+1. To include the API documentation, run `npm run docs:api` before the either of the following commands.
 1. To serve the site and rebuild as changes are made, execute `npm run docs-watch`.
 1. To rebuild the site _once_, execute `npm run docs`.
 
