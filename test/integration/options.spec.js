@@ -11,6 +11,7 @@ describe('options', function () {
     'config',
     'mocharc-extended'
   );
+  const configFile = path.join(workspaceDir, 'extends.json');
 
   beforeEach(function () {
     workingDirectory = process.cwd();
@@ -21,11 +22,13 @@ describe('options', function () {
     process.chdir(workingDirectory);
   });
 
+  it('Should load `_`-option properly', function () {
+    var extended = loadOptions(['--config', configFile]);
+    expect(extended._, 'to equal', ['**/*.spec.js']);
+  });
+
   it('Should support extended options using --config parameter', function () {
-    var extended = loadOptions([
-      '--config',
-      path.join(workspaceDir, 'extends.json')
-    ]);
+    var extended = loadOptions(['--config', configFile]);
     expect(extended.require, 'to equal', ['foo', 'bar']);
     expect(extended.bail, 'to equal', true);
     expect(extended.reporter, 'to equal', 'html');

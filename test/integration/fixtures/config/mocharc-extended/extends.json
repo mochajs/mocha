@@ -1,3 +1,4 @@
 {
-  "extends": "./modifiers.json"
+  "extends": "./modifiers.json",
+  "_": ["**/*.spec.js"]
 }
