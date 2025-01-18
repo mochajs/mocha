@@ -42,4 +42,16 @@ describe('options', function () {
     expect(extended.reporter, 'to equal', 'html');
     expect(extended.slow, 'to equal', 30);
   });
+
+  it('Should support extended options using package.json', function () {
+    var extended = loadOptions([
+      '--package',
+      path.join(workspaceDir, 'package-lock.json')
+    ]);
+    expect(extended.require, 'to equal', ['foo', 'bar']);
+    expect(extended.bail, 'to equal', true);
+    expect(extended.reporter, 'to equal', 'html');
+    expect(extended.slow, 'to equal', 30);
+    expect(extended.grep, 'to equal', 'package');
+  });
 });
