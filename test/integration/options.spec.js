@@ -45,6 +45,7 @@ describe('options', function () {
 
   it('Should support extended options using package.json', function () {
     var extended = loadOptions([
+      '--no-config',
       '--package',
       path.join(workspaceDir, 'package-lock.json')
     ]);
