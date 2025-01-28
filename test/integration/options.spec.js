@@ -43,6 +43,13 @@ describe('options', function () {
     expect(extended.slow, 'to equal', 30);
   });
 
+  it('Should support standalone options using standalone rc file', function () {
+    var extended = loadOptions(['--config', configFileStandalone]);
+    expect(extended.require, 'to equal', ['foo', 'bar']);
+    expect(extended.bail, 'to equal', true);
+    expect(extended.reporter, 'to equal', 'dot');
+    expect(extended.slow, 'to equal', 60);
+  });
   it('Should support extended options using package.json', function () {
     var extended = loadOptions([
       '--no-config',
