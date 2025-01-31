@@ -16,7 +16,7 @@ describe('global teardown errors', () => {
     ], { encoding: 'utf-8' });
 
     expect(result.status).to.equal(1);
-    expect(result.stdout).to.include('Global Teardown Error:');
+    expect(result.stdout).to.include('Global fixture error');
     expect(result.stdout).to.include('Teardown problem');
   });
 });
