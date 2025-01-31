@@ -4,6 +4,6 @@ const { it } = require('../../../lib/mocha');
 
 it('should pass', () => {});
 
-exports.mochaTeardown = async function () {
+exports.mochaGlobalTeardown = async function () {
     throw new Error('Teardown problem')
 }
