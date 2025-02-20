@@ -592,4 +592,66 @@ describe('XUnit reporter', function () {
       expect(lines[0], 'to contain', defaultSuiteName);
     });
   });
+
+  describe('showRelativePaths reporter option', function () {
+    const projectPath = path.join('home', 'username', 'demo-project');
+    const relativeTestPath = path.join('tests', 'demo-test.spec.js');
+    const absoluteTestPath = path.join(projectPath, relativeTestPath);
+
+    var expectedWrite = '';
+    const fakeThis = {
+      write: function (str) {
+        expectedWrite = expectedWrite + str;
+      }
+    };
+
+    const failingTest = {
+      state: STATE_FAILED,
+      title: expectedTitle,
+      file: absoluteTestPath,
+      parent: {
+        fullTitle: function () {
+          return expectedClassName;
+        }
+      },
+      duration: 1000,
+      err: {
+        actual: 'foo',
+        expected: 'bar',
+        message: expectedMessage,
+        stack: expectedStack
+      }
+    };
+
+    beforeEach(function () {
+      sinon.stub(process, 'cwd').returns(projectPath);
+    });
+
+    afterEach(function () {
+      sinon.restore();
+      expectedWrite = '';
+    });
+
+    it('shows relative paths for tests if showRelativePaths reporter option is set', function () {
+      const options = {
+        reporterOption: {
+          showRelativePaths: true
+        }
+      };
+      const xunit = new XUnit(runner, options);
+
+      xunit.test.call(fakeThis, failingTest);
+
+      expect(expectedWrite, 'not to contain', absoluteTestPath);
+      expect(expectedWrite, 'to contain', relativeTestPath);
+    });
+
+    it('shows absolute paths for tests by default', function () {
+      const xunit = new XUnit(runner);
+
+      xunit.test.call(fakeThis, failingTest);
+
+      expect(expectedWrite, 'to contain', absoluteTestPath);
+    });
+  });
 });
