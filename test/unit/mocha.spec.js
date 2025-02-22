@@ -1072,7 +1072,8 @@ describe('Mocha', function () {
           await mocha.runGlobalSetup(context);
           expect(mocha._runGlobalFixtures, 'to have a call satisfying', [
             mocha.options.globalSetup,
-            context
+            context,
+            'Global Setup'
           ]);
         });
       });
@@ -1102,7 +1103,8 @@ describe('Mocha', function () {
           await mocha.runGlobalTeardown();
           expect(mocha._runGlobalFixtures, 'to have a call satisfying', [
             mocha.options.globalTeardown,
-            context
+            context,
+            'Global Teardown'
           ]);
         });
       });
