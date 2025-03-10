@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs-extra');
+const fs = require('node:fs');
 const path = require('node:path');
 const {
   copyFixture,
@@ -131,7 +131,7 @@ describe('--watch', function () {
         [testFile, '--watch-files', 'lib/**/*.xyz'],
         tempDir,
         () => {
-          fs.removeSync(watchedFile);
+          fs.rmSync(watchedFile, { recursive: true, force: true });
         }
       ).then(results => {
         expect(results, 'to have length', 2);
