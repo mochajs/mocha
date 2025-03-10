@@ -173,7 +173,9 @@ describe('Runnable(title, fn)', function () {
     var run;
 
     beforeEach(function () {
-      run = new Runnable('foo', function () {});
+      run = new Runnable('foo', function (done) {
+        done();
+      });
     });
 
     it('should be .async', function () {
@@ -465,9 +467,14 @@ describe('Runnable(title, fn)', function () {
 
       it('should allow updating the timeout', function (done) {
         var spy = sinon.spy();
-        var runnable = new Runnable('foo', function () {
-          setTimeout(spy, 1);
-          setTimeout(spy, 100);
+        var runnable = new Runnable('foo', function (done) {
+          setTimeout(function () {
+            spy();
+            setTimeout(function () {
+              spy();
+              done();
+            }, 50);
+          }, 10);
         });
         runnable.timeout(50);
         runnable.run(function (err) {
@@ -531,7 +538,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is rejected', function () {
         var expectedErr = new Error('fail');
         var rejectedPromise = {
-          then: function (_fulfilled, rejected) {
+          then: function (fulfilled, rejected) {
             setTimeout(function () {
               rejected(expectedErr);
             });
@@ -553,7 +560,7 @@ describe('Runnable(title, fn)', function () {
       describe('when the promise is rejected without a reason', function () {
         var expectedErr = new Error('Promise rejected with no or falsy reason');
         var rejectedPromise = {
-          then: function (_fulfilled, rejected) {
+          then: function (fulfilled, rejected) {
             setTimeout(function () {
               rejected();
             });
@@ -623,9 +630,10 @@ describe('Runnable(title, fn)', function () {
 
     describe('if async', function () {
       it('this.skip() should set runnable to pending', function (done) {
-        var runnable = new Runnable('foo', function () {
+        var runnable = new Runnable('foo', function (done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
+          done();
         });
         runnable.run(function (err) {
           expect(err, 'to be undefined');
@@ -636,11 +644,12 @@ describe('Runnable(title, fn)', function () {
 
       it('this.skip() should halt synchronous execution', function (done) {
         var aborted = true;
-        var runnable = new Runnable('foo', function () {
+        var runnable = new Runnable('foo', function (done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
           /* istanbul ignore next */
           aborted = false;
+          done();
         });
         runnable.run(function () {
           process.nextTick(function () {
