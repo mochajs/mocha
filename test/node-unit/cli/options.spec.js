@@ -344,14 +344,14 @@ describe('options', function () {
           it('should not look for a config', function () {
             try {
               loadOptions(`--config ${config}`);
-            } catch (ignored) {}
+            } catch {}
             expect(findConfig, 'was not called');
           });
 
           it('should attempt to load file at path', function () {
             try {
               loadOptions(`--config ${config}`);
-            } catch (ignored) {}
+            } catch {}
             expect(loadConfig, 'to have a call satisfying', [config]);
           });
 

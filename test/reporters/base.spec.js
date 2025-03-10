@@ -37,7 +37,7 @@ describe('Base reporter', function () {
     return diffStr;
   }
 
-  var gather = function (chunk, encoding, cb) {
+  var gather = function (chunk) {
     stdout.push(chunk);
   };
 
@@ -524,14 +524,14 @@ describe('Base reporter', function () {
       var err1 = {
         message: 'Error',
         stack: 'Error\nfoo\nbar',
-        showDiff: false,
+        showDiff: false
       };
       var err2 = {
         message: 'Cause1',
         stack: 'Cause1\nbar\nfoo',
         showDiff: false,
         cause: err1
-      }
+      };
       err1.cause = err2;
 
       var test = makeTest(err1);
@@ -552,7 +552,7 @@ describe('Base reporter', function () {
         stack: 'Error\nfoo\nbar',
         showDiff: false,
         cause: {
-          showDiff: false,
+          showDiff: false
         }
       };
 

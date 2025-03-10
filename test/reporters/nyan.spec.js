@@ -161,7 +161,7 @@ describe('Nyan reporter', function () {
 
     beforeEach(function () {
       stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
@@ -260,7 +260,7 @@ describe('Nyan reporter', function () {
 
     beforeEach(function () {
       stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
@@ -289,7 +289,7 @@ describe('Nyan reporter', function () {
 
     beforeEach(function () {
       stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
@@ -452,7 +452,7 @@ describe('Nyan reporter', function () {
         return type + n;
       });
       var stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
@@ -521,7 +521,7 @@ describe('Nyan reporter', function () {
 
     beforeEach(function () {
       var stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];

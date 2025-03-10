@@ -173,7 +173,9 @@ describe('Runnable(title, fn)', function () {
     var run;
 
     beforeEach(function () {
-      run = new Runnable('foo', function (done) {});
+      run = new Runnable('foo', function (done) {
+        done();
+      });
     });
 
     it('should be .async', function () {
@@ -387,7 +389,7 @@ describe('Runnable(title, fn)', function () {
         });
 
         it('should not throw its own exception if passed a non-object', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             /* eslint no-throw-literal: off */
             throw null;
           });
@@ -401,7 +403,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function () {
         it('throws an error when it is allowed', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             throw new Error('fail');
           });
           runnable.allowUncaught = true;
@@ -466,8 +468,13 @@ describe('Runnable(title, fn)', function () {
       it('should allow updating the timeout', function (done) {
         var spy = sinon.spy();
         var runnable = new Runnable('foo', function (done) {
-          setTimeout(spy, 1);
-          setTimeout(spy, 100);
+          setTimeout(function () {
+            spy();
+            setTimeout(function () {
+              spy();
+              done();
+            }, 50);
+          }, 10);
         });
         runnable.timeout(50);
         runnable.run(function (err) {
@@ -509,7 +516,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when the promise is fulfilled with a value', function () {
         var fulfilledPromise = {
-          then: function (fulfilled, rejected) {
+          then: function (fulfilled) {
             setTimeout(function () {
               fulfilled({});
             });
@@ -626,6 +633,7 @@ describe('Runnable(title, fn)', function () {
         var runnable = new Runnable('foo', function (done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
+          done();
         });
         runnable.run(function (err) {
           expect(err, 'to be undefined');
@@ -641,6 +649,7 @@ describe('Runnable(title, fn)', function () {
           runnable.skip();
           /* istanbul ignore next */
           aborted = false;
+          done();
         });
         runnable.run(function () {
           process.nextTick(function () {
