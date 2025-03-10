@@ -2,7 +2,8 @@
 
 const escapeRegExp = require('escape-string-regexp');
 const os = require('os');
-const fs = require('fs-extra');
+const fs = require('fs');
+const fsP = require('fs/promises');
 const {format} = require('util');
 const path = require('path');
 const Base = require('../../lib/reporters/base');
@@ -487,7 +488,7 @@ const touchRef = new Date();
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
-  fs.ensureDirSync(path.dirname(filepath));
+  fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
     fs.utimesSync(filepath, touchRef, touchRef);
   } catch (e) {
@@ -519,8 +520,8 @@ function replaceFileContents(filepath, pattern, replacement) {
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
-  fs.ensureDirSync(path.dirname(dest));
-  fs.copySync(fixtureSource, dest);
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.cpSync(fixtureSource, dest);
 }
 
 /**
@@ -528,12 +529,12 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
-  const dirpath = await fs.mkdtemp(path.join(os.tmpdir(), 'mocha-'));
+  const dirpath = await fsP.mkdtemp(path.join(os.tmpdir(), 'mocha-'));
   return {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
-        return fs.remove(dirpath);
+        return fs.rmSync(dirpath, { recursive: true, force: true });
       }
     }
   };

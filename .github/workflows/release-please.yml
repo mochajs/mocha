@@ -38,12 +38,13 @@ jobs:
           show-progress: false
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
+          node-version: '22.11.0'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm ci --ignore-scripts --force --no-fund --no-audit
 
-      - run: npm publish --provenance --access public
+      - run: npm publish --provenance --access public --tag=next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
