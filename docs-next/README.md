@@ -4,6 +4,6 @@ After `cd`ing into this directory:
 
 ```shell
 npm i
-npm run prebuild
+npm run generate
 npm run dev
 ```
