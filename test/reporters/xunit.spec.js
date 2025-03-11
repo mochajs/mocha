@@ -652,6 +652,7 @@ describe('XUnit reporter', function () {
       xunit.test.call(fakeThis, failingTest);
 
       expect(expectedWrite, 'to contain', absoluteTestPath);
+      expect(expectedWrite, 'not to contain', `"${relativeTestPath}`);
     });
   });
 });
