@@ -2071,7 +2071,7 @@ By default, it will output to the console. To write directly to a file, use `--r
 
 To specify custom report title, use `--reporter-option suiteName="Custom name"`.
 
-The reporter shows absolute file paths by default. To show relative paths instead, use `--reporter-option showRelativePaths`
+The reporter shows absolute file paths by default. To show relative paths instead, use `--reporter-option showRelativePaths`.
 
 ### Third-Party Reporters
 
