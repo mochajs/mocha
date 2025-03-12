@@ -634,22 +634,23 @@ describe('XUnit reporter', function () {
 
     it('shows relative paths for tests if showRelativePaths reporter option is set', function () {
       const options = {
-        reporterOption: {
+        reporterOptions: {
           showRelativePaths: true
         }
       };
       const xunit = new XUnit(runner, options);
 
-      xunit.test.call(fakeThis, failingTest);
+      xunit.test.call(fakeThis, failingTest, options);
 
       expect(expectedWrite, 'not to contain', absoluteTestPath);
       expect(expectedWrite, 'to contain', relativeTestPath);
     });
 
     it('shows absolute paths for tests by default', function () {
+      const options = {};
       const xunit = new XUnit(runner);
 
-      xunit.test.call(fakeThis, failingTest);
+      xunit.test.call(fakeThis, failingTest, options);
 
       expect(expectedWrite, 'to contain', absoluteTestPath);
       expect(expectedWrite, 'not to contain', `"${relativeTestPath}`);
