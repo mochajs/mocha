@@ -653,6 +653,7 @@ describe('XUnit reporter', function () {
       xunit.test.call(fakeThis, failingTest, options);
 
       expect(expectedWrite, 'to contain', absoluteTestPath);
+      // Double quote included to ensure printed paths don't start with relative path. Example printed line: <testcase classname="suite" name="test" file="some/tesfile.js" time="0"/>
       expect(expectedWrite, 'not to contain', `"${relativeTestPath}`);
     });
   });
