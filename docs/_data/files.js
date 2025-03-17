@@ -1,7 +1,7 @@
 'use strict';
 
-const {resolve, relative, dirname} = require('path');
-const {promises: fs} = require('fs');
+const {resolve, relative, dirname} = require('node:path');
+const {promises: fs} = require('node:fs');
 
 const PROJECT_ROOT_DIR = resolve(__dirname, '..', '..');
 const FILES = [

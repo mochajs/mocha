@@ -18,7 +18,7 @@ const {
   EVENT_HOOK_END,
   EVENT_RUN_END
 } = require('../../../lib/runner').constants;
-const {EventEmitter} = require('events');
+const {EventEmitter} = require('node:events');
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 

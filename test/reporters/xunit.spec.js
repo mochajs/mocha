@@ -1,8 +1,8 @@
 'use strict';
 
-var EventEmitter = require('events').EventEmitter;
-var fs = require('fs');
-var path = require('path');
+var EventEmitter = require('node:events').EventEmitter;
+var fs = require('node:fs');
+var path = require('node:path');
 var sinon = require('sinon');
 var createStatsCollector = require('../../lib/stats-collector');
 var events = require('../../').Runner.constants;

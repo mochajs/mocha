@@ -1,9 +1,9 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const rewiremock = require('rewiremock/node');
 const sinon = require('sinon');
-const {EventEmitter} = require('events');
+const {EventEmitter} = require('node:events');
 
 const DUMB_FIXTURE_PATH = require.resolve('./fixtures/dumb-module.fixture.js');
 const DUMBER_FIXTURE_PATH = require.resolve(

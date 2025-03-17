@@ -3,8 +3,8 @@
 // This is not a "functional" test; we aren't invoking the mocha executable.
 // Instead we just avoid test doubles.
 
-var fs = require('fs');
-var path = require('path');
+var fs = require('node:fs');
+var path = require('node:path');
 var loadConfig = require('../../lib/cli/config').loadConfig;
 
 describe('config', function () {
