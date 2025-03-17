@@ -1,0 +1,245 @@
+---
+description: Adding code to be run before and/or after every test in every file.
+title: Root Hook Plugins
+---
+
+:::note[New in v8.0.0]
+:::
+
+In some cases, you may want a [hook](./hooks) before (or after) every test in every file.
+These are called _root hooks_.
+Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see _[Root Hooks Are Not Global](./parallel-mode#root-hooks-are-not-global)_).
+This still works in v8.0.0, but _not_ when running tests in parallel mode!
+For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
+
+A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](../running/cli#--require-module--r-module) which "registers" one or more root hooks to be used across all test files.
+
+In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: {beforeEach() {...}} })`, see [`mocha.setup()`](../running/browsers)
+
+## Defining a Root Hook Plugin
+
+A Root Hook Plugin file is a script which exports (via `module.exports`) a `mochaHooks` property.
+It is loaded via `--require <file>`.
+
+Here's a simple example which defines a root hook, written using CJS and ESM syntax.
+
+### With CommonJS
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  },
+};
+```
+
+### With ES Modules
+
+We're using the `.mjs` extension in these examples.
+
+:::tip
+If you're having trouble getting ES modules to work, refer to [the Node.js documentation](https://nodejs.org/api/esm.html).
+:::
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeEach(done) {
+    // do something before every test
+    done();
+  },
+};
+```
+
+:::note
+Further examples will use ESM syntax.
+:::
+
+## Available Root Hooks
+
+Root hooks work with any interface, but _the property names do not change_.
+In other words, if you are using the `tdd` interface, `suiteSetup` maps to `beforeAll`, and `setup` maps to `beforeEach`.
+
+Available root hooks and their behavior:
+
+- `beforeAll`:
+  - In **serial** mode (Mocha's default), _before all tests begin, once only_
+  - In **parallel** mode, run _before all tests begin, for each file_
+- `beforeEach`:
+  - In **both** modes, run _before each test_
+- `afterAll`:
+  - In **serial** mode, run _after all tests end, once only_
+  - In **parallel** mode, run _after all tests end, for each file_
+- `afterEach`:
+  - In **both** modes, run _after every test_
+
+:::tip
+If you need to ensure code runs once and only once in any mode, use [global fixtures](./global-fixtures).
+:::
+
+As with other hooks, `this` refers to the current context object:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeAll() {
+    // skip all tests for bob
+    if (require("os").userInfo().username === "bob") {
+      return this.skip();
+    }
+  },
+};
+```
+
+## Multiple Root Hooks in a Single Plugin
+
+Multiple root hooks can be defined in a single plugin, for organizational purposes.
+For example:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = {
+  beforeEach: [
+    function (done) {
+      // do something before every test,
+      // then run the next hook in this array
+    },
+    async function () {
+      // async or Promise-returning functions allowed
+    },
+  ],
+};
+```
+
+## Root Hook Plugins Can Export a Function
+
+If you need to perform some logic--such as choosing a root hook conditionally, based on the environment--`mochaHooks` can be a _function_ which returns the expected object.
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = () => {
+  if (process.env.CI) {
+    // root hooks object
+    return {
+      beforeEach: [
+        function () {
+          // CI-specific beforeEach
+        },
+        function () {
+          // some other CI-specific beforeEach
+        },
+      ],
+    };
+  }
+  // root hooks object
+  return {
+    beforeEach() {
+      // regular beforeEach
+    },
+  };
+};
+```
+
+If you need to perform an async operation, `mochaHooks` can be `Promise`-returning:
+
+```js
+// test/hooks.mjs
+
+export const mochaHooks = async () => {
+  const result = await checkSomething();
+  // only use a root hook if `result` is truthy
+  if (result) {
+    // root hooks object
+    return {
+      beforeEach() {
+        // something
+      },
+    };
+  }
+};
+```
+
+## Multiple Root Hook Plugins
+
+Multiple root hook plugins can be registered by using `--require` multiple times.
+For example, to register the root hooks in `hooks-a.js` and `hooks-b.js`, use `--require hooks-a.js --require hooks-b.js`.
+These will be registered (and run) _in order_.
+
+## Migrating Tests to use Root Hook Plugins
+
+To migrate your tests using root hooks to a root hook plugin:
+
+1. Find your root hooks (hooks defined _outside_ of a suite--usually `describe()` callback).
+1. Create a new file, e.g., `test/hooks.js`.
+1. _Move_ your root hooks into `test/hooks.js`.
+1. In `test/hooks.js`, make your hooks a member of an exported `mochaHooks` property.
+1. Use `--require test/hooks.js` (even better: use a [config file](../running/configuring) with `{"require": "test/hooks.js"}`) when running your tests.
+
+For example, given the following file, `test/test.spec.js`, containing root hooks:
+
+```js
+// test/test.spec.js
+
+beforeEach(function () {
+  // global setup for all tests
+});
+
+after(function () {
+  // one-time final cleanup
+});
+
+describe("my test suite", function () {
+  it("should have run my global setup", function () {
+    // make assertion
+  });
+});
+```
+
+Your `test/hooks.js` (for this example, a CJS module) should contain:
+
+```js
+// test/hooks.js
+
+exports.mochaHooks = {
+  beforeEach: function () {
+    // global setup for all tests
+  },
+  afterAll: function () {
+    // one-time final cleanup
+  },
+};
+```
+
+:::note
+Careful!
+`after` becomes `afterAll` and `before` becomes `beforeAll`.
+:::
+
+Your original `test/test.spec.js` should now contain:
+
+```js
+// test/test.spec.js
+
+describe("my test suite", function () {
+  it("should have run my global setup", function () {
+    // make assertion
+  });
+});
+```
+
+Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](../running/cli#--parallel--p)).
+
+## Migrating a Library to use Root Hook PLugins
+
+If you're a library maintainer, and your library uses root hooks, you can migrate by refactoring your entry point:
+
+- Your library should _always_ export a [`mochaHooks` object](#defining-a-root-hook-plugin).
+- To maintain backwards compatibility, run your root hooks _if and only if_ `global.beforeEach` (or other relevant hook) exists.
+- Instruct your users to `--require <your-package>` when running `mocha`.

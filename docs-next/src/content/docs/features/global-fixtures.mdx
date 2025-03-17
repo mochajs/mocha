@@ -1,0 +1,146 @@
+---
+description: Adding code to be run before and/or after every tests.
+title: Global Fixtures
+---
+
+:::note[New in v8.2.0]
+:::
+
+At first glance, _global fixtures_ seem similar to [root hook plugins](./root-hook-plugins).
+However, unlike root hooks, global fixtures:
+
+1. Are _guaranteed_ to execute _once and only once_
+1. Work identically parallel mode, watch mode, and serial mode
+1. Do not share a context with tests, suites, or other hooks
+
+There are two types of global fixtures: [global setup fixtures](#global-setup-fixtures) and [global teardown fixtures](#global-teardown-fixtures).
+
+## Global Setup Fixtures
+
+To create a global setup fixture, export `mochaGlobalSetup` from a script, e.g.,:
+
+```js
+// fixtures.cjs
+
+// can be async or not
+exports.mochaGlobalSetup = async function () {
+  this.server = await startSomeServer({ port: process.env.TEST_PORT });
+  console.log(`server running on port ${this.server.port}`);
+};
+```
+
+...or an ES module:
+
+```js
+// fixtures.mjs
+
+// can be async or not
+export async function mochaGlobalSetup() {
+  this.server = await startSomeServer({ port: process.env.TEST_PORT });
+  console.log(`server running on port ${this.server.port}`);
+}
+```
+
+To use it, load this file when running Mocha via `mocha --require fixtures.cjs` (or whatever you have named the file).
+
+:::tip
+Remember: you can define "requires" in a [configuration file](../running/configuring).
+:::
+
+Now, before Mocha loads and runs your tests, it will execute the above global setup fixture, starting a server for testing.
+This won't shut _down_ the server when Mocha is done, however!
+To do that, use a _[global teardown fixture](#global-teardown-fixtures)_.
+
+## Global Teardown Fixtures
+
+Just like a [global setup fixture](#global-setup-fixtures), a _global teardown fixture_ can be created by exporting from a "required" script (we can put both types of fixtures in a single file):
+
+```js
+// fixtures.cjs, cont'd
+
+// can be async or not
+exports.mochaGlobalTeardown = async function () {
+  await this.server.stop();
+  console.log("server stopped!");
+};
+```
+
+...or an ES module:
+
+```js
+// fixtures.mjs, cont'd
+
+// can be async or not
+export async function mochaGlobalTeardown() {
+  await this.server.stop();
+  console.log("server stopped!");
+}
+```
+
+You'll note that we used `this` in the fixture examples.
+Global setup fixtures and global teardown fixtures _share a context_, which means we can add properties to the context object (`this`) in the setup fixture, and reference them later in the teardown fixture.
+This is more useful when the fixtures are in separate files, since you can just use JS' variable scoping rules instead ([example below](#when-not-to-use-global-fixtures)).
+
+As explained [above](#_top)--and [below](#when-not-to-use-global-fixtures)--test files _do not_ have access to this context object.
+
+## When To Use Global Fixtures
+
+Global fixtures are good for spinning up a server, opening a socket, or otherwise creating a resource that your tests will repeatedly access via I/O.
+
+## When Not To Use Global Fixtures
+
+If you need to access an in-memory value (such as a file handle or database connection), _don't_ use global fixtures to do this, because your tests will not have access to the value.
+
+:::note
+You could be clever and try to get around this restriction by assigning something to the `global` object, but this will _not_ work in parallel mode.
+It's probably best to play by the rules!
+:::
+
+Instead, use the global fixture to _start_ the database, and use [root hook plugins](./root-hook-plugins) or plain old [hooks](./hooks) to create a connection.
+
+Here's an example of using global fixtures and "before all" hooks to get the job done.
+Note that we do not reference the `server` object anywhere in our tests!
+
+First, use a global fixture to start and stop a test server:
+
+```js
+// fixtures.mjs
+
+let server;
+
+export const mochaGlobalSetup = async () => {
+  server = await startSomeServer({ port: process.env.TEST_PORT });
+  console.log(`server running on port ${server.port}`);
+};
+
+export const mochaGlobalTeardown = async () => {
+  await server.stop();
+  console.log("server stopped!");
+};
+```
+
+Then, connect to the server in your tests:
+
+```js
+// test.spec.mjs
+
+import { connect } from "my-server-connector-thingy";
+
+describe("my API", function () {
+  let connection;
+
+  before(async function () {
+    connection = await connect({ port: process.env.TEST_PORT });
+  });
+
+  it("should be a nice API", function () {
+    // assertions here
+  });
+
+  after(async function () {
+    return connection.close();
+  });
+});
+```
+
+Finally, use this command to bring it together: `mocha --require fixtures.mjs test.spec.mjs`.
