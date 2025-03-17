@@ -48,7 +48,7 @@ export default defineConfig({
             { label: "Global fixtures", slug: "features/global-fixtures" },
             { label: "Hooks", slug: "features/hooks" },
             { label: "Parallel mode", slug: "features/parallel-mode" },
-            { label: "Root Hook plugins", slug: "features/root-hook-plugins" },
+            { label: "Root hook plugins", slug: "features/root-hook-plugins" },
             { label: "Timeouts", slug: "features/timeouts" },
           ],
           label: "Features",
