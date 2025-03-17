@@ -1,5 +1,26 @@
 # Changelog
 
+## [11.2.0](https://github.com/mochajs/mocha/compare/v11.1.0...v11.2.0) (2025-03-17)
+
+
+### 🌟 Features
+
+* enable reporters to show relative paths of tests ([#5292](https://github.com/mochajs/mocha/issues/5292)) ([81ea666](https://github.com/mochajs/mocha/commit/81ea6667e9286c55ffa67977448b776a23c6da2d))
+
+
+### 📚 Documentation
+
+* add instructions for API docs ([#5287](https://github.com/mochajs/mocha/issues/5287)) ([b720ec1](https://github.com/mochajs/mocha/commit/b720ec1b3ca630a90f80311da391b2a0cdfead4e))
+* add new website using Astro Starlight ([#5246](https://github.com/mochajs/mocha/issues/5246)) ([b1f1cb7](https://github.com/mochajs/mocha/commit/b1f1cb78b655191b7a43dc962b513bf1b076890c))
+* improve third-party reporter docs ([#5285](https://github.com/mochajs/mocha/issues/5285)) ([c5a0ef5](https://github.com/mochajs/mocha/commit/c5a0ef523d52d8cab50e4a9b226af3790f54e75f))
+
+
+### 🧹 Chores
+
+* enabled eslint-plugin-n ([#5280](https://github.com/mochajs/mocha/issues/5280)) ([945d6e3](https://github.com/mochajs/mocha/commit/945d6e3bf5a9de19c3aa26fbdac966a721006b58))
+* pin node-lts tests to 22.11.0 ([#5279](https://github.com/mochajs/mocha/issues/5279)) ([664e1f4](https://github.com/mochajs/mocha/commit/664e1f49f7ae214a9666c90f388407e9fa100309))
+* replace `fs-extra` with newer `fs` built-ins ([#5284](https://github.com/mochajs/mocha/issues/5284)) ([75dcf8c](https://github.com/mochajs/mocha/commit/75dcf8c6c40ed1ce134ae5e174b6f4c4ca4d8c42))
+
 ## [11.1.0](https://github.com/mochajs/mocha/compare/v11.0.2...v11.1.0) (2025-01-02)
 
 
