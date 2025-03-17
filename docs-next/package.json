@@ -6,7 +6,7 @@
     "generate": "node ../docs/_data/supporters.js --write-supporters-json",
     "dev": "astro dev",
     "start": "astro dev",
-    "docs": "cd ..; npm i; cd docs-next; npm run generate; npm run build",
+    "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"

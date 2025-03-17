@@ -23,32 +23,32 @@ export default defineConfig({
           items: [
             { label: "CLI", slug: "running/cli" },
             { label: "Configuring", slug: "running/configuring" },
-            { label: "Editor Plugins", slug: "running/editor-plugins" },
+            { label: "Editor plugins", slug: "running/editor-plugins" },
             { label: "Browsers", slug: "running/browsers" },
-            { label: "Test Globs", slug: "running/test-globs" },
+            { label: "Test globs", slug: "running/test-globs" },
           ],
           label: "Running Mocha",
         },
         {
           items: [
-            { label: "Dynamic Tests", slug: "declaring/dynamic-tests" },
-            { label: "Exclusive Tests", slug: "declaring/exclusive-tests" },
-            { label: "Inclusive Tests", slug: "declaring/inclusive-tests" },
-            { label: "Pending Tests", slug: "declaring/pending-tests" },
-            { label: "Retrying Tests", slug: "declaring/retrying-tests" },
+            { label: "Dynamic tests", slug: "declaring/dynamic-tests" },
+            { label: "Exclusive tests", slug: "declaring/exclusive-tests" },
+            { label: "Inclusive tests", slug: "declaring/inclusive-tests" },
+            { label: "Pending tests", slug: "declaring/pending-tests" },
+            { label: "Retrying tests", slug: "declaring/retrying-tests" },
           ],
           label: "Declaring Tests",
         },
         {
           items: [
-            { label: "Arrow Functions", slug: "features/arrow-functions" },
+            { label: "Arrow functions", slug: "features/arrow-functions" },
             { label: "Assertions", slug: "features/assertions" },
-            { label: "Asynchronous Code", slug: "features/asynchronous-code" },
-            { label: "Error Codes", slug: "features/error-codes" },
-            { label: "Global Fixtures", slug: "features/global-fixtures" },
+            { label: "Asynchronous code", slug: "features/asynchronous-code" },
+            { label: "Error codes", slug: "features/error-codes" },
+            { label: "Global fixtures", slug: "features/global-fixtures" },
             { label: "Hooks", slug: "features/hooks" },
-            { label: "Parallel Mode", slug: "features/parallel-mode" },
-            { label: "Root Hook Plugins", slug: "features/root-hook-plugins" },
+            { label: "Parallel mode", slug: "features/parallel-mode" },
+            { label: "Root Hook plugins", slug: "features/root-hook-plugins" },
             { label: "Timeouts", slug: "features/timeouts" },
           ],
           label: "Features",
@@ -56,7 +56,7 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
-            { label: "BDD (Default)", slug: "interfaces/bdd" },
+            { label: "BDD (default)", slug: "interfaces/bdd" },
             { label: "TDD", slug: "interfaces/tdd" },
             { label: "Exports", slug: "interfaces/exports" },
             { label: "QUnit", slug: "interfaces/qunit" },
@@ -68,7 +68,7 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
-            { label: "Spec (Default)", slug: "reporters/spec" },
+            { label: "Spec (default)", slug: "reporters/spec" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },
             { label: "HTML", slug: "reporters/html" },
@@ -90,20 +90,20 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              label: "Detecting Multiple Calls to done()",
+              label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
-              label: "Node.js Native ESM Support",
+              label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
             {
-              label: "Run Cycle Overview",
+              label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
-            { label: "Test Duration", slug: "explainers/test-duration" },
+            { label: "Test duration", slug: "explainers/test-duration" },
             {
-              label: "Test Fixture Decision Tree",
+              label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
             },
           ],
