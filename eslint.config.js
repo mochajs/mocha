@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const js = require('@eslint/js');
-const n = require('eslint-plugin-n');
+const { defineConfig } = require('eslint/config');
+const neostandard = require('neostandard');
 const globals = require('globals');
 
 const messages = {
@@ -9,64 +9,45 @@ const messages = {
   gh3604: 'See https://github.com/mochajs/mocha/issues/3604'
 };
 
-module.exports = [
-  n.configs['flat/recommended-script'],
-  {
-    ...js.configs.recommended,
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: {
-        ...globals.browser,
-        ...globals.node
-      },
-      sourceType: 'script'
-    },
-    rules: {
-      'n/prefer-node-protocol': 'error',
-      strict: ['error', 'global'],
-
-      'no-var': 'off',
-      'n/no-process-exit': 'off',
-      'n/no-unpublished-require': 'off',
-      'n/no-unsupported-features/node-builtins': 'off',
-    }
-  },
-  {
-    files: ['docs/js/**/*.js'],
-    languageOptions: {
-      globals: globals.browser
-    }
-  },
-  {
-    files: [
-      '.eleventy.js',
-      '.wallaby.js',
-      'package-scripts.js',
-      'karma.conf.js',
-      'bin/*',
-      'docs/_data/**/*.js',
-      'lib/cli/**/*.js',
-      'lib/nodejs/**/*.js',
-      'scripts/**/*.{js,mjs}',
-      'test/**/*.{js,mjs}',
-      'test/node-unit/**/*.js'
+module.exports = defineConfig([
+  // Core rules
+  neostandard({
+    globals: ['browser', 'node'],
+    files: ['bin/*'],
+    ignores: [
+      '**/*.{fixture,min}.{js,mjs}',
+      'docs/{_dist,_site,api,example}/**',
+      'test/integration/fixtures/**',
+      ...neostandard.resolveIgnoresFromGitignore(),
     ],
-    languageOptions: {
-      globals: globals.node,
-      ecmaVersion: 2020,
-    }
+    noJsx: true,
+    semi: true,
+    ts: true,
+  }),
+
+  // Extra configs
+  {
+    ...neostandard.plugins.n.configs['flat/recommended-module'],
+    files: ['**/*.mjs'],
   },
+  {
+    ...neostandard.plugins.n.configs['flat/recommended-script'],
+    ignores: ['**/*.mjs'],
+  },
+
+  // Source type instructions
   {
     files: [
       'lib/nodejs/esm-utils.js',
       'rollup.config.js',
-      'scripts/*.mjs',
       'scripts/pick-from-package-json.js'
     ],
     languageOptions: {
       sourceType: 'module'
     }
   },
+
+  // Additional globals
   {
     files: ['test/**/*.{js,mjs}'],
     languageOptions: {
@@ -78,12 +59,34 @@ module.exports = [
       }
     }
   },
+
+  // Rule staging (not yet fully compliant)
   {
-    files: ['test/**/*.mjs'],
-    languageOptions: {
-      sourceType: "module"
+    rules: {
+      'no-undef': 'warn',
+      'no-unused-vars': 'warn',
+      'prefer-const': 'warn',
+      'n/no-unpublished-require': 'warn',
+      'n/no-unsupported-features/node-builtins': 'warn',
     },
   },
+
+  // Rule relaxation
+  {
+    rules: {
+      'n/no-process-exit': 'off',
+    }
+  },
+  {
+    files: ['**/*.ts'],
+    rules: {
+      // TODO: Remove when *.js files can be properly resolved from *.d.ts
+      'n/no-missing-import': 'off',
+      'n/no-unsupported-features/es-syntax': 'off',
+    },
+  },
+
+  // Extra rules
   {
     files: ['bin/*', 'lib/**/*.js'],
     rules: {
@@ -119,7 +122,7 @@ module.exports = [
         }
       ],
       'no-restricted-modules': ['error', 'timers'],
-      "no-restricted-syntax": ['error',
+      'no-restricted-syntax': ['error',
         // disallow `global.setTimeout()`, `global.setInterval()`, etc.
         {
           message: messages.gh237,
@@ -150,15 +153,4 @@ module.exports = [
       ]
     }
   },
-  {
-    ignores: [
-      '**/*.{fixture,min}.{js,mjs}',
-      'coverage/**',
-      'docs/{_dist,_site,api,example}/**',
-      'out/**',
-      'test/integration/fixtures/**',
-      '.karma/**',
-      'mocha.js'
-    ],
-  }
-];
+]);
