@@ -1,0 +1,28 @@
+---
+description: A mid-level outline of Mocha's "flow of execution".
+title: Test Duration
+---
+
+Many reporters will display test duration and flag tests that are slow (default: 75ms), as shown here with the SPEC reporter:
+
+![test duration](./reporter-spec-duration.png)
+
+There are three levels of test duration (depicted in the following image):
+
+1. FAST: Tests that run within half of the "slow" threshold will show the duration in green (if at all).
+2. NORMAL: Tests that run exceeding half of the threshold (but still within it) will show the duration in yellow.
+3. SLOW: Tests that run exceeding the threshold will show the duration in red.
+
+![test duration range](./test-duration-range.png)
+
+To tweak what's considered "slow", you can use the `slow()` method:
+
+```js
+describe("something slow", function () {
+  this.slow(300000); // five minutes
+
+  it("should take long enough for me to go make a sandwich", function () {
+    // ...
+  });
+});
+```

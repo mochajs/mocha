@@ -1,0 +1,55 @@
+---
+description: A mid-level outline of Mocha's "flow of execution".
+title: Run Cycle Overview
+---
+
+The following is a mid-level outline of Mocha’s "flow of execution" when run in Node.js; the "less important" details have been omitted.
+
+In a browser, test files are loaded by `<script>` tags, and calling `mocha.run()` begins at step 9 [below](#serial-mode).
+
+## Serial Mode
+
+1. User (that's you) executes `mocha`
+2. Loads options from config files, if present
+3. Mocha processes any command-line options provided (see section on [configuration merging](../running/configuring#merging) for details)
+4. If known flags for the `node` executable are found:
+   1. Mocha will spawn `node` in a child process, executing itself with these flags
+   2. Otherwise, Mocha does not spawn a child process
+5. Mocha loads modules specified by `--require`
+   1. If a file loaded this way contains known Mocha-specific exports (e.g., [root hook plugins](../features/root-hook-plugins)), Mocha "registers" these
+   2. If not, Mocha ignores any exports of a `--require`'d module
+6. Mocha validates any custom reporters or interfaces which were loaded via `--require` or otherwise
+7. Mocha _discovers_ test files; when given no files or directories, it finds files with extensions `.js`, `.mjs` or `.cjs` in the `test` directory (but not its children), relative to the current working directory
+8. The (default) [bdd interface](../interfaces/bdd) loads the test files _in no particular order_, which are given an interface-specific `global` context (this is how, e.g., `describe()` ends up as a global in a test file)
+   1. When a test file is loaded, Mocha executes all of its suites and finds--_but does not execute_--any hooks and tests therein.
+   2. Top-level hooks, tests and suites are all made members of an "invisible" _root suite_; there is only _one_ root suite for the entire process
+9. Mocha runs [global setup fixtures](../features/global-fixtures#global-setup-fixtures), if any
+10. Starting with the "root" suite, Mocha executes:
+11. Any "before all" hooks (for the _root_ suite, this only happens once; see [root hook plugins](../features/root-hook-plugins))
+12. For each test, Mocha executes:
+    1. Any "before each" hooks
+    2. The test (and reports the result)
+    3. Any "after each" hooks
+13. If the current suite has a child suite, repeat the steps in 10. for each child suite; each child suite _inherits_ any "before each" and "after each" hooks defined in its parent
+14. Any "after all" hooks (for the _root_ suite, this only happens once; see [root hook plugins](../features/root-hook-plugins))
+15. Mocha prints a final summary/epilog, if applicable
+16. Mocha runs [global teardown fixtures](../features/global-fixtures#global-teardown-fixtures), if any
+
+## Parallel Mode
+
+1. Repeat steps 1 through 6 from [Serial Mode](#serial-mode) above, skipping reporter validation
+2. All test files found are put into a queue (they are _not_ loaded by the main process)
+3. Mocha runs [global setup fixtures](../features/global-fixtures#global-setup-fixtures), if any
+4. Mocha creates a pool of subprocesses ("workers")
+5. _Immediately before_ a worker runs the first test it receives, the worker "bootstraps" itself by:
+   1. Loading all `--require`'d modules
+   2. Registering any root hook plugins
+   3. _Ignoring_ global fixtures and custom reporters
+   4. Asserting the built-in or custom interface is valid
+6. When a worker receives a test file to run, the worker creates a new Mocha instance _for the single test file_, and:
+7. The worker repeats step 8 from [above](#serial-mode)
+8. The worker repeats step 10 from [above](#serial-mode), with the caveat that the worker _does not_ report test results directly; it holds them in a memory buffer
+9. When the worker completes the test file, buffered results are returned to the main process, which then gives them to the user-specified reporter (`spec` by default)
+10. The worker makes itself available to the pool; the pool gives the worker another test file to run, if any remain
+11. Mocha prints a final summary/epilog, if applicable
+12. Mocha runs [global teardown fixtures](../features/global-fixtures#global-teardown-fixtures), if any

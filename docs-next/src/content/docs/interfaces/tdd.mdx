@@ -1,0 +1,20 @@
+---
+description: The TDD (Test-Driven-Design) test interface for Mocha.
+title: TDD
+---
+
+The **TDD** interface provides `suite()`, `test()`, `suiteSetup()`, `suiteTeardown()`, `setup()`, and `teardown()`:
+
+```js
+suite("Array", function () {
+  setup(function () {
+    // ...
+  });
+
+  suite("#indexOf()", function () {
+    test("should return -1 when not present", function () {
+      assert.equal(-1, [1, 2, 3].indexOf(4));
+    });
+  });
+});
+```
