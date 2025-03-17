@@ -12,7 +12,7 @@ Mocha supports configuration files, typical of modern command-line tools, in sev
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory.
-  Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
+  Comments--while not valid JSON--are allowed in this file, and will be ignored by Mocha.
 - **package.json**: Create a `mocha` property in your project's `package.json`.
 
 ## Custom Locations
@@ -29,7 +29,7 @@ Likewise, use `--no-package` to stop Mocha from looking for configuration in a `
 
 ## Priorities
 
-If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for &mdash; and use &mdash; only one.
+If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for--and use--only one.
 The priority is:
 
 1. `.mocharc.js`
@@ -65,7 +65,7 @@ For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execu
 ## Extending Configuration
 
 Configurations can inherit from other modules using the `extends` keyword.
-See [here](http://yargs.js.org/docs/#api-reference-configobject-extends-keyword) for more information.
+See [yargs API reference](http://yargs.js.org/docs/#api-reference-configobject-extends-keyword) for more information.
 
 ## Configuration Format
 

@@ -5,7 +5,7 @@ title: Inclusive Tests
 
 This feature is the inverse of `.only()`.
 By appending `.skip()`, you may tell Mocha to ignore test case(s).
-Anything skipped will be marked as [pending](./pending-tests), and reported as such.
+Anything skipped will be marked as [pending](./pending-tests) and reported as such.
 Here's an example of skipping an individual test:
 
 ```js
@@ -36,7 +36,7 @@ describe("Array", function () {
 });
 ```
 
-_Note_: Code in skipped suites, that is placed outside of hooks or tests is still executed, as mocha will still invoke the suite function to build up the suite structure for visualization.
+_Note_: Code in skipped suites that is placed outside of hooks or tests is still executed, as Mocha will still invoke the suite function to build up the suite structure for visualization.
 
 :::tip[Best practice]
 Use `.skip()` instead of commenting tests out.

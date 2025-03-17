@@ -14,7 +14,7 @@ For that reason, running root hooks using this method is _strongly discouraged_,
 
 A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](../running/cli#--require-module--r-module) which "registers" one or more root hooks to be used across all test files.
 
-In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: {beforeEach() {...}} })`, see [`mocha.setup()`](../running/browsers)
+In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: { beforeEach() {...} } })`, see [`mocha.setup()`](../running/browsers)
 
 ## Defining a Root Hook Plugin
 
@@ -208,7 +208,7 @@ Your `test/hooks.js` (for this example, a CJS module) should contain:
 // test/hooks.js
 
 exports.mochaHooks = {
-  beforeEach: function () {
+  beforeAll: function () {
     // global setup for all tests
   },
   afterAll: function () {
