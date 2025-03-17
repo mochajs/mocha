@@ -1,8 +1,8 @@
 'use strict';
 
-const {stripVTControlCharacters} = require('util');
-const {resolve} = require('path');
-const {execSync} = require('child_process');
+const {stripVTControlCharacters} = require('node:util');
+const {resolve} = require('node:path');
+const {execSync} = require('node:child_process');
 
 const executable = require.resolve('../../bin/mocha');
 const flag = '--help';

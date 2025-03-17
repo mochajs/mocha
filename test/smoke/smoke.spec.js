@@ -6,7 +6,7 @@
 // in `devDependencies` or otherwise in the wrong place.
 // It does not ensure that all files are present in the published package!
 
-var assert = require('assert');
+var assert = require('node:assert');
 
 describe('a production installation of Mocha', function () {
   it('should be able to execute a test', function () {

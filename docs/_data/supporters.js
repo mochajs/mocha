@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * This script gathers metadata for active supporters of Mocha from OpenCollective's
  * API by aggregating order ("donation") information.
@@ -17,8 +15,8 @@
 
 'use strict';
 
-const {writeFile, mkdir, rm} = require('fs').promises;
-const {resolve} = require('path');
+const {writeFile, mkdir, rm} = require('node:fs').promises;
+const {resolve} = require('node:path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const blocklist = new Set(require('./blocklist.json'));

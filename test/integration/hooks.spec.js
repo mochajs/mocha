@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert');
+var assert = require('node:assert');
 var runMocha = require('./helpers').runMocha;
 var runMochaJSON = require('./helpers').runMochaJSON;
 var SPLIT_DOT_REPORTER_REGEXP = require('./helpers').SPLIT_DOT_REPORTER_REGEXP;

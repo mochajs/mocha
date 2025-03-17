@@ -1,3 +1,4 @@
+import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
@@ -20,6 +21,10 @@ const config = {
     banner: `// mocha@${version} in javascript ES2018`
   },
   plugins: [
+    // https://github.com/FredKSchott/rollup-plugin-polyfill-node/issues/84
+    alias({
+      entries: [{find: /^node:(.*)/, replacement: '$1'}]
+    }),
     json(),
     pickFromPackageJson({
       keys: ['name', 'version', 'homepage', 'notifyLogo']

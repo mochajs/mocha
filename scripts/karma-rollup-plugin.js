@@ -29,10 +29,10 @@
  * been modified heavily to simplify and support rollup instead of browserify.
  */
 
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const {randomUUID} = require('crypto');
+const os = require('node:os');
+const fs = require('node:fs');
+const path = require('node:path');
+const {randomUUID} = require('node:crypto');
 const rollup = require('rollup');
 const minimatch = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile.js');

@@ -1,5 +1,5 @@
 'use strict';
-var path = require('path');
+var path = require('node:path');
 const {runMochaJSON: run, runMochaAsync} = require('./helpers');
 var args = [];
 

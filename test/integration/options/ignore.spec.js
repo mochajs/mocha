@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path').posix;
+var path = require('node:path').posix;
 var helpers = require('../helpers');
 var runMochaJSON = helpers.runMochaJSON;
 var resolvePath = helpers.resolveFixturePath;

@@ -1,6 +1,7 @@
 "use strict";
 
 const js = require('@eslint/js');
+const n = require('eslint-plugin-n');
 const globals = require('globals');
 
 const messages = {
@@ -9,6 +10,7 @@ const messages = {
 };
 
 module.exports = [
+  n.configs['flat/recommended-script'],
   {
     ...js.configs.recommended,
     languageOptions: {
@@ -20,8 +22,13 @@ module.exports = [
       sourceType: 'script'
     },
     rules: {
+      'n/prefer-node-protocol': 'error',
+      strict: ['error', 'global'],
+
       'no-var': 'off',
-      strict: ['error', 'global']
+      'n/no-process-exit': 'off',
+      'n/no-unpublished-require': 'off',
+      'n/no-unsupported-features/node-builtins': 'off',
     }
   },
   {

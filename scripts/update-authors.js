@@ -1,12 +1,11 @@
-#!/usr/bin/env node
 // original comes from https://github.com/nodejs/node/blob/master/tools/update-authors.js
 
 // Usage: tools/update-author.js [--dry]
 // Passing --dry will redirect output to stdout rather than write to 'AUTHORS'.
 'use strict';
-const {spawn} = require('child_process');
-const fs = require('fs');
-const readline = require('readline');
+const {spawn} = require('node:child_process');
+const fs = require('node:fs');
+const readline = require('node:readline');
 
 const log = spawn(
   'git',
