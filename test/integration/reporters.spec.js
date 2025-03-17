@@ -1,14 +1,14 @@
 'use strict';
 
-var os = require('node:os');
-var fs = require('node:fs');
-var crypto = require('node:crypto');
-var path = require('node:path');
-var run = require('./helpers').runMocha;
+const os = require('node:os');
+const fs = require('node:fs');
+const crypto = require('node:crypto');
+const path = require('node:path');
+const run = require('./helpers').runMocha;
 
 describe('reporters', function () {
   describe('markdown', function () {
-    var res;
+    let res;
 
     before(function (done) {
       run(
@@ -26,7 +26,7 @@ describe('reporters', function () {
     });
 
     it('contains spec src', function () {
-      var src = ['```js', 'assert(true);', '```'].join('\n');
+      const src = ['```js', 'assert(true);', '```'].join('\n');
 
       expect(res.output, 'to contain', src);
     });
@@ -34,16 +34,16 @@ describe('reporters', function () {
 
   describe('xunit', function () {
     it('prints test cases with --reporter-options output (issue: 1864)', function (done) {
-      var randomStr = crypto.randomBytes(8).toString('hex');
-      var tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
-      var tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
+      const randomStr = crypto.randomBytes(8).toString('hex');
+      const tmpDir = os.tmpdir().replace(new RegExp(path.sep + '$'), '');
+      const tmpFile = tmpDir + path.sep + 'test-issue-1864-' + randomStr + '.xml';
 
-      var args = [
+      const args = [
         '--reporter=xunit',
         '--reporter-options',
         'output=' + tmpFile
       ];
-      var expectedOutput = [
+      const expectedOutput = [
         '<testcase classname="suite" name="test1" file="',
         '<testcase classname="suite" name="test2" file="',
         '</testsuite>'
@@ -52,7 +52,7 @@ describe('reporters', function () {
       run('passing.fixture.js', args, function (err, result) {
         if (err) return done(err);
 
-        var xml = fs.readFileSync(tmpFile, 'utf8');
+        const xml = fs.readFileSync(tmpFile, 'utf8');
         fs.unlinkSync(tmpFile);
 
         expectedOutput.forEach(function (line) {
@@ -66,10 +66,10 @@ describe('reporters', function () {
 
   describe('loader', function () {
     it('loads a reporter from a path relative to the current working directory', function (done) {
-      var reporterAtARelativePath =
+      const reporterAtARelativePath =
         'test/integration/fixtures/simple-reporter.js';
 
-      var args = ['--reporter=' + reporterAtARelativePath];
+      const args = ['--reporter=' + reporterAtARelativePath];
 
       run('passing.fixture.js', args, function (err, result) {
         if (err) {
@@ -83,12 +83,12 @@ describe('reporters', function () {
 
     it('loads a reporter from an absolute path', function (done) {
       // Generates an absolute path string
-      var reporterAtAnAbsolutePath = path.join(
+      const reporterAtAnAbsolutePath = path.join(
         process.cwd(),
         'test/integration/fixtures/simple-reporter.js'
       );
 
-      var args = ['--reporter=' + reporterAtAnAbsolutePath];
+      const args = ['--reporter=' + reporterAtAnAbsolutePath];
 
       run('passing.fixture.js', args, function (err, result) {
         if (err) {
@@ -102,27 +102,27 @@ describe('reporters', function () {
   });
 
   describe('tap', function () {
-    var not = function (predicate) {
+    const not = function (predicate) {
       return function () {
         return !predicate.apply(this, arguments);
       };
     };
-    var versionPredicate = function (line) {
+    const versionPredicate = function (line) {
       return line.match(/^TAP version \d+$/) != null;
     };
-    var planPredicate = function (line) {
+    const planPredicate = function (line) {
       return line.match(/^1\.\.\d+$/) != null;
     };
-    var testLinePredicate = function (line) {
+    const testLinePredicate = function (line) {
       return line.match(/^not ok/) != null || line.match(/^ok/) != null;
     };
-    var diagnosticPredicate = function (line) {
+    const diagnosticPredicate = function (line) {
       return line.match(/^#/) != null;
     };
-    var bailOutPredicate = function (line) {
+    const bailOutPredicate = function (line) {
       return line.match(/^Bail out!/) != null;
     };
-    var anythingElsePredicate = function (line) {
+    const anythingElsePredicate = function (line) {
       return (
         versionPredicate(line) === false &&
         planPredicate(line) === false &&
@@ -133,9 +133,9 @@ describe('reporters', function () {
     };
 
     describe('produces valid TAP v13 output', function () {
-      var runFixtureAndValidateOutput = function (fixture, expected) {
+      const runFixtureAndValidateOutput = function (fixture, expected) {
         it('for ' + fixture, function (done) {
-          var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
+          const args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
           run(fixture, args, function (err, res) {
             if (err) {
@@ -143,10 +143,10 @@ describe('reporters', function () {
               return;
             }
 
-            var expectedVersion = 13;
-            var expectedPlan = '1..' + expected.numTests;
+            const expectedVersion = 13;
+            const expectedPlan = '1..' + expected.numTests;
 
-            var outputLines = res.output.split('\n');
+            const outputLines = res.output.split('\n');
 
             // first line must be version line
             expect(
@@ -165,14 +165,14 @@ describe('reporters', function () {
               1
             );
             // plan cannot appear in middle of the output
-            var firstTestLine = outputLines.findIndex(testLinePredicate);
+            const firstTestLine = outputLines.findIndex(testLinePredicate);
             // there must be at least one test line
             expect(firstTestLine, 'to be greater than', -1);
-            var lastTestLine =
+            const lastTestLine =
               outputLines.length -
               1 -
               outputLines.slice().reverse().findIndex(testLinePredicate);
-            var planLine = outputLines.findIndex(function (line) {
+            const planLine = outputLines.findIndex(function (line) {
               return line === expectedPlan;
             });
             expect(
@@ -195,8 +195,8 @@ describe('reporters', function () {
     });
 
     it('should fail if given invalid `tapVersion`', function (done) {
-      var invalidTapVersion = 'nosuch';
-      var args = [
+      const invalidTapVersion = 'nosuch';
+      const args = [
         '--reporter=tap',
         '--reporter-option',
         'tapVersion=' + invalidTapVersion
@@ -211,19 +211,19 @@ describe('reporters', function () {
             return;
           }
 
-          var pattern = `Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
+          const pattern = `Error: invalid or unsupported TAP version: "${invalidTapVersion}"`;
           expect(res, 'to satisfy', {
             code: 1,
             output: new RegExp(pattern, 'm')
           });
           done();
         },
-        {stdio: 'pipe'}
+        { stdio: 'pipe' }
       );
     });
 
     it('places exceptions correctly in YAML blocks', function (done) {
-      var args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
+      const args = ['--reporter=tap', '--reporter-option', 'tapVersion=13'];
 
       run('reporters.fixture.js', args, function (err, res) {
         if (err) {
@@ -231,19 +231,19 @@ describe('reporters', function () {
           return;
         }
 
-        var outputLines = res.output.split('\n');
+        const outputLines = res.output.split('\n');
 
-        for (var i = 0; i + 1 < outputLines.length; i++) {
+        for (let i = 0; i + 1 < outputLines.length; i++) {
           if (
             testLinePredicate(outputLines[i]) &&
             testLinePredicate(outputLines[i + 1]) === false
           ) {
-            var blockLinesStart = i + 1;
-            var blockLinesEnd =
+            const blockLinesStart = i + 1;
+            const blockLinesEnd =
               i +
               1 +
               outputLines.slice(i + 1).findIndex(not(anythingElsePredicate));
-            var blockLines =
+            const blockLines =
               blockLinesEnd > blockLinesStart
                 ? outputLines.slice(blockLinesStart, blockLinesEnd)
                 : outputLines.slice(blockLinesStart);

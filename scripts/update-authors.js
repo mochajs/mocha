@@ -3,7 +3,7 @@
 // Usage: tools/update-author.js [--dry]
 // Passing --dry will redirect output to stdout rather than write to 'AUTHORS'.
 'use strict';
-const {spawn} = require('node:child_process');
+const { spawn } = require('node:child_process');
 const fs = require('node:fs');
 const readline = require('node:readline');
 
@@ -15,7 +15,7 @@ const log = spawn(
     stdio: ['inherit', 'pipe', 'inherit']
   }
 );
-const rl = readline.createInterface({input: log.stdout});
+const rl = readline.createInterface({ input: log.stdout });
 
 let output;
 if (process.argv.includes('--dry')) {
@@ -44,7 +44,7 @@ rl.on('line', line => {
   const match = line.match(authorRe);
   if (!match) return;
 
-  const {author, email} = match.groups;
+  const { author, email } = match.groups;
 
   if (seen.has(email) || excludeEmails.includes(email)) {
     return;

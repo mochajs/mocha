@@ -1,6 +1,6 @@
 'use strict';
 
-var invokeMochaAsync = require('../helpers').invokeMochaAsync;
+const invokeMochaAsync = require('../helpers').invokeMochaAsync;
 
 /**
  * Extracts root hook log messages from run results
@@ -8,7 +8,7 @@ var invokeMochaAsync = require('../helpers').invokeMochaAsync;
  * for verification that they have been run.
  * @param {RawResult} res - result of invokeMochaAsync()
  */
-function extractHookOutputFromResult(res) {
+function extractHookOutputFromResult (res) {
   return res.output
     .trim()
     .split('\n')
@@ -25,7 +25,7 @@ function extractHookOutputFromResult(res) {
  * @param {*} args - args for invokeMochaAsync
  * @param {*} opts - opts for invokeMochaAsync
  */
-function runMochaForHookOutput(args, opts) {
+function runMochaForHookOutput (args, opts) {
   return invokeMochaAsync(args, opts)[1].then(extractHookOutputFromResult);
 }
 

@@ -2,7 +2,7 @@
 
 const serializeJavascript = require('serialize-javascript');
 const rewiremock = require('rewiremock/node');
-const {SerializableWorkerResult} = require('../../lib/nodejs/serializer');
+const { SerializableWorkerResult } = require('../../lib/nodejs/serializer');
 const sinon = require('sinon');
 
 const WORKER_PATH = require.resolve('../../lib/nodejs/worker.js');
@@ -73,7 +73,7 @@ describe('worker', function () {
 
     it('should register itself with workerpool', function () {
       expect(stubs.workerpool.worker, 'to have a call satisfying', [
-        {run: worker.run}
+        { run: worker.run }
       ]);
     });
 
@@ -145,20 +145,20 @@ describe('worker', function () {
           it('should handle "--require"', async function () {
             await worker.run(
               'some-file.js',
-              serializeJavascript({require: 'foo'})
+              serializeJavascript({ require: 'foo' })
             );
             expect(
               stubs.runHelpers.handleRequires,
               'to have a call satisfying',
               [
                 'foo',
-                {ignoredPlugins: ['mochaGlobalSetup', 'mochaGlobalTeardown']}
+                { ignoredPlugins: ['mochaGlobalSetup', 'mochaGlobalTeardown'] }
               ]
             ).and('was called once');
           });
 
           it('should handle "--ui"', async function () {
-            const argv = {foo: 'bar'};
+            const argv = { foo: 'bar' };
             await worker.run('some-file.js', serializeJavascript(argv));
 
             expect(

@@ -7,7 +7,7 @@ test('should add', function () {
 });
 
 test('should decrement', function () {
-  var number = 3;
+  let number = 3;
   expect(--number, 'to be', 2);
   expect(--number, 'to be', 1);
   expect(--number, 'to be', 0);

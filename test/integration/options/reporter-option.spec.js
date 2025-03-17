@@ -1,7 +1,7 @@
 'use strict';
 
-var runMocha = require('../helpers').runMocha;
-var path = require('node:path');
+const runMocha = require('../helpers').runMocha;
+const path = require('node:path');
 
 describe('--reporter-option', function () {
   describe('when given options w/ invalid format', function () {

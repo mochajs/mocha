@@ -1,10 +1,10 @@
 'use strict';
 
-var helpers = require('../helpers');
-var runMocha = helpers.runMocha;
-var runMochaJSON = helpers.runMochaJSON;
+const helpers = require('../helpers');
+const runMocha = helpers.runMocha;
+const runMochaJSON = helpers.runMochaJSON;
 
-var FIXTURE = 'options/grep';
+const FIXTURE = 'options/grep';
 
 describe('--grep', function () {
   it('should run specs matching a string', function (done) {

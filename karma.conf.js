@@ -77,7 +77,7 @@ const baseConfig = {
 
 module.exports = config => {
   let bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, hostname);
-  let cfg = {...baseConfig};
+  let cfg = { ...baseConfig };
 
   // TO RUN AGAINST SAUCELABS LOCALLY, execute:
   // `CI=1 SAUCE_USERNAME=<user> SAUCE_ACCESS_KEY=<key> npm run test-browser`
@@ -118,7 +118,7 @@ module.exports = config => {
   // include sourcemap
   cfg = {
     ...cfg,
-    files: [...cfg.files, {pattern: './mocha.js.map', included: false}]
+    files: [...cfg.files, { pattern: './mocha.js.map', included: false }]
   };
 
   if (BROWSER) {
@@ -143,7 +143,7 @@ module.exports = config => {
 const createBundleDir = (cfg, bundleDirPath) => {
   if (bundleDirPath) {
     try {
-      fs.mkdirSync(bundleDirPath, {recursive: true});
+      fs.mkdirSync(bundleDirPath, { recursive: true });
       cfg = {
         ...cfg,
         rollup: {
@@ -157,7 +157,7 @@ const createBundleDir = (cfg, bundleDirPath) => {
       );
     }
   }
-  return {...cfg};
+  return { ...cfg };
 };
 
 /**
@@ -211,7 +211,7 @@ const addSauceTests = (cfg, sauceLabs) => {
     };
     return result;
   }
-  return {...cfg};
+  return { ...cfg };
 };
 
 /**
@@ -272,7 +272,7 @@ const addSauceLabsTestName = (testName, cfg) =>
           testName
         }
       }
-    : {...cfg};
+    : { ...cfg };
 
 /**
  * Returns a new Karma config to run with specific configuration (which cannot

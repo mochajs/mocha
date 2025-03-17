@@ -1,14 +1,14 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--dry-run', function () {
-  var args = ['--dry-run'];
+  const args = ['--dry-run'];
 
   it('should only report, but not execute any test', function (done) {
-    var fixture = path.join('options/dry-run', 'dry-run');
+    const fixture = path.join('options/dry-run', 'dry-run');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -29,7 +29,7 @@ describe('--dry-run', function () {
   });
 
   it('should pass without "RangeError: maximum call stack size exceeded"', function (done) {
-    var fixture = path.join('options/dry-run', 'stack-size');
+    const fixture = path.join('options/dry-run', 'stack-size');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

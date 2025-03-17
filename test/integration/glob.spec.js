@@ -1,9 +1,9 @@
 'use strict';
 
-var exec = require('node:child_process').exec;
-var path = require('node:path');
+const exec = require('node:child_process').exec;
+const path = require('node:path');
 
-var node = '"' + process.execPath + '"';
+const node = '"' + process.execPath + '"';
 
 describe('globbing', function () {
   describe('by the shell', function () {
@@ -176,30 +176,30 @@ describe('globbing', function () {
 });
 
 var testGlob = {
-  shouldSucceed: execMochaWith(function shouldNotError(error) {
+  shouldSucceed: execMochaWith(function shouldNotError (error) {
     if (error) {
       throw error;
     }
   }),
 
-  shouldFail: execMochaWith(function shouldFailWithStderr(error, stderr) {
+  shouldFail: execMochaWith(function shouldFailWithStderr (error, stderr) {
     expect(error && error.message, 'to contain', stderr);
   })
 };
 
-function execMochaWith(validate) {
-  return function execMocha(glob, assertOn, done) {
+function execMochaWith (validate) {
+  return function execMocha (glob, assertOn, done) {
     exec(
       node +
         ' "' +
         path.join('..', '..', '..', '..', 'bin', 'mocha') +
         '" -R json-stream --no-config ' +
         glob,
-      {cwd: path.join(__dirname, 'fixtures', 'glob')},
+      { cwd: path.join(__dirname, 'fixtures', 'glob') },
       function (error, stdout, stderr) {
         try {
           validate(error, stderr);
-          assertOn({stdout, stderr});
+          assertOn({ stdout, stderr });
           done();
         } catch (assertion) {
           done(assertion);

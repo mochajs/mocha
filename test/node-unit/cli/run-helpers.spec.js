@@ -1,6 +1,6 @@
 'use strict';
 
-const {validateLegacyPlugin, list} = require('../../../lib/cli/run-helpers');
+const { validateLegacyPlugin, list } = require('../../../lib/cli/run-helpers');
 const Mocha = require('../../../lib/mocha');
 
 describe('helpers', function () {
@@ -8,7 +8,7 @@ describe('helpers', function () {
     describe('when used with "reporter" key', function () {
       it('should disallow an array of names', function () {
         expect(
-          () => validateLegacyPlugin({reporter: ['bar']}, 'reporter'),
+          () => validateLegacyPlugin({ reporter: ['bar'] }, 'reporter'),
           'to throw',
           {
             code: 'ERR_MOCHA_INVALID_REPORTER',
@@ -19,23 +19,23 @@ describe('helpers', function () {
 
       it('should fail to recognize an unknown reporter', function () {
         expect(
-          () => validateLegacyPlugin({reporter: 'bar'}, 'reporter'),
+          () => validateLegacyPlugin({ reporter: 'bar' }, 'reporter'),
           'to throw',
-          {code: 'ERR_MOCHA_INVALID_REPORTER', message: /cannot find module/i}
+          { code: 'ERR_MOCHA_INVALID_REPORTER', message: /cannot find module/i }
         );
       });
     });
 
     describe('when used with an "ui" key', function () {
       it('should disallow an array of names', function () {
-        expect(() => validateLegacyPlugin({ui: ['bar']}, 'ui'), 'to throw', {
+        expect(() => validateLegacyPlugin({ ui: ['bar'] }, 'ui'), 'to throw', {
           code: 'ERR_MOCHA_INVALID_INTERFACE',
           message: /can only be specified once/i
         });
       });
 
       it('should fail to recognize an unknown interface', function () {
-        expect(() => validateLegacyPlugin({ui: 'bar'}, 'ui'), 'to throw', {
+        expect(() => validateLegacyPlugin({ ui: 'bar' }, 'ui'), 'to throw', {
           code: 'ERR_MOCHA_INVALID_INTERFACE',
           message: /cannot find module/i
         });
@@ -45,7 +45,7 @@ describe('helpers', function () {
     describe('when used with an unknown plugin type', function () {
       it('should fail', function () {
         expect(
-          () => validateLegacyPlugin({frog: 'bar'}, 'frog'),
+          () => validateLegacyPlugin({ frog: 'bar' }, 'frog'),
           'to throw',
           /unknown plugin/i
         );
@@ -55,10 +55,10 @@ describe('helpers', function () {
     describe('when used with a third-party interface', function () {
       it('should add the interface to "Mocha.interfaces"', function () {
         // let's suppose that `glob` is an interface
-        const opts = {ui: 'glob'};
+        const opts = { ui: 'glob' };
         validateLegacyPlugin(opts, 'ui', Mocha.interfaces);
         expect(opts.ui, 'to equal', 'glob');
-        expect(Mocha.interfaces, 'to satisfy', {glob: require('glob')});
+        expect(Mocha.interfaces, 'to satisfy', { glob: require('glob') });
         delete Mocha.interfaces.glob;
       });
     });
@@ -74,7 +74,7 @@ describe('helpers', function () {
               'reporter'
             ),
           'to throw',
-          {message: /wonky/, code: 'ERR_MOCHA_INVALID_REPORTER'}
+          { message: /wonky/, code: 'ERR_MOCHA_INVALID_REPORTER' }
         );
       });
 

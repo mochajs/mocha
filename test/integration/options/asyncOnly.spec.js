@@ -1,18 +1,18 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--async-only', function () {
-  var args = [];
+  let args = [];
 
   before(function () {
     args = ['--async-only'];
   });
 
   it('should fail synchronous specs', function (done) {
-    var fixture = path.join('options', 'async-only-sync');
+    const fixture = path.join('options', 'async-only-sync');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -24,7 +24,7 @@ describe('--async-only', function () {
   });
 
   it('should allow asynchronous specs', function (done) {
-    var fixture = path.join('options', 'async-only-async');
+    const fixture = path.join('options', 'async-only-async');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

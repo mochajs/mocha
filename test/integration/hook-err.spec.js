@@ -5,7 +5,7 @@ const {
   runMochaJSONAsync,
   SPLIT_DOT_REPORTER_REGEXP
 } = require('./helpers');
-const {bang} = require('../../lib/reporters/base').symbols;
+const { bang } = require('../../lib/reporters/base').symbols;
 
 describe('hook error handling', function () {
   let lines;
@@ -267,7 +267,7 @@ describe('hook error handling', function () {
     });
   });
 
-  function run(fnPath, outputFilter) {
+  function run (fnPath, outputFilter) {
     return done =>
       runMocha(fnPath, ['--reporter', 'dot'], (err, res) => {
         expect(err, 'to be falsy');
@@ -282,7 +282,7 @@ describe('hook error handling', function () {
   }
 });
 
-function onlyConsoleOutput() {
+function onlyConsoleOutput () {
   let foundSummary = false;
   return line => {
     if (!foundSummary) {
@@ -292,7 +292,7 @@ function onlyConsoleOutput() {
   };
 }
 
-function onlyErrorTitle(line) {
+function onlyErrorTitle (line) {
   let foundErrorTitle = false;
   let foundError = false;
   return line => {

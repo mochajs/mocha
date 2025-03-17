@@ -1,7 +1,7 @@
 'use strict';
 
-var run = require('./helpers').runMocha;
-var args = [];
+const run = require('./helpers').runMocha;
+const args = [];
 
 describe('suite w/no callback', function () {
   it('should throw a helpful error message when a callback for suite is not supplied', function (done) {
@@ -19,7 +19,7 @@ describe('suite w/no callback', function () {
         );
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: 'pipe' }
     );
   });
 });
@@ -33,8 +33,8 @@ describe('skipped suite w/no callback', function () {
         if (err) {
           return done(err);
         }
-        var pattern = /TypeError/g;
-        var result = res.output.match(pattern) || [];
+        const pattern = /TypeError/g;
+        const result = res.output.match(pattern) || [];
         expect(result, 'to have length', 0);
         done();
       }
@@ -48,8 +48,8 @@ describe('skipped suite w/ callback', function () {
       if (err) {
         return done(err);
       }
-      var pattern = /TypeError/g;
-      var result = res.output.match(pattern) || [];
+      const pattern = /TypeError/g;
+      const result = res.output.match(pattern) || [];
       expect(result, 'to have length', 0);
       done();
     });
@@ -68,7 +68,7 @@ describe('suite returning a value', function () {
         expect(res, 'not to contain output', /Suites ignore return values/);
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: 'pipe' }
     );
   });
 });

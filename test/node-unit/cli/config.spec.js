@@ -2,10 +2,10 @@
 
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
-const {parsers} = require('../../../lib/cli/config');
+const { parsers } = require('../../../lib/cli/config');
 
 describe('cli/config', function () {
-  const phonyConfigObject = {ok: true};
+  const phonyConfigObject = { ok: true };
 
   afterEach(function () {
     sinon.restore();
@@ -36,7 +36,7 @@ describe('cli/config', function () {
         it('should use the YAML parser', function () {
           loadConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -47,7 +47,7 @@ describe('cli/config', function () {
         it('should use the YAML parser', function () {
           loadConfig(filepath);
           expect(parsers.yaml, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -58,7 +58,7 @@ describe('cli/config', function () {
         it('should use the JS parser', function () {
           loadConfig(filepath);
           expect(parsers.js, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -69,7 +69,7 @@ describe('cli/config', function () {
         it('should use the JS parser', function () {
           loadConfig(filepath);
           expect(parsers.js, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -80,7 +80,7 @@ describe('cli/config', function () {
         it('should use the JSON parser', function () {
           loadConfig('foo.jsonc');
           expect(parsers.json, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -91,7 +91,7 @@ describe('cli/config', function () {
         it('should use the JSON parser', function () {
           loadConfig('foo.json');
           expect(parsers.json, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
+            { args: [filepath], returned: phonyConfigObject }
           ]).and('was called once');
         });
       });
@@ -129,7 +129,7 @@ describe('cli/config', function () {
     let CONFIG_FILES;
 
     beforeEach(function () {
-      findup = {sync: sinon.stub().returns('/some/path/.mocharc.js')};
+      findup = { sync: sinon.stub().returns('/some/path/.mocharc.js') };
       const config = rewiremock.proxy(
         require.resolve('../../../lib/cli/config'),
         r => ({
@@ -143,7 +143,7 @@ describe('cli/config', function () {
     it('should look for one of the config files using findup-sync', function () {
       findConfig();
       expect(findup, 'to have a call satisfying', {
-        args: [CONFIG_FILES, {cwd: process.cwd()}],
+        args: [CONFIG_FILES, { cwd: process.cwd() }],
         returned: '/some/path/.mocharc.js'
       });
     });
@@ -151,7 +151,7 @@ describe('cli/config', function () {
     it('should support an explicit `cwd`', function () {
       findConfig('/some/path/');
       expect(findup, 'to have a call satisfying', {
-        args: [CONFIG_FILES, {cwd: '/some/path/'}],
+        args: [CONFIG_FILES, { cwd: '/some/path/' }],
         returned: '/some/path/.mocharc.js'
       });
     });
@@ -164,7 +164,7 @@ describe('cli/config', function () {
       expect(
         () => parsers.js(require.resolve('./fixtures/bad-require.fixture.js')),
         'to throw',
-        {message: /Cannot find module 'fake'/, code: 'MODULE_NOT_FOUND'}
+        { message: /Cannot find module 'fake'/, code: 'MODULE_NOT_FOUND' }
       );
     });
 

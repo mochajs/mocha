@@ -1,8 +1,8 @@
 'use strict';
 
-var Mocha = require('../../');
+const Mocha = require('../../');
 
-var mocha = new Mocha({
+const mocha = new Mocha({
   ui: 'bdd',
   globals: ['okGlobalA', 'okGlobalB', 'okGlobalC', 'callback*'],
   growl: true

@@ -6,10 +6,10 @@ import nodePolyfills from 'rollup-plugin-polyfill-node';
 import globals from 'rollup-plugin-node-globals';
 
 // Debugging tools
-import {visualizer} from 'rollup-plugin-visualizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 import pickFromPackageJson from './scripts/pick-from-package-json';
-import {version} from './package.json';
+import { version } from './package.json';
 
 const config = {
   input: './browser-entry.js',
@@ -23,7 +23,7 @@ const config = {
   plugins: [
     // https://github.com/FredKSchott/rollup-plugin-polyfill-node/issues/84
     alias({
-      entries: [{find: /^node:(.*)/, replacement: '$1'}]
+      entries: [{ find: /^node:(.*)/, replacement: '$1' }]
     }),
     json(),
     pickFromPackageJson({

@@ -1,7 +1,7 @@
 'use strict';
 
-const {resolve, relative, dirname} = require('node:path');
-const {promises: fs} = require('node:fs');
+const { resolve, relative, dirname } = require('node:path');
+const { promises: fs } = require('node:fs');
 
 const PROJECT_ROOT_DIR = resolve(__dirname, '..', '..');
 const FILES = [
@@ -12,7 +12,7 @@ const FILES = [
   }
 ];
 
-const loadFile = async (path, {header} = {}) => {
+const loadFile = async (path, { header } = {}) => {
   const relativeDir = relative(dirname(path), PROJECT_ROOT_DIR);
   let content = await fs.readFile(path, 'utf-8');
   // replace relative paths in `require()` to root with "mocha".
@@ -34,12 +34,12 @@ const loadFile = async (path, {header} = {}) => {
  */
 module.exports = async () => {
   const files = [];
-  for await (const {path, header, slug} of FILES) {
-    const content = await loadFile(path, {header});
-    files.push({slug, content});
+  for await (const { path, header, slug } of FILES) {
+    const content = await loadFile(path, { header });
+    files.push({ slug, content });
   }
   return files.reduce(
-    (files, {slug, content}) => ({
+    (files, { slug, content }) => ({
       ...files,
       [slug]: content
     }),

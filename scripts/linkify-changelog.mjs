@@ -2,8 +2,8 @@
  * Linkify CHANGELOG.md
  */
 
-import {readFileSync, writeFileSync} from 'node:fs';
-import {remark} from 'remark';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { remark } from 'remark';
 import remarkGithub from 'remark-github';
 import remarkInlineLinks from 'remark-inline-links';
 

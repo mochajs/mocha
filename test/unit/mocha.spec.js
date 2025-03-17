@@ -1,50 +1,50 @@
 'use strict';
 
-var sinon = require('sinon');
-var EventEmitter = require('node:events').EventEmitter;
-var Mocha = require('../../lib/mocha');
-var utils = require('../../lib/utils');
+const sinon = require('sinon');
+const EventEmitter = require('node:events').EventEmitter;
+const Mocha = require('../../lib/mocha');
+const utils = require('../../lib/utils');
 const errors = require('../../lib/errors');
 
 describe('Mocha', function () {
   /**
    * Options for `Mocha` constructor
    */
-  var opts;
+  let opts;
 
   /**
    * Stub `Runner` constructor; returns a stubbed `EventEmitter`
    */
-  var Runner;
+  let Runner;
 
   /**
    * Stub `Suite` constructor; returns a stubbed `EventEmitter`
    */
-  var Suite;
+  let Suite;
 
   /**
    * Stub `Suite` instance (root suite in our case)
    */
-  var suite;
+  let suite;
 
   /**
    * Stub `Runner` (`EventEmitter`) instance
    */
-  var runner;
+  let runner;
 
   /**
    * Stub `Base` reporter constructor
    */
-  var Base;
+  let Base;
 
   /**
    * Instance of a hypothetical reporter
    */
-  var reporterInstance;
+  let reporterInstance;
 
   beforeEach(function () {
     reporterInstance = {};
-    opts = {reporter: sinon.stub().returns(reporterInstance)};
+    opts = { reporter: sinon.stub().returns(reporterInstance) };
 
     // NOTE: calling `stub(someObject, someFunction)` where `someFunction` has
     // its own static properties WILL NOT blast those static properties!
@@ -88,7 +88,7 @@ describe('Mocha', function () {
   });
 
   describe('constructor', function () {
-    var mocha;
+    let mocha;
 
     beforeEach(function () {
       mocha = sinon.createStubInstance(Mocha);
@@ -112,7 +112,7 @@ describe('Mocha', function () {
     describe('when `timeout` option is `undefined`', function () {
       it('should not attempt to set timeout', function () {
         // eslint-disable-next-line no-new
-        new Mocha({timeout: undefined});
+        new Mocha({ timeout: undefined });
         expect(Mocha.prototype.timeout, 'was not called');
       });
     });
@@ -120,7 +120,7 @@ describe('Mocha', function () {
     describe('when `timeout` option is `false`', function () {
       it('should attempt to set timeout', function () {
         // eslint-disable-next-line no-new
-        new Mocha({timeout: false});
+        new Mocha({ timeout: false });
         expect(Mocha.prototype.timeout, 'to have a call satisfying', [0]).and(
           'was called once'
         );
@@ -130,7 +130,7 @@ describe('Mocha', function () {
     describe('when `global` option is an `Array`', function () {
       it('should attempt to set globals', function () {
         // eslint-disable-next-line no-new
-        new Mocha({global: ['singular']});
+        new Mocha({ global: ['singular'] });
         expect(Mocha.prototype.global, 'to have a call satisfying', [
           ['singular']
         ]).and('was called once');
@@ -140,7 +140,7 @@ describe('Mocha', function () {
     describe('when `retries` option is present', function () {
       it('should attempt to set retries`', function () {
         // eslint-disable-next-line no-new
-        new Mocha({retries: 1});
+        new Mocha({ retries: 1 });
         expect(Mocha.prototype.retries, 'to have a call satisfying', [1]).and(
           'was called once'
         );
@@ -158,7 +158,7 @@ describe('Mocha', function () {
     describe('when `rootHooks` option is truthy', function () {
       it('shouid attempt to set root hooks', function () {
         // eslint-disable-next-line no-new
-        new Mocha({rootHooks: ['a root hook']});
+        new Mocha({ rootHooks: ['a root hook'] });
         expect(Mocha.prototype.rootHooks, 'to have a call satisfying', [
           ['a root hook']
         ]).and('was called once');
@@ -169,7 +169,7 @@ describe('Mocha', function () {
       describe('and `jobs` option > 1', function () {
         it('should enable parallel mode', function () {
           // eslint-disable-next-line no-new
-          new Mocha({parallel: true, jobs: 2});
+          new Mocha({ parallel: true, jobs: 2 });
           expect(Mocha.prototype.parallelMode, 'to have a call satisfying', [
             true
           ]).and('was called once');
@@ -179,7 +179,7 @@ describe('Mocha', function () {
       describe('and `jobs` option <= 1', function () {
         it('should not enable parallel mode', function () {
           // eslint-disable-next-line no-new
-          new Mocha({parallel: true, jobs: 1});
+          new Mocha({ parallel: true, jobs: 1 });
           expect(Mocha.prototype.parallelMode, 'was not called');
         });
       });
@@ -187,7 +187,7 @@ describe('Mocha', function () {
       describe('when `globalSetup` option is present', function () {
         it('should configure global setup fixtures', function () {
           const globalSetup = [() => {}];
-          const mocha = new Mocha({globalSetup});
+          const mocha = new Mocha({ globalSetup });
           expect(mocha.globalSetup, 'to have a call satisfying', [
             globalSetup
           ]).and('was called once');
@@ -197,7 +197,7 @@ describe('Mocha', function () {
       describe('when `globalTeardown` option is present', function () {
         it('should configure global teardown fixtures', function () {
           const globalTeardown = [() => {}];
-          const mocha = new Mocha({globalTeardown});
+          const mocha = new Mocha({ globalTeardown });
           expect(mocha.globalTeardown, 'to have a call satisfying', [
             globalTeardown
           ]).and('was called once');
@@ -206,7 +206,7 @@ describe('Mocha', function () {
 
       describe('when `enableGlobalSetup` option is present', function () {
         it('should toggle global setup fixtures', function () {
-          const mocha = new Mocha({enableGlobalSetup: 1});
+          const mocha = new Mocha({ enableGlobalSetup: 1 });
           expect(mocha.enableGlobalSetup, 'to have a call satisfying', [1]).and(
             'was called once'
           );
@@ -215,7 +215,7 @@ describe('Mocha', function () {
 
       describe('when `enableGlobalTeardown` option is present', function () {
         it('should configure global teardown fixtures', function () {
-          const mocha = new Mocha({enableGlobalTeardown: 1});
+          const mocha = new Mocha({ enableGlobalTeardown: 1 });
           expect(mocha.enableGlobalTeardown, 'to have a call satisfying', [
             1
           ]).and('was called once');
@@ -225,7 +225,7 @@ describe('Mocha', function () {
   });
 
   describe('instance method', function () {
-    var mocha;
+    let mocha;
 
     beforeEach(function () {
       mocha = new Mocha(opts);
@@ -358,7 +358,7 @@ describe('Mocha', function () {
       });
 
       it('should unload the files', function () {
-        var unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
+        const unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
         mocha.dispose();
         expect(unloadFilesStub, 'was called once');
       });
@@ -376,8 +376,8 @@ describe('Mocha', function () {
       });
     });
 
-    describe('passOnFailingTestSuite()', function() {
-      it('should set the passOnFailingTestSuite option to false', function() {
+    describe('passOnFailingTestSuite()', function () {
+      it('should set the passOnFailingTestSuite option to false', function () {
         mocha.passOnFailingTestSuite();
         expect(
           mocha.options,
@@ -387,7 +387,7 @@ describe('Mocha', function () {
         );
       });
 
-      it('should set the passOnFailingTestSuite option to true', function() {
+      it('should set the passOnFailingTestSuite option to true', function () {
         mocha.passOnFailingTestSuite(true);
         expect(
           mocha.options,
@@ -480,9 +480,9 @@ describe('Mocha', function () {
       });
 
       describe('when argument is valid', function () {
-        var elem = 'foo';
-        var elem2 = 'bar';
-        var elem3 = 'baz';
+        const elem = 'foo';
+        const elem2 = 'bar';
+        const elem3 = 'baz';
 
         it('should add string to the whitelist', function () {
           mocha.global(elem);
@@ -491,15 +491,15 @@ describe('Mocha', function () {
         });
 
         it('should add contents of string array to the whitelist', function () {
-          var elems = [elem, elem2];
+          const elems = [elem, elem2];
           mocha.global(elems);
           expect(mocha.options.global, 'to contain', elem, elem2);
           expect(mocha.options.global, 'to have length', elems.length);
         });
 
         it('should not have duplicates', function () {
-          var mocha = new Mocha({global: [elem, elem2]});
-          var elems = [elem, elem2, elem3];
+          const mocha = new Mocha({ global: [elem, elem2] });
+          const elems = [elem, elem2, elem3];
           mocha.global(elems);
           expect(mocha.options.global, 'to contain', elem, elem2, elem3);
           expect(mocha.options.global, 'to have length', elems.length);
@@ -552,7 +552,7 @@ describe('Mocha', function () {
       });
 
       it('should keep reporterOption on options', function () {
-        var mocha = new Mocha({
+        const mocha = new Mocha({
           reporter: 'spec',
           reporterOption: {
             foo: 'bar'
@@ -564,7 +564,7 @@ describe('Mocha', function () {
       });
 
       it('should support legacy reporterOptions', function () {
-        var mocha = new Mocha({
+        const mocha = new Mocha({
           reporter: 'spec',
           reporterOptions: {
             foo: 'bar'
@@ -943,7 +943,7 @@ describe('Mocha', function () {
           it('should run global teardown fixtures', function (done) {
             mocha.run(() => {
               expect(mocha.runGlobalTeardown, 'to have a call satisfying', {
-                args: [expect.it('to be', runner), {context: {}}]
+                args: [expect.it('to be', runner), { context: {} }]
               }).and('was called once');
               done();
             });
@@ -960,7 +960,7 @@ describe('Mocha', function () {
                 expect(mocha.runGlobalTeardown, 'to have a call satisfying', {
                   args: [
                     expect.it('to be', runner),
-                    {context: globalFixtureContext}
+                    { context: globalFixtureContext }
                   ]
                 }).and('was called once');
                 done();
@@ -1014,7 +1014,7 @@ describe('Mocha', function () {
               mocha.parallelMode();
             },
             'to throw',
-            {code: 'ERR_MOCHA_UNSUPPORTED'}
+            { code: 'ERR_MOCHA_UNSUPPORTED' }
           );
         });
       });
@@ -1155,7 +1155,7 @@ describe('Mocha', function () {
       describe('when provided a single "before all" hook', function () {
         it('should attach it to the root suite', function () {
           const beforeAll = () => {};
-          mocha.rootHooks({beforeAll});
+          mocha.rootHooks({ beforeAll });
           expect(mocha.suite.beforeAll, 'to have a call satisfying', [
             beforeAll
           ]).and('was called once');
@@ -1165,7 +1165,7 @@ describe('Mocha', function () {
       describe('when provided a single "before each" hook', function () {
         it('should attach it to the root suite', function () {
           const beforeEach = () => {};
-          mocha.rootHooks({beforeEach});
+          mocha.rootHooks({ beforeEach });
           expect(mocha.suite.beforeEach, 'to have a call satisfying', [
             beforeEach
           ]).and('was called once');
@@ -1175,7 +1175,7 @@ describe('Mocha', function () {
       describe('when provided a single "after all" hook', function () {
         it('should attach it to the root suite', function () {
           const afterAll = () => {};
-          mocha.rootHooks({afterAll});
+          mocha.rootHooks({ afterAll });
           expect(mocha.suite.afterAll, 'to have a call satisfying', [
             afterAll
           ]).and('was called once');
@@ -1185,7 +1185,7 @@ describe('Mocha', function () {
       describe('when provided a single "after each" hook', function () {
         it('should attach it to the root suite', function () {
           const afterEach = () => {};
-          mocha.rootHooks({afterEach});
+          mocha.rootHooks({ afterEach });
           expect(mocha.suite.afterEach, 'to have a call satisfying', [
             afterEach
           ]).and('was called once');
@@ -1195,7 +1195,7 @@ describe('Mocha', function () {
       describe('when provided multiple "before all" hooks', function () {
         it('should attach each to the root suite', function () {
           const beforeAll = [() => {}, () => {}];
-          mocha.rootHooks({beforeAll});
+          mocha.rootHooks({ beforeAll });
           expect(mocha.suite.beforeAll, 'to have calls satisfying', [
             [beforeAll[0]],
             [beforeAll[1]]
@@ -1206,7 +1206,7 @@ describe('Mocha', function () {
       describe('when provided multiple "before each" hooks', function () {
         it('should attach each to the root suite', function () {
           const beforeEach = [() => {}, () => {}];
-          mocha.rootHooks({beforeEach});
+          mocha.rootHooks({ beforeEach });
           expect(mocha.suite.beforeEach, 'to have calls satisfying', [
             [beforeEach[0]],
             [beforeEach[1]]
@@ -1217,7 +1217,7 @@ describe('Mocha', function () {
       describe('when provided multiple "after all" hooks', function () {
         it('should attach each to the root suite', function () {
           const afterAll = [() => {}, () => {}];
-          mocha.rootHooks({afterAll});
+          mocha.rootHooks({ afterAll });
           expect(mocha.suite.afterAll, 'to have calls satisfying', [
             [afterAll[0]],
             [afterAll[1]]
@@ -1228,7 +1228,7 @@ describe('Mocha', function () {
       describe('when provided multiple "after each" hooks', function () {
         it('should attach each to the root suite', function () {
           const afterEach = [() => {}, () => {}];
-          mocha.rootHooks({afterEach});
+          mocha.rootHooks({ afterEach });
           expect(mocha.suite.afterEach, 'to have calls satisfying', [
             [afterEach[0]],
             [afterEach[1]]

@@ -1,7 +1,7 @@
 'use strict';
 
-var run = require('./helpers').runMocha;
-var runJSON = require('./helpers').runMochaJSON;
+const run = require('./helpers').runMocha;
+const runJSON = require('./helpers').runMochaJSON;
 
 describe('regressions', function () {
   it('issue-1991: Declarations do not get cleaned up unless you set them to `null` - Memory Leak', function (done) {
@@ -22,7 +22,7 @@ describe('regressions', function () {
   });
 
   describe("issue-2286: after doesn't execute if test was skipped in beforeEach", function () {
-    var afterWasRun = false;
+    let afterWasRun = false;
     describe('suite with skipped test for meta test', function () {
       beforeEach(function () {
         this.skip();

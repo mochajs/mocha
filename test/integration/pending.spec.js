@@ -1,11 +1,11 @@
 'use strict';
 
-var assert = require('node:assert');
-var helpers = require('./helpers');
-var run = helpers.runMochaJSON;
-var invokeNode = helpers.invokeNode;
-var toJSONResult = helpers.toJSONResult;
-var args = [];
+const assert = require('node:assert');
+const helpers = require('./helpers');
+const run = helpers.runMochaJSON;
+const invokeNode = helpers.invokeNode;
+const toJSONResult = helpers.toJSONResult;
+const args = [];
 
 describe('pending', function () {
   describe('pending specs', function () {
@@ -166,7 +166,7 @@ describe('pending', function () {
 
     describe('in beforeEach', function () {
       it('should skip all suite specs', function (done) {
-        var fixture = 'pending/skip-sync-beforeEach.fixture.js';
+        const fixture = 'pending/skip-sync-beforeEach.fixture.js';
         run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
@@ -185,7 +185,7 @@ describe('pending', function () {
         });
       });
       it('should skip only two suite specs', function (done) {
-        var fixture = 'pending/skip-sync-beforeEach-cond.fixture.js';
+        const fixture = 'pending/skip-sync-beforeEach-cond.fixture.js';
         run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
@@ -279,7 +279,7 @@ describe('pending', function () {
 
     describe('in beforeEach', function () {
       it('should skip all suite specs', function (done) {
-        var fixture = 'pending/skip-async-beforeEach.fixture.js';
+        const fixture = 'pending/skip-async-beforeEach.fixture.js';
         run(fixture, args, function (err, res) {
           if (err) {
             return done(err);
@@ -302,12 +302,12 @@ describe('pending', function () {
 
   describe('programmatic usage', function () {
     it('should skip the test by listening to test event', function (done) {
-      var path = require.resolve('./fixtures/pending/programmatic.fixture.js');
+      const path = require.resolve('./fixtures/pending/programmatic.fixture.js');
       invokeNode([path], function (err, res) {
         if (err) {
           return done(err);
         }
-        var result = toJSONResult(res);
+        const result = toJSONResult(res);
         expect(result, 'to have passed')
           .and('to have passed test count', 0)
           .and('to have pending test count', 1)

@@ -1,7 +1,7 @@
 'use strict';
 
 describe('serial', function () {
-  var calls = [];
+  const calls = [];
 
   beforeEach(function () {
     calls.push('parent before');

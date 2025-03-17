@@ -1,27 +1,27 @@
 'use strict';
 
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var TAP = reporters.TAP;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const TAP = reporters.TAP;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_END = events.EVENT_TEST_END;
-var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
-var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_END = events.EVENT_TEST_END;
+const EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe('TAP reporter', function () {
-  var runReporter = makeRunReporter(TAP);
-  var expectedTitle = 'some title';
-  var countAfterTestEnd = 2;
-  var noop = function () {};
+  const runReporter = makeRunReporter(TAP);
+  const expectedTitle = 'some title';
+  const countAfterTestEnd = 2;
+  const noop = function () {};
 
-  function createTest() {
+  function createTest () {
     return {
       fullTitle: function () {
         return expectedTitle;
@@ -31,7 +31,7 @@ describe('TAP reporter', function () {
   }
 
   describe('TAP12 spec', function () {
-    var options = {
+    const options = {
       reporterOptions: {
         tapVersion: '12'
       }
@@ -39,11 +39,11 @@ describe('TAP reporter', function () {
 
     describe('event handlers', function () {
       describe("on 'start' event", function () {
-        var expectedSuite = 'some suite';
-        var stdout = [];
+        const expectedSuite = 'some suite';
+        let stdout = [];
 
         before(function () {
-          var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+          const runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
           stdout = runReporter({}, runner, options);
         });
@@ -54,11 +54,11 @@ describe('TAP reporter', function () {
       });
 
       describe("on 'pending' event", function () {
-        var stdout = [];
+        let stdout = [];
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PENDING,
@@ -70,18 +70,18 @@ describe('TAP reporter', function () {
         });
 
         it('should write expected message including count and title', function () {
-          var expectedMessage =
+          const expectedMessage =
             'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
           expect(stdout[0], 'to equal', expectedMessage);
         });
       });
 
       describe("on 'pass' event", function () {
-        var stdout;
+        let stdout;
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PASS,
@@ -93,25 +93,25 @@ describe('TAP reporter', function () {
         });
 
         it('should write expected message including count and title', function () {
-          var expectedMessage =
+          const expectedMessage =
             'ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n';
           expect(stdout[0], 'to equal', expectedMessage);
         });
       });
 
       describe("on 'fail' event", function () {
-        var expectedErrorMessage = 'some error';
-        var expectedStack = 'some stack';
+        const expectedErrorMessage = 'some error';
+        const expectedStack = 'some stack';
 
         describe("when 'error' has only message", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               message: expectedErrorMessage
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -131,7 +131,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message and error message', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ' + expectedErrorMessage + '\n'
             ];
@@ -140,14 +140,14 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has only stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               stack: expectedStack
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -160,7 +160,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message and stack', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ' + expectedStack + '\n'
             ];
@@ -169,15 +169,15 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has both message and stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               stack: expectedStack,
               message: expectedErrorMessage
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -197,7 +197,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message, error message, and stack', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ' + expectedErrorMessage + '\n',
               '  ' + expectedStack + '\n'
@@ -207,12 +207,12 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has neither message nor stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {};
-            var runner = createMockRunner(
+            const test = createTest();
+            const error = {};
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -232,7 +232,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message only', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n'
             ];
             expect(stdout, 'to equal', expectedArray);
@@ -241,11 +241,11 @@ describe('TAP reporter', function () {
       });
 
       describe("on 'end' event", function () {
-        var stdout;
+        let stdout;
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'fail end pass',
             EVENT_TEST_FAIL,
             EVENT_RUN_END,
@@ -257,10 +257,10 @@ describe('TAP reporter', function () {
         });
 
         it('should write total tests, passes, failures, & plan', function () {
-          var numberOfPasses = 1;
-          var numberOfFails = 1;
-          var totalTests = numberOfPasses + numberOfFails;
-          var expectedArray = [
+          const numberOfPasses = 1;
+          const numberOfFails = 1;
+          const totalTests = numberOfPasses + numberOfFails;
+          const expectedArray = [
             'ok ' + numberOfPasses + ' ' + expectedTitle + '\n',
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',
@@ -275,7 +275,7 @@ describe('TAP reporter', function () {
   });
 
   describe('TAP13 spec', function () {
-    var options = {
+    const options = {
       reporterOptions: {
         tapVersion: '13'
       }
@@ -283,28 +283,28 @@ describe('TAP reporter', function () {
 
     describe('event handlers', function () {
       describe("on 'start' event", function () {
-        var expectedSuite = 'some suite';
-        var stdout;
+        const expectedSuite = 'some suite';
+        let stdout;
 
         before(function () {
-          var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+          const runner = createMockRunner('start', EVENT_RUN_BEGIN);
           runner.suite = expectedSuite;
           stdout = runReporter({}, runner, options);
         });
 
         it('should write the TAP specification version', function () {
-          var tapVersion = options.reporterOptions.tapVersion;
-          var expectedFirstLine = 'TAP version ' + tapVersion + '\n';
+          const tapVersion = options.reporterOptions.tapVersion;
+          const expectedFirstLine = 'TAP version ' + tapVersion + '\n';
           expect(stdout[0], 'to equal', expectedFirstLine);
         });
       });
 
       describe("on 'pending' event", function () {
-        var stdout;
+        let stdout;
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PENDING,
@@ -316,18 +316,18 @@ describe('TAP reporter', function () {
         });
 
         it('should write expected message including count and title', function () {
-          var expectedMessage =
+          const expectedMessage =
             'ok ' + countAfterTestEnd + ' ' + expectedTitle + ' # SKIP -\n';
           expect(stdout[0], 'to equal', expectedMessage);
         });
       });
 
       describe("on 'pass' event", function () {
-        var stdout;
+        let stdout;
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'start test',
             EVENT_TEST_END,
             EVENT_TEST_PASS,
@@ -339,25 +339,25 @@ describe('TAP reporter', function () {
         });
 
         it('should write expected message including count and title', function () {
-          var expectedMessage =
+          const expectedMessage =
             'ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n';
           expect(stdout[0], 'to equal', expectedMessage);
         });
       });
 
       describe("on 'fail' event", function () {
-        var expectedErrorMessage = 'some error';
-        var expectedStack = 'some stack';
+        const expectedErrorMessage = 'some error';
+        const expectedStack = 'some stack';
 
         describe("when 'error' has only message", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               message: expectedErrorMessage
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -377,7 +377,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message and error message', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ---\n',
               '    message: |-\n',
@@ -389,14 +389,14 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has only stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               stack: expectedStack
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -409,7 +409,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message and stack', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ---\n',
               '    stack: |-\n',
@@ -421,15 +421,15 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has both message and stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {
+            const test = createTest();
+            const error = {
               stack: expectedStack,
               message: expectedErrorMessage
             };
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -449,7 +449,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message, error message, and stack', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n',
               '  ---\n',
               '    message: |-\n',
@@ -463,12 +463,12 @@ describe('TAP reporter', function () {
         });
 
         describe("when 'error' has neither message nor stack", function () {
-          var stdout;
+          let stdout;
 
           before(function () {
-            var test = createTest();
-            var error = {};
-            var runner = createMockRunner(
+            const test = createTest();
+            const error = {};
+            const runner = createMockRunner(
               'test end fail',
               EVENT_TEST_END,
               EVENT_TEST_FAIL,
@@ -488,7 +488,7 @@ describe('TAP reporter', function () {
           });
 
           it('should write expected message only', function () {
-            var expectedArray = [
+            const expectedArray = [
               'not ok ' + countAfterTestEnd + ' ' + expectedTitle + '\n'
             ];
             expect(stdout, 'to equal', expectedArray);
@@ -497,11 +497,11 @@ describe('TAP reporter', function () {
       });
 
       describe("on 'end' event", function () {
-        var stdout;
+        let stdout;
 
         before(function () {
-          var test = createTest();
-          var runner = createMockRunner(
+          const test = createTest();
+          const runner = createMockRunner(
             'fail end pass',
             EVENT_TEST_FAIL,
             EVENT_RUN_END,
@@ -513,10 +513,10 @@ describe('TAP reporter', function () {
         });
 
         it('should write total tests, passes, failures & plan', function () {
-          var numberOfPasses = 1;
-          var numberOfFails = 1;
-          var totalTests = numberOfPasses + numberOfFails;
-          var expectedArray = [
+          const numberOfPasses = 1;
+          const numberOfFails = 1;
+          const totalTests = numberOfPasses + numberOfFails;
+          const expectedArray = [
             'ok ' + numberOfPasses + ' ' + expectedTitle + '\n',
             'not ok ' + numberOfFails + ' ' + expectedTitle + '\n',
             '# tests ' + totalTests + '\n',

@@ -3,31 +3,31 @@
 // This is not a "functional" test; we aren't invoking the mocha executable.
 // Instead we just avoid test doubles.
 
-var fs = require('node:fs');
-var path = require('node:path');
-var loadConfig = require('../../lib/cli/config').loadConfig;
+const fs = require('node:fs');
+const path = require('node:path');
+const loadConfig = require('../../lib/cli/config').loadConfig;
 
 describe('config', function () {
   it('should return the same values for all supported config types', function () {
-    var configDir = path.join(__dirname, 'fixtures', 'config');
-    var js = loadConfig(path.join(configDir, 'mocharc.js'));
-    var cjs = loadConfig(path.join(configDir, 'mocharc.cjs'));
-    var json = loadConfig(path.join(configDir, 'mocharc.json'));
-    var yaml = loadConfig(path.join(configDir, 'mocharc.yaml'));
+    const configDir = path.join(__dirname, 'fixtures', 'config');
+    const js = loadConfig(path.join(configDir, 'mocharc.js'));
+    const cjs = loadConfig(path.join(configDir, 'mocharc.cjs'));
+    const json = loadConfig(path.join(configDir, 'mocharc.json'));
+    const yaml = loadConfig(path.join(configDir, 'mocharc.yaml'));
     expect(js, 'to equal', json);
     expect(js, 'to equal', cjs);
     expect(json, 'to equal', yaml);
   });
 
   describe('when configuring Mocha via a ".js" file', function () {
-    var projRootDir = path.join(__dirname, '..', '..');
-    var configDir = path.join(__dirname, 'fixtures', 'config');
-    var json = loadConfig(path.join(configDir, 'mocharc.json'));
+    const projRootDir = path.join(__dirname, '..', '..');
+    const configDir = path.join(__dirname, 'fixtures', 'config');
+    const json = loadConfig(path.join(configDir, 'mocharc.json'));
 
     it('should load configuration given absolute path', function () {
-      var js;
+      let js;
 
-      function _loadConfig() {
+      function _loadConfig () {
         js = loadConfig(path.join(configDir, 'mocharc.js'));
       }
 
@@ -36,10 +36,10 @@ describe('config', function () {
     });
 
     it('should load configuration given cwd-relative path', function () {
-      var relConfigDir = configDir.substring(projRootDir.length + 1);
-      var js;
+      const relConfigDir = configDir.substring(projRootDir.length + 1);
+      let js;
 
-      function _loadConfig() {
+      function _loadConfig () {
         js = loadConfig(path.join('.', relConfigDir, 'mocharc.js'));
       }
 
@@ -48,7 +48,7 @@ describe('config', function () {
     });
 
     it('should rethrow error from absolute path configuration', function () {
-      function _loadConfig() {
+      function _loadConfig () {
         loadConfig(path.join(configDir, 'mocharcWithThrowError.js'));
       }
 
@@ -58,9 +58,9 @@ describe('config', function () {
     });
 
     it('should rethrow error from cwd-relative path configuration', function () {
-      var relConfigDir = configDir.substring(projRootDir.length + 1);
+      const relConfigDir = configDir.substring(projRootDir.length + 1);
 
-      function _loadConfig() {
+      function _loadConfig () {
         loadConfig(path.join('.', relConfigDir, 'mocharcWithThrowError.js'));
       }
 
@@ -71,15 +71,15 @@ describe('config', function () {
 
     // In other words, path does not begin with '/', './', or '../'
     describe('when path is neither absolute or relative', function () {
-      var nodeModulesDir = path.join(projRootDir, 'node_modules');
-      var pkgName = 'mocha-config';
-      var installedLocally = false;
-      var symlinkedPkg = false;
+      const nodeModulesDir = path.join(projRootDir, 'node_modules');
+      const pkgName = 'mocha-config';
+      let installedLocally = false;
+      let symlinkedPkg = false;
 
       before(function () {
         try {
-          var srcPath = path.join(configDir, pkgName);
-          var targetPath = path.join(nodeModulesDir, pkgName);
+          const srcPath = path.join(configDir, pkgName);
+          const targetPath = path.join(nodeModulesDir, pkgName);
           fs.symlinkSync(srcPath, targetPath, 'dir');
           symlinkedPkg = true;
           installedLocally = true;
@@ -94,13 +94,13 @@ describe('config', function () {
       });
 
       it('should load configuration given module-relative path', function () {
-        var js;
+        let js;
 
         if (!installedLocally) {
           return this.skip();
         }
 
-        function _loadConfig() {
+        function _loadConfig () {
           js = loadConfig(path.join(pkgName, 'index.js'));
         }
 

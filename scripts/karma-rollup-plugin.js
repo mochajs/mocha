@@ -32,7 +32,7 @@
 const os = require('node:os');
 const fs = require('node:fs');
 const path = require('node:path');
-const {randomUUID} = require('node:crypto');
+const { randomUUID } = require('node:crypto');
 const rollup = require('rollup');
 const minimatch = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile.js');
@@ -44,7 +44,7 @@ const fileMap = new Map();
  * The rollup framework that creates the initial logger and bundle file
  * as well as prepends the bundle file to the karma file configuration.
  */
-function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
+function framework (fileConfigs, pluginConfig, basePath, preprocessors) {
   const includePatterns = pluginConfig.include.map(pattern =>
     path.resolve(basePath, pattern)
   );
@@ -77,7 +77,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
   // Need to use array mutation, otherwise Karma ignores us
   let bundleInjected = false;
   for (const bundlePattern of bundlePatterns) {
-    const idx = fileConfigs.findIndex(({pattern}) => pattern === bundlePattern);
+    const idx = fileConfigs.findIndex(({ pattern }) => pattern === bundlePattern);
 
     if (idx > -1) {
       if (bundleInjected) {
@@ -106,21 +106,21 @@ framework.$inject = [
  * A special preprocessor that builds the main rollup bundle once and
  * passes the bundle contents through on all later preprocessing request.
  */
-function bundlePreprocessor(config) {
+function bundlePreprocessor (config) {
   const {
     basePath,
-    rollup: {configFile, globals = {}, external = []}
+    rollup: { configFile, globals = {}, external = [] }
   } = config;
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
 
   return async function (content, file, done) {
-    const {options, warnings} = await configPromise;
+    const { options, warnings } = await configPromise;
     const config = options[0];
     // plugins is always an array
     const pluginConfig = [
       ...(config.plugins || []),
-      multiEntry({exports: false})
+      multiEntry({ exports: false })
     ];
     // XXX: output is always an array, but we only have one output config.
     // if we have multiple, this code needs changing.

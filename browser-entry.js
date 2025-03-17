@@ -7,11 +7,11 @@
  * Shim process.stdout.
  */
 
-process.stdout = require('browser-stdout')({label: false});
+process.stdout = require('browser-stdout')({ label: false });
 
-var parseQuery = require('./lib/browser/parse-query');
-var highlightTags = require('./lib/browser/highlight-tags');
-var Mocha = require('./lib/mocha');
+const parseQuery = require('./lib/browser/parse-query');
+const highlightTags = require('./lib/browser/highlight-tags');
+const Mocha = require('./lib/mocha');
 
 /**
  * Create a Mocha instance.
@@ -19,21 +19,21 @@ var Mocha = require('./lib/mocha');
  * @return {undefined}
  */
 
-var mocha = new Mocha({reporter: 'html'});
+const mocha = new Mocha({ reporter: 'html' });
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
  */
 
-var Date = global.Date;
-var setTimeout = global.setTimeout;
-var setInterval = global.setInterval;
-var clearTimeout = global.clearTimeout;
-var clearInterval = global.clearInterval;
+const Date = global.Date;
+const setTimeout = global.setTimeout;
+const setInterval = global.setInterval;
+const clearTimeout = global.clearTimeout;
+const clearInterval = global.clearInterval;
 
-var uncaughtExceptionHandlers = [];
+const uncaughtExceptionHandlers = [];
 
-var originalOnerrorHandler = global.onerror;
+const originalOnerrorHandler = global.onerror;
 
 /**
  * Remove uncaughtException listener.
@@ -47,7 +47,7 @@ process.removeListener = function (e, fn) {
     } else {
       global.onerror = function () {};
     }
-    var i = uncaughtExceptionHandlers.indexOf(fn);
+    const i = uncaughtExceptionHandlers.indexOf(fn);
     if (i !== -1) {
       uncaughtExceptionHandlers.splice(i, 1);
     }
@@ -91,11 +91,11 @@ process.listeners = function (e) {
 // Ensure that this default UI does not expose its methods to the global scope.
 mocha.suite.removeAllListeners('pre-require');
 
-var immediateQueue = [];
-var immediateTimeout;
+const immediateQueue = [];
+let immediateTimeout;
 
-function timeslice() {
-  var immediateStart = new Date().getTime();
+function timeslice () {
+  const immediateStart = new Date().getTime();
   while (immediateQueue.length && new Date().getTime() - immediateStart < 100) {
     immediateQueue.shift()();
   }
@@ -146,12 +146,12 @@ mocha.ui = function (ui) {
 
 mocha.setup = function (opts) {
   if (typeof opts === 'string') {
-    opts = {ui: opts};
+    opts = { ui: opts };
   }
   if (opts.delay === true) {
     this.delay();
   }
-  var self = this;
+  const self = this;
   Object.keys(opts)
     .filter(function (opt) {
       return opt !== 'delay';
@@ -169,10 +169,10 @@ mocha.setup = function (opts) {
  */
 
 mocha.run = function (fn) {
-  var options = mocha.options;
+  const options = mocha.options;
   mocha.globals('location');
 
-  var query = parseQuery(global.location.search || '');
+  const query = parseQuery(global.location.search || '');
   if (query.grep) {
     mocha.grep(query.grep);
   }
@@ -185,7 +185,7 @@ mocha.run = function (fn) {
 
   return Mocha.prototype.run.call(mocha, function (err) {
     // The DOM Document is not available in Web Workers.
-    var document = global.document;
+    const document = global.document;
     if (
       document &&
       document.getElementById('mocha') &&
@@ -215,11 +215,11 @@ global.mocha = mocha;
 // for bundlers: enable `import {describe, it} from 'mocha'`
 // `bdd` interface only
 // prettier-ignore
-[ 
+[
   'describe', 'context', 'it', 'specify',
   'xdescribe', 'xcontext', 'xit', 'xspecify',
   'before', 'beforeEach', 'afterEach', 'after'
-].forEach(function(key) {
+].forEach(function (key) {
   mocha[key] = global[key];
 });
 

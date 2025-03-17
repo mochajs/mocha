@@ -1,18 +1,18 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--sort', function () {
-  var args = [];
+  let args = [];
 
   before(function () {
     args = ['--sort'];
   });
 
   it('should sort tests in alphabetical order', function (done) {
-    var fixtures = path.join('options', 'sort*');
+    const fixtures = path.join('options', 'sort*');
     runMochaJSON(fixtures, args, function (err, res) {
       if (err) {
         done(err);

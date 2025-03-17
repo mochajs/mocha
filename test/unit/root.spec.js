@@ -1,6 +1,6 @@
 'use strict';
 
-var calls = [];
+const calls = [];
 
 before(function () {
   calls.push('before');

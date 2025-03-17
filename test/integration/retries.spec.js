@@ -1,10 +1,10 @@
 'use strict';
 
-var assert = require('node:assert');
-var helpers = require('./helpers');
-var runJSON = helpers.runMochaJSON;
-var args = [];
-var bang = require('../../lib/reporters/base').symbols.bang;
+const assert = require('node:assert');
+const helpers = require('./helpers');
+const runJSON = helpers.runMochaJSON;
+const args = [];
+const bang = require('../../lib/reporters/base').symbols.bang;
 
 describe('retries', function () {
   it('are ran in correct order', function (done) {
@@ -12,7 +12,7 @@ describe('retries', function () {
       'retries/hooks.fixture.js',
       ['--reporter', 'dot'],
       function (err, res) {
-        var lines, expected;
+        let lines, expected;
 
         if (err) {
           done(err);
@@ -94,7 +94,7 @@ describe('retries', function () {
       'retries/async.fixture.js',
       ['--reporter', 'dot'],
       function (err, res) {
-        var lines, expected;
+        let lines, expected;
 
         if (err) {
           done(err);

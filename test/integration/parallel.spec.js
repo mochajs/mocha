@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('node:assert');
-const {runMochaJSONAsync} = require('./helpers');
+const { runMochaJSONAsync } = require('./helpers');
 
 describe('parallel run', () => {
   /**
@@ -69,7 +69,7 @@ describe('parallel run', () => {
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, 'Oh no!');
-    assert.deepStrictEqual(result.failures[0].err.values, [ { toB: { toA: '[Circular]' } } ]);
+    assert.deepStrictEqual(result.failures[0].err.values, [{ toB: { toA: '[Circular]' } }]);
   });
 
   it('should correctly handle a non-writable getter reference in an exception', async () => {

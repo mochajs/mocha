@@ -2,7 +2,7 @@
 
 const PluginLoader = require('../../lib/plugin-loader');
 const sinon = require('sinon');
-const {INVALID_PLUGIN_DEFINITION, INVALID_PLUGIN_IMPLEMENTATION} =
+const { INVALID_PLUGIN_DEFINITION, INVALID_PLUGIN_IMPLEMENTATION } =
   require('../../lib/errors').constants;
 
 describe('plugin module', function () {
@@ -16,9 +16,9 @@ describe('plugin module', function () {
 
       describe('when passed custom plugins', function () {
         it('should register the custom plugins', function () {
-          const plugin = {exportName: 'mochaBananaPhone'};
+          const plugin = { exportName: 'mochaBananaPhone' };
           expect(
-            new PluginLoader({pluginDefs: [plugin]}).registered,
+            new PluginLoader({ pluginDefs: [plugin] }).registered,
             'to satisfy',
             new Map([['mochaBananaPhone', plugin]])
           );
@@ -59,7 +59,7 @@ describe('plugin module', function () {
         describe('when the plugin export name is not in use', function () {
           it('should not throw', function () {
             expect(
-              () => pluginLoader.register({exportName: 'butts'}),
+              () => pluginLoader.register({ exportName: 'butts' }),
               'not to throw'
             );
           });
@@ -67,7 +67,7 @@ describe('plugin module', function () {
 
         describe('when the plugin export name is already in use', function () {
           it('should throw', function () {
-            const pluginDef = {exportName: 'butts'};
+            const pluginDef = { exportName: 'butts' };
             pluginLoader.register(pluginDef);
             expect(() => pluginLoader.register(pluginDef), 'to throw', {
               code: INVALID_PLUGIN_DEFINITION,
@@ -80,7 +80,7 @@ describe('plugin module', function () {
           let pluginDef;
 
           beforeEach(function () {
-            pluginDef = {exportName: 'elephantInRoom'};
+            pluginDef = { exportName: 'elephantInRoom' };
           });
 
           it('should not throw', function () {
@@ -116,7 +116,7 @@ describe('plugin module', function () {
 
         describe('when passed a definition w/o an exportName', function () {
           it('should throw', function () {
-            const pluginDef = {foo: 'bar'};
+            const pluginDef = { foo: 'bar' };
             expect(() => pluginLoader.register(pluginDef), 'to throw', {
               code: INVALID_PLUGIN_DEFINITION,
               pluginDef
@@ -142,7 +142,7 @@ describe('plugin module', function () {
           it('should return false', function () {
             // also it should not throw
             expect(
-              pluginLoader.load({mochaBananaPhone: () => {}}),
+              pluginLoader.load({ mochaBananaPhone: () => {} }),
               'to be false'
             );
           });
@@ -157,17 +157,17 @@ describe('plugin module', function () {
               exportName: 'mochaBananaPhone',
               validate: sinon.spy()
             };
-            pluginLoader = PluginLoader.create({pluginDefs: [plugin]});
+            pluginLoader = PluginLoader.create({ pluginDefs: [plugin] });
           });
 
           it('should return true', function () {
             const func = () => {};
-            expect(pluginLoader.load({mochaBananaPhone: func}), 'to be true');
+            expect(pluginLoader.load({ mochaBananaPhone: func }), 'to be true');
           });
 
           it('should retain the value of any matching property in its mapping', function () {
             const func = () => {};
-            pluginLoader.load({mochaBananaPhone: func});
+            pluginLoader.load({ mochaBananaPhone: func });
             expect(
               pluginLoader.loaded,
               'to satisfy',
@@ -177,7 +177,7 @@ describe('plugin module', function () {
 
           it('should call the associated validator, if present', function () {
             const func = () => {};
-            pluginLoader.load({mochaBananaPhone: func});
+            pluginLoader.load({ mochaBananaPhone: func });
             expect(plugin.validate, 'was called once');
           });
         });
@@ -220,7 +220,7 @@ describe('plugin module', function () {
             let retval;
 
             beforeEach(function () {
-              retval = pluginLoader.load({butts: () => {}});
+              retval = pluginLoader.load({ butts: () => {} });
             });
 
             it('should return false', function () {
@@ -237,7 +237,7 @@ describe('plugin module', function () {
             });
 
             it('should call the associated validator', function () {
-              retval = pluginLoader.load({foo: impl});
+              retval = pluginLoader.load({ foo: impl });
 
               expect(fooPlugin.validate, 'to have a call satisfying', [
                 impl
@@ -245,13 +245,13 @@ describe('plugin module', function () {
             });
 
             it('should not call validators whose keys were not found', function () {
-              retval = pluginLoader.load({foo: impl});
+              retval = pluginLoader.load({ foo: impl });
               expect(barPlugin.validate, 'was not called');
             });
 
             describe('when the value passes the associated validator', function () {
               beforeEach(function () {
-                retval = pluginLoader.load({foo: impl});
+                retval = pluginLoader.load({ foo: impl });
               });
 
               it('should return true', function () {
@@ -277,7 +277,7 @@ describe('plugin module', function () {
 
             describe('when the value does not pass the associated validator', function () {
               it('should throw', function () {
-                expect(() => pluginLoader.load({foo: 'ERROR'}), 'to throw');
+                expect(() => pluginLoader.load({ foo: 'ERROR' }), 'to throw');
               });
             });
           });
@@ -319,8 +319,8 @@ describe('plugin module', function () {
 
         describe('when a plugin has one or more implementations', function () {
           beforeEach(function () {
-            pluginLoader.load({foo: sinon.stub()});
-            pluginLoader.load({foo: sinon.stub()});
+            pluginLoader.load({ foo: sinon.stub() });
+            pluginLoader.load({ foo: sinon.stub() });
           });
 
           it('should return an object map using `optionName` key for each registered plugin', async function () {
@@ -330,7 +330,7 @@ describe('plugin module', function () {
           });
 
           it('should omit unused plugins', async function () {
-            pluginLoader.load({bar: sinon.stub()});
+            pluginLoader.load({ bar: sinon.stub() });
             return expect(pluginLoader.finalize(), 'to be fulfilled with', {
               fooOption: ['FOO', 'FOO'],
               bar: ['BAR']
@@ -340,7 +340,7 @@ describe('plugin module', function () {
 
         describe('when a plugin has no "finalize" function', function () {
           it('should return an array of raw implementations', function () {
-            pluginLoader.load({baz: 'polar bears'});
+            pluginLoader.load({ baz: 'polar bears' });
             return expect(pluginLoader.finalize(), 'to be fulfilled with', {
               baz: ['polar bears']
             });
@@ -359,7 +359,7 @@ describe('plugin module', function () {
 
     describe('when impl is an array', function () {
       it('should fail validation', function () {
-        expect(() => pluginLoader.load({mochaHooks: []}), 'to throw', {
+        expect(() => pluginLoader.load({ mochaHooks: [] }), 'to throw', {
           code: INVALID_PLUGIN_IMPLEMENTATION
         });
       });
@@ -367,7 +367,7 @@ describe('plugin module', function () {
 
     describe('when impl is a primitive', function () {
       it('should fail validation', function () {
-        expect(() => pluginLoader.load({mochaHooks: 'nuts'}), 'to throw', {
+        expect(() => pluginLoader.load({ mochaHooks: 'nuts' }), 'to throw', {
           code: INVALID_PLUGIN_IMPLEMENTATION
         });
       });
@@ -375,7 +375,7 @@ describe('plugin module', function () {
 
     describe('when impl is a function', function () {
       it('should pass validation', function () {
-        expect(pluginLoader.load({mochaHooks: sinon.stub()}), 'to be true');
+        expect(pluginLoader.load({ mochaHooks: sinon.stub() }), 'to be true');
       });
     });
 
@@ -386,18 +386,18 @@ describe('plugin module', function () {
 
     describe('when a loaded impl is finalized', function () {
       it('should flatten the implementations', async function () {
-        function a() {}
-        function b() {}
-        function d() {}
-        function g() {}
-        async function f() {}
-        function c() {
+        function a () {}
+        function b () {}
+        function d () {}
+        function g () {}
+        async function f () {}
+        function c () {
           return {
             beforeAll: d,
             beforeEach: g
           };
         }
-        async function e() {
+        async function e () {
           return {
             afterEach: f
           };
@@ -413,7 +413,7 @@ describe('plugin module', function () {
           c,
           e
         ].forEach(impl => {
-          pluginLoader.load({mochaHooks: impl});
+          pluginLoader.load({ mochaHooks: impl });
         });
 
         return expect(pluginLoader.finalize(), 'to be fulfilled with', {
@@ -439,7 +439,7 @@ describe('plugin module', function () {
       describe('when an implementation is a primitive', function () {
         it('should fail validation', function () {
           expect(
-            () => pluginLoader.load({mochaGlobalSetup: 'nuts'}),
+            () => pluginLoader.load({ mochaGlobalSetup: 'nuts' }),
             'to throw'
           );
         });
@@ -447,7 +447,7 @@ describe('plugin module', function () {
       describe('when an implementation is an array of primitives', function () {
         it('should fail validation', function () {
           expect(
-            () => pluginLoader.load({mochaGlobalSetup: ['nuts']}),
+            () => pluginLoader.load({ mochaGlobalSetup: ['nuts'] }),
             'to throw'
           );
         });
@@ -456,7 +456,7 @@ describe('plugin module', function () {
       describe('when an implementation is a function', function () {
         it('should pass validation', function () {
           expect(
-            pluginLoader.load({mochaGlobalSetup: sinon.stub()}),
+            pluginLoader.load({ mochaGlobalSetup: sinon.stub() }),
             'to be true'
           );
         });
@@ -465,7 +465,7 @@ describe('plugin module', function () {
       describe('when an implementation is an array of functions', function () {
         it('should pass validation', function () {
           expect(
-            pluginLoader.load({mochaGlobalSetup: [sinon.stub()]}),
+            pluginLoader.load({ mochaGlobalSetup: [sinon.stub()] }),
             'to be true'
           );
         });
@@ -476,7 +476,7 @@ describe('plugin module', function () {
       describe('when an implementation is a primitive', function () {
         it('should fail validation', function () {
           expect(
-            () => pluginLoader.load({mochaGlobalTeardown: 'nuts'}),
+            () => pluginLoader.load({ mochaGlobalTeardown: 'nuts' }),
             'to throw'
           );
         });
@@ -484,7 +484,7 @@ describe('plugin module', function () {
       describe('when an implementation is an array of primitives', function () {
         it('should fail validation', function () {
           expect(
-            () => pluginLoader.load({mochaGlobalTeardown: ['nuts']}),
+            () => pluginLoader.load({ mochaGlobalTeardown: ['nuts'] }),
             'to throw'
           );
         });
@@ -493,7 +493,7 @@ describe('plugin module', function () {
       describe('when an implementation is a function', function () {
         it('should pass validation', function () {
           expect(
-            pluginLoader.load({mochaGlobalTeardown: sinon.stub()}),
+            pluginLoader.load({ mochaGlobalTeardown: sinon.stub() }),
             'to be true'
           );
         });
@@ -502,7 +502,7 @@ describe('plugin module', function () {
       describe('when an implementation is an array of functions', function () {
         it('should pass validation', function () {
           expect(
-            pluginLoader.load({mochaGlobalTeardown: [sinon.stub()]}),
+            pluginLoader.load({ mochaGlobalTeardown: [sinon.stub()] }),
             'to be true'
           );
         });

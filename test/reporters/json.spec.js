@@ -1,21 +1,21 @@
 'use strict';
 
-var fs = require('node:fs');
-var sinon = require('sinon');
-var JSONReporter = require('../../lib/reporters/json');
-var utils = require('../../lib/utils');
-var Mocha = require('../../');
-var Suite = Mocha.Suite;
-var Runner = Mocha.Runner;
-var Test = Mocha.Test;
+const fs = require('node:fs');
+const sinon = require('sinon');
+const JSONReporter = require('../../lib/reporters/json');
+const utils = require('../../lib/utils');
+const Mocha = require('../../');
+const Suite = Mocha.Suite;
+const Runner = Mocha.Runner;
+const Test = Mocha.Test;
 
 describe('JSON reporter', function () {
-  var mocha;
-  var suite;
-  var runner;
-  var testTitle = 'json test 1';
-  var testFile = 'someTest.spec.js';
-  var noop = function () {};
+  let mocha;
+  let suite;
+  let runner;
+  const testTitle = 'json test 1';
+  const testFile = 'someTest.spec.js';
+  const noop = function () {};
 
   beforeEach(function () {
     mocha = new Mocha({
@@ -31,9 +31,9 @@ describe('JSON reporter', function () {
 
   describe('test results', function () {
     beforeEach(function () {
-      var options = {};
+      const options = {};
       /* eslint no-unused-vars: off */
-      var mochaReporter = new mocha._reporter(runner, options);
+      const mochaReporter = new mocha._reporter(runner, options);
     });
 
     beforeEach(function () {
@@ -41,9 +41,9 @@ describe('JSON reporter', function () {
     });
 
     it('should have 1 test failure', function (done) {
-      var error = {message: 'oh shit'};
+      const error = { message: 'oh shit' };
 
-      var test = new Test(testTitle, function (done) {
+      const test = new Test(testTitle, function (done) {
         done(new Error(error.message));
       });
 
@@ -71,7 +71,7 @@ describe('JSON reporter', function () {
     });
 
     it('should have 1 test pending', function (done) {
-      var test = new Test(testTitle);
+      const test = new Test(testTitle);
       test.file = testFile;
       suite.addTest(test);
 
@@ -117,14 +117,14 @@ describe('JSON reporter', function () {
     });
 
     it('should handle circular objects in errors', function (done) {
-      var testTitle = 'json test 1';
-      function CircleError() {
+      const testTitle = 'json test 1';
+      function CircleError () {
         this.message = 'oh shit';
         this.circular = this;
       }
-      var error = new CircleError();
+      const error = new CircleError();
 
-      var test = new Test(testTitle, function (done) {
+      const test = new Test(testTitle, function (done) {
         throw error;
       });
 
@@ -153,22 +153,21 @@ describe('JSON reporter', function () {
   });
 
   describe('when "reporterOption.output" is provided', function () {
-    var expectedDirName = 'reports';
-    var expectedFileName = 'reports/test-results.json';
-    var options = {
+    const expectedDirName = 'reports';
+    const expectedFileName = 'reports/test-results.json';
+    const options = {
       reporterOption: {
         output: expectedFileName
       }
     };
 
     beforeEach(function () {
-      /* eslint no-unused-vars: off */
-      var mochaReporter = new mocha._reporter(runner, options);
+      const mochaReporter = new mocha._reporter(runner, options);
     });
 
     beforeEach(function () {
       // Add one test to suite to avoid assertions against empty test results
-      var test = new Test(testTitle, () => {});
+      const test = new Test(testTitle, () => {});
       test.file = testFile;
       suite.addTest(test);
     });
@@ -185,7 +184,7 @@ describe('JSON reporter', function () {
 
       runner.run(function () {
         expect(
-          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
           'to be true'
         );
         expect(fsWriteFileSync.calledOnce, 'to be true');
@@ -207,7 +206,7 @@ describe('JSON reporter', function () {
       runner.run(function () {
         sinon.restore();
         expect(
-          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
           'to be true'
         );
         expect(fsWriteFileSync.calledOnce, 'to be true');

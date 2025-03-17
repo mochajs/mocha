@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('../helpers');
-var invokeMocha = helpers.invokeMocha;
+const helpers = require('../helpers');
+const invokeMocha = helpers.invokeMocha;
 
 describe('--compilers', function () {
   it('should report deprecation', function (done) {

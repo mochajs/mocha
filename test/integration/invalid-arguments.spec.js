@@ -1,6 +1,6 @@
 'use strict';
 
-var invokeMocha = require('./helpers').invokeMocha;
+const invokeMocha = require('./helpers').invokeMocha;
 
 describe('invalid arguments', function () {
   describe('when argument is missing required value', function () {
@@ -15,7 +15,7 @@ describe('invalid arguments', function () {
           expect(result.output, 'to match', /not enough arguments/i);
           done();
         },
-        {stdio: 'pipe'}
+        { stdio: 'pipe' }
       );
     });
   });

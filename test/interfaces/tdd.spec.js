@@ -2,7 +2,7 @@
 
 suite('integer primitives', function () {
   suite('arithmetic', function () {
-    var initialValue = 41;
+    let initialValue = 41;
 
     suiteSetup(function (done) {
       expect(initialValue, 'to be', 41);
@@ -23,13 +23,13 @@ suite('integer primitives', function () {
     });
 
     test.skip('should skip this test', function () {
-      var zero = 0;
+      const zero = 0;
       expect(zero, 'to be', 1);
     });
 
     suite.skip('should skip this suite', function () {
       test('should skip this test', function () {
-        var zero = 0;
+        const zero = 0;
         expect(zero, 'to be', 1);
       });
     });

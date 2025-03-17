@@ -1,17 +1,17 @@
 'use strict';
 
-const {version} = require('../package.json');
+const { version } = require('../package.json');
 const escapeRe = require('escape-string-regexp');
 
 module.exports = {
   name: 'unexpected-mocha-internal',
   version,
-  installInto(expect) {
+  installInto (expect) {
     expect
       .addType({
         name: 'RawResult',
         base: 'object',
-        identify(v) {
+        identify (v) {
           return (
             this.baseType.identify(v) &&
             typeof v.output === 'string' &&
@@ -24,7 +24,7 @@ module.exports = {
       .addType({
         name: 'JSONResult',
         base: 'RawResult',
-        identify(v) {
+        identify (v) {
           return (
             this.baseType.identify(v) &&
             typeof v.stats === 'object' &&
@@ -38,7 +38,7 @@ module.exports = {
       .addType({
         name: 'SummarizedResult',
         base: 'RawResult',
-        identify(v) {
+        identify (v) {
           return (
             this.baseType.identify(v) &&
             typeof v.passing === 'number' &&
@@ -75,7 +75,7 @@ module.exports = {
         '<JSONResult> [not] to have passed (with|having) count <number>',
         (expect, result, count) => {
           expect(result, '[not] to pass').and('[not] to satisfy', {
-            stats: {passes: expect.it('to be', count)}
+            stats: { passes: expect.it('to be', count) }
           });
         }
       )
@@ -83,7 +83,7 @@ module.exports = {
         '<JSONResult> [not] to have failed (with|having) count <number>',
         (expect, result, count) => {
           expect(result, '[not] to have failed').and('[not] to satisfy', {
-            stats: {failures: expect.it('to be', count)}
+            stats: { failures: expect.it('to be', count) }
           });
         }
       )
@@ -203,7 +203,7 @@ module.exports = {
               failures: expect.it('to have an item satisfying', {
                 err: expect
                   .it('to satisfy', error)
-                  .or('to satisfy', {message: error})
+                  .or('to satisfy', { message: error })
               })
             });
           });
@@ -226,7 +226,7 @@ module.exports = {
             result[state].slice(0, titles.length),
             '[not] to satisfy',
             titles.map(title => {
-              return typeof title === 'string' ? {title} : title;
+              return typeof title === 'string' ? { title } : title;
             })
           );
         }
@@ -314,7 +314,7 @@ module.exports = {
               failures: expect.it('to have an item satisfying', {
                 err: expect
                   .it('to satisfy', error)
-                  .or('to satisfy', {message: error})
+                  .or('to satisfy', { message: error })
               })
             });
           });

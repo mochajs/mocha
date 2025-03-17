@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('./helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const helpers = require('./helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('event order', function () {
   describe('trivial test case', function () {

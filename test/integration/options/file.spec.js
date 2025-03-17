@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('node:path').posix;
+const path = require('node:path').posix;
 const {
   runMochaJSON,
   resolveFixturePath: resolvePath,
@@ -8,8 +8,8 @@ const {
 } = require('../helpers');
 
 describe('--file', function () {
-  var args = [];
-  var fixtures = {
+  let args = [];
+  const fixtures = {
     alpha: path.join('options', 'file-alpha'),
     beta: path.join('options', 'file-beta'),
     theta: path.join('options', 'file-theta')
@@ -18,7 +18,7 @@ describe('--file', function () {
   it('should run tests passed via file first', function (done) {
     args = ['--file', resolvePath(fixtures.alpha)];
 
-    var fixture = fixtures.beta;
+    const fixture = fixtures.beta;
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -38,7 +38,7 @@ describe('--file', function () {
       resolvePath(fixtures.beta)
     ];
 
-    var fixture = fixtures.theta;
+    const fixture = fixtures.theta;
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -93,11 +93,11 @@ describe('--file', function () {
         expect(
           res.output,
           'to contain',
-          `Warning: Cannot find any files matching pattern`
+          'Warning: Cannot find any files matching pattern'
         ).and('to contain', nonexistentTestFileArg);
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: 'pipe' }
     );
   });
 
@@ -115,11 +115,11 @@ describe('--file', function () {
         expect(
           res.output,
           'to contain',
-          `Warning: Cannot find any files matching pattern`
+          'Warning: Cannot find any files matching pattern'
         ).and('to contain', nonexistentCjsArg);
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: 'pipe' }
     );
   });
 
@@ -137,11 +137,11 @@ describe('--file', function () {
         expect(
           res.output,
           'to contain',
-          `Warning: Cannot find any files matching pattern`
+          'Warning: Cannot find any files matching pattern'
         ).and('to contain', nonexistentEsmArg);
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: 'pipe' }
     );
   });
 });

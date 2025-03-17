@@ -1,13 +1,12 @@
 'use strict';
 
 const Mocha = require('../../lib/mocha');
-const {Suite, Test, Context} = Mocha;
+const { Suite, Test, Context } = Mocha;
 const sinon = require('sinon');
 const errors = require('../../lib/errors');
 
-function supportsFunctionNames() {
-  // eslint-disable-next-line no-extra-parens
-  return function foo() {}.name === 'foo';
+function supportsFunctionNames () {
+  return function foo () {}.name === 'foo';
 }
 
 describe('Suite', function () {
@@ -187,7 +186,7 @@ describe('Suite', function () {
             this.skip();
             return;
           }
-          function namedFn() {}
+          function namedFn () {}
           suite.beforeAll(namedFn);
           const beforeAllItem = suite._beforeAll[0];
           expect(beforeAllItem.title, 'to be', '"before all" hook: namedFn');
@@ -226,7 +225,7 @@ describe('Suite', function () {
             this.skip();
             return;
           }
-          function namedFn() {}
+          function namedFn () {}
           suite.afterAll(namedFn);
           const afterAllItem = suite._afterAll[0];
           expect(afterAllItem.title, 'to be', '"after all" hook: namedFn');
@@ -268,7 +267,7 @@ describe('Suite', function () {
             this.skip();
             return;
           }
-          function namedFn() {}
+          function namedFn () {}
           suite.beforeEach(namedFn);
           const beforeEachItem = suite._beforeEach[0];
           expect(beforeEachItem.title, 'to be', '"before each" hook: namedFn');
@@ -319,7 +318,7 @@ describe('Suite', function () {
             this.skip();
             return;
           }
-          function namedFn() {}
+          function namedFn () {}
           suite.afterEach(namedFn);
           const afterEachItem = suite._afterEach[0];
           expect(afterEachItem.title, 'to be', '"after each" hook: namedFn');
@@ -488,7 +487,7 @@ describe('Suite', function () {
       describe('when there are no nested suites or tests', function () {
         it('should return 0', function () {
           let n = 0;
-          function fn() {
+          function fn () {
             n++;
           }
           suite.eachTest(fn);
@@ -502,7 +501,7 @@ describe('Suite', function () {
           suite.addTest(new Test('another child test'));
 
           let n = 0;
-          function fn() {
+          function fn () {
             n++;
           }
           suite.eachTest(fn);
@@ -518,7 +517,7 @@ describe('Suite', function () {
           suite.addSuite(childSuite);
 
           let n = 0;
-          function fn() {
+          function fn () {
             n++;
           }
           suite.eachTest(fn);
@@ -618,7 +617,7 @@ describe('Suite', function () {
           suites: expect.it('to be empty'),
           tests: expect
             .it('to have length', 1)
-            .and('to have an item satisfying', {title: 'c'})
+            .and('to have an item satisfying', { title: 'c' })
         });
       });
 
@@ -641,7 +640,7 @@ describe('Suite', function () {
         expect(suite, 'to satisfy', {
           suites: expect
             .it('to have length', 1)
-            .and('to have an item satisfying', {title: 'b'}),
+            .and('to have an item satisfying', { title: 'b' }),
           tests: expect.it('to be empty')
         });
       });

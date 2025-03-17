@@ -15,8 +15,8 @@
 
 'use strict';
 
-const {writeFile, mkdir, rm} = require('node:fs').promises;
-const {resolve} = require('node:path');
+const { writeFile, mkdir, rm } = require('node:fs').promises;
+const { resolve } = require('node:path');
 const debug = require('debug')('mocha:docs:data:supporters');
 const needle = require('needle');
 const blocklist = new Set(require('./blocklist.json'));
@@ -99,31 +99,31 @@ const nodeToSupporter = node => ({
 
 const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
   ? async supporter => {
-      invalidSupporters.push(supporter);
-    }
+    invalidSupporters.push(supporter);
+  }
   : async supporter => {
-      try {
-        const {avatar: url} = supporter;
-        const {body: imageBuf, headers} = await needle('get', url, {
-          open_timeout: 30000
-        });
-        if (headers['content-type'].startsWith('text/html')) {
-          throw new TypeError(
-            'received html and expected a png; outage likely'
-          );
-        }
-        debug('fetched %s', url);
-        const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
-        await writeFile(filePath, imageBuf);
-        debug('wrote %s', filePath);
-      } catch (err) {
-        console.error(
+    try {
+      const { avatar: url } = supporter;
+      const { body: imageBuf, headers } = await needle('get', url, {
+        open_timeout: 30000
+      });
+      if (headers['content-type'].startsWith('text/html')) {
+        throw new TypeError(
+          'received html and expected a png; outage likely'
+        );
+      }
+      debug('fetched %s', url);
+      const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + '.png');
+      await writeFile(filePath, imageBuf);
+      debug('wrote %s', filePath);
+    } catch (err) {
+      console.error(
           `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
           err
-        );
-        invalidSupporters.push(supporter);
-      }
-    };
+      );
+      invalidSupporters.push(supporter);
+    }
+  };
 
 /**
  * Retrieves donation data from OC
@@ -134,15 +134,15 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
  */
 const getAllOrders = async (slug = 'mochajs') => {
   let allOrders = [];
-  const variables = {limit: GRAPHQL_PAGE_SIZE, offset: 0, slug};
+  const variables = { limit: GRAPHQL_PAGE_SIZE, offset: 0, slug };
 
   // Handling pagination if necessary (2 pages for ~1400 results in May 2019)
   while (true) {
     const result = await needle(
       'post',
       API_ENDPOINT,
-      {query: SUPPORTER_QUERY, variables},
-      {json: true}
+      { query: SUPPORTER_QUERY, variables },
+      { json: true }
     );
     const orders = result.body.data.account.orders.nodes;
     allOrders = [...allOrders, ...orders];
@@ -159,7 +159,7 @@ const getAllOrders = async (slug = 'mochajs') => {
   }
 };
 
-const isAllowed = ({name, slug, website, categories}) => {
+const isAllowed = ({ name, slug, website, categories }) => {
   const allowed = !blocklist.has(slug) &&
     !BLOCKED_STRINGS.test(name) &&
     !BLOCKED_STRINGS.test(slug) &&
@@ -167,7 +167,7 @@ const isAllowed = ({name, slug, website, categories}) => {
     !categories.some(category => BLOCKED_CATEGORIES.includes(category));
 
   if (!allowed) {
-    debug('filtering %o', {categories, name, slug, website});
+    debug('filtering %o', { categories, name, slug, website });
   } else {
     // debug('keeping %o', {categories, name, slug, website}, BLOCKED_STRINGS.test(website));
   }
@@ -227,9 +227,9 @@ const getSupporters = async () => {
       }
     );
 
-  await rm(SUPPORTER_IMAGE_PATH, {recursive: true, force: true});
+  await rm(SUPPORTER_IMAGE_PATH, { recursive: true, force: true });
   debug('blasted %s', SUPPORTER_IMAGE_PATH);
-  await mkdir(SUPPORTER_IMAGE_PATH, {recursive: true});
+  await mkdir(SUPPORTER_IMAGE_PATH, { recursive: true });
   debug('created %s', SUPPORTER_IMAGE_PATH);
 
   // Fetch images for sponsors and save their image dimensions

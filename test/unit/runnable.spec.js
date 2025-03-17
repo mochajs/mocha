@@ -1,32 +1,32 @@
 'use strict';
 
-var Mocha = require('../../lib/mocha');
-var Runnable = Mocha.Runnable;
-var Suite = Mocha.Suite;
-var sinon = require('sinon');
-const {TIMEOUT} = require('../../lib/errors').constants;
-var STATE_FAILED = Runnable.constants.STATE_FAILED;
+const Mocha = require('../../lib/mocha');
+const Runnable = Mocha.Runnable;
+const Suite = Mocha.Suite;
+const sinon = require('sinon');
+const { TIMEOUT } = require('../../lib/errors').constants;
+const STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe('Runnable(title, fn)', function () {
   describe('#timeout(ms)', function () {
-    var DISABLED_TIMEOUTS = 0;
-    var MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
+    const DISABLED_TIMEOUTS = 0;
+    const MAX_TIMEOUT = 2147483647; // INT_MAX (32-bit signed integer)
 
     describe('when value is less than lower bound', function () {
       it('should clamp to lower bound given numeric', function () {
-        var run = new Runnable();
+        const run = new Runnable();
         run.timeout(-1);
         expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
       it('should clamp to lower bound given timestamp', function () {
-        var run = new Runnable();
+        const run = new Runnable();
         run.timeout('-1 ms');
         expect(run.timeout(), 'to be', DISABLED_TIMEOUTS);
       });
     });
 
     describe('when value is equal to lower bound', function () {
-      var run;
+      let run;
 
       beforeEach(function () {
         run = new Runnable();
@@ -46,8 +46,8 @@ describe('Runnable(title, fn)', function () {
     });
 
     describe('when value is within `setTimeout` bounds', function () {
-      var run;
-      var timeout = 1000;
+      let run;
+      const timeout = 1000;
 
       beforeEach(function () {
         run = new Runnable();
@@ -68,7 +68,7 @@ describe('Runnable(title, fn)', function () {
     });
 
     describe('when value is equal to upper bound', function () {
-      var run;
+      let run;
 
       beforeEach(function () {
         run = new Runnable();
@@ -82,8 +82,8 @@ describe('Runnable(title, fn)', function () {
     });
 
     describe('when value is out-of-bounds', function () {
-      var run;
-      var timeout = MAX_TIMEOUT + 1;
+      let run;
+      const timeout = MAX_TIMEOUT + 1;
 
       beforeEach(function () {
         run = new Runnable();
@@ -99,7 +99,7 @@ describe('Runnable(title, fn)', function () {
   });
 
   describe('#slow(ms)', function () {
-    var run;
+    let run;
 
     beforeEach(function () {
       run = new Runnable();
@@ -129,7 +129,7 @@ describe('Runnable(title, fn)', function () {
   });
 
   describe('#reset', function () {
-    var run;
+    let run;
 
     beforeEach(function () {
       run = new Runnable();
@@ -159,7 +159,7 @@ describe('Runnable(title, fn)', function () {
 
   describe('.titlePath()', function () {
     it("returns the concatenation of the parent's title path and runnable's title", function () {
-      var runnable = new Runnable('bar');
+      const runnable = new Runnable('bar');
       runnable.parent = new Suite('foo');
       expect(
         JSON.stringify(runnable.titlePath()),
@@ -170,7 +170,7 @@ describe('Runnable(title, fn)', function () {
   });
 
   describe('when arity >= 1', function () {
-    var run;
+    let run;
 
     beforeEach(function () {
       run = new Runnable('foo', function (done) {});
@@ -186,7 +186,7 @@ describe('Runnable(title, fn)', function () {
   });
 
   describe('when arity == 0', function () {
-    var run;
+    let run;
 
     beforeEach(function () {
       run = new Runnable('foo', function () {});
@@ -203,7 +203,7 @@ describe('Runnable(title, fn)', function () {
 
   describe('#globals', function () {
     it('should allow for whitelisting globals', function () {
-      var runnable = new Runnable('foo', function () {});
+      const runnable = new Runnable('foo', function () {});
       runnable.globals(['foobar']);
       expect(runnable._allowedGlobals, 'to equal', ['foobar']);
     });
@@ -211,7 +211,7 @@ describe('Runnable(title, fn)', function () {
 
   describe('#retries(n)', function () {
     it('should set the number of retries', function () {
-      var run = new Runnable();
+      const run = new Runnable();
       run.retries(1);
       expect(run.retries(), 'to be', 1);
     });
@@ -220,8 +220,8 @@ describe('Runnable(title, fn)', function () {
   describe('.run(fn)', function () {
     describe('when .pending', function () {
       it('should not invoke the callback', function (done) {
-        var spy = sinon.spy();
-        var runnable = new Runnable('foo', spy);
+        const spy = sinon.spy();
+        const runnable = new Runnable('foo', spy);
 
         runnable.pending = true;
         runnable.run(function (err) {
@@ -237,8 +237,8 @@ describe('Runnable(title, fn)', function () {
     describe('when sync', function () {
       describe('without error', function () {
         it('should invoke the callback', function (done) {
-          var spy = sinon.spy();
-          var runnable = new Runnable('foo', spy);
+          const spy = sinon.spy();
+          const runnable = new Runnable('foo', spy);
 
           runnable.run(function (err) {
             if (err) {
@@ -253,8 +253,8 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown', function () {
         it('should invoke the callback with error', function (done) {
-          var stub = sinon.stub().throws('Error', 'fail');
-          var runnable = new Runnable('foo', stub);
+          const stub = sinon.stub().throws('Error', 'fail');
+          const runnable = new Runnable('foo', stub);
 
           runnable.run(function (err) {
             expect(err.message, 'to be', 'fail');
@@ -266,11 +266,11 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function () {
         it('throws an error when it is allowed', function () {
-          var stub = sinon.stub().throws('Error', 'fail');
-          var runnable = new Runnable('foo', stub);
+          const stub = sinon.stub().throws('Error', 'fail');
+          const runnable = new Runnable('foo', stub);
           runnable.allowUncaught = true;
 
-          function fail() {
+          function fail () {
             runnable.run(function () {});
           }
           expect(fail, 'to throw', 'fail');
@@ -280,7 +280,7 @@ describe('Runnable(title, fn)', function () {
 
     describe('when timeouts are disabled', function () {
       it('should not error with timeout', function (done) {
-        var runnable = new Runnable('foo', function (done) {
+        const runnable = new Runnable('foo', function (done) {
           setTimeout(function () {
             setTimeout(done);
           }, 2);
@@ -297,7 +297,7 @@ describe('Runnable(title, fn)', function () {
     describe('when async', function () {
       describe('without error', function () {
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             setTimeout(done);
           });
 
@@ -311,10 +311,10 @@ describe('Runnable(title, fn)', function () {
       describe('when the callback is invoked several times', function () {
         describe('without an error', function () {
           it('should emit a single "error" event', function (done) {
-            var callbackSpy = sinon.spy();
-            var errorSpy = sinon.spy();
+            const callbackSpy = sinon.spy();
+            const errorSpy = sinon.spy();
 
-            var runnable = new Runnable('foo', function (done) {
+            const runnable = new Runnable('foo', function (done) {
               process.nextTick(done);
               setTimeout(done);
               setTimeout(done);
@@ -342,10 +342,10 @@ describe('Runnable(title, fn)', function () {
 
         describe('with an error', function () {
           it('should emit a single "error" event', function (done) {
-            var callbackSpy = sinon.spy();
-            var errorSpy = sinon.spy();
+            const callbackSpy = sinon.spy();
+            const errorSpy = sinon.spy();
 
-            var runnable = new Runnable('foo', function (done) {
+            const runnable = new Runnable('foo', function (done) {
               done(new Error('fail'));
               setTimeout(done);
               done(new Error('fail'));
@@ -375,7 +375,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown', function () {
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable(
+          const runnable = new Runnable(
             'foo',
             sinon.stub().throws('Error', 'fail')
           );
@@ -387,7 +387,7 @@ describe('Runnable(title, fn)', function () {
         });
 
         it('should not throw its own exception if passed a non-object', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             /* eslint no-throw-literal: off */
             throw null;
           });
@@ -401,12 +401,12 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function () {
         it('throws an error when it is allowed', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             throw new Error('fail');
           });
           runnable.allowUncaught = true;
 
-          function fail() {
+          function fail () {
             runnable.run(function () {});
           }
           expect(fail, 'to throw', 'fail');
@@ -416,7 +416,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an error is passed', function () {
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             done(new Error('fail'));
           });
 
@@ -429,7 +429,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when done() is invoked with a non-Error object', function () {
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             done({
               error: 'Test error'
             });
@@ -448,7 +448,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when done() is invoked with a string', function () {
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          const runnable = new Runnable('foo', function (done) {
             done('Test error');
           });
 
@@ -464,8 +464,8 @@ describe('Runnable(title, fn)', function () {
       });
 
       it('should allow updating the timeout', function (done) {
-        var spy = sinon.spy();
-        var runnable = new Runnable('foo', function (done) {
+        const spy = sinon.spy();
+        const runnable = new Runnable('foo', function (done) {
           setTimeout(spy, 1);
           setTimeout(spy, 100);
         });
@@ -489,14 +489,14 @@ describe('Runnable(title, fn)', function () {
 
     describe('when fn returns a promise', function () {
       describe('when the promise is fulfilled with no value', function () {
-        var fulfilledPromise = {
+        const fulfilledPromise = {
           then: function (fulfilled) {
             setTimeout(fulfilled);
           }
         };
 
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function () {
+          const runnable = new Runnable('foo', function () {
             return fulfilledPromise;
           });
 
@@ -508,7 +508,7 @@ describe('Runnable(title, fn)', function () {
       });
 
       describe('when the promise is fulfilled with a value', function () {
-        var fulfilledPromise = {
+        const fulfilledPromise = {
           then: function (fulfilled, rejected) {
             setTimeout(function () {
               fulfilled({});
@@ -517,7 +517,7 @@ describe('Runnable(title, fn)', function () {
         };
 
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function () {
+          const runnable = new Runnable('foo', function () {
             return fulfilledPromise;
           });
 
@@ -529,8 +529,8 @@ describe('Runnable(title, fn)', function () {
       });
 
       describe('when the promise is rejected', function () {
-        var expectedErr = new Error('fail');
-        var rejectedPromise = {
+        const expectedErr = new Error('fail');
+        const rejectedPromise = {
           then: function (fulfilled, rejected) {
             setTimeout(function () {
               rejected(expectedErr);
@@ -539,7 +539,7 @@ describe('Runnable(title, fn)', function () {
         };
 
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function () {
+          const runnable = new Runnable('foo', function () {
             return rejectedPromise;
           });
 
@@ -551,8 +551,8 @@ describe('Runnable(title, fn)', function () {
       });
 
       describe('when the promise is rejected without a reason', function () {
-        var expectedErr = new Error('Promise rejected with no or falsy reason');
-        var rejectedPromise = {
+        const expectedErr = new Error('Promise rejected with no or falsy reason');
+        const rejectedPromise = {
           then: function (fulfilled, rejected) {
             setTimeout(function () {
               rejected();
@@ -561,7 +561,7 @@ describe('Runnable(title, fn)', function () {
         };
 
         it('should invoke the callback', function (done) {
-          var runnable = new Runnable('foo', function () {
+          const runnable = new Runnable('foo', function () {
             return rejectedPromise;
           });
 
@@ -573,19 +573,19 @@ describe('Runnable(title, fn)', function () {
       });
 
       describe('when the promise takes too long to settle', function () {
-        var foreverPendingPromise = {
+        const foreverPendingPromise = {
           then: function () {}
         };
 
         it('should throw the timeout error', function (done) {
-          var runnable = new Runnable('foo', function () {
+          const runnable = new Runnable('foo', function () {
             return foreverPendingPromise;
           });
           runnable.file = '/some/path';
 
           runnable.timeout(10);
           runnable.run(function (err) {
-            expect(err, 'to satisfy', {code: TIMEOUT, timeout: 10});
+            expect(err, 'to satisfy', { code: TIMEOUT, timeout: 10 });
             done();
           });
         });
@@ -594,7 +594,7 @@ describe('Runnable(title, fn)', function () {
 
     describe('when fn returns a non-promise', function () {
       it('should invoke the callback', function (done) {
-        var runnable = new Runnable('foo', function () {
+        const runnable = new Runnable('foo', function () {
           return {
             then: 'i ran my tests'
           };
@@ -606,12 +606,12 @@ describe('Runnable(title, fn)', function () {
 
     describe('if timed-out', function () {
       it('should ignore call to `done` and not execute callback again', function (done) {
-        var runnable = new Runnable('foo', function (done) {
+        const runnable = new Runnable('foo', function (done) {
           setTimeout(done, 20);
         });
         runnable.timeout(10);
         runnable.run(function (err) {
-          expect(err, 'to satisfy', {code: TIMEOUT, timeout: 10});
+          expect(err, 'to satisfy', { code: TIMEOUT, timeout: 10 });
           // timedOut is set *after* this callback is executed
           process.nextTick(function () {
             expect(runnable.timedOut, 'to be truthy');
@@ -635,7 +635,7 @@ describe('Runnable(title, fn)', function () {
       });
 
       it('this.skip() should halt synchronous execution', function (done) {
-        var aborted = true;
+        let aborted = true;
         var runnable = new Runnable('foo', function (done) {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
@@ -653,7 +653,7 @@ describe('Runnable(title, fn)', function () {
 
     describe('when fn is not a function', function () {
       it('should throw an error', function () {
-        var runnable = new Runnable('foo', 4);
+        const runnable = new Runnable('foo', 4);
 
         runnable.run(function (err) {
           expect(
@@ -668,7 +668,7 @@ describe('Runnable(title, fn)', function () {
 
   describe('#isFailed()', function () {
     it('should return `true` if test has not failed', function () {
-      var runnable = new Runnable('foo', function () {});
+      const runnable = new Runnable('foo', function () {});
       // runner sets the state
       runnable.run(function () {
         expect(runnable.isFailed(), 'to be false');
@@ -676,7 +676,7 @@ describe('Runnable(title, fn)', function () {
     });
 
     it('should return `true` if test has failed', function () {
-      var runnable = new Runnable('foo', function () {});
+      const runnable = new Runnable('foo', function () {});
       // runner sets the state
       runnable.state = STATE_FAILED;
       runnable.run(function () {
@@ -685,7 +685,7 @@ describe('Runnable(title, fn)', function () {
     });
 
     it('should return `false` if test is pending', function () {
-      var runnable = new Runnable('foo', function () {});
+      const runnable = new Runnable('foo', function () {});
       // runner sets the state
       runnable.isPending = function () {
         return true;
@@ -698,7 +698,7 @@ describe('Runnable(title, fn)', function () {
 
   describe('#resetTimeout()', function () {
     it('should not time out if timeouts disabled after reset', function (done) {
-      var runnable = new Runnable('foo', function () {});
+      const runnable = new Runnable('foo', function () {});
       runnable.timeout(10);
       runnable.resetTimeout();
       runnable.timeout(0);

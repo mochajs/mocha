@@ -2,7 +2,7 @@
 
 describe('serial', function () {
   describe('nested', function () {
-    var calls = [];
+    const calls = [];
 
     beforeEach(function () {
       calls.push('parent before');

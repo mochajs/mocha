@@ -1,7 +1,7 @@
 'use strict';
 
-var exec = require('node:child_process').exec;
-var path = require('node:path');
+const exec = require('node:child_process').exec;
+const path = require('node:path');
 
 describe('globbing like --compilers', function () {
   it('should find a file of each type', function (done) {
@@ -11,15 +11,15 @@ describe('globbing like --compilers', function () {
         '" "' +
         path.join('bin', 'mocha') +
         '" -R json --require coffeescript/register --require test/compiler-fixtures/foo.fixture "test/compiler/*.@(coffee|foo)"',
-      {cwd: path.join(__dirname, '..', '..')},
+      { cwd: path.join(__dirname, '..', '..') },
       function (error, stdout) {
         if (error && !stdout) {
           return done(error);
         }
-        var results = JSON.parse(stdout);
+        const results = JSON.parse(stdout);
         expect(results, 'to have property', 'tests');
-        var titles = [];
-        for (var index = 0; index < results.tests.length; index += 1) {
+        const titles = [];
+        for (let index = 0; index < results.tests.length; index += 1) {
           expect(results.tests[index], 'to have property', 'fullTitle');
           titles.push(results.tests[index].fullTitle);
         }

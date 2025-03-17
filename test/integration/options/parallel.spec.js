@@ -16,7 +16,7 @@ const REPORTER_FIXTURE_PATH = resolveFixturePath('options/parallel/test-a');
  * @param {string} reporter - Reporter name
  * @returns {{actual: import('../helpers').Summary, expected: import('../helpers').Summary}}
  */
-async function compareReporters(reporter) {
+async function compareReporters (reporter) {
   const [actual, expected] = await Promise.all([
     runMochaAsync(REPORTER_FIXTURE_PATH, [
       '--reporter',
@@ -29,15 +29,15 @@ async function compareReporters(reporter) {
   // the test duration is non-deterministic, so we just fudge it
   actual.output = expected.output = expected.output.replace(/\d+m?s/g, '100ms');
 
-  return {actual, expected};
+  return { actual, expected };
 }
 
 /**
  * Many (but not all) reporters can use this assertion to compare output of serial vs. parallel
  * @param {string} reporter - Reporter name
  */
-async function assertReporterOutputEquality(reporter) {
-  const {actual, expected} = await compareReporters(reporter);
+async function assertReporterOutputEquality (reporter) {
+  const { actual, expected } = await compareReporters(reporter);
   return expect(actual, 'to satisfy', {
     passing: expected.passing,
     failing: expected.failing,
@@ -52,7 +52,7 @@ async function assertReporterOutputEquality(reporter) {
  * @param {number} pid - Process PID
  * @returns {number[]} Child PIDs
  */
-async function waitForChildPids(pid) {
+async function waitForChildPids (pid) {
   let childPids = [];
   while (!childPids.length) {
     childPids = await pidtree(pid);
@@ -432,7 +432,7 @@ describe('--parallel', function () {
     describe('when a single test file is run with --reporter=json', function () {
       it('should have the same output as when run with --no-parallel', async function () {
         // this one has some timings/durations that we can safely ignore
-        const {expected, actual} = await compareReporters('json');
+        const { expected, actual } = await compareReporters('json');
         expected.output = JSON.parse(expected.output);
         actual.output = JSON.parse(actual.output);
         return expect(actual, 'to satisfy', {
@@ -457,7 +457,7 @@ describe('--parallel', function () {
     describe('when a single test file is run with --reporter=xunit', function () {
       it('should have the same output as when run with --no-parallel', async function () {
         // durations need replacing
-        const {expected, actual} = await compareReporters('xunit');
+        const { expected, actual } = await compareReporters('xunit');
         expected.output = expected.output
           .replace(/time=".+?"/g, 'time="0.5"')
           .replace(/timestamp=".+?"/g, 'timestamp="some-timestamp');
@@ -498,7 +498,7 @@ describe('--parallel', function () {
     // processes have actually exited.
     describe('during normal operation', function () {
       it('should not leave orphaned processes around', async function () {
-        const [{pid}, promise] = invokeMochaAsync([
+        const [{ pid }, promise] = invokeMochaAsync([
           resolveFixturePath('options/parallel/test-*'),
           '--parallel'
         ]);
@@ -509,7 +509,7 @@ describe('--parallel', function () {
             [pid, ...childPids].map(async childPid => {
               let pids = null;
               try {
-                pids = await pidtree(childPid, {root: true});
+                pids = await pidtree(childPid, { root: true });
               } catch (ignored) {}
               return pids;
             })
@@ -523,7 +523,7 @@ describe('--parallel', function () {
 
     describe('during operation with --bail', function () {
       it('should not leave orphaned processes around', async function () {
-        const [{pid}, promise] = invokeMochaAsync([
+        const [{ pid }, promise] = invokeMochaAsync([
           resolveFixturePath('options/parallel/test-*'),
           '--bail',
           '--parallel'
@@ -535,7 +535,7 @@ describe('--parallel', function () {
             [pid, ...childPids].map(async childPid => {
               let pids = null;
               try {
-                pids = await pidtree(childPid, {root: true});
+                pids = await pidtree(childPid, { root: true });
               } catch (ignored) {}
               return pids;
             })

@@ -10,7 +10,7 @@
  * @private
  */
 
-const {loadOptions} = require('../lib/cli/options');
+const { loadOptions } = require('../lib/cli/options');
 const {
   unparseNodeFlags,
   isNodeFlag,
@@ -18,7 +18,7 @@ const {
 } = require('../lib/cli/node-flags');
 const unparse = require('yargs-unparser');
 const debug = require('debug')('mocha:cli:mocha');
-const {aliases} = require('../lib/cli/run-option-metadata');
+const { aliases } = require('../lib/cli/run-option-metadata');
 
 const mochaArgs = {};
 const nodeArgs = {};
@@ -78,7 +78,7 @@ if (mochaArgs._) {
 }
 
 if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
-  const {spawn} = require('node:child_process');
+  const { spawn } = require('node:child_process');
   const mochaPath = require.resolve('../lib/cli/cli.js');
 
   const nodeArgv =
@@ -93,7 +93,7 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   const args = [].concat(
     nodeArgv,
     mochaPath,
-    unparse(mochaArgs, {alias: aliases})
+    unparse(mochaArgs, { alias: aliases })
   );
 
   debug(

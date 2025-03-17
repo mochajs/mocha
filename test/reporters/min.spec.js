@@ -1,43 +1,43 @@
 'use strict';
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const sinon = require('sinon');
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var Min = reporters.Min;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Min = reporters.Min;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
 
 describe('Min reporter', function () {
-  var runReporter = makeRunReporter(Min);
-  var noop = function () {};
+  const runReporter = makeRunReporter(Min);
+  const noop = function () {};
 
   describe('event handlers', function () {
     describe("on 'start' event", function () {
       it('should clear screen then set cursor position', function () {
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var options = {};
-        var fakeThis = {
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const options = {};
+        const fakeThis = {
           epilogue: noop
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        const stdout = runReporter(fakeThis, runner, options);
 
-        var expectedArray = ['\u001b[2J', '\u001b[1;3H'];
+        const expectedArray = ['\u001b[2J', '\u001b[1;3H'];
         expect(stdout, 'to equal', expectedArray);
       });
     });
 
     describe("on 'end' event", function () {
       it('should call epilogue', function () {
-        var fakeThis = {
+        const fakeThis = {
           epilogue: sinon.stub().callsFake(noop)
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
-        var options = {};
+        const runner = createMockRunner('end', EVENT_RUN_END);
+        const options = {};
         runReporter(fakeThis, runner, options);
 
         expect(fakeThis.epilogue.called, 'to be true');

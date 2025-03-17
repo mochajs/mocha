@@ -27,7 +27,7 @@ describe('--watch', function () {
     this.slow(5000);
 
     beforeEach(async function () {
-      const {dirpath, removeTempDir} = await createTempDir();
+      const { dirpath, removeTempDir } = await createTempDir();
       tempDir = dirpath;
       cleanup = removeTempDir;
     });
@@ -329,8 +329,8 @@ describe('--watch', function () {
         'to satisfy',
         {
           length: 2,
-          0: {tests: expect.it('to have length', 2)},
-          1: {tests: expect.it('to have length', 2)}
+          0: { tests: expect.it('to have length', 2) },
+          1: { tests: expect.it('to have length', 2) }
         }
       );
     });
@@ -342,7 +342,7 @@ describe('--watch', function () {
        * @param {string} hookName name of hook to test
        * @return {function}
        */
-      function setupHookTest(hookName) {
+      function setupHookTest (hookName) {
         return function () {
           const testFile = path.join(tempDir, 'test.js');
           const hookFile = path.join(tempDir, 'hook.js');
@@ -380,7 +380,7 @@ describe('--watch', function () {
       return expect(
         runMochaWatchAsync(
           [testFile],
-          {cwd: tempDir, stdio: 'pipe'},
+          { cwd: tempDir, stdio: 'pipe' },
           async () => {
             // we want to cause _n + 1_ reruns, which should cause the warning
             // to occur if the listeners aren't properly destroyed

@@ -31,9 +31,9 @@ module.exports = () => {
       type: 'node',
       runner: 'node'
     },
-    workers: {recycle: true},
-    testFramework: {type: 'mocha', path: __dirname},
-    setup(wallaby) {
+    workers: { recycle: true },
+    testFramework: { type: 'mocha', path: __dirname },
+    setup (wallaby) {
       // running mocha instance is not the same as mocha under test,
       // running mocha is the project's source code mocha, mocha under test is instrumented version of the source code
       const runningMocha = wallaby.testFramework;

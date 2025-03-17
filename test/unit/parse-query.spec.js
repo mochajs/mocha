@@ -1,6 +1,6 @@
 'use strict';
 
-var parseQuery = require('../../lib/browser/parse-query');
+const parseQuery = require('../../lib/browser/parse-query');
 
 describe('parseQuery()', function () {
   it('should get queryString and return key-value object', function () {
@@ -18,6 +18,6 @@ describe('parseQuery()', function () {
   });
 
   it('should parse "+" as a space', function () {
-    expect(parseQuery('?grep=foo+bar'), 'to equal', {grep: 'foo bar'});
+    expect(parseQuery('?grep=foo+bar'), 'to equal', { grep: 'foo bar' });
   });
 });

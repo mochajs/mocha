@@ -33,7 +33,7 @@ describe('global leaks', function () {
   it('should pass when prefixed "mocha-"', function () {
     // Opera and IE do this for HTML element IDs anyway
     // but to sure we can assert this in any browser, simulate it.
-    global['mocha-example'] = {nodeType: 1};
+    global['mocha-example'] = { nodeType: 1 };
   });
 
   afterEach(function () {

@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--timeout', function () {
   it('should allow human-readable string value', function (done) {
@@ -35,7 +35,7 @@ describe('--timeout', function () {
   });
 
   it('should allow multiple values', function (done) {
-    var fixture = 'options/slow-test';
+    const fixture = 'options/slow-test';
     runMochaJSON(
       fixture,
       ['--timeout', '2s', '--timeout', '1000'],
@@ -53,7 +53,7 @@ describe('--timeout', function () {
   });
 
   it('should disable timeout with "--inspect"', function (done) {
-    var fixture = 'options/slow-test';
+    const fixture = 'options/slow-test';
     runMochaJSON(
       fixture,
       ['--inspect', '--timeout', '200'],
@@ -69,7 +69,7 @@ describe('--timeout', function () {
   });
 
   it('should disable timeout with "-n inspect"', function (done) {
-    var fixture = 'options/slow-test';
+    const fixture = 'options/slow-test';
     runMochaJSON(
       fixture,
       ['-n', 'inspect', '--timeout', '200'],
@@ -84,8 +84,8 @@ describe('--timeout', function () {
     );
   });
 
-  it("should complete tests having unref'd async behavior", function(done) {
-    runMochaJSON('options/timeout-unref', ['--timeout', '0'], function(err, res) {
+  it("should complete tests having unref'd async behavior", function (done) {
+    runMochaJSON('options/timeout-unref', ['--timeout', '0'], function (err, res) {
       if (err) {
         done(err);
         return;

@@ -1,6 +1,6 @@
 'use strict';
 
-var runMochaJSON = require('./helpers').runMochaJSON;
+const runMochaJSON = require('./helpers').runMochaJSON;
 
 describe('when non-array argument is provided multiple times', function () {
   describe('when the same argument name is used', function () {

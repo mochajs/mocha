@@ -1,15 +1,15 @@
 'use strict';
 
-var assert = require('node:assert');
-var runMocha = require('./helpers').runMocha;
-var runMochaJSON = require('./helpers').runMochaJSON;
-var SPLIT_DOT_REPORTER_REGEXP = require('./helpers').SPLIT_DOT_REPORTER_REGEXP;
-var args = ['--reporter', 'dot'];
+const assert = require('node:assert');
+const runMocha = require('./helpers').runMocha;
+const runMochaJSON = require('./helpers').runMochaJSON;
+const SPLIT_DOT_REPORTER_REGEXP = require('./helpers').SPLIT_DOT_REPORTER_REGEXP;
+const args = ['--reporter', 'dot'];
 
 describe('hooks', function () {
   it('are ran in correct order', function (done) {
     runMocha('cascade.fixture.js', args, function (err, res) {
-      var lines, expected;
+      let lines, expected;
 
       if (err) {
         done(err);

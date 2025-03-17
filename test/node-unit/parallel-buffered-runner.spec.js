@@ -11,8 +11,8 @@ const rewiremock = require('rewiremock/node');
 const Suite = require('../../lib/suite');
 const Runner = require('../../lib/runner');
 const sinon = require('sinon');
-const {constants} = require('../../lib/utils');
-const {MOCHA_ID_PROP_NAME} = constants;
+const { constants } = require('../../lib/utils');
+const { MOCHA_ID_PROP_NAME } = constants;
 
 describe('parallel-buffered-runner', function () {
   describe('ParallelBufferedRunner', function () {
@@ -49,7 +49,7 @@ describe('parallel-buffered-runner', function () {
           '../../lib/nodejs/buffered-worker-pool': {
             BufferedWorkerPool
           },
-          '../../lib/utils': r.with({warn}).callThrough(),
+          '../../lib/utils': r.with({ warn }).callThrough(),
           '../../lib/errors': r
             .with({
               createFatalError: sinon.stub().returns(fatalError)
@@ -117,14 +117,14 @@ describe('parallel-buffered-runner', function () {
         // the purpose of this is to ensure that--despite using `Promise`s
         // internally--`BufferedRunner#run` does not return a `Promise`.
         it('should be chainable', function (done) {
-          expect(runner.run(done, {files: [], options: {}}), 'to be', runner);
+          expect(runner.run(done, { files: [], options: {} }), 'to be', runner);
         });
 
         it('should emit `EVENT_RUN_BEGIN`', async function () {
           return expect(
             () =>
               new Promise(resolve => {
-                runner.run(resolve, {files: [], options: {}});
+                runner.run(resolve, { files: [], options: {} });
               }),
             'to emit from',
             runner,
@@ -138,7 +138,7 @@ describe('parallel-buffered-runner', function () {
           });
 
           it('should create object references', function () {
-            const options = {reporter: runner._workerReporter};
+            const options = { reporter: runner._workerReporter };
             const someSuite = {
               title: 'some suite',
               [MOCHA_ID_PROP_NAME]: 'bar'
@@ -166,7 +166,7 @@ describe('parallel-buffered-runner', function () {
                   eventName: EVENT_SUITE_END,
                   // ensure we are not passing the _same_ someSuite,
                   // because we won't get the same one from the subprocess
-                  data: {...someSuite}
+                  data: { ...someSuite }
                 }
               ]
             });
@@ -174,7 +174,7 @@ describe('parallel-buffered-runner', function () {
             return expect(
               () =>
                 new Promise(resolve => {
-                  runner.run(resolve, {files: ['some-file.js'], options: {}});
+                  runner.run(resolve, { files: ['some-file.js'], options: {} });
                 }),
               'to emit from',
               runner,
@@ -191,7 +191,7 @@ describe('parallel-buffered-runner', function () {
 
           describe('when event data object is missing an ID', function () {
             it('should result in an uncaught exception', function (done) {
-              const options = {reporter: runner._workerReporter};
+              const options = { reporter: runner._workerReporter };
               sinon.spy(runner, 'uncaught');
               const someSuite = {
                 title: 'some suite',
@@ -220,7 +220,7 @@ describe('parallel-buffered-runner', function () {
                     eventName: EVENT_SUITE_END,
                     // ensure we are not passing the _same_ someSuite,
                     // because we won't get the same one from the subprocess
-                    data: {...someSuite}
+                    data: { ...someSuite }
                   }
                 ]
               });
@@ -232,7 +232,7 @@ describe('parallel-buffered-runner', function () {
                   ]);
                   done();
                 },
-                {files: ['some-file.js'], options: {}}
+                { files: ['some-file.js'], options: {} }
               );
             });
           });
@@ -240,7 +240,7 @@ describe('parallel-buffered-runner', function () {
 
         describe('when a worker fails', function () {
           it('should recover', function (done) {
-            const options = {reporter: runner._workerReporter};
+            const options = { reporter: runner._workerReporter };
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
             run.withArgs('some-other-file.js', options).resolves({
               failureCount: 0,
@@ -262,7 +262,7 @@ describe('parallel-buffered-runner', function () {
 
             runner.run(
               () => {
-                expect(terminate, 'to have calls satisfying', [{args: []}]);
+                expect(terminate, 'to have calls satisfying', [{ args: [] }]);
                 done();
               },
               {
@@ -273,7 +273,7 @@ describe('parallel-buffered-runner', function () {
           });
 
           it('should delegate to Runner#uncaught', function (done) {
-            const options = {reporter: runner._workerReporter};
+            const options = { reporter: runner._workerReporter };
             sinon.spy(runner, 'uncaught');
             const err = new Error('whoops');
             run.withArgs('some-file.js', options).rejects(new Error('whoops'));
@@ -355,7 +355,7 @@ describe('parallel-buffered-runner', function () {
           describe('when an event contains an error and has positive failures', function () {
             describe('when subsequent files have not yet been run', function () {
               it('should cleanly terminate the thread pool', function (done) {
-                const options = {reporter: runner._workerReporter};
+                const options = { reporter: runner._workerReporter };
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -391,8 +391,8 @@ describe('parallel-buffered-runner', function () {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: []}, // this is the pool force-terminating
-                      {args: []} // this will always be called, and will do nothing due to the previous call
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] } // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
                   },
@@ -406,7 +406,7 @@ describe('parallel-buffered-runner', function () {
 
             describe('when subsequent files already started running', function () {
               it('should cleanly terminate the thread pool', function (done) {
-                const options = {reporter: runner._workerReporter};
+                const options = { reporter: runner._workerReporter };
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -464,8 +464,8 @@ describe('parallel-buffered-runner', function () {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: []}, // this is the pool force-terminating
-                      {args: []} // this will always be called, and will do nothing due to the previous call
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] } // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
                   },
@@ -519,7 +519,7 @@ describe('parallel-buffered-runner', function () {
           describe('when an event contains an error and has positive failures', function () {
             describe('when subsequent files have not yet been run', function () {
               it('should cleanly terminate the thread pool', function (done) {
-                const options = {reporter: runner._workerReporter};
+                const options = { reporter: runner._workerReporter };
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -548,8 +548,8 @@ describe('parallel-buffered-runner', function () {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: []}, // this is the pool force-terminating
-                      {args: []} // this will always be called, and will do nothing due to the previous call
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] } // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
                   },
@@ -563,7 +563,7 @@ describe('parallel-buffered-runner', function () {
 
             describe('when subsequent files already started running', function () {
               it('should cleanly terminate the thread pool', function (done) {
-                const options = {reporter: runner._workerReporter};
+                const options = { reporter: runner._workerReporter };
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -608,8 +608,8 @@ describe('parallel-buffered-runner', function () {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: []}, // this is the pool force-terminating
-                      {args: []} // this will always be called, and will do nothing due to the previous call
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] } // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
                   },
@@ -623,7 +623,7 @@ describe('parallel-buffered-runner', function () {
 
             describe('when subsequent files have not yet been run', function () {
               it('should cleanly terminate the thread pool', function (done) {
-                const options = {reporter: runner._workerReporter};
+                const options = { reporter: runner._workerReporter };
                 const err = {
                   __type: 'Error',
                   message: 'oh no'
@@ -652,8 +652,8 @@ describe('parallel-buffered-runner', function () {
                 runner.run(
                   () => {
                     expect(terminate, 'to have calls satisfying', [
-                      {args: []}, // this is the pool force-terminating
-                      {args: []} // this will always be called, and will do nothing due to the previous call
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] } // this will always be called, and will do nothing due to the previous call
                     ]).and('was called twice');
                     done();
                   },

@@ -7,7 +7,7 @@ const {
   unparseNodeFlags
 } = require('../../../lib/cli/node-flags');
 
-const {isMochaFlag} = require('../../../lib/cli/run-option-metadata');
+const { isMochaFlag } = require('../../../lib/cli/run-option-metadata');
 
 describe('node-flags', function () {
   describe('isNodeFlag()', function () {
@@ -95,22 +95,22 @@ describe('node-flags', function () {
 
   describe('unparseNodeFlags()', function () {
     it('should handle single v8 flags', function () {
-      expect(unparseNodeFlags({'v8-numeric': 100}), 'to equal', [
+      expect(unparseNodeFlags({ 'v8-numeric': 100 }), 'to equal', [
         '--v8-numeric=100'
       ]);
-      expect(unparseNodeFlags({'v8-boolean': true}), 'to equal', [
+      expect(unparseNodeFlags({ 'v8-boolean': true }), 'to equal', [
         '--v8-boolean'
       ]);
     });
 
     it('should handle multiple v8 flags', function () {
       expect(
-        unparseNodeFlags({'v8-numeric-one': 1, 'v8-numeric-two': 2}),
+        unparseNodeFlags({ 'v8-numeric-one': 1, 'v8-numeric-two': 2 }),
         'to equal',
         ['--v8-numeric-one=1', '--v8-numeric-two=2']
       );
       expect(
-        unparseNodeFlags({'v8-boolean-one': true, 'v8-boolean-two': true}),
+        unparseNodeFlags({ 'v8-boolean-one': true, 'v8-boolean-two': true }),
         'to equal',
         ['--v8-boolean-one', '--v8-boolean-two']
       );

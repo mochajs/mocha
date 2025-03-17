@@ -1,20 +1,20 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMocha = helpers.runMocha;
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMocha = helpers.runMocha;
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--forbid-only', function () {
-  var args = [];
-  var onlyErrorMessage = '`.only` forbidden';
+  let args = [];
+  const onlyErrorMessage = '`.only` forbidden';
 
   beforeEach(function () {
     args = ['--forbid-only'];
   });
 
   it('should succeed if there are only passed tests', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'passed');
+    const fixture = path.join('options', 'forbid-only', 'passed');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -25,8 +25,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if there are tests marked only', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args,
@@ -42,8 +42,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if there are tests in suites marked only', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-suite');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-suite');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args,
@@ -59,8 +59,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if there is empty suite marked only', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-empty-suite');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-empty-suite');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args,
@@ -76,8 +76,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if there is suite marked only which matches grep', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-suite');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-suite');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args.concat('--fgrep', 'suite marked with only'),
@@ -93,8 +93,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if suite marked only does not match grep', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-suite');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-suite');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args.concat('--fgrep', 'bumble bees'),
@@ -110,8 +110,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail if suite marked only does not match inverted grep', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-suite');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-suite');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args.concat('--fgrep', 'suite marked with only', '--invert'),
@@ -127,8 +127,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail even if before has "skip"', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-before');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-before');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args,
@@ -144,8 +144,8 @@ describe('--forbid-only', function () {
   });
 
   it('should fail even if beforeEach has "skip"', function (done) {
-    var fixture = path.join('options', 'forbid-only', 'only-before-each');
-    var spawnOpts = {stdio: 'pipe'};
+    const fixture = path.join('options', 'forbid-only', 'only-before-each');
+    const spawnOpts = { stdio: 'pipe' };
     runMocha(
       fixture,
       args,

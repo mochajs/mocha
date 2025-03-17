@@ -4,7 +4,7 @@ const escapeRegExp = require('escape-string-regexp');
 const os = require('node:os');
 const fs = require('node:fs');
 const fsP = require('node:fs/promises');
-const {format} = require('node:util');
+const { format } = require('node:util');
 const path = require('node:path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
@@ -53,7 +53,7 @@ const DEFAULT_FIXTURE_PATH = resolveFixturePath(DEFAULT_FIXTURE);
  * @param {Object} [opts] - Options for `spawn()`
  * @returns {ChildProcess} Subprocess process
  */
-function runMocha(fixturePath, args, done, opts = {}) {
+function runMocha (fixturePath, args, done, opts = {}) {
   if (typeof args === 'function') {
     opts = done;
     done = args;
@@ -88,7 +88,7 @@ function runMocha(fixturePath, args, done, opts = {}) {
  * @param {Object} [opts] - Opts for `spawn()`
  * @returns {ChildProcess} Subprocess instance
  */
-function runMochaJSON(fixturePath, args, done, opts) {
+function runMochaJSON (fixturePath, args, done, opts) {
   if (typeof args === 'function') {
     opts = done;
     done = args;
@@ -132,7 +132,7 @@ function runMochaJSON(fixturePath, args, done, opts) {
  * @param {Object} [opts] - Options for `child_process.spawn`.
  * @returns {Promise<Summary>}
  */
-function runMochaAsync(fixturePath, args, opts) {
+function runMochaAsync (fixturePath, args, opts) {
   return new Promise((resolve, reject) => {
     runMocha(
       fixturePath,
@@ -155,7 +155,7 @@ function runMochaAsync(fixturePath, args, opts) {
  * @param {Object} [opts] - Options for `child_process.spawn`
  * @returns {Promise<JSONResult>}
  */
-function runMochaJSONAsync(fixturePath, args = [], opts = {}) {
+function runMochaJSONAsync (fixturePath, args = [], opts = {}) {
   return new Promise((resolve, reject) => {
     runMochaJSON(
       fixturePath,
@@ -177,9 +177,9 @@ function runMochaJSONAsync(fixturePath, args = [], opts = {}) {
  * @param {RawResult} result - Raw stdout from Mocha run using JSON reporter
  * @returns {JSONResult}
  */
-function toJSONResult(result) {
+function toJSONResult (result) {
   try {
-    return {...JSON.parse(result.output), ...result};
+    return { ...JSON.parse(result.output), ...result };
   } catch (err) {
     throw new Error(
       `Couldn't parse JSON: ${err.message}\n\nOriginal result output: ${result.output}`
@@ -202,7 +202,7 @@ function toJSONResult(result) {
  * @param {string[]|*} [args] - Arguments to `spawn`
  * @returns {string[]}
  */
-function defaultArgs(args = [DEFAULT_FIXTURE_PATH]) {
+function defaultArgs (args = [DEFAULT_FIXTURE_PATH]) {
   const newArgs = [
     ...(!args.length ? [DEFAULT_FIXTURE_PATH] : args),
     '--no-color'
@@ -227,7 +227,7 @@ function defaultArgs(args = [DEFAULT_FIXTURE_PATH]) {
  * @param {Object} [opts] - Options
  * @returns {ChildProcess}
  */
-function invokeMocha(args, done, opts = {}) {
+function invokeMocha (args, done, opts = {}) {
   if (typeof args === 'function') {
     opts = done;
     done = args;
@@ -253,7 +253,7 @@ function invokeMocha(args, done, opts = {}) {
  * @param {Object} [opts] - Opts for `spawn()`
  * @returns {[import('child_process').ChildProcess,Promise<RawResult>]} A tuple of process and result promise
  */
-function invokeMochaAsync(args, opts = {}) {
+function invokeMochaAsync (args, opts = {}) {
   let mochaProcess;
   const resultPromise = new Promise((resolve, reject) => {
     mochaProcess = createSubprocess(
@@ -281,7 +281,7 @@ function invokeMochaAsync(args, opts = {}) {
  * @param {Object} [opts] - Options
  * @returns {ChildProcess}
  */
-function invokeNode(args, done, opts = {}) {
+function invokeNode (args, done, opts = {}) {
   if (typeof args === 'function') {
     opts = done;
     done = args;
@@ -301,14 +301,14 @@ function invokeNode(args, done, opts = {}) {
  * @param {boolean} [opts.fork] - If `true`, use `child_process.fork` instead
  * @returns {import('child_process').ChildProcess}
  */
-function createSubprocess(args, done, opts = {}) {
+function createSubprocess (args, done, opts = {}) {
   let output = '';
 
   if (opts === 'pipe') {
-    opts = {stdio: ['inherit', 'pipe', 'pipe']};
+    opts = { stdio: ['inherit', 'pipe', 'pipe'] };
   }
 
-  const env = {...process.env};
+  const env = { ...process.env };
   // prevent DEBUG from borking STDERR when piping, unless explicitly set via `opts`
   delete env.DEBUG;
 
@@ -324,7 +324,7 @@ function createSubprocess(args, done, opts = {}) {
    */
   let mocha;
   if (opts.fork) {
-    const {fork} = require('node:child_process');
+    const { fork } = require('node:child_process');
     // to use ipc, we need a fourth item in `stdio` array.
     // opts.stdio is usually an array of length 3, but it could be smaller
     // (pad with `null`)
@@ -334,7 +334,7 @@ function createSubprocess(args, done, opts = {}) {
     debug('forking: %s', args.join(' '));
     mocha = fork(args[0], args.slice(1), opts);
   } else {
-    const {spawn} = require('node:child_process');
+    const { spawn } = require('node:child_process');
     debug('spawning: %s', [process.execPath].concat(args).join(' '));
     mocha = spawn(process.execPath, args, opts);
   }
@@ -367,7 +367,7 @@ function createSubprocess(args, done, opts = {}) {
  * @param {string} fixture - Fixture name
  * @returns {string} Resolved filepath
  */
-function resolveFixturePath(fixture) {
+function resolveFixturePath (fixture) {
   if (
     path.extname(fixture) !== '.js' &&
     path.extname(fixture) !== '.mjs' &&
@@ -385,7 +385,7 @@ function resolveFixturePath(fixture) {
  * @param {string} res - Typically output of STDOUT from the 'spec' reporter
  * @returns {Summary}
  */
-function getSummary(res) {
+function getSummary (res) {
   return ['passing', 'pending', 'failing'].reduce((summary, type) => {
     const pattern = new RegExp(`  (\\d+) ${type}\\s`);
     const match = pattern.exec(res.output);
@@ -412,9 +412,9 @@ function getSummary(res) {
  * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
  * @returns {Promise<RawResult>}
  */
-async function runMochaWatchAsync(args, opts, change) {
+async function runMochaWatchAsync (args, opts, change) {
   if (typeof opts === 'string') {
-    opts = {cwd: opts};
+    opts = { cwd: opts };
   }
   opts = {
     sleepMs: 2000,
@@ -463,7 +463,7 @@ async function runMochaWatchAsync(args, opts, change) {
  * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
  * @returns {Promise<JSONResult>}
  */
-async function runMochaWatchJSONAsync(args, opts, change) {
+async function runMochaWatchJSONAsync (args, opts, change) {
   const res = await runMochaWatchAsync(
     [...args, '--reporter', 'json'],
     opts,
@@ -487,7 +487,7 @@ const touchRef = new Date();
  *
  * @param {string} filepath - Path to file
  */
-function touchFile(filepath) {
+function touchFile (filepath) {
   fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
     fs.utimesSync(filepath, touchRef, touchRef);
@@ -505,7 +505,7 @@ function touchFile(filepath) {
  * @param {RegExp|string} pattern - Search pattern
  * @param {string} replacement - Replacement
  */
-function replaceFileContents(filepath, pattern, replacement) {
+function replaceFileContents (filepath, pattern, replacement) {
   const contents = fs.readFileSync(filepath, 'utf-8');
   const newContents = contents.replace(pattern, replacement);
   fs.writeFileSync(filepath, newContents, 'utf-8');
@@ -518,7 +518,7 @@ function replaceFileContents(filepath, pattern, replacement) {
  * @param {string} fixtureName - Relative path from __dirname to fixture, or absolute path
  * @param {*} dest - Destination directory
  */
-function copyFixture(fixtureName, dest) {
+function copyFixture (fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.cpSync(fixtureSource, dest);
@@ -545,7 +545,7 @@ const createTempDir = async () => {
  * @param {number} time - Time in ms
  * @returns {Promise<void>}
  */
-function sleep(time) {
+function sleep (time) {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });

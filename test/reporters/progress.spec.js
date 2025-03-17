@@ -1,22 +1,22 @@
 'use strict';
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const sinon = require('sinon');
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var Base = reporters.Base;
-var Progress = reporters.Progress;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Base = reporters.Base;
+const Progress = reporters.Progress;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_END = events.EVENT_TEST_END;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_END = events.EVENT_TEST_END;
 
 describe('Progress reporter', function () {
-  var runReporter = makeRunReporter(Progress);
-  var noop = function () {};
+  const runReporter = makeRunReporter(Progress);
+  const noop = function () {};
 
   afterEach(function () {
     sinon.restore();
@@ -25,10 +25,10 @@ describe('Progress reporter', function () {
   describe('event handlers', function () {
     describe("on 'start' event", function () {
       it('should call cursor hide', function () {
-        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
+        const hideCursorStub = sinon.stub(Base.cursor, 'hide');
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var options = {};
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const options = {};
         runReporter({}, runner, options);
         sinon.restore();
 
@@ -39,30 +39,30 @@ describe('Progress reporter', function () {
     describe("on 'test end' event", function () {
       describe('when line has changed', function () {
         it('should write expected progress of open and close options', function () {
-          var crCursorStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
+          const crCursorStub = sinon.stub(Base.cursor, 'CR').callsFake(noop);
           sinon.stub(Base, 'useColors').value(false);
           sinon.stub(Base.window, 'width').value(5);
 
-          var expectedTotal = 12;
-          var expectedOpen = 'OpEn';
-          var expectedClose = 'cLoSe';
-          var expectedIncomplete = 'iNcOmPlEtE';
-          var expectedOptions = {
+          const expectedTotal = 12;
+          const expectedOpen = 'OpEn';
+          const expectedClose = 'cLoSe';
+          const expectedIncomplete = 'iNcOmPlEtE';
+          const expectedOptions = {
             open: expectedOpen,
             complete: 'cOmPlEtE',
             incomplete: expectedIncomplete,
             close: expectedClose
           };
 
-          var runner = createMockRunner('test end', EVENT_TEST_END);
+          const runner = createMockRunner('test end', EVENT_TEST_END);
           runner.total = expectedTotal;
-          var options = {
+          const options = {
             reporterOptions: expectedOptions
           };
-          var stdout = runReporter({}, runner, options);
+          const stdout = runReporter({}, runner, options);
           sinon.restore();
 
-          var expectedArray = [
+          const expectedArray = [
             '\u001b[J',
             '  ' + expectedOpen,
             '',
@@ -81,11 +81,11 @@ describe('Progress reporter', function () {
           sinon.stub(Base.cursor, 'CR').callsFake(noop);
           sinon.stub(Base.window, 'width').value(-3);
 
-          var expectedTotal = 1;
-          var runner = createMockRunner('test end', EVENT_TEST_END);
+          const expectedTotal = 1;
+          const runner = createMockRunner('test end', EVENT_TEST_END);
           runner.total = expectedTotal;
-          var options = {};
-          var stdout = runReporter({}, runner, options);
+          const options = {};
+          const stdout = runReporter({}, runner, options);
           sinon.restore();
 
           expect(stdout, 'to equal', []);
@@ -95,12 +95,12 @@ describe('Progress reporter', function () {
 
     describe("on 'end' event", function () {
       it('should call cursor show and epilogue', function () {
-        var showCursorStub = sinon.stub(Base.cursor, 'show');
-        var fakeThis = {
+        const showCursorStub = sinon.stub(Base.cursor, 'show');
+        const fakeThis = {
           epilogue: sinon.spy()
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
-        var options = {};
+        const runner = createMockRunner('end', EVENT_RUN_END);
+        const options = {};
         runReporter(fakeThis, runner, options);
         sinon.restore();
 

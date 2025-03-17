@@ -12,8 +12,8 @@ describe('class BufferedWorkerPool', function () {
   let result;
 
   beforeEach(function () {
-    stats = {totalWorkers: 10, busyWorkers: 8, idleWorkers: 2, pendingTasks: 3};
-    result = {failures: 0, events: []};
+    stats = { totalWorkers: 10, busyWorkers: 8, idleWorkers: 2, pendingTasks: 3 };
+    result = { failures: 0, events: [] };
     pool = {
       terminate: sinon.stub().resolves(),
       exec: sinon.stub().resolves(result),
@@ -48,7 +48,7 @@ describe('class BufferedWorkerPool', function () {
     describe('create()', function () {
       it('should return a BufferedWorkerPool instance', function () {
         expect(
-          BufferedWorkerPool.create({foo: 'bar'}),
+          BufferedWorkerPool.create({ foo: 'bar' }),
           'to be a',
           BufferedWorkerPool
         );
@@ -70,7 +70,7 @@ describe('class BufferedWorkerPool', function () {
 
       it('should return a serialized string', function () {
         expect(
-          BufferedWorkerPool.serializeOptions({foo: 'bar'}),
+          BufferedWorkerPool.serializeOptions({ foo: 'bar' }),
           'to be a',
           'string'
         );
@@ -78,14 +78,14 @@ describe('class BufferedWorkerPool', function () {
 
       describe('when called multiple times with the same object', function () {
         it('should not perform serialization twice', function () {
-          const obj = {foo: 'bar'};
+          const obj = { foo: 'bar' };
           BufferedWorkerPool.serializeOptions(obj);
           BufferedWorkerPool.serializeOptions(obj);
           expect(serializeJavascript, 'was called once');
         });
 
         it('should return the same value', function () {
-          const obj = {foo: 'bar'};
+          const obj = { foo: 'bar' };
           expect(
             BufferedWorkerPool.serializeOptions(obj),
             'to be',
@@ -101,7 +101,7 @@ describe('class BufferedWorkerPool', function () {
       expect(new BufferedWorkerPool(), 'to satisfy', {
         options: {
           workerType: 'process',
-          forkOpts: {execArgv: process.execArgv},
+          forkOpts: { execArgv: process.execArgv },
           maxWorkers: expect.it('to be greater than or equal to', 1)
         }
       });
@@ -139,7 +139,7 @@ describe('class BufferedWorkerPool', function () {
       });
 
       it('should serialize the options object', async function () {
-        await workerPool.run('file.js', {foo: 'bar'});
+        await workerPool.run('file.js', { foo: 'bar' });
 
         expect(pool.exec, 'to have a call satisfying', [
           'run',
@@ -148,7 +148,7 @@ describe('class BufferedWorkerPool', function () {
       });
 
       it('should deserialize the result', async function () {
-        await workerPool.run('file.js', {foo: 'bar'});
+        await workerPool.run('file.js', { foo: 'bar' });
         expect(serializer.deserialize, 'to have a call satisfying', [
           result
         ]).and('was called once');

@@ -3,7 +3,7 @@
 const path = require('node:path');
 const rewiremock = require('rewiremock/node');
 const sinon = require('sinon');
-const {EventEmitter} = require('node:events');
+const { EventEmitter } = require('node:events');
 
 const DUMB_FIXTURE_PATH = require.resolve('./fixtures/dumb-module.fixture.js');
 const DUMBER_FIXTURE_PATH = require.resolve(
@@ -16,20 +16,20 @@ describe('Mocha', function () {
   let Mocha;
 
   beforeEach(function () {
-    opts = {reporter: sinon.stub()};
+    opts = { reporter: sinon.stub() };
 
     stubs = {};
     stubs.errors = {
       warn: sinon.stub(),
       createMochaInstanceAlreadyDisposedError: sinon
         .stub()
-        .throws({code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}),
+        .throws({ code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED' }),
       createInvalidReporterError: sinon
         .stub()
-        .throws({code: 'ERR_MOCHA_INVALID_REPORTER'}),
+        .throws({ code: 'ERR_MOCHA_INVALID_REPORTER' }),
       createUnsupportedError: sinon
         .stub()
-        .throws({code: 'ERR_MOCHA_UNSUPPORTED'})
+        .throws({ code: 'ERR_MOCHA_UNSUPPORTED' })
     };
     stubs.utils = {
       supportsEsModules: sinon.stub().returns(false),
@@ -106,7 +106,7 @@ describe('Mocha', function () {
 
           it('should not swap the Runner, nor change lazy loading setting', function () {
             expect(mocha.parallelMode(true), 'to satisfy', {
-              options: {parallel: true},
+              options: { parallel: true },
               _runnerClass: stubs.ParallelBufferedRunner,
               _lazyLoadFiles: true
             });
@@ -122,7 +122,7 @@ describe('Mocha', function () {
 
           it('should not swap the Runner, nor change lazy loading setting', function () {
             expect(mocha.parallelMode(false), 'to satisfy', {
-              options: {parallel: false},
+              options: { parallel: false },
               _runnerClass: Mocha.Runner,
               _lazyLoadFiles: false
             });
@@ -227,7 +227,7 @@ describe('Mocha', function () {
       it('shoud pass esmDecorator to actual load function', async function () {
         const esmDecorator = x => `${x}?foo=bar`;
 
-        await mocha.loadFilesAsync({esmDecorator});
+        await mocha.loadFilesAsync({ esmDecorator });
 
         expect(stubs.esmUtils.loadFilesAsync, 'was called once');
         expect(
@@ -326,7 +326,7 @@ describe('Mocha', function () {
             mocha.unloadFiles();
           },
           'to throw',
-          {code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED'}
+          { code: 'ERR_MOCHA_INSTANCE_ALREADY_DISPOSED' }
         );
       });
     });

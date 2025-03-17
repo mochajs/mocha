@@ -1,9 +1,9 @@
 'use strict';
 
-var sinon = require('sinon');
-var mocha = require('../../lib/mocha');
-var Test = mocha.Test;
-var Runnable = mocha.Runnable;
+const sinon = require('sinon');
+const mocha = require('../../lib/mocha');
+const Test = mocha.Test;
+const Runnable = mocha.Runnable;
 
 describe('Test', function () {
   afterEach(function () {
@@ -43,7 +43,7 @@ describe('Test', function () {
     });
 
     it('should add/keep the retriedTest value', function () {
-      var clone1 = this._test.clone();
+      const clone1 = this._test.clone();
       expect(clone1.retriedTest(), 'to be', this._test);
       expect(clone1.clone().retriedTest(), 'to be', this._test);
     });
@@ -73,7 +73,7 @@ describe('Test', function () {
     });
 
     it('should call Runnable.reset', function () {
-      var runnableResetStub = sinon.stub(Runnable.prototype, 'reset');
+      const runnableResetStub = sinon.stub(Runnable.prototype, 'reset');
       this._test.reset();
       expect(runnableResetStub, 'was called once');
     });
@@ -109,8 +109,8 @@ describe('Test', function () {
     });
 
     it('should call appendOnlyTest on parent', function () {
-      var test = new Test('foo');
-      var spy = sinon.spy();
+      const test = new Test('foo');
+      const spy = sinon.spy();
       test.parent = {
         appendOnlyTest: spy
       };

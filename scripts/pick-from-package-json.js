@@ -7,7 +7,7 @@
  * @param {object} options
  * @param {string[]} options.keys List of keys to export from package.json
  */
-export default function pickFromPackageJson({keys}) {
+export default function pickFromPackageJson ({ keys }) {
   return {
     name: 'pick-from-package-json',
     load: id => {
@@ -20,7 +20,7 @@ export default function pickFromPackageJson({keys}) {
           result[key] = manifest[key];
         }
 
-        return {code: JSON.stringify(result)};
+        return { code: JSON.stringify(result) };
       }
       return null;
     }

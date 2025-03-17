@@ -1,29 +1,29 @@
 'use strict';
 
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var Markdown = reporters.Markdown;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Markdown = reporters.Markdown;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
-var EVENT_SUITE_END = events.EVENT_SUITE_END;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
+const EVENT_SUITE_END = events.EVENT_SUITE_END;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
 describe('Markdown reporter', function () {
-  var runReporter = makeRunReporter(Markdown);
-  var expectedTitle = 'expected title';
-  var expectedFullTitle = 'full title';
-  var sluggedFullTitle = 'full-title';
-  var noop = function () {};
+  const runReporter = makeRunReporter(Markdown);
+  const expectedTitle = 'expected title';
+  const expectedFullTitle = 'full title';
+  const sluggedFullTitle = 'full-title';
+  const noop = function () {};
 
   describe('event handlers', function () {
     describe("on 'suite' event", function () {
       it("should write expected slugged titles on 'end' event", function () {
-        var expectedSuite = {
+        const expectedSuite = {
           title: expectedTitle,
           fullTitle: function () {
             return expectedFullTitle;
@@ -38,7 +38,7 @@ describe('Markdown reporter', function () {
             }
           ]
         };
-        var runner = createMockRunner(
+        const runner = createMockRunner(
           'suite suite end',
           EVENT_SUITE_BEGIN,
           EVENT_SUITE_END,
@@ -46,10 +46,10 @@ describe('Markdown reporter', function () {
           expectedSuite
         );
         runner.suite = expectedSuite;
-        var options = {};
-        var stdout = runReporter({}, runner, options);
+        const options = {};
+        const stdout = runReporter({}, runner, options);
 
-        var expectedArray = [
+        const expectedArray = [
           '# TOC\n',
           ' - [' +
             expectedTitle +
@@ -69,17 +69,17 @@ describe('Markdown reporter', function () {
 
     describe("on 'pass' event", function () {
       it("should write test code inside js code block, on 'end' event", function () {
-        var expectedSuite = {
+        const expectedSuite = {
           title: expectedTitle,
           fullTitle: function () {
             return expectedFullTitle;
           },
           suites: []
         };
-        var expectedDuration = 1000;
-        var currentRetry = 1;
-        var expectedBody = 'some body';
-        var expectedTest = {
+        const expectedDuration = 1000;
+        const currentRetry = 1;
+        const expectedBody = 'some body';
+        const expectedTest = {
           title: expectedTitle,
           fullTitle: function () {
             return expectedFullTitle;
@@ -91,7 +91,7 @@ describe('Markdown reporter', function () {
           slow: noop,
           body: expectedBody
         };
-        var runner = createMockRunner(
+        const runner = createMockRunner(
           'pass end',
           EVENT_TEST_PASS,
           EVENT_RUN_END,
@@ -99,10 +99,10 @@ describe('Markdown reporter', function () {
           expectedTest
         );
         runner.suite = expectedSuite;
-        var options = {};
-        var stdout = runReporter({}, runner, options);
+        const options = {};
+        const stdout = runReporter({}, runner, options);
 
-        var expectedArray = [
+        const expectedArray = [
           '# TOC\n',
           ' - [' + expectedTitle + '](#' + sluggedFullTitle + ')\n',
           expectedTitle + '.\n\n```js\n' + expectedBody + '\n```\n\n'

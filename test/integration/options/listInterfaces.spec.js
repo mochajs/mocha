@@ -1,13 +1,13 @@
 'use strict';
 
-var helpers = require('../helpers');
-var invokeMocha = helpers.invokeMocha;
-var escapeRegExp = helpers.escapeRegExp;
-var interfaces = require('../../../lib/mocha').interfaces;
+const helpers = require('../helpers');
+const invokeMocha = helpers.invokeMocha;
+const escapeRegExp = helpers.escapeRegExp;
+const interfaces = require('../../../lib/mocha').interfaces;
 
 describe('--list-interfaces', function () {
   it('should dump a list of all interfaces with descriptions', function (done) {
-    var expected = Object.keys(interfaces)
+    const expected = Object.keys(interfaces)
       .filter(function (name) {
         return /^[a-z]/.test(name);
       })

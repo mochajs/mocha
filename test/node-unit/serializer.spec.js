@@ -31,8 +31,8 @@ describe('serializer', function () {
 
         describe('having a `serialize` method', function () {
           it('should return the result of the `serialize` method', function () {
-            const serializedObj = {foo: 'bar'};
-            const obj = {serialize: sinon.stub().returns(serializedObj)};
+            const serializedObj = { foo: 'bar' };
+            const obj = { serialize: sinon.stub().returns(serializedObj) };
             expect(serialize(obj), 'to be', serializedObj);
           });
         });
@@ -160,12 +160,12 @@ describe('serializer', function () {
         describe('when passed an object containing an array', function () {
           it('should serialize the array', function () {
             const obj = {
-              list: [{herp: 'derp'}, {bing: 'bong'}]
+              list: [{ herp: 'derp' }, { bing: 'bong' }]
             };
             expect(
               SerializableEvent.create('some-event', obj).serialize(),
               'to satisfy',
-              {data: {list: [{herp: 'derp'}, {bing: 'bong'}]}}
+              { data: { list: [{ herp: 'derp' }, { bing: 'bong' }] } }
             );
           });
         });
@@ -284,7 +284,7 @@ describe('serializer', function () {
         });
 
         it('should return a new object w/ null prototype', function () {
-          const obj = {bob: 'bob'};
+          const obj = { bob: 'bob' };
           expect(SerializableEvent.deserialize(obj), 'to satisfy', obj)
             .and('not to equal', obj)
             .and('not to have property', 'constructor');
@@ -296,7 +296,7 @@ describe('serializer', function () {
               data: Object.create(null)
             };
             // eslint-disable-next-line no-proto
-            obj.data.__proto__ = {peaches: 'prunes'};
+            obj.data.__proto__ = { peaches: 'prunes' };
 
             const expected = Object.assign(Object.create(null), {
               data: Object.create(null)
@@ -367,7 +367,7 @@ describe('serializer', function () {
           let result;
 
           beforeEach(function () {
-            result = SerializableEvent.deserialize({data: {$$foo: 'bar'}});
+            result = SerializableEvent.deserialize({ data: { $$foo: 'bar' } });
           });
           it('should create a new prop having a function value', function () {
             expect(result, 'to satisfy', {
@@ -392,7 +392,7 @@ describe('serializer', function () {
           });
 
           it('should deserialize each prop', function () {
-            const obj = {data: {foo: [{bar: 'baz'}]}};
+            const obj = { data: { foo: [{ bar: 'baz' }] } };
             SerializableEvent.deserialize(obj);
             expect(
               SerializableEvent._deserializeObject,
@@ -475,14 +475,14 @@ describe('serializer', function () {
           const result = Object.assign(
             {},
             SerializableWorkerResult.create([
-              {eventName: 'foo'},
-              {eventName: 'bar'}
+              { eventName: 'foo' },
+              { eventName: 'bar' }
             ])
           );
           SerializableWorkerResult.deserialize(result);
           expect(SerializableEvent.deserialize, 'to have calls satisfying', [
-            {args: [{eventName: 'foo'}]},
-            {args: [{eventName: 'bar'}]}
+            { args: [{ eventName: 'foo' }] },
+            { args: [{ eventName: 'bar' }] }
           ]);
         });
 
@@ -490,8 +490,8 @@ describe('serializer', function () {
           const result = Object.assign(
             {},
             SerializableWorkerResult.create([
-              {eventName: 'foo'},
-              {eventName: 'bar'}
+              { eventName: 'foo' },
+              { eventName: 'bar' }
             ])
           );
           expect(
@@ -522,7 +522,7 @@ describe('serializer', function () {
           expect(
             SerializableEvent.prototype.serialize,
             'to have calls satisfying',
-            [{thisValue: events[0]}, {thisValue: events[1]}]
+            [{ thisValue: events[0] }, { thisValue: events[1] }]
           );
         });
       });
