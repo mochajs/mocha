@@ -1,8 +1,8 @@
 'use strict';
 
 const lookupFiles = require('../../lib/cli/lookup-files');
-const {existsSync, symlinkSync, renameSync} = require('fs');
-const path = require('path');
+const {existsSync, symlinkSync, renameSync} = require('node:fs');
+const path = require('node:path');
 const {touchFile, createTempDir} = require('./helpers');
 
 const SYMLINK_SUPPORT = process.platform !== 'win32';

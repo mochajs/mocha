@@ -1,0 +1,66 @@
+---
+interface Supporter {
+  imgUrlMed: string;
+  imgUrlSmall: string;
+  name: string;
+  website: string;
+}
+
+interface Props {
+  data: Supporter[];
+  size: "small" | "medium";
+}
+---
+
+<div class:list={["supporters", `supporters-${Astro.props.size}`]}>
+  {
+    Astro.props.data.map((supporter) => (
+      <a class="supporter" href={supporter.website}>
+        <img
+          alt={supporter.name}
+          class="supporter-image"
+          src={
+            Astro.props.size === "small"
+              ? supporter.imgUrlSmall
+              : supporter.imgUrlMed
+          }
+        />
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .supporters {
+    display: flex;
+    gap: var(--supporterSpacing);
+    padding: var(--supporterSpacing) 0;
+  }
+
+  .supporters-small {
+    --supporterSpacing: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .supporters-medium {
+    display: flex;
+    --supporterSpacing: 1rem;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .supporter {
+    background: var(--mocha-color-backdrop);
+    padding: var(--supporterSpacing);
+    user-select: none;
+  }
+
+  .supporters-small img.supporter-image {
+    height: 2rem;
+  }
+
+  .supporters-medium img.supporter-image {
+    height: 4rem;
+  }
+</style>

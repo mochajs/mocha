@@ -1,10 +1,10 @@
 'use strict';
 
-var fs = require('fs');
+var fs = require('node:fs');
 var rimraf = require('rimraf');
 var invokeMocha = require('./helpers').invokeMocha;
-var path = require('path');
-var os = require('os');
+var path = require('node:path');
+var os = require('node:os');
 
 describe('init command', function () {
   var tmpdir;

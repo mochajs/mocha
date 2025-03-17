@@ -762,7 +762,8 @@ describe('add()', function () {
 });
 ```
 
-With `top-level await` you can collect your test data in a dynamic and asynchronous way while the test file is being loaded.<br>
+With `top-level await` you can collect your test data in a dynamic and asynchronous way while the test file is being loaded.
+
 See also [`--delay`](#delayed-root-suite) for CommonJS modules without `top-level await`.
 
 ```js
@@ -1058,7 +1059,8 @@ By default, Mocha will search for a config file if `--config` is not specified; 
 
 > _Since v9.1.0_
 
-For Node.js and V8 options. Mocha forwards these options to Node.js by spawning a new child-process.<br>
+For Node.js and V8 options. Mocha forwards these options to Node.js by spawning a new child-process.
+
 The options are set without leading dashes `--`, e.g. `-n require=foo -n unhandled-rejections=strict`
 
 Can also be specified as a comma-delimited list: `-n require=foo,unhandled-rejections=strict`
@@ -1101,7 +1103,8 @@ Files specified in this way should contain one or more suites, tests or hooks. I
 
 ### `--ignore <file|directory|glob>, --exclude <file|directory|glob>,`
 
-Explicitly ignore one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.<br>
+Explicitly ignore one or more test files, directories or globs (e.g., `some/**/files*`) that would otherwise be loaded.
+
 Can be specified multiple times.
 
 > _Since v10.0.0:_ In Windows always use forward-slashes `/` as path separator.
@@ -1180,7 +1183,8 @@ Cause Mocha to only run tests matching the given `regexp`, which is internally c
 
 Suppose, for example, you have "api" related tests, as well as "app" related tests, as shown in the following snippet; One could use `--grep api` or `--grep app` to run one or the other. The same goes for any other part of a suite or test-case title, `--grep users` would be valid as well, or even `--grep GET`.
 
-And another option with double quotes: `--grep "groupA|groupB"`.<br>
+And another option with double quotes: `--grep "groupA|groupB"`.
+
 And for more complex criteria: `--grep "/get/i"`. Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`. Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
 
 ```js

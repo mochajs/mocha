@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const sinon = require('sinon');
 const Mocha = require('../../lib/mocha');
 const Pending = require('../../lib/pending');

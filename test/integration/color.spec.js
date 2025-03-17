@@ -1,7 +1,7 @@
 'use strict';
 
-var childProcess = require('child_process');
-var path = require('path');
+var childProcess = require('node:child_process');
+var path = require('node:path');
 
 describe('mocha binary', function () {
   it('should not output colors to pipe', function (done) {

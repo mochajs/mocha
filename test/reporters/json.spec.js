@@ -1,6 +1,6 @@
 'use strict';
 
-var fs = require('fs');
+var fs = require('node:fs');
 var sinon = require('sinon');
 var JSONReporter = require('../../lib/reporters/json');
 var utils = require('../../lib/utils');
