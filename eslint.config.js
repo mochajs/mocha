@@ -21,6 +21,7 @@ module.exports = defineConfig([
       ...neostandard.resolveIgnoresFromGitignore(),
     ],
     noJsx: true,
+    noStyle: true,
     semi: true,
     ts: true,
   }),
