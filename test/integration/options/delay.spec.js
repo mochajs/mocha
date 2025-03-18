@@ -1,18 +1,18 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--delay', function () {
-  var args = [];
+  let args = [];
 
   before(function () {
     args = ['--delay'];
   });
 
   it('should run the generated test suite', function (done) {
-    var fixture = path.join('options', 'delay');
+    const fixture = path.join('options', 'delay');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -24,7 +24,7 @@ describe('--delay', function () {
   });
 
   it('should execute exclusive tests only', function (done) {
-    var fixture = path.join('options', 'delay-only');
+    const fixture = path.join('options', 'delay-only');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -42,7 +42,7 @@ describe('--delay', function () {
   });
 
   it('should throw an error if the test suite failed to run', function (done) {
-    var fixture = path.join('options', 'delay-fail');
+    const fixture = path.join('options', 'delay-fail');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

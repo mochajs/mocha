@@ -1,8 +1,8 @@
 /* global BigInt */
 'use strict';
 
-var utils = require('../../lib/utils');
-var sinon = require('sinon');
+const utils = require('../../lib/utils');
+const sinon = require('sinon');
 
 describe('lib/utils', function () {
   afterEach(function () {
@@ -79,13 +79,13 @@ describe('lib/utils', function () {
     });
 
     it('should format a single line test function', function () {
-      var fn = ['function () {', '  var a = 1;', '}'].join('\n');
+      const fn = ['function () {', '  var a = 1;', '}'].join('\n');
       expect(utils.clean(fn), 'to be', 'var a = 1;');
     });
 
     it('should format a multi line test indented with spaces', function () {
       // and no new lines after curly braces, shouldn't matter
-      var fn = [
+      const fn = [
         'function(){  var a = 1;',
         // this one has more spaces
         '    var b = 2;',
@@ -95,7 +95,7 @@ describe('lib/utils', function () {
     });
 
     it('should format a multi line test indented with tabs', function () {
-      var fn = [
+      const fn = [
         'function (arg1, arg2)   {',
         '\tif (true) {',
         '\t\tvar a = 1;',
@@ -106,7 +106,7 @@ describe('lib/utils', function () {
     });
 
     it('should format functions saved in windows style - spaces', function () {
-      var fn = [
+      const fn = [
         'function (one) {',
         '   do {',
         '    "nothing";',
@@ -117,7 +117,7 @@ describe('lib/utils', function () {
     });
 
     it('should format functions saved in windows style - tabs', function () {
-      var fn = [
+      const fn = [
         'function ( )   {',
         '\tif (false) {',
         '\t\tvar json = {',
@@ -134,18 +134,18 @@ describe('lib/utils', function () {
     });
 
     it('should format es6 arrow functions', function () {
-      var fn = ['() => {', '  var a = 1;', '}'].join('\n');
+      const fn = ['() => {', '  var a = 1;', '}'].join('\n');
       expect(utils.clean(fn), 'to be', 'var a = 1;');
     });
 
     it('should format es6 arrow functions with implicit return', function () {
-      var fn = '() => foo()';
+      const fn = '() => foo()';
       expect(utils.clean(fn), 'to be', 'foo()');
     });
   });
 
   describe('stringify()', function () {
-    var stringify = utils.stringify;
+    const stringify = utils.stringify;
 
     it('should return an object representation of a string created with a String constructor', function () {
       /* eslint no-new-wrappers: off */
@@ -174,7 +174,7 @@ describe('lib/utils', function () {
         '[Date: ' + new Date(0).toISOString() + ']'
       );
 
-      var date = new Date(); // now
+      const date = new Date(); // now
       expect(stringify(date), 'to be', '[Date: ' + date.toISOString() + ']');
     });
 
@@ -215,7 +215,7 @@ describe('lib/utils', function () {
 
     describe('canonicalize example', function () {
       it('should represent the actual full result', function () {
-        var expected = {
+        const expected = {
           str: 'string',
           int: 90,
           float: 9.99,
@@ -237,7 +237,7 @@ describe('lib/utils', function () {
           empObj: {}
         };
         expected.circular = expected; // Make `Circular` situation
-        var actual = [
+        const actual = [
           '{',
           '  "array": [',
           '    1',
@@ -329,14 +329,14 @@ describe('lib/utils', function () {
     });
 
     it('should canonicalize the object', function () {
-      var travis = {name: 'travis', age: 24};
-      var travis2 = {age: 24, name: 'travis'};
+      const travis = {name: 'travis', age: 24};
+      const travis2 = {age: 24, name: 'travis'};
 
       expect(stringify(travis), 'to be', stringify(travis2));
     });
 
     it('should handle circular structures in objects', function () {
-      var travis = {name: 'travis'};
+      const travis = {name: 'travis'};
       travis.whoami = travis;
 
       expect(
@@ -347,23 +347,23 @@ describe('lib/utils', function () {
     });
 
     it('should handle circular structures in arrays', function () {
-      var travis = ['travis'];
+      const travis = ['travis'];
       travis.push(travis);
 
       expect(stringify(travis), 'to be', '[\n  "travis"\n  [Circular]\n]');
     });
 
     it('should handle circular structures in functions', function () {
-      var travis = function () {};
+      const travis = function () {};
       travis.fn = travis;
 
       expect(stringify(travis), 'to be', '{\n  "fn": [Circular]\n}');
     });
 
     it('should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values', function () {
-      var regexp = /(?:)/;
-      var regExpObj = {regexp};
-      var regexpString = '/(?:)/';
+      const regexp = /(?:)/;
+      const regExpObj = {regexp};
+      const regexpString = '/(?:)/';
 
       expect(
         stringify(regExpObj),
@@ -372,16 +372,16 @@ describe('lib/utils', function () {
       );
       expect(stringify(regexp), 'to be', regexpString);
 
-      var number = 1;
-      var numberObj = {number};
-      var numberString = '1';
+      const number = 1;
+      const numberObj = {number};
+      const numberString = '1';
 
       expect(stringify(numberObj), 'to be', '{\n  "number": ' + number + '\n}');
       expect(stringify(number), 'to be', numberString);
 
-      var boolean = false;
-      var booleanObj = {boolean};
-      var booleanString = 'false';
+      const boolean = false;
+      const booleanObj = {boolean};
+      const booleanString = 'false';
 
       expect(
         stringify(booleanObj),
@@ -390,8 +390,8 @@ describe('lib/utils', function () {
       );
       expect(stringify(boolean), 'to be', booleanString);
 
-      var string = 'sneepy';
-      var stringObj = {string};
+      const string = 'sneepy';
+      const stringObj = {string};
 
       expect(
         stringify(stringObj),
@@ -400,18 +400,18 @@ describe('lib/utils', function () {
       );
       expect(stringify(string), 'to be', JSON.stringify(string));
 
-      var nullValue = null;
-      var nullObj = {null: null};
-      var nullString = '[null]';
+      const nullValue = null;
+      const nullObj = {null: null};
+      const nullString = '[null]';
 
       expect(stringify(nullObj), 'to be', '{\n  "null": [null]\n}');
       expect(stringify(nullValue), 'to be', nullString);
     });
 
     it('should handle arrays', function () {
-      var array = ['dave', 'dave', 'dave', 'dave'];
-      var arrayObj = {array};
-      var arrayString = '    "dave"\n    "dave"\n    "dave"\n    "dave"';
+      const array = ['dave', 'dave', 'dave', 'dave'];
+      const arrayObj = {array};
+      const arrayString = '    "dave"\n    "dave"\n    "dave"\n    "dave"';
 
       expect(
         stringify(arrayObj),
@@ -426,9 +426,9 @@ describe('lib/utils', function () {
     });
 
     it('should handle functions', function () {
-      var fn = function () {};
-      var fnObj = {fn};
-      var fnString = '[Function]';
+      const fn = function () {};
+      const fnObj = {fn};
+      const fnString = '[Function]';
 
       expect(stringify(fnObj), 'to be', '{\n  "fn": ' + fnString + '\n}');
       expect(stringify(fn), 'to be', '[Function]');
@@ -467,7 +467,7 @@ describe('lib/utils', function () {
     });
 
     it('should handle functions w/ properties', function () {
-      var fn = function () {};
+      const fn = function () {};
       fn.bar = 'baz';
       expect(stringify(fn), 'to be', '{\n  "bar": "baz"\n}');
       expect(
@@ -517,7 +517,7 @@ describe('lib/utils', function () {
     });
 
     it('should stringify dates', function () {
-      var date = new Date(0);
+      const date = new Date(0);
       expect(stringify(date), 'to be', '[Date: 1970-01-01T00:00:00.000Z]');
       expect(
         stringify({date}),
@@ -527,7 +527,7 @@ describe('lib/utils', function () {
     });
 
     it('should handle object without an Object prototype', function () {
-      var a;
+      let a;
       if (Object.create) {
         a = Object.create(null);
       } else {
@@ -541,7 +541,7 @@ describe('lib/utils', function () {
     // In old version node.js, Symbol is not available by default.
     if (typeof global.Symbol === 'function') {
       it('should handle Symbol', function () {
-        var symbol = Symbol('value');
+        const symbol = Symbol('value');
         expect(stringify(symbol), 'to match', /^Symbol\(value\)/);
         expect(stringify({symbol}), 'to match', /"symbol": Symbol\(value\)/);
       });
@@ -564,8 +564,8 @@ describe('lib/utils', function () {
   describe('type()', function () {
     /* eslint no-extend-native: off */
 
-    var type = utils.type;
-    var toString = Object.prototype.toString;
+    const type = utils.type;
+    const toString = Object.prototype.toString;
 
     beforeEach(function () {
       // some JS engines such as PhantomJS 1.x exhibit this behavior
@@ -618,8 +618,8 @@ describe('lib/utils', function () {
   describe('canonicalType()', function () {
     /* eslint no-extend-native: off */
 
-    var type = utils.canonicalType;
-    var toString = Object.prototype.toString;
+    const type = utils.canonicalType;
+    const toString = Object.prototype.toString;
 
     beforeEach(function () {
       // some JS engines such as PhantomJS 1.x exhibit this behavior

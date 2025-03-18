@@ -1,6 +1,6 @@
 'use strict';
 
-var invokeMochaAsync = require('../helpers').invokeMochaAsync;
+const invokeMochaAsync = require('../helpers').invokeMochaAsync;
 
 /**
  * Extracts root hook log messages from run results

@@ -1,13 +1,13 @@
 'use strict';
 
-var fs = require('node:fs');
-var rimraf = require('rimraf');
-var invokeMocha = require('./helpers').invokeMocha;
-var path = require('node:path');
-var os = require('node:os');
+const fs = require('node:fs');
+const rimraf = require('rimraf');
+const invokeMocha = require('./helpers').invokeMocha;
+const path = require('node:path');
+const os = require('node:os');
 
 describe('init command', function () {
-  var tmpdir;
+  let tmpdir;
 
   beforeEach(function () {
     tmpdir = path.join(os.tmpdir(), 'mocha-init');

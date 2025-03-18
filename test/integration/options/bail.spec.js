@@ -1,18 +1,18 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--bail', function () {
-  var args = [];
+  let args = [];
 
   before(function () {
     args = ['--bail'];
   });
 
   it('should stop after the first error', function (done) {
-    var fixture = path.join('options', 'bail');
+    const fixture = path.join('options', 'bail');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -28,7 +28,7 @@ describe('--bail', function () {
   });
 
   it('should stop after the first error - async', function (done) {
-    var fixture = path.join('options', 'bail-async');
+    const fixture = path.join('options', 'bail-async');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -44,7 +44,7 @@ describe('--bail', function () {
   });
 
   it('should stop all tests after failing "before" hook', function (done) {
-    var fixture = path.join('options', 'bail-with-before');
+    const fixture = path.join('options', 'bail-with-before');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -62,7 +62,7 @@ describe('--bail', function () {
   });
 
   it('should stop all tests after failing "beforeEach" hook', function (done) {
-    var fixture = path.join('options', 'bail-with-beforeEach');
+    const fixture = path.join('options', 'bail-with-beforeEach');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -80,7 +80,7 @@ describe('--bail', function () {
   });
 
   it('should stop all tests after failing test', function (done) {
-    var fixture = path.join('options', 'bail-with-test');
+    const fixture = path.join('options', 'bail-with-test');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -95,7 +95,7 @@ describe('--bail', function () {
   });
 
   it('should stop all tests after failing "after" hook', function (done) {
-    var fixture = path.join('options', 'bail-with-after');
+    const fixture = path.join('options', 'bail-with-after');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -114,7 +114,7 @@ describe('--bail', function () {
   });
 
   it('should stop all tests after failing "afterEach" hook', function (done) {
-    var fixture = path.join('options', 'bail-with-afterEach');
+    const fixture = path.join('options', 'bail-with-afterEach');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

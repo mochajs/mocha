@@ -1,7 +1,7 @@
 'use strict';
 
-var run = require('./helpers').runMochaJSON;
-var assert = require('node:assert');
+const run = require('./helpers').runMochaJSON;
+const assert = require('node:assert');
 
 describe('.only()', function () {
   describe('bdd', function () {

@@ -1,40 +1,40 @@
 'use strict';
 
-var EventEmitter = require('node:events').EventEmitter;
-var fs = require('node:fs');
-var path = require('node:path');
-var sinon = require('sinon');
-var createStatsCollector = require('../../lib/stats-collector');
-var events = require('../../').Runner.constants;
-var reporters = require('../../').reporters;
-var states = require('../../').Runnable.constants;
+const EventEmitter = require('node:events').EventEmitter;
+const fs = require('node:fs');
+const path = require('node:path');
+const sinon = require('sinon');
+const createStatsCollector = require('../../lib/stats-collector');
+const events = require('../../').Runner.constants;
+const reporters = require('../../').reporters;
+const states = require('../../').Runnable.constants;
 
 const {createTempDir, touchFile} = require('../integration/helpers');
 
-var Base = reporters.Base;
-var XUnit = reporters.XUnit;
+const Base = reporters.Base;
+const XUnit = reporters.XUnit;
 
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_END = events.EVENT_TEST_END;
-var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
-var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_END = events.EVENT_TEST_END;
+const EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-var STATE_FAILED = states.STATE_FAILED;
-var STATE_PASSED = states.STATE_PASSED;
+const STATE_FAILED = states.STATE_FAILED;
+const STATE_PASSED = states.STATE_PASSED;
 
 describe('XUnit reporter', function () {
-  var runner;
-  var noop = function () {};
+  let runner;
+  const noop = function () {};
 
-  var expectedLine = 'some-line';
-  var expectedClassName = 'fullTitle';
-  var expectedTitle = 'some title';
-  var expectedFile = 'testFile.spec.js';
-  var expectedMessage = 'some message';
-  var expectedDiff =
+  const expectedLine = 'some-line';
+  const expectedClassName = 'fullTitle';
+  const expectedTitle = 'some title';
+  const expectedFile = 'testFile.spec.js';
+  const expectedMessage = 'some message';
+  const expectedDiff =
     '\n      + expected - actual\n\n      -foo\n      +bar\n      ';
-  var expectedStack = 'some-stack';
+  const expectedStack = 'some-stack';
 
   beforeEach(function () {
     runner = {on: noop, once: noop};
@@ -42,16 +42,16 @@ describe('XUnit reporter', function () {
   });
 
   describe("when 'reporterOptions.output' is provided", function () {
-    var expectedOutput = path.join(path.sep, 'path', 'to', 'some-output');
-    var options = {
+    const expectedOutput = path.join(path.sep, 'path', 'to', 'some-output');
+    const options = {
       reporterOptions: {
         output: expectedOutput
       }
     };
 
     describe('when fileStream can be created', function () {
-      var fsMkdirSync;
-      var fsCreateWriteStream;
+      let fsMkdirSync;
+      let fsCreateWriteStream;
 
       beforeEach(function () {
         fsMkdirSync = sinon.stub(fs, 'mkdirSync');
@@ -59,12 +59,12 @@ describe('XUnit reporter', function () {
       });
 
       it('should open given file for writing, recursively creating directories in pathname', function () {
-        var fakeThis = {
+        const fakeThis = {
           fileStream: null
         };
         XUnit.call(fakeThis, runner, options);
 
-        var expectedDirectory = path.dirname(expectedOutput);
+        const expectedDirectory = path.dirname(expectedOutput);
         expect(
           fsMkdirSync.calledWith(expectedDirectory, {
             recursive: true
@@ -91,7 +91,7 @@ describe('XUnit reporter', function () {
          * @type {import('../integration/helpers').RemoveTempDirCallback}
          */
         let cleanup;
-        var invalidPath;
+        let invalidPath;
 
         beforeEach(async function () {
           const {dirpath, removeTempDir} = await createTempDir();
@@ -108,12 +108,12 @@ describe('XUnit reporter', function () {
         });
 
         it('should throw system error', function () {
-          var options = {
+          const options = {
             reporterOptions: {
               output: invalidPath
             }
           };
-          var boundXUnit = XUnit.bind({}, runner, options);
+          const boundXUnit = XUnit.bind({}, runner, options);
           expect(
             boundXUnit,
             'to throw',
@@ -136,7 +136,7 @@ describe('XUnit reporter', function () {
         });
 
         it('should throw unsupported error', function () {
-          var boundXUnit = XUnit.bind({}, runner, options);
+          const boundXUnit = XUnit.bind({}, runner, options);
           expect(
             boundXUnit,
             'to throw',
@@ -154,15 +154,15 @@ describe('XUnit reporter', function () {
   describe('event handlers', function () {
     describe("on 'pending', 'pass' and 'fail' events", function () {
       it("should add test to tests called on 'end' event", function () {
-        var pendingTest = {
+        const pendingTest = {
           name: 'pending',
           slow: noop
         };
-        var failTest = {
+        const failTest = {
           name: 'fail',
           slow: noop
         };
-        var passTest = {
+        const passTest = {
           name: 'pass',
           slow: noop
         };
@@ -178,8 +178,8 @@ describe('XUnit reporter', function () {
           }
         };
 
-        var calledTests = [];
-        var fakeThis = {
+        const calledTests = [];
+        const fakeThis = {
           write: noop,
           test: function (test) {
             calledTests.push(test);
@@ -187,19 +187,19 @@ describe('XUnit reporter', function () {
         };
         XUnit.call(fakeThis, runner);
 
-        var expectedCalledTests = [pendingTest, passTest, failTest];
+        const expectedCalledTests = [pendingTest, passTest, failTest];
         expect(calledTests, 'to equal', expectedCalledTests);
       });
     });
   });
 
   describe('#done', function () {
-    var xunit;
-    var options = {
+    let xunit;
+    const options = {
       reporterOptions: {}
     };
-    var expectedNFailures = 13;
-    var callback;
+    const expectedNFailures = 13;
+    let callback;
 
     beforeEach(function () {
       callback = sinon.spy();
@@ -212,7 +212,7 @@ describe('XUnit reporter', function () {
     });
 
     describe('when output directed to file', function () {
-      var fakeThis;
+      let fakeThis;
 
       beforeEach(function () {
         xunit = new XUnit(runner, options);
@@ -240,7 +240,7 @@ describe('XUnit reporter', function () {
     });
 
     describe('when output directed to stdout (or console)', function () {
-      var fakeThis;
+      let fakeThis;
 
       beforeEach(function () {
         xunit = new XUnit(runner, options);
@@ -259,13 +259,13 @@ describe('XUnit reporter', function () {
   describe('#write', function () {
     // :TODO: Method should be named 'writeln', not 'write'
     describe('when output directed to file', function () {
-      var fileStream = {
+      const fileStream = {
         write: sinon.spy()
       };
 
       it("should call 'fileStream.write' with line and newline", function () {
-        var xunit = new XUnit(runner);
-        var fakeThis = {fileStream};
+        const xunit = new XUnit(runner);
+        const fakeThis = {fileStream};
         xunit.write.call(fakeThis, expectedLine);
 
         expect(fileStream.write.calledWith(expectedLine + '\n'), 'to be true');
@@ -274,9 +274,9 @@ describe('XUnit reporter', function () {
 
     describe('when output directed to stdout', function () {
       it("should call 'process.stdout.write' with line and newline", function () {
-        var xunit = new XUnit(runner);
-        var fakeThis = {fileStream: false};
-        var stdoutWriteStub = sinon.stub(process.stdout, 'write');
+        const xunit = new XUnit(runner);
+        const fakeThis = {fileStream: false};
+        const stdoutWriteStub = sinon.stub(process.stdout, 'write');
         xunit.write.call(fakeThis, expectedLine);
         stdoutWriteStub.restore();
 
@@ -287,16 +287,16 @@ describe('XUnit reporter', function () {
     describe('when output directed to console', function () {
       it("should call 'Base.consoleLog' with line", function () {
         // :TODO: XUnit needs a trivially testable means to force console.log()
-        var realProcess = process;
-        process = false; // eslint-disable-line no-native-reassign, no-global-assign
+        const realProcess = process;
+        process = false; // eslint-disable-line no-global-assign
 
-        var xunit = new XUnit(runner);
-        var fakeThis = {fileStream: false};
-        var consoleLogStub = sinon.stub(Base, 'consoleLog');
+        const xunit = new XUnit(runner);
+        const fakeThis = {fileStream: false};
+        const consoleLogStub = sinon.stub(Base, 'consoleLog');
         xunit.write.call(fakeThis, expectedLine);
         consoleLogStub.restore();
 
-        process = realProcess; // eslint-disable-line no-native-reassign, no-global-assign
+        process = realProcess; // eslint-disable-line no-global-assign
 
         expect(consoleLogStub.calledWith(expectedLine), 'to be true');
       });
@@ -304,8 +304,8 @@ describe('XUnit reporter', function () {
   });
 
   describe('#test', function () {
-    var expectedWrite;
-    var fakeThis = {
+    let expectedWrite;
+    const fakeThis = {
       write: function (str) {
         expectedWrite = str;
       }
@@ -322,8 +322,8 @@ describe('XUnit reporter', function () {
 
     describe('on test failure', function () {
       it('should write expected tag with error details', function () {
-        var xunit = new XUnit(runner);
-        var expectedTest = {
+        const xunit = new XUnit(runner);
+        const expectedTest = {
           state: STATE_FAILED,
           title: expectedTitle,
           file: expectedFile,
@@ -344,7 +344,7 @@ describe('XUnit reporter', function () {
         xunit.test.call(fakeThis, expectedTest);
         sinon.restore();
 
-        var expectedTag =
+        const expectedTag =
           '<testcase classname="' +
           expectedClassName +
           '" name="' +
@@ -362,11 +362,11 @@ describe('XUnit reporter', function () {
       });
 
       it('should handle non-string diff values', function () {
-        var runner = new EventEmitter();
+        const runner = new EventEmitter();
         createStatsCollector(runner);
-        var xunit = new XUnit(runner);
+        const xunit = new XUnit(runner);
 
-        var expectedTest = {
+        const expectedTest = {
           state: STATE_FAILED,
           title: expectedTitle,
           file: expectedFile,
@@ -392,7 +392,7 @@ describe('XUnit reporter', function () {
         runner.emit(EVENT_RUN_END);
         sinon.restore();
 
-        var expectedDiff =
+        const expectedDiff =
           '\n      + expected - actual\n\n      -1\n      +2\n      ';
 
         expect(expectedWrite, 'to contain', expectedDiff);
@@ -401,8 +401,8 @@ describe('XUnit reporter', function () {
 
     describe('on test pending', function () {
       it('should write expected tag', function () {
-        var xunit = new XUnit(runner);
-        var expectedTest = {
+        const xunit = new XUnit(runner);
+        const expectedTest = {
           isPending: function () {
             return true;
           },
@@ -419,7 +419,7 @@ describe('XUnit reporter', function () {
         xunit.test.call(fakeThis, expectedTest);
         sinon.restore();
 
-        var expectedTag =
+        const expectedTag =
           '<testcase classname="' +
           expectedClassName +
           '" name="' +
@@ -433,8 +433,8 @@ describe('XUnit reporter', function () {
 
     describe('on test in any other state', function () {
       it('should write expected tag', function () {
-        var xunit = new XUnit(runner);
-        var expectedTest = {
+        const xunit = new XUnit(runner);
+        const expectedTest = {
           isPending: function () {
             return false;
           },
@@ -451,7 +451,7 @@ describe('XUnit reporter', function () {
         xunit.test.call(fakeThis, expectedTest);
         sinon.restore();
 
-        var expectedTag =
+        const expectedTag =
           '<testcase classname="' +
           expectedClassName +
           '" name="' +
@@ -464,16 +464,16 @@ describe('XUnit reporter', function () {
     });
 
     it('should write expected summary statistics', function () {
-      var numTests = 0;
-      var numPass = 0;
-      var numFail = 0;
-      var simpleError = {
+      let numTests = 0;
+      let numPass = 0;
+      let numFail = 0;
+      const simpleError = {
         actual: 'foo',
         expected: 'bar',
         message: expectedMessage,
         stack: expectedStack
       };
-      var generateTest = function (passed) {
+      const generateTest = function (passed) {
         numTests++;
         if (passed) {
           numPass++;
@@ -498,9 +498,9 @@ describe('XUnit reporter', function () {
         };
       };
 
-      var runner = new EventEmitter();
+      const runner = new EventEmitter();
       createStatsCollector(runner);
-      var xunit = new XUnit(runner);
+      const xunit = new XUnit(runner);
       expectedWrite = '';
       sinon.stub(xunit, 'write').callsFake(function (str) {
         expectedWrite += str;
@@ -517,16 +517,16 @@ describe('XUnit reporter', function () {
 
       sinon.restore();
 
-      var expectedNumPass = 1;
-      var expectedNumFail = 2;
-      var expectedNumTests = 3;
+      const expectedNumPass = 1;
+      const expectedNumFail = 2;
+      const expectedNumTests = 3;
 
       expect(expectedNumPass, 'to be', numPass);
       expect(expectedNumFail, 'to be', numFail);
       expect(expectedNumTests, 'to be', numTests);
 
       // :NOTE: Mocha test "fail" is an XUnit "error"
-      var expectedTag =
+      const expectedTag =
         '<testsuite name="Mocha Tests" tests="3" failures="0" errors="2" skipped="0"';
 
       expect(expectedWrite, 'to contain', expectedTag);
@@ -536,11 +536,11 @@ describe('XUnit reporter', function () {
 
   describe('suite name', function () {
     // Capture the events that the reporter subscribes to
-    var events = {};
+    let events = {};
     // Capture output lines (will contain the resulting XML of XUnit reporter)
-    var lines = [];
+    let lines = [];
     // File stream into which the XUnit reporter will write
-    var fileStream;
+    let fileStream;
 
     before(function () {
       fileStream = {
@@ -561,14 +561,14 @@ describe('XUnit reporter', function () {
     });
 
     it('should use custom name if provided via reporter options', function () {
-      var customSuiteName = 'Mocha Is Great!';
-      var options = {
+      const customSuiteName = 'Mocha Is Great!';
+      const options = {
         reporterOptions: {
           suiteName: customSuiteName
         }
       };
 
-      var xunit = new XUnit(runner, options);
+      const xunit = new XUnit(runner, options);
       xunit.fileStream = fileStream;
 
       // Trigger end event to force XUnit reporter to write its output
@@ -578,12 +578,12 @@ describe('XUnit reporter', function () {
     });
 
     it('should use default name otherwise', function () {
-      var defaultSuiteName = 'Mocha Tests';
-      var options = {
+      const defaultSuiteName = 'Mocha Tests';
+      const options = {
         reporterOptions: {}
       };
 
-      var xunit = new XUnit(runner, options);
+      const xunit = new XUnit(runner, options);
       xunit.fileStream = fileStream;
 
       // Trigger end event to force XUnit reporter to write its output

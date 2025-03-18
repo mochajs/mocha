@@ -1,8 +1,8 @@
 'use strict';
 
-var assert = require('node:assert');
-var run = require('./helpers').runMochaJSON;
-var args = [];
+const assert = require('node:assert');
+const run = require('./helpers').runMochaJSON;
+const args = [];
 
 describe('this.timeout()', function () {
   it('is respected by sync and async suites', function (done) {

@@ -1,11 +1,11 @@
 'use strict';
-var sinon = require('sinon');
-var Mocha = require('../../lib/mocha');
-var Hook = Mocha.Hook;
-var Runnable = Mocha.Runnable;
+const sinon = require('sinon');
+const Mocha = require('../../lib/mocha');
+const Hook = Mocha.Hook;
+const Runnable = Mocha.Runnable;
 
 describe('Hook', function () {
-  var hook;
+  let hook;
 
   beforeEach(function () {
     hook = new Hook('Some hook', function () {});
@@ -17,12 +17,12 @@ describe('Hook', function () {
 
   describe('error', function () {
     it('should set the hook._error', function () {
-      var expectedError = new Error('Expected error');
+      const expectedError = new Error('Expected error');
       hook.error(expectedError);
       expect(hook._error, 'to be', expectedError);
     });
     it('should get the hook._error when called without arguments', function () {
-      var expectedError = new Error('Expected error');
+      const expectedError = new Error('Expected error');
       hook._error = expectedError;
       expect(hook.error(), 'to be', expectedError);
     });
@@ -30,7 +30,7 @@ describe('Hook', function () {
 
   describe('reset', function () {
     it('should call Runnable.reset', function () {
-      var runnableResetStub = sinon.stub(Runnable.prototype, 'reset');
+      const runnableResetStub = sinon.stub(Runnable.prototype, 'reset');
       hook.reset();
       expect(runnableResetStub, 'was called once');
     });

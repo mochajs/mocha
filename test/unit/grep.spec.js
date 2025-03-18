@@ -1,23 +1,23 @@
 'use strict';
 
-var Mocha = require('../../lib/mocha');
+const Mocha = require('../../lib/mocha');
 
 describe('Mocha', function () {
   describe('"grep" option', function () {
     it('should add a RegExp to the mocha.options object', function () {
-      var mocha = new Mocha({grep: /foo.*/});
+      const mocha = new Mocha({grep: /foo.*/});
       expect(mocha.options.grep, 'to equal', /foo.*/);
     });
 
     it('should convert string to a RegExp', function () {
-      var mocha = new Mocha({grep: 'foo.*'});
+      const mocha = new Mocha({grep: 'foo.*'});
       expect(mocha.options.grep, 'to equal', /foo.*/);
     });
   });
 
   describe('"fgrep" option', function () {
     it('should escape and convert string to a RegExp', function () {
-      var mocha = new Mocha({fgrep: 'foo.*'});
+      const mocha = new Mocha({fgrep: 'foo.*'});
       expect(mocha.options.grep, 'to equal', /foo\.\*/);
     });
   });
@@ -32,19 +32,19 @@ describe('Mocha', function () {
     }
 
     it('should add a RegExp to the mocha.options object', function () {
-      var test = testGrep(new Mocha());
+      const test = testGrep(new Mocha());
       test(/foo/, '/foo/');
     });
 
     it('should convert grep string to a RegExp', function () {
-      var test = testGrep(new Mocha());
+      const test = testGrep(new Mocha());
       test('foo', '/foo/');
       test('^foo.*bar$', '/^foo.*bar$/');
       test('^@.*(?=\\(\\)$)', '/^@.*(?=\\(\\)$)/');
     });
 
     it('should covert grep regex-like string to a RegExp', function () {
-      var test = testGrep(new Mocha());
+      const test = testGrep(new Mocha());
       test('/foo/', '/foo/');
       // Keep the flags
       test('/baz/i', '/baz/i');
@@ -53,14 +53,14 @@ describe('Mocha', function () {
     });
 
     it('should return its parent Mocha object for chainability', function () {
-      var mocha = new Mocha();
+      const mocha = new Mocha();
       expect(mocha.grep(), 'to be', mocha);
     });
   });
 
   describe('"invert" option', function () {
     it('should add a Boolean to the mocha.options object', function () {
-      var mocha = new Mocha({invert: true});
+      const mocha = new Mocha({invert: true});
       expect(mocha.options.invert, 'to be', true);
     });
   });

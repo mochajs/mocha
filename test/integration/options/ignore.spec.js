@@ -1,9 +1,9 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
-var resolvePath = helpers.resolveFixturePath;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
+const resolvePath = helpers.resolveFixturePath;
 
 describe('--ignore', function () {
   /*
@@ -27,7 +27,7 @@ describe('--ignore', function () {
   }
 
   it('should ignore specific files', function (done) {
-    var fixtures = path.join('options', 'ignore', '*');
+    const fixtures = path.join('options', 'ignore', '*');
     runMochaTest(
       fixtures,
       [
@@ -44,7 +44,7 @@ describe('--ignore', function () {
   });
 
   it('should ignore globbed files', function (done) {
-    var fixtures = path.join('options', 'ignore', '**', '*');
+    const fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
       ['--ignore', '**/fail.fixture.js'],
@@ -58,7 +58,7 @@ describe('--ignore', function () {
   });
 
   it('should ignore multiple patterns', function (done) {
-    var fixtures = path.join('options', 'ignore', '**', '*');
+    const fixtures = path.join('options', 'ignore', '**', '*');
     runMochaTest(
       fixtures,
       [

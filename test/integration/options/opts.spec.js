@@ -1,6 +1,6 @@
 'use strict';
 
-var invokeMocha = require('../helpers').invokeMocha;
+const invokeMocha = require('../helpers').invokeMocha;
 
 describe('--opts', function () {
   it('should report deprecation', function (done) {

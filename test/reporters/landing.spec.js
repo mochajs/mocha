@@ -1,27 +1,27 @@
 'use strict';
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
-var states = require('../../').Runnable.constants;
+const sinon = require('sinon');
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
+const states = require('../../').Runnable.constants;
 
-var Base = reporters.Base;
-var Landing = reporters.Landing;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Base = reporters.Base;
+const Landing = reporters.Landing;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_END = events.EVENT_TEST_END;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_END = events.EVENT_TEST_END;
 
-var STATE_FAILED = states.STATE_FAILED;
-var STATE_PASSED = states.STATE_PASSED;
+const STATE_FAILED = states.STATE_FAILED;
+const STATE_PASSED = states.STATE_PASSED;
 
 describe('Landing reporter', function () {
-  var runReporter = makeRunReporter(Landing);
-  var resetCode = '\u001b[0m';
-  var expectedArray = [
+  const runReporter = makeRunReporter(Landing);
+  const resetCode = '\u001b[0m';
+  const expectedArray = [
     '\u001b[1D\u001b[2A',
     '  ',
     '\n  ',
@@ -46,19 +46,19 @@ describe('Landing reporter', function () {
       it('should write newlines', function () {
         sinon.stub(Base.cursor, 'hide');
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var options = {};
-        var stdout = runReporter({}, runner, options);
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const options = {};
+        const stdout = runReporter({}, runner, options);
         sinon.restore();
 
         expect(stdout[0], 'to equal', '\n\n\n  ');
       });
 
       it('should call cursor hide', function () {
-        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
+        const hideCursorStub = sinon.stub(Base.cursor, 'hide');
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var options = {};
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const options = {};
         runReporter({}, runner, options);
         sinon.restore();
 
@@ -69,18 +69,18 @@ describe('Landing reporter', function () {
     describe("on 'test end' event", function () {
       describe('when test passes', function () {
         it('should write expected landing strip', function () {
-          var test = {
+          const test = {
             state: STATE_PASSED
           };
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'test end',
             EVENT_TEST_END,
             null,
             null,
             test
           );
-          var options = {};
-          var stdout = runReporter({}, runner, options);
+          const options = {};
+          const stdout = runReporter({}, runner, options);
           sinon.restore();
 
           expect(stdout, 'to equal', expectedArray);
@@ -89,10 +89,10 @@ describe('Landing reporter', function () {
 
       describe('when test fails', function () {
         it('should write expected landing strip', function () {
-          var test = {
+          const test = {
             state: STATE_FAILED
           };
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'test end',
             EVENT_TEST_END,
             null,
@@ -100,8 +100,8 @@ describe('Landing reporter', function () {
             test
           );
           runner.total = 12;
-          var options = {};
-          var stdout = runReporter({}, runner, options);
+          const options = {};
+          const stdout = runReporter({}, runner, options);
           sinon.restore();
 
           expect(stdout, 'to equal', expectedArray);
@@ -111,13 +111,13 @@ describe('Landing reporter', function () {
 
     describe("on 'end' event", function () {
       it('should call cursor show and epilogue', function () {
-        var showCursorStub = sinon.stub(Base.cursor, 'show');
+        const showCursorStub = sinon.stub(Base.cursor, 'show');
 
-        var fakeThis = {
+        const fakeThis = {
           epilogue: sinon.spy()
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
-        var options = {};
+        const runner = createMockRunner('end', EVENT_RUN_END);
+        const options = {};
         runReporter(fakeThis, runner, options);
         sinon.restore();
 

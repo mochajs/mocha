@@ -7,7 +7,7 @@ const {
   invokeNode,
   resolveFixturePath
 } = require('./helpers');
-var args = [];
+const args = [];
 
 describe('uncaught exceptions', function () {
   it('handles uncaught exceptions from hooks', function (done) {
@@ -52,7 +52,7 @@ describe('uncaught exceptions', function () {
         return done(err);
       }
 
-      var testName = 'should bail if a successful test asynchronously fails';
+      const testName = 'should bail if a successful test asynchronously fails';
       expect(res, 'to have failed with error', 'global error')
         .and('to have passed test count', 1)
         .and('to have failed test count', 1)

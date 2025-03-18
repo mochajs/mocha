@@ -1,6 +1,6 @@
 'use strict';
 
-var calls = [];
+const calls = [];
 
 exports.Array = {
   before: function () {

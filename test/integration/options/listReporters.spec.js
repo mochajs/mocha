@@ -1,13 +1,13 @@
 'use strict';
 
-var helpers = require('../helpers');
-var invokeMocha = helpers.invokeMocha;
-var escapeRegExp = helpers.escapeRegExp;
-var reporters = require('../../../lib/mocha').reporters;
+const helpers = require('../helpers');
+const invokeMocha = helpers.invokeMocha;
+const escapeRegExp = helpers.escapeRegExp;
+const reporters = require('../../../lib/mocha').reporters;
 
 describe('--list-reporters', function () {
   it('should dump a list of all reporters with descriptions', function (done) {
-    var expected = Object.keys(reporters)
+    const expected = Object.keys(reporters)
       .filter(function (name) {
         return (
           /^[a-z]/.test(name) &&

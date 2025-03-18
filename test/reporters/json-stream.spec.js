@@ -1,28 +1,28 @@
 'use strict';
 
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var JSONStream = reporters.JSONStream;
-var createMockRunner = helpers.createMockRunner;
-var makeExpectedTest = helpers.makeExpectedTest;
-var makeRunReporter = helpers.createRunReporterFunction;
+const JSONStream = reporters.JSONStream;
+const createMockRunner = helpers.createMockRunner;
+const makeExpectedTest = helpers.makeExpectedTest;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
 describe('JSON Stream reporter', function () {
-  var runReporter = makeRunReporter(JSONStream);
-  var expectedTitle = 'some title';
-  var expectedFullTitle = 'full title';
-  var expectedFile = 'someTest.spec.js';
-  var expectedDuration = 1000;
-  var currentRetry = 1;
-  var expectedSpeed = 'fast';
-  var expectedTest = makeExpectedTest(
+  const runReporter = makeRunReporter(JSONStream);
+  const expectedTitle = 'some title';
+  const expectedFullTitle = 'full title';
+  const expectedFile = 'someTest.spec.js';
+  const expectedDuration = 1000;
+  const currentRetry = 1;
+  const expectedSpeed = 'fast';
+  const expectedTest = makeExpectedTest(
     expectedTitle,
     expectedFullTitle,
     expectedFile,
@@ -30,20 +30,20 @@ describe('JSON Stream reporter', function () {
     currentRetry,
     expectedSpeed
   );
-  var expectedErrorMessage = 'error message';
-  var expectedErrorStack = 'error stack';
-  var expectedError = {
+  const expectedErrorMessage = 'error message';
+  const expectedErrorStack = 'error stack';
+  const expectedError = {
     message: expectedErrorMessage
   };
 
   describe('event handlers', function () {
     describe("on 'start' event", function () {
       it('should write stringified start with expected total', function () {
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var expectedTotal = 12;
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const expectedTotal = 12;
         runner.total = expectedTotal;
-        var options = {};
-        var stdout = runReporter({}, runner, options);
+        const options = {};
+        const stdout = runReporter({}, runner, options);
 
         expect(
           stdout[0],
@@ -55,15 +55,15 @@ describe('JSON Stream reporter', function () {
 
     describe("on 'pass' event", function () {
       it('should write stringified test data', function () {
-        var runner = createMockRunner(
+        const runner = createMockRunner(
           'pass',
           EVENT_TEST_PASS,
           null,
           null,
           expectedTest
         );
-        var options = {};
-        var stdout = runReporter({}, runner, options);
+        const options = {};
+        const stdout = runReporter({}, runner, options);
 
         expect(
           stdout[0],
@@ -89,7 +89,7 @@ describe('JSON Stream reporter', function () {
       describe('when error stack exists', function () {
         it('should write stringified test data with error data', function () {
           expectedError.stack = expectedErrorStack;
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'fail two args',
             EVENT_TEST_FAIL,
             null,
@@ -97,8 +97,8 @@ describe('JSON Stream reporter', function () {
             expectedTest,
             expectedError
           );
-          var options = {};
-          var stdout = runReporter({}, runner, options);
+          const options = {};
+          const stdout = runReporter({}, runner, options);
 
           expect(
             stdout[0],
@@ -127,7 +127,7 @@ describe('JSON Stream reporter', function () {
       describe('when error stack does not exist', function () {
         it('should write stringified test data with error data', function () {
           expectedError.stack = null;
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'fail two args',
             EVENT_TEST_FAIL,
             null,
@@ -135,8 +135,8 @@ describe('JSON Stream reporter', function () {
             expectedTest,
             expectedError
           );
-          var options = {};
-          var stdout = runReporter(this, runner, options);
+          const options = {};
+          const stdout = runReporter(this, runner, options);
 
           expect(
             stdout[0],
@@ -163,9 +163,9 @@ describe('JSON Stream reporter', function () {
 
     describe("on 'end' event", function () {
       it('should write summary statistics', function () {
-        var runner = createMockRunner('end', EVENT_RUN_END);
-        var options = {};
-        var stdout = runReporter(this, runner, options);
+        const runner = createMockRunner('end', EVENT_RUN_END);
+        const options = {};
+        const stdout = runReporter(this, runner, options);
         expect(stdout[0], 'to match', /end/);
       });
     });

@@ -1,25 +1,25 @@
 'use strict';
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const sinon = require('sinon');
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var Base = reporters.Base;
-var Dot = reporters.Dot;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Base = reporters.Base;
+const Dot = reporters.Dot;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
-var EVENT_RUN_END = events.EVENT_RUN_END;
-var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
-var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
+const EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
+const EVENT_RUN_END = events.EVENT_RUN_END;
+const EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe('Dot reporter', function () {
-  var windowWidthStub;
-  var runReporter = makeRunReporter(Dot);
-  var noop = function () {};
+  let windowWidthStub;
+  const runReporter = makeRunReporter(Dot);
+  const noop = function () {};
 
   beforeEach(function () {
     windowWidthStub = sinon.stub(Base.window, 'width').value(0);
@@ -36,12 +36,12 @@ describe('Dot reporter', function () {
   describe('event handlers', function () {
     describe("on 'start' event", function () {
       it('should write a newline', function () {
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
-        var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        const runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        const options = {};
+        const stdout = runReporter({epilogue: noop}, runner, options);
         sinon.restore();
 
-        var expectedArray = ['\n'];
+        const expectedArray = ['\n'];
         expect(stdout, 'to equal', expectedArray);
       });
     });
@@ -53,31 +53,31 @@ describe('Dot reporter', function () {
         });
 
         it('should write a newline followed by a comma', function () {
-          var runner = createMockRunner('pending', EVENT_TEST_PENDING);
-          var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          const runner = createMockRunner('pending', EVENT_TEST_PENDING);
+          const options = {};
+          const stdout = runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
-          var expectedArray = ['\n  ', 'pending_' + Base.symbols.comma];
+          const expectedArray = ['\n  ', 'pending_' + Base.symbols.comma];
           expect(stdout, 'to equal', expectedArray);
         });
       });
 
       describe('when window width is less than or equal to 1', function () {
         it('should write a comma', function () {
-          var runner = createMockRunner('pending', EVENT_TEST_PENDING);
-          var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          const runner = createMockRunner('pending', EVENT_TEST_PENDING);
+          const options = {};
+          const stdout = runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
-          var expectedArray = ['pending_' + Base.symbols.comma];
+          const expectedArray = ['pending_' + Base.symbols.comma];
           expect(stdout, 'to equal', expectedArray);
         });
       });
     });
 
     describe("on 'pass' event", function () {
-      var test = {
+      const test = {
         duration: 1,
         slow: function () {
           return 2;
@@ -91,19 +91,19 @@ describe('Dot reporter', function () {
 
         describe('when test speed is fast', function () {
           it('should write a newline followed by a dot', function () {
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'pass',
               EVENT_TEST_PASS,
               null,
               null,
               test
             );
-            var options = {};
-            var stdout = runReporter({epilogue: noop}, runner, options);
+            const options = {};
+            const stdout = runReporter({epilogue: noop}, runner, options);
             sinon.restore();
 
             expect(test.speed, 'to equal', 'fast');
-            var expectedArray = ['\n  ', 'fast_' + Base.symbols.dot];
+            const expectedArray = ['\n  ', 'fast_' + Base.symbols.dot];
             expect(stdout, 'to equal', expectedArray);
           });
         });
@@ -112,19 +112,19 @@ describe('Dot reporter', function () {
       describe('when window width is less than or equal to 1', function () {
         describe('when test speed is fast', function () {
           it('should write a grey dot', function () {
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'pass',
               EVENT_TEST_PASS,
               null,
               null,
               test
             );
-            var options = {};
-            var stdout = runReporter({epilogue: noop}, runner, options);
+            const options = {};
+            const stdout = runReporter({epilogue: noop}, runner, options);
             sinon.restore();
 
             expect(test.speed, 'to equal', 'fast');
-            var expectedArray = ['fast_' + Base.symbols.dot];
+            const expectedArray = ['fast_' + Base.symbols.dot];
             expect(stdout, 'to equal', expectedArray);
           });
         });
@@ -132,19 +132,19 @@ describe('Dot reporter', function () {
         describe('when test speed is medium', function () {
           it('should write a yellow dot', function () {
             test.duration = 2;
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'pass',
               EVENT_TEST_PASS,
               null,
               null,
               test
             );
-            var options = {};
-            var stdout = runReporter({epilogue: noop}, runner, options);
+            const options = {};
+            const stdout = runReporter({epilogue: noop}, runner, options);
             sinon.restore();
 
             expect(test.speed, 'to equal', 'medium');
-            var expectedArray = ['medium_' + Base.symbols.dot];
+            const expectedArray = ['medium_' + Base.symbols.dot];
             expect(stdout, 'to equal', expectedArray);
           });
         });
@@ -152,19 +152,19 @@ describe('Dot reporter', function () {
         describe('when test speed is slow', function () {
           it('should write a bright yellow dot', function () {
             test.duration = 3;
-            var runner = createMockRunner(
+            const runner = createMockRunner(
               'pass',
               EVENT_TEST_PASS,
               null,
               null,
               test
             );
-            var options = {};
-            var stdout = runReporter({epilogue: noop}, runner, options);
+            const options = {};
+            const stdout = runReporter({epilogue: noop}, runner, options);
             sinon.restore();
 
             expect(test.speed, 'to equal', 'slow');
-            var expectedArray = ['bright-yellow_' + Base.symbols.dot];
+            const expectedArray = ['bright-yellow_' + Base.symbols.dot];
             expect(stdout, 'to equal', expectedArray);
           });
         });
@@ -172,7 +172,7 @@ describe('Dot reporter', function () {
     });
 
     describe("on 'fail' event", function () {
-      var test = {
+      const test = {
         test: {
           err: 'some error'
         }
@@ -184,36 +184,36 @@ describe('Dot reporter', function () {
         });
 
         it('should write a newline followed by an exclamation mark', function () {
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'fail',
             EVENT_TEST_FAIL,
             null,
             null,
             test
           );
-          var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          const options = {};
+          const stdout = runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
-          var expectedArray = ['\n  ', 'fail_' + Base.symbols.bang];
+          const expectedArray = ['\n  ', 'fail_' + Base.symbols.bang];
           expect(stdout, 'to equal', expectedArray);
         });
       });
 
       describe('when window width is less than or equal to 1', function () {
         it('should write an exclamation mark', function () {
-          var runner = createMockRunner(
+          const runner = createMockRunner(
             'fail',
             EVENT_TEST_FAIL,
             null,
             null,
             test
           );
-          var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          const options = {};
+          const stdout = runReporter({epilogue: noop}, runner, options);
           sinon.restore();
 
-          var expectedArray = ['fail_' + Base.symbols.bang];
+          const expectedArray = ['fail_' + Base.symbols.bang];
           expect(stdout, 'to equal', expectedArray);
         });
       });
@@ -221,11 +221,11 @@ describe('Dot reporter', function () {
 
     describe("on 'end' event", function () {
       it('should call epilogue', function () {
-        var runner = createMockRunner('end', EVENT_RUN_END);
-        var fakeThis = {
+        const runner = createMockRunner('end', EVENT_RUN_END);
+        const fakeThis = {
           epilogue: sinon.stub()
         };
-        var options = {};
+        const options = {};
         runReporter(fakeThis, runner, options);
         sinon.restore();
 

@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('../helpers');
-var runMochaAsync = helpers.runMochaAsync;
+const helpers = require('../helpers');
+const runMochaAsync = helpers.runMochaAsync;
 
 describe('--jobs', function () {
   describe('when set to a number less than 2', function () {

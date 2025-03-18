@@ -1,11 +1,11 @@
 'use strict';
-var path = require('node:path');
+const path = require('node:path');
 const {runMochaJSON: run, runMochaAsync} = require('./helpers');
-var args = [];
+const args = [];
 
 describe('esm', function () {
   it('should pass a passing esm test that uses esm', function (done) {
-    var fixture = 'esm/esm-success.fixture.mjs';
+    const fixture = 'esm/esm-success.fixture.mjs';
     run(fixture, args, function (err, result) {
       if (err) {
         done(err);
@@ -18,7 +18,7 @@ describe('esm', function () {
   });
 
   it('should fail a failing esm test that uses esm', function (done) {
-    var fixture = 'esm/esm-failure.fixture.mjs';
+    const fixture = 'esm/esm-failure.fixture.mjs';
     run(fixture, args, function (err, result) {
       if (err) {
         done(err);
@@ -34,7 +34,7 @@ describe('esm', function () {
   });
 
   it('should show file location when there is a syntax error in the test', async function () {
-    var fixture = 'esm/syntax-error/esm-syntax-error.fixture.mjs';
+    const fixture = 'esm/syntax-error/esm-syntax-error.fixture.mjs';
     const err = await runMochaAsync(fixture, args, {stdio: 'pipe'}).catch(
       err => err
     );
@@ -45,7 +45,7 @@ describe('esm', function () {
   });
 
   it('should recognize esm files ending with .js due to package.json type flag', function (done) {
-    var fixture = 'esm/js-folder/esm-in-js.fixture.js';
+    const fixture = 'esm/js-folder/esm-in-js.fixture.js';
     run(fixture, args, function (err, result) {
       if (err) {
         done(err);
@@ -58,7 +58,7 @@ describe('esm', function () {
   });
 
   it('should enable requiring/loading a cjs module with "dir" as filename', async function () {
-    var fixture = 'esm/test-that-uses-dir-cjs-require.fixture.js';
+    const fixture = 'esm/test-that-uses-dir-cjs-require.fixture.js';
     const result = await runMochaAsync(
       fixture,
       ['--require', path.resolve(__dirname, './fixtures/esm/dir-cjs-require')],

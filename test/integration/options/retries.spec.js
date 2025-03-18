@@ -1,15 +1,15 @@
 'use strict';
 
-var path = require('node:path').posix;
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const path = require('node:path').posix;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--retries', function () {
-  var args = [];
+  let args = [];
 
   it('should retry test failures after a certain threshold', function (done) {
     args = ['--retries', '3'];
-    var fixture = path.join('options', 'retries');
+    const fixture = path.join('options', 'retries');
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

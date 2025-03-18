@@ -1,46 +1,46 @@
 'use strict';
 
-var sinon = require('sinon');
-var EventEmitter = require('node:events').EventEmitter;
-var Mocha = require('../../lib/mocha');
-var utils = require('../../lib/utils');
+const sinon = require('sinon');
+const EventEmitter = require('node:events').EventEmitter;
+const Mocha = require('../../lib/mocha');
+const utils = require('../../lib/utils');
 const errors = require('../../lib/errors');
 
 describe('Mocha', function () {
   /**
    * Options for `Mocha` constructor
    */
-  var opts;
+  let opts;
 
   /**
    * Stub `Runner` constructor; returns a stubbed `EventEmitter`
    */
-  var Runner;
+  let Runner;
 
   /**
    * Stub `Suite` constructor; returns a stubbed `EventEmitter`
    */
-  var Suite;
+  let Suite;
 
   /**
    * Stub `Suite` instance (root suite in our case)
    */
-  var suite;
+  let suite;
 
   /**
    * Stub `Runner` (`EventEmitter`) instance
    */
-  var runner;
+  let runner;
 
   /**
    * Stub `Base` reporter constructor
    */
-  var Base;
+  let Base;
 
   /**
    * Instance of a hypothetical reporter
    */
-  var reporterInstance;
+  let reporterInstance;
 
   beforeEach(function () {
     reporterInstance = {};
@@ -88,7 +88,7 @@ describe('Mocha', function () {
   });
 
   describe('constructor', function () {
-    var mocha;
+    let mocha;
 
     beforeEach(function () {
       mocha = sinon.createStubInstance(Mocha);
@@ -225,7 +225,7 @@ describe('Mocha', function () {
   });
 
   describe('instance method', function () {
-    var mocha;
+    let mocha;
 
     beforeEach(function () {
       mocha = new Mocha(opts);
@@ -358,7 +358,7 @@ describe('Mocha', function () {
       });
 
       it('should unload the files', function () {
-        var unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
+        const unloadFilesStub = sinon.stub(mocha, 'unloadFiles');
         mocha.dispose();
         expect(unloadFilesStub, 'was called once');
       });
@@ -480,9 +480,9 @@ describe('Mocha', function () {
       });
 
       describe('when argument is valid', function () {
-        var elem = 'foo';
-        var elem2 = 'bar';
-        var elem3 = 'baz';
+        const elem = 'foo';
+        const elem2 = 'bar';
+        const elem3 = 'baz';
 
         it('should add string to the whitelist', function () {
           mocha.global(elem);
@@ -491,15 +491,15 @@ describe('Mocha', function () {
         });
 
         it('should add contents of string array to the whitelist', function () {
-          var elems = [elem, elem2];
+          const elems = [elem, elem2];
           mocha.global(elems);
           expect(mocha.options.global, 'to contain', elem, elem2);
           expect(mocha.options.global, 'to have length', elems.length);
         });
 
         it('should not have duplicates', function () {
-          var mocha = new Mocha({global: [elem, elem2]});
-          var elems = [elem, elem2, elem3];
+          const mocha = new Mocha({global: [elem, elem2]});
+          const elems = [elem, elem2, elem3];
           mocha.global(elems);
           expect(mocha.options.global, 'to contain', elem, elem2, elem3);
           expect(mocha.options.global, 'to have length', elems.length);
@@ -552,7 +552,7 @@ describe('Mocha', function () {
       });
 
       it('should keep reporterOption on options', function () {
-        var mocha = new Mocha({
+        const mocha = new Mocha({
           reporter: 'spec',
           reporterOption: {
             foo: 'bar'
@@ -564,7 +564,7 @@ describe('Mocha', function () {
       });
 
       it('should support legacy reporterOptions', function () {
-        var mocha = new Mocha({
+        const mocha = new Mocha({
           reporter: 'spec',
           reporterOptions: {
             foo: 'bar'

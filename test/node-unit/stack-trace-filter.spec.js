@@ -1,11 +1,11 @@
 'use strict';
 
-var path = require('node:path');
-var utils = require('../../lib/utils');
+const path = require('node:path');
+const utils = require('../../lib/utils');
 
 describe('stackTraceFilter()', function () {
   describe('on node', function () {
-    var filter = utils.stackTraceFilter();
+    const filter = utils.stackTraceFilter();
 
     describe('on POSIX OS', function () {
       before(function () {
@@ -15,7 +15,7 @@ describe('stackTraceFilter()', function () {
       });
 
       it('should get a stack-trace as a string and prettify it', function () {
-        var stack = [
+        let stack = [
           'AssertionError: foo bar',
           'at EventEmitter.<anonymous> (/usr/local/dev/test.js:16:12)',
           'at Context.<anonymous> (/usr/local/dev/test.js:19:5)',
@@ -48,7 +48,7 @@ describe('stackTraceFilter()', function () {
       });
 
       it('does not ignore other bower_components and components', function () {
-        var stack = [
+        const stack = [
           'Error: failed',
           'at assert (index.html:11:26)',
           'at Context.<anonymous> (test.js:17:18)',
@@ -67,13 +67,13 @@ describe('stackTraceFilter()', function () {
       });
 
       it('should replace absolute with relative paths', function () {
-        var stack = [
+        const stack = [
           'Error: ' + process.cwd() + '/bla.js has a problem',
           'at foo (' + process.cwd() + '/foo/index.js:13:226)',
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        var expected = [
+        const expected = [
           'Error: ' + process.cwd() + '/bla.js has a problem',
           'at foo (foo/index.js:13:226)',
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
@@ -83,13 +83,13 @@ describe('stackTraceFilter()', function () {
       });
 
       it('should not replace absolute path which has cwd as infix', function () {
-        var stack = [
+        const stack = [
           'Error: /www' + process.cwd() + '/bla.js has a problem',
           'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
         ];
 
-        var expected = [
+        const expected = [
           'Error: /www' + process.cwd() + '/bla.js has a problem',
           'at foo (/www' + process.cwd() + '/foo/index.js:13:226)',
           'at bar (/usr/local/dev/own/tmp/node_modules/bluebird/js/main/promise.js:11:26)'
@@ -107,7 +107,7 @@ describe('stackTraceFilter()', function () {
       });
 
       it('should work on Windows', function () {
-        var stack = [
+        const stack = [
           'Error: failed',
           'at Context.<anonymous> (C:\\Users\\ishida\\src\\test\\test\\mytest.js:5:9)',
           'at callFn (C:\\Users\\ishida\\src\\test\\node_modules\\mocha\\lib\\runnable.js:326:21)',
@@ -125,14 +125,14 @@ describe('stackTraceFilter()', function () {
   });
 
   describe('on browser', function () {
-    var filter;
+    let filter;
     before(function () {
       global.document = true;
       global.location = {href: 'localhost:3000/foo/bar/index.html'};
       filter = utils.stackTraceFilter();
     });
     it('does not strip out other bower_components', function () {
-      var stack = [
+      const stack = [
         'Error: failed',
         'at assert (index.html:11:26)',
         'at Context.<anonymous> (test.js:17:18)',

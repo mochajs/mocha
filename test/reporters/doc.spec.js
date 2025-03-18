@@ -1,22 +1,22 @@
 'use strict';
 
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+const events = require('../../').Runner.constants;
+const helpers = require('./helpers');
+const reporters = require('../../').reporters;
 
-var Doc = reporters.Doc;
-var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+const Doc = reporters.Doc;
+const createMockRunner = helpers.createMockRunner;
+const makeRunReporter = helpers.createRunReporterFunction;
 
-var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
-var EVENT_SUITE_END = events.EVENT_SUITE_END;
-var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
-var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
+const EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
+const EVENT_SUITE_END = events.EVENT_SUITE_END;
+const EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
+const EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
 describe('Doc reporter', function () {
-  var runner;
-  var options = {};
-  var runReporter = makeRunReporter(Doc);
+  let runner;
+  const options = {};
+  const runReporter = makeRunReporter(Doc);
 
   afterEach(function () {
     runner = null;
@@ -25,9 +25,9 @@ describe('Doc reporter', function () {
   describe('event handlers', function () {
     describe("on 'suite' event", function () {
       describe('when suite root does not exist', function () {
-        var expectedTitle = 'expectedTitle';
-        var unescapedTitle = '<div>' + expectedTitle + '</div>';
-        var suite = {
+        let expectedTitle = 'expectedTitle';
+        const unescapedTitle = '<div>' + expectedTitle + '</div>';
+        const suite = {
           root: false,
           title: expectedTitle
         };
@@ -40,8 +40,8 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
-          var expectedArray = [
+          const stdout = runReporter(this, runner, options);
+          const expectedArray = [
             '    <section class="suite">\n',
             '      <h1>' + expectedTitle + '</h1>\n',
             '      <dl>\n'
@@ -50,7 +50,7 @@ describe('Doc reporter', function () {
         });
 
         it('should escape title where necessary', function () {
-          var suite = {
+          const suite = {
             root: false,
             title: unescapedTitle
           };
@@ -64,8 +64,8 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
-          var expectedArray = [
+          const stdout = runReporter(this, runner, options);
+          const expectedArray = [
             '    <section class="suite">\n',
             '      <h1>' + expectedTitle + '</h1>\n',
             '      <dl>\n'
@@ -75,7 +75,7 @@ describe('Doc reporter', function () {
       });
 
       describe('when suite root exists', function () {
-        var suite = {
+        const suite = {
           root: true
         };
 
@@ -87,7 +87,7 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          const stdout = runReporter(this, runner, options);
           expect(stdout, 'to be empty');
         });
       });
@@ -95,7 +95,7 @@ describe('Doc reporter', function () {
 
     describe("on 'suite end' event", function () {
       describe('when suite root does not exist', function () {
-        var suite = {
+        const suite = {
           root: false
         };
 
@@ -107,14 +107,14 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
-          var expectedArray = ['  </dl>\n', '</section>\n'];
+          const stdout = runReporter(this, runner, options);
+          const expectedArray = ['  </dl>\n', '</section>\n'];
           expect(stdout, 'to equal', expectedArray);
         });
       });
 
       describe('when suite root exists', function () {
-        var suite = {
+        const suite = {
           root: true
         };
 
@@ -126,17 +126,17 @@ describe('Doc reporter', function () {
             null,
             suite
           );
-          var stdout = runReporter(this, runner, options);
+          const stdout = runReporter(this, runner, options);
           expect(stdout, 'to be empty');
         });
       });
     });
 
     describe("on 'pass' event", function () {
-      var expectedTitle = 'some tite';
-      var expectedFile = 'testFile.spec.js';
-      var expectedBody = 'some body';
-      var test = {
+      const expectedTitle = 'some tite';
+      const expectedFile = 'testFile.spec.js';
+      const expectedBody = 'some body';
+      const test = {
         title: expectedTitle,
         file: expectedFile,
         body: expectedBody,
@@ -147,8 +147,8 @@ describe('Doc reporter', function () {
 
       it('should log html with indents, expected title, and body', function () {
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
-        var stdout = runReporter(this, runner, options);
-        var expectedArray = [
+        const stdout = runReporter(this, runner, options);
+        const expectedArray = [
           '    <dt>' + expectedTitle + '</dt>\n',
           '    <dt>' + expectedFile + '</dt>\n',
           '    <dd><pre><code>' + expectedBody + '</code></pre></dd>\n'
@@ -157,22 +157,22 @@ describe('Doc reporter', function () {
       });
 
       it('should escape title and body where necessary', function () {
-        var unescapedTitle = '<div>' + expectedTitle + '</div>';
-        var unescapedFile = '<div>' + expectedFile + '</div>';
-        var unescapedBody = '<div>' + expectedBody + '</div>';
+        const unescapedTitle = '<div>' + expectedTitle + '</div>';
+        const unescapedFile = '<div>' + expectedFile + '</div>';
+        const unescapedBody = '<div>' + expectedBody + '</div>';
         test.title = unescapedTitle;
         test.file = unescapedFile;
         test.body = unescapedBody;
 
-        var expectedEscapedTitle =
+        const expectedEscapedTitle =
           '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
-        var expectedEscapedFile =
+        const expectedEscapedFile =
           '&#x3C;div&#x3E;' + expectedFile + '&#x3C;/div&#x3E;';
-        var expectedEscapedBody =
+        const expectedEscapedBody =
           '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
         runner = createMockRunner('pass', EVENT_TEST_PASS, null, null, test);
-        var stdout = runReporter(this, runner, options);
-        var expectedArray = [
+        const stdout = runReporter(this, runner, options);
+        const expectedArray = [
           '    <dt>' + expectedEscapedTitle + '</dt>\n',
           '    <dt>' + expectedEscapedFile + '</dt>\n',
           '    <dd><pre><code>' + expectedEscapedBody + '</code></pre></dd>\n'
@@ -182,11 +182,11 @@ describe('Doc reporter', function () {
     });
 
     describe("on 'fail' event", function () {
-      var expectedTitle = 'some tite';
-      var expectedFile = 'testFile.spec.js';
-      var expectedBody = 'some body';
-      var expectedError = 'some error';
-      var test = {
+      const expectedTitle = 'some tite';
+      const expectedFile = 'testFile.spec.js';
+      const expectedBody = 'some body';
+      const expectedError = 'some error';
+      const test = {
         title: expectedTitle,
         file: expectedFile,
         body: expectedBody,
@@ -204,8 +204,8 @@ describe('Doc reporter', function () {
           test,
           expectedError
         );
-        var stdout = runReporter(this, runner, options);
-        var expectedArray = [
+        const stdout = runReporter(this, runner, options);
+        const expectedArray = [
           '    <dt class="error">' + expectedTitle + '</dt>\n',
           '    <dt class="error">' + expectedFile + '</dt>\n',
           '    <dd class="error"><pre><code>' +
@@ -217,21 +217,21 @@ describe('Doc reporter', function () {
       });
 
       it('should escape title, body, and error where necessary', function () {
-        var unescapedTitle = '<div>' + expectedTitle + '</div>';
-        var unescapedFile = '<div>' + expectedFile + '</div>';
-        var unescapedBody = '<div>' + expectedBody + '</div>';
-        var unescapedError = '<div>' + expectedError + '</div>';
+        const unescapedTitle = '<div>' + expectedTitle + '</div>';
+        const unescapedFile = '<div>' + expectedFile + '</div>';
+        const unescapedBody = '<div>' + expectedBody + '</div>';
+        const unescapedError = '<div>' + expectedError + '</div>';
         test.title = unescapedTitle;
         test.file = unescapedFile;
         test.body = unescapedBody;
 
-        var expectedEscapedTitle =
+        const expectedEscapedTitle =
           '&#x3C;div&#x3E;' + expectedTitle + '&#x3C;/div&#x3E;';
-        var expectedEscapedFile =
+        const expectedEscapedFile =
           '&#x3C;div&#x3E;' + expectedFile + '&#x3C;/div&#x3E;';
-        var expectedEscapedBody =
+        const expectedEscapedBody =
           '&#x3C;div&#x3E;' + expectedBody + '&#x3C;/div&#x3E;';
-        var expectedEscapedError =
+        const expectedEscapedError =
           '&#x3C;div&#x3E;' + expectedError + '&#x3C;/div&#x3E;';
         runner = createMockRunner(
           'fail two args',
@@ -241,8 +241,8 @@ describe('Doc reporter', function () {
           test,
           unescapedError
         );
-        var stdout = runReporter(this, runner, options);
-        var expectedArray = [
+        const stdout = runReporter(this, runner, options);
+        const expectedArray = [
           '    <dt class="error">' + expectedEscapedTitle + '</dt>\n',
           '    <dt class="error">' + expectedEscapedFile + '</dt>\n',
           '    <dd class="error"><pre><code>' +

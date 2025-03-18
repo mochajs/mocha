@@ -1,7 +1,7 @@
 'use strict';
 
-var helpers = require('./helpers');
-var run = helpers.runMocha;
+const helpers = require('./helpers');
+const run = helpers.runMocha;
 
 describe('no-diff', function () {
   describe('when enabled', function () {

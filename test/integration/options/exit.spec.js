@@ -1,15 +1,15 @@
 'use strict';
 
-var runMocha = require('../helpers').runMocha;
+const runMocha = require('../helpers').runMocha;
 
 describe('--exit', function () {
-  var behaviors = {
+  const behaviors = {
     enabled: '--exit',
     disabled: '--no-exit'
   };
 
   // subprocess
-  var mocha;
+  let mocha;
 
   function killSubprocess() {
     mocha.kill('SIGKILL');
@@ -33,16 +33,16 @@ describe('--exit', function () {
    * @param {"enabled"|"disabled"} [behavior] - 'enabled' or 'disabled'; omit for default
    * @returns {Function} async function implementing the test
    */
-  var runExit = function (shouldExit, behavior) {
+  const runExit = function (shouldExit, behavior) {
     return function (done) {
-      var timeout = this.timeout();
+      const timeout = this.timeout();
       this.timeout(0);
       this.slow(Infinity);
 
-      var didExit = true;
-      var timeoutObj;
-      var fixture = 'exit.fixture.js';
-      var args = behaviors[behavior] ? [behaviors[behavior]] : [];
+      let didExit = true;
+      let timeoutObj;
+      const fixture = 'exit.fixture.js';
+      const args = behaviors[behavior] ? [behaviors[behavior]] : [];
       mocha = runMocha(fixture, args, function postmortem(err) {
         clearTimeout(timeoutObj);
         if (err) {

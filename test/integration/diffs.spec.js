@@ -1,9 +1,9 @@
 'use strict';
 
-var helpers = require('./helpers');
-var run = helpers.runMocha;
-var fs = require('node:fs');
-var path = require('node:path');
+const helpers = require('./helpers');
+const run = helpers.runMocha;
+const fs = require('node:fs');
+const path = require('node:path');
 
 /**
  * Returns an array of diffs corresponding to exceptions thrown from specs,
@@ -13,7 +13,7 @@ var path = require('node:path');
  * returns {string[]}
  */
 function getDiffs(output) {
-  var diffs, i, inDiff, inStackTrace;
+  let diffs, i, inDiff, inStackTrace;
 
   diffs = [];
   output.split('\n').forEach(function (line) {
@@ -52,7 +52,7 @@ function getDiffs(output) {
  * @returns {string[]} Array of diff lines
  */
 function getExpectedOutput() {
-  var output = fs
+  const output = fs
     .readFileSync(path.join(__dirname, 'fixtures', 'diffs', 'output'), 'UTF8')
     .replace(/\r\n/g, '\n');
 
@@ -66,7 +66,7 @@ function getExpectedOutput() {
 }
 
 describe('diffs', function () {
-  var diffs, expected;
+  let diffs, expected;
 
   before(function (done) {
     run('diffs/diffs.fixture.js', [], function (err, res) {

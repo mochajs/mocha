@@ -1,11 +1,11 @@
 'use strict';
 
-var runMochaJSON = require('./helpers').runMochaJSON;
-var invokeMocha = require('./helpers').invokeMocha;
-var MULTIPLE_DONE = require('../../lib/errors').constants.MULTIPLE_DONE;
+const runMochaJSON = require('./helpers').runMochaJSON;
+const invokeMocha = require('./helpers').invokeMocha;
+const MULTIPLE_DONE = require('../../lib/errors').constants.MULTIPLE_DONE;
 
 describe('multiple calls to done()', function () {
-  var res;
+  let res;
   describe('from a spec', function () {
     before(function (done) {
       runMochaJSON('multiple-done', function (err, result) {

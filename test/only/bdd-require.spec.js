@@ -1,10 +1,10 @@
 'use strict';
 
-var mocha = require('../../lib/mocha');
+const mocha = require('../../lib/mocha');
 
-var beforeEach = mocha.beforeEach;
-var it = mocha.it;
-var describe = mocha.describe;
+const beforeEach = mocha.beforeEach;
+const it = mocha.it;
+const describe = mocha.describe;
 
 describe('it.only via require("mocha")', function () {
   beforeEach(function () {

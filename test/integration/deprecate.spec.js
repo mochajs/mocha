@@ -1,8 +1,8 @@
 'use strict';
 
-var assert = require('node:assert');
-var run = require('./helpers').runMocha;
-var args = [];
+const assert = require('node:assert');
+const run = require('./helpers').runMocha;
+const args = [];
 
 describe('utils.deprecate test', function () {
   it('should print unique deprecation only once', function (done) {
@@ -13,7 +13,7 @@ describe('utils.deprecate test', function () {
         if (err) {
           return done(err);
         }
-        var result = res.output.match(/deprecated thing/g) || [];
+        const result = res.output.match(/deprecated thing/g) || [];
         assert.strictEqual(result.length, 2);
         done();
       },

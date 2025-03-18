@@ -1,9 +1,9 @@
 'use strict';
 
-var exec = require('node:child_process').exec;
-var path = require('node:path');
+const exec = require('node:child_process').exec;
+const path = require('node:path');
 
-var node = '"' + process.execPath + '"';
+const node = '"' + process.execPath + '"';
 
 describe('globbing', function () {
   describe('by the shell', function () {

@@ -1,10 +1,10 @@
 'use strict';
 
-var sinon = require('sinon');
-var errors = require('../../lib/errors');
-var createStatsCollector = require('../../lib/stats-collector');
+const sinon = require('sinon');
+const errors = require('../../lib/errors');
+const createStatsCollector = require('../../lib/stats-collector');
 
-var createUnsupportedError = errors.createUnsupportedError;
+const createUnsupportedError = errors.createUnsupportedError;
 
 /**
  * Creates a mock runner object.
@@ -18,7 +18,7 @@ var createUnsupportedError = errors.createUnsupportedError;
  * @return {Object} mock runner instance
  */
 function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
-  var runnerFunction = createRunnerFunction(
+  const runnerFunction = createRunnerFunction(
     runStr,
     ifStr1,
     ifStr2,
@@ -26,7 +26,7 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     arg1,
     arg2
   );
-  var mockRunner = {
+  const mockRunner = {
     on: runnerFunction,
     once: runnerFunction
   };
@@ -49,7 +49,7 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
  * @return {Function} event handler for the requested runner events
  */
 function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
-  var test = null;
+  let test = null;
   switch (runStr) {
     case 'start':
     case 'pending':
@@ -153,8 +153,8 @@ function makeTest(err) {
 }
 
 function createElements(argObj) {
-  var res = [];
-  for (var i = argObj.from; i <= argObj.to; i++) {
+  const res = [];
+  for (let i = argObj.from; i <= argObj.to; i++) {
     res.push('element ' + i);
   }
   return res;
@@ -198,12 +198,12 @@ function createRunReporterFunction(ctor) {
    * @param {boolean} [tee=false] - Whether to echo output to screen
    * @return {string[]} Lines of output written to `stdout`
    */
-  var runReporter = function (stubSelf, runner, options, tee) {
-    var origStdoutWrite = process.stdout.write;
-    var stdoutWriteStub = sinon.stub(process.stdout, 'write');
-    var stdout = [];
+  const runReporter = function (stubSelf, runner, options, tee) {
+    const origStdoutWrite = process.stdout.write;
+    const stdoutWriteStub = sinon.stub(process.stdout, 'write');
+    const stdout = [];
 
-    var gather = function (chunk, enc, callback) {
+    const gather = function (chunk, enc, callback) {
       stdout.push(chunk);
       if (tee) {
         origStdoutWrite.call(process.stdout, chunk);

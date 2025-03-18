@@ -1,6 +1,6 @@
 'use strict';
 
-var errors = require('../../lib/errors');
+const errors = require('../../lib/errors');
 const sinon = require('sinon');
 const {createNoFilesMatchPatternError} = require('../../lib/errors');
 
@@ -9,7 +9,7 @@ describe('Errors', function () {
     sinon.restore();
   });
 
-  var message = 'some message';
+  const message = 'some message';
 
   describe('createInvalidReporterError()', function () {
     it('should include expected code in thrown reporter errors', function () {
@@ -42,7 +42,7 @@ describe('Errors', function () {
   describe('createForbiddenExclusivityError()', function () {
     describe('when Mocha instance is running in a worker process', function () {
       it('should output a message regarding incompatibility', function () {
-        var mocha = {isWorker: true};
+        const mocha = {isWorker: true};
         expect(
           errors.createForbiddenExclusivityError(mocha, {}),
           'to satisfy',
@@ -56,7 +56,7 @@ describe('Errors', function () {
 
     describe('when Mocha instance is not running in a worker process', function () {
       it('should output a message regarding --forbid-only', function () {
-        var mocha = {};
+        const mocha = {};
         expect(
           errors.createForbiddenExclusivityError(mocha, {}),
           'to satisfy',
@@ -83,7 +83,7 @@ describe('Errors', function () {
   });
 
   describe('deprecate()', function () {
-    var emitWarning;
+    let emitWarning;
 
     beforeEach(function () {
       if (process.emitWarning) {
@@ -123,7 +123,7 @@ describe('Errors', function () {
   });
 
   describe('warn()', function () {
-    var emitWarning;
+    let emitWarning;
 
     beforeEach(function () {
       if (process.emitWarning) {

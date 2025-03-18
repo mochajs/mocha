@@ -1,10 +1,10 @@
 'use strict';
 
-var helpers = require('../helpers');
-var runMochaJSON = helpers.runMochaJSON;
+const helpers = require('../helpers');
+const runMochaJSON = helpers.runMochaJSON;
 
 describe('--ui', function () {
-  var simpleUiPath = require.resolve('../fixtures/simple-ui.fixture');
+  const simpleUiPath = require.resolve('../fixtures/simple-ui.fixture');
 
   it('should load interface and run it', function (done) {
     runMochaJSON(

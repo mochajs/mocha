@@ -1,7 +1,7 @@
 'use strict';
 
 describe('async', function () {
-  var calls = [];
+  const calls = [];
 
   before(function () {
     calls.push('root before all');
@@ -56,7 +56,7 @@ describe('async', function () {
     });
 
     beforeEach(function (done) {
-      var ctx = this;
+      const ctx = this;
       process.nextTick(function () {
         calls.push('before');
         if (ctx.currentTest) {
@@ -122,7 +122,7 @@ describe('async', function () {
     });
 
     afterEach(function (done) {
-      var ctx = this;
+      const ctx = this;
       process.nextTick(function () {
         calls.push('after');
         if (ctx.currentTest) {

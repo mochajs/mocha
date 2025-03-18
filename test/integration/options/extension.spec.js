@@ -1,12 +1,12 @@
 'use strict';
 
-var helpers = require('../helpers');
-var invokeMocha = helpers.invokeMocha;
-var toJSONResult = helpers.toJSONResult;
+const helpers = require('../helpers');
+const invokeMocha = helpers.invokeMocha;
+const toJSONResult = helpers.toJSONResult;
 
 describe('--extension', function () {
   it('should allow comma-separated variables', function (done) {
-    var args = [
+    const args = [
       '--require',
       'coffeescript/register',
       '--require',
@@ -30,7 +30,7 @@ describe('--extension', function () {
   });
 
   it('should allow extensions beginning with a dot', function (done) {
-    var args = [
+    const args = [
       '--require',
       'coffeescript/register',
       '--require',
