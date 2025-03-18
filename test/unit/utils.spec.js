@@ -616,8 +616,6 @@ describe('lib/utils', function () {
   });
 
   describe('canonicalType()', function () {
-    /* eslint no-extend-native: off */
-
     const type = utils.canonicalType;
     const toString = Object.prototype.toString;
 
