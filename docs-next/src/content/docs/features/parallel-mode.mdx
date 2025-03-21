@@ -112,8 +112,7 @@ Here are a couple suggested workarounds:
 
 1. `require('./setup.js')` or `import './setup.js'` at the top of every test file.
    Best avoided for those averse to boilerplate.
-1. _Recommended_: Define root hooks in a "required" file, using the new (also as
-   of v8.0.0) [Root Hook Plugin](./root-hook-plugins) system.
+1. _Recommended_: Define root hooks in a "required" file, using the [Root Hook Plugin](./root-hook-plugins) system.
 
 If you need to run some code _once and only once_, use a [global fixture](./global-fixtures) instead.
 
@@ -133,7 +132,7 @@ If you find your tests don't work properly when run with [`--parallel`](../runni
 - ✅ Ensure you are using a [supported reporter](#reporter-limitations).
 - ✅ Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
 - ✅ Double-check your [config file](../running/configuring); options set in config files will be merged with any command-line option.
-- ✅ Look for root hooks (they look like [this](#root-hooks-are-not-global)) in your tests.
+- ✅ Look for [root hooks](#root-hooks-are-not-global) in your tests.
   Move them into a [Root Hook Plugin](./root-hook-plugins).
 - ✅ Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
 - ✅ If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](../running/cli#--timeout-ms--t-ms))

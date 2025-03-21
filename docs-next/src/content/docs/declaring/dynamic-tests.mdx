@@ -4,7 +4,7 @@ title: Dynamic Tests
 ---
 
 Given Mocha's use of function expressions to define suites and test cases, it's straightforward to generate your tests dynamically.
-No special syntax is required &mdash; plain old JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
+No special syntax is required--plain old JavaScript can be used to achieve functionality similar to "parameterized" tests, which you may have seen in other frameworks.
 
 Take the following example:
 
@@ -77,7 +77,7 @@ const tests = await new Promise((resolve) => {
   ]);
 });
 
-// in suites ASYNCHRONOUS callbacks are NOT supported
+// in suites, async callbacks are **not** supported
 describe("add()", function () {
   tests.forEach(({ args, expected }) => {
     it(`correctly adds ${args.length} args`, function () {

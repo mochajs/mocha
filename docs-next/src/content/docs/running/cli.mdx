@@ -5,6 +5,8 @@ description: Running Mocha in your terminal.
 
 Running `npx mocha --help` will show the full list of available commands:
 
+{/* This output is defined in lib/cli/run.js */}
+
 ```plaintext
 mocha [spec..]
 
@@ -154,7 +156,7 @@ TL;DR: If your tests hang after an upgrade to Mocha v4.0.0 or newer, use `--exit
 :::
 
 _Prior to_ version v4.0.0, _by default_, Mocha would force its own process to exit once it was finished executing all tests.
-This behavior enables a set of potential problems; it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.
+This behavior enables a set of potential problems: it's indicative of tests (or fixtures, harnesses, code under test, etc.) which don't clean up after themselves properly.
 Ultimately, "dirty" tests can (but not always) lead to _false positive_ or _false negative_ results.
 
 "Hanging" most often manifests itself if a server is still listening on a port, or a socket is still open, etc.
@@ -163,7 +165,7 @@ It can also be something like a runaway `setInterval()`, or even an errant `Prom
 The _default behavior_ in v4.0.0 (and newer) is `--no-exit`, where previously it was `--exit`.
 
 **The easiest way to "fix" the issue is to pass `--exit` to the Mocha process.**
-It _can_ be time-consuming to debug &mdash; because it's not always obvious where the problem is &mdash; but it _is_ recommended to do so.
+It _can_ be time-consuming to debug--because it's not always obvious where the problem is--but it _is_ recommended to do so.
 
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
@@ -184,7 +186,7 @@ If set to `true`, Mocha returns exit code `0` even if there are failed tests dur
 :::note[New in v9.1.0]
 :::
 
-Fail test run if no tests are encountered with `exit-code: 1`.
+Fail test run with `exit-code: 1` if no tests are encountered.
 
 ### `--forbid-only`
 
@@ -478,7 +480,7 @@ Rerun tests on file changes.
 
 The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
 
-Tests may be rerun manually by typing &#x24e1; &#x24e2; &#x23ce; (same shortcut as `nodemon`).
+Tests may be rerun manually by typing `rs` and pressing enter (same shortcut as `nodemon`).
 
 ### `--watch-files <file|directory|glob>`
 
@@ -535,7 +537,7 @@ The same goes for any other part of a suite or test-case title, `--grep users` w
 And another option with double quotes: `--grep "groupA|groupB"`.
 
 And for more complex criteria: `--grep "/get/i"`.
-Some shells as e.g. Git-Bash-for-Windows may require: `--grep "'/get/i'"`.
+Some shells (e.g. Git Bash for Windows) may require: `--grep "'/get/i'"`.
 Using flags other than the `ignoreCase /i` (especially `/g` and `/y`) may lead to unpredictable results.
 
 ```js
@@ -602,7 +604,7 @@ You can also pass `node` flags to Node.js using [`--node-option`](#--node-option
 
 ### `--enable-source-maps`
 
-:::note[New in vNode.js v12.12.0]
+:::note[New in Node.js v12.12.0]
 :::
 
 If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
@@ -618,7 +620,7 @@ Error: cool
 
 Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
 
-V8 flags can be defined in Mocha's [configuration](./configuring).
+[V8](https://v8.dev/) flags can be defined in Mocha's [configuration](./configuring).
 
 :::note[New in v9.1.0]
 You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#--node-option-name--n-name).
