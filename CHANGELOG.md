@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.2.1](https://github.com/mochajs/mocha/compare/v11.2.0...v11.2.1) (2025-03-21)
+
+
+### 📚 Documentation
+
+* fix new website typos, improve readability ([#5312](https://github.com/mochajs/mocha/issues/5312)) ([fbceb19](https://github.com/mochajs/mocha/commit/fbceb19bbdad121f0100ec3434258775bd87aeaf))
+
 ## [11.2.0](https://github.com/mochajs/mocha/compare/v11.1.0...v11.2.0) (2025-03-17)
 
 
