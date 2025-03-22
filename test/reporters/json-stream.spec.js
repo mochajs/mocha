@@ -21,6 +21,7 @@ describe('JSON Stream reporter', function () {
   var expectedFile = 'someTest.spec.js';
   var expectedDuration = 1000;
   var currentRetry = 1;
+  var currentRepeat = 1;
   var expectedSpeed = 'fast';
   var expectedTest = makeExpectedTest(
     expectedTitle,
@@ -28,6 +29,7 @@ describe('JSON Stream reporter', function () {
     expectedFile,
     expectedDuration,
     currentRetry,
+    currentRepeat,
     expectedSpeed
   );
   var expectedErrorMessage = 'error message';
@@ -78,6 +80,8 @@ describe('JSON Stream reporter', function () {
             expectedDuration +
             ',"currentRetry":' +
             currentRetry +
+            ',"currentRepeat":' +
+            currentRepeat +
             ',"speed":' +
             `"${expectedSpeed}"` +
             '}]\n'
@@ -113,6 +117,8 @@ describe('JSON Stream reporter', function () {
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
+              ',"currentRepeat":' +
+              currentRepeat +
               ',"speed":' +
               `"${expectedSpeed}"` +
               ',"err":' +
@@ -151,6 +157,8 @@ describe('JSON Stream reporter', function () {
               expectedDuration +
               ',"currentRetry":' +
               currentRetry +
+              ',"currentRepeat":' +
+              currentRepeat +
               ',"speed":' +
               `"${expectedSpeed}"` +
               ',"err":' +
