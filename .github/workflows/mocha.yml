@@ -66,8 +66,9 @@ jobs:
             coverage: false
     with:
       os: 'ubuntu-latest,windows-latest'
+      # The 20.18.3 is instead of 20 per https://github.com/mochajs/mocha/issues/5052
       # The 22.11.0 is instead of 22 per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20,22.11.0'
+      node-versions: '18,20.18.3,22.11.0'
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
