@@ -528,6 +528,34 @@ describe('Runner', function () {
         });
       });
 
+      it('should emit "retry" when a repeatable test passes', function (done) {
+        var repeats = 2;
+        var runs = 0;
+        var retries = 0;
+
+        var test = new Test('i do nothing', () => {
+          runs++;
+        });
+
+        suite.repeats(repeats);
+        suite.addTest(test);
+
+        runner.on(EVENT_TEST_RETRY, function (testClone, testErr) {
+          retries++;
+          expect(testClone.currentRepeat(), 'to be', runs);
+          expect(testErr, 'to be', null);
+          expect(testClone.title, 'to be', test.title);
+        });
+
+        runner.run(function (failures) {
+          expect(failures, 'to be', 0);
+          expect(runs, 'to be', repeats);
+          expect(retries, 'to be', repeats - 1);
+
+          done();
+        });
+      });
+
       // karma-mocha is inexplicably doing this with a Hook
       it('should not throw an exception if something emits EVENT_TEST_END with a non-Test object', function () {
         expect(function () {
