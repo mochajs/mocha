@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
 export default defineConfig({
   // For now, this is only being deployed to mocha-docs-next.netlify.app.
@@ -17,6 +18,15 @@ export default defineConfig({
         dark: "./src/components/icon-dark.svg",
         light: "./src/components/icon-light.svg",
       },
+      plugins: [
+        starlightTypeDoc({
+          entryPoints: ["../lib/mocha.js"],
+          sidebar: {
+            collapsed: true,
+          },
+          tsconfig: "../tsconfig.json",
+        }),
+      ],
       sidebar: [
         { label: "Getting Started", slug: "getting-started" },
         {
@@ -109,15 +119,20 @@ export default defineConfig({
           ],
           label: "Explainers",
         },
+        typeDocSidebarGroup,
+      ],
+      social: [
         {
-          label: "API",
-          link: "https://mochajs.org/api",
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/KeDn2uXhER",
+        },
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/mochajs/mocha",
         },
       ],
-      social: {
-        discord: "https://discord.gg/KeDn2uXhER",
-        github: "https://github.com/mochajs/mocha",
-      },
       title: "Mocha",
     }),
   ],
