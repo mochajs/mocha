@@ -44,6 +44,7 @@ export default defineConfig({
             { label: "Arrow functions", slug: "features/arrow-functions" },
             { label: "Assertions", slug: "features/assertions" },
             { label: "Asynchronous code", slug: "features/asynchronous-code" },
+            { label: "Diffs", slug: "features/diffs" },
             { label: "Error codes", slug: "features/error-codes" },
             { label: "Global fixtures", slug: "features/global-fixtures" },
             { label: "Hooks", slug: "features/hooks" },
@@ -56,6 +57,7 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
+            { label: "About", slug: "interfaces/about" },
             { label: "BDD (default)", slug: "interfaces/bdd" },
             { label: "TDD", slug: "interfaces/tdd" },
             { label: "Exports", slug: "interfaces/exports" },
@@ -68,6 +70,7 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
+            { label: "About", slug: "reporters/about" },
             { label: "Spec (default)", slug: "reporters/spec" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },

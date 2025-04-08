@@ -3,9 +3,7 @@ description: Managing timing for non-synchronous tests.
 title: Timeouts
 ---
 
-## Timeouts
-
-### Suite-level
+## Suite-level
 
 Suite-level timeouts may be applied to entire test "suites", or disabled via `this.timeout(0)`.
 This will be inherited by all nested suites and test-cases that do not override the value.
@@ -24,7 +22,7 @@ describe("a suite of tests", function () {
 });
 ```
 
-### Test-level
+## Test-level
 
 Test-specific timeouts may also be applied, or the use of `this.timeout(0)` to disable timeouts all together:
 
@@ -35,7 +33,7 @@ it("should take less than 500ms", function (done) {
 });
 ```
 
-### Hook-level
+## Hook-level
 
 Hook-level timeouts may also be applied:
 
@@ -60,11 +58,3 @@ In v8.0.0 or newer, `this.enableTimeouts()` has been removed.
 :::caution
 With async tests if you disable timeouts via `this.timeout(0)` and then do not call `done()`, your test will exit silently.
 :::
-
-## Diffs
-
-Mocha supports the `err.expected` and `err.actual` properties of any thrown `AssertionError`s from an assertion library.
-Mocha will attempt to display the difference between what was expected and what the assertion actually saw.
-Here's an example of a "string" diff using `--inline-diffs`:
-
-![string diffs](./reporter-string-diffs.png)
