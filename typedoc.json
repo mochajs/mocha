@@ -1,0 +1,5 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./lib/mocha.js", "./lib/cli/cli.js"],
+  "out": "docs-next/api"
+}
