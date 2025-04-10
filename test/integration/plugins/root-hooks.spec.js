@@ -136,47 +136,38 @@ describe('root hooks', function () {
     });
 
     describe('support ESM via .js extension w/o type=module', function () {
-      describe('should fail due to ambiguous file type', function () {
-        const filename =
-          '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
-        const noDetectModuleRegex = /SyntaxError: Unexpected token/;
-        const detectModuleRegex = /Cannot require\(\) ES Module/;
-
-        it('with --no-experimental-detect-module', function () {
+      const filename =
+        '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
+      const [major, minor] = process.version.slice(1).split('.').map(Number);
+      if (major > 22 || (major === 22 && minor >= 7)) {
+        it('It should not fail since nodejs can recognize the file based on syntax', function () {
+          return expect(
+            runMochaForHookOutput([
+              '--require=' + require.resolve(filename),
+              require.resolve(
+                '../fixtures/plugins/root-hooks/root-hook-test.fixture.js'
+              )
+            ]),
+            'to be fulfilled with',
+            ['mjs afterAll', 'mjs beforeAll']
+          );
+        });
+      } else {
+        const noModuleDetectedRegex = /SyntaxError: Unexpected token/;
+        it('should fail due to ambiguous file type', function () {
           return expect(
             invokeMochaAsync(
               [
-                '--require=' + require.resolve(filename), // as object
-                '--no-experimental-detect-module'
+                '--require=' + require.resolve(filename) // as object
               ],
               'pipe'
             )[1],
             'when fulfilled',
             'to contain output',
-            noDetectModuleRegex
+            noModuleDetectedRegex
           );
         });
-
-        it('with --experimental-detect-module', function () {
-          // --experimental-detect-module was introduced in Node 21.1.0
-          const expectedRegex =
-            process.version >= 'v21.1.0'
-              ? detectModuleRegex
-              : noDetectModuleRegex;
-          return expect(
-            invokeMochaAsync(
-              [
-                '--require=' + require.resolve(filename), // as object
-                '--experimental-detect-module'
-              ],
-              'pipe'
-            )[1],
-            'when fulfilled',
-            'to contain output',
-            expectedRegex
-          );
-        });
-      });
+      }
     });
   });
 
