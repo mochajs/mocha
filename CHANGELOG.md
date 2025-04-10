@@ -1,5 +1,23 @@
 # Changelog
 
+## [11.2.1](https://github.com/mochajs/mocha/compare/v11.2.0...v11.2.1) (2025-04-10)
+
+
+### 🩹 Fixes
+
+* switch from ansi-colors to picocolors ([#5323](https://github.com/mochajs/mocha/issues/5323)) ([7c08d09](https://github.com/mochajs/mocha/commit/7c08d0944d2255084bc4415238430b13c90f0df5))
+
+
+### 📚 Documentation
+
+* fix new website typos, improve readability ([#5312](https://github.com/mochajs/mocha/issues/5312)) ([fbceb19](https://github.com/mochajs/mocha/commit/fbceb19bbdad121f0100ec3434258775bd87aeaf))
+
+
+### 🧹 Chores
+
+* "force" Netlify to use npm to build new site ([#5319](https://github.com/mochajs/mocha/issues/5319)) ([3a46855](https://github.com/mochajs/mocha/commit/3a46855294f82e58a5a414aed3525e394b82aced))
+* Fix tests ([#5320](https://github.com/mochajs/mocha/issues/5320)) ([18699a0](https://github.com/mochajs/mocha/commit/18699a0d668ed2654dd15433f03b74348baf9559))
+
 ## [11.2.0](https://github.com/mochajs/mocha/compare/v11.1.0...v11.2.0) (2025-03-17)
 
 
