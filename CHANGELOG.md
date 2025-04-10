@@ -1,5 +1,18 @@
 # Changelog
 
+## [11.2.2](https://github.com/mochajs/mocha/compare/v11.2.1...v11.2.2) (2025-04-10)
+
+
+### 🩹 Fixes
+
+* **deps:** update chokidar to v4 ([#5256](https://github.com/mochajs/mocha/issues/5256)) ([8af0f1a](https://github.com/mochajs/mocha/commit/8af0f1a9005a948fbefeb19be618a64dd910d39f))
+
+
+### 📚 Documentation
+
+* add ClientRedirects.astro ([#5324](https://github.com/mochajs/mocha/issues/5324)) ([b88d441](https://github.com/mochajs/mocha/commit/b88d441cc7616253892572778150998627d746ec))
+* add example/tests.html to docs-next ([#5325](https://github.com/mochajs/mocha/issues/5325)) ([6ec5762](https://github.com/mochajs/mocha/commit/6ec5762edd419578e9d3ce2fcc2b8dedcb0caf06))
+
 ## [11.2.1](https://github.com/mochajs/mocha/compare/v11.2.0...v11.2.1) (2025-04-10)
 
 
