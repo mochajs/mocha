@@ -11,6 +11,7 @@ import { Image } from "astro:assets";
 
 import supporters from "../data/supporters.json";
 import Badges from "../../components/Badges.astro";
+import ClientRedirects from "../../components/ClientRedirects.astro";
 import Supporters from "../../components/Supporters.astro";
 
 :::note[New Site Preview]
@@ -55,3 +56,5 @@ spies, mocking, and shared behaviours be sure to check out the [Mocha Wiki](http
 For a running example of Mocha, view [example/tests.html](example/tests.html).
 
 For the JavaScript API, view the [API documentation](/api) or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
+
+<ClientRedirects client:load />
