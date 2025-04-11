@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.2.3](https://github.com/mochajs/mocha/compare/v11.2.2...v11.2.3) (2025-04-11)
+
+
+### 📚 Documentation
+
+* update Node.js version requirements for 11.x ([#5329](https://github.com/mochajs/mocha/issues/5329)) ([abf3dd9](https://github.com/mochajs/mocha/commit/abf3dd921544b45c4c09eef8f7c9c3c4481a3d66))
+
 ## [11.2.2](https://github.com/mochajs/mocha/compare/v11.2.1...v11.2.2) (2025-04-10)
 
 
