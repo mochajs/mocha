@@ -121,6 +121,7 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
           process.kill(process.pid, signal);
         }
       } else if (code !== 0 && mochaArgs['posix-exit-codes'] === true) {
+        console.log(`Mocha exited with exit code ${code}; normalizing to ${EXIT_FAILURE}.`);
         process.exit(EXIT_FAILURE);
       } else {
         process.exit(code);
