@@ -120,10 +120,8 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
         } else {
           process.kill(process.pid, signal);
         }
-      } else if (code !== 0 && mochaArgs['posix-exit-codes'] === true) {
-        process.exit(EXIT_FAILURE);
       } else {
-        process.exit(code);
+        process.exit(Math.min(code, mochaArgs['posix-exit-codes'] ? 1 : 255));
       }
     });
   });
