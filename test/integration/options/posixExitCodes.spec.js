@@ -49,6 +49,26 @@ describe('--posix-exit-codes', function () {
         }
       });
 
+      it('should exit with the correct POSIX shell code on numeric fatal signal', function(done) {
+        // not supported on Windows
+        if (os.platform() !== 'win32') {
+          var fixture = 'signals-sigterm-numeric.fixture.js';
+          runMocha(fixture, args, function postmortem(err, res) {
+            if (err) {
+              return done(err);
+            }
+            expect(
+              res.code,
+              'to be',
+              SIGNAL_OFFSET + os.constants.signals.SIGTERM
+            );
+            done();
+          });
+        } else {
+          done();
+        }
+      });
+
       it('should exit with code 1 if there are test failures', function (done) {
         var fixture = 'failing.fixture.js';
         runMocha(fixture, args, function postmortem(err, res) {
