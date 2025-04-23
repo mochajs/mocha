@@ -111,13 +111,11 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   proc.on('exit', (code, signal) => {
     process.on('exit', () => {
       if (signal) {
-        const numericSignal =
-          typeof signal === 'string' ? os.constants.signals[signal] : signal;
+        signal = typeof signal === 'string' ? os.constants.signals[signal] : signal;
         if (mochaArgs['posix-exit-codes'] === true) {
-          process.exit(SIGNAL_OFFSET + numericSignal);
-        } else {
-          process.kill(process.pid, signal);
+          process.exitCode = SIGNAL_OFFSET + signal;
         }
+        process.kill(process.pid, signal);
       } else {
         process.exit(Math.min(code, mochaArgs['posix-exit-codes'] ? 1 : 255));
       }
