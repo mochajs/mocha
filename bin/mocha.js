@@ -23,8 +23,6 @@ const {aliases} = require('../lib/cli/run-option-metadata');
 
 const mochaArgs = {};
 const nodeArgs = {};
-const EXIT_SUCCESS = 0;
-const EXIT_FAILURE = 1;
 const SIGNAL_OFFSET = 128;
 let hasInspect = false;
 
