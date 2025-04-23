@@ -2,7 +2,7 @@
 
 var helpers = require('../helpers');
 var runMocha = helpers.runMocha;
-var os = require('os');
+var os = require('node:os');
 
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
