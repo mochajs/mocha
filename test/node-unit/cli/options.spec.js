@@ -11,15 +11,15 @@ const configPath = require.resolve('../../../lib/cli/config');
 
 const proxyLoadOptions = ({
   readFileSync = {},
-  findupSync = null,
+  empathic = null,
   findConfig = {},
   loadConfig = {}
 } = {}) =>
   rewiremock.proxy(modulePath, r => ({
     'node:fs': r.with({readFileSync}).directChildOnly(),
     [mocharcPath]: defaults,
-    'find-up': r
-      .by(() => (findupSync ? {sync: findupSync} : {}))
+    'empathic/find': r
+      .by(() => (empathic ? {up: empathic} : {}))
       .directChildOnly(),
     [configPath]: r.with({findConfig, loadConfig}).directChildOnly()
   })).loadOptions;
@@ -31,7 +31,7 @@ const defaults = {
 
 describe('options', function () {
   let readFileSync;
-  let findupSync;
+  let empathic;
   let loadOptions;
   let findConfig;
   let loadConfig;
@@ -56,13 +56,13 @@ describe('options', function () {
         readFileSync.onFirstCall().returns('{}');
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
       });
 
@@ -91,12 +91,12 @@ describe('options', function () {
             readFileSync.onFirstCall().returns('{"mocha": {"retries": 3}}');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
-            findupSync = sinon.stub();
+            empathic = sinon.stub();
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
             result = loadOptions(['--package', filepath]);
           });
@@ -120,7 +120,7 @@ describe('options', function () {
           });
 
           it('should not try to find a package.json', function () {
-            expect(findupSync, 'was not called');
+            expect(empathic, 'was not called');
           });
 
           it('should set package = false', function () {
@@ -135,12 +135,12 @@ describe('options', function () {
             readFileSync.onFirstCall().throws('bad file message');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
-            findupSync = sinon.stub();
+            empathic = sinon.stub();
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
           });
 
@@ -167,12 +167,12 @@ describe('options', function () {
               .returns('{"mocha": {"retries": 3, "_": ["foobar.spec.js"]}}');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
-            findupSync = sinon.stub().returns(filepath);
+            empathic = sinon.stub().returns(filepath);
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
             result = loadOptions();
           });
@@ -210,12 +210,12 @@ describe('options', function () {
               .returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
-            findupSync = sinon.stub().returns(filepath);
+            empathic = sinon.stub().returns(filepath);
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
           });
 
@@ -237,13 +237,13 @@ describe('options', function () {
             readFileSync.onFirstCall().returns('{}');
             findConfig = sinon.stub().returns('/some/path/to/.mocharc.json');
             loadConfig = sinon.stub().returns({'check-leaks': true});
-            findupSync = sinon.stub().returns('/some/package.json');
+            empathic = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
 
             result = loadOptions('--no-diff --no-package');
@@ -263,7 +263,7 @@ describe('options', function () {
           });
 
           it('should not look for package.json', function () {
-            expect(findupSync, 'was not called');
+            expect(empathic, 'was not called');
           });
 
           it('should set package = false', function () {
@@ -284,13 +284,13 @@ describe('options', function () {
               );
             findConfig = sinon.stub();
             loadConfig = sinon.stub();
-            findupSync = sinon.stub().returns('/some/package.json');
+            empathic = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
 
             result = loadOptions('--no-diff --no-config');
@@ -331,13 +331,13 @@ describe('options', function () {
             readFileSync.onFirstCall().returns('{}');
             findConfig = sinon.stub();
             loadConfig = sinon.stub().throws('Error', 'failed to parse');
-            findupSync = sinon.stub().returns('/some/package.json');
+            empathic = sinon.stub().returns('/some/package.json');
 
             loadOptions = proxyLoadOptions({
               readFileSync,
               findConfig,
               loadConfig,
-              findupSync
+              empathic
             });
           });
 
@@ -376,13 +376,13 @@ describe('options', function () {
               readFileSync.onSecondCall().throws();
               findConfig = sinon.stub().returns('/some/.mocharc.json');
               loadConfig = sinon.stub().returns({});
-              findupSync = sinon.stub().returns('/some/package.json');
+              empathic = sinon.stub().returns('/some/package.json');
 
               loadOptions = proxyLoadOptions({
                 readFileSync,
                 findConfig,
                 loadConfig,
-                findupSync
+                empathic
               });
 
               result = loadOptions();
@@ -412,13 +412,13 @@ describe('options', function () {
               readFileSync.onSecondCall().throws();
               findConfig = sinon.stub().returns(null);
               loadConfig = sinon.stub().returns({});
-              findupSync = sinon.stub().returns('/some/package.json');
+              empathic = sinon.stub().returns('/some/package.json');
 
               loadOptions = proxyLoadOptions({
                 readFileSync,
                 findConfig,
                 loadConfig,
-                findupSync
+                empathic
               });
 
               result = loadOptions();
@@ -445,7 +445,7 @@ describe('options', function () {
         readFileSync = sinon.stub().onFirstCall().returns('{}');
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
         sinon
           .stub(process, 'env')
           .value({MOCHA_OPTIONS: '--retries 42 --color'});
@@ -454,7 +454,7 @@ describe('options', function () {
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
 
         expect(loadOptions(), 'to satisfy', {
@@ -474,13 +474,13 @@ describe('options', function () {
           );
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
 
         expect(loadOptions(), 'to satisfy', {
@@ -496,13 +496,13 @@ describe('options', function () {
         readFileSync.onSecondCall().returns('--timeout 800');
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({timeout: 600});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
 
         expect(loadOptions(), 'to have property', 'timeout', 600);
@@ -514,13 +514,13 @@ describe('options', function () {
         readFileSync.onSecondCall().returns('--timeout 800');
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({timeout: 600});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
 
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
 
         expect(
@@ -537,7 +537,7 @@ describe('options', function () {
         readFileSync.onSecondCall().returns('');
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({retries: 300});
-        findupSync = sinon.stub().returns('/some/package.json');
+        empathic = sinon.stub().returns('/some/package.json');
         sinon
           .stub(process, 'env')
           .value({MOCHA_OPTIONS: '--retries 800 --color'});
@@ -546,7 +546,7 @@ describe('options', function () {
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
 
         expect(loadOptions(), 'to have property', 'retries', 800);
@@ -558,12 +558,12 @@ describe('options', function () {
         readFileSync = sinon.stub();
         findConfig = sinon.stub();
         loadConfig = sinon.stub();
-        findupSync = sinon.stub();
+        empathic = sinon.stub();
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
       });
 
@@ -585,12 +585,12 @@ describe('options', function () {
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
           loadConfig = sinon.stub().returns({extension: ['tsx']});
-          findupSync = sinon.stub();
+          empathic = sinon.stub();
           loadOptions = proxyLoadOptions({
             readFileSync,
             findConfig,
             loadConfig,
-            findupSync
+            empathic
           });
           result = loadOptions(['--extension', 'ts']);
         });
@@ -608,12 +608,12 @@ describe('options', function () {
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
           loadConfig = sinon.stub().returns({});
-          findupSync = sinon.stub();
+          empathic = sinon.stub();
           loadOptions = proxyLoadOptions({
             readFileSync,
             findConfig,
             loadConfig,
-            findupSync
+            empathic
           });
           result = loadOptions();
         });
@@ -633,12 +633,12 @@ describe('options', function () {
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns('/some/.mocharc.json');
           loadConfig = sinon.stub().returns({spec: '{dirA,dirB}/**/*.spec.js'});
-          findupSync = sinon.stub();
+          empathic = sinon.stub();
           loadOptions = proxyLoadOptions({
             readFileSync,
             findConfig,
             loadConfig,
-            findupSync
+            empathic
           });
           result = loadOptions(['*.test.js']);
         });
@@ -660,12 +660,12 @@ describe('options', function () {
         readFileSync.onFirstCall().throws();
         findConfig = sinon.stub().returns('/some/.mocharc.json');
         loadConfig = sinon.stub().returns({ignore: '{dirA,dirB}/**/*.spec.js'});
-        findupSync = sinon.stub();
+        empathic = sinon.stub();
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
         result = loadOptions(['--ignore', '*.test.js']);
       });
@@ -702,12 +702,12 @@ describe('options', function () {
         readFileSync = sinon.stub();
         findConfig = sinon.stub();
         loadConfig = sinon.stub();
-        findupSync = sinon.stub();
+        empathic = sinon.stub();
         loadOptions = proxyLoadOptions({
           readFileSync,
           findConfig,
           loadConfig,
-          findupSync
+          empathic
         });
       });
 
