@@ -100,3 +100,8 @@ jobs:
   #   with:
   #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
   #     npm-script: test-browser
+
+  tsc:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: tsc
