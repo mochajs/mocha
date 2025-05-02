@@ -2158,6 +2158,14 @@ A typical setup might look something like the following, where we call `mocha.se
 </html>
 ```
 
+Mocha supports the latest major versions of evergreen browsers available when Mocha's oldest supported Node.js version was released.
+As of Mocha v11.0.0, that includes the following browser versions that were stable as of [Node.js 18.18.0](https://nodejs.org/en/blog/release/v18.18.0)'s release on September 18, 2023:
+
+- [Chrome 117](https://developer.chrome.com/blog/new-in-chrome-117)
+- [Edge 117](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1170204531-september-15-2023)
+- [Firefox 117](https://www.mozilla.org/en-US/firefox/117.0/releasenotes)
+- [Safari 17](https://developer.apple.com/documentation/safari-release-notes/safari-17-release-notes)
+
 ### Grep
 
 The browser may use the `--grep` as functionality. Append a query-string to your URL: `?grep=api`.
