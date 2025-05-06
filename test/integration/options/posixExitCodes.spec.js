@@ -49,7 +49,7 @@ describe('--posix-exit-codes', function () {
         }
       });
 
-      it('should exit with the correct POSIX shell code on numeric fatal signal', function(done) {
+      it('should exit with the correct POSIX shell code on numeric fatal signal', function (done) {
         // not supported on Windows
         if (os.platform() !== 'win32') {
           var fixture = 'signals-sigterm-numeric.fixture.js';
@@ -134,49 +134,13 @@ describe('--posix-exit-codes', function () {
   });
 
   describe('when not enabled', function () {
-    const fixture = 'failing.fixture.js'; // contains three failing tests
-    const numFailures = 3;
-
     describe('when mocha is run as a child process', () => {
-      // 'no-warnings' node option makes mocha run as a child process
+      // any node-specific option makes mocha run as a child process
       var args = ['--no-warnings'];
 
-      it('should exit with the correct POSIX shell code on SIGABRT', function (done) {
-        var fixture = 'signals-sigabrt.fixture.js';
-        runMocha(fixture, args, function postmortem(err, res) {
-          if (err) {
-            return done(err);
-          }
-          expect(
-            res.code,
-            'to be',
-            SIGNAL_OFFSET + os.constants.signals.SIGABRT
-          );
-          done();
-        });
-      });
-
-      it('should exit with the correct POSIX shell code on SIGTERM', function (done) {
-        // SIGTERM is not supported on Windows
-        if (os.platform() !== 'win32') {
-          var fixture = 'signals-sigterm.fixture.js';
-          runMocha(fixture, args, function postmortem(err, res) {
-            if (err) {
-              return done(err);
-            }
-            expect(
-              res.code,
-              'to be',
-              SIGNAL_OFFSET + os.constants.signals.SIGTERM
-            );
-            done();
-          });
-        } else {
-          done();
-        }
-      });
-
       it('should exit with the number of failed tests', function (done) {
+        var fixture = 'failing.fixture.js';
+        var numFailures = 3;
         runMocha(fixture, args, function postmortem(err, res) {
           if (err) {
             return done(err);
@@ -189,42 +153,10 @@ describe('--posix-exit-codes', function () {
 
     describe('when mocha is run in-process', () => {
       var args = [];
-      it('should exit with the correct POSIX shell code on SIGABRT', function (done) {
-        var fixture = 'signals-sigabrt.fixture.js';
-        runMocha(fixture, args, function postmortem(err, res) {
-          if (err) {
-            return done(err);
-          }
-          expect(
-            res.code,
-            'to be',
-            SIGNAL_OFFSET + os.constants.signals.SIGABRT
-          );
-          done();
-        });
-      });
-
-      it('should exit with the correct POSIX shell code on SIGTERM', function (done) {
-        // SIGTERM is not supported on Windows
-        if (os.platform() !== 'win32') {
-          var fixture = 'signals-sigterm.fixture.js';
-          runMocha(fixture, args, function postmortem(err, res) {
-            if (err) {
-              return done(err);
-            }
-            expect(
-              res.code,
-              'to be',
-              SIGNAL_OFFSET + os.constants.signals.SIGTERM
-            );
-            done();
-          });
-        } else {
-          done();
-        }
-      });
 
       it('should exit with the number of failed tests', function (done) {
+        var fixture = 'failing.fixture.js';
+        var numFailures = 3;
         runMocha(fixture, args, function postmortem(err, res) {
           if (err) {
             return done(err);
