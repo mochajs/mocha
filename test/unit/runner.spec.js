@@ -7,7 +7,7 @@ const Pending = require('../../lib/pending');
 const {Suite, Runner, Test, Hook, Runnable} = Mocha;
 const {noop} = Mocha.utils;
 const {FATAL, MULTIPLE_DONE, UNSUPPORTED} =
-  require('../../lib/errors').constants;
+  require('../../lib/error-constants').constants;
 
 const {
   EVENT_HOOK_BEGIN,
