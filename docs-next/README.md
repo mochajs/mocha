@@ -19,7 +19,7 @@ To preview the old and new site:
 
 ```shell
 cd .. # back to root dir
-npm run docs-preview
+npm run docs:preview
 ```
 
 The new site will be at `http://localhost:8080/next`
