@@ -61,7 +61,8 @@ module.exports = [
       'lib/nodejs/esm-utils.js',
       'rollup.config.js',
       'scripts/*.mjs',
-      'scripts/pick-from-package-json.js'
+      'scripts/pick-from-package-json.js',
+      'test/compiler-cjs/test.js'
     ],
     languageOptions: {
       sourceType: 'module'
