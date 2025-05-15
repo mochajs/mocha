@@ -14,8 +14,7 @@
 
 [build.environment]
   DEBUG = "mocha:docs*"
-  NODE_VERSION = "16"
-  RUBY_VERSION = "2.7.2"
+  NODE_VERSION = "20" # LTS until 2026-04-30
 
 [context.deploy-preview]
   command = "npm run docs"
