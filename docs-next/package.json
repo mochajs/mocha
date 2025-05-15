@@ -9,6 +9,7 @@
     "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
     "build": "astro check && astro build",
     "preview": "astro preview",
+    "build-with-old": "npm run generate && npm run build -- --outDir ../docs/_site/next",
     "astro": "astro"
   },
   "dependencies": {

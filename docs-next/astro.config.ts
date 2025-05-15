@@ -2,9 +2,7 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
 export default defineConfig({
-  // For now, this is only being deployed to mocha-docs-next.netlify.app.
-  // Soon we'll move it onto mochajs.org/next.
-  ...(!process.env.NETLIFY_BUILD_BASE && { base: "/next" }),
+  base: "/next",
   integrations: [
     starlight({
       components: {

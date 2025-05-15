@@ -1,5 +1,6 @@
 # Deploy `mochajs.org` branch nightly by hitting a netlify build URL.
 # This updates the list of supporters
+# It uses commands from netlify.toml at root of repo
 
 name: Nightly mochajs.org Deploy
 
