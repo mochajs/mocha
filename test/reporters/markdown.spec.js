@@ -78,6 +78,7 @@ describe('Markdown reporter', function () {
         };
         var expectedDuration = 1000;
         var currentRetry = 1;
+        var currentRepeat = 1;
         var expectedBody = 'some body';
         var expectedTest = {
           title: expectedTitle,
@@ -87,6 +88,9 @@ describe('Markdown reporter', function () {
           duration: expectedDuration,
           currentRetry: function () {
             return currentRetry;
+          },
+          currentRepeat: function () {
+            return currentRepeat;
           },
           slow: noop,
           body: expectedBody
