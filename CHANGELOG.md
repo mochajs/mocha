@@ -77,6 +77,8 @@
 ### 🌟 Features
 
 * bump yargs to 17 ([#5165](https://github.com/mochajs/mocha/issues/5165)) ([8f1c8d8](https://github.com/mochajs/mocha/commit/8f1c8d888b0104afcd95ca55a517320399755749))
+  * Note that this also included a version bump of [`yargs-parser`](http://npmjs.com/package/yargs-parser) from `^20.2.9` to `^21.1.`, which fixed a bug that caused extra quotes in file paths to be removed.
+    See [#5341](https://github.com/mochajs/mocha/issues/5341) for more information.
 * replace `strip-ansi` with `util.stripVTControlCharacters` ([#5267](https://github.com/mochajs/mocha/issues/5267)) ([3c191c0](https://github.com/mochajs/mocha/commit/3c191c05d9db1e99aec9b600edac2ce10a6b6d71)), closes [#5265](https://github.com/mochajs/mocha/issues/5265)
 
 ## [11.0.2](https://github.com/mochajs/mocha/compare/v11.0.1...v11.0.2) (2024-12-09)
