@@ -1,5 +1,24 @@
 # Changelog
 
+## [11.3.0](https://github.com/mochajs/mocha/compare/v11.2.2...v11.3.0) (2025-05-16)
+
+
+### 🌟 Features
+
+* add option to use posix exit code upon fatal signal ([#4989](https://github.com/mochajs/mocha/issues/4989)) ([91bbf85](https://github.com/mochajs/mocha/commit/91bbf855012ee9b83700d3c563b517483de0831c))
+
+
+### 📚 Documentation
+
+* Deploy new site alongside old one ([#5360](https://github.com/mochajs/mocha/issues/5360)) ([6c96545](https://github.com/mochajs/mocha/commit/6c96545aee03efeee78c55feedcf70664426514c))
+* mention explicit browser support range ([#5354](https://github.com/mochajs/mocha/issues/5354)) ([c514c0b](https://github.com/mochajs/mocha/commit/c514c0bfad044f8450a63b2f9c6c781b9ce6f164))
+* update Node.js version requirements for 11.x ([#5329](https://github.com/mochajs/mocha/issues/5329)) ([abf3dd9](https://github.com/mochajs/mocha/commit/abf3dd921544b45c4c09eef8f7c9c3c4481a3d66))
+
+
+### 🧹 Chores
+
+* remove prerelease setting in release-please config ([#5363](https://github.com/mochajs/mocha/issues/5363)) ([8878f22](https://github.com/mochajs/mocha/commit/8878f222c418a0bf4fe170c17573c30b5ea2d567))
+
 ## [11.2.2](https://github.com/mochajs/mocha/compare/v11.2.1...v11.2.2) (2025-04-10)
 
 
