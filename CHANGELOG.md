@@ -1,9 +1,9 @@
 # Changelog
 
-## [11.3.1](https://github.com/mochajs/mocha/compare/v11.3.0...v11.3.1) (2025-05-19)
+## [11.4.0](https://github.com/mochajs/mocha/compare/v11.3.0...v11.4.0) (2025-05-19)
 
 
-### 🩹 Fixes
+### 🌟 Features
 
 * bump diff from ^5.2.0 to ^7.0.0 ([#5348](https://github.com/mochajs/mocha/issues/5348)) ([554d6bb](https://github.com/mochajs/mocha/commit/554d6bbec92c3c938af0a533109749b6f3b7bd2c))
 
