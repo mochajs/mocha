@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.5.0](https://github.com/mochajs/mocha/compare/v11.4.0...v11.5.0) (2025-05-22)
+
+
+### 🌟 Features
+
+* bump mimimatch from ^5.1.6 to ^9.0.5 ([#5349](https://github.com/mochajs/mocha/issues/5349)) ([a3dea85](https://github.com/mochajs/mocha/commit/a3dea85b316e229ea95f51c715ad61708e9ab9a3))
+
 ## [11.4.0](https://github.com/mochajs/mocha/compare/v11.3.0...v11.4.0) (2025-05-19)
 
 
