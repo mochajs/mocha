@@ -34,7 +34,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {randomUUID} = require('node:crypto');
 const rollup = require('rollup');
-const minimatch = require('minimatch');
+const { minimatch } = require('minimatch');
 const loadConfigFile = require('rollup/dist/loadConfigFile.js');
 const multiEntry = require('@rollup/plugin-multi-entry');
 
