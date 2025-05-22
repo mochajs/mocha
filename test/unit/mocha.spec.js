@@ -94,9 +94,11 @@ describe('Mocha', function () {
       mocha = sinon.createStubInstance(Mocha);
       mocha.timeout.returnsThis();
       mocha.retries.returnsThis();
+      mocha.repeats.returnsThis();
       sinon.stub(Mocha.prototype, 'timeout').returnsThis();
       sinon.stub(Mocha.prototype, 'global').returnsThis();
       sinon.stub(Mocha.prototype, 'retries').returnsThis();
+      sinon.stub(Mocha.prototype, 'repeats').returnsThis();
       sinon.stub(Mocha.prototype, 'rootHooks').returnsThis();
       sinon.stub(Mocha.prototype, 'parallelMode').returnsThis();
       sinon.stub(Mocha.prototype, 'globalSetup').returnsThis();
@@ -152,6 +154,24 @@ describe('Mocha', function () {
         // eslint-disable-next-line no-new
         new Mocha({});
         expect(Mocha.prototype.retries, 'was not called');
+      });
+    });
+
+    describe('when `repeats` option is present', function () {
+      it('should attempt to set repeats`', function () {
+        // eslint-disable-next-line no-new
+        new Mocha({repeats: 1});
+        expect(Mocha.prototype.repeats, 'to have a call satisfying', [1]).and(
+          'was called once'
+        );
+      });
+    });
+
+    describe('when `repeats` option is not present', function () {
+      it('should not attempt to set repeats', function () {
+        // eslint-disable-next-line no-new
+        new Mocha({});
+        expect(Mocha.prototype.repeats, 'was not called');
       });
     });
 
