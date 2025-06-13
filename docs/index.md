@@ -963,6 +963,18 @@ Define a global variable name. For example, suppose your app deliberately expose
 
 By using this option in conjunction with `--check-leaks`, you can specify a whitelist of known global variables that you _expect_ to leak into global scope.
 
+### `--posix-exit-codes`
+
+Exits with standard POSIX exit codes instead of the number of failed tests.
+
+Those exit codes are:
+
+- `0`: if all tests passed
+- `1`: if any test failed
+- `128 + <signal>` if given a signal, such as:
+  - 134: `SIGABRT` (`128 + 6`)
+  - 143: `SIGTERM` (`128 + 15`)
+
 ### `--retries <n>`
 
 Retries failed tests `n` times.
@@ -2157,6 +2169,14 @@ A typical setup might look something like the following, where we call `mocha.se
   </body>
 </html>
 ```
+
+Mocha supports the latest major versions of evergreen browsers available when Mocha's oldest supported Node.js major version was released.
+As of Mocha v11.0.0, that includes the following browser versions that were stable as of [Node.js 18.10.0](https://nodejs.org/en/blog/release/v18.0.0)'s release on April 19, 2022:
+
+- [Chrome 100](https://developer.chrome.com/blog/new-in-chrome-100)
+- [Edge 100](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1000118544-april-15)
+- [Firefox 99](https://www.mozilla.org/en-US/firefox/99.0/releasenotes)
+- [Safari 15.4](https://developer.apple.com/documentation/safari-release-notes/safari-15_4-release-notes)
 
 ### Grep
 

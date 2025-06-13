@@ -8,6 +8,7 @@ const {format} = require('node:util');
 const path = require('node:path');
 const Base = require('../../lib/reporters/base');
 const debug = require('debug')('mocha:test:integration:helpers');
+const SIGNAL_OFFSET = 128;
 
 /**
  * Path to `mocha` executable
@@ -356,6 +357,18 @@ function createSubprocess(args, done, opts = {}) {
       args,
       command: args.join(' ')
     });
+  });
+
+  /**
+   * Emulate node's exit code for fatal signal. Allows tests to see the same
+   * exit code as the mocha cli.
+   */
+  mocha.on('exit', (code, signal) => {
+    if (signal) {
+      mocha.exitCode =
+        SIGNAL_OFFSET +
+        (typeof signal == 'string' ? os.constants.signals[signal] : signal);
+    }
   });
 
   return mocha;

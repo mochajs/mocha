@@ -1,5 +1,50 @@
 # Changelog
 
+## [11.6.0](https://github.com/mochajs/mocha/compare/v11.5.0...v11.6.0) (2025-06-09)
+
+
+### 🌟 Features
+
+* bump workerpool from ^6.5.1 to ^9.2.0 ([#5350](https://github.com/mochajs/mocha/issues/5350)) ([581a3c5](https://github.com/mochajs/mocha/commit/581a3c554489855ac02860689d3f4ae772c2ea79))
+
+## [11.5.0](https://github.com/mochajs/mocha/compare/v11.4.0...v11.5.0) (2025-05-22)
+
+
+### 🌟 Features
+
+* bump mimimatch from ^5.1.6 to ^9.0.5 ([#5349](https://github.com/mochajs/mocha/issues/5349)) ([a3dea85](https://github.com/mochajs/mocha/commit/a3dea85b316e229ea95f51c715ad61708e9ab9a3))
+
+## [11.4.0](https://github.com/mochajs/mocha/compare/v11.3.0...v11.4.0) (2025-05-19)
+
+
+### 🌟 Features
+
+* bump diff from ^5.2.0 to ^7.0.0 ([#5348](https://github.com/mochajs/mocha/issues/5348)) ([554d6bb](https://github.com/mochajs/mocha/commit/554d6bbec92c3c938af0a533109749b6f3b7bd2c))
+
+
+### 📚 Documentation
+
+* added CHANGELOG.md note around 11.1 yargs-parser update ([#5362](https://github.com/mochajs/mocha/issues/5362)) ([618415d](https://github.com/mochajs/mocha/commit/618415d9c6fa3ef4e959207c8dd404f4703de7a7))
+
+## [11.3.0](https://github.com/mochajs/mocha/compare/v11.2.2...v11.3.0) (2025-05-16)
+
+
+### 🌟 Features
+
+* add option to use posix exit code upon fatal signal ([#4989](https://github.com/mochajs/mocha/issues/4989)) ([91bbf85](https://github.com/mochajs/mocha/commit/91bbf855012ee9b83700d3c563b517483de0831c))
+
+
+### 📚 Documentation
+
+* Deploy new site alongside old one ([#5360](https://github.com/mochajs/mocha/issues/5360)) ([6c96545](https://github.com/mochajs/mocha/commit/6c96545aee03efeee78c55feedcf70664426514c))
+* mention explicit browser support range ([#5354](https://github.com/mochajs/mocha/issues/5354)) ([c514c0b](https://github.com/mochajs/mocha/commit/c514c0bfad044f8450a63b2f9c6c781b9ce6f164))
+* update Node.js version requirements for 11.x ([#5329](https://github.com/mochajs/mocha/issues/5329)) ([abf3dd9](https://github.com/mochajs/mocha/commit/abf3dd921544b45c4c09eef8f7c9c3c4481a3d66))
+
+
+### 🧹 Chores
+
+* remove prerelease setting in release-please config ([#5363](https://github.com/mochajs/mocha/issues/5363)) ([8878f22](https://github.com/mochajs/mocha/commit/8878f222c418a0bf4fe170c17573c30b5ea2d567))
+
 ## [11.2.2](https://github.com/mochajs/mocha/compare/v11.2.1...v11.2.2) (2025-04-10)
 
 
@@ -58,6 +103,8 @@
 ### 🌟 Features
 
 * bump yargs to 17 ([#5165](https://github.com/mochajs/mocha/issues/5165)) ([8f1c8d8](https://github.com/mochajs/mocha/commit/8f1c8d888b0104afcd95ca55a517320399755749))
+  * Note that this also included a version bump of [`yargs-parser`](http://npmjs.com/package/yargs-parser) from `^20.2.9` to `^21.1.`, which fixed a bug that caused extra quotes in file paths to be removed.
+    See [#5341](https://github.com/mochajs/mocha/issues/5341) for more information.
 * replace `strip-ansi` with `util.stripVTControlCharacters` ([#5267](https://github.com/mochajs/mocha/issues/5267)) ([3c191c0](https://github.com/mochajs/mocha/commit/3c191c05d9db1e99aec9b600edac2ce10a6b6d71)), closes [#5265](https://github.com/mochajs/mocha/issues/5265)
 
 ## [11.0.2](https://github.com/mochajs/mocha/compare/v11.0.1...v11.0.2) (2024-12-09)
