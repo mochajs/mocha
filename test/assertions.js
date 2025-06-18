@@ -307,6 +307,24 @@ module.exports = {
         }
       )
       .addAssertion(
+        '<JSONResult> [not] to have repeated test <string>',
+        (expect, result, title) => {
+          expect(result.tests, '[not] to have an item satisfying', {
+            title,
+            currentRepeat: expect.it('to be positive')
+          });
+        }
+      )
+      .addAssertion(
+        '<JSONResult> [not] to have repeated test <string> <number>',
+        (expect, result, title, count) => {
+          expect(result.tests, '[not] to have an item satisfying', {
+            title,
+            currentRepeat: count
+          });
+        }
+      )
+      .addAssertion(
         '<JSONResult> [not] to have failed with (error|errors) <any+>',
         function (expect, result, ...errors) {
           errors.forEach(error => {
