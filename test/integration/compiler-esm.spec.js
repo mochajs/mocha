@@ -3,8 +3,8 @@
 var exec = require('node:child_process').exec;
 var path = require('node:path');
 
-describe('support ESM module hooks compilers with esm syntax', function () {
-  it('should support .js extension', function (done) {
+describe('support ESM module loader compilers', function () {
+  it('should support ESM .js extension', function (done) {
     exec(
       '"' +
         process.execPath +
@@ -36,7 +36,7 @@ describe('support ESM module hooks compilers with esm syntax', function () {
     );
   });
 
-  it('should support .ts extension', function (done) {
+  it('should support ESM .ts extension', function (done) {
     exec(
       '"' +
         process.execPath +
