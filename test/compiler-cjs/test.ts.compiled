@@ -1,9 +1,0 @@
-const obj = { foo: 'bar' };
-
-describe('cts written in esm', () => {
-  it('should work', () => {
-    expect(obj, 'to equal', { foo: 'bar' });
-  });
-});
-
-module.exports.foo = 'bar';
