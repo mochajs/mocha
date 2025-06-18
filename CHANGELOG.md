@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.7.0](https://github.com/mochajs/mocha/compare/v11.6.0...v11.7.0) (2025-06-18)
+
+
+### 🌟 Features
+
+* use require to load esm ([#5366](https://github.com/mochajs/mocha/issues/5366)) ([41e24a2](https://github.com/mochajs/mocha/commit/41e24a242944da0cfc9d4d6989dede85f648cb40))
+
 ## [11.6.0](https://github.com/mochajs/mocha/compare/v11.5.0...v11.6.0) (2025-06-09)
 
 
