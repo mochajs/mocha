@@ -1,0 +1,4 @@
+{
+  "//": "Setting default type for .ts files as ESM as well",
+  "type": "module"
+}
