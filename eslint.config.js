@@ -69,6 +69,16 @@ module.exports = [
     }
   },
   {
+    files: [
+      'test/compiler-esm/*.js'
+    ],
+    languageOptions: {
+      sourceType: 'module',
+      // For top-level await support.
+      ecmaVersion: 2022,
+    }
+  },
+  {
     files: ['test/**/*.{js,mjs}'],
     languageOptions: {
       globals: {
