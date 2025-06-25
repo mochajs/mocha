@@ -28,6 +28,7 @@ describe('cli/config', function () {
         sinon.stub(parsers, 'yaml').returns(phonyConfigObject);
         sinon.stub(parsers, 'json').returns(phonyConfigObject);
         sinon.stub(parsers, 'js').returns(phonyConfigObject);
+        sinon.stub(parsers, 'mjs').returns(phonyConfigObject);
       });
 
       describe('when supplied a filepath with ".yaml" extension', function () {
@@ -69,6 +70,17 @@ describe('cli/config', function () {
         it('should use the JS parser', function () {
           loadConfig(filepath);
           expect(parsers.js, 'to have calls satisfying', [
+            {args: [filepath], returned: phonyConfigObject}
+          ]).and('was called once');
+        });
+      });
+
+      describe('when supplied a filepath with ".mjs" extension', function () {
+        const filepath = 'foo.mjs';
+
+        it('should use the MJS parser', function () {
+          loadConfig(filepath);
+          expect(parsers.mjs, 'to have calls satisfying', [
             {args: [filepath], returned: phonyConfigObject}
           ]).and('was called once');
         });
