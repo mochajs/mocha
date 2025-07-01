@@ -210,7 +210,7 @@ export interface FileCollectionOptions {
  * Diagnostic object containing unmatched files
  */
 export interface UnmatchedFile {
-  /** A list of unmatched files derived from the file arguments passed in */
+  /** The absolute path to the file */
   absolutePath: string;
   /** A list of unmatched files derived from the file arguments passed in */
   pattern: string;
