@@ -71,7 +71,7 @@ export interface MochaOptions {
   /** Disable syntax highlighting? */
   noHighlighting?: boolean;
 
-  /** - Reporter name or constructor. */
+  /** Reporter name or constructor. */
   reporter?: string | Reporter;
 
   /** Reporter settings object. */
@@ -80,10 +80,10 @@ export interface MochaOptions {
   /** Number of times to retry failed tests. */
   retries?: number;
 
-  /** Slow threshold value. */
+  /** Slow threshold value, in milliseconds. */
   slow?: number;
 
-  /** Timeout threshold value. */
+  /** Timeout threshold value, in milliseconds. */
   timeout?: number | string;
 
   /** Interface name. */
@@ -119,7 +119,7 @@ export interface MochaOptions {
  * @private
  * @param failures - Number of failures that occurred.
  */
-export type DoneCB = (failures: number) => void;
+export type DoneCB = (failures?: number) => void;
 
 export interface RunnerOptions {
   /** Files to run */
