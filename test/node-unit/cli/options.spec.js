@@ -3,7 +3,7 @@
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
 const {ONE_AND_DONE_ARGS} = require('../../../lib/cli/one-and-dones');
-const {constants} = require('../../../lib/errors');
+const {constants} = require('../../../lib/error-constants');
 
 const modulePath = require.resolve('../../../lib/cli/options');
 const mocharcPath = require.resolve('../../../lib/mocharc.json');
