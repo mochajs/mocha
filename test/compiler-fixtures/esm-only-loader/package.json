@@ -1,0 +1,9 @@
+{
+  "name": "@test/esm-only-loader",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm.fixture.js"
+    }
+  }
+}
