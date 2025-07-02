@@ -6,7 +6,7 @@ var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 
 describe('nested test detection', function () {
-  var nestedTestErrorMessage = 'Nested tests are not allowed';
+  var nestedTestErrorMessage = 'Nested test ".*" detected inside';
 
   describe('BDD interface', function () {
     it('should fail when nested tests are detected', function (done) {
@@ -20,7 +20,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /inner nested test.*detected inside test.*outer test/);
+          expect(res, 'to have failed with output', /inner nested test.*detected inside.*outer test/);
           done();
         },
         spawnOpts
@@ -53,7 +53,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /inner nested test.*detected inside test.*outer test/);
+          expect(res, 'to have failed with output', /inner nested test.*detected inside.*outer test/);
           done();
         },
         spawnOpts
@@ -86,7 +86,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /nested in sync.*detected inside test.*sync nested test/);
+          expect(res, 'to have failed with output', /nested in sync.*detected inside.*sync nested test/);
           done();
         },
         spawnOpts
@@ -104,7 +104,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /nested in async.*detected inside test.*async\/await nested test/);
+          expect(res, 'to have failed with output', /nested in async.*detected inside.*async\/await nested test/);
           done();
         },
         spawnOpts
@@ -122,7 +122,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /Uncaught.*nested in callback.*detected inside test.*callback nested test/);
+          expect(res, 'to have failed with output', /Uncaught.*nested in callback.*detected inside.*callback nested test/);
           done();
         },
         spawnOpts
@@ -140,7 +140,27 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
-          expect(res, 'to have failed with output', /Uncaught.*nested in promise.*detected inside test.*promise nested test/);
+          expect(res, 'to have failed with output', /Uncaught.*nested in promise.*detected inside.*promise nested test/);
+          done();
+        },
+        spawnOpts
+      );
+    });
+  });
+
+  describe('hook nested tests', function () {
+    it('should fail when nested tests are detected inside hooks', function (done) {
+      var fixture = path.join('nested-tests', 'bdd-hook-nested');
+      var spawnOpts = {stdio: 'pipe'};
+      runMocha(
+        fixture,
+        ['--ui', 'bdd'],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, 'to have failed with output', new RegExp(nestedTestErrorMessage));
+          expect(res, 'to have failed with output', /nested test in before hook.*detected inside.*"before all" hook/);
           done();
         },
         spawnOpts
@@ -160,7 +180,7 @@ describe('nested test detection', function () {
             return done(err);
           }
           expect(res, 'to have failed with output', /Error: Nested test "inner nested test"/);
-          expect(res, 'to have failed with output', /detected inside test "outer test with nested test"/);
+          expect(res, 'to have failed with output', /detected inside "outer test with nested test"/);
           expect(res, 'to have failed with output', /createUnsupportedError/);
           done();
         },
