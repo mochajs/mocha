@@ -23,9 +23,10 @@ module.exports = [
     },
     rules: {
       'n/prefer-node-protocol': 'error',
-      strict: ['error', 'global'],
       'no-unused-vars': 'error',
+      strict: ['error', 'global'],
 
+      'no-var': 'off',
       'n/no-process-exit': 'off',
       'n/no-unpublished-require': 'off',
       'n/no-unsupported-features/node-builtins': 'off',
