@@ -138,6 +138,62 @@ describe('--watch', function () {
       });
     });
 
+    it('reruns test when file matching --watch-files outside the current working directory changes', function () {
+      // create a subdirectory to watch as the current working directory
+      const tempCwd = path.join(tempDir, 'dir');
+      const testFile = path.join(tempCwd, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/file.xyz');
+      touchFile(watchedFile);
+
+      // use an absolute path for the watch file pattern,
+      // otherwise it would be read relative to the current working directory
+      const watchFilePattern = path.join(tempDir, 'lib/**/*.xyz');
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', watchFilePattern],
+        tempCwd,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test with a thousand watched files', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const total = 1000;
+      const maxUpdates = 10;
+      const delay = 10;
+
+      const watchedFiles = Array.from(Array(total)).map((_, index) => {
+        const watchedFile = path.join(tempDir, `lib/file-${index}.xyz`);
+        touchFile(watchedFile);
+        return watchedFile;
+      });
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib/**/*.xyz'],
+        tempDir,
+        async () => {
+          // note that changes that are too fast won't be counted properly,
+          // so limit the files to update and add a small delay while making
+          // sure that we don't go over the timeout
+          for (const watchedFile of watchedFiles.slice(0, maxUpdates)) {
+            await new Promise(resolve => setTimeout(resolve, delay));
+
+            touchFile(watchedFile);
+          }
+        }
+      ).then(results => {
+        expect(results, 'to have length', maxUpdates + 1);
+      });
+    });
+
     it('does not rerun test when file not matching --watch-files is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
