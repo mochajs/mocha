@@ -292,7 +292,7 @@ function onlyConsoleOutput() {
   };
 }
 
-function onlyErrorTitle(line) {
+function onlyErrorTitle() {
   let foundErrorTitle = false;
   let foundError = false;
   return line => {

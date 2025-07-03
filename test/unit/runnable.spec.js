@@ -173,6 +173,8 @@ describe('Runnable(title, fn)', function () {
     var run;
 
     beforeEach(function () {
+      // Runnable knows whether it's provided a 'done' parameter
+      // eslint-disable-next-line no-unused-vars
       run = new Runnable('foo', function (done) {});
     });
 
@@ -387,7 +389,7 @@ describe('Runnable(title, fn)', function () {
         });
 
         it('should not throw its own exception if passed a non-object', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             /* eslint no-throw-literal: off */
             throw null;
           });
@@ -401,7 +403,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when an exception is thrown and is allowed to remain uncaught', function () {
         it('throws an error when it is allowed', function (done) {
-          var runnable = new Runnable('foo', function (done) {
+          var runnable = new Runnable('foo', function () {
             throw new Error('fail');
           });
           runnable.allowUncaught = true;
@@ -465,6 +467,8 @@ describe('Runnable(title, fn)', function () {
 
       it('should allow updating the timeout', function (done) {
         var spy = sinon.spy();
+        // Runnable knows whether it's provided a 'done' parameter
+        // eslint-disable-next-line no-unused-vars
         var runnable = new Runnable('foo', function (done) {
           setTimeout(spy, 1);
           setTimeout(spy, 100);
@@ -509,7 +513,7 @@ describe('Runnable(title, fn)', function () {
 
       describe('when the promise is fulfilled with a value', function () {
         var fulfilledPromise = {
-          then: function (fulfilled, rejected) {
+          then: function (fulfilled) {
             setTimeout(function () {
               fulfilled({});
             });
@@ -623,7 +627,7 @@ describe('Runnable(title, fn)', function () {
 
     describe('if async', function () {
       it('this.skip() should set runnable to pending', function (done) {
-        var runnable = new Runnable('foo', function (done) {
+        var runnable = new Runnable('foo', function () {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
         });
@@ -636,7 +640,7 @@ describe('Runnable(title, fn)', function () {
 
       it('this.skip() should halt synchronous execution', function (done) {
         var aborted = true;
-        var runnable = new Runnable('foo', function (done) {
+        var runnable = new Runnable('foo', function () {
           // normally "this" but it gets around having to muck with a context
           runnable.skip();
           /* istanbul ignore next */

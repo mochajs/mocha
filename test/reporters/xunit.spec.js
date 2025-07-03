@@ -225,7 +225,7 @@ describe('XUnit reporter', function () {
               }
               cb();
             }),
-            write: function (chunk, encoding, cb) {}
+            write: function () {}
           }
         };
       });
@@ -544,7 +544,7 @@ describe('XUnit reporter', function () {
 
     before(function () {
       fileStream = {
-        write: function (chunk, encoding, cb) {
+        write: function (chunk) {
           lines.push(chunk);
         }
       };
