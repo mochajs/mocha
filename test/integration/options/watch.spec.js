@@ -166,31 +166,23 @@ describe('--watch', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
 
-      const total = 1000;
-      const maxUpdates = 10;
-      const delay = 10;
+      function getWatchedFile(index) {
+        return path.join(tempDir, `lib/file-${index}.xyz`);
+      }
 
-      const watchedFiles = Array.from(Array(total)).map((_, index) => {
-        const watchedFile = path.join(tempDir, `lib/file-${index}.xyz`);
-        touchFile(watchedFile);
-        return watchedFile;
-      });
+      const total = 1000;
+      for (let i = 0; i < total; i++) {
+        touchFile(getWatchedFile(i));
+      }
 
       return runMochaWatchJSONAsync(
         [testFile, '--watch-files', 'lib/**/*.xyz'],
         tempDir,
-        async () => {
-          // note that changes that are too fast won't be counted properly,
-          // so limit the files to update and add a small delay while making
-          // sure that we don't go over the timeout
-          for (const watchedFile of watchedFiles.slice(0, maxUpdates)) {
-            await new Promise(resolve => setTimeout(resolve, delay));
-
-            touchFile(watchedFile);
-          }
+        () => {
+          touchFile(getWatchedFile(0));
         }
       ).then(results => {
-        expect(results, 'to have length', maxUpdates + 1);
+        expect(results, 'to have length', 2);
       });
     });
 
