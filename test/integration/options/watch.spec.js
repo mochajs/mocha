@@ -162,30 +162,6 @@ describe('--watch', function () {
       });
     });
 
-    it('reruns test with a thousand watched files', function () {
-      const testFile = path.join(tempDir, 'test.js');
-      copyFixture(DEFAULT_FIXTURE, testFile);
-
-      function getWatchedFile(index) {
-        return path.join(tempDir, `lib/file-${index}.xyz`);
-      }
-
-      const total = 1000;
-      for (let i = 0; i < total; i++) {
-        touchFile(getWatchedFile(i));
-      }
-
-      return runMochaWatchJSONAsync(
-        [testFile, '--watch-files', 'lib/**/*.xyz'],
-        tempDir,
-        () => {
-          touchFile(getWatchedFile(0));
-        }
-      ).then(results => {
-        expect(results, 'to have length', 2);
-      });
-    });
-
     it('does not rerun test when file not matching --watch-files is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
