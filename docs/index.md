@@ -2131,6 +2131,8 @@ More information can be found in the [Node.js documentation](https://nodejs.org/
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
 - [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
+- Mocha in Node.js version 24.4.0 or older [silently ignored top level errors in ESM files](https://github.com/mochajs/mocha/issues/5396).
+  If you cannot upgrade to a newer Node.js version, you can add `--no-experimental-require-module` to the `NODE_OPTIONS` environment variable.
 - When using module-level mocks via libs like `proxyquire`, `rewiremock` or `rewire`,
   hold off on using ES modules for your test files. You can switch to using `testdouble`,
   which does support ESM.
