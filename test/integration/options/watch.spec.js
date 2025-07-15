@@ -138,6 +138,30 @@ describe('--watch', function () {
       });
     });
 
+    it('reruns test when file matching --watch-files outside the current working directory changes', function () {
+      // create a subdirectory to watch as the current working directory
+      const tempCwd = path.join(tempDir, 'dir');
+      const testFile = path.join(tempCwd, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/file.xyz');
+      touchFile(watchedFile);
+
+      // use an absolute path for the watch file pattern,
+      // otherwise it would be read relative to the current working directory
+      const watchFilePattern = path.join(tempDir, 'lib/**/*.xyz');
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', watchFilePattern],
+        tempCwd,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
     it('does not rerun test when file not matching --watch-files is changed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
