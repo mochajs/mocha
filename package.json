@@ -104,6 +104,7 @@
     "find-up": "^5.0.0",
     "glob": "^10.4.5",
     "he": "^1.2.0",
+    "is-path-inside": "^3.0.3",
     "js-yaml": "^4.1.0",
     "log-symbols": "^4.1.0",
     "minimatch": "^9.0.5",

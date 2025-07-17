@@ -120,6 +120,32 @@ describe('--watch', function () {
       });
     });
 
+    it('reruns test when file and directory paths under --watch-files are added', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      // only create 'lib', 'dir', and 'file.xyz' when watching
+      const libPath = path.join(tempDir, 'lib');
+      const dirPath = path.join(libPath, 'dir');
+      const watchedFile = path.join(dirPath, 'file.xyz');
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib'],
+        tempDir,
+        async () => {
+          fs.mkdirSync(libPath);
+          await sleep(1000);
+
+          fs.mkdirSync(dirPath);
+          await sleep(1000);
+
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 4);
+      });
+    });
+
     it('reruns test when file matching --watch-files is removed', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
@@ -132,6 +158,96 @@ describe('--watch', function () {
         tempDir,
         () => {
           fs.rmSync(watchedFile, { recursive: true, force: true });
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file matching exact --watch-files changes', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib/file.xyz'],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file under --watch-files changes', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/dir/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib'],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file matching --watch-files starting with a glob pattern changes', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/dir/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', '**/lib'],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file matching --watch-files ending with a glob pattern changes', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/dir/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib/**/*'],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results, 'to have length', 2);
+      });
+    });
+
+    it('reruns test when file matching --watch-files with glob pattern in between changes', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'lib/dir/file.xyz');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, '--watch-files', 'lib/**/dir'],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
         }
       ).then(results => {
         expect(results, 'to have length', 2);
