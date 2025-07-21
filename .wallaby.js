@@ -16,6 +16,7 @@ module.exports = () => {
         instrument: false
       },
       'package.json',
+      'test/opts/mocha.opts',
       'mocharc.yml',
       '!lib/browser/growl.js'
     ],
