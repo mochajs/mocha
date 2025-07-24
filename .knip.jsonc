@@ -14,6 +14,7 @@
   ],
   "ignoreDependencies": [
     "@mocha/docdash",
+    "@test/esm-only-loader",
     "coffeescript",
     "fake",
     "jsdoc-ts-utils",

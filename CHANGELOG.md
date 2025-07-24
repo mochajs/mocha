@@ -1,5 +1,17 @@
 # Changelog
 
+## [11.7.1](https://github.com/mochajs/mocha/compare/v11.7.0...v11.7.1) (2025-06-24)
+
+
+### 🩹 Fixes
+
+* always fallback to import() if require() fails ([#5384](https://github.com/mochajs/mocha/issues/5384)) ([295c168](https://github.com/mochajs/mocha/commit/295c168628c2583245fb67d371b640309ba243ba))
+
+
+### 🧹 Chores
+
+* add esm loader test ([#5383](https://github.com/mochajs/mocha/issues/5383)) ([f58e49f](https://github.com/mochajs/mocha/commit/f58e49f08df2066e27f87f93ad7ee9cd6f91d225))
+
 ## [11.7.0](https://github.com/mochajs/mocha/compare/v11.6.0...v11.7.0) (2025-06-18)
 
 
