@@ -11,7 +11,7 @@ body:
         - For runtime performance: some kind of reproducible benchmark to demonstrate exactly what's different
         - For dependency cleanups:
           - The specific change to the dependency tree of a project with Mocha and no other dependencies
-          - The specific change to the dependency tree of a project with Mocha other common deps: maybe, chai, express, and sinon?
+          - The specific change to the dependency tree of a project with Mocha and other common dependencies, such as `chai`, `express`, and `sinon`
 
         You can always suggest a performance improvement without those validations, but we are unlikely to accept it without them.
         For more information, see [mochajs/mocha#5377 🛠️ Repo: Add issue template for performance improvements](https://github.com/mochajs/mocha/issues/5377).
