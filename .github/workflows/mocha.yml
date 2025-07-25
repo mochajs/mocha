@@ -24,7 +24,7 @@ jobs:
     uses: ./.github/workflows/npm-script.yml
     with:
       # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20,22.11.0'
+      node-versions: '18,20,22.11.0,24'
       npm-script: test-smoke
 
   test-node-lts:
@@ -68,7 +68,7 @@ jobs:
       os: 'ubuntu-latest,windows-latest'
       # The 20.18.3 is instead of 20 per https://github.com/mochajs/mocha/issues/5052
       # The 22.11.0 is instead of 22 per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20.18.3,22.11.0'
+      node-versions: '18,20.18.3,22.11.0,24'
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
@@ -77,10 +77,10 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
 
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
