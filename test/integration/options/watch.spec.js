@@ -407,6 +407,28 @@ describe('--watch', function () {
       });
     });
 
+    it('ignores files whose name is the watch glob', function () {
+      const testFile = path.join(tempDir, 'test.js');
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      const watchedFile = path.join(tempDir, 'dir/[ab].js');
+      touchFile(watchedFile);
+
+      return runMochaWatchJSONAsync(
+        [
+          testFile,
+          '--watch-files',
+          'dir/[ab].js',
+        ],
+        tempDir,
+        () => {
+          touchFile(watchedFile);
+        }
+      ).then(results => {
+        expect(results.length, 'to equal', 1);
+      });
+    });
+
     it('reloads test files when they change', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture('options/watch/test-file-change', testFile);
