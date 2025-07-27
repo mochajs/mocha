@@ -407,6 +407,8 @@ describe('--watch', function () {
       });
     });
 
+    // New breaking change in Mocha 11.2.2
+    // Workaround: escape via e.g. `dir/[[]ab[]].js`
     it('ignores files whose name is the watch glob', function () {
       const testFile = path.join(tempDir, 'test.js');
       copyFixture(DEFAULT_FIXTURE, testFile);
