@@ -142,14 +142,20 @@ describe('root hooks', function () {
       // (introduced in Node 21.1.0, 20.10.0)
       // newer versions of Node no longer fail :)
       function isNewerVersion(vString) {
-        return (vString > 'v20.18.3' || vString > 'v22.11.0' || vString >= 'v24.0.0');
+        // Latest versions considered "older": 22.11.0, 20.18.3, 18.20.8
+        // (May update after writing)
+        return (
+          (vString.startsWith('20') && vString > '20.18.3') ||
+          (vString.startsWith('22') && vString > '22.11.0') ||
+          (vString.startsWith('24'))
+        );
       }
 
       describe('on older versions, should fail due to ambiguous file type', function () {
         // --(no-)experimental-detect-module was experimental when these tests were written
         // (introduced in Node 21.1.0, 20.10.0)
         // newer versions of Node no longer fail :)
-        if (isNewerVersion(process.version)) {
+        if (isNewerVersion(process.versions.node)) {
           return true; // skip test on newer Node versions
         }
 
@@ -196,7 +202,7 @@ describe('root hooks', function () {
       });
 
       describe('on newer versions, should work', function () {
-        if (!isNewerVersion(process.version)) {
+        if (!isNewerVersion(process.versions.node)) {
           return true; // skip test on older Node versions
         }
 
