@@ -136,7 +136,23 @@ describe('root hooks', function () {
     });
 
     describe('support ESM via .js extension w/o type=module', function () {
-      describe('should fail due to ambiguous file type', function () {
+      // --(no-)experimental-detect-module was experimental when these tests were written
+      // https://nodejs.org/api/cli.html#--no-experimental-detect-module
+      // https://nodejs.org/api/packages.html#syntax-detection
+      // (introduced in Node 21.1.0, 20.10.0)
+      // newer versions of Node no longer fail :)
+      function isNewerVersion(vString) {
+        return (vString > 'v20.18.3' || vString > 'v22.11.0' || vString >= 'v24.0.0');
+      }
+
+      describe('on older versions, should fail due to ambiguous file type', function () {
+        // --(no-)experimental-detect-module was experimental when these tests were written
+        // (introduced in Node 21.1.0, 20.10.0)
+        // newer versions of Node no longer fail :)
+        if (isNewerVersion(process.version)) {
+          return true; // skip test on newer Node versions
+        }
+
         const filename =
           '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
         const noDetectModuleRegex = /SyntaxError: Unexpected token/;
@@ -158,7 +174,8 @@ describe('root hooks', function () {
         });
 
         it('with --experimental-detect-module', function () {
-          // --experimental-detect-module was introduced in Node 21.1.0
+          // --experimental-detect-module was introduced in Node 21.1.0, 20.10.0
+          // adding the flag to older versions of Node does nothing
           const expectedRegex =
             process.version >= 'v21.1.0'
               ? detectModuleRegex
@@ -174,6 +191,47 @@ describe('root hooks', function () {
             'when fulfilled',
             'to contain output',
             expectedRegex
+          );
+        });
+      });
+
+      describe('on newer versions, should work', function () {
+        if (!isNewerVersion(process.version)) {
+          return true; // skip test on older Node versions
+        }
+
+        const filename =
+          '../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js';
+        const runSuccessRegex = /0 passing/;
+
+        it('with --no-experimental-detect-module', function () {
+          return expect(
+            invokeMochaAsync(
+              [
+                '--require=' + require.resolve(filename), // as object
+                '--no-experimental-detect-module'
+              ],
+              'pipe'
+            )[1],
+            'when fulfilled',
+            'to contain output',
+            runSuccessRegex
+          );
+        });
+
+        it('with --experimental-detect-module', function () {
+          return expect(
+            invokeMochaAsync(
+              [
+                '--require=' + require.resolve(filename), // as object
+                 // enabled by default in these newer versions, but clearer to use it explicitly
+                '--experimental-detect-module'
+              ],
+              'pipe'
+            )[1],
+            'when fulfilled',
+            'to contain output',
+            runSuccessRegex
           );
         });
       });
