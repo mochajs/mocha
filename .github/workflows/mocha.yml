@@ -23,7 +23,8 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      node-versions: '18,20,22,24'
+      # The 22.11.0 is instead of 22 per https://github.com/mochajs/mocha/issues/5278
+      node-versions: '18,20,22.11.0,24'
       npm-script: test-smoke
 
   test-node-lts:
@@ -66,9 +67,10 @@ jobs:
     with:
       os: 'ubuntu-latest,windows-latest'
       # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
+      # The 22.11.0 is instead of 22 per https://github.com/mochajs/mocha/issues/5278
       # LTS is tested in a previous step
       # Ref https://nodejs.org/en/about/previous-releases
-      node-versions: '18.20.8,20.19.4,22.17.1,24.4.1'
+      node-versions: '18.20.8,20.19.4,22.11.0,24.4.1'
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
