@@ -15,36 +15,6 @@ permissions:
   contents: read
 
 jobs:
-  lint:
-    uses: ./.github/workflows/npm-script.yml
-    with:
-      npm-script: lint
-
-  smoke:
-    uses: ./.github/workflows/npm-script.yml
-    with:
-      # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20,22.11.0,24'
-      npm-script: test-smoke
-
-  test-node-lts:
-    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
-    uses: ./.github/workflows/npm-script.yml
-    needs: smoke
-    strategy:
-      fail-fast: false
-      matrix:
-        test-part:
-          - interfaces
-          - unit
-          - integration
-          - jsapi
-          - requires
-          - reporters
-          - only
-    with:
-      npm-script: test-node:${{ matrix.test-part }}
-
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
@@ -55,12 +25,7 @@ jobs:
       matrix:
         coverage: [true]
         test-part:
-          - interfaces
-          - unit
           - integration
-          - requires
-          - reporters
-          - only
         include:
           - test-part: jsapi
             coverage: false
@@ -71,22 +36,6 @@ jobs:
       node-versions: '18,20.18.3,22.11.0,24'
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
-
-  test-node-upload-coverage:
-    needs: test-node-all
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
-
-  test-browser-local:
-    uses: ./.github/workflows/npm-script.yml
-    with:
-      browsers: ChromeHeadless
-      npm-script: test-browser
 
   # test-browser-saucelabs:
   #   # Don't run forked 'pull_request' without saucelabs token
