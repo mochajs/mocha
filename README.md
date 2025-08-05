@@ -50,6 +50,29 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Supported by
+
+Mocha is also supported by these awesome companies and services:
+
+<div align="center">
+
+<a href="https://wallabyjs.com/"><img src="https://img.shields.io/badge/wallaby.js-configured-green.svg" alt="Wallaby.js" height="20"></a>
+<a href="https://saucelabs.com/"><img src="https://img.shields.io/badge/tested_on-saucelabs-FaD817.svg" alt="Sauce Labs" height="20"></a>
+<a href="https://www.jetbrains.com/"><img src="https://img.shields.io/badge/jetbrains-tools-ff69b4.svg" alt="JetBrains" height="20"></a>
+
+</div>
+
+**Development Tools & Licenses:**
+- [Wallaby.js](https://wallabyjs.com/) - JavaScript testing tool with real-time code coverage
+- [Sauce Labs](https://saucelabs.com/) - Cross-browser testing platform  
+- [JetBrains](https://www.jetbrains.com/) - WebStorm IDE licenses
+
+**Infrastructure & Services:**
+- [Travis CI](https://www.travis-ci.com/) - Continuous integration and deployment
+- [AppVeyor](https://www.appveyor.com/) - Continuous integration for Windows
+- [Coveralls](https://coveralls.io/) - Test coverage history and statistics
+- [Netlify](https://www.netlify.com/) - Static site hosting and deployment
+
 ## Development
 
 You might want to know that:
