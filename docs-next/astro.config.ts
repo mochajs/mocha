@@ -99,6 +99,10 @@ export default defineConfig({
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Run cycle details",
+              slug: "explainers/run-cycle-details",
+            },
+            {
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },

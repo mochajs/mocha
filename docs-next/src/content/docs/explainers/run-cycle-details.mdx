@@ -1,0 +1,276 @@
+---
+description: A low-level detailed example of Mocha's flow of execution.
+title: Run Cycle Details
+---
+
+For a higher-level view, refer to the [Run Cycle Overview](./run-cycle-overview).
+
+## Startup
+
+1. package.json `bin` prop defines `mocha` as bin/mocha.js
+
+## bin/mocha.js
+
+1. bin/mocha.js uses lib/cli/options.js to parse command line args
+1. parses v8 options
+1. conditionally disables test timeout
+1. does some more stuff {/* todo */}
+1. If args are provided, calls lib/cli/cli.js in a separate process
+1. Else calls lib/cli/cli.js in the same process, printing help and exiting
+
+We assume non-help args are provided for this example
+
+## cli.js
+
+cli.js does more parsing and then goes to lib/cli/run.js via `yargs().command(commands.run)`. See also commands.js.
+
+## run.js and run-helpers.js
+
+1. run.js exports a yargs object with metadata, specifically a `builder` and `handler` property
+1. `builder` handles options: mutually exclusive options, deprecated options, etc.
+1. `handler` creates a new instance of Mocha and calls `lib/cli/run-helpers.js#runMocha` with it
+1. run-helpers.js `runMocha` reads options and delegates to one of four run functions 5. `watchParallelRun`, `watchRun`, `parallelRun`, and `singleRun` are documented in source
+   - We will go to `watchRun` for this example
+
+## watch-run.js
+
+1. `watch-run.js` exports the `watchRun` function
+1. `watchRun` returns a call to `createWatcher`
+1. `createWatcher` watches all files iff there was no `watchFiles` arg passed in
+1. `createWatcher` creates a `watcher` object
+   - Implementation varies, see below
+1. (In the background, Chokidar starts readying the watcher)
+1. `createWatcher` creates a `rerunner` object to blindly handle rerun events
+1. `createWatcher` adds a `watcher.on('ready', ...)` handler for first-time setup
+1. `createWatcher` adds a `watcher.on('all', ...)` handler for file changes
+   - Implementation varies, see below
+1. `createWatcher` hides cursor while running and shows it when done
+1. `createWatcher` does some more terminal output handling
+1. `createWatcher` returns the watcher object
+1. (In the background, Chokidar finishes readying the watcher)
+1. `watcher.on('ready', ...` is called
+1. The on-ready handler calls `mocha.runGlobalSetup()` (no args provided)
+   1. If there is anything to do, lib/mocha.js `runGlobalSetup` awaits `_runGlobalFixtures` (context is empty obj in this case)
+   1. `_runGlobalFixtures` loops through each fixture function defined in `options.globalSetup` (ref https://mochajs.org/next/features/global-fixtures/#global-setup-fixtures)
+   1. `runGlobalSetup` returns the updated context object, which the on-ready handler saves to ensure it doesn't call `runGlobalSetup` twice
+1. On-ready handler calls `rerunner.run()`
+1. `run` calls `options.beforeRun({mocha, watcher})` if `beforeRun` exists
+1. `run` calls `mocha.run(() => ...)` (`Mocha.prototype.run`) with an anonymous done-callback
+
+### Mocha 11.2.1 (Chokidar 3, b88d441c/4804aba)
+
+Mocha `createWatcher` lets Chokidar handle globs:
+
+```js
+const watcher = chokidar.watch(watchFiles, {
+  ignored: watchIgnore,
+  ignoreInitial: true
+});
+```
+
+Mocha `watcher.on('all')` handler trusts Chokidar to only emit events when watched files change:
+
+```js
+watcher.on('all', () => {
+  rerunner.scheduleRun();
+});
+```
+
+Internally, Chokidar watches the glob parents using [`glob-parent`](https://www.npmjs.com/package/glob-parent) and calls [`anymatch` package](https://www.npmjs.com/package/anymatch) on each file to watch.
+
+[Chokidar 3.5.3 index.js](https://github.com/paulmillr/chokidar/blob/3.5.3/index.js#L967):
+
+```js
+const watch = (paths, options) => {
+  const watcher = new FSWatcher(options);
+  watcher.add(paths);
+  return watcher;
+};
+```
+
+FSWatcher constructor sets options then calls an underlying watcher, in our case probably FsEventsHandler
+
+**lib/fsevents-handler.js**: FsEventsHandler constructor is trivial, we exit out of construction
+
+`watch` then calls `watcher.add(paths)` from index.js
+
+`add`:
+
+1. normalizes the paths according to the options
+1. makes sure each path is not ignored, unless it starts with `!`
+1. calls `this._fsEventsHandler._addToFsEvents` for each non-ignored path
+
+`_addToFsEvents`:
+
+1. calls `fsw._getWatchHelpers` for the path
+
+`_getWatchHelpers`:
+
+1. calls `globParent` from [`glob-parent` package](https://www.npmjs.com/package/glob-parent) for each glob path, but this just extracts the non-magic parent path from a glob string.
+1. returns a `WatchHelper` which has a `globFilter` path defined by calling `anymatch` from [`anymatch` package](https://www.npmjs.com/package/anymatch) on the glob parent path
+
+`_addToFsEvents`:
+
+1. ultimately calls `wh.filterPath` to determine whether to watch files
+
+### Mocha 11.2.2 (Chokidar 4, 8af0f1a)
+
+Creating `watcher`:
+
+```js
+const tracker = new GlobFilesTracker(watchFiles, watchIgnore);
+tracker.regenerate();
+
+const watcher = chokidar.watch('.', {
+  ignoreInitial: true
+});
+```
+
+`watcher.on('all')`:
+
+```js
+watcher.on('all', (event, filePath) => {
+  if (event === 'add') {
+    tracker.regenerate();
+  }
+  if (tracker.has(filePath)) {
+    rerunner.scheduleRun();
+  }
+});
+```
+
+1. `createWatcher` creates a new `GlobFilesTracker` object for the watched and ignored globs
+   - `GlobFilesTracker` is a new Mocha-defined class because `chokidar` v4 no longer handles globs.
+1. `GlobFilesTracker` constructor defines an empty set of resolved path strings
+1. `GlobFilesTracker.regenerate` uses `glob.sync` to resolve globs to path strings and track them
+   - This appears to be very slow, increasing time for this repo from 0.01 seconds (Chokidar v3) to 33 seconds. Chokidar 3 does not actually scan files, it simply creates matchers for directories.
+1. `GlobFilesTracker.has` simply checks the resolved set and returns whether it includes the path
+
+Known issues:
+
+- Only watches the current directory (https://github.com/mochajs/mocha/issues/5355). This was by design of the PR author and missed by the reviewers.
+- Very slow and crashes on large watches (https://github.com/mochajs/mocha/issues/5374)
+
+### PR 5379 (Better Chokidar 4, 00bb46a1)
+
+Creating `watcher`:
+
+```js
+const basePath = process.cwd();
+const allowed = createPathFilter(watchFiles, basePath);
+const ignored = createPathFilter(castArray(watchIgnore), basePath);
+const matcher = createPathMatcher(allowed, ignored, basePath);
+
+const watcher = chokidar.watch(Array.from(allowed.dir.paths), {
+  ignoreInitial: true,
+  ignored: matcher.ignore
+});
+```
+
+`watcher.on('all')`:
+
+```js
+watcher.on('all', (_event, filePath) => {
+  // only allow file paths that match the allowed patterns
+  if (matcher.allow(filePath)) {
+    rerunner.scheduleRun();
+  }
+});
+```
+
+Changes from Mocha 11.2.2:
+
+- Replaces the `GlobFilesTracker` class with `createPathFilter` and `createPathMatcher`
+- Resolves globs to directory watches instead of files, allowing Chokidar to watch them
+- Watches paths outside of current directory, fixing bug 5355
+- Does not need to regenerate all files when new file is created, possibly fixing bug 5374
+  - Watcher still takes 5 seconds to setup, faster than Mocha 11.2.2 (33 seconds) but slower than Mocha 11.2.1 (0.01 s)
+
+Control flow:
+
+1. `createWatcher` creates `allowed` via `createPathFilter` on the watch globs with the current working directory as the base path
+1. `createPathFilter` creates a `PathPattern` object, which has the following structure:
+   ```jsonc
+   {
+     "dir": {
+       // raw directories
+       "paths": "Set<string>", // treat the provided paths as literals
+       "glob": "Set<`${string}/**/*`>" // if a dir, watch all its children
+     },
+     "match": {
+       // match globs to check against
+       "paths": "Set<string>", // treat the provided paths as literals
+       "glob": "Set<`${string}/**/*`>" // if a dir, watch all its children
+     }
+   }
+   ```
+1. `createPathFilter` reduces the globs to their `Glob.patterns` via the `glob` package
+1. For each pattern, `createPathFilter`: 5. finds the first glob entry in the pattern (or null if there isn't one) 6. adds the non-glob segments/entries to the base path, then adds that to `dir.paths` 7. does the same with `/**/*` to `dir.globs` 8. adds absolute path to either `match.globs` (if it found a glob entry) or `match.paths` (otherwise) 9. ensure `match.globs` includes absolute path + `/**/*`
+1. `createPathFilter` returns to `createWatcher`
+1. `createWatcher` creates `ignored` via `createPathFilter` on the ignore globs with cwd as the base path
+   - See above for details of `createPathFilter`
+1. `createWatcher` calls `createPathMatcher` on the return values of the previous `createPathFilter` calls with cwd
+1. `createPathMatcher` returns a `PathMatcher` object:
+   ```js
+   /**
+    * Object for matching paths to either allow or ignore them.
+    * @private
+    * @typedef {Object} PathMatcher
+    * @property {AllowMatchFunction} allow Checks if the file path matches the allowed patterns.
+    * @property {chokidar.MatchFunction} ignore The chokidar `ignored` match function.
+    */
+   ```
+1. `createPathMatcher().allow` checks a cache, then calls `matchPattern(filePath, allowed.match)` if needed
+1. `matchPattern` short-circuits to `true` if the file is one of the directories (likely very rare)
+1. `matchPattern` skips the `isPathInside` ([`is-path-inside`](https://www.npmjs.com/package/is-path-inside)) check because its third param `matchParent` was not truthy
+   - This block checks of the `pattern` entries for one inside the `filePath` entry
+1. `matchPattern` then uses ([`minimatch`](https://www.npmjs.com/package/minimatch)) to check if the file matches
+   - Chokidar 3 uses `anymatch`, which uses `picomatch` for globs. Both `mini` and `pico` are popular, we could consider `pico` for bug 5374 if needed
+1. `createPathMatcher().ignore` resolve the path then checks a cache
+1. If cache fails, ...(todo)...
+
+## lib/mocha.js
+
+1. `run` calls `_guardRunningStateTransition` to ensure a new test run is valid
+1. `run` sets state to `running`
+1. If previous runner exists, `run` disposes it and resets the suite
+1. If there are files and it's not set to lazy load, it eagerly loads files with `loadFiles`
+   - This emits the `EVENT_FILE_PRE_REQUIRE`, `EVENT_FILE_REQUIRE`, and `EVENT_FILE_POST_REQUIRE` events
+1. `run` calls `_runnerClass`, which is either
+   - a lib/nodejs/parallel-buffered-runner.js `ParallelBufferedRunner` or
+   - a lib/runner.js `Runner`
+   - we use `Runner` for this example since we have assumed non-parallel earlier (`watchRun` instead of `watchParallelRun`)
+   - creating the runner just returns an object
+1. `run` calls `createStatsCollector` which listens to various events:
+   - EVENT_RUN_BEGIN
+   - EVENT_SUITE_BEGIN
+   - EVENT_TEST_PASS
+   - EVENT_TEST_FAIL
+   - EVENT_TEST_PENDING
+   - EVENT_TEST_END
+   - EVENT_RUN_END
+1. `run` calls `_reporter` which creates a new reporter based on options (done in Mocha constructor)
+1. `run` sets some properties on the runner:
+   - checkLeaks
+   - fullStackTrace
+   - asyncOnly
+   - allowUncaught
+   - forbidOnly
+   - forbidPending
+1. If `options.grep`, `run` calls `runner.grep` which grep each test title
+1. If `options.global`, `run` calls `runner.globals` which appends the provided globals to the runner's `_globals` array
+1. `run` sets up reporter options:
+   - useColors
+   - inlineDiffs
+   - hideDiff
+1. `run` defines `done` which wraps around the passed-in done-callback
+1. `run` defines `runAsync`:
+   1. calls `context = runGlobalSetup(runner)` if appropriate
+   1. calls `runner.runAsync`
+   1. calls `runGlobalTeardown(runner, {context})` if appropriate
+1. `run` calls `runAsync(runner).then(done)`
+1. `run` returns `runner`
+
+## lib/runner.js
+
+1. `runAsync`
