@@ -1,6 +1,7 @@
 'use strict';
 
 var invokeMochaAsync = require('../helpers').invokeMochaAsync;
+const semver = require('semver');
 
 /**
  * Extracts root hook log messages from run results
@@ -144,11 +145,7 @@ describe('root hooks', function () {
       function isNewerVersion(vString) {
         // Latest versions considered "older": 22.11.0, 20.18.3, 18.20.8
         // (May update after writing)
-        return (
-          (vString.startsWith('20') && vString > '20.18.3') ||
-          (vString.startsWith('22') && vString > '22.11.0') ||
-          (vString.startsWith('24'))
-        );
+        return semver.satisfies(vString, '^20.19.0 || ^22.12.0 || ^24.0.0');
       }
 
       describe('on older versions, should fail due to ambiguous file type', function () {
