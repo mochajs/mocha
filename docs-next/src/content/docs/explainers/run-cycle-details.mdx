@@ -231,11 +231,13 @@ Control flow:
 
 ## lib/mocha.js
 
+1. Top-level calls `require('./interfaces')` which includes `lib/interfaces/exports.js` (see `EVENT_FILE_REQUIRE`, {/* todo confirm with debug */})
 1. `run` calls `_guardRunningStateTransition` to ensure a new test run is valid
 1. `run` sets state to `running`
 1. If previous runner exists, `run` disposes it and resets the suite
 1. If there are files and it's not set to lazy load, it eagerly loads files with `loadFiles`
    - This emits the `EVENT_FILE_PRE_REQUIRE`, `EVENT_FILE_REQUIRE`, and `EVENT_FILE_POST_REQUIRE` events
+   - `EVENT_FILE_REQUIRE` has a listener defined in lib/interfaces/exports.js to populate the Suite and Test objects via `visit`
 1. `run` calls `_runnerClass`, which is either
    - a lib/nodejs/parallel-buffered-runner.js `ParallelBufferedRunner` or
    - a lib/runner.js `Runner`
@@ -273,4 +275,56 @@ Control flow:
 
 ## lib/runner.js
 
-1. `runAsync`
+1. `runAsync` calls `run`
+1. If `options.cleanReferencesAfterRun`, `run` sets up an `on(EVENT_SUITE_END, ...)` handler to call `suite.cleanReferences`
+1. `run` sets an `on(EVENT_RUN_END, ...)` handler to set state to stopped and call the done-callback with failures
+1. `run` calls `_removeEventListener` on `uncaughtException` and `unhandledRejection`
+1. `run` calls `_addEventListener` on the same events
+   - These two steps are likely deduping and fixing bookkeeping
+1. `run` waits for `options.delay` if needed (we'll skip these details for now) {/* todo */}
+1. `run` calls inner function `prepare`
+1. `prepare` filters for any `only` suites
+1. `prepare` calls `begin`, another function inner to `run`
+1. `begin` emits `EVENT_RUN_BEGIN`
+1. `begin` calls `runSuite(rootSuite, end)`, where `end` is another function inner to `run`
+1. `runSuite` calls `grepTotal` on the suite
+1. If no tests to run (or there was a failure and `options.bail` is truthy), `runSuite` returns a call to its `fn` (`end`)
+1. Else, `runSuite` emits `EVENT_SUITE_BEGIN`
+1. `runSuite` defines `next`, a function that determines the next suite
+1. `runSuite` defines `done`, a function that starts executing the next suite
+1. `runSuite` calls `hook` with `HOOK_TYPE_BEFORE_ALL` and a function that calls `runTests`
+1. If `options.dryRun` is truthy, `hook` short-circuits and calls its `fn`
+1. `hook` gets the hooks of the given name (`HOOK_TYPE_BEFORE_ALL`) using `suite.getHooks`
+1. `hook` executes all the hooks and calls `fn` (we are skipping these details too) {/* todo */}
+1. `hook#fn` (defined in `runSuite`) calls `runTests` with `runSuite#next` as its `fn` 
+1. `runTests` defines `next` which handles hooks, errors, and running the next test
+1. `runTests` calls `next`
+1. If `self._abort` is truthy, `next` returns a call to `runTests#fn` (in this case it's `runSuite#next`)
+1. If there's an error, `next` returns a call to `hookErr`
+1. If there are no more tests, `next` returns a call to `runTests#fn`
+1. If the current test doesn't match the grep, `next` calls itself, then returns
+1. If `test.isPending()`, `next` handles that, calls itself, then returns {/* todo */}
+1. `next` emits `EVENT_TEST_BEGIN`
+1. `next` calls `hookDown` on `HOOK_TYPE_BEFORE_EACH` with a function that calls `runTest` and handles edge cases
+1. `hookDown` calls all hooks matching that type, then calls its `fn`
+1. `hookDown#fn` (defined in `runTests#next`):
+   1. If the test is pending, handles that, emits events, and returns a call to `hookUp` with a function that calls `runTests#next`
+   1. If there's an error, returns a call to `hookErr`
+   1. Calls `runTest` with a big function
+1. `runTest` calls `_addEventListener` for the `error` event to fail the test
+1. If `allowUncaught` is truthy, `runTest` returns `test.run(fn)`
+1. Else `runTest` calls `test.run(fn)` in a `try` and returns `fn(err)` in a catch
+
+## lib/test.js
+
+1. `Test` inherits from `Runnable` via `utils.inherits` (yuck!)
+1. `Runnable` defines `run`
+
+## lib/runnable.js
+
+1. `run` calls `fn.call(ctx)`, which actually runs the test!
+
+
+## Open questions
+
+1. How does a delayed run start?
