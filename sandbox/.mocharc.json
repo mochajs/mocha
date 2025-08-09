@@ -1,0 +1,6 @@
+{
+  "extension": ["js"],
+  "spec": ["src/**/test.js"],
+  "watch-ignore": ["node_modules"],
+  "watch-files": ["./src"]
+}
