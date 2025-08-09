@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "debug": "node ../bin/mocha index.spec.js",
-        "test": "mocha index.spec.js"
+        "debug": "node ../bin/mocha index.spec.js --no-config",
+        "test": "mocha index.spec.js --no-config"
     },
     "dependencies": {
         "mocha": "^11.7.1"
