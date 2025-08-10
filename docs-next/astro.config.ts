@@ -1,8 +1,23 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { visit } from "unist-util-visit";
+
+// Relative links work locally but not in production
+const rewriteLinks = (base: string) => {
+  return (tree: any) => {
+    visit(tree, "link", (node) => {
+      if (node.url.startsWith("./") || node.url.startsWith("../")) {
+        // Remove leading ./ or ../ and prepend base
+        node.url = base + "/" + node.url.replace(/^(\.\/|\.\.\/)+/, "");
+      }
+    });
+  };
+}
+
+const base = "/next";
 
 export default defineConfig({
-  base: "/next",
+  base: base,
   integrations: [
     starlight({
       components: {
@@ -122,4 +137,9 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  markdown: {
+    remarkPlugins: [
+      rewriteLinks(base),
+    ]
+  }
 });
