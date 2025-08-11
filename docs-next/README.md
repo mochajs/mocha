@@ -11,4 +11,4 @@ npm run generate
 npm run dev
 ```
 
-However, note that relative links my resolve with `dev` but fail with `build` and `preview` (see https://github.com/mochajs/mocha/issues/5415).
+However, note that relative links may resolve with `dev` but fail with `build` and `preview` (see https://github.com/mochajs/mocha/issues/5415).
