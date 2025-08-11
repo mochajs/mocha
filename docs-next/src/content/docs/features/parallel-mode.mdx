@@ -6,7 +6,7 @@ title: Parallel Mode
 :::note[New in v8.0.0]
 :::
 
-Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](../running/cli#--parallel--p) flag).
+Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](/next/running/cli#--parallel--p) flag).
 
 Parallel tests should work out-of-the box for many use cases.
 However, you must be aware of some important implications of the behavior.
@@ -38,7 +38,7 @@ This is for the same reason as the incompatible reporters noted above: in parall
 
 Suggested workarounds:
 
-1. Use [`--grep`](../running/cli#--grep-regexp--g-regexp) or [`--fgrep`](../running/cli#--fgrep-string--f-string) instead; it's not particularly efficient, but it will work.
+1. Use [`--grep`](/next/running/cli#--grep-regexp--g-regexp) or [`--fgrep`](/next/running/cli#--fgrep-string--f-string) instead; it's not particularly efficient, but it will work.
 1. Don't use parallel mode.
    Likely, you won't be running very many exclusive tests, so you won't see a great benefit from parallel mode anyhow.
 
@@ -52,15 +52,15 @@ In parallel mode, Mocha does not guarantee the order in which test files will ru
 
 Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
 
-- [`--file`](../running/cli#--file-file)
-- [`--sort`](../running/cli#--sort--s)
-- [`--delay`](../running/cli#--delay)
+- [`--file`](/next/running/cli#--file-file)
+- [`--sort`](/next/running/cli#--sort--s)
+- [`--delay`](/next/running/cli#--delay)
 
 ## Test Duration Variability
 
 Running tests in parallel mode will naturally use more system resources.
 The OS may take extra time to schedule and complete some operations, depending on system load.
-For this reason, the timeouts of _individual tests_ may need to be increased either [globally](../running/cli#--timeout-ms--t-ms) or [otherwise](./timeouts).
+For this reason, the timeouts of _individual tests_ may need to be increased either [globally](/next/running/cli#--timeout-ms--t-ms) or [otherwise](./timeouts).
 
 ## "Bail" is "Best Effort"
 
@@ -127,15 +127,15 @@ If a third-party reporter does not work in parallel mode (but otherwise works in
 
 ## Troubleshooting Parallel Mode
 
-If you find your tests don't work properly when run with [`--parallel`](../running/cli#--parallel--p), either shrug and move on, or use this handy-dandy checklist to get things working:
+If you find your tests don't work properly when run with [`--parallel`](/next/running/cli#--parallel--p), either shrug and move on, or use this handy-dandy checklist to get things working:
 
 - ✅ Ensure you are using a [supported reporter](#reporter-limitations).
 - ✅ Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
-- ✅ Double-check your [config file](../running/configuring); options set in config files will be merged with any command-line option.
+- ✅ Double-check your [config file](/next/running/configuring); options set in config files will be merged with any command-line option.
 - ✅ Look for [root hooks](#root-hooks-are-not-global) in your tests.
   Move them into a [Root Hook Plugin](./root-hook-plugins).
 - ✅ Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
-- ✅ If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](../running/cli#--timeout-ms--t-ms))
+- ✅ If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](/next/running/cli#--timeout-ms--t-ms))
 - ✅ Ensure your tests do not depend on being run in a specific order.
 - ✅ Ensure your tests clean up after themselves; remove temp files, handles, sockets, etc.
   Don't try to share state or resources between test files.
@@ -149,7 +149,7 @@ Free-tier cloud CI services may not provide a suitable multi-core container or V
 Regarding expected performance gains in CI: your mileage may vary.
 It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
 
-It's unlikely (but not impossible) to see a performance gain from a [job count](../running/cli#--jobs-count--j-count) _greater than_ the number of available CPU cores.
+It's unlikely (but not impossible) to see a performance gain from a [job count](/next/running/cli#--jobs-count--j-count) _greater than_ the number of available CPU cores.
 That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
 
 ## Parallel Mode Worker IDs
