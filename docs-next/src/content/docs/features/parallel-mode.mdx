@@ -19,9 +19,9 @@ Authors of third-party libraries built on Mocha should read this!
 
 Due to the nature of the following reporters, they cannot work when running tests in parallel:
 
-- [`json-stream`](../reporters/json-stream)
-- [`markdown`](../reporters/markdown)
-- [`progress`](../reporters/progress)
+- [`json-stream`](/next/reporters/json-stream)
+- [`markdown`](/next/reporters/markdown)
+- [`progress`](/next/reporters/progress)
 
 These reporters expect Mocha to know _how many tests it plans to run_ before execution.
 This information is unavailable in parallel mode, as test files are loaded only when they are about to be run.
@@ -60,7 +60,7 @@ Because of this, the following options, which depend on order, _cannot be used_ 
 
 Running tests in parallel mode will naturally use more system resources.
 The OS may take extra time to schedule and complete some operations, depending on system load.
-For this reason, the timeouts of _individual tests_ may need to be increased either [globally](/next/running/cli#--timeout-ms--t-ms) or [otherwise](./timeouts).
+For this reason, the timeouts of _individual tests_ may need to be increased either [globally](/next/running/cli#--timeout-ms--t-ms) or [otherwise](/next/features/timeouts).
 
 ## "Bail" is "Best Effort"
 
@@ -112,9 +112,9 @@ Here are a couple suggested workarounds:
 
 1. `require('./setup.js')` or `import './setup.js'` at the top of every test file.
    Best avoided for those averse to boilerplate.
-1. _Recommended_: Define root hooks in a "required" file, using the [Root Hook Plugin](./root-hook-plugins) system.
+1. _Recommended_: Define root hooks in a "required" file, using the [Root Hook Plugin](/next/features/root-hook-plugins) system.
 
-If you need to run some code _once and only once_, use a [global fixture](./global-fixtures) instead.
+If you need to run some code _once and only once_, use a [global fixture](/next/features/global-fixtures) instead.
 
 ## No Browser Support
 
@@ -133,7 +133,7 @@ If you find your tests don't work properly when run with [`--parallel`](/next/ru
 - ✅ Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
 - ✅ Double-check your [config file](/next/running/configuring); options set in config files will be merged with any command-line option.
 - ✅ Look for [root hooks](#root-hooks-are-not-global) in your tests.
-  Move them into a [Root Hook Plugin](./root-hook-plugins).
+  Move them into a [Root Hook Plugin](/next/features/root-hook-plugins).
 - ✅ Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
 - ✅ If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](/next/running/cli#--timeout-ms--t-ms))
 - ✅ Ensure your tests do not depend on being run in a specific order.

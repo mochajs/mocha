@@ -6,7 +6,7 @@ title: Global Fixtures
 :::note[New in v8.2.0]
 :::
 
-At first glance, _global fixtures_ seem similar to [root hook plugins](./root-hook-plugins).
+At first glance, _global fixtures_ seem similar to [root hook plugins](/next/features/root-hook-plugins).
 However, unlike root hooks, global fixtures:
 
 1. Are _guaranteed_ to execute _once and only once_
@@ -96,7 +96,7 @@ You could be clever and try to get around this restriction by assigning somethin
 It's probably best to play by the rules!
 :::
 
-Instead, use the global fixture to _start_ the database, and use [root hook plugins](./root-hook-plugins) or plain old [hooks](./hooks) to create a connection.
+Instead, use the global fixture to _start_ the database, and use [root hook plugins](/next/features/root-hook-plugins) or plain old [hooks](/next/features/hooks) to create a connection.
 
 Here's an example of using global fixtures and "before all" hooks to get the job done.
 Note that we do not reference the `server` object anywhere in our tests!

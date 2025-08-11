@@ -6,9 +6,9 @@ title: Root Hook Plugins
 :::note[New in v8.0.0]
 :::
 
-In some cases, you may want a [hook](./hooks) before (or after) every test in every file.
+In some cases, you may want a [hook](/next/features/hooks) before (or after) every test in every file.
 These are called _root hooks_.
-Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see _[Root Hooks Are Not Global](./parallel-mode#root-hooks-are-not-global)_).
+Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see _[Root Hooks Are Not Global](/next/features/parallel-mode#root-hooks-are-not-global)_).
 This still works in v8.0.0, but _not_ when running tests in parallel mode!
 For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
 
@@ -78,7 +78,7 @@ Available root hooks and their behavior:
   - In **both** modes, run _after every test_
 
 :::tip
-If you need to ensure code runs once and only once in any mode, use [global fixtures](./global-fixtures).
+If you need to ensure code runs once and only once in any mode, use [global fixtures](/next/features/global-fixtures).
 :::
 
 As with other hooks, `this` refers to the current context object:
