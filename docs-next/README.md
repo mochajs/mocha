@@ -1,6 +1,6 @@
 # Mocha Docs: Built on Astro Starlight
 
-This is the new site, hosted at https://mochajs.org/next. For details on how to build alongside the old site, see the `docs` directory.
+This is the new site, hosted at https://mochajs.org/next and built with [Astro Starlight](https://starlight.astro.build). For details on how to build alongside the old site, see the `docs` directory.
 
 To run this site alone:
 
