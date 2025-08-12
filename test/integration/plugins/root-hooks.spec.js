@@ -140,17 +140,17 @@ describe('root hooks', function () {
       // --(no-)experimental-detect-module was experimental when these tests were written
       // https://nodejs.org/api/cli.html#--no-experimental-detect-module
       // https://nodejs.org/api/packages.html#syntax-detection
-      // (introduced in Node 21.1.0, 20.10.0)
+      // (introduced in Node 20.10.0, 21.1.0)
       // newer versions of Node no longer fail :)
       function isNewerVersion(vString) {
-        // Latest versions considered "older": 22.11.0, 20.18.3, 18.20.8
+        // Latest versions considered "older": 18.20.8, 20.18.3, 22.11.0
         // (May update after writing)
         return semver.satisfies(vString, '^20.19.0 || ^22.12.0 || ^24.0.0');
       }
 
       describe('on older versions, should fail due to ambiguous file type', function () {
         // --(no-)experimental-detect-module was experimental when these tests were written
-        // (introduced in Node 21.1.0, 20.10.0)
+        // (introduced in Node 20.10.0, 21.1.0)
         // newer versions of Node no longer fail :)
         if (isNewerVersion(process.versions.node)) {
           return true; // skip test on newer Node versions
@@ -177,7 +177,7 @@ describe('root hooks', function () {
         });
 
         it('with --experimental-detect-module', function () {
-          // --experimental-detect-module was introduced in Node 21.1.0, 20.10.0
+          // --experimental-detect-module was introduced in Node 20.10.0, 21.1.0
           // adding the flag to older versions of Node does nothing
           const expectedRegex =
             process.version >= 'v21.1.0'
