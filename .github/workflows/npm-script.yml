@@ -59,7 +59,7 @@ jobs:
         os: ${{ fromJson(needs.resolve-inputs.outputs.os || '["ubuntu-latest"]') }}
         browser: ${{ fromJson(needs.resolve-inputs.outputs.browsers || '[""]') }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - uses: actions/setup-node@v4
