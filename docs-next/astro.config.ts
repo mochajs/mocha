@@ -102,6 +102,10 @@ export default defineConfig({
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
+            {
+              label: "Spies",
+              slug: "explainers/spies",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
