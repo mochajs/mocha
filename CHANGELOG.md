@@ -1,5 +1,29 @@
 # Changelog
 
+## [11.7.2](https://github.com/mochajs/mocha/compare/v11.7.1...v11.7.2) (2025-08-15)
+
+
+### 📚 Documentation
+
+* explain node import swallowing error ([#5401](https://github.com/mochajs/mocha/issues/5401)) ([09f5b2c](https://github.com/mochajs/mocha/commit/09f5b2c9de67ef40d5bd1775c3fca3bdb138f371))
+* fix links in new site ([#5416](https://github.com/mochajs/mocha/issues/5416)) ([b2bc769](https://github.com/mochajs/mocha/commit/b2bc769c6c8d87311ba0bdc9df8b9b588494eba5))
+
+
+### 🧹 Chores
+
+* add issue form for ⚡️ Performance ([#5406](https://github.com/mochajs/mocha/issues/5406)) ([a908b3b](https://github.com/mochajs/mocha/commit/a908b3b86604d41d5751cccfaff505d7092c114f))
+* add test for `-R import-only-loader` ([#5391](https://github.com/mochajs/mocha/issues/5391)) ([6ee5b48](https://github.com/mochajs/mocha/commit/6ee5b483b8c29e0593c7765ad7a5c7b7f7764fc3))
+* also test Node.js 24 in CI ([#5405](https://github.com/mochajs/mocha/issues/5405)) ([15f5980](https://github.com/mochajs/mocha/commit/15f59805287f4c84ab8d057735a391a795be23f1))
+* bump Knip to 5.61.2 ([#5394](https://github.com/mochajs/mocha/issues/5394)) ([f3d7430](https://github.com/mochajs/mocha/commit/f3d743061d6523f7077b21749089e6fb2f9c32e3))
+* cleanup references of --opts ([#5402](https://github.com/mochajs/mocha/issues/5402)) ([1096b37](https://github.com/mochajs/mocha/commit/1096b376c3c3bb9d4256c643ad35a459ed750928))
+* enabled ESLint's no-unused-vars ([#5399](https://github.com/mochajs/mocha/issues/5399)) ([d4168ae](https://github.com/mochajs/mocha/commit/d4168aef4c21f8fd119385da1cf1794a1ec5c2e1))
+* Update experimental module detection test and pin exact Node versions ([#5417](https://github.com/mochajs/mocha/issues/5417)) ([2489090](https://github.com/mochajs/mocha/commit/2489090223f2629e4a380abe4cc6d46858ada922))
+
+
+### 🤖 Automation
+
+* **deps:** bump actions/checkout in the github-actions group ([#5419](https://github.com/mochajs/mocha/issues/5419)) ([03ac2d0](https://github.com/mochajs/mocha/commit/03ac2d0e6e75e95b3dc7fb08f2e1a1117d9718ca))
+
 ## [11.7.1](https://github.com/mochajs/mocha/compare/v11.7.0...v11.7.1) (2025-06-24)
 
 
