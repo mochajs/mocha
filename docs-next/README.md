@@ -1,25 +1,14 @@
-# Mocha Docs vNext: Built on Astro Starlight
+# Mocha Docs: Built on Astro Starlight
 
-After `cd`ing into this directory:
+This is the new site, hosted at https://mochajs.org/next and built with [Astro Starlight](https://starlight.astro.build). For details on how to build alongside the old site, see the `docs` directory.
+
+To run this site alone:
 
 ```shell
+cd docs-next
 npm i
 npm run generate
 npm run dev
 ```
 
-To merge with the old site:
-
-```shell
-npm i
-npm run build-with-old
-```
-
-To preview the old and new site:
-
-```shell
-cd .. # back to root dir
-npm run docs:preview
-```
-
-The new site will be at `http://localhost:8080/next`
+However, note that relative links may resolve with `dev` but fail with `build` and `preview` (see https://github.com/mochajs/mocha/issues/5415).
