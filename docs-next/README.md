@@ -1,21 +1,25 @@
 # Mocha Docs vNext: Built on Astro Starlight
 
-After `cd`ing into this directory:
+## Preview the new site on its own
 
 ```shell
+cd docs-next
 npm i
 npm run generate
 npm run dev
 ```
 
-To merge with the old site:
+## Build the new site into a folder with the old site
 
 ```shell
+cd docs-next
 npm i
 npm run build-with-old
 ```
 
-To preview the old and new site:
+## Preview the old and new site together
+
+First, build the new site into a folder with the old site above.
 
 ```shell
 cd .. # back to root dir
