@@ -67,7 +67,7 @@ jobs:
       os: 'ubuntu-latest,windows-latest'
       # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
       # Ref https://nodejs.org/en/about/previous-releases
-      node-versions: '18.20.8,20.19.4,22.17.1,24.4.1'
+      node-versions: '18.20.8,20.19.4,22.18.0,24.6.0'
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
