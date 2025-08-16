@@ -1,4 +1,4 @@
-Mocha does not come equipped with spies, though libraries like Sinon provide this behaviour if desired. The following is an example of Mocha utilizing Sinon and Should.js to test an EventEmitter:
+Mocha does not come equipped with spies, though libraries like [Sinon](https://github.com/cjohansen/sinon.js) provide this behaviour if desired. The following is an example of Mocha utilizing Sinon and [Should.js](https://github.com/shouldjs/should.js) to test an EventEmitter:
 
 ```javascript
 var sinon = require('sinon'),
