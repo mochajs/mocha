@@ -102,7 +102,14 @@ describe('ParallelBuffered', function () {
     describe('on EVENT_RUN_END', function () {
       it('should remove all listeners', function () {
         runner.emit(EVENT_RUN_END);
-        expect(runner.listeners(), 'to be empty');
+        if (process.version.startsWith('v20.19')) {
+          // Node 20.19.x returns `undefined` instead of `[]` due to a bug
+          // Fix is in Node 22 and 24, but not yet backported as of writing
+          // https://github.com/nodejs/node/issues/56263
+          expect(runner.listeners(), 'to be undefined');
+        } else {
+          expect(runner.listeners(), 'to be empty');
+        }
       });
     });
 
