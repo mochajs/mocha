@@ -28,7 +28,7 @@ describe('EventEmitter', function() {
 })
 ```
 
-The following is the same test, performed without any special spy library, simply utilizing the Mocha `done([err])` callback as a means to assert that the callback has occurred, otherwise resulting in a timeout. Note that Mocha only allows `done()` to be invoked once, and will otherwise error.
+The following is the same test, performed without any special spy library, utilizing the Mocha `done([err])` callback as a means to assert that the callback has occurred, otherwise resulting in a timeout. Note that Mocha only allows `done()` to be invoked once, and will otherwise error.
 
 ```javascript
 describe('EventEmitter', function() {
