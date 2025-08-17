@@ -104,6 +104,10 @@ export default defineConfig({
             },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
+              label: "Shared behaviours",
+              slug: "explainers/shared-behaviours",
+            },
+            {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
             },
