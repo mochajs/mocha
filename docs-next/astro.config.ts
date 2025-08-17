@@ -4,14 +4,11 @@ import { visit } from "unist-util-visit";
 
 const base = "/next";
 
-/**
- * Rewrite links in the markdown AST.
- */
+/** Prepend base URL to non-`/api` absolute links */
 const rewriteLinks = ({ base }: { base: string }) => {
   return (tree: any) => {
     visit(tree, "link", (node) => {
       if (node.url.startsWith("/") && !node.url.startsWith("/api")) {
-        // Remove leading ./ or ../ and prepend base
         node.url = base + node.url;
       }
     });
