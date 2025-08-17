@@ -1,5 +1,8 @@
 {
   "custom-reporter": {
     "title": "Create a Custom Reporter"
+  },
+  "spies": {
+    "title": "Spies"
   }
 }
