@@ -1,8 +1,25 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { visit } from "unist-util-visit";
+
+const base = "/next";
+
+/**
+ * Rewrite links in the markdown AST.
+ */
+const rewriteLinks = ({ base }: { base: string }) => {
+  return (tree: any) => {
+    visit(tree, "link", (node) => {
+      if (node.url.startsWith("/") && !node.url.startsWith("/api")) {
+        // Remove leading ./ or ../ and prepend base
+        node.url = base + node.url;
+      }
+    });
+  };
+};
 
 export default defineConfig({
-  base: "/next",
+  base,
   integrations: [
     starlight({
       components: {
@@ -122,4 +139,7 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  markdown: {
+    remarkPlugins: [[rewriteLinks, { base }]],
+  },
 });
