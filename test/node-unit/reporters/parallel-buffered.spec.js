@@ -21,8 +21,10 @@ const {
 const {EventEmitter} = require('node:events');
 const sinon = require('sinon');
 const rewiremock = require('rewiremock/node');
+const semver = require('semver');
 
 describe('ParallelBuffered', function () {
+  /** @type {EventEmitter} */
   let runner;
   let ParallelBuffered;
 
@@ -102,11 +104,16 @@ describe('ParallelBuffered', function () {
     describe('on EVENT_RUN_END', function () {
       it('should remove all listeners', function () {
         runner.emit(EVENT_RUN_END);
-        if (process.version.startsWith('v20.19')) {
-          // Node 20.19.x returns `undefined` instead of `[]` due to a bug
-          // Fix is in Node 22 and 24, but not yet backported as of writing
-          // https://github.com/nodejs/node/issues/56263
-          expect(runner.listeners(), 'to be undefined');
+        // Some node versions throw instead of returning `[]` due to a bug
+        // Fix is in Node ^22.14 and ^24.0, but not yet backported to 20 as of writing
+        // Problem was introduced in 20.19.0, not present in 20.18.3
+        // https://github.com/nodejs/node/issues/56263
+        const nodeVersionThrows = semver.satisfies(
+          process.versions.node,
+          '^20.19.0 || >=22.0.0 <22.14.0'
+        );
+        if (nodeVersionThrows) {
+          expect(runner.listeners, 'to throw');
         } else {
           expect(runner.listeners(), 'to be empty');
         }
