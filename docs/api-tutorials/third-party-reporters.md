@@ -1,6 +1,6 @@
-  Mocha 1.3.0 allows you to define custom third-party reporters within your own test suite, or by using npm modules. For example if "lcov-reporter" was published to npm, you would simply add it to your package.json in `devDependencies` and use `--reporter lcov-reporter`.
+Mocha 1.3.0 allows you to define custom third-party reporters within your own test suite, or by using npm modules. For example if "lcov-reporter" was published to npm, you would simply add it to your package.json in `devDependencies` and use `--reporter lcov-reporter`.
 
-  Here is a minimalistic sample reporter, which you can use by executing: `mocha --reporter my-reporter.js`
+Here is a minimalistic sample reporter, which you can use by executing: `mocha --reporter my-reporter.js`
 
 ```js
 // my-reporter.js
@@ -36,17 +36,18 @@ For details look at the implementations in [lib/reporters/*](https://github.com/
 Another sample implementation can be found at [mocha-examples: third-party-reporter (GitHub)](https://github.com/mochajs/mocha-examples/tree/main/packages/third-party-reporter).
 
 Mocha provides the following events:
- * **start**: Execution started
- * **waiting**: Execution of root `Suite` delayed
- * **ready**: Execution of root `Suite` started
- * **end**: Execution complete
- * **suite**: Test suite execution started
- * **suite end**: All tests (and sub-suites) have finished
- * **test**: Test execution started
- * **test end**: Test completed
- * **hook**: Hook execution started
- * **hook end**: Hook complete
- * **pass**: Test passed
- * **fail**: Test failed
- * **pending**: Test pending
- * **retry**: Test failed and retries
+
+* **start**: Execution started
+* **waiting**: Execution of root `Suite` delayed
+* **ready**: Execution of root `Suite` started
+* **end**: Execution complete
+* **suite**: Test suite execution started
+* **suite end**: All tests (and sub-suites) have finished
+* **test**: Test execution started
+* **test end**: Test completed
+* **hook**: Hook execution started
+* **hook end**: Hook complete
+* **pass**: Test passed
+* **fail**: Test failed
+* **pending**: Test pending
+* **retry**: Test failed and retries
