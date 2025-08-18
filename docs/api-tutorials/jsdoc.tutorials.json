@@ -4,5 +4,8 @@
   },
   "spies": {
     "title": "Spies"
+  },
+  "third-party-ui": {
+    "title": "Create a test interface"
   }
 }
