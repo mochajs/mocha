@@ -4,5 +4,8 @@
   },
   "spies": {
     "title": "Spies"
+  },
+  "third-party-reporters": {
+    "title": "Third party reporters"
   }
 }
