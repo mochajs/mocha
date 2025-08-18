@@ -104,6 +104,10 @@ export default defineConfig({
             },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
+              label: "Third party UIs",
+              slug: "explainers/third-party-test-interface",
+            },
+            {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
             },
