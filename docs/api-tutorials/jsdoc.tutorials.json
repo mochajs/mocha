@@ -4,5 +4,8 @@
   },
   "spies": {
     "title": "Spies"
+  },
+  "shared-behaviours": {
+    "title": "Shared behaviours"
   }
 }
