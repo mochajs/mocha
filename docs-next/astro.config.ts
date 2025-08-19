@@ -123,6 +123,10 @@ export default defineConfig({
               label: "Third party reporters",
               slug: "explainers/third-party-reporters",
             },
+            {
+              label: "Finding a specific global leak",
+              slug: "explainers/global-leak",
+            },
           ],
           label: "Explainers",
         },
