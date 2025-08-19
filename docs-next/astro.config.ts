@@ -106,6 +106,10 @@ export default defineConfig({
               label: "Shared behaviours",
               slug: "explainers/shared-behaviours",
             },
+            {
+              label: "Spies",
+              slug: "explainers/spies",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Third party UIs",
