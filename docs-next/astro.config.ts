@@ -111,7 +111,7 @@ export default defineConfig({
               slug: "explainers/spies",
             },
             {
-              label: "Tagging",
+              label: "Tagging with --grep",
               slug: "explainers/tagging",
             },
             { label: "Test duration", slug: "explainers/test-duration" },
