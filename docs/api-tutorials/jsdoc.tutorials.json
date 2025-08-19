@@ -13,5 +13,8 @@
   },
   "third-party-reporters": {
     "title": "Third party reporters"
+  },
+  "find-global-leak": {
+    "title": "Find a specific global leak"
   }
 }
