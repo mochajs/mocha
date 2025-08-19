@@ -102,6 +102,14 @@ export default defineConfig({
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
+            {
+              label: "Shared behaviours",
+              slug: "explainers/shared-behaviours",
+            },
+            {
+              label: "Spies",
+              slug: "explainers/spies",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Tagging",
@@ -110,6 +118,10 @@ export default defineConfig({
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
+            },
+            {
+              label: "Third party reporters",
+              slug: "explainers/third-party-reporters",
             },
           ],
           label: "Explainers",

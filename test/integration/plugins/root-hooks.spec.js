@@ -153,7 +153,7 @@ describe('root hooks', function () {
         // (introduced in Node 20.10.0, 21.1.0)
         // newer versions of Node no longer fail :)
         if (isNewerVersion(process.versions.node)) {
-          return true; // skip test on newer Node versions
+          return true; // skip suite on newer Node versions
         }
 
         const filename =
@@ -200,7 +200,7 @@ describe('root hooks', function () {
 
       describe('on newer versions, should work', function () {
         if (!isNewerVersion(process.versions.node)) {
-          return true; // skip test on older Node versions
+          return true; // skip suite on older Node versions
         }
 
         const filename =
@@ -227,7 +227,7 @@ describe('root hooks', function () {
             invokeMochaAsync(
               [
                 '--require=' + require.resolve(filename), // as object
-                 // enabled by default in these newer versions, but clearer to use it explicitly
+                // enabled by default in these newer versions, but clearer to use it explicitly
                 '--experimental-detect-module'
               ],
               'pipe'
