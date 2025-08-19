@@ -8,6 +8,9 @@
   "spies": {
     "title": "Spies"
   },
+  "tagging": {
+    "title": "Tagging with --grep"
+  },
   "third-party-reporters": {
     "title": "Third party reporters"
   }

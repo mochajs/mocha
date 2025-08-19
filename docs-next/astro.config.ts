@@ -110,6 +110,10 @@ export default defineConfig({
               label: "Spies",
               slug: "explainers/spies",
             },
+            {
+              label: "Tagging with --grep",
+              slug: "explainers/tagging",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
