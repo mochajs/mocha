@@ -111,6 +111,10 @@ export default defineConfig({
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
             },
+            {
+              label: "Third party reporters",
+              slug: "explainers/third-party-reporters",
+            },
           ],
           label: "Explainers",
         },
