@@ -102,6 +102,10 @@ export default defineConfig({
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
+            {
+              label: "Shared behaviours",
+              slug: "explainers/shared-behaviours",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Third party reporters",
