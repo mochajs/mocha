@@ -12,17 +12,17 @@ function MyReporter(runner) {
   var passes = 0;
   var failures = 0;
 
-  runner.on('pass', function(test) {
+  runner.on('pass', function (test) {
     passes++;
     console.log('pass: %s', test.fullTitle());
   });
 
-  runner.on('fail', function(test, err) {
+  runner.on('fail', function (test, err) {
     failures++;
     console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
   });
 
-  runner.on('end', function() {
+  runner.on('end', function () {
     console.log('end: %d/%d', passes, passes + failures);
   });
 }
@@ -31,23 +31,23 @@ function MyReporter(runner) {
 // mocha.utils.inherits(MyReporter, mocha.reporters.Spec);
 ```
 
-For details look at the implementations in [lib/reporters/*](https://github.com/mochajs/mocha/tree/master/lib/reporters).
+For details look at the implementations in [lib/reporters/\*](https://github.com/mochajs/mocha/tree/main/lib/reporters).
 
 Another sample implementation can be found at [mocha-examples: third-party-reporter (GitHub)](https://github.com/mochajs/mocha-examples/tree/main/packages/third-party-reporter).
 
 Mocha provides the following events:
 
-* **start**: Execution started
-* **waiting**: Execution of root `Suite` delayed
-* **ready**: Execution of root `Suite` started
-* **end**: Execution complete
-* **suite**: Test suite execution started
-* **suite end**: All tests (and sub-suites) have finished
-* **test**: Test execution started
-* **test end**: Test completed
-* **hook**: Hook execution started
-* **hook end**: Hook complete
-* **pass**: Test passed
-* **fail**: Test failed
-* **pending**: Test pending
-* **retry**: Test failed and retries
+- **start**: Execution started
+- **waiting**: Execution of root `Suite` delayed
+- **ready**: Execution of root `Suite` started
+- **end**: Execution complete
+- **suite**: Test suite execution started
+- **suite end**: All tests (and sub-suites) have finished
+- **test**: Test execution started
+- **test end**: Test completed
+- **hook**: Hook execution started
+- **hook end**: Hook complete
+- **pass**: Test passed
+- **fail**: Test failed
+- **pending**: Test pending
+- **retry**: Test failed and retries
