@@ -121,7 +121,7 @@ export default defineConfig({
             },
             {
               label: "Third party UIs",
-              slug: "explainers/third-party-test-interface",
+              slug: "explainers/third-party-uis",
             },
           ],
           label: "Explainers",

@@ -11,7 +11,7 @@
   "third-party-reporters": {
     "title": "Third party reporters"
   },
-  "third-party-ui": {
-    "title": "Create a test interface"
+  "third-party-uis": {
+    "title": "Third party UIs"
   }
 }
