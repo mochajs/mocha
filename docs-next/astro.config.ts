@@ -102,11 +102,11 @@ export default defineConfig({
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
-            { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Shared behaviours",
               slug: "explainers/shared-behaviours",
             },
+            { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
