@@ -1,5 +1,14 @@
 {
   "custom-reporter": {
     "title": "Create a Custom Reporter"
+  },
+  "shared-behaviours": {
+    "title": "Shared behaviours"
+  },
+  "spies": {
+    "title": "Spies"
+  },
+  "third-party-reporters": {
+    "title": "Third party reporters"
   }
 }
