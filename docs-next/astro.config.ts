@@ -125,7 +125,7 @@ export default defineConfig({
             },
             {
               label: "Find a specific global leak",
-              slug: "explainers/global-leak",
+              slug: "explainers/find-global-leak",
             },
           ],
           label: "Explainers",
