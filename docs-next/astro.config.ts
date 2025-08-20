@@ -95,6 +95,10 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Find a specific global leak",
+              slug: "explainers/find-global-leak",
+            },
+            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
@@ -122,10 +126,6 @@ export default defineConfig({
             {
               label: "Third party reporters",
               slug: "explainers/third-party-reporters",
-            },
-            {
-              label: "Find a specific global leak",
-              slug: "explainers/find-global-leak",
             },
           ],
           label: "Explainers",
