@@ -103,6 +103,10 @@ export default defineConfig({
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Popular assertion libraries that work well with mocha",
+              slug: "explainers/assertion-libraries",
+            },
+            {
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
