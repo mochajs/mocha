@@ -8,6 +8,9 @@
   "find-global-leak": {
     "title": "Find a specific global leak"
   },
+  "mocks-stubs-spies": {
+    "title": "Mocks, Stubs & Spies"
+  },
   "shared-behaviours": {
     "title": "Shared behaviours"
   },
