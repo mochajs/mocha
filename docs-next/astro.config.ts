@@ -91,6 +91,10 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
+              label: "Assertion libraries":
+                slug: "explainers/assertion-libraries"
+            }
+            {
               label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
             },
@@ -101,10 +105,6 @@ export default defineConfig({
             {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
-            },
-            {
-              label: "Popular assertion libraries that work well with mocha",
-              slug: "explainers/assertion-libraries",
             },
             {
               label: "Run cycle overview",
