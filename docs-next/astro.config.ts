@@ -107,6 +107,10 @@ export default defineConfig({
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Mocks, Stubs & Spies",
+              slug: "explainers/mocks-stubs-ties",
+            },
+            {
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
