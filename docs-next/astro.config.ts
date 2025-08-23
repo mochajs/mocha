@@ -95,6 +95,10 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Counting assertions",
+              slug: "explainers/count-assertions",
+            },
+            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
             },
