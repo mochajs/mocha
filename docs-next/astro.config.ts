@@ -95,6 +95,10 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Find global leaks",
+              slug: "explainers/find-global-leaks",
+            },
+            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
