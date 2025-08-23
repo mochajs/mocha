@@ -47,4 +47,8 @@ describe('support ESM only module loader packages', function () {
   it('should support ESM .ts extension', function (done) {
     loadAndExpect('test/compiler-esm/*.ts', done);
   });
+
+  it('should support ESM .mjs extension', function (done) {
+    loadAndExpect('test/compiler-esm/*.mjs', done);
+  });
 });
