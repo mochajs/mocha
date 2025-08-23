@@ -95,6 +95,14 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Counting assertions",
+              slug: "explainers/count-assertions",
+            },
+            {
+              label: "Find global leaks",
+              slug: "explainers/find-global-leaks",
+            },
+            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
@@ -102,10 +110,26 @@ export default defineConfig({
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
+            {
+              label: "Shared behaviours",
+              slug: "explainers/shared-behaviours",
+            },
+            {
+              label: "Spies",
+              slug: "explainers/spies",
+            },
+            {
+              label: "Tagging with --grep",
+              slug: "explainers/tagging",
+            },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
+            },
+            {
+              label: "Third party reporters",
+              slug: "explainers/third-party-reporters",
             },
           ],
           label: "Explainers",
