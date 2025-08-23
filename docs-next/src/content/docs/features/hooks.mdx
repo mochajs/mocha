@@ -87,12 +87,12 @@ describe("Connection", function () {
 
 A hook defined at the top scope of a test file (outside of a suite) is a _root hook_.
 
-As of v8.0.0, [Root Hook Plugins](/next/features/root-hook-plugins) are the preferred mechanism for setting root hooks.
+As of v8.0.0, [Root Hook Plugins](/features/root-hook-plugins) are the preferred mechanism for setting root hooks.
 
 ## Delayed Root Suite
 
 :::caution
-Delayed root suites are incompatible with [parallel mode](/next/features/parallel-mode).
+Delayed root suites are incompatible with [parallel mode](/features/parallel-mode).
 :::
 
 If you need to perform asynchronous operations before any of your suites are run (e.g. for dynamically generating tests), you may delay the root suite.
