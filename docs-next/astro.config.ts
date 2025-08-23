@@ -91,8 +91,16 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
+              label: "Assertion libraries",
+              slug: "explainers/assertion-libraries",
+            },
+            {
               label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
+            },
+            {
+              label: "Find a specific global leak",
+              slug: "explainers/find-global-leak",
             },
             {
               label: "Node.js native ESM support",
