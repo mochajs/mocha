@@ -1,7 +1,6 @@
 While Mocha itself does not provide an assertion layer and cannot provide assertion counting, it's relatively easy to integrate this behavior using hooks. The following is a simplified version of an assertion counter:
 
 ```js
-
 var expected = 0;
 var actual = 0;
 
@@ -28,21 +27,21 @@ function check() {
 beforeEach(reset);
 afterEach(check);
 
-describe('something', function() {
-  it('should work', function(done){
+describe('something', function () {
+  it('should work', function (done) {
     expect(2);
 
-    setTimeout(function() {
-      assert('wahoo')
+    setTimeout(function () {
+      assert('wahoo');
     }, 50);
 
-    setTimeout(function() {
-      assert('hey')
+    setTimeout(function () {
+      assert('hey');
     }, 50);
 
-    setTimeout(function() {
+    setTimeout(function () {
       done();
     }, 100);
-  })
-})
+  });
+});
 ```
