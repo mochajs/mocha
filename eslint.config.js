@@ -71,7 +71,7 @@ module.exports = [
   },
   {
     files: [
-      'test/compiler-esm/*.js'
+      'test/compiler-esm/*.{js,mjs}'
     ],
     languageOptions: {
       sourceType: 'module',
