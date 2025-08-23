@@ -1,8 +1,23 @@
 {
+  "count-assertions": {
+    "title": "Count assertions"
+  },
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
+  "find-global-leaks": {
+    "title": "Find global leaks"
+  },
+  "shared-behaviours": {
+    "title": "Shared behaviours"
+  },
   "spies": {
     "title": "Spies"
+  },
+  "tagging": {
+    "title": "Tagging with --grep"
+  },
+  "third-party-reporters": {
+    "title": "Third party reporters"
   }
 }
