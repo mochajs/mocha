@@ -2,8 +2,8 @@
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
-  "find-global-leak": {
-    "title": "Find a specific global leak"
+  "find-global-leaks": {
+    "title": "Find global leaks"
   },
   "shared-behaviours": {
     "title": "Shared behaviours"
