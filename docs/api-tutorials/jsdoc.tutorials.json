@@ -1,9 +1,9 @@
 {
-  "assertion-libraries": {
-    "title": "Assertion libraries"
-  },
   "custom-reporter": {
     "title": "Create a Custom Reporter"
+  },
+  "related-tools": {
+    "title": "Related tools"
   },
   "shared-behaviours": {
     "title": "Shared behaviours"

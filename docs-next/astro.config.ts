@@ -91,16 +91,16 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              label: "Assertion libraries",
-              slug: "explainers/assertion-libraries",
-            },
-            {
               label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
+            },
+            {
+              label: "Related tools",
+              slug: "explainers/related-tools",
             },
             {
               label: "Run cycle overview",
