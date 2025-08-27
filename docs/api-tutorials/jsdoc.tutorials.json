@@ -1,4 +1,7 @@
 {
+  "count-assertions": {
+    "title": "Count assertions"
+  },
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
