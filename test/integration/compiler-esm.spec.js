@@ -7,7 +7,7 @@ describe('support ESM module loader compilers', function () {
   /**
    * Runs `exec` on an ESM setup for the given file
    * @param {string} filename Path to the file to load
-   * @param {Function} done The done callback
+   * @param {Function} done A Mocha done callback for when the test ends
    */
   function loadAndExpect(filename, done) {
     exec(

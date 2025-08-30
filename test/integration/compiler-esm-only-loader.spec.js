@@ -8,7 +8,7 @@ describe('support ESM only module loader packages', function () {
   /**
    * Load the filename using an ESM-only loader and expect things to work
    * @param {string} filename Name of the file to load
-   * @param {Function} done The done callback
+   * @param {Function} done A Mocha done callback for when the test ends
    */
   function loadAndExpect(filename, done) {
     exec(
