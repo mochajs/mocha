@@ -121,6 +121,10 @@ export default defineConfig({
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Related tools",
+              slug: "explainers/related-tools",
+            },
+            {
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
             },
