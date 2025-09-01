@@ -3,14 +3,14 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
-    "dev": "astro dev",
-    "start": "astro dev",
-    "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
+    "astro": "astro",
     "build": "astro check && astro build",
-    "preview": "astro preview",
     "build-with-old": "npm run generate && npm run build -- --outDir ../docs/_site/next",
-    "astro": "astro"
+    "dev": "astro dev",
+    "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
+    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
+    "preview": "astro preview",
+    "start": "astro dev"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -21,6 +21,7 @@
     "needle": "^3.3.1",
     "sharp": "^0.32.5",
     "starlight-package-managers": "^0.7.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "unist-util-visit": "^5.0.0"
   }
 }
