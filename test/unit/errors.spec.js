@@ -1,6 +1,7 @@
 'use strict';
 
 var errors = require('../../lib/errors');
+var constants = require('../../lib/error-constants');
 const sinon = require('sinon');
 const {createNoFilesMatchPatternError} = require('../../lib/errors');
 
@@ -48,7 +49,7 @@ describe('Errors', function () {
           'to satisfy',
           {
             message: /parallel/,
-            code: errors.constants.FORBIDDEN_EXCLUSIVITY
+            code: constants.FORBIDDEN_EXCLUSIVITY
           }
         );
       });
@@ -62,7 +63,7 @@ describe('Errors', function () {
           'to satisfy',
           {
             message: /--forbid-only/,
-            code: errors.constants.FORBIDDEN_EXCLUSIVITY
+            code: constants.FORBIDDEN_EXCLUSIVITY
           }
         );
       });
