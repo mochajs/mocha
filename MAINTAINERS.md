@@ -377,37 +377,14 @@ By using milestones, we can cherry-pick non-breaking changes into minor or patch
 
 ## Mocha's Release Process
 
-_It's easier to release often._
+Releases are managed by [release-please](https://github.com/googleapis/release-please) and require manual approval after tests pass.
+To create a new release after merging changes, merge the _`chore(main): release...`_ pull request that its automation has created.
+Doing so will:
 
-1. Decide whether this is a `patch`, `minor`, or `major` release.
-1. Checkout `main` in your working copy & pull.
-1. Modify `CHANGELOG.md`; follow the existing conventions in that file.
-   Use the "pull request" number, unless there isn't one.
-   _You do not need to add Markdown links; this is done automatically._
-   1. You can omit stuff from `CHANGELOG.md` that was done by a maintainer, but would have no interest to consumers of Mocha.
-   1. If the changes aren't of interest to consumers but _were not_ made by a maintainer, reference them anyway.
-      It's cool to give attribution!
-1. Use `npm version` (use `npm@8+`) to bump the version; see `npm version --help` for more info.
-   (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
-   1. This command will update the list of authors (from the Git history) in `AUTHORS`, and add GitHub links to `CHANGELOG.md`.
-   1. These changes are then added to the Git "stage" and will be added to the commit.
-1. Push `main` to `origin` with your new tag; e.g. `git push origin main --tags`
-1. Copy & paste the `CHANGELOG.md` lines to a new GitHub "release".
-   Save release as draft.
-1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI and [GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Windows+CI%22).
-   1. Once the build is green, you'll want to trigger an update of `mochajs.org`:
-   1. _If you're doing a prerelease_, fast-forward the `next` branch to `main`, and push it.
-      This updates [https://next.mochajs.org](https://next.mochajs.org).
-      That's all.
-   1. _If this is NOT a prerelease_, fast-forward the `mochajs.org` branch to `main` and push it.
-      This updates [https://mochajs.org](https://mochajs.org).
-   1. _If this is a "final" release_ (the first release of a major _after_ one or more prereleases) then remove the `next` tag from npm via `npm dist-tag rm next`.
-1. Finally, you're satisfied with the release notes, open your draft release on GitHub, then click "publish."
-1. Back in your working copy, run `npm publish`.
-   _If you're doing a prerelease, ensure that you use `--tag=next`._
-1. Announce the update on Twitter or just tell your dog or something.
+1. Create a new GitHub release
+2. Cause a CI job to run on `main` that will publish the package to npm
 
-_Note: there are too many steps above._
+You'll then need to go to the `chore(main): release ...` commit _Publish to npm_ job run logs and click the _Review pending deployments_ link.
 
 ## About The OpenJS Foundation
 
