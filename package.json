@@ -129,7 +129,6 @@
     "@rollup/plugin-multi-entry": "^4.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",
     "@types/node": "^22.15.3",
-    "@types/workerpool": "^6.4.7",
     "@types/yargs": "^17.0.33",
     "@test/esm-only-loader": "./test/compiler-fixtures/esm-only-loader",
     "chai": "^4.3.4",
