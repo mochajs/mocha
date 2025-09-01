@@ -5,28 +5,20 @@
     "bin/_mocha!",
     "browser-entry.js!",
     "index.js!",
-    "lib/cli/index.js!",
-    ".eleventy.js",
-    "karma.conf.js"
+    "lib/cli/index.js!"
   ],
-  "project": [
-    "{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"
-  ],
+  "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.js"
   ],
   "ignoreDependencies": [
     "@mocha/docdash",
+    "@test/esm-only-loader",
     "coffeescript",
     "fake",
     "jsdoc-ts-utils",
-    "karma-chrome-launcher",
-    "karma-mocha-reporter",
-    "karma-mocha",
-    "karma-sauce-launcher",
-    "non-existent-package",
-    "prettier"
+    "non-existent-package"
   ],
   "mocha": {
     "entry": ["test/**/*.{js,ts,mjs,cjs}"]

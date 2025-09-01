@@ -23,6 +23,7 @@ module.exports = [
     },
     rules: {
       'n/prefer-node-protocol': 'error',
+      'no-unused-vars': 'error',
       strict: ['error', 'global'],
 
       'no-var': 'off',
@@ -70,7 +71,7 @@ module.exports = [
   },
   {
     files: [
-      'test/compiler-esm/*.js'
+      'test/compiler-esm/*.{js,mjs}'
     ],
     languageOptions: {
       sourceType: 'module',
