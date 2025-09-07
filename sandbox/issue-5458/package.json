@@ -1,0 +1,9 @@
+{
+    "scripts": {
+        "test": "mocha test.js --no-config"
+    },
+    "dependencies": {
+        "mocha": "^11.7.2"
+    },
+    "type": "module"
+}
