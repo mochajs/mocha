@@ -1,22 +1,25 @@
 import assert from "node:assert";
 
 describe("my suite", () => {
-  // mutable global ref
-  let callCount = 0;
+  /** "Fake" hook explicitly called in wrapper function */
+  function myBeforeEach() {
+    return { callCount: 0 };
+  }
 
-  // reset global ref before each test
-  beforeEach(() => {
-    callCount = 0;
-  });
+  function wrappedIt(name, fn) {
+    it(name, function () {
+      const initialState = myBeforeEach();
+      return fn(initialState);
+    });
+  }
 
-  it("should mutate call count asynchronously (broken but passes)", (/* done */) => {
+  wrappedIt("should mutate call count asynchronously (broken but passes)", ({ callCount }) => {
     setTimeout(() => {
       callCount += 1;
-      /* done() */
     }, 100);
   });
 
-  it("should read call count asynchronously (correct but fails)", async () => {
+  wrappedIt("should read call count asynchronously (correct but fails)", async ({ callCount }) => {
     await new Promise((resolve) => setTimeout(resolve, 120));
     assert.equal(callCount, 0);
   });
