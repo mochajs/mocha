@@ -149,6 +149,10 @@ export default defineConfig({
               label: "Third party reporters",
               slug: "explainers/third-party-reporters",
             },
+            {
+              label: "Third party UIs",
+              slug: "explainers/third-party-uis",
+            },
           ],
           label: "Explainers",
         },
