@@ -1,5 +1,13 @@
 # Changelog
 
+## [11.7.3](https://github.com/mochajs/mocha/compare/v11.7.2...v11.7.3) (2025-09-07)
+
+
+### 📚 Documentation
+
+* migrate third party UIs wiki page to docs ([#5434](https://github.com/mochajs/mocha/issues/5434)) ([6654704](https://github.com/mochajs/mocha/commit/66547045cb9bd2fa8209b34c36da2a5ef49d23fc))
+* update maintainer release notes for release-please ([#5453](https://github.com/mochajs/mocha/issues/5453)) ([185ae1e](https://github.com/mochajs/mocha/commit/185ae1eabe5c1e92c758bdfb398f7f47b6ef9483))
+
 ## [11.7.2](https://github.com/mochajs/mocha/compare/v11.7.1...v11.7.2) (2025-09-01)
 
 
