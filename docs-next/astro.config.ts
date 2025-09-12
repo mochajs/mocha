@@ -117,6 +117,10 @@ export default defineConfig({
               slug: "explainers/find-global-leaks",
             },
             {
+              label: "Mess with globals",
+              slug: "explainers/mess-with-globals",
+            },
+            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
@@ -137,10 +141,15 @@ export default defineConfig({
               slug: "explainers/spies",
             },
             {
+              label: "Stub stdout",
+              slug: "explainers/stub-stdout",
+            },
+            {
               label: "Tagging with --grep",
               slug: "explainers/tagging",
             },
-            { label: "Test duration", slug: "explainers/test-duration" },
+            { label: "Test duration",
+              slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
@@ -152,6 +161,10 @@ export default defineConfig({
             {
               label: "Third party UIs",
               slug: "explainers/third-party-uis",
+            },
+            {
+              label: "Use environment variables",
+              slug: "explainers/environment-variables",
             },
           ],
           label: "Explainers",
