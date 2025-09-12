@@ -109,12 +109,20 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Compilers deprecation",
+              slug: "explainers/compiler-deprecation",
+            },
+            {
               label: "Counting assertions",
               slug: "explainers/count-assertions",
             },
             {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
+            },
+            {
+              label: "Mocha with node webkit",
+              slug: "explainers/mocha-with-node-webkit",
             },
             {
               label: "Node.js native ESM support",
