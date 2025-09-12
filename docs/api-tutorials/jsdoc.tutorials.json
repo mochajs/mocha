@@ -5,6 +5,12 @@
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
+  "environment-variables": {
+    "title": "Environment variables"
+  },
+  "mess-with-globals": {
+    "title": "Mess with globals"
+  },
   "related-tools": {
     "title": "Related tools"
   },
@@ -13,6 +19,9 @@
   },
   "spies": {
     "title": "Spies"
+  },
+  "stub-stdout": {
+    "title" : "Stub stdout"
   },
   "tagging": {
     "title": "Tagging with --grep"
