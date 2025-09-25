@@ -21,7 +21,7 @@ describe('esm-utils', function () {
       );
     });
 
-    it('should show a syntax error message when importing a TypeScript file with a syntax complaint', async function () {
+    it('should show a syntax error message when importing a TypeScript file with invalid syntax', async function () {
       return expect(
         () =>
           esmUtils.requireOrImport(
