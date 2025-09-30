@@ -19,5 +19,8 @@
   },
   "third-party-reporters": {
     "title": "Third party reporters"
+  },
+  "third-party-uis": {
+    "title": "Third party UIs"
   }
 }
