@@ -20,6 +20,21 @@ describe('esm-utils', function () {
         }
       );
     });
+
+    it('should show a syntax error message when importing a TypeScript file with invalid syntax', async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            '../../test/node-unit/fixtures/broken-syntax.ts'
+          ),
+        'to be rejected with error satisfying',
+        {
+          name: 'SyntaxError',
+          message:
+            /Invalid or unexpected token|Expected ident/
+        }
+      );
+    });
   });
 
   describe('loadFilesAsync()', function () {
