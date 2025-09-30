@@ -1,5 +1,25 @@
 # Changelog
 
+## [11.7.3](https://github.com/mochajs/mocha/compare/v11.7.2...v11.7.3) (2025-09-30)
+
+
+### 🩹 Fixes
+
+* use original require() error for TS files if ERR_UNKNOWN_FILE_EXTENSION ([#5408](https://github.com/mochajs/mocha/issues/5408)) ([ebdbc48](https://github.com/mochajs/mocha/commit/ebdbc487693254498de62068c59e3e43d078eff1))
+
+
+### 📚 Documentation
+
+* add security escalation policy ([#5466](https://github.com/mochajs/mocha/issues/5466)) ([4122c7d](https://github.com/mochajs/mocha/commit/4122c7d13d0941be451365397fbf43e1f3103027))
+* fix duplicate global leak documentation ([#5461](https://github.com/mochajs/mocha/issues/5461)) ([1164b9d](https://github.com/mochajs/mocha/commit/1164b9da895e56cf745acda2792e634080018ff6))
+* migrate third party UIs wiki page to docs ([#5434](https://github.com/mochajs/mocha/issues/5434)) ([6654704](https://github.com/mochajs/mocha/commit/66547045cb9bd2fa8209b34c36da2a5ef49d23fc))
+* update maintainer release notes for release-please ([#5453](https://github.com/mochajs/mocha/issues/5453)) ([185ae1e](https://github.com/mochajs/mocha/commit/185ae1eabe5c1e92c758bdfb398f7f47b6ef9483))
+
+
+### 🤖 Automation
+
+* **deps:** bump actions/setup-node in the github-actions group ([#5459](https://github.com/mochajs/mocha/issues/5459)) ([48c6f40](https://github.com/mochajs/mocha/commit/48c6f4068b5d22ebc49220900f0b53f8ecdc2b74))
+
 ## [11.7.2](https://github.com/mochajs/mocha/compare/v11.7.1...v11.7.2) (2025-09-01)
 
 
