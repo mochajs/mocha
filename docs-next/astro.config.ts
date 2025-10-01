@@ -109,6 +109,10 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Compilers deprecation",
+              slug: "explainers/compilers-deprecation",
+            },
+            {
               label: "Counting assertions",
               slug: "explainers/count-assertions",
             },
