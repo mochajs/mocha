@@ -1,5 +1,22 @@
 # Changelog
 
+## [11.7.4](https://github.com/mochajs/mocha/compare/v11.7.3...v11.7.4) (2025-10-01)
+
+
+### 🩹 Fixes
+
+* watch mode using chokidar v4 ([#5379](https://github.com/mochajs/mocha/issues/5379)) ([c2667c3](https://github.com/mochajs/mocha/commit/c2667c3b3fca33c21306f59a1cca55bb7e1dac1f))
+
+
+### 📚 Documentation
+
+* migrate remaining legacy wiki pages to main documentation ([#5465](https://github.com/mochajs/mocha/issues/5465)) ([bff9166](https://github.com/mochajs/mocha/commit/bff91660733b71b124aad939538dee7747cfbeb8))
+
+
+### 🧹 Chores
+
+* remove trailing spaces ([#5475](https://github.com/mochajs/mocha/issues/5475)) ([7f68e5c](https://github.com/mochajs/mocha/commit/7f68e5c1565606bcebeb715b8591c52973d00dff))
+
 ## [11.7.3](https://github.com/mochajs/mocha/compare/v11.7.2...v11.7.3) (2025-09-30)
 
 
