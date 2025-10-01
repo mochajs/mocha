@@ -110,7 +110,7 @@ export default defineConfig({
             },
             {
               label: "Compilers deprecation",
-              slug: "explainers/compiler-deprecation",
+              slug: "explainers/compilers-deprecation",
             },
             {
               label: "Counting assertions",
