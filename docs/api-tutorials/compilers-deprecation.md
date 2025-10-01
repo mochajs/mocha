@@ -1,14 +1,12 @@
-# Compilers deprecation
-
-If you're here, you probably hit the deprecation notice.  Sorry about that!
+If you're here, you probably hit the deprecation notice. Sorry about that!
 
 ## Will it break?
 
-This is a *soft* deprecation, which means you get nagged about it, but it won't break (yet).
+This is a _soft_ deprecation, which means you get nagged about it, but it won't break (yet).
 
 ## Make it go away
 
-To suppress this warning, execute `mocha` with the `--no-deprecation` flag (though you won't get notice of any *other* deprecations you may encounter either).
+To suppress this warning, execute `mocha` with the `--no-deprecation` flag (though you won't get notice of any _other_ deprecations you may encounter either).
 
 ## ... but why?
 
@@ -18,7 +16,7 @@ To suppress this warning, execute `mocha` with the `--no-deprecation` flag (thou
 
 Let's say you want to compile using CoffeeScript. Ensure that you have the coffeescript package installed as a dev dependency:
 
-```npm install coffeescript --save-dev```
+`npm install coffeescript --save-dev`
 
 Then update your package.json with the relevant require statement: `--require coffeescript/register`.
 
@@ -31,7 +29,7 @@ Here's a list of popular compilers/transpilers:
 - LiveScript: `--compilers ls:livescript` becomes `--require livescript`
 - (feel free to add more examples!)
 
-You'll have to handle file extensions as well. Mocha, by default, only loads `.js` files when given a directory (and the default directory is `test`).  Therefore, to use a *different* file extension (such as `.coffee` or `.ts`), you will need to supply a *glob* instead of simply a directory.  If this was how you ran Mocha pre-v4:
+You'll have to handle file extensions as well. Mocha, by default, only loads `.js` files when given a directory (and the default directory is `test`). Therefore, to use a _different_ file extension (such as `.coffee` or `.ts`), you will need to supply a _glob_ instead of simply a directory. If this was how you ran Mocha pre-v4:
 
 ```bash
 $ mocha --compilers coffee:coffee-script/register --recursive ./test
@@ -44,9 +42,9 @@ $ mocha --require coffeescript/register "test/**/*.js"
 ```
 
 When you wrap a glob in quotes, file discovery is handed to the [glob](https://npm.im/glob) package.
- It's *recommended* to wrap in double-quotes, because the result should be the same regardless of your shell or environment (Windows/Linux/macOS, etc.).
+It's _recommended_ to wrap in double-quotes, because the result should be the same regardless of your shell or environment (Windows/Linux/macOS, etc.).
 
-[glob](https://npm.im/glob) is powerful.  For instance, if your `test` dir has tests written in *both* JS *and* CoffeeScript, you could do this:
+[glob](https://npm.im/glob) is powerful. For instance, if your `test` dir has tests written in _both_ JS _and_ CoffeeScript, you could do this:
 
 ```bash
 $ mocha --require coffeescript/register "test/**/*.{js,coffee}"
@@ -62,4 +60,4 @@ $ mocha --require coffeescript/register --watch --watch-extensions js,coffee "te
 
 ## This isn't working
 
-Any questions or trouble?  Ask for help [in our Gitter chat room](https://gitter.im/mochajs/mocha)!
+Any questions or trouble? Ask for help [in our Gitter chat room](https://gitter.im/mochajs/mocha)!
