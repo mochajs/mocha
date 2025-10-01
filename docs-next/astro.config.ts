@@ -121,10 +121,6 @@ export default defineConfig({
               slug: "explainers/find-global-leaks",
             },
             {
-              label: "Mocha with node webkit",
-              slug: "explainers/mocha-with-node-webkit",
-            },
-            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
