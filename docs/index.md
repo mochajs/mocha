@@ -67,7 +67,7 @@ or as a development dependency for your project:
 $ npm install --save-dev mocha
 ```
 
-> As of v11.0.0, Mocha requires [Node.js](https://nodejs.org) `^18.18.0 || ^20.9.0 || >=21.1.0`.
+> As of v12.0.0, Mocha requires [Node.js](https://nodejs.org) `^20.19.0 || >=22.12.0`.
 
 ## Getting Started
 
@@ -2175,12 +2175,12 @@ A typical setup might look something like the following, where we call `mocha.se
 ```
 
 Mocha supports the latest major versions of evergreen browsers available when Mocha's oldest supported Node.js major version was released.
-As of Mocha v11.0.0, that includes the following browser versions that were stable as of [Node.js 18.10.0](https://nodejs.org/en/blog/release/v18.0.0)'s release on April 19, 2022:
+As of Mocha v12.0.0, that includes the following browser versions that were stable as of [Node.js 20.0.0](https://nodejs.org/en/blog/release/v20.0.0)'s release on April 18, 2023:
 
-- [Chrome 100](https://developer.chrome.com/blog/new-in-chrome-100)
-- [Edge 100](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1000118544-april-15)
-- [Firefox 99](https://www.mozilla.org/en-US/firefox/99.0/releasenotes)
-- [Safari 15.4](https://developer.apple.com/documentation/safari-release-notes/safari-15_4-release-notes)
+- [Chrome 112](https://developer.chrome.com/blog/new-in-chrome-112)
+- [Edge 112](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1120172248-april-14-2023)
+- [Firefox 112](https://www.mozilla.org/en-US/firefox/112.0/releasenotes)
+- [Safari 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes)
 
 ### Grep
 
