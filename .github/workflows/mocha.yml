@@ -23,7 +23,7 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      node-versions: '18,20,22,24'
+      node-versions: '20,22,24'
       npm-script: test-smoke
 
   test-node-lts:
