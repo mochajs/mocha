@@ -33,10 +33,10 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           show-progress: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
           node-version: '22.11.0'
