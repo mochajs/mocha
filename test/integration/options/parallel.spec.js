@@ -6,9 +6,36 @@ const {
   getSummary,
   resolveFixturePath
 } = require('../helpers');
-const pidtree = require('pidtree');
+const psList = require('ps-list').default;
 
 const REPORTER_FIXTURE_PATH = resolveFixturePath('options/parallel/test-a');
+
+/**
+ * Get child processes of a given PID using ps-list
+ * @param {number} pid - Parent process ID
+ * @param {Object} options - Options object
+ * @param {boolean} options.root - Include the parent PID in results
+ * @returns {Promise<number[]>} Array of child process PIDs
+ */
+async function getChildPids(pid) {
+  return (
+    (await psList())
+      // ppid = parent process ID
+      .filter(proc => proc.ppid === pid)
+      .map(proc => proc.pid)
+  );
+}
+
+/**
+ * Check if a process exists using ps-list
+ * @param {number} pid - Process ID to check
+ * @param {Object} options - Options object
+ * @param {boolean} options.root - Include the PID itself in results
+ * @returns {Promise<boolean>} Array with the PID if exists, null otherwise
+ */
+async function checkProcessExists(pid) {
+  return (await psList()).some(proc => proc.pid === pid);
+}
 
 /**
  * Run a test fixture with the same reporter in both parallel and serial modes,
@@ -55,7 +82,7 @@ async function assertReporterOutputEquality(reporter) {
 async function waitForChildPids(pid) {
   let childPids = [];
   while (!childPids.length) {
-    childPids = await pidtree(pid);
+    childPids = await getChildPids(pid);
     await new Promise(resolve => setTimeout(resolve, 100));
   }
   return childPids;
@@ -475,27 +502,12 @@ describe('--parallel', function () {
     });
   });
 
+  // - `waitForChildPids` polls for created children
+  // - `await promise` waits for `invokeMochaAsync` to complete, which should
+  //   kill all children
+  // - `checkProcessExists` validates that each child was killed
+  // - if any weren't killed, the test fails
   describe('pool shutdown', function () {
-    // these are unusual and deserve some explanation. we start our mocha
-    // subprocess, and in parallel mode, that subprocess spawns more
-    // subprocesses. `invokeMochaAsync` returns a tuple of a `mocha`
-    // `ChildProcess` object and a `Promise` (which will resolve/reject when the
-    // subprocess finishes its test run). we use the `pid` from the `mocha`
-    // `ChildProcess` to ask `pidtree` (https://npm.im/pidtree) for the
-    // children, which are the worker processes. the `mocha` subprocess does
-    // _not_ immediately spawn worker processes, so we need to _poll_ for child
-    // processes. when we have them, we record them.  once the `Promise`
-    // resolves, we then attempt to get pid information for our `mocha` process
-    // and _each_ worker process we retrieved earlier. if a process does not
-    // exist, `pidtree` will reject--this is what we _want_ to happen.  we check
-    // each explicitly in case the child processes are somehow orphaned.
-    //
-    // we return `null` for each in the case of the expected rejection--if the
-    // `Promise.all()` call results in an array containing anything _except_ a
-    // bunch of `null`s, then this test fails, because one of the processes is
-    // still running. this behavior is dependent on `workerpool@6.0.2`, which
-    // added a guarantee that terminating the pool will _wait_ until all child
-    // processes have actually exited.
     describe('during normal operation', function () {
       it('should not leave orphaned processes around', async function () {
         const [{pid}, promise] = invokeMochaAsync([
@@ -506,17 +518,13 @@ describe('--parallel', function () {
         await promise;
         return expect(
           Promise.all(
-            [pid, ...childPids].map(async childPid => {
-              let pids = null;
-              try {
-                pids = await pidtree(childPid, {root: true});
-              } catch (ignored) {}
-              return pids;
-            })
+            [pid, ...childPids].map(
+              async childPid => await checkProcessExists(childPid)
+            )
           ),
           'when fulfilled',
           'to have items satisfying',
-          null
+          false
         );
       });
     });
@@ -532,17 +540,13 @@ describe('--parallel', function () {
         await promise;
         return expect(
           Promise.all(
-            [pid, ...childPids].map(async childPid => {
-              let pids = null;
-              try {
-                pids = await pidtree(childPid, {root: true});
-              } catch (ignored) {}
-              return pids;
-            })
+            [pid, ...childPids].map(
+              async childPid => await checkProcessExists(childPid)
+            )
           ),
           'when fulfilled',
           'to have items satisfying',
-          null
+          false
         );
       });
     });
