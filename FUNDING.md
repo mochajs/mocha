@@ -4,7 +4,7 @@ This project follows [Collective Funds Guidelines 0.1](https://github.com/collec
 
 ## Rates
 
-* TSC Members: $50.00 USD/hour
+* TSC Members: $75.00 USD/hour
 * Project Contributors: $50.00 USD/hour
 
 ## Additional notes
