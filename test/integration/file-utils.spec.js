@@ -17,7 +17,7 @@ describe('file utils', function () {
     tmpDir = result.dirpath;
     removeTempDir = result.removeTempDir;
 
-    tmpFile = filepath => path.join(tmpDir, filepath);
+    tmpFile = (...args) => path.join(...[tmpDir, ...args]);
 
     touchFile(tmpFile('mocha-utils.js'));
     if (SYMLINK_SUPPORT) {
@@ -63,6 +63,22 @@ describe('file utils', function () {
 
       ex.and('to have length', expectedLength);
     });
+
+    describe('when containing subdirectories', function () {
+      beforeEach(function () {
+        touchFile(tmpFile('types','mocha-utils.d.ts'));
+      });
+
+      it('should find files in subdirectories', function () {
+        expect(
+          lookupFiles(tmpDir, ['.d.ts'], true).map(foundFilepath =>
+            path.normalize(foundFilepath)
+          ),
+          'to contain',
+          tmpFile('types', 'mocha-utils.d.ts')
+        ).and('to have length', 1);
+      });
+    })
 
     describe('when given `extension` option', function () {
       describe('when provided a directory for the filepath', function () {
@@ -249,6 +265,15 @@ describe('file utils', function () {
               [filepath]
             );
           });
+        });
+      });
+    });
+
+    describe('when provided path to non existing file', function () {
+      it('should throw an exception', function () {
+        expect(() => lookupFiles(tmpFile('mocha-utils-faux')), 'to throw', {
+          name: 'Error',
+          code: 'ERR_MOCHA_NO_FILES_MATCH_PATTERN'
         });
       });
     });
