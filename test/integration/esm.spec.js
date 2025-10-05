@@ -90,12 +90,16 @@ describe('esm', function () {
       fixture,
       [
         '--unhandled-rejections=warn',
+        // paths are relative to root
+        // '--import ./test/integration/fixtures/esm/loader-with-module-not-found/loader-import.js'
+        // `--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs", pathToFileURL("./"));'`
         '--loader=./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs'
       ],
       {
         stdio: 'pipe'
       }
     ).catch(err => err);
+    console.log(err.output);
 
     expect(err.output, 'to contain', 'ERR_MODULE_NOT_FOUND').and(
       'to contain',
