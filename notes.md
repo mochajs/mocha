@@ -34,7 +34,7 @@ Loading from loader that recognizes TS
 This command fails:
 
 ```
-
+DEBUG=* npx mocha --grep "module with a loader" --timeout 3000 "test/integration/esm.spec.js"
 ```
 
 with this output:
