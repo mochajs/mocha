@@ -30,8 +30,7 @@ describe('esm-utils', function () {
         'to be rejected with error satisfying',
         {
           name: 'SyntaxError',
-          message:
-            /Invalid or unexpected token|Expected ident/
+          message: /Invalid or unexpected token|Expected ident/
         }
       );
     });

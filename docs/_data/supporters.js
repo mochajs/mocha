@@ -25,7 +25,8 @@ const blocklist = new Set(require('./blocklist.json'));
  * In addition to the blocklist, any account slug matching this regex will not
  * be displayed on the website.
  */
-const BLOCKED_STRINGS = /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|follow|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground)/i;
+const BLOCKED_STRINGS =
+  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|follow|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -160,7 +161,8 @@ const getAllOrders = async (slug = 'mochajs') => {
 };
 
 const isAllowed = ({name, slug, website, categories}) => {
-  const allowed = !blocklist.has(slug) &&
+  const allowed =
+    !blocklist.has(slug) &&
     !BLOCKED_STRINGS.test(name) &&
     !BLOCKED_STRINGS.test(slug) &&
     !BLOCKED_STRINGS.test(website) &&
@@ -286,8 +288,11 @@ const getSupporters = async () => {
   // Eventually, we'll sunset the classic docs and only have docs-next.
   // At that point we'll have supporters.js only used for writing files.
   if (process.argv.includes('--write-supporters-json')) {
-    await mkdir("src/content/data", { recursive: true });
-    await writeFile('src/content/data/supporters.json', JSON.stringify(supporters, null, 4));
+    await mkdir('src/content/data', {recursive: true});
+    await writeFile(
+      'src/content/data/supporters.json',
+      JSON.stringify(supporters, null, 4)
+    );
   }
   return supporters;
 };

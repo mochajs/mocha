@@ -32,12 +32,15 @@ describe('parallel run', () => {
   });
 
   it('should correctly handle circular array references in an exception', async () => {
-    const result = await runMochaJSONAsync('parallel/circular-error-array.mjs', [
-      '--parallel',
-      '--jobs',
-      '2',
-      require.resolve('./fixtures/parallel/testworkerid1.mjs')
-    ]);
+    const result = await runMochaJSONAsync(
+      'parallel/circular-error-array.mjs',
+      [
+        '--parallel',
+        '--jobs',
+        '2',
+        require.resolve('./fixtures/parallel/testworkerid1.mjs')
+      ]
+    );
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, 'Foo');
@@ -45,14 +48,17 @@ describe('parallel run', () => {
   });
 
   it('should correctly handle an exception with retries', async () => {
-    const result = await runMochaJSONAsync('parallel/circular-error-array.mjs', [
-      '--parallel',
-      '--jobs',
-      '2',
-      '--retries',
-      '1',
-      require.resolve('./fixtures/parallel/testworkerid1.mjs')
-    ]);
+    const result = await runMochaJSONAsync(
+      'parallel/circular-error-array.mjs',
+      [
+        '--parallel',
+        '--jobs',
+        '2',
+        '--retries',
+        '1',
+        require.resolve('./fixtures/parallel/testworkerid1.mjs')
+      ]
+    );
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, 'Foo');
@@ -60,16 +66,21 @@ describe('parallel run', () => {
   });
 
   it('should correctly handle circular object references in an exception', async () => {
-    const result = await runMochaJSONAsync('parallel/circular-error-object.mjs', [
-      '--parallel',
-      '--jobs',
-      '2',
-      require.resolve('./fixtures/parallel/testworkerid1.mjs')
-    ]);
+    const result = await runMochaJSONAsync(
+      'parallel/circular-error-object.mjs',
+      [
+        '--parallel',
+        '--jobs',
+        '2',
+        require.resolve('./fixtures/parallel/testworkerid1.mjs')
+      ]
+    );
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, 'Oh no!');
-    assert.deepStrictEqual(result.failures[0].err.values, [ { toB: { toA: '[Circular]' } } ]);
+    assert.deepStrictEqual(result.failures[0].err.values, [
+      {toB: {toA: '[Circular]'}}
+    ]);
   });
 
   it('should correctly handle a non-writable getter reference in an exception', async () => {

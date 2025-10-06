@@ -4,7 +4,7 @@
 // project's `package.json`.
 {
   "diff": true,
-  "extension": ["js","cjs","mjs"],
+  "extension": ["js", "cjs", "mjs"],
   "package": /* 📦 */ "./package.json",
   "reporter": /* 📋 */ "spec",
   "slow": "75",

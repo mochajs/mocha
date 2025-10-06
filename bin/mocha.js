@@ -111,7 +111,8 @@ if (mochaArgs['node-option'] || Object.keys(nodeArgs).length || hasInspect) {
   proc.on('exit', (code, signal) => {
     process.on('exit', () => {
       if (signal) {
-        signal = typeof signal === 'string' ? os.constants.signals[signal] : signal;
+        signal =
+          typeof signal === 'string' ? os.constants.signals[signal] : signal;
         if (mochaArgs['posix-exit-codes'] === true) {
           process.exitCode = SIGNAL_OFFSET + signal;
         }

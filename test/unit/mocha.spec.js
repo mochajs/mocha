@@ -376,8 +376,8 @@ describe('Mocha', function () {
       });
     });
 
-    describe('passOnFailingTestSuite()', function() {
-      it('should set the passOnFailingTestSuite option to false', function() {
+    describe('passOnFailingTestSuite()', function () {
+      it('should set the passOnFailingTestSuite option to false', function () {
         mocha.passOnFailingTestSuite();
         expect(
           mocha.options,
@@ -387,7 +387,7 @@ describe('Mocha', function () {
         );
       });
 
-      it('should set the passOnFailingTestSuite option to true', function() {
+      it('should set the passOnFailingTestSuite option to true', function () {
         mocha.passOnFailingTestSuite(true);
         expect(
           mocha.options,

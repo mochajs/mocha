@@ -2,7 +2,8 @@
 
 var runMochaJSON = require('./helpers').runMochaJSON;
 var invokeMocha = require('./helpers').invokeMocha;
-var MULTIPLE_DONE = require('../../lib/error-constants').constants.MULTIPLE_DONE;
+var MULTIPLE_DONE = require('../../lib/error-constants').constants
+  .MULTIPLE_DONE;
 
 describe('multiple calls to done()', function () {
   var res;

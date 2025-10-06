@@ -23,11 +23,10 @@ describe('support CJS require.extension compilers with esm syntax', function () 
           expect(results.tests[index], 'to have property', 'fullTitle');
           titles.push(results.tests[index].fullTitle);
         }
-        expect(
-          titles,
-          'to contain',
-          'cjs written in esm should work',
-        ).and('to have length', 1);
+        expect(titles, 'to contain', 'cjs written in esm should work').and(
+          'to have length',
+          1
+        );
         done();
       }
     );
@@ -52,11 +51,10 @@ describe('support CJS require.extension compilers with esm syntax', function () 
           expect(results.tests[index], 'to have property', 'fullTitle');
           titles.push(results.tests[index].fullTitle);
         }
-        expect(
-          titles,
-          'to contain',
-          'cts written in esm should work',
-        ).and('to have length', 1);
+        expect(titles, 'to contain', 'cts written in esm should work').and(
+          'to have length',
+          1
+        );
         done();
       }
     );

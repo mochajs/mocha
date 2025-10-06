@@ -13,7 +13,7 @@ describe('how to debug Mocha when it hangs', function () {
     global.asyncDump();
   });
 
-  it('should complete, but Mocha should not exit', function(done) {
+  it('should complete, but Mocha should not exit', function (done) {
     const sock = net.createConnection(10101, () => {
       assert.deepStrictEqual(sock.address().family, 'IPv4');
       done();

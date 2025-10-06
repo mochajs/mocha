@@ -9,7 +9,7 @@ const filterStack = stackTraceFilter();
 
 const hook = createHook({
   init(asyncId, type, triggerAsyncId) {
-    allResources.set(asyncId, {type, triggerAsyncId, stack: (new Error()).stack});
+    allResources.set(asyncId, {type, triggerAsyncId, stack: new Error().stack});
   },
   before(asyncId) {
     resourceActivity.add(asyncId);
@@ -24,8 +24,8 @@ const hook = createHook({
 
 global.asyncDump = module.exports = () => {
   hook.disable();
-  console.error('STUFF STILL IN THE EVENT LOOP:')
-  allResources.forEach(value=> {
+  console.error('STUFF STILL IN THE EVENT LOOP:');
+  allResources.forEach(value => {
     console.error(`Type: ${value.type}`);
     console.error(filterStack(value.stack));
     console.error('\n');

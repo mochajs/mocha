@@ -157,7 +157,7 @@ describe('--watch', function () {
         [testFile, '--watch-files', 'lib/**/*.xyz'],
         tempDir,
         () => {
-          fs.rmSync(watchedFile, { recursive: true, force: true });
+          fs.rmSync(watchedFile, {recursive: true, force: true});
         }
       ).then(results => {
         expect(results, 'to have length', 2);
@@ -416,11 +416,7 @@ describe('--watch', function () {
       touchFile(watchedFile);
 
       return runMochaWatchJSONAsync(
-        [
-          testFile,
-          '--watch-files',
-          'dir/[ab].js',
-        ],
+        [testFile, '--watch-files', 'dir/[ab].js'],
         tempDir,
         () => {
           touchFile(watchedFile);
