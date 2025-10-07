@@ -212,7 +212,7 @@ describe('serializer', function () {
           it('should not retain not-own props', function () {
             const obj = {};
             const err = new Error('monkeypants');
-            // eslint-disable-next-line no-proto
+             
             err.__proto__.code = 'MONKEY';
             expect(
               SerializableEvent.create('some-event', obj, err).serialize(),
@@ -295,7 +295,7 @@ describe('serializer', function () {
             const obj = {
               data: Object.create(null)
             };
-            // eslint-disable-next-line no-proto
+             
             obj.data.__proto__ = {peaches: 'prunes'};
 
             const expected = Object.assign(Object.create(null), {

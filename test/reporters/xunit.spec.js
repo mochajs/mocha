@@ -288,7 +288,7 @@ describe('XUnit reporter', function () {
       it("should call 'Base.consoleLog' with line", function () {
         // :TODO: XUnit needs a trivially testable means to force console.log()
         var realProcess = process;
-        process = false; // eslint-disable-line no-native-reassign, no-global-assign
+        process = false;  
 
         var xunit = new XUnit(runner);
         var fakeThis = {fileStream: false};
@@ -296,7 +296,7 @@ describe('XUnit reporter', function () {
         xunit.write.call(fakeThis, expectedLine);
         consoleLogStub.restore();
 
-        process = realProcess; // eslint-disable-line no-native-reassign, no-global-assign
+        process = realProcess;  
 
         expect(consoleLogStub.calledWith(expectedLine), 'to be true');
       });

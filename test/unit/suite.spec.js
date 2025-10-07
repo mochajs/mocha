@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const errors = require('../../lib/errors');
 
 function supportsFunctionNames() {
-  // eslint-disable-next-line no-extra-parens
+   
   return function foo() {}.name === 'foo';
 }
 

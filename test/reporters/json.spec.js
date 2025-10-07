@@ -162,7 +162,7 @@ describe('JSON reporter', function () {
     };
 
     beforeEach(function () {
-      /* eslint no-unused-vars: off */
+       
       var mochaReporter = new mocha._reporter(runner, options);
     });
 

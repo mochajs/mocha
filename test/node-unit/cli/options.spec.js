@@ -205,9 +205,7 @@ describe('options', function () {
             const filepath = '/some/package.json';
             readFileSync = sinon.stub();
             // package.json
-            readFileSync
-              .onFirstCall()
-              .returns('{definitely-invalid');
+            readFileSync.onFirstCall().returns('{definitely-invalid');
             findConfig = sinon.stub().returns('/some/.mocharc.json');
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub().returns(filepath);
@@ -225,7 +223,7 @@ describe('options', function () {
                 loadOptions();
               },
               'to throw',
-                /SyntaxError/,
+              /SyntaxError/
             );
           });
         });
@@ -344,14 +342,14 @@ describe('options', function () {
           it('should not look for a config', function () {
             try {
               loadOptions(`--config ${config}`);
-            } catch (ignored) {}
+            } catch {}
             expect(findConfig, 'was not called');
           });
 
           it('should attempt to load file at path', function () {
             try {
               loadOptions(`--config ${config}`);
-            } catch (ignored) {}
+            } catch {}
             expect(loadConfig, 'to have a call satisfying', [config]);
           });
 

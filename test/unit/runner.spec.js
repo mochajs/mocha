@@ -1045,7 +1045,7 @@ describe('Runner', function () {
                   function () {
                     try {
                       runner.uncaught(err);
-                    } catch (ignored) {}
+                    } catch {}
                   },
                   'not to emit from',
                   runner,

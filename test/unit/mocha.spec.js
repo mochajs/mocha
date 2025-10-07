@@ -111,7 +111,6 @@ describe('Mocha', function () {
 
     describe('when `timeout` option is `undefined`', function () {
       it('should not attempt to set timeout', function () {
-        // eslint-disable-next-line no-new
         new Mocha({timeout: undefined});
         expect(Mocha.prototype.timeout, 'was not called');
       });
@@ -119,7 +118,6 @@ describe('Mocha', function () {
 
     describe('when `timeout` option is `false`', function () {
       it('should attempt to set timeout', function () {
-        // eslint-disable-next-line no-new
         new Mocha({timeout: false});
         expect(Mocha.prototype.timeout, 'to have a call satisfying', [0]).and(
           'was called once'
@@ -129,7 +127,6 @@ describe('Mocha', function () {
 
     describe('when `global` option is an `Array`', function () {
       it('should attempt to set globals', function () {
-        // eslint-disable-next-line no-new
         new Mocha({global: ['singular']});
         expect(Mocha.prototype.global, 'to have a call satisfying', [
           ['singular']
@@ -139,7 +136,6 @@ describe('Mocha', function () {
 
     describe('when `retries` option is present', function () {
       it('should attempt to set retries`', function () {
-        // eslint-disable-next-line no-new
         new Mocha({retries: 1});
         expect(Mocha.prototype.retries, 'to have a call satisfying', [1]).and(
           'was called once'
@@ -149,7 +145,6 @@ describe('Mocha', function () {
 
     describe('when `retries` option is not present', function () {
       it('should not attempt to set retries', function () {
-        // eslint-disable-next-line no-new
         new Mocha({});
         expect(Mocha.prototype.retries, 'was not called');
       });
@@ -157,7 +152,6 @@ describe('Mocha', function () {
 
     describe('when `rootHooks` option is truthy', function () {
       it('shouid attempt to set root hooks', function () {
-        // eslint-disable-next-line no-new
         new Mocha({rootHooks: ['a root hook']});
         expect(Mocha.prototype.rootHooks, 'to have a call satisfying', [
           ['a root hook']
@@ -168,7 +162,6 @@ describe('Mocha', function () {
     describe('when `parallel` option is true', function () {
       describe('and `jobs` option > 1', function () {
         it('should enable parallel mode', function () {
-          // eslint-disable-next-line no-new
           new Mocha({parallel: true, jobs: 2});
           expect(Mocha.prototype.parallelMode, 'to have a call satisfying', [
             true
@@ -178,7 +171,6 @@ describe('Mocha', function () {
 
       describe('and `jobs` option <= 1', function () {
         it('should not enable parallel mode', function () {
-          // eslint-disable-next-line no-new
           new Mocha({parallel: true, jobs: 1});
           expect(Mocha.prototype.parallelMode, 'was not called');
         });
@@ -376,8 +368,8 @@ describe('Mocha', function () {
       });
     });
 
-    describe('passOnFailingTestSuite()', function() {
-      it('should set the passOnFailingTestSuite option to false', function() {
+    describe('passOnFailingTestSuite()', function () {
+      it('should set the passOnFailingTestSuite option to false', function () {
         mocha.passOnFailingTestSuite();
         expect(
           mocha.options,
@@ -387,7 +379,7 @@ describe('Mocha', function () {
         );
       });
 
-      it('should set the passOnFailingTestSuite option to true', function() {
+      it('should set the passOnFailingTestSuite option to true', function () {
         mocha.passOnFailingTestSuite(true);
         expect(
           mocha.options,
@@ -747,7 +739,7 @@ describe('Mocha', function () {
           mocha.run(done); // this is async!
           try {
             mocha.run();
-          } catch (ignored) {
+          } catch {
           } finally {
             // it'll be 0 or 1, depending on timing.
             expect(runner.runAsync.callCount, 'to be less than', 2);
@@ -777,7 +769,7 @@ describe('Mocha', function () {
         it('should not call `Runner#runAsync`', function () {
           try {
             mocha.run();
-          } catch (ignored) {
+          } catch {
           } finally {
             expect(runner.runAsync, 'was not called');
           }
@@ -808,7 +800,7 @@ describe('Mocha', function () {
         it('should not call `Runner#runAsync()`', function () {
           try {
             mocha.run();
-          } catch (ignored) {
+          } catch {
           } finally {
             expect(runner.runAsync, 'was not called');
           }

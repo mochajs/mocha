@@ -65,7 +65,7 @@ describe('ParallelBuffered', function () {
       // befouls our assertion below.
       sinon.stub(runner, 'once');
       sinon.stub(runner, 'on');
-      // eslint-disable-next-line no-new
+       
       new ParallelBuffered(runner);
       expect(runner.on, 'to have calls satisfying', [
         // via Buffered
@@ -84,7 +84,7 @@ describe('ParallelBuffered', function () {
 
     it('should listen for Runner events expecting to occur once', function () {
       sinon.stub(runner, 'once');
-      // eslint-disable-next-line no-new
+       
       new ParallelBuffered(runner);
       expect(runner.once, 'to have calls satisfying', [
         [EVENT_DELAY_BEGIN, expect.it('to be a function')],

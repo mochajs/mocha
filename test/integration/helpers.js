@@ -482,14 +482,12 @@ async function runMochaWatchJSONAsync(args, opts, change) {
     opts,
     change
   );
-  return (
-    res.output
-      // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, '')
-      .split('\u001b[2K')
-      .filter(x => x)
-      .map(x => JSON.parse(x))
-  );
+  return res.output
+
+    .replace(/\u001b\[\?25./g, '')
+    .split('\u001b[2K')
+    .filter(x => x)
+    .map(x => JSON.parse(x));
 }
 
 const touchRef = new Date();
@@ -501,10 +499,10 @@ const touchRef = new Date();
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
-  fs.mkdirSync(path.dirname(filepath), { recursive: true });
+  fs.mkdirSync(path.dirname(filepath), {recursive: true});
   try {
     fs.utimesSync(filepath, touchRef, touchRef);
-  } catch (err) {
+  } catch {
     const fd = fs.openSync(filepath, 'a');
     fs.closeSync(fd);
   }
@@ -533,7 +531,7 @@ function replaceFileContents(filepath, pattern, replacement) {
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.mkdirSync(path.dirname(dest), {recursive: true});
   fs.cpSync(fixtureSource, dest);
 }
 
@@ -547,7 +545,7 @@ const createTempDir = async () => {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
-        return fs.rmSync(dirpath, { recursive: true, force: true });
+        return fs.rmSync(dirpath, {recursive: true, force: true});
       }
     }
   };

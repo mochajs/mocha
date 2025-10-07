@@ -13,14 +13,14 @@ describe('init command', function () {
     tmpdir = path.join(os.tmpdir(), 'mocha-init');
     try {
       fs.mkdirSync(tmpdir);
-    } catch (ignored) {}
+    } catch {}
     expect(fs.existsSync(tmpdir), 'to be true');
   });
 
   afterEach(function () {
     try {
       rimraf.sync(tmpdir);
-    } catch (ignored) {}
+    } catch {}
   });
 
   describe('when no path is supplied', function () {

@@ -10,9 +10,9 @@
 export default function pickFromPackageJson({keys}) {
   return {
     name: 'pick-from-package-json',
-    load: id => {
+    load: async id => {
       if (id.endsWith('mocha/package.json')) {
-        const manifest = require(id);
+        const manifest = await import(id, {with: {type: 'json'}});
 
         const result = {};
 

@@ -52,7 +52,7 @@ const baseConfig = {
     rollupPlugin
   ],
   rollup: {
-    configFile: 'rollup.config.js',
+    configFile: 'rollup.config.mjs',
     include: ['test/**']
   },
   reporters: ['mocha'],
@@ -151,7 +151,7 @@ const createBundleDir = (cfg, bundleDirPath) => {
           bundleDirPath
         }
       };
-    } catch (ignored) {
+    } catch {
       console.error(
         `Failed to create ${bundleDirPath}; using temp directory instead`
       );
