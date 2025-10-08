@@ -6,7 +6,7 @@ var assert = require('node:assert');
 describe('.only()', function () {
   describe('bdd', function () {
     it('should run only tests that marked as `only`', function (done) {
-      run('options/only/bdd.fixture.js', ['--ui', 'bdd'], function (err, res) {
+      run('options/only/bdd.fixture.js', ['--ui', 'bdd', '--no-forbid-only'], function (err, res) {
         if (err) {
           done(err);
           return;
@@ -22,7 +22,7 @@ describe('.only()', function () {
 
   describe('tdd', function () {
     it('should run only tests that marked as `only`', function (done) {
-      run('options/only/tdd.fixture.js', ['--ui', 'tdd'], function (err, res) {
+      run('options/only/tdd.fixture.js', ['--ui', 'tdd', '--no-forbid-only'], function (err, res) {
         if (err) {
           done(err);
           return;
@@ -40,7 +40,7 @@ describe('.only()', function () {
     it('should run only tests that marked as `only`', function (done) {
       run(
         'options/only/qunit.fixture.js',
-        ['--ui', 'qunit'],
+        ['--ui', 'qunit', '--no-forbid-only'],
         function (err, res) {
           if (err) {
             done(err);

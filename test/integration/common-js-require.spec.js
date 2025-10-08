@@ -5,7 +5,8 @@ const {runMochaAsync} = require('./helpers');
 describe('common js require', () => {
   it('should be able to run a test where all mocha exports are used', async () => {
     const result = await runMochaAsync('common-js-require.fixture.js', [
-      '--delay'
+      '--delay',
+      '--no-forbid-only'
     ]);
     expect(result.output, 'to contain', 'running before');
     expect(result.output, 'to contain', 'running suiteSetup');
