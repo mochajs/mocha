@@ -499,7 +499,7 @@ async function runMochaWatchJSONAsync(args, opts, change) {
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
-  fs.mkdirSync(path.dirname(filepath), { recursive: true });
+  fs.mkdirSync(path.dirname(filepath), {recursive: true});
   try {
     const touchRef = new Date();
     fs.utimesSync(filepath, touchRef, touchRef);
@@ -532,7 +532,7 @@ function replaceFileContents(filepath, pattern, replacement) {
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.mkdirSync(path.dirname(dest), {recursive: true});
   fs.cpSync(fixtureSource, dest);
 }
 
@@ -546,7 +546,7 @@ const createTempDir = async () => {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
-        return fs.rmSync(dirpath, { recursive: true, force: true });
+        return fs.rmSync(dirpath, {recursive: true, force: true});
       }
     }
   };
@@ -563,6 +563,33 @@ function sleep(time) {
   });
 }
 
+function gotEvent(emitter, event, opts) {
+  const {filter = () => true, rejectionEvents = ['error']} = opts || {};
+  return new Promise((_resolve, _reject) => {
+    function onEvent(value) {
+      if (filter(value)) resolve(value);
+    }
+    function cleanup() {
+      emitter.removeListener(event, onEvent);
+      for (const error of rejectionEvents) {
+        emitter.removeListener(error, reject);
+      }
+    }
+    function resolve(value) {
+      cleanup();
+      _resolve(value);
+    }
+    function reject(reason) {
+      cleanup();
+      _reject(reason);
+    }
+    emitter.on(event, onEvent);
+    for (const error of rejectionEvents) {
+      emitter.on(error, reject);
+    }
+  });
+}
+
 module.exports = {
   DEFAULT_FIXTURE,
   SPLIT_DOT_REPORTER_REGEXP,
@@ -571,6 +598,7 @@ module.exports = {
   createTempDir,
   escapeRegExp,
   getSummary,
+  gotEvent,
   invokeMocha,
   invokeMochaAsync,
   invokeNode,
