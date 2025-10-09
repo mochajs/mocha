@@ -492,8 +492,6 @@ async function runMochaWatchJSONAsync(args, opts, change) {
   );
 }
 
-const touchRef = new Date();
-
 /**
  * Synchronously touch a file. Creates
  * the file and all its parent directories if necessary.
@@ -503,6 +501,7 @@ const touchRef = new Date();
 function touchFile(filepath) {
   fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
+    const touchRef = new Date();
     fs.utimesSync(filepath, touchRef, touchRef);
   } catch (err) {
     const fd = fs.openSync(filepath, 'a');
