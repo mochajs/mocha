@@ -68,6 +68,25 @@ describe('esm', function () {
     expect(result, 'to have passed test count', 1);
   });
 
+  it('should handle non-ERR_UNKNOWN_FILE_EXTENSION errors from *ts files', async function () {
+    // make sure Node is in ESM mode, not CJS mode, at the beginning of this test
+    // then try to run node with the loader-that-recognizes-ts.mjs referenced in the bottom of this file
+    // then expect the err output to contain "Error: stop"
+    const fixture = 'esm/loader-with-non-err-unknown-file-ext/test-that-throws.fixture.ts';
+    const loader = path.resolve(
+      __dirname,
+      './fixtures/esm/loader-with-non-err-unknown-file-ext/loader-that-recognizes-ts.mjs'
+    );
+
+    const err = await runMochaAsync(
+      fixture,
+      [`--loader=${loader}`],
+      { stdio: 'pipe' }
+    ).catch(err => err);
+
+    expect(err.output, 'to contain', 'Error: stop');
+  });
+
   it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module', async function () {
     const fixture =
       'esm/type-module/test-that-imports-non-existing-module.fixture.js';
