@@ -1,11 +1,12 @@
 {
     "scripts": {
-        "test": "npx mocha --no-config '--import=data:text/javascript,import{register}from\"node:module\";import{pathToFileURL}from\"node:url\";register(\"ts-node/esm\",pathToFileURL(\"./\"));' --enable-source-maps --inspect 'src/*.test.ts' "
+        "test": "npx mocha --no-config '--loader=./src/register-loader.js' --enable-source-maps --inspect 'src/*.test.ts' "
     },
     "dependencies": {
         "mocha": "file:../../"
     },
     "devDependencies": {
+        "@types/mocha": "^10.0.10",
         "ts-node": "^10.9.2"
     },
     "type": "module"
