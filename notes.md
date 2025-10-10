@@ -94,13 +94,13 @@ requireModule(file), file is *ts or importErr code === ERR_UNKNOWN_FILE_EXTENSIO
 ...
 ```
 
-This command:
+This command passes:
 
 ```
 DEBUG=* npx mocha --grep "module with a loader" --timeout 3000 "test/integration/esm.spec.js"
 ```
 
-gives this output:
+but gives this output:
 
 ```log
 ...
@@ -131,4 +131,11 @@ import 'non-existent-package';
 
 SyntaxError: Cannot use import statement outside a module
 ...
+```
+
+This command only passes because we've modified `helpers.js#347`:
+
+```
+// we added `process...utils";` for debugging
+'process.env.DEBUG="mocha:esm-utils"; require(process.argv[1]);',
 ```
