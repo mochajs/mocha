@@ -3,7 +3,7 @@
         "test": "npx mocha --no-config '--import=data:text/javascript,import{register}from\"node:module\";import{pathToFileURL}from\"node:url\";register(\"ts-node/esm\",pathToFileURL(\"./\"));' --enable-source-maps --inspect 'src/*.test.ts' "
     },
     "dependencies": {
-        "mocha": "file:../../"
+        "mocha": "11.7.4"
     },
     "devDependencies": {
         "ts-node": "^10.9.2"
