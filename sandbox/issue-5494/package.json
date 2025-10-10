@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "test": "npx mocha --no-config '--loader=./src/register-loader.js' --enable-source-maps --inspect 'src/*.test.ts' "
+        "test": "npx mocha --no-config '--import=./src/register-hooks.js' 'src/*.test.ts' "
     },
     "dependencies": {
         "mocha": "file:../../"
