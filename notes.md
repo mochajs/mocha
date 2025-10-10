@@ -3,7 +3,7 @@
 Tests pass in CI because, when Mocha is wrapped by `nyc`, the Node loader defaults to module mode and allows `import` statements.
 Tests will pass locally when run via `npx nyc node bin/mocha.js ...` for the same reason.
 Tests are failing when run directly (e.g. `npx mocha ...` or `node bin/mocha.js ...`) because Mocha does not have `type: module` in its package.json (by design) so Node's default module loader does not allow `import` statements.
-Tests were passing locally before [#5408](https://github.com/mochajs/mocha/pull/5408/files#r2240266621) because Mocha was
+Tests were passing locally before [#5408](https://github.com/mochajs/mocha/pull/5408/files#r2240266621) because Mocha was doing this:
 
 ## Control flow
 
@@ -58,22 +58,39 @@ with this output:
 ...
 
   mocha:test:integration:helpers spawning: DEBUG=mocha:esm-utils /home/markw/.local/share/fnm/node-versions/v22.20.0/installation/bin/node /home/markw/my-stuff/mocha-stuff/mocha/bin/mocha.js --unhandled-rejections=warn --loader=./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs /home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts --no-color --no-bail --no-parallel +0ms
-internal secret log:  /home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/register-env.js:/home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/wrap.js
-2025-10-05T02:35:21.733Z mocha:esm-utils assigning requireOrImport, require_module === true
-internal secret log:  /home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/register-env.js:/home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/wrap.js
-(node:155036) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+2025-10-10T03:47:48.948Z mocha:esm-utils assigning requireOrImport, require_module === true
+(node:17260) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
 --import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs", pathToFileURL("./"));'
 (Use `node --trace-warnings ...` to show where the warning was created)
-internal secret log:  /home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/register-env.js:/home/markw/my-stuff/mocha-stuff/mocha/node_modules/nyc/lib/wrap.js
-2025-10-05T02:35:22.137Z mocha:esm-utils assigning requireOrImport, require_module === true
-2025-10-05T02:35:22.232Z mocha:esm-utils requireModule(/home/markw/my-stuff/mocha-stuff/mocha/test/setup)
-2025-10-05T02:35:22.518Z mocha:esm-utils requireModule(/home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts)
-2025-10-05T02:35:22.522Z mocha:esm-utils requireModule caught err: "Cannot find package 'non-existent-package' imported from /home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts"
+2025-10-10T03:47:49.354Z mocha:esm-utils assigning requireOrImport, require_module === true
+2025-10-10T03:47:49.452Z mocha:esm-utils requireModule(/home/markw/my-stuff/mocha-stuff/mocha/test/setup)
+2025-10-10T03:47:49.452Z mocha:esm-utils requireModule trying require(file)
+2025-10-10T03:47:49.746Z mocha:esm-utils requireModule(/home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts)
+2025-10-10T03:47:49.746Z mocha:esm-utils requireModule trying require(file)
+2025-10-10T03:47:49.750Z mocha:esm-utils requireModule caught requireErr: "Cannot find package 'non-existent-package' imported from /home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts"
+2025-10-10T03:47:49.750Z mocha:esm-utils requireModule falling back
 Loading from loader that recognizes TS
 Specifier:  file:///home/markw/my-stuff/mocha-stuff/mocha/lib/cli/cli.js
 Loading from loader that recognizes TS
+Specifier:  non-existent-package
+Loading from loader that recognizes TS
+Specifier:  file:///home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts
+Loading from loader that recognizes TS
+2025-10-10T03:47:49.753Z mocha:esm-utils requireModule caught importErr: [ERR_MODULE_NOT_FOUND]: "Cannot find package 'non-existent-package' imported from /home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.mjs"
+requireModule(file), file is *ts or importErr code === ERR_UNKNOWN_FILE_EXTENSION, throwing importErr
 
  Exception during run: Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'non-existent-package' imported from /home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:266:9)
+    at packageResolve (node:internal/modules/esm/resolve:767:81)
+    at moduleResolve (node:internal/modules/esm/resolve:853:18)
+    at defaultResolve (node:internal/modules/esm/resolve:983:11)
+    at nextResolve (node:internal/modules/esm/hooks:748:28)
+    at resolve (file:///home/markw/my-stuff/mocha-stuff/mocha/test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs:21:16)
+    at nextResolve (node:internal/modules/esm/hooks:748:28)
+    at Hooks.resolve (node:internal/modules/esm/hooks:240:30)
+    at handleMessage (node:internal/modules/esm/worker:199:24)
+    at Immediate.checkForMessages (node:internal/modules/esm/worker:141:28) {
+  code: 'ERR_MODULE_NOT_FOUND'
 ...
 ```
 

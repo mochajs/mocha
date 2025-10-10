@@ -90,10 +90,17 @@ describe('esm', function () {
       fixture,
       [
         '--unhandled-rejections=warn',
-        // paths are relative to root
-        // '--import ./test/integration/fixtures/esm/loader-with-module-not-found/loader-import.js'
-        // `--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs", pathToFileURL("./"));'`
+        
+        // original
+        // https://nodejs.org/docs/latest-v22.x/api/cli.html#--experimental-loadermodule
         '--loader=./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs'
+
+        //* none of these reproduce the same behavior as the original CLI flag
+        //* paths are relative to root
+        // '--import ./test/integration/fixtures/esm/loader-with-module-not-found/register-hooks.mjs'
+        // `--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs", pathToFileURL("./"));'`
+        // '--require ./test/integration/fixtures/esm/loader-with-module-not-found/loader-that-recognizes-ts.mjs',
+
       ],
       {
         stdio: 'pipe'
