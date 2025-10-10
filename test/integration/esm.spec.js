@@ -101,7 +101,7 @@ describe('esm', function () {
     );
   });
 
-  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module with a loader', async function () {
+  it('should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module with a loader @bare', async function () {
     const fixture =
       'esm/loader-with-module-not-found/test-that-imports-non-existing-module.fixture.ts';
 

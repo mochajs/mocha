@@ -37,6 +37,7 @@ jobs:
           - interfaces
           - unit
           - integration
+          - integration:bare
           - jsapi
           - requires
           - reporters
@@ -57,6 +58,7 @@ jobs:
           - interfaces
           - unit
           - integration
+          - integration:bare
           - requires
           - reporters
           - only
