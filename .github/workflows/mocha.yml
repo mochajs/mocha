@@ -58,12 +58,13 @@ jobs:
           - interfaces
           - unit
           - integration
-          - integration:bare
           - requires
           - reporters
           - only
         include:
           - test-part: jsapi
+            coverage: false
+          - test-part: integration:bare
             coverage: false
     with:
       os: 'ubuntu-latest,windows-latest'
