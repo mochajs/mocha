@@ -241,6 +241,27 @@ Depending on that reproduction, remove `status: in triage` and add the following
   - If it isn't a bug at all: add the `invalid` label
   - If it is roughly a bug but isn't something that can or should be fixed: add the `status: wontfix` label
 
+#### Reproducing bugs
+
+We use a `/sandbox/issue-xxxx` folder for all issue repros, for example:
+
+```jsonc
+// /sandbox/issue-5494/package.json
+// https://github.com/mochajs/mocha/issues/5494
+{
+  "scripts": {
+    "test": "mocha --no-config"
+  },
+  "dependencies": {
+    "mocha": "file:../../"
+  }
+}
+```
+
+The rest of the folder would be filled with repro files such that `npm test` failed in a bad version of the code and passed in a good version.
+
+We try to commit and push these repros for later reference, especially as having repros within the main repo allows us to run Mocha in debug mode against the bad scenario.
+
 ### 📝 Documentation
 
 Documentation reports should clearly indicate a gap or problem that should be addressed in documentation.
