@@ -77,6 +77,8 @@ jobs:
       - name: Generate coverage report
         if: always() && inputs.coverage
         run: npm run test-coverage-generate
+      # https://github.com/marketplace/actions/codecov
+      # https://app.codecov.io/gh/mochajs/mocha
       - name: Upload coverage reports to Codecov
         if: always() && inputs.coverage
         uses: codecov/codecov-action@v5
