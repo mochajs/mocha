@@ -140,7 +140,7 @@ See [further explanation and workarounds](https://github.com/mochajs/mocha/wiki/
 
 Delay initial execution of root suite.
 
-See [Delayed Root Suite](/next/features/hooks#delayed-root-suite).
+See [Delayed Root Suite](/features/hooks#delayed-root-suite).
 
 ### `--dry-run`
 
@@ -172,7 +172,7 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 - See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector)
 - Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843))
 - Try something like [wtfnode](https://npm.im/wtfnode)
-- Use [`.only`](/next/declaring/exclusive-tests) until you find the test that causes Mocha to hang
+- Use [`.only`](/declaring/exclusive-tests) until you find the test that causes Mocha to hang
 
 ### `--pass-on-failing-test-suite`
 
@@ -243,7 +243,7 @@ Each test file will be put into a queue and executed as workers become available
 
 :::caution
 `--parallel` has certain implications for Mocha's behavior which you must be aware of.
-Read more about [running tests in parallel](/next/features/parallel-mode).
+Read more about [running tests in parallel](/features/parallel-mode).
 :::
 
 ### `--retries <n>`
@@ -361,7 +361,7 @@ Can be specified as a comma-delimited list.
 :::note[New in v6.0.0]
 :::
 
-Specify an explicit path to a [configuration file](/next/running/configuring).
+Specify an explicit path to a [configuration file](/running/configuring).
 
 By default, Mocha will search for a config file if `--config` is not specified; use `--no-config` to suppress this behavior.
 
@@ -380,7 +380,7 @@ Can also be specified as a comma-delimited list: `-n require=foo,unhandled-rejec
 ### `--opts <path>`
 
 :::note[Removed in v8.0.0]
-Please use [configuration file](/next/running/configuring) instead.
+Please use [configuration file](/running/configuring) instead.
 :::
 
 ### `--package <path>`
@@ -388,7 +388,7 @@ Please use [configuration file](/next/running/configuring) instead.
 :::note[New in v6.0.0]
 :::
 
-Specify an explicit path to a [`package.json` file](/next/running/configuring) (ostensibly containing configuration in a `mocha` property).
+Specify an explicit path to a [`package.json` file](/running/configuring) (ostensibly containing configuration in a `mocha` property).
 
 By default, Mocha looks for a `package.json` in the current working directory or nearest ancestor, and will use the first file found (regardless of whether it contains a `mocha` property); to suppress `package.json` lookup, use `--no-package`.
 
@@ -413,7 +413,7 @@ The option accepts a comma-delimited list: `--extension a,b` is equivalent to `-
 ### `--file <file>`
 
 :::caution
-`--file` is incompatible with [parallel mode](/next/features/parallel-mode).
+`--file` is incompatible with [parallel mode](/features/parallel-mode).
 :::
 
 Explicitly _include_ a test file to be loaded before other test files.
@@ -458,18 +458,18 @@ Modules required in this manner are expected to do work synchronously; Mocha won
 
 :::caution
 **You cannot use `--require` to set hooks**.
-If you want to set hooks to run, e.g., before each test, use a [Root Hook Plugin](/next/features/root-hook-plugins).
+If you want to set hooks to run, e.g., before each test, use a [Root Hook Plugin](/features/root-hook-plugins).
 :::
 
 :::note
-As of v8.0.0, Mocha supports `--require` for [NodeJS native ESM](/next/explainers/nodejs-native-esm-support).
+As of v8.0.0, Mocha supports `--require` for [NodeJS native ESM](/explainers/nodejs-native-esm-support).
 There is no separate `--import` flag.
 :::
 
 ### `--sort, -S`
 
 :::caution
-`--sort` is incompatible with [parallel mode](/next/features/parallel-mode).
+`--sort` is incompatible with [parallel mode](/features/parallel-mode).
 :::
 
 Sort test files (by absolute path) using [Array.prototype.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
@@ -596,7 +596,7 @@ The `mocha` executable supports all applicable flags which the `node` executable
 
 These flags vary depending on your version of Node.js.
 
-`node` flags can be defined in Mocha's [configuration](/next/running/configuring).
+`node` flags can be defined in Mocha's [configuration](/running/configuring).
 
 :::note[New in v9.1.0]
 You can also pass `node` flags to Node.js using [`--node-option`](#--node-option-name--n-name).
@@ -620,7 +620,7 @@ Error: cool
 
 Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excluding `--v8-options` itself) to use it.
 
-[V8](https://v8.dev/) flags can be defined in Mocha's [configuration](/next/running/configuring).
+[V8](https://v8.dev/) flags can be defined in Mocha's [configuration](/running/configuring).
 
 :::note[New in v9.1.0]
 You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#--node-option-name--n-name).

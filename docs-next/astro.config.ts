@@ -1,8 +1,22 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { visit } from "unist-util-visit";
+
+const base = "/next";
+
+/** Prepend base URL to non-`/api` absolute links */
+const rewriteLinks = ({ base }: { base: string }) => {
+  return (tree: any) => {
+    visit(tree, "link", (node) => {
+      if (node.url.startsWith("/") && !node.url.startsWith("/api")) {
+        node.url = base + node.url;
+      }
+    });
+  };
+};
 
 export default defineConfig({
-  base: "/next",
+  base,
   integrations: [
     starlight({
       components: {
@@ -19,10 +33,10 @@ export default defineConfig({
         { label: "Getting Started", slug: "getting-started" },
         {
           items: [
+            { label: "Browsers", slug: "running/browsers" },
             { label: "CLI", slug: "running/cli" },
             { label: "Configuring", slug: "running/configuring" },
             { label: "Editor plugins", slug: "running/editor-plugins" },
-            { label: "Browsers", slug: "running/browsers" },
             { label: "Test globs", slug: "running/test-globs" },
           ],
           label: "Running Mocha",
@@ -57,10 +71,10 @@ export default defineConfig({
           items: [
             { label: "About", slug: "interfaces/about" },
             { label: "BDD (default)", slug: "interfaces/bdd" },
-            { label: "TDD", slug: "interfaces/tdd" },
             { label: "Exports", slug: "interfaces/exports" },
             { label: "QUnit", slug: "interfaces/qunit" },
             { label: "Require", slug: "interfaces/require" },
+            { label: "TDD", slug: "interfaces/tdd" },
             { label: "Third-Party", slug: "interfaces/third-party" },
           ],
           label: "Interfaces",
@@ -69,7 +83,6 @@ export default defineConfig({
           collapsed: true,
           items: [
             { label: "About", slug: "reporters/about" },
-            { label: "Spec (default)", slug: "reporters/spec" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },
             { label: "HTML", slug: "reporters/html" },
@@ -81,9 +94,10 @@ export default defineConfig({
             { label: "Min", slug: "reporters/min" },
             { label: "Nyan", slug: "reporters/nyan" },
             { label: "Progress", slug: "reporters/progress" },
+            { label: "Spec (default)", slug: "reporters/spec" },
             { label: "Tap", slug: "reporters/tap" },
-            { label: "XUnit", slug: "reporters/xunit" },
             { label: "Third-Party", slug: "reporters/third-party" },
+            { label: "XUnit", slug: "reporters/xunit" },
           ],
           label: "Reporters",
         },
@@ -93,6 +107,10 @@ export default defineConfig({
             {
               label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
+            },
+            {
+              label: "Compilers deprecation",
+              slug: "explainers/compilers-deprecation",
             },
             {
               label: "Counting assertions",
@@ -105,6 +123,10 @@ export default defineConfig({
             {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
+            },
+            {
+              label: "Related tools",
+              slug: "explainers/related-tools",
             },
             {
               label: "Run cycle overview",
@@ -131,6 +153,10 @@ export default defineConfig({
               label: "Third party reporters",
               slug: "explainers/third-party-reporters",
             },
+            {
+              label: "Third party UIs",
+              slug: "explainers/third-party-uis",
+            },
           ],
           label: "Explainers",
         },
@@ -146,4 +172,7 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  markdown: {
+    remarkPlugins: [[rewriteLinks, { base }]],
+  },
 });

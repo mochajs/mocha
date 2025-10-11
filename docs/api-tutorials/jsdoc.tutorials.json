@@ -1,12 +1,15 @@
 {
+  "compilers-deprecation": {
+    "title": "Compilers deprecation"
+  },
   "count-assertions": {
     "title": "Count assertions"
   },
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
-  "find-global-leaks": {
-    "title": "Find global leaks"
+  "related-tools": {
+    "title": "Related tools"
   },
   "shared-behaviours": {
     "title": "Shared behaviours"
@@ -19,5 +22,8 @@
   },
   "third-party-reporters": {
     "title": "Third party reporters"
+  },
+  "third-party-uis": {
+    "title": "Third party UIs"
   }
 }

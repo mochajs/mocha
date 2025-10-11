@@ -5,15 +5,47 @@ const sinon = require('sinon');
 const url = require('node:url');
 
 describe('esm-utils', function () {
-  beforeEach(function () {
-    sinon.stub(esmUtils, 'doImport').resolves({});
-  });
+  describe('requireOrImport', function () {
+    it('should show an informative error message for a broken default import', async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            '../../test/node-unit/fixtures/broken-default-import.mjs'
+          ),
+        'to be rejected with error satisfying',
+        {
+          name: 'SyntaxError',
+          message:
+            "The requested module './module-without-default-export.mjs' does not provide an export named 'default'"
+        }
+      );
+    });
 
-  afterEach(function () {
-    sinon.restore();
+    it('should show a syntax error message when importing a TypeScript file with invalid syntax', async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            '../../test/node-unit/fixtures/broken-syntax.ts'
+          ),
+        'to be rejected with error satisfying',
+        {
+          name: 'SyntaxError',
+          message:
+            /Invalid or unexpected token|Expected ident/
+        }
+      );
+    });
   });
 
   describe('loadFilesAsync()', function () {
+    beforeEach(function () {
+      sinon.stub(esmUtils, 'doImport').resolves({});
+    });
+
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it('should not decorate imported module if no decorator passed', async function () {
       await esmUtils.loadFilesAsync(
         ['/foo/bar.mjs'],
