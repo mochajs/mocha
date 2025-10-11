@@ -75,11 +75,6 @@ jobs:
     needs: test-node-all
     if: always()
     runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
 
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
