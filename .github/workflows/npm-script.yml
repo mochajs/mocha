@@ -73,12 +73,12 @@ jobs:
           NODE_OPTIONS: '--trace-warnings'
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+      # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
         if: always() && inputs.coverage
         run: npm run test-coverage-generate
-      - name: Coveralls Parallel
+      - name: Upload coverage reports to Codecov
         if: always() && inputs.coverage
-        uses: coverallsapp/github-action@v2
+        uses: codecov/codecov-action@v5
         with:
-          flag-name: run-${{ inputs.npm-script }}-${{ join(matrix.*, '-') }}
-          parallel: true
+          token: ${{ secrets.CODECOV_TOKEN }}
