@@ -75,10 +75,6 @@ jobs:
     needs: test-node-all
     if: always()
     runs-on: ubuntu-latest
-    # Uploading coverage is optional. Job won't fail just because this step fails.
-    # Ref https://github.com/mochajs/mocha/issues/5436
-    # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idcontinue-on-error
-    continue-on-error: true
     steps:
       - name: Coveralls Finished
         uses: coverallsapp/github-action@v2
