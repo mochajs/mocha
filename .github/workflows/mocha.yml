@@ -71,11 +71,6 @@ jobs:
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
-  test-node-upload-coverage:
-    needs: test-node-all
-    if: always()
-    runs-on: ubuntu-latest
-
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
     with:
