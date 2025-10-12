@@ -26,7 +26,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write # for Codecov OIDC
 
 jobs:
   resolve-inputs:
