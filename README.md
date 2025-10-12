@@ -1,3 +1,5 @@
+Hello world
+
 <p align="center">
   <img src="assets/mocha-logo.svg" alt="Mocha test framework logo"/>
 </p>
