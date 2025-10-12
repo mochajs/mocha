@@ -49,6 +49,8 @@ jobs:
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: test-node-lts
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     strategy:
       fail-fast: false
       matrix:

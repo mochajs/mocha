@@ -23,6 +23,10 @@ on:
         description: 'Whether to set up coverage reporting or not'
         required: false
         type: boolean
+    secrets:
+      CODECOV_TOKEN:
+        description: 'Codecov token for uploading coverage'
+        required: false
 
 permissions:
   contents: read
