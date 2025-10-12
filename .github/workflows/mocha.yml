@@ -46,9 +46,6 @@ jobs:
 
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
-    permissions:
-      id-token: write # for Codecov OIDC
-      contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: test-node-lts
