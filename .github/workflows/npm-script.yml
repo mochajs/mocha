@@ -47,8 +47,6 @@ jobs:
 
   script:
     name: ${{ inputs.npm-script }}${{ needs.resolve-inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve-inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve-inputs.outputs.os && format(' on {0}', matrix.os) }}
-    permissions:
-          id-token: write # for codecov action, see below
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     needs:
