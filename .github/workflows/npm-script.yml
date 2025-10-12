@@ -23,10 +23,6 @@ on:
         description: 'Whether to set up coverage reporting or not'
         required: false
         type: boolean
-    secrets:
-      CODECOV_TOKEN:
-        description: 'Codecov token for uploading coverage'
-        required: false
 
 permissions:
   contents: read
@@ -83,9 +79,12 @@ jobs:
         run: npm run test-coverage-generate
       # https://github.com/marketplace/actions/codecov
       # https://app.codecov.io/gh/mochajs/mocha
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage reports
         if: always() && inputs.coverage
+        permissions:
+          id-token: write
         uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: true
-          # token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
+
