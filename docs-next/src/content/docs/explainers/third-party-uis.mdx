@@ -11,7 +11,7 @@ In this first brief example, we'll create an interface with only a single functi
 
 ```javascript
 var Mocha = require("mocha");
-(Suite = require("mocha/lib/suite")), (Test = require("mocha/lib/test"));
+((Suite = require("mocha/lib/suite")), (Test = require("mocha/lib/test")));
 
 /**
  * A simple UI that only exposes a single function: test
@@ -69,9 +69,9 @@ In this next example, we'll be extending the [TDD interface](https://github.com/
 
 ```javascript
 var Mocha = require("mocha");
-(Suite = require("mocha/lib/suite")),
+((Suite = require("mocha/lib/suite")),
   (Test = require("mocha/lib/test")),
-  (escapeRe = require("escape-string-regexp"));
+  (escapeRe = require("escape-string-regexp")));
 
 /**
  * This example is identical to the TDD interface, but with the addition of a

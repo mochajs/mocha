@@ -77,7 +77,11 @@ body {
 }
 
 #mocha {
-  font: 20px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font:
+    20px/1.5 "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
   margin: 60px 50px;
 }
 
@@ -136,7 +140,7 @@ body {
 }
 
 #mocha .test.pending:hover h2::after {
-  content: '(pending)';
+  content: "(pending)";
   font-family: arial, sans-serif;
 }
 
@@ -149,7 +153,7 @@ body {
 }
 
 #mocha .test.pass::before {
-  content: '✓';
+  content: "✓";
   font-size: 12px;
   display: block;
   float: left;
@@ -181,7 +185,7 @@ body {
 }
 
 #mocha .test.pending::before {
-  content: '◦';
+  content: "◦";
   color: var(--mocha-test-pending-icon-color);
 }
 
@@ -194,7 +198,7 @@ body {
 }
 
 #mocha .test.fail::before {
-  content: '✖';
+  content: "✖";
   font-size: 12px;
   display: block;
   float: left;
@@ -214,7 +218,9 @@ body {
   display: block;
   float: left;
   clear: left;
-  font: 12px/1.5 monaco, monospace;
+  font:
+    12px/1.5 monaco,
+    monospace;
   margin: 5px;
   padding: 15px;
   border: 1px solid var(--mocha-box-shadow-color);
@@ -256,7 +262,9 @@ body {
   display: block;
   float: left;
   clear: left;
-  font: 12px/1.5 monaco, monospace;
+  font:
+    12px/1.5 monaco,
+    monospace;
   margin: 5px;
   padding: 15px;
   border: 1px solid var(--mocha-box-shadow-color);

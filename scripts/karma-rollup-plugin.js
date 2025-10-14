@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * This Karma plugin bundles all test files into a single file for browser
@@ -29,14 +29,14 @@
  * been modified heavily to simplify and support rollup instead of browserify.
  */
 
-const os = require('node:os');
-const fs = require('node:fs');
-const path = require('node:path');
-const {randomUUID} = require('node:crypto');
-const rollup = require('rollup');
-const {minimatch} = require('minimatch');
-const loadConfigFile = require('rollup/dist/loadConfigFile.js');
-const multiEntry = require('@rollup/plugin-multi-entry');
+const os = require("node:os");
+const fs = require("node:fs");
+const path = require("node:path");
+const { randomUUID } = require("node:crypto");
+const rollup = require("rollup");
+const { minimatch } = require("minimatch");
+const loadConfigFile = require("rollup/dist/loadConfigFile.js");
+const multiEntry = require("@rollup/plugin-multi-entry");
 
 const fileMap = new Map();
 
@@ -45,29 +45,29 @@ const fileMap = new Map();
  * as well as prepends the bundle file to the karma file configuration.
  */
 function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
-  const includePatterns = pluginConfig.include.map(pattern =>
-    path.resolve(basePath, pattern)
+  const includePatterns = pluginConfig.include.map((pattern) =>
+    path.resolve(basePath, pattern),
   );
 
   const bundlePatterns = fileConfigs
-    .map(fileConfig => fileConfig.pattern)
-    .filter(filePath =>
-      includePatterns.some(includePattern =>
-        minimatch(filePath, includePattern.replace(/\\/g, '/'))
-      )
+    .map((fileConfig) => fileConfig.pattern)
+    .filter((filePath) =>
+      includePatterns.some((includePattern) =>
+        minimatch(filePath, includePattern.replace(/\\/g, "/")),
+      ),
     );
 
   const bundleFilename = `${randomUUID()}.rollup.js`;
   let bundleLocation = path.resolve(
     pluginConfig.bundleDirPath ? pluginConfig.bundleDirPath : os.tmpdir(),
-    bundleFilename
+    bundleFilename,
   );
-  if (process.platform === 'win32') {
-    bundleLocation = bundleLocation.replace(/\\/g, '/');
+  if (process.platform === "win32") {
+    bundleLocation = bundleLocation.replace(/\\/g, "/");
   }
 
-  fs.closeSync(fs.openSync(bundleLocation, 'w'));
-  preprocessors[bundleLocation] = ['rollup'];
+  fs.closeSync(fs.openSync(bundleLocation, "w"));
+  preprocessors[bundleLocation] = ["rollup"];
 
   // Save file mapping for later
   fileMap.set(bundleLocation, bundlePatterns);
@@ -77,7 +77,9 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
   // Need to use array mutation, otherwise Karma ignores us
   let bundleInjected = false;
   for (const bundlePattern of bundlePatterns) {
-    const idx = fileConfigs.findIndex(({pattern}) => pattern === bundlePattern);
+    const idx = fileConfigs.findIndex(
+      ({ pattern }) => pattern === bundlePattern,
+    );
 
     if (idx > -1) {
       if (bundleInjected) {
@@ -87,7 +89,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
           pattern: bundleLocation,
           served: true,
           included: true,
-          watched: true
+          watched: true,
         });
         bundleInjected = true;
       }
@@ -96,10 +98,10 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
 }
 
 framework.$inject = [
-  'config.files',
-  'config.rollup',
-  'config.basePath',
-  'config.preprocessors'
+  "config.files",
+  "config.rollup",
+  "config.basePath",
+  "config.preprocessors",
 ];
 
 /**
@@ -109,18 +111,18 @@ framework.$inject = [
 function bundlePreprocessor(config) {
   const {
     basePath,
-    rollup: {configFile, globals = {}, external = []}
+    rollup: { configFile, globals = {}, external = [] },
   } = config;
 
   const configPromise = loadConfigFile(path.resolve(basePath, configFile));
 
   return async function (content, file, done) {
-    const {options, warnings} = await configPromise;
+    const { options, warnings } = await configPromise;
     const config = options[0];
     // plugins is always an array
     const pluginConfig = [
       ...(config.plugins || []),
-      multiEntry({exports: false})
+      multiEntry({ exports: false }),
     ];
     // XXX: output is always an array, but we only have one output config.
     // if we have multiple, this code needs changing.
@@ -128,7 +130,7 @@ function bundlePreprocessor(config) {
       ...((config.output || [])[0] || {}),
       file: file.path,
       globals,
-      sourcemap: 'inline'
+      sourcemap: "inline",
     };
 
     warnings.flush();
@@ -137,20 +139,20 @@ function bundlePreprocessor(config) {
       input: fileMap.get(file.path),
       plugins: pluginConfig,
       external,
-      onwarn: config.onwarn
+      onwarn: config.onwarn,
     });
 
     await bundle.write(outputConfig);
     console.error(`wrote bundle to ${file.path}`);
-    const code = fs.readFileSync(outputConfig.file, 'utf8');
+    const code = fs.readFileSync(outputConfig.file, "utf8");
 
     done(null, code);
   };
 }
 
-bundlePreprocessor.$inject = ['config'];
+bundlePreprocessor.$inject = ["config"];
 
 module.exports = {
-  'framework:rollup': ['factory', framework],
-  'preprocessor:rollup': ['factory', bundlePreprocessor]
+  "framework:rollup": ["factory", framework],
+  "preprocessor:rollup": ["factory", bundlePreprocessor],
 };
