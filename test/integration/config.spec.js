@@ -12,10 +12,12 @@ describe('config', function () {
     var configDir = path.join(__dirname, 'fixtures', 'config');
     var js = loadConfig(path.join(configDir, 'mocharc.js'));
     var cjs = loadConfig(path.join(configDir, 'mocharc.cjs'));
+    var mjs = loadConfig(path.join(configDir, 'mocharc.mjs'));
     var json = loadConfig(path.join(configDir, 'mocharc.json'));
     var yaml = loadConfig(path.join(configDir, 'mocharc.yaml'));
     expect(js, 'to equal', json);
     expect(js, 'to equal', cjs);
+    expect(mjs, 'to equal', js);
     expect(json, 'to equal', yaml);
   });
 
