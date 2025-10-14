@@ -5,11 +5,6 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
 
 ## Prerequisites
 
-<!--
-todo update this section and setup section
-https://github.com/mochajs/mocha/issues/5497
--->
-
 - [Install Node.js 14 LTS or newer with npm@7+](https://nodejs.org/en/download).
   - If you're new to installing Node, a tool like [nvm](https://github.com/nvm-sh/nvm#install-script) can help you manage multiple version installations.
 - You will need [Google Chrome](https://www.google.com/chrome) to run browser-based tests locally.
