@@ -19,7 +19,7 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
 
 ## Tests
 
-Running tests via `npm test` should just work on any operating system with any supported version of Node. If they don't, please file an issue or contact us in [our Discord](https://discord.gg/KeDn2uXhER).
+Running tests via `npm test` should work on any operating system with any supported version of Node. If they don't, please file an issue or contact us in [our Discord](https://discord.gg/KeDn2uXhER).
 
 Running tests this way runs all tests in a "covered" state. That is, they're run through Istanbul's `nyc` command. This pre-loads some modules for coverage reporting and can change the behavior in niche situations around Node's loader system.
 
