@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # for Codecov OIDC
 
 jobs:
   format:
@@ -51,6 +52,9 @@ jobs:
 
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
+    permissions:
+      id-token: write # for Codecov OIDC
+      contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: test-node-lts
@@ -75,16 +79,6 @@ jobs:
       node-versions: "20.19.4,22.18.0,24.6.0"
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
-
-  test-node-upload-coverage:
-    needs: test-node-all
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2
-        with:
-          parallel-finished: true
 
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
