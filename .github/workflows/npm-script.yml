@@ -86,4 +86,3 @@ jobs:
         with:
           fail_ci_if_error: true
           use_oidc: true
-
