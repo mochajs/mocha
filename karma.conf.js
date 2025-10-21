@@ -52,7 +52,7 @@ const baseConfig = {
     rollupPlugin
   ],
   rollup: {
-    configFile: 'rollup.config.js',
+    configFile: 'rollup.config.mjs',
     include: ['test/**']
   },
   reporters: ['mocha'],
