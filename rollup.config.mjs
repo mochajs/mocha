@@ -3,22 +3,22 @@ import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import nodePolyfills from 'rollup-plugin-polyfill-node';
-import globals from 'rollup-plugin-node-globals';
 
 // Debugging tools
 import {visualizer} from 'rollup-plugin-visualizer';
 
-import pickFromPackageJson from './scripts/pick-from-package-json';
-import {version} from './package.json';
+import pickFromPackageJson from './scripts/pick-from-package-json.mjs';
+import packageJson from './package.json' with {type: 'json'};
 
 const config = {
   input: './browser-entry.js',
+  strictDeprecations: true,
   output: {
     file: './mocha.js',
     format: 'umd',
     sourcemap: true,
     name: 'mocha',
-    banner: `// mocha@${version} in javascript ES2018`
+    banner: `// mocha@${packageJson.version} in javascript ES2018`
   },
   plugins: [
     // https://github.com/FredKSchott/rollup-plugin-polyfill-node/issues/84
@@ -30,8 +30,10 @@ const config = {
       keys: ['name', 'version', 'homepage', 'notifyLogo']
     }),
     commonjs(),
-    globals(),
-    nodePolyfills(),
+    nodePolyfills({
+      // Polyfill all files, including all files including any source files.
+      include: null,
+    }),
     nodeResolve({
       browser: true
     })
