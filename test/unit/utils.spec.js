@@ -290,6 +290,13 @@ describe('lib/utils', function () {
       });
 
       describe('should represent null prototypes', function () {
+        it('Without properties', function () {
+          const foo = Object.create(null, {});
+          const expected = '{}';
+
+          expect(stringify(foo), 'to be', expected);
+        });
+
         it('With explicit names', function () {
           const foo = Object.create(null, {
             [Symbol.toStringTag]: {value: 'Foo'},
