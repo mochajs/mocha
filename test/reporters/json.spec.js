@@ -1,27 +1,27 @@
-'use strict';
+"use strict";
 
-var fs = require('node:fs');
-var sinon = require('sinon');
-var JSONReporter = require('../../lib/reporters/json');
-var utils = require('../../lib/utils');
-var Mocha = require('../../');
+var fs = require("node:fs");
+var sinon = require("sinon");
+var JSONReporter = require("../../lib/reporters/json");
+var utils = require("../../lib/utils");
+var Mocha = require("../../");
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
 
-describe('JSON reporter', function () {
+describe("JSON reporter", function () {
   var mocha;
   var suite;
   var runner;
-  var testTitle = 'json test 1';
-  var testFile = 'someTest.spec.js';
+  var testTitle = "json test 1";
+  var testFile = "someTest.spec.js";
   var noop = function () {};
 
   beforeEach(function () {
     mocha = new Mocha({
-      reporter: 'json'
+      reporter: "json",
     });
-    suite = new Suite('JSON suite', 'root');
+    suite = new Suite("JSON suite", "root");
     runner = new Runner(suite);
   });
 
@@ -29,7 +29,7 @@ describe('JSON reporter', function () {
     sinon.restore();
   });
 
-  describe('test results', function () {
+  describe("test results", function () {
     beforeEach(function () {
       var options = {};
       /* eslint no-unused-vars: off */
@@ -37,11 +37,11 @@ describe('JSON reporter', function () {
     });
 
     beforeEach(function () {
-      sinon.stub(process.stdout, 'write').callsFake(noop);
+      sinon.stub(process.stdout, "write").callsFake(noop);
     });
 
-    it('should have 1 test failure', function (done) {
-      var error = {message: 'oh shit'};
+    it("should have 1 test failure", function (done) {
+      var error = { message: "oh shit" };
 
       var test = new Test(testTitle, function (done) {
         done(new Error(error.message));
@@ -52,47 +52,47 @@ describe('JSON reporter', function () {
 
       runner.run(function (failureCount) {
         sinon.restore();
-        expect(runner, 'to satisfy', {
+        expect(runner, "to satisfy", {
           testResults: {
             failures: [
               {
                 title: testTitle,
                 file: testFile,
                 err: {
-                  message: error.message
-                }
-              }
-            ]
-          }
+                  message: error.message,
+                },
+              },
+            ],
+          },
         });
-        expect(failureCount, 'to be', 1);
+        expect(failureCount, "to be", 1);
         done();
       });
     });
 
-    it('should have 1 test pending', function (done) {
+    it("should have 1 test pending", function (done) {
       var test = new Test(testTitle);
       test.file = testFile;
       suite.addTest(test);
 
       runner.run(function (failureCount) {
         sinon.restore();
-        expect(runner, 'to satisfy', {
+        expect(runner, "to satisfy", {
           testResults: {
             pending: [
               {
                 title: testTitle,
-                file: testFile
-              }
-            ]
-          }
+                file: testFile,
+              },
+            ],
+          },
         });
-        expect(failureCount, 'to be', 0);
+        expect(failureCount, "to be", 0);
         done();
       });
     });
 
-    it('should have 1 test pass', function (done) {
+    it("should have 1 test pass", function (done) {
       const test = new Test(testTitle, () => {});
 
       test.file = testFile;
@@ -100,26 +100,26 @@ describe('JSON reporter', function () {
 
       runner.run(function (failureCount) {
         sinon.restore();
-        expect(runner, 'to satisfy', {
+        expect(runner, "to satisfy", {
           testResults: {
             passes: [
               {
                 title: testTitle,
                 file: testFile,
-                speed: /(slow|medium|fast)/
-              }
-            ]
-          }
+                speed: /(slow|medium|fast)/,
+              },
+            ],
+          },
         });
-        expect(failureCount, 'to be', 0);
+        expect(failureCount, "to be", 0);
         done();
       });
     });
 
-    it('should handle circular objects in errors', function (done) {
-      var testTitle = 'json test 1';
+    it("should handle circular objects in errors", function (done) {
+      var testTitle = "json test 1";
       function CircleError() {
-        this.message = 'oh shit';
+        this.message = "oh shit";
         this.circular = this;
       }
       var error = new CircleError();
@@ -133,32 +133,32 @@ describe('JSON reporter', function () {
 
       runner.run(function (failureCount) {
         sinon.restore();
-        expect(runner, 'to satisfy', {
+        expect(runner, "to satisfy", {
           testResults: {
             failures: [
               {
                 title: testTitle,
                 file: testFile,
                 err: {
-                  message: error.message
-                }
-              }
-            ]
-          }
+                  message: error.message,
+                },
+              },
+            ],
+          },
         });
-        expect(failureCount, 'to be', 1);
+        expect(failureCount, "to be", 1);
         done();
       });
     });
   });
 
   describe('when "reporterOption.output" is provided', function () {
-    var expectedDirName = 'reports';
-    var expectedFileName = 'reports/test-results.json';
+    var expectedDirName = "reports";
+    var expectedFileName = "reports/test-results.json";
     var options = {
       reporterOption: {
-        output: expectedFileName
-      }
+        output: expectedFileName,
+      },
     };
 
     beforeEach(function () {
@@ -173,60 +173,60 @@ describe('JSON reporter', function () {
       suite.addTest(test);
     });
 
-    it('should write test results to file', function (done) {
-      const fsMkdirSync = sinon.stub(fs, 'mkdirSync');
-      const fsWriteFileSync = sinon.stub(fs, 'writeFileSync');
+    it("should write test results to file", function (done) {
+      const fsMkdirSync = sinon.stub(fs, "mkdirSync");
+      const fsWriteFileSync = sinon.stub(fs, "writeFileSync");
 
       fsWriteFileSync.callsFake(function (filename, content) {
         const expectedJson = JSON.stringify(runner.testResults, null, 2);
-        expect(expectedFileName, 'to be', filename);
-        expect(content, 'to be', expectedJson);
+        expect(expectedFileName, "to be", filename);
+        expect(content, "to be", expectedJson);
       });
 
       runner.run(function () {
         expect(
-          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
-          'to be true'
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
+          "to be true",
         );
-        expect(fsWriteFileSync.calledOnce, 'to be true');
+        expect(fsWriteFileSync.calledOnce, "to be true");
         done();
       });
     });
 
-    it('should warn and write test results to console', function (done) {
-      const fsMkdirSync = sinon.stub(fs, 'mkdirSync');
-      const fsWriteFileSync = sinon.stub(fs, 'writeFileSync');
+    it("should warn and write test results to console", function (done) {
+      const fsMkdirSync = sinon.stub(fs, "mkdirSync");
+      const fsWriteFileSync = sinon.stub(fs, "writeFileSync");
 
-      fsWriteFileSync.throws('unable to write file');
+      fsWriteFileSync.throws("unable to write file");
 
       const outLog = [];
-      const fake = chunk => outLog.push(chunk);
-      sinon.stub(process.stderr, 'write').callsFake(fake);
-      sinon.stub(process.stdout, 'write').callsFake(fake);
+      const fake = (chunk) => outLog.push(chunk);
+      sinon.stub(process.stderr, "write").callsFake(fake);
+      sinon.stub(process.stdout, "write").callsFake(fake);
 
       runner.run(function () {
         sinon.restore();
         expect(
-          fsMkdirSync.calledWith(expectedDirName, {recursive: true}),
-          'to be true'
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
+          "to be true",
         );
-        expect(fsWriteFileSync.calledOnce, 'to be true');
+        expect(fsWriteFileSync.calledOnce, "to be true");
         expect(
           outLog[0],
-          'to contain',
-          `[mocha] writing output to "${expectedFileName}" failed:`
+          "to contain",
+          `[mocha] writing output to "${expectedFileName}" failed:`,
         );
-        expect(outLog[1], 'to match', /"fullTitle": "JSON suite json test 1"/);
+        expect(outLog[1], "to match", /"fullTitle": "JSON suite json test 1"/);
         done();
       });
     });
 
     it('should throw "unsupported error" in browser', function () {
-      sinon.stub(utils, 'isBrowser').callsFake(() => true);
+      sinon.stub(utils, "isBrowser").callsFake(() => true);
       expect(
         () => new JSONReporter(runner, options),
-        'to throw',
-        'file output not supported in browser'
+        "to throw",
+        "file output not supported in browser",
       );
     });
   });

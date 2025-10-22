@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-    paths-ignore: ['*.md', 'docs/**']
+    paths-ignore: ["*.md", "docs/**"]
   pull_request:
     branches:
       - main
-    paths-ignore: ['*.md', 'docs/**']
+    paths-ignore: ["*.md", "docs/**"]
   workflow_dispatch:
 
 permissions:
@@ -16,6 +16,11 @@ permissions:
   id-token: write # for Codecov OIDC
 
 jobs:
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format
+
   lint:
     uses: ./.github/workflows/npm-script.yml
     with:
@@ -24,7 +29,7 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      node-versions: '20,22,24'
+      node-versions: "20,22,24"
       npm-script: test-smoke
 
   test-node-lts:
@@ -68,10 +73,10 @@ jobs:
           - test-part: jsapi
             coverage: false
     with:
-      os: 'ubuntu-latest,windows-latest'
+      os: "ubuntu-latest,windows-latest"
       # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
       # Ref https://nodejs.org/en/about/previous-releases
-      node-versions: '20.19.4,22.18.0,24.6.0'
+      node-versions: "20.19.4,22.18.0,24.6.0"
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 

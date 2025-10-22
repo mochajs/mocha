@@ -6,7 +6,7 @@ name: Nightly mochajs.org Deploy
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 permissions:
   contents: read
@@ -18,5 +18,5 @@ jobs:
       - name: Webhook Action
         uses: joelwmale/webhook-action@cc1a66f987e1591785273fd6f9d2f7a9d8d7c9cd
         env:
-          data: ''
+          data: ""
           WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}

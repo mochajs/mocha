@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /* eslint no-unused-vars: off */
 /* eslint-env commonjs */
@@ -7,11 +7,11 @@
  * Shim process.stdout.
  */
 
-process.stdout = require('browser-stdout')({label: false});
+process.stdout = require("browser-stdout")({ label: false });
 
-var parseQuery = require('./lib/browser/parse-query');
-var highlightTags = require('./lib/browser/highlight-tags');
-var Mocha = require('./lib/mocha');
+var parseQuery = require("./lib/browser/parse-query");
+var highlightTags = require("./lib/browser/highlight-tags");
+var Mocha = require("./lib/mocha");
 
 /**
  * Create a Mocha instance.
@@ -19,7 +19,7 @@ var Mocha = require('./lib/mocha');
  * @return {undefined}
  */
 
-var mocha = new Mocha({reporter: 'html'});
+var mocha = new Mocha({ reporter: "html" });
 
 /**
  * Save timer references to avoid Sinon interfering (see GH-237).
@@ -41,7 +41,7 @@ var originalOnerrorHandler = global.onerror;
  */
 
 process.removeListener = function (e, fn) {
-  if (e === 'uncaughtException') {
+  if (e === "uncaughtException") {
     if (originalOnerrorHandler) {
       global.onerror = originalOnerrorHandler;
     } else {
@@ -59,7 +59,7 @@ process.removeListener = function (e, fn) {
  */
 
 process.listenerCount = function (name) {
-  if (name === 'uncaughtException') {
+  if (name === "uncaughtException") {
     return uncaughtExceptionHandlers.length;
   }
   return 0;
@@ -70,9 +70,9 @@ process.listenerCount = function (name) {
  */
 
 process.on = function (e, fn) {
-  if (e === 'uncaughtException') {
+  if (e === "uncaughtException") {
     global.onerror = function (msg, url, line, col, err) {
-      fn(err || new Error(msg + ' (' + url + ':' + line + ':' + col + ')'));
+      fn(err || new Error(msg + " (" + url + ":" + line + ":" + col + ")"));
       return !mocha.options.allowUncaught;
     };
     uncaughtExceptionHandlers.push(fn);
@@ -80,7 +80,7 @@ process.on = function (e, fn) {
 };
 
 process.listeners = function (err) {
-  if (err === 'uncaughtException') {
+  if (err === "uncaughtException") {
     return uncaughtExceptionHandlers;
   }
   return [];
@@ -89,7 +89,7 @@ process.listeners = function (err) {
 // The BDD UI is registered by default, but no UI will be functional in the
 // browser without an explicit call to the overridden `mocha.ui` (see below).
 // Ensure that this default UI does not expose its methods to the global scope.
-mocha.suite.removeAllListeners('pre-require');
+mocha.suite.removeAllListeners("pre-require");
 
 var immediateQueue = [];
 var immediateTimeout;
@@ -136,7 +136,7 @@ mocha.throwError = function (err) {
 
 mocha.ui = function (ui) {
   Mocha.prototype.ui.call(this, ui);
-  this.suite.emit('pre-require', global, null, this);
+  this.suite.emit("pre-require", global, null, this);
   return this;
 };
 
@@ -145,8 +145,8 @@ mocha.ui = function (ui) {
  */
 
 mocha.setup = function (opts) {
-  if (typeof opts === 'string') {
-    opts = {ui: opts};
+  if (typeof opts === "string") {
+    opts = { ui: opts };
   }
   if (opts.delay === true) {
     this.delay();
@@ -154,7 +154,7 @@ mocha.setup = function (opts) {
   var self = this;
   Object.keys(opts)
     .filter(function (opt) {
-      return opt !== 'delay';
+      return opt !== "delay";
     })
     .forEach(function (opt) {
       if (Object.prototype.hasOwnProperty.call(opts, opt)) {
@@ -170,9 +170,9 @@ mocha.setup = function (opts) {
 
 mocha.run = function (fn) {
   var options = mocha.options;
-  mocha.globals('location');
+  mocha.globals("location");
 
-  var query = parseQuery(global.location.search || '');
+  var query = parseQuery(global.location.search || "");
   if (query.grep) {
     mocha.grep(query.grep);
   }
@@ -188,10 +188,10 @@ mocha.run = function (fn) {
     var document = global.document;
     if (
       document &&
-      document.getElementById('mocha') &&
+      document.getElementById("mocha") &&
       options.noHighlighting !== true
     ) {
-      highlightTags('code');
+      highlightTags("code");
     }
     if (fn) {
       fn(err);

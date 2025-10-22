@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
 var calls = [];
 
 before(function () {
-  calls.push('before');
+  calls.push("before");
 });
 
-describe('root', function () {
-  it('should be a valid suite', function () {
-    expect(calls, 'to equal', ['before']);
+describe("root", function () {
+  it("should be a valid suite", function () {
+    expect(calls, "to equal", ["before"]);
   });
 });

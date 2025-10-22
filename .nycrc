@@ -1,8 +1,5 @@
 {
-  "reporter": [
-    "json",
-    "text-summary"
-  ],
+  "reporter": ["json", "text-summary"],
   "exclude": [
     "coverage/**",
     "docs/**",

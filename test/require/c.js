@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 global.required = global.required || [];
-global.required.push('c.js');
+global.required.push("c.js");

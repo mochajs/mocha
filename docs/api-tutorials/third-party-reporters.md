@@ -4,7 +4,7 @@ Here is a minimalistic sample reporter, which you can use by executing: `mocha -
 
 ```js
 // my-reporter.js
-var mocha = require('mocha');
+var mocha = require("mocha");
 module.exports = MyReporter;
 
 function MyReporter(runner) {
@@ -12,18 +12,18 @@ function MyReporter(runner) {
   var passes = 0;
   var failures = 0;
 
-  runner.on('pass', function (test) {
+  runner.on("pass", function (test) {
     passes++;
-    console.log('pass: %s', test.fullTitle());
+    console.log("pass: %s", test.fullTitle());
   });
 
-  runner.on('fail', function (test, err) {
+  runner.on("fail", function (test, err) {
     failures++;
-    console.log('fail: %s -- error: %s', test.fullTitle(), err.message);
+    console.log("fail: %s -- error: %s", test.fullTitle(), err.message);
   });
 
-  runner.on('end', function () {
-    console.log('end: %d/%d', passes, passes + failures);
+  runner.on("end", function () {
+    console.log("end: %d/%d", passes, passes + failures);
   });
 }
 

@@ -1,133 +1,133 @@
-'use strict';
+"use strict";
 
-describe('async', function () {
+describe("async", function () {
   var calls = [];
 
   before(function () {
-    calls.push('root before all');
+    calls.push("root before all");
   });
 
   after(function () {
-    calls.push('root after all');
-    expect(calls, 'to equal', [
-      'root before all',
-      'before all',
-      'parent before',
-      'before',
-      'before test one',
-      'one',
-      'after',
-      'after test one passed',
-      'parent after',
-      'parent before',
-      'before',
-      'before test two',
-      'two',
-      'after',
-      'after test two passed',
-      'parent after',
-      'parent before',
-      'before',
-      'before test three',
-      'three',
-      'after',
-      'after test three passed',
-      'parent after',
-      'after all',
-      'root after all'
+    calls.push("root after all");
+    expect(calls, "to equal", [
+      "root before all",
+      "before all",
+      "parent before",
+      "before",
+      "before test one",
+      "one",
+      "after",
+      "after test one passed",
+      "parent after",
+      "parent before",
+      "before",
+      "before test two",
+      "two",
+      "after",
+      "after test two passed",
+      "parent after",
+      "parent before",
+      "before",
+      "before test three",
+      "three",
+      "after",
+      "after test three passed",
+      "parent after",
+      "after all",
+      "root after all",
     ]);
   });
 
   beforeEach(function () {
-    calls.push('parent before');
+    calls.push("parent before");
   });
 
   afterEach(function () {
-    calls.push('parent after');
+    calls.push("parent after");
   });
 
-  describe('hooks', function () {
+  describe("hooks", function () {
     before(function () {
-      calls.push('before all');
+      calls.push("before all");
     });
 
     after(function () {
-      calls.push('after all');
+      calls.push("after all");
     });
 
     beforeEach(function (done) {
       var ctx = this;
       process.nextTick(function () {
-        calls.push('before');
+        calls.push("before");
         if (ctx.currentTest) {
-          calls.push('before test ' + ctx.currentTest.title);
+          calls.push("before test " + ctx.currentTest.title);
         }
         done();
       });
     });
 
-    it('one', function (done) {
-      expect(calls, 'to equal', [
-        'root before all',
-        'before all',
-        'parent before',
-        'before',
-        'before test one'
+    it("one", function (done) {
+      expect(calls, "to equal", [
+        "root before all",
+        "before all",
+        "parent before",
+        "before",
+        "before test one",
       ]);
-      calls.push('one');
+      calls.push("one");
       process.nextTick(done);
     });
 
-    it('two', function () {
-      expect(calls, 'to equal', [
-        'root before all',
-        'before all',
-        'parent before',
-        'before',
-        'before test one',
-        'one',
-        'after',
-        'after test one passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test two'
+    it("two", function () {
+      expect(calls, "to equal", [
+        "root before all",
+        "before all",
+        "parent before",
+        "before",
+        "before test one",
+        "one",
+        "after",
+        "after test one passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test two",
       ]);
-      calls.push('two');
+      calls.push("two");
     });
 
-    it('three', function () {
-      expect(calls, 'to equal', [
-        'root before all',
-        'before all',
-        'parent before',
-        'before',
-        'before test one',
-        'one',
-        'after',
-        'after test one passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test two',
-        'two',
-        'after',
-        'after test two passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test three'
+    it("three", function () {
+      expect(calls, "to equal", [
+        "root before all",
+        "before all",
+        "parent before",
+        "before",
+        "before test one",
+        "one",
+        "after",
+        "after test one passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test two",
+        "two",
+        "after",
+        "after test two passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test three",
       ]);
-      calls.push('three');
+      calls.push("three");
     });
 
     afterEach(function (done) {
       var ctx = this;
       process.nextTick(function () {
-        calls.push('after');
+        calls.push("after");
         if (ctx.currentTest) {
           calls.push(
-            'after test ' + ctx.currentTest.title + ' ' + ctx.currentTest.state
+            "after test " + ctx.currentTest.title + " " + ctx.currentTest.state,
           );
         }
         done();

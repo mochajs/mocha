@@ -3,15 +3,15 @@ Mocha's `--grep` feature may be used both on the client (via `?grep=`) and serve
 A good example of this is if you wanted to run slow tests only before releasing, or periodically. You could use any sequence of characters you like, perhaps `#slow`, `@slow` to tag them as shown here:
 
 ```js
-describe('app', function () {
-  describe('GET /login', function () {
-    it('should respond with the login form @fast', function () {
+describe("app", function () {
+  describe("GET /login", function () {
+    it("should respond with the login form @fast", function () {
       // ...
     });
   });
 
-  describe('GET /download/:file', function () {
-    it('should respond with the file @slow', function () {
+  describe("GET /download/:file", function () {
+    it("should respond with the file @slow", function () {
       // ...
     });
   });

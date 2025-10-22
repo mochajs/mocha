@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var run = require('./helpers').runMochaJSON;
-var assert = require('node:assert');
+var run = require("./helpers").runMochaJSON;
+var assert = require("node:assert");
 
-describe('.only()', function () {
-  describe('bdd', function () {
-    it('should run only tests that marked as `only`', function (done) {
-      run('options/only/bdd.fixture.js', ['--ui', 'bdd'], function (err, res) {
+describe(".only()", function () {
+  describe("bdd", function () {
+    it("should run only tests that marked as `only`", function (done) {
+      run("options/only/bdd.fixture.js", ["--ui", "bdd"], function (err, res) {
         if (err) {
           done(err);
           return;
@@ -20,9 +20,9 @@ describe('.only()', function () {
     });
   });
 
-  describe('tdd', function () {
-    it('should run only tests that marked as `only`', function (done) {
-      run('options/only/tdd.fixture.js', ['--ui', 'tdd'], function (err, res) {
+  describe("tdd", function () {
+    it("should run only tests that marked as `only`", function (done) {
+      run("options/only/tdd.fixture.js", ["--ui", "tdd"], function (err, res) {
         if (err) {
           done(err);
           return;
@@ -36,11 +36,11 @@ describe('.only()', function () {
     });
   });
 
-  describe('qunit', function () {
-    it('should run only tests that marked as `only`', function (done) {
+  describe("qunit", function () {
+    it("should run only tests that marked as `only`", function (done) {
       run(
-        'options/only/qunit.fixture.js',
-        ['--ui', 'qunit'],
+        "options/only/qunit.fixture.js",
+        ["--ui", "qunit"],
         function (err, res) {
           if (err) {
             done(err);
@@ -51,7 +51,7 @@ describe('.only()', function () {
           assert.strictEqual(res.stats.failures, 0);
           assert.strictEqual(res.code, 0);
           done();
-        }
+        },
       );
     });
   });

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   test-browser:
-    name: 'Browser Tests'
+    name: "Browser Tests"
     if: contains(github.event.pull_request.labels.*.name, 'run-browser-test')
     uses: ./.github/workflows/npm-script.yml
     secrets: inherit

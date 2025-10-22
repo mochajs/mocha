@@ -5,7 +5,7 @@ var expected = 0;
 var actual = 0;
 
 function assert(expr, msg) {
-  if (!expr) throw new Error(msg || 'assertion failed');
+  if (!expr) throw new Error(msg || "assertion failed");
   actual++;
 }
 
@@ -20,23 +20,23 @@ function reset() {
 
 function check() {
   if (!expected || expected == actual) return;
-  var err = new Error('expected ' + expected + ' assertions, got ' + actual);
-  this.currentTest.emit('error', err);
+  var err = new Error("expected " + expected + " assertions, got " + actual);
+  this.currentTest.emit("error", err);
 }
 
 beforeEach(reset);
 afterEach(check);
 
-describe('something', function () {
-  it('should work', function (done) {
+describe("something", function () {
+  it("should work", function (done) {
     expect(2);
 
     setTimeout(function () {
-      assert('wahoo');
+      assert("wahoo");
     }, 50);
 
     setTimeout(function () {
-      assert('hey');
+      assert("hey");
     }, 50);
 
     setTimeout(function () {

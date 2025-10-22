@@ -1,17 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Mocha</title>
-    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css">
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+    <link rel="shortcut icon" href="../favicon.ico" />
   </head>
   <body>
     <div id="mocha"></div>
     <script src="https://unpkg.com/mocha/mocha.js"></script>
     <script src="https://unpkg.com/chai@4.5.0/chai.js"></script>
-    <script>mocha.setup('bdd')</script>
-    <script>expect = chai.expect</script>
+    <script>
+      mocha.setup("bdd");
+    </script>
+    <script>
+      expect = chai.expect;
+    </script>
     <script src="Array.js"></script>
     <script>
       mocha.run();

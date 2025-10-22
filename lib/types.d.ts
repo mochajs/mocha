@@ -4,11 +4,11 @@
  * For now, if you're an external user, you should use the types from @types/mocha.
  */
 
-import type {FSWatcher, MatchFunction} from 'chokidar';
+import type { FSWatcher, MatchFunction } from "chokidar";
 
-import type {constants} from './error-constants.js';
-import type Mocha from './mocha.js';
-import Runner from './runner.js';
+import type { constants } from "./error-constants.js";
+import type Mocha from "./mocha.js";
+import Runner from "./runner.js";
 
 /**
  * Command-line options
@@ -185,7 +185,7 @@ export type PluginValidator = (this: PluginDefinition, value: unknown) => void;
  * @param implementations User-supplied implementations
  */
 export type PluginFinalizer = (
-  implementations: unknown[]
+  implementations: unknown[],
 ) => Promise<unknown> | unknown;
 
 /**
@@ -374,7 +374,7 @@ export interface SerializedWorkerResult {
   events: SerializedEvent[];
 
   /** Symbol-like to denote the type of object this is */
-  __type: 'SerializedWorkerResult';
+  __type: "SerializedWorkerResult";
 }
 
 /**

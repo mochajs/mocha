@@ -53,7 +53,7 @@
     "docs:preview": "http-server docs/_site -o",
     "docs": "run-s docs-clean docs:api docs:build docs:build-new",
     "format:eslint": "eslint --fix . \"bin/*\"",
-    "format:prettier": "prettier --write \"!(package*).json\" \".*.json\" \"lib/**/*.json\" \"*.yml\"",
+    "format:prettier": "prettier --write .",
     "format": "run-s format:*",
     "lint:installed-check": "installed-check --engine-check",
     "lint:knip": "knip --cache",
@@ -160,7 +160,7 @@
     "needle": "^2.5.0",
     "npm-run-all2": "^6.2.0",
     "nyc": "^15.1.0",
-    "prettier": "^2.4.1",
+    "prettier": "3.6.2",
     "ps-list": "^9.0.0",
     "remark": "^14.0.2",
     "remark-github": "^11.2.2",
@@ -205,13 +205,6 @@
     "./lib/nodejs/worker.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
     "./lib/cli/index.js": false
-  },
-  "prettier": {
-    "arrowParens": "avoid",
-    "bracketSpacing": false,
-    "endOfLine": "auto",
-    "singleQuote": true,
-    "trailingComma": "none"
   },
   "overrides": {
     "@types/eslint": "^9.6.1",

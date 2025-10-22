@@ -1,174 +1,174 @@
-'use strict';
+"use strict";
 
-var exec = require('node:child_process').exec;
-var path = require('node:path');
+var exec = require("node:child_process").exec;
+var path = require("node:path");
 
 var node = '"' + process.execPath + '"';
 
-describe('globbing', function () {
-  describe('by the shell', function () {
-    it('should find the first level test', function (done) {
+describe("globbing", function () {
+  describe("by the shell", function () {
+    it("should find the first level test", function (done) {
       testGlob.shouldSucceed(
-        './*.js',
+        "./*.js",
         function (results) {
           expect(
             results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            "to contain",
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,',
           );
         },
-        done
+        done,
       );
     });
 
-    it('should not find a non-matching pattern', function (done) {
+    it("should not find a non-matching pattern", function (done) {
       testGlob.shouldFail(
-        './*-none.js',
+        "./*-none.js",
         function (results) {
           expect(
             results.stderr,
-            'to contain',
-            'Error: No test files found: "./*-none.js"'
+            "to contain",
+            'Error: No test files found: "./*-none.js"',
           );
         },
-        done
+        done,
       );
     });
 
-    it('should handle multiple non-matching patterns', function (done) {
+    it("should handle multiple non-matching patterns", function (done) {
       testGlob.shouldFail(
-        './*-none.js ./*-none-twice.js',
+        "./*-none.js ./*-none-twice.js",
         function (results) {
-          expect(results.stderr, 'to contain', 'Error: No test files found');
-          expect(results.stderr, 'not to contain', '*-none');
+          expect(results.stderr, "to contain", "Error: No test files found");
+          expect(results.stderr, "not to contain", "*-none");
         },
-        done
+        done,
       );
     });
 
-    it('should handle both matching and non-matching patterns in the same command', function (done) {
+    it("should handle both matching and non-matching patterns in the same command", function (done) {
       testGlob.shouldSucceed(
-        './*.js ./*-none.js',
+        "./*.js ./*-none.js",
         function (results) {
           expect(
             results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            "to contain",
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,',
           );
           expect(
             results.stderr,
-            'to contain',
-            'Warning: Cannot find any files matching pattern'
+            "to contain",
+            "Warning: Cannot find any files matching pattern",
           );
         },
-        done
+        done,
       );
     });
   });
 
-  describe('by Mocha', function () {
-    it('should find the first level test', function (done) {
+  describe("by Mocha", function () {
+    it("should find the first level test", function (done) {
       testGlob.shouldSucceed(
         '"./*.js"',
         function (results) {
           expect(
             results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            "to contain",
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,',
           );
         },
-        done
+        done,
       );
     });
 
-    it('should not find a non-matching pattern', function (done) {
+    it("should not find a non-matching pattern", function (done) {
       testGlob.shouldFail(
         '"./*-none.js"',
         function (results) {
           expect(
             results.stderr,
-            'to contain',
-            'Error: No test files found: "./*-none.js"'
+            "to contain",
+            'Error: No test files found: "./*-none.js"',
           );
         },
-        done
+        done,
       );
     });
 
-    it('should handle multiple non-matching patterns', function (done) {
+    it("should handle multiple non-matching patterns", function (done) {
       testGlob.shouldFail(
         '"./*-none.js" "./*-none-twice.js"',
         function (results) {
-          expect(results.stderr, 'to contain', 'Error: No test files found');
+          expect(results.stderr, "to contain", "Error: No test files found");
         },
-        done
+        done,
       );
     });
 
-    it('should handle both matching and non-matching patterns in the same command', function (done) {
+    it("should handle both matching and non-matching patterns in the same command", function (done) {
       testGlob.shouldSucceed(
         '"./*.js" "./*-none.js"',
         function (results) {
           expect(
             results.stdout,
-            'to contain',
-            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,'
+            "to contain",
+            '["end",{"suites":1,"tests":1,"passes":1,"pending":0,"failures":0,',
           );
           expect(
             results.stderr,
-            'to contain',
-            'Warning: Cannot find any files matching pattern'
+            "to contain",
+            "Warning: Cannot find any files matching pattern",
           );
         },
-        done
+        done,
       );
     });
 
-    describe('double-starred', function () {
-      it('should find the tests on multiple levels', function (done) {
+    describe("double-starred", function () {
+      it("should find the tests on multiple levels", function (done) {
         testGlob.shouldSucceed(
           '"./**/*.js"',
           function (results) {
             expect(
               results.stdout,
-              'to contain',
-              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
+              "to contain",
+              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,',
             );
           },
-          done
+          done,
         );
       });
 
-      it('should not find a non-matching pattern', function (done) {
+      it("should not find a non-matching pattern", function (done) {
         testGlob.shouldFail(
           '"./**/*-none.js"',
           function (results) {
             expect(
               results.stderr,
-              'to contain',
-              'Error: No test files found: "./**/*-none.js"'
+              "to contain",
+              'Error: No test files found: "./**/*-none.js"',
             );
           },
-          done
+          done,
         );
       });
 
-      it('should handle both matching and non-matching patterns in the same command', function (done) {
+      it("should handle both matching and non-matching patterns in the same command", function (done) {
         testGlob.shouldSucceed(
           '"./**/*.js" "./**/*-none.js"',
           function (results) {
             expect(
               results.stdout,
-              'to contain',
-              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,'
+              "to contain",
+              '["end",{"suites":2,"tests":2,"passes":2,"pending":0,"failures":0,',
             );
             expect(
               results.stderr,
-              'to contain',
-              'Warning: Cannot find any files matching pattern'
+              "to contain",
+              "Warning: Cannot find any files matching pattern",
             );
           },
-          done
+          done,
         );
       });
     });
@@ -183,8 +183,8 @@ var testGlob = {
   }),
 
   shouldFail: execMochaWith(function shouldFailWithStderr(error, stderr) {
-    expect(error && error.message, 'to contain', stderr);
-  })
+    expect(error && error.message, "to contain", stderr);
+  }),
 };
 
 function execMochaWith(validate) {
@@ -192,19 +192,19 @@ function execMochaWith(validate) {
     exec(
       node +
         ' "' +
-        path.join('..', '..', '..', '..', 'bin', 'mocha') +
+        path.join("..", "..", "..", "..", "bin", "mocha") +
         '" -R json-stream --no-config ' +
         glob,
-      {cwd: path.join(__dirname, 'fixtures', 'glob')},
+      { cwd: path.join(__dirname, "fixtures", "glob") },
       function (error, stdout, stderr) {
         try {
           validate(error, stderr);
-          assertOn({stdout, stderr});
+          assertOn({ stdout, stderr });
           done();
         } catch (assertion) {
           done(assertion);
         }
-      }
+      },
     );
   };
 }

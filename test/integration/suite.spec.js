@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var run = require('./helpers').runMocha;
+var run = require("./helpers").runMocha;
 var args = [];
 
-describe('suite w/no callback', function () {
-  it('should throw a helpful error message when a callback for suite is not supplied', function (done) {
+describe("suite w/no callback", function () {
+  it("should throw a helpful error message when a callback for suite is not supplied", function (done) {
     run(
-      'suite/suite-no-callback.fixture.js',
+      "suite/suite-no-callback.fixture.js",
       args,
       function (err, res) {
         if (err) {
@@ -14,20 +14,20 @@ describe('suite w/no callback', function () {
         }
         expect(
           res.output,
-          'to match',
-          /no callback was supplied. Supply a callback/
+          "to match",
+          /no callback was supplied. Supply a callback/,
         );
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: "pipe" },
     );
   });
 });
 
-describe('skipped suite w/no callback', function () {
-  it('should not throw an error when a callback for skipped suite is not supplied', function (done) {
+describe("skipped suite w/no callback", function () {
+  it("should not throw an error when a callback for skipped suite is not supplied", function (done) {
     run(
-      'suite/suite-skipped-no-callback.fixture.js',
+      "suite/suite-skipped-no-callback.fixture.js",
       args,
       function (err, res) {
         if (err) {
@@ -35,40 +35,40 @@ describe('skipped suite w/no callback', function () {
         }
         var pattern = /TypeError/g;
         var result = res.output.match(pattern) || [];
-        expect(result, 'to have length', 0);
+        expect(result, "to have length", 0);
         done();
-      }
+      },
     );
   });
 });
 
-describe('skipped suite w/ callback', function () {
-  it('should not throw an error when a callback for skipped suite is supplied', function (done) {
-    run('suite/suite-skipped-callback.fixture.js', args, function (err, res) {
+describe("skipped suite w/ callback", function () {
+  it("should not throw an error when a callback for skipped suite is supplied", function (done) {
+    run("suite/suite-skipped-callback.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
       var pattern = /TypeError/g;
       var result = res.output.match(pattern) || [];
-      expect(result, 'to have length', 0);
+      expect(result, "to have length", 0);
       done();
     });
   });
 });
 
-describe('suite returning a value', function () {
-  it('should not give a deprecation warning for suite callback returning a value', function (done) {
+describe("suite returning a value", function () {
+  it("should not give a deprecation warning for suite callback returning a value", function (done) {
     run(
-      'suite/suite-returning-value.fixture.js',
+      "suite/suite-returning-value.fixture.js",
       args,
       function (err, res) {
         if (err) {
           return done(err);
         }
-        expect(res, 'not to contain output', /Suites ignore return values/);
+        expect(res, "not to contain output", /Suites ignore return values/);
         done();
       },
-      {stdio: 'pipe'}
+      { stdio: "pipe" },
     );
   });
 });

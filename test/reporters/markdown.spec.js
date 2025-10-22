@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+var events = require("../../").Runner.constants;
+var helpers = require("./helpers");
+var reporters = require("../../").reporters;
 
 var Markdown = reporters.Markdown;
 var createMockRunner = helpers.createMockRunner;
@@ -13,14 +13,14 @@ var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
 var EVENT_SUITE_END = events.EVENT_SUITE_END;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 
-describe('Markdown reporter', function () {
+describe("Markdown reporter", function () {
   var runReporter = makeRunReporter(Markdown);
-  var expectedTitle = 'expected title';
-  var expectedFullTitle = 'full title';
-  var sluggedFullTitle = 'full-title';
+  var expectedTitle = "expected title";
+  var expectedFullTitle = "full title";
+  var sluggedFullTitle = "full-title";
   var noop = function () {};
 
-  describe('event handlers', function () {
+  describe("event handlers", function () {
     describe("on 'suite' event", function () {
       it("should write expected slugged titles on 'end' event", function () {
         var expectedSuite = {
@@ -34,36 +34,36 @@ describe('Markdown reporter', function () {
               fullTitle: function () {
                 return expectedFullTitle;
               },
-              suites: []
-            }
-          ]
+              suites: [],
+            },
+          ],
         };
         var runner = createMockRunner(
-          'suite suite end',
+          "suite suite end",
           EVENT_SUITE_BEGIN,
           EVENT_SUITE_END,
           EVENT_RUN_END,
-          expectedSuite
+          expectedSuite,
         );
         runner.suite = expectedSuite;
         var options = {};
         var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
-          '# TOC\n',
-          ' - [' +
+          "# TOC\n",
+          " - [" +
             expectedTitle +
-            '](#' +
+            "](#" +
             sluggedFullTitle +
-            ')\n   - [' +
+            ")\n   - [" +
             expectedTitle +
-            '](#' +
+            "](#" +
             sluggedFullTitle +
-            ')\n',
-          '<a name="' + sluggedFullTitle + '"></a>\n ' + expectedTitle + '\n'
+            ")\n",
+          '<a name="' + sluggedFullTitle + '"></a>\n ' + expectedTitle + "\n",
         ];
 
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout, "to equal", expectedArray);
       });
     });
 
@@ -74,11 +74,11 @@ describe('Markdown reporter', function () {
           fullTitle: function () {
             return expectedFullTitle;
           },
-          suites: []
+          suites: [],
         };
         var expectedDuration = 1000;
         var currentRetry = 1;
-        var expectedBody = 'some body';
+        var expectedBody = "some body";
         var expectedTest = {
           title: expectedTitle,
           fullTitle: function () {
@@ -89,26 +89,26 @@ describe('Markdown reporter', function () {
             return currentRetry;
           },
           slow: noop,
-          body: expectedBody
+          body: expectedBody,
         };
         var runner = createMockRunner(
-          'pass end',
+          "pass end",
           EVENT_TEST_PASS,
           EVENT_RUN_END,
           null,
-          expectedTest
+          expectedTest,
         );
         runner.suite = expectedSuite;
         var options = {};
         var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
-          '# TOC\n',
-          ' - [' + expectedTitle + '](#' + sluggedFullTitle + ')\n',
-          expectedTitle + '.\n\n```js\n' + expectedBody + '\n```\n\n'
+          "# TOC\n",
+          " - [" + expectedTitle + "](#" + sluggedFullTitle + ")\n",
+          expectedTitle + ".\n\n```js\n" + expectedBody + "\n```\n\n",
         ];
 
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout, "to equal", expectedArray);
       });
     });
   });

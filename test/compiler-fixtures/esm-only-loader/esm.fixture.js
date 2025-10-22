@@ -1,3 +1,3 @@
-import Module from 'node:module';
+import Module from "node:module";
 
-Module.register(new URL('./esm-loader.fixture.mjs', import.meta.url));
+Module.register(new URL("./esm-loader.fixture.mjs", import.meta.url));

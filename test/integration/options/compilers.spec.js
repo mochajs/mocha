@@ -1,21 +1,21 @@
-'use strict';
+"use strict";
 
-var helpers = require('../helpers');
+var helpers = require("../helpers");
 var invokeMocha = helpers.invokeMocha;
 
-describe('--compilers', function () {
-  it('should report deprecation', function (done) {
+describe("--compilers", function () {
+  it("should report deprecation", function (done) {
     invokeMocha(
-      ['--compilers', 'coffee:coffeescript/register'],
+      ["--compilers", "coffee:coffeescript/register"],
       function (err, res) {
         if (err) {
           return done(err);
         }
 
-        expect(res, 'to have failed with output', /compilers is deprecated/i);
+        expect(res, "to have failed with output", /compilers is deprecated/i);
         done();
       },
-      'pipe'
+      "pipe",
     );
   });
 });

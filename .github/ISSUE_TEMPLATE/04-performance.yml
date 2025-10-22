@@ -45,7 +45,7 @@ body:
     type: textarea
 description: Suggest a way to make Mocha faster, more memory- and/or space-efficient, or otherwise improve performance
 labels:
-  - 'area: performance'
-  - 'status: in triage'
+  - "area: performance"
+  - "status: in triage"
 name: ⚡️ Performance
-title: '⚡️ Performance: <short description of the change>'
+title: "⚡️ Performance: <short description of the change>"

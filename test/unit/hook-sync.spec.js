@@ -1,100 +1,100 @@
-'use strict';
+"use strict";
 
-describe('serial', function () {
+describe("serial", function () {
   var calls = [];
 
   beforeEach(function () {
-    calls.push('parent before');
+    calls.push("parent before");
   });
 
   afterEach(function () {
-    calls.push('parent after');
+    calls.push("parent after");
   });
 
-  describe('hooks', function () {
+  describe("hooks", function () {
     beforeEach(function () {
-      calls.push('before');
+      calls.push("before");
       if (this.currentTest) {
-        calls.push('before test ' + this.currentTest.title);
+        calls.push("before test " + this.currentTest.title);
       }
     });
 
-    it('one', function () {
-      expect(calls, 'to equal', ['parent before', 'before', 'before test one']);
-      calls.push('one');
+    it("one", function () {
+      expect(calls, "to equal", ["parent before", "before", "before test one"]);
+      calls.push("one");
     });
 
-    it('two', function () {
-      expect(calls, 'to equal', [
-        'parent before',
-        'before',
-        'before test one',
-        'one',
-        'after',
-        'after test one passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test two'
+    it("two", function () {
+      expect(calls, "to equal", [
+        "parent before",
+        "before",
+        "before test one",
+        "one",
+        "after",
+        "after test one passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test two",
       ]);
-      calls.push('two');
+      calls.push("two");
     });
 
-    it('three', function () {
-      expect(calls, 'to equal', [
-        'parent before',
-        'before',
-        'before test one',
-        'one',
-        'after',
-        'after test one passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test two',
-        'two',
-        'after',
-        'after test two passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test three'
+    it("three", function () {
+      expect(calls, "to equal", [
+        "parent before",
+        "before",
+        "before test one",
+        "one",
+        "after",
+        "after test one passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test two",
+        "two",
+        "after",
+        "after test two passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test three",
       ]);
-      calls.push('three');
+      calls.push("three");
     });
 
     afterEach(function () {
-      calls.push('after');
+      calls.push("after");
       if (this.currentTest) {
         calls.push(
-          'after test ' + this.currentTest.title + ' ' + this.currentTest.state
+          "after test " + this.currentTest.title + " " + this.currentTest.state,
         );
       }
     });
 
     after(function () {
-      expect(calls, 'to equal', [
-        'parent before',
-        'before',
-        'before test one',
-        'one',
-        'after',
-        'after test one passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test two',
-        'two',
-        'after',
-        'after test two passed',
-        'parent after',
-        'parent before',
-        'before',
-        'before test three',
-        'three',
-        'after',
-        'after test three passed',
-        'parent after'
+      expect(calls, "to equal", [
+        "parent before",
+        "before",
+        "before test one",
+        "one",
+        "after",
+        "after test one passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test two",
+        "two",
+        "after",
+        "after test two passed",
+        "parent after",
+        "parent before",
+        "before",
+        "before test three",
+        "three",
+        "after",
+        "after test three passed",
+        "parent after",
       ]);
     });
   });

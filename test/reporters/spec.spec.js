@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+var sinon = require("sinon");
+var events = require("../../").Runner.constants;
+var helpers = require("./helpers");
+var reporters = require("../../").reporters;
 
 var Base = reporters.Base;
 var Spec = reporters.Spec;
@@ -15,146 +15,146 @@ var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-describe('Spec reporter', function () {
+describe("Spec reporter", function () {
   var runReporter = makeRunReporter(Spec);
-  var expectedTitle = 'expectedTitle';
+  var expectedTitle = "expectedTitle";
   var noop = function () {};
 
   beforeEach(function () {
-    sinon.stub(Base, 'useColors').value(false);
+    sinon.stub(Base, "useColors").value(false);
   });
 
   afterEach(function () {
     sinon.restore();
   });
 
-  describe('event handlers', function () {
+  describe("event handlers", function () {
     describe("on 'suite' event", function () {
-      it('should return title', function () {
+      it("should return title", function () {
         var suite = {
-          title: expectedTitle
+          title: expectedTitle,
         };
         var runner = createMockRunner(
-          'suite',
+          "suite",
           EVENT_SUITE_BEGIN,
           null,
           null,
-          suite
+          suite,
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var stdout = runReporter({ epilogue: noop }, runner, options);
         sinon.restore();
 
-        var expectedArray = [expectedTitle + '\n'];
-        expect(stdout, 'to equal', expectedArray);
+        var expectedArray = [expectedTitle + "\n"];
+        expect(stdout, "to equal", expectedArray);
       });
     });
 
     describe("on 'pending' event", function () {
-      it('should return title', function () {
+      it("should return title", function () {
         var suite = {
-          title: expectedTitle
+          title: expectedTitle,
         };
         var runner = createMockRunner(
-          'pending test',
+          "pending test",
           EVENT_TEST_PENDING,
           null,
           null,
-          suite
+          suite,
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var stdout = runReporter({ epilogue: noop }, runner, options);
         sinon.restore();
 
-        var expectedArray = ['  - ' + expectedTitle + '\n'];
-        expect(stdout, 'to equal', expectedArray);
+        var expectedArray = ["  - " + expectedTitle + "\n"];
+        expect(stdout, "to equal", expectedArray);
       });
     });
 
     describe("on 'pass' event", function () {
-      describe('when test speed is slow', function () {
-        it('should return expected tick, title, and duration', function () {
+      describe("when test speed is slow", function () {
+        it("should return expected tick, title, and duration", function () {
           var expectedDuration = 2;
           var test = {
             title: expectedTitle,
             duration: expectedDuration,
             slow: function () {
               return 1;
-            }
+            },
           };
           var runner = createMockRunner(
-            'pass',
+            "pass",
             EVENT_TEST_PASS,
             null,
             null,
-            test
+            test,
           );
           var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          var stdout = runReporter({ epilogue: noop }, runner, options);
           sinon.restore();
 
           var expectedString =
-            '  ' +
+            "  " +
             Base.symbols.ok +
-            ' ' +
+            " " +
             expectedTitle +
-            ' (' +
+            " (" +
             expectedDuration +
-            'ms)' +
-            '\n';
-          expect(stdout[0], 'to be', expectedString);
+            "ms)" +
+            "\n";
+          expect(stdout[0], "to be", expectedString);
         });
       });
 
-      describe('when test speed is fast', function () {
-        it('should return expected tick, title without a duration', function () {
+      describe("when test speed is fast", function () {
+        it("should return expected tick, title without a duration", function () {
           var expectedDuration = 1;
           var test = {
             title: expectedTitle,
             duration: expectedDuration,
             slow: function () {
               return 2;
-            }
+            },
           };
           var runner = createMockRunner(
-            'pass',
+            "pass",
             EVENT_TEST_PASS,
             null,
             null,
-            test
+            test,
           );
           var options = {};
-          var stdout = runReporter({epilogue: noop}, runner, options);
+          var stdout = runReporter({ epilogue: noop }, runner, options);
           sinon.restore();
 
           var expectedString =
-            '  ' + Base.symbols.ok + ' ' + expectedTitle + '\n';
-          expect(stdout[0], 'to be', expectedString);
+            "  " + Base.symbols.ok + " " + expectedTitle + "\n";
+          expect(stdout[0], "to be", expectedString);
         });
       });
     });
 
     describe("on 'fail' event", function () {
-      it('should return title and function count', function () {
+      it("should return title and function count", function () {
         var functionCount = 1;
         var test = {
-          title: expectedTitle
+          title: expectedTitle,
         };
         var runner = createMockRunner(
-          'fail',
+          "fail",
           EVENT_TEST_FAIL,
           null,
           null,
-          test
+          test,
         );
         var options = {};
-        var stdout = runReporter({epilogue: noop}, runner, options);
+        var stdout = runReporter({ epilogue: noop }, runner, options);
         sinon.restore();
 
         var expectedArray = [
-          '  ' + functionCount + ') ' + expectedTitle + '\n'
+          "  " + functionCount + ") " + expectedTitle + "\n",
         ];
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout, "to equal", expectedArray);
       });
     });
   });
