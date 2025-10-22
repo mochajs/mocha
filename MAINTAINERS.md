@@ -90,9 +90,8 @@ Your public behavior, whether in the physical or virtual world, reflects upon th
 > If you don't understand the code of conduct, or why it exists, it is _your responsibility_ to educate yourself.
 > This does not imply the CoC is immutable.
 
-Furthermore, a maintainer is a contributor who **contributes regularly**, or expresses a _desire to do so._ That could be every day--but it might be once a week, or even once a month.
-Your boss doesn't work here; contribute as often as you wish.
-We are all people with Real Lives, and for many of us, contributing to OSS is just a hobby!
+Furthermore, a maintainer is a contributor who **contributes regularly**. That can be daily, weekly, or even just a few times a month -- as long as it's regular.
+We are all people with Real Lives, and for many of us, contributing to OSS is just an occasional hobby!
 
 Finally, a maintainer must help define what makes Mocha "Mocha".
 At minimum, a maintainer must _understand_ the current definition (if a maintainer is not interested in decision-making).
@@ -108,7 +107,7 @@ As maintainers, _we work together_ to learn about the nature of these questions.
 
 A maintainer _must_ also have 2FA enabled on their GitHub account.
 
-> If you think that you aren't familiar with mocha's internals enough to contribute, please watch [This walkthrough video!](https://youtu.be/zLayCLcIno0)
+> If you think that you aren't familiar with mocha's internals enough to contribute, please watch [this walkthrough video](https://youtu.be/zLayCLcIno0)!
 
 #### The Rights of a Maintainer
 
@@ -127,6 +126,28 @@ You may choose to do zero or more of these _at their discretion_:
 > For example, a spelling correction in `CHANGELOG.md` may not require a pull request.
 > A change to a reporter's output most certainly would! Maintainers are trusted to use their best judgement; if unsure, err on the side of caution.
 
+#### Expected Activity Levels
+
+We generally expect maintainers to average at least:
+
+- Multiple contributions of any kind in a week
+- One meaningful, non-trivial contribution per month
+
+These are rough averages, not strict minimums!
+It's totally fine to skip a week or two here and there, as long as you do a little more before or after.
+Meaningful, non-trivial contributions can be a well-thought-out comment, sending a non-straightforward pull request, or anything else that adds real value to the project.
+
+If you have to step away longer than a couple of weeks, that's totally fine too.
+Just let the other maintainers know ahead of time.
+
+- If you need to step away for up to a month or two, don't sweat it.
+- If we don't hear from you for a month without prior notice, we'll check in with you to see if you want to remain a maintainer.
+- After three months of inactivity, or two without prior notice, we'll likely remove you as a maintainer.
+
+Again, don't stress about this if you can't always be available.
+Your boss doesn't work here; contribute as often as you reasonably can.
+Even if you step down or are removed, if you can come back and be regularly active we'll happily reinstate you.
+
 #### About "Owners"
 
 Some maintainers will have full admin rights to the [mochajs org](https://github.com/mochajs) and/or will have access to publish to npm.
@@ -142,6 +163,7 @@ If that fails, we decide by a simple vote.
 
 Active maintainers will make an effort to solicit feedback from others before making important or potentially controversial decisions.
 Given the varying geographical distribution and availability of the maintenance team, we resolve to do the best we can to solicit feedback.
+We will wait at least two weeks for consensus votes in most cases, and a month for especially important decisions.
 
 In other words, to have your opinion heard, participate regularly.
 The rest of the team won't wait on feedback that isn't necessarily forthcoming!
