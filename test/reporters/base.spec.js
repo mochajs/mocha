@@ -13,6 +13,7 @@ var makeTest = helpers.makeTest;
 var Mocha = require('../../');
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
+const { FATAL } = require('../../lib/error-constants').constants;
 
 describe('Base reporter', function () {
   var stdout;
@@ -624,6 +625,22 @@ describe('Base reporter', function () {
 
       expect(baseConsoleLog, 'was called');
       expect(console.log, 'was not called');
+    });
+  });
+
+  describe('error handling in event handling', function () {
+    it('should convert unexpected errors to mocha fatal errors', function () {
+      const suite = new Suite('Dummy suite', 'root');
+      const runner = new Runner(suite);
+      const base = new Base(runner);
+
+      try {
+        // It's hard to simulate an unexpected error in the EVENT_TEST_FAIL handling, so
+        // we do it here by triggering the event without the expected additional arguments
+        runner.emit(Runner.constants.EVENT_TEST_FAIL);
+      } catch(err) {
+        assert.deepEqual(err.code, FATAL);
+      }
     });
   });
 });
