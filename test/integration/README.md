@@ -4,7 +4,6 @@ The tests in this directory are integration or end-to-end tests. Most of them sp
 
 ## Directories
 
-- `cli`: Related to general CLI behavior; not necessarily command-line-flag specific
 - `fixtures`: Test file fixtures intended to be run via these tests. Usually have `.fixture.js` extension
 - `plugins`: Tests related to plugins (e.g., root hook plugins, global fixtures, etc.)
 - `options`: Tests for specific command-line flags
