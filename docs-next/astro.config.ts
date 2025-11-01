@@ -117,8 +117,16 @@ export default defineConfig({
               slug: "explainers/count-assertions",
             },
             {
+              label: "Environment variables",
+              slug: "explainers/environment-variables",
+            },
+            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
+            },
+            {
+              label: "Global variables",
+              slug: "explainers/global-variables",
             },
             {
               label: "Node.js native ESM support",
@@ -139,6 +147,10 @@ export default defineConfig({
             {
               label: "Spies",
               slug: "explainers/spies",
+            },
+            {
+              label: "Stub stdout",
+              slug: "explainers/stub-stdout",
             },
             {
               label: "Tagging with --grep",

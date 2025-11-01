@@ -8,6 +8,15 @@
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
+  "environment-variables": {
+    "title": "Environment variables"
+  },
+  "find-global-leaks": {
+    "title": "Find global leaks"
+  },
+  "global-variables": {
+    "title": "Global variables"
+  },
   "related-tools": {
     "title": "Related tools"
   },
@@ -16,6 +25,9 @@
   },
   "spies": {
     "title": "Spies"
+  },
+  "stub-stdout": {
+    "title": "Stub stdout"
   },
   "tagging": {
     "title": "Tagging with --grep"
