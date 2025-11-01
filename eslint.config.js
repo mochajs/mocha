@@ -60,7 +60,7 @@ module.exports = [
   {
     files: [
       "lib/nodejs/esm-utils.js",
-      "rollup.config.js",
+      "rollup.config.mjs",
       "scripts/*.mjs",
       "scripts/pick-from-package-json.js",
       "test/compiler-cjs/test.js",
@@ -176,6 +176,9 @@ module.exports = [
       "test/integration/fixtures/**",
       ".karma/**",
       "mocha.js",
+      // TODO: EsLint v8 parser can't parse Import attributes
+      "rollup.config.mjs",
+      "scripts/pick-from-package-json.mjs",
     ],
   },
 ];
