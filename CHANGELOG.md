@@ -1,5 +1,35 @@
 # Changelog
 
+## [12.0.0](https://github.com/mochajs/mocha/compare/v11.7.4...v12.0.0) (2025-11-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump minimum Node.js version from 18.18.0 to 20.19.0 ([#5477](https://github.com/mochajs/mocha/issues/5477))
+
+### 🌟 Features
+
+* bump minimum Node.js version from 18.18.0 to 20.19.0 ([#5477](https://github.com/mochajs/mocha/issues/5477)) ([1c34eef](https://github.com/mochajs/mocha/commit/1c34eef426f29e5e46ec348272ccaa869ae43922))
+
+
+### 📚 Documentation
+
+* add maintainer expectations to MAINTAINERS.md ([#5514](https://github.com/mochajs/mocha/issues/5514)) ([76f95a1](https://github.com/mochajs/mocha/commit/76f95a1113ea0472800ff6b1781f2750836a6db7))
+
+
+### 🧹 Chores
+
+* applied formatting to all files ([#5493](https://github.com/mochajs/mocha/issues/5493)) ([76d7194](https://github.com/mochajs/mocha/commit/76d719495d09dc4afb37d1179ede8911c52a011e))
+* fix broken link in .github/CONTRIBUTING.md ([681e843](https://github.com/mochajs/mocha/commit/681e843800051a9d3ab66c1bfb7ad71428e34315))
+* remove Node.js 18 from test-smoke in CI too ([d643105](https://github.com/mochajs/mocha/commit/d643105aa6f3fbac9d13e8a44f4c4c7302512193))
+* switch from Coveralls to Codecov ([#5447](https://github.com/mochajs/mocha/issues/5447)) ([f4e7e54](https://github.com/mochajs/mocha/commit/f4e7e54eb285765d7c50bce9c501db2e1b1e22be))
+* use `ps-list` instead of `pidtree` to remove wmic ([#5479](https://github.com/mochajs/mocha/issues/5479)) ([b2985b3](https://github.com/mochajs/mocha/commit/b2985b3428b4b88ca220a14a26e9eb7139e8d445))
+
+
+### 🤖 Automation
+
+* **deps:** bump actions/setup-node in the github-actions group ([#5503](https://github.com/mochajs/mocha/issues/5503)) ([9a70533](https://github.com/mochajs/mocha/commit/9a7053349589344236b20301de965030eaabfea9))
+
 ## [11.7.4](https://github.com/mochajs/mocha/compare/v11.7.3...v11.7.4) (2025-10-01)
 
 
