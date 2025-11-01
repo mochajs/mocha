@@ -8,8 +8,8 @@
   "environment-variables": {
     "title": "Environment variables"
   },
-  "mess-with-globals": {
-    "title": "Mess with globals"
+  "global-variables": {
+    "title": "Global variables"
   },
   "related-tools": {
     "title": "Related tools"
@@ -21,7 +21,7 @@
     "title": "Spies"
   },
   "stub-stdout": {
-    "title" : "Stub stdout"
+    "title": "Stub stdout"
   },
   "tagging": {
     "title": "Tagging with --grep"

@@ -117,8 +117,8 @@ export default defineConfig({
               slug: "explainers/find-global-leaks",
             },
             {
-              label: "Mess with globals",
-              slug: "explainers/mess-with-globals",
+              label: "Global variables",
+              slug: "explainers/global-variables",
             },
             {
               label: "Node.js native ESM support",
@@ -148,8 +148,7 @@ export default defineConfig({
               label: "Tagging with --grep",
               slug: "explainers/tagging",
             },
-            { label: "Test duration",
-              slug: "explainers/test-duration" },
+            { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",

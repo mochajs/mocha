@@ -1,11 +1,11 @@
 ---
 description: How to work with global variables in Mocha tests
-title: "Globals"
+title: "Global variables"
 ---
 
 Related issue [#1582](https://github.com/mochajs/mocha/issues/1582)
 
-If your test manipulates globals, a reasonable expectation is that you will clean up after yourself. This includes commonly called methods such as `process.stdout.write()` or `console.log()`.
+If your test manipulates global variables, a reasonable expectation is that you will clean up after yourself. This includes commonly called methods such as `process.stdout.write()` or `console.log()`.
 
 ```js
 var expect = require("chai").expect;

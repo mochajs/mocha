@@ -1,29 +1,31 @@
-# Mess with globals
+# Global variables
 
 Related issue [#1582](https://github.com/mochajs/mocha/issues/1582)
 
-If your test messes with globals, a reasonable expectation is that you will clean up after yourself. This is not impossible in the case of `process.stdout.write()` or `console.log()`. In fact, it's pretty easy.
+If your test manipulates global variables, a reasonable expectation is that you will clean up after yourself. This includes commonly called methods such as `process.stdout.write()` or `console.log()`.
 
 ```js
 var expect = require('chai').expect;
 
-describe('my nice test', function() {
-  var write, log, output = '';
+describe('my nice test', function () {
+  var write,
+    log,
+    output = '';
 
   // restore process.stdout.write() and console.log() to their previous glory
-  var cleanup = function() {
+  var cleanup = function () {
     process.stdout.write = write;
     console.log = log;
-    output = "";
+    output = '';
   };
 
-  beforeEach(function() {
+  beforeEach(function () {
     // store these functions to restore later because we are messing with them
     write = process.stdout.write;
     log = console.log;
 
     // our stub will concatenate any output to a string
-    process.stdout.write = console.log = function(s) {
+    process.stdout.write = console.log = function (s) {
       output += s;
     };
   });
@@ -31,7 +33,7 @@ describe('my nice test', function() {
   // restore after each test
   afterEach(cleanup);
 
-  it('should suppress all output if a non-AssertionError was thrown', function() {
+  it('should suppress all output if a non-AssertionError was thrown', function () {
     process.stdout.write('foo');
     console.log('bar');
     // uncomment below line to suppress output, which is bad
@@ -39,7 +41,7 @@ describe('my nice test', function() {
     expect(output).to.equal('foobar');
   });
 
-  it('should not suppress any output', function() {
+  it('should not suppress any output', function () {
     try {
       process.stdout.write('foo');
       console.log('bar');
