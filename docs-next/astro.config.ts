@@ -113,6 +113,10 @@ export default defineConfig({
               slug: "explainers/count-assertions",
             },
             {
+              label: "Environment variables",
+              slug: "explainers/environment-variables",
+            },
+            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
             },
@@ -160,10 +164,6 @@ export default defineConfig({
             {
               label: "Third party UIs",
               slug: "explainers/third-party-uis",
-            },
-            {
-              label: "Use environment variables",
-              slug: "explainers/environment-variables",
             },
           ],
           label: "Explainers",
