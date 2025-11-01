@@ -8,6 +8,9 @@
   "environment-variables": {
     "title": "Environment variables"
   },
+  "find-global-leaks": {
+    "title": "Find global leaks"
+  },
   "global-variables": {
     "title": "Global variables"
   },
