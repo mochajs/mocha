@@ -24,7 +24,8 @@ jobs:
         id: release
         with:
           config-file: .github/release-please/config.json
-          manifest-file: .github/release-please/manifest.json
+          manifest-file: .github/release-please/manifest-${{ github.ref_name }}.json
+          target-branch: ${{ github.ref_name }}
 
   npm_publish:
     name: Publish to npm
