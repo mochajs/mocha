@@ -1,5 +1,18 @@
 # Changelog
 
+## [11.7.5](https://github.com/mochajs/mocha/compare/v11.7.4...v11.7.5) (2025-11-04)
+
+
+### 🩹 Fixes
+
+* swallow more `require` errors from *ts files ([#5498](https://github.com/mochajs/mocha/issues/5498)) ([d89dbaf](https://github.com/mochajs/mocha/commit/d89dbaf23d093c22ab72e124dcaed110f3b0228d))
+
+
+### 🧹 Chores
+
+* run tests on PRs for and pushes to v11.x ([#5525](https://github.com/mochajs/mocha/issues/5525)) ([8b21b38](https://github.com/mochajs/mocha/commit/8b21b3820e99d8c50c024ad1fbac8b78a3293d8d))
+* setup release-please for v11 ([#5522](https://github.com/mochajs/mocha/issues/5522)) ([663fff4](https://github.com/mochajs/mocha/commit/663fff4b06ed3a1c70483c6ed8911ff0b89fa7b5))
+
 ## [11.7.4](https://github.com/mochajs/mocha/compare/v11.7.3...v11.7.4) (2025-10-01)
 
 
