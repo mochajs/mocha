@@ -8,6 +8,12 @@
   "custom-reporter": {
     "title": "Create a Custom Reporter"
   },
+  "developing-mocha": {
+    "title": "Developing Mocha"
+  },
+  "programmatic-usage": {
+    "title": "Programmatic usage"
+  },
   "related-tools": {
     "title": "Related tools"
   },
