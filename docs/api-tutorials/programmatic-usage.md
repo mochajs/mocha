@@ -1,5 +1,3 @@
-# using Mocha programmatically
-
 There are a lot of reasons why you might want to automate running the tests using Mocha. Using the command-line can run into some problems if you want to load specific files, for example.
 
 Here is an example of using Mocha programmatically:
