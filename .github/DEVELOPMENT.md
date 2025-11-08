@@ -19,24 +19,24 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
 
 ## Developing Mocha
 
-When you contribute to mocha, you will probably want to try to run your changes on the test suite of another project. You can (and should) run the test suite of mocha itself before committing, but also confirming that your changes give the expected result on another project.
+When you contribute to Mocha, you will probably want to try to run your changes on the test suite of another project. You can (and should) run the test suite of Mocha itself before committing, but also confirming that your changes give the expected result on another project.
 
 For example, [WebSocket.io](https://github.com/LearnBoost/websocket.io/):
 
     $ git clone https://github.com/LearnBoost/websocket.io.git
 
-Retreive websocket.io's dependencies, which will include the stable version of mocha:
+Retrieve websocket.io's dependencies, which will include the stable version of Mocha:
 
     $ cd websocket.io/
     $ npm install
 
-Replace the mocha dependency by the current git repository:
+Replace the Mocha dependency by the current git repository:
 
     $ cd node_modules/
     $ mv mocha/ mocha.save
-    $ git clone https://github.com/visionmedia/mocha.git
+    $ git clone https://github.com/mochajs/mocha.git
 
-Install mocha's dependencies for the development version:
+Install Mocha's dependencies for the development version:
 
     $ cd mocha
     $ npm install
