@@ -8,29 +8,28 @@ There are a lot of reasons why you might want to automate running the tests usin
 Here is an example of using Mocha programmatically:
 
 ```javascript
-var Mocha = require('mocha'),
-    fs = require('fs'),
-    path = require('path');
+var Mocha = require("mocha"),
+  fs = require("fs"),
+  path = require("path");
 
 // Instantiate a Mocha instance.
 var mocha = new Mocha();
 
-var testDir = 'some/dir/test'
+var testDir = "some/dir/test";
 
 // Add each .js file to the mocha instance
-fs.readdirSync(testDir).filter(function(file) {
+fs.readdirSync(testDir)
+  .filter(function (file) {
     // Only keep the .js files
-    return file.substr(-3) === '.js';
-
-}).forEach(function(file) {
-    mocha.addFile(
-        path.join(testDir, file)
-    );
-});
+    return file.substr(-3) === ".js";
+  })
+  .forEach(function (file) {
+    mocha.addFile(path.join(testDir, file));
+  });
 
 // Run the tests.
-mocha.run(function(failures) {
-  process.exitCode = failures ? 1 : 0;  // exit with non-zero status if there were failures
+mocha.run(function (failures) {
+  process.exitCode = failures ? 1 : 0; // exit with non-zero status if there were failures
 });
 ```
 
@@ -50,8 +49,8 @@ Firstly, you can set these options in the constructor object:
 
 ```javascript
 var mocha = new Mocha({
-    ui: 'tdd',
-    reporter: 'list'
+  ui: "tdd",
+  reporter: "list",
 });
 ```
 
@@ -63,13 +62,13 @@ Here is an example:
 
 ```javascript
 // Change the reporter to "list" before running the tests
-mocha.reporter('list').run();
+mocha.reporter("list").run();
 
 // Change the UI to "tdd" before running the tests
-mocha.ui('tdd').run();
+mocha.ui("tdd").run();
 
 // Or do both changes before running the tests
-mocha.reporter('list').ui('tdd').run();
+mocha.reporter("list").ui("tdd").run();
 ```
 
 Please check our [API documentation](https://mochajs.org/api/mocha) for more information.
