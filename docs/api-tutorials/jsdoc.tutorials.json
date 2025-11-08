@@ -1,4 +1,7 @@
 {
+  "compilers-deprecation": {
+    "title": "Compilers deprecation"
+  },
   "count-assertions": {
     "title": "Count assertions"
   },

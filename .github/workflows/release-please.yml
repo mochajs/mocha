@@ -36,11 +36,11 @@ jobs:
       - uses: actions/checkout@v5
         with:
           show-progress: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
-          node-version: '22.11.0'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "22.11.0"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: npm ci --ignore-scripts --force --no-fund --no-audit
