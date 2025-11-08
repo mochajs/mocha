@@ -117,10 +117,6 @@ export default defineConfig({
               slug: "explainers/count-assertions",
             },
             {
-              label: "Developing Mocha",
-              slug: "explainers/developing-mocha",
-            },
-            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
             },
