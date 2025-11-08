@@ -28,13 +28,13 @@ mocha.run(function (failures) {
 });
 ```
 
-`mocha.run()` returns a `Runner` instance which emits many [events](https://github.com/mochajs/mocha/blob/8cae7a34f0b6eafeb16567beb8852b827cc5956b/lib/runner.js#L47-L57) of interest.
+`mocha.run()` returns a `Runner` instance which emits many [events](https://github.com/mochajs/mocha/blob/9a7053349589344236b20301de965030eaabfea9/lib/runner.js#L52) of interest.
 
 Note that `run` (via `loadFiles`, which it calls) relies on Node's `require` to execute the test interface functions. Thus, files loaded by Mocha will be stored in Node's `require` cache and therefore tests in these files will not be re-run if `mocha.run()` is called again. If you want to run tests multiple times, you may need to clear Node's `require` cache before subsequent calls in whichever manner best suits your needs. The upcoming Mocha-6.0 release will provide `Mocha#unloadFiles`, which will remove all files loaded by `Mocha#loadFiles`.
 
 Unfortunately, event listeners in multiple places are not yet configured for restartability; for now, we recommend recreating the `mocha` instance before rerunning to _ensure_ everything gets reset properly.
 
-Find a fully [working example here](https://github.com/mochajs/mocha-examples/tree/master/packages/programmatic-usage).
+Find a fully [working example here](https://github.com/mochajs/mocha-examples/tree/main/packages/programmatic-usage).
 
 ## Set options
 
