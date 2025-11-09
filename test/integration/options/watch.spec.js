@@ -615,7 +615,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await runFinished;
-          await new Promise((r) => setTimeout(r, 100));
+          await sleep(10); // ensure file timestamp is greater
           await touchFile(dependency);
           runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "change", dependency);
@@ -668,7 +668,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await runFinished;
-          await new Promise((r) => setTimeout(r, 100));
+          await sleep(10); // ensure file timestamp is greater
           let dependency2 = path.join(tempDir, "lib", "dependency2.js");
           copyFixture("options/watch/dependency", dependency2);
           dependency2 = await fsPromises.realpath(dependency2);
