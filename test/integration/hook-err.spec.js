@@ -268,7 +268,7 @@ describe("hook error handling", function () {
   });
 
   describe("--fail-hook-affected-tests", function () {
-    describe("before hook error", function () {
+    describe("error in `before` hook", function () {
       it("should fail all affected tests", function (done) {
         runMochaJSON(
           "hooks/before-hook-error-with-fail-affected",
@@ -290,7 +290,7 @@ describe("hook error handling", function () {
       });
     });
 
-    describe("beforeEach hook error", function () {
+    describe("error in `beforeEach` hook", function () {
       it("should fail all affected tests", function (done) {
         runMochaJSON(
           "hooks/before-each-hook-error-with-fail-affected",

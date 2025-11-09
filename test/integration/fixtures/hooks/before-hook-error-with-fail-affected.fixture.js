@@ -1,8 +1,8 @@
 'use strict';
 
-describe('spec 1', function () {
+describe('fails `before` hook', function () {
   before(function () {
-    throw new Error('before hook error');
+    throw new Error('error in `before` hook');
   });
   it('test 1', function () {
     // This should be reported as failed due to before hook failure
@@ -11,7 +11,7 @@ describe('spec 1', function () {
     // This should be reported as failed due to before hook failure
   });
 });
-describe('spec 2', function () {
+describe('passes normally', function () {
   it('test 3', function () {
     // This should pass normally
   });
