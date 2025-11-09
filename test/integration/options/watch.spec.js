@@ -717,6 +717,10 @@ describe("--watch", function () {
               mochaProcess.send({ watcher: args }),
             ]);
 
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
           await gotMessage((msg) => msg.listening);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -726,8 +730,7 @@ describe("--watch", function () {
             gotMessage((msg) => msg.runFinished),
             mochaProcess.send({ resolveGlobalSetup: true }),
           ]);
-          // wait to make sure rerun doesn't get triggered
-          await new Promise((r) => setTimeout(r, 2000));
+          expect(rerunScheduled, "to equal", false);
         }
       );
       expect(results, "to have length", 1);
@@ -767,6 +770,10 @@ describe("--watch", function () {
               mochaProcess.send({ watcher: args }),
             ]);
 
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
           await gotMessage((msg) => msg.listening);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -779,8 +786,7 @@ describe("--watch", function () {
             gotMessage((msg) => msg.runFinished),
             mochaProcess.send({ resolveGlobalSetup: true }),
           ]);
-          // wait to make sure rerun doesn't get triggered
-          await new Promise((r) => setTimeout(r, 2000));
+          expect(rerunScheduled, "to equal", false);
         }
       );
       expect(results, "to have length", 1);
