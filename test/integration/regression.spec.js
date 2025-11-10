@@ -51,28 +51,36 @@ describe("regressions", function () {
   });
 
   it("issue-2406: should run nested describe.only suites", function (done) {
-    runJSON("regression/issue-2406.fixture.js", [], function (err, res) {
-      if (err) {
-        done(err);
-        return;
-      }
-      expect(res, "to have passed")
-        .and("not to have pending tests")
-        .and("to have passed test count", 2);
-      done();
-    });
+    runJSON(
+      "regression/issue-2406.fixture.js",
+      ["--no-forbid-only"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed")
+          .and("not to have pending tests")
+          .and("to have passed test count", 2);
+        done();
+      },
+    );
   });
 
   it("issue-2417: should not recurse infinitely with .only suites nested within each other", function (done) {
-    runJSON("regression/issue-2417.fixture.js", [], function (err, res) {
-      if (err) {
-        done(err);
-        return;
-      }
-      expect(res, "to have passed")
-        .and("not to have pending tests")
-        .and("to have passed test count", 1);
-      done();
-    });
+    runJSON(
+      "regression/issue-2417.fixture.js",
+      ["--no-forbid-only"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed")
+          .and("not to have pending tests")
+          .and("to have passed test count", 1);
+        done();
+      },
+    );
   });
 });
