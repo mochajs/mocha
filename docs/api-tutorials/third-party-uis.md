@@ -4,17 +4,16 @@ Creating a Third Party UI involves listening for the `pre-require` event emitted
 
 In this first brief example, we'll create an interface with only a single function: `test`
 
-``` javascript
-var Mocha = require('mocha');
-    Suite = require('mocha/lib/suite'),
-    Test  = require('mocha/lib/test');
+```javascript
+var Mocha = require("mocha");
+((Suite = require("mocha/lib/suite")), (Test = require("mocha/lib/test")));
 
 /**
  * A simple UI that only exposes a single function: test
  */
-module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
-  suite.on('pre-require', function(context, file, mocha) {
-    var common = require('mocha/lib/interfaces/common')([suite], context);
+module.exports = Mocha.interfaces["simple-ui"] = function (suite) {
+  suite.on("pre-require", function (context, file, mocha) {
+    var common = require("mocha/lib/interfaces/common")([suite], context);
 
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
@@ -22,7 +21,7 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
      * Describes a specification or test-case with the given `title`
      * and callback `fn` acting as a thunk.
      */
-    context.test = function(title, fn) {
+    context.test = function (title, fn) {
       var test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -33,13 +32,13 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
 };
 ```
 
-``` javascript
-test('pass', function() {
+```javascript
+test("pass", function () {
   // pass
 });
 
-test('fail', function() {
-  throw new Error('oops!');
+test("fail", function () {
+  throw new Error("oops!");
 });
 ```
 
@@ -63,22 +62,22 @@ $ mocha --require ./simple-ui.js --ui simple-ui test.js
 
 In this next example, we'll be extending the [TDD interface](https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js) with a comment function that simply prints the passed text. That is, `comment('This is a comment');` would print the string.
 
-``` javascript
-var Mocha    = require('mocha');
-    Suite    = require('mocha/lib/suite'),
-    Test     = require('mocha/lib/test'),
-    escapeRe = require('escape-string-regexp');
+```javascript
+var Mocha = require("mocha");
+((Suite = require("mocha/lib/suite")),
+  (Test = require("mocha/lib/test")),
+  (escapeRe = require("escape-string-regexp")));
 
 /**
  * This example is identical to the TDD interface, but with the addition of a
  * "comment" function:
  * https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js
  */
-module.exports = Mocha.interfaces['example-ui'] = function(suite) {
+module.exports = Mocha.interfaces["example-ui"] = function (suite) {
   var suites = [suite];
 
-  suite.on('pre-require', function(context, file, mocha) {
-    var common = require('mocha/lib/interfaces/common')(suites, context);
+  suite.on("pre-require", function (context, file, mocha) {
+    var common = require("mocha/lib/interfaces/common")(suites, context);
 
     /**
      * Use all existing hook logic common to UIs. Common logic can be found in
@@ -97,7 +96,7 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
      * a pending test. But any custom reporter could check for the isComment
      * attribute on a test to modify its presentation.
      */
-    context.comment = function(title) {
+    context.comment = function (title) {
       var suite, comment;
 
       suite = suites[0];
@@ -120,7 +119,7 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
      * given title and callback, fn`, which may contain nested suites
      * and/or tests.
      */
-    context.suite = function(title, fn) {
+    context.suite = function (title, fn) {
       var suite = Suite.create(suites[0], title);
 
       suite.file = file;
@@ -134,7 +133,7 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
     /**
      * The default TDD pending suite functionality.
      */
-    context.suite.skip = function(title, fn) {
+    context.suite.skip = function (title, fn) {
       var suite = Suite.create(suites[0], title);
 
       suite.pending = true;
@@ -146,7 +145,7 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
     /**
      * Default TDD exclusive test-case logic.
      */
-    context.suite.only = function(title, fn) {
+    context.suite.only = function (title, fn) {
       var suite = context.suite(title, fn);
       mocha.grep(suite.fullTitle());
     };
@@ -155,7 +154,7 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
      * Default TDD test-case logic. Describes a specification or test-case
      * with the given `title` and callback `fn` acting as a thunk.
      */
-    context.test = function(title, fn) {
+    context.test = function (title, fn) {
       var suite, test;
 
       suite = suites[0];
@@ -170,11 +169,11 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
     /**
      * Exclusive test-case.
      */
-    context.test.only = function(title, fn) {
+    context.test.only = function (title, fn) {
       var test, reString;
 
       test = context.test(title, fn);
-      reString = '^' + escapeRe(test.fullTitle()) + '$';
+      reString = "^" + escapeRe(test.fullTitle()) + "$";
       mocha.grep(new RegExp(reString));
     };
 
@@ -186,16 +185,16 @@ module.exports = Mocha.interfaces['example-ui'] = function(suite) {
 };
 ```
 
-``` javascript
-suite('Example', function() {
+```javascript
+suite("Example", function () {
   comment("Here's the addition we made to the UI");
 
-  test('passing test', function() {
+  test("passing test", function () {
     // Pass
   });
 
-  test('failing test', function() {
-    throw new Error('it failed!');
+  test("failing test", function () {
+    throw new Error("it failed!");
   });
 });
 ```

@@ -1,1 +1,1 @@
-throw new Error('this module is wonky');
+throw new Error("this module is wonky");

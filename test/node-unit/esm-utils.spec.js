@@ -1,77 +1,76 @@
-'use strict';
+"use strict";
 
-const esmUtils = require('../../lib/nodejs/esm-utils');
-const sinon = require('sinon');
-const url = require('node:url');
+const esmUtils = require("../../lib/nodejs/esm-utils");
+const sinon = require("sinon");
+const url = require("node:url");
 
-describe('esm-utils', function () {
-  describe('requireOrImport', function () {
-    it('should show an informative error message for a broken default import', async function () {
+describe("esm-utils", function () {
+  describe("requireOrImport", function () {
+    it("should show an informative error message for a broken default import", async function () {
       return expect(
         () =>
           esmUtils.requireOrImport(
-            '../../test/node-unit/fixtures/broken-default-import.mjs'
+            "../../test/node-unit/fixtures/broken-default-import.mjs",
           ),
-        'to be rejected with error satisfying',
+        "to be rejected with error satisfying",
         {
-          name: 'SyntaxError',
+          name: "SyntaxError",
           message:
-            "The requested module './module-without-default-export.mjs' does not provide an export named 'default'"
-        }
+            "The requested module './module-without-default-export.mjs' does not provide an export named 'default'",
+        },
       );
     });
 
-    it('should show a syntax error message when importing a TypeScript file with invalid syntax', async function () {
+    it("should show a syntax error message when importing a TypeScript file with invalid syntax", async function () {
       return expect(
         () =>
           esmUtils.requireOrImport(
-            '../../test/node-unit/fixtures/broken-syntax.ts'
+            "../../test/node-unit/fixtures/broken-syntax.ts",
           ),
-        'to be rejected with error satisfying',
+        "to be rejected with error satisfying",
         {
-          name: 'SyntaxError',
-          message:
-            /Invalid or unexpected token|Expected ident/
-        }
+          name: "SyntaxError",
+          message: /Invalid or unexpected token|Expected ident/,
+        },
       );
     });
   });
 
-  describe('loadFilesAsync()', function () {
+  describe("loadFilesAsync()", function () {
     beforeEach(function () {
-      sinon.stub(esmUtils, 'doImport').resolves({});
+      sinon.stub(esmUtils, "doImport").resolves({});
     });
 
     afterEach(function () {
       sinon.restore();
     });
 
-    it('should not decorate imported module if no decorator passed', async function () {
+    it("should not decorate imported module if no decorator passed", async function () {
       await esmUtils.loadFilesAsync(
-        ['/foo/bar.mjs'],
+        ["/foo/bar.mjs"],
         () => {},
-        () => {}
+        () => {},
       );
 
       expect(
         esmUtils.doImport.firstCall.args[0].toString(),
-        'to be',
-        url.pathToFileURL('/foo/bar.mjs').toString()
+        "to be",
+        url.pathToFileURL("/foo/bar.mjs").toString(),
       );
     });
 
-    it('should decorate imported module with passed decorator', async function () {
+    it("should decorate imported module with passed decorator", async function () {
       await esmUtils.loadFilesAsync(
-        ['/foo/bar.mjs'],
+        ["/foo/bar.mjs"],
         () => {},
         () => {},
-        x => `${x}?foo=bar`
+        (x) => `${x}?foo=bar`,
       );
 
       expect(
         esmUtils.doImport.firstCall.args[0].toString(),
-        'to be',
-        `${url.pathToFileURL('/foo/bar.mjs').toString()}?foo=bar`
+        "to be",
+        `${url.pathToFileURL("/foo/bar.mjs").toString()}?foo=bar`,
       );
     });
   });
