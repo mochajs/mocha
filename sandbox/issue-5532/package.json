@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "debug-test": "cross-env DEBUG=mocha:cli:mocha npm test",
+    "test": "mocha my.test.js --reporter-option output=./test-reports/cli.xml"
+  },
+  "dependencies": {
+    "mocha": "file:../../"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}
