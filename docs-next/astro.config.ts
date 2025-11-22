@@ -125,6 +125,10 @@ export default defineConfig({
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Programmatic usage",
+              slug: "explainers/programmatic-usage",
+            },
+            {
               label: "Related tools",
               slug: "explainers/related-tools",
             },
