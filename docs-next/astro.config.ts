@@ -105,16 +105,16 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              label: "Detecting multiple calls to done()",
-              slug: "explainers/detecting-multiple-calls-to-done",
-            },
-            {
               label: "Compilers deprecation",
               slug: "explainers/compilers-deprecation",
             },
             {
               label: "Counting assertions",
               slug: "explainers/count-assertions",
+            },
+            {
+              label: "Detecting multiple calls to done()",
+              slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
               label: "Environment variables",
