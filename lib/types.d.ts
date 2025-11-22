@@ -4,11 +4,11 @@
  * For now, if you're an external user, you should use the types from @types/mocha.
  */
 
-import type {FSWatcher} from 'chokidar';
+import type { FSWatcher, MatchFunction } from "chokidar";
 
-import type {constants} from './error-constants.js';
-import type Mocha from './mocha.js';
-import Runner from './runner.js';
+import type { constants } from "./error-constants.js";
+import type Mocha from "./mocha.js";
+import Runner from "./runner.js";
 
 /**
  * Command-line options
@@ -185,7 +185,7 @@ export type PluginValidator = (this: PluginDefinition, value: unknown) => void;
  * @param implementations User-supplied implementations
  */
 export type PluginFinalizer = (
-  implementations: unknown[]
+  implementations: unknown[],
 ) => Promise<unknown> | unknown;
 
 /**
@@ -250,6 +250,47 @@ export interface Rerunner {
   run: Function;
   /** Schedules another call to `run */
   scheduleRun: Function;
+}
+
+/**
+ * Object containing paths (without globs) and glob paths for matching.
+ * @private
+ */
+export interface PathPattern {
+  /** Set of absolute paths without globs. */
+  paths: Set<string>;
+  /** Set of absolute glob paths. */
+  globs: Set<string>;
+}
+
+/**
+ * Object containing path patterns for filtering from the provided glob paths.
+ * @private
+ */
+export interface PathFilter {
+  /** Path patterns for directories. */
+  dir: PathPattern;
+  /** Path patterns for matching. */
+  match: PathPattern;
+}
+
+/**
+ * Checks if the file path matches the allowed patterns.
+ * @private
+ * @param filePath The file path to check.
+ * @returns Determines if there was a match.
+ */
+export type AllowMatchFunction = (filePath: string) => boolean;
+
+/**
+ * Object for matching paths to either allow or ignore them.
+ * @private
+ */
+export interface PathMatcher {
+  /** Checks if the file path matches the allowed patterns. */
+  allow: AllowMatchFunction;
+  /** The Chokidar `ignored` match function. */
+  ignore: MatchFunction;
 }
 
 export interface StatsCollector {
@@ -333,7 +374,7 @@ export interface SerializedWorkerResult {
   events: SerializedEvent[];
 
   /** Symbol-like to denote the type of object this is */
-  __type: 'SerializedWorkerResult';
+  __type: "SerializedWorkerResult";
 }
 
 /**

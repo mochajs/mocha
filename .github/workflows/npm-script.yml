@@ -4,28 +4,29 @@ on:
   workflow_call:
     inputs:
       npm-script:
-        description: 'npm script'
+        description: "npm script"
         required: true
         type: string
       browsers:
-        description: 'A comma separated list of browser names to test with.'
+        description: "A comma separated list of browser names to test with."
         required: false
         type: string
       node-versions:
-        description: 'A comma separated list of Node versions to test with.'
+        description: "A comma separated list of Node versions to test with."
         required: false
         type: string
       os:
-        description: 'A comma separated list of operating systems to test on.'
+        description: "A comma separated list of operating systems to test on."
         required: false
         type: string
       coverage:
-        description: 'Whether to set up coverage reporting or not'
+        description: "Whether to set up coverage reporting or not"
         required: false
         type: boolean
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   resolve-inputs:
@@ -61,24 +62,27 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node_version }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --ignore-scripts
       - run: npm run ${{ inputs.npm-script }}
         env:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
-          NODE_OPTIONS: '--trace-warnings'
+          NODE_OPTIONS: "--trace-warnings"
           SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
           SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+      # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
         if: always() && inputs.coverage
         run: npm run test-coverage-generate
-      - name: Coveralls Parallel
+      # https://github.com/marketplace/actions/codecov
+      # https://app.codecov.io/gh/mochajs/mocha
+      - name: Upload coverage reports
         if: always() && inputs.coverage
-        uses: coverallsapp/github-action@v2
+        uses: codecov/codecov-action@v5
         with:
-          flag-name: run-${{ inputs.npm-script }}-${{ join(matrix.*, '-') }}
-          parallel: true
+          fail_ci_if_error: true
+          use_oidc: true

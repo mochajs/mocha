@@ -109,6 +109,10 @@ export default defineConfig({
               slug: "explainers/detecting-multiple-calls-to-done",
             },
             {
+              label: "Compilers deprecation",
+              slug: "explainers/compilers-deprecation",
+            },
+            {
               label: "Counting assertions",
               slug: "explainers/count-assertions",
             },
@@ -127,6 +131,10 @@ export default defineConfig({
             {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
+            },
+            {
+              label: "Programmatic usage",
+              slug: "explainers/programmatic-usage",
             },
             {
               label: "Related tools",
