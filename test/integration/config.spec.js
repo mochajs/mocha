@@ -10,15 +10,15 @@ var loadConfig = require("../../lib/cli/config").loadConfig;
 describe("config", function () {
   it("should return the same values for all supported config types", function () {
     var configDir = path.join(__dirname, "fixtures", "config");
-    var js = loadConfig(path.join(configDir, "mocharc.js"));
+    var js = loadConfig(path.join(configDir, "mocharc.js")); // canonical form
     var cjs = loadConfig(path.join(configDir, "mocharc.cjs"));
-    var mjs = loadConfig(path.join(configDir, "mocharc.mjs"));
     var json = loadConfig(path.join(configDir, "mocharc.json"));
+    var mjs = loadConfig(path.join(configDir, "mocharc.mjs"));
     var yaml = loadConfig(path.join(configDir, "mocharc.yaml"));
-    expect(js, "to equal", json);
-    expect(js, "to equal", cjs);
+    expect(cjs, "to equal", js);
+    expect(json, "to equal", js);
     expect(mjs, "to equal", js);
-    expect(json, "to equal", yaml);
+    expect(yaml, "to equal", js);
   });
 
   describe('when configuring Mocha via a ".js" file', function () {
