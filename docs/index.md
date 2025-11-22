@@ -947,6 +947,12 @@ Enforce a rule that tests may not be exclusive (use of e.g., `describe.only()` o
 
 `--forbid-only` causes Mocha to fail when an exclusive ("only'd") test or suite is encountered, and it will abort further test execution.
 
+Defaults:
+
+1. Before v12: false
+2. After v12: false, unless an environment variable called `CI` is set. Many popular
+   CI providers, like github actions or gitlab, do this automatically.
+
 ### `--forbid-pending`
 
 Enforce a rule that tests may not be skipped (use of e.g., `describe.skip()`, `it.skip()`, or `this.skip()` anywhere is disallowed).
