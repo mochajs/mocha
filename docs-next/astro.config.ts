@@ -105,10 +105,6 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              label: "Detecting multiple calls to done()",
-              slug: "explainers/detecting-multiple-calls-to-done",
-            },
-            {
               label: "Compilers deprecation",
               slug: "explainers/compilers-deprecation",
             },
@@ -117,8 +113,20 @@ export default defineConfig({
               slug: "explainers/count-assertions",
             },
             {
+              label: "Detecting multiple calls to done()",
+              slug: "explainers/detecting-multiple-calls-to-done",
+            },
+            {
+              label: "Environment variables",
+              slug: "explainers/environment-variables",
+            },
+            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
+            },
+            {
+              label: "Global variables",
+              slug: "explainers/global-variables",
             },
             {
               label: "Node.js native ESM support",
@@ -143,6 +151,10 @@ export default defineConfig({
             {
               label: "Spies",
               slug: "explainers/spies",
+            },
+            {
+              label: "Stub stdout",
+              slug: "explainers/stub-stdout",
             },
             {
               label: "Tagging with --grep",
