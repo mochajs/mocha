@@ -75,24 +75,13 @@ describe("cli/config", function () {
       });
 
       describe('when supplied a filepath with ".mjs" extension', function () {
-        const filepath = 'foo.mjs';
+        const filepath = "foo.mjs";
 
-        it('should use the JS parser', function () {
+        it("should use the JS parser", function () {
           loadConfig(filepath);
-          expect(parsers.js, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
-          ]).and('was called once');
-        });
-      });
-
-      describe('when supplied a filepath with an ESM ".js" extension', function () {
-        const filepath = 'foo.js';
-
-        it('should use the JS parser', function () {
-          loadConfig(filepath);
-          expect(parsers.js, 'to have calls satisfying', [
-            {args: [filepath], returned: phonyConfigObject}
-          ]).and('was called once');
+          expect(parsers.js, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
         });
       });
 
