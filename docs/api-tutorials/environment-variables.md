@@ -1,5 +1,3 @@
-# Environment variables
-
 Sometimes you might want your test to make use of variables set on an environment-level. Common reasons for this include
 
 - Flagging a run as CI

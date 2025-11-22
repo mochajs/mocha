@@ -1,5 +1,3 @@
-# Stub stdout
-
 If you want to stub `stdout` inside your own code (via `process.stdout.write` or `console.log`) there is a potential to hinder Mocha's reporter output. This is because they rely on the same mechanisms to print results of the tests.
 
 i.e.
