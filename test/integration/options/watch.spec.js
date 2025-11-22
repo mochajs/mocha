@@ -1,9 +1,11 @@
 "use strict";
 
 const fs = require("node:fs");
+const fsPromises = require("node:fs/promises");
 const path = require("node:path");
 const {
   copyFixture,
+  gotEvent,
   runMochaWatchJSONAsync,
   sleep,
   runMochaWatchAsync,
@@ -98,7 +100,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results.length, "to equal", 2);
       });
@@ -114,7 +116,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -140,7 +142,7 @@ describe("--watch", function () {
           await sleep(1000);
 
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 4);
       });
@@ -158,7 +160,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           fs.rmSync(watchedFile, { recursive: true, force: true });
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -176,7 +178,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -194,7 +196,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -212,7 +214,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -230,7 +232,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -248,7 +250,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -272,7 +274,7 @@ describe("--watch", function () {
         tempCwd,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -290,7 +292,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -306,7 +308,7 @@ describe("--watch", function () {
         () => {
           const addedTestFile = path.join(tempDir, "test/b.js");
           copyFixture("passing", addedTestFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 1);
@@ -326,7 +328,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -355,7 +357,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -377,7 +379,7 @@ describe("--watch", function () {
         () => {
           touchFile(gitFile);
           touchFile(nodeModulesFile);
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 1);
       });
@@ -401,7 +403,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -420,7 +422,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        },
+        }
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -437,9 +439,9 @@ describe("--watch", function () {
           replaceFileContents(
             testFile,
             "testShouldFail = true",
-            "testShouldFail = false",
+            "testShouldFail = false"
           );
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 0);
@@ -463,9 +465,9 @@ describe("--watch", function () {
           replaceFileContents(
             dependency,
             "module.exports.testShouldFail = false",
-            "module.exports.testShouldFail = true",
+            "module.exports.testShouldFail = true"
           );
-        },
+        }
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 1);
@@ -473,6 +475,323 @@ describe("--watch", function () {
         expect(results[1].passes, "to have length", 0);
         expect(results[1].failures, "to have length", 1);
       });
+    });
+
+    it("works when watcher is ready before global setup finishes", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          await gotMessage((msg) => msg.listening);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({ resolveGlobalSetup: true }),
+          ]);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            sendWatcherEvent("all", "change", dependency),
+          ]);
+        }
+      );
+
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+    });
+
+    it("ignores changes before watcher is ready with timestamp before start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          await gotMessage((msg) => msg.listening);
+          const runFinished = gotMessage((msg) => msg.runFinished);
+          mochaProcess.send({ resolveGlobalSetup: true });
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("all", "change", dependency);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        }
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+    });
+
+    it("handles changes before watcher is ready with timestamp after start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          await gotMessage((msg) => msg.listening);
+          mochaProcess.send({ resolveGlobalSetup: true });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await runFinished;
+          await sleep(10); // ensure file timestamp is greater
+          await touchFile(dependency);
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "change", dependency);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        }
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    });
+
+    it("handles files added before watcher is ready with timestamp after start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          await gotMessage((msg) => msg.listening);
+          mochaProcess.send({ resolveGlobalSetup: true });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await runFinished;
+          await sleep(10); // ensure file timestamp is greater
+          let dependency2 = path.join(tempDir, "lib", "dependency2.js");
+          copyFixture("options/watch/dependency", dependency2);
+          dependency2 = await fsPromises.realpath(dependency2);
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", dependency2);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        }
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    });
+
+    it("ignores changes before globalSetup is finished", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
+          await gotMessage((msg) => msg.listening);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          await sendWatcherEvent("all", "change", dependency);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({ resolveGlobalSetup: true }),
+          ]);
+          expect(rerunScheduled, "to equal", false);
+        }
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+    });
+
+    it("ignores files added before globalSetup is finished", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchJSONAsync(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          sleepMs: 0,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i])
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
+          await gotMessage((msg) => msg.listening);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          let dependency2 = path.join(tempDir, "lib", "dependency2.js");
+          copyFixture("options/watch/dependency", dependency2);
+          dependency2 = await fsPromises.realpath(dependency2);
+          await sendWatcherEvent("all", "add", dependency2);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({ resolveGlobalSetup: true }),
+          ]);
+          expect(rerunScheduled, "to equal", false);
+        }
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
     });
 
     // Regression test for https://github.com/mochajs/mocha/issues/2027
@@ -490,7 +809,7 @@ describe("--watch", function () {
           length: 2,
           0: { tests: expect.it("to have length", 2) },
           1: { tests: expect.it("to have length", 2) },
-        },
+        }
       );
     });
 
@@ -516,7 +835,7 @@ describe("--watch", function () {
             tempDir,
             () => {
               touchFile(testFile);
-            },
+            }
           ).then((results) => {
             expect(results.length, "to equal", 2);
             expect(results[0].failures, "to have length", 1);
@@ -549,13 +868,13 @@ describe("--watch", function () {
               touchFile(testFile);
               await sleep(1000);
             }
-          },
+          }
         ),
         "when fulfilled",
         "to satisfy",
         {
           output: expect.it("not to match", /MaxListenersExceededWarning/),
-        },
+        }
       );
     });
   });
