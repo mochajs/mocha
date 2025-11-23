@@ -107,6 +107,7 @@
     "glob": "^10.4.5",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
+    "is-unicode-supported": "^0.1.0",
     "js-yaml": "^4.1.0",
     "minimatch": "^9.0.5",
     "ms": "^2.1.3",
