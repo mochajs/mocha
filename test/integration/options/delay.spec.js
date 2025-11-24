@@ -5,11 +5,7 @@ var helpers = require("../helpers");
 var runMochaJSON = helpers.runMochaJSON;
 
 describe("--delay", function () {
-  var args = [];
-
-  before(function () {
-    args = ["--delay"];
-  });
+  var args = ["--delay", "--no-forbid-only"];
 
   it("should run the generated test suite", function (done) {
     var fixture = path.join("options", "delay");

@@ -1,5 +1,3 @@
-# Related Tools
-
 ## Assertion Libraries
 
 - [chai](http://chaijs.com/) (recommended): expect(), assert(), and should style assertions
