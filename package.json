@@ -104,7 +104,7 @@
     "diff": "^7.0.0",
     "escape-string-regexp": "^4.0.0",
     "find-up": "^5.0.0",
-    "glob": "^10.4.5",
+    "glob": "^11.0.0",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
     "js-yaml": "^4.1.0",
