@@ -477,24 +477,18 @@ describe("--watch", function () {
       });
     });
 
-    it("works when watcher is ready before global setup finishes", async function () {
-      let testFile = path.join(tempDir, "test.js");
-      copyFixture("options/watch/test-with-dependency", testFile);
-
-      let dependency = path.join(tempDir, "lib", "dependency.js");
-      copyFixture("options/watch/dependency", dependency);
-
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
-
-      const results = await runMochaWatchJSONAsync(
-        [testFile, "--watch-files", "lib/**/*.js"],
+    async function runMochaWatchWithChokidarMock(args, opts, change) {
+      return await runMochaWatchJSONAsync(
+        args,
         {
-          cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
+          stdio: ['pipe', 'pipe', 'inherit', 'ipc'],
+          env: {
+            ...process.env,
+            __MOCHA_WATCH_MOCK_CHOKIDAR: "1",
+            DEBUG: "mocha:cli:watch",
+          },
           sleepMs: 0,
+          ...opts,
         },
         async (mochaProcess) => {
           const gotMessage = (filter) =>
@@ -510,12 +504,36 @@ describe("--watch", function () {
             ]);
 
           await gotMessage((msg) => msg.listening);
+          await change(mochaProcess, { gotMessage, sendWatcherEvent });
+        }
+      );
+    }
+
+    it("works when watcher is ready before global setup finishes", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      // get realpaths to send for watcher events
+      testFile = await fsPromises.realpath(testFile);
+      dependency = await fsPromises.realpath(dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("ready");
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({ resolveGlobalSetup: true }),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
           ]);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
@@ -541,30 +559,16 @@ describe("--watch", function () {
       testFile = await fsPromises.realpath(testFile);
       dependency = await fsPromises.realpath(dependency);
 
-      const results = await runMochaWatchJSONAsync(
+      const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
           cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
-          sleepMs: 0,
         },
-        async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
-          const sendWatcherEvent = (...args) =>
-            Promise.all([
-              gotMessage(
-                (msg) =>
-                  Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
-              ),
-              mochaProcess.send({ watcher: args }),
-            ]);
-
-          await gotMessage((msg) => msg.listening);
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           const runFinished = gotMessage((msg) => msg.runFinished);
-          mochaProcess.send({ resolveGlobalSetup: true });
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("all", "change", dependency);
@@ -588,29 +592,15 @@ describe("--watch", function () {
       testFile = await fsPromises.realpath(testFile);
       dependency = await fsPromises.realpath(dependency);
 
-      const results = await runMochaWatchJSONAsync(
+      const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
           cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
-          sleepMs: 0,
         },
-        async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
-          const sendWatcherEvent = (...args) =>
-            Promise.all([
-              gotMessage(
-                (msg) =>
-                  Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
-              ),
-              mochaProcess.send({ watcher: args }),
-            ]);
-
-          await gotMessage((msg) => msg.listening);
-          mochaProcess.send({ resolveGlobalSetup: true });
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
           let runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -641,29 +631,15 @@ describe("--watch", function () {
       testFile = await fsPromises.realpath(testFile);
       dependency = await fsPromises.realpath(dependency);
 
-      const results = await runMochaWatchJSONAsync(
+      const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
           cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
-          sleepMs: 0,
         },
-        async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
-          const sendWatcherEvent = (...args) =>
-            Promise.all([
-              gotMessage(
-                (msg) =>
-                  Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
-              ),
-              mochaProcess.send({ watcher: args }),
-            ]);
-
-          await gotMessage((msg) => msg.listening);
-          mochaProcess.send({ resolveGlobalSetup: true });
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
           let runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -696,39 +672,25 @@ describe("--watch", function () {
       testFile = await fsPromises.realpath(testFile);
       dependency = await fsPromises.realpath(dependency);
 
-      const results = await runMochaWatchJSONAsync(
+      const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
           cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
-          sleepMs: 0,
         },
-        async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
-          const sendWatcherEvent = (...args) =>
-            Promise.all([
-              gotMessage(
-                (msg) =>
-                  Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
-              ),
-              mochaProcess.send({ watcher: args }),
-            ]);
-
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           let rerunScheduled = false;
           mochaProcess.on("message", (msg) => {
             if (msg.scheduleRun) rerunScheduled = true;
           });
-          await gotMessage((msg) => msg.listening);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("ready");
           await sendWatcherEvent("all", "change", dependency);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({ resolveGlobalSetup: true }),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
           ]);
           expect(rerunScheduled, "to equal", false);
         }
@@ -749,32 +711,16 @@ describe("--watch", function () {
       testFile = await fsPromises.realpath(testFile);
       dependency = await fsPromises.realpath(dependency);
 
-      const results = await runMochaWatchJSONAsync(
+      const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
           cwd: tempDir,
-          stdio: ["pipe", "pipe", "inherit", "ipc"],
-          env: { ...process.env, MOCHA_TEST_WATCH: "1" },
-          sleepMs: 0,
         },
-        async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
-          const sendWatcherEvent = (...args) =>
-            Promise.all([
-              gotMessage(
-                (msg) =>
-                  Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
-              ),
-              mochaProcess.send({ watcher: args }),
-            ]);
-
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           let rerunScheduled = false;
           mochaProcess.on("message", (msg) => {
             if (msg.scheduleRun) rerunScheduled = true;
           });
-          await gotMessage((msg) => msg.listening);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("ready");
@@ -784,7 +730,9 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "add", dependency2);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({ resolveGlobalSetup: true }),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
           ]);
           expect(rerunScheduled, "to equal", false);
         }
