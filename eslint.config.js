@@ -176,7 +176,7 @@ module.exports = [
       "test/integration/fixtures/**",
       ".karma/**",
       "mocha.js",
-      // TODO: EsLint v8 parser can't parse Import attributes
+      // TODO: ESLint v8 parser can't parse Import attributes
       "rollup.config.mjs",
       "scripts/pick-from-package-json.mjs",
     ],
