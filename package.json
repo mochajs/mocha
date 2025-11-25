@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "11.7.4",
+  "version": "12.0.0-beta-1",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
@@ -71,7 +71,7 @@
     "test-browser": "run-s clean build test-browser:*",
     "test-coverage-clean": "rimraf .nyc_output coverage",
     "test-coverage-generate": "nyc report --reporter=lcov --reporter=text",
-    "test-node-run-only": "nyc --no-clean --reporter=json node bin/mocha.js",
+    "test-node-run-only": "nyc --no-clean --reporter=json node bin/mocha.js --no-forbid-only",
     "test-node-run": "nyc --no-clean --reporter=json node bin/mocha.js --forbid-only",
     "test-node:integration": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/**/*.spec.js\"",
     "test-node:integration:watch": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/options/watch.spec.js\"",
@@ -104,7 +104,7 @@
     "diff": "^7.0.0",
     "escape-string-regexp": "^4.0.0",
     "find-up": "^5.0.0",
-    "glob": "^10.4.5",
+    "glob": "^13.0.0",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
     "js-yaml": "^4.1.0",

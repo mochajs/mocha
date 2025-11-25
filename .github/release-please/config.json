@@ -1,7 +1,10 @@
 {
-  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v16.12.0/schemas/config.json",
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v17.1.3/schemas/config.json",
   "release-type": "node",
   "include-component-in-tag": false,
+
+  "prerelease": true,
+  "versioning": "prerelease",
 
   "changelog-sections": [
     { "type": "feat", "section": "🌟 Features", "hidden": false },
