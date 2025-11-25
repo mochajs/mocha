@@ -38,8 +38,7 @@ jobs:
           show-progress: false
       - uses: actions/setup-node@v6
         with:
-          # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
-          node-version: "22.11.0"
+          node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
