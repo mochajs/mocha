@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "11.7.4",
+  "version": "12.0.0",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
