@@ -725,7 +725,7 @@ describe('repeat', function () {
   });
 
   it('should use proper tear-down', function () {
-    // Specify this test to only retry up to 2 times
+    // Specify that only this test is to be repeated twice (and not 4x2=8 times)
     this.repeats(2);
     expect($('.foo').isDisplayed()).to.eventually.be.true;
   });
