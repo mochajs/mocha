@@ -15,6 +15,7 @@ const {
   EVENT_TEST_FAIL,
   EVENT_TEST_PASS,
   EVENT_TEST_RETRY,
+  EVENT_TEST_REPEAT,
   EVENT_TEST_END,
   EVENT_RUN_END,
   EVENT_SUITE_END,
@@ -528,7 +529,7 @@ describe("Runner", function () {
         });
       });
 
-      it('should emit "retry" when a repeatable test passes', function (done) {
+      it('should emit "repeat" when a repeatable test passes', function (done) {
         var repeats = 2;
         var runs = 0;
         var retries = 0;
@@ -540,7 +541,7 @@ describe("Runner", function () {
         suite.repeats(repeats);
         suite.addTest(test);
 
-        runner.on(EVENT_TEST_RETRY, function (testClone, testErr) {
+        runner.on(EVENT_TEST_REPEAT, function (testClone, testErr) {
           retries++;
           expect(testClone.currentRepeat(), 'to be', runs);
           expect(testErr, 'to be', null);
