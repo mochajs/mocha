@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-beta-2](https://github.com/mochajs/mocha/compare/v12.0.0-beta-1...v12.0.0-beta-2) (2025-11-25)
+
+
+### 🧹 Chores
+
+* bump glob to version 13 ([#5546](https://github.com/mochajs/mocha/issues/5546)) ([f4d4ad2](https://github.com/mochajs/mocha/commit/f4d4ad23e9e994668c7d95c5a9bf59f581dccebf))
+
 ## [12.0.0-beta-1](https://github.com/mochajs/mocha/compare/v11.7.4...v12.0.0-beta-1) (2025-11-25)
 
 
