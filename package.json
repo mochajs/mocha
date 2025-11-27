@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "11.7.4",
+  "version": "12.0.0-beta-2",
   "type": "commonjs",
   "description": "simple, flexible, fun test framework",
   "keywords": [
@@ -53,7 +53,7 @@
     "docs:preview": "http-server docs/_site -o",
     "docs": "run-s docs-clean docs:api docs:build docs:build-new",
     "format:eslint": "eslint --fix . \"bin/*\"",
-    "format:prettier": "prettier --write \"!(package*).json\" \".*.json\" \"lib/**/*.json\" \"*.yml\"",
+    "format:prettier": "prettier --write .",
     "format": "run-s format:*",
     "lint:installed-check": "installed-check --engine-check",
     "lint:knip": "knip --cache",
@@ -71,7 +71,7 @@
     "test-browser": "run-s clean build test-browser:*",
     "test-coverage-clean": "rimraf .nyc_output coverage",
     "test-coverage-generate": "nyc report --reporter=lcov --reporter=text",
-    "test-node-run-only": "nyc --no-clean --reporter=json node bin/mocha.js",
+    "test-node-run-only": "nyc --no-clean --reporter=json node bin/mocha.js --no-forbid-only",
     "test-node-run": "nyc --no-clean --reporter=json node bin/mocha.js --forbid-only",
     "test-node:integration": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/**/*.spec.js\"",
     "test-node:integration:watch": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/options/watch.spec.js\"",
@@ -104,7 +104,7 @@
     "diff": "^7.0.0",
     "escape-string-regexp": "^4.0.0",
     "find-up": "^5.0.0",
-    "glob": "^10.4.5",
+    "glob": "^13.0.0",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
     "js-yaml": "^4.1.0",
@@ -160,7 +160,7 @@
     "needle": "^2.5.0",
     "npm-run-all2": "^6.2.0",
     "nyc": "^15.1.0",
-    "prettier": "^2.4.1",
+    "prettier": "3.6.2",
     "ps-list": "^9.0.0",
     "remark": "^14.0.2",
     "remark-github": "^11.2.2",
@@ -205,13 +205,6 @@
     "./lib/nodejs/worker.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
     "./lib/cli/index.js": false
-  },
-  "prettier": {
-    "arrowParens": "avoid",
-    "bracketSpacing": false,
-    "endOfLine": "auto",
-    "singleQuote": true,
-    "trailingComma": "none"
   },
   "overrides": {
     "@types/eslint": "^9.6.1",
