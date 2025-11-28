@@ -80,6 +80,9 @@ export interface MochaOptions {
   /** Number of times to retry failed tests. */
   retries?: number;
 
+  /** Number of times to repeat each test. */
+  repeats?: number;
+
   /** Slow threshold value, in milliseconds. */
   slow?: number;
 

@@ -48,6 +48,8 @@ The event names are exported from the `constants` property of `Mocha.Runner`:
 | `EVENT_TEST_PENDING` | `pending`   | `Test`          | A {@link Test} was skipped.                                                                                                          |
 | `EVENT_TEST_RETRY`   | `retry`     | `Test`, `Error` | A {@link Test} failed, but is about to be retried; only emitted if the `retry` option is nonzero.                                    |
 
+| `EVENT_TEST_REPEAT`  | `repeat`    | `Test`, `Error` | A {@link Test} succeeded, but is about to be repeated; only emitted if the `repeat` option is nonzero.                                    |
+
 **Please use these constants** instead of the event names in your own reporter! This will ensure compatibility with future versions of Mocha.
 
 > It's important to understand that all `Suite` callbacks will be run _before_ the {@link Runner} emits `EVENT_RUN_BEGIN`. Hooks and tests won't run until _after_ the {@link Runner} emits `EVENT_RUN_BEGIN`.
