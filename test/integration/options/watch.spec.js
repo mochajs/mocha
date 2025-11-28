@@ -516,10 +516,6 @@ describe("--watch", function () {
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
 
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
-
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
@@ -555,10 +551,6 @@ describe("--watch", function () {
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
 
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
-
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
@@ -587,10 +579,6 @@ describe("--watch", function () {
 
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
-
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
 
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
@@ -626,10 +614,6 @@ describe("--watch", function () {
 
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
-
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
 
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
@@ -668,10 +652,6 @@ describe("--watch", function () {
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
 
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
-
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],
         {
@@ -706,10 +686,6 @@ describe("--watch", function () {
 
       let dependency = path.join(tempDir, "lib", "dependency.js");
       copyFixture("options/watch/dependency", dependency);
-
-      // get realpaths to send for watcher events
-      testFile = await fsPromises.realpath(testFile);
-      dependency = await fsPromises.realpath(dependency);
 
       const results = await runMochaWatchWithChokidarMock(
         [testFile, "--watch-files", "lib/**/*.js"],

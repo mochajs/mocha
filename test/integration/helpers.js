@@ -541,7 +541,7 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
-  const dirpath = await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-"));
+  const dirpath = await fsP.realpath(await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-")));
   return {
     dirpath,
     removeTempDir: async () => {
