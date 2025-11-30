@@ -89,7 +89,7 @@ module.exports = [
     },
   },
   {
-    files: ["test/**/*.mjs"],
+    files: ["**/*.mjs"],
     languageOptions: {
       sourceType: "module",
     },
