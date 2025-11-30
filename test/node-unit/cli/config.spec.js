@@ -30,6 +30,61 @@ describe("cli/config", function () {
         sinon.stub(parsers, "js").returns(phonyConfigObject);
       });
 
+      describe('when supplied a filepath with ".cjs" extension', function () {
+        const filepath = "foo.cjs";
+
+        it("should use the JS parser", function () {
+          loadConfig(filepath);
+          expect(parsers.js, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
+        });
+      });
+
+      describe('when supplied a filepath with ".js" extension', function () {
+        const filepath = "foo.js";
+
+        it("should use the JS parser", function () {
+          loadConfig(filepath);
+          expect(parsers.js, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
+        });
+      });
+
+      describe('when supplied a filepath with ".json" extension', function () {
+        const filepath = "foo.json";
+
+        it("should use the JSON parser", function () {
+          loadConfig("foo.json");
+          expect(parsers.json, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
+        });
+      });
+
+      describe('when supplied a filepath with ".jsonc" extension', function () {
+        const filepath = "foo.jsonc";
+
+        it("should use the JSON parser", function () {
+          loadConfig("foo.jsonc");
+          expect(parsers.json, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
+        });
+      });
+
+      describe('when supplied a filepath with ".mjs" extension', function () {
+        const filepath = "foo.mjs";
+
+        it("should use the JS parser", function () {
+          loadConfig(filepath);
+          expect(parsers.js, "to have calls satisfying", [
+            { args: [filepath], returned: phonyConfigObject },
+          ]).and("was called once");
+        });
+      });
+
       describe('when supplied a filepath with ".yaml" extension', function () {
         const filepath = "foo.yaml";
 
@@ -47,50 +102,6 @@ describe("cli/config", function () {
         it("should use the YAML parser", function () {
           loadConfig(filepath);
           expect(parsers.yaml, "to have calls satisfying", [
-            { args: [filepath], returned: phonyConfigObject },
-          ]).and("was called once");
-        });
-      });
-
-      describe('when supplied a filepath with ".js" extension', function () {
-        const filepath = "foo.js";
-
-        it("should use the JS parser", function () {
-          loadConfig(filepath);
-          expect(parsers.js, "to have calls satisfying", [
-            { args: [filepath], returned: phonyConfigObject },
-          ]).and("was called once");
-        });
-      });
-
-      describe('when supplied a filepath with ".cjs" extension', function () {
-        const filepath = "foo.cjs";
-
-        it("should use the JS parser", function () {
-          loadConfig(filepath);
-          expect(parsers.js, "to have calls satisfying", [
-            { args: [filepath], returned: phonyConfigObject },
-          ]).and("was called once");
-        });
-      });
-
-      describe('when supplied a filepath with ".jsonc" extension', function () {
-        const filepath = "foo.jsonc";
-
-        it("should use the JSON parser", function () {
-          loadConfig("foo.jsonc");
-          expect(parsers.json, "to have calls satisfying", [
-            { args: [filepath], returned: phonyConfigObject },
-          ]).and("was called once");
-        });
-      });
-
-      describe('when supplied a filepath with ".json" extension', function () {
-        const filepath = "foo.json";
-
-        it("should use the JSON parser", function () {
-          loadConfig("foo.json");
-          expect(parsers.json, "to have calls satisfying", [
             { args: [filepath], returned: phonyConfigObject },
           ]).and("was called once");
         });
