@@ -13,6 +13,8 @@ describe("init command", function () {
     tmpdir = path.join(os.tmpdir(), "mocha-init");
     try {
       fs.mkdirSync(tmpdir);
+      // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
+      /* eslint-disable-next-line no-unused-vars */
     } catch (ignored) {}
     expect(fs.existsSync(tmpdir), "to be true");
   });
@@ -20,6 +22,8 @@ describe("init command", function () {
   afterEach(function () {
     try {
       rimraf.sync(tmpdir);
+      // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
+      /* eslint-disable-next-line no-unused-vars */
     } catch (ignored) {}
   });
 

@@ -151,6 +151,8 @@ const createBundleDir = (cfg, bundleDirPath) => {
           bundleDirPath,
         },
       };
+      // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
+      /* eslint-disable-next-line no-unused-vars */
     } catch (ignored) {
       console.error(
         `Failed to create ${bundleDirPath}; using temp directory instead`,
