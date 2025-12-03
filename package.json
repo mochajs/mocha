@@ -159,7 +159,7 @@
     "markdownlint-cli": "^0.30.0",
     "needle": "^2.5.0",
     "npm-run-all2": "^6.2.0",
-    "nyc": "^15.1.0",
+    "nyc": "^17.1.0",
     "prettier": "3.6.2",
     "ps-list": "^9.0.0",
     "remark": "^14.0.2",
