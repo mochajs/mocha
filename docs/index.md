@@ -31,20 +31,20 @@ Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in 
 - [reports test durations](#test-duration)
 - [highlights slow tests](#dot-matrix)
 - [file watcher support](#min)
-- [global variable leak detection](#-check-leaks)
-- [optionally run tests that match a regexp](#-grep-regexp-g-regexp)
-- [auto-exit to prevent "hanging" with an active loop](#-exit)
+- [global variable leak detection](#--check-leaks)
+- [optionally run tests that match a regexp](#--grep-regexp--g-regexp)
+- [auto-exit to prevent "hanging" with an active loop](#--exit)
 - [easily meta-generate suites](#markdown) & [test-cases](#list)
-- [config file support](#-config-path)
-- [node debugger support](#-inspect-inspect-brk-inspect)
+- [config file support](#--config-path)
+- [node debugger support](#--inspect---inspect-brk-inspect)
 - [node native ES modules support](#nodejs-native-esm-support)
-- [source-map support](#-enable-source-maps)
+- [source-map support](#--enable-source-maps)
 - [detects multiple calls to `done()`](#detects-multiple-calls-to-done)
 - [use any assertion library you want](#assertions)
 - [extensible reporting, bundled with 9+ reporters](#reporters)
 - [extensible test DSLs or "interfaces"](#interfaces)
 - [before, after, before each, after each hooks](#hooks)
-- [arbitrary transpiler support (coffee-script etc)](#-compilers)
+- [arbitrary transpiler support (coffee-script etc)](#--compilers)
 - [TextMate bundle](#textmate)
   {:.two-column}
 
@@ -1265,7 +1265,7 @@ The default value is the _number of CPU cores_ less 1.
 
 Hint: Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
 
-Has no effect unless used with [`--parallel`](#-parallel-p).
+Has no effect unless used with [`--parallel`](#--parallel--p).
 
 ### About Option Types
 
@@ -1283,7 +1283,7 @@ These flags vary depending on your version of Node.js.
 
 `node` flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _Since v9.1.0_ You can also pass `node` flags to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _Since v9.1.0_ You can also pass `node` flags to Node.js using [`--node-option`](#--node-option-name--n-name).
 
 ### `--enable-source-maps`
 
@@ -1304,13 +1304,13 @@ Prepend `--v8-` to any flag listed in the output of `node --v8-options` (excludi
 
 V8 flags can be defined in Mocha's [configuration](#configuring-mocha-nodejs).
 
-> _Since v9.1.0_ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#-node-option-name-n-name).
+> _Since v9.1.0_ You can also pass V8 flags (without `--v8-`) to Node.js using [`--node-option`](#--node-option-name--n-name).
 
 ## Parallel Tests
 
 > _Since v.8.0.0._
 
-Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](#-parallel-p) flag).
+Depending on the number and nature of your tests, you may find a significant performance benefit when running tests in parallel (using the [`--parallel`](#--parallel--p) flag).
 
 Parallel tests should work out-of-the box for many use cases. However, you must be aware of some important implications of the behavior.
 
@@ -1335,7 +1335,7 @@ In serial mode, tests results will "stream" as they occur. In parallel mode, rep
 
 Suggested workarounds:
 
-1. Use [`--grep`](#-grep-regexp-g-regexp) or [`--fgrep`](#-fgrep-string-f-string) instead; it's not particularly efficient, but it will work.
+1. Use [`--grep`](#--grep-regexp--g-regexp) or [`--fgrep`](#--fgrep-string--f-string) instead; it's not particularly efficient, but it will work.
 1. Don't use parallel mode. Likely, you won't be running very many exclusive tests, so you won't see a great benefit from parallel mode anyhow.
 
 > _TIP: If parallel mode is defined in your config file, you can temporarily disable it on the command-line by using either the `--no-parallel` flag or reducing the job count, e.g., `--jobs=0`._
@@ -1346,14 +1346,14 @@ In parallel mode, Mocha does not guarantee the order in which test files will ru
 
 Because of this, the following options, which depend on order, _cannot be used_ in parallel mode:
 
-- [`--file`](#-file-file)
-- [`--sort`](#-sort-s)
+- [`--file`](#--file-file)
+- [`--sort`](#--sort--s)
 - [`--delay`](#delayed-root-suite)
   {:.single-column}
 
 ### Test Duration Variability
 
-Running tests in parallel mode will naturally use more system resources. The OS may take extra time to schedule and complete some operations, depending on system load. For this reason, the timeouts of _individual tests_ may need to be increased either [globally](#-timeout-ms-t-ms) or [otherwise](#timeouts).
+Running tests in parallel mode will naturally use more system resources. The OS may take extra time to schedule and complete some operations, depending on system load. For this reason, the timeouts of _individual tests_ may need to be increased either [globally](#--timeout-ms--t-ms) or [otherwise](#timeouts).
 
 ### "Bail" is "Best Effort"
 
@@ -1414,14 +1414,14 @@ Third-party reporters may encounter issues when attempting to access non-existen
 
 ### Troubleshooting Parallel Mode
 
-If you find your tests don't work properly when run with [`--parallel`](#-parallel-p), either shrug and move on, or use this handy-dandy checklist to get things working:
+If you find your tests don't work properly when run with [`--parallel`](#--parallel--p), either shrug and move on, or use this handy-dandy checklist to get things working:
 
 - :white_check_mark: Ensure you are using a [supported reporter](#reporter-limitations).
 - :white_check_mark: Ensure you are not using [other unsupported flags](#file-order-is-non-deterministic).
 - :white_check_mark: Double-check your [config file](#configuring-mocha-nodejs); options set in config files will be merged with any command-line option.
 - :white_check_mark: Look for root hooks (they look like [this](#root-hooks-are-not-global)) in your tests. Move them into a [Root Hook Plugin](#root-hook-plugins).
 - :white_check_mark: Do any assertion, mock, or other test libraries you're consuming use root hooks? They may need to be [migrated](#migrating-a-library-to-use-root-hook-plugins) for compatibility with parallel mode.
-- :white_check_mark: If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](#-timeout-ms-t-ms))
+- :white_check_mark: If tests are unexpectedly timing out, you may need to increase the default test timeout (via [`--timeout`](#--timeout-ms--t-ms))
 - :white_check_mark: Ensure your tests do not depend on being run in a specific order.
 - :white_check_mark: Ensure your tests clean up after themselves; remove temp files, handles, sockets, etc. Don't try to share state or resources between test files.
 
@@ -1431,7 +1431,7 @@ Some types of tests are _not_ so well-suited to run in parallel. For example, ex
 
 Free-tier cloud CI services may not provide a suitable multi-core container or VM for their build agents. Regarding expected performance gains in CI: your mileage may vary. It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI`, and adjust the job count as appropriate.
 
-It's unlikely (but not impossible) to see a performance gain from a [job count](#-jobs-count-j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+It's unlikely (but not impossible) to see a performance gain from a [job count](#--jobs-count--j-count) _greater than_ the number of available CPU cores. That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
 
 ### Parallel Mode Worker IDs
 
@@ -1445,7 +1445,7 @@ Each process launched by parallel mode is assigned a unique id, from 0 for the f
 
 In some cases, you may want a [hook](#hooks) before (or after) every test in every file. These are called _root hooks_. Previous to v8.0.0, the way to accomplish this was to use `--file` combined with root hooks (see [example above](#root-hooks-are-not-global)). This still works in v8.0.0, but _not_ when running tests in parallel mode! For that reason, running root hooks using this method is _strongly discouraged_, and may be deprecated in the future.
 
-A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#-require-module-r-module) which "registers" one or more root hooks to be used across all test files.
+A _Root Hook Plugin_ is a JavaScript file loaded via [`--require`](#--require-module--r-module) which "registers" one or more root hooks to be used across all test files.
 
 In browsers you can set root hooks directly via a `rootHooks` object: `mocha.setup({ rootHooks: {beforeEach() {...}} })`, see [`mocha.setup()`](#running-mocha-in-the-browser)
 
@@ -1655,7 +1655,7 @@ describe("my test suite", function () {
 });
 ```
 
-Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](#-parallel-p)).
+Running `mocha --require test/hooks.js test/test.spec.js` will run as before (and is now ready to be used with [`--parallel`](#--parallel--p)).
 
 ### Migrating a Library to use Root Hook PLugins
 
@@ -2135,7 +2135,7 @@ More information can be found in the [Node.js documentation](https://nodejs.org/
 
 ### Current Limitations
 
-- [Watch mode](#-watch-w) does not support ES Module test files
+- [Watch mode](#--watch--w) does not support ES Module test files
 - [Custom reporters](#third-party-reporters) and [custom interfaces](#interfaces)
   can only be CommonJS files
 - [Configuration file](#configuring-mocha-nodejs) can only be a CommonJS file (`.mocharc.js` or `.mocharc.cjs`)
@@ -2233,7 +2233,7 @@ To use a [cli option](#command-line-usage) that contains a "-", please convert t
 #### Options that differ slightly from [cli options](#command-line-usage):
 
 `reporter` _{string|constructor}_
-You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
+You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser in [Reporting section](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 #### Options that _only_ function in browser context:
 
@@ -2305,7 +2305,7 @@ This also includes `spec`. For example, a `.mocharc.json` containing `"spec": ["
 
 ### Extending Configuration
 
-Configurations can inherit from other modules using the `extends` keyword. See [here][yargs-configobject-extends] for more information.
+Configurations can inherit from other modules using the `extends` keyword. For more information, please refer to [this section in yargs.js.org][yargs-configobject-extends]
 
 ### Configuration Format
 
@@ -2434,8 +2434,6 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [//]: # "Cross reference section"
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 [better-assert]: https://github.com/visionmedia/better-assert
-[caniuse-notifications]: https://caniuse.com/#feat=notifications
-[caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [discord-mocha]: https://discord.gg/KeDn2uXhER
@@ -2466,7 +2464,6 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
 [mocha-examples]: https://github.com/mochajs/mocha-examples
 [mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
-[mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
 [mocha-wiki-compilers]: https://github.com/mochajs/mocha/wiki/compilers-deprecation
 [mocha-wiki-more-reporters]: https://github.com/mochajs/mocha/wiki/Third-party-reporters
