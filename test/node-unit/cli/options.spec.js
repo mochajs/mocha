@@ -342,18 +342,14 @@ describe("options", function () {
           it("should not look for a config", function () {
             try {
               loadOptions(`--config ${config}`);
-              // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
-              /* eslint-disable-next-line no-unused-vars */
-            } catch (ignored) {}
+            } catch {}
             expect(findConfig, "was not called");
           });
 
           it("should attempt to load file at path", function () {
             try {
               loadOptions(`--config ${config}`);
-              // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
-              /* eslint-disable-next-line no-unused-vars */
-            } catch (ignored) {}
+            } catch {}
             expect(loadConfig, "to have a call satisfying", [config]);
           });
 

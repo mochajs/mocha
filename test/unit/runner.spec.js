@@ -1045,9 +1045,7 @@ describe("Runner", function () {
                   function () {
                     try {
                       runner.uncaught(err);
-                      // TODO: remove below eslint ignore directive once Rollup is upgraded to v4
-                      /* eslint-disable-next-line no-unused-vars */
-                    } catch (ignored) {}
+                    } catch {}
                   },
                   "not to emit from",
                   runner,
