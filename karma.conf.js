@@ -151,7 +151,7 @@ const createBundleDir = (cfg, bundleDirPath) => {
           bundleDirPath,
         },
       };
-    } catch (ignored) {
+    } catch {
       console.error(
         `Failed to create ${bundleDirPath}; using temp directory instead`,
       );

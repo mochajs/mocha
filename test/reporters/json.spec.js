@@ -32,7 +32,7 @@ describe("JSON reporter", function () {
   describe("test results", function () {
     beforeEach(function () {
       var options = {};
-      /* eslint no-unused-vars: off */
+      /* eslint-disable-next-line no-unused-vars */
       var mochaReporter = new mocha._reporter(runner, options);
     });
 
@@ -124,7 +124,7 @@ describe("JSON reporter", function () {
       }
       var error = new CircleError();
 
-      var test = new Test(testTitle, function (done) {
+      var test = new Test(testTitle, function () {
         throw error;
       });
 
@@ -162,7 +162,7 @@ describe("JSON reporter", function () {
     };
 
     beforeEach(function () {
-      /* eslint no-unused-vars: off */
+      /* eslint-disable-next-line no-unused-vars */
       var mochaReporter = new mocha._reporter(runner, options);
     });
 
