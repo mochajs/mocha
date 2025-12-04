@@ -483,7 +483,6 @@ async function runMochaWatchJSONAsync(args, opts, change) {
     change,
   );
   return res.output
-
     .replace(/\u001b\[\?25./g, "")
     .split("\u001b[2K")
     .filter((x) => x)
