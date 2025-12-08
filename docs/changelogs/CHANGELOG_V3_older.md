@@ -624,6 +624,10 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 # 1.22.1-3 / 2014-07-27
 
 - fix: disabling timeouts with this.timeout(0) ([#1301](https://github.com/mochajs/mocha/issues/1301))
+
+<!-- markdownlint-disable-next-line MD024 -->
+# 1.22.1-3 / 2014-07-27
+
 - fix: local uis and reporters ([#1288](https://github.com/mochajs/mocha/issues/1288))
 - fix: building 1.21.0's changes in the browser ([#1284](https://github.com/mochajs/mocha/issues/1284))
 
