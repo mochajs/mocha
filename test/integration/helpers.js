@@ -489,8 +489,6 @@ async function runMochaWatchJSONAsync(args, opts, change) {
     .map((x) => JSON.parse(x));
 }
 
-const touchRef = new Date();
-
 /**
  * Synchronously touch a file. Creates
  * the file and all its parent directories if necessary.
@@ -498,8 +496,9 @@ const touchRef = new Date();
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
-  fs.mkdirSync(path.dirname(filepath), { recursive: true });
+  fs.mkdirSync(path.dirname(filepath), {recursive: true});
   try {
+    const touchRef = new Date();
     fs.utimesSync(filepath, touchRef, touchRef);
   } catch {
     const fd = fs.openSync(filepath, "a");
@@ -530,7 +529,7 @@ function replaceFileContents(filepath, pattern, replacement) {
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  fs.mkdirSync(path.dirname(dest), {recursive: true});
   fs.cpSync(fixtureSource, dest);
 }
 
@@ -539,12 +538,12 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
-  const dirpath = await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-"));
+  const dirpath = await fsP.realpath(await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-")));
   return {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
-        return fs.rmSync(dirpath, { recursive: true, force: true });
+        return fs.rmSync(dirpath, {recursive: true, force: true});
       }
     },
   };
@@ -561,6 +560,43 @@ function sleep(time) {
   });
 }
 
+/**
+ * Waits for an `EventEmitter` to emit the given `event`.
+ * @param {object} [opts]
+ * @param {EventFilter} [opts.filter] - predicate that will filter which event payloads will resolve the Promise
+ * @param {string[]} [opts.rejectionEvents] - events that will reject the Promise
+ * (defaults to `['error']`)
+ * @returns {Promise<void>} a Promise that will be resolved when `emitter` emitted
+ * the `event` and it matched `opts.filter` if given, or rejected when `emitter` emitted
+ * a rejection event
+ */
+function gotEvent(emitter, event, opts) {
+  const {filter = () => true, rejectionEvents = ['error']} = opts || {};
+  return new Promise((_resolve, _reject) => {
+    function onEvent(value) {
+      if (filter(value)) resolve(value);
+    }
+    function cleanup() {
+      emitter.removeListener(event, onEvent);
+      for (const error of rejectionEvents) {
+        emitter.removeListener(error, reject);
+      }
+    }
+    function resolve(value) {
+      cleanup();
+      _resolve(value);
+    }
+    function reject(reason) {
+      cleanup();
+      _reject(reason);
+    }
+    emitter.on(event, onEvent);
+    for (const error of rejectionEvents) {
+      emitter.on(error, reject);
+    }
+  });
+}
+
 module.exports = {
   DEFAULT_FIXTURE,
   SPLIT_DOT_REPORTER_REGEXP,
@@ -569,6 +605,7 @@ module.exports = {
   createTempDir,
   escapeRegExp,
   getSummary,
+  gotEvent,
   invokeMocha,
   invokeMochaAsync,
   invokeNode,
@@ -654,4 +691,11 @@ module.exports = {
  * Cleanup function to remove temp dir
  * @callback RemoveTempDirCallback
  * @returns {void}
+ */
+
+/**
+ * Predicate for `gotEvent` that will filter which event payloads will resolve the Promise
+ * @callback EventFilter
+ * @param {...?} payload - the payload emitted for the event
+ * @returns {boolean} `true` if the event should resolve the Promise
  */
