@@ -2,27 +2,50 @@
 /* eslint-disable-next-line n/no-missing-import */
 import "./mocha.js";
 
-const { mocha } = globalThis;
+const {mocha, Mocha} = globalThis;
 
-mocha.ui();
+const mochaExports = {
+  afterEach: (...args) => globalThis.afterEach?.(...args),
+  after: (...args) => globalThis.after?.(...args),
+  beforeEach: (...args) => globalThis.beforeEach?.(...args),
+  before: (...args) => globalThis.before?.(...args),
+  describe: (...args) => globalThis.describe?.(...args),
+  it: (...args) => globalThis.it?.(...args),
+  xdescribe: (...args) => globalThis.xdescribe?.(...args),
+  xit: (...args) => globalThis.xit?.(...args),
+  setup: (...args) => mocha.setup?.(...args),
+  suiteSetup: (...args) => globalThis.suiteSetup?.(...args),
+  suiteTeardown: (...args) => globalThis.suiteTeardown?.(...args),
+  suite: (...args) => globalThis.suite?.(...args),
+  teardown: (...args) => globalThis.teardown?.(...args),
+  test: (...args) => globalThis.test?.(...args),
+  xspecify: (...args) => globalThis.xspecify?.(...args),
+  specify: (...args) => globalThis.specify?.(...args),
+  context: (...args) => globalThis.context?.(...args),
+  xcontext: (...args) => globalThis.xcontext?.(...args),
+  run: mocha.run.bind(mocha)
+};
 
-const after = globalThis.after.bind(mocha);
-const afterEach = globalThis.afterEach.bind(mocha);
-const before = globalThis.before.bind(mocha);
-const beforeEach = globalThis.beforeEach.bind(mocha);
-const context = globalThis.context.bind(mocha);
-const describe = globalThis.describe.bind(mocha);
-const it = globalThis.it.bind(mocha);
-const specify = globalThis.specify.bind(mocha);
-const xcontext = globalThis.xcontext.bind(mocha);
-const xdescribe = globalThis.xdescribe.bind(mocha);
-const xit = globalThis.xit.bind(mocha);
-const xspecify = globalThis.xspecify.bind(mocha);
+export default Mocha;
 
-const run = mocha.run.bind(mocha);
-const setup = mocha.setup.bind(mocha);
+// Export the mocha instance (in browser, this has setup/run methods)
+export { mocha };
 
-export {
+// Re-export class/utility exports from the Mocha module
+export const {
+  utils,
+  interfaces,
+  reporters,
+  Runnable,
+  Context,
+  Runner,
+  Suite,
+  Hook,
+  Test,
+} = Mocha;
+
+// Re-export test interface functions
+export const {
   after,
   afterEach,
   before,
@@ -32,9 +55,14 @@ export {
   it,
   run,
   setup,
+  suiteSetup,
+  suiteTeardown,
+  suite,
+  teardown,
+  test,
   specify,
   xcontext,
   xdescribe,
   xit,
   xspecify,
-};
+} = mochaExports;
