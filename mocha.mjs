@@ -5,25 +5,25 @@ import "./mocha.js";
 const {mocha, Mocha} = globalThis;
 
 const mochaExports = {
-  afterEach: (...args) => globalThis.afterEach?.(...args),
   after: (...args) => globalThis.after?.(...args),
-  beforeEach: (...args) => globalThis.beforeEach?.(...args),
+  afterEach: (...args) => globalThis.afterEach?.(...args),
   before: (...args) => globalThis.before?.(...args),
+  beforeEach: (...args) => globalThis.beforeEach?.(...args),
+  context: (...args) => globalThis.context?.(...args),
   describe: (...args) => globalThis.describe?.(...args),
   it: (...args) => globalThis.it?.(...args),
-  xdescribe: (...args) => globalThis.xdescribe?.(...args),
-  xit: (...args) => globalThis.xit?.(...args),
+  run: mocha.run.bind(mocha),
   setup: (...args) => mocha.setup?.(...args),
+  suite: (...args) => globalThis.suite?.(...args),
   suiteSetup: (...args) => globalThis.suiteSetup?.(...args),
   suiteTeardown: (...args) => globalThis.suiteTeardown?.(...args),
-  suite: (...args) => globalThis.suite?.(...args),
   teardown: (...args) => globalThis.teardown?.(...args),
   test: (...args) => globalThis.test?.(...args),
-  xspecify: (...args) => globalThis.xspecify?.(...args),
   specify: (...args) => globalThis.specify?.(...args),
-  context: (...args) => globalThis.context?.(...args),
   xcontext: (...args) => globalThis.xcontext?.(...args),
-  run: mocha.run.bind(mocha)
+  xdescribe: (...args) => globalThis.xdescribe?.(...args),
+  xit: (...args) => globalThis.xit?.(...args),
+  xspecify: (...args) => globalThis.xspecify?.(...args),
 };
 
 export default Mocha;
@@ -55,9 +55,9 @@ export const {
   it,
   run,
   setup,
+  suite,
   suiteSetup,
   suiteTeardown,
-  suite,
   teardown,
   test,
   specify,
