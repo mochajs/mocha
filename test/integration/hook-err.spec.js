@@ -311,6 +311,47 @@ describe("hook error handling", function () {
         );
       });
     });
+
+    describe("non-Error thrown in `before` hook", function () {
+      it("should handle null, undefined, and other non-Error values", function (done) {
+        runMochaJSON(
+          "hooks/before-hook-throw-non-error",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 8) // 4 hooks + 4 affected tests
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have failed test", "test 3")
+              .and("to have failed test", "test 4");
+            done();
+          },
+        );
+      });
+    });
+
+    describe("non-Error thrown in `beforeEach` hook", function () {
+      it("should handle null, undefined, and other non-Error values", function (done) {
+        runMochaJSON(
+          "hooks/before-each-hook-throw-non-error",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 6) // 3 hooks + 3 affected tests
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have failed test", "test 3");
+            done();
+          },
+        );
+      });
+    });
   });
 
   function run(fnPath, outputFilter) {
