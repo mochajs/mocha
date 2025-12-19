@@ -4,6 +4,9 @@ title: "Mocha - the fun, simple, flexible JavaScript test framework"
 description: "Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun."
 ---
 
+<!-- Disable MD051 due to the rule not aware of this file is specifically converted to HTML -->
+<!--markdownlint-disable-file MD051 -->
+
 <div class="admonition">This site has a new look, try it out at <a href="next">mochajs.org/next</a>!</div>
 
 Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
@@ -2233,7 +2236,7 @@ To use a [cli option](#command-line-usage) that contains a "-", please convert t
 #### Options that differ slightly from [cli options](#command-line-usage):
 
 `reporter` _{string|constructor}_
-You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser [here](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
+You can pass a reporter's name or a custom reporter's constructor. You can find **recommended** reporters for the browser in [Reporting section](#reporting). It is possible to use [built-in reporters](#reporters) as well. Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 #### Options that _only_ function in browser context:
 
@@ -2305,7 +2308,7 @@ This also includes `spec`. For example, a `.mocharc.json` containing `"spec": ["
 
 ### Extending Configuration
 
-Configurations can inherit from other modules using the `extends` keyword. See [here][yargs-configobject-extends] for more information.
+Configurations can inherit from other modules using the `extends` keyword. For more information, please refer to [this section in yargs.js.org][yargs-configobject-extends]
 
 ### Configuration Format
 
@@ -2434,8 +2437,6 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [//]: # "Cross reference section"
 [bash-globbing]: https://www.gnu.org/software/bash/manual/html_node/The-Shopt-Builtin.html
 [better-assert]: https://github.com/visionmedia/better-assert
-[caniuse-notifications]: https://caniuse.com/#feat=notifications
-[caniuse-promises]: https://caniuse.com/#feat=promises
 [chai]: https://www.chaijs.com/
 [connect-test-output]: https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md
 [discord-mocha]: https://discord.gg/KeDn2uXhER
@@ -2466,7 +2467,6 @@ or the [source](https://github.com/mochajs/mocha/blob/main/lib/mocha.js).
 [mdn-settimeout-maxdelay]: https://developer.mozilla.org/docs/Web/API/WindowTimers/setTimeout#Maximum_delay_value
 [mocha-examples]: https://github.com/mochajs/mocha-examples
 [mocha-teamcity-reporter]: https://github.com/travisjeffery/mocha-teamcity-reporter
-[mocha-website]: https://mochajs.org/
 [mocha-wiki]: https://github.com/mochajs/mocha/wiki
 [mocha-wiki-compilers]: https://github.com/mochajs/mocha/wiki/compilers-deprecation
 [mocha-wiki-more-reporters]: https://github.com/mochajs/mocha/wiki/Third-party-reporters
