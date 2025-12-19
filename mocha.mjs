@@ -12,7 +12,6 @@ const mochaExports = {
   context: (...args) => globalThis.context?.(...args),
   describe: (...args) => globalThis.describe?.(...args),
   it: (...args) => globalThis.it?.(...args),
-  run: mocha.run.bind(mocha),
   setup: (...args) => globalThis.setup?.(...args),
   suite: (...args) => globalThis.suite?.(...args),
   suiteSetup: (...args) => globalThis.suiteSetup?.(...args),
