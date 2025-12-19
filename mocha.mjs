@@ -13,7 +13,7 @@ const mochaExports = {
   describe: (...args) => globalThis.describe?.(...args),
   it: (...args) => globalThis.it?.(...args),
   run: mocha.run.bind(mocha),
-  setup: (...args) => mocha.setup?.(...args),
+  setup: (...args) => globalThis.setup?.(...args),
   suite: (...args) => globalThis.suite?.(...args),
   suiteSetup: (...args) => globalThis.suiteSetup?.(...args),
   suiteTeardown: (...args) => globalThis.suiteTeardown?.(...args),
