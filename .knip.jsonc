@@ -4,6 +4,7 @@
     "bin/mocha.js!",
     "bin/_mocha!",
     "browser-entry.js!",
+    "docs/_data/supporters.js",
     "index.js!",
     "lib/cli/index.js!",
   ],
