@@ -74,6 +74,6 @@ _Excellent._ Here's how:
 
 ## 👞 Contributing Code
 
-[DEVELOPMENT.md](./DEVELOPMENT.md) has detailed steps for writing code for Mocha :)
+[DEVELOPMENT.md](./DEVELOPMENT.md) has detailed steps for writing code for Mocha 🙂 
 
 Join us in [our Discord](https://discord.gg/KeDn2uXhER)!
