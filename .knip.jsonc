@@ -13,11 +13,9 @@
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
   ],
   "ignoreDependencies": [
-    "@mocha/docdash",
     "@test/esm-only-loader",
     "coffeescript",
     "fake",
-    "jsdoc-ts-utils",
     "non-existent-package",
   ],
   "mocha": {

@@ -31,19 +31,11 @@ module.exports = defineConfig(
     },
   },
   {
-    files: ["docs/js/**/*.js"],
-    languageOptions: {
-      globals: globals.browser,
-    },
-  },
-  {
     files: [
-      ".eleventy.js",
       ".wallaby.js",
       "package-scripts.js",
       "karma.conf.js",
       "bin/*",
-      "docs/_data/**/*.js",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
       "scripts/**/*.{js,mjs}",
@@ -153,7 +145,6 @@ module.exports = defineConfig(
     "**/*.{fixture,min}.{js,mjs}",
     "coverage/**",
     "docs-next/dist/**",
-    "docs/{_dist,_site,api,example}/**",
     "mocha.js",
     "out/**",
     "test/integration/fixtures/**",

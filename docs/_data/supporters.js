@@ -100,31 +100,31 @@ const nodeToSupporter = (node) => ({
 
 const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
   ? async (supporter) => {
+    invalidSupporters.push(supporter);
+  }
+  : async (supporter) => {
+    try {
+      const { avatar: url } = supporter;
+      const { body: imageBuf, headers } = await needle("get", url, {
+        open_timeout: 30000,
+      });
+      if (headers["content-type"].startsWith("text/html")) {
+        throw new TypeError(
+          "received html and expected a png; outage likely",
+        );
+      }
+      debug("fetched %s", url);
+      const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
+      await writeFile(filePath, imageBuf);
+      debug("wrote %s", filePath);
+    } catch (err) {
+      console.error(
+        `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
+        err,
+      );
       invalidSupporters.push(supporter);
     }
-  : async (supporter) => {
-      try {
-        const { avatar: url } = supporter;
-        const { body: imageBuf, headers } = await needle("get", url, {
-          open_timeout: 30000,
-        });
-        if (headers["content-type"].startsWith("text/html")) {
-          throw new TypeError(
-            "received html and expected a png; outage likely",
-          );
-        }
-        debug("fetched %s", url);
-        const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
-        await writeFile(filePath, imageBuf);
-        debug("wrote %s", filePath);
-      } catch (err) {
-        console.error(
-          `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
-          err,
-        );
-        invalidSupporters.push(supporter);
-      }
-    };
+  };
 
 /**
  * Retrieves donation data from OC
@@ -266,43 +266,33 @@ const getSupporters = async () => {
   if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
     if (process.env.NETLIFY && process.env.CONTEXT !== "deploy-preview") {
       throw new Error(
-        `Failed to meet success threshold ${
-          PRODUCTION_SUCCESS_THRESHOLD * 100
-        }% (was ${
-          successRate * 100
+        `Failed to meet success threshold ${PRODUCTION_SUCCESS_THRESHOLD * 100
+        }% (was ${successRate * 100
         }%) for a production deployment; refusing to deploy`,
       );
     } else {
       console.warn(
-        `WARNING: Success rate of ${
-          successRate * 100
-        }% fails to meet production threshold of ${
-          PRODUCTION_SUCCESS_THRESHOLD * 100
+        `WARNING: Success rate of ${successRate * 100
+        }% fails to meet production threshold of ${PRODUCTION_SUCCESS_THRESHOLD * 100
         }%; would fail a production deployment!`,
       );
     }
   }
   debug("supporter image pull completed");
 
-  // TODO: For now, this supporters.js script is used both in the classic docs (docs/) and next (docs-next/).
-  // Eventually, we'll sunset the classic docs and only have docs-next.
-  // At that point we'll have supporters.js only used for writing files.
-  if (process.argv.includes("--write-supporters-json")) {
-    await mkdir("src/content/data", { recursive: true });
-    await writeFile(
-      "src/content/data/supporters.json",
-      JSON.stringify(supporters, null, 4),
-    );
-  }
+  await mkdir("src/content/data", { recursive: true });
+  await writeFile(
+    "src/content/data/supporters.json",
+    JSON.stringify(supporters, null, 4),
+  );
+
   return supporters;
 };
 
-module.exports = getSupporters;
+require("debug").enable("mocha:docs:data:supporters");
 
-if (require.main === module) {
-  require("debug").enable("mocha:docs:data:supporters");
-  process.on("unhandledRejection", (err) => {
-    throw err;
-  });
-  getSupporters();
-}
+process.on("unhandledRejection", (err) => {
+  throw err;
+});
+
+getSupporters();
