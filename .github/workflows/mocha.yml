@@ -4,17 +4,23 @@ on:
   push:
     branches:
       - main
-    paths-ignore: ['*.md', 'docs/**']
+    paths-ignore: ["*.md", "docs/**"]
   pull_request:
     branches:
       - main
-    paths-ignore: ['*.md', 'docs/**']
+    paths-ignore: ["*.md", "docs/**"]
   workflow_dispatch:
 
 permissions:
   contents: read
+  id-token: write # for Codecov OIDC
 
 jobs:
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format
+
   lint:
     uses: ./.github/workflows/npm-script.yml
     with:
@@ -23,8 +29,7 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      # The 22.11.0 is instead of lts per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20,22.11.0'
+      node-versions: "20,22,24"
       npm-script: test-smoke
 
   test-node-lts:
@@ -47,6 +52,9 @@ jobs:
 
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
+    permissions:
+      id-token: write # for Codecov OIDC
+      contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
     needs: test-node-lts
@@ -65,22 +73,12 @@ jobs:
           - test-part: jsapi
             coverage: false
     with:
-      os: 'ubuntu-latest,windows-latest'
-      # The 20.18.3 is instead of 20 per https://github.com/mochajs/mocha/issues/5052
-      # The 22.11.0 is instead of 22 per https://github.com/mochajs/mocha/issues/5278
-      node-versions: '18,20.18.3,22.11.0'
+      os: "ubuntu-latest,windows-latest"
+      # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
+      # Ref https://nodejs.org/en/about/previous-releases
+      node-versions: "20.19.4,22.18.0,24.6.0"
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
-
-  test-node-upload-coverage:
-    needs: test-node-all
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
 
   test-browser-local:
     uses: ./.github/workflows/npm-script.yml
@@ -100,3 +98,8 @@ jobs:
   #   with:
   #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
   #     npm-script: test-browser
+
+  tsc:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: tsc

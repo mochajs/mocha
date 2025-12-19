@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
+var sinon = require("sinon");
+var events = require("../../").Runner.constants;
+var helpers = require("./helpers");
+var reporters = require("../../").reporters;
 
 var Base = reporters.Base;
 var NyanCat = reporters.Nyan;
@@ -16,163 +16,163 @@ var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
 var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
-describe('Nyan reporter', function () {
+describe("Nyan reporter", function () {
   var noop = function () {};
 
   afterEach(function () {
     sinon.restore();
   });
 
-  describe('event handlers', function () {
+  describe("event handlers", function () {
     var runReporter = makeRunReporter(NyanCat);
 
     describe("on 'start' event", function () {
-      it('should call draw', function () {
+      it("should call draw", function () {
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
-          generateColors: noop
+          generateColors: noop,
         };
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
         runReporter(fakeThis, runner, options);
 
-        expect(fakeThis.draw.called, 'to be true');
+        expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'pending' event", function () {
-      it('should call draw', function () {
+      it("should call draw", function () {
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
-          generateColors: noop
+          generateColors: noop,
         };
-        var runner = createMockRunner('pending', EVENT_TEST_PENDING);
+        var runner = createMockRunner("pending", EVENT_TEST_PENDING);
         var options = {};
         runReporter(fakeThis, runner, options);
 
-        expect(fakeThis.draw.called, 'to be true');
+        expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'pass' event", function () {
-      it('should call draw', function () {
+      it("should call draw", function () {
         var test = {
-          duration: '',
-          slow: noop
+          duration: "",
+          slow: noop,
         };
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
-          generateColors: noop
+          generateColors: noop,
         };
         var runner = createMockRunner(
-          'pass',
+          "pass",
           EVENT_TEST_PASS,
           null,
           null,
-          test
+          test,
         );
         var options = {};
         runReporter(fakeThis, runner, options);
 
-        expect(fakeThis.draw.called, 'to be true');
+        expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'fail' event", function () {
-      it('should call draw', function () {
+      it("should call draw", function () {
         var test = {
-          err: ''
+          err: "",
         };
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
-          generateColors: noop
+          generateColors: noop,
         };
         var runner = createMockRunner(
-          'fail',
+          "fail",
           EVENT_TEST_FAIL,
           null,
           null,
-          test
+          test,
         );
         var options = {};
         runReporter(fakeThis, runner, options);
 
-        expect(fakeThis.draw.called, 'to be true');
+        expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'end' event", function () {
-      it('should call epilogue', function () {
+      it("should call epilogue", function () {
         var fakeThis = {
           draw: noop,
           epilogue: sinon.stub().callsFake(noop),
-          generateColors: noop
+          generateColors: noop,
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
+        var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
         runReporter(fakeThis, runner, options);
 
-        expect(fakeThis.epilogue.called, 'to be true');
+        expect(fakeThis.epilogue.called, "to be true");
       });
 
-      it('should write numberOfLines amount of newlines', function () {
+      it("should write numberOfLines amount of newlines", function () {
         var expectedNumberOfLines = 4;
         var fakeThis = {
           draw: noop,
           epilogue: noop,
-          generateColors: noop
+          generateColors: noop,
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
+        var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
         var stdout = runReporter(fakeThis, runner, options);
 
         var isBlankLine = function (value) {
-          return value === '\n';
+          return value === "\n";
         };
 
         expect(
           stdout.filter(isBlankLine),
-          'to have length',
-          expectedNumberOfLines
+          "to have length",
+          expectedNumberOfLines,
         );
       });
 
-      it('should call Base show', function () {
-        var showCursorStub = sinon.stub(Base.cursor, 'show');
+      it("should call Base show", function () {
+        var showCursorStub = sinon.stub(Base.cursor, "show");
         var fakeThis = {
           draw: noop,
           epilogue: noop,
-          generateColors: noop
+          generateColors: noop,
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
+        var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
         runReporter(fakeThis, runner, options);
         sinon.restore();
 
-        expect(showCursorStub.called, 'to be true');
+        expect(showCursorStub.called, "to be true");
       });
     });
   });
 
-  describe('#draw', function () {
+  describe("#draw", function () {
     var stdoutWriteStub;
     var stdout;
 
     beforeEach(function () {
-      stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub = sinon.stub(process.stdout, "write");
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
     });
 
     describe("when 'tick' is false", function () {
-      it('should draw face with expected spaces, _ and ^', function () {
-        var runner = {on: noop, once: noop};
+      it("should draw face with expected spaces, _ and ^", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
-        nyanCat.stats = {passes: 2, pending: 1, failures: 0};
+        nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
         var fakeThis = {
           tick: false,
           appendRainbow: noop,
@@ -183,7 +183,7 @@ describe('Nyan reporter', function () {
           scoreboardWidth: 0,
           trajectories: [[]],
           face: noop,
-          cursorUp: noop
+          cursorUp: noop,
         };
 
         try {
@@ -193,29 +193,29 @@ describe('Nyan reporter', function () {
         }
 
         var expectedArray = [
-          '\u001b[0C',
-          '_,------,',
-          '\n',
-          '\u001b[0C',
-          '_|   /\\_/\\ ',
-          '\n',
-          '\u001b[0C',
-          '^|__undefined ',
-          '\n',
-          '\u001b[0C',
+          "\u001b[0C",
+          "_,------,",
+          "\n",
+          "\u001b[0C",
+          "_|   /\\_/\\ ",
+          "\n",
+          "\u001b[0C",
+          "^|__undefined ",
+          "\n",
+          "\u001b[0C",
           '  ""  "" ',
-          '\n'
+          "\n",
         ];
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout, "to equal", expectedArray);
       });
     });
 
     describe("when 'tick' is true", function () {
-      it('should draw face with expected spaces, _ and ~', function () {
-        var runner = {on: noop, once: noop};
+      it("should draw face with expected spaces, _ and ~", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
-        nyanCat.stats = {passes: 2, pending: 1, failures: 0};
+        nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
         var fakeThis = {
           tick: true,
           appendRainbow: noop,
@@ -226,7 +226,7 @@ describe('Nyan reporter', function () {
           scoreboardWidth: 0,
           trajectories: [[]],
           face: noop,
-          cursorUp: noop
+          cursorUp: noop,
         };
 
         try {
@@ -236,38 +236,38 @@ describe('Nyan reporter', function () {
         }
 
         var expectedArray = [
-          '\u001b[0C',
-          '_,------,',
-          '\n',
-          '\u001b[0C',
-          '_|  /\\_/\\ ',
-          '\n',
-          '\u001b[0C',
-          '~|_undefined ',
-          '\n',
-          '\u001b[0C',
+          "\u001b[0C",
+          "_,------,",
+          "\n",
+          "\u001b[0C",
+          "_|  /\\_/\\ ",
+          "\n",
+          "\u001b[0C",
+          "~|_undefined ",
+          "\n",
+          "\u001b[0C",
           ' ""  "" ',
-          '\n'
+          "\n",
         ];
-        expect(stdout, 'to equal', expectedArray);
+        expect(stdout, "to equal", expectedArray);
       });
     });
   });
 
-  describe('#cursorDown', function () {
+  describe("#cursorDown", function () {
     var stdoutWriteStub;
     var stdout;
 
     beforeEach(function () {
-      stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub = sinon.stub(process.stdout, "write");
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
     });
 
-    it('should write cursor down interaction with expected number', function () {
-      var runner = {on: noop, once: noop};
+    it("should write cursor down interaction with expected number", function () {
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
       var expectedNumber = 25;
@@ -278,25 +278,25 @@ describe('Nyan reporter', function () {
         sinon.restore();
       }
 
-      var expectedArray = ['\u001b[' + expectedNumber + 'B'];
-      expect(stdout, 'to equal', expectedArray);
+      var expectedArray = ["\u001b[" + expectedNumber + "B"];
+      expect(stdout, "to equal", expectedArray);
     });
   });
 
-  describe('#cursorUp', function () {
+  describe("#cursorUp", function () {
     var stdoutWriteStub;
     var stdout;
 
     beforeEach(function () {
-      stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      stdoutWriteStub = sinon.stub(process.stdout, "write");
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
     });
 
-    it('should write cursor up interaction with expected number', function () {
-      var runner = {on: noop, once: noop};
+    it("should write cursor up interaction with expected number", function () {
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
       var expectedNumber = 25;
@@ -307,16 +307,16 @@ describe('Nyan reporter', function () {
         sinon.restore();
       }
 
-      var expectedArray = ['\u001b[' + expectedNumber + 'A'];
-      expect(stdout, 'to equal', expectedArray);
+      var expectedArray = ["\u001b[" + expectedNumber + "A"];
+      expect(stdout, "to equal", expectedArray);
     });
   });
 
-  describe('#rainbowify', function () {
+  describe("#rainbowify", function () {
     var useColorsStub;
 
     beforeEach(function () {
-      useColorsStub = sinon.stub(Base, 'useColors');
+      useColorsStub = sinon.stub(Base, "useColors");
     });
 
     afterEach(function () {
@@ -328,17 +328,17 @@ describe('Nyan reporter', function () {
         useColorsStub.value(false);
       });
 
-      it('should return argument string', function () {
-        var runner = {on: noop, once: noop};
+      it("should return argument string", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
 
-        var inputString = 'hello';
+        var inputString = "hello";
         var outputString = nyanCat.rainbowify(inputString);
         sinon.restore();
 
         var expectedString = inputString;
-        expect(outputString, 'to be', expectedString);
+        expect(outputString, "to be", expectedString);
       });
     });
 
@@ -347,33 +347,33 @@ describe('Nyan reporter', function () {
         useColorsStub.value(true);
       });
 
-      it('should return rainbowified string from the given string and predefined codes', function () {
-        var runner = {on: noop, once: noop};
+      it("should return rainbowified string from the given string and predefined codes", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
 
-        var inputString = 'hello';
-        var colorCode = 'somecode';
+        var inputString = "hello";
+        var colorCode = "somecode";
         var fakeThis = {
           rainbowColors: [colorCode],
-          colorIndex: 0
+          colorIndex: 0,
         };
         var outputString = nyanCat.rainbowify.call(fakeThis, inputString);
         sinon.restore();
 
-        var startCode = '\u001b[38;5;';
-        var endCode = '\u001b[0m';
+        var startCode = "\u001b[38;5;";
+        var endCode = "\u001b[0m";
         var expectedString =
-          startCode + colorCode + 'm' + inputString + endCode;
-        expect(outputString, 'to be', expectedString);
+          startCode + colorCode + "m" + inputString + endCode;
+        expect(outputString, "to be", expectedString);
       });
     });
   });
 
-  describe('#appendRainbow', function () {
+  describe("#appendRainbow", function () {
     describe("when 'tick' is true", function () {
-      it('should set an underscore segment', function () {
-        var runner = {on: noop, once: noop};
+      it("should set an underscore segment", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
         var expectedSegment;
@@ -386,26 +386,26 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 0,
-          trajectories
+          trajectories,
         });
 
-        expect(expectedSegment, 'to be', '_');
+        expect(expectedSegment, "to be", "_");
       });
 
-      it('should shift each trajectory item if its length is greater than or equal to its max width', function () {
-        var runner = {on: noop, once: noop};
+      it("should shift each trajectory item if its length is greater than or equal to its max width", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
 
-        var rainbowifyResult = 'rainbowify';
-        var inputArray = ['itemToShify'];
+        var rainbowifyResult = "rainbowify";
+        var inputArray = ["itemToShify"];
         var trajectories = [inputArray, inputArray, inputArray, inputArray];
         var expectedArray = [rainbowifyResult];
         var expectedTrajectories = [
           expectedArray,
           expectedArray,
           expectedArray,
-          expectedArray
+          expectedArray,
         ];
         nyanCat.appendRainbow.call({
           tick: true,
@@ -414,16 +414,16 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 0,
-          trajectories
+          trajectories,
         });
 
-        expect(trajectories, 'to equal', expectedTrajectories);
+        expect(trajectories, "to equal", expectedTrajectories);
       });
     });
 
     describe("when 'tick' is false", function () {
-      it('should set a dash segment', function () {
-        var runner = {on: noop, once: noop};
+      it("should set a dash segment", function () {
+        var runner = { on: noop, once: noop };
         var options = {};
         var nyanCat = new NyanCat(runner, options);
         var expectedSegment;
@@ -436,30 +436,30 @@ describe('Nyan reporter', function () {
           },
           numberOfLines: 4,
           trajectoryWidthMax: 5,
-          trajectories
+          trajectories,
         });
 
-        expect(expectedSegment, 'to equal', '-');
+        expect(expectedSegment, "to equal", "-");
       });
     });
   });
 
-  describe('#drawScoreboard', function () {
+  describe("#drawScoreboard", function () {
     var stdout;
 
     beforeEach(function () {
-      sinon.stub(Base, 'color').callsFake(function (type, n) {
+      sinon.stub(Base, "color").callsFake(function (type, n) {
         return type + n;
       });
-      var stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      var stdoutWriteStub = sinon.stub(process.stdout, "write");
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
     });
 
-    it('should write scoreboard with color set with each stat', function () {
-      var runner = {on: noop, once: noop};
+    it("should write scoreboard with color set with each stat", function () {
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
 
@@ -469,8 +469,8 @@ describe('Nyan reporter', function () {
 
       var fakeThis = {
         cursorUp: noop,
-        stats: {passes, pending, failures},
-        numberOfLines: 4
+        stats: { passes, pending, failures },
+        numberOfLines: 4,
       };
 
       try {
@@ -480,30 +480,30 @@ describe('Nyan reporter', function () {
       }
 
       var expectedArray = [
-        ' ',
-        'green' + passes,
-        '\n',
-        ' ',
-        'fail' + failures,
-        '\n',
-        ' ',
-        'pending' + pending,
-        '\n',
-        '\n'
+        " ",
+        "green" + passes,
+        "\n",
+        " ",
+        "fail" + failures,
+        "\n",
+        " ",
+        "pending" + pending,
+        "\n",
+        "\n",
       ];
-      expect(stdout, 'to equal', expectedArray);
+      expect(stdout, "to equal", expectedArray);
     });
 
-    it('should call cursorUp with given numberOfLines', function () {
+    it("should call cursorUp with given numberOfLines", function () {
       var expectedNumberOfLines = 1000;
 
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
       var fakeThis = {
         cursorUp: sinon.spy(),
-        stats: {passes: 0, pending: 0, failures: 0},
-        numberOfLines: expectedNumberOfLines
+        stats: { passes: 0, pending: 0, failures: 0 },
+        numberOfLines: expectedNumberOfLines,
       };
 
       try {
@@ -512,35 +512,35 @@ describe('Nyan reporter', function () {
         sinon.restore();
       }
 
-      expect(fakeThis.cursorUp.calledWith(expectedNumberOfLines), 'to be true');
+      expect(fakeThis.cursorUp.calledWith(expectedNumberOfLines), "to be true");
     });
   });
 
-  describe('#drawRainbow', function () {
+  describe("#drawRainbow", function () {
     var stdout;
 
     beforeEach(function () {
-      var stdoutWriteStub = sinon.stub(process.stdout, 'write');
-      stdoutWriteStub.callsFake(function (chunk, encoding, cb) {
+      var stdoutWriteStub = sinon.stub(process.stdout, "write");
+      stdoutWriteStub.callsFake(function (chunk) {
         stdout.push(chunk);
       });
       stdout = [];
     });
 
-    it('should write width, contents and newline for each trajectory', function () {
+    it("should write width, contents and newline for each trajectory", function () {
       var expectedWidth = 444;
 
-      var expectedContents = 'input';
+      var expectedContents = "input";
       var inputArray = [expectedContents];
       var trajectories = [inputArray];
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
       var fakeThis = {
         cursorUp: noop,
         trajectories,
         scoreboardWidth: expectedWidth,
-        numberOfLines: 1
+        numberOfLines: 1,
       };
 
       try {
@@ -550,27 +550,27 @@ describe('Nyan reporter', function () {
       }
 
       var expectedArray = [
-        '\u001b[' + expectedWidth + 'C',
+        "\u001b[" + expectedWidth + "C",
         expectedContents,
-        '\n'
+        "\n",
       ];
-      expect(stdout, 'to equal', expectedArray);
+      expect(stdout, "to equal", expectedArray);
     });
 
-    it('should call cursorUp with given numberOfLines', function () {
+    it("should call cursorUp with given numberOfLines", function () {
       var expectedCursorArgument = null;
       var expectedNumberOfLines = 1000;
 
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
       var fakeThis = {
         cursorUp: function (lines) {
           expectedCursorArgument = lines;
         },
-        trajectories: [['input']],
+        trajectories: [["input"]],
         scoreboardWidth: 1,
-        numberOfLines: expectedNumberOfLines
+        numberOfLines: expectedNumberOfLines,
       };
 
       try {
@@ -579,45 +579,45 @@ describe('Nyan reporter', function () {
         sinon.restore();
       }
 
-      expect(expectedCursorArgument, 'to be', expectedNumberOfLines);
+      expect(expectedCursorArgument, "to be", expectedNumberOfLines);
     });
   });
 
-  describe('#face', function () {
+  describe("#face", function () {
     it('should expect "( x .x)" if any failures', function () {
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
-      nyanCat.stats = {passes: 2, pending: 1, failures: 1};
+      nyanCat.stats = { passes: 2, pending: 1, failures: 1 };
 
-      expect(nyanCat.face(), 'to be', '( x .x)');
+      expect(nyanCat.face(), "to be", "( x .x)");
     });
 
     it('should expect "( o .o)" if any pending but none failing', function () {
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
-      nyanCat.stats = {passes: 2, pending: 1, failures: 0};
+      nyanCat.stats = { passes: 2, pending: 1, failures: 0 };
 
-      expect(nyanCat.face(), 'to be', '( o .o)');
+      expect(nyanCat.face(), "to be", "( o .o)");
     });
 
     it('should expect "( ^ .^)" if all passing', function () {
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
-      nyanCat.stats = {passes: 1, pending: 0, failures: 0};
+      nyanCat.stats = { passes: 1, pending: 0, failures: 0 };
 
-      expect(nyanCat.face(), 'to be', '( ^ .^)');
+      expect(nyanCat.face(), "to be", "( ^ .^)");
     });
 
     it('should expect "( - .-)" otherwise', function (done) {
-      var runner = {on: noop, once: noop};
+      var runner = { on: noop, once: noop };
       var options = {};
       var nyanCat = new NyanCat(runner, options);
-      nyanCat.stats = {passes: 0, pending: 0, failures: 0};
+      nyanCat.stats = { passes: 0, pending: 0, failures: 0 };
 
-      expect(nyanCat.face(), 'to be', '( - .-)');
+      expect(nyanCat.face(), "to be", "( - .-)");
       done();
     });
   });

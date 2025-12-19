@@ -4,9 +4,10 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "ESNext"
   },
-  "exclude": ["**/node_modules"],
+  "exclude": ["lib/browser"],
   "include": ["lib"]
 }

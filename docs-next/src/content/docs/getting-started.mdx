@@ -12,7 +12,7 @@ First, install the [`mocha` package](https://www.npmjs.com/package/mocha) as a d
 <PackageManagers dev type="add" pkg="mocha" />
 
 :::note
-As of v10.0.0, Mocha requires [Node.js](https://nodejs.org) v14.0.0 or newer.
+As of v12.0.0, Mocha requires [Node.js](https://nodejs.org) `^20.19.0 || >=22.12.0`.
 :::
 
 ## 2. Test File
@@ -21,7 +21,7 @@ Create the following `example.test.js` file under a `test/` directory:
 
 ```js
 // test/example.test.js
-import { assert } from "node:assert";
+import assert from "node:assert";
 
 describe("Array", function () {
   describe("#indexOf()", function () {
@@ -71,11 +71,11 @@ You can then run that script with your favorite package manager:
 
 See:
 
-- [CLI](./running/cli) for the commands you can pass to `mocha`
-- [Configuring](./running/configuring) for creating a persistent test configuration file
-- [Editor Plugins](./running/editor-plugins) for improving the Mocha experience in your editor
+- [CLI](/running/cli) for the commands you can pass to `mocha`
+- [Configuring](/running/configuring) for creating a persistent test configuration file
+- [Editor Plugins](/running/editor-plugins) for improving the Mocha experience in your editor
 
-You can see real live live example code in our example repositories:
+You can see real live example code in our example repositories:
 
 - [Mocha examples](https://github.com/mochajs/mocha-examples)
 - [Express](https://github.com/visionmedia/express/tree/master/test)

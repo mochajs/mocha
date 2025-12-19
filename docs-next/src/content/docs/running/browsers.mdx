@@ -9,7 +9,7 @@ Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` fo
 A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the **BDD** interface before loading the test scripts, running them `onload` with `mocha.run()`.
 
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -36,6 +36,14 @@ A typical setup might look something like the following, where we call `mocha.se
   </body>
 </html>
 ```
+
+Mocha supports the latest major versions of evergreen browsers available when Mocha's oldest supported Node.js major version was released.
+As of Mocha v12.0.0, that includes the following browser versions that were stable as of [Node.js 20.0.0](https://nodejs.org/en/blog/release/v20.0.0)'s release on April 18, 2023:
+
+- [Chrome 112](https://developer.chrome.com/blog/new-in-chrome-112)
+- [Edge 112](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1120172248-april-14-2023)
+- [Firefox 112](https://www.mozilla.org/en-US/firefox/112.0/releasenotes)
+- [Safari 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes)
 
 ## Grep
 
@@ -78,17 +86,17 @@ mocha.setup({
 
 ## Browser-Specific Options
 
-Browser Mocha supports many, but not all [CLI options](./configuring).
+Browser Mocha supports many, but not all [CLI options](/running/configuring).
 To use a CLI option that contains a "-", please convert the option to camelCase, (eg. `check-leaks` to `checkLeaks`).
 
-### Options That Differ Slightly From [CLI Options](./configuring)
+### Options That Differ Slightly From [CLI Options](/running/configuring)
 
 > `reporter` _`string|constructor`_
 
 You can pass a reporter's name or a custom reporter's constructor.
 You can find **recommended** reporters for the browser [here](#reporting).
 
-It is possible to use [built-in reporters](../reporters/spec) as well.
+It is possible to use [built-in reporters](/reporters/spec) as well.
 Their employment in browsers is neither recommended nor supported, open the console to see the test results.
 
 ### Options That _Only_ Function In Browser Context

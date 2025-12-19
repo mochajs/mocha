@@ -1,28 +1,29 @@
-'use strict';
+"use strict";
 
-const escapeRegExp = require('escape-string-regexp');
-const os = require('node:os');
-const fs = require('node:fs');
-const fsP = require('node:fs/promises');
-const {format} = require('node:util');
-const path = require('node:path');
-const Base = require('../../lib/reporters/base');
-const debug = require('debug')('mocha:test:integration:helpers');
+const escapeRegExp = require("escape-string-regexp");
+const os = require("node:os");
+const fs = require("node:fs");
+const fsP = require("node:fs/promises");
+const { format } = require("node:util");
+const path = require("node:path");
+const Base = require("../../lib/reporters/base");
+const debug = require("debug")("mocha:test:integration:helpers");
+const SIGNAL_OFFSET = 128;
 
 /**
  * Path to `mocha` executable
  */
-const MOCHA_EXECUTABLE = require.resolve('../../bin/mocha');
+const MOCHA_EXECUTABLE = require.resolve("../../bin/mocha");
 
 /**
  * regular expression used for splitting lines based on new line / dot symbol.
  */
-const SPLIT_DOT_REPORTER_REGEXP = new RegExp('[\\n' + Base.symbols.dot + ']+');
+const SPLIT_DOT_REPORTER_REGEXP = new RegExp("[\\n" + Base.symbols.dot + "]+");
 
 /**
  * Name of "default" fixture file.
  */
-const DEFAULT_FIXTURE = '__default__';
+const DEFAULT_FIXTURE = "__default__";
 
 /**
  * Path to "default" fixture file
@@ -54,7 +55,7 @@ const DEFAULT_FIXTURE_PATH = resolveFixturePath(DEFAULT_FIXTURE);
  * @returns {ChildProcess} Subprocess process
  */
 function runMocha(fixturePath, args, done, opts = {}) {
-  if (typeof args === 'function') {
+  if (typeof args === "function") {
     opts = done;
     done = args;
     args = [];
@@ -69,7 +70,7 @@ function runMocha(fixturePath, args, done, opts = {}) {
 
       done(null, getSummary(res));
     },
-    opts
+    opts,
   );
 }
 
@@ -89,14 +90,14 @@ function runMocha(fixturePath, args, done, opts = {}) {
  * @returns {ChildProcess} Subprocess instance
  */
 function runMochaJSON(fixturePath, args, done, opts) {
-  if (typeof args === 'function') {
+  if (typeof args === "function") {
     opts = done;
     done = args;
     args = [];
   }
 
   return invokeMocha(
-    [...args, '--reporter', 'json', resolveFixturePath(fixturePath)],
+    [...args, "--reporter", "json", resolveFixturePath(fixturePath)],
     (err, res) => {
       if (err) {
         return done(err);
@@ -109,16 +110,16 @@ function runMochaJSON(fixturePath, args, done, opts) {
         return done(
           new Error(
             format(
-              'Failed to parse JSON reporter output. Error:\n%O\nResult:\n%O',
+              "Failed to parse JSON reporter output. Error:\n%O\nResult:\n%O",
               err,
-              res
-            )
-          )
+              res,
+            ),
+          ),
         );
       }
       done(null, result);
     },
-    opts
+    opts,
   );
 }
 
@@ -143,7 +144,7 @@ function runMochaAsync(fixturePath, args, opts) {
         }
         resolve(result);
       },
-      opts
+      opts,
     );
   });
 }
@@ -166,7 +167,7 @@ function runMochaJSONAsync(fixturePath, args = [], opts = {}) {
         }
         resolve(result);
       },
-      opts
+      opts,
     );
   });
 }
@@ -179,10 +180,10 @@ function runMochaJSONAsync(fixturePath, args = [], opts = {}) {
  */
 function toJSONResult(result) {
   try {
-    return {...JSON.parse(result.output), ...result};
+    return { ...JSON.parse(result.output), ...result };
   } catch (err) {
     throw new Error(
-      `Couldn't parse JSON: ${err.message}\n\nOriginal result output: ${result.output}`
+      `Couldn't parse JSON: ${err.message}\n\nOriginal result output: ${result.output}`,
     );
   }
 }
@@ -205,13 +206,13 @@ function toJSONResult(result) {
 function defaultArgs(args = [DEFAULT_FIXTURE_PATH]) {
   const newArgs = [
     ...(!args.length ? [DEFAULT_FIXTURE_PATH] : args),
-    '--no-color'
+    "--no-color",
   ];
-  if (!newArgs.some(arg => /--(no-)?bail/.test(arg))) {
-    newArgs.push('--no-bail');
+  if (!newArgs.some((arg) => /--(no-)?bail/.test(arg))) {
+    newArgs.push("--no-bail");
   }
-  if (!newArgs.some(arg => /--(no-)?parallel/.test(arg))) {
-    newArgs.push('--no-parallel');
+  if (!newArgs.some((arg) => /--(no-)?parallel/.test(arg))) {
+    newArgs.push("--no-parallel");
   }
   return newArgs;
 }
@@ -228,7 +229,7 @@ function defaultArgs(args = [DEFAULT_FIXTURE_PATH]) {
  * @returns {ChildProcess}
  */
 function invokeMocha(args, done, opts = {}) {
-  if (typeof args === 'function') {
+  if (typeof args === "function") {
     opts = done;
     done = args;
     args = [];
@@ -236,7 +237,7 @@ function invokeMocha(args, done, opts = {}) {
   return createSubprocess(
     defaultArgs([MOCHA_EXECUTABLE].concat(args)),
     done,
-    opts
+    opts,
   );
 }
 
@@ -265,7 +266,7 @@ function invokeMochaAsync(args, opts = {}) {
           resolve(result);
         }
       },
-      opts
+      opts,
     );
   });
   return [mochaProcess, resultPromise];
@@ -282,7 +283,7 @@ function invokeMochaAsync(args, opts = {}) {
  * @returns {ChildProcess}
  */
 function invokeNode(args, done, opts = {}) {
-  if (typeof args === 'function') {
+  if (typeof args === "function") {
     opts = done;
     done = args;
     args = [];
@@ -302,21 +303,21 @@ function invokeNode(args, done, opts = {}) {
  * @returns {import('child_process').ChildProcess}
  */
 function createSubprocess(args, done, opts = {}) {
-  let output = '';
+  let output = "";
 
-  if (opts === 'pipe') {
-    opts = {stdio: ['inherit', 'pipe', 'pipe']};
+  if (opts === "pipe") {
+    opts = { stdio: ["inherit", "pipe", "pipe"] };
   }
 
-  const env = {...process.env};
+  const env = { ...process.env };
   // prevent DEBUG from borking STDERR when piping, unless explicitly set via `opts`
   delete env.DEBUG;
 
   opts = {
     cwd: process.cwd(),
-    stdio: ['inherit', 'pipe', 'inherit'],
+    stdio: ["inherit", "pipe", "inherit"],
     env,
-    ...opts
+    ...opts,
   };
 
   /**
@@ -324,38 +325,50 @@ function createSubprocess(args, done, opts = {}) {
    */
   let mocha;
   if (opts.fork) {
-    const {fork} = require('node:child_process');
+    const { fork } = require("node:child_process");
     // to use ipc, we need a fourth item in `stdio` array.
     // opts.stdio is usually an array of length 3, but it could be smaller
     // (pad with `null`)
     for (let i = opts.stdio.length; i < 4; i++) {
-      opts.stdio.push(i === 3 ? 'ipc' : null);
+      opts.stdio.push(i === 3 ? "ipc" : null);
     }
-    debug('forking: %s', args.join(' '));
+    debug("forking: %s", args.join(" "));
     mocha = fork(args[0], args.slice(1), opts);
   } else {
-    const {spawn} = require('node:child_process');
-    debug('spawning: %s', [process.execPath].concat(args).join(' '));
+    const { spawn } = require("node:child_process");
+    debug("spawning: %s", [process.execPath].concat(args).join(" "));
     mocha = spawn(process.execPath, args, opts);
   }
 
-  const listener = data => {
+  const listener = (data) => {
     output += data;
   };
 
-  mocha.stdout.on('data', listener);
+  mocha.stdout.on("data", listener);
   if (mocha.stderr) {
-    mocha.stderr.on('data', listener);
+    mocha.stderr.on("data", listener);
   }
-  mocha.on('error', done);
+  mocha.on("error", done);
 
-  mocha.on('close', code => {
+  mocha.on("close", (code) => {
     done(null, {
       output,
       code,
       args,
-      command: args.join(' ')
+      command: args.join(" "),
     });
+  });
+
+  /**
+   * Emulate node's exit code for fatal signal. Allows tests to see the same
+   * exit code as the mocha cli.
+   */
+  mocha.on("exit", (code, signal) => {
+    if (signal) {
+      mocha.exitCode =
+        SIGNAL_OFFSET +
+        (typeof signal == "string" ? os.constants.signals[signal] : signal);
+    }
   });
 
   return mocha;
@@ -369,15 +382,15 @@ function createSubprocess(args, done, opts = {}) {
  */
 function resolveFixturePath(fixture) {
   if (
-    path.extname(fixture) !== '.js' &&
-    path.extname(fixture) !== '.mjs' &&
-    path.extname(fixture) !== '.ts'
+    path.extname(fixture) !== ".js" &&
+    path.extname(fixture) !== ".mjs" &&
+    path.extname(fixture) !== ".ts"
   ) {
-    fixture += '.fixture.js';
+    fixture += ".fixture.js";
   }
   return path.isAbsolute(fixture)
     ? fixture
-    : path.resolve(__dirname, 'fixtures', fixture);
+    : path.resolve(__dirname, "fixtures", fixture);
 }
 
 /**
@@ -386,7 +399,7 @@ function resolveFixturePath(fixture) {
  * @returns {Summary}
  */
 function getSummary(res) {
-  return ['passing', 'pending', 'failing'].reduce((summary, type) => {
+  return ["passing", "pending", "failing"].reduce((summary, type) => {
     const pattern = new RegExp(`  (\\d+) ${type}\\s`);
     const match = pattern.exec(res.output);
     summary[type] = match ? parseInt(match, 10) : 0;
@@ -413,18 +426,18 @@ function getSummary(res) {
  * @returns {Promise<RawResult>}
  */
 async function runMochaWatchAsync(args, opts, change) {
-  if (typeof opts === 'string') {
-    opts = {cwd: opts};
+  if (typeof opts === "string") {
+    opts = { cwd: opts };
   }
   opts = {
     sleepMs: 2000,
-    stdio: ['pipe', 'pipe', 'inherit'],
+    stdio: ["pipe", "pipe", "inherit"],
     ...opts,
-    fork: process.platform === 'win32'
+    fork: process.platform === "win32",
   };
   const [mochaProcess, resultPromise] = invokeMochaAsync(
-    [...args, '--watch'],
-    opts
+    [...args, "--watch"],
+    opts,
   );
   await sleep(opts.sleepMs);
   await change(mochaProcess);
@@ -432,10 +445,10 @@ async function runMochaWatchAsync(args, opts, change) {
 
   if (
     !(mochaProcess.connected
-      ? mochaProcess.send('SIGINT')
-      : mochaProcess.kill('SIGINT'))
+      ? mochaProcess.send("SIGINT")
+      : mochaProcess.kill("SIGINT"))
   ) {
-    throw new Error('failed to send signal to subprocess');
+    throw new Error("failed to send signal to subprocess");
   }
 
   const res = await resultPromise;
@@ -465,18 +478,15 @@ async function runMochaWatchAsync(args, opts, change) {
  */
 async function runMochaWatchJSONAsync(args, opts, change) {
   const res = await runMochaWatchAsync(
-    [...args, '--reporter', 'json'],
+    [...args, "--reporter", "json"],
     opts,
-    change
+    change,
   );
-  return (
-    res.output
-      // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, '')
-      .split('\u001b[2K')
-      .filter(x => x)
-      .map(x => JSON.parse(x))
-  );
+  return res.output
+    .replace(/\u001b\[\?25./g, "")
+    .split("\u001b[2K")
+    .filter((x) => x)
+    .map((x) => JSON.parse(x));
 }
 
 const touchRef = new Date();
@@ -491,8 +501,8 @@ function touchFile(filepath) {
   fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
     fs.utimesSync(filepath, touchRef, touchRef);
-  } catch (e) {
-    const fd = fs.openSync(filepath, 'a');
+  } catch {
+    const fd = fs.openSync(filepath, "a");
     fs.closeSync(fd);
   }
 }
@@ -506,9 +516,9 @@ function touchFile(filepath) {
  * @param {string} replacement - Replacement
  */
 function replaceFileContents(filepath, pattern, replacement) {
-  const contents = fs.readFileSync(filepath, 'utf-8');
+  const contents = fs.readFileSync(filepath, "utf-8");
   const newContents = contents.replace(pattern, replacement);
-  fs.writeFileSync(filepath, newContents, 'utf-8');
+  fs.writeFileSync(filepath, newContents, "utf-8");
 }
 
 /**
@@ -529,14 +539,14 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
-  const dirpath = await fsP.mkdtemp(path.join(os.tmpdir(), 'mocha-'));
+  const dirpath = await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-"));
   return {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
         return fs.rmSync(dirpath, { recursive: true, force: true });
       }
-    }
+    },
   };
 };
 
@@ -546,7 +556,7 @@ const createTempDir = async () => {
  * @returns {Promise<void>}
  */
 function sleep(time) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
 }
@@ -572,7 +582,7 @@ module.exports = {
   runMochaWatchJSONAsync,
   sleep,
   toJSONResult,
-  touchFile
+  touchFile,
 };
 
 /**

@@ -7,12 +7,12 @@
  * @param {object} options
  * @param {string[]} options.keys List of keys to export from package.json
  */
-export default function pickFromPackageJson({keys}) {
+export default function pickFromPackageJson({ keys }) {
   return {
-    name: 'pick-from-package-json',
-    load: id => {
-      if (id.endsWith('mocha/package.json')) {
-        const manifest = require(id);
+    name: "pick-from-package-json",
+    load: async (id) => {
+      if (id.endsWith("mocha/package.json")) {
+        const manifest = await import(id, { with: { type: "json" } });
 
         const result = {};
 
@@ -20,9 +20,9 @@ export default function pickFromPackageJson({keys}) {
           result[key] = manifest[key];
         }
 
-        return {code: JSON.stringify(result)};
+        return { code: JSON.stringify(result) };
       }
       return null;
-    }
+    },
   };
 }

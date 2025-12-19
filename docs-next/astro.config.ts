@@ -1,11 +1,23 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { visit } from "unist-util-visit";
 import starlightTypeDoc, { typeDocSidebarGroup } from "starlight-typedoc";
 
+const base = "/next";
+
+/** Prepend base URL to non-`/api` absolute links */
+const rewriteLinks = ({ base }: { base: string }) => {
+  return (tree: any) => {
+    visit(tree, "link", (node) => {
+      if (node.url.startsWith("/") && !node.url.startsWith("/api")) {
+        node.url = base + node.url;
+      }
+    });
+  };
+};
+
 export default defineConfig({
-  // For now, this is only being deployed to mocha-docs-next.netlify.app.
-  // Soon we'll move it onto mochajs.org/next.
-  ...(!process.env.NETLIFY_BUILD_BASE && { base: "/next" }),
+  base,
   integrations: [
     starlight({
       components: {
@@ -31,10 +43,10 @@ export default defineConfig({
         { label: "Getting Started", slug: "getting-started" },
         {
           items: [
+            { label: "Browsers", slug: "running/browsers" },
             { label: "CLI", slug: "running/cli" },
             { label: "Configuring", slug: "running/configuring" },
             { label: "Editor plugins", slug: "running/editor-plugins" },
-            { label: "Browsers", slug: "running/browsers" },
             { label: "Test globs", slug: "running/test-globs" },
           ],
           label: "Running Mocha",
@@ -54,6 +66,7 @@ export default defineConfig({
             { label: "Arrow functions", slug: "features/arrow-functions" },
             { label: "Assertions", slug: "features/assertions" },
             { label: "Asynchronous code", slug: "features/asynchronous-code" },
+            { label: "Diffs", slug: "features/diffs" },
             { label: "Error codes", slug: "features/error-codes" },
             { label: "Global fixtures", slug: "features/global-fixtures" },
             { label: "Hooks", slug: "features/hooks" },
@@ -66,11 +79,12 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
+            { label: "About", slug: "interfaces/about" },
             { label: "BDD (default)", slug: "interfaces/bdd" },
-            { label: "TDD", slug: "interfaces/tdd" },
             { label: "Exports", slug: "interfaces/exports" },
             { label: "QUnit", slug: "interfaces/qunit" },
             { label: "Require", slug: "interfaces/require" },
+            { label: "TDD", slug: "interfaces/tdd" },
             { label: "Third-Party", slug: "interfaces/third-party" },
           ],
           label: "Interfaces",
@@ -78,7 +92,7 @@ export default defineConfig({
         {
           collapsed: true,
           items: [
-            { label: "Spec (default)", slug: "reporters/spec" },
+            { label: "About", slug: "reporters/about" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },
             { label: "HTML", slug: "reporters/html" },
@@ -90,9 +104,10 @@ export default defineConfig({
             { label: "Min", slug: "reporters/min" },
             { label: "Nyan", slug: "reporters/nyan" },
             { label: "Progress", slug: "reporters/progress" },
+            { label: "Spec (default)", slug: "reporters/spec" },
             { label: "Tap", slug: "reporters/tap" },
-            { label: "XUnit", slug: "reporters/xunit" },
             { label: "Third-Party", slug: "reporters/third-party" },
+            { label: "XUnit", slug: "reporters/xunit" },
           ],
           label: "Reporters",
         },
@@ -100,26 +115,82 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
+              label: "Compilers deprecation",
+              slug: "explainers/compilers-deprecation",
+            },
+            {
+              label: "Counting assertions",
+              slug: "explainers/count-assertions",
+            },
+            {
               label: "Detecting multiple calls to done()",
               slug: "explainers/detecting-multiple-calls-to-done",
+            },
+            {
+              label: "Environment variables",
+              slug: "explainers/environment-variables",
+            },
+            {
+              label: "Find global leaks",
+              slug: "explainers/find-global-leaks",
+            },
+            {
+              label: "Global variables",
+              slug: "explainers/global-variables",
             },
             {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
             {
+              label: "Programmatic usage",
+              slug: "explainers/programmatic-usage",
+            },
+            {
+              label: "Related tools",
+              slug: "explainers/related-tools",
+            },
+            {
               label: "Run cycle overview",
               slug: "explainers/run-cycle-overview",
+            },
+            {
+              label: "Shared behaviours",
+              slug: "explainers/shared-behaviours",
+            },
+            {
+              label: "Spies",
+              slug: "explainers/spies",
+            },
+            {
+              label: "Stub stdout",
+              slug: "explainers/stub-stdout",
+            },
+            {
+              label: "Tagging with --grep",
+              slug: "explainers/tagging",
             },
             { label: "Test duration", slug: "explainers/test-duration" },
             {
               label: "Test fixture decision tree",
               slug: "explainers/test-fixture-decision-tree",
             },
+            {
+              label: "Third party reporters",
+              slug: "explainers/third-party-reporters",
+            },
+            {
+              label: "Third party UIs",
+              slug: "explainers/third-party-uis",
+            },
           ],
           label: "Explainers",
         },
         typeDocSidebarGroup,
+        {
+          label: "API (legacy)",
+          link: "https://mochajs.org/api",
+        },
       ],
       social: [
         {
@@ -136,4 +207,7 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  markdown: {
+    remarkPlugins: [[rewriteLinks, { base }]],
+  },
 });

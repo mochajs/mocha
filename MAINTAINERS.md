@@ -90,9 +90,8 @@ Your public behavior, whether in the physical or virtual world, reflects upon th
 > If you don't understand the code of conduct, or why it exists, it is _your responsibility_ to educate yourself.
 > This does not imply the CoC is immutable.
 
-Furthermore, a maintainer is a contributor who **contributes regularly**, or expresses a _desire to do so._ That could be every day--but it might be once a week, or even once a month.
-Your boss doesn't work here; contribute as often as you wish.
-We are all people with Real Lives, and for many of us, contributing to OSS is just a hobby!
+Furthermore, a maintainer is a contributor who **contributes regularly**. That can be daily, weekly, or even just a few times a month -- as long as it's regular.
+We are all people with Real Lives, and for many of us, contributing to OSS is just an occasional hobby!
 
 Finally, a maintainer must help define what makes Mocha "Mocha".
 At minimum, a maintainer must _understand_ the current definition (if a maintainer is not interested in decision-making).
@@ -108,7 +107,7 @@ As maintainers, _we work together_ to learn about the nature of these questions.
 
 A maintainer _must_ also have 2FA enabled on their GitHub account.
 
-> If you think that you aren't familiar with mocha's internals enough to contribute, please watch [This walkthrough video!](https://youtu.be/zLayCLcIno0)
+> If you think that you aren't familiar with mocha's internals enough to contribute, please watch [this walkthrough video](https://youtu.be/zLayCLcIno0)!
 
 #### The Rights of a Maintainer
 
@@ -127,6 +126,28 @@ You may choose to do zero or more of these _at their discretion_:
 > For example, a spelling correction in `CHANGELOG.md` may not require a pull request.
 > A change to a reporter's output most certainly would! Maintainers are trusted to use their best judgement; if unsure, err on the side of caution.
 
+#### Expected Activity Levels
+
+We generally expect maintainers to average at least:
+
+- Multiple contributions of any kind in a week
+- One meaningful, non-trivial contribution per month
+
+These are rough averages, not strict minimums!
+It's totally fine to skip a week or two here and there, as long as you do a little more before or after.
+Meaningful, non-trivial contributions can be a well-thought-out comment, sending a non-straightforward pull request, or anything else that adds real value to the project.
+
+If you have to step away longer than a couple of weeks, that's totally fine too.
+Just let the other maintainers know ahead of time.
+
+- If you need to step away for up to a month or two, don't sweat it.
+- If we don't hear from you for a month without prior notice, we'll check in with you to see if you want to remain a maintainer.
+- After three months of inactivity, or two without prior notice, we'll likely remove you as a maintainer.
+
+Again, don't stress about this if you can't always be available.
+Your boss doesn't work here; contribute as often as you reasonably can.
+Even if you step down or are removed, if you can come back and be regularly active we'll happily reinstate you.
+
 #### About "Owners"
 
 Some maintainers will have full admin rights to the [mochajs org](https://github.com/mochajs) and/or will have access to publish to npm.
@@ -142,6 +163,7 @@ If that fails, we decide by a simple vote.
 
 Active maintainers will make an effort to solicit feedback from others before making important or potentially controversial decisions.
 Given the varying geographical distribution and availability of the maintenance team, we resolve to do the best we can to solicit feedback.
+We will wait at least two weeks for consensus votes in most cases, and a month for especially important decisions.
 
 In other words, to have your opinion heard, participate regularly.
 The rest of the team won't wait on feedback that isn't necessarily forthcoming!
@@ -377,37 +399,14 @@ By using milestones, we can cherry-pick non-breaking changes into minor or patch
 
 ## Mocha's Release Process
 
-_It's easier to release often._
+Releases are managed by [release-please](https://github.com/googleapis/release-please) and require manual approval after tests pass.
+To create a new release after merging changes, merge the _`chore(main): release...`_ pull request that its automation has created.
+Doing so will:
 
-1. Decide whether this is a `patch`, `minor`, or `major` release.
-1. Checkout `main` in your working copy & pull.
-1. Modify `CHANGELOG.md`; follow the existing conventions in that file.
-   Use the "pull request" number, unless there isn't one.
-   _You do not need to add Markdown links; this is done automatically._
-   1. You can omit stuff from `CHANGELOG.md` that was done by a maintainer, but would have no interest to consumers of Mocha.
-   1. If the changes aren't of interest to consumers but _were not_ made by a maintainer, reference them anyway.
-      It's cool to give attribution!
-1. Use `npm version` (use `npm@8+`) to bump the version; see `npm version --help` for more info.
-   (Hint--use `-m`: e.g., `npm version patch -m 'Release v%s'`)
-   1. This command will update the list of authors (from the Git history) in `AUTHORS`, and add GitHub links to `CHANGELOG.md`.
-   1. These changes are then added to the Git "stage" and will be added to the commit.
-1. Push `main` to `origin` with your new tag; e.g. `git push origin main --tags`
-1. Copy & paste the `CHANGELOG.md` lines to a new GitHub "release".
-   Save release as draft.
-1. Meanwhile, you can check [the build](https://travis-ci.org/mochajs/mocha) on Travis-CI and [GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Windows+CI%22).
-   1. Once the build is green, you'll want to trigger an update of `mochajs.org`:
-   1. _If you're doing a prerelease_, fast-forward the `next` branch to `main`, and push it.
-      This updates [https://next.mochajs.org](https://next.mochajs.org).
-      That's all.
-   1. _If this is NOT a prerelease_, fast-forward the `mochajs.org` branch to `main` and push it.
-      This updates [https://mochajs.org](https://mochajs.org).
-   1. _If this is a "final" release_ (the first release of a major _after_ one or more prereleases) then remove the `next` tag from npm via `npm dist-tag rm next`.
-1. Finally, you're satisfied with the release notes, open your draft release on GitHub, then click "publish."
-1. Back in your working copy, run `npm publish`.
-   _If you're doing a prerelease, ensure that you use `--tag=next`._
-1. Announce the update on Twitter or just tell your dog or something.
+1. Create a new GitHub release
+2. Cause a CI job to run on `main` that will publish the package to npm
 
-_Note: there are too many steps above._
+You'll then need to go to the `chore(main): release ...` commit _Publish to npm_ job run logs and click the _Review pending deployments_ link.
 
 ## About The OpenJS Foundation
 

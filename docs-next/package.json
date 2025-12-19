@@ -3,24 +3,26 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
-    "dev": "astro dev",
-    "start": "astro dev",
-    "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
+    "astro": "astro",
     "build": "astro check && astro build",
+    "build-with-old": "npm run generate && npm run build -- --outDir ../docs/_site/next",
+    "dev": "astro dev",
+    "docs": "cd .. && npm i && cd docs-next && npm run generate && npm run build",
+    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
     "preview": "astro preview",
-    "astro": "astro"
+    "start": "astro dev"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/starlight": "^0.33.0",
-    "astro": "^5.6.1",
-    "astro-og-canvas": "^0.7.0",
-    "debug": "^4.4.0",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/starlight": "^0.37.1",
+    "astro": "^5.16.6",
+    "astro-og-canvas": "^0.7.2",
+    "debug": "^4.4.3",
     "needle": "^3.3.1",
-    "sharp": "^0.34.1",
-    "starlight-package-managers": "^0.10.0",
-    "starlight-typedoc": "^0.21.0",
-    "typescript": "^5.8.3"
+    "sharp": "^0.34.5",
+    "starlight-package-managers": "^0.11.1",
+    "starlight-typedoc": "^0.21.5",
+    "typescript": "^5.9.3",
+    "unist-util-visit": "^5.0.0"
   }
 }
