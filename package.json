@@ -156,7 +156,7 @@
     "markdown-it-emoji": "^2.0.0",
     "markdown-it-prism": "^2.2.2",
     "markdown-toc": "^1.2.0",
-    "markdownlint-cli": "^0.30.0",
+    "markdownlint-cli": "^0.46.0",
     "needle": "^2.5.0",
     "npm-run-all2": "^6.2.0",
     "nyc": "^17.1.0",
@@ -189,6 +189,7 @@
     "mocha.css",
     "mocha.js",
     "mocha.js.map",
+    "mocha.mjs",
     "browser-entry.js"
   ],
   "browser": {
