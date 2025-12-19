@@ -1,6 +1,3 @@
-import path from 'path'
-import {fileURLToPath} from 'url'
-
 /**
  * @param {string} specifier
  * @param {{
@@ -11,8 +8,5 @@ import {fileURLToPath} from 'url'
  * @returns {Promise<{ url: string }>}
  */
 export async function resolve(specifier, context, defaultResolve) {
-  const extension = path.extname(
-    fileURLToPath(/**@type {import('url').URL}*/ (new URL(specifier, context.parentURL))),
-  )
   return await defaultResolve(specifier.replace('.ts', '.mjs'), context, defaultResolve)
 }
