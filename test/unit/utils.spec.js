@@ -569,8 +569,6 @@ describe("lib/utils", function () {
   });
 
   describe("type()", function () {
-    /* eslint no-extend-native: off */
-
     var type = utils.type;
     var toString = Object.prototype.toString;
 
@@ -623,8 +621,6 @@ describe("lib/utils", function () {
   });
 
   describe("canonicalType()", function () {
-    /* eslint no-extend-native: off */
-
     var type = utils.canonicalType;
     var toString = Object.prototype.toString;
 

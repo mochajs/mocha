@@ -482,14 +482,11 @@ async function runMochaWatchJSONAsync(args, opts, change) {
     opts,
     change,
   );
-  return (
-    res.output
-      // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, "")
-      .split("\u001b[2K")
-      .filter((x) => x)
-      .map((x) => JSON.parse(x))
-  );
+  return res.output
+    .replace(/\u001b\[\?25./g, "")
+    .split("\u001b[2K")
+    .filter((x) => x)
+    .map((x) => JSON.parse(x));
 }
 
 /**
@@ -503,7 +500,7 @@ function touchFile(filepath) {
   try {
     const touchRef = new Date();
     fs.utimesSync(filepath, touchRef, touchRef);
-  } catch (err) {
+  } catch {
     const fd = fs.openSync(filepath, "a");
     fs.closeSync(fd);
   }
