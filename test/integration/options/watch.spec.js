@@ -774,6 +774,43 @@ describe("--watch", function () {
       it("mochaHooks.afterEach runs as expected", setupHookTest("afterEach"));
     });
 
+    describe("reloads root hooks", function () {
+      /**
+       * Helper for setting up hook tests
+       *
+       * @param {string} hookName name of hook to test
+       * @return {function}
+       */
+      function setupHookTest(hookName) {
+        return function () {
+          const testFile = path.join(tempDir, "test.js");
+          const hookFile = path.join(tempDir, "hook.js");
+
+          copyFixture("__default__", testFile);
+          copyFixture("options/watch/hook", hookFile);
+
+          replaceFileContents(hookFile, "<hook>", hookName);
+
+          return runMochaWatchJSONAsync(
+            [testFile, "--require", hookFile],
+            tempDir,
+            () => {
+              replaceFileContents(hookFile, /throw new Error\([^)]+\)/gm, '');
+            }
+          ).then((results) => {
+            expect(results.length, "to equal", 2);
+            expect(results[0].failures, "to have length", 1);
+            expect(results[1].failures, "to have length", 0);
+          });
+        };
+      }
+
+      it("mochaHooks.beforeAll runs as expected", setupHookTest("beforeAll"));
+      it("mochaHooks.beforeEach runs as expected", setupHookTest("beforeEach"));
+      it("mochaHooks.afterAll runs as expected", setupHookTest("afterAll"));
+      it("mochaHooks.afterEach runs as expected", setupHookTest("afterEach"));
+    })
+
     it("should not leak event listeners", function () {
       this.timeout(20000);
       const testFile = path.join(tempDir, "test.js");
