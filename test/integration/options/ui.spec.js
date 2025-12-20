@@ -51,4 +51,19 @@ describe("--ui", function () {
       },
     );
   });
+
+  it("should work for ESM when imported via path", function (done) {
+    runMochaJSON(
+      "test-for-simple-ui",
+      ["--ui", simpleUiESMPath],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed");
+        done();
+      },
+    );
+  });
 });

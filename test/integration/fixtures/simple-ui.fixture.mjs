@@ -7,7 +7,7 @@ const EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
 /**
  * A simple UI that only exposes a single function: test
  */
-export default Mocha.interfaces['simple-ui'] = function(suite) {
+function SimpleUI(suite) {
   suite.on(EVENT_FILE_PRE_REQUIRE, function(
     context,
     file,
@@ -34,3 +34,6 @@ export default Mocha.interfaces['simple-ui'] = function(suite) {
   });
 };
 
+Mocha.interfaces['simple-ui'] = SimpleUI;
+
+export default SimpleUI;
