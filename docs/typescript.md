@@ -1,80 +1,45 @@
 # TypeScript
 
-Mocha works well with TypeScript. Here's how to get started:
+Mocha supports TypeScript out of the box using Node.js native type stripping (available in Node.js 22.6.0+).
 
-## Quick Setup
+## Quick Start
 
-Install dependencies:
+Install Mocha and TypeScript:
+
 ```bash
-npm install --save-dev mocha typescript ts-node @types/mocha @types/node
+npm install --save-dev mocha @types/mocha
 ```
 
-Run tests:
-```bash
-npx mocha --require ts-node/register "test/**/*.test.ts"
-```
-
-## Configuration Files
-
-### package.json
-Add a test script:
-```json
-{
-  "scripts": {
-    "test": "mocha --require ts-node/register 'test/**/*.test.ts'"
-  }
-}
-```
-
-### tsconfig.json
-Basic configuration:
-```json
-{
-  "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "types": ["mocha", "node"]
-  }
-}
-```
-
-## Example Test
+Create a test file:
 
 ```typescript
-// test/math.test.ts
-describe('math functions', function() {
-  it('should add numbers', function() {
-    const result = 2 + 2;
-    if (result !== 4) {
-      throw new Error('Addition failed');
-    }
-  });
-  
-  it('should handle async', async function() {
-    const result = await Promise.resolve(42);
-    if (result !== 42) {
-      throw new Error('Async test failed');
-    }
+// test/example.test.ts
+import assert from "node:assert";
+
+describe("Array", function () {
+  it("should return -1 when value is not present", function () {
+    assert.equal([1, 2, 3].indexOf(4), -1);
   });
 });
 ```
 
-## Common Issues
+Run your tests:
 
-**"Cannot find module" errors**: Make sure @types/mocha and @types/node are installed.
-
-**Compilation errors**: Check that tsconfig.json includes test files and has "types": ["mocha"].
-
-**Import errors**: Use import syntax, not require() in TypeScript files.
-
-## .mocharc.json (Optional)
-
-For persistent configuration:
-```json
-{
-  "require": ["ts-node/register"],
-  "spec": ["test/**/*.test.ts"]
-}
+```bash
+npx mocha --experimental-strip-types test/**/*.test.ts
 ```
+
+> **Note:** Node.js native type stripping requires Node.js v22.6.0 or later. For older Node versions or more complex setups, see the [mocha-examples TypeScript packages](https://github.com/mochajs/mocha-examples).
+
+## Alternative: Using ts-node
+
+For projects needing full TypeScript compilation:
+
+```bash
+npm install --save-dev ts-node typescript
+npx mocha --require ts-node/register test/**/*.test.ts
+```
+
+## More Examples
+
+Check out [mocha-examples](https://github.com/mochajs/mocha-examples) for complete TypeScript project setups including configs for ts-node, tsx, and other tools.
