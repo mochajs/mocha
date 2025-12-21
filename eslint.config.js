@@ -1,6 +1,7 @@
 "use strict";
 
 const js = require("@eslint/js");
+const { defineConfig, globalIgnores } = require("eslint/config");
 const n = require("eslint-plugin-n");
 const globals = require("globals");
 
@@ -9,27 +10,24 @@ const messages = {
   gh3604: "See https://github.com/mochajs/mocha/issues/3604",
 };
 
-module.exports = [
-  n.configs["flat/recommended-script"],
+module.exports = defineConfig(
   {
-    ...js.configs.recommended,
+    files: ["**/*.{cjs,js,mjs}"],
+    extends: [n.configs["flat/recommended-script"], js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: {
         ...globals.browser,
         ...globals.node,
       },
-      sourceType: "script",
     },
     rules: {
-      "n/prefer-node-protocol": "error",
-      "no-unused-vars": "error",
-      strict: ["error", "global"],
-
-      "no-var": "off",
+      "no-redeclare": "off",
+      "no-undef": "off",
       "n/no-process-exit": "off",
       "n/no-unpublished-require": "off",
       "n/no-unsupported-features/node-builtins": "off",
+      strict: ["error", "global"],
     },
   },
   {
@@ -50,31 +48,21 @@ module.exports = [
       "lib/nodejs/**/*.js",
       "scripts/**/*.{js,mjs}",
       "test/**/*.{js,mjs}",
-      "test/node-unit/**/*.js",
     ],
     languageOptions: {
       globals: globals.node,
-      ecmaVersion: 2020,
     },
   },
   {
     files: [
+      "**/*.mjs",
       "lib/nodejs/esm-utils.js",
-      "rollup.config.mjs",
-      "scripts/*.mjs",
       "scripts/pick-from-package-json.js",
       "test/compiler-cjs/test.js",
+      "test/compiler-esm/*.js",
     ],
     languageOptions: {
       sourceType: "module",
-    },
-  },
-  {
-    files: ["test/compiler-esm/*.{js,mjs}"],
-    languageOptions: {
-      sourceType: "module",
-      // For top-level await support.
-      ecmaVersion: 2022,
     },
   },
   {
@@ -86,12 +74,6 @@ module.exports = [
         ...globals.node,
         expect: "readonly",
       },
-    },
-  },
-  {
-    files: ["**/*.mjs"],
-    languageOptions: {
-      sourceType: "module",
     },
   },
   {
@@ -166,19 +148,17 @@ module.exports = [
       ],
     },
   },
-  {
-    ignores: [
-      "**/*.{fixture,min}.{js,mjs}",
-      "coverage/**",
-      "docs/{_dist,_site,api,example}/**",
-      "docs-next/dist/**",
-      "out/**",
-      "test/integration/fixtures/**",
-      ".karma/**",
-      "mocha.js",
-      // TODO: ESLint v8 parser can't parse Import attributes
-      "rollup.config.mjs",
-      "scripts/pick-from-package-json.mjs",
-    ],
-  },
-];
+  globalIgnores([
+    ".karma/**",
+    "**/*.{fixture,min}.{js,mjs}",
+    "coverage/**",
+    "docs-next/dist/**",
+    "docs/{_dist,_site,api,example}/**",
+    "mocha.js",
+    "out/**",
+    "test/integration/fixtures/**",
+    // TODO: ESLint's parser can't parse import attributes
+    "rollup.config.mjs",
+    "scripts/pick-from-package-json.mjs",
+  ]),
+);

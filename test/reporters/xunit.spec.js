@@ -287,6 +287,7 @@ describe("XUnit reporter", function () {
     describe("when output directed to console", function () {
       it("should call 'Base.consoleLog' with line", function () {
         // :TODO: XUnit needs a trivially testable means to force console.log()
+        /* eslint-disable no-global-assign */
         var realProcess = process;
         process = false;
 
@@ -299,6 +300,7 @@ describe("XUnit reporter", function () {
         process = realProcess;
 
         expect(consoleLogStub.calledWith(expectedLine), "to be true");
+        /* eslint-enable no-global-assign */
       });
     });
   });
