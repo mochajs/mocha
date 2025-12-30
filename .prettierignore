@@ -10,7 +10,7 @@
 /pnpm-lock.yaml
 /test/*/fixtures/**
 
-# release-please generate compact  manifest.json by default
+# release-please generate a compact manifest.json by default
 /.github/release-please/manifest.json
 
 # a markdownlint ignore directive is for a heading and need not a line breaker 
