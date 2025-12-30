@@ -9,3 +9,9 @@
 /docs/js/
 /pnpm-lock.yaml
 /test/*/fixtures/**
+
+# release-please generate compact  manifest.json by default
+/.github/release-please/manifest.json
+
+# a markdownlint ignore directive is for a heading and need not a line breaker 
+/docs/changelogs/CHANGELOG_V3_older.md
