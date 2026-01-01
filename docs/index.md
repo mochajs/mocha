@@ -4,7 +4,7 @@ title: "Mocha - the fun, simple, flexible JavaScript test framework"
 description: "Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun."
 ---
 
-<!-- Disable markdown/no-missing-link-fragments due to the rule not aware of this file is specifically converted to HTML -->
+<!-- Disable markdown/no-missing-link-fragments, false positive as this file is specifically converted to HTML -->
 <!-- eslint-disable markdown/no-missing-link-fragments -->
 
 <div class="admonition">This site has a new look, try it out at <a href="next">mochajs.org/next</a>!</div>
