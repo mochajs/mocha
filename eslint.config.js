@@ -152,7 +152,7 @@ module.exports = defineConfig(
   {
     files: ["**/*.md"],
     plugins: {
-      markdown
+      markdown,
     },
     extends: ["markdown/recommended"],
     language: "markdown/gfm",
@@ -160,8 +160,8 @@ module.exports = defineConfig(
       "markdown/no-multiple-h1": "off",
       "markdown/fenced-code-language": "off",
       "markdown/no-missing-label-refs": "off",
-      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }]
-    }
+      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }],
+    },
   },
   globalIgnores([
     ".karma/**",
