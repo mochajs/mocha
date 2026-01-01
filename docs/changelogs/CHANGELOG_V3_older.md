@@ -625,7 +625,7 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 
 - fix: disabling timeouts with this.timeout(0) ([#1301](https://github.com/mochajs/mocha/issues/1301))
 
-<!-- markdownlint-disable-next-line MD024 -->
+<!-- eslint-disable-next-line markdown/no-duplicate-headings -->
 # 1.22.1-3 / 2014-07-27
 
 - fix: local uis and reporters ([#1288](https://github.com/mochajs/mocha/issues/1288))
