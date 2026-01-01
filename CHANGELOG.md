@@ -1,5 +1,41 @@
 # Changelog
 
+## [12.0.0-beta-3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-2...v12.0.0-beta-3) (2026-01-01)
+
+
+### 🌟 Features
+
+* add mocha.mjs export ([#5527](https://github.com/mochajs/mocha/issues/5527)) ([e1cf23c](https://github.com/mochajs/mocha/commit/e1cf23cbc2049a375ab9980337dbf2486450f7cb))
+* bump serialize-javascript from 6.0.2 to 7.0.2 ([#5589](https://github.com/mochajs/mocha/issues/5589)) ([24fb1b6](https://github.com/mochajs/mocha/commit/24fb1b6f8a45b4ca93b4577838bc1d9a47c74ec1))
+* bump strip-json-comments from 3 to 5 ([#5484](https://github.com/mochajs/mocha/issues/5484)) ([9b0db24](https://github.com/mochajs/mocha/commit/9b0db24740c65717dcd1838dcafccbfc1c538d3b))
+
+
+### 🩹 Fixes
+
+* allow importing ESM interface and reporters ([#5563](https://github.com/mochajs/mocha/issues/5563)) ([bc9fc84](https://github.com/mochajs/mocha/commit/bc9fc842213d00cf7ac4a4b0de898bf29e38bdad))
+* **docs-next:** backer's logo is consistent regardless of size ([#5594](https://github.com/mochajs/mocha/issues/5594)) ([1a53a10](https://github.com/mochajs/mocha/commit/1a53a100a4f3b83a725ccf3c166dcbefebca8602))
+* surface ts-node compile errors ([#5572](https://github.com/mochajs/mocha/issues/5572)) ([add4cf8](https://github.com/mochajs/mocha/commit/add4cf8166b330c9af4342def643c606459331d7))
+
+
+### 📚 Documentation
+
+* bumped docs-next Astro to ^5.16.6 ([#5574](https://github.com/mochajs/mocha/issues/5574)) ([806222b](https://github.com/mochajs/mocha/commit/806222b0998ffb4d09399090f4ec638e90974427))
+* fix light mode Astro accent text color ([#5585](https://github.com/mochajs/mocha/issues/5585)) ([9cc3ada](https://github.com/mochajs/mocha/commit/9cc3ada85b4ab4a4f2a8c7dc1b9d9ff8f101ffc1))
+* update Contributor License Agreement link in CONTRIBUTING.md ([#5567](https://github.com/mochajs/mocha/issues/5567)) ([410ce0d](https://github.com/mochajs/mocha/commit/410ce0d2a0f799aaca2c0bc627294d70c62dd3f4))
+
+
+### 🧹 Chores
+
+* normalized ESLint config to v9's recommended structure ([#5575](https://github.com/mochajs/mocha/issues/5575)) ([7f9ed1f](https://github.com/mochajs/mocha/commit/7f9ed1fb3480e0658c2c7d84c60a1b505c941ce5))
+* update Rollup to v4 ([#5510](https://github.com/mochajs/mocha/issues/5510)) ([cafa782](https://github.com/mochajs/mocha/commit/cafa782f010021e7055f8482ede2c02c6503f0a0))
+
+
+### 🤖 Automation
+
+* **dev-deps:** upgrade `eslint` from v8 to v9 ([#5559](https://github.com/mochajs/mocha/issues/5559)) ([bb24ca8](https://github.com/mochajs/mocha/commit/bb24ca8fde15471ff68d5b01b74c2d7e6047d966))
+* **dev-deps:** upgrade `markdownlint-cli` to latest v0.46.0  ([#5560](https://github.com/mochajs/mocha/issues/5560)) ([a124f1d](https://github.com/mochajs/mocha/commit/a124f1d3b7d0f8277962cae295cd43878294e183))
+* **dev-deps:** upgrade `nyc` from 15 to 17 ([#5556](https://github.com/mochajs/mocha/issues/5556)) ([599ab01](https://github.com/mochajs/mocha/commit/599ab013f526e78b3888a092a928ea4bc67138c0))
+
 ## [12.0.0-beta-2](https://github.com/mochajs/mocha/compare/v12.0.0-beta-1...v12.0.0-beta-2) (2025-11-25)
 
 
