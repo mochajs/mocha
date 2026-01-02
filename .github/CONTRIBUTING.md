@@ -39,7 +39,7 @@ Most importantly:
 - Include your test code or file(s).
   If large, please provide a link to a repository or [gist](https://gist.github.com).
 
-We'll discuss your proposed changes and how they relate to the overarching goals of Mocha, detailed below in [⚽️ About Project Goals](#⚽️-about-project-goals).
+We'll discuss your proposed changes and how they relate to the overarching goals of Mocha, detailed below in [⚽️ About Project Goals](#%EF%B8%8F-about-project-goals).
 
 ## ⚽️ About Project Goals
 
@@ -118,7 +118,7 @@ You should see a pull request on github.com/mochajs/mocha/pulls.
 
 Now that the pull request exists, some tasks will be run on it:
 
-1. If you have not signed our [Contributor License Agreement](https://js.foundation/cla), a friendly robot will prompt you to do so.
+1. If you have not signed our [Contributor License Agreement](docs.linuxfoundation.org/lfx/easycla/v2-current/contributors), a friendly robot will prompt you to do so.
    A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
 1. Continuous integration checks will run against your changes.
    The result of these checks will be displayed on your PR.

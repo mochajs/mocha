@@ -48,12 +48,12 @@ The **Mocha** project is part of the [OpenJS Foundation], which operates transpa
 ### §2.2: Out-of-Scope
 
 - [Test assertions](https://wikipedia.org/wiki/Test_assertion) and [mocks](https://en.wikipedia.org/wiki/Mock_object) or related
-- Compatibility with other 3rd-party libraries not hosted under GitHub's [mochajs organization](https://github.com/mochajs) unless explicitly stated in [§2: Scope](#%c2%a72-scope)
+- Compatibility with other 3rd-party libraries not hosted under GitHub's [mochajs organization](https://github.com/mochajs) unless explicitly stated in [§2: Scope](#2-scope)
   - Note: _existence of "official" code samples does not imply explicit support_
   - Efforts must be made to retain compatibility with popular libraries, frameworks and tools, but not at the expense of Mocha itself
 - Use within _unmaintained_ versions of Node.js
 - Use within browsers not meeting a threshold decided upon by maintainers
-- Use within non-Node.js or non-browser environments, unless otherwise explicitly stated in [§2: Scope](#%c2%a72-scope)
+- Use within non-Node.js or non-browser environments, unless otherwise explicitly stated in [§2: Scope](#2-scope)
 - "Unofficial" collaboration or Q&A spaces (including Stack Overflow and Quora)
 - Certain classes of contributions:
   - Bug fixes or enhancements without associated test coverage

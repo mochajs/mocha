@@ -504,7 +504,7 @@ function touchFile(filepath) {
   fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
     fs.utimesSync(filepath, touchRef, touchRef);
-  } catch (err) {
+  } catch {
     const fd = fs.openSync(filepath, "a");
     fs.closeSync(fd);
   }
