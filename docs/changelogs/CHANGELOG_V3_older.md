@@ -204,7 +204,7 @@ Thanks to all our contributors, sponsors and backers! Keep on the lookout for a 
 - [#2315](https://github.com/mochajs/mocha/issues/2315): Fix uncaught TypeError thrown from callback stack ([@1999](https://github.com/1999))
 - Fix broken `only()`/`skip()` in IE7/IE8 ([@boneskull](https://github.com/boneskull))
 - [#2502](https://github.com/mochajs/mocha/issues/2502): Fix broken stack trace filter on Node.js under Windows ([@boneskull](https://github.com/boneskull))
-- [#2496](https://github.com/mochajs/mocha/issues/2496): Fix diff output for objects instantiated with `String` constructor ([more](https://youtrack.jetbrains.com/issue/WEB-23383)) ([@boneskull](https://github.com/boneskull))
+- [#2496](https://github.com/mochajs/mocha/issues/2496): Fix diff output for objects instantiated with `String` constructor ([YouTrack issue tracker](https://youtrack.jetbrains.com/issue/WEB-23383)) ([@boneskull](https://github.com/boneskull))
 
 # 3.0.2 / 2016-08-08
 
@@ -625,7 +625,12 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 
 - fix: disabling timeouts with this.timeout(0) ([#1301](https://github.com/mochajs/mocha/issues/1301))
 
+<!-- Ref https://github.com/mochajs/mocha/issues/5595 -->
+<!-- eslint-disable markdown/no-duplicate-headings -->
+
 # 1.22.1-3 / 2014-07-27
+
+<!-- eslint-enable markdown/no-duplicate-headings -->
 
 - fix: local uis and reporters ([#1288](https://github.com/mochajs/mocha/issues/1288))
 - fix: building 1.21.0's changes in the browser ([#1284](https://github.com/mochajs/mocha/issues/1284))

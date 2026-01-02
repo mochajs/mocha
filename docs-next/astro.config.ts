@@ -181,10 +181,18 @@ export default defineConfig({
           link: "https://mochajs.org/api",
         },
       ],
-      social: {
-        discord: "https://discord.gg/KeDn2uXhER",
-        github: "https://github.com/mochajs/mocha",
-      },
+      social: [
+        {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/KeDn2uXhER",
+        },
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/mochajs/mocha",
+        },
+      ],
       title: "Mocha",
     }),
   ],
