@@ -621,14 +621,14 @@ Thanks to everyone who contributed, and our fabulous [sponsors and backers](http
 - Fix for --watch+only() issue ([#888](https://github.com/mochajs/mocha/issues/888) )
 - fix: respect err.showDiff, add Base reporter test ([#810](https://github.com/mochajs/mocha/issues/810))
 
-# 1.22.1-3 / 2014-07-27
+# 1.21.4 / 2014-07-27
 
 - fix: disabling timeouts with this.timeout(0) ([#1301](https://github.com/mochajs/mocha/issues/1301))
 
 <!-- Ref https://github.com/mochajs/mocha/issues/5595 -->
 <!-- eslint-disable markdown/no-duplicate-headings -->
 
-# 1.22.1-3 / 2014-07-27
+# 1.21.1-3 / 2014-07-27
 
 <!-- eslint-enable markdown/no-duplicate-headings -->
 
