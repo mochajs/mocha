@@ -47,7 +47,7 @@ const baseConfig = {
   plugins: [
     "karma-mocha",
     "karma-mocha-reporter",
-    "karma-sauce-launcher",
+    "karma-sauce-launcher", // todo remove sauce from this file and package.json
     "karma-chrome-launcher",
     rollupPlugin,
   ],
