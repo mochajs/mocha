@@ -608,6 +608,46 @@ describe("--watch", function () {
       expect(results[1].failures, "to have length", 0);
     });
 
+    it("handles multiple changes before watcher is ready or test is done with timestamp after start", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-delay", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+      const dependency2 = path.join(tempDir, "lib", "dependency2.js");
+      copyFixture("options/watch/dependency", dependency2);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("all", "add", dependency2);
+          await sleep(10); // ensure file timestamp is greater
+          await Promise.all([touchFile(dependency), touchFile(dependency2)]);
+          await Promise.all([
+            sendWatcherEvent("all", "change", dependency),
+            sendWatcherEvent("all", "change", dependency2),
+          ]);
+          await runFinished;
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await runFinished;
+        }
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    })
+
     it("handles files added before watcher is ready with timestamp after start", async function () {
       let testFile = path.join(tempDir, "test.js");
       copyFixture("options/watch/test-with-dependency", testFile);
