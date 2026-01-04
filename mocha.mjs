@@ -2,7 +2,7 @@
 /* eslint-disable-next-line n/no-missing-import */
 import "./mocha.js";
 
-const {mocha, Mocha} = globalThis;
+const { mocha, Mocha } = globalThis;
 
 const mochaExports = {
   after: (...args) => globalThis.after?.(...args),

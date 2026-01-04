@@ -4,6 +4,7 @@ const js = require("@eslint/js");
 const { defineConfig, globalIgnores } = require("eslint/config");
 const n = require("eslint-plugin-n");
 const globals = require("globals");
+const { default: markdown } = require("@eslint/markdown");
 
 const messages = {
   gh237: "See https://github.com/mochajs/mocha/issues/237",
@@ -146,6 +147,20 @@ module.exports = defineConfig(
             "CallExpression[callee.object.name=console][callee.property.name=log]",
         },
       ],
+    },
+  },
+  {
+    files: ["**/*.md"],
+    plugins: {
+      markdown,
+    },
+    extends: ["markdown/recommended"],
+    language: "markdown/gfm",
+    rules: {
+      "markdown/no-multiple-h1": "off",
+      "markdown/fenced-code-language": "off",
+      "markdown/no-missing-label-refs": "off",
+      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }],
     },
   },
   globalIgnores([
