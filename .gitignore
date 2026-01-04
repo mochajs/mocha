@@ -143,8 +143,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# SauceConnect
-*.sock
-
 # Local Netlify folder
 .netlify
