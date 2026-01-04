@@ -1,9 +1,11 @@
 "use strict";
 
 const fs = require("node:fs");
+const fsPromises = require("node:fs/promises");
 const path = require("node:path");
 const {
   copyFixture,
+  gotEvent,
   runMochaWatchJSONAsync,
   sleep,
   runMochaWatchAsync,
@@ -475,6 +477,287 @@ describe("--watch", function () {
       });
     });
 
+    async function runMochaWatchWithChokidarMock(args, opts, change) {
+      return await runMochaWatchJSONAsync(
+        args,
+        {
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
+          env: {
+            ...process.env,
+            __MOCHA_WATCH_MOCK_CHOKIDAR: "1",
+            DEBUG: "mocha:cli:watch",
+          },
+          sleepMs: 0,
+          ...opts,
+        },
+        async (mochaProcess) => {
+          const gotMessage = (filter) =>
+            gotEvent(mochaProcess, "message", { filter });
+          const sendWatcherEvent = (...args) =>
+            Promise.all([
+              gotMessage(
+                (msg) =>
+                  Array.isArray(msg.received) &&
+                  msg.received.every((value, i) => value === args[i]),
+              ),
+              mochaProcess.send({ watcher: args }),
+            ]);
+
+          await gotMessage((msg) => msg.listening);
+          await change(mochaProcess, { gotMessage, sendWatcherEvent });
+        },
+      );
+    }
+
+    it("works when watcher is ready before global setup finishes", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
+          ]);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            sendWatcherEvent("all", "change", dependency),
+          ]);
+        },
+      );
+
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+    });
+
+    it("ignores changes before watcher is ready with timestamp before start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          const runFinished = gotMessage((msg) => msg.runFinished);
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("all", "change", dependency);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+    });
+
+    it("handles changes before watcher is ready with timestamp after start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await runFinished;
+          await sleep(10); // ensure file timestamp is greater
+          await touchFile(dependency);
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "change", dependency);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        },
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    });
+
+    it("handles multiple changes before watcher is ready or test is done with timestamp after start", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-delay", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+      const dependency2 = path.join(tempDir, "lib", "dependency2.js");
+      copyFixture("options/watch/dependency", dependency2);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("all", "add", dependency2);
+          await sleep(10); // ensure file timestamp is greater
+          await Promise.all([touchFile(dependency), touchFile(dependency2)]);
+          await Promise.all([
+            sendWatcherEvent("all", "change", dependency),
+            sendWatcherEvent("all", "change", dependency2),
+          ]);
+          await runFinished;
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await runFinished;
+        },
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    });
+
+    it("handles files added before watcher is ready with timestamp after start", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          mochaProcess.send({
+            resolveGlobalSetup: true,
+          });
+          let runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await runFinished;
+          await sleep(10); // ensure file timestamp is greater
+          let dependency2 = path.join(tempDir, "lib", "dependency2.js");
+          copyFixture("options/watch/dependency", dependency2);
+          dependency2 = await fsPromises.realpath(dependency2);
+          runFinished = gotMessage((msg) => msg.runFinished);
+          await sendWatcherEvent("all", "add", dependency2);
+          await sendWatcherEvent("ready");
+          await runFinished;
+        },
+      );
+      expect(results, "to have length", 2);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results[1].passes, "to have length", 1);
+      expect(results[1].failures, "to have length", 0);
+    });
+
+    it("ignores changes before globalSetup is finished", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          await sendWatcherEvent("all", "change", dependency);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
+          ]);
+          expect(rerunScheduled, "to equal", false);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+    });
+
+    it("ignores files added before globalSetup is finished", async function () {
+      let testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency", testFile);
+
+      let dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [testFile, "--watch-files", "lib/**/*.js"],
+        {
+          cwd: tempDir,
+        },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          let rerunScheduled = false;
+          mochaProcess.on("message", (msg) => {
+            if (msg.scheduleRun) rerunScheduled = true;
+          });
+          await sendWatcherEvent("all", "add", testFile);
+          await sendWatcherEvent("all", "add", dependency);
+          await sendWatcherEvent("ready");
+          let dependency2 = path.join(tempDir, "lib", "dependency2.js");
+          copyFixture("options/watch/dependency", dependency2);
+          dependency2 = await fsPromises.realpath(dependency2);
+          await sendWatcherEvent("all", "add", dependency2);
+          await Promise.all([
+            gotMessage((msg) => msg.runFinished),
+            mochaProcess.send({
+              resolveGlobalSetup: true,
+            }),
+          ]);
+          expect(rerunScheduled, "to equal", false);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+    });
+
     // Regression test for https://github.com/mochajs/mocha/issues/2027
     it("respects --fgrep on re-runs", async function () {
       const testFile = path.join(tempDir, "test.js");
@@ -521,6 +804,43 @@ describe("--watch", function () {
             expect(results.length, "to equal", 2);
             expect(results[0].failures, "to have length", 1);
             expect(results[1].failures, "to have length", 1);
+          });
+        };
+      }
+
+      it("mochaHooks.beforeAll runs as expected", setupHookTest("beforeAll"));
+      it("mochaHooks.beforeEach runs as expected", setupHookTest("beforeEach"));
+      it("mochaHooks.afterAll runs as expected", setupHookTest("afterAll"));
+      it("mochaHooks.afterEach runs as expected", setupHookTest("afterEach"));
+    });
+
+    describe("reloads root hooks", function () {
+      /**
+       * Helper for setting up hook tests
+       *
+       * @param {string} hookName name of hook to test
+       * @return {function}
+       */
+      function setupHookTest(hookName) {
+        return function () {
+          const testFile = path.join(tempDir, "test.js");
+          const hookFile = path.join(tempDir, "hook.js");
+
+          copyFixture("__default__", testFile);
+          copyFixture("options/watch/hook", hookFile);
+
+          replaceFileContents(hookFile, "<hook>", hookName);
+
+          return runMochaWatchJSONAsync(
+            [testFile, "--require", hookFile],
+            tempDir,
+            () => {
+              replaceFileContents(hookFile, /throw new Error\([^)]+\)/gm, "");
+            },
+          ).then((results) => {
+            expect(results.length, "to equal", 2);
+            expect(results[0].failures, "to have length", 1);
+            expect(results[1].failures, "to have length", 0);
           });
         };
       }
