@@ -42,6 +42,15 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "package-lock.json",
+      "**/package-lock.json",
+      "node_modules/**",
+      "test/**"
+    ]
+  },
   "scripts": {
     "build": "rollup -c ./rollup.config.mjs",
     "clean": "rimraf mocha.js mocha.js.map",
