@@ -1,5 +1,35 @@
 # Changelog
 
+## [12.0.0-beta-4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-3...v12.0.0-beta-4) (2026-01-04)
+
+
+### 🌟 Features
+
+* ESM configuration file ([#5397](https://github.com/mochajs/mocha/issues/5397)) ([dff9d78](https://github.com/mochajs/mocha/commit/dff9d7873f2d47a799e0adef338a7d6045ba0731))
+* migrate Markdown lint to `@eslint/markdown` ([#5593](https://github.com/mochajs/mocha/issues/5593)) ([d9e1f0a](https://github.com/mochajs/mocha/commit/d9e1f0aa7e39caa11edb81581c14cd02b3f40b3f))
+
+
+### 🩹 Fixes
+
+* remove `run` and use globalThis `setup` ([#5592](https://github.com/mochajs/mocha/issues/5592)) ([1544c39](https://github.com/mochajs/mocha/commit/1544c39dcd76916cca23a111c88eee8cbb781c24))
+
+
+### 📚 Documentation
+
+* fix v3_older changelog duplicate headings ([#5602](https://github.com/mochajs/mocha/issues/5602)) ([a750518](https://github.com/mochajs/mocha/commit/a7505180b64541ac71639ec3d1193f26e73527d9))
+
+
+### 🧹 Chores
+
+* create exclusions for nyc ([#5609](https://github.com/mochajs/mocha/issues/5609)) ([702473a](https://github.com/mochajs/mocha/commit/702473a54d9348948a63b4600171afa6956ccb0b))
+* prevent unwanted Prettier rewrites ([#5591](https://github.com/mochajs/mocha/issues/5591)) ([3ea1578](https://github.com/mochajs/mocha/commit/3ea15789ddb4b77c591d9da36d2476ac359de00d))
+
+
+### 🤖 Automation
+
+* **dep:** update `diff` from v7 to v8 ([#5605](https://github.com/mochajs/mocha/issues/5605)) ([8ca311c](https://github.com/mochajs/mocha/commit/8ca311c6c9b0d353b1c9d65b5751296d9baddd83))
+* update npm command for format ([#5603](https://github.com/mochajs/mocha/issues/5603)) ([c6a29cc](https://github.com/mochajs/mocha/commit/c6a29ccb38f81d65100cb2a0e6d73ad4303f58fb))
+
 ## [12.0.0-beta-3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-2...v12.0.0-beta-3) (2026-01-01)
 
 
