@@ -11,6 +11,7 @@
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
+    "test/integration/fixtures/options/watch/test-with-dependency-and-delay.fixture.js",
   ],
   "ignoreDependencies": [
     "@mocha/docdash",
