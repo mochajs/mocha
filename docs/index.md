@@ -4,8 +4,8 @@ title: "Mocha - the fun, simple, flexible JavaScript test framework"
 description: "Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun."
 ---
 
-<!-- Disable MD051 due to the rule not aware of this file is specifically converted to HTML -->
-<!--markdownlint-disable-file MD051 -->
+<!-- False positive as this file is specifically converted to HTML -->
+<!-- eslint-disable markdown/no-missing-link-fragments -->
 
 <div class="admonition">This site has a new look, try it out at <a href="next">mochajs.org/next</a>!</div>
 
@@ -2257,7 +2257,9 @@ The HTML reporter is the default reporter when running Mocha in the browser. It 
 
 Mocha supports configuration files, typical of modern command-line tools, in several formats:
 
-- **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](#nodejs-native-esm-support) in your `package.json`)
+- **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](/explainers/nodejs-native-esm-support) in your `package.json`)
+  in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration. For native ESM and using `type="module"`
+  or using `.mjs`, use a default export (`default export  {/* ... */}`).
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory. Comments &mdash; while not valid JSON &mdash; are allowed in this file, and will be ignored by Mocha.
