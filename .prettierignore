@@ -4,3 +4,6 @@
 /coverage
 /pnpm-lock.yaml
 /test/*/fixtures/**
+
+# release-please generate a compact manifest.json by default
+/.github/release-please/manifest.json
