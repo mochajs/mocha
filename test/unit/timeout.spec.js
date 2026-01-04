@@ -20,6 +20,25 @@ describe("timeouts", function () {
     }, 50);
   });
 
+  describe("chaining calls", function () {
+    describe("suite-level", function () {
+      describe("should override for inner test cases and deeply nested suites", function () {
+        it("inner test", async function () {
+          await new Promise((resolve) => {
+            setTimeout(resolve, 50);
+          });
+        });
+        describe("nested suite", function () {
+          it("nested test", async function () {
+            await new Promise((resolve) => {
+              setTimeout(resolve, 55);
+            });
+          });
+        }).timeout(70);
+      }).timeout(100);
+    });
+  });
+
   describe("disabling", function () {
     it("should work with timeout(0)", function (done) {
       this.timeout(0);
