@@ -4,6 +4,7 @@
     "bin/mocha.js!",
     "bin/_mocha!",
     "browser-entry.js!",
+    "docs/_data/supporters.js",
     "index.js!",
     "lib/cli/index.js!",
   ],
@@ -13,11 +14,9 @@
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
   ],
   "ignoreDependencies": [
-    "@mocha/docdash",
     "@test/esm-only-loader",
     "coffeescript",
     "fake",
-    "jsdoc-ts-utils",
     "non-existent-package",
   ],
   "mocha": {
