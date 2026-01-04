@@ -19,7 +19,7 @@ jobs:
   format:
     uses: ./.github/workflows/npm-script.yml
     with:
-      npm-script: format
+      npm-script: format:check
 
   lint:
     uses: ./.github/workflows/npm-script.yml
