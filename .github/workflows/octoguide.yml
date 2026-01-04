@@ -5,17 +5,7 @@ jobs:
     steps:
       - uses: OctoGuide/bot@0.18.1
         with:
-          config: recommended
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-header: "Octobot Response:"
-          include-bots: "false"
-          include-associations: "FIRST_TIMER,FIRST_TIME_CONTRIBUTOR,CONTRIBUTOR,MEMBER"
-          pr-body-descriptive: "true"
-          comment-meaningful: "true"
-          pr-title-conventional: "true"
-          pr-linked-issue: "true"
-          pr-task-completion: "true"
-          text-image-alt-text: "true"
 
 name: OctoGuide
 
