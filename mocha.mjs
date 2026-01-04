@@ -1,7 +1,7 @@
 // this built file is not committed to the repo
 import "./mocha.js";
 
-const {mocha, Mocha} = globalThis;
+const { mocha, Mocha } = globalThis;
 
 const mochaExports = {
   after: (...args) => globalThis.after?.(...args),
@@ -11,8 +11,7 @@ const mochaExports = {
   context: (...args) => globalThis.context?.(...args),
   describe: (...args) => globalThis.describe?.(...args),
   it: (...args) => globalThis.it?.(...args),
-  run: mocha.run.bind(mocha),
-  setup: (...args) => mocha.setup?.(...args),
+  setup: (...args) => globalThis.setup?.(...args),
   suite: (...args) => globalThis.suite?.(...args),
   suiteSetup: (...args) => globalThis.suiteSetup?.(...args),
   suiteTeardown: (...args) => globalThis.suiteTeardown?.(...args),
