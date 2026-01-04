@@ -54,6 +54,7 @@
   "scripts": {
     "build": "rollup -c ./rollup.config.mjs",
     "clean": "rimraf mocha.js mocha.js.map",
+    "docs": "cd docs-next; npm run docs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint:installed-check": "installed-check --engine-check",
