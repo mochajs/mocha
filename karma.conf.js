@@ -30,6 +30,9 @@ const env = process.env;
 const hostname = os.hostname();
 const BROWSER = env.BROWSER;
 
+/**
+ * @type KarmaConfig
+ */
 const baseConfig = {
   frameworks: ["rollup", "mocha"],
   files: [
@@ -67,6 +70,10 @@ const baseConfig = {
   },
 };
 
+/**
+ *
+ * @param {KarmaConfig} config
+ */
 module.exports = (config) => {
   let bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, hostname);
   let cfg = { ...baseConfig };
@@ -109,9 +116,9 @@ module.exports = (config) => {
  * containing `bundleDirPath` for rollup plugin.
  *
  * If this fails, the rollup plugin will use a temp dir.
- * @param {object} cfg - Karma config.
- * @param {string} [bundleDirPath] - Path where the output bundle should live
- * @returns {object} - New Karma config
+ * @param {KarmaConfig} cfg
+ * @param {string} [bundleDirPath] Path where the output bundle should live
+ * @returns {KarmaConfig} New Karma config
  */
 const createBundleDir = (cfg, bundleDirPath) => {
   if (bundleDirPath) {
@@ -137,8 +144,8 @@ const createBundleDir = (cfg, bundleDirPath) => {
  * Returns a new Karma config containing standard dependencies for our tests.
  *
  * Most suites use this.
- * @param {object} cfg - Karma config
- * @returns {object} New Karma config
+ * @param {KarmaConfig} cfg
+ * @returns {KarmaConfig} New Karma config
  */
 const addStandardDependencies = (cfg) => ({
   ...cfg,
@@ -182,9 +189,9 @@ const addStandardDependencies = (cfg) => ({
  *
  * Since we can't change Mocha's interface on-the-fly, tests for specific interfaces
  * must be run in isolation.
- * @param {object} cfg - Karma config
- * @param {string} [value] - Configuration identifier, if any
- * @returns {object} New Karma config
+ * @param {KarmaConfig} cfg
+ * @param {string} [value] Configuration identifier, if any
+ * @returns {KarmaConfig} New Karma config
  */
 const chooseTestSuite = (cfg, value) => {
   switch (value) {
@@ -219,3 +226,8 @@ const chooseTestSuite = (cfg, value) => {
       return addStandardDependencies({});
   }
 };
+
+/**
+ * @typedef {object} KarmaConfig
+ * @property {string[]} files
+ */
