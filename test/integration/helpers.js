@@ -482,11 +482,14 @@ async function runMochaWatchJSONAsync(args, opts, change) {
     opts,
     change,
   );
-  return res.output
-    .replace(/\u001b\[\?25./g, "")
-    .split("\u001b[2K")
-    .filter((x) => x)
-    .map((x) => JSON.parse(x));
+  return (
+    res.output
+      // eslint-disable-next-line no-control-regex
+      .replace(/\u001b\[\?25./g, "")
+      .split("\u001b[2K")
+      .filter((x) => x)
+      .map((x) => JSON.parse(x))
+  );
 }
 
 /**
