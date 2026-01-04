@@ -25,17 +25,17 @@ describe("timeouts", function () {
       describe("should override for inner test cases and deeply nested suites", function () {
         it("inner test", async function () {
           await new Promise((resolve) => {
-            setTimeout(resolve, 50);
+            setTimeout(resolve, 1000);
           });
         });
         describe("nested suite", function () {
           it("nested test", async function () {
             await new Promise((resolve) => {
-              setTimeout(resolve, 55);
+              setTimeout(resolve, 2200); // This waiting time is higher than the default timeout value, 2 seconds.
             });
           });
         }).timeout(70);
-      }).timeout(100); // This chained `timeout` config will override `timeout` for nested suites and cases
+      }).timeout(2500); // This chained `timeout` config will override `timeout` for nested suites and cases
     });
   });
 
