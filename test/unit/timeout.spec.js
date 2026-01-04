@@ -35,7 +35,7 @@ describe("timeouts", function () {
             });
           });
         }).timeout(70);
-      }).timeout(100);
+      }).timeout(100); // This chained `timeout` config will override `timeout` for nested suites and cases
     });
   });
 
