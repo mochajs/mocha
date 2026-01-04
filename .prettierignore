@@ -12,6 +12,3 @@
 
 # release-please generate a compact manifest.json by default
 /.github/release-please/manifest.json
-
-# at line 628, markdownlint ignore directive is for a subsequent heading and need not a line breaker 
-/docs/changelogs/CHANGELOG_V3_older.md
