@@ -100,7 +100,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results.length, "to equal", 2);
       });
@@ -116,7 +116,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -142,7 +142,7 @@ describe("--watch", function () {
           await sleep(1000);
 
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 4);
       });
@@ -160,7 +160,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           fs.rmSync(watchedFile, { recursive: true, force: true });
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -178,7 +178,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -196,7 +196,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -214,7 +214,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -232,7 +232,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -250,7 +250,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -274,7 +274,7 @@ describe("--watch", function () {
         tempCwd,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -292,7 +292,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -308,7 +308,7 @@ describe("--watch", function () {
         () => {
           const addedTestFile = path.join(tempDir, "test/b.js");
           copyFixture("passing", addedTestFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 1);
@@ -328,7 +328,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -357,7 +357,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
       });
@@ -379,7 +379,7 @@ describe("--watch", function () {
         () => {
           touchFile(gitFile);
           touchFile(nodeModulesFile);
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 1);
       });
@@ -403,7 +403,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -422,7 +422,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           touchFile(watchedFile);
-        }
+        },
       ).then((results) => {
         expect(results.length, "to equal", 1);
       });
@@ -439,9 +439,9 @@ describe("--watch", function () {
           replaceFileContents(
             testFile,
             "testShouldFail = true",
-            "testShouldFail = false"
+            "testShouldFail = false",
           );
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 0);
@@ -465,9 +465,9 @@ describe("--watch", function () {
           replaceFileContents(
             dependency,
             "module.exports.testShouldFail = false",
-            "module.exports.testShouldFail = true"
+            "module.exports.testShouldFail = true",
           );
-        }
+        },
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 1);
@@ -481,7 +481,7 @@ describe("--watch", function () {
       return await runMochaWatchJSONAsync(
         args,
         {
-          stdio: ['pipe', 'pipe', 'inherit', 'ipc'],
+          stdio: ["pipe", "pipe", "inherit", "ipc"],
           env: {
             ...process.env,
             __MOCHA_WATCH_MOCK_CHOKIDAR: "1",
@@ -498,14 +498,14 @@ describe("--watch", function () {
               gotMessage(
                 (msg) =>
                   Array.isArray(msg.received) &&
-                  msg.received.every((value, i) => value === args[i])
+                  msg.received.every((value, i) => value === args[i]),
               ),
               mochaProcess.send({ watcher: args }),
             ]);
 
           await gotMessage((msg) => msg.listening);
           await change(mochaProcess, { gotMessage, sendWatcherEvent });
-        }
+        },
       );
     }
 
@@ -535,7 +535,7 @@ describe("--watch", function () {
             gotMessage((msg) => msg.runFinished),
             sendWatcherEvent("all", "change", dependency),
           ]);
-        }
+        },
       );
 
       expect(results, "to have length", 2);
@@ -566,7 +566,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "change", dependency);
           await sendWatcherEvent("ready");
           await runFinished;
-        }
+        },
       );
       expect(results, "to have length", 1);
       expect(results[0].passes, "to have length", 1);
@@ -599,7 +599,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "change", dependency);
           await sendWatcherEvent("ready");
           await runFinished;
-        }
+        },
       );
       expect(results, "to have length", 2);
       expect(results[0].passes, "to have length", 1);
@@ -639,14 +639,14 @@ describe("--watch", function () {
           await runFinished;
           runFinished = gotMessage((msg) => msg.runFinished);
           await runFinished;
-        }
+        },
       );
       expect(results, "to have length", 2);
       expect(results[0].passes, "to have length", 1);
       expect(results[0].failures, "to have length", 0);
       expect(results[1].passes, "to have length", 1);
       expect(results[1].failures, "to have length", 0);
-    })
+    });
 
     it("handles files added before watcher is ready with timestamp after start", async function () {
       let testFile = path.join(tempDir, "test.js");
@@ -676,7 +676,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "add", dependency2);
           await sendWatcherEvent("ready");
           await runFinished;
-        }
+        },
       );
       expect(results, "to have length", 2);
       expect(results[0].passes, "to have length", 1);
@@ -713,7 +713,7 @@ describe("--watch", function () {
             }),
           ]);
           expect(rerunScheduled, "to equal", false);
-        }
+        },
       );
       expect(results, "to have length", 1);
       expect(results[0].passes, "to have length", 1);
@@ -751,7 +751,7 @@ describe("--watch", function () {
             }),
           ]);
           expect(rerunScheduled, "to equal", false);
-        }
+        },
       );
       expect(results, "to have length", 1);
       expect(results[0].passes, "to have length", 1);
@@ -773,7 +773,7 @@ describe("--watch", function () {
           length: 2,
           0: { tests: expect.it("to have length", 2) },
           1: { tests: expect.it("to have length", 2) },
-        }
+        },
       );
     });
 
@@ -799,7 +799,7 @@ describe("--watch", function () {
             tempDir,
             () => {
               touchFile(testFile);
-            }
+            },
           ).then((results) => {
             expect(results.length, "to equal", 2);
             expect(results[0].failures, "to have length", 1);
@@ -835,8 +835,8 @@ describe("--watch", function () {
             [testFile, "--require", hookFile],
             tempDir,
             () => {
-              replaceFileContents(hookFile, /throw new Error\([^)]+\)/gm, '');
-            }
+              replaceFileContents(hookFile, /throw new Error\([^)]+\)/gm, "");
+            },
           ).then((results) => {
             expect(results.length, "to equal", 2);
             expect(results[0].failures, "to have length", 1);
@@ -849,7 +849,7 @@ describe("--watch", function () {
       it("mochaHooks.beforeEach runs as expected", setupHookTest("beforeEach"));
       it("mochaHooks.afterAll runs as expected", setupHookTest("afterAll"));
       it("mochaHooks.afterEach runs as expected", setupHookTest("afterEach"));
-    })
+    });
 
     it("should not leak event listeners", function () {
       this.timeout(20000);
@@ -869,13 +869,13 @@ describe("--watch", function () {
               touchFile(testFile);
               await sleep(1000);
             }
-          }
+          },
         ),
         "when fulfilled",
         "to satisfy",
         {
           output: expect.it("not to match", /MaxListenersExceededWarning/),
-        }
+        },
       );
     });
   });

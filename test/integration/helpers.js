@@ -499,7 +499,7 @@ async function runMochaWatchJSONAsync(args, opts, change) {
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
-  fs.mkdirSync(path.dirname(filepath), {recursive: true});
+  fs.mkdirSync(path.dirname(filepath), { recursive: true });
   try {
     const touchRef = new Date();
     fs.utimesSync(filepath, touchRef, touchRef);
@@ -532,7 +532,7 @@ function replaceFileContents(filepath, pattern, replacement) {
  */
 function copyFixture(fixtureName, dest) {
   const fixtureSource = resolveFixturePath(fixtureName);
-  fs.mkdirSync(path.dirname(dest), {recursive: true});
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.cpSync(fixtureSource, dest);
 }
 
@@ -541,12 +541,14 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
-  const dirpath = await fsP.realpath(await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-")));
+  const dirpath = await fsP.realpath(
+    await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-")),
+  );
   return {
     dirpath,
     removeTempDir: async () => {
       if (!process.env.MOCHA_TEST_KEEP_TEMP_DIRS) {
-        return fs.rmSync(dirpath, {recursive: true, force: true});
+        return fs.rmSync(dirpath, { recursive: true, force: true });
       }
     },
   };
@@ -574,7 +576,7 @@ function sleep(time) {
  * a rejection event
  */
 function gotEvent(emitter, event, opts) {
-  const {filter = () => true, rejectionEvents = ['error']} = opts || {};
+  const { filter = () => true, rejectionEvents = ["error"] } = opts || {};
   return new Promise((_resolve, _reject) => {
     function onEvent(value) {
       if (filter(value)) resolve(value);
