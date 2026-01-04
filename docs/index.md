@@ -2258,7 +2258,7 @@ The HTML reporter is the default reporter when running Mocha in the browser. It 
 Mocha supports configuration files, typical of modern command-line tools, in several formats:
 
 - **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](/explainers/nodejs-native-esm-support) in your `package.json`)
-  in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.  For native ESM and using `type="module"`
+  in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration. For native ESM and using `type="module"`
   or using `.mjs`, use a default export (`default export  {/* ... */}`).
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration.
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
