@@ -1,0 +1,2 @@
+/api/* https://legacy.mochajs.org/api/:splat 301
+/next/* https://mochajs.org/:splat 301
