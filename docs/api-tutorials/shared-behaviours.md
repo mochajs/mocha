@@ -3,49 +3,49 @@ Mocha currently has no concept of a "shared behaviour" however the "contexts" fa
 shared.js:
 
 ```js
-exports.shouldBehaveLikeAUser = function() {
-  it('should have .name.first', function() {
-    this.user.name.first.should.equal('tobi');
-  })
+exports.shouldBehaveLikeAUser = function () {
+  it("should have .name.first", function () {
+    this.user.name.first.should.equal("tobi");
+  });
 
-  it('should have .name.last', function() {
-    this.user.name.last.should.equal('holowaychuk');
-  })
+  it("should have .name.last", function () {
+    this.user.name.last.should.equal("holowaychuk");
+  });
 
-  describe('.fullname()', function() {
-    it('should return the full name', function() {
-      this.user.fullname().should.equal('tobi holowaychuk');
-    })
-  })
+  describe(".fullname()", function () {
+    it("should return the full name", function () {
+      this.user.fullname().should.equal("tobi holowaychuk");
+    });
+  });
 };
 ```
 
 test.js:
 
 ```js
-var User = require('./user').User
-  , Admin = require('./user').Admin
-  , shared = require('./shared');
+var User = require("./user").User,
+  Admin = require("./user").Admin,
+  shared = require("./shared");
 
-describe('User', function() {
-  beforeEach(function() {
-    this.user = new User('tobi', 'holowaychuk');
-  })
-
-  shared.shouldBehaveLikeAUser();
-})
-
-describe('Admin', function() {
-  beforeEach(function() {
-    this.user = new Admin('tobi', 'holowaychuk');
-  })
+describe("User", function () {
+  beforeEach(function () {
+    this.user = new User("tobi", "holowaychuk");
+  });
 
   shared.shouldBehaveLikeAUser();
+});
 
-  it('should be an .admin', function() {
+describe("Admin", function () {
+  beforeEach(function () {
+    this.user = new Admin("tobi", "holowaychuk");
+  });
+
+  shared.shouldBehaveLikeAUser();
+
+  it("should be an .admin", function () {
     this.user.admin.should.be.true;
-  })
-})
+  });
+});
 ```
 
 user.js:
@@ -57,12 +57,12 @@ exports.Admin = Admin;
 function User(first, last) {
   this.name = {
     first: first,
-    last: last
+    last: last,
   };
 }
 
-User.prototype.fullname = function() {
-  return this.name.first + ' ' + this.name.last;
+User.prototype.fullname = function () {
+  return this.name.first + " " + this.name.last;
 };
 
 function Admin(first, last) {
