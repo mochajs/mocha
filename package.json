@@ -208,13 +208,6 @@
     "./lib/nodejs/reporters/parallel-buffered.js": false,
     "./lib/cli/index.js": false
   },
-  "prettier": {
-    "arrowParens": "avoid",
-    "bracketSpacing": false,
-    "endOfLine": "auto",
-    "singleQuote": true,
-    "trailingComma": "none"
-  },
   "overrides": {
     "@types/eslint": "^9.6.1",
     "@types/estree": "^1.0.7",
