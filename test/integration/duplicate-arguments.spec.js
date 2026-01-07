@@ -1,6 +1,7 @@
 "use strict";
 
 var runMochaJSON = require("./helpers").runMochaJSON;
+var { expect } = require('chai');
 
 describe("when non-array argument is provided multiple times", function () {
   describe("when the same argument name is used", function () {
@@ -12,7 +13,8 @@ describe("when non-array argument is provided multiple times", function () {
           if (err) {
             return done(err);
           }
-          expect(result, "to have passed");
+
+          expect(result.failures.length).to.equal(0);
           done();
         },
       );
@@ -28,7 +30,7 @@ describe("when non-array argument is provided multiple times", function () {
           if (err) {
             return done(err);
           }
-          expect(result, "to have failed");
+          expect(result.failures.length).to.be.greaterThan(0);
           done();
         },
       );

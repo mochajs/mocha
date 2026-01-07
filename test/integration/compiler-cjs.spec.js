@@ -3,6 +3,8 @@
 var exec = require("node:child_process").exec;
 var path = require("node:path");
 
+var { expect } = require("chai");
+
 describe("support CJS require.extension compilers with esm syntax", function () {
   it("should support .js extension", function (done) {
     exec(
@@ -16,17 +18,19 @@ describe("support CJS require.extension compilers with esm syntax", function () 
         if (error && !stdout) {
           return done(error);
         }
+
         var results = JSON.parse(stdout);
-        expect(results, "to have property", "tests");
+
+        expect(results).to.have.property("tests");
+
         var titles = [];
+
         for (var index = 0; index < results.tests.length; index += 1) {
-          expect(results.tests[index], "to have property", "fullTitle");
+          expect(results.tests[index]).to.have.property("fullTitle")
           titles.push(results.tests[index].fullTitle);
         }
-        expect(titles, "to contain", "cjs written in esm should work").and(
-          "to have length",
-          1,
-        );
+
+        expect(titles).to.contain("cjs written in esm should work").and.to.have.length(1);
         done();
       },
     );
@@ -44,17 +48,18 @@ describe("support CJS require.extension compilers with esm syntax", function () 
         if (error && !stdout) {
           return done(error);
         }
+
         var results = JSON.parse(stdout);
-        expect(results, "to have property", "tests");
+
+        expect(results).to.have.property("tests");
+
         var titles = [];
         for (var index = 0; index < results.tests.length; index += 1) {
-          expect(results.tests[index], "to have property", "fullTitle");
+          expect(results.tests[index]).to.have.property("fullTitle");
           titles.push(results.tests[index].fullTitle);
         }
-        expect(titles, "to contain", "cts written in esm should work").and(
-          "to have length",
-          1,
-        );
+
+        expect(titles).to.contain("cts written in esm should work").and.to.have.length(1);
         done();
       },
     );
