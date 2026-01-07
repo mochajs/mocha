@@ -5,12 +5,12 @@
     "bin/_mocha!",
     "browser-entry.js!",
     "index.js!",
-    "lib/cli/index.js!"
+    "lib/cli/index.js!",
   ],
   "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
-    "test/integration/fixtures/options/watch/test-with-dependency.fixture.js"
+    "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
   ],
   "ignoreDependencies": [
     "@mocha/docdash",
@@ -18,15 +18,15 @@
     "coffeescript",
     "fake",
     "jsdoc-ts-utils",
-    "non-existent-package"
+    "non-existent-package",
   ],
   "mocha": {
-    "entry": ["test/**/*.{js,ts,mjs,cjs}"]
+    "entry": ["test/**/*.{js,ts,mjs,cjs}"],
   },
   "webpack": {
-    "config": "test/browser-specific/fixtures/webpack/webpack.config.js"
+    "config": "test/browser-specific/fixtures/webpack/webpack.config.js",
   },
   "rules": {
-    "exports": "off"
-  }
+    "exports": "off",
+  },
 }

@@ -1,1 +1,1 @@
-require('fake');
+require("fake");
