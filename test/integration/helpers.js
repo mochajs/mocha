@@ -701,6 +701,6 @@ module.exports = {
 /**
  * Predicate for `gotEvent` that will filter which event payloads will resolve the Promise
  * @callback EventFilter
- * @param {...?} payload - the payload emitted for the event
+ * @param {*} payload - the payload emitted for the event
  * @returns {boolean} `true` if the event should resolve the Promise
  */
