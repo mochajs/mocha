@@ -1,5 +1,6 @@
 const dependency = require('./lib/dependency');
 
+// sleep and then check for existing depencency.fixture.js
 it('checks dependency', async () => {
   await new Promise(r => setTimeout(r, 100));
   if (dependency.testShouldFail === true) {
