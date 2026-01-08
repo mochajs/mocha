@@ -568,7 +568,7 @@ function sleep(time) {
 /**
  * Waits for an `EventEmitter` to emit the given `event`.
  * @param {object} [opts]
- * @param {EventFilter} [opts.filter] - predicate that will filter which event payloads will resolve the Promise
+ * @param {EventFilter} [opts.filter] - predicate that will filter which event payloads will resolve the Promise (defaults to `() => true`)
  * @param {string[]} [opts.rejectionEvents] - events that will reject the Promise
  * (defaults to `['error']`)
  * @returns {Promise<void>} a Promise that will be resolved when `emitter` emitted
