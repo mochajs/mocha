@@ -1,5 +1,49 @@
 # Changelog
 
+## [11.7.2](https://github.com/mochajs/mocha/compare/v11.7.1...v11.7.2) (2025-09-01)
+
+
+### 🩹 Fixes
+
+* fail with an informative error message on a file with a broken default import ([#5413](https://github.com/mochajs/mocha/issues/5413)) ([b0e6135](https://github.com/mochajs/mocha/commit/b0e61350594f2a044bf34ea153d1fab1e82e80cc))
+* load mjs files correctly ([#5429](https://github.com/mochajs/mocha/issues/5429)) ([a947b9b](https://github.com/mochajs/mocha/commit/a947b9b95501a35efa73c18aa57a74dad555c03a))
+
+
+### 📚 Documentation
+
+* add banner from old site to new site, link from new to old ([#5414](https://github.com/mochajs/mocha/issues/5414)) ([dedef11](https://github.com/mochajs/mocha/commit/dedef110a2af2f8632fb6c1b864fa0a46ad6ca9c))
+* add info on spies to legacy docs ([#5421](https://github.com/mochajs/mocha/issues/5421)) ([21f5544](https://github.com/mochajs/mocha/commit/21f554459c75f5a75b22556b6e2ac70d6ac0e9fc))
+* explain node import swallowing error ([#5401](https://github.com/mochajs/mocha/issues/5401)) ([09f5b2c](https://github.com/mochajs/mocha/commit/09f5b2c9de67ef40d5bd1775c3fca3bdb138f371))
+* fix links in new site ([#5416](https://github.com/mochajs/mocha/issues/5416)) ([b2bc769](https://github.com/mochajs/mocha/commit/b2bc769c6c8d87311ba0bdc9df8b9b588494eba5))
+* migrate assertion libraries wiki link to main docs ([#5442](https://github.com/mochajs/mocha/issues/5442)) ([95f3ca8](https://github.com/mochajs/mocha/commit/95f3ca8bc3a6c6af2932f7fd59a404768c0c6693))
+* migrate count assertions wiki page to docs ([#5438](https://github.com/mochajs/mocha/issues/5438)) ([02a306c](https://github.com/mochajs/mocha/commit/02a306c6cbf31f4eef7d4c9bf5e06c917d3efc11))
+* migrate shared behaviours to docs-next ([#5432](https://github.com/mochajs/mocha/issues/5432)) ([1dc4aa9](https://github.com/mochajs/mocha/commit/1dc4aa98eb3793865fa2a4da3373534dafc1c9a7))
+* migrate Spies wiki page to explainers ([#5420](https://github.com/mochajs/mocha/issues/5420)) ([cbcf007](https://github.com/mochajs/mocha/commit/cbcf007c5ae25f203863aac0b43eca1e8aefe093))
+* Migrate tagging wiki page to docs ([#5435](https://github.com/mochajs/mocha/issues/5435)) ([876247a](https://github.com/mochajs/mocha/commit/876247a8a636cc7bb1c3bf31390e7771182a090a))
+* migrate third party reporters wiki page to docs ([#5433](https://github.com/mochajs/mocha/issues/5433)) ([f70764c](https://github.com/mochajs/mocha/commit/f70764c9a56fcf12e316d5539788c7be0693b6a9))
+* migrate to global leak wiki page to docs ([#5437](https://github.com/mochajs/mocha/issues/5437)) ([8a6fdca](https://github.com/mochajs/mocha/commit/8a6fdcafccd94c888fae5e8be47dd29a604241b6))
+* update /next bug report link to be docs issue template ([#5424](https://github.com/mochajs/mocha/issues/5424)) ([668cb66](https://github.com/mochajs/mocha/commit/668cb66e1288051369ab144ccb50c840ebe34267))
+
+
+### 🧹 Chores
+
+* add issue form for ⚡️ Performance ([#5406](https://github.com/mochajs/mocha/issues/5406)) ([a908b3b](https://github.com/mochajs/mocha/commit/a908b3b86604d41d5751cccfaff505d7092c114f))
+* add test for `-R import-only-loader` ([#5391](https://github.com/mochajs/mocha/issues/5391)) ([6ee5b48](https://github.com/mochajs/mocha/commit/6ee5b483b8c29e0593c7765ad7a5c7b7f7764fc3))
+* also test Node.js 24 in CI ([#5405](https://github.com/mochajs/mocha/issues/5405)) ([15f5980](https://github.com/mochajs/mocha/commit/15f59805287f4c84ab8d057735a391a795be23f1))
+* bump CI to use 20.19.4, 22.18.0, 24.6.0 ([#5430](https://github.com/mochajs/mocha/issues/5430)) ([ace5eb4](https://github.com/mochajs/mocha/commit/ace5eb47a7926fe9d56ebcd95fd659c557a5be4d))
+* bump Knip to 5.61.2 ([#5394](https://github.com/mochajs/mocha/issues/5394)) ([f3d7430](https://github.com/mochajs/mocha/commit/f3d743061d6523f7077b21749089e6fb2f9c32e3))
+* cleanup references of --opts ([#5402](https://github.com/mochajs/mocha/issues/5402)) ([1096b37](https://github.com/mochajs/mocha/commit/1096b376c3c3bb9d4256c643ad35a459ed750928))
+* enabled ESLint's no-unused-vars ([#5399](https://github.com/mochajs/mocha/issues/5399)) ([d4168ae](https://github.com/mochajs/mocha/commit/d4168aef4c21f8fd119385da1cf1794a1ec5c2e1))
+* move callback and object typedefs to a new types.d.ts ([#5351](https://github.com/mochajs/mocha/issues/5351)) ([3300d21](https://github.com/mochajs/mocha/commit/3300d2155a1b06059fbe89c98a1d8bf979539019))
+* rewrite base path instead of copy-pasting ([#5431](https://github.com/mochajs/mocha/issues/5431)) ([c6c6740](https://github.com/mochajs/mocha/commit/c6c6740fb45da43510f86c1d22ea46ce9ee6a7ae))
+* unify caught errors as err ([#5439](https://github.com/mochajs/mocha/issues/5439)) ([d4912e7](https://github.com/mochajs/mocha/commit/d4912e705cf9ae1c3aa274b6449a6a0ff6d408c5))
+* Update experimental module detection test and pin exact Node versions ([#5417](https://github.com/mochajs/mocha/issues/5417)) ([2489090](https://github.com/mochajs/mocha/commit/2489090223f2629e4a380abe4cc6d46858ada922))
+
+
+### 🤖 Automation
+
+* **deps:** bump actions/checkout in the github-actions group ([#5419](https://github.com/mochajs/mocha/issues/5419)) ([03ac2d0](https://github.com/mochajs/mocha/commit/03ac2d0e6e75e95b3dc7fb08f2e1a1117d9718ca))
+
 ## [11.7.1](https://github.com/mochajs/mocha/compare/v11.7.0...v11.7.1) (2025-06-24)
 
 

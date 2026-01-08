@@ -79,8 +79,8 @@ process.on = function (e, fn) {
   }
 };
 
-process.listeners = function (e) {
-  if (e === 'uncaughtException') {
+process.listeners = function (err) {
+  if (err === 'uncaughtException') {
     return uncaughtExceptionHandlers;
   }
   return [];

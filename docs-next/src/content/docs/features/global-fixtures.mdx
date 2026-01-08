@@ -6,7 +6,7 @@ title: Global Fixtures
 :::note[New in v8.2.0]
 :::
 
-At first glance, _global fixtures_ seem similar to [root hook plugins](./root-hook-plugins).
+At first glance, _global fixtures_ seem similar to [root hook plugins](/features/root-hook-plugins).
 However, unlike root hooks, global fixtures:
 
 1. Are _guaranteed_ to execute _once and only once_
@@ -44,7 +44,7 @@ export async function mochaGlobalSetup() {
 To use it, load this file when running Mocha via `mocha --require fixtures.cjs` (or whatever you have named the file).
 
 :::tip
-Remember: you can define "requires" in a [configuration file](../running/configuring).
+Remember: you can define "requires" in a [configuration file](/running/configuring).
 :::
 
 Now, before Mocha loads and runs your tests, it will execute the above global setup fixture, starting a server for testing.
@@ -96,7 +96,7 @@ You could be clever and try to get around this restriction by assigning somethin
 It's probably best to play by the rules!
 :::
 
-Instead, use the global fixture to _start_ the database, and use [root hook plugins](./root-hook-plugins) or plain old [hooks](./hooks) to create a connection.
+Instead, use the global fixture to _start_ the database, and use [root hook plugins](/features/root-hook-plugins) or plain old [hooks](/features/hooks) to create a connection.
 
 Here's an example of using global fixtures and "before all" hooks to get the job done.
 Note that we do not reference the `server` object anywhere in our tests!

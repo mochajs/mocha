@@ -4,6 +4,8 @@ title: 'Mocha - the fun, simple, flexible JavaScript test framework'
 description: 'Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple and fun.'
 ---
 
+<div class="admonition">This site has a new look, try it out at <a href="next">mochajs.org/next</a>!</div>
+
 Mocha is a feature-rich JavaScript test framework running on [Node.js][] and in the browser, making asynchronous testing _simple_ and _fun_. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Hosted on [GitHub][github-mocha].
 
 <nav class="badges">
@@ -2291,7 +2293,9 @@ Mocha will also _merge_ any options found in `package.json` into its run-time co
 1. Configuration file (`.mocharc.js`, `.mocharc.yml`, etc.)
 1. `mocha` property of `package.json`
 
-Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priority configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"`, coupled with execution of `mocha --require foo`, would cause Mocha to require `foo`, then `bar`, in that order.
+Options which can safely be repeated (e.g., `--require`) will be _concatenated_, with higher-priority configuration sources appearing earlier in the list. For example, a `.mocharc.json` containing `"require": "bar"` coupled with execution of `mocha --require foo` would cause Mocha to require `foo`, then `bar`, in that order.
+
+This also includes `spec`. For example, a `.mocharc.json` containing `"spec": ["**/*.test.js"]` coupled with execution of `mocha bar.spec.js` would be the same as runninng `mocha bar.spec.js **/*.test.js`, and it would still run all `.test.js` files. To workaround this, you can comment out the `spec` property or use a different config file via `--config`.
 
 ### Extending Configuration
 
