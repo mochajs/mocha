@@ -104,7 +104,9 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
   : async (supporter) => {
       try {
         const { avatar: url } = supporter;
-        const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
+        const response = await fetch(url, {
+          signal: AbortSignal.timeout(30000),
+        });
         if (response.headers.get("content-type")?.startsWith("text/html")) {
           throw new TypeError(
             "received html and expected a png; outage likely",
@@ -137,16 +139,14 @@ const getAllOrders = async (slug = "mochajs") => {
 
   // Handling pagination if necessary (2 pages for ~1400 results in May 2019)
   while (true) {
-    const response = await fetch(API_ENDPOINT,
-      { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: SUPPORTER_QUERY,
-          variables: variables, 
-        })
-      }
-    );
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: SUPPORTER_QUERY,
+        variables: variables,
+      }),
+    });
     const result = await response.json();
     const orders = result.data.account.orders.nodes;
     allOrders = [...allOrders, ...orders];
