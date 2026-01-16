@@ -1,5 +1,32 @@
 # Changelog
 
+## [12.0.0-beta-5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-4...v12.0.0-beta-5) (2026-01-16)
+
+
+### 🌟 Features
+
+* add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519)) ([0ed524a](https://github.com/mochajs/mocha/commit/0ed524af347b59200e03b972c2450d36f6818a45))
+
+
+### 📚 Documentation
+
+* add missing /next/* redirects ([#5627](https://github.com/mochajs/mocha/issues/5627)) ([8fa183d](https://github.com/mochajs/mocha/commit/8fa183d592b29346901b55e2fa479c8f598a1ec3))
+
+
+### 🧹 Chores
+
+* cleanup issue templates ([#5624](https://github.com/mochajs/mocha/issues/5624)) ([1972dd7](https://github.com/mochajs/mocha/commit/1972dd76ec66e8e11532bb6aca9157c4f8892d3c))
+* remove unused assets folder ([#5638](https://github.com/mochajs/mocha/issues/5638)) ([ddf8644](https://github.com/mochajs/mocha/commit/ddf864482ff66b1ca46ef7f08e63ca923222e717))
+* update spam filter ([#5645](https://github.com/mochajs/mocha/issues/5645)) ([cf945fb](https://github.com/mochajs/mocha/commit/cf945fb73b7c5a74f0856cabca5b5b1c8a6ff1c8))
+* update tagline ([#5635](https://github.com/mochajs/mocha/issues/5635)) ([8ff0209](https://github.com/mochajs/mocha/commit/8ff0209db575c8231eea77e6ab23e6fe95620c92))
+
+
+### 🤖 Automation
+
+* **deps:** bump OctoGuide/bot in the github-actions group ([#5648](https://github.com/mochajs/mocha/issues/5648)) ([fed6bbd](https://github.com/mochajs/mocha/commit/fed6bbdb891c518e61e8ef4bbf07ed46b469f860))
+* **docs/dev-deps:** use JS-native `fetch` to get supporters data instead of external `needle` ([#5643](https://github.com/mochajs/mocha/issues/5643)) ([e37e56f](https://github.com/mochajs/mocha/commit/e37e56fbe6a1072f1784ef87278d46f7ac48cdb8))
+* initial file implementation for ocotoguide ([#5608](https://github.com/mochajs/mocha/issues/5608)) ([a5f5c64](https://github.com/mochajs/mocha/commit/a5f5c6442505069573a17798a515f267c24a38f3))
+
 ## [12.0.0-beta-4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-3...v12.0.0-beta-4) (2026-01-04)
 
 
