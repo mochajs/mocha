@@ -3,9 +3,9 @@
 const fs = require("node:fs");
 const fsPromises = require("node:fs/promises");
 const path = require("node:path");
+const { once } = require("node:events");
 const {
   copyFixture,
-  gotEvent,
   runMochaWatchJSONAsync,
   sleep,
   runMochaWatchAsync,
@@ -491,8 +491,12 @@ describe("--watch", function () {
           ...opts,
         },
         async (mochaProcess) => {
-          const gotMessage = (filter) =>
-            gotEvent(mochaProcess, "message", { filter });
+          const gotMessage = async (filter) => {
+            let message;
+            do {
+              [message] = await once(mochaProcess, "message");
+            } while (!filter(message));
+          };
           const sendWatcherEvent = (...args) =>
             Promise.all([
               gotMessage(

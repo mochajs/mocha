@@ -565,43 +565,6 @@ function sleep(time) {
   });
 }
 
-/**
- * Waits for an `EventEmitter` to emit the given `event`.
- * @param {object} [opts]
- * @param {EventFilter} [opts.filter] - predicate that will filter which event payloads will resolve the Promise (defaults to `() => true`)
- * @param {string[]} [opts.rejectionEvents] - events that will reject the Promise
- * (defaults to `['error']`)
- * @returns {Promise<void>} a Promise that will be resolved when `emitter` emitted
- * the `event` and it matched `opts.filter` if given, or rejected when `emitter` emitted
- * a rejection event
- */
-function gotEvent(emitter, event, opts) {
-  const { filter = () => true, rejectionEvents = ["error"] } = opts || {};
-  return new Promise((_resolve, _reject) => {
-    function onEvent(value) {
-      if (filter(value)) resolve(value);
-    }
-    function cleanup() {
-      emitter.removeListener(event, onEvent);
-      for (const error of rejectionEvents) {
-        emitter.removeListener(error, reject);
-      }
-    }
-    function resolve(value) {
-      cleanup();
-      _resolve(value);
-    }
-    function reject(reason) {
-      cleanup();
-      _reject(reason);
-    }
-    emitter.on(event, onEvent);
-    for (const error of rejectionEvents) {
-      emitter.on(error, reject);
-    }
-  });
-}
-
 module.exports = {
   DEFAULT_FIXTURE,
   SPLIT_DOT_REPORTER_REGEXP,
@@ -610,7 +573,6 @@ module.exports = {
   createTempDir,
   escapeRegExp,
   getSummary,
-  gotEvent,
   invokeMocha,
   invokeMochaAsync,
   invokeNode,
@@ -696,11 +658,4 @@ module.exports = {
  * Cleanup function to remove temp dir
  * @callback RemoveTempDirCallback
  * @returns {void}
- */
-
-/**
- * Predicate for `gotEvent` that will filter which event payloads will resolve the Promise
- * @callback EventFilter
- * @param {*} payload - the payload emitted for the event
- * @returns {boolean} `true` if the event should resolve the Promise
  */
