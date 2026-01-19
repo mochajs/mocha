@@ -12,6 +12,7 @@ const {
   touchFile,
   replaceFileContents,
   createTempDir,
+  resolveFixturePath,
   DEFAULT_FIXTURE,
 } = require("../helpers");
 
@@ -521,19 +522,21 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("ready");
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({
-              resolveGlobalSetup: true,
-            }),
+            mochaProcess.send({ resolveGlobalSetup: true }),
           ]);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
@@ -556,15 +559,17 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           const runFinished = gotMessage((msg) => msg.runFinished);
-          mochaProcess.send({
-            resolveGlobalSetup: true,
-          });
+          mochaProcess.send({ resolveGlobalSetup: true });
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
           await sendWatcherEvent("all", "change", dependency);
@@ -585,14 +590,16 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
-          mochaProcess.send({
-            resolveGlobalSetup: true,
-          });
+          mochaProcess.send({ resolveGlobalSetup: true });
           let runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -622,14 +629,16 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency2);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
-          mochaProcess.send({
-            resolveGlobalSetup: true,
-          });
+          mochaProcess.send({ resolveGlobalSetup: true });
           let runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -660,14 +669,16 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
-          mochaProcess.send({
-            resolveGlobalSetup: true,
-          });
+          mochaProcess.send({ resolveGlobalSetup: true });
           let runFinished = gotMessage((msg) => msg.runFinished);
           await sendWatcherEvent("all", "add", testFile);
           await sendWatcherEvent("all", "add", dependency);
@@ -697,10 +708,14 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           let rerunScheduled = false;
           mochaProcess.on("message", (msg) => {
@@ -712,9 +727,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "change", dependency);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({
-              resolveGlobalSetup: true,
-            }),
+            mochaProcess.send({ resolveGlobalSetup: true }),
           ]);
           expect(rerunScheduled, "to equal", false);
         },
@@ -732,10 +745,14 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const results = await runMochaWatchWithChokidarMock(
-        [testFile, "--watch-files", "lib/**/*.js"],
-        {
-          cwd: tempDir,
-        },
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mockGlobalSetup"),
+        ],
+        { cwd: tempDir },
         async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
           let rerunScheduled = false;
           mochaProcess.on("message", (msg) => {
@@ -750,9 +767,7 @@ describe("--watch", function () {
           await sendWatcherEvent("all", "add", dependency2);
           await Promise.all([
             gotMessage((msg) => msg.runFinished),
-            mochaProcess.send({
-              resolveGlobalSetup: true,
-            }),
+            mochaProcess.send({ resolveGlobalSetup: true }),
           ]);
           expect(rerunScheduled, "to equal", false);
         },

@@ -541,6 +541,11 @@ function copyFixture(fixtureName, dest) {
  * @returns {Promise<CreateTempDirResult>} Temp dir path and cleanup function
  */
 const createTempDir = async () => {
+  // os.tmpdir() can be a symlink on some OSes, or contain 8.3 filename on Windows
+  // (https://en.wikipedia.org/wiki/8.3_filename)
+  // realpathing this prevents cases where some watch tests fail because the mock
+  // file watcher events they send to the mocha process don't match the watch patterns
+  // or require.cache entries.
   const dirpath = await fsP.realpath(
     await fsP.mkdtemp(path.join(os.tmpdir(), "mocha-")),
   );
