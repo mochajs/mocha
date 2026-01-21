@@ -2,27 +2,32 @@
 interface Supporter {
   imgUrlMed: string;
   imgUrlSmall: string;
+  imgUrlLarge: string;
   name: string;
   website: string;
 }
 
 interface Props {
   data: Supporter[];
-  size: "small" | "medium";
+  size: "small" | "medium" | "large";
 }
+
+const { data, size } = Astro.props;
 ---
 
-<div class:list={["supporters", `supporters-${Astro.props.size}`]}>
+<div class:list={["supporters", `supporters-${size}`]}>
   {
-    Astro.props.data.map((supporter) => (
+    data.map((supporter) => (
       <a class="supporter" href={supporter.website}>
         <img
           alt={supporter.name}
           class="supporter-image"
           src={
-            Astro.props.size === "small"
+            size === "small"
               ? supporter.imgUrlSmall
-              : supporter.imgUrlMed
+              : size === "medium"
+              ? supporter.imgUrlMed
+              : supporter.imgUrlLarge
           }
         />
       </a>
@@ -44,10 +49,15 @@ interface Props {
   }
 
   .supporters-medium {
-    display: flex;
     --supporterSpacing: 1rem;
     align-items: center;
     flex-direction: column;
+  }
+
+  .supporters-large {
+    --supporterSpacing: 1rem;
+    flex-direction: column;
+    align-items: center;
   }
 
   .supporter {
@@ -65,6 +75,12 @@ interface Props {
   .supporters-medium img.supporter-image {
     height: 4rem;
     width: 4rem;
+    object-fit: contain;
+  }
+
+  .supporters-large img.supporter-image {
+    height: 8rem;
+    width: 24rem;
     object-fit: contain;
   }
 </style>
