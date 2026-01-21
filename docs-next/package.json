@@ -17,7 +17,6 @@
     "astro": "^5.16.6",
     "astro-og-canvas": "^0.7.2",
     "debug": "^4.4.3",
-    "needle": "^3.3.1",
     "sharp": "^0.34.5",
     "starlight-package-managers": "^0.11.1",
     "typescript": "^5.9.3",

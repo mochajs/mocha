@@ -18,7 +18,6 @@
 const { writeFile, mkdir, rm } = require("node:fs").promises;
 const { resolve } = require("node:path");
 const debug = require("debug")("mocha:docs:data:supporters");
-const needle = require("needle");
 const blocklist = new Set(require("./blocklist.json"));
 
 /**
@@ -105,14 +104,15 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
   : async (supporter) => {
       try {
         const { avatar: url } = supporter;
-        const { body: imageBuf, headers } = await needle("get", url, {
-          open_timeout: 30000,
+        const response = await fetch(url, {
+          signal: AbortSignal.timeout(30000),
         });
-        if (headers["content-type"].startsWith("text/html")) {
+        if (response.headers.get("content-type")?.startsWith("text/html")) {
           throw new TypeError(
             "received html and expected a png; outage likely",
           );
         }
+        const imageBuf = Buffer.from(await response.arrayBuffer());
         debug("fetched %s", url);
         const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
         await writeFile(filePath, imageBuf);
@@ -139,13 +139,16 @@ const getAllOrders = async (slug = "mochajs") => {
 
   // Handling pagination if necessary (2 pages for ~1400 results in May 2019)
   while (true) {
-    const result = await needle(
-      "post",
-      API_ENDPOINT,
-      { query: SUPPORTER_QUERY, variables },
-      { json: true },
-    );
-    const orders = result.body.data.account.orders.nodes;
+    const response = await fetch(API_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: SUPPORTER_QUERY,
+        variables: variables,
+      }),
+    });
+    const result = await response.json();
+    const orders = result.data.account.orders.nodes;
     allOrders = [...allOrders, ...orders];
     variables.offset += GRAPHQL_PAGE_SIZE;
     if (orders.length < GRAPHQL_PAGE_SIZE) {
