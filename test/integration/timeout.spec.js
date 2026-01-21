@@ -32,7 +32,7 @@ describe("this.timeout()", function () {
 });
 
 describe("describe.timeout()", function () {
-  it("should fail due to suite-level timeout is lower than elapsed time of inner test", function (done) {
+  it("should fail due to suite-level timeout lower than elapsed time of inner test", function (done) {
     run("timeout-chained-call.fixture.js", args, function (err, res) {
       if (err) {
         done(err);
