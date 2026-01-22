@@ -1,8 +1,8 @@
 {
   "name": "mocha",
-  "version": "12.0.0-beta-4",
+  "version": "12.0.0-beta-5",
   "type": "commonjs",
-  "description": "simple, flexible, fun test framework",
+  "description": "Classic, reliable, trusted test framework for Node.js and the browser",
   "keywords": [
     "mocha",
     "test",
@@ -146,7 +146,6 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-sauce-launcher": "^4.3.6",
     "knip": "^5.61.3",
-    "needle": "^2.5.0",
     "npm-run-all2": "^6.2.0",
     "nyc": "^17.1.0",
     "prettier": "3.6.2",
