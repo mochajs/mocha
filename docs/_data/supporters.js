@@ -68,7 +68,6 @@ const SUPPORTER_QUERY = `query account($limit: Int, $offset: Int, $slug: String)
           website
           imgUrlMed: imageUrl(height:64)
           imgUrlSmall: imageUrl(height:32)
-          imgUrlLarge: imageUrl(height:256)
           type
           categories
         }
@@ -91,7 +90,6 @@ const nodeToSupporter = (node) => ({
   website: node.fromAccount.website,
   imgUrlMed: node.fromAccount.imgUrlMed,
   imgUrlSmall: node.fromAccount.imgUrlSmall,
-  imgUrlLarge: node.fromAccount.imgUrlLarge,
   type: node.fromAccount.type,
   categories: node.fromAccount.categories,
   tier: (node.tier && node.tier.slug) || BACKER_TIER,
@@ -222,7 +220,7 @@ const getSupporters = async () => {
             ...supporters[SPONSOR_TIER],
             {
               ...supporter,
-              avatar: encodeURI(supporter.imgUrlLarge),
+              avatar: encodeURI(supporter.imgUrlMed),
             },
           ];
         }

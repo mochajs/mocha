@@ -2,14 +2,13 @@
 interface Supporter {
   imgUrlMed: string;
   imgUrlSmall: string;
-  imgUrlLarge: string;
   name: string;
   website: string;
 }
 
 interface Props {
   data: Supporter[];
-  size: "small" | "medium" | "large";
+  size: "small" | "medium";
 }
 
 const { data, size } = Astro.props;
@@ -25,9 +24,7 @@ const { data, size } = Astro.props;
           src={
             size === "small"
               ? supporter.imgUrlSmall
-              : size === "medium"
-              ? supporter.imgUrlMed
-              : supporter.imgUrlLarge
+              : supporter.imgUrlMed
           }
         />
       </a>
@@ -54,12 +51,6 @@ const { data, size } = Astro.props;
     flex-direction: column;
   }
 
-  .supporters-large {
-    --supporterSpacing: 1rem;
-    flex-direction: column;
-    align-items: center;
-  }
-
   .supporter {
     background: var(--mocha-color-backdrop);
     padding: var(--supporterSpacing);
@@ -73,14 +64,8 @@ const { data, size } = Astro.props;
   }
 
   .supporters-medium img.supporter-image {
-    height: 4rem;
-    width: 4rem;
-    object-fit: contain;
-  }
-
-  .supporters-large img.supporter-image {
-    height: 8rem;
-    width: 24rem;
+    height: 6rem;
+    width: 20rem;
     object-fit: contain;
   }
 </style>
