@@ -14,7 +14,7 @@ body:
         - label: I want to provide a PR to resolve this
     type: checkboxes
   - attributes:
-      description: What did you expect to be able to do?
+      description: What changes would you like, and how do they help contributors?
       label: Overview
     type: textarea
     validations:
@@ -27,5 +27,5 @@ description: Report a bug or request an enhancement in the Mocha repository's in
 labels:
   - "area: repository tooling"
   - "status: in triage"
-name: 🛠 Repository Tooling
-title: "🛠 Repo: <short description of the change>"
+name: 🛠️ Repository Tooling
+title: "🛠️ Repo: <short description of the change>"

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/mocha-logo.svg" alt="Mocha test framework logo"/>
+  <img src="docs-next/src/components/mocha-logo.svg" alt="Mocha test framework logo"/>
 </p>
 
-<p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
+<p align="center">☕️ Classic, reliable, trusted test framework for Node.js and the browser ☕️</p>
 
 <div align="center">
 
