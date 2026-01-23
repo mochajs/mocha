@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "12.0.0-beta-5",
+  "version": "12.0.0-beta-6",
   "type": "commonjs",
   "description": "Classic, reliable, trusted test framework for Node.js and the browser",
   "keywords": [
