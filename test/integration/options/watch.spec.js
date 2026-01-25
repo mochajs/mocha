@@ -485,6 +485,27 @@ describe("--watch", function () {
       birthtime: time,
     });
 
+    /**
+     * @callback ChokidarMockChangeCallback
+     * @param {ChildProcess} mocha - the `mocha` CLI child process
+     * @param {Object} api - test api for interacting with the `mocha` prcoess
+     * @param {Function} api.gotMessage - function that accepts a message predicate and returns a Promise that resolves with the first
+     * message received from the `mocha` process matching the predicate
+     * @param {SendWatcherEvent} api.sendWatcherEvent - function for sending a mock chokidar event to the `mocha` process
+     * @param {SendFileEvent} api.sendWatcherEvent.add - function for sending a mock chokidar file add event to the `mocha` process
+     * @param {SendFileEvent} api.sendWatcherEvent.change - function for sending a mock chokidar file change event to the `mocha` process
+     * @param {SendFileEvent} api.sendWatcherEvent.unlink - function for sending a mock chokidar file unlink event to the `mocha` process
+     */
+
+    /**
+     * Helper for running watch tests with mock chokidar events to precisely
+     * test behavior in different concurrent timing scenarios.
+     * 
+     * @param {string[]} args - the `mocha` CLI arguments
+     * @param {Object} opts - additional `spawn` options for the `mocha` child process
+     * @param {ChokidarMockChangeCallback} change - function to perform test-specific actions
+     * once the `mocha` process has started.
+     */
     async function runMochaWatchWithChokidarMock(args, opts, change) {
       let runScheduled = false;
       let running = false;
