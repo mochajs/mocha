@@ -86,7 +86,6 @@
     "test-node:only:globalBdd": "npm run -s test-node-run-only -- --ui bdd test/only/global/bdd.spec --no-parallel",
     "test-node:only:globalQunit": "npm run -s test-node-run-only -- --ui qunit test/only/global/qunit.spec --no-parallel",
     "test-node:only:globalTdd": "npm run -s test-node-run-only -- --ui tdd test/only/global/tdd.spec --no-parallel",
-    "test-node:only:integration:watch": "npm run -s test-node-run-only -- --no-parallel --timeout 10000 --slow 3750 \"test/integration/options/watch.spec.js\"",
     "test-node:only": "run-p test-node:only:*",
     "test-node:reporters": "npm run -s test-node-run -- \"test/reporters/*.spec.js\"",
     "test-node:requires": "npm run -s test-node-run -- --require coffeescript/register --require test/require/a.js --require test/require/b.coffee --require test/require/c.js --require test/require/d.coffee test/require/require.spec.js",
