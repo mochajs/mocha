@@ -1,5 +1,18 @@
 # Changelog
 
+## [12.0.0-beta-6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-5...v12.0.0-beta-6) (2026-01-23)
+
+
+### 🩹 Fixes
+
+* allow chain call timeout to override nested items timeout ([#5612](https://github.com/mochajs/mocha/issues/5612)) ([5525da6](https://github.com/mochajs/mocha/commit/5525da60cf8d2596e14ff5441ea518d47bd732da))
+* import() fallback prevention ([#5647](https://github.com/mochajs/mocha/issues/5647)) ([6a78fa3](https://github.com/mochajs/mocha/commit/6a78fa39576ffb42700811661a94c9ac996707f2))
+
+
+### 🤖 Automation
+
+* **deps:** bump OctoGuide/bot in the github-actions group ([#5653](https://github.com/mochajs/mocha/issues/5653)) ([e06cce7](https://github.com/mochajs/mocha/commit/e06cce7a49b79a163e33db166e9b078b0d7b4001))
+
 ## [12.0.0-beta-5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-4...v12.0.0-beta-5) (2026-01-16)
 
 
