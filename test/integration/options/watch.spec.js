@@ -3,7 +3,6 @@
 const fs = require("node:fs");
 const fsPromises = require("node:fs/promises");
 const path = require("node:path");
-const { once } = require("node:events");
 const { isDeepStrictEqual } = require("node:util");
 const {
   copyFixture,
