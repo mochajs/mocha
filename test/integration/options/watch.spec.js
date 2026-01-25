@@ -531,13 +531,25 @@ describe("--watch", function () {
             if (msg.runFinished) running = false;
             if (msg.scheduleRun) runScheduled = true;
           });
-          const gotMessage = async (filter) => {
-            let message;
-            do {
-              [message] = await once(mochaProcess, "message");
-            } while (!filter(message));
-            return message;
-          };
+          const gotMessage = (filter) =>
+            new Promise((resolve, reject) => {
+              function onMessage(message) {
+                if (filter(message)) {
+                  cleanup();
+                  resolve(message);
+                }
+              }
+              function onError(error) {
+                cleanup();
+                reject(error);
+              }
+              function cleanup() {
+                mochaProcess.removeListener("message", onMessage);
+                mochaProcess.removeListener("error", onError);
+              }
+              mochaProcess.on("message", onMessage);
+              mochaProcess.on("error", onError);
+            });
           const sendWatcherEvent = (...args) =>
             Promise.all([
               gotMessage(
@@ -737,9 +749,6 @@ describe("--watch", function () {
     describe("reruns once if file events occur during test run", function () {
       for (const event of ["add", "change", "unlink"]) {
         it(`${event} events`, async function () {
-          console.error(
-            `\n****** reruns once if file events occur during test run > ${event} events ******\n`,
-          );
           const testFile = path.join(tempDir, "test.js");
           copyFixture(
             "options/watch/test-with-dependency-and-barrier",
