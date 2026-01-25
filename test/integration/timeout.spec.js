@@ -30,3 +30,18 @@ describe("this.timeout()", function () {
     });
   });
 });
+
+describe("describe.timeout()", function () {
+  it("should fail due to suite-level timeout lower than elapsed time of inner test", function (done) {
+    run("timeout-chained-call.fixture.js", args, function (err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+
+      assert.ok(res.failures[0].err.message.match(/Timeout of 50ms exceeded/));
+      assert.strictEqual(res.code, 1);
+      done();
+    });
+  });
+});
