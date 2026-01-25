@@ -661,7 +661,6 @@ describe("--watch", function () {
           await gotMessage((msg) => msg.runFinished);
         },
       );
-      console.log(require("util").inspect(results, { depth: 10 }));
       expect(results, "to have length", 1);
       expect(results[0].passes, "to have length", 1);
       expect(results[0].failures, "to have length", 0);
@@ -727,7 +726,6 @@ describe("--watch", function () {
               await gotMessage((msg) => msg.runFinished);
             },
           );
-          console.log(require("util").inspect(results, { depth: 10 }));
           expect(results, "to have length", 1);
           expect(results[0].passes, "to have length", 1);
           expect(results[0].failures, "to have length", 0);
@@ -739,6 +737,9 @@ describe("--watch", function () {
     describe("reruns once if file events occur during test run", function () {
       for (const event of ["add", "change", "unlink"]) {
         it(`${event} events`, async function () {
+          console.error(
+            `\n****** reruns once if file events occur during test run > ${event} events ******\n`,
+          );
           const testFile = path.join(tempDir, "test.js");
           copyFixture(
             "options/watch/test-with-dependency-and-barrier",
