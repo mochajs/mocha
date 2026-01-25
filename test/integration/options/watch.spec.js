@@ -500,7 +500,7 @@ describe("--watch", function () {
     /**
      * Helper for running watch tests with mock chokidar events to precisely
      * test behavior in different concurrent timing scenarios.
-     * 
+     *
      * @param {string[]} args - the `mocha` CLI arguments
      * @param {Object} opts - additional `spawn` options for the `mocha` child process
      * @param {ChokidarMockChangeCallback} change - function to perform test-specific actions
@@ -863,7 +863,7 @@ describe("--watch", function () {
             },
           );
 
-          const filtered = results.filter(r => r.tests.length > 0)
+          const filtered = results.filter((r) => r.tests.length > 0);
 
           expect(filtered, "to have length", 2);
           expect(filtered[0].passes, "to have length", 1);
