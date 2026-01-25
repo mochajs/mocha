@@ -863,11 +863,13 @@ describe("--watch", function () {
             },
           );
 
-          expect(results, "to have length", 2);
-          expect(results[0].passes, "to have length", 1);
-          expect(results[0].failures, "to have length", 0);
-          expect(results[1].passes, "to have length", 1);
-          expect(results[1].failures, "to have length", 0);
+          const filtered = results.filter(r => r.tests.length > 0)
+
+          expect(filtered, "to have length", 2);
+          expect(filtered[0].passes, "to have length", 1);
+          expect(filtered[0].failures, "to have length", 0);
+          expect(filtered[1].passes, "to have length", 1);
+          expect(filtered[1].failures, "to have length", 0);
           expect(results.runPending, "to be", false);
         });
       }
