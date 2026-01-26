@@ -819,7 +819,7 @@ describe("--watch", function () {
       }
     });
 
-    describe.only("reruns once if file events occur after test run", function () {
+    describe("reruns once if file events occur after test run", function () {
       for (const event of ["add", "change", "unlink"]) {
         it(`${event} events`, async function () {
           console.error(

@@ -63,7 +63,7 @@ jobs:
       matrix:
         coverage: [true]
         test-part:
-          - only:integration:watch
+          - integration:watch
           # - interfaces
           # - unit
           # - integration
