@@ -819,9 +819,12 @@ describe("--watch", function () {
       }
     });
 
-    describe("reruns once if file events occur after test run", function () {
+    describe.only("reruns once if file events occur after test run", function () {
       for (const event of ["add", "change", "unlink"]) {
         it(`${event} events`, async function () {
+          console.error(
+            `\n***** reruns once if file events occur after test run (${event}) *****\n`,
+          );
           const testFile = path.join(tempDir, "test.js");
           copyFixture("options/watch/test-with-dependency", testFile);
 
@@ -852,8 +855,11 @@ describe("--watch", function () {
                 await sendWatcherEvent.add(dependency3, 0);
               }
 
+              console.error(0);
               mochaProcess.send({ resolveGlobalSetup: true });
+              console.error(1);
               await gotMessage((msg) => msg.runFinished);
+              console.error(2);
 
               if (event === "add") {
                 copyFixture("options/watch/dependency", dependency2);
@@ -864,14 +870,22 @@ describe("--watch", function () {
                   fsPromises.unlink(dependency3),
                 ]);
               }
+              console.error(3);
               await Promise.all([
-                sendWatcherEvent[event](dependency2, 1000),
-                sendWatcherEvent[event](dependency3, 1000),
-                gotMessage((msg) => msg.runFinished),
+                sendWatcherEvent[event](dependency2, 1000).then(() =>
+                  console.error(4),
+                ),
+                sendWatcherEvent[event](dependency3, 1000).then(() =>
+                  console.error(5),
+                ),
+                gotMessage((msg) => msg.runFinished).then(() =>
+                  console.error(6),
+                ),
               ]);
             },
           );
 
+          console.error(require("util").inspect(results, { depth: 10 }));
           const filtered = results.filter((r) => r.tests.length > 0);
 
           expect(filtered, "to have length", 2);
