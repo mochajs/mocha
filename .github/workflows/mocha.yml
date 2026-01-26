@@ -16,39 +16,39 @@ permissions:
   id-token: write # for Codecov OIDC
 
 jobs:
-  # format:
-  #   uses: ./.github/workflows/npm-script.yml
-  #   with:
-  #     npm-script: format:check
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format:check
 
-  # lint:
-  #   uses: ./.github/workflows/npm-script.yml
-  #   with:
-  #     npm-script: lint
+  lint:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: lint
 
-  # smoke:
-  #   uses: ./.github/workflows/npm-script.yml
-  #   with:
-  #     node-versions: "20,22,24"
-  #     npm-script: test-smoke
+  smoke:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      node-versions: "20,22,24"
+      npm-script: test-smoke
 
-  # test-node-lts:
-  #   # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
-  #   uses: ./.github/workflows/npm-script.yml
-  #   needs: smoke
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       test-part:
-  #         - interfaces
-  #         - unit
-  #         - integration
-  #         - jsapi
-  #         - requires
-  #         - reporters
-  #         - only
-  #   with:
-  #     npm-script: test-node:${{ matrix.test-part }}
+  test-node-lts:
+    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    uses: ./.github/workflows/npm-script.yml
+    needs: smoke
+    strategy:
+      fail-fast: false
+      matrix:
+        test-part:
+          - interfaces
+          - unit
+          - integration
+          - jsapi
+          - requires
+          - reporters
+          - only
+    with:
+      npm-script: test-node:${{ matrix.test-part }}
 
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
@@ -57,22 +57,21 @@ jobs:
       contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     uses: ./.github/workflows/npm-script.yml
-    # needs: test-node-lts
+    needs: test-node-lts
     strategy:
       fail-fast: false
       matrix:
         coverage: [true]
         test-part:
-          - integration:watch
-          # - interfaces
-          # - unit
-          # - integration
-          # - requires
-          # - reporters
-          # - only
-        # include:
-        #   - test-part: jsapi
-        #     coverage: false
+          - interfaces
+          - unit
+          - integration
+          - requires
+          - reporters
+          - only
+        include:
+          - test-part: jsapi
+            coverage: false
     with:
       os: "ubuntu-latest,windows-latest"
       # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
@@ -81,11 +80,11 @@ jobs:
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
-  # test-browser-local:
-  #   uses: ./.github/workflows/npm-script.yml
-  #   with:
-  #     browsers: ChromeHeadless
-  #     npm-script: test-browser
+  test-browser-local:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      browsers: ChromeHeadless
+      npm-script: test-browser
 
   # test-browser-saucelabs:
   #   # Don't run forked 'pull_request' without saucelabs token
@@ -100,7 +99,7 @@ jobs:
   #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
   #     npm-script: test-browser
 
-  # tsc:
-  #   uses: ./.github/workflows/npm-script.yml
-  #   with:
-  #     npm-script: tsc
+  tsc:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: tsc
