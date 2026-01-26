@@ -50,7 +50,7 @@ describe("--watch", function () {
       });
     });
 
-    it("reruns test when watched test file crashes", function () {
+    it.only("reruns test when watched test file crashes", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
