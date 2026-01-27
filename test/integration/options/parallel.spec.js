@@ -59,7 +59,16 @@ async function assertReporterOutputEquality(reporter) {
 async function waitForChildPids(pid) {
   let childPids = [];
   while (!childPids.length) {
-    childPids = await pidtree(pid);
+    try {
+      childPids = await pidtree(pid);
+    } catch (err) {
+      // On Windows, pidtree may fail if wmic is not available (deprecated/removed in newer Windows)
+      // In this case, we can't reliably get child PIDs, so throw to skip the test
+      if (process.platform === 'win32' && err.message && err.message.includes('wmic')) {
+        throw new Error('pidtree requires wmic on Windows, which is not available');
+      }
+      throw err;
+    }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
   return childPids;
@@ -506,7 +515,16 @@ describe("--parallel", function () {
           resolveFixturePath("options/parallel/test-*"),
           "--parallel",
         ]);
-        const childPids = await waitForChildPids(pid);
+        let childPids;
+        try {
+          childPids = await waitForChildPids(pid);
+        } catch (err) {
+          if (err.message && err.message.includes('wmic')) {
+            this.skip();
+            return;
+          }
+          throw err;
+        }
         await promise;
         return expect(
           Promise.all(
@@ -532,7 +550,16 @@ describe("--parallel", function () {
           "--bail",
           "--parallel",
         ]);
-        const childPids = await waitForChildPids(pid);
+        let childPids;
+        try {
+          childPids = await waitForChildPids(pid);
+        } catch (err) {
+          if (err.message && err.message.includes('wmic')) {
+            this.skip();
+            return;
+          }
+          throw err;
+        }
         await promise;
         return expect(
           Promise.all(
