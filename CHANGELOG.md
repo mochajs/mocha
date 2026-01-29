@@ -1,5 +1,18 @@
 # Changelog
 
+## [11.7.6](https://github.com/mochajs/mocha/compare/v11.7.5...v11.7.6) (2026-01-29)
+
+
+### 🩹 Fixes
+
+* make `describe().timeout()` work ([aafe6fd](https://github.com/mochajs/mocha/commit/aafe6fd8c8f0a897c35cfb228aa8ecf43805b697))
+
+
+### 🧹 Chores
+
+* format all code ([#5629](https://github.com/mochajs/mocha/issues/5629)) ([0696784](https://github.com/mochajs/mocha/commit/0696784dd2d7f9b11471acd5854603fa57fe6fab))
+* remove Netlify ([#5630](https://github.com/mochajs/mocha/issues/5630)) ([8d01d33](https://github.com/mochajs/mocha/commit/8d01d335becbcb12439328be90ce75351418d787))
+
 ## [11.7.5](https://github.com/mochajs/mocha/compare/v11.7.4...v11.7.5) (2025-11-04)
 
 
