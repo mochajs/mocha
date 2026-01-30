@@ -17,6 +17,7 @@
     "package-lock.json",
     "**/package-lock.json",
     "node_modules/**",
-    "scripts/**"
+    "scripts/**",
+    "!test/integration/fixtures/failing-sync.fixture.js"
   ]
 }
