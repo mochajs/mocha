@@ -1,22 +1,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
-import { visit } from "unist-util-visit";
-
-const base = "/next";
-
-/** Prepend base URL to non-`/api` absolute links */
-const rewriteLinks = ({ base }: { base: string }) => {
-  return (tree: any) => {
-    visit(tree, "link", (node) => {
-      if (node.url.startsWith("/") && !node.url.startsWith("/api")) {
-        node.url = base + node.url;
-      }
-    });
-  };
-};
 
 export default defineConfig({
-  base,
   integrations: [
     starlight({
       components: {
@@ -105,10 +90,6 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              label: "Detecting multiple calls to done()",
-              slug: "explainers/detecting-multiple-calls-to-done",
-            },
-            {
               label: "Compilers deprecation",
               slug: "explainers/compilers-deprecation",
             },
@@ -117,8 +98,20 @@ export default defineConfig({
               slug: "explainers/count-assertions",
             },
             {
+              label: "Detecting multiple calls to done()",
+              slug: "explainers/detecting-multiple-calls-to-done",
+            },
+            {
+              label: "Environment variables",
+              slug: "explainers/environment-variables",
+            },
+            {
               label: "Find global leaks",
               slug: "explainers/find-global-leaks",
+            },
+            {
+              label: "Global variables",
+              slug: "explainers/global-variables",
             },
             {
               label: "Node.js native ESM support",
@@ -145,6 +138,10 @@ export default defineConfig({
               slug: "explainers/spies",
             },
             {
+              label: "Stub stdout",
+              slug: "explainers/stub-stdout",
+            },
+            {
               label: "Tagging with --grep",
               slug: "explainers/tagging",
             },
@@ -169,14 +166,19 @@ export default defineConfig({
           link: "https://mochajs.org/api",
         },
       ],
-      social: {
-        discord: "https://discord.gg/KeDn2uXhER",
-        github: "https://github.com/mochajs/mocha",
-      },
+      social: [
+        {
+          icon: "discord",
+          label: "Discord",
+          href: "https://discord.gg/KeDn2uXhER",
+        },
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/mochajs/mocha",
+        },
+      ],
       title: "Mocha",
     }),
   ],
-  markdown: {
-    remarkPlugins: [[rewriteLinks, { base }]],
-  },
 });

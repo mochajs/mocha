@@ -1,80 +1,61 @@
 "use strict";
 
 const js = require("@eslint/js");
+const { defineConfig, globalIgnores } = require("eslint/config");
 const n = require("eslint-plugin-n");
 const globals = require("globals");
+const { default: markdown } = require("@eslint/markdown");
 
 const messages = {
   gh237: "See https://github.com/mochajs/mocha/issues/237",
   gh3604: "See https://github.com/mochajs/mocha/issues/3604",
 };
 
-module.exports = [
-  n.configs["flat/recommended-script"],
+module.exports = defineConfig(
   {
-    ...js.configs.recommended,
+    files: ["**/*.{cjs,js,mjs}"],
+    extends: [n.configs["flat/recommended-script"], js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: {
         ...globals.browser,
         ...globals.node,
       },
-      sourceType: "script",
     },
     rules: {
-      "n/prefer-node-protocol": "error",
-      "no-unused-vars": "error",
-      strict: ["error", "global"],
-
-      "no-var": "off",
+      "no-redeclare": "off",
+      "no-undef": "off",
       "n/no-process-exit": "off",
       "n/no-unpublished-require": "off",
       "n/no-unsupported-features/node-builtins": "off",
-    },
-  },
-  {
-    files: ["docs/js/**/*.js"],
-    languageOptions: {
-      globals: globals.browser,
+      strict: ["error", "global"],
     },
   },
   {
     files: [
-      ".eleventy.js",
       ".wallaby.js",
       "package-scripts.js",
       "karma.conf.js",
       "bin/*",
-      "docs/_data/**/*.js",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
       "scripts/**/*.{js,mjs}",
       "test/**/*.{js,mjs}",
-      "test/node-unit/**/*.js",
     ],
     languageOptions: {
       globals: globals.node,
-      ecmaVersion: 2020,
     },
   },
   {
     files: [
+      "**/*.mjs",
       "lib/nodejs/esm-utils.js",
-      "rollup.config.js",
-      "scripts/*.mjs",
       "scripts/pick-from-package-json.js",
       "test/compiler-cjs/test.js",
+      "test/compiler-esm/*.js",
     ],
     languageOptions: {
       sourceType: "module",
-    },
-  },
-  {
-    files: ["test/compiler-esm/*.{js,mjs}"],
-    languageOptions: {
-      sourceType: "module",
-      // For top-level await support.
-      ecmaVersion: 2022,
     },
   },
   {
@@ -86,12 +67,6 @@ module.exports = [
         ...globals.node,
         expect: "readonly",
       },
-    },
-  },
-  {
-    files: ["test/**/*.mjs"],
-    languageOptions: {
-      sourceType: "module",
     },
   },
   {
@@ -167,15 +142,29 @@ module.exports = [
     },
   },
   {
-    ignores: [
-      "**/*.{fixture,min}.{js,mjs}",
-      "coverage/**",
-      "docs/{_dist,_site,api,example}/**",
-      "docs-next/dist/**",
-      "out/**",
-      "test/integration/fixtures/**",
-      ".karma/**",
-      "mocha.js",
-    ],
+    files: ["**/*.md"],
+    plugins: {
+      markdown,
+    },
+    extends: ["markdown/recommended"],
+    language: "markdown/gfm",
+    rules: {
+      "markdown/no-multiple-h1": "off",
+      "markdown/fenced-code-language": "off",
+      "markdown/no-missing-label-refs": "off",
+      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }],
+    },
   },
-];
+  globalIgnores([
+    ".karma/**",
+    "**/*.{fixture,min}.{js,mjs}",
+    "coverage/**",
+    "docs-next/{.astro,dist}/**",
+    "mocha.js",
+    "out/**",
+    "test/integration/fixtures/**",
+    // TODO: ESLint's parser can't parse import attributes
+    "rollup.config.mjs",
+    "scripts/pick-from-package-json.mjs",
+  ]),
+);

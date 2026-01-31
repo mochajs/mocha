@@ -39,7 +39,7 @@ Most importantly:
 - Include your test code or file(s).
   If large, please provide a link to a repository or [gist](https://gist.github.com).
 
-We'll discuss your proposed changes and how they relate to the overarching goals of Mocha, detailed below in [⚽️ About Project Goals](#⚽️-about-project-goals).
+We'll discuss your proposed changes and how they relate to the overarching goals of Mocha, detailed below in [⚽️ About Project Goals](#%EF%B8%8F-about-project-goals).
 
 ## ⚽️ About Project Goals
 
@@ -74,6 +74,6 @@ _Excellent._ Here's how:
 
 ## 👞 Contributing Code
 
-[DEVELOPMENT.md](./DEVELOPMENT.md) has detailed steps for writing code for Mocha 🙂 
+[DEVELOPMENT.md](./DEVELOPMENT.md) has detailed steps for writing code for Mocha 🙂
 
 Join us in [our Discord](https://discord.gg/KeDn2uXhER)!

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/mocha-logo.svg" alt="Mocha test framework logo"/>
+  <img src="docs-next/src/components/mocha-logo.svg" alt="Mocha test framework logo"/>
 </p>
 
-<p align="center">☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️</p>
+<p align="center">☕️ Classic, reliable, trusted test framework for Node.js and the browser ☕️</p>
 
 <div align="center">
 
@@ -36,7 +36,7 @@
 
 [Become a backer](https://opencollective.com/mochajs) and show your support to our open source project on [our site](https://mochajs.org/#backers).
 
-<a href="https://opencollective.com/mochajs"><img src="https://opencollective.com/mochajs/tiers/backers.svg?limit=30&button=false&avatarHeight=46&width=750"></a>
+<a href="https://opencollective.com/mochajs"><img alt="Mocha's backers on Open Collective" src="https://opencollective.com/mochajs/tiers/backers.svg?limit=30&button=false&avatarHeight=46&width=750"></a>
 
 ## Sponsors
 
