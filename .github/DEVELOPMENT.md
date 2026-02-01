@@ -21,7 +21,7 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
 We recommend creating a folder named `sandbox` within this repo, and then using a child project within `sandbox` for each issue you want to repro.
 
 `package.json` will have a reference to the local Mocha build and any options you need for your repro.
-We recommend [`cross-env`](https://www.npmjs.com/package/cross-env) for applying the `DEBUG` environment variable to get detailed logs (via the [`debug`](https://www.npmjs.com/package/debug) package).
+For Windows, we recommend [`cross-env`](https://www.npmjs.com/package/cross-env) for applying the `DEBUG` environment variable to get detailed logs (via the [`debug`](https://www.npmjs.com/package/debug) package). On MacOS and Linux, this `cross-env` isn't necessary.
 Use `--no-config` to avoid using the sample configs in this repo:
 
 ```jsonc
