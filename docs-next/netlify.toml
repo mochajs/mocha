@@ -1,0 +1,11 @@
+[build]
+  command = "npm run docs"
+  publish = "docs-next/dist/"
+
+[build.environment]
+  DEBUG = "mocha:docs*"
+  NODE_VERSION = "24"
+
+[context.deploy-preview]
+  command = "npm run docs"
+  publish = "docs-next/dist/"

@@ -1,155 +1,170 @@
 "use strict";
 
-const js = require('@eslint/js');
-const globals = require('globals');
+const js = require("@eslint/js");
+const { defineConfig, globalIgnores } = require("eslint/config");
+const n = require("eslint-plugin-n");
+const globals = require("globals");
+const { default: markdown } = require("@eslint/markdown");
 
 const messages = {
-  gh237: 'See https://github.com/mochajs/mocha/issues/237',
-  gh3604: 'See https://github.com/mochajs/mocha/issues/3604'
+  gh237: "See https://github.com/mochajs/mocha/issues/237",
+  gh3604: "See https://github.com/mochajs/mocha/issues/3604",
 };
 
-module.exports = [
+module.exports = defineConfig(
   {
-    ...js.configs.recommended,
+    files: ["**/*.{cjs,js,mjs}"],
+    extends: [n.configs["flat/recommended-script"], js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 2022,
       globals: {
         ...globals.browser,
-        ...globals.node
+        ...globals.node,
       },
-      sourceType: 'script'
     },
     rules: {
-      'no-var': 'off',
-      strict: ['error', 'global']
-    }
-  },
-  {
-    files: ['docs/js/**/*.js'],
-    languageOptions: {
-      globals: globals.browser
-    }
+      "no-redeclare": "off",
+      "no-undef": "off",
+      "n/no-process-exit": "off",
+      "n/no-unpublished-require": "off",
+      "n/no-unsupported-features/node-builtins": "off",
+      strict: ["error", "global"],
+    },
   },
   {
     files: [
-      '.eleventy.js',
-      '.wallaby.js',
-      'package-scripts.js',
-      'karma.conf.js',
-      'bin/*',
-      'docs/_data/**/*.js',
-      'lib/cli/**/*.js',
-      'lib/nodejs/**/*.js',
-      'scripts/**/*.{js,mjs}',
-      'test/**/*.{js,mjs}',
-      'test/node-unit/**/*.js'
+      ".wallaby.js",
+      "package-scripts.js",
+      "karma.conf.js",
+      "bin/*",
+      "lib/cli/**/*.js",
+      "lib/nodejs/**/*.js",
+      "scripts/**/*.{js,mjs}",
+      "test/**/*.{js,mjs}",
     ],
     languageOptions: {
       globals: globals.node,
-      ecmaVersion: 2020,
-    }
+    },
   },
   {
     files: [
-      'lib/nodejs/esm-utils.js',
-      'rollup.config.js',
-      'scripts/*.mjs',
-      'scripts/pick-from-package-json.js'
+      "**/*.mjs",
+      "lib/nodejs/esm-utils.js",
+      "scripts/pick-from-package-json.js",
+      "test/compiler-cjs/test.js",
+      "test/compiler-esm/*.js",
     ],
     languageOptions: {
-      sourceType: 'module'
-    }
+      sourceType: "module",
+    },
   },
   {
-    files: ['test/**/*.{js,mjs}'],
+    files: ["test/**/*.{js,mjs}"],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.mocha,
         ...globals.node,
-        expect: 'readonly'
-      }
-    }
-  },
-  {
-    files: ['test/**/*.mjs'],
-    languageOptions: {
-      sourceType: "module"
+        expect: "readonly",
+      },
     },
   },
   {
-    files: ['bin/*', 'lib/**/*.js'],
+    files: ["bin/*", "lib/**/*.js"],
     rules: {
-      'no-restricted-globals': [
-        'error',
+      "no-restricted-globals": [
+        "error",
         {
           message: messages.gh237,
-          name: 'setTimeout'
+          name: "setTimeout",
         },
         {
           message: messages.gh237,
-          name: 'clearTimeout'
+          name: "clearTimeout",
         },
         {
           message: messages.gh237,
-          name: 'setInterval'
+          name: "setInterval",
         },
         {
           message: messages.gh237,
-          name: 'clearInterval'
+          name: "clearInterval",
         },
         {
           message: messages.gh237,
-          name: 'setImmediate'
+          name: "setImmediate",
         },
         {
           message: messages.gh237,
-          name: 'clearImmediate'
+          name: "clearImmediate",
         },
         {
           message: messages.gh237,
-          name: 'Date'
-        }
+          name: "Date",
+        },
       ],
-      'no-restricted-modules': ['error', 'timers'],
-      "no-restricted-syntax": ['error',
+      "no-restricted-modules": ["error", "timers"],
+      "no-restricted-syntax": [
+        "error",
         // disallow `global.setTimeout()`, `global.setInterval()`, etc.
         {
           message: messages.gh237,
-          selector: 'CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]'
+          selector:
+            "CallExpression[callee.object.name=global][callee.property.name=/(set|clear)(Timeout|Immediate|Interval)/]",
         },
         // disallow `new global.Date()`
         {
           message: messages.gh237,
-          selector: 'NewExpression[callee.object.name=global][callee.property.name=Date]'
+          selector:
+            "NewExpression[callee.object.name=global][callee.property.name=Date]",
         },
         // disallow property access of `global.<timer>.*`
         {
           message: messages.gh237,
-          selector: '*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression'
-        }
-      ]
-    }
+          selector:
+            "*[object.object.name=global][object.property.name=/(Date|(set|clear)(Timeout|Immediate|Interval))/]:expression",
+        },
+      ],
+    },
   },
   {
-    files: ['lib/reporters/*.js'],
+    files: ["lib/reporters/*.js"],
     rules: {
-      'no-restricted-syntax': ['error',
+      "no-restricted-syntax": [
+        "error",
         // disallow Reporters using `console.log()`
         {
           message: messages.gh3604,
-          selector: 'CallExpression[callee.object.name=console][callee.property.name=log]'
-        }
-      ]
-    }
+          selector:
+            "CallExpression[callee.object.name=console][callee.property.name=log]",
+        },
+      ],
+    },
   },
   {
-    ignores: [
-      '**/*.{fixture,min}.{js,mjs}',
-      'coverage/**',
-      'docs/{_dist,_site,api,example}/**',
-      'out/**',
-      'test/integration/fixtures/**',
-    ],
-  }
-];
+    files: ["**/*.md"],
+    plugins: {
+      markdown,
+    },
+    extends: ["markdown/recommended"],
+    language: "markdown/gfm",
+    rules: {
+      "markdown/no-multiple-h1": "off",
+      "markdown/fenced-code-language": "off",
+      "markdown/no-missing-label-refs": "off",
+      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }],
+    },
+  },
+  globalIgnores([
+    ".karma/**",
+    "**/*.{fixture,min}.{js,mjs}",
+    "coverage/**",
+    "docs-next/{.astro,dist}/**",
+    "mocha.js",
+    "out/**",
+    "test/integration/fixtures/**",
+    // TODO: ESLint's parser can't parse import attributes
+    "rollup.config.mjs",
+    "scripts/pick-from-package-json.mjs",
+  ]),
+);
