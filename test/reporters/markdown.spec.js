@@ -22,7 +22,7 @@ describe("Markdown reporter", function () {
 
   describe("event handlers", function () {
     describe("on 'suite' event", function () {
-      it("should write expected slugged titles on 'end' event", async function () {
+      it("should write expected slugged titles on 'end' event", function () {
         var expectedSuite = {
           title: expectedTitle,
           fullTitle: function () {
@@ -47,7 +47,7 @@ describe("Markdown reporter", function () {
         );
         runner.suite = expectedSuite;
         var options = {};
-        var { stdout } = await runReporter({}, runner, options);
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           "# TOC\n",
@@ -68,7 +68,7 @@ describe("Markdown reporter", function () {
     });
 
     describe("on 'pass' event", function () {
-      it("should write test code inside js code block, on 'end' event", async function () {
+      it("should write test code inside js code block, on 'end' event", function () {
         var expectedSuite = {
           title: expectedTitle,
           fullTitle: function () {
@@ -100,7 +100,7 @@ describe("Markdown reporter", function () {
         );
         runner.suite = expectedSuite;
         var options = {};
-        var { stdout } = await runReporter({}, runner, options);
+        var stdout = runReporter({}, runner, options);
 
         var expectedArray = [
           "# TOC\n",
