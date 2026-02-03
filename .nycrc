@@ -1,5 +1,6 @@
 {
   "reporter": ["json", "text-summary"],
+  "all": true,
   "exclude": [
     "coverage/**",
     "docs/**",
@@ -13,6 +14,9 @@
     "**/{babel.config,.eslintrc,.mocharc}.{js,cjs}",
     "lib/browser/**",
     "package-scripts.js",
+    "package-lock.json",
+    "**/package-lock.json",
+    "node_modules/**",
     "scripts/**"
   ]
 }
