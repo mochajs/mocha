@@ -1,0 +1,75 @@
+---
+import { Image } from "astro:assets";
+
+import logo from "./mocha-logo.svg";
+---
+
+<h1 class="page-title">
+  <Image alt="Mocha" class="mocha-logo"  src={logo} />
+  <span class="tags">classic, reliable, trusted</span>
+</h1>
+
+<style>
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideright {
+    from {
+      transform: translateY(-2rem);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .page-title {
+    --logoSize: 12rem;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mocha-logo {
+    height: var(--logoSize);
+    width: var(--logoSize);
+    z-index: 1;
+  }
+
+
+  .tags {
+    animation:
+      fadein 1s forwards,
+      slideright 1s forwards;
+    color: var(--sl-color-accent-text);
+    display: block;
+    font-size: 2rem;
+    font-weight: 200;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (width >= 819px) {
+    @keyframes slideright {
+      from {
+        transform: translateX(-3rem);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .page-title {
+      flex-direction: row;
+      --logoSize: 16rem;
+    }
+  }
+</style>

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var sinon = require('sinon');
-var errors = require('../../lib/errors');
-var createStatsCollector = require('../../lib/stats-collector');
+var sinon = require("sinon");
+var errors = require("../../lib/errors");
+var createStatsCollector = require("../../lib/stats-collector");
 
 var createUnsupportedError = errors.createUnsupportedError;
 
@@ -24,22 +24,14 @@ function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
     ifStr2,
     ifStr3,
     arg1,
-    arg2
+    arg2,
   );
   var mockRunner = {
     on: runnerFunction,
-    once: runnerFunction
+    once: runnerFunction,
   };
   createStatsCollector(mockRunner);
   return mockRunner;
-}
-
-function afterTick(callback) {
-  return async function (...args) {
-    // Waiting a tick allows any extensions to be assigned in the constructor
-    await Promise.resolve();
-    callback(...args);
-  };
 }
 
 /**
@@ -59,47 +51,47 @@ function afterTick(callback) {
 function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var test = null;
   switch (runStr) {
-    case 'start':
-    case 'pending':
-    case 'end':
-      return afterTick(function (event, callback) {
+    case "start":
+    case "pending":
+    case "end":
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
-      });
-    case 'pending test':
-    case 'pass':
-    case 'fail':
-    case 'suite':
-    case 'suite end':
-    case 'test end':
+      };
+    case "pending test":
+    case "pass":
+    case "fail":
+    case "suite":
+    case "suite end":
+    case "test end":
       test = arg1;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
-      });
-    case 'fail two args':
+      };
+    case "fail two args":
       test = arg1;
       var expectedError = arg2;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test, expectedError);
         }
-      });
-    case 'start test':
+      };
+    case "start test":
       test = arg1;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
         if (event === ifStr2) {
           callback(test);
         }
-      });
-    case 'suite suite end':
+      };
+    case "suite suite end":
       var expectedSuite = arg1;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(expectedSuite);
         }
@@ -109,30 +101,30 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         if (event === ifStr3) {
           callback();
         }
-      });
-    case 'pass end':
+      };
+    case "pass end":
       test = arg1;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback(test);
         }
         if (event === ifStr2) {
           callback();
         }
-      });
-    case 'test end fail':
+      };
+    case "test end fail":
       test = arg1;
       var error = arg2;
-      return afterTick(function (event, callback) {
+      return function (event, callback) {
         if (event === ifStr1) {
           callback();
         }
         if (event === ifStr2) {
           callback(test, error);
         }
-      });
-    case 'fail end pass':
-      return afterTick(function (event, callback) {
+      };
+    case "fail end pass":
+      return function (event, callback) {
         test = arg1;
         if (event === ifStr1) {
           callback(test, {});
@@ -143,19 +135,11 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
         if (event === ifStr3) {
           callback(test);
         }
-      });
+      };
     default:
       throw createUnsupportedError(
-        'This function does not support the runner string specified.'
+        "This function does not support the runner string specified.",
       );
-  }
-}
-
-
-
-function createNoopRunner() {
-  return {
-    // ...
   }
 }
 
@@ -163,15 +147,15 @@ function makeTest(err) {
   return {
     err,
     titlePath: function () {
-      return ['test title'];
-    }
+      return ["test title"];
+    },
   };
 }
 
 function createElements(argObj) {
   var res = [];
   for (var i = argObj.from; i <= argObj.to; i++) {
-    res.push('element ' + i);
+    res.push("element " + i);
   }
   return res;
 }
@@ -182,7 +166,6 @@ function makeExpectedTest(
   expectedFile,
   expectedDuration,
   currentRetry,
-  expectedBody
 ) {
   return {
     title: expectedTitle,
@@ -194,27 +177,29 @@ function makeExpectedTest(
     currentRetry: function () {
       return currentRetry;
     },
-    slow: function () {}
+    slow: function () {},
   };
 }
 
 /**
  * Creates closure with reference to the reporter class constructor.
  *
- * @param {Function} ReporterClass - Reporter class constructor
+ * @param {Function} ctor - Reporter class constructor
  * @return {createRunReporterFunction~runReporter}
  */
-function createRunReporterFunction(ReporterClass) {
+function createRunReporterFunction(ctor) {
   /**
    * Run reporter using stream reassignment to capture output.
    *
+   * @param {Object} stubSelf - Reporter-like stub instance
    * @param {Runner} runner - Mock instance
    * @param {Object} [options] - Reporter configuration settings
    * @param {boolean} [tee=false] - Whether to echo output to screen
+   * @return {string[]} Lines of output written to `stdout`
    */
-  var runReporter = async function (extensions, runner, options, tee) {
+  var runReporter = function (stubSelf, runner, options, tee) {
     var origStdoutWrite = process.stdout.write;
-    var stdoutWriteStub = sinon.stub(process.stdout, 'write');
+    var stdoutWriteStub = sinon.stub(process.stdout, "write");
     var stdout = [];
 
     var gather = function (chunk) {
@@ -227,26 +212,19 @@ function createRunReporterFunction(ReporterClass) {
     // Reassign stream in order to make a copy of all reporter output
     stdoutWriteStub.callsFake(gather);
 
-    var ReporterClassExtended = class extends ReporterClass {
-      constructor(...args) {
-        super(...args);
-        Object.assign(this, extensions);
-      }
-    };
+    // Give `stubSelf` access to `ctor` prototype chain
+    Object.setPrototypeOf(stubSelf, ctor.prototype);
 
-    var reporter;
     try {
-      reporter = new ReporterClassExtended(runner, options);
-
-      // Waiting a tick allows any events to fire before this function resolves
-      await Promise.resolve();
+      // Invoke reporter
+      ctor.call(stubSelf, runner, options);
     } finally {
       // Revert stream reassignment here so reporter output
       // can't be corrupted if any test assertions throw
       stdoutWriteStub.restore();
     }
 
-    return {reporter, stdout};
+    return stdout;
   };
 
   return runReporter;
@@ -255,8 +233,7 @@ function createRunReporterFunction(ReporterClass) {
 module.exports = {
   createElements,
   createMockRunner,
-  createNoopRunner,
   createRunReporterFunction,
   makeExpectedTest,
-  makeTest
+  makeTest,
 };

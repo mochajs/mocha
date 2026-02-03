@@ -25,12 +25,12 @@ body:
       required: true
   - attributes:
       description: Detail the steps necessary to reproduce the problem. To get the fastest support, create an [MCVE](https://stackoverflow.com/help/mcve) and upload it to GitHub.
-      label: Minimal, Reproducible Example
+      label: Minimal, Complete and Verifiable Example
     type: textarea
     validations:
       required: true
   - attributes:
-      description: What do `mocha --version`, `node_modules/.bin/mocha --version`, and `node --version` output? What name and version of browser/environment, shell, and any other related modules such as transpilers are you using?.
+      description: What do `mocha --version`, `node_modules/.bin/mocha --version`, and `node --version` output? What name and version of browser/environment, shell, and any other related modules such as transpilers are you using?
       label: Versions
     type: textarea
     validations:
@@ -39,9 +39,9 @@ body:
       description: Any additional info you'd like to provide.
       label: Additional Info
     type: textarea
-description: Report a bug trying to run the code
+description: Report a bug trying to use Mocha
 labels:
-  - 'status: in triage'
-  - 'type: bug'
+  - "status: in triage"
+  - "type: bug"
 name: 🐛 Bug
-title: '🐛 Bug: <short description of the bug>'
+title: "🐛 Bug: <short description of the bug>"

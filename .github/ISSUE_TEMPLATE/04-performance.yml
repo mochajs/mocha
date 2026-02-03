@@ -1,0 +1,51 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a performance improvement to Mocha! Please note that Mocha is a widely used library with many millions of weekly downloads, many thousands of dependents, and many years of longstanding behavior. Every change to it is inherently risky and may break user edge cases that we have no way to learn of otherwise.
+
+        So, to accept a performance improvement, we'd need to see _measurable, non-negligible improvement_ in Mocha's real-world usage. That requires providing at least:
+
+        - Exhaustive comparison with other alternatives that proves this is the winning approach
+          - Disclosure of any personal affiliation with the proposed solution and alternatives
+        - For runtime performance: some kind of reproducible benchmark to demonstrate exactly what's different
+        - For dependency cleanups:
+          - The specific change to the dependency tree of a project with Mocha and no other dependencies
+          - The specific change to the dependency tree of a project with Mocha and other common dependencies, such as `chai`, `express`, and `sinon`
+
+        You can always suggest a performance improvement without those validations, but we are unlikely to accept it without them.
+        For more information, see [mochajs/mocha#5377 🛠️ Repo: Add issue template for performance improvements](https://github.com/mochajs/mocha/issues/5377).
+  - attributes:
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      label: Performance Suggestion Checklist
+      options:
+        - label: I am using the latest version of Mocha.
+          required: true
+        - label: I have read and understood the nuances around performance reports.
+          required: true
+        - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/main/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
+          required: true
+        - label: I have searched for [related issues](https://github.com/mochajs/mocha/issues?q=is%3Aissue) and [issues with the `faq` label](https://github.com/mochajs/mocha/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Afaq%20), but none matched my issue.
+          required: true
+        - label: I want to provide a PR to resolve this
+    type: checkboxes
+  - attributes:
+      description: What is your suggestion?
+      label: Overview
+    type: textarea
+    validations:
+      required: true
+  - attributes:
+      description: If you have a suggested implementation, please explain why you believe it's the best one here.
+      label: Validations
+    type: textarea
+  - attributes:
+      description: Any additional info you'd like to provide.
+      label: Additional Info
+    type: textarea
+description: Suggest a way to make Mocha faster, more memory- and/or space-efficient, or otherwise improve performance
+labels:
+  - "area: performance"
+  - "status: in triage"
+name: ⚡️ Performance
+title: "⚡️ Performance: <short description of the change>"

@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var sinon = require('sinon');
-var events = require('../../').Runner.constants;
-var helpers = require('./helpers');
-var reporters = require('../../').reporters;
-var states = require('../../').Runnable.constants;
+var sinon = require("sinon");
+var events = require("../../").Runner.constants;
+var helpers = require("./helpers");
+var reporters = require("../../").reporters;
+var states = require("../../").Runnable.constants;
 
 var Base = reporters.Base;
 var Landing = reporters.Landing;
@@ -18,111 +18,111 @@ var EVENT_TEST_END = events.EVENT_TEST_END;
 var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
 
-describe('Landing reporter', function () {
+describe("Landing reporter", function () {
   var runReporter = makeRunReporter(Landing);
-  var resetCode = '\u001b[0m';
+  var resetCode = "\u001b[0m";
   var expectedArray = [
-    '\u001b[1D\u001b[2A',
-    '  ',
-    '\n  ',
-    '',
-    '✈',
-    '\n',
-    '  ',
-    resetCode
+    "\u001b[1D\u001b[2A",
+    "  ",
+    "\n  ",
+    "",
+    "✈",
+    "\n",
+    "  ",
+    resetCode,
   ];
 
   beforeEach(function () {
-    sinon.stub(Base, 'useColors').value(false);
-    sinon.stub(Base.window, 'width').value(1);
+    sinon.stub(Base, "useColors").value(false);
+    sinon.stub(Base.window, "width").value(1);
   });
 
   afterEach(function () {
     sinon.restore();
   });
 
-  describe('event handlers', function () {
+  describe("event handlers", function () {
     describe("on 'start' event", function () {
-      it('should write newlines', async function () {
-        sinon.stub(Base.cursor, 'hide');
+      it("should write newlines", function () {
+        sinon.stub(Base.cursor, "hide");
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
-        var {stdout} = await runReporter({}, runner, options);
+        var stdout = runReporter({}, runner, options);
         sinon.restore();
 
-        expect(stdout[0], 'to equal', '\n\n\n  ');
+        expect(stdout[0], "to equal", "\n\n\n  ");
       });
 
-      it('should call cursor hide', async function () {
-        var hideCursorStub = sinon.stub(Base.cursor, 'hide');
+      it("should call cursor hide", function () {
+        var hideCursorStub = sinon.stub(Base.cursor, "hide");
 
-        var runner = createMockRunner('start', EVENT_RUN_BEGIN);
+        var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
-        await runReporter({}, runner, options);
+        runReporter({}, runner, options);
         sinon.restore();
 
-        expect(hideCursorStub.called, 'to be true');
+        expect(hideCursorStub.called, "to be true");
       });
     });
 
     describe("on 'test end' event", function () {
-      describe('when test passes', function () {
-        it('should write expected landing strip', async function () {
+      describe("when test passes", function () {
+        it("should write expected landing strip", function () {
           var test = {
-            state: STATE_PASSED
+            state: STATE_PASSED,
           };
           var runner = createMockRunner(
-            'test end',
+            "test end",
             EVENT_TEST_END,
             null,
             null,
-            test
+            test,
           );
           var options = {};
-          var {stdout} = await runReporter({}, runner, options);
+          var stdout = runReporter({}, runner, options);
           sinon.restore();
 
-          expect(stdout, 'to equal', expectedArray);
+          expect(stdout, "to equal", expectedArray);
         });
       });
 
-      describe('when test fails', function () {
-        it('should write expected landing strip', async function () {
+      describe("when test fails", function () {
+        it("should write expected landing strip", function () {
           var test = {
-            state: STATE_FAILED
+            state: STATE_FAILED,
           };
           var runner = createMockRunner(
-            'test end',
+            "test end",
             EVENT_TEST_END,
             null,
             null,
-            test
+            test,
           );
           runner.total = 12;
           var options = {};
-          var {stdout} = await runReporter({}, runner, options);
+          var stdout = runReporter({}, runner, options);
           sinon.restore();
 
-          expect(stdout, 'to equal', expectedArray);
+          expect(stdout, "to equal", expectedArray);
         });
       });
     });
 
     describe("on 'end' event", function () {
-      it('should call cursor show and epilogue', async function () {
-        var showCursorStub = sinon.stub(Base.cursor, 'show');
+      it("should call cursor show and epilogue", function () {
+        var showCursorStub = sinon.stub(Base.cursor, "show");
 
         var fakeThis = {
-          epilogue: sinon.spy()
+          epilogue: sinon.spy(),
         };
-        var runner = createMockRunner('end', EVENT_RUN_END);
+        var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
-        await runReporter(fakeThis, runner, options);
+        runReporter(fakeThis, runner, options);
         sinon.restore();
 
-        expect(fakeThis.epilogue.calledOnce, 'to be true');
-        expect(showCursorStub.called, 'to be true');
+        expect(fakeThis.epilogue.calledOnce, "to be true");
+        expect(showCursorStub.called, "to be true");
       });
     });
   });

@@ -1,0 +1,198 @@
+<script>
+  const knownHashes = {
+    "-allow-uncaught": "running/cli/#--allow-uncaught",
+    "-async-only-a": "running/cli/#--async-only--a",
+    "-bail-b": "running/cli/#--bail--b",
+    "-check-leaks": "running/cli/#--check-leaks",
+    "-color-c-colors": "running/cli/#--color--c---colors",
+    "-compilers": "running/cli/#--compilers",
+    "-config-path": "running/cli/#--config-path",
+    "-diff": "running/cli/#--diff",
+    "-dry-run": "running/cli/#--dry-run",
+    "-enable-source-maps": "running/cli/#--enable-source-maps",
+    "-exit": "running/cli/#--exit",
+    "-extension-ext": "running/cli/#--extension-ext",
+    "-fail-zero": "running/cli/#--fail-zero",
+    "-fgrep-string-f-string": "running/cli/#--fgrep-string--f-string",
+    "-file-file": "running/cli/#--file-file",
+    "-forbid-only": "running/cli/#--forbid-only",
+    "-forbid-pending": "running/cli/#--forbid-pending",
+    "-full-trace": "running/cli/#--full-trace",
+    "-global-variable-name": "running/cli/#--global-variable-name",
+    "-grep-regexp-g-regexp": "running/cli/#--grep-regexp--g-regexp",
+    "-ignore-filedirectoryglob-exclude-filedirectoryglob":
+      "running/cli/#--ignore-filedirectoryglob---exclude-filedirectoryglob",
+    "-inline-diffs": "running/cli/#--inline-diffs",
+    "-inspect-inspect-brk-inspect":
+      "running/cli/#--inspect---inspect-brk-inspect",
+    "-invert": "running/cli/#--invert",
+    "-jobs-count-j-count": "running/cli/#--jobs-count--j-count",
+    "-node-option-name-n-name": "running/cli/#--node-option-name--n-name",
+    "-opts-path": "running/cli/#--opts-path",
+    "-package-path": "running/cli/#--package-path",
+    "-parallel-p": "running/cli/#--parallel--p",
+    "-pass-on-failing-test-suite": "running/cli/#--pass-on-failing-test-suite",
+    "-recursive": "running/cli/#--recursive",
+    "-reporter-name-r-name": "running/cli/#--reporter-name--r-name",
+    "-reporter-option-option-o-option-reporter-options-option":
+      "running/cli/#--reporter-option-option--o-option---reporter-options-option",
+    "-require-module-r-module": "running/cli/#--require-module--r-module",
+    "-retries-n": "running/cli/#--retries-n",
+    "-slow-ms-s-ms": "#--slow-ms--s-ms",
+    "-sort-s": "running/cli/#--sort--s",
+    "-timeout-ms-t-ms": "running/cli/#--timeout-ms--t-ms",
+    "-ui-name-u-name": "running/cli/#--ui-name--u-name",
+    "-watch-files-filedirectoryglob":
+      "running/cli/#--watch-files-filedirectoryglob",
+    "-watch-ignore-filedirectoryglob":
+      "running/cli/#--watch-ignore-filedirectoryglob",
+    "-watch-w": "running/cli/#--watch--w",
+    "about-node-flags": "running/cli/#about-node-flags",
+    "about-option-types": "running/cli/#about-option-types",
+    "about-v8-flags": "running/cli/#about-v8-flags",
+    "arrow-functions": "features/arrow-functions",
+    assertions: "features/assertions",
+    "asynchronous-code": "features/asynchronous-code",
+    "asynchronous-hooks": "features/hooks/#asynchronous-hooks",
+    "available-root-hooks": "features/root-hook-plugins/#available-root-hooks",
+    backers: "#backers",
+    "bail-is-best-effort": "features/parallel-mode/#bail-is-best-effort",
+    bdd: "interfaces/bdd",
+    "browser-configuration": "running/browsers/#browser-configuration",
+    "browser-specific-options": "running/browsers/#browser-specific-options",
+    "caveats-about-testing-in-parallel":
+      "features/parallel-mode/#caveats-about-testing-in-parallel",
+    "command-line-usage": "running/cli",
+    "configuration-format": "running/configuring/#configuration-format",
+    "configuring-mocha-nodejs": "running/configuring",
+    "current-limitations":
+      "explainers/nodejs-native-esm-support#current-limitations",
+    "custom-locations": "running/configuring/#custom-locations",
+    "defining-a-root-hook-plugin":
+      "features/root-hook-plugins#defining-a-root-hook-plugin",
+    "delayed-root-suite": "features/hooks/#root-level-hooks",
+    "describing-hooks": "features/hooks/#describing-hooks",
+    "detects-multiple-calls-to-done":
+      "explainers/detecting-multiple-calls-to-done",
+    diffs: "features/diffs",
+    doc: "reporters/doc",
+    "dot-matrix": "reporters/dot-matrix",
+    "dynamically-generating-tests": "declaring/dynamic-tests",
+    "editor-plugins": "running/editor-plugins",
+    emacs: "running/editor-plugins/#emacs",
+    "environment-variables": "running/configuring/#environment-variables",
+    "error-codes": "features/error-codes",
+    examples: "getting-started#next-steps",
+    "exclusive-tests": "declaring/exclusive-tests",
+    "exclusive-tests-are-disallowed":
+      "features/parallel-mode/#exclusive-tests-are-disallowed",
+    exports: "interfaces/exports",
+    "extending-configuration": "running/configuring/#extending-configuration",
+    "file-order-is-non-deterministic":
+      "features/parallel-mode/#file-order-is-non-deterministic",
+    "getting-started": "getting-started",
+    "global-fixtures": "features/global-fixtures",
+    "global-setup-fixtures": "features/global-fixtures/#global-setup-fixtures",
+    "global-teardown-fixtures":
+      "features/global-fixtures/#global-teardown-fixtures",
+    grep: "running/browsers/#grep",
+    "hook-level": "features/timeouts#hook-level",
+    hooks: "features/hooks",
+    "html-reporter": "reporters/html",
+    "ignoring-config-files": "running/configuring/#ignoring-config-files",
+    "inclusive-tests": "declaring/inclusive-tests",
+    installation: "getting-started#1-installation",
+    interfaces: "interfaces/about",
+    jetbrains: "running/editor-plugins/#jetbrains",
+    json: "reporters/json",
+    "json-stream": "reporters/json-stream",
+    "landing-strip": "reporters/landing",
+    "limitations-of-asynchronous-callbacks":
+      "features/asynchronous-code/#limitations-of-asynchronous-callbacks",
+    "limited-reporter-api-for-third-party-reporters":
+      "features/parallel-mode/#limited-reporter-api-for-third-party-reporters",
+    list: "reporters/list",
+    markdown: "reporters/markdown",
+    merging: "running/configuring/#merging",
+    "migrating-a-library-to-use-root-hook-plugins":
+      "features/root-hook-plugins#migrating-a-library-to-use-root-hook-plugins",
+    "migrating-tests-to-use-root-hook-plugins":
+      "features/root-hook-plugins#migrating-tests-to-use-root-hook-plugins",
+    min: "reporters/min",
+    "mocha-fixture-wizard": "explainers/test-fixture-decision-tree",
+    "mocha-fixture-wizard-diagram": "explainers/test-fixture-decision-tree",
+    "mocha-sidebar-vs-code": "running/editor-plugins/#mocha-sidebar-vs-code",
+    "more-information": "#more-information",
+    "multiple-root-hook-plugins":
+      "features/root-hook-plugins#multiple-root-hook-plugins",
+    "multiple-root-hooks-in-a-single-plugin":
+      "features/root-hook-plugins#multiple-root-hooks-in-a-single-plugin",
+    "no-browser-support": "features/parallel-mode/#no-browser-support",
+    "nodejs-native-esm-support": "explainers/nodejs-native-esm-support",
+    nyan: "reporters/nyan",
+    "options-that-differ-slightly-from-cli-options":
+      "running/browsers/#options-that-differ-slightly-from-cli-options",
+    "options-that-only-function-in-browser-context":
+      "running/browsers/#options-that-only-function-in-browser-context",
+    "parallel-mode": "explainers/run-cycle-overview#parallel-mode",
+    "parallel-mode-worker-ids":
+      "features/parallel-mode/#parallel-mode-worker-ids",
+    "parallel-tests": "features/parallel-mode",
+    "pending-tests": "declaring/pending-tests",
+    priorities: "running/configuring/#priorities",
+    progress: "reporters/progress",
+    qunit: "interfaces/qunit",
+    "reporter-limitations": "features/parallel-mode/#reporter-limitations",
+    reporters: "reporters/about",
+    reporting: "running/browsers/#reporting",
+    require: "interfaces/require",
+    "retry-tests": "declaring/retrying-tests",
+    "root-hook-plugins": "features/root-hook-plugins",
+    "root-hook-plugins-can-export-a-function":
+      "features/root-hook-plugins#root-hook-plugins-can-export-a-function",
+    "root-hooks-are-not-global":
+      "features/parallel-mode/#root-hooks-are-not-global",
+    "root-level-hooks": "features/hooks/#root-level-hooks",
+    "run-cycle-overview": "explainers/run-cycle-overview",
+    "running-mocha-in-the-browser": "running/browsers",
+    "serial-mode": "explainers/run-cycle-overview#serial-mode",
+    spec: "reporters/spec",
+    sponsors: "#sponsors",
+    "suite-level": "features/timeouts#suite-level",
+    "synchronous-code": "features/asynchronous-code/#synchronous-code",
+    tap: "reporters/tap",
+    tdd: "interfaces/tdd",
+    "test-duration": "explainers/test-duration",
+    "test-duration-variability":
+      "features/parallel-mode/#test-duration-variability",
+    "test-fixture-decision-tree-wizard-thing":
+      "explainers/test-fixture-decision-tree",
+    "test-level": "features/timeouts#test-level",
+    textmate: "running/editor-plugins/#textmate",
+    "the-test-directory": "running/test-globs",
+    "third-party-reporters": "reporters/third-party",
+    timeouts: "features/timeouts",
+    "troubleshooting-parallel-mode":
+      "features/parallel-mode/#no-browser-support",
+    "using-async-await": "features/asynchronous-code/#using-async--await",
+    wallabyjs: "running/editor-plugins/#wallabyjs",
+    "when-not-to-use-global-fixtures":
+      "features/global-fixtures/#when-not-to-use-global-fixtures",
+    "when-to-use-global-fixtures":
+      "features/global-fixtures/#when-to-use-global-fixtures",
+    "with-commonjs": "features/root-hook-plugins#with-commonjs",
+    "with-es-modules": "features/root-hook-plugins#with-es-modules",
+    "working-with-promises":
+      "features/asynchronous-code/#working-with-promises",
+    xunit: "reporters/xunit",
+  };
+
+  const hash = window.location.hash.slice(1);
+
+  if (Object.hasOwn(knownHashes, hash)) {
+    window.location.href = [
+      window.location.pathname,
+      knownHashes[hash as keyof typeof knownHashes],
+    ].join("/");
+  }
+</script>
