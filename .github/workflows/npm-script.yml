@@ -1,0 +1,88 @@
+name: Reusable npm script runner
+
+on:
+  workflow_call:
+    inputs:
+      npm-script:
+        description: "npm script"
+        required: true
+        type: string
+      browsers:
+        description: "A comma separated list of browser names to test with."
+        required: false
+        type: string
+      node-versions:
+        description: "A comma separated list of Node versions to test with."
+        required: false
+        type: string
+      os:
+        description: "A comma separated list of operating systems to test on."
+        required: false
+        type: string
+      coverage:
+        description: "Whether to set up coverage reporting or not"
+        required: false
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  resolve-inputs:
+    runs-on: ubuntu-latest
+    outputs:
+      browsers: ${{ steps.split-browsers.outputs.splitted }}
+      nodeVersions: ${{ steps.split-node-versions.outputs.splitted }}
+      os: ${{ steps.split-os.outputs.splitted }}
+    steps:
+      - id: split-browsers
+        if: inputs.browsers
+        run: echo "splitted=$(echo '${{ inputs.browsers }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
+      - id: split-node-versions
+        if: inputs.node-versions
+        run: echo "splitted=$(echo '${{ inputs.node-versions }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
+      - id: split-os
+        if: inputs.os
+        run: echo "splitted=$(echo '${{ inputs.os }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
+
+  script:
+    name: ${{ inputs.npm-script }}${{ needs.resolve-inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve-inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve-inputs.outputs.os && format(' on {0}', matrix.os) }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    needs:
+      - resolve-inputs
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: ${{ fromJson(needs.resolve-inputs.outputs.nodeVersions || '["22"]') }}
+        os: ${{ fromJson(needs.resolve-inputs.outputs.os || '["ubuntu-latest"]') }}
+        browser: ${{ fromJson(needs.resolve-inputs.outputs.browsers || '[""]') }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node_version }}
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+      - run: npm run ${{ inputs.npm-script }}
+        env:
+          BROWSER: ${{ matrix.browser }}
+          COVERAGE: ${{ inputs.coverage && '1'}}
+          NODE_OPTIONS: "--trace-warnings"
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+      # Generate and upload coverage, even if tests fail
+      - name: Generate coverage report
+        if: always() && inputs.coverage
+        run: npm run test-coverage-generate
+      # https://github.com/marketplace/actions/codecov
+      # https://app.codecov.io/gh/mochajs/mocha
+      - name: Upload coverage reports
+        if: always() && inputs.coverage
+        uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: true
+          use_oidc: true

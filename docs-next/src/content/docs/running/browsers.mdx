@@ -1,0 +1,115 @@
+---
+description: Running Mocha in Browsers
+title: Browsers
+---
+
+Mocha can run in the browser.
+Every release of Mocha will have new builds of `./mocha.js` and `./mocha.css` for use in the browser.
+
+A typical setup might look something like the following, where we call `mocha.setup('bdd')` to use the **BDD** interface before loading the test scripts, running them `onload` with `mocha.run()`.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+
+    <script src="https://unpkg.com/chai@4/chai.js"></script>
+    <script src="https://unpkg.com/mocha/mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup("bdd");
+      mocha.checkLeaks();
+    </script>
+    <script src="test.array.js"></script>
+    <script src="test.object.js"></script>
+    <script src="test.xhr.js"></script>
+    <script class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
+```
+
+Mocha supports the latest major versions of evergreen browsers available when Mocha's oldest supported Node.js major version was released.
+As of Mocha v12.0.0, that includes the following browser versions that were stable as of [Node.js 20.0.0](https://nodejs.org/en/blog/release/v20.0.0)'s release on April 18, 2023:
+
+- [Chrome 112](https://developer.chrome.com/blog/new-in-chrome-112)
+- [Edge 112](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-archive-stable-channel#version-1120172248-april-14-2023)
+- [Firefox 112](https://www.mozilla.org/en-US/firefox/112.0/releasenotes)
+- [Safari 16.4](https://developer.apple.com/documentation/safari-release-notes/safari-16_4-release-notes)
+
+## Grep
+
+The browser may use the `--grep` as functionality.
+Append a query-string to your URL: `?grep=api`.
+
+## Browser Configuration
+
+Mocha options can be set via `mocha.setup()`.
+Examples:
+
+```js
+// Use "tdd" interface.  This is a shortcut to setting the interface;
+// any other options must be passed via an object.
+mocha.setup('tdd');
+
+// This is equivalent to the above.
+mocha.setup({
+  ui: 'tdd'
+});
+
+// Examples of options:
+mocha.setup({
+  allowUncaught: true,
+  asyncOnly: true,
+  bail: true,
+  checkLeaks: true,
+  dryRun: true,
+  failZero: true,
+  forbidOnly: true,
+  forbidPending: true,
+  global: ['MyLib'],
+  retries: 3,
+  rootHooks: { beforeEach(done) { ... done();} },
+  slow: '100',
+  timeout: '2000',
+  ui: 'bdd'
+});
+```
+
+## Browser-Specific Options
+
+Browser Mocha supports many, but not all [CLI options](/running/configuring).
+To use a CLI option that contains a "-", please convert the option to camelCase, (eg. `check-leaks` to `checkLeaks`).
+
+### Options That Differ Slightly From [CLI Options](/running/configuring)
+
+> `reporter` _`string|constructor`_
+
+You can pass a reporter's name or a custom reporter's constructor.
+You can find **recommended** reporters for the browser [here](#reporting).
+
+It is possible to use [built-in reporters](/reporters/spec) as well.
+Their employment in browsers is neither recommended nor supported, open the console to see the test results.
+
+### Options That _Only_ Function In Browser Context
+
+> `noHighlighting` _`boolean`_
+
+If set to `true`, do not attempt to use syntax highlighting on output test code.
+
+## Reporting
+
+The HTML reporter is the default reporter when running Mocha in the browser.
+It looks like this:
+
+![HTML test reporter](./reporter-html.png)
+
+[Mochawesome](https://npm.im/mochawesome) is a great alternative to the default HTML reporter.

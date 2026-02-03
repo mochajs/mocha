@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
+  "entry": [
+    "bin/mocha.js!",
+    "bin/_mocha!",
+    "browser-entry.js!",
+    "docs/_data/supporters.js",
+    "index.js!",
+    "lib/cli/index.js!",
+  ],
+  "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
+  "ignore": [
+    "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
+    "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
+  ],
+  "ignoreDependencies": [
+    "@test/esm-only-loader",
+    "coffeescript",
+    "fake",
+    "non-existent-package",
+  ],
+  "mocha": {
+    "entry": ["test/**/*.{js,ts,mjs,cjs}"],
+  },
+  "webpack": {
+    "config": "test/browser-specific/fixtures/webpack/webpack.config.js",
+  },
+  "rules": {
+    "exports": "off",
+  },
+}

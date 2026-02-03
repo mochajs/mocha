@@ -1,205 +1,105 @@
 name: Tests
+
 on:
   push:
     branches:
-      - '**'
-      - '!mochajs.org'
-    paths-ignore: ['*.md', 'docs/**']
-    tags-ignore:
-      - '**'
+      - main
+    paths-ignore: ["*.md", "docs/**"]
   pull_request:
-    types: [opened, synchronize, reopened]
-    paths-ignore: ['*.md', 'docs/**']
+    branches:
+      - main
+    paths-ignore: ["*.md", "docs/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # for Codecov OIDC
 
 jobs:
-  prevent-double-run:
-    # skip 'push' event when an open PR exists
-    name: Prevent double run
-    runs-on: ubuntu-latest
-    outputs:
-      pr-id: ${{ steps.findPr.outputs.number }}
-    steps:
-      - name: Check event pull_request
-        if: github.event_name == 'pull_request'
-        run: 'echo pull_request: run workflow'
-      - uses: actions/checkout@v4
-        if: github.event_name == 'push'
-        with:
-          persist-credentials: false
-      - name: Check event push
-        id: findPr
-        if: github.event_name == 'push'
-        uses: jwalton/gh-find-current-pr@v1
-        with:
-          state: open
-
-  smoke:
-    name: 'Smoke [Node.js v${{ matrix.node }} / ${{ matrix.os }}]'
-    needs: prevent-double-run
-    if: needs.prevent-double-run.outputs.pr-id == ''
-    runs-on: '${{ matrix.os }}'
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-2019
-        node:
-          - 14
-          - 16
-          - 18
-          - 20
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '${{ matrix.node }}'
-      - run: npm install --production
-      - run: npm run test:smoke
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format:check
 
   lint:
-    name: Linting code and markdown
-    runs-on: ubuntu-latest
-    needs: smoke
-    steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: 'Cache node_modules'
-        uses: actions/cache@v4
-        with:
-          path: '~/.npm'
-          key: "ubuntu-latest-node-lts-${{ hashFiles('**/package-lock.json') }}"
-      - name: Install Dependencies
-        run: npm ci --ignore-scripts
-      - name: 'Check lint'
-        run: npm start lint
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: lint
 
-  test-node:
-    name: 'Node.js [v${{ matrix.node }} / ${{ matrix.os }}]'
+  smoke:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      node-versions: "20,22,24"
+      npm-script: test-smoke
+
+  test-node-lts:
+    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    uses: ./.github/workflows/npm-script.yml
     needs: smoke
-    runs-on: '${{ matrix.os }}'
-    env:
-      NODE_OPTIONS: '--trace-warnings'
     strategy:
+      fail-fast: false
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-2019
-        node:
-          - 14
-          - 16
-          - 18
-          - 20
+        test-part:
+          - interfaces
+          - unit
+          - integration
+          - jsapi
+          - requires
+          - reporters
+          - only
+    with:
+      npm-script: test-node:${{ matrix.test-part }}
+
+  test-node-all:
+    name: Test ${{ matrix.test-part }} in all environments
+    permissions:
+      id-token: write # for Codecov OIDC
+      contents: read # for Codecov OIDC
+    # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    uses: ./.github/workflows/npm-script.yml
+    needs: test-node-lts
+    strategy:
+      fail-fast: false
+      matrix:
+        coverage: [true]
+        test-part:
+          - interfaces
+          - unit
+          - integration
+          - requires
+          - reporters
+          - only
         include:
-          - os: ubuntu-latest
-            node: 16
-            env:
-              COVERAGE: 1
-    steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '${{ matrix.node }}'
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Get npm cache directory in Windows
-        id: npm-cache
-        if: ${{ matrix.os == 'windows-2019' }}
-        run: |
-          echo "dir=$(npm config get cache)" >> $env:GITHUB_OUTPUT
-      - name: 'Cache node_modules'
-        uses: actions/cache@v4
-        with:
-          path: ${{ matrix.os == 'ubuntu-latest' && '~/.npm' || steps.npm-cache.outputs.dir }}
-          key: "${{ matrix.os }}-node-v${{ matrix.node }}-${{ hashFiles('**/package-lock.json') }}"
-      - name: Install Dependencies
-        run: npm ci --ignore-scripts
-      - name: Install Annotation Support
-        run: npm install mocha-github-actions-reporter
-      - name: Run All Node.js Tests
-        run: npm start test.node
-        env:
-          COVERAGE: '${{ matrix.env.COVERAGE }}'
-          MOCHA_REPORTER: mocha-github-actions-reporter
-          # this is so mocha-github-actions-reporter can find mocha
-          NODE_PATH: lib
-      - name: Generate Coverage Report (Linux + Node.js latest)
-        if: ${{ matrix.env.COVERAGE }}
-        run: npm start coverage-report-lcov
-      - name: Upload Coverage to Coveralls (Linux + Node.js latest)
-        if: ${{ matrix.env.COVERAGE }}
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
+          - test-part: jsapi
+            coverage: false
+    with:
+      os: "ubuntu-latest,windows-latest"
+      # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
+      # Ref https://nodejs.org/en/about/previous-releases
+      node-versions: "20.19.4,22.18.0,24.6.0"
+      npm-script: test-node:${{ matrix.test-part }}
+      coverage: ${{ matrix.coverage }}
 
   test-browser-local:
-    name: Browser Test [ChromeHeadless]
-    needs: smoke
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    # Don't run forked 'pull_request' without saucelabs token
-    if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
-    steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: 'Cache node_modules'
-        uses: actions/cache@v4
-        with:
-          path: '~/.npm'
-          # this key is different than above, since we are running scripts
-          # (builds, postinstall lifecycle hooks, etc.)
-          key: "ubuntu-latest-node-full-lts-${{ hashFiles('**/package-lock.json') }}"
-      - name: Install Dependencies
-        run: npm ci
-      - name: Run Browser Tests
-        run: npm start test.browser
-        env:
-          BROWSER: ChromeHeadless
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      browsers: ChromeHeadless
+      npm-script: test-browser
 
-  test-browser-saucelabs:
-    name: Browser Tests on SauceLabs [${{ matrix.browser }}]
-    needs:
-      - smoke
-      - test-browser-local
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      matrix:
-        browser:
-          - firefox@latest
-          - chrome@latest
-          - MicrosoftEdge@latest
-          - safari@latest
-    # Don't run forked 'pull_request' without saucelabs token
-    if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
-    steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: 'Cache node_modules'
-        uses: actions/cache@v4
-        with:
-          path: '~/.npm'
-          # this key is different than above, since we are running scripts
-          # (builds, postinstall lifecycle hooks, etc.)
-          key: "ubuntu-latest-node-full-lts-${{ hashFiles('**/package-lock.json') }}"
-      - name: Install Dependencies
-        run: npm ci
-      - name: Run Browser Tests
-        run: npm start test.browser
-        env:
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-          BROWSER: ${{ matrix.browser }}
+  # test-browser-saucelabs:
+  #   # Don't run forked 'pull_request' without saucelabs token
+  #   if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
+  #   needs:
+  #     - lint
+  #     - smoke
+  #     - test-browser-local
+  #   uses: ./.github/workflows/npm-script.yml
+  #   secrets: inherit
+  #   with:
+  #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
+  #     npm-script: test-browser
+
+  tsc:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: tsc

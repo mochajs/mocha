@@ -17,4 +17,31 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
    - Some optional dependencies may fail; you can safely ignore these unless you are trying to build the documentation.
    - If you're sick of seeing the failures, run `npm install --ignore-scripts`.
 
-> PRO TIP: After `npm install`, run `npm start` to see a list of commands which can be run with `npm start <command>` (powered by [nps](https://npm.im/nps)).
+## Developing Mocha
+
+When you contribute to Mocha, you will probably want to try to run your changes on the test suite of another project. You can (and should) run the test suite of Mocha itself before committing, but also confirming that your changes give the expected result on another project.
+
+For example, [WebSocket.io](https://github.com/LearnBoost/websocket.io/):
+
+    $ git clone https://github.com/LearnBoost/websocket.io.git
+
+Retrieve websocket.io's dependencies, which will include the stable version of Mocha:
+
+    $ cd websocket.io/
+    $ npm install
+
+Replace the Mocha dependency by the current git repository:
+
+    $ cd node_modules/
+    $ mv mocha/ mocha.save
+    $ git clone https://github.com/mochajs/mocha.git
+
+Install Mocha's dependencies for the development version:
+
+    $ cd mocha
+    $ npm install
+
+Run websocket.io's test suite using the development version you just installed:
+
+    $ cd ../..
+    $ ./node_modules/.bin/mocha

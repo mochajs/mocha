@@ -1,16 +1,22 @@
 # Deploy `mochajs.org` branch nightly by hitting a netlify build URL.
 # This updates the list of supporters
+# It uses commands from netlify.toml at root of repo
 
 name: Nightly mochajs.org Deploy
+
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Webhook Action
-        uses: joelwmale/webhook-action@2.3.2
+        uses: joelwmale/webhook-action@cc1a66f987e1591785273fd6f9d2f7a9d8d7c9cd
         env:
-          data: ''
+          data: ""
           WEBHOOK_URL: ${{ secrets.NETLIFY_NIGHTLY_DEPLOY_URL }}

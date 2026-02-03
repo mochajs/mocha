@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v17.1.3/schemas/config.json",
+  "release-type": "node",
+  "include-component-in-tag": false,
+
+  "prerelease": true,
+  "versioning": "prerelease",
+
+  "changelog-sections": [
+    { "type": "feat", "section": "🌟 Features", "hidden": false },
+    { "type": "fix", "section": "🩹 Fixes", "hidden": false },
+    { "type": "docs", "section": "📚 Documentation", "hidden": false },
+
+    { "type": "chore", "section": "🧹 Chores", "hidden": false },
+    { "type": "perf", "section": "🧹 Chores", "hidden": false },
+    { "type": "refactor", "section": "🧹 Chores", "hidden": false },
+    { "type": "test", "section": "🧹 Chores", "hidden": false },
+
+    { "type": "build", "section": "🤖 Automation", "hidden": false },
+    { "type": "ci", "section": "🤖 Automation", "hidden": true }
+  ],
+  "packages": {
+    ".": {}
+  }
+}
