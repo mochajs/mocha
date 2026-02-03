@@ -1,5 +1,24 @@
 # Changelog
 
+## [12.0.0-beta-7](https://github.com/mochajs/mocha/compare/v12.0.0-beta-6...v12.0.0-beta-7) (2026-02-03)
+
+
+### 🩹 Fixes
+
+* bump diff dependency to ^8.0.3 ([#5674](https://github.com/mochajs/mocha/issues/5674)) ([15fb31a](https://github.com/mochajs/mocha/commit/15fb31a8b25a4d03242e5c5f901ff3800889263e))
+* print helpful message when internal CLI error happens ([#5344](https://github.com/mochajs/mocha/issues/5344)) ([1e11836](https://github.com/mochajs/mocha/commit/1e118367dbb27f558edb7389985cca97d6d7da4b))
+
+
+### 📚 Documentation
+
+* update sponsor image to be larger ([#5659](https://github.com/mochajs/mocha/issues/5659)) ([bbe2bdb](https://github.com/mochajs/mocha/commit/bbe2bdbb69f7aa560645a5ab2cbd596dd0b43448))
+
+
+### 🧹 Chores
+
+* move nyc config changes from package.json into .nycrc ([#5668](https://github.com/mochajs/mocha/issues/5668)) ([e923e40](https://github.com/mochajs/mocha/commit/e923e4063f6a24dcaf7c6d7c7a3c8be998cb7980))
+* remove extra newline ([bbe2bdb](https://github.com/mochajs/mocha/commit/bbe2bdbb69f7aa560645a5ab2cbd596dd0b43448))
+
 ## [12.0.0-beta-6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-5...v12.0.0-beta-6) (2026-01-23)
 
 
