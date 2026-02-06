@@ -29,11 +29,11 @@ if (process.env.CI === "STAGE") // do something
 The value is available from anywhere in a spec file allowing you to set values from it before the tests run. e.g.
 
 ```javascript
-import { equal } from "assert";
+import { equal } from "node:assert";
 import { loadPage } from "your-code";
 const URL = `${process.env.APP_HOST}/${process.env.APP_URI}`;
-describe('Test the page loads', () {
-  it('goes to URL', () => {
+describe("Test the page loads", () => {
+  it("goes to URL", () => {
     const page = loadPage(URL);
     equal(page.url, URL);
   });
