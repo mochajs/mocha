@@ -2,6 +2,7 @@
 
 var childProcess = require("node:child_process");
 var path = require("node:path");
+var { expect } = require("chai");
 
 describe("mocha binary", function () {
   it("should not output colors to pipe", function (done) {
@@ -9,7 +10,7 @@ describe("mocha binary", function () {
     childProcess.execFile(process.execPath, command, function (err, stdout) {
       if (err) return done(err);
 
-      expect(stdout, "not to contain", "[90m");
+      expect(stdout).not.to.contain("[90m");
 
       done();
     });

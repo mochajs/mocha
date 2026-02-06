@@ -1,5 +1,7 @@
 "use strict";
 
+var { expect } = require("chai");
+
 var helpers = require("./helpers");
 var runMochaJSON = helpers.runMochaJSON;
 
@@ -11,10 +13,10 @@ describe("event order", function () {
           done(err);
           return;
         }
-        expect(res, "to have passed")
-          .and("to have passed test count", 2)
-          .and("to have passed test order", "test A", "test B")
-          .and("to have failed test count", 0);
+
+        expect(res.failures.length).to.equal(0);
+        expect(res.passes.length).to.equal(2);
+        expect(res.passes.map(t => t.title)).to.deep.equal(["test A", "test B"]);
         done();
       });
     });
@@ -30,9 +32,10 @@ describe("event order", function () {
             done(err);
             return;
           }
-          expect(res, "to have failed with error", "error test A")
-            .and("to have failed test count", 1)
-            .and("to have passed test count", 0);
+
+          expect(res.failures.length).to.equal(1);
+          expect(res.failures[0].err.message).to.equal("error test A");
+          expect(res.passes.length).to.equal(0);
           done();
         },
       );
@@ -49,9 +52,10 @@ describe("event order", function () {
             done(err);
             return;
           }
-          expect(res, "to have failed with error", "error test A")
-            .and("to have failed test count", 1)
-            .and("to have passed test count", 0);
+
+          expect(res.failures[0].err.message).to.equal("error test A");
+          expect(res.failures.length).to.equal(1);
+          expect(res.passes.length).to.equal(0);
           done();
         },
       );
@@ -68,10 +72,11 @@ describe("event order", function () {
             done(err);
             return;
           }
-          expect(res, "to have passed")
-            .and("to have passed test count", 2)
-            .and("to have passed test order", "test A", "test B")
-            .and("to have failed test count", 0);
+
+          expect(res.failures.length).to.equal(0);
+          expect(res.passes.length).to.equal(2);
+          expect(res.passes[0].title).to.equal("test A")
+          expect(res.passes[1].title).to.equal("test B");
           done();
         },
       );
@@ -88,9 +93,10 @@ describe("event order", function () {
             done(err);
             return;
           }
-          expect(res, "to have failed with error", "error test A")
-            .and("to have failed test count", 1)
-            .and("to have passed test count", 0);
+
+          expect(res.failures.length).to.equal(1);
+          expect(res.passes.length).to.equal(0);
+          expect(res.failures[0].err.message).to.equal("error test A");
           done();
         },
       );

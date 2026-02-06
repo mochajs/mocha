@@ -5,6 +5,7 @@ var run = helpers.runMocha;
 var fs = require("node:fs");
 var path = require("node:path");
 
+var { expect } = require("chai");
 /**
  * Returns an array of diffs corresponding to exceptions thrown from specs,
  * given the plaintext output (-C) of a mocha run.
@@ -94,7 +95,7 @@ describe("diffs", function () {
     "should display diff by data and not like an objects",
   ].forEach(function (title, i) {
     it(title, function () {
-      expect(diffs[i], "to be", expected[i]);
+      expect(diffs[i]).to.equal(expected[i]);
     });
   });
 });

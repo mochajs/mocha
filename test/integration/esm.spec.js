@@ -1,4 +1,7 @@
 "use strict";
+
+var { expect } = require("chai");
+
 var path = require("node:path");
 const { runMochaJSON: run, runMochaAsync } = require("./helpers");
 var args = [];
@@ -12,7 +15,7 @@ describe("esm", function () {
         return;
       }
 
-      expect(result, "to have passed test count", 1);
+      expect(result.failures.length).to.equal(0);
       done();
     });
   });
@@ -25,10 +28,8 @@ describe("esm", function () {
         return;
       }
 
-      expect(result, "to have failed test count", 1).and(
-        "to have failed test",
-        "should use a function from an esm, and fail",
-      );
+      expect(result.failures.length).to.equal(1);
+      expect(result.failures[0].fullTitle).to.equal("should use a function from an esm, and fail");
       done();
     });
   });
@@ -38,10 +39,9 @@ describe("esm", function () {
     const err = await runMochaAsync(fixture, args, { stdio: "pipe" }).catch(
       (err) => err,
     );
-    expect(err.output, "to contain", "SyntaxError").and(
-      "to contain",
-      "esm-syntax-error.fixture.mjs",
-    );
+
+    expect(err.output).to.contain("SyntaxError")
+      .and.to.contain("esm-syntax-error.fixture.mjs");
   });
 
   it("should recognize esm files ending with .js due to package.json type flag", function (done) {
@@ -52,7 +52,7 @@ describe("esm", function () {
         return;
       }
 
-      expect(result, "to have passed test count", 1);
+      expect(result.failures.length).to.equal(0);
       done();
     });
   });
@@ -65,7 +65,7 @@ describe("esm", function () {
       { stdio: "pipe" },
     );
 
-    expect(result, "to have passed test count", 1);
+    expect(result.passing).to.equal(1);
   });
 
   it("should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module", async function () {
@@ -76,10 +76,8 @@ describe("esm", function () {
       stdio: "pipe",
     }).catch((err) => err);
 
-    expect(err.output, "to contain", "ERR_MODULE_NOT_FOUND").and(
-      "to contain",
-      "test-that-imports-non-existing-module",
-    );
+    expect(err.output).to.contain("ERR_MODULE_NOT_FOUND")
+      .and.to.contain("test-that-imports-non-existing-module");
   });
 
   it("should throw an ERR_MODULE_NOT_FOUND and not ERR_REQUIRE_ESM if file imports a non-existing module with a loader", async function () {
@@ -97,9 +95,7 @@ describe("esm", function () {
       },
     ).catch((err) => err);
 
-    expect(err.output, "to contain", "ERR_MODULE_NOT_FOUND").and(
-      "to contain",
-      "non-existent-package",
-    );
+    expect(err.output).to.contain("ERR_MODULE_NOT_FOUND")
+      .and.to.contain("non-existent-package");
   });
 });

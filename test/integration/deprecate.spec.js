@@ -13,6 +13,7 @@ describe("utils.deprecate test", function () {
         if (err) {
           return done(err);
         }
+
         var result = res.output.match(/deprecated thing/g) || [];
         assert.strictEqual(result.length, 2);
         done();

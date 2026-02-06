@@ -1,5 +1,6 @@
 "use strict";
 
+const { expect } = require("chai");
 const { runMochaAsync } = require("./helpers");
 
 describe("common js require", () => {
@@ -8,14 +9,15 @@ describe("common js require", () => {
       "--delay",
       "--no-forbid-only",
     ]);
-    expect(result.output, "to contain", "running before");
-    expect(result.output, "to contain", "running suiteSetup");
-    expect(result.output, "to contain", "running setup");
-    expect(result.output, "to contain", "running beforeEach");
-    expect(result.output, "to contain", "running it");
-    expect(result.output, "to contain", "running afterEach");
-    expect(result.output, "to contain", "running teardown");
-    expect(result.output, "to contain", "running suiteTeardown");
-    expect(result.output, "to contain", "running after");
+
+    expect(result.output).to.contain("running before");
+    expect(result.output).to.contain("running suiteSetup");
+    expect(result.output).to.contain("running setup");
+    expect(result.output).to.contain("running beforeEach");
+    expect(result.output).to.contain("running it");
+    expect(result.output).to.contain("running afterEach");
+    expect(result.output).to.contain("running teardown");
+    expect(result.output).to.contain("running suiteTeardown");
+    expect(result.output).to.contain("running after");
   });
 });

@@ -7,6 +7,8 @@ var fs = require("node:fs");
 var path = require("node:path");
 var loadConfig = require("../../lib/cli/config").loadConfig;
 
+var { expect } = require("chai");
+
 describe("config", function () {
   it("should return the same values for all supported config types", function () {
     var configDir = path.join(__dirname, "fixtures", "config");
@@ -15,10 +17,10 @@ describe("config", function () {
     var json = loadConfig(path.join(configDir, "mocharc.json"));
     var mjs = loadConfig(path.join(configDir, "mocharc.mjs"));
     var yaml = loadConfig(path.join(configDir, "mocharc.yaml"));
-    expect(cjs, "to equal", js);
-    expect(json, "to equal", js);
-    expect(mjs, "to equal", js);
-    expect(yaml, "to equal", js);
+    expect(cjs).to.deep.equal(js);
+    expect(json).to.deep.equal(js);
+    expect(mjs).to.deep.equal(js);
+    expect(yaml).to.deep.equal(js);
   });
 
   describe('when configuring Mocha via a ".js" file', function () {
@@ -33,8 +35,8 @@ describe("config", function () {
         js = loadConfig(path.join(configDir, "mocharc.js"));
       }
 
-      expect(_loadConfig, "not to throw");
-      expect(js, "to equal", json);
+      expect(_loadConfig).to.not.throw();
+      expect(js).to.deep.equal(json);
     });
 
     it("should load configuration given cwd-relative path", function () {
@@ -45,8 +47,8 @@ describe("config", function () {
         js = loadConfig(path.join(".", relConfigDir, "mocharc.js"));
       }
 
-      expect(_loadConfig, "not to throw");
-      expect(js, "to equal", json);
+      expect(_loadConfig).to.not.throw();
+      expect(js).to.deep.equal(json);
     });
 
     it("should rethrow error from absolute path configuration", function () {
@@ -54,9 +56,7 @@ describe("config", function () {
         loadConfig(path.join(configDir, "mocharcWithThrowError.js"));
       }
 
-      expect(_loadConfig, "to throw", {
-        message: /Error from mocharcWithThrowError/,
-      });
+      expect(_loadConfig).to.throw(Error).with.property('message').that.matches(/Error from mocharcWithThrowError/);
     });
 
     it("should rethrow error from cwd-relative path configuration", function () {
@@ -66,9 +66,7 @@ describe("config", function () {
         loadConfig(path.join(".", relConfigDir, "mocharcWithThrowError.js"));
       }
 
-      expect(_loadConfig, "to throw", {
-        message: /Error from mocharcWithThrowError/,
-      });
+      expect(_loadConfig).to.throw(Error).with.property('message').that.matches(/Error from mocharcWithThrowError/);
     });
 
     // In other words, path does not begin with '/', './', or '../'
@@ -106,8 +104,8 @@ describe("config", function () {
           js = loadConfig(path.join(pkgName, "index.js"));
         }
 
-        expect(_loadConfig, "not to throw");
-        expect(js, "to equal", json);
+        expect(_loadConfig).to.not.throw();
+        expect(js).to.deep.equal(json);
       });
 
       after(function () {
