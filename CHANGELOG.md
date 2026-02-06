@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-beta-8](https://github.com/mochajs/mocha/compare/v12.0.0-beta-7...v12.0.0-beta-8) (2026-02-06)
+
+
+### 🧹 Chores
+
+* use OIDC to publish to npm ([#5681](https://github.com/mochajs/mocha/issues/5681)) ([5567aed](https://github.com/mochajs/mocha/commit/5567aed50a00b63074d5c7703c6d8196dee92088))
+
 ## [12.0.0-beta-7](https://github.com/mochajs/mocha/compare/v12.0.0-beta-6...v12.0.0-beta-7) (2026-02-03)
 
 
