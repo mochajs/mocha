@@ -1,0 +1,95 @@
+name: Token Expiry Monitor
+
+# Monitors GitHub token expiry and sends alerts
+# NOTE: This is only needed if you use PATs (Personal Access Tokens).
+# Consider using GITHUB_TOKEN or GitHub App tokens instead - they don't expire!
+# Learn more: 
+# - OIDC: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
+# - GitHub Apps: https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/about-authentication-with-a-github-app
+
+on:
+  schedule:
+    # Run weekly on Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  check-token-expiry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            // This workflow is mostly informational since we should use GITHUB_TOKEN
+            // which doesn't expire, or GitHub Apps with auto-refreshing tokens
+            
+            const warningIssueTitle = '⚠️ GitHub Token Expiry Reminder';
+            
+            // Check if warning issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'type: tooling',
+              creator: 'github-actions[bot]'
+            });
+            
+            const warningExists = existingIssues.data.some(issue => 
+              issue.title === warningIssueTitle
+            );
+            
+            if (!warningExists) {
+              const body = `## Token Expiry Reminder
+              
+              This is a periodic reminder to check your GitHub tokens and secrets.
+              
+              ### ✅ Recommended Approach (No Token Rotation Needed)
+              
+              Most workflows should use \`GITHUB_TOKEN\` which:
+              - Automatically generated for each workflow run
+              - Requires no manual rotation
+              - Has appropriate permissions set via \`permissions:\` key
+              
+              \`\`\`yaml
+              permissions:
+                contents: read
+                issues: write
+                pull-requests: write
+              \`\`\`
+              
+              ### 🔐 For External Services
+              
+              If you need tokens for external services (npm, Codecov, etc.):
+              - Use OIDC authentication when supported (no secrets needed!)
+              - Use GitHub App tokens (auto-refresh, scoped permissions)
+              - Only use PATs as a last resort
+              
+              ### 📋 Action Items
+              
+              - [ ] Review all workflows using \`secrets.GITHUB_TOKEN\` - can they use \`secrets.GITHUB_TOKEN\` instead?
+              - [ ] Check PAT expiry dates in repository secrets settings
+              - [ ] Consider migrating to OIDC for external services
+              - [ ] Document token rotation process if PATs are required
+              
+              **Resources:**
+              - [Automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)
+              - [OIDC with GitHub Actions](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect)
+              - [GitHub Apps vs PATs](https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps)
+              
+              This issue will auto-close when the checklist is complete.`;
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: warningIssueTitle,
+                body: body,
+                labels: ['type: tooling', 'needs: triage']
+              });
+              
+              console.log('Created token expiry reminder issue');
+            } else {
+              console.log('Warning issue already exists');
+            }

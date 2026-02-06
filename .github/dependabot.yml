@@ -1,5 +1,6 @@
 version: 2
 updates:
+  # GitHub Actions dependencies
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -8,3 +9,33 @@ updates:
       github-actions:
         patterns:
           - "*"
+  
+  # npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Group minor and patch updates together
+    groups:
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+    # Ignore major updates - handle manually
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    # Add helpful labels
+    labels:
+      - "type: dependencies"
+      - "status: accepting prs"
+    # Keep PR description concise
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"

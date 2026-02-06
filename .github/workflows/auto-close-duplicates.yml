@@ -1,0 +1,61 @@
+name: Auto Close Duplicate Issues
+
+# Automatically detects and closes duplicate issues
+# Learn more: https://github.com/actions/toolkit/tree/main/packages/github
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  check-duplicates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const issueBody = issue.body || '';
+            const issueTitle = issue.title || '';
+            
+            // Check if issue already has duplicate label
+            const labels = issue.labels.map(l => l.name);
+            if (labels.includes('status: duplicate')) {
+              console.log('Issue already marked as duplicate');
+              return;
+            }
+            
+            // Search for similar issues
+            const searchQuery = `repo:${context.repo.owner}/${context.repo.repo} is:issue "${issueTitle}"`;
+            const results = await github.rest.search.issuesAndPullRequests({
+              q: searchQuery,
+              per_page: 5
+            });
+            
+            // Check for duplicates (excluding current issue)
+            const duplicates = results.data.items.filter(i => 
+              i.number !== issue.number && 
+              i.state === 'open' &&
+              i.created_at < issue.created_at
+            );
+            
+            if (duplicates.length > 0) {
+              const duplicateNumbers = duplicates.map(d => `#${d.number}`).join(', ');
+              
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `👋 This issue appears to be a duplicate of ${duplicateNumbers}.\n\nPlease check those issues first. If your issue is different, please provide more details to help us understand how it differs.\n\nThis issue will be automatically closed in 7 days unless there is additional clarifying information.`
+              });
+              
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['status: duplicate', 'needs: clarification']
+              });
+            }

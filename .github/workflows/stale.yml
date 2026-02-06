@@ -1,0 +1,57 @@
+name: Stale Issues and PRs
+
+# Automatically marks stale issues and PRs, and closes them after inactivity
+# Learn more: https://github.com/actions/stale
+
+on:
+  schedule:
+    # Run daily at 1:00 AM UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Issue settings
+          days-before-issue-stale: 90
+          days-before-issue-close: 14
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not had
+            recent activity. It will be closed if no further activity occurs. Thank you
+            for your contributions.
+          stale-issue-label: 'status: stale'
+          close-issue-message: >
+            This issue has been automatically closed because it has not had recent activity.
+            If you believe this issue is still relevant, please reopen it.
+          
+          # PR settings  
+          days-before-pr-stale: 60
+          days-before-pr-close: 14
+          stale-pr-message: >
+            This pull request has been automatically marked as stale because it has not had
+            recent activity. It will be closed if no further activity occurs. Thank you
+            for your contributions.
+          stale-pr-label: 'status: stale'
+          close-pr-message: >
+            This pull request has been automatically closed because it has not had recent activity.
+            If you would like to continue working on this, please reopen it.
+          
+          # Exempt labels - issues/PRs with these labels won't be marked stale
+          exempt-issue-labels: 'status: accepting prs,status: in progress,good first issue,epic'
+          exempt-pr-labels: 'status: in progress,status: blocked'
+          
+          # Don't mark as stale if there are recent comments
+          exempt-all-issue-assignees: true
+          exempt-all-pr-assignees: true
+          
+          # Operations per run (avoid API rate limits)
+          operations-per-run: 100
