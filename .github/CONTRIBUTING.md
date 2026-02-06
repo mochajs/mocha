@@ -72,6 +72,12 @@ _Excellent._ Here's how:
 - **Do you write unit tests for _fun_?** A PR which increases coverage is unlikely to be turned down.
 - **Are you experienced?** 🎸 If you're a seasoned Mocha user, why not help answer some questions in [our Discord's `#help` channel](https://discord.gg/KeDn2uXhER)?
 
+## 🙋 Frequently Asked Questions
+
+### Can I work on this issue?
+
+Anyone can work on any issue marked `status: accepting prs`, including this one 🙂 Please check if there is already a PR for this issue, and if it's still being worked on. If it hasn't been updated for a while, or you have ideas for a different approach, you're welcome to open your own PR and we'll review it when we can!
+
 ## 👞 Contributing Code: Step-by-Step
 
 First follow the steps in [DEVELOPMENT.md](./DEVELOPMENT.md) to get Mocha's repository installed locally.
