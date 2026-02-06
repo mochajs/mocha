@@ -30,9 +30,6 @@ jobs:
     environment: npm
     needs: release_please
     if: needs.release_please.outputs.releaseCreated
-    permissions:
-      contents: read
-      id-token: write
     steps:
       - uses: actions/checkout@v6
         with:
