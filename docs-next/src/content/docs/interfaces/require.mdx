@@ -11,10 +11,8 @@ The `require` interface cannot be run via the `node` executable, and must be run
 :::
 
 ```js
-var testCase = require("mocha").describe;
-var pre = require("mocha").before;
-var assertions = require("mocha").it;
-var assert = require("chai").assert;
+import { describe as testCase, before as pre, it as assertions } from "mocha";
+import { assert } from "chai";
 
 testCase("Array", function () {
   pre(function () {
