@@ -1,13 +1,13 @@
 {
-  "name": "docs-next",
+  "name": "docs",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "astro": "astro",
     "build": "astro check && astro build",
     "dev": "astro dev",
-    "docs": "cd .. && npm i && cd docs-next && npm i && npm run generate && npm run build && cp _redirects dist/_redirects",
-    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
+    "docs": "cd .. && npm i && cd docs && npm i && npm run generate && npm run build && cp _redirects dist/_redirects",
+    "generate": "node ./_data/supporters.js --write-supporters-json",
     "preview": "astro preview",
     "start": "astro dev"
   },
