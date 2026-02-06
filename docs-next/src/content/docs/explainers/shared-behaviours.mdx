@@ -8,7 +8,7 @@ Mocha currently has no concept of a "shared behaviour" however the "contexts" fa
 shared.js:
 
 ```js
-exports.shouldBehaveLikeAUser = function () {
+export function shouldBehaveLikeAUser() {
   it("should have .name.first", function () {
     this.user.name.first.should.equal("tobi");
   });
@@ -22,22 +22,21 @@ exports.shouldBehaveLikeAUser = function () {
       this.user.fullname().should.equal("tobi holowaychuk");
     });
   });
-};
+}
 ```
 
 test.js:
 
 ```js
-var User = require("./user").User,
-  Admin = require("./user").Admin,
-  shared = require("./shared");
+import { User, Admin } from "./user.js";
+import { shouldBehaveLikeAUser } from "./shared.js";
 
 describe("User", function () {
   beforeEach(function () {
     this.user = new User("tobi", "holowaychuk");
   });
 
-  shared.shouldBehaveLikeAUser();
+  shouldBehaveLikeAUser();
 });
 
 describe("Admin", function () {
@@ -45,7 +44,7 @@ describe("Admin", function () {
     this.user = new Admin("tobi", "holowaychuk");
   });
 
-  shared.shouldBehaveLikeAUser();
+  shouldBehaveLikeAUser();
 
   it("should be an .admin", function () {
     this.user.admin.should.be.true;
@@ -56,24 +55,23 @@ describe("Admin", function () {
 user.js:
 
 ```js
-exports.User = User;
-exports.Admin = Admin;
+export class User {
+  constructor(first, last) {
+    this.name = {
+      first: first,
+      last: last,
+    };
+  }
 
-function User(first, last) {
-  this.name = {
-    first: first,
-    last: last,
-  };
+  fullname() {
+    return this.name.first + " " + this.name.last;
+  }
 }
 
-User.prototype.fullname = function () {
-  return this.name.first + " " + this.name.last;
-};
-
-function Admin(first, last) {
-  User.call(this, first, last);
-  this.admin = true;
+export class Admin extends User {
+  constructor(first, last) {
+    super(first, last);
+    this.admin = true;
+  }
 }
-
-Admin.prototype.__proto__ = User.prototype;
 ```
