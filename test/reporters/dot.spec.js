@@ -8,7 +8,7 @@ var reporters = require("../../").reporters;
 var Base = reporters.Base;
 var Dot = reporters.Dot;
 var createMockRunner = helpers.createMockRunner;
-var makeRunReporter = helpers.createRunReporterFunction;
+var createRunReporterFunction = helpers.createRunReporterFunction;
 
 var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
 var EVENT_RUN_END = events.EVENT_RUN_END;
@@ -18,7 +18,7 @@ var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 
 describe("Dot reporter", function () {
   var windowWidthStub;
-  var runReporter = makeRunReporter(Dot);
+  var runReporter = createRunReporterFunction(Dot);
   var noop = function () {};
 
   beforeEach(function () {
@@ -35,10 +35,10 @@ describe("Dot reporter", function () {
 
   describe("event handlers", function () {
     describe("on 'start' event", function () {
-      it("should write a newline", function () {
+      it("should write a newline", async function () {
         var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
-        var stdout = runReporter({ epilogue: noop }, runner, options);
+        var { stdout } = await runReporter({ epilogue: noop }, runner, options);
         sinon.restore();
 
         var expectedArray = ["\n"];
@@ -52,10 +52,14 @@ describe("Dot reporter", function () {
           windowWidthStub.value(2);
         });
 
-        it("should write a newline followed by a comma", function () {
+        it("should write a newline followed by a comma", async function () {
           var runner = createMockRunner("pending", EVENT_TEST_PENDING);
           var options = {};
-          var stdout = runReporter({ epilogue: noop }, runner, options);
+          var { stdout } = await runReporter(
+            { epilogue: noop },
+            runner,
+            options,
+          );
           sinon.restore();
 
           var expectedArray = ["\n  ", "pending_" + Base.symbols.comma];
@@ -64,10 +68,14 @@ describe("Dot reporter", function () {
       });
 
       describe("when window width is less than or equal to 1", function () {
-        it("should write a comma", function () {
+        it("should write a comma", async function () {
           var runner = createMockRunner("pending", EVENT_TEST_PENDING);
           var options = {};
-          var stdout = runReporter({ epilogue: noop }, runner, options);
+          var { stdout } = await runReporter(
+            { epilogue: noop },
+            runner,
+            options,
+          );
           sinon.restore();
 
           var expectedArray = ["pending_" + Base.symbols.comma];
@@ -90,7 +98,7 @@ describe("Dot reporter", function () {
         });
 
         describe("when test speed is fast", function () {
-          it("should write a newline followed by a dot", function () {
+          it("should write a newline followed by a dot", async function () {
             var runner = createMockRunner(
               "pass",
               EVENT_TEST_PASS,
@@ -99,7 +107,11 @@ describe("Dot reporter", function () {
               test,
             );
             var options = {};
-            var stdout = runReporter({ epilogue: noop }, runner, options);
+            var { stdout } = await runReporter(
+              { epilogue: noop },
+              runner,
+              options,
+            );
             sinon.restore();
 
             expect(test.speed, "to equal", "fast");
@@ -111,7 +123,7 @@ describe("Dot reporter", function () {
 
       describe("when window width is less than or equal to 1", function () {
         describe("when test speed is fast", function () {
-          it("should write a grey dot", function () {
+          it("should write a grey dot", async function () {
             var runner = createMockRunner(
               "pass",
               EVENT_TEST_PASS,
@@ -120,7 +132,11 @@ describe("Dot reporter", function () {
               test,
             );
             var options = {};
-            var stdout = runReporter({ epilogue: noop }, runner, options);
+            var { stdout } = await runReporter(
+              { epilogue: noop },
+              runner,
+              options,
+            );
             sinon.restore();
 
             expect(test.speed, "to equal", "fast");
@@ -130,7 +146,7 @@ describe("Dot reporter", function () {
         });
 
         describe("when test speed is medium", function () {
-          it("should write a yellow dot", function () {
+          it("should write a yellow dot", async function () {
             test.duration = 2;
             var runner = createMockRunner(
               "pass",
@@ -140,7 +156,11 @@ describe("Dot reporter", function () {
               test,
             );
             var options = {};
-            var stdout = runReporter({ epilogue: noop }, runner, options);
+            var { stdout } = await runReporter(
+              { epilogue: noop },
+              runner,
+              options,
+            );
             sinon.restore();
 
             expect(test.speed, "to equal", "medium");
@@ -150,7 +170,7 @@ describe("Dot reporter", function () {
         });
 
         describe("when test speed is slow", function () {
-          it("should write a bright yellow dot", function () {
+          it("should write a bright yellow dot", async function () {
             test.duration = 3;
             var runner = createMockRunner(
               "pass",
@@ -160,7 +180,11 @@ describe("Dot reporter", function () {
               test,
             );
             var options = {};
-            var stdout = runReporter({ epilogue: noop }, runner, options);
+            var { stdout } = await runReporter(
+              { epilogue: noop },
+              runner,
+              options,
+            );
             sinon.restore();
 
             expect(test.speed, "to equal", "slow");
@@ -183,7 +207,7 @@ describe("Dot reporter", function () {
           windowWidthStub.value(2);
         });
 
-        it("should write a newline followed by an exclamation mark", function () {
+        it("should write a newline followed by an exclamation mark", async function () {
           var runner = createMockRunner(
             "fail",
             EVENT_TEST_FAIL,
@@ -192,7 +216,11 @@ describe("Dot reporter", function () {
             test,
           );
           var options = {};
-          var stdout = runReporter({ epilogue: noop }, runner, options);
+          var { stdout } = await runReporter(
+            { epilogue: noop },
+            runner,
+            options,
+          );
           sinon.restore();
 
           var expectedArray = ["\n  ", "fail_" + Base.symbols.bang];
@@ -201,7 +229,7 @@ describe("Dot reporter", function () {
       });
 
       describe("when window width is less than or equal to 1", function () {
-        it("should write an exclamation mark", function () {
+        it("should write an exclamation mark", async function () {
           var runner = createMockRunner(
             "fail",
             EVENT_TEST_FAIL,
@@ -210,7 +238,11 @@ describe("Dot reporter", function () {
             test,
           );
           var options = {};
-          var stdout = runReporter({ epilogue: noop }, runner, options);
+          var { stdout } = await runReporter(
+            { epilogue: noop },
+            runner,
+            options,
+          );
           sinon.restore();
 
           var expectedArray = ["fail_" + Base.symbols.bang];
@@ -220,13 +252,13 @@ describe("Dot reporter", function () {
     });
 
     describe("on 'end' event", function () {
-      it("should call epilogue", function () {
+      it("should call epilogue", async function () {
         var runner = createMockRunner("end", EVENT_RUN_END);
         var fakeThis = {
           epilogue: sinon.stub(),
         };
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(fakeThis.epilogue.called, "to be true");
