@@ -187,6 +187,7 @@
   "overrides": {
     "@types/eslint": "^9.6.1",
     "@types/estree": "^1.0.7",
+    "@types/glob": "^9.0.0",
     "webdriverio": "^7.33.0"
   }
 }
