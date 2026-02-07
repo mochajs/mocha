@@ -24,10 +24,7 @@ Auto-adds issues/PRs to GitHub Projects (configured for https://github.com/orgs/
 ### 6. **Token Expiry Monitoring**
 Weekly reminder about token best practices and migration to OIDC.
 
-### 7. **PR Checklist**
-Adds helpful checklist to PRs without one.
-
-### 8. **Enhanced Dependabot**
+### 7. **Enhanced Dependabot**
 Now handles npm dependencies with grouped updates and auto-labeling.
 
 ## 🔐 Security Benefits

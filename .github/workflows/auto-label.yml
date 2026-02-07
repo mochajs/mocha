@@ -37,11 +37,11 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           xs_label: 'size: xs'
-          xs_max_size: 10
+          xs_max_size: 30
           s_label: 'size: s'
           s_max_size: 100
           m_label: 'size: m'
-          m_max_size: 500
+          m_max_size: 300
           l_label: 'size: l'
           l_max_size: 1000
           xl_label: 'size: xl'

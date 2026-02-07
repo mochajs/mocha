@@ -108,21 +108,6 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 
 ---
 
-### 7. PR Checklist Reminder (`pr-checklist.yml`)
-
-**Purpose:** Adds a helpful checklist to PRs that don't have one.
-
-**When it runs:** When PRs are opened
-
-**What it does:**
-- Checks if PR description has a checklist
-- If not, adds a comment with a standard checklist
-- Reminds contributors of testing, linting, and documentation requirements
-
-**Learn more:** https://github.com/actions/github-script
-
----
-
 ## Security Best Practices
 
 ### Use `GITHUB_TOKEN` Instead of PATs

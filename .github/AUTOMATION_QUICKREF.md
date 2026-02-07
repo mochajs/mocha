@@ -11,7 +11,6 @@ Quick reference for maintainers on the new automation workflows.
 | **Welcome** | Greets first-time contributors | On first issue/PR |
 | **Auto Add to Project** | Adds issues/PRs to project board | On open/reopen |
 | **Dependency Review** | Blocks vulnerable deps | On PR to main |
-| **PR Checklist** | Adds checklist if missing | On PR open |
 | **Token Monitor** | Reminds about token best practices | Weekly Mon 9 AM UTC |
 | **Dependabot** | Updates dependencies | Weekly |
 
