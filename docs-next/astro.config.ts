@@ -16,9 +16,6 @@ export default defineConfig({
       },
       sidebar: [
         { label: "Getting Started", slug: "getting-started" },
-        { label: "Community", slug: "community" },
-        { label: "Contributing", slug: "contributing" },
-        { label: "Maintenance", slug: "maintenance" },
         {
           items: [
             { label: "Browsers", slug: "running/browsers" },
