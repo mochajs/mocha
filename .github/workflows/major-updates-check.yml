@@ -1,0 +1,119 @@
+name: Notify Major Dependency Updates
+
+# Creates issues for available major version updates that Dependabot ignores
+# Learn more: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/keeping-your-actions-up-to-date-with-dependabot
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9 AM UTC (after Dependabot runs)
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-major-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Check for major npm updates
+        id: check-npm
+        run: |
+          npm install -g npm-check-updates
+          
+          # Get outdated packages (major versions only)
+          ncu --target major --jsonUpgraded > major-updates.json || true
+          
+          # Check if there are any updates
+          if [ -s major-updates.json ] && [ "$(cat major-updates.json)" != "{}" ]; then
+            echo "has-updates=true" >> $GITHUB_OUTPUT
+            echo "Updates found:"
+            cat major-updates.json
+          else
+            echo "has-updates=false" >> $GITHUB_OUTPUT
+            echo "No major updates available"
+          fi
+
+      - uses: actions/github-script@v7
+        if: steps.check-npm.outputs.has-updates == 'true'
+        with:
+          script: |
+            const fs = require('fs');
+            const updates = JSON.parse(fs.readFileSync('major-updates.json', 'utf8'));
+            
+            const issueTitle = '📦 Major Dependency Updates Available';
+            
+            // Check if issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'type: dependencies',
+              creator: 'github-actions[bot]'
+            });
+            
+            const existingIssue = existingIssues.data.find(issue => 
+              issue.title === issueTitle
+            );
+            
+            // Format the updates as a table
+            let body = `## Major Dependency Updates Available\n\n`;
+            body += `The following dependencies have major version updates available. These are ignored by Dependabot to avoid automatic breaking changes.\n\n`;
+            body += `| Package | Current | Latest |\n`;
+            body += `|---------|---------|--------|\n`;
+            
+            for (const [pkg, version] of Object.entries(updates)) {
+              const current = version.split(' → ')[0] || 'unknown';
+              const latest = version.split(' → ')[1] || version;
+              body += `| ${pkg} | ${current} | ${latest} |\n`;
+            }
+            
+            body += `\n### Next Steps\n\n`;
+            body += `1. Review the changelog for each package\n`;
+            body += `2. Test compatibility in a separate branch\n`;
+            body += `3. Update packages individually or in small groups\n`;
+            body += `4. Run full test suite before merging\n\n`;
+            body += `**Note:** This issue is automatically created weekly. Close it when all updates are reviewed or not applicable.\n\n`;
+            body += `**Resources:**\n`;
+            body += `- Run \`npx npm-check-updates --target major\` locally for interactive updates\n`;
+            body += `- [Semantic Versioning](https://semver.org/)\n`;
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: body
+              });
+              
+              // Add comment about update
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `🔄 Updated with latest available major versions (${new Date().toISOString().split('T')[0]})`
+              });
+              
+              console.log('Updated existing issue #' + existingIssue.number);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: body,
+                labels: ['type: dependencies', 'needs: triage']
+              });
+              
+              console.log('Created new issue #' + issue.data.number);
+            }
