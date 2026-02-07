@@ -856,11 +856,8 @@ describe("--watch", function () {
                 await sendWatcherEvent.add(dependency3, 0);
               }
 
-              console.error(0);
               mochaProcess.send({ resolveGlobalSetup: true });
-              console.error(1);
               await gotMessage((msg) => msg.runFinished);
-              console.error(2);
 
               if (event === "add") {
                 copyFixture("options/watch/dependency", dependency2);
