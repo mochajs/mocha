@@ -1,4 +1,5 @@
 "use strict";
+const { getProcessList } = require("@vscode/windows-process-tree");
 const Mocha = require("../../../lib/mocha");
 const {
   runMochaAsync,
@@ -54,20 +55,15 @@ async function assertReporterOutputEquality(reporter) {
 /**
  * Polls a process for its list of children PIDs. Returns the first non-empty list found
  * @param {number} pid - Process PID
- * @returns {number[]} Child PIDs
+ * @returns {Promise<number[]>} Child PIDs
  */
 async function waitForChildPids(pid) {
   let childPids = [];
   while (!childPids.length) {
-    try {
+    if (process.platform === 'win32') {
+      childPids = (await getProcessList.__promisify__(pid)).map(i => i.pid);
+    } else {
       childPids = await pidtree(pid);
-    } catch (err) {
-      // On Windows, pidtree may fail if wmic is not available (deprecated/removed in newer Windows)
-      // In this case, we can't reliably get child PIDs, so throw to skip the test
-      if (process.platform === 'win32' && err.message && err.message.includes('wmic')) {
-        throw new Error('pidtree requires wmic on Windows, which is not available');
-      }
-      throw err;
     }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
@@ -75,6 +71,10 @@ async function waitForChildPids(pid) {
 }
 
 describe("--parallel", function () {
+  if (process.platform === 'win32') {
+    child_process.spawn('cmd.exe');
+  }
+
   describe("when a test has a syntax error", function () {
     describe("when there is only a single test file", function () {
       it("should fail gracefully", async function () {
@@ -515,23 +515,18 @@ describe("--parallel", function () {
           resolveFixturePath("options/parallel/test-*"),
           "--parallel",
         ]);
-        let childPids;
-        try {
-          childPids = await waitForChildPids(pid);
-        } catch (err) {
-          if (err.message && err.message.includes('wmic')) {
-            this.skip();
-            return;
-          }
-          throw err;
-        }
+        const childPids = await waitForChildPids(pid);
         await promise;
         return expect(
           Promise.all(
             [pid, ...childPids].map(async (childPid) => {
               let pids = null;
               try {
-                pids = await pidtree(childPid, { root: true });
+                if (process.platform === 'win32') {
+                  pids = (await getProcessList.__promisify__(childPid)).map(i => i.pid);
+                } else {
+                  pids = await pidtree(childPid, { root: true });
+                }
               } catch (ignored) {}
               return pids;
             }),
@@ -550,23 +545,18 @@ describe("--parallel", function () {
           "--bail",
           "--parallel",
         ]);
-        let childPids;
-        try {
-          childPids = await waitForChildPids(pid);
-        } catch (err) {
-          if (err.message && err.message.includes('wmic')) {
-            this.skip();
-            return;
-          }
-          throw err;
-        }
+        const childPids = await waitForChildPids(pid);
         await promise;
         return expect(
           Promise.all(
             [pid, ...childPids].map(async (childPid) => {
               let pids = null;
               try {
-                pids = await pidtree(childPid, { root: true });
+                if (process.platform === 'win32') {
+                  pids = (await getProcessList.__promisify__(childPid)).map(i => i.pid);
+                } else {
+                  pids = await pidtree(childPid, { root: true });
+                }
               } catch (ignored) {}
               return pids;
             }),
