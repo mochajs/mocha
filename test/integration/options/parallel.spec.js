@@ -1,4 +1,5 @@
 "use strict";
+const childProcess = require("node:child_process");
 const { getProcessList } = require("@vscode/windows-process-tree");
 const Mocha = require("../../../lib/mocha");
 const {
@@ -72,7 +73,7 @@ async function waitForChildPids(pid) {
 
 describe("--parallel", function () {
   if (process.platform === 'win32') {
-    child_process.spawn('cmd.exe');
+    childProcess.spawn('cmd.exe');
   }
 
   describe("when a test has a syntax error", function () {
