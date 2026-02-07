@@ -1,5 +1,6 @@
 "use strict";
 const childProcess = require("node:child_process");
+const assert = require("node:assert");
 const { getProcessList } = require("@vscode/windows-process-tree");
 const Mocha = require("../../../lib/mocha");
 const {
@@ -517,6 +518,7 @@ describe("--parallel", function () {
           "--parallel",
         ]);
         const childPids = await waitForChildPids(pid);
+        assert.ok(childPids.length > 0);
         await promise;
         return expect(
           Promise.all(
@@ -547,6 +549,7 @@ describe("--parallel", function () {
           "--parallel",
         ]);
         const childPids = await waitForChildPids(pid);
+        assert.ok(childPids.length > 0);
         await promise;
         return expect(
           Promise.all(
