@@ -23,9 +23,8 @@ jobs:
         with:
           # Use GITHUB_TOKEN instead of PAT - no token rotation needed!
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          # TODO: Replace with your project URL
-          # Find at: https://github.com/orgs/mochajs/projects
-          project-url: https://github.com/orgs/mochajs/projects/YOUR_PROJECT_NUMBER
+          # Project URL for Mocha project board
+          project-url: https://github.com/orgs/mochajs/projects/6
           # Optional: Set custom field values
           # labeled: bug, feature
           # label-operator: OR

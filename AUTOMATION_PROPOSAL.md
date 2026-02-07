@@ -15,22 +15,19 @@ Automatically marks and closes inactive issues (90 days) and PRs (60 days), with
 ### 3. **Welcome Messages**
 Greets first-time contributors with helpful links to documentation and Discord.
 
-### 4. **Duplicate Detection**
-Automatically detects and flags potential duplicate issues.
-
-### 5. **Dependency Review** 
+### 4. **Dependency Review** 
 Blocks PRs with vulnerable or license-incompatible dependencies.
 
-### 6. **Project Board Integration** *(requires setup)*
-Auto-adds issues/PRs to GitHub Projects (update project URL in workflow).
+### 5. **Project Board Integration**
+Auto-adds issues/PRs to GitHub Projects (configured for https://github.com/orgs/mochajs/projects/6).
 
-### 7. **Token Expiry Monitoring**
+### 6. **Token Expiry Monitoring**
 Weekly reminder about token best practices and migration to OIDC.
 
-### 8. **PR Checklist**
+### 7. **PR Checklist**
 Adds helpful checklist to PRs without one.
 
-### 9. **Enhanced Dependabot**
+### 8. **Enhanced Dependabot**
 Now handles npm dependencies with grouped updates and auto-labeling.
 
 ## 🔐 Security Benefits
@@ -50,16 +47,14 @@ See [`.github/AUTOMATION.md`](.github/AUTOMATION.md) for:
 
 ## 🎨 Creative Ideas Included
 
-1. **Duplicate detection** - Uses GitHub search API to find similar issues
-2. **Size labeling** - Visual indicator of PR scope
-3. **Smart stale handling** - Exempts active items and those with assignees
-4. **Token migration path** - Guides away from PAT rotation headaches
-5. **Grouped dependency updates** - Reduces PR noise
+1. **Size labeling** - Visual indicator of PR scope
+2. **Smart stale handling** - Exempts active items and those with assignees
+3. **Token migration path** - Guides away from PAT rotation headaches
+4. **Grouped dependency updates** - Reduces PR noise
 
 ## ⚙️ Setup Required
 
-1. **Project board automation**: Update project URL in `.github/workflows/add-to-project.yml` (or disable if not using Projects)
-2. All other workflows work out of the box!
+No additional setup required - all workflows are configured and ready to use!
 
 ## 🔗 Resources
 

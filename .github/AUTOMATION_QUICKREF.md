@@ -9,7 +9,7 @@ Quick reference for maintainers on the new automation workflows.
 | **Stale** | Marks & closes inactive issues/PRs | Daily 1 AM UTC |
 | **Auto Label** | Labels PRs by area, size; issues by triage | On open/edit |
 | **Welcome** | Greets first-time contributors | On first issue/PR |
-| **Duplicate Detection** | Flags potential duplicates | On issue open/edit |
+| **Auto Add to Project** | Adds issues/PRs to project board | On open/reopen |
 | **Dependency Review** | Blocks vulnerable deps | On PR to main |
 | **PR Checklist** | Adds checklist if missing | On PR open |
 | **Token Monitor** | Reminds about token best practices | Weekly Mon 9 AM UTC |
@@ -40,12 +40,6 @@ Edit `.github/labeler.yml`:
 Edit `.github/workflows/stale.yml`:
 ```yaml
 exempt-issue-labels: 'status: accepting prs,my-new-label'
-```
-
-### Enable Project Board Auto-Add
-Edit `.github/workflows/add-to-project.yml`:
-```yaml
-project-url: https://github.com/orgs/mochajs/projects/YOUR_NUMBER
 ```
 
 ### Disable a Workflow

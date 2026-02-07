@@ -68,8 +68,7 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 **What it does:**
 - Adds items to specified GitHub Project board
 - Uses `GITHUB_TOKEN` (no token rotation needed!)
-
-**Setup required:** Update `project-url` in the workflow with your project URL
+- Configured to add items to https://github.com/orgs/mochajs/projects/6
 
 **Learn more:** https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project
 
@@ -91,23 +90,7 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 
 ---
 
-### 6. Auto Close Duplicate Issues (`auto-close-duplicates.yml`)
-
-**Purpose:** Detects and flags potential duplicate issues.
-
-**When it runs:** When issues are opened or edited
-
-**What it does:**
-- Searches for similar existing issues
-- Comments with links to potential duplicates
-- Adds "status: duplicate" and "needs: clarification" labels
-- Lets stale workflow close it after 7 days if not clarified
-
-**Learn more:** https://github.com/actions/github-script
-
----
-
-### 7. Token Expiry Monitor (`token-expiry-monitor.yml`)
+### 6. Token Expiry Monitor (`token-expiry-monitor.yml`)
 
 **Purpose:** Periodic reminder to check GitHub tokens and migrate to GITHUB_TOKEN/OIDC.
 
@@ -125,7 +108,7 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 
 ---
 
-### 8. PR Checklist Reminder (`pr-checklist.yml`)
+### 7. PR Checklist Reminder (`pr-checklist.yml`)
 
 **Purpose:** Adds a helpful checklist to PRs that don't have one.
 
