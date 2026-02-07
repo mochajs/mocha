@@ -511,6 +511,7 @@ describe("--watch", function () {
       const result = await runMochaWatchJSONAsync(
         args,
         {
+          // stdin: pipe, stdout: pipe, stderr: inherit, ipc: create IPC channel for messages
           stdio: ["pipe", "pipe", "inherit", "ipc"],
           env: {
             ...process.env,
