@@ -23,27 +23,23 @@ jobs:
           
           # Issue settings
           days-before-issue-stale: 90
-          days-before-issue-close: 14
+          days-before-issue-close: -1  # Disabled: Set to a positive number (e.g., 14) to enable auto-closing
           stale-issue-message: >
             This issue has been automatically marked as stale because it has not had
             recent activity. It will be closed if no further activity occurs. Thank you
             for your contributions.
           stale-issue-label: 'status: stale'
-          close-issue-message: >
-            This issue has been automatically closed because it has not had recent activity.
-            If you believe this issue is still relevant, please reopen it.
+          # close-issue-message is not used when days-before-issue-close is -1
           
           # PR settings  
           days-before-pr-stale: 60
-          days-before-pr-close: 14
+          days-before-pr-close: -1  # Disabled: Set to a positive number (e.g., 14) to enable auto-closing
           stale-pr-message: >
             This pull request has been automatically marked as stale because it has not had
             recent activity. It will be closed if no further activity occurs. Thank you
             for your contributions.
           stale-pr-label: 'status: stale'
-          close-pr-message: >
-            This pull request has been automatically closed because it has not had recent activity.
-            If you would like to continue working on this, please reopen it.
+          # close-pr-message is not used when days-before-pr-close is -1
           
           # Exempt labels - issues/PRs with these labels won't be marked stale
           exempt-issue-labels: 'status: accepting prs,status: in progress,good first issue,epic'

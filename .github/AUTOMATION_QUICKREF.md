@@ -6,12 +6,11 @@ Quick reference for maintainers on the new automation workflows.
 
 | Workflow | What It Does | When |
 |----------|-------------|------|
-| **Stale** | Marks & closes inactive issues/PRs | Daily 1 AM UTC |
+| **Stale** | Marks inactive issues/PRs as stale (no auto-close) | Daily 1 AM UTC |
 | **Auto Label** | Labels PRs by area, size; issues by triage | On open/edit |
 | **Welcome** | Greets first-time contributors | On first issue/PR |
 | **Auto Add to Project** | Adds issues/PRs to project board | On open/reopen |
 | **Dependency Review** | Blocks vulnerable deps | On PR to main |
-| **Token Monitor** | Reminds about token best practices | Weekly Mon 9 AM UTC |
 | **Dependabot** | Updates dependencies | Weekly |
 
 ## Quick Actions
@@ -24,7 +23,8 @@ Quick reference for maintainers on the new automation workflows.
 ### Adjust Stale Timings
 Edit `.github/workflows/stale.yml`:
 - `days-before-issue-stale: 90` - Days before marking stale
-- `days-before-issue-close: 14` - Days after stale before closing
+- `days-before-issue-close: -1` - Set to positive number (e.g., 14) to enable auto-closing
+- `days-before-pr-close: -1` - Set to positive number (e.g., 14) to enable auto-closing
 
 ### Add New Label Rules
 Edit `.github/labeler.yml`:

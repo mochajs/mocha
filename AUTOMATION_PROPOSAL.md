@@ -5,7 +5,7 @@ This PR adds several automation workflows to reduce manual work for maintainers.
 ## 🎯 Key Improvements
 
 ### 1. **Stale Issue/PR Management** 
-Automatically marks and closes inactive issues (90 days) and PRs (60 days), with smart exemptions for important labels.
+Automatically marks inactive issues (90 days) and PRs (60 days) as stale, with smart exemptions for important labels. Auto-closing is disabled by default but can be easily enabled.
 
 ### 2. **Auto-Labeling**
 - Labels PRs by affected area (docs, tests, CLI, etc.) based on files changed
@@ -21,10 +21,7 @@ Blocks PRs with vulnerable or license-incompatible dependencies.
 ### 5. **Project Board Integration**
 Auto-adds issues/PRs to GitHub Projects (configured for https://github.com/orgs/mochajs/projects/6).
 
-### 6. **Token Expiry Monitoring**
-Weekly reminder about token best practices and migration to OIDC.
-
-### 7. **Enhanced Dependabot**
+### 6. **Enhanced Dependabot**
 Now handles npm dependencies with grouped updates and auto-labeling.
 
 ## 🔐 Security Benefits
@@ -45,9 +42,8 @@ See [`.github/AUTOMATION.md`](.github/AUTOMATION.md) for:
 ## 🎨 Creative Ideas Included
 
 1. **Size labeling** - Visual indicator of PR scope
-2. **Smart stale handling** - Exempts active items and those with assignees
-3. **Token migration path** - Guides away from PAT rotation headaches
-4. **Grouped dependency updates** - Reduces PR noise
+2. **Smart stale handling** - Marks items stale but doesn't auto-close, exempts active items and those with assignees
+3. **Grouped dependency updates** - Reduces PR noise
 
 ## ⚙️ Setup Required
 

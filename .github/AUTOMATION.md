@@ -10,16 +10,19 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 
 ### 1. Stale Issues and PRs (`stale.yml`)
 
-**Purpose:** Automatically marks and closes inactive issues and PRs.
+**Purpose:** Automatically marks inactive issues and PRs as stale.
 
 **When it runs:** Daily at 1:00 AM UTC
 
 **What it does:**
 - Marks issues as stale after 90 days of inactivity
 - Marks PRs as stale after 60 days of inactivity  
-- Closes stale items after 14 additional days
+- **Does NOT automatically close** stale items (disabled by default)
 - Exempts issues/PRs with certain labels (e.g., `status: accepting prs`, `good first issue`)
 - Never marks items with assignees as stale
+
+**To enable auto-closing:**
+Edit the workflow and change `days-before-issue-close: -1` to a positive number (e.g., `14`) for issues, and `days-before-pr-close: -1` to a positive number for PRs.
 
 **Learn more:** https://github.com/actions/stale
 
@@ -87,24 +90,6 @@ Mocha uses GitHub Actions to automate common project management tasks, reducing 
 - Allows vulnerabilities in dev dependencies (not shipped)
 
 **Learn more:** https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review
-
----
-
-### 6. Token Expiry Monitor (`token-expiry-monitor.yml`)
-
-**Purpose:** Periodic reminder to check GitHub tokens and migrate to GITHUB_TOKEN/OIDC.
-
-**When it runs:** Weekly on Mondays at 9 AM UTC
-
-**What it does:**
-- Creates informational issue about token best practices
-- Recommends using `GITHUB_TOKEN` instead of PATs (no rotation needed)
-- Provides guidance on OIDC and GitHub Apps
-- Only creates one reminder issue (won't spam)
-
-**Learn more:**
-- https://docs.github.com/en/actions/security-guides/automatic-token-authentication
-- https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect
 
 ---
 
