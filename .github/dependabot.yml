@@ -28,6 +28,7 @@ updates:
           - "minor"
           - "patch"
     # Ignore major updates - handle manually
+    # See .github/workflows/major-updates-check.yml for automated issue creation
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]

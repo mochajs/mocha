@@ -6,6 +6,17 @@ This document describes the automated workflows that help manage the Mocha proje
 
 Mocha uses GitHub Actions to automate common project management tasks, reducing manual work for maintainers and ensuring consistency. All workflows use `GITHUB_TOKEN` where possible to avoid token rotation issues.
 
+## Quick Reference
+
+| Workflow | What It Does | When |
+|----------|-------------|------|
+| **Stale** | Marks inactive issues/PRs as stale (no auto-close) | Daily 1 AM UTC |
+| **Auto Label** | Labels PRs by area, size; issues by triage | On open/edit |
+| **Welcome** | Greets first-time contributors | On first issue/PR |
+| **Auto Add to Project** | Adds issues/PRs to project board | On open/reopen |
+| **Dependency Review** | Blocks vulnerable deps | On PR to main |
+| **Dependabot** | Updates dependencies | Weekly |
+
 ## Workflows
 
 ### 1. Stale Issues and PRs (`stale.yml`)
@@ -36,7 +47,7 @@ Edit the workflow and change `days-before-issue-close: -1` to a positive number 
 
 **What it does:**
 - Labels PRs by affected area (docs, browser, tests, CLI, etc.) based on files changed
-- Labels PRs by size (XS, S, M, L, XL) based on lines changed
+- Labels PRs by size (XS: ≤30, S: ≤100, M: ≤300, L: ≤1000, XL: >1000 lines) based on lines changed
 - Adds "needs: triage" label to new issues
 
 **Configuration:** See `.github/labeler.yml` for path-to-label mappings
@@ -93,6 +104,39 @@ Edit the workflow and change `days-before-issue-close: -1` to a positive number 
 
 ---
 
+## Quick Actions
+
+### Manually Trigger a Workflow
+1. Go to **Actions** tab
+2. Select workflow (e.g., "Stale Issues and PRs")
+3. Click **Run workflow** button
+
+### Adjust Stale Timings
+Edit `.github/workflows/stale.yml`:
+- `days-before-issue-stale: 90` - Days before marking stale
+- `days-before-issue-close: -1` - Set to positive number (e.g., 14) to enable auto-closing
+- `days-before-pr-close: -1` - Set to positive number (e.g., 14) to enable auto-closing
+
+### Add New Label Rules
+Edit `.github/labeler.yml`:
+```yaml
+'area: my-feature':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'lib/my-feature/**/*'
+```
+
+### Exempt Label from Stale
+Edit `.github/workflows/stale.yml`:
+```yaml
+exempt-issue-labels: 'status: accepting prs,my-new-label'
+```
+
+### Disable a Workflow
+Rename file: `workflow.yml` → `workflow.yml.disabled`
+
+---
+
 ## Security Best Practices
 
 ### Use `GITHUB_TOKEN` Instead of PATs
@@ -146,6 +190,25 @@ For workflows that need elevated permissions, use GitHub Apps instead of PATs:
 
 ---
 
+## Troubleshooting
+
+### Workflow Not Running?
+- Check workflow permissions in Settings → Actions → General
+- Verify event triggers match your action (e.g., `issues: opened`)
+- Check workflow run logs in Actions tab
+
+### Labels Not Being Added?
+- Verify `.github/labeler.yml` paths match your changes
+- Check PR is from fork (use `pull_request_target` not `pull_request`)
+- Run workflow manually to test
+
+### Stale Marking Wrong Issues?
+- Add labels to `exempt-issue-labels` in `stale.yml`
+- Check `days-before-issue-stale` setting
+- Assignees are automatically exempted
+
+---
+
 ## Existing Automation
 
 Mocha already uses these automation tools:
@@ -154,56 +217,6 @@ Mocha already uses these automation tools:
 - **Release Please** (`release-please.yml`) - Automated releases with conventional commits
 - **Dependabot** (`dependabot.yml`) - Automated dependency updates
 - **Codecov** - Automated code coverage reporting (via OIDC)
-
----
-
-## Maintenance
-
-### Adjusting Stale Timings
-
-Edit `.github/workflows/stale.yml`:
-- `days-before-issue-stale`: Days before marking issue stale
-- `days-before-issue-close`: Days after stale before closing
-- `days-before-pr-stale`: Days before marking PR stale
-- `days-before-pr-close`: Days after stale before closing
-
-### Adding Label Rules
-
-Edit `.github/labeler.yml` to add new path-based labeling rules:
-
-```yaml
-'area: new-feature':
-  - changed-files:
-    - any-glob-to-any-file:
-      - 'lib/new-feature/**/*'
-```
-
-### Disabling Workflows
-
-To disable a workflow without deleting it:
-1. Add `if: false` to the job
-2. Or rename the file to `*.yml.disabled`
-
----
-
-## Testing Workflows
-
-### Manually Trigger Workflows
-
-Workflows with `workflow_dispatch` can be manually triggered:
-1. Go to Actions tab
-2. Select the workflow
-3. Click "Run workflow"
-
-### Test Label Automation
-
-1. Create a test PR
-2. Modify files in different areas
-3. Check that appropriate labels are added
-
-### Test Stale Automation
-
-The stale workflow can be tested in dry-run mode by modifying the action configuration temporarily.
 
 ---
 
@@ -227,3 +240,9 @@ Consider these additional automations:
 - [Automating GitHub Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project)
 - [Security Hardening for GitHub Actions](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [Awesome Actions](https://github.com/sdras/awesome-actions) - Curated list of GitHub Actions
+
+---
+
+## Support
+
+Questions? Check the detailed documentation or ask in Discord!
