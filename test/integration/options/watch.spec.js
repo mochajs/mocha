@@ -883,7 +883,6 @@ describe("--watch", function () {
             },
           );
 
-          console.error(require("util").inspect(results, { depth: 10 }));
           const filtered = results.filter((r) => r.tests.length > 0);
 
           expect(filtered, "to have length", 2);
