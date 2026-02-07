@@ -868,7 +868,6 @@ describe("--watch", function () {
                   fsPromises.unlink(dependency3),
                 ]);
               }
-              console.error(3);
               await Promise.all([
                 sendWatcherEvent[event](dependency2, 1000).then(() =>
                   console.error(4),
