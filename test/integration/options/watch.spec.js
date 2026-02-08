@@ -591,7 +591,41 @@ describe("--watch", function () {
       result.runPending = runScheduled || running;
       return result;
     }
-    it("doesn't rerun when file events occur before tests (even if events are received late)", async function () {
+    it("doesn't rerun when file events occur before tests", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mock-global-setup"),
+        ],
+        { cwd: tempDir },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          await sendWatcherEvent.add(testFile, -1000);
+          await sendWatcherEvent.add(dependency, -1000);
+          await sendWatcherEvent.change(dependency, -1000);
+
+          mochaProcess.send({ resolveGlobalSetup: true });
+          await gotMessage((msg) => msg.testStarted);
+
+          mochaProcess.send({ resolveTest: true });
+          await gotMessage((msg) => msg.runFinished);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results.runPending, "to be", false);
+    });
+
+    it("doesn't rerun when file events timestamped before tests are received late, while test is running", async function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
 
@@ -599,7 +633,6 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const dependency2 = path.join(tempDir, "lib", "dependency2.js");
-      const dependency3 = path.join(tempDir, "lib", "dependency3.js");
 
       const results = await runMochaWatchWithChokidarMock(
         [
@@ -624,10 +657,45 @@ describe("--watch", function () {
 
           mochaProcess.send({ resolveTest: true });
           await gotMessage((msg) => msg.runFinished);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results.runPending, "to be", false);
+    });
 
-          copyFixture("options/watch/dependency", dependency3);
+    it("doesn't rerun when file events timestamped before tests are received late, after test run", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const dependency2 = path.join(tempDir, "lib", "dependency2.js");
+
+      const results = await runMochaWatchWithChokidarMock(
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mock-global-setup"),
+        ],
+        { cwd: tempDir },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          await sendWatcherEvent.add(testFile, -1000);
+          await sendWatcherEvent.add(dependency, -1000);
+
+          mochaProcess.send({ resolveGlobalSetup: true });
+          await gotMessage((msg) => msg.testStarted);
+
+          mochaProcess.send({ resolveTest: true });
+          await gotMessage((msg) => msg.runFinished);
+
+          copyFixture("options/watch/dependency", dependency2);
           await sendWatcherEvent.change(dependency, -600);
-          await sendWatcherEvent.add(dependency3, -600);
+          await sendWatcherEvent.add(dependency2, -600);
         },
       );
       expect(results, "to have length", 1);
