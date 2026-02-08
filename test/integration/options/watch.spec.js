@@ -508,6 +508,14 @@ describe("--watch", function () {
     async function runMochaWatchWithChokidarMock(args, opts, change) {
       let runScheduled = false;
       let running = false;
+      if (
+        opts?.stdio &&
+        (!Array.isArray(opts.stdio) || !opts.stdio.includes("ipc"))
+      ) {
+        throw new Error(
+          `if overriding stdio, you must include an 'ipc' channel`,
+        );
+      }
       const result = await runMochaWatchJSONAsync(
         args,
         {
