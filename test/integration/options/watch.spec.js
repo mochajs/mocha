@@ -516,7 +516,7 @@ describe("--watch", function () {
           env: {
             ...process.env,
             __MOCHA_WATCH_MOCK_CHOKIDAR: "1",
-            DEBUG: "mocha:cli:watch",
+            ...opts?.env,
           },
           sleepMs: 0,
           ...opts,
