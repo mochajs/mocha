@@ -623,6 +623,46 @@ describe("Runnable(title, fn)", function () {
           });
         });
       });
+
+      it("should include duration in timeout error message when timeout fires", function (done) {
+        var runnable = new Runnable("foo", function (done) {
+          setTimeout(done, 50);
+        });
+        runnable.timeout(20);
+        runnable.run(function (err) {
+          expect(err, "to satisfy", { code: TIMEOUT, timeout: 20 });
+          expect(err.message, "to match", /Test ran for \d+ms/);
+          done();
+        });
+      });
+
+      it("should include duration in timeout error message when test finishes late", function (done) {
+        var runnable = new Runnable("foo", function (done) {
+          setTimeout(function () {
+            done();
+          }, 30);
+        });
+        runnable.timeout(10);
+        runnable.run(function (err) {
+          expect(err, "to satisfy", { code: TIMEOUT, timeout: 10 });
+          expect(err.message, "to match", /Test ran for \d+ms/);
+          done();
+        });
+      });
+
+      it("should include duration in timeout error message for promise-based tests", function (done) {
+        var runnable = new Runnable("foo", function () {
+          return new Promise(function (resolve) {
+            setTimeout(resolve, 30);
+          });
+        });
+        runnable.timeout(10);
+        runnable.run(function (err) {
+          expect(err, "to satisfy", { code: TIMEOUT, timeout: 10 });
+          expect(err.message, "to match", /Test ran for \d+ms/);
+          done();
+        });
+      });
     });
 
     describe("if async", function () {
