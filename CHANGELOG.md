@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-beta-9](https://github.com/mochajs/mocha/compare/v12.0.0-beta-8...v12.0.0-beta-9) (2026-02-13)
+
+
+### 🌟 Features
+
+* remove `log-symbols` dependency ([#5469](https://github.com/mochajs/mocha/issues/5469)) ([b92168f](https://github.com/mochajs/mocha/commit/b92168f5625be7343fb94d458d8a055cca8ff0a4))
+
 ## [12.0.0-beta-8](https://github.com/mochajs/mocha/compare/v12.0.0-beta-7...v12.0.0-beta-8) (2026-02-06)
 
 
