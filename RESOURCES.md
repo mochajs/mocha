@@ -19,5 +19,3 @@ This document lists external services and infrastructure used by the Mocha proje
 - **npm Registry**: [https://npmjs.com/package/mocha](https://www.npmjs.com/package/mocha) - Package distribution. Publishing is automated via GitHub Actions with OIDC authentication (no stored credentials).
 
 - **GitHub Actions**: All CI/CD, testing, and automated releases run through GitHub Actions. View workflow runs at [https://github.com/mochajs/mocha/actions](https://github.com/mochajs/mocha/actions).
-
-- **FOSSA**: License compliance and dependency scanning service. Excludes documentation and examples from scanning (see `.fossaignore`).
