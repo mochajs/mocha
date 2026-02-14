@@ -159,7 +159,7 @@ module.exports = defineConfig(
     ".karma/**",
     "**/*.{fixture,min}.{js,mjs}",
     "coverage/**",
-    "docs-next/{.astro,dist}/**",
+    "docs/{.astro,dist}/**",
     "mocha.js",
     "out/**",
     "test/integration/fixtures/**",
