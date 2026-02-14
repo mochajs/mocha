@@ -508,6 +508,14 @@ describe("--watch", function () {
     async function runMochaWatchWithChokidarMock(args, opts, change) {
       let runScheduled = false;
       let running = false;
+      if (
+        opts?.stdio &&
+        (!Array.isArray(opts.stdio) || !opts.stdio.includes("ipc"))
+      ) {
+        throw new Error(
+          `if overriding stdio, you must include an 'ipc' channel`,
+        );
+      }
       const result = await runMochaWatchJSONAsync(
         args,
         {
@@ -516,7 +524,7 @@ describe("--watch", function () {
           env: {
             ...process.env,
             __MOCHA_WATCH_MOCK_CHOKIDAR: "1",
-            DEBUG: "mocha:cli:watch",
+            ...opts?.env,
           },
           sleepMs: 0,
           ...opts,
@@ -591,7 +599,41 @@ describe("--watch", function () {
       result.runPending = runScheduled || running;
       return result;
     }
-    it("doesn't rerun when file events occur before tests (even if events are received late)", async function () {
+    it("doesn't rerun when file events occur before tests", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const results = await runMochaWatchWithChokidarMock(
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mock-global-setup"),
+        ],
+        { cwd: tempDir },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          await sendWatcherEvent.add(testFile, -1000);
+          await sendWatcherEvent.add(dependency, -1000);
+          await sendWatcherEvent.change(dependency, -1000);
+
+          mochaProcess.send({ resolveGlobalSetup: true });
+          await gotMessage((msg) => msg.testStarted);
+
+          mochaProcess.send({ resolveTest: true });
+          await gotMessage((msg) => msg.runFinished);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results.runPending, "to be", false);
+    });
+
+    it("doesn't rerun when file events timestamped before tests are received late, while test is running", async function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
 
@@ -599,7 +641,6 @@ describe("--watch", function () {
       copyFixture("options/watch/dependency", dependency);
 
       const dependency2 = path.join(tempDir, "lib", "dependency2.js");
-      const dependency3 = path.join(tempDir, "lib", "dependency3.js");
 
       const results = await runMochaWatchWithChokidarMock(
         [
@@ -624,10 +665,45 @@ describe("--watch", function () {
 
           mochaProcess.send({ resolveTest: true });
           await gotMessage((msg) => msg.runFinished);
+        },
+      );
+      expect(results, "to have length", 1);
+      expect(results[0].passes, "to have length", 1);
+      expect(results[0].failures, "to have length", 0);
+      expect(results.runPending, "to be", false);
+    });
 
-          copyFixture("options/watch/dependency", dependency3);
+    it("doesn't rerun when file events timestamped before tests are received late, after test run", async function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/test-with-dependency-and-barrier", testFile);
+
+      const dependency = path.join(tempDir, "lib", "dependency.js");
+      copyFixture("options/watch/dependency", dependency);
+
+      const dependency2 = path.join(tempDir, "lib", "dependency2.js");
+
+      const results = await runMochaWatchWithChokidarMock(
+        [
+          testFile,
+          "--watch-files",
+          "lib/**/*.js",
+          "--require",
+          resolveFixturePath("options/watch/mock-global-setup"),
+        ],
+        { cwd: tempDir },
+        async (mochaProcess, { gotMessage, sendWatcherEvent }) => {
+          await sendWatcherEvent.add(testFile, -1000);
+          await sendWatcherEvent.add(dependency, -1000);
+
+          mochaProcess.send({ resolveGlobalSetup: true });
+          await gotMessage((msg) => msg.testStarted);
+
+          mochaProcess.send({ resolveTest: true });
+          await gotMessage((msg) => msg.runFinished);
+
+          copyFixture("options/watch/dependency", dependency2);
           await sendWatcherEvent.change(dependency, -600);
-          await sendWatcherEvent.add(dependency3, -600);
+          await sendWatcherEvent.add(dependency2, -600);
         },
       );
       expect(results, "to have length", 1);
@@ -856,11 +932,8 @@ describe("--watch", function () {
                 await sendWatcherEvent.add(dependency3, 0);
               }
 
-              console.error(0);
               mochaProcess.send({ resolveGlobalSetup: true });
-              console.error(1);
               await gotMessage((msg) => msg.runFinished);
-              console.error(2);
 
               if (event === "add") {
                 copyFixture("options/watch/dependency", dependency2);
@@ -871,7 +944,6 @@ describe("--watch", function () {
                   fsPromises.unlink(dependency3),
                 ]);
               }
-              console.error(3);
               await Promise.all([
                 sendWatcherEvent[event](dependency2, 1000).then(() =>
                   console.error(4),
@@ -886,7 +958,6 @@ describe("--watch", function () {
             },
           );
 
-          console.error(require("util").inspect(results, { depth: 10 }));
           const filtered = results.filter((r) => r.tests.length > 0);
 
           expect(filtered, "to have length", 2);
