@@ -1,5 +1,4 @@
 .astro/
 dist/
 node_modules/
-src/content/data/
-src/data/
+src/content/data/supporters.json
