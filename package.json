@@ -135,7 +135,6 @@
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "karma-sauce-launcher": "^4.3.6",
     "knip": "^5.61.3",
     "npm-run-all2": "^6.2.0",
     "nyc": "^17.1.0",
