@@ -161,7 +161,7 @@ export default defineConfig({
             {
               label: "TypeScript",
               slug: "explainers/typescript",
-            }
+            },
           ],
           label: "Explainers",
         },
