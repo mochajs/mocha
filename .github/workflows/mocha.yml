@@ -34,6 +34,7 @@ jobs:
 
   test-node-lts:
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    # https://github.com/mochajs/mocha/issues/5183
     uses: ./.github/workflows/npm-script.yml
     needs: smoke
     strategy:
@@ -56,6 +57,7 @@ jobs:
       id-token: write # for Codecov OIDC
       contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
+    # https://github.com/mochajs/mocha/issues/5183
     uses: ./.github/workflows/npm-script.yml
     needs: test-node-lts
     strategy:
@@ -85,19 +87,6 @@ jobs:
     with:
       browsers: ChromeHeadless
       npm-script: test-browser
-
-  # test-browser-saucelabs:
-  #   # Don't run forked 'pull_request' without saucelabs token
-  #   if: github.event_name == 'push' || !github.event.pull_request.head.repo.fork
-  #   needs:
-  #     - lint
-  #     - smoke
-  #     - test-browser-local
-  #   uses: ./.github/workflows/npm-script.yml
-  #   secrets: inherit
-  #   with:
-  #     browsers: 'firefox@latest,chrome@latest,MicrosoftEdge@latest,safari@latest'
-  #     npm-script: test-browser
 
   tsc:
     uses: ./.github/workflows/npm-script.yml
