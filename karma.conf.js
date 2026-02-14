@@ -211,6 +211,7 @@ const chooseTestSuite = (cfg, value) => {
       });
     case "esm":
       return addStandardDependencies({
+        ...cfg,
         files: [
           {
             pattern: "test/browser-specific/fixtures/esm.fixture.mjs",
@@ -223,7 +224,7 @@ const chooseTestSuite = (cfg, value) => {
         ],
       });
     default:
-      return addStandardDependencies({});
+      return addStandardDependencies({ ...cfg });
   }
 };
 
