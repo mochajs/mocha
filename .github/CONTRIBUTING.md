@@ -149,6 +149,6 @@ Mocha uses several external services for project infrastructure:
 
 - **[npm Registry](https://www.npmjs.com/package/mocha)**: Package distribution. Publishing is automated with OIDC authentication.
 
-- **[Open Collective](https://opencollective.com/mochajs)**: Mocha's funding collective hosted by Open Source Collective. All donations and expenses are publicly visible. Follows fund usage guidelines with rates: $75/hour for TSC members, $50/hour for contributors.
+- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers.
 
 - **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
