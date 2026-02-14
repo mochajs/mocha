@@ -10,17 +10,19 @@ interface Props {
   data: Supporter[];
   size: "small" | "medium";
 }
+
+const { size, data } = Astro.props;
 ---
 
-<div class:list={["supporters", `supporters-${Astro.props.size}`]}>
+<div class:list={["supporters", `supporters-${size}`]}>
   {
-    Astro.props.data.map((supporter) => (
+    data.map((supporter) => (
       <a class="supporter" href={supporter.website}>
         <img
           alt={supporter.name}
           class="supporter-image"
           src={
-            Astro.props.size === "small"
+            size === "small"
               ? supporter.imgUrlSmall
               : supporter.imgUrlMed
           }
@@ -63,8 +65,8 @@ interface Props {
   }
 
   .supporters-medium img.supporter-image {
-    height: 4rem;
-    width: 4rem;
+    height: 6rem;
+    width: 20rem;
     object-fit: contain;
   }
 </style>

@@ -48,6 +48,20 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should surface Mocha errors rather than falling back to `import(...)`", async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            "../../test/node-unit/fixtures/mock-mocha-forbidden-exclusivity-err.ts",
+          ),
+        "to be rejected with error satisfying",
+        {
+          code: "ERR_MOCHA_FORBIDDEN_EXCLUSIVITY",
+          message: /`\.only` is not supported in parallel mode/,
+        },
+      );
+    });
   });
 
   describe("loadFilesAsync()", function () {
