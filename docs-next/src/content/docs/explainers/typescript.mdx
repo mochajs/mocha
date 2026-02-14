@@ -5,19 +5,19 @@ description: How to use Mocha with TypeScript
 
 import { PackageManagers } from "starlight-package-managers";
 
-Mocha supports TypeScript out of the box using Node.js native type stripping (available in Node.js 22.6.0+).
+Mocha supports TypeScript out of the box using [Node.js type stripping](https://nodejs.org/api/typescript.html#type-stripping) (available in Node.js 22.6.0+). Type stripping is newly [stable in Node.js as of November 2025](https://github.com/nodejs/node/releases/tag/v25.2.0).
 
 ## Quick Start
 
-Install Mocha and TypeScript:
+Install Mocha, Mocha's types, and Node.js types:
 
-<PackageManagers dev type="add" pkg="mocha @types/mocha" />
+<PackageManagers dev type="add" pkg="mocha @types/mocha @types/node" />
 
 Create a test file:
 
 ```typescript
-// test/example.test.ts
-import assert from "node:assert";
+// example.test.ts
+import * as assert from "node:assert";
 
 describe("Array", function () {
   it("should return -1 when value is not present", function () {
@@ -29,23 +29,22 @@ describe("Array", function () {
 Run your tests:
 
 ```bash
-npx mocha --experimental-strip-types test/**/*.test.ts
+npx mocha example.test.ts
+
+# Older versions of Node require an experimental flag
+npx mocha --experimental-strip-types example.test.ts
 ```
 
-:::note
-Node.js native type stripping requires Node.js v22.6.0 or later. For older Node versions or more complex setups, see the [mocha-examples TypeScript packages](https://github.com/mochajs/mocha-examples).
-:::
+In case of IDE issues not recognizing types, you can optionally add an empty `tsconfig.json`:
 
-## Alternative: Using ts-node
-
-For projects needing full TypeScript compilation:
-
-<PackageManagers dev type="add" pkg="ts-node typescript" />
-
-```bash
-npx mocha --require ts-node/register test/**/*.test.ts
+```js
+// tsconfig.json
+{
+}
 ```
+
+Upon restarting your IDE, any type errors should go away.
 
 ## More Examples
 
-Check out [mocha-examples](https://github.com/mochajs/mocha-examples) for complete TypeScript project setups including configs for ts-node, tsx, and other tools.
+Check out [mocha-examples](https://github.com/mochajs/mocha-examples) for complete TypeScript project setups including configs for `ts-node`, `tsx`, and other tools.
