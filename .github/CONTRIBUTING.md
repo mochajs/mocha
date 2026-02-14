@@ -151,4 +151,4 @@ Mocha uses several external services for project infrastructure:
 
 - **Netlify**: Hosts the documentation website at mochajs.org. Provides automatic deploy previews for documentation PRs and nightly scheduled deploys to update supporter information.
 
-- **npm Registry**: Package distribution. Publishing is automated with OIDC authentication.
+- **[npm Registry](https://www.npmjs.com/package/mocha)**: Package distribution. Publishing is automated with OIDC authentication.
