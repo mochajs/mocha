@@ -1,7 +1,5 @@
 # Mocha-specific
-docs/_site
 docs/images/supporters
-docs/api
 mocha.js
 mocha.js.map
 .karma/

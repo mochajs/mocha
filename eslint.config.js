@@ -4,6 +4,7 @@ const js = require("@eslint/js");
 const { defineConfig, globalIgnores } = require("eslint/config");
 const n = require("eslint-plugin-n");
 const globals = require("globals");
+const { default: markdown } = require("@eslint/markdown");
 
 const messages = {
   gh237: "See https://github.com/mochajs/mocha/issues/237",
@@ -31,19 +32,11 @@ module.exports = defineConfig(
     },
   },
   {
-    files: ["docs/js/**/*.js"],
-    languageOptions: {
-      globals: globals.browser,
-    },
-  },
-  {
     files: [
-      ".eleventy.js",
       ".wallaby.js",
       "package-scripts.js",
       "karma.conf.js",
       "bin/*",
-      "docs/_data/**/*.js",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
       "scripts/**/*.{js,mjs}",
@@ -148,12 +141,25 @@ module.exports = defineConfig(
       ],
     },
   },
+  {
+    files: ["**/*.md"],
+    plugins: {
+      markdown,
+    },
+    extends: ["markdown/recommended"],
+    language: "markdown/gfm",
+    rules: {
+      "markdown/no-multiple-h1": "off",
+      "markdown/fenced-code-language": "off",
+      "markdown/no-missing-label-refs": "off",
+      "markdown/no-duplicate-headings": ["error", { checkSiblingsOnly: true }],
+    },
+  },
   globalIgnores([
     ".karma/**",
     "**/*.{fixture,min}.{js,mjs}",
     "coverage/**",
-    "docs-next/dist/**",
-    "docs/{_dist,_site,api,example}/**",
+    "docs-next/{.astro,dist}/**",
     "mocha.js",
     "out/**",
     "test/integration/fixtures/**",

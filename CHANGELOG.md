@@ -1,5 +1,149 @@
 # Changelog
 
+## [12.0.0-beta-9](https://github.com/mochajs/mocha/compare/v12.0.0-beta-8...v12.0.0-beta-9) (2026-02-13)
+
+
+### 🌟 Features
+
+* remove `log-symbols` dependency ([#5469](https://github.com/mochajs/mocha/issues/5469)) ([b92168f](https://github.com/mochajs/mocha/commit/b92168f5625be7343fb94d458d8a055cca8ff0a4))
+
+## [12.0.0-beta-8](https://github.com/mochajs/mocha/compare/v12.0.0-beta-7...v12.0.0-beta-8) (2026-02-06)
+
+
+### 🧹 Chores
+
+* use OIDC to publish to npm ([#5681](https://github.com/mochajs/mocha/issues/5681)) ([5567aed](https://github.com/mochajs/mocha/commit/5567aed50a00b63074d5c7703c6d8196dee92088))
+
+## [12.0.0-beta-7](https://github.com/mochajs/mocha/compare/v12.0.0-beta-6...v12.0.0-beta-7) (2026-02-03)
+
+
+### 🩹 Fixes
+
+* bump diff dependency to ^8.0.3 ([#5674](https://github.com/mochajs/mocha/issues/5674)) ([15fb31a](https://github.com/mochajs/mocha/commit/15fb31a8b25a4d03242e5c5f901ff3800889263e))
+* print helpful message when internal CLI error happens ([#5344](https://github.com/mochajs/mocha/issues/5344)) ([1e11836](https://github.com/mochajs/mocha/commit/1e118367dbb27f558edb7389985cca97d6d7da4b))
+
+
+### 📚 Documentation
+
+* update sponsor image to be larger ([#5659](https://github.com/mochajs/mocha/issues/5659)) ([bbe2bdb](https://github.com/mochajs/mocha/commit/bbe2bdbb69f7aa560645a5ab2cbd596dd0b43448))
+
+
+### 🧹 Chores
+
+* move nyc config changes from package.json into .nycrc ([#5668](https://github.com/mochajs/mocha/issues/5668)) ([e923e40](https://github.com/mochajs/mocha/commit/e923e4063f6a24dcaf7c6d7c7a3c8be998cb7980))
+* remove extra newline ([bbe2bdb](https://github.com/mochajs/mocha/commit/bbe2bdbb69f7aa560645a5ab2cbd596dd0b43448))
+
+## [12.0.0-beta-6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-5...v12.0.0-beta-6) (2026-01-23)
+
+
+### 🩹 Fixes
+
+* allow chain call timeout to override nested items timeout ([#5612](https://github.com/mochajs/mocha/issues/5612)) ([5525da6](https://github.com/mochajs/mocha/commit/5525da60cf8d2596e14ff5441ea518d47bd732da))
+* import() fallback prevention ([#5647](https://github.com/mochajs/mocha/issues/5647)) ([6a78fa3](https://github.com/mochajs/mocha/commit/6a78fa39576ffb42700811661a94c9ac996707f2))
+
+
+### 🤖 Automation
+
+* **deps:** bump OctoGuide/bot in the github-actions group ([#5653](https://github.com/mochajs/mocha/issues/5653)) ([e06cce7](https://github.com/mochajs/mocha/commit/e06cce7a49b79a163e33db166e9b078b0d7b4001))
+
+## [12.0.0-beta-5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-4...v12.0.0-beta-5) (2026-01-16)
+
+
+### 🌟 Features
+
+* add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519)) ([0ed524a](https://github.com/mochajs/mocha/commit/0ed524af347b59200e03b972c2450d36f6818a45))
+
+
+### 📚 Documentation
+
+* add missing /next/* redirects ([#5627](https://github.com/mochajs/mocha/issues/5627)) ([8fa183d](https://github.com/mochajs/mocha/commit/8fa183d592b29346901b55e2fa479c8f598a1ec3))
+
+
+### 🧹 Chores
+
+* cleanup issue templates ([#5624](https://github.com/mochajs/mocha/issues/5624)) ([1972dd7](https://github.com/mochajs/mocha/commit/1972dd76ec66e8e11532bb6aca9157c4f8892d3c))
+* remove unused assets folder ([#5638](https://github.com/mochajs/mocha/issues/5638)) ([ddf8644](https://github.com/mochajs/mocha/commit/ddf864482ff66b1ca46ef7f08e63ca923222e717))
+* update spam filter ([#5645](https://github.com/mochajs/mocha/issues/5645)) ([cf945fb](https://github.com/mochajs/mocha/commit/cf945fb73b7c5a74f0856cabca5b5b1c8a6ff1c8))
+* update tagline ([#5635](https://github.com/mochajs/mocha/issues/5635)) ([8ff0209](https://github.com/mochajs/mocha/commit/8ff0209db575c8231eea77e6ab23e6fe95620c92))
+
+
+### 🤖 Automation
+
+* **deps:** bump OctoGuide/bot in the github-actions group ([#5648](https://github.com/mochajs/mocha/issues/5648)) ([fed6bbd](https://github.com/mochajs/mocha/commit/fed6bbdb891c518e61e8ef4bbf07ed46b469f860))
+* **docs/dev-deps:** use JS-native `fetch` to get supporters data instead of external `needle` ([#5643](https://github.com/mochajs/mocha/issues/5643)) ([e37e56f](https://github.com/mochajs/mocha/commit/e37e56fbe6a1072f1784ef87278d46f7ac48cdb8))
+* initial file implementation for ocotoguide ([#5608](https://github.com/mochajs/mocha/issues/5608)) ([a5f5c64](https://github.com/mochajs/mocha/commit/a5f5c6442505069573a17798a515f267c24a38f3))
+
+## [12.0.0-beta-4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-3...v12.0.0-beta-4) (2026-01-04)
+
+
+### 🌟 Features
+
+* ESM configuration file ([#5397](https://github.com/mochajs/mocha/issues/5397)) ([dff9d78](https://github.com/mochajs/mocha/commit/dff9d7873f2d47a799e0adef338a7d6045ba0731))
+* migrate Markdown lint to `@eslint/markdown` ([#5593](https://github.com/mochajs/mocha/issues/5593)) ([d9e1f0a](https://github.com/mochajs/mocha/commit/d9e1f0aa7e39caa11edb81581c14cd02b3f40b3f))
+
+
+### 🩹 Fixes
+
+* remove `run` and use globalThis `setup` ([#5592](https://github.com/mochajs/mocha/issues/5592)) ([1544c39](https://github.com/mochajs/mocha/commit/1544c39dcd76916cca23a111c88eee8cbb781c24))
+
+
+### 📚 Documentation
+
+* fix v3_older changelog duplicate headings ([#5602](https://github.com/mochajs/mocha/issues/5602)) ([a750518](https://github.com/mochajs/mocha/commit/a7505180b64541ac71639ec3d1193f26e73527d9))
+
+
+### 🧹 Chores
+
+* **ci:** use OIDC token for trusted publishing to `npm` ([#5610](https://github.com/mochajs/mocha/issues/5610)) ([dc0fdb7](https://github.com/mochajs/mocha/commit/dc0fdb767fe46b885f7a0ccfb67acfb453156a3b))
+* create exclusions for nyc ([#5609](https://github.com/mochajs/mocha/issues/5609)) ([702473a](https://github.com/mochajs/mocha/commit/702473a54d9348948a63b4600171afa6956ccb0b))
+* **main:** release 12.0.0-beta-4 ([#5598](https://github.com/mochajs/mocha/issues/5598)) ([424516e](https://github.com/mochajs/mocha/commit/424516ed3c34c6716afbf554425cf5df439cd86c))
+* prevent unwanted Prettier rewrites ([#5591](https://github.com/mochajs/mocha/issues/5591)) ([3ea1578](https://github.com/mochajs/mocha/commit/3ea15789ddb4b77c591d9da36d2476ac359de00d))
+* remove broken browser-test.yml ([#5615](https://github.com/mochajs/mocha/issues/5615)) ([33ce345](https://github.com/mochajs/mocha/commit/33ce345f9ab4f47573a4994c5c01de6eda2af45d))
+* remove legacy `docs/` ([#5583](https://github.com/mochajs/mocha/issues/5583)) ([d8c310e](https://github.com/mochajs/mocha/commit/d8c310e3eddd235be55ad1891cde84c3be6f56f3))
+* revert "chore(main): release 12.0.0-beta-4 ([#5598](https://github.com/mochajs/mocha/issues/5598))" ([#5619](https://github.com/mochajs/mocha/issues/5619)) ([dba8091](https://github.com/mochajs/mocha/commit/dba809196541df415fac2681822f5cd35cf20442))
+
+
+### 🤖 Automation
+
+* **dep:** update `diff` from v7 to v8 ([#5605](https://github.com/mochajs/mocha/issues/5605)) ([8ca311c](https://github.com/mochajs/mocha/commit/8ca311c6c9b0d353b1c9d65b5751296d9baddd83))
+* update npm command for format ([#5603](https://github.com/mochajs/mocha/issues/5603)) ([c6a29cc](https://github.com/mochajs/mocha/commit/c6a29ccb38f81d65100cb2a0e6d73ad4303f58fb))
+
+## [12.0.0-beta-3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-2...v12.0.0-beta-3) (2026-01-01)
+
+
+### 🌟 Features
+
+* add mocha.mjs export ([#5527](https://github.com/mochajs/mocha/issues/5527)) ([e1cf23c](https://github.com/mochajs/mocha/commit/e1cf23cbc2049a375ab9980337dbf2486450f7cb))
+* bump serialize-javascript from 6.0.2 to 7.0.2 ([#5589](https://github.com/mochajs/mocha/issues/5589)) ([24fb1b6](https://github.com/mochajs/mocha/commit/24fb1b6f8a45b4ca93b4577838bc1d9a47c74ec1))
+* bump strip-json-comments from 3 to 5 ([#5484](https://github.com/mochajs/mocha/issues/5484)) ([9b0db24](https://github.com/mochajs/mocha/commit/9b0db24740c65717dcd1838dcafccbfc1c538d3b))
+
+
+### 🩹 Fixes
+
+* allow importing ESM interface and reporters ([#5563](https://github.com/mochajs/mocha/issues/5563)) ([bc9fc84](https://github.com/mochajs/mocha/commit/bc9fc842213d00cf7ac4a4b0de898bf29e38bdad))
+* **docs-next:** backer's logo is consistent regardless of size ([#5594](https://github.com/mochajs/mocha/issues/5594)) ([1a53a10](https://github.com/mochajs/mocha/commit/1a53a100a4f3b83a725ccf3c166dcbefebca8602))
+* surface ts-node compile errors ([#5572](https://github.com/mochajs/mocha/issues/5572)) ([add4cf8](https://github.com/mochajs/mocha/commit/add4cf8166b330c9af4342def643c606459331d7))
+
+
+### 📚 Documentation
+
+* bumped docs-next Astro to ^5.16.6 ([#5574](https://github.com/mochajs/mocha/issues/5574)) ([806222b](https://github.com/mochajs/mocha/commit/806222b0998ffb4d09399090f4ec638e90974427))
+* fix light mode Astro accent text color ([#5585](https://github.com/mochajs/mocha/issues/5585)) ([9cc3ada](https://github.com/mochajs/mocha/commit/9cc3ada85b4ab4a4f2a8c7dc1b9d9ff8f101ffc1))
+* update Contributor License Agreement link in CONTRIBUTING.md ([#5567](https://github.com/mochajs/mocha/issues/5567)) ([410ce0d](https://github.com/mochajs/mocha/commit/410ce0d2a0f799aaca2c0bc627294d70c62dd3f4))
+
+
+### 🧹 Chores
+
+* normalized ESLint config to v9's recommended structure ([#5575](https://github.com/mochajs/mocha/issues/5575)) ([7f9ed1f](https://github.com/mochajs/mocha/commit/7f9ed1fb3480e0658c2c7d84c60a1b505c941ce5))
+* update Rollup to v4 ([#5510](https://github.com/mochajs/mocha/issues/5510)) ([cafa782](https://github.com/mochajs/mocha/commit/cafa782f010021e7055f8482ede2c02c6503f0a0))
+
+
+### 🤖 Automation
+
+* **dev-deps:** upgrade `eslint` from v8 to v9 ([#5559](https://github.com/mochajs/mocha/issues/5559)) ([bb24ca8](https://github.com/mochajs/mocha/commit/bb24ca8fde15471ff68d5b01b74c2d7e6047d966))
+* **dev-deps:** upgrade `markdownlint-cli` to latest v0.46.0  ([#5560](https://github.com/mochajs/mocha/issues/5560)) ([a124f1d](https://github.com/mochajs/mocha/commit/a124f1d3b7d0f8277962cae295cd43878294e183))
+* **dev-deps:** upgrade `nyc` from 15 to 17 ([#5556](https://github.com/mochajs/mocha/issues/5556)) ([599ab01](https://github.com/mochajs/mocha/commit/599ab013f526e78b3888a092a928ea4bc67138c0))
+
 ## [12.0.0-beta-2](https://github.com/mochajs/mocha/compare/v12.0.0-beta-1...v12.0.0-beta-2) (2025-11-25)
 
 
