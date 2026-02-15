@@ -1,5 +1,39 @@
 # Changelog
 
+## [12.0.0-beta-10](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9...v12.0.0-beta-10) (2026-02-15)
+
+
+### 🌟 Features
+
+* remove Sauce Labs ([#5700](https://github.com/mochajs/mocha/issues/5700)) ([625c34e](https://github.com/mochajs/mocha/commit/625c34e8469562dbde8440c2b4d64e820f7019fa))
+
+
+### 🩹 Fixes
+
+* change Pending to properly extend Error ([#5679](https://github.com/mochajs/mocha/issues/5679)) ([158effd](https://github.com/mochajs/mocha/commit/158effd7de677c21b3a4ccd79ce0879fe0f97f8b))
+
+
+### 📚 Documentation
+
+* fix client redirects ([#5697](https://github.com/mochajs/mocha/issues/5697)) ([dd9145d](https://github.com/mochajs/mocha/commit/dd9145dd9c5a684aa918ca5ed10155293df2bb91)), closes [#5696](https://github.com/mochajs/mocha/issues/5696)
+
+
+### 🧹 Chores
+
+* Configure Renovate ([#5678](https://github.com/mochajs/mocha/issues/5678)) ([a9c9b90](https://github.com/mochajs/mocha/commit/a9c9b90098a831d82e69d82bfc7ce8c7aa749911))
+* **deps:** update dependency astro to v5.17.1 ([#5703](https://github.com/mochajs/mocha/issues/5703)) ([ec3d1fa](https://github.com/mochajs/mocha/commit/ec3d1fa02e285a4430942942c11c376e63d395ca))
+* **deps:** update dependency chai to v4.5.0 ([#5705](https://github.com/mochajs/mocha/issues/5705)) ([870f9f8](https://github.com/mochajs/mocha/commit/870f9f8df7d1f9cace40bfc29a9b5b79a26ccb4e))
+* **deps:** update dependency knip to v5.83.1 ([#5708](https://github.com/mochajs/mocha/issues/5708)) ([d833413](https://github.com/mochajs/mocha/commit/d833413622807c91cc2dea243c2be3518e2fe10b))
+* **deps:** update dependency rollup to v4.57.1 ([#5710](https://github.com/mochajs/mocha/issues/5710)) ([178749d](https://github.com/mochajs/mocha/commit/178749da1bee978b5ef109a253337ae88206365c))
+* **deps:** update dependency unist-util-visit to v5.1.0 ([#5711](https://github.com/mochajs/mocha/issues/5711)) ([7ede894](https://github.com/mochajs/mocha/commit/7ede8943ff8f7925b51d4e4a226ee76b0a77619d))
+* **deps:** update dependency workerpool to v9.3.4 ([#5715](https://github.com/mochajs/mocha/issues/5715)) ([c030a3b](https://github.com/mochajs/mocha/commit/c030a3bd4774db679ac8dc7d56e705975f1a1b6e))
+* switch Suite from util.inherits to ES2015 classes ([#5179](https://github.com/mochajs/mocha/issues/5179)) ([1ce690e](https://github.com/mochajs/mocha/commit/1ce690e590ca7bff7f47b108d3a5cc61dde6aa1b))
+
+
+### 🤖 Automation
+
+* run `npm audit fix` ([#5695](https://github.com/mochajs/mocha/issues/5695)) ([c7b00b0](https://github.com/mochajs/mocha/commit/c7b00b0e4f03583c4dcc407f28a5453df436f32b))
+
 ## [12.0.0-beta-9](https://github.com/mochajs/mocha/compare/v12.0.0-beta-8...v12.0.0-beta-9) (2026-02-13)
 
 
