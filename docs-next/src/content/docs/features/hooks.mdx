@@ -59,7 +59,7 @@ For example, you may wish to populate database with dummy content before each te
 
 ```js
 describe("Connection", function () {
-  var db = new Connection(),
+  const db = new Connection(),
     tobi = new User("tobi"),
     loki = new User("loki"),
     jane = new User("jane");
@@ -100,7 +100,7 @@ Run `mocha` with the `--delay` flag.
 This will attach a special callback function, `run()`, to the global context:
 
 ```js
-const assert = require("assert");
+import assert from "node:assert";
 
 const fn = async (x) => {
   return new Promise((resolve) => {
