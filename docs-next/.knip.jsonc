@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
+  "entry": ["src/content/**/*.mdx!", "src/content/config.ts!"],
+  "project": ["src/**/*.{ts,js,mjs,cjs,astro}"],
+  "astro": {
+    "config": "astro.config.ts",
+  },
+  "rules": {
+    "exports": "off",
+  },
+}
