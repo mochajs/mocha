@@ -151,7 +151,7 @@
     "semver": "^7.7.2",
     "sinon": "^9.0.3",
     "typescript": "^5.8.3",
-    "unexpected": "^13.0.0",
+    "unexpected": "^11.14.0",
     "unexpected-eventemitter": "^2.2.0",
     "unexpected-map": "^2.0.0",
     "unexpected-set": "^3.0.0",
