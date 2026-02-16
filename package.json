@@ -149,7 +149,7 @@
     "rollup-plugin-polyfill-node": "^0.13.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "semver": "^7.7.2",
-    "sinon": "^9.0.3",
+    "sinon": "^21.0.0",
     "typescript": "^5.8.3",
     "unexpected": "^11.14.0",
     "unexpected-eventemitter": "^2.2.0",
