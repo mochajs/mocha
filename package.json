@@ -144,7 +144,7 @@
     "remark-github": "^11.2.2",
     "remark-inline-links": "^6.0.1",
     "rewiremock": "^3.14.3",
-    "rimraf": "^3.0.2",
+    "rimraf": "^6.0.0",
     "rollup": "^4.52.3",
     "rollup-plugin-polyfill-node": "^0.13.0",
     "rollup-plugin-visualizer": "^6.0.5",
