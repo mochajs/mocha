@@ -6,9 +6,8 @@ const sinon = require("sinon");
 const { EventEmitter } = require("node:events");
 
 const DUMB_FIXTURE_PATH = require.resolve("./fixtures/dumb-module.fixture.js");
-const DUMBER_FIXTURE_PATH = require.resolve(
-  "./fixtures/dumber-module.fixture.js",
-);
+const DUMBER_FIXTURE_PATH =
+  require.resolve("./fixtures/dumber-module.fixture.js");
 
 describe("Mocha", function () {
   let stubs;
