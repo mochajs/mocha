@@ -105,10 +105,7 @@ describe("XUnit reporter", function () {
             path.basename(expectedOutput),
           );
           touchFile(path.dirname(invalidPath));
-
-          // this sometimes takes more than 1 second in GitHub Actions
-          // https://github.com/mochajs/mocha/issues/5361
-        }).timeout(2000);
+        });
 
         it("should throw system error", function () {
           var options = {
