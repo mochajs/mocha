@@ -4,7 +4,9 @@
  * For now, if you're an external user, you should use the types from @types/mocha.
  */
 
-import type { FSWatcher, MatchFunction } from "chokidar" with { "resolution-mode": "import" };
+import type { FSWatcher, MatchFunction } from "chokidar" with {
+  "resolution-mode": "import",
+};
 
 import type { constants } from "./error-constants.js";
 import type Mocha from "./mocha.js";
