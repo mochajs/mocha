@@ -130,7 +130,7 @@
     "eslint-plugin-n": "^17.23.1",
     "fail-on-errors-webpack-plugin": "^3.0.0",
     "globals": "^16.5.0",
-    "installed-check": "^9.3.0",
+    "installed-check": "^10.0.0",
     "karma": "^6.4.2",
     "karma-chrome-launcher": "^3.2.0",
     "karma-mocha": "^2.0.1",
