@@ -21,7 +21,8 @@ export async function resolve(specifier, context, defaultResolve) {
       }
     }
   } catch (err) {
-    // If URL construction fails, just pass through to default resolver
+    // URL construction can fail for invalid specifiers, but the default resolver
+    // will handle them appropriately, so we just pass through
   }
   return await defaultResolve(specifier, context, defaultResolve);
 }
