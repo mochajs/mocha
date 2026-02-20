@@ -11,8 +11,17 @@ import {fileURLToPath} from 'url'
  * @returns {Promise<{ url: string }>}
  */
 export async function resolve(specifier, context, defaultResolve) {
-  const extension = path.extname(
-    fileURLToPath(/**@type {import('url').URL}*/ (new URL(specifier, context.parentURL))),
-  )
-  return await defaultResolve(specifier.replace('.ts', '.mjs'), context, defaultResolve)
+  try {
+    const url = new URL(specifier, context.parentURL);
+    // Only process file: URLs
+    if (url.protocol === 'file:') {
+      const extension = path.extname(fileURLToPath(url));
+      if (extension === '.ts') {
+        return await defaultResolve(specifier.replace('.ts', '.mjs'), context, defaultResolve);
+      }
+    }
+  } catch (err) {
+    // If URL construction fails, just pass through to default resolver
+  }
+  return await defaultResolve(specifier, context, defaultResolve);
 }
