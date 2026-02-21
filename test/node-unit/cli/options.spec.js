@@ -132,7 +132,12 @@ describe("options", function () {
           beforeEach(function () {
             readFileSync = sinon.stub();
             // package.json
-            readFileSync.onFirstCall().throws("bad file message");
+            const error = new Error("bad file message");
+            // Make error stringify to just the message (like fs errors do in template strings in older Node/Sinon)
+            error.toString = function () {
+              return this.message;
+            };
+            readFileSync.onFirstCall().throws(error);
             findConfig = sinon.stub().returns("/some/.mocharc.json");
             loadConfig = sinon.stub().returns({});
             findupSync = sinon.stub();
