@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+    types: [opened, synchronize, reopened, edited]
     paths-ignore: ["*.md", "docs/**"]
   workflow_dispatch:
 
