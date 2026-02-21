@@ -19,7 +19,7 @@ const proxyLoadOptions = ({
     "node:fs": r.with({ readFileSync }).directChildOnly(),
     [mocharcPath]: defaults,
     "find-up": r
-      .by(() => (findupSync ? { sync: findupSync } : {}))
+      .by(() => (findupSync ? { findUpSync: findupSync } : {}))
       .directChildOnly(),
     [configPath]: r.with({ findConfig, loadConfig }).directChildOnly(),
   })).loadOptions;
