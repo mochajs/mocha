@@ -150,9 +150,9 @@ Even if you step down or are removed, if you can come back and be regularly acti
 
 #### About "Owners"
 
-Some maintainers will have full admin rights to the [mochajs org](https://github.com/mochajs) and/or will have access to publish to npm.
+Some maintainers will have full admin rights to the [mochajs GitHub org](https://github.com/mochajs) and/or will have access to publish to npm.
 
-- Those with publish access are expected to use npm's 2FA.
+- Those with publish access must use npm's 2FA.
 - This level of access will be granted by the current owners to those maintainers who have earned the project's trust.
 
 ## Mocha's Decision-Making Process
@@ -306,9 +306,9 @@ This may also apply to questions which receive a lot of 👍 reactions.
 
 ### Closing Issues
 
-Write "closes #<ISSUE>" or "resolves #<ISSUE>" in a commit or PR to have the original issue closed automatically once the PR is merged.
+Write "closes #000" (where 000 is the issue number) or "resolves #000" in a commit or PR to have the original issue closed automatically once the PR is merged.
 
-For any issue which is a duplicate, write "duplicate of #<ISSUE>" in a new comment, and close the issue.
+For any issue which is a duplicate, write "duplicate of #000" in a new comment, and close the issue.
 [Read more about marking issues as duplicates](https://help.github.com/articles/about-duplicate-issues-and-pull-requests/).
 
 If the issue is a support question, and you believe it has been answered, close the issue.
@@ -399,7 +399,7 @@ By using milestones, we can cherry-pick non-breaking changes into minor or patch
 
 ## Mocha's Release Process
 
-Releases are managed by [release-please](https://github.com/googleapis/release-please) and require manual approval after tests pass.
+Releases are managed by [Release Please](https://github.com/googleapis/release-please) and require manual approval after tests pass.
 To create a new release after merging changes, merge the _`chore(main): release...`_ pull request that its automation has created.
 Doing so will:
 
@@ -407,6 +407,28 @@ Doing so will:
 2. Cause a CI job to run on `main` that will publish the package to npm
 
 You'll then need to go to the `chore(main): release ...` commit _Publish to npm_ job run logs and click the _Review pending deployments_ link.
+
+### Major releases
+
+For major releases, we follow an even-odd pattern:
+
+- Even versions only update dependencies and avoid breaking functional changes
+- Odd versions can update dependencies and add breaking functional changes
+
+This results in even versions being quite small but easy to migrate to, and odd versions can usually focus on the functional changes.
+
+For large releases, we recommend betas, then release candidates (RCs), then a full release.
+Betas are when most features are available, but more will likely be added before full release.
+RCs are almost ready for release, but would benefit from user testing before a full release.
+
+To start a new major version beta, add `Release-As: 12.0.0-beta-1` to the additional details of your PR commit message.
+This must be part the last line of the commit message, not the PR description.
+Release Please respects this property and will update accordingly.
+You can also set Release Please to prelease mode to increment the beta number.
+
+To transition to an RC, add `Release-As: 12.0.0-rc-1` at the end of the PR commit message.
+
+To transition from betas or RCs to a full release, just change Release Please back to `prerelease: false`.
 
 ## About The OpenJS Foundation
 

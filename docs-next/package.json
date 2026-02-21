@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "docs": "cd .. && npm i && cd docs-next && npm i && npm run generate && npm run build && cp _redirects dist/_redirects",
     "generate": "node ../docs/_data/supporters.js --write-supporters-json",
+    "lint:knip": "knip --cache",
     "preview": "astro preview",
     "start": "astro dev"
   },
@@ -15,11 +16,10 @@
     "@astrojs/check": "^0.9.6",
     "@astrojs/starlight": "^0.37.1",
     "astro": "^5.16.6",
-    "astro-og-canvas": "^0.7.2",
-    "debug": "^4.4.3",
-    "sharp": "^0.34.5",
     "starlight-package-managers": "^0.12.0",
-    "typescript": "^5.9.3",
-    "unist-util-visit": "^5.0.0"
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "knip": "^5.83.1"
   }
 }
