@@ -134,3 +134,21 @@ Now that the pull request exists, some tasks will be run on it:
 1. Once you've addressed all the feedback you can, [re-request review on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews#re-requesting-a-review).
 
 Join us in [our Discord](https://discord.gg/KeDn2uXhER)!
+
+## 🌐 External Services
+
+Mocha uses several external services for project infrastructure:
+
+- **[Codecov](https://app.codecov.io/gh/mochajs/mocha)**: Code coverage tracking. PRs must not decrease coverage. Contributors should add the Codecov GitHub app to upload coverage from forks.
+
+- **[Discord](https://discord.gg/KeDn2uXhER)**: Official community chat for support, discussions, and connecting with maintainers and users.
+
+- **[EasyCLA](https://cla.js.foundation/mochajs/mocha)**: Contributor License Agreement system via Linux Foundation. All code contributions require a signed CLA. A bot prompts contributors on their first PR.
+
+- **Netlify**: Hosts the documentation website at mochajs.org. Provides automatic deploy previews for documentation PRs and nightly scheduled deploys to update supporter information.
+
+- **[npm registry](https://www.npmjs.com/package/mocha)**: Package distribution. Mocha is also available via GitHub Releases.
+
+- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers.
+
+- **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
