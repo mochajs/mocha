@@ -1,0 +1,33 @@
+name: Dependency Review
+
+# Reviews dependencies in PRs for security vulnerabilities and license issues
+# Prevents vulnerable or incompatible dependencies from being merged
+# Learn more: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          show-progress: false
+          
+      - uses: actions/dependency-review-action@v4
+        with:
+          # Fail the build if vulnerabilities are found
+          fail-on-severity: moderate
+          # Fail if license is not compatible
+          # Mocha is MIT licensed, so we should be compatible with permissive licenses
+          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0, LGPL-2.0, LGPL-2.1, LGPL-3.0
+          # Comment on the PR with the review
+          comment-summary-in-pr: always
+          # Allow dev dependencies to have vulnerabilities (not shipped)
+          fail-on-scopes: runtime
