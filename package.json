@@ -48,7 +48,7 @@
     "docs": "cd docs-next; npm run docs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint:installed-check": "installed-check --engine-check",
+    "lint:installed-check": "installed-check --engine-check --ignore-dev",
     "lint:knip": "knip --cache",
     "lint:code": "eslint . --max-warnings 0",
     "lint": "run-p lint:*",
