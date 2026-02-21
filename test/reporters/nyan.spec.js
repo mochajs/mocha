@@ -27,7 +27,7 @@ describe("Nyan reporter", function () {
     var runReporter = makeRunReporter(NyanCat);
 
     describe("on 'start' event", function () {
-      it("should call draw", function () {
+      it("should call draw", async function () {
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
           generateColors: noop,
@@ -35,28 +35,28 @@ describe("Nyan reporter", function () {
 
         var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'pending' event", function () {
-      it("should call draw", function () {
+      it("should call draw", async function () {
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),
           generateColors: noop,
         };
         var runner = createMockRunner("pending", EVENT_TEST_PENDING);
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'pass' event", function () {
-      it("should call draw", function () {
+      it("should call draw", async function () {
         var test = {
           duration: "",
           slow: noop,
@@ -73,14 +73,14 @@ describe("Nyan reporter", function () {
           test,
         );
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'fail' event", function () {
-      it("should call draw", function () {
+      it("should call draw", async function () {
         var test = {
           err: "",
         };
@@ -96,14 +96,14 @@ describe("Nyan reporter", function () {
           test,
         );
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.draw.called, "to be true");
       });
     });
 
     describe("on 'end' event", function () {
-      it("should call epilogue", function () {
+      it("should call epilogue", async function () {
         var fakeThis = {
           draw: noop,
           epilogue: sinon.stub().callsFake(noop),
@@ -111,12 +111,12 @@ describe("Nyan reporter", function () {
         };
         var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.epilogue.called, "to be true");
       });
 
-      it("should write numberOfLines amount of newlines", function () {
+      it("should write numberOfLines amount of newlines", async function () {
         var expectedNumberOfLines = 4;
         var fakeThis = {
           draw: noop,
@@ -125,7 +125,7 @@ describe("Nyan reporter", function () {
         };
         var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
-        var stdout = runReporter(fakeThis, runner, options);
+        var { stdout } = await runReporter(fakeThis, runner, options);
 
         var isBlankLine = function (value) {
           return value === "\n";
@@ -138,7 +138,7 @@ describe("Nyan reporter", function () {
         );
       });
 
-      it("should call Base show", function () {
+      it("should call Base show", async function () {
         var showCursorStub = sinon.stub(Base.cursor, "show");
         var fakeThis = {
           draw: noop,
@@ -147,7 +147,7 @@ describe("Nyan reporter", function () {
         };
         var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
         sinon.restore();
 
         expect(showCursorStub.called, "to be true");
