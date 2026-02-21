@@ -158,6 +158,10 @@ export default defineConfig({
               label: "Third party UIs",
               slug: "explainers/third-party-uis",
             },
+            {
+              label: "TypeScript",
+              slug: "explainers/typescript",
+            },
           ],
           label: "Explainers",
         },

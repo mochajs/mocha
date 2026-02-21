@@ -1,0 +1,56 @@
+---
+title: TypeScript
+description: How to use Mocha with TypeScript
+---
+
+import { PackageManagers } from "starlight-package-managers";
+
+Mocha supports TypeScript out of the box using [Node.js type stripping](https://nodejs.org/api/typescript.html#type-stripping). Type stripping was added in Node 22.6.0 via the `--experimental-strip-types` flag and became default behavior in Node 22.12.0. Type stripping is [stable as of November 2025](https://github.com/nodejs/node/releases/tag/v25.2.0). Type-stripping was backported to Node 20.19.0 as default behavior.
+
+## Quick Start
+
+Install Mocha, Mocha's types, and Node types:
+
+<PackageManagers dev type="add" pkg="mocha @types/mocha @types/node" />
+
+Create a test file:
+
+```typescript
+// example.test.ts
+import * as assert from "node:assert";
+
+describe("Array", function () {
+  it("should return -1 when value is not present", function () {
+    assert.equal([1, 2, 3].indexOf(4), -1);
+  });
+});
+```
+
+:::note
+At this point, your IDE may complain "Cannot find name 'describe'" or "Cannot find module 'node:assert' or its corresponding type declarations". This shouldn't stop the tests from working. For details, see [troubleshooting](#troubleshooting).
+:::
+
+Run your tests:
+
+```bash
+npx mocha example.test.ts
+
+# Older versions of Node require an experimental flag
+npx mocha --experimental-strip-types example.test.ts
+```
+
+## Troubleshooting
+
+In case of IDE issues not finding types, you can optionally add an empty `tsconfig.json` at the root of your project:
+
+```js
+// tsconfig.json
+{
+}
+```
+
+Upon restarting your IDE, any type errors should go away.
+
+## More Examples
+
+Check out [mocha-examples](https://github.com/mochajs/mocha-examples) for complete TypeScript project setups including configs for `ts-node`, `tsx`, and other tools.
