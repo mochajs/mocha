@@ -8,20 +8,20 @@ There are a lot of reasons why you might want to automate running the tests usin
 Here is an example of using Mocha programmatically:
 
 ```javascript
-var Mocha = require("mocha"),
-  fs = require("fs"),
-  path = require("path");
+import Mocha from "mocha";
+import fs from "node:fs";
+import path from "node:path";
 
 // Instantiate a Mocha instance.
-var mocha = new Mocha();
+const mocha = new Mocha();
 
-var testDir = "some/dir/test";
+const testDir = "some/dir/test";
 
 // Add each .js file to the mocha instance
 fs.readdirSync(testDir)
   .filter(function (file) {
     // Only keep the .js files
-    return file.substr(-3) === ".js";
+    return file.endsWith(".js");
   })
   .forEach(function (file) {
     mocha.addFile(path.join(testDir, file));
@@ -48,7 +48,7 @@ There are two ways to set the options to run the tests.
 Firstly, you can set these options in the constructor object:
 
 ```javascript
-var mocha = new Mocha({
+const mocha = new Mocha({
   ui: "tdd",
   reporter: "list",
 });

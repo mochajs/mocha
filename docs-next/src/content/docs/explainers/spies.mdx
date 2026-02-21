@@ -6,13 +6,13 @@ title: Spies
 Mocha does not come equipped with spies, though libraries like [Sinon](https://github.com/sinonjs/sinon) provide this behaviour if desired. The following is an example of Mocha utilizing Sinon and [Should.js](https://github.com/shouldjs/should.js) to test an EventEmitter:
 
 ```javascript
-var sinon = require("sinon"),
-  EventEmitter = require("events").EventEmitter;
+import sinon from "sinon";
+import { EventEmitter } from "node:events";
 
 describe("EventEmitter", function () {
   describe("#emit()", function () {
     it("should invoke the callback", function () {
-      var spy = sinon.spy(),
+      const spy = sinon.spy(),
         emitter = new EventEmitter();
 
       emitter.on("foo", spy);
@@ -21,7 +21,7 @@ describe("EventEmitter", function () {
     });
 
     it("should pass arguments to the callbacks", function () {
-      var spy = sinon.spy(),
+      const spy = sinon.spy(),
         emitter = new EventEmitter();
 
       emitter.on("foo", spy);
@@ -39,14 +39,14 @@ The following is the same test, performed without any special spy library, utili
 describe("EventEmitter", function () {
   describe("#emit()", function () {
     it("should invoke the callback", function (done) {
-      var emitter = new EventEmitter();
+      const emitter = new EventEmitter();
 
       emitter.on("foo", done);
       emitter.emit("foo");
     });
 
     it("should pass arguments to the callbacks", function (done) {
-      var emitter = new EventEmitter();
+      const emitter = new EventEmitter();
 
       emitter.on("foo", function (a, b) {
         a.should.equal("bar");

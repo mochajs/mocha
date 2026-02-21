@@ -86,10 +86,12 @@ As with other hooks, `this` refers to the current context object:
 ```js
 // test/hooks.mjs
 
+import os from "node:os";
+
 export const mochaHooks = {
   beforeAll() {
     // skip all tests for bob
-    if (require("os").userInfo().username === "bob") {
+    if (os.userInfo().username === "bob") {
       return this.skip();
     }
   },
