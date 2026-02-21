@@ -12,6 +12,7 @@ const {
   createTempDir,
   DEFAULT_FIXTURE,
 } = require("../helpers");
+const debug = require("debug")("mocha:test:integration:options:watch");
 
 describe("--watch", function () {
   describe("when enabled", function () {
@@ -66,7 +67,9 @@ describe("--watch", function () {
         copyFixture(DEFAULT_FIXTURE, testFile);
 
         return runMochaWatchJSONAsync(["--parallel", testFile], tempDir, () => {
+          debug("Hello world");
           touchFile(testFile);
+          debug("All done");
         }).then((results) => {
           expect(results, "to have length", 2);
         });
