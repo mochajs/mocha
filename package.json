@@ -109,7 +109,7 @@
     "supports-color": "^8.1.1",
     "workerpool": "^9.2.0",
     "yargs": "^17.7.2",
-    "yargs-parser": "^21.1.1",
+    "yargs-parser": "^22.0.0",
     "yargs-unparser": "^2.0.0"
   },
   "devDependencies": {
