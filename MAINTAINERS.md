@@ -420,7 +420,6 @@ This results in even versions being quite small but easy to migrate to, and odd 
 For large releases, we recommend betas, then release candidates (RCs), then a full release.
 Betas are when most features are available, but more will likely be added before full release.
 RCs are almost ready for release, but would benefit from user testing before a full release.
-Betas and/or RCs can be skipped, neither of those phases are ever necessary.
 
 To start a new major version beta, add `Release-As: 12.0.0-beta-1` to the additional details of your PR commit message.
 This must be part the last line of the commit message, not the PR description.
