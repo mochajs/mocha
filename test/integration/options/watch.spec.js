@@ -37,7 +37,7 @@ describe("--watch", function () {
       cleanup();
     });
 
-    it("reruns test when watched test file is touched", function () {
+    it("reruns test when watched test file is touched @bare", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
