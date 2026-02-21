@@ -10,7 +10,7 @@ Mocha supports configuration files, typical of modern command-line tools, in sev
 
 - **JavaScript**: Create a `.mocharc.js` (or `.mocharc.cjs` when using [`"type"="module"`](/explainers/nodejs-native-esm-support) in your `package.json`)
   in your project's root directory, and export an object (`module.exports = {/* ... */}`) containing your configuration. For native ESM and using `type="module"`
-  or using `.mjs`, use a default export (`default export  {/* ... */}`).
+  or using `.mjs`, use a default export (`export default  {/* ... */}`).
 - **YAML**: Create a `.mocharc.yaml` (or `.mocharc.yml`) in your project's root directory.
 - **JSON**: Create a `.mocharc.json` (or `.mocharc.jsonc`) in your project's root directory.
   Comments--while not valid JSON--are allowed in this file, and will be ignored by Mocha.
