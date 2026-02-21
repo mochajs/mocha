@@ -4,7 +4,7 @@ var Mocha = require("../../lib/mocha");
 var Runnable = Mocha.Runnable;
 var Suite = Mocha.Suite;
 var sinon = require("sinon");
-const { TIMEOUT } = require("../../lib/error-constants").constants;
+const { TIMEOUT } = require("../../lib/error-constants.mjs").constants;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe("Runnable(title, fn)", function () {

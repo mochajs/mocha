@@ -3,11 +3,11 @@
 const path = require("node:path");
 const sinon = require("sinon");
 const Mocha = require("../../lib/mocha");
-const PendingError = require("../../lib/pending");
+const PendingError = require("../../lib/pending.mjs").default;
 const { Suite, Runner, Test, Hook, Runnable } = Mocha;
 const { noop } = Mocha.utils;
 const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =
-  require("../../lib/error-constants").constants;
+  require("../../lib/error-constants.mjs").constants;
 
 const {
   EVENT_HOOK_BEGIN,
