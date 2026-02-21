@@ -208,9 +208,11 @@ describe("Mocha", function () {
       describe("when `enableGlobalTeardown` option is present", function () {
         it("should configure global teardown fixtures", function () {
           const mocha = new Mocha({ enableGlobalTeardown: 1 });
-          expect(mocha.enableGlobalTeardown, "to have a call satisfying", [
-            1,
-          ]).and("was called once");
+          expect(
+            mocha.enableGlobalTeardown,
+            "to have a call satisfying",
+            [1],
+          ).and("was called once");
         });
       });
     });
