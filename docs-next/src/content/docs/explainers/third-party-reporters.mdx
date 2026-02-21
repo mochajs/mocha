@@ -12,7 +12,7 @@ Here is a minimalistic sample reporter, which you can use by executing: `mocha -
 var mocha = require("mocha");
 module.exports = MyReporter;
 
-function MyReporter(runner) {
+class MyReporter(runner) {
   mocha.reporters.Base.call(this, runner);
   var passes = 0;
   var failures = 0;
@@ -32,8 +32,8 @@ function MyReporter(runner) {
   });
 }
 
-// To have this reporter "extend" a built-in reporter uncomment the following line:
-// mocha.utils.inherits(MyReporter, mocha.reporters.Spec);
+// To have this reporter "extend" a built-in reporter, change it to extend:
+// class MyReporter extends mocha.reporters.Spec {
 ```
 
 For details look at the implementations in [lib/reporters/\*](https://github.com/mochajs/mocha/tree/main/lib/reporters).
