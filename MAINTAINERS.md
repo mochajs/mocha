@@ -426,7 +426,11 @@ This must be part the last line of the commit message, not the PR description.
 Release Please respects this property and will update accordingly.
 You can also set Release Please to prelease mode to increment the beta number.
 
-To transition to an RC, add `Release-As: 12.0.0-rc-1` at the end of the PR commit message.
+> **Important:** Always use a dot (`.`) as the separator between the pre-release label and the number (e.g. `beta.1`, not `beta-1`).
+> The `semver` library (used by npm) treats dot-separated numeric identifiers numerically, so `beta.10 > beta.9`.
+> With a dash separator, `beta-10` is a single string identifier and sorts before `beta-9` alphabetically.
+
+To transition to an RC, add `Release-As: 12.0.0-rc.1` at the end of the PR commit message.
 
 To transition from betas or RCs to a full release, just change Release Please back to `prerelease: false`.
 
