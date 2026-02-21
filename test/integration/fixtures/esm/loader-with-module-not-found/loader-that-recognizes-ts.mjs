@@ -1,6 +1,3 @@
-import path from 'path'
-import {fileURLToPath} from 'url'
-
 /**
  * @param {string} specifier
  * @param {{
@@ -11,6 +8,7 @@ import {fileURLToPath} from 'url'
  * @returns {Promise<{ url: string }>}
  */
 export async function resolve(specifier, context, defaultResolve) {
+<<<<<<< HEAD
   try {
     const url = new URL(specifier, context.parentURL);
     // Only process file: URLs
@@ -25,4 +23,11 @@ export async function resolve(specifier, context, defaultResolve) {
     // will handle them appropriately, so we just pass through
   }
   return await defaultResolve(specifier, context, defaultResolve);
+=======
+  return await defaultResolve(
+    specifier.replace('.ts', '.mjs'),
+    context,
+    defaultResolve,
+  );
+>>>>>>> 95c9d75120078e4c1fbb87d23f4fd7ec1f8a5405
 }
