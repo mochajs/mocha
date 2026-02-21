@@ -40,7 +40,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^20.19.0 || ^22.12.0 || >=23.0.0"
   },
   "scripts": {
     "build": "rollup -c ./rollup.config.mjs",
