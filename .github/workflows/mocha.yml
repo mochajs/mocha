@@ -9,6 +9,7 @@ on:
     branches:
       - main
     paths-ignore: ["*.md", "docs/**", "docs-next/**", ".github/**", ".prettierignore", "AUTHORS", "LICENSE"]
+    types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
 
 permissions:
