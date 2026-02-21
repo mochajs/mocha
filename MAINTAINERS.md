@@ -421,7 +421,7 @@ For large releases, we recommend betas, then release candidates (RCs), then a fu
 Betas are when most features are available, but more will likely be added before full release.
 RCs are almost ready for release, but would benefit from user testing before a full release.
 
-To start a new major version beta, add `Release-As: 12.0.0-beta-1` to the additional details of your PR commit message.
+To start a new major version beta, add `Release-As: 12.0.0-beta.1` to the additional details of your PR commit message.
 This must be part the last line of the commit message, not the PR description.
 Release Please respects this property and will update accordingly.
 You can also set Release Please to prelease mode to increment the beta number.

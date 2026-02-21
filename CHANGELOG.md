@@ -1,6 +1,6 @@
 # Changelog
 
-## [12.0.0-beta-10](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9...v12.0.0-beta-10) (2026-02-21)
+## [12.0.0-beta.10](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9...v12.0.0-beta.10) (2026-02-21)
 
 
 ### 🌟 Features
