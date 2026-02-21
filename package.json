@@ -157,7 +157,7 @@
     "unexpected-set": "^3.0.0",
     "unexpected-sinon": "^10.11.2",
     "webpack": "^5.67.0",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^6.0.0"
   },
   "files": [
     "bin/*mocha*",
