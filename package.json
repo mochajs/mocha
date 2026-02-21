@@ -123,7 +123,7 @@
     "@test/esm-only-loader": "./test/compiler-fixtures/esm-only-loader",
     "@types/node": "^22.15.3",
     "@types/yargs": "^17.0.33",
-    "chai": "^4.3.4",
+    "chai": "^6.0.0",
     "coffeescript": "^2.6.1",
     "cross-env": "^10.0.0",
     "eslint": "^10.0.0",
