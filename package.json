@@ -48,7 +48,7 @@
     "docs": "cd docs-next; npm run docs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint:installed-check": "installed-check --engine-check",
+    "lint:installed-check": "installed-check --engine-check --ignore-dev",
     "lint:knip": "knip --cache",
     "lint:code": "eslint . --max-warnings 0",
     "lint": "run-p lint:*",
@@ -113,7 +113,7 @@
     "yargs-unparser": "^2.0.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.0",
     "@eslint/markdown": "^7.5.1",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
@@ -126,7 +126,7 @@
     "chai": "^4.3.4",
     "coffeescript": "^2.6.1",
     "cross-env": "^10.0.0",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "eslint-plugin-n": "^17.23.1",
     "fail-on-errors-webpack-plugin": "^3.0.0",
     "globals": "^16.5.0",
