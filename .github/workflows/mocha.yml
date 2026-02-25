@@ -8,7 +8,6 @@ on:
       [
         "*.md",
         "docs/**",
-        "docs-next/**",
         ".github/**",
         ".prettierignore",
         "AUTHORS",
@@ -21,7 +20,6 @@ on:
       [
         "*.md",
         "docs/**",
-        "docs-next/**",
         ".github/**",
         ".prettierignore",
         "AUTHORS",
