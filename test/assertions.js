@@ -1,7 +1,7 @@
 "use strict";
 
 const { version } = require("../package.json");
-const escapeRe = require("escape-string-regexp");
+const escapeRe = require("tiny-escape");
 
 module.exports = {
   name: "unexpected-mocha-internal",

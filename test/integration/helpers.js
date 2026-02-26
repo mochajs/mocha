@@ -1,6 +1,6 @@
 "use strict";
 
-const escapeRegExp = require("escape-string-regexp");
+const escapeRegExp = require("tiny-escape");
 const os = require("node:os");
 const fs = require("node:fs");
 const fsP = require("node:fs/promises");
