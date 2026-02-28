@@ -3,7 +3,7 @@
 const path = require("node:path");
 const sinon = require("sinon");
 const Mocha = require("../../lib/mocha");
-const Pending = require("../../lib/pending");
+const PendingError = require("../../lib/pending");
 const { Suite, Runner, Test, Hook, Runnable } = Mocha;
 const { noop } = Mocha.utils;
 const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =
@@ -966,9 +966,9 @@ describe("Runner", function () {
           });
         });
 
-        describe("when argument is a Pending", function () {
+        describe("when argument is a PendingError", function () {
           it("should ignore argument and return", function () {
-            var err = new Pending();
+            var err = new PendingError();
             expect(runner.uncaught(err), "to be undefined");
           });
         });

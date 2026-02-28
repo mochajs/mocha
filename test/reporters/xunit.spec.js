@@ -1,8 +1,8 @@
 "use strict";
 
-var EventEmitter = require("node:events").EventEmitter;
-var fs = require("node:fs");
-var path = require("node:path");
+var EventEmitter = require("events").EventEmitter;
+var fs = require("fs");
+var path = require("path");
 var sinon = require("sinon");
 var createStatsCollector = require("../../lib/stats-collector");
 var events = require("../../").Runner.constants;
@@ -10,6 +10,10 @@ var reporters = require("../../").reporters;
 var states = require("../../").Runnable.constants;
 
 const { createTempDir, touchFile } = require("../integration/helpers");
+
+var helpers = require("./helpers");
+var createMockRunner = helpers.createMockRunner;
+var makeRunReporter = helpers.createRunReporterFunction;
 
 var Base = reporters.Base;
 var XUnit = reporters.XUnit;
@@ -24,6 +28,7 @@ var STATE_FAILED = states.STATE_FAILED;
 var STATE_PASSED = states.STATE_PASSED;
 
 describe("XUnit reporter", function () {
+  var runReporter = makeRunReporter(XUnit);
   var runner;
   var noop = function () {};
 
@@ -58,11 +63,14 @@ describe("XUnit reporter", function () {
         fsCreateWriteStream = sinon.stub(fs, "createWriteStream");
       });
 
-      it("should open given file for writing, recursively creating directories in pathname", function () {
-        var fakeThis = {
-          fileStream: null,
+      it("should open given file for writing, recursively creating directories in pathname", async function () {
+        var runner = createMockRunner("start", events.EVENT_RUN_BEGIN);
+        var options = {
+          reporterOptions: {
+            output: expectedOutput,
+          },
         };
-        XUnit.call(fakeThis, runner, options);
+        new XUnit(runner, options);
 
         var expectedDirectory = path.dirname(expectedOutput);
         expect(
@@ -113,7 +121,7 @@ describe("XUnit reporter", function () {
               output: invalidPath,
             },
           };
-          var boundXUnit = XUnit.bind({}, runner, options);
+          var boundXUnit = () => new XUnit(runner, options);
           expect(
             boundXUnit,
             "to throw",
@@ -136,7 +144,7 @@ describe("XUnit reporter", function () {
         });
 
         it("should throw unsupported error", function () {
-          var boundXUnit = XUnit.bind({}, runner, options);
+          var boundXUnit = () => new XUnit(runner, options);
           expect(
             boundXUnit,
             "to throw",
@@ -152,20 +160,41 @@ describe("XUnit reporter", function () {
   });
 
   describe("event handlers", function () {
+    var fsCreateWriteStream;
+
+    beforeEach(function () {
+      sinon.stub(fs, "mkdirSync");
+      fsCreateWriteStream = sinon.stub(fs, "createWriteStream");
+    });
+
     describe("on 'pending', 'pass' and 'fail' events", function () {
-      it("should add test to tests called on 'end' event", function () {
+      it("should add test to tests called on 'end' event", async function () {
         var pendingTest = {
+          isPending: () => false,
+          parent: {
+            fullTitle: () => "pending parent",
+          },
           name: "pending",
           slow: noop,
         };
         var failTest = {
+          isPending: () => false,
+          parent: {
+            fullTitle: () => "fail parent",
+          },
           name: "fail",
           slow: noop,
         };
         var passTest = {
+          isPending: () => false,
+          parent: {
+            fullTitle: () => "pass parent",
+          },
           name: "pass",
           slow: noop,
         };
+        var write = sinon.spy();
+        fsCreateWriteStream.returns({ write });
         runner.on = runner.once = function (event, callback) {
           if (event === EVENT_TEST_PENDING) {
             callback(pendingTest);
@@ -178,17 +207,19 @@ describe("XUnit reporter", function () {
           }
         };
 
-        var calledTests = [];
-        var fakeThis = {
-          write: noop,
-          test: function (test) {
-            calledTests.push(test);
+        var expectedOutput = path.join(path.sep, "path", "to", "some-output");
+        var options = {
+          reporterOptions: {
+            output: expectedOutput,
           },
         };
-        XUnit.call(fakeThis, runner);
+        const { reporter } = await runReporter({}, runner, options);
 
-        var expectedCalledTests = [pendingTest, passTest, failTest];
-        expect(calledTests, "to equal", expectedCalledTests);
+        reporter.fileStream;
+        expect(write.getCalls().length, "to equal", 5);
+        expect(write.getCall(1).args[0], "to match", /pending parent/);
+        expect(write.getCall(2).args[0], "to match", /pass parent/);
+        expect(write.getCall(3).args[0], "to match", /fail parent/);
       });
     });
   });
@@ -287,9 +318,8 @@ describe("XUnit reporter", function () {
     describe("when output directed to console", function () {
       it("should call 'Base.consoleLog' with line", function () {
         // :TODO: XUnit needs a trivially testable means to force console.log()
-        /* eslint-disable no-global-assign */
         var realProcess = process;
-        process = false;
+        process = false; // eslint-disable-line no-global-assign
 
         var xunit = new XUnit(runner);
         var fakeThis = { fileStream: false };
@@ -297,10 +327,9 @@ describe("XUnit reporter", function () {
         xunit.write.call(fakeThis, expectedLine);
         consoleLogStub.restore();
 
-        process = realProcess;
+        process = realProcess; // eslint-disable-line no-global-assign
 
         expect(consoleLogStub.calledWith(expectedLine), "to be true");
-        /* eslint-enable no-global-assign */
       });
     });
   });

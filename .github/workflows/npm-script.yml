@@ -72,8 +72,6 @@ jobs:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
           NODE_OPTIONS: "--trace-warnings"
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
         if: always() && inputs.coverage

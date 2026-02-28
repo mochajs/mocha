@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
+  // Entry points marked with ! are analyzed but not reported as unused
+  "entry": ["src/content/**/*.mdx!", "src/content/config.ts!"],
+  "project": ["src/**/*.{ts,js,mjs,cjs,astro}"],
+  "astro": {
+    "config": "astro.config.ts",
+  },
+  "rules": {
+    "exports": "off",
+  },
+}
