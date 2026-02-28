@@ -76,7 +76,7 @@ _Excellent._ Here's how:
 
 ### Can I work on this issue?
 
-Anyone can work on any issue marked `status: accepting prs` 🙂 Please check if there is already a PR for this issue, and if it's still being worked on. If it hasn't been updated for a while, or you have ideas for a different approach, you're welcome to open your own PR and we'll review it when we can!
+Anyone can work on any issue marked `status: accepting prs` 🙂 Please check if there is already a PR for this issue, and if it's still being worked on. If it hasn't been updated for over a week, you're welcome to open your own PR and we'll review it when we can!
 
 ## 👞 Contributing Code: Step-by-Step
 
