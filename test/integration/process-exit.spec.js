@@ -12,13 +12,10 @@ describe("process.exit() during test execution", function () {
       expect(res, "to have failed")
         .and("to have passed test count", 1)
         .and("to have failed test count", 1)
-        .and(
-          "to have failed test",
-          "should fail when calling process.exit(0)"
-        )
+        .and("to have failed test", "should fail when calling process.exit(0)")
         .and(
           "to have passed test",
-          "should still run this test after process.exit(0)"
+          "should still run this test after process.exit(0)",
         );
 
       done();
@@ -34,13 +31,10 @@ describe("process.exit() during test execution", function () {
       expect(res, "to have failed")
         .and("to have passed test count", 1)
         .and("to have failed test count", 1)
-        .and(
-          "to have failed test",
-          "should fail when calling process.exit(1)"
-        )
+        .and("to have failed test", "should fail when calling process.exit(1)")
         .and(
           "to have passed test",
-          "should still run this test after process.exit(1)"
+          "should still run this test after process.exit(1)",
         );
 
       done();
@@ -56,10 +50,7 @@ describe("process.exit() during test execution", function () {
       expect(res, "to have failed")
         .and("to have passed test count", 2)
         .and("to have failed test count", 1)
-        .and(
-          "to have failed test",
-          "second test calls process.exit(0)"
-        )
+        .and("to have failed test", "second test calls process.exit(0)")
         .and("to have passed test", "first test passes")
         .and("to have passed test", "third test should still run");
 
