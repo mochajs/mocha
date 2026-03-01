@@ -1,7 +1,5 @@
-"use strict";
-
-var runMocha = require("../helpers").runMocha;
-var path = require("node:path");
+import { runMocha } from "../helpers.js";
+import path from "node:path";
 
 describe("--reporter-option", function () {
   describe("when given options w/ invalid format", function () {

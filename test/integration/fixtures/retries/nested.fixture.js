@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('retries', function () {
   this.retries(3);

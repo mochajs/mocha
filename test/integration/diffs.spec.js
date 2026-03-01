@@ -1,9 +1,7 @@
-"use strict";
-
-var helpers = require("./helpers");
+import helpers from "./helpers.js";
 var run = helpers.runMocha;
-var fs = require("node:fs");
-var path = require("node:path");
+import fs from "node:fs";
+import path from "node:path";
 
 /**
  * Returns an array of diffs corresponding to exceptions thrown from specs,

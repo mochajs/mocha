@@ -78,7 +78,7 @@ var Mocha = require("mocha");
  * "comment" function:
  * https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js
  */
-module.exports = Mocha.interfaces["example-ui"] = function (suite) {
+function exampleUi(suite) {
   var suites = [suite];
 
   suite.on("pre-require", function (context, file, mocha) {
@@ -187,7 +187,11 @@ module.exports = Mocha.interfaces["example-ui"] = function (suite) {
      */
     context.test.skip = common.test.skip;
   });
-};
+}
+
+Mocha.interfaces["example-ui"] = exampleUi;
+
+export default exampleUi;
 ```
 
 ```javascript

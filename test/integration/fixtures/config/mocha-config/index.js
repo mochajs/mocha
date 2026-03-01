@@ -1,7 +1,7 @@
-'use strict';
-  
+
+
 // a comment
-module.exports = {
+export default {
   require: ['foo', 'bar'],
   bail: true,
   reporter: 'dot',

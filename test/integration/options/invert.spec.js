@@ -1,6 +1,4 @@
-"use strict";
-
-var runMocha = require("../helpers").runMocha;
+import { runMocha } from "../helpers.js";
 
 describe("--invert", function () {
   describe("when used without --fgrep or --grep", function () {

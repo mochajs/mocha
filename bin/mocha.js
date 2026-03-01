@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-"use strict";
-
 /**
  * This wrapper executable checks for known node flags and appends them when found,
  * before invoking the "real" executable (`lib/cli/cli.js`)
@@ -10,16 +8,23 @@
  * @private
  */
 
-const os = require("node:os");
-const { loadOptions } = require("../lib/cli/options");
-const {
+import { spawn } from "node:child_process";
+import os from "node:os";
+import { loadOptions } from "../lib/cli/options.js";
+import { main } from "../lib/cli/cli.js";
+import {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts,
-} = require("../lib/cli/node-flags");
-const unparse = require("yargs-unparser");
-const debug = require("debug")("mocha:cli:mocha");
-const { aliases } = require("../lib/cli/run-option-metadata");
+} from "../lib/cli/node-flags.js";
+import unparse from "yargs-unparser";
+import dbg from "debug";
+import { aliases } from "../lib/cli/run-option-metadata.js";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url)
+
+const debug = dbg("mocha:cli:mocha");
 
 const mochaArgs = {};
 const nodeArgs = {};
@@ -80,7 +85,6 @@ if (mochaArgs._) {
 }
 
 if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
-  const { spawn } = require("node:child_process");
   const mochaPath = require.resolve("../lib/cli/cli.js");
 
   const nodeArgv =
@@ -146,5 +150,5 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   });
 } else {
   debug("running Mocha in-process");
-  require("../lib/cli/cli").main([], mochaArgs);
+  main([], mochaArgs);
 }

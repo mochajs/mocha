@@ -1,7 +1,5 @@
-"use strict";
-
-var assert = require("node:assert");
-var run = require("./helpers").runMocha;
+import assert from "node:assert";
+import { runMocha as run } from "./helpers.js";
 var args = [];
 
 describe("utils.deprecate test", function () {

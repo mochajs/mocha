@@ -1,11 +1,9 @@
-"use strict";
+import sinon from "sinon";
+import * as helpers from "./helpers.js";
+import { reporters, Runnable, Runner } from "../../index.js";
 
-var sinon = require("sinon");
-var events = require("../../").Runner.constants;
-var helpers = require("./helpers");
-var reporters = require("../../").reporters;
-var states = require("../../").Runnable.constants;
-
+var events = Runner.constants;
+var states = Runnable.constants;
 var Base = reporters.Base;
 var Landing = reporters.Landing;
 var createMockRunner = helpers.createMockRunner;

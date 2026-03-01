@@ -1,12 +1,11 @@
-"use strict";
-
-const {
+import {
   runMocha,
-  runMochaJSON: run,
+  runMochaJSON as run,
   invokeMochaAsync,
   invokeNode,
   resolveFixturePath,
-} = require("./helpers");
+} from "./helpers.js";
+
 var args = [];
 
 describe("uncaught exceptions", function () {

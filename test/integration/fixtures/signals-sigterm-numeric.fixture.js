@@ -1,5 +1,5 @@
-'use strict';
-const os = require('node:os');
+
+import os from 'node:os';
 
 describe('signal suite', function () {
   it('test SIGTERM', function () {

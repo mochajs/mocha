@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('Uncaught exception - throw and exit', () => {
   it('test1', () => {

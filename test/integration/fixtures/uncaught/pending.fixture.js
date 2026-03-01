@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('Uncaught exception within pending test', () => {
   it('test1', function () { });

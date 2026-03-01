@@ -1,4 +1,8 @@
-"use strict";
+import rewiremock from "rewiremock/node";
+import { Suite } from "../../lib/suite.js";
+import { Runner } from "../../lib/runner.js";
+import sinon from "sinon";
+import { constants } from "../../lib/utils.js";
 
 const {
   EVENT_RUN_BEGIN,
@@ -6,12 +10,8 @@ const {
   EVENT_TEST_FAIL,
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
-} = require("../../lib/runner").constants;
-const rewiremock = require("rewiremock/node");
-const Suite = require("../../lib/suite");
-const Runner = require("../../lib/runner");
-const sinon = require("sinon");
-const { constants } = require("../../lib/utils");
+} = Runner.constants;
+
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {

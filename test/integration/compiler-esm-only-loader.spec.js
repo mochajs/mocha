@@ -1,7 +1,5 @@
-"use strict";
-
-var exec = require("node:child_process").exec;
-var path = require("node:path");
+import { exec } from "node:child_process";
+import path from "node:path";
 
 // Regression test for https://github.com/mochajs/mocha/issues/5380
 describe("support ESM only module loader packages", function () {

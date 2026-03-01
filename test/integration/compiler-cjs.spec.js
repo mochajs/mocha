@@ -1,7 +1,5 @@
-"use strict";
-
-var exec = require("node:child_process").exec;
-var path = require("node:path");
+import { exec } from "node:child_process";
+import path from "node:path";
 
 describe("support CJS require.extension compilers with esm syntax", function () {
   it("should support .js extension", function (done) {

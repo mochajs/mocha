@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('skip in before with nested describes', function () {
   before(function () {

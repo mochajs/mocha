@@ -1,11 +1,10 @@
-"use strict";
-
-const { invokeNode } = require("./helpers");
+import { invokeNode } from "./helpers.js";
 
 describe("multiple runs", function () {
   it("should be allowed to run multiple times if cleanReferences is turned off", function (done) {
-    var path =
-      require.resolve("./fixtures/multiple-runs/run-thrice.fixture.js");
+    var path = require.resolve(
+      "./fixtures/multiple-runs/run-thrice.fixture.js",
+    );
     invokeNode([path], function (err, res) {
       if (err) {
         done(err);
@@ -28,8 +27,9 @@ describe("multiple runs", function () {
   });
 
   it("should not be allowed if cleanReferences is true", function (done) {
-    var path =
-      require.resolve("./fixtures/multiple-runs/clean-references.fixture.js");
+    var path = require.resolve(
+      "./fixtures/multiple-runs/clean-references.fixture.js",
+    );
     invokeNode(
       [path],
       function (err, res) {
@@ -66,8 +66,9 @@ describe("multiple runs", function () {
   });
 
   it("should not be allowed to run while a previous run is in progress", function (done) {
-    var path =
-      require.resolve("./fixtures/multiple-runs/start-second-run-if-previous-is-still-running.fixture");
+    var path = require.resolve(
+      "./fixtures/multiple-runs/start-second-run-if-previous-is-still-running.fixture",
+    );
     invokeNode(
       [path],
       function (err, res) {
@@ -83,8 +84,9 @@ describe("multiple runs", function () {
   });
 
   it("should reset the hooks between runs", function (done) {
-    var path =
-      require.resolve("./fixtures/multiple-runs/multiple-runs-with-flaky-before-each.fixture");
+    var path = require.resolve(
+      "./fixtures/multiple-runs/multiple-runs-with-flaky-before-each.fixture",
+    );
     invokeNode([path], function (err, res) {
       expect(err, "to be null");
       expect(res.code, "to be", 0);

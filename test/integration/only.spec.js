@@ -1,7 +1,5 @@
-"use strict";
-
-var run = require("./helpers").runMochaJSON;
-var assert = require("node:assert");
+import { runMochaJSON as run } from "./helpers.js";
+import assert from "node:assert";
 
 describe(".only()", function () {
   describe("bdd", function () {

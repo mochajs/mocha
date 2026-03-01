@@ -1,10 +1,8 @@
-"use strict";
-
-var os = require("node:os");
-var fs = require("node:fs");
-var crypto = require("node:crypto");
-var path = require("node:path");
-var run = require("./helpers").runMocha;
+import os from "node:os";
+import fs from "node:fs";
+import crypto from "node:crypto";
+import path from "node:path";
+import { runMocha as run } from "./helpers.js";
 
 describe("reporters", function () {
   describe("markdown", function () {

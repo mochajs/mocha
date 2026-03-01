@@ -1,10 +1,7 @@
-"use strict";
+import sinon from "sinon";
+import { createUnsupportedError } from "../../lib/errors.js";
+import { createStatsCollector } from "../../lib/stats-collector.js";
 
-var sinon = require("sinon");
-var errors = require("../../lib/errors");
-var createStatsCollector = require("../../lib/stats-collector");
-
-var createUnsupportedError = errors.createUnsupportedError;
 
 /**
  * Creates a mock runner object.
@@ -17,7 +14,7 @@ var createUnsupportedError = errors.createUnsupportedError;
  * @param {(*|null)} [arg2] - variable to be added to event handler's scope
  * @return {Object} mock runner instance
  */
-function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
+export function createMockRunner(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   var runnerFunction = createRunnerFunction(
     runStr,
     ifStr1,
@@ -151,7 +148,7 @@ function createRunnerFunction(runStr, ifStr1, ifStr2, ifStr3, arg1, arg2) {
   }
 }
 
-function makeTest(err) {
+export function makeTest(err) {
   return {
     err,
     titlePath: function () {
@@ -160,7 +157,7 @@ function makeTest(err) {
   };
 }
 
-function createElements(argObj) {
+export function createElements(argObj) {
   var res = [];
   for (var i = argObj.from; i <= argObj.to; i++) {
     res.push("element " + i);
@@ -168,7 +165,7 @@ function createElements(argObj) {
   return res;
 }
 
-function makeExpectedTest(
+export function makeExpectedTest(
   expectedTitle,
   expectedFullTitle,
   expectedFile,
@@ -195,7 +192,7 @@ function makeExpectedTest(
  * @param {Function} ReporterClass - Reporter class constructor
  * @return {createRunReporterFunction~runReporter}
  */
-function createRunReporterFunction(ReporterClass) {
+export function createRunReporterFunction(ReporterClass) {
   /**
    * Run reporter using stream reassignment to capture output.
    *
@@ -246,11 +243,3 @@ function createRunReporterFunction(ReporterClass) {
 
   return runReporter;
 }
-
-module.exports = {
-  createElements,
-  createMockRunner,
-  createRunReporterFunction,
-  makeExpectedTest,
-  makeTest,
-};

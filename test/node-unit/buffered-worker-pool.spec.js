@@ -1,7 +1,5 @@
-"use strict";
-
-const rewiremock = require("rewiremock/node");
-const sinon = require("sinon");
+import rewiremock from "rewiremock/node";
+import sinon from "sinon";
 
 describe("class BufferedWorkerPool", function () {
   let BufferedWorkerPool;

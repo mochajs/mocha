@@ -1,10 +1,15 @@
-"use strict";
+import BrowserStdout from "browser-stdout";
+import unexpected from 'unexpected'
+import unexpectedSet from 'unexpected-set'
+import unexpectedMap from 'unexpected-map'
+import unexpectedSinon from 'unexpected-sinon'
+import unexpectedEventEmitter from 'unexpected-eventemitter'
 
-process.stdout = require("browser-stdout")();
+process.stdout = BrowserStdout();
 
-global.expect = require("unexpected")
+global.expect = unexpected
   .clone()
-  .use(require("unexpected-set"))
-  .use(require("unexpected-map"))
-  .use(require("unexpected-sinon"))
-  .use(require("unexpected-eventemitter"));
+  .use(unexpectedSet)
+  .use(unexpectedMap)
+  .use(unexpectedSinon)
+  .use(unexpectedEventEmitter)

@@ -1,6 +1,4 @@
-"use strict";
-
-const fs = require("fs");
+import fs from "fs";
 
 const original = require.extensions[".js"];
 require.extensions[".js"] = function (module, filename) {

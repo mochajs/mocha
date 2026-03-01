@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('test suite', () => {
     it('test1', function () { });

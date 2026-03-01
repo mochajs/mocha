@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('issue-2315: cannot read property currentRetry of undefined', function () {
   before(function () {

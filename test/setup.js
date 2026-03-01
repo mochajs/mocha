@@ -1,11 +1,14 @@
-"use strict";
-
-const unexpected = require("unexpected");
+import unexpected from "unexpected";
+import unexpectedSinon from "unexpected-sinon";
+import unexpectedEventemitter from "unexpected-eventemitter";
+import unexpectedMap from "unexpected-map";
+import unexpectedSet from "unexpected-set";
+import assertions from "./assertions.js";
 
 global.expect = unexpected
   .clone()
-  .use(require("unexpected-sinon"))
-  .use(require("unexpected-eventemitter"))
-  .use(require("unexpected-map"))
-  .use(require("unexpected-set"))
-  .use(require("./assertions"));
+  .use(unexpectedSinon)
+  .use(unexpectedEventemitter)
+  .use(unexpectedMap)
+  .use(unexpectedSet)
+  .use(assertions);

@@ -1,4 +1,4 @@
-'use strict';
+
 
 setTimeout(function () {
   throw new Error('oops');

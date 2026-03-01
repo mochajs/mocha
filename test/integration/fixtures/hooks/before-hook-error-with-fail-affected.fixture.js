@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('fails `before` hook', function () {
   before(function () {

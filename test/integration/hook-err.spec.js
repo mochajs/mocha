@@ -1,11 +1,12 @@
-"use strict";
-const {
+import {
   runMocha,
   runMochaJSON,
   runMochaJSONAsync,
   SPLIT_DOT_REPORTER_REGEXP,
-} = require("./helpers");
-const { bang } = require("../../lib/reporters/base").symbols;
+} from "./helpers.js";
+import { symbols } from "../../lib/reporters/base.js";
+
+const { bang } = symbols;
 
 describe("hook error handling", function () {
   let lines;

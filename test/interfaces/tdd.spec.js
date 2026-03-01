@@ -1,5 +1,3 @@
-"use strict";
-
 suite("integer primitives", function () {
   suite("arithmetic", function () {
     var initialValue = 41;

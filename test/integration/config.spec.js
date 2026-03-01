@@ -1,11 +1,9 @@
-"use strict";
-
 // This is not a "functional" test; we aren't invoking the mocha executable.
 // Instead we just avoid test doubles.
 
-var fs = require("node:fs");
-var path = require("node:path");
-var loadConfig = require("../../lib/cli/config").loadConfig;
+import fs from "node:fs";
+import path from "node:path";
+import { loadConfig } from "../../lib/cli/config.js";
 
 describe("config", function () {
   it("should return the same values for all supported config types", function () {

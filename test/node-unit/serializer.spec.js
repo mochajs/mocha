@@ -1,12 +1,10 @@
-"use strict";
-
-const sinon = require("sinon");
-const {
+import sinon from "sinon";
+import {
   serialize,
   deserialize,
   SerializableEvent,
   SerializableWorkerResult,
-} = require("../../lib/nodejs/serializer");
+} from "../../lib/nodejs/serializer.js";
 
 describe("serializer", function () {
   afterEach(function () {
@@ -144,7 +142,7 @@ describe("serializer", function () {
         describe("when passed an object containing a non-`serialize` method", function () {
           it("should remove the method", function () {
             const obj = {
-              func: () => {},
+              func: () => { },
             };
 
             expect(

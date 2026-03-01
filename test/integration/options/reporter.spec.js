@@ -1,7 +1,5 @@
-"use strict";
-
-var runMocha = require("../helpers").runMocha;
-var path = require("node:path");
+import { runMocha } from "../helpers.js";
+import path from "node:path";
 
 describe("--reporter", function () {
   it("should work for ESM", function (done) {

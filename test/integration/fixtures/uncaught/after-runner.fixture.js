@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe("Uncaught exception after runner's end", () => {
   it('test', () => {

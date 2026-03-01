@@ -1,12 +1,11 @@
-"use strict";
-const Mocha = require("../../../lib/mocha");
-const {
+import { Mocha } from "../../../lib/mocha.js";
+import {
   runMochaAsync,
   invokeMochaAsync,
   getSummary,
   resolveFixturePath,
-} = require("../helpers");
-const psList = require("ps-list").default;
+} from "../helpers.js";
+import psList from 'ps-list';
 
 const REPORTER_FIXTURE_PATH = resolveFixturePath("options/parallel/test-a");
 

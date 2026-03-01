@@ -1,9 +1,7 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
-var interfaces = require("../../../lib/mocha").interfaces;
+import { interfaces } from "../../../lib/mocha.js";
 
 describe("--list-interfaces", function () {
   it("should dump a list of all interfaces with descriptions", function (done) {

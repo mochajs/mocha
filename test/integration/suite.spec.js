@@ -1,6 +1,4 @@
-"use strict";
-
-var run = require("./helpers").runMocha;
+import { runMocha as run } from "./helpers.js";
 var args = [];
 
 describe("suite w/no callback", function () {

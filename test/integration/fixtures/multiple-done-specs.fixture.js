@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('suite', function () {
   it('test1', function (done) {

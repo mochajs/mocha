@@ -1,4 +1,4 @@
-'use strict';
+
 
 exports.mochaHooks = async () => ({
   beforeAll() {

@@ -1,5 +1,4 @@
-'use strict';
-var assert = require('assert');
+import assert from 'assert';
 
 describe('skip in beforeEach', function() {
   var runOrder = [];

@@ -1,9 +1,7 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
-var reporters = require("../../../lib/mocha").reporters;
+import { reporters } from "../../../lib/mocha.js";
 
 describe("--list-reporters", function () {
   it("should dump a list of all reporters with descriptions", function (done) {

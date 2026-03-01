@@ -1,5 +1,4 @@
-'use strict';
-var assert = require('assert');
+import assert from 'assert';
 
 describe('outer suite', function() {
   var runOrder = [];
@@ -62,7 +61,7 @@ describe('outer suite', function() {
   after(function() {
     runOrder.push('outer after');
     assert.deepStrictEqual(runOrder, [
-      'outer before', 
+      'outer before',
       'should run test-1', 'should run test-2',
       'inner before', 'inner after',
       'outer after'

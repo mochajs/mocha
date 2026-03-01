@@ -1,4 +1,4 @@
-'use strict';
+
 
 suite.only('should run all tests in this suite');
 

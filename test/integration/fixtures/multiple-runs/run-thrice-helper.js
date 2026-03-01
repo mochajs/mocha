@@ -1,4 +1,4 @@
-module.exports = function (mocha) {
+export default function (mocha) {
   mocha.addFile(require.resolve('./multiple-runs-with-different-output-suite.fixture.js'));
   console.log('[');
   try {

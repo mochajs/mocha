@@ -1,5 +1,4 @@
-'use strict';
-var assert = require('assert');
+import assert from 'assert';
 
 describe('suite1', function () {
   var runOrder = [];
@@ -19,7 +18,7 @@ describe('suite1', function () {
     });
     beforeEach('beforeEach suite1A', function () {
       runOrder.push('beforeEach suite1A');
-    }); 
+    });
     it('test suite1A', function () {
       runOrder.push('test suite1A');
     });

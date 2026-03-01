@@ -1,4 +1,4 @@
-'use strict';
+
 
 // we cannot recover gracefully if a Runnable has already passed
 // then fails asynchronously

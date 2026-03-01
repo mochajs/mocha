@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('skip in after', function () {
   it('should run this test-1', function () {});

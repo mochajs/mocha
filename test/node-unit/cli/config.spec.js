@@ -1,8 +1,6 @@
-"use strict";
-
-const sinon = require("sinon");
-const rewiremock = require("rewiremock/node");
-const { parsers } = require("../../../lib/cli/config");
+import sinon from "sinon";
+import rewiremock from "rewiremock/node";
+import { parsers } from "../../../lib/cli/config.js";
 
 describe("cli/config", function () {
   const phonyConfigObject = { ok: true };

@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('a suite', function(){
   describe.skip('skipped suite 1');

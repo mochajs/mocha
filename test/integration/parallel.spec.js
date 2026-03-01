@@ -1,7 +1,5 @@
-"use strict";
-
-const assert = require("node:assert");
-const { runMochaJSONAsync } = require("./helpers");
+import assert from "node:assert";
+import { runMochaJSONAsync } from "./helpers.js";
 
 describe("parallel run", () => {
   /**

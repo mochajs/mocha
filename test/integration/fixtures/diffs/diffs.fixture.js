@@ -1,8 +1,7 @@
-'use strict';
-
 // assert is used because unexpected doesn't use mocha's diffs.
-var assert = require('assert');
-var fs = require('fs');
+import assert from 'assert';
+import fs from 'fs';
+
 var cssin = fs.readFileSync('test/integration/fixtures/diffs/diffs.css.in', 'ascii');
 var cssout = fs.readFileSync('test/integration/fixtures/diffs/diffs.css.out', 'ascii');
 

@@ -1,10 +1,8 @@
-"use strict";
-
-var sinon = require("sinon");
-var EventEmitter = require("node:events").EventEmitter;
-var Mocha = require("../../lib/mocha");
-var utils = require("../../lib/utils");
-const errors = require("../../lib/errors");
+import sinon from "sinon";
+import { EventEmitter } from "node:events";
+import { Mocha } from "../../lib/mocha.js";
+import utils from "../../lib/utils.js";
+import * as errors from "../../lib/errors.js";
 
 describe("Mocha", function () {
   /**
@@ -208,11 +206,9 @@ describe("Mocha", function () {
       describe("when `enableGlobalTeardown` option is present", function () {
         it("should configure global teardown fixtures", function () {
           const mocha = new Mocha({ enableGlobalTeardown: 1 });
-          expect(
-            mocha.enableGlobalTeardown,
-            "to have a call satisfying",
-            [1],
-          ).and("was called once");
+          expect(mocha.enableGlobalTeardown, "to have a call satisfying", [
+            1,
+          ]).and("was called once");
         });
       });
     });

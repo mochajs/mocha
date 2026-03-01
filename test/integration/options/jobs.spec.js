@@ -1,6 +1,4 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var runMochaAsync = helpers.runMochaAsync;
 
 describe("--jobs", function () {

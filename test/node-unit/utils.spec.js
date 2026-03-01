@@ -1,6 +1,4 @@
-"use strict";
-
-const rewiremock = require("rewiremock/node");
+import rewiremock from "rewiremock/node";
 
 describe("utils", function () {
   let utils;

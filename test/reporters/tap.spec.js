@@ -1,8 +1,6 @@
-"use strict";
-
-var events = require("../../").Runner.constants;
-var helpers = require("./helpers");
-var reporters = require("../../").reporters;
+import * as helpers from "./helpers.js";
+import { reporters, Runner } from "../../index.js";
+const events = Runner.constants;
 
 var TAP = reporters.TAP;
 var createMockRunner = helpers.createMockRunner;

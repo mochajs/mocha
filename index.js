@@ -1,3 +1,1 @@
-"use strict";
-
-module.exports = require("./lib/mocha");
+export * from "./lib/mocha.js";

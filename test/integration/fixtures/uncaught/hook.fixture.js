@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('uncaught', function () {
   beforeEach(function (done) {

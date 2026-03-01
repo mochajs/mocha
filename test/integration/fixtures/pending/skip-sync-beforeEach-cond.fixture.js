@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('skip conditionally in beforeEach', function() {
   var n = 1;

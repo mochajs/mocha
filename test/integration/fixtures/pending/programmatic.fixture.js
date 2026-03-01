@@ -1,5 +1,5 @@
-'use strict';
-const Mocha = require('../../../../lib/mocha');
+
+import Mocha from '../../../../lib/mocha.js';
 
 const mocha = new Mocha({reporter: 'json'});
 mocha.addFile("./test/integration/fixtures/__default__.fixture.js");

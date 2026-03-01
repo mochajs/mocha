@@ -1,5 +1,3 @@
-"use strict";
-
 describe("require test", function () {
   it("should require args in order", function () {
     var req = global.required;

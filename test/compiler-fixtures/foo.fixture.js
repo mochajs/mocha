@@ -1,6 +1,4 @@
-"use strict";
-
-var fs = require("fs");
+import fs from "fs";
 
 require.extensions[".foo"] = function (module, filename) {
   var content;

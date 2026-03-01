@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('timeout', function () {
   this.timeout(1);

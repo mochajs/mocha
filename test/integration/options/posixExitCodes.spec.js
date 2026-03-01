@@ -1,8 +1,6 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var runMocha = helpers.runMocha;
-var os = require("node:os");
+import os from "node:os";
 
 const EXIT_FAILURE = 1;
 const SIGNAL_OFFSET = 128;

@@ -20,11 +20,10 @@
  * configuration we've built.
  */
 
-"use strict";
-const fs = require("node:fs");
-const path = require("node:path");
-const os = require("node:os");
-const rollupPlugin = require("./scripts/karma-rollup-plugin");
+import fs from "node:fs";
+import path from "node:path";
+import os from "node:os";
+import rollupPlugin from "./scripts/karma-rollup-plugin.js";
 const BASE_BUNDLE_DIR_PATH = path.join(__dirname, ".karma");
 const env = process.env;
 const hostname = os.hostname();
@@ -74,7 +73,7 @@ const baseConfig = {
  *
  * @param {KarmaConfig} config
  */
-module.exports = (config) => {
+export default (config) => {
   let bundleDirPath = path.join(BASE_BUNDLE_DIR_PATH, hostname);
   let cfg = { ...baseConfig };
 

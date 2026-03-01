@@ -1,5 +1,4 @@
-'use strict';
-var assert = require('assert');
+import assert from 'assert';
 
 function getTitle(ctx) {
   return ctx.currentTest && ctx.currentTest.title;

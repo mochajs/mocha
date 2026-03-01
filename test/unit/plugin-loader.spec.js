@@ -1,7 +1,5 @@
-"use strict";
-
-const PluginLoader = require("../../lib/plugin-loader");
-const sinon = require("sinon");
+import { PluginLoader } from "../../lib/plugin-loader.js";
+import sinon from "sinon";
 const { INVALID_PLUGIN_DEFINITION, INVALID_PLUGIN_IMPLEMENTATION } =
   require("../../lib/error-constants").constants;
 

@@ -1,6 +1,4 @@
-"use strict";
-
-const fs = require("fs");
+import fs from "fs";
 
 require.extensions[".ts"] = function (module, filename) {
   const content = fs.readFileSync(filename + ".compiled", "utf8");

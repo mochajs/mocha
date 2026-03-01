@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('spec 1', function () {
   before(function (done) {

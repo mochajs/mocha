@@ -1,8 +1,6 @@
-"use strict";
-
-const esmUtils = require("../../lib/nodejs/esm-utils");
-const sinon = require("sinon");
-const url = require("node:url");
+import * as esmUtils from "../../lib/nodejs/esm-utils.js";
+import sinon from "sinon";
+import url from "node:url";
 
 describe("esm-utils", function () {
   describe("requireOrImport", function () {

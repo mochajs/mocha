@@ -1,16 +1,14 @@
-"use strict";
+import assert from "node:assert";
+import chai from "chai";
+import sinon from "sinon";
+import helpers from "./helpers.js";
+import { reporters, Mocha } from "../../index.js";
 
-var assert = require("node:assert");
-var chai = require("chai");
-var sinon = require("sinon");
-var helpers = require("./helpers");
-var reporters = require("../../").reporters;
 var AssertionError = assert.AssertionError;
 var Base = reporters.Base;
 var chaiExpect = chai.expect;
 var createElements = helpers.createElements;
 var makeTest = helpers.makeTest;
-var Mocha = require("../../");
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 

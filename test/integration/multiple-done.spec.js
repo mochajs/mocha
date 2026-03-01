@@ -1,9 +1,7 @@
-"use strict";
-
-var runMochaJSON = require("./helpers").runMochaJSON;
-var invokeMocha = require("./helpers").invokeMocha;
-var MULTIPLE_DONE = require("../../lib/error-constants").constants
-  .MULTIPLE_DONE;
+import { runMochaJSON } from "./helpers.js";
+import { invokeMocha } from "./helpers.js";
+import { constants } from "../../lib/error-constants.js";
+const { MULTIPLE_DONE } = constants;
 
 describe("multiple calls to done()", function () {
   var res;

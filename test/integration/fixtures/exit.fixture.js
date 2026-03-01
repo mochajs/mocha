@@ -1,8 +1,6 @@
-'use strict';
-
-var net = require('net');
+import { createServer } from 'net';
 
 it('should hang when --no-exit used', function (done) {
-  var server = net.createServer();
+  var server = createServer();
   server.listen(55554, done);
 });

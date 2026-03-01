@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * This Karma plugin bundles all test files into a single file for browser
  * testing.
@@ -29,14 +27,14 @@
  * been modified heavily to simplify and support rollup instead of browserify.
  */
 
-const os = require("node:os");
-const fs = require("node:fs");
-const path = require("node:path");
-const { randomUUID } = require("node:crypto");
-const rollup = require("rollup");
-const { minimatch } = require("minimatch");
-const { loadConfigFile } = require("rollup/dist/loadConfigFile.js");
-const multiEntry = require("@rollup/plugin-multi-entry");
+import os from "node:os";
+import fs from "node:fs";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
+import rollup from "rollup";
+import { minimatch } from "minimatch";
+import { loadConfigFile } from "rollup/dist/loadConfigFile.js";
+import multiEntry from "@rollup/plugin-multi-entry";
 
 const fileMap = new Map();
 
@@ -153,7 +151,7 @@ function bundlePreprocessor(config) {
 
 bundlePreprocessor.$inject = ["config"];
 
-module.exports = {
+export default {
   "framework:rollup": ["factory", framework],
   "preprocessor:rollup": ["factory", bundlePreprocessor],
 };

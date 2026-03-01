@@ -1,5 +1,3 @@
-"use strict";
-
 describe("async", function () {
   var calls = [];
 

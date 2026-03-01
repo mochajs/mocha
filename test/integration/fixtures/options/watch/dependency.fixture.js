@@ -1,1 +1,1 @@
-module.exports.testShouldFail = false;
+export const testShouldFail = false;

@@ -1,9 +1,9 @@
-"use strict";
+import packageJson from "../package.json" with { type: "json" };
+import escapeRe from "escape-string-regexp";
 
-const { version } = require("../package.json");
-const escapeRe = require("escape-string-regexp");
+const { version } = packageJson
 
-module.exports = {
+export default {
   name: "unexpected-mocha-internal",
   version,
   installInto(expect) {

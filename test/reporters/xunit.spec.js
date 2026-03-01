@@ -1,17 +1,16 @@
-"use strict";
+import { EventEmitter } from 'events';
+import fs from 'fs';
+import path from 'path';
+import sinon from "sinon";
+import * as helpers from "./helpers.js";
+import { createStatsCollector } from "../../lib/stats-collector.js";
+import { Runner, reporters, Runnable } from "../../index.js";
 
-var EventEmitter = require("events").EventEmitter;
-var fs = require("fs");
-var path = require("path");
-var sinon = require("sinon");
-var createStatsCollector = require("../../lib/stats-collector");
-var events = require("../../").Runner.constants;
-var reporters = require("../../").reporters;
-var states = require("../../").Runnable.constants;
+var events = Runner.constants;
+var states = Runnable.constants;
 
-const { createTempDir, touchFile } = require("../integration/helpers");
+import { createTempDir, touchFile } from "../integration/helpers.js";
 
-var helpers = require("./helpers");
 var createMockRunner = helpers.createMockRunner;
 var makeRunReporter = helpers.createRunReporterFunction;
 
