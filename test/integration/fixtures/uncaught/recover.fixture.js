@@ -1,5 +1,5 @@
-'use strict';
-const assert = require('assert');
+
+import assert from 'assert';
 
 describe('uncaught', function() {
   var hookOrder = [];
@@ -9,7 +9,7 @@ describe('uncaught', function() {
     }, 10)
     setTimeout(done, 10);
   });
-  it('should wait 15ms', (done) => {      
+  it('should wait 15ms', (done) => {
     setTimeout(done, 15);
   });
   it('test 3', () => { });

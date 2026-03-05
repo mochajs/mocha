@@ -1,9 +1,7 @@
-"use strict";
-
 /* eslint no-throw-literal: off */
 
-var sinon = require("sinon");
-var Mocha = require("../../lib/mocha");
+import sinon from "sinon";
+import { Mocha } from "../../lib/mocha.js";
 var Suite = Mocha.Suite;
 var Test = Mocha.Test;
 var Runnable = Mocha.Runnable;

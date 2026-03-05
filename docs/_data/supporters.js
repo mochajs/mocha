@@ -13,11 +13,14 @@
  * @see https://docs.opencollective.com/help/contributing/development/api
  */
 
-"use strict";
+import * as fs from "node:fs/promises";
+import { resolve } from "node:path";
+import dbg from "debug";
 
-const { writeFile, mkdir, rm } = require("node:fs").promises;
-const { resolve } = require("node:path");
-const debug = require("debug")("mocha:docs:data:supporters");
+const debug = dbg("mocha:docs:data:supporters");
+
+debug.enabled = true;
+
 const blocklist = new Set(require("./blocklist.json"));
 
 /**
@@ -99,32 +102,32 @@ const nodeToSupporter = (node) => ({
 
 const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
   ? async (supporter) => {
+    invalidSupporters.push(supporter);
+  }
+  : async (supporter) => {
+    try {
+      const { avatar: url } = supporter;
+      const response = await fetch(url, {
+        signal: AbortSignal.timeout(30000),
+      });
+      if (response.headers.get("content-type")?.startsWith("text/html")) {
+        throw new TypeError(
+          "received html and expected a png; outage likely",
+        );
+      }
+      const imageBuf = Buffer.from(await response.arrayBuffer());
+      debug("fetched %s", url);
+      const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
+      await fs.writeFile(filePath, imageBuf);
+      debug("wrote %s", filePath);
+    } catch (err) {
+      console.error(
+        `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
+        err,
+      );
       invalidSupporters.push(supporter);
     }
-  : async (supporter) => {
-      try {
-        const { avatar: url } = supporter;
-        const response = await fetch(url, {
-          signal: AbortSignal.timeout(30000),
-        });
-        if (response.headers.get("content-type")?.startsWith("text/html")) {
-          throw new TypeError(
-            "received html and expected a png; outage likely",
-          );
-        }
-        const imageBuf = Buffer.from(await response.arrayBuffer());
-        debug("fetched %s", url);
-        const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
-        await writeFile(filePath, imageBuf);
-        debug("wrote %s", filePath);
-      } catch (err) {
-        console.error(
-          `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
-          err,
-        );
-        invalidSupporters.push(supporter);
-      }
-    };
+  };
 
 /**
  * Retrieves donation data from OC
@@ -180,132 +183,110 @@ const isAllowed = ({ name, slug, website, categories }) => {
   return allowed;
 };
 
-const getSupporters = async () => {
-  const orders = await getAllOrders();
-  // Deduplicating supporters with multiple orders
-  const uniqueSupporters = new Map();
+const orders = await getAllOrders();
+// Deduplicating supporters with multiple orders
+const uniqueSupporters = new Map();
 
-  const supporters = orders
-    // turn raw query result into a better data structure
-    .map(nodeToSupporter)
-    // aggregate total $ donated by unique supporter (using slug)
-    .reduce((supporters, supporter) => {
-      if (uniqueSupporters.has(supporter.slug)) {
-        uniqueSupporters.get(supporter.slug).totalDonations +=
-          supporter.totalDonations;
-        return supporters;
-      }
-      uniqueSupporters.set(supporter.slug, supporter);
-      return [...supporters, supporter];
-    }, [])
-    // discard spammy supporters
-    .filter(isAllowed)
-    // sort by total $ donated, descending
-    .sort((a, b) => b.totalDonations - a.totalDonations)
-    // determine which url to use depending on tier
-    .reduce(
-      (supporters, supporter) => {
-        if (supporter.tier === BACKER_TIER) {
-          if (supporter.name !== "anonymous") {
-            supporters[BACKER_TIER] = [
-              ...supporters[BACKER_TIER],
-              {
-                ...supporter,
-                avatar: encodeURI(supporter.imgUrlSmall),
-              },
-            ];
-          }
-        } else {
-          supporters[SPONSOR_TIER] = [
-            ...supporters[SPONSOR_TIER],
+const supporters = orders
+  // turn raw query result into a better data structure
+  .map(nodeToSupporter)
+  // aggregate total $ donated by unique supporter (using slug)
+  .reduce((supporters, supporter) => {
+    if (uniqueSupporters.has(supporter.slug)) {
+      uniqueSupporters.get(supporter.slug).totalDonations +=
+        supporter.totalDonations;
+      return supporters;
+    }
+    uniqueSupporters.set(supporter.slug, supporter);
+    return [...supporters, supporter];
+  }, [])
+  // discard spammy supporters
+  .filter(isAllowed)
+  // sort by total $ donated, descending
+  .sort((a, b) => b.totalDonations - a.totalDonations)
+  // determine which url to use depending on tier
+  .reduce(
+    (supporters, supporter) => {
+      if (supporter.tier === BACKER_TIER) {
+        if (supporter.name !== "anonymous") {
+          supporters[BACKER_TIER] = [
+            ...supporters[BACKER_TIER],
             {
               ...supporter,
-              avatar: encodeURI(supporter.imgUrlMed),
+              avatar: encodeURI(supporter.imgUrlSmall),
             },
           ];
         }
-        return supporters;
-      },
-      {
-        [SPONSOR_TIER]: [],
-        [BACKER_TIER]: [],
-      },
-    );
-
-  await rm(SUPPORTER_IMAGE_PATH, { recursive: true, force: true });
-  debug("blasted %s", SUPPORTER_IMAGE_PATH);
-  await mkdir(SUPPORTER_IMAGE_PATH, { recursive: true });
-  debug("created %s", SUPPORTER_IMAGE_PATH);
-
-  // Fetch images for sponsors and save their image dimensions
-  await Promise.all([
-    ...supporters[SPONSOR_TIER].map(fetchImage),
-    ...supporters[BACKER_TIER].map(fetchImage),
-  ]);
-  debug("fetched images");
-
-  invalidSupporters.forEach((supporter) => {
-    supporters[supporter.tier].splice(
-      supporters[supporter.tier].indexOf(supporter),
-      1,
-    );
-  });
-  debug("tossed out invalid supporters");
-
-  const backerCount = supporters[BACKER_TIER].length;
-  const sponsorCount = supporters[SPONSOR_TIER].length;
-  const totalSupportersCount = backerCount + sponsorCount;
-  const successRate = 1 - invalidSupporters.length / totalSupportersCount;
-
-  debug(
-    "found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)",
-    backerCount,
-    sponsorCount,
-    totalSupportersCount,
-    invalidSupporters.length,
-    uniqueSupporters.size - totalSupportersCount,
+      } else {
+        supporters[SPONSOR_TIER] = [
+          ...supporters[SPONSOR_TIER],
+          {
+            ...supporter,
+            avatar: encodeURI(supporter.imgUrlMed),
+          },
+        ];
+      }
+      return supporters;
+    },
+    {
+      [SPONSOR_TIER]: [],
+      [BACKER_TIER]: [],
+    },
   );
 
-  if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
-    if (process.env.NETLIFY && process.env.CONTEXT !== "deploy-preview") {
-      throw new Error(
-        `Failed to meet success threshold ${
-          PRODUCTION_SUCCESS_THRESHOLD * 100
-        }% (was ${
-          successRate * 100
-        }%) for a production deployment; refusing to deploy`,
-      );
-    } else {
-      console.warn(
-        `WARNING: Success rate of ${
-          successRate * 100
-        }% fails to meet production threshold of ${
-          PRODUCTION_SUCCESS_THRESHOLD * 100
-        }%; would fail a production deployment!`,
-      );
-    }
-  }
-  debug("supporter image pull completed");
+await fs.rm(SUPPORTER_IMAGE_PATH, { recursive: true, force: true });
+debug("blasted %s", SUPPORTER_IMAGE_PATH);
+await fs.mkdir(SUPPORTER_IMAGE_PATH, { recursive: true });
+debug("created %s", SUPPORTER_IMAGE_PATH);
 
-  // TODO: For now, this supporters.js script is used both in the classic docs (docs/) and next (docs-next/).
-  // Eventually, we'll sunset the classic docs and only have docs-next.
-  // At that point we'll have supporters.js only used for writing files.
-  if (process.argv.includes("--write-supporters-json")) {
-    await mkdir("src/content/data", { recursive: true });
-    await writeFile(
-      "src/content/data/supporters.json",
-      JSON.stringify(supporters, null, 4),
+// Fetch images for sponsors and save their image dimensions
+await Promise.all([
+  ...supporters[SPONSOR_TIER].map(fetchImage),
+  ...supporters[BACKER_TIER].map(fetchImage),
+]);
+debug("fetched images");
+
+invalidSupporters.forEach((supporter) => {
+  supporters[supporter.tier].splice(
+    supporters[supporter.tier].indexOf(supporter),
+    1,
+  );
+});
+debug("tossed out invalid supporters");
+
+const backerCount = supporters[BACKER_TIER].length;
+const sponsorCount = supporters[SPONSOR_TIER].length;
+const totalSupportersCount = backerCount + sponsorCount;
+const successRate = 1 - invalidSupporters.length / totalSupportersCount;
+
+debug(
+  "found %d valid backers and %d valid sponsors (%d total; %d invalid; %d blocked)",
+  backerCount,
+  sponsorCount,
+  totalSupportersCount,
+  invalidSupporters.length,
+  uniqueSupporters.size - totalSupportersCount,
+);
+
+if (successRate < PRODUCTION_SUCCESS_THRESHOLD) {
+  if (process.env.NETLIFY && process.env.CONTEXT !== "deploy-preview") {
+    throw new Error(
+      `Failed to meet success threshold ${PRODUCTION_SUCCESS_THRESHOLD * 100
+      }% (was ${successRate * 100
+      }%) for a production deployment; refusing to deploy`,
+    );
+  } else {
+    console.warn(
+      `WARNING: Success rate of ${successRate * 100
+      }% fails to meet production threshold of ${PRODUCTION_SUCCESS_THRESHOLD * 100
+      }%; would fail a production deployment!`,
     );
   }
-  return supporters;
-};
-
-module.exports = getSupporters;
-
-if (require.main === module) {
-  require("debug").enable("mocha:docs:data:supporters");
-  process.on("unhandledRejection", (err) => {
-    throw err;
-  });
-  getSupporters();
 }
+debug("supporter image pull completed");
+
+await fs.mkdir("src/content/data", { recursive: true });
+await fs.writeFile(
+  "src/content/data/supporters.json",
+  JSON.stringify(supporters, null, 4),
+);

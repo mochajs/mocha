@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe.only('should run this suite', function () {
   it('should run this test', function () {});

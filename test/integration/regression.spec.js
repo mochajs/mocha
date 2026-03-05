@@ -1,7 +1,5 @@
-"use strict";
-
-var run = require("./helpers").runMocha;
-var runJSON = require("./helpers").runMochaJSON;
+import { runMocha as run } from "./helpers.js";
+import { runMochaJSON as runJSON } from "./helpers.js";
 
 describe("regressions", function () {
   it("issue-1991: Declarations do not get cleaned up unless you set them to `null` - Memory Leak", function (done) {

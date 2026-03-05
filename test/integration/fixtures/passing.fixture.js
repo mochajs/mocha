@@ -1,6 +1,6 @@
-'use strict';
 
-var assert = require('assert');
+
+import assert from 'assert';
 
 describe('suite', function () {
   it('test1', function () {

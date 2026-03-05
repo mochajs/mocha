@@ -1,10 +1,8 @@
-"use strict";
+import sinon from "sinon";
+import * as helpers from "./helpers.js";
+import { reporters, Runner } from "../../index.js";
 
-var sinon = require("sinon");
-var events = require("../../").Runner.constants;
-var helpers = require("./helpers");
-var reporters = require("../../").reporters;
-
+var events = Runner.constants;
 var Base = reporters.Base;
 var Spec = reporters.Spec;
 var createMockRunner = helpers.createMockRunner;
@@ -18,7 +16,7 @@ var EVENT_TEST_PENDING = events.EVENT_TEST_PENDING;
 describe("Spec reporter", function () {
   var runReporter = makeRunReporter(Spec);
   var expectedTitle = "expectedTitle";
-  var noop = function () {};
+  var noop = function () { };
 
   beforeEach(function () {
     sinon.stub(Base, "useColors").value(false);

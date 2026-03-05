@@ -1,6 +1,6 @@
-'use strict';
 
-const Mocha = require('../../..');
+import * as Mocha from "../../../index.js"
+
 const {
   EVENT_RUN_BEGIN,
   EVENT_RUN_END,
@@ -54,4 +54,4 @@ class MyReporter {
   }
 }
 
-module.exports = MyReporter;
+export default MyReporter;

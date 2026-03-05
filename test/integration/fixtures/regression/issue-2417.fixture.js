@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('outer describe', function () {
   describe.only('outer describe.only', function () {

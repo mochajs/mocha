@@ -1,6 +1,4 @@
-"use strict";
-
-var helpers = require("./helpers");
+import helpers from "./helpers.js";
 var run = helpers.runMocha;
 
 describe("no-diff", function () {

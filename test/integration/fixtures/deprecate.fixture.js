@@ -1,9 +1,9 @@
-'use strict';
 
-var errors = require("../../../lib/errors");
 
-it('consolidates identical calls to deprecate', function() {
-  errors.deprecate("suite foo did a deprecated thing");
-  errors.deprecate("suite foo did a deprecated thing");
-  errors.deprecate("suite bar did a deprecated thing");
+import { deprecate } from "../../../lib/errors.js";
+
+it('consolidates identical calls to deprecate', function () {
+  deprecate("suite foo did a deprecated thing");
+  deprecate("suite foo did a deprecated thing");
+  deprecate("suite bar did a deprecated thing");
 });

@@ -1,6 +1,6 @@
-"use strict";
-var path = require("node:path");
-const { runMochaJSON: run, runMochaAsync } = require("./helpers");
+import path from "node:path";
+import { runMochaJSON as run, runMochaAsync } from "./helpers.js";
+
 var args = [];
 
 describe("esm", function () {

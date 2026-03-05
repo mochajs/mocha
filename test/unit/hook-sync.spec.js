@@ -1,5 +1,3 @@
-"use strict";
-
 describe("serial", function () {
   var calls = [];
 

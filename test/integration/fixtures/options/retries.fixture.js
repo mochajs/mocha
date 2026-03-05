@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('retries', function () {
   it('should fail', function () {

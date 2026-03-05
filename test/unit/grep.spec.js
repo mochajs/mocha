@@ -1,6 +1,4 @@
-"use strict";
-
-var Mocha = require("../../lib/mocha");
+import { Mocha } from "../../lib/mocha.js";
 
 describe("Mocha", function () {
   describe('"grep" option', function () {

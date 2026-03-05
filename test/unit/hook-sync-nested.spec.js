@@ -1,5 +1,3 @@
-"use strict";
-
 describe("serial", function () {
   describe("nested", function () {
     var calls = [];

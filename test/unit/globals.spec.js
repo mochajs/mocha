@@ -1,5 +1,3 @@
-"use strict";
-
 describe("global leaks", function () {
   before(function () {
     // uncomment to test

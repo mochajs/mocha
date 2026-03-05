@@ -1,9 +1,7 @@
-"use strict";
-
-const lookupFiles = require("../../lib/cli/lookup-files");
-const { existsSync, symlinkSync, renameSync } = require("node:fs");
-const path = require("node:path");
-const { touchFile, createTempDir } = require("./helpers");
+import { lookupFiles } from "../../lib/cli/lookup-files.js";
+import fs from "node:fs";
+import path from "node:path";
+import { touchFile, createTempDir } from "./helpers.js";
 
 const SYMLINK_SUPPORT = process.platform !== "win32";
 
@@ -21,7 +19,7 @@ describe("file utils", function () {
 
     touchFile(tmpFile("mocha-utils.js"));
     if (SYMLINK_SUPPORT) {
-      symlinkSync(tmpFile("mocha-utils.js"), tmpFile("mocha-utils-link.js"));
+      fs.symlinkSync(tmpFile("mocha-utils.js"), tmpFile("mocha-utils-link.js"));
     }
   });
 
@@ -41,9 +39,9 @@ describe("file utils", function () {
         tmpFile("mocha-utils-link.js"),
         tmpFile("mocha-utils.js"),
       ).and("to have length", 2);
-      expect(existsSync(tmpFile("mocha-utils-link.js")), "to be", true);
-      renameSync(tmpFile("mocha-utils.js"), tmpFile("bob"));
-      expect(existsSync(tmpFile("mocha-utils-link.js")), "to be", false);
+      expect(fs.existsSync(tmpFile("mocha-utils-link.js")), "to be", true);
+      fs.renameSync(tmpFile("mocha-utils.js"), tmpFile("bob"));
+      expect(fs.existsSync(tmpFile("mocha-utils-link.js")), "to be", false);
       expect(lookupFiles(tmpDir, ["js"], false), "to equal", []);
     });
 

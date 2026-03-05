@@ -1,9 +1,6 @@
-"use strict";
-
-var errors = require("../../lib/errors");
-var constants = require("../../lib/error-constants");
-const sinon = require("sinon");
-const { createNoFilesMatchPatternError } = require("../../lib/errors");
+import * as errors from "../../lib/errors.js";
+import constants from "../../lib/error-constants.js";
+import sinon from "sinon";
 
 describe("Errors", function () {
   afterEach(function () {
@@ -163,7 +160,7 @@ describe("Errors", function () {
     describe("when provided an Error object having a known Mocha error code", function () {
       it("should return true", function () {
         expect(
-          errors.isMochaError(createNoFilesMatchPatternError("derp")),
+          errors.isMochaError(errors.createNoFilesMatchPatternError("derp")),
           "to be true",
         );
       });

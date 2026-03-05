@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('pending shorthand', function () {
   xit('pending spec', function () {}).timeout(0);

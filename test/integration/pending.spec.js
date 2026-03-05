@@ -1,7 +1,5 @@
-"use strict";
-
-var assert = require("node:assert");
-var helpers = require("./helpers");
+import assert from "node:assert";
+import helpers from "./helpers.js";
 var run = helpers.runMochaJSON;
 var invokeNode = helpers.invokeNode;
 var toJSONResult = helpers.toJSONResult;

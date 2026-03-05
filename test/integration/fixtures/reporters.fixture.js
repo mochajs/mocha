@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * This file generates a wide range of output to test reporter functionality.

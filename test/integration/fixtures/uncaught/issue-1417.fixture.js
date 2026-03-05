@@ -1,4 +1,4 @@
-'use strict';
+
 
 /**
  * This file should generate only one failure per spec for the thrown error.

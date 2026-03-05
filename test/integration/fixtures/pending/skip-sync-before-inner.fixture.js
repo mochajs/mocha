@@ -1,5 +1,4 @@
-'use strict';
-var assert = require('assert');
+import assert from 'assert';
 
 describe('outer suite', function() {
   var runOrder = [];

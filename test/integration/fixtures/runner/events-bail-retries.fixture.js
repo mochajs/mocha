@@ -1,6 +1,5 @@
-'use strict';
-var Runner = require('../../../../lib/runner.js');
-var assert = require('assert');
+import { Runner } from '../../../../lib/runner.js';
+import assert from 'assert';
 var constants = Runner.constants;
 var EVENT_HOOK_BEGIN = constants.EVENT_HOOK_BEGIN;
 var EVENT_HOOK_END = constants.EVENT_HOOK_END;

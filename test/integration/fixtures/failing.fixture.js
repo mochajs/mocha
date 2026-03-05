@@ -1,8 +1,8 @@
-'use strict';
+
 
 // One passing test and three failing tests
 
-var assert = require('assert');
+import assert from 'assert';
 
 describe('suite', function () {
   it('test1', function () {

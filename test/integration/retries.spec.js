@@ -1,10 +1,10 @@
-"use strict";
+import assert from 'node:assert';
+import * as helpers from "./helpers.js";
+import { Base } from "../../lib/reporters/base.js"
 
-var assert = require("node:assert");
-var helpers = require("./helpers");
 var runJSON = helpers.runMochaJSON;
 var args = [];
-var bang = require("../../lib/reporters/base").symbols.bang;
+var bang = Base.symbols.bang;
 
 describe("retries", function () {
   it("are ran in correct order", function (done) {

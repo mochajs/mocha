@@ -1,5 +1,5 @@
-'use strict';
-const assert = require('assert');
+
+import assert from 'assert';
 
 describe('retries', function () {
   this.retries(1);
@@ -12,7 +12,7 @@ describe('retries', function () {
       throw new Error('retry error ' + times);
     }
   });
-  
+
   it('check for updated `suite.tests`', function() {
     assert.strictEqual(self.tests[0]._currentRetry, 1);
     assert.ok(self.tests[0]._retriedTest);

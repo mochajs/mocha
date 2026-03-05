@@ -1,10 +1,10 @@
-"use strict";
+import { Mocha } from "../../lib/mocha.js";
+import sinon from "sinon";
+import { constants } from "../../lib/error-constants.js"
 
-var Mocha = require("../../lib/mocha");
+const { TIMEOUT } = constants;
 var Runnable = Mocha.Runnable;
 var Suite = Mocha.Suite;
-var sinon = require("sinon");
-const { TIMEOUT } = require("../../lib/error-constants").constants;
 var STATE_FAILED = Runnable.constants.STATE_FAILED;
 
 describe("Runnable(title, fn)", function () {
@@ -175,7 +175,7 @@ describe("Runnable(title, fn)", function () {
     beforeEach(function () {
       // Runnable knows whether it's provided a 'done' parameter
       // eslint-disable-next-line no-unused-vars
-      run = new Runnable("foo", function (done) {});
+      run = new Runnable("foo", function (done) { });
     });
 
     it("should be .async", function () {
@@ -191,7 +191,7 @@ describe("Runnable(title, fn)", function () {
     var run;
 
     beforeEach(function () {
-      run = new Runnable("foo", function () {});
+      run = new Runnable("foo", function () { });
     });
 
     it("should not be .async", function () {
@@ -205,7 +205,7 @@ describe("Runnable(title, fn)", function () {
 
   describe("#globals", function () {
     it("should allow for whitelisting globals", function () {
-      var runnable = new Runnable("foo", function () {});
+      var runnable = new Runnable("foo", function () { });
       runnable.globals(["foobar"]);
       expect(runnable._allowedGlobals, "to equal", ["foobar"]);
     });
@@ -273,7 +273,7 @@ describe("Runnable(title, fn)", function () {
           runnable.allowUncaught = true;
 
           function fail() {
-            runnable.run(function () {});
+            runnable.run(function () { });
           }
           expect(fail, "to throw", "fail");
         });
@@ -409,7 +409,7 @@ describe("Runnable(title, fn)", function () {
           runnable.allowUncaught = true;
 
           function fail() {
-            runnable.run(function () {});
+            runnable.run(function () { });
           }
           expect(fail, "to throw", "fail");
           done();
@@ -482,7 +482,7 @@ describe("Runnable(title, fn)", function () {
       });
 
       it("should allow a timeout of 0", function (done) {
-        const runnable = new Runnable("foo", () => {});
+        const runnable = new Runnable("foo", () => { });
         runnable.timeout(0);
         runnable.run((err) => {
           expect(err, "to be falsy");
@@ -578,7 +578,7 @@ describe("Runnable(title, fn)", function () {
 
       describe("when the promise takes too long to settle", function () {
         var foreverPendingPromise = {
-          then: function () {},
+          then: function () { },
         };
 
         it("should throw the timeout error", function (done) {
@@ -672,7 +672,7 @@ describe("Runnable(title, fn)", function () {
 
   describe("#isFailed()", function () {
     it("should return `true` if test has not failed", function () {
-      var runnable = new Runnable("foo", function () {});
+      var runnable = new Runnable("foo", function () { });
       // runner sets the state
       runnable.run(function () {
         expect(runnable.isFailed(), "to be false");
@@ -680,7 +680,7 @@ describe("Runnable(title, fn)", function () {
     });
 
     it("should return `true` if test has failed", function () {
-      var runnable = new Runnable("foo", function () {});
+      var runnable = new Runnable("foo", function () { });
       // runner sets the state
       runnable.state = STATE_FAILED;
       runnable.run(function () {
@@ -689,7 +689,7 @@ describe("Runnable(title, fn)", function () {
     });
 
     it("should return `false` if test is pending", function () {
-      var runnable = new Runnable("foo", function () {});
+      var runnable = new Runnable("foo", function () { });
       // runner sets the state
       runnable.isPending = function () {
         return true;
@@ -702,7 +702,7 @@ describe("Runnable(title, fn)", function () {
 
   describe("#resetTimeout()", function () {
     it("should not time out if timeouts disabled after reset", function (done) {
-      var runnable = new Runnable("foo", function () {});
+      var runnable = new Runnable("foo", function () { });
       runnable.timeout(10);
       runnable.resetTimeout();
       runnable.timeout(0);
@@ -729,11 +729,11 @@ describe("Runnable(title, fn)", function () {
   describe("interesting property", function () {
     describe("id", function () {
       it("should have a unique identifier", function () {
-        expect(new Runnable("foo", () => {}), "to have property", "id");
+        expect(new Runnable("foo", () => { }), "to have property", "id");
       });
 
       it("should have a permanent identifier", function () {
-        const runnable = new Runnable("foo", () => {});
+        const runnable = new Runnable("foo", () => { });
         expect(runnable.id, "to be", runnable.id);
       });
     });

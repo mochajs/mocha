@@ -7,7 +7,7 @@
     "build": "astro check && astro build",
     "dev": "astro dev",
     "docs": "cd .. && npm i && cd docs-next && npm i && npm run generate && npm run build && cp _redirects dist/_redirects",
-    "generate": "node ../docs/_data/supporters.js --write-supporters-json",
+    "generate": "node ../docs/_data/supporters.js",
     "lint:knip": "knip --cache",
     "preview": "astro preview",
     "start": "astro dev"

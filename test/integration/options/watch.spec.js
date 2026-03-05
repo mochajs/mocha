@@ -1,8 +1,6 @@
-"use strict";
-
-const fs = require("node:fs");
-const path = require("node:path");
-const {
+import fs from "node:fs";
+import path from "node:path";
+import {
   copyFixture,
   runMochaWatchJSONAsync,
   sleep,
@@ -11,7 +9,7 @@ const {
   replaceFileContents,
   createTempDir,
   DEFAULT_FIXTURE,
-} = require("../helpers");
+} from "../helpers.js";
 
 describe("--watch", function () {
   describe("when enabled", function () {

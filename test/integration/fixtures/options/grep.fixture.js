@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('grep', function () {
   describe('Match', function () {

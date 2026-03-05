@@ -1,6 +1,4 @@
-"use strict";
-
-const { runMochaAsync } = require("./helpers");
+import { runMochaAsync } from "./helpers.js";
 
 describe("common js require", () => {
   it("should be able to run a test where all mocha exports are used", async () => {

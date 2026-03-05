@@ -1,11 +1,10 @@
-"use strict";
+import { posix as path } from "node:path";
 
-var path = require("node:path").posix;
-const {
+import {
   runMochaJSON,
-  resolveFixturePath: resolvePath,
+  resolveFixturePath as resolvePath,
   runMocha,
-} = require("../helpers");
+} from "../helpers.js";
 
 describe("--file", function () {
   var args = [];

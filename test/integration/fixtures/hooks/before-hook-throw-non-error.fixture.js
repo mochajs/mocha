@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('throws non-Error in `before` hook', function () {
   describe('throws null', function () {

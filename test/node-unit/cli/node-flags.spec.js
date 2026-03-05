@@ -1,13 +1,12 @@
-"use strict";
-
-const nodeEnvFlags = [...process.allowedNodeEnvironmentFlags];
-const {
+import {
   isNodeFlag,
   impliesNoTimeouts,
   unparseNodeFlags,
-} = require("../../../lib/cli/node-flags");
+} from "../../../lib/cli/node-flags";
+import { isMochaFlag } from "../../../lib/cli/run-option-metadata.js";
 
-const { isMochaFlag } = require("../../../lib/cli/run-option-metadata");
+const nodeEnvFlags = [...process.allowedNodeEnvironmentFlags];
+
 
 describe("node-flags", function () {
   describe("isNodeFlag()", function () {

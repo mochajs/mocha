@@ -1,6 +1,4 @@
-"use strict";
-
-module.exports = () => {
+export default () => {
   return {
     files: [
       "index.js",
@@ -38,7 +36,7 @@ module.exports = () => {
       const runningMocha = wallaby.testFramework;
       runningMocha.timeout(1000);
       // to expose it/describe etc. on the mocha under test
-      const MochaUnderTest = require("./");
+      const MochaUnderTest = require("./index.js");
       const mochaUnderTest = new MochaUnderTest();
       mochaUnderTest.suite.emit(
         MochaUnderTest.Suite.constants.EVENT_FILE_PRE_REQUIRE,
@@ -46,7 +44,7 @@ module.exports = () => {
         "",
         mochaUnderTest,
       );
-      require("./test/setup");
+      require("./test/setup.js");
     },
     debug: true,
     runMode: "onsave",

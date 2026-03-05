@@ -1,34 +1,33 @@
-"use strict";
-
-const js = require("@eslint/js");
-const { defineConfig, globalIgnores } = require("eslint/config");
-const n = require("eslint-plugin-n");
-const globals = require("globals");
-const { default: markdown } = require("@eslint/markdown");
+import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import n from "eslint-plugin-n";
+import globals from "globals";
+import markdown from "@eslint/markdown";
 
 const messages = {
   gh237: "See https://github.com/mochajs/mocha/issues/237",
   gh3604: "See https://github.com/mochajs/mocha/issues/3604",
 };
 
-module.exports = defineConfig(
+export default defineConfig(
   {
-    files: ["**/*.{cjs,js,mjs}"],
+    files: ["**/*.{cjs,js}"],
     extends: [n.configs["flat/recommended-script"], js.configs.recommended],
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2025,
       globals: {
         ...globals.browser,
         ...globals.node,
       },
+      sourceType: "module",
     },
     rules: {
       "no-redeclare": "off",
       "no-undef": "off",
       "n/no-process-exit": "off",
+      "n/no-unpublished-import": "off",
       "n/no-unpublished-require": "off",
       "n/no-unsupported-features/node-builtins": "off",
-      strict: ["error", "global"],
     },
   },
   {
@@ -39,27 +38,15 @@ module.exports = defineConfig(
       "bin/*",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
-      "scripts/**/*.{js,mjs}",
-      "test/**/*.{js,mjs}",
+      "scripts/**/*.js",
+      "test/**/*.js",
     ],
     languageOptions: {
       globals: globals.node,
     },
   },
   {
-    files: [
-      "**/*.mjs",
-      "lib/nodejs/esm-utils.js",
-      "scripts/pick-from-package-json.js",
-      "test/compiler-cjs/test.js",
-      "test/compiler-esm/*.js",
-    ],
-    languageOptions: {
-      sourceType: "module",
-    },
-  },
-  {
-    files: ["test/**/*.{js,mjs}"],
+    files: ["test/**/*.js"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -157,14 +144,11 @@ module.exports = defineConfig(
   },
   globalIgnores([
     ".karma/**",
-    "**/*.{fixture,min}.{js,mjs}",
+    "**/*.{fixture,min}.js",
     "coverage/**",
     "docs-next/{.astro,dist}/**",
     "mocha.js",
     "out/**",
     "test/integration/fixtures/**",
-    // TODO: ESLint's parser can't parse import attributes
-    "rollup.config.mjs",
-    "scripts/pick-from-package-json.mjs",
   ]),
 );

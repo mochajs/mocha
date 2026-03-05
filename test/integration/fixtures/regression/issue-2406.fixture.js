@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('outer describe', function () {
   it('should not run this test', function () {});

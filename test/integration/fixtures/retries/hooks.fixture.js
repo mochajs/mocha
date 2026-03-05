@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('retries', function () {
   var times = 0;

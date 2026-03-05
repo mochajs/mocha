@@ -1,9 +1,7 @@
-"use strict";
-
-const serializeJavascript = require("serialize-javascript");
-const rewiremock = require("rewiremock/node");
-const { SerializableWorkerResult } = require("../../lib/nodejs/serializer");
-const sinon = require("sinon");
+import serializeJavascript from "serialize-javascript";
+import rewiremock from "rewiremock/node";
+import { SerializableWorkerResult } from "../../lib/nodejs/serializer.js";
+import sinon from "sinon";
 
 const WORKER_PATH = require.resolve("../../lib/nodejs/worker.js");
 

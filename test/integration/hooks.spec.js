@@ -1,9 +1,7 @@
-"use strict";
-
-var assert = require("node:assert");
-var runMocha = require("./helpers").runMocha;
-var runMochaJSON = require("./helpers").runMochaJSON;
-var SPLIT_DOT_REPORTER_REGEXP = require("./helpers").SPLIT_DOT_REPORTER_REGEXP;
+import assert from "node:assert";
+import { runMocha } from "./helpers.js";
+import { runMochaJSON } from "./helpers.js";
+import { SPLIT_DOT_REPORTER_REGEXP } from "./helpers.js";
 var args = ["--reporter", "dot"];
 
 describe("hooks", function () {

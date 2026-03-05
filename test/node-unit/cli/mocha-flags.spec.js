@@ -1,9 +1,7 @@
-"use strict";
-
-const {
+import {
   types,
   expectedTypeForFlag,
-} = require("../../../lib/cli/run-option-metadata");
+} from "../../../lib/cli/run-option-metadata";
 
 describe("mocha-flags", function () {
   describe("expectedTypeForFlag()", function () {

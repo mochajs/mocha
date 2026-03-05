@@ -1,5 +1,3 @@
-"use strict";
-
 describe("hook timeout", function () {
   before(function (done) {
     setTimeout(done, 100);

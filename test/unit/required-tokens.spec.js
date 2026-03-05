@@ -1,7 +1,5 @@
-"use strict";
-
-const assert = require("node:assert");
-const { describe, it } = require("../..");
+import assert from "node:assert";
+import { describe, it } from "../../index.js";
 
 describe('using imported "describe"', function () {
   it('using imported "it"', function (done) {

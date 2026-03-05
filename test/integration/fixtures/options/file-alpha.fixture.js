@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('alpha', function () {
   it('should be executed first', function () {

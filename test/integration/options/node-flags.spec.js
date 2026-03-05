@@ -1,6 +1,4 @@
-"use strict";
-
-var invokeMocha = require("../helpers").invokeMocha;
+import { invokeMocha } from "../helpers.js";
 
 describe("node flags", function () {
   it("should not consider argument values to be node flags", function (done) {

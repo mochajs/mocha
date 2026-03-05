@@ -1,6 +1,4 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 

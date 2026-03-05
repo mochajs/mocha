@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('fails `beforeEach` hook', function () {
   beforeEach(function () {

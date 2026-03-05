@@ -1,6 +1,4 @@
-"use strict";
-
-var helpers = require("../helpers");
+import helpers from "../helpers.js";
 var runMochaJSON = helpers.runMochaJSON;
 
 describe("Enabled --pass-on-failing-test-suite", function () {

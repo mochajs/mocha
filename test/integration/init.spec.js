@@ -1,10 +1,8 @@
-"use strict";
-
-var fs = require("node:fs");
-var rimraf = require("rimraf");
-var invokeMocha = require("./helpers").invokeMocha;
-var path = require("node:path");
-var os = require("node:os");
+import fs from "node:fs";
+import rimraf from "rimraf";
+import { invokeMocha } from "./helpers.js";
+import path from "node:path";
+import os from "node:os";
 
 describe("init command", function () {
   var tmpdir;

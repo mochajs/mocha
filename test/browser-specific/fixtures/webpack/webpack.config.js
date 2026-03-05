@@ -1,14 +1,14 @@
-'use strict';
 
-const FailOnErrorsPlugin = require('fail-on-errors-webpack-plugin');
-const {tmpdir} = require('node:os');
-const {join} = require('node:path');
 
-const outputPath = join(tmpdir(), 'mocha-test-webpack');
+import FailOnErrorsWebpackPlugin from 'fail-on-errors-webpack-plugin';
+import os from 'node:os';
+import path from 'node:path';
+
+const outputPath = path.join(os.tmpdir(), 'mocha-test-webpack');
 
 console.error('output dir: %s', outputPath);
 
-module.exports = {
+export default {
   entry: require.resolve('./webpack.fixture.mjs'),
   target: 'browserslist:last 2 Chrome versions',
   output: {
@@ -16,7 +16,7 @@ module.exports = {
     chunkFormat: 'commonjs'
   },
   plugins: [
-    new FailOnErrorsPlugin({
+    new FailOnErrorsWebpackPlugin({
       failOnErrors: true,
       failOnWarnings: false
     })

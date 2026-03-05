@@ -1,13 +1,12 @@
-"use strict";
-
-const path = require("node:path");
-const rewiremock = require("rewiremock/node");
-const sinon = require("sinon");
-const { EventEmitter } = require("node:events");
+import path from "node:path";
+import rewiremock from "rewiremock/node";
+import sinon from "sinon";
+import { EventEmitter } from "node:events";
 
 const DUMB_FIXTURE_PATH = require.resolve("./fixtures/dumb-module.fixture.js");
-const DUMBER_FIXTURE_PATH =
-  require.resolve("./fixtures/dumber-module.fixture.js");
+const DUMBER_FIXTURE_PATH = require.resolve(
+  "./fixtures/dumber-module.fixture.js",
+);
 
 describe("Mocha", function () {
   let stubs;

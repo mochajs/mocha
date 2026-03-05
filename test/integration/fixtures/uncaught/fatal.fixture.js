@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('fatal uncaught exception', function () {
   describe('first suite', function () {
@@ -13,7 +13,7 @@ describe('fatal uncaught exception', function () {
       throw new Error('should never throw - first suite');
     });
   });
-  
+
   describe('second suite', function () {
     it('should not actually get run', function () {
       throw new Error('should never throw - second suite');

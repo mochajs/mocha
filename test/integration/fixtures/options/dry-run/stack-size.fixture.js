@@ -1,4 +1,4 @@
-var assert = require('assert');
+import assert from 'assert';
 
 describe('Wrapper suite', function () {
   for(let i=0; i < 400; i++) {

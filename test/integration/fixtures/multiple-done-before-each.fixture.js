@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('suite1', function () {
   beforeEach(function (done) {

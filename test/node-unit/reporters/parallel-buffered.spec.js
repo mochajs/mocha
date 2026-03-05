@@ -1,7 +1,11 @@
-"use strict";
-
 // this reporter does not actually output anything to the terminal, so we
 // need to test it differently.
+
+import { Runner } from "../../../lib/runner.js";
+import { EventEmitter } from "node:events";
+import sinon from 'sinon';
+import rewiremock from "rewiremock/node";
+import semver from "semver";
 
 const {
   EVENT_SUITE_BEGIN,
@@ -17,11 +21,7 @@ const {
   EVENT_HOOK_BEGIN,
   EVENT_HOOK_END,
   EVENT_RUN_END,
-} = require("../../../lib/runner").constants;
-const { EventEmitter } = require("node:events");
-const sinon = require("sinon");
-const rewiremock = require("rewiremock/node");
-const semver = require("semver");
+} = Runner.constants;
 
 describe("ParallelBuffered", function () {
   /** @type {EventEmitter} */

@@ -1,9 +1,9 @@
-'use strict';
+
 
 throw new Error("Error from mocharcWithThrowError");
 
 // a comment
-module.exports = {
+export default {
   require: ['foo', 'bar'],
   bail: true,
   reporter: 'dot',

@@ -1,7 +1,5 @@
-"use strict";
-
-const path = require("node:path");
-const {
+import path from "node:path";
+import {
   touchFile,
   runMochaAsync,
   runMochaWatchAsync,
@@ -9,7 +7,7 @@ const {
   DEFAULT_FIXTURE,
   resolveFixturePath,
   createTempDir,
-} = require("../helpers");
+} from "../helpers.js";
 
 describe("global setup/teardown", function () {
   describe("when mocha run in serial mode", function () {

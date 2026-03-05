@@ -9,10 +9,9 @@ Here is a minimalistic sample reporter, which you can use by executing: `mocha -
 
 ```js
 // my-reporter.js
-var mocha = require("mocha");
-module.exports = MyReporter;
+import mocha from "mocha";
 
-function MyReporter(runner) {
+export default function MyReporter(runner) {
   mocha.reporters.Base.call(this, runner);
   var passes = 0;
   var failures = 0;

@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('forbid pending - test calls `skip()`', function() {
   it('test1', function() {});

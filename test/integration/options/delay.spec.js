@@ -1,7 +1,5 @@
-"use strict";
-
-var path = require("node:path").posix;
-var helpers = require("../helpers");
+import { posix as path } from "node:path";
+import helpers from "../helpers.js";
 var runMochaJSON = helpers.runMochaJSON;
 
 describe("--delay", function () {

@@ -1,9 +1,7 @@
-"use strict";
-
-const path = require("node:path");
-const sinon = require("sinon");
-const Mocha = require("../../lib/mocha");
-const PendingError = require("../../lib/pending");
+import path from "node:path";
+import sinon from "sinon";
+import { Mocha } from "../../lib/mocha.js";
+import PendingError from "../../lib/pending.js";
 const { Suite, Runner, Test, Hook, Runnable } = Mocha;
 const { noop } = Mocha.utils;
 const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =

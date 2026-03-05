@@ -1,6 +1,4 @@
-"use strict";
-
-var mocha = require("../../lib/mocha");
+import * as mocha from "../../lib/mocha.js";
 
 var beforeEach = mocha.beforeEach;
 var it = mocha.it;

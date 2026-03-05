@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe.only('suite1', function() {
   it.skip('test1 - report as skipped', function() { });

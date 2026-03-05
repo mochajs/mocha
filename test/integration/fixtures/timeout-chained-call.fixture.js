@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe("should fail due to suite-level timeout lower than elapsed time of inner test", function() {
   it("inner test", async function () {

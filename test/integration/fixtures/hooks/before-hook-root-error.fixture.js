@@ -1,4 +1,4 @@
-'use strict';
+
 
 before(function() {
   throw new Error('before hook root error');

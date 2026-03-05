@@ -1,6 +1,6 @@
-'use strict';
 
-var assert = require('assert');
+
+import assert from 'assert';
 var delay = 200;
 
 setTimeout(function () {

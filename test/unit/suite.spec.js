@@ -1,9 +1,8 @@
-"use strict";
+import { Mocha } from "../../lib/mocha.js";
+import sinon from "sinon";
+import * as errors from "../../lib/errors.js";
 
-const Mocha = require("../../lib/mocha");
 const { Suite, Test, Context } = Mocha;
-const sinon = require("sinon");
-const errors = require("../../lib/errors");
 
 function supportsFunctionNames() {
   return function foo() {}.name === "foo";

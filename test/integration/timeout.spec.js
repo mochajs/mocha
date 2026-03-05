@@ -1,7 +1,5 @@
-"use strict";
-
-var assert = require("node:assert");
-var run = require("./helpers").runMochaJSON;
+import assert from "node:assert";
+import { runMochaJSON as run } from "./helpers.js";
 var args = [];
 
 describe("this.timeout()", function () {

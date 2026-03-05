@@ -1,8 +1,7 @@
 /* global BigInt */
-"use strict";
 
-var utils = require("../../lib/utils");
-var sinon = require("sinon");
+import utils from "../../lib/utils.js";
+import sinon from "sinon";
 
 describe("lib/utils", function () {
   afterEach(function () {

@@ -1,4 +1,4 @@
-'use strict';
+
 
 // The suite below should result in an additional error, but does
 // not. Uncomment once this bug is resolved.

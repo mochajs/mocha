@@ -1,4 +1,4 @@
-'use strict';
+
 
 describe('test marked with only and before has skip', function() {
   before(function() {

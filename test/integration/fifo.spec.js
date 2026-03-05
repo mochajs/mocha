@@ -1,25 +1,18 @@
-"use strict";
-
-const assert = require("node:assert/strict");
-const { execSync } = require("node:child_process");
-const {
-  createReadStream,
-  createWriteStream,
-  mkdtempSync,
-  unlinkSync,
-} = require("node:fs");
-const { join } = require("node:path");
-const { tmpdir } = require("node:os");
+import assert from "node:assert/strict";
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import os from "node:os";
 
 const { invokeMocha, toJSONResult } = require("./helpers");
 
 describe("FIFO support", function () {
   it("should accept a test passed as a FIFO", function (done) {
-    const dir = mkdtempSync(join(tmpdir(), "mocha-test-fifo-"));
-    const fifoPath = join(dir, "fifo-1");
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-test-fifo-"));
+    const fifoPath = path.join(dir, "fifo-1");
     execSync(`mkfifo ${fifoPath}`);
 
-    const writer = createWriteStream(fifoPath);
+    const writer = fs.createWriteStream(fifoPath);
     writer.on("ready", () => {
       writer.write(
         `
@@ -50,12 +43,12 @@ describe("FIFO support", function () {
           assert.equal(result.stats.failures, 0);
 
           // Node hangs if FIFO is never unlinked.
-          unlinkSync(fifoPath);
+          fs.unlinkSync(fifoPath);
 
           done();
         } catch (err) {
           // Node hangs if FIFO is never read from.
-          createReadStream(fifoPath).close();
+          fs.createReadStream(fifoPath).close();
 
           done(err);
         }

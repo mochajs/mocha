@@ -18,7 +18,7 @@ In browsers you can set root hooks directly via a `rootHooks` object: `mocha.set
 
 ## Defining a Root Hook Plugin
 
-A Root Hook Plugin file is a script which exports (via `module.exports`) a `mochaHooks` property.
+A Root Hook Plugin file is a script which exports (via `export` or `module.exports`) a `mochaHooks` property.
 It is loaded via `--require <file>`.
 
 Here's a simple example which defines a root hook, written using CJS and ESM syntax.

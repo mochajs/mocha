@@ -1,14 +1,11 @@
-"use strict";
-
-var Mocha = require("../../");
+import { Mocha } from "../../index.js";
+import "../setup.js";
 
 var mocha = new Mocha({
   ui: "bdd",
   globals: ["okGlobalA", "okGlobalB", "okGlobalC", "callback*"],
   growl: true,
 });
-
-require("../setup");
 
 mocha.addFile("test/unit/suite.spec.js");
 mocha.addFile("test/unit/runner.spec.js");
