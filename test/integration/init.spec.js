@@ -1,7 +1,6 @@
 "use strict";
 
 var fs = require("node:fs");
-var rimraf = require("rimraf");
 var invokeMocha = require("./helpers").invokeMocha;
 var path = require("node:path");
 var os = require("node:os");
@@ -21,7 +20,7 @@ describe("init command", function () {
 
   afterEach(function () {
     try {
-      rimraf.sync(tmpdir);
+      fs.rmSync(tmpdir, { recursive: true, force: true });
     } catch {
       /* empty */
     }
