@@ -1,0 +1,54 @@
+# Configuration for actions/labeler
+# Automatically labels PRs based on file paths changed
+# Learn more: https://github.com/actions/labeler
+
+# Documentation changes
+'area: documentation':
+  - changed-files:
+    - any-glob-to-any-file: 
+      - 'docs/**/*'
+      - 'docs-next/**/*'
+      - '*.md'
+      - '.github/*.md'
+
+# Browser-related changes
+'area: browser':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'browser-entry.js'
+      - 'karma.conf.js'
+      - '**/browser/**/*'
+
+# Test changes
+'area: testing':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'test/**/*'
+
+# Reporter changes
+'area: reporters':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'lib/reporters/**/*'
+      - 'test/reporters/**/*'
+
+# CLI/bin changes
+'area: cli':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'bin/**/*'
+      - 'lib/cli/**/*'
+
+# GitHub Actions / CI changes
+'area: ci':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/workflows/**/*'
+      - '.github/dependabot.yml'
+
+# Dependencies
+'type: dependencies':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'package-lock.json'
