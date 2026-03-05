@@ -3,7 +3,7 @@ body:
       description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
       label: Bug Report Checklist
       options:
-        - label: This is NOT a [security, `npm audit`, or GitHub Advisory issue](https://mochajs.org/explainers/security-vulnerability-reports/).
+        - label: This is NOT a [security, `npm audit`, or GitHub Advisory issue](https://mochajs.org/explainers/security-vulnerability-reports).
           required: true
         - label: I have read and agree to Mocha's [Code of Conduct](https://github.com/mochajs/mocha/blob/main/.github/CODE_OF_CONDUCT.md) and [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
           required: true
