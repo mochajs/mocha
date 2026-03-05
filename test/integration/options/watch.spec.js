@@ -4,6 +4,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const {
   copyFixture,
+  invokeMochaAsync,
+  resolveFixturePath,
   runMochaWatchJSONAsync,
   sleep,
   runMochaWatchAsync,
@@ -557,6 +559,63 @@ describe("--watch", function () {
           output: expect.it("not to match", /MaxListenersExceededWarning/),
         },
       );
+    });
+  });
+
+  describe("when used with ESM files in serial mode", function () {
+    it("should error out for .mjs test files", async function () {
+      return expect(
+        invokeMochaAsync(
+          ["--watch", resolveFixturePath("esm/esm-success.fixture.mjs")],
+          "pipe",
+        )[1],
+        "when fulfilled",
+        "to contain output",
+        /incompatible with ESM/,
+      );
+    });
+
+    it("should error out for .js files with type:module in package.json", async function () {
+      return expect(
+        invokeMochaAsync(
+          ["--watch", resolveFixturePath("esm/js-folder/esm-in-js.fixture.js")],
+          "pipe",
+        )[1],
+        "when fulfilled",
+        "to contain output",
+        /incompatible with ESM/,
+      );
+    });
+
+    it("should suggest --parallel --jobs 1 in error message", async function () {
+      return expect(
+        invokeMochaAsync(
+          ["--watch", resolveFixturePath("esm/esm-success.fixture.mjs")],
+          "pipe",
+        )[1],
+        "when fulfilled",
+        "to contain output",
+        /--parallel --jobs 1/,
+      );
+    });
+
+    it("should not error when --parallel is also used", async function () {
+      const testFile = resolveFixturePath("esm/esm-success.fixture.mjs");
+      // Using invokeMochaAsync with --parallel should NOT produce the ESM error.
+      // We just check the output does not contain the incompatibility message.
+      // The process will eventually be killed since --watch keeps running.
+      const [proc, resultPromise] = invokeMochaAsync(
+        ["--watch", "--parallel", testFile],
+        { stdio: "pipe" },
+      );
+
+      // Give it a moment to start, then kill it
+      await sleep(2000);
+      proc.kill("SIGINT");
+
+      return expect(resultPromise, "when fulfilled", "to satisfy", {
+        output: expect.it("not to contain", "incompatible with ESM"),
+      });
     });
   });
 });
