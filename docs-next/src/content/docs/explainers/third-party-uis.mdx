@@ -10,23 +10,16 @@ Creating a Third Party UI involves listening for the `pre-require` event emitted
 In this first brief example, we'll create an interface with only a single function: `test`
 
 ```javascript
-import Mocha from 'mocha'
-import MochaInterface from 'mocha/lib/interfaces/common.js';
+import Mocha from "mocha";
+import MochaInterface from "mocha/lib/interfaces/common.js";
 
 const Test = Mocha.Test;
 /**
  * A simple UI that only exposes a single function: test
  */
 function SimpleUI(suite) {
-  suite.on('pre-require', function(
-    context,
-    file,
-    mocha
-  ) {
-    const common = MochaInterface(
-      [suite],
-      context
-    );
+  suite.on("pre-require", function (context, file, mocha) {
+    const common = MochaInterface([suite], context);
 
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
@@ -34,7 +27,7 @@ function SimpleUI(suite) {
      * Describes a specification or test-case with the given `title`
      * and callback `fn` acting as a thunk.
      */
-    context.test = function(title, fn) {
+    context.test = function (title, fn) {
       const test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
@@ -42,9 +35,9 @@ function SimpleUI(suite) {
       return test;
     };
   });
-};
+}
 
-Mocha.interfaces['simple-ui'] = SimpleUI;
+Mocha.interfaces["simple-ui"] = SimpleUI;
 
 export default SimpleUI;
 ```
@@ -80,9 +73,9 @@ $ mocha --require ./simple-ui.js --ui simple-ui test.js
 In this next example, we'll be extending the [TDD interface](https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js) with a comment function that simply prints the passed text. That is, `comment('This is a comment');` would print the string.
 
 ```javascript
-import Mocha from 'mocha';
-import MochaInterface from 'mocha/lib/interfaces/common.js';
-import escapeStringRegexp from 'escape-string-regexp';
+import Mocha from "mocha";
+import MochaInterface from "mocha/lib/interfaces/common.js";
+import escapeStringRegexp from "escape-string-regexp";
 
 const Test = Mocha.Test;
 const Suite = Mocha.Suite;
@@ -201,9 +194,9 @@ function ExampleUI(suite) {
      */
     context.test.skip = common.test.skip;
   });
-};
+}
 
-Mocha.interfaces['example-ui'] = ExampleUI;
+Mocha.interfaces["example-ui"] = ExampleUI;
 
 export default ExampleUI;
 ```

@@ -34,7 +34,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { randomUUID } = require("node:crypto");
 const rollup = require("rollup");
-const { minimatch } = require("minimatch");
+const picomatch = require("picomatch");
 const { loadConfigFile } = require("rollup/dist/loadConfigFile.js");
 const multiEntry = require("@rollup/plugin-multi-entry");
 
@@ -53,7 +53,7 @@ function framework(fileConfigs, pluginConfig, basePath, preprocessors) {
     .map((fileConfig) => fileConfig.pattern)
     .filter((filePath) =>
       includePatterns.some((includePattern) =>
-        minimatch(filePath, includePattern.replace(/\\/g, "/")),
+        picomatch.isMatch(filePath, includePattern.replace(/\\/g, "/")),
       ),
     );
 
