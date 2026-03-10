@@ -161,7 +161,7 @@
   },
   "files": [
     "bin/*mocha*",
-    "lib/**/*.{js,html,json}",
+    "lib/**/*.{js,mjs,html,json}",
     "index.js",
     "mocha.css",
     "mocha.js",
