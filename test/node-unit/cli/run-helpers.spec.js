@@ -57,12 +57,14 @@ describe("helpers", function () {
 
     describe("when used with a third-party interface", function () {
       it('should add the interface to "Mocha.interfaces"', function () {
-        // let's suppose that `glob` is an interface
-        const opts = { ui: "glob" };
+        // let's suppose that `tinyglobby` is an interface
+        const opts = { ui: "tinyglobby" };
         validateLegacyPlugin(opts, "ui", Mocha.interfaces);
-        expect(opts.ui, "to equal", "glob");
-        expect(Mocha.interfaces, "to satisfy", { glob: require("glob") });
-        delete Mocha.interfaces.glob;
+        expect(opts.ui, "to equal", "tinyglobby");
+        expect(Mocha.interfaces, "to satisfy", {
+          tinyglobby: require("tinyglobby"),
+        });
+        delete Mocha.interfaces.tinyglobby;
       });
     });
 
