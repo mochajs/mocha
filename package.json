@@ -95,7 +95,7 @@
     "debug": "^4.3.5",
     "diff": "^8.0.3",
     "escape-string-regexp": "^4.0.0",
-    "find-up": "^5.0.0",
+    "find-up": "^8.0.0",
     "glob": "^13.0.0",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
