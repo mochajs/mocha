@@ -5,26 +5,12 @@ on:
     branches:
       - main
     paths-ignore:
-      [
-        "*.md",
-        "docs/**",
-        ".github/**",
-        ".prettierignore",
-        "AUTHORS",
-        "LICENSE",
-      ]
+      ["*.md", "docs/**", ".github/**", ".prettierignore", "AUTHORS", "LICENSE"]
   pull_request:
     branches:
       - main
     paths-ignore:
-      [
-        "*.md",
-        "docs/**",
-        ".github/**",
-        ".prettierignore",
-        "AUTHORS",
-        "LICENSE",
-      ]
+      ["*.md", "docs/**", ".github/**", ".prettierignore", "AUTHORS", "LICENSE"]
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
 
