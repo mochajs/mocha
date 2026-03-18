@@ -9,7 +9,7 @@ This is the current Mocha documentation website, hosted at [mochajs.org](https:/
 To run this site:
 
 ```shell
-cd docs-next
+cd docs
 npm i
 npm run generate
 npm run dev
