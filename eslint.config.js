@@ -166,7 +166,5 @@ module.exports = defineConfig(
     // TODO: ESLint's parser can't parse import attributes
     "rollup.config.mjs",
     "scripts/pick-from-package-json.mjs",
-    "**/node_modules/**",
-    "docs/node_modules/**"
   ]),
 );
