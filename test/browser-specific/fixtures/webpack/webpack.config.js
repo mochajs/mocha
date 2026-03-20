@@ -19,5 +19,8 @@ module.exports = {
       failOnErrors: true,
       failOnWarnings: false
     })
-  ]
+  ],
+  experiments: {
+    outputModule: true,
+  },
 };
