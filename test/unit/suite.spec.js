@@ -101,6 +101,12 @@ describe("Suite", function () {
         });
       });
 
+      describe("when undefined is passed", function () {
+        it("should return the timeout value", function () {
+          expect(suite.timeout(undefined), "to be", 2000);
+        });
+      });
+
       describe("when argument is passed", function () {
         it("should return the Suite object", function () {
           const newSuite = suite.timeout(5000);
@@ -127,10 +133,41 @@ describe("Suite", function () {
         });
       });
 
+      describe("when undefined is passed", function () {
+        it("should return the slow value", function () {
+          expect(suite.slow(undefined), "to be", 75);
+        });
+      });
+
       describe("when argument is passed", function () {
         it("should return the Suite object", function () {
           const newSuite = suite.slow(5000);
           expect(newSuite.slow(), "to be", 5000);
+        });
+      });
+    });
+
+    describe("retries()", function () {
+      beforeEach(function () {
+        suite = new Suite("A Suite");
+      });
+
+      describe("when no argument is passed", function () {
+        it("should return the retries value", function () {
+          expect(suite.retries(), "to be", -1);
+        });
+      });
+
+      describe("when undefined is passed", function () {
+        it("should return the retries value", function () {
+          expect(suite.retries(undefined), "to be", -1);
+        });
+      });
+
+      describe("when argument is passed", function () {
+        it("should return the Suite object", function () {
+          const newSuite = suite.retries(5);
+          expect(newSuite.retries(), "to be", 5);
         });
       });
     });
