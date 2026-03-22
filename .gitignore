@@ -145,3 +145,6 @@ Temporary Items
 
 # Local Netlify folder
 .netlify
+
+# Docs deps
+docs/node_modules/
