@@ -184,6 +184,7 @@ function toJSONResult(result) {
   } catch (err) {
     throw new Error(
       `Couldn't parse JSON: ${err.message}\n\nOriginal result output: ${result.output}`,
+      { cause: err },
     );
   }
 }
