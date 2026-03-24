@@ -49,6 +49,19 @@ describe("esm-utils", function () {
       );
     });
 
+    it("should throw the import() error for a .ts file when the error is not ERR_UNKNOWN_FILE_EXTENSION", async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            "../../test/node-unit/fixtures/esm-ts-runtime-error/module.ts",
+          ),
+        "to be rejected with error satisfying",
+        {
+          message: /runtime-error-from-ts-fixture/,
+        },
+      );
+    });
+
     it("should surface Mocha errors rather than falling back to `import(...)`", async function () {
       return expect(
         () =>
