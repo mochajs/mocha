@@ -623,6 +623,36 @@ describe("Runnable(title, fn)", function () {
           });
         });
       });
+
+      it("should include actual elapsed duration in timeout error message (hard timeout)", function (done) {
+        var runnable = new Runnable("foo", function (done) {
+          setTimeout(done, 100);
+        });
+        runnable.timeout(10);
+        runnable.run(function (err) {
+          expect(
+            err.message,
+            "to match",
+            /Timeout of 10ms exceeded\. Test ran for \d+ms\./,
+          );
+          done();
+        });
+      });
+
+      it("should include actual elapsed duration in timeout error message (soft timeout)", function (done) {
+        var runnable = new Runnable("foo", function (innerDone) {
+          setTimeout(innerDone, 60);
+        });
+        runnable.timeout(50);
+        runnable.run(function (err) {
+          expect(
+            err.message,
+            "to match",
+            /Timeout of 50ms exceeded\. Test ran for \d+ms\./,
+          );
+          done();
+        });
+      });
     });
 
     describe("if async", function () {
