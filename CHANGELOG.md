@@ -1,6 +1,6 @@
 # Changelog
 
-## [12.0.0-beta.10](https://github.com/mochajs/mocha/compare/v12.0.0-beta.9...v12.0.0-beta.10) (2026-02-21)
+## [12.0.0-beta.10](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9...v12.0.0-beta-10) (2026-02-21)
 
 
 ### 🌟 Features
@@ -49,21 +49,21 @@
 * **deps:** bump OctoGuide/bot in the github-actions group ([#5724](https://github.com/mochajs/mocha/issues/5724)) ([87224d8](https://github.com/mochajs/mocha/commit/87224d8400fa3b074f77a8ba1baadf7e0b99d864))
 * run `npm audit fix` ([#5695](https://github.com/mochajs/mocha/issues/5695)) ([c7b00b0](https://github.com/mochajs/mocha/commit/c7b00b0e4f03583c4dcc407f28a5453df436f32b))
 
-## [12.0.0-beta.9](https://github.com/mochajs/mocha/compare/v12.0.0-beta.8...v12.0.0-beta.9) (2026-02-13)
+## [12.0.0-beta.9](https://github.com/mochajs/mocha/compare/v12.0.0-beta-8...v12.0.0-beta-9) (2026-02-13)
 
 
 ### 🌟 Features
 
 * remove `log-symbols` dependency ([#5469](https://github.com/mochajs/mocha/issues/5469)) ([b92168f](https://github.com/mochajs/mocha/commit/b92168f5625be7343fb94d458d8a055cca8ff0a4))
 
-## [12.0.0-beta.8](https://github.com/mochajs/mocha/compare/v12.0.0-beta.7...v12.0.0-beta.8) (2026-02-06)
+## [12.0.0-beta.8](https://github.com/mochajs/mocha/compare/v12.0.0-beta-7...v12.0.0-beta-8) (2026-02-06)
 
 
 ### 🧹 Chores
 
 * use OIDC to publish to npm ([#5681](https://github.com/mochajs/mocha/issues/5681)) ([5567aed](https://github.com/mochajs/mocha/commit/5567aed50a00b63074d5c7703c6d8196dee92088))
 
-## [12.0.0-beta.7](https://github.com/mochajs/mocha/compare/v12.0.0-beta.6...v12.0.0-beta.7) (2026-02-03)
+## [12.0.0-beta.7](https://github.com/mochajs/mocha/compare/v12.0.0-beta-6...v12.0.0-beta-7) (2026-02-03)
 
 
 ### 🩹 Fixes
@@ -82,7 +82,7 @@
 * move nyc config changes from package.json into .nycrc ([#5668](https://github.com/mochajs/mocha/issues/5668)) ([e923e40](https://github.com/mochajs/mocha/commit/e923e4063f6a24dcaf7c6d7c7a3c8be998cb7980))
 * remove extra newline ([bbe2bdb](https://github.com/mochajs/mocha/commit/bbe2bdbb69f7aa560645a5ab2cbd596dd0b43448))
 
-## [12.0.0-beta.6](https://github.com/mochajs/mocha/compare/v12.0.0-beta.5...v12.0.0-beta.6) (2026-01-23)
+## [12.0.0-beta.6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-5...v12.0.0-beta-6) (2026-01-23)
 
 
 ### 🩹 Fixes
@@ -95,7 +95,7 @@
 
 * **deps:** bump OctoGuide/bot in the github-actions group ([#5653](https://github.com/mochajs/mocha/issues/5653)) ([e06cce7](https://github.com/mochajs/mocha/commit/e06cce7a49b79a163e33db166e9b078b0d7b4001))
 
-## [12.0.0-beta.5](https://github.com/mochajs/mocha/compare/v12.0.0-beta.4...v12.0.0-beta.5) (2026-01-16)
+## [12.0.0-beta.5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-4...v12.0.0-beta-5) (2026-01-16)
 
 
 ### 🌟 Features
@@ -122,7 +122,7 @@
 * **docs/dev-deps:** use JS-native `fetch` to get supporters data instead of external `needle` ([#5643](https://github.com/mochajs/mocha/issues/5643)) ([e37e56f](https://github.com/mochajs/mocha/commit/e37e56fbe6a1072f1784ef87278d46f7ac48cdb8))
 * initial file implementation for ocotoguide ([#5608](https://github.com/mochajs/mocha/issues/5608)) ([a5f5c64](https://github.com/mochajs/mocha/commit/a5f5c6442505069573a17798a515f267c24a38f3))
 
-## [12.0.0-beta.4](https://github.com/mochajs/mocha/compare/v12.0.0-beta.3...v12.0.0-beta.4) (2026-01-04)
+## [12.0.0-beta.4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-3...v12.0.0-beta-4) (2026-01-04)
 
 
 ### 🌟 Features
@@ -145,11 +145,11 @@
 
 * **ci:** use OIDC token for trusted publishing to `npm` ([#5610](https://github.com/mochajs/mocha/issues/5610)) ([dc0fdb7](https://github.com/mochajs/mocha/commit/dc0fdb767fe46b885f7a0ccfb67acfb453156a3b))
 * create exclusions for nyc ([#5609](https://github.com/mochajs/mocha/issues/5609)) ([702473a](https://github.com/mochajs/mocha/commit/702473a54d9348948a63b4600171afa6956ccb0b))
-* **main:** release 12.0.0-beta.4 ([#5598](https://github.com/mochajs/mocha/issues/5598)) ([424516e](https://github.com/mochajs/mocha/commit/424516ed3c34c6716afbf554425cf5df439cd86c))
+* **main:** release 12.0.0-beta-4 ([#5598](https://github.com/mochajs/mocha/issues/5598)) ([424516e](https://github.com/mochajs/mocha/commit/424516ed3c34c6716afbf554425cf5df439cd86c))
 * prevent unwanted Prettier rewrites ([#5591](https://github.com/mochajs/mocha/issues/5591)) ([3ea1578](https://github.com/mochajs/mocha/commit/3ea15789ddb4b77c591d9da36d2476ac359de00d))
 * remove broken browser-test.yml ([#5615](https://github.com/mochajs/mocha/issues/5615)) ([33ce345](https://github.com/mochajs/mocha/commit/33ce345f9ab4f47573a4994c5c01de6eda2af45d))
 * remove legacy `docs/` ([#5583](https://github.com/mochajs/mocha/issues/5583)) ([d8c310e](https://github.com/mochajs/mocha/commit/d8c310e3eddd235be55ad1891cde84c3be6f56f3))
-* revert "chore(main): release 12.0.0-beta.4 ([#5598](https://github.com/mochajs/mocha/issues/5598))" ([#5619](https://github.com/mochajs/mocha/issues/5619)) ([dba8091](https://github.com/mochajs/mocha/commit/dba809196541df415fac2681822f5cd35cf20442))
+* revert "chore(main): release 12.0.0-beta-4 ([#5598](https://github.com/mochajs/mocha/issues/5598))" ([#5619](https://github.com/mochajs/mocha/issues/5619)) ([dba8091](https://github.com/mochajs/mocha/commit/dba809196541df415fac2681822f5cd35cf20442))
 
 
 ### 🤖 Automation
@@ -157,7 +157,7 @@
 * **dep:** update `diff` from v7 to v8 ([#5605](https://github.com/mochajs/mocha/issues/5605)) ([8ca311c](https://github.com/mochajs/mocha/commit/8ca311c6c9b0d353b1c9d65b5751296d9baddd83))
 * update npm command for format ([#5603](https://github.com/mochajs/mocha/issues/5603)) ([c6a29cc](https://github.com/mochajs/mocha/commit/c6a29ccb38f81d65100cb2a0e6d73ad4303f58fb))
 
-## [12.0.0-beta.3](https://github.com/mochajs/mocha/compare/v12.0.0-beta.2...v12.0.0-beta.3) (2026-01-01)
+## [12.0.0-beta.3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-2...v12.0.0-beta-3) (2026-01-01)
 
 
 ### 🌟 Features
@@ -193,14 +193,14 @@
 * **dev-deps:** upgrade `markdownlint-cli` to latest v0.46.0  ([#5560](https://github.com/mochajs/mocha/issues/5560)) ([a124f1d](https://github.com/mochajs/mocha/commit/a124f1d3b7d0f8277962cae295cd43878294e183))
 * **dev-deps:** upgrade `nyc` from 15 to 17 ([#5556](https://github.com/mochajs/mocha/issues/5556)) ([599ab01](https://github.com/mochajs/mocha/commit/599ab013f526e78b3888a092a928ea4bc67138c0))
 
-## [12.0.0-beta.2](https://github.com/mochajs/mocha/compare/v12.0.0-beta.1...v12.0.0-beta.2) (2025-11-25)
+## [12.0.0-beta.2](https://github.com/mochajs/mocha/compare/v12.0.0-beta-1...v12.0.0-beta-2) (2025-11-25)
 
 
 ### 🧹 Chores
 
 * bump glob to version 13 ([#5546](https://github.com/mochajs/mocha/issues/5546)) ([f4d4ad2](https://github.com/mochajs/mocha/commit/f4d4ad23e9e994668c7d95c5a9bf59f581dccebf))
 
-## [12.0.0-beta.1](https://github.com/mochajs/mocha/compare/v11.7.4...v12.0.0-beta.1) (2025-11-25)
+## [12.0.0-beta.1](https://github.com/mochajs/mocha/compare/v11.7.4...v12.0.0-beta-1) (2025-11-25)
 
 
 ### ⚠ BREAKING CHANGES
