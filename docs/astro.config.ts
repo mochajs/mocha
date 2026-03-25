@@ -130,6 +130,10 @@ export default defineConfig({
               slug: "explainers/run-cycle-overview",
             },
             {
+              label: "Security vulnerability reports",
+              slug: "explainers/security-vulnerability-reports",
+            },
+            {
               label: "Shared behaviours",
               slug: "explainers/shared-behaviours",
             },
