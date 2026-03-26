@@ -20,8 +20,6 @@
     { "type": "ci", "section": "🤖 Automation", "hidden": true }
   ],
   "packages": {
-    ".": {
-      "prerelease-type": "beta-10"
-    }
+    ".": {}
   }
 }
