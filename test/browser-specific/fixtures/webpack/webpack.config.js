@@ -11,13 +11,16 @@ console.error('output dir: %s', outputPath);
 module.exports = {
   entry: require.resolve('./webpack.fixture.mjs'),
   target: 'browserslist:last 2 Chrome versions',
+  experiments: {
+    outputModule: true,
+  },
   output: {
-    path: outputPath
+    path: outputPath,
   },
   plugins: [
     new FailOnErrorsPlugin({
       failOnErrors: true,
       failOnWarnings: false
     })
-  ]
+  ],
 };
