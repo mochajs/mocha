@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       target_branch:
-        description: "Branch to run release-please against"
+        description: "Branch to run Release Please against"
         default: "main"
         required: false
 
