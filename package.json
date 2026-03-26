@@ -66,7 +66,7 @@
     "test-browser:reporters:qunit": "cross-env MOCHA_TEST=qunit npm run -s test-browser-run",
     "test-browser:reporters:tdd": "cross-env MOCHA_TEST=tdd npm run -s test-browser-run",
     "test-browser:reporters": "run-s test-browser:reporters:*",
-    "test-browser:webpack-compat": "webpack --mode development --stats-error-details --config ./test/browser-specific/fixtures/webpack/webpack.config.js",
+    "test-browser:webpack-compat": "webpack --mode development --config ./test/browser-specific/fixtures/webpack/webpack.config.js",
     "test-browser": "run-s clean build test-browser:*",
     "test-coverage-clean": "rimraf .nyc_output coverage",
     "test-coverage-generate": "nyc report --reporter=lcov --reporter=text",
