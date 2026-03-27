@@ -150,6 +150,34 @@ describe("JSON reporter", function () {
         done();
       });
     });
+
+    it("should handle same object references (DAG) in errors", function (done) {
+      var testTitle = "json test DAG";
+      var shared = { foo: "bar" };
+      var error = {
+        message: "dag",
+        actual: shared,
+        expected: shared,
+      };
+
+      var test = new Test(testTitle, function () {
+        throw error;
+      });
+
+      test.file = testFile;
+      suite.addTest(test);
+
+      runner.run(function () {
+        sinon.restore();
+        expect(runner.testResults.failures[0].err.actual, "to equal", {
+          foo: "bar",
+        });
+        expect(runner.testResults.failures[0].err.expected, "to equal", {
+          foo: "bar",
+        });
+        done();
+      });
+    });
   });
 
   describe('when "reporterOption.output" is provided', function () {
