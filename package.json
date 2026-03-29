@@ -52,6 +52,7 @@
     "lint:knip": "knip --cache",
     "lint:knip-docs": "cd docs && npm run lint:knip",
     "lint:code": "eslint . --max-warnings 0",
+    "prelint": "npm run clean",
     "lint": "run-p lint:*",
     "prepublishOnly": "run-s clean build version",
     "test-browser-run": "cross-env NODE_PATH=. karma start ./karma.conf.js --single-run",
