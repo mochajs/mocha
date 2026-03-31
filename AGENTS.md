@@ -109,19 +109,17 @@ Reusable execution details in `.github/workflows/npm-script.yml`:
 - `NODE_OPTIONS=--trace-warnings`
 - Optional coverage upload via Codecov
 
-## Current known issues seen during onboarding validation
+## Transient validation issues and environment drift
 
-Observed during local onboarding validation on 2026-03-31 (macOS); treat these as environment/version drift signals, not permanent repository truth.
+During onboarding or after dependency refresh, you may encounter validation failures that reflect local environment or ecosystem drift rather than a persistent repository bug.
 
-- After dependency refresh, `npm run lint:code` failed due to a warning treated as error (`--max-warnings 0`) in `mocha.mjs` (unused eslint-disable directive).
-- `docs` build path currently unstable in this environment after dependency refresh:
-  - `docs` generation succeeds
-  - `astro build` failed with `Cannot read properties of undefined (reading '_zod')`
+Common patterns include:
+- Lint commands (for example, `npm run lint:code`) failing because new or stricter rules turn warnings into errors (such as via `--max-warnings 0`). Inspect the reported rule and location before changing lint configuration or adding suppressions.
+- Docs-related workflows where documentation generation succeeds but a subsequent static site or bundler step (for example, `astro build`) fails with runtime errors originating in third-party dependencies.
 
-Treat these as environment/version drift signals; do not “fix” by weakening lint or removing checks unless explicitly requested.
+Treat these as potential environment/version drift signals. Do not resolve them by broadly weakening checks (for example, relaxing lint strictness or skipping build steps) unless explicitly requested in the task.
 
 ## Change strategy for agents
-
 - Prefer smallest reproducible command to validate your specific edit first.
 - Add/adjust tests with behavior changes; do not change unrelated tests.
 - Avoid broad dependency upgrades unless task explicitly requests it.
