@@ -47,6 +47,8 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
+      # If this step fails, it may be a transient issue, just run again
+      # https://github.com/mochajs/mocha/issues/5611
       - name: Upgrade npm for OIDC support
         run: npm install -g npm@latest
 
