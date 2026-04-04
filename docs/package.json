@@ -8,6 +8,7 @@
     "dev": "astro dev",
     "docs": "cd .. && npm i && cd docs && npm i && npm run generate && npm run build && cp _redirects dist/_redirects",
     "generate": "node _data/supporters.cjs --write-supporters-json",
+    "prelint:knip": "npm install",
     "lint:knip": "knip --cache",
     "preview": "astro preview",
     "start": "astro dev"
@@ -21,6 +22,6 @@
   },
   "devDependencies": {
     "debug": "^4.4.3",
-    "knip": "^5.83.1"
+    "knip": "^6.0.0"
   }
 }
