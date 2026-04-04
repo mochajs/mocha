@@ -8,7 +8,7 @@ import type { FSWatcher, MatchFunction } from "chokidar" with {
   "resolution-mode": "import",
 };
 
-import type { constants } from "./error-constants.js";
+import type { constants } from "./error-constants.mjs";
 import type Mocha from "./mocha.js";
 import Runner from "./runner.js";
 
