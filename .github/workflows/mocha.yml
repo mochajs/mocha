@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      ["*.md", "docs/**", ".github/**", ".prettierignore", "AUTHORS", "LICENSE"]
   pull_request:
     branches:
       - main
-    paths-ignore:
-      ["*.md", "docs/**", ".github/**", ".prettierignore", "AUTHORS", "LICENSE"]
     types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
 
@@ -19,12 +15,45 @@ permissions:
   id-token: write # for Codecov OIDC
 
 jobs:
+  # Detect whether non-doc files changed so test jobs can be skipped on
+  # documentation-only PRs while format:check still runs on every PR.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.check.outputs.code }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "code=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          FILES=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files --paginate --jq '.[].filename')
+          for f in $FILES; do
+            case "$f" in
+              *.md|docs/*|.github/*|.prettierignore|AUTHORS|LICENSE) ;;
+              *) echo "code=true" >> $GITHUB_OUTPUT; exit 0 ;;
+            esac
+          done
+          echo "code=false" >> $GITHUB_OUTPUT
+
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format:check
+
   lint:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
     with:
       npm-script: lint
 
   smoke:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
     with:
       node-versions: "20,22,24"
@@ -33,8 +62,9 @@ jobs:
   test-node-lts:
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     # https://github.com/mochajs/mocha/issues/5183
+    needs: [changes, smoke]
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
-    needs: smoke
     strategy:
       fail-fast: false
       matrix:
@@ -56,8 +86,9 @@ jobs:
       contents: read # for Codecov OIDC
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     # https://github.com/mochajs/mocha/issues/5183
+    needs: [changes, test-node-lts]
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
-    needs: test-node-lts
     strategy:
       fail-fast: false
       matrix:
@@ -81,12 +112,16 @@ jobs:
       coverage: ${{ matrix.coverage }}
 
   test-browser-local:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
     with:
       browsers: ChromeHeadless
       npm-script: test-browser
 
   tsc:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     uses: ./.github/workflows/npm-script.yml
     with:
       npm-script: tsc
