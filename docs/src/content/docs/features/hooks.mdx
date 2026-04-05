@@ -97,7 +97,9 @@ Delayed root suites are incompatible with [parallel mode](/features/parallel-mod
 
 If you need to perform asynchronous operations before any of your suites are run (e.g. for dynamically generating tests), you may delay the root suite.
 Run `mocha` with the `--delay` flag.
-This will attach a special callback function, `run()`, to the global context:
+This will attach a special callback function, `run()`, to the global context.
+
+With `--delay`, Mocha loads your test file and executes its top-level code as usual, but waits to _run_ tests until you call `run()`. Place your `describe()` and `it()` calls inside the asynchronous code so that suites are registered after setup completes, then call `run()` to begin execution:
 
 ```js
 const assert = require("assert");
