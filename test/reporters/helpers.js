@@ -2,7 +2,7 @@
 
 var sinon = require("sinon");
 var errors = require("../../lib/errors");
-var createStatsCollector = require("../../lib/stats-collector.mjs");
+var createStatsCollector = require("../../lib/stats-collector.mjs").default;
 
 var createUnsupportedError = errors.createUnsupportedError;
 
