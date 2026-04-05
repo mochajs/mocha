@@ -23,6 +23,10 @@ Mocha will use the file's extension to determine how to parse the file, and will
 
 You can specify a custom `package.json` location as well, using the `--package <path>` option.
 
+## Parent Directory Lookup
+
+If Mocha does not find a configuration file in the current working directory, it will search parent directories until one is found or the filesystem root is reached. The same applies when looking for `package.json`. This means a config file placed in a repository root will be used automatically when running Mocha from any subdirectory.
+
 ## Ignoring Config Files
 
 To skip looking for config files, use `--no-config`.
