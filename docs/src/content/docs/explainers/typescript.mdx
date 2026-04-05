@@ -1,0 +1,76 @@
+---
+title: TypeScript
+description: Running Mocha tests written in TypeScript.
+---
+
+## Node.js Native Type Stripping
+
+The simplest way to use TypeScript with Mocha is [Node.js native type stripping](https://nodejs.org/en/learn/typescript/run-natively), available in all Node.js versions supported by Mocha.
+
+Use the [`--node-option`](/running/cli#--node-option-name--n-name) flag to enable type stripping, and [`--extension`](/running/cli#--extension-ext) to tell Mocha to look for `.ts` files:
+
+```bash
+mocha --node-option experimental-strip-types --extension ts
+```
+
+Or in a [configuration file](/running/configuring) such as `.mocharc.yml`:
+
+```yaml
+node-option:
+  - experimental-strip-types
+extension:
+  - js
+  - ts
+spec: test/**/*.ts
+```
+
+:::note
+Specifying `--extension` replaces the default `.js` extension.
+Add both `js` and `ts` if you have a mix of JavaScript and TypeScript test files.
+:::
+
+### Hello World Example
+
+The example below uses ESM `import` syntax. If your `package.json` does not contain `"type": "module"`, Node.js will still run the file but emit a warning. Adding `"type": "module"` eliminates the warning.
+
+Given a source file `src/add.ts`:
+
+```ts
+export function add(a: number, b: number): number {
+  return a + b;
+}
+```
+
+And a test file `test/add.test.ts`:
+
+```ts
+import assert from "node:assert/strict";
+import { add } from "../src/add.ts";
+
+describe("add", function () {
+  it("should add two numbers", function () {
+    assert.strictEqual(add(1, 2), 3);
+  });
+});
+```
+
+Run with:
+
+```bash
+npx mocha --node-option experimental-strip-types --extension ts test/add.test.ts
+```
+
+:::caution
+Node.js type stripping removes type annotations but does not perform type checking.
+Run `tsc --noEmit` separately to check types.
+:::
+
+## Other Approaches
+
+For setups that require TypeScript features beyond type stripping (such as `enum`, `namespace`, or path aliases), you can use a register-style loader like [ts-node](https://npm.im/ts-node) or [tsx](https://npm.im/tsx) via [`--require`](/running/cli#--require-module--r-module):
+
+```bash
+mocha --require ts-node/register --extension ts
+```
+
+See the [mocha-examples TypeScript package](https://github.com/mochajs/mocha-examples/tree/main/packages/typescript) for complete working examples with different configurations.
