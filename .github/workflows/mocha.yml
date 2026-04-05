@@ -26,17 +26,30 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # For pushes to main and manual runs, always run all jobs.
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "code=true" >> $GITHUB_OUTPUT
             exit 0
           fi
+
+          # For pull requests, fetch the list of changed files from the
+          # GitHub API (paginated to handle large PRs).
           FILES=$(gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files --paginate --jq '.[].filename')
+
+          # Check each changed file against the doc/config-only patterns.
+          # If ANY file falls outside these patterns, it's a code change
+          # and we need to run the full test suite.
           for f in $FILES; do
             case "$f" in
+              # These patterns mirror the old workflow-level paths-ignore list.
               *.md|docs/*|.github/*|.prettierignore|AUTHORS|LICENSE) ;;
+              # A non-doc file was found — flag code changes and stop early.
               *) echo "code=true" >> $GITHUB_OUTPUT; exit 0 ;;
             esac
           done
+
+          # Every changed file matched the doc/config patterns, so this
+          # is a documentation-only PR — skip test/lint jobs.
           echo "code=false" >> $GITHUB_OUTPUT
 
   format:
