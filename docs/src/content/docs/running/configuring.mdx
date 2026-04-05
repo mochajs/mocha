@@ -33,7 +33,9 @@ Likewise, use `--no-package` to stop Mocha from looking for configuration in a `
 If no custom path was given, and if there are multiple configuration files in the same directory, Mocha will search for--and use--only one.
 The priority is:
 
+1. `.mocharc.cjs`
 1. `.mocharc.js`
+1. `.mocharc.mjs`
 1. `.mocharc.yaml`
 1. `.mocharc.yml`
 1. `.mocharc.jsonc`
