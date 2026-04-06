@@ -3,7 +3,7 @@
 const path = require("node:path");
 const sinon = require("sinon");
 const Mocha = require("../../lib/mocha");
-const PendingError = require("../../lib/pending.mjs").default;
+const { PendingError } = require("../../lib/pending.mjs");
 const { Suite, Runner, Test, Hook, Runnable } = Mocha;
 const { noop } = Mocha.utils;
 const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =
