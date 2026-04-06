@@ -116,7 +116,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@eslint/markdown": "^7.5.1",
+    "@eslint/markdown": "^8.0.0",
     "@rollup/plugin-alias": "^6.0.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-json": "^6.1.0",
