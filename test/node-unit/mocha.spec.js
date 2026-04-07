@@ -223,7 +223,7 @@ describe("Mocha", function () {
     });
 
     describe("loadFilesAsync()", function () {
-      it("shoud pass esmDecorator to actual load function", async function () {
+      it("should pass esmDecorator to actual load function", async function () {
         const esmDecorator = (x) => `${x}?foo=bar`;
 
         await mocha.loadFilesAsync({ esmDecorator });
