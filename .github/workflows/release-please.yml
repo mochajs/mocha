@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      target_branch:
+        description: "Branch to run Release Please against"
+        default: "main"
+        required: false
 
 permissions:
   contents: read
@@ -25,6 +30,7 @@ jobs:
         with:
           config-file: .github/release-please/config.json
           manifest-file: .github/release-please/manifest.json
+          target-branch: ${{ inputs.target_branch || 'main' }}
 
   npm_publish:
     name: Publish to npm
@@ -41,6 +47,8 @@ jobs:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
 
+      # If this step fails, it may be a transient issue, just run again
+      # https://github.com/mochajs/mocha/issues/5611
       - name: Upgrade npm for OIDC support
         run: npm install -g npm@latest
 
