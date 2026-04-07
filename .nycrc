@@ -18,6 +18,6 @@
     "**/package-lock.json",
     "node_modules/**",
     "scripts/**",
-    "!test/integration/fixtures/failing-sync.fixture.js"
+    "!test/integration/fixtures/stack-trace.fixture.js"
   ]
 }
