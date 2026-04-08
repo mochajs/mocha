@@ -1,11 +1,22 @@
 ---
-description: The XUnit test reporter for Mocha.
-title: XUnit
+description: The XUnit test reporter for Mocha (deprecated).
+title: XUnit (deprecated)
 ---
+
+import { Aside } from "@astrojs/starlight/components";
+
+<Aside type="caution" title="Deprecated">
+  The `xunit` reporter is deprecated. Use `junit` instead. The `xunit` reporter
+  currently emits JUnit-compatible XML, not actual xUnit XML. In a future major
+  version, the `xunit` reporter will be repurposed to emit actual xUnit XML
+  format. See [GitHub issue #4758](https://github.com/mochajs/mocha/issues/4758)
+  for details.
+</Aside>
 
 Alias: `XUnit`, `xunit`
 
-The XUnit reporter outputs an XUnit-compatible XML document, often applicable in CI servers.
+The XUnit reporter is a deprecated alias for the [JUnit reporter](./junit).
+It outputs a JUnit-compatible XML document, often applicable in CI servers.
 
 By default, it will output to the console.
 To write directly to a file, use `--reporter-option output=filename.xml`.
