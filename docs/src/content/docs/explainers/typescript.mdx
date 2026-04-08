@@ -5,15 +5,34 @@ description: Running Mocha tests written in TypeScript.
 
 ## Node.js Native Type Stripping
 
-The simplest way to use TypeScript with Mocha is [Node.js native type stripping](https://nodejs.org/en/learn/typescript/run-natively), available in all Node.js versions supported by Mocha 12+.
+Node.js can run TypeScript files directly via [native type stripping](https://nodejs.org/en/learn/typescript/run-natively). On **Node.js ≥22.18.0** (and ≥23.6.0), type stripping is stable and enabled by default — no flags needed. On older versions in Mocha's supported range (`^20.19.0 || >=22.12.0`), pass the `--experimental-strip-types` flag.
 
-Use the [`--node-option`](/running/cli#--node-option-name--n-name) flag to enable type stripping, and [`--extension`](/running/cli#--extension-ext) to tell Mocha to look for `.ts` files:
+You also need [`--extension ts`](/running/cli#--extension-ext) so Mocha discovers `.ts` files when scanning directories (the default extensions are `.js`, `.cjs`, `.mjs`).
+
+### Quick Start (Node ≥22.18.0)
+
+```bash
+mocha --extension ts
+```
+
+Or in a [configuration file](/running/configuring) such as `.mocharc.yml`:
+
+```yaml
+extension:
+  - js
+  - ts
+spec: test/**/*.ts
+```
+
+### Older Node Versions (20.x, 22.12–22.17)
+
+Add `--node-option experimental-strip-types`:
 
 ```bash
 mocha --node-option experimental-strip-types --extension ts
 ```
 
-Or in a [configuration file](/running/configuring) such as `.mocharc.yml`:
+Or in `.mocharc.yml`:
 
 ```yaml
 node-option:
@@ -25,8 +44,8 @@ spec: test/**/*.ts
 ```
 
 :::note
-Specifying `--extension` replaces the default `.js` extension.
-Add both `js` and `ts` if you have a mix of JavaScript and TypeScript test files.
+Specifying `--extension` replaces the defaults.
+Include both `js` and `ts` if you have a mix of JavaScript and TypeScript test files.
 :::
 
 ### Hello World Example
@@ -57,7 +76,7 @@ describe("add", function () {
 Run with:
 
 ```bash
-npx mocha --node-option experimental-strip-types --extension ts test/add.test.ts
+npx mocha --extension ts test/add.test.ts
 ```
 
 :::caution
