@@ -60,6 +60,7 @@ describe("Nyan reporter", function () {
         var test = {
           duration: "",
           slow: noop,
+          fast: noop,
         };
         var fakeThis = {
           draw: sinon.stub().callsFake(noop),

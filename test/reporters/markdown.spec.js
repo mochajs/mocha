@@ -89,6 +89,7 @@ describe("Markdown reporter", function () {
             return currentRetry;
           },
           slow: noop,
+          fast: noop,
           body: expectedBody,
         };
         var runner = createMockRunner(

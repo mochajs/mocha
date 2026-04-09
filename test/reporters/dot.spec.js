@@ -90,6 +90,9 @@ describe("Dot reporter", function () {
         slow: function () {
           return 2;
         },
+        fast: function () {
+          return 1;
+        },
       };
 
       describe("when window width is greater than 1", function () {

@@ -59,6 +59,11 @@ describe("Test", function () {
     it("should copy the file value", function () {
       expect(this._test.clone().file, "to be", "bar");
     });
+
+    it("should copy the fast value when explicitly set", function () {
+      this._test.fast(42);
+      expect(this._test.clone().fast(), "to be", 42);
+    });
   });
 
   describe(".reset()", function () {

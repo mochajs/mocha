@@ -28,6 +28,7 @@ describe("List reporter", function () {
     },
     duration: expectedDuration,
     slow: noop,
+    fast: noop,
   };
 
   beforeEach(function () {

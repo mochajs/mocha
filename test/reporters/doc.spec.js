@@ -143,6 +143,9 @@ describe("Doc reporter", function () {
         slow: function () {
           return "";
         },
+        fast: function () {
+          return "";
+        },
       };
 
       it("should log html with indents, expected title, and body", async function () {
@@ -191,6 +194,9 @@ describe("Doc reporter", function () {
         file: expectedFile,
         body: expectedBody,
         slow: function () {
+          return "";
+        },
+        fast: function () {
           return "";
         },
       };

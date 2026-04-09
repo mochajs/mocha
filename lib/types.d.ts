@@ -85,6 +85,9 @@ export interface MochaOptions {
   /** Slow threshold value, in milliseconds. */
   slow?: number;
 
+  /** Fast threshold value, in milliseconds. Defaults to half of slow. */
+  fast?: number;
+
   /** Timeout threshold value, in milliseconds. */
   timeout?: number | string;
 

@@ -177,6 +177,7 @@ describe("XUnit reporter", function () {
           },
           name: "pending",
           slow: noop,
+          fast: noop,
         };
         var failTest = {
           isPending: () => false,
@@ -185,6 +186,7 @@ describe("XUnit reporter", function () {
           },
           name: "fail",
           slow: noop,
+          fast: noop,
         };
         var passTest = {
           isPending: () => false,
@@ -193,6 +195,7 @@ describe("XUnit reporter", function () {
           },
           name: "pass",
           slow: noop,
+          fast: noop,
         };
         var write = sinon.spy();
         fsCreateWriteStream.returns({ write });
@@ -519,6 +522,9 @@ describe("XUnit reporter", function () {
             return false;
           },
           slow: function () {
+            return false;
+          },
+          fast: function () {
             return false;
           },
           parent: {

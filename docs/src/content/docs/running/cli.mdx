@@ -259,8 +259,16 @@ Mocha uses this to highlight test cases that are taking too long.
 "Slow" tests are not considered failures.
 
 :::note
-A test that executes for _half_ of the "slow" time will be highlighted _in yellow_ with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted _in red_.
+A test that executes for the "fast" threshold (half of the "slow" time by default) will be highlighted _in yellow_ with the default `spec` reporter; a test that executes for entire "slow" time will be highlighted _in red_.
 :::
+
+### `--fast <ms>`
+
+Specify the "fast" test threshold in milliseconds.
+Tests finishing within this threshold are considered "fast" and won't have their duration displayed by the default `spec` reporter.
+Tests that exceed `--fast` but stay under `--slow` will have their duration highlighted _in yellow_.
+
+If `--fast` is not set, it defaults to half of the "slow" threshold, matching Mocha's historical behavior.
 
 ### `--timeout <ms>, -t <ms>`
 

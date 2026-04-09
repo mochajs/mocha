@@ -81,6 +81,9 @@ describe("Spec reporter", function () {
             slow: function () {
               return 1;
             },
+            fast: function () {
+              return 0;
+            },
           };
           var runner = createMockRunner(
             "pass",
@@ -118,6 +121,9 @@ describe("Spec reporter", function () {
             duration: expectedDuration,
             slow: function () {
               return 2;
+            },
+            fast: function () {
+              return 1;
             },
           };
           var runner = createMockRunner(

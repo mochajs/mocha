@@ -187,6 +187,7 @@ function makeExpectedTest(
       return currentRetry;
     },
     slow: function () {},
+    fast: function () {},
   };
 }
 
