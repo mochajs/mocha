@@ -2,6 +2,9 @@
 
 var path = require("node:path").posix;
 var helpers = require("../helpers");
+var invokeMochaAsync = helpers.invokeMochaAsync;
+var resolveFixturePath = helpers.resolveFixturePath;
+var sleep = helpers.sleep;
 var runMochaJSON = helpers.runMochaJSON;
 
 describe("--delay", function () {
@@ -50,5 +53,42 @@ describe("--delay", function () {
       );
       done();
     });
+  });
+
+  it("should wait for every delayed child suite before starting the root suite", function (done) {
+    var fixture = path.join("options", "delay-per-suite");
+    runMochaJSON(fixture, args, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, "to have passed")
+        .and("to have passed test count", 2)
+        .and(
+          "to have passed tests",
+          "suite2 runs after suite1 is ready",
+          "suite1 waits for suite2",
+        );
+      done();
+    });
+  });
+
+  it("should keep the root suite waiting when a child suite never calls run", async function () {
+    var fixture = path.join("options", "delay-never-run");
+    var result = invokeMochaAsync(
+      [resolveFixturePath(fixture), "--delay", "--reporter", "json"],
+      { stdio: "pipe" },
+    );
+    var mochaProcess = result[0];
+    var resultPromise = result[1];
+
+    await sleep(200);
+    expect(mochaProcess.exitCode, "to be", null);
+
+    mochaProcess.kill("SIGINT");
+    var res = await resultPromise;
+
+    expect(res.code, "to be", 130);
+    expect(res.output, "not to contain", "suite3 should never run");
   });
 });
