@@ -66,6 +66,7 @@ describe("Mocha", function () {
     suite = {
       ...sinon.createStubInstance(EventEmitter),
       slow: sinon.stub(),
+      fast: sinon.stub(),
       timeout: sinon.stub(),
       bail: sinon.stub(),
       dispose: sinon.stub(),
@@ -147,6 +148,20 @@ describe("Mocha", function () {
       it("should not attempt to set retries", function () {
         new Mocha({});
         expect(Mocha.prototype.retries, "was not called");
+      });
+    });
+
+    describe("when `fast` option is present", function () {
+      it("should set the fast threshold on the root suite", function () {
+        new Mocha({ fast: 50 });
+        expect(suite.fast, "to have a call satisfying", [50]);
+      });
+    });
+
+    describe("when `fast` option is not present", function () {
+      it("should not set the fast threshold", function () {
+        new Mocha({});
+        expect(suite.fast, "was not called");
       });
     });
 
@@ -274,6 +289,17 @@ describe("Mocha", function () {
 
       it("should be chainable", function () {
         expect(mocha.bail(), "to be", mocha);
+      });
+    });
+
+    describe("fast()", function () {
+      it("should set the fast threshold on the root suite", function () {
+        mocha.fast(100);
+        expect(suite.fast, "to have a call satisfying", [100]);
+      });
+
+      it("should be chainable", function () {
+        expect(mocha.fast(100), "to be", mocha);
       });
     });
 

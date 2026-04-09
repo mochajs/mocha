@@ -90,6 +90,17 @@ describe("methods", function () {
     });
   });
 
+  describe("fast()", function () {
+    it("should default to half of slow", function () {
+      expect(this.fast(), "to be", 37);
+    });
+
+    it("should set and return the fast threshold", function () {
+      this.fast(50);
+      expect(this.fast(), "to be", 50);
+    });
+  });
+
   describe("retries", function () {
     it("should return the number of retries", function () {
       expect(this.retries(), "to be", -1);

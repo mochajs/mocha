@@ -128,6 +128,58 @@ describe("Runnable(title, fn)", function () {
     });
   });
 
+  describe("#fast(ms)", function () {
+    var run;
+
+    beforeEach(function () {
+      run = new Runnable();
+    });
+
+    it("should default to half of slow", function () {
+      expect(run.fast(), "to be", 37);
+    });
+
+    it("should default to half of custom slow value", function () {
+      run.slow(200);
+      expect(run.fast(), "to be", 100);
+    });
+
+    it("should set the fast threshold", function () {
+      run.fast(50);
+      expect(run.fast(), "to be", 50);
+    });
+
+    it("should not change the fast threshold if the parameter is not passed", function () {
+      run.fast(50);
+      run.fast();
+      expect(run.fast(), "to be", 50);
+    });
+
+    it("should not change the fast threshold if the parameter is undefined", function () {
+      run.fast(50);
+      run.fast(undefined);
+      expect(run.fast(), "to be", 50);
+    });
+
+    it("should use explicit value even when slow changes", function () {
+      run.fast(50);
+      run.slow(200);
+      expect(run.fast(), "to be", 50);
+    });
+
+    it("should allow 0 to disable fast classification", function () {
+      run.fast(0);
+      expect(run.fast(), "to be", 0);
+    });
+
+    describe("when passed a time-formatted string", function () {
+      it("should convert to ms", function () {
+        run.fast("100ms");
+        expect(run.fast(), "to be", 100);
+      });
+    });
+  });
+
   describe("#reset", function () {
     var run;
 
