@@ -601,7 +601,7 @@ describe("Suite", function () {
     });
 
     describe("filterOnly()", function () {
-      it("should filter out all other tests and suites if a test has `only`", function () {
+      it("should filter out non-only tests and nested suites without only content if a test has `only`", function () {
         const suite = new Suite("a");
         const nested = new Suite("b");
         const test = new Test("c");
@@ -642,6 +642,35 @@ describe("Suite", function () {
             .it("to have length", 1)
             .and("to have an item satisfying", { title: "b" }),
           tests: expect.it("to be empty"),
+        });
+      });
+
+      it("should keep nested suites with `only` tests even when parent has `only` tests (#4836)", function () {
+        const suite = new Suite("a");
+        const nested = new Suite("b");
+        const topOnlyTest = new Test("c");
+        const nestedOnlyTest = new Test("d");
+
+        suite.suites.push(nested);
+        suite.appendOnlyTest(topOnlyTest);
+        suite.tests.push(topOnlyTest);
+        nested.appendOnlyTest(nestedOnlyTest);
+        nested.tests.push(nestedOnlyTest);
+
+        suite.filterOnly();
+
+        expect(suite, "to satisfy", {
+          tests: expect
+            .it("to have length", 1)
+            .and("to have an item satisfying", { title: "c" }),
+          suites: expect
+            .it("to have length", 1)
+            .and("to have an item satisfying", {
+              title: "b",
+              tests: expect
+                .it("to have length", 1)
+                .and("to have an item satisfying", { title: "d" }),
+            }),
         });
       });
     });
