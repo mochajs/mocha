@@ -440,24 +440,131 @@ async function runMochaWatchAsync(args, opts, change) {
     [...args, "--watch"],
     opts,
   );
-  await sleep(opts.sleepMs);
-  await change(mochaProcess);
-  await sleep(opts.sleepMs);
 
-  if (
-    !(mochaProcess.connected
-      ? mochaProcess.send("SIGINT")
-      : mochaProcess.kill("SIGINT"))
-  ) {
-    throw new Error("failed to send signal to subprocess");
+  const runCompletionMarkers = ['"stats":', "waiting for changes..."];
+  let markerCount = 0;
+  let markerBuffer = "";
+
+  /** @type {Array<{count: number, resolve: Function}>} */
+  const markerWaiters = [];
+
+  const maybeResolveWaiters = () => {
+    for (let i = markerWaiters.length - 1; i >= 0; i--) {
+      if (markerCount >= markerWaiters[i].count) {
+        markerWaiters[i].resolve();
+        markerWaiters.splice(i, 1);
+      }
+    }
+  };
+
+  const onOutput = (data) => {
+    markerBuffer += data.toString();
+
+    let markerMatch = runCompletionMarkers
+      .map((marker) => ({ marker, index: markerBuffer.indexOf(marker) }))
+      .filter((match) => match.index !== -1)
+      .sort((a, b) => a.index - b.index)[0];
+
+    while (markerMatch) {
+      markerCount++;
+      markerBuffer = markerBuffer.slice(
+        markerMatch.index + markerMatch.marker.length,
+      );
+      maybeResolveWaiters();
+
+      markerMatch = runCompletionMarkers
+        .map((marker) => ({ marker, index: markerBuffer.indexOf(marker) }))
+        .filter((match) => match.index !== -1)
+        .sort((a, b) => a.index - b.index)[0];
+    }
+
+    const maxBufferLength = Math.max(
+      ...runCompletionMarkers.map((marker) => marker.length * 2),
+    );
+    if (markerBuffer.length > maxBufferLength) {
+      markerBuffer = markerBuffer.slice(-maxBufferLength);
+    }
+  };
+
+  const waitForMarker = (count, timeoutMs) => {
+    if (markerCount >= count) {
+      return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+      /** @type {{count: number, resolve: Function}} */
+      let waiter;
+      const timer = setTimeout(() => {
+        const index = markerWaiters.indexOf(waiter);
+        if (index !== -1) {
+          markerWaiters.splice(index, 1);
+        }
+        reject(new Error("timed out waiting for watch run completion"));
+      }, timeoutMs);
+
+      waiter = {
+        count,
+        resolve: () => {
+          clearTimeout(timer);
+          resolve();
+        },
+      };
+      markerWaiters.push(waiter);
+    });
+  };
+
+  const waitForRunSettle = async () => {
+    let seenCount = markerCount;
+
+    while (true) {
+      try {
+        await waitForMarker(seenCount + 1, opts.sleepMs);
+        seenCount = markerCount;
+      } catch (err) {
+        debug(
+          "watch marker wait for additional run timed out: %s",
+          err.message,
+        );
+        return;
+      }
+    }
+  };
+
+  mochaProcess.stdout.on("data", onOutput);
+
+  // prefer synchronising on completed watch output markers; this avoids races
+  // where fixed sleeps fire before the first run has actually finished.
+  try {
+    await waitForMarker(1, opts.sleepMs * 3);
+  } catch (err) {
+    debug("watch marker wait for first run timed out: %s", err.message);
   }
 
-  const res = await resultPromise;
+  await change(mochaProcess);
 
-  // we kill the process with `SIGINT`, so it will always appear as "failed" to our
-  // custom assertions (a non-zero exit code 130). just change it to 0.
-  res.code = 0;
-  return res;
+  // wait until no further watch runs complete within sleepMs. This keeps
+  // Existing behavior for tests expecting zero reruns while also allowing
+  // multiple reruns to complete before shutdown.
+  await waitForRunSettle();
+
+  try {
+    if (
+      !(mochaProcess.connected
+        ? mochaProcess.send("SIGINT")
+        : mochaProcess.kill("SIGINT"))
+    ) {
+      throw new Error("failed to send signal to subprocess");
+    }
+
+    const res = await resultPromise;
+
+    // we kill the process with `SIGINT`, so it will always appear as "failed" to our
+    // custom assertions (a non-zero exit code 130). just change it to 0.
+    res.code = 0;
+    return res;
+  } finally {
+    mochaProcess.stdout.removeListener("data", onOutput);
+  }
 }
 
 /**
