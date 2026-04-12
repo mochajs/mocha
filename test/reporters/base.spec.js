@@ -367,6 +367,29 @@ describe("Base reporter", function () {
     expect(errOut, "to match", /\+ expected/);
   });
 
+  it("should not throw when diff stringify fails (#5507)", function () {
+    var utils = require("../../lib/utils");
+    var originalStringify = utils.stringify;
+    utils.stringify = function () {
+      throw new TypeError("Converting circular structure to JSON");
+    };
+    try {
+      var err = new Error("test");
+      err.actual = { a: 1 };
+      err.expected = { b: 2 };
+      err.showDiff = true;
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n");
+      expect(errOut, "to match", /test/);
+      expect(errOut, "to match", /test title/);
+    } finally {
+      utils.stringify = originalStringify;
+    }
+  });
+
   it("should handle error messages that are not strings", function () {
     try {
       assert(false, true);
