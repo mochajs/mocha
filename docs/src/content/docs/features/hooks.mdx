@@ -59,7 +59,7 @@ For example, you may wish to populate database with dummy content before each te
 
 ```js
 describe("Connection", function () {
-  var db = new Connection(),
+  const db = new Connection(),
     tobi = new User("tobi"),
     loki = new User("loki"),
     jane = new User("jane");
@@ -103,7 +103,7 @@ With `--delay`, Mocha loads your test file and executes its top-level code as us
 Place your `describe()` and `it()` calls inside the asynchronous code so that suites are registered after setup completes, then call `run()` to begin execution:
 
 ```js
-const assert = require("assert");
+import assert from "node:assert";
 
 const fn = async (x) => {
   return new Promise((resolve) => {

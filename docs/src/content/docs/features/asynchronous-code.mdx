@@ -10,7 +10,7 @@ This callback accepts both an `Error` instance _or_ a falsy value; anything else
 describe("User", function () {
   describe("#save()", function () {
     it("should save without error", function (done) {
-      var user = new User("Luna");
+      const user = new User("Luna");
       user.save(function (err) {
         if (err) done(err);
         else done();
@@ -26,7 +26,7 @@ Alternatively, use the `done()` callback directly (which will handle an error ar
 describe("User", function () {
   describe("#save()", function () {
     it("should save without error", function (done) {
-      var user = new User("Luna");
+      const user = new User("Luna");
       user.save(done);
     });
   });
@@ -59,7 +59,7 @@ The latter example uses [Chai as Promised](https://www.npmjs.com/package/chai-as
 In Mocha v3.0.0 and newer, returning a `Promise` _and_ calling `done()` will result in an exception, as this is generally a mistake:
 
 ```js
-const assert = require("assert");
+import assert from "node:assert";
 
 // antipattern
 it("should complete this test", function (done) {
