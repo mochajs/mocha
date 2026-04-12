@@ -18,13 +18,13 @@ describe("Min reporter", function () {
 
   describe("event handlers", function () {
     describe("on 'start' event", function () {
-      it("should clear screen then set cursor position", function () {
+      it("should clear screen then set cursor position", async function () {
         var runner = createMockRunner("start", EVENT_RUN_BEGIN);
         var options = {};
         var fakeThis = {
           epilogue: noop,
         };
-        var stdout = runReporter(fakeThis, runner, options);
+        var { stdout } = await runReporter(fakeThis, runner, options);
 
         var expectedArray = ["\u001b[2J", "\u001b[1;3H"];
         expect(stdout, "to equal", expectedArray);
@@ -32,13 +32,13 @@ describe("Min reporter", function () {
     });
 
     describe("on 'end' event", function () {
-      it("should call epilogue", function () {
+      it("should call epilogue", async function () {
         var fakeThis = {
           epilogue: sinon.stub().callsFake(noop),
         };
         var runner = createMockRunner("end", EVENT_RUN_END);
         var options = {};
-        runReporter(fakeThis, runner, options);
+        await runReporter(fakeThis, runner, options);
 
         expect(fakeThis.epilogue.called, "to be true");
       });

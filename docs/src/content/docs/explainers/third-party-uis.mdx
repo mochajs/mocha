@@ -10,16 +10,16 @@ Creating a Third Party UI involves listening for the `pre-require` event emitted
 In this first brief example, we'll create an interface with only a single function: `test`
 
 ```javascript
-const Mocha = require("mocha");
-const Suite = require("mocha/lib/suite");
-const Test = require("mocha/lib/test");
+import Mocha from "mocha";
+import MochaInterface from "mocha/lib/interfaces/common.js";
 
+const Test = Mocha.Test;
 /**
  * A simple UI that only exposes a single function: test
  */
-module.exports = Mocha.interfaces["simple-ui"] = function (suite) {
+function SimpleUI(suite) {
   suite.on("pre-require", function (context, file, mocha) {
-    const common = require("mocha/lib/interfaces/common")([suite], context);
+    const common = MochaInterface([suite], context);
 
     context.run = mocha.options.delay && common.runWithSuite(suite);
 
@@ -35,7 +35,11 @@ module.exports = Mocha.interfaces["simple-ui"] = function (suite) {
       return test;
     };
   });
-};
+}
+
+Mocha.interfaces["simple-ui"] = SimpleUI;
+
+export default SimpleUI;
 ```
 
 ```javascript
@@ -69,21 +73,23 @@ $ mocha --require ./simple-ui.js --ui simple-ui test.js
 In this next example, we'll be extending the [TDD interface](https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js) with a comment function that simply prints the passed text. That is, `comment('This is a comment');` would print the string.
 
 ```javascript
-const Mocha = require("mocha");
-const Suite = require("mocha/lib/suite");
-const Test = require("mocha/lib/test");
-const escapeRe = require("escape-string-regexp");
+import Mocha from "mocha";
+import MochaInterface from "mocha/lib/interfaces/common.js";
+import escapeStringRegexp from "escape-string-regexp";
+
+const Test = Mocha.Test;
+const Suite = Mocha.Suite;
 
 /**
  * This example is identical to the TDD interface, but with the addition of a
  * "comment" function:
  * https://github.com/mochajs/mocha/blob/master/lib/interfaces/tdd.js
  */
-module.exports = Mocha.interfaces["example-ui"] = function (suite) {
-  const suites = [suite];
+function ExampleUI(suite) {
+  var suites = [suite];
 
   suite.on("pre-require", function (context, file, mocha) {
-    const common = require("mocha/lib/interfaces/common")(suites, context);
+    var common = MochaInterface([suite], context);
 
     /**
      * Use all existing hook logic common to UIs. Common logic can be found in
@@ -179,7 +185,7 @@ module.exports = Mocha.interfaces["example-ui"] = function (suite) {
       let test, reString;
 
       test = context.test(title, fn);
-      reString = "^" + escapeRe(test.fullTitle()) + "$";
+      reString = "^" + escapeStringRegexp(test.fullTitle()) + "$";
       mocha.grep(new RegExp(reString));
     };
 
@@ -188,7 +194,11 @@ module.exports = Mocha.interfaces["example-ui"] = function (suite) {
      */
     context.test.skip = common.test.skip;
   });
-};
+}
+
+Mocha.interfaces["example-ui"] = ExampleUI;
+
+export default ExampleUI;
 ```
 
 ```javascript
