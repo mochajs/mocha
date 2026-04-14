@@ -1,12 +1,12 @@
 "use strict";
 
-const escapeRegExp = require("escape-string-regexp");
 const os = require("node:os");
 const fs = require("node:fs");
 const fsP = require("node:fs/promises");
 const { format } = require("node:util");
 const path = require("node:path");
 const Base = require("../../lib/reporters/base");
+const { escapeRegExp } = require("../../lib/utils/regexp.mjs");
 const debug = require("debug")("mocha:test:integration:helpers");
 const SIGNAL_OFFSET = 128;
 
