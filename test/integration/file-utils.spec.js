@@ -1,12 +1,7 @@
 "use strict";
 
 const lookupFiles = require("../../lib/cli/lookup-files");
-const {
-  existsSync,
-  symlinkSync,
-  renameSync,
-  mkdirSync,
-} = require("node:fs");
+const { existsSync, symlinkSync, renameSync, mkdirSync } = require("node:fs");
 const path = require("node:path");
 const { touchFile, createTempDir } = require("./helpers");
 
