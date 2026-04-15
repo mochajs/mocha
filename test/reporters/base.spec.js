@@ -111,6 +111,54 @@ describe("Base reporter", function () {
       expect(errOut, "not to match", /- actual/);
       expect(errOut, "not to match", /\+ expected/);
     });
+
+    it("should show diffs when actual is a Symbol", function () {
+      var _err = new Error("test");
+      _err.actual = Symbol("actual-value");
+      _err.expected = "expected-value";
+      _err.showDiff = true;
+      var test = makeTest(_err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n");
+      expect(errOut, "to match", /Symbol\(actual-value\)/);
+      expect(errOut, "to match", /expected-value/);
+      expect(errOut, "to match", /- actual/);
+      expect(errOut, "to match", /\+ expected/);
+    });
+
+    it("should show diffs when expected is a Symbol", function () {
+      var _err = new Error("test");
+      _err.actual = "actual-value";
+      _err.expected = Symbol("expected-value");
+      _err.showDiff = true;
+      var test = makeTest(_err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n");
+      expect(errOut, "to match", /actual-value/);
+      expect(errOut, "to match", /Symbol\(expected-value\)/);
+      expect(errOut, "to match", /- actual/);
+      expect(errOut, "to match", /\+ expected/);
+    });
+
+    it("should show diffs when both actual and expected are Symbols", function () {
+      var _err = new Error("test");
+      _err.actual = Symbol("one");
+      _err.expected = Symbol("two");
+      _err.showDiff = true;
+      var test = makeTest(_err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n");
+      expect(errOut, "to match", /Symbol\(one\)/);
+      expect(errOut, "to match", /Symbol\(two\)/);
+      expect(errOut, "to match", /- actual/);
+      expect(errOut, "to match", /\+ expected/);
+    });
   });
 
   describe("getting two strings", function () {
