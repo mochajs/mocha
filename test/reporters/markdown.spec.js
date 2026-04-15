@@ -112,4 +112,89 @@ describe("Markdown reporter", function () {
       });
     });
   });
+
+  describe("escaping markdown special characters", function () {
+    it("should escape special characters in suite titles", async function () {
+      var specialSuite = {
+        title: "***bold***",
+        fullTitle: function () {
+          return "***bold***";
+        },
+        suites: [],
+      };
+      var runner = createMockRunner(
+        "suite suite end",
+        EVENT_SUITE_BEGIN,
+        EVENT_SUITE_END,
+        EVENT_RUN_END,
+        specialSuite,
+      );
+      runner.suite = specialSuite;
+      var options = {};
+      var { stdout } = await runReporter({}, runner, options);
+      var output = stdout.join("");
+
+      expect(output, "to contain", "\\*\\*\\*bold\\*\\*\\*");
+      expect(output, "not to match", /# \*\*\*bold\*\*\*/);
+    });
+
+    it("should escape special characters in TOC link text", async function () {
+      var specialSuite = {
+        title: "[link](url)",
+        fullTitle: function () {
+          return "[link](url)";
+        },
+        suites: [],
+      };
+      var runner = createMockRunner(
+        "suite suite end",
+        EVENT_SUITE_BEGIN,
+        EVENT_SUITE_END,
+        EVENT_RUN_END,
+        specialSuite,
+      );
+      runner.suite = specialSuite;
+      var options = {};
+      var { stdout } = await runReporter({}, runner, options);
+      var output = stdout.join("");
+
+      expect(output, "to contain", "\\[link\\]\\(url\\)");
+    });
+
+    it("should escape special characters in test titles", async function () {
+      var specialSuite = {
+        title: "suite",
+        fullTitle: function () {
+          return "suite";
+        },
+        suites: [],
+      };
+      var expectedBody = "some body";
+      var specialTest = {
+        title: ">>> should be escaped",
+        fullTitle: function () {
+          return "suite >>> should be escaped";
+        },
+        duration: 1000,
+        currentRetry: function () {
+          return 0;
+        },
+        slow: noop,
+        body: expectedBody,
+      };
+      var runner = createMockRunner(
+        "pass end",
+        EVENT_TEST_PASS,
+        EVENT_RUN_END,
+        null,
+        specialTest,
+      );
+      runner.suite = specialSuite;
+      var options = {};
+      var { stdout } = await runReporter({}, runner, options);
+      var output = stdout.join("");
+
+      expect(output, "to contain", "\\>\\>\\> should be escaped");
+    });
+  });
 });
