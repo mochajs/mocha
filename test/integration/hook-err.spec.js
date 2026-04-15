@@ -139,7 +139,28 @@ describe("hook error handling", function () {
   describe("after each hook error", function () {
     before(run("hooks/after-each-hook-error.fixture.js"));
     it("should verify results", function () {
-      expect(lines, "to equal", ["test 1", "after", bang + "test 3"]);
+      expect(lines, "to equal", [
+        "test 1",
+        "after",
+        bang + "test 2",
+        "after",
+        bang + "test 3",
+      ]);
+    });
+  });
+
+  describe("after each hook error - pass/fail counts", function () {
+    it("should continue running tests after afterEach failure", function (done) {
+      runMochaJSON("hooks/after-each-hook-error-continues", [], (err, res) => {
+        if (err) {
+          return done(err);
+        }
+        expect(res, "to have failed")
+          .and("to have passed test count", 2)
+          .and("to have passed test", "test 1")
+          .and("to have passed test", "test 2");
+        done();
+      });
     });
   });
 
@@ -161,6 +182,13 @@ describe("hook error handling", function () {
         "1 before each",
         "1-2 before each",
         "1-2 test 1",
+        "1-2 after each",
+        bang + "1 after each",
+        "root after each",
+        "root before each",
+        "1 before each",
+        "1-2 before each",
+        "1-2 test 2",
         "1-2 after each",
         bang + "1 after each",
         "root after each",
@@ -214,7 +242,13 @@ describe("hook error handling", function () {
   describe("async - after each hook error", function () {
     before(run("hooks/after-each-hook-async-error.fixture.js"));
     it("should verify results", function () {
-      expect(lines, "to equal", ["test 1", "after", bang + "test 3"]);
+      expect(lines, "to equal", [
+        "test 1",
+        "after",
+        bang + "test 2",
+        "after",
+        bang + "test 3",
+      ]);
     });
   });
 
@@ -236,6 +270,13 @@ describe("hook error handling", function () {
         "1 before each",
         "1-2 before each",
         "1-2 test 1",
+        "1-2 after each",
+        bang + "1 after each",
+        "root after each",
+        "root before each",
+        "1 before each",
+        "1-2 before each",
+        "1-2 test 2",
         "1-2 after each",
         bang + "1 after each",
         "root after each",
@@ -264,6 +305,18 @@ describe("hook error handling", function () {
         "to have failed test",
         'fail the test from the "after each" hook should fail',
       );
+    });
+
+    it("should not double-count the test in passes", function (done) {
+      runMochaJSON("hooks/after-each-this-test-error", [], (err, res) => {
+        if (err) {
+          return done(err);
+        }
+        expect(res, "to have failed")
+          .and("to have passed test count", 0)
+          .and("to have failed test count", 1);
+        done();
+      });
     });
   });
 

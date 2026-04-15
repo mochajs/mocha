@@ -10,7 +10,7 @@ describe('spec 1', function () {
   it('should be called because error is in after each hook', function () {
     console.log('test 1');
   });
-  it('should not be called', function () {
+  it('should be called because afterEach errors do not halt the suite', function () {
     console.log('test 2');
   });
 });

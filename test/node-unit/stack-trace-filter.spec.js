@@ -122,6 +122,16 @@ describe("stackTraceFilter()", function () {
         expect(filter(stack.join("\n")), "to be", stack.slice(0, 2).join("\n"));
       });
     });
+
+    it("should filter out modern Node.js internal frames using (node: prefix)", function () {
+      var stack = [
+        "Error: timeout of 2000ms exceeded",
+        "at Context.<anonymous> (/dev/test/mytest.js:5:9)",
+        "at processImmediate (node:internal/timers:478:21)",
+        "at process.callbackTrampoline (node:internal/async_hooks:130:17)",
+      ];
+      expect(filter(stack.join("\n")), "to be", stack.slice(0, 2).join("\n"));
+    });
   });
 
   describe("on browser", function () {
