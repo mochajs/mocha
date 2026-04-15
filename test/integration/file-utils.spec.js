@@ -1,7 +1,12 @@
 "use strict";
 
 const lookupFiles = require("../../lib/cli/lookup-files");
-const { existsSync, symlinkSync, renameSync } = require("node:fs");
+const {
+  existsSync,
+  symlinkSync,
+  renameSync,
+  mkdirSync,
+} = require("node:fs");
 const path = require("node:path");
 const { touchFile, createTempDir } = require("./helpers");
 
@@ -45,6 +50,22 @@ describe("file utils", function () {
       renameSync(tmpFile("mocha-utils.js"), tmpFile("bob"));
       expect(existsSync(tmpFile("mocha-utils-link.js")), "to be", false);
       expect(lookupFiles(tmpDir, ["js"], false), "to equal", []);
+    });
+
+    it("should handle symlink loops without crashing", function () {
+      if (!SYMLINK_SUPPORT) {
+        return this.skip();
+      }
+
+      // Create a subdirectory with a symlink back to the parent
+      var subDir = path.join(tmpDir, "subdir");
+      mkdirSync(subDir);
+      touchFile(path.join(subDir, "test.js"));
+      symlinkSync(tmpDir, path.join(subDir, "loop-link"));
+
+      // Should not throw ENAMETOOLONG or cause infinite recursion
+      var files = lookupFiles(tmpDir, ["js"], true);
+      expect(files, "to contain", path.join(subDir, "test.js"));
     });
 
     it('should accept a glob "path" value', function () {
