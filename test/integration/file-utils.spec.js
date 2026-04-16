@@ -253,6 +253,42 @@ describe("file utils", function () {
       });
     });
 
+    describe("when `recursive` option is true with a glob pattern", function () {
+      it("should find files in subdirectories", function () {
+        touchFile(tmpFile("sub/deep/nested.js"));
+        touchFile(tmpFile("sub/shallow.js"));
+
+        const res = lookupFiles(tmpFile("sub/*.js"), ["js"], true).map(
+          (foundFilepath) => path.normalize(foundFilepath),
+        );
+
+        expect(res, "to contain", tmpFile("sub/shallow.js"));
+        expect(res, "to contain", tmpFile("sub/deep/nested.js"));
+      });
+
+      it("should not inject ** when pattern already contains it", function () {
+        touchFile(tmpFile("sub/deep/nested.js"));
+
+        const res = lookupFiles(tmpFile("sub/**/*.js"), ["js"], true).map(
+          (foundFilepath) => path.normalize(foundFilepath),
+        );
+
+        expect(res, "to contain", tmpFile("sub/deep/nested.js"));
+      });
+
+      it("should not recurse when `recursive` is false", function () {
+        touchFile(tmpFile("sub/shallow.js"));
+        touchFile(tmpFile("sub/deep/nested.js"));
+
+        const res = lookupFiles(tmpFile("sub/*.js"), ["js"], false).map(
+          (foundFilepath) => path.normalize(foundFilepath),
+        );
+
+        expect(res, "to contain", tmpFile("sub/shallow.js"));
+        expect(res, "not to contain", tmpFile("sub/deep/nested.js"));
+      });
+    });
+
     describe("when no files match", function () {
       it("should throw an exception", function () {
         expect(() => lookupFiles(tmpFile("mocha-utils")), "to throw", {
