@@ -367,6 +367,29 @@ describe("lib/utils", function () {
       expect(stringify(travis), "to be", '{\n  "fn": [Circular]\n}');
     });
 
+    it("should handle shared references without exponential blowup", function () {
+      var shared = { x: 1 };
+      var obj = { a: shared, b: shared };
+
+      expect(
+        stringify(obj),
+        "to be",
+        '{\n  "a": {\n    "x": 1\n  }\n  "b": "[Duplicate]"\n}',
+      );
+    });
+
+    it("should handle deeply shared references efficiently", function () {
+      // this would cause 2^25 recursive calls without the shared-reference fix
+      var obj = { v: 1 };
+      for (var i = 0; i < 25; i++) {
+        obj = { a: obj, b: obj };
+      }
+      // Should complete without hanging
+      var result = stringify(obj);
+      expect(result, "to be a", "string");
+      expect(result, "to contain", "[Duplicate]");
+    });
+
     it("should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values", function () {
       var regexp = /(?:)/;
       var regExpObj = { regexp };
