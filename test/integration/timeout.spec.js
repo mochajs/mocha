@@ -45,3 +45,21 @@ describe("describe.timeout()", function () {
     });
   });
 });
+
+describe("this.timeout(0) silent exit", function () {
+  it("should fail the test when a promise never resolves and event loop empties", function (done) {
+    run("timeout-zero-silent-exit.fixture.js", args, function (err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      assert.strictEqual(res.stats.failures, 1);
+      assert.ok(
+        res.failures[0].err.message.match(
+          /async test exited without done\(\) being called/,
+        ),
+      );
+      done();
+    });
+  });
+});
