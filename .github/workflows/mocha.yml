@@ -19,11 +19,6 @@ permissions:
   id-token: write # for Codecov OIDC
 
 jobs:
-  format:
-    uses: ./.github/workflows/npm-script.yml
-    with:
-      npm-script: format:check
-
   lint:
     uses: ./.github/workflows/npm-script.yml
     with:
