@@ -109,7 +109,7 @@ function ExampleUI(suite) {
      * attribute on a test to modify its presentation.
      */
     context.comment = function (title) {
-      var suite, comment;
+      let suite, comment;
 
       suite = suites[0];
       comment = new Test(title, null);
@@ -132,7 +132,7 @@ function ExampleUI(suite) {
      * and/or tests.
      */
     context.suite = function (title, fn) {
-      var suite = Suite.create(suites[0], title);
+      const suite = Suite.create(suites[0], title);
 
       suite.file = file;
       suites.unshift(suite);
@@ -146,7 +146,7 @@ function ExampleUI(suite) {
      * The default TDD pending suite functionality.
      */
     context.suite.skip = function (title, fn) {
-      var suite = Suite.create(suites[0], title);
+      const suite = Suite.create(suites[0], title);
 
       suite.pending = true;
       suites.unshift(suite);
@@ -158,7 +158,7 @@ function ExampleUI(suite) {
      * Default TDD exclusive test-case logic.
      */
     context.suite.only = function (title, fn) {
-      var suite = context.suite(title, fn);
+      const suite = context.suite(title, fn);
       mocha.grep(suite.fullTitle());
     };
 
@@ -167,7 +167,7 @@ function ExampleUI(suite) {
      * with the given `title` and callback `fn` acting as a thunk.
      */
     context.test = function (title, fn) {
-      var suite, test;
+      let suite, test;
 
       suite = suites[0];
       if (suite.pending) fn = null;
@@ -182,7 +182,7 @@ function ExampleUI(suite) {
      * Exclusive test-case.
      */
     context.test.only = function (title, fn) {
-      var test, reString;
+      let test, reString;
 
       test = context.test(title, fn);
       reString = "^" + escapeStringRegexp(test.fullTitle()) + "$";

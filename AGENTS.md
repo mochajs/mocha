@@ -130,6 +130,16 @@ Treat these as potential environment/version drift signals. Do not resolve them 
 - If touching browser behavior, always include at least one browser test run.
 - If touching CLI or node runtime behavior, include smoke + targeted node suite.
 
+### CJS to ESM migration conventions (runtime code)
+
+- Scope: prioritize runtime modules under `lib/`; do not include test fixtures unless explicitly requested.
+- For ESM modules, prefer **named exports** over `export default`.
+- When consuming ESM from CJS via `require()`, import named bindings from the namespace object:
+  - Use `const { SomeName } = require("./file.mjs");`
+  - Avoid `require("./file.mjs").default` for runtime modules.
+- Keep PRs small and reviewable (roughly <=100 changed lines when practical).
+- After each migration slice, update all direct runtime call sites in the same PR to avoid mixed import patterns.
+
 ## Docs subsystem notes (`docs/`)
 
 - Separate package and lockfile.

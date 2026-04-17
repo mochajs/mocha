@@ -4,7 +4,8 @@ var EventEmitter = require("events").EventEmitter;
 var fs = require("fs");
 var path = require("path");
 var sinon = require("sinon");
-var createStatsCollector = require("../../lib/stats-collector.mjs").default;
+var createStatsCollector =
+  require("../../lib/stats-collector.mjs").createStatsCollector;
 var events = require("../../").Runner.constants;
 var reporters = require("../../").reporters;
 var states = require("../../").Runnable.constants;
