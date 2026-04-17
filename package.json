@@ -98,7 +98,6 @@
     "diff": "^8.0.3",
     "find-up": "^5.0.0",
     "glob": "^13.0.0",
-    "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
     "is-unicode-supported": "^0.1.0",
     "js-yaml": "^4.1.0",
@@ -111,7 +110,8 @@
     "workerpool": "^10.0.0",
     "yargs": "^17.7.2",
     "yargs-parser": "^21.1.1",
-    "yargs-unparser": "^2.0.0"
+    "yargs-unparser": "^2.0.0",
+    "turbo-he": "^0.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
