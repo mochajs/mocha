@@ -5,11 +5,20 @@ description: Running Mocha tests written in TypeScript.
 
 ## Node.js Native Type Stripping
 
-Node.js can run TypeScript files directly via [native type stripping](https://nodejs.org/en/learn/typescript/run-natively). On **Node.js ≥22.18.0** (and ≥23.6.0), type stripping is stable and enabled by default — no flags needed. On older versions in Mocha's supported range (`^20.19.0 || >=22.12.0`), pass the `--experimental-strip-types` flag.
+Newer versions of Node.js can run TypeScript files directly via [native type stripping](https://nodejs.org/en/learn/typescript/run-natively). On modern versions of Node, type stripping is stable and enabled by default. For older versions of Node, `--experimental-strip-types` flag. This feature has not been backported to Node 20.
+
+| State        | 20  | 22    | 24   |
+| ------------ | --- | ----- | ---- |
+| Experimental | n/a | 22.6  | 24.0 |
+| Stable       | n/a | 22.18 | 24.3 |
 
 You also need [`--extension ts`](/running/cli#--extension-ext) so Mocha discovers `.ts` files when scanning directories (the default extensions are `.js`, `.cjs`, `.mjs`).
 
-### Quick Start (Node ≥22.18.0)
+Note that this does not perform type-checking, it simply strips types to allow you to easily run your tests. We recommend using another tool to get the benefits of type-checking.
+
+### Quick Start
+
+You can run Mocha against `ts` files matching your `spec` pattern with a single option:
 
 ```bash
 mocha --extension ts
@@ -24,7 +33,7 @@ extension:
 spec: test/**/*.ts
 ```
 
-### Older Node Versions (20.x, 22.12–22.17)
+### Older Node Versions (22.6 through 22.17)
 
 Add `--node-option experimental-strip-types`:
 
@@ -36,7 +45,7 @@ Or in `.mocharc.yml`:
 
 ```yaml
 node-option:
-  - experimental-strip-types
+  - strip-types
 extension:
   - js
   - ts
@@ -50,7 +59,7 @@ Include both `js` and `ts` if you have a mix of JavaScript and TypeScript test f
 
 ### Hello World Example
 
-The example below uses ESM `import` syntax. If your `package.json` does not contain `"type": "module"`, Node.js will still run the file but emit a warning. Adding `"type": "module"` eliminates the warning.
+The example below uses ESM `import` syntax. It is a minimal working example that does not include everything for IDE support. For IDE integration, see the [mocha-examples TypeScript package](https://github.com/mochajs/mocha-examples/tree/main/packages/typescript).
 
 Given a source file `src/add.ts`:
 
@@ -60,11 +69,11 @@ export function add(a: number, b: number): number {
 }
 ```
 
-And a test file `test/add.test.ts`:
+And a test file `src/add.test.ts`:
 
 ```ts
 import assert from "node:assert/strict";
-import { add } from "../src/add.ts";
+import { add } from "./add.ts";
 
 describe("add", function () {
   it("should add two numbers", function () {
@@ -76,17 +85,12 @@ describe("add", function () {
 Run with:
 
 ```bash
-npx mocha --extension ts test/add.test.ts
+npx mocha --extension ts src/add.test.ts
 ```
-
-:::caution
-Node.js type stripping removes type annotations but does not perform type checking.
-Run `tsc --noEmit` separately to check types.
-:::
 
 ## Other Approaches
 
-For setups that require TypeScript features beyond type stripping (such as `enum`, `namespace`, or path aliases), you can use a register-style loader like [ts-node](https://npm.im/ts-node) or [tsx](https://npm.im/tsx) via [`--require`](/running/cli#--require-module--r-module):
+For setups that require TypeScript features beyond type stripping (such as `enum`, `namespace`, or path aliases), you can use a register-style loader like [tsx](https://npm.im/tsx) via [`--require`](/running/cli#--require-module--r-module):
 
 ```bash
 mocha --require ts-node/register --extension ts
