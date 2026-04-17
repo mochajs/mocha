@@ -71,6 +71,7 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
+          MOCHA_REPORTER: github-actions
           NODE_OPTIONS: "--trace-warnings"
       # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
