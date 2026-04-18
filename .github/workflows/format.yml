@@ -12,6 +12,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # for Codecov OIDC (required by npm-script.yml)
 
 jobs:
   format:
