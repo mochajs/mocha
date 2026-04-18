@@ -1,5 +1,6 @@
 "use strict";
 
+var { expect } = require("chai");
 var calls = [];
 
 before(function () {
@@ -8,6 +9,6 @@ before(function () {
 
 describe("root", function () {
   it("should be a valid suite", function () {
-    expect(calls, "to equal", ["before"]);
+    expect(calls).to.deep.equal(["before"]);
   });
 });
