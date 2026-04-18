@@ -56,7 +56,7 @@ module.exports = defineConfig(
     ],
     languageOptions: {
       sourceType: "module",
-      ecmaVersion: 2025
+      ecmaVersion: 2025,
     },
   },
   {
