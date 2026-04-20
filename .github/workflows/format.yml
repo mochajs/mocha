@@ -1,0 +1,21 @@
+name: Format
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # for Codecov OIDC (required by npm-script.yml)
+
+jobs:
+  format:
+    uses: ./.github/workflows/npm-script.yml
+    with:
+      npm-script: format:check

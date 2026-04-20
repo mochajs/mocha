@@ -1,7 +1,7 @@
 "use strict";
 
 const { version } = require("../package.json");
-const escapeRe = require("escape-string-regexp");
+const { escapeRegExp } = require("../lib/utils/regexp.mjs");
 
 module.exports = {
   name: "unexpected-mocha-internal",
@@ -330,7 +330,7 @@ module.exports = {
         "<RawResult|SummarizedResult> to contain [output] once <any>",
         (expect, result, output) => {
           if (typeof output === "string") {
-            output = escapeRe(output);
+            output = escapeRegExp(output);
           } else if (!(output instanceof RegExp)) {
             throw new TypeError("expected a string or regexp");
           }

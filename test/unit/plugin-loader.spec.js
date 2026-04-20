@@ -3,7 +3,7 @@
 const PluginLoader = require("../../lib/plugin-loader");
 const sinon = require("sinon");
 const { INVALID_PLUGIN_DEFINITION, INVALID_PLUGIN_IMPLEMENTATION } =
-  require("../../lib/error-constants").constants;
+  require("../../lib/error-constants.mjs").constants;
 
 describe("plugin module", function () {
   describe("class PluginLoader", function () {
