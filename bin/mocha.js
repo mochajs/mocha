@@ -19,7 +19,7 @@ const {
 } = require("../lib/cli/node-flags");
 const unparse = require("yargs-unparser");
 const debug = require("debug")("mocha:cli:mocha");
-const { aliases } = require("../lib/cli/run-option-metadata");
+const { aliases } = require("../lib/cli/run-option-metadata.mjs");
 
 const mochaArgs = {};
 const nodeArgs = {};
