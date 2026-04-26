@@ -105,7 +105,7 @@ mocha --file "./test/setup.js" "./test/**/*.spec.js"
 
 **The above example does not work in parallel mode.**
 
-When Mocha runs in parallel mode, **test files do not share the same process,** nor do they share the same instance of Mocha.
+When Mocha runs in parallel mode, **each test file gets its own instance of Mocha.**
 Consequently, a hypothetical root hook defined in test file _A_ **will not be present** in test file _B_.
 
 Here are a couple suggested workarounds:
@@ -151,6 +151,15 @@ It may help to use a conditional in a `.mocharc.js` to check for `process.env.CI
 
 It's unlikely (but not impossible) to see a performance gain from a [job count](/running/cli#--jobs-count--j-count) _greater than_ the number of available CPU cores.
 That said, _play around with the job count_--there's no one-size-fits all, and the unique characteristics of your tests will determine the optimal number of jobs; it may even be that fewer is faster!
+
+## Test Isolation Is Not Provided
+
+In parallel mode, Mocha uses a pool of worker processes. Each worker may run multiple test files sequentially within the same process. This means test files assigned to the same worker share process-level state, including the Node.js module cache and global variables.
+
+Mocha does **not** provide an option to spawn a fresh process for each test file. If your tests require strict process-level isolation (for example, because they patch globals, modify the module system, or have other irreversible side effects), consider:
+
+- Invoking `mocha` separately for each test file and merging results externally.
+- Using a test runner that provides process-level isolation per test file.
 
 ## Parallel Mode Worker IDs
 

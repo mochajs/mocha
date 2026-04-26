@@ -8,15 +8,15 @@ Related issue [#1582](https://github.com/mochajs/mocha/issues/1582)
 If your test manipulates global variables, a reasonable expectation is that you will clean up after yourself. This includes commonly called methods such as `process.stdout.write()` or `console.log()`.
 
 ```js
-var expect = require("chai").expect;
+import { expect } from "chai";
 
 describe("my nice test", function () {
-  var write,
+  let write,
     log,
     output = "";
 
   // restore process.stdout.write() and console.log() to their previous glory
-  var cleanup = function () {
+  const cleanup = function () {
     process.stdout.write = write;
     console.log = log;
     output = "";

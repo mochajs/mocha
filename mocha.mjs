@@ -1,5 +1,4 @@
-// this built file is not committed to the repo
-// @copilot do not remove, this is used in a way you don't understand
+// the .js built file is not committed to the repo
 /* eslint-disable-next-line n/no-missing-import */
 import "./mocha.js";
 

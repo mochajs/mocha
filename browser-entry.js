@@ -8,8 +8,8 @@
 
 process.stdout = require("browser-stdout")({ label: false });
 
-var parseQuery = require("./lib/browser/parse-query");
-var highlightTags = require("./lib/browser/highlight-tags");
+var parseQuery = require("./lib/browser/parse-query.mjs").parseQuery;
+var highlightTags = require("./lib/browser/highlight-tags.mjs").highlightTags;
 var Mocha = require("./lib/mocha");
 
 /**
