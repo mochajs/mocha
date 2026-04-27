@@ -446,7 +446,9 @@ describe("options", function () {
         findConfig = sinon.stub().returns("/some/.mocharc.json");
         loadConfig = sinon.stub().returns({});
         findupSync = sinon.stub().returns("/some/package.json");
-        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--retries 42 --color" });
+        sinon
+          .stub(process, "env")
+          .value({ MOCHA_OPTIONS: "--retries 42 --color" });
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -536,7 +538,9 @@ describe("options", function () {
         findConfig = sinon.stub().returns("/some/.mocharc.json");
         loadConfig = sinon.stub().returns({ retries: 300 });
         findupSync = sinon.stub().returns("/some/package.json");
-        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--retries 800 --color" });
+        sinon
+          .stub(process, "env")
+          .value({ MOCHA_OPTIONS: "--retries 800 --color" });
 
         loadOptions = proxyLoadOptions({
           readFileSync,
@@ -628,7 +632,9 @@ describe("options", function () {
           readFileSync = sinon.stub();
           readFileSync.onFirstCall().throws();
           findConfig = sinon.stub().returns("/some/.mocharc.json");
-          loadConfig = sinon.stub().returns({ spec: "{dirA,dirB}/**/*.spec.js" });
+          loadConfig = sinon
+            .stub()
+            .returns({ spec: "{dirA,dirB}/**/*.spec.js" });
           findupSync = sinon.stub();
           loadOptions = proxyLoadOptions({
             readFileSync,
@@ -655,7 +661,9 @@ describe("options", function () {
         readFileSync = sinon.stub();
         readFileSync.onFirstCall().throws();
         findConfig = sinon.stub().returns("/some/.mocharc.json");
-        loadConfig = sinon.stub().returns({ ignore: "{dirA,dirB}/**/*.spec.js" });
+        loadConfig = sinon
+          .stub()
+          .returns({ ignore: "{dirA,dirB}/**/*.spec.js" });
         findupSync = sinon.stub();
         loadOptions = proxyLoadOptions({
           readFileSync,
