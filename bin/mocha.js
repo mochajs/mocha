@@ -146,5 +146,5 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   });
 } else {
   debug("running Mocha in-process");
-  require("../lib/cli/cli").main([], mochaArgs);
+  require("../lib/cli/cli.mjs").main([], mochaArgs);
 }
