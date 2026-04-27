@@ -11,12 +11,12 @@
  */
 
 const os = require("node:os");
-const { loadOptions } = require("../lib/cli/options");
+const { loadOptions } = require("../lib/cli/options.mjs");
 const {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts,
-} = require("../lib/cli/node-flags");
+} = require("../lib/cli/node-flags.mjs");
 const unparse = require("yargs-unparser");
 const debug = require("debug")("mocha:cli:mocha");
 const { aliases } = require("../lib/cli/run-option-metadata");
