@@ -1,11 +1,9 @@
-"use strict";
+import sinon from "sinon";
+import { proxy } from "rewiremock/node";
+import { ONE_AND_DONE_ARGS } from "../../../lib/cli/one-and-dones";
+import { constants } from "../../../lib/error-constants.mjs";
 
-const sinon = require("sinon");
-const rewiremock = require("rewiremock/node");
-const { ONE_AND_DONE_ARGS } = require("../../../lib/cli/one-and-dones");
-const { constants } = require("../../../lib/error-constants.mjs");
-
-const modulePath = require.resolve("../../../lib/cli/options");
+const modulePath = require.resolve("../../../lib/cli/options.mjs");
 const mocharcPath = require.resolve("../../../lib/mocharc.json");
 const configPath = require.resolve("../../../lib/cli/config");
 
@@ -15,7 +13,7 @@ const proxyLoadOptions = ({
   findConfig = {},
   loadConfig = {},
 } = {}) =>
-  rewiremock.proxy(modulePath, (r) => ({
+  proxy(modulePath, (r) => ({
     "node:fs": r.with({ readFileSync }).directChildOnly(),
     [mocharcPath]: defaults,
     "find-up": r
