@@ -1,9 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
   "entry": [
-    "bin/mocha.js!",
     "bin/_mocha!",
-    "browser-entry.js!",
     "docs/_data/supporters.cjs",
     "index.js!",
     "lib/cli/index.js!",
