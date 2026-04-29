@@ -15,7 +15,7 @@ describe(".only()", function () {
             return;
           }
           assert.strictEqual(res.stats.pending, 0);
-          assert.strictEqual(res.stats.passes, 11);
+          assert.strictEqual(res.stats.passes, 19);
           assert.strictEqual(res.stats.failures, 0);
           assert.strictEqual(res.code, 0);
           done();
