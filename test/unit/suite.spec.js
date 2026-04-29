@@ -45,6 +45,11 @@ describe("Suite", function () {
           root: true,
         }).and("not to be", suite);
       });
+
+      it("should copy the fast threshold when explicitly set", function () {
+        suite.fast(25);
+        expect(suite.clone().fast(), "to be", 25);
+      });
     });
 
     describe("reset()", function () {
@@ -134,6 +139,52 @@ describe("Suite", function () {
       });
     });
 
+    describe("fast()", function () {
+      beforeEach(function () {
+        suite = new Suite("A Suite");
+      });
+
+      describe("when no argument is passed", function () {
+        it("should return half of slow by default", function () {
+          expect(suite.fast(), "to be", 37);
+        });
+      });
+
+      describe("when argument is passed", function () {
+        it("should return the Suite object", function () {
+          const newSuite = suite.fast(50);
+          expect(newSuite.fast(), "to be", 50);
+        });
+      });
+
+      describe("when given a string", function () {
+        it("should parse it", function () {
+          suite.fast("100ms");
+          expect(suite.fast(), "to be", 100);
+        });
+      });
+
+      describe("when slow is changed", function () {
+        it("should reflect in default fast if fast not set", function () {
+          suite.slow(200);
+          expect(suite.fast(), "to be", 100);
+        });
+
+        it("should not affect explicitly set fast", function () {
+          suite.fast(50);
+          suite.slow(200);
+          expect(suite.fast(), "to be", 50);
+        });
+      });
+
+      describe("when set to 0", function () {
+        it("should return 0", function () {
+          suite.fast(0);
+          expect(suite.fast(), "to be", 0);
+        });
+      });
+    });
+
     describe("bail()", function () {
       beforeEach(function () {
         suite = new Suite("A Suite");
@@ -157,6 +208,12 @@ describe("Suite", function () {
     describe("beforeAll()", function () {
       beforeEach(function () {
         suite = new Suite("A Suite");
+      });
+
+      it("copies the fast threshold to hooks when explicitly set", function () {
+        suite.fast(20);
+        suite.beforeAll(function () {});
+        expect(suite._beforeAll[0].fast(), "to be", 20);
       });
 
       describe("wraps the passed in function in a Hook", function () {
@@ -374,6 +431,17 @@ describe("Suite", function () {
         expect(second.slow(), "to be", 200);
       });
 
+      it("does not copy fast when not explicitly set", function () {
+        expect(second._fast, "to be undefined");
+      });
+
+      it("copies fast when explicitly set", function () {
+        var third = new Suite("Third suite");
+        first.fast(50);
+        first.addSuite(third);
+        expect(third.fast(), "to be", 50);
+      });
+
       it("adds the suite to the suites collection", function () {
         expect(first.suites, "to have length", 1);
         expect(first.suites[0], "to be", second);
@@ -405,6 +473,14 @@ describe("Suite", function () {
 
       it("adds the test to the tests collection", function () {
         expect(suite.tests, "to satisfy", [test]).and("to have length", 1);
+      });
+
+      it("copies the fast threshold when explicitly set", function () {
+        var s = new Suite("fast suite", new Context());
+        s.fast(30);
+        var t = new Test("fast test");
+        s.addTest(t);
+        expect(t.fast(), "to be", 30);
       });
     });
 
