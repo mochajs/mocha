@@ -29,16 +29,16 @@ npm test
 
 For faster feedback during development, you can directly use targeted commands:
 
-| Command | What it runs |
-| --- | --- |
-| `npm run test-smoke` | Quick smoke test to confirm Mocha boots |
-| `npm run test-node:unit` | Unit tests |
-| `npm run test-node:integration` | Integration tests (includes build) |
-| `npm run test-node:interfaces` | Interface tests (BDD, TDD, QUnit, exports) |
-| `npm run test-node:reporters` | Reporter tests |
-| `npm run test-browser` | Browser tests via Karma + Chrome (includes build) |
-| `npm run tsc` | TypeScript type checking |
-| `npm run lint` | Linting and formatting checks |
+| Command                         | What it runs                                      |
+| ------------------------------- | ------------------------------------------------- |
+| `npm run test-smoke`            | Quick smoke test to confirm Mocha boots           |
+| `npm run test-node:unit`        | Unit tests                                        |
+| `npm run test-node:integration` | Integration tests (includes build)                |
+| `npm run test-node:interfaces`  | Interface tests (BDD, TDD, QUnit, exports)        |
+| `npm run test-node:reporters`   | Reporter tests                                    |
+| `npm run test-browser`          | Browser tests via Karma + Chrome (includes build) |
+| `npm run tsc`                   | TypeScript type checking                          |
+| `npm run lint`                  | Linting and formatting checks                     |
 
 A typical edit-test cycle uses `--watch` to re-run tests automatically as you change files:
 
