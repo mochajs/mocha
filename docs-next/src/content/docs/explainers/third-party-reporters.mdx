@@ -14,6 +14,8 @@ module.exports = MyReporter;
 
 class MyReporter extends mocha.reporters.Base {
   constructor(runner) {
+    super(runner);
+
     var passes = 0;
     var failures = 0;
 
