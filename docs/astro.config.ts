@@ -114,6 +114,10 @@ export default defineConfig({
               slug: "explainers/global-variables",
             },
             {
+              label: "Mocha 12",
+              slug: "explainers/mocha-12",
+            },
+            {
               label: "Node.js native ESM support",
               slug: "explainers/nodejs-native-esm-support",
             },
