@@ -5,7 +5,7 @@ If you are having trouble, don't be afraid to [ask for help](./CONTRIBUTING.md#â
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/en/download) `^20.19.0 || >=22.12.0` (Node 22 recommended).
+- [Node.js](https://nodejs.org/en/download) `^20.19.0 || >=22.12.0` (Node >=22 LTS recommended).
   - If you're new to installing Node, a tool like [nvm](https://github.com/nvm-sh/nvm#install-script) can help you manage multiple version installations.
 - npm (do not use yarn or pnpm for this repository).
 - [Google Chrome](https://www.google.com/chrome) is required to run browser tests locally.
