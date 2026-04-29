@@ -24,13 +24,13 @@ You can run Mocha against `ts` files matching your `spec` pattern either by spec
 mocha --extension ts
 ```
 
-Or in a [configuration file](/running/configuring) such as `.mocharc.yml`:
+Or in a [configuration file](/running/configuring) such as `.mocharc.js`:
 
-```yaml
-extension:
-  - js
-  - ts
-spec: test/**/*.ts
+```js
+export default {
+  extension: ["js", "ts"],
+  spec: "test/**/*.ts",
+};
 ```
 
 ### Older Node Versions (22.6 through 22.17)
@@ -41,15 +41,14 @@ Add `--node-option experimental-strip-types`:
 mocha --node-option experimental-strip-types --extension ts
 ```
 
-Or in `.mocharc.yml`:
+Or in `.mocharc.js`:
 
-```yaml
-node-option:
-  - strip-types
-extension:
-  - js
-  - ts
-spec: test/**/*.ts
+```js
+export default {
+  "node-option": ["strip-types"]
+  "extension": ["js", "ts"]
+  "spec": ["test/**/*.ts"]
+}
 ```
 
 :::note
