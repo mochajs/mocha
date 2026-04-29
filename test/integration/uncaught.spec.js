@@ -215,4 +215,26 @@ describe("uncaught exceptions", function () {
       });
     });
   });
+
+  it("issue-2556: should show failure at the correct indent level", function (done) {
+    runMocha(
+      "uncaught/issue-2556",
+      ["--reporter", "spec"],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        // The failure is for a test inside "first suite" (depth 1).
+        // Spec reporter should indent it as: 2 spaces (suite depth) +
+        // "  N) title" = 4 leading spaces before the failure number.
+        var failLine = res.output.split("\n").find(function (line) {
+          return /\d+\)/.test(line) && line.indexOf("should pass") !== -1;
+        });
+        expect(failLine, "not to be undefined");
+        // should start with exactly 4 spaces before the number
+        expect(failLine, "to match", /^ {4}\d+\) /);
+        done();
+      },
+    );
+  });
 });
