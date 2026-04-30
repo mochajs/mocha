@@ -1,5 +1,31 @@
 # Changelog
 
+## [12.0.0-beta-9.4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.3...v12.0.0-beta-9.4) (2026-04-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove unused legacy `errors.js` functions ([#5835](https://github.com/mochajs/mocha/issues/5835))
+
+### 📚 Documentation
+
+* add TypeScript setup guide ([#5863](https://github.com/mochajs/mocha/issues/5863)) ([af63dcf](https://github.com/mochajs/mocha/commit/af63dcf772b0884695b3c447df78c62d41cb6472))
+* fix correctness issues in error codes, CLI defaults, and config docs ([#5860](https://github.com/mochajs/mocha/issues/5860)) ([bd54205](https://github.com/mochajs/mocha/commit/bd54205584abe47f4b1588e0ceb7db4dc2cc924b))
+* modernize DEVELOPMENT.md for new contributors ([#5865](https://github.com/mochajs/mocha/issues/5865)) ([5122ad7](https://github.com/mochajs/mocha/commit/5122ad74d717f29e5c7d59466db774cb6a8b144b))
+
+
+### 🧹 Chores
+
+* convert dot, min, and list reporters to esm ([#5907](https://github.com/mochajs/mocha/issues/5907)) ([b19b696](https://github.com/mochajs/mocha/commit/b19b69691b3b0725acacad1e1e3268a6d4762cca))
+* convert run-option-metadata and exports interface to ESM ([#5910](https://github.com/mochajs/mocha/issues/5910)) ([27b0814](https://github.com/mochajs/mocha/commit/27b081488b05e9c673b7fc9acd51ffb4fca77904))
+* **deps:** update dependency knip to v6.6.1 ([#5927](https://github.com/mochajs/mocha/issues/5927)) ([7c48496](https://github.com/mochajs/mocha/commit/7c4849672dd5192fd3bc33f4427281ae22f68fc3))
+* **deps:** update dependency nyc to v18 ([#5846](https://github.com/mochajs/mocha/issues/5846)) ([1fea247](https://github.com/mochajs/mocha/commit/1fea247b4e7ba0dafa1a338d438b042ac431d997))
+* **deps:** update dependency webpack-cli to v7 ([#5871](https://github.com/mochajs/mocha/issues/5871)) ([9d367e1](https://github.com/mochajs/mocha/commit/9d367e1d31fc03cb744979665a3252aaf47259b4))
+* **deps:** update googleapis/release-please-action action to v5 ([#5929](https://github.com/mochajs/mocha/issues/5929)) ([f32085f](https://github.com/mochajs/mocha/commit/f32085ff2e9794b329b45f06761e710a5baeb4f8))
+* document CJS and MJS config file priority ([#5923](https://github.com/mochajs/mocha/issues/5923)) ([09a1106](https://github.com/mochajs/mocha/commit/09a11062c701b6776937e3f9b53fd879f71b608c))
+* fix Knip issues ([#5919](https://github.com/mochajs/mocha/issues/5919)) ([1b3d604](https://github.com/mochajs/mocha/commit/1b3d60429e484bde837b86e6eb12b497e2c73c40))
+* remove unused legacy `errors.js` functions ([#5835](https://github.com/mochajs/mocha/issues/5835)) ([4116368](https://github.com/mochajs/mocha/commit/41163689264c3ae80c25d168954532b10337aa75))
+
 ## [12.0.0-beta-9.3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.2...v12.0.0-beta-9.3) (2026-04-28)
 
 
