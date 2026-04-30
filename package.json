@@ -138,7 +138,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "knip": "^6.0.0",
     "npm-run-all2": "^8.0.0",
-    "nyc": "^17.1.0",
+    "nyc": "^18.0.0",
     "prettier": "3.8.1",
     "ps-list": "^9.0.0",
     "remark": "^15.0.0",
