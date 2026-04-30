@@ -10,6 +10,7 @@ var makeRunReporter = helpers.createRunReporterFunction;
 
 var EVENT_RUN_BEGIN = events.EVENT_RUN_BEGIN;
 var EVENT_RUN_END = events.EVENT_RUN_END;
+var EVENT_SUITE_BEGIN = events.EVENT_SUITE_BEGIN;
 var EVENT_TEST_END = events.EVENT_TEST_END;
 var EVENT_TEST_FAIL = events.EVENT_TEST_FAIL;
 var EVENT_TEST_PASS = events.EVENT_TEST_PASS;
@@ -23,6 +24,7 @@ describe("TAP reporter", function () {
 
   function createTest() {
     return {
+      title: expectedTitle,
       fullTitle: function () {
         return expectedTitle;
       },
@@ -526,6 +528,87 @@ describe("TAP reporter", function () {
           ];
           expect(stdout, "to equal", expectedArray);
         });
+      });
+    });
+  });
+
+  describe("suite hierarchy", function () {
+    var options = {
+      reporterOptions: {
+        tapVersion: "12",
+      },
+    };
+
+    describe("on 'suite' event", function () {
+      var stdout;
+      var expectedSuiteTitle = "My Suite";
+
+      before(async function () {
+        var suite = { root: false, title: expectedSuiteTitle };
+        var runner = createMockRunner(
+          "suite",
+          EVENT_SUITE_BEGIN,
+          null,
+          null,
+          suite,
+        );
+        runner.suite = "";
+        ({ stdout } = await runReporter({}, runner, options));
+      });
+
+      it("should write a comment with the suite title", function () {
+        expect(stdout[0], "to equal", "# " + expectedSuiteTitle + "\n");
+      });
+    });
+
+    describe("on 'suite' event with root suite", function () {
+      var stdout;
+
+      before(async function () {
+        var suite = { root: true, title: "" };
+        var runner = createMockRunner(
+          "suite",
+          EVENT_SUITE_BEGIN,
+          null,
+          null,
+          suite,
+        );
+        runner.suite = "";
+        ({ stdout } = await runReporter({}, runner, options));
+      });
+
+      it("should not write a comment for the root suite", function () {
+        expect(stdout, "to be empty");
+      });
+    });
+
+    describe("on 'pass' event with suite context", function () {
+      var stdout;
+      var testTitle = "should work";
+
+      before(async function () {
+        var test = {
+          title: testTitle,
+          fullTitle: function () {
+            return "My Suite should work";
+          },
+          slow: noop,
+        };
+        var runner = createMockRunner(
+          "start test",
+          EVENT_TEST_END,
+          EVENT_TEST_PASS,
+          null,
+          test,
+        );
+        runner.suite = "";
+        ({ stdout } = await runReporter({}, runner, options));
+      });
+
+      it("should use test title not fullTitle in output", function () {
+        var expectedMessage =
+          "ok " + countAfterTestEnd + " " + testTitle + "\n";
+        expect(stdout[0], "to equal", expectedMessage);
       });
     });
   });
