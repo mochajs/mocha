@@ -1,17 +1,15 @@
-"use strict";
-
-const js = require("@eslint/js");
-const { defineConfig, globalIgnores } = require("eslint/config");
-const n = require("eslint-plugin-n");
-const globals = require("globals");
-const { default: markdown } = require("@eslint/markdown");
+import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import n from "eslint-plugin-n";
+import globals from "globals";
+import markdown from "@eslint/markdown";
 
 const messages = {
   gh237: "See https://github.com/mochajs/mocha/issues/237",
   gh3604: "See https://github.com/mochajs/mocha/issues/3604",
 };
 
-module.exports = defineConfig(
+export default defineConfig(
   {
     files: ["**/*.{cjs,js,mjs}"],
     extends: [n.configs["flat/recommended-script"], js.configs.recommended],

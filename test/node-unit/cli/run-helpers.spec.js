@@ -1,6 +1,9 @@
 "use strict";
 
-const { validateLegacyPlugin, list } = require("../../../lib/cli/run-helpers");
+const {
+  validateLegacyPlugin,
+  list,
+} = require("../../../lib/cli/run-helpers.mjs");
 const Mocha = require("../../../lib/mocha");
 
 describe("helpers", function () {
