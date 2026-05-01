@@ -264,7 +264,7 @@ describe("Mocha", function () {
 
         it("should load from current working directory", function () {
           expect(function () {
-            mocha.reporter("./lib/reporters/spec.js");
+            mocha.reporter("./lib/reporters/spec.mjs");
           }, "not to throw");
         });
 
