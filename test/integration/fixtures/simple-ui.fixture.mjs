@@ -1,5 +1,5 @@
 import Mocha from '../../../lib/mocha.js'
-import MochaInterface from '../../../lib/interfaces/common.js';
+import { createCommon as MochaInterface } from '../../../lib/interfaces/common.mjs';
 
 const Test = Mocha.Test;
 const EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;

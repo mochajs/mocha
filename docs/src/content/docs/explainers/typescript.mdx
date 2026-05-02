@@ -1,0 +1,98 @@
+---
+title: TypeScript
+description: Running Mocha tests written in TypeScript.
+---
+
+## Node.js Native Type Stripping
+
+Newer versions of Node.js can run TypeScript files directly via [native type stripping](https://nodejs.org/en/learn/typescript/run-natively). On modern versions of Node, type stripping is stable and enabled by default. For older versions of Node, use the [`--experimental-strip-types` flag](https://nodejs.org/learn/typescript/run-natively). This feature has not been backported to Node 20.
+
+| State        | 20  | 22    | 24   |
+| ------------ | --- | ----- | ---- |
+| Experimental | n/a | 22.6  | 24.0 |
+| Stable       | n/a | 22.18 | 24.3 |
+
+You also need [`--extension ts`](/running/cli#--extension-ext) so Mocha discovers `.ts` files when scanning directories (the default extensions are `.js`, `.cjs`, `.mjs`).
+
+Note that this does not perform type-checking, it only strips types to allow you to easily run your tests. We recommend using another tool to get the benefits of type-checking.
+
+### Quick Start
+
+You can run Mocha against `ts` files matching your `spec` pattern either by specifying [`--extension`](/running/cli/#--extension-ext):
+
+```bash
+mocha --extension ts
+```
+
+Or in a [configuration file](/running/configuring) such as `.mocharc.js`:
+
+```js
+export default {
+  extension: ["js", "ts"],
+  spec: "test/**/*.ts",
+};
+```
+
+### Older Node Versions (22.6 through 22.17)
+
+Add `--node-option experimental-strip-types`:
+
+```bash
+mocha --node-option experimental-strip-types --extension ts
+```
+
+Or in `.mocharc.js`:
+
+```js
+export default {
+  "node-option": ["strip-types"]
+  "extension": ["js", "ts"]
+  "spec": ["test/**/*.ts"]
+}
+```
+
+:::note
+Specifying `--extension` replaces the defaults.
+Include both `js` and `ts` if you have a mix of JavaScript and TypeScript test files.
+:::
+
+### Hello World Example
+
+The example below uses ESM `import` syntax. It is a minimal working example that does not include everything for IDE support. For IDE integration, see the [mocha-examples TypeScript package](https://github.com/mochajs/mocha-examples/tree/main/packages/typescript).
+
+Given a source file `src/add.ts`:
+
+```ts
+export function add(a: number, b: number) {
+  return a + b;
+}
+```
+
+And a test file `src/add.test.ts`:
+
+```ts
+import assert from "node:assert/strict";
+import { add } from "./add.ts";
+
+describe("add", function () {
+  it("should add two numbers", function () {
+    assert.strictEqual(add(1, 2), 3);
+  });
+});
+```
+
+Run with:
+
+```bash
+npx mocha --extension ts src/add.test.ts
+```
+
+## Other Approaches
+
+For setups that require TypeScript features beyond type stripping (such as `enum`, `namespace`, or path aliases), you can use a register-style loader like [tsx](https://npm.im/tsx) via [`--require`](/running/cli#--require-module--r-module):
+
+```bash
+mocha --require ts-node/register --extension ts
+```
+
+See the [mocha-examples TypeScript package](https://github.com/mochajs/mocha-examples/tree/main/packages/typescript) for complete working examples with different configurations.

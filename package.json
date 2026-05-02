@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "12.0.0-beta-9.2",
+  "version": "12.0.0-beta-9.3",
   "type": "commonjs",
   "description": "Classic, reliable, trusted test framework for Node.js and the browser",
   "keywords": [
@@ -138,7 +138,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "knip": "^6.0.0",
     "npm-run-all2": "^8.0.0",
-    "nyc": "^17.1.0",
+    "nyc": "^18.0.0",
     "prettier": "3.8.1",
     "ps-list": "^9.0.0",
     "remark": "^15.0.0",
@@ -158,7 +158,7 @@
     "unexpected-set": "^3.0.0",
     "unexpected-sinon": "^11.0.0",
     "webpack": "^5.67.0",
-    "webpack-cli": "^6.0.0"
+    "webpack-cli": "^7.0.0"
   },
   "files": [
     "bin/*mocha*",
