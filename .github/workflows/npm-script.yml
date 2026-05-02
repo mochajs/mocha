@@ -72,8 +72,6 @@ jobs:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
           NODE_OPTIONS: "--trace-warnings"
-          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
         if: always() && inputs.coverage
@@ -82,7 +80,7 @@ jobs:
       # https://app.codecov.io/gh/mochajs/mocha
       - name: Upload coverage reports
         if: always() && inputs.coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           fail_ci_if_error: true
           use_oidc: true

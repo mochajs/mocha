@@ -4,7 +4,6 @@ var sinon = require("sinon");
 var EventEmitter = require("node:events").EventEmitter;
 var Mocha = require("../../lib/mocha");
 var utils = require("../../lib/utils");
-const errors = require("../../lib/errors");
 
 describe("Mocha", function () {
   /**
@@ -78,7 +77,6 @@ describe("Mocha", function () {
     Suite = sinon.stub(Mocha, "Suite").returns(suite);
     Suite.constants = {};
 
-    sinon.stub(errors, "warn");
     sinon.stub(utils, "isString");
     sinon.stub(utils, "noop");
   });
@@ -208,9 +206,11 @@ describe("Mocha", function () {
       describe("when `enableGlobalTeardown` option is present", function () {
         it("should configure global teardown fixtures", function () {
           const mocha = new Mocha({ enableGlobalTeardown: 1 });
-          expect(mocha.enableGlobalTeardown, "to have a call satisfying", [
-            1,
-          ]).and("was called once");
+          expect(
+            mocha.enableGlobalTeardown,
+            "to have a call satisfying",
+            [1],
+          ).and("was called once");
         });
       });
     });

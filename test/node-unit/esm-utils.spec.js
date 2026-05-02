@@ -101,5 +101,48 @@ describe("esm-utils", function () {
         `${url.pathToFileURL("/foo/bar.mjs").toString()}?foo=bar`,
       );
     });
+
+    it("should support file: URLs passed to loadFilesAsync", async function () {
+      const fileUrl = url.pathToFileURL("/foo/bar.mjs").toString();
+      await esmUtils.loadFilesAsync(
+        [fileUrl],
+        () => {},
+        () => {},
+      );
+
+      expect(esmUtils.doImport.firstCall.args[0].toString(), "to be", fileUrl);
+    });
+
+    it("should treat Windows drive-letter paths as regular file paths", async function () {
+      // URL.canParse("C:/foo/bar.mjs") returns true on all platforms,
+      // but "c:" is a drive letter, not a URL scheme — must fall through to path.resolve
+      await esmUtils.loadFilesAsync(
+        ["C:/foo/bar.mjs"],
+        () => {},
+        () => {},
+      );
+
+      expect(
+        esmUtils.doImport.firstCall.args[0].toString(),
+        "to contain",
+        "C:",
+      );
+    });
+
+    it("should throw for unsupported URL protocols", async function () {
+      return expect(
+        () =>
+          esmUtils.loadFilesAsync(
+            ["https://example.com/suite.js"],
+            () => {},
+            () => {},
+          ),
+        "to be rejected with error satisfying",
+        {
+          message:
+            'Unsupported URL protocol "https:". Only "file:" URLs are supported.',
+        },
+      );
+    });
   });
 });

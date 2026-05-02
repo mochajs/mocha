@@ -10,7 +10,7 @@ test("should decrement", function () {
   var number = 3;
   expect(--number, "to be", 2);
   expect(--number, "to be", 1);
-  expect(--number, "to be", 0);
+  expect(number - 1, "to be", 0);
 });
 
 suite("String");

@@ -3,7 +3,6 @@
 const Mocha = require("../../lib/mocha");
 const { Suite, Test, Context } = Mocha;
 const sinon = require("sinon");
-const errors = require("../../lib/errors");
 
 function supportsFunctionNames() {
   return function foo() {}.name === "foo";
@@ -527,10 +526,6 @@ describe("Suite", function () {
     });
 
     describe("constructor", function () {
-      beforeEach(function () {
-        sinon.stub(errors, "deprecate");
-      });
-
       /* eslint no-new: off */
       it("should throw an error if the title isn't a string", function () {
         expect(function () {

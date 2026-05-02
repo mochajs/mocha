@@ -6,9 +6,8 @@ const sinon = require("sinon");
 const { EventEmitter } = require("node:events");
 
 const DUMB_FIXTURE_PATH = require.resolve("./fixtures/dumb-module.fixture.js");
-const DUMBER_FIXTURE_PATH = require.resolve(
-  "./fixtures/dumber-module.fixture.js",
-);
+const DUMBER_FIXTURE_PATH =
+  require.resolve("./fixtures/dumber-module.fixture.js");
 
 describe("Mocha", function () {
   let stubs;
@@ -66,12 +65,12 @@ describe("Mocha", function () {
       () => require("../../lib/mocha"),
       (r) => ({
         "../../lib/utils.js": r.with(stubs.utils).callThrough(),
-        "../../lib/suite.js": stubs.Suite,
+        "../../lib/suite.mjs": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.js":
           stubs.ParallelBufferedRunner,
         "../../lib/nodejs/esm-utils": stubs.esmUtils,
         "../../lib/runner.js": stubs.Runner,
-        "../../lib/errors.js": stubs.errors,
+        "../../lib/errors.mjs": stubs.errors,
       }),
     );
     delete require.cache[DUMB_FIXTURE_PATH];
@@ -224,7 +223,7 @@ describe("Mocha", function () {
     });
 
     describe("loadFilesAsync()", function () {
-      it("shoud pass esmDecorator to actual load function", async function () {
+      it("should pass esmDecorator to actual load function", async function () {
         const esmDecorator = (x) => `${x}?foo=bar`;
 
         await mocha.loadFilesAsync({ esmDecorator });
@@ -265,7 +264,7 @@ describe("Mocha", function () {
 
         it("should load from current working directory", function () {
           expect(function () {
-            mocha.reporter("./lib/reporters/spec.js");
+            mocha.reporter("./lib/reporters/spec.mjs");
           }, "not to throw");
         });
 

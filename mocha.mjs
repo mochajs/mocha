@@ -1,4 +1,4 @@
-// this built file is not committed to the repo
+// the .js built file is not committed to the repo
 /* eslint-disable-next-line n/no-missing-import */
 import "./mocha.js";
 

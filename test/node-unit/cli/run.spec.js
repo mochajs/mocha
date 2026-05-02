@@ -1,7 +1,7 @@
 "use strict";
 
 const { builder } = require("../../../lib/cli/run");
-const { types } = require("../../../lib/cli/run-option-metadata");
+const { types } = require("../../../lib/cli/run-option-metadata.mjs");
 
 describe("command", function () {
   describe("run", function () {

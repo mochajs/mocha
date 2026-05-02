@@ -1,0 +1,62 @@
+---
+description: Create custom reporters.
+title: Third party reporters
+---
+
+Mocha allows you to define custom third-party reporters within your own test suite, or by using npm modules. For example if "lcov-reporter" was published to npm, you would simply add it to your package.json in `devDependencies` and use `--reporter lcov-reporter`.
+
+{/* todo detail the migration path, maybe on a separate page (Mocha 12 migration guide / announcement?) */}
+In Mocha 12, we've updated our extension logic to use `class`es instead of `util.inherits`. Learn more at __todo__
+
+Here is a minimalistic sample reporter, which you can use by executing: `mocha --reporter my-reporter.js`
+
+```js
+// my-reporter.js
+import mocha from "mocha";
+
+// You can extend other reporters by changing the class you extend:
+// class MyReporter extends mocha.reporters.Spec {
+class MyReporter extends mocha.reporters.Base {
+  constructor(runner) {
+    super(runner);
+
+    let passes = 0;
+    let failures = 0;
+
+    runner.on("pass", function (test) {
+      passes++;
+      console.log("pass: %s", test.fullTitle());
+    });
+
+    runner.on("fail", function (test, err) {
+      failures++;
+      console.log("fail: %s -- error: %s", test.fullTitle(), err.message);
+    });
+
+    runner.on("end", function () {
+      console.log("end: %d/%d", passes, passes + failures);
+    });
+  }
+}
+```
+
+For details, look at the implementations in [lib/reporters/\*](https://github.com/mochajs/mocha/tree/main/lib/reporters).
+
+[mocha-examples: third-party-reporter (GitHub)](https://github.com/mochajs/mocha-examples/tree/main/packages/third-party-reporter) is another sample implementation.
+
+Mocha provides the following events:
+
+- `start`: Execution started
+- `waiting`: Execution of root `Suite` delayed
+- `ready`: Execution of root `Suite` started
+- `end`: Execution complete
+- `suite`: Test suite execution started
+- `suite end`: All tests (and sub-suites) have finished
+- `test`: Test execution started
+- `test end`: Test completed
+- `hook`: Hook execution started
+- `hook end`: Hook complete
+- `pass`: Test passed
+- `fail`: Test failed
+- `pending`: Test pending
+- `retry`: Test failed and retries
