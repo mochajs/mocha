@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-alpha-issue-5899.3](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.2...v12.0.0-alpha-issue-5899.3) (2026-05-02)
+
+
+### 🧹 Chores
+
+* convert cli.js to ESM ([#5909](https://github.com/mochajs/mocha/issues/5909)) ([8955ac2](https://github.com/mochajs/mocha/commit/8955ac2a9b8339727e139d014a6067843f5216ef))
+
 ## [12.0.0-alpha-issue-5899.2](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.1...v12.0.0-alpha-issue-5899.2) (2026-05-02)
 
 
