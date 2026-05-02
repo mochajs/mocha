@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-alpha-issue-5899.1](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.0...v12.0.0-alpha-issue-5899.1) (2026-05-02)
+
+
+### 🧹 Chores
+
+* set alpha-issue-5899 baseline ([17c2908](https://github.com/mochajs/mocha/commit/17c29089d63a060dd5b659d548be47749bb27814))
+
 ## [12.0.0-beta-9.3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.2...v12.0.0-beta-9.3) (2026-04-28)
 
 
