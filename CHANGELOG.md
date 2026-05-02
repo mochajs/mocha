@@ -1,5 +1,13 @@
 # Changelog
 
+## [12.0.0-alpha-issue-5899.4](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.3...v12.0.0-alpha-issue-5899.4) (2026-05-02)
+
+
+### 🧹 Chores
+
+* convert cli.mjs back to CJS ([da799d2](https://github.com/mochajs/mocha/commit/da799d22eb898fc480cf1ff1d14692e834dd6742))
+* stop modifying module.paths in cli.js ([e2f47a9](https://github.com/mochajs/mocha/commit/e2f47a9b2709e0f19c41404dc36d469fbbf5bfa2))
+
 ## [12.0.0-alpha-issue-5899.3](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.2...v12.0.0-alpha-issue-5899.3) (2026-05-02)
 
 
