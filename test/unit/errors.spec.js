@@ -1,9 +1,9 @@
 "use strict";
 
-var errors = require("../../lib/errors");
+var errors = require("../../lib/errors.mjs");
 var constants = require("../../lib/error-constants.mjs");
 const sinon = require("sinon");
-const { createNoFilesMatchPatternError } = require("../../lib/errors");
+const { createNoFilesMatchPatternError } = require("../../lib/errors.mjs");
 
 describe("Errors", function () {
   afterEach(function () {

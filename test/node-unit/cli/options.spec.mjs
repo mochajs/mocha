@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import { proxy } from "rewiremock/node";
-import { ONE_AND_DONE_ARGS } from "../../../lib/cli/one-and-dones";
+import { ONE_AND_DONE_ARGS } from "../../../lib/cli/one-and-dones.mjs";
 import { constants } from "../../../lib/error-constants.mjs";
 
 const modulePath = require.resolve("../../../lib/cli/options.mjs");
