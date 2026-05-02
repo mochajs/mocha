@@ -14,6 +14,7 @@ describe("--list-interfaces", function () {
       .map(function (name) {
         return {
           name: escapeRegExp(name),
+          // the description prop is required
           description: escapeRegExp(interfaces[name].description),
         };
       });
