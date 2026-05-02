@@ -1,5 +1,13 @@
 # Changelog
 
+## [12.0.0-alpha-issue-5899.2](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.1...v12.0.0-alpha-issue-5899.2) (2026-05-02)
+
+
+### 🧹 Chores
+
+* add debug logs to cli.js module.paths logic ([1bbcca3](https://github.com/mochajs/mocha/commit/1bbcca3645c4ac51db11d5465fd7fd972c1ff657))
+* bump release-please publish node-version to 24 ([f5c1556](https://github.com/mochajs/mocha/commit/f5c1556989d859543bd6d791c1ce9c240babaa49))
+
 ## [12.0.0-alpha-issue-5899.1](https://github.com/mochajs/mocha/compare/v12.0.0-alpha-issue-5899.0...v12.0.0-alpha-issue-5899.1) (2026-05-02)
 
 
