@@ -1,0 +1,38 @@
+---
+description: Details about the Mocha 12 release
+title: Mocha 12 is here!
+---
+
+Mocha 12 is the first release to follow our [even-odd major release pattern](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md#major-releases).
+As an even release, Mocha 12 does not introduce any significant breaking changes.
+We've upgraded Node and removed some broken, deprecated features,
+but everything else works just as before.
+
+{/* some stats about dependency bumps? */}
+{/* talk about surfaced errors in CJS vs ESM module handling */}
+{/* talk about internal conversion from CJS to ESM */}
+
+## Breaking changes
+
+{/* this list is complete as of commit d103e34e, 2026-04-02 PDT */}
+
+- cleanup references of --compilers ([#5403](https://github.com/mochajs/mocha/issues/5403))
+- change the default of --forbid-only to check for process.env.CI ([#5496](https://github.com/mochajs/mocha/issues/5496))
+- bump minimum Node.js version from 18.18.0 to 20.19.0 ([#5477](https://github.com/mochajs/mocha/issues/5477))
+
+## New features
+
+This is only a summary!
+
+- allow FIFOs as test files ([#5512](https://github.com/mochajs/mocha/issues/5512)) ([ca4af43](https://github.com/mochajs/mocha/commit/ca4af439d5766fdfb2b5a7d7e06db0280b1abb6e))
+- change the default of --forbid-only to check for process.env.CI ([#5496](https://github.com/mochajs/mocha/issues/5496)) ([3d94dde](https://github.com/mochajs/mocha/commit/3d94ddea2f45d18473bf00e71db2b9766ab227fe))
+- add mocha.mjs export ([#5527](https://github.com/mochajs/mocha/issues/5527)) ([e1cf23c](https://github.com/mochajs/mocha/commit/e1cf23cbc2049a375ab9980337dbf2486450f7cb))
+- add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519)) ([0ed524a](https://github.com/mochajs/mocha/commit/0ed524af347b59200e03b972c2450d36f6818a45))
+
+## Notable fixes
+
+- allow importing ESM interface and reporters ([#5563](https://github.com/mochajs/mocha/issues/5563)) ([bc9fc84](https://github.com/mochajs/mocha/commit/bc9fc842213d00cf7ac4a4b0de898bf29e38bdad))
+
+## References
+
+- [CHANGELOG.md](https://github.com/mochajs/mocha/blob/main/CHANGELOG.md)
