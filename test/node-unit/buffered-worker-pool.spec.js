@@ -36,7 +36,7 @@ describe("class BufferedWorkerPool", function () {
           pool: sinon.stub().returns(pool),
           cpus: 8,
         },
-        "../../lib/nodejs/serializer": serializer,
+        "../../lib/nodejs/serializer.mjs": serializer,
         "serialize-javascript": serializeJavascript,
       },
     ).BufferedWorkerPool;

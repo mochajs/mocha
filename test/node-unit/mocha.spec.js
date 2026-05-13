@@ -288,7 +288,7 @@ describe("Mocha", function () {
       describe('when a reporter exists relative to the "mocha" module path', function () {
         it("should load from module path", function () {
           expect(function () {
-            mocha.reporter("./reporters/spec");
+            mocha.reporter("./reporters/spec.mjs");
           }, "not to throw");
         });
 

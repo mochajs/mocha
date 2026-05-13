@@ -50,7 +50,7 @@ describe("parallel-buffered-runner", function () {
             BufferedWorkerPool,
           },
           "../../lib/utils": r.with({ warn }).callThrough(),
-          "../../lib/errors": r
+          "../../lib/errors.mjs": r
             .with({
               createFatalError: sinon.stub().returns(fatalError),
             })

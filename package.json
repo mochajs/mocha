@@ -179,7 +179,7 @@
     "./lib/nodejs/esm-utils.js": false,
     "./lib/nodejs/file-unloader.js": false,
     "./lib/nodejs/parallel-buffered-runner.js": false,
-    "./lib/nodejs/serializer.js": false,
+    "./lib/nodejs/serializer.mjs": false,
     "./lib/nodejs/worker.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
     "./lib/cli/index.js": false

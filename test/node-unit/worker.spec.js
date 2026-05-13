@@ -2,7 +2,7 @@
 
 const serializeJavascript = require("serialize-javascript");
 const rewiremock = require("rewiremock/node");
-const { SerializableWorkerResult } = require("../../lib/nodejs/serializer");
+const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.mjs");
 const sinon = require("sinon");
 
 const WORKER_PATH = require.resolve("../../lib/nodejs/worker.js");
@@ -58,16 +58,11 @@ describe("worker", function () {
         validateLegacyPlugin: sinon.stub(),
       };
 
-      stubs.plugin = {
-        aggregateRootHooks: sinon.stub().resolves(),
-      };
-
       worker = rewiremock.proxy(WORKER_PATH, {
         workerpool: stubs.workerpool,
         "../../lib/mocha": stubs.Mocha,
-        "../../lib/nodejs/serializer": stubs.serializer,
+        "../../lib/nodejs/serializer.mjs": stubs.serializer,
         "../../lib/cli/run-helpers": stubs.runHelpers,
-        "../../lib/plugin-loader": stubs.plugin,
       });
     });
 
