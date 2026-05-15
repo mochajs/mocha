@@ -44,7 +44,7 @@ jobs:
           show-progress: false
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
       # If this step fails, it may be a transient issue, just run again
