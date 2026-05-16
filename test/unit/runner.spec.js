@@ -572,6 +572,23 @@ describe("Runner", function () {
         done();
       });
 
+      it("should update runner.total after tests are registered in delay mode", function (done) {
+        var delaySuite = new Suite("delay suite", "root");
+        var delayRunner = new Runner(delaySuite, { delay: true });
+
+        expect(delayRunner.total, "to be", 0);
+
+        delaySuite.addTest(new Test("test one", noop));
+        delaySuite.addTest(new Test("test two", noop));
+
+        delayRunner.run(function () {
+          expect(delayRunner.total, "to be", 2);
+          done();
+        });
+
+        delaySuite.emit(Suite.constants.EVENT_ROOT_SUITE_RUN);
+      });
+
       describe("stack traces", function () {
         var stack = [
           "AssertionError: foo bar",
