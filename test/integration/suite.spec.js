@@ -56,8 +56,8 @@ describe("skipped suite w/ callback", function () {
   });
 });
 
-describe("suite returning a value", function () {
-  it("should not give a deprecation warning for suite callback returning a value", function (done) {
+describe("suite returning a plain value", function () {
+  it("should not warn when suite callback returns a non-promise value", function (done) {
     run(
       "suite/suite-returning-value.fixture.js",
       args,
@@ -65,7 +65,24 @@ describe("suite returning a value", function () {
         if (err) {
           return done(err);
         }
-        expect(res, "not to contain output", /Suites ignore return values/);
+        expect(res, "not to contain output", /returned a promise/);
+        done();
+      },
+      { stdio: "pipe" },
+    );
+  });
+});
+
+describe("suite with async callback", function () {
+  it("should warn when suite callback returns a promise", function (done) {
+    run(
+      "suite/suite-async-callback.fixture.js",
+      args,
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(res, "to contain output", /returned a promise/);
         done();
       },
       { stdio: "pipe" },
