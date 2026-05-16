@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       releaseCreated: ${{ steps.release.outputs.release_created }}
+      version: ${{ steps.release.outputs.version }}
     permissions:
       contents: write
       pull-requests: write
@@ -55,6 +56,17 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts --force --no-fund --no-audit
 
-      - run: npm publish --provenance --access public --tag=next
+      - name: Determine npm dist-tag
+        id: dist_tag
+        env:
+          VERSION: ${{ needs.release_please.outputs.version }}
+        run: |
+          if [[ "$VERSION" == *-alpha* ]]; then
+            echo "tag=alpha" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=next" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm publish --provenance --access public --tag=${{ steps.dist_tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
