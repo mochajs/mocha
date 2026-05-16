@@ -20,6 +20,8 @@
     { "type": "ci", "section": "🤖 Automation", "hidden": true }
   ],
   "packages": {
-    ".": {}
+    ".": {
+      "extra-files": ["README.md"]
+    }
   }
 }
