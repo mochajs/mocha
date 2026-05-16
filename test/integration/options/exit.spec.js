@@ -78,3 +78,58 @@ describe("--exit", function () {
     );
   });
 });
+
+describe("--exit-timeout", function () {
+  var mocha;
+
+  function killSubprocess() {
+    if (mocha) mocha.kill("SIGKILL");
+  }
+
+  before(function () {
+    process.on("SIGINT", killSubprocess);
+  });
+
+  after(function () {
+    process.removeListener("SIGINT", killSubprocess);
+  });
+
+  it("should force-exit and report an error should the process not exit within the timeout", function (done) {
+    this.timeout(10000);
+    this.slow(Infinity);
+
+    mocha = runMocha(
+      "exit.fixture.js",
+      ["--exit-timeout", "500"],
+      function (err, result) {
+        if (err) {
+          return done(err);
+        }
+        expect(
+          result.output,
+          "to match",
+          /Timeout of 500ms elapsed after test run/,
+        );
+        done();
+      },
+      { stdio: "pipe" },
+    );
+  });
+
+  it("should not affect normal exit when process exits before exit", function (done) {
+    this.timeout(10000);
+    this.slow(Infinity);
+
+    mocha = runMocha(
+      "passing.fixture.js",
+      ["--exit-timeout", "5000"],
+      function (err, result) {
+        if (err) {
+          return done(err);
+        }
+        expect(result, "to have passed");
+        done();
+      },
+    );
+  });
+});
