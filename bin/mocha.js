@@ -4,7 +4,7 @@
 
 /**
  * This wrapper executable checks for known node flags and appends them when found,
- * before invoking the "real" executable (`lib/cli/cli.js`)
+ * before invoking the "real" executable (`lib/cli/cli.mjs`)
  *
  * @module bin/mocha
  * @private
@@ -81,7 +81,7 @@ if (mochaArgs._) {
 
 if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   const { spawn } = require("node:child_process");
-  const mochaPath = require.resolve("../lib/cli/cli.js");
+  const mochaPath = require.resolve("../lib/cli/cli.mjs");
 
   const nodeArgv =
     (mochaArgs["node-option"] &&
@@ -146,5 +146,5 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   });
 } else {
   debug("running Mocha in-process");
-  require("../lib/cli/cli").main([], mochaArgs);
+  require("../lib/cli/cli.mjs").main([], mochaArgs);
 }
