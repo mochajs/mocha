@@ -1,5 +1,49 @@
 # Changelog
 
+## [12.0.0-beta-9.4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.3...v12.0.0-beta-9.4) (2026-05-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove unused legacy `errors.js` functions ([#5835](https://github.com/mochajs/mocha/issues/5835))
+
+### 🩹 Fixes
+
+* **deps:** update dependency @astrojs/starlight to ^0.39.0 ([#5952](https://github.com/mochajs/mocha/issues/5952)) ([eed10ac](https://github.com/mochajs/mocha/commit/eed10acdad8f075488beadedb872a43d4f781285))
+
+
+### 📚 Documentation
+
+* add TypeScript setup guide ([#5863](https://github.com/mochajs/mocha/issues/5863)) ([af63dcf](https://github.com/mochajs/mocha/commit/af63dcf772b0884695b3c447df78c62d41cb6472))
+* fix correctness issues in error codes, CLI defaults, and config docs ([#5860](https://github.com/mochajs/mocha/issues/5860)) ([bd54205](https://github.com/mochajs/mocha/commit/bd54205584abe47f4b1588e0ceb7db4dc2cc924b))
+* modernize DEVELOPMENT.md for new contributors ([#5865](https://github.com/mochajs/mocha/issues/5865)) ([5122ad7](https://github.com/mochajs/mocha/commit/5122ad74d717f29e5c7d59466db774cb6a8b144b))
+
+
+### 🧹 Chores
+
+* convert `lib/cli/cli.mjs` to ESM ([#5909](https://github.com/mochajs/mocha/issues/5909)) ([6e91a89](https://github.com/mochajs/mocha/commit/6e91a8915e55924a6186e6ac1f5994a81191956c))
+* convert dot, min, and list reporters to esm ([#5907](https://github.com/mochajs/mocha/issues/5907)) ([b19b696](https://github.com/mochajs/mocha/commit/b19b69691b3b0725acacad1e1e3268a6d4762cca))
+* convert run-option-metadata and exports interface to ESM ([#5910](https://github.com/mochajs/mocha/issues/5910)) ([27b0814](https://github.com/mochajs/mocha/commit/27b081488b05e9c673b7fc9acd51ffb4fca77904))
+* **deps:** update dependency @types/node to v24 ([#5958](https://github.com/mochajs/mocha/issues/5958)) ([ef113d7](https://github.com/mochajs/mocha/commit/ef113d7262e8f5d6b602c75a84204863870a4fd5))
+* **deps:** update dependency eslint to v10.3.0 ([#5945](https://github.com/mochajs/mocha/issues/5945)) ([18cf178](https://github.com/mochajs/mocha/commit/18cf17847379f0b80dacdfe7b37c7625209b2bea))
+* **deps:** update dependency eslint-plugin-n to v18 ([#5948](https://github.com/mochajs/mocha/issues/5948)) ([99f0e4a](https://github.com/mochajs/mocha/commit/99f0e4a39e44508384e992f2edec03a1c37200c2))
+* **deps:** update dependency globals to v17.6.0 ([#5946](https://github.com/mochajs/mocha/issues/5946)) ([412070c](https://github.com/mochajs/mocha/commit/412070c7f6570e3bc18cb9769a8b4c85246805db))
+* **deps:** update dependency knip to v6.12.1 ([#5942](https://github.com/mochajs/mocha/issues/5942)) ([e29003d](https://github.com/mochajs/mocha/commit/e29003d049979204689a6a7aee2fa0b6bf73dd30))
+* **deps:** update dependency knip to v6.6.1 ([#5927](https://github.com/mochajs/mocha/issues/5927)) ([7c48496](https://github.com/mochajs/mocha/commit/7c4849672dd5192fd3bc33f4427281ae22f68fc3))
+* **deps:** update dependency knip to v6.7.0 ([#5933](https://github.com/mochajs/mocha/issues/5933)) ([441c32a](https://github.com/mochajs/mocha/commit/441c32aa076f2b0e1c1ba39d67f267c46c1dee4b))
+* **deps:** update dependency nyc to v18 ([#5846](https://github.com/mochajs/mocha/issues/5846)) ([1fea247](https://github.com/mochajs/mocha/commit/1fea247b4e7ba0dafa1a338d438b042ac431d997))
+* **deps:** update dependency semver to v7.8.0 ([#5957](https://github.com/mochajs/mocha/issues/5957)) ([0cbb43c](https://github.com/mochajs/mocha/commit/0cbb43c120c5ce48b6f9df0969c2160bcc6150db))
+* **deps:** update dependency sinon to v22 ([#5949](https://github.com/mochajs/mocha/issues/5949)) ([54dcfda](https://github.com/mochajs/mocha/commit/54dcfda422f5260a2a9705c04213db7f37ac7e75))
+* **deps:** update dependency webpack-cli to v7 ([#5871](https://github.com/mochajs/mocha/issues/5871)) ([9d367e1](https://github.com/mochajs/mocha/commit/9d367e1d31fc03cb744979665a3252aaf47259b4))
+* **deps:** update googleapis/release-please-action action to v5 ([#5929](https://github.com/mochajs/mocha/issues/5929)) ([f32085f](https://github.com/mochajs/mocha/commit/f32085ff2e9794b329b45f06761e710a5baeb4f8))
+* **dev-deps:** upgrade `webpack` from v6 to v7 + remove obsolete `fail-on-errors-webpack-plugin` ([#5908](https://github.com/mochajs/mocha/issues/5908)) ([103ad41](https://github.com/mochajs/mocha/commit/103ad416546bc33804c680cde46de4d0b9ff1c9a))
+* document CJS and MJS config file priority ([#5923](https://github.com/mochajs/mocha/issues/5923)) ([09a1106](https://github.com/mochajs/mocha/commit/09a11062c701b6776937e3f9b53fd879f71b608c))
+* fix Knip issues ([#5919](https://github.com/mochajs/mocha/issues/5919)) ([1b3d604](https://github.com/mochajs/mocha/commit/1b3d60429e484bde837b86e6eb12b497e2c73c40))
+* migrate core interfaces and utilities to ESM ([#5930](https://github.com/mochajs/mocha/issues/5930)) ([1ad23ab](https://github.com/mochajs/mocha/commit/1ad23ab544ac7344b0e2840ce91e0817ce71079a))
+* migrate reporters to ESM ([#5928](https://github.com/mochajs/mocha/issues/5928)) ([f6a62ca](https://github.com/mochajs/mocha/commit/f6a62cae13bf84dda64d1e12978ace049af89369))
+* remove unused legacy `errors.js` functions ([#5835](https://github.com/mochajs/mocha/issues/5835)) ([4116368](https://github.com/mochajs/mocha/commit/41163689264c3ae80c25d168954532b10337aa75))
+* tag alpha releases as `alpha`, not `next` ([#5951](https://github.com/mochajs/mocha/issues/5951)) ([8e29413](https://github.com/mochajs/mocha/commit/8e29413678a36a87f41ba4730af3db6507f1b719)), closes [#5947](https://github.com/mochajs/mocha/issues/5947)
+
 ## [12.0.0-beta-9.3](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.2...v12.0.0-beta-9.3) (2026-04-28)
 
 
