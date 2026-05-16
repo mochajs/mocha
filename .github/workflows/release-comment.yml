@@ -18,4 +18,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           comment-template: |
-            :tada: This was released in {release_link}. :tada:
+            :brown_heart: This was released in {release_link}. :brown_heart:
