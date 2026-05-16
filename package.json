@@ -121,6 +121,7 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-multi-entry": "^7.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
+    "@test/async-resolve-hook": "./test/compiler-fixtures/async-resolve-hook",
     "@test/esm-only-loader": "./test/compiler-fixtures/esm-only-loader",
     "@types/node": "^24.0.0",
     "@types/yargs": "^17.0.33",

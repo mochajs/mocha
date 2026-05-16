@@ -12,6 +12,7 @@
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
   ],
   "ignoreDependencies": [
+    "@test/async-resolve-hook",
     "@test/esm-only-loader",
     "coffeescript",
     "fake",

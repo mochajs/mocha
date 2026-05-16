@@ -1,0 +1,9 @@
+{
+  "name": "@test/async-resolve-hook",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./register.fixture.js"
+    }
+  }
+}
