@@ -50,6 +50,9 @@ describe("Mocha", function () {
       // Keep the flags
       test("/baz/i", "/baz/i");
       test("/bar/g", "/bar/g");
+      test("/foo/u", "/foo/u");
+      test("/foo/s", "/foo/s");
+      test("/foo/v", "/foo/v");
       test("/^foo(.*)bar/g", "/^foo(.*)bar/g");
     });
 

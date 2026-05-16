@@ -2,7 +2,7 @@
 
 var fs = require("node:fs");
 var sinon = require("sinon");
-var JSONReporter = require("../../lib/reporters/json");
+var JSONReporter = require("../../lib/reporters/json.mjs").JSONReporter;
 var utils = require("../../lib/utils");
 var Mocha = require("../../");
 var Suite = Mocha.Suite;

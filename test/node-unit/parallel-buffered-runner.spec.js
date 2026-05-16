@@ -8,7 +8,7 @@ const {
   EVENT_SUITE_BEGIN,
 } = require("../../lib/runner").constants;
 const rewiremock = require("rewiremock/node");
-const Suite = require("../../lib/suite");
+const { Suite } = require("../../lib/suite.mjs");
 const Runner = require("../../lib/runner");
 const sinon = require("sinon");
 const { constants } = require("../../lib/utils");

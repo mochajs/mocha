@@ -11,7 +11,7 @@ In this first brief example, we'll create an interface with only a single functi
 
 ```javascript
 import Mocha from "mocha";
-import MochaInterface from "mocha/lib/interfaces/common.js";
+import { createCommon as MochaInterface } from "mocha/lib/interfaces/common.mjs";
 
 const Test = Mocha.Test;
 /**
@@ -74,7 +74,7 @@ In this next example, we'll be extending the [TDD interface](https://github.com/
 
 ```javascript
 import Mocha from "mocha";
-import MochaInterface from "mocha/lib/interfaces/common.js";
+import { createCommon as MochaInterface } from "mocha/lib/interfaces/common.mjs";
 import escapeStringRegexp from "escape-string-regexp";
 
 const Test = Mocha.Test;

@@ -1,7 +1,7 @@
 "use strict";
 
 var sinon = require("sinon");
-var errors = require("../../lib/errors");
+var errors = require("../../lib/errors.mjs");
 var createStatsCollector =
   require("../../lib/stats-collector.mjs").createStatsCollector;
 

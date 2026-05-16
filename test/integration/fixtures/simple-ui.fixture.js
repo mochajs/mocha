@@ -13,7 +13,7 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
     file,
     mocha
   ) {
-    var common = require('../../../lib/interfaces/common')(
+    var common = require('../../../lib/interfaces/common.mjs').createCommon(
       [suite],
       context
     );

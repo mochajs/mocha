@@ -397,10 +397,10 @@ By default, Mocha looks for a `package.json` in the current working directory or
 ### `--extension <ext>`
 
 Files having this extension will be considered test files.
-Defaults to `js`.
+Defaults to `js`, `cjs`, and `mjs`.
 
-Specifying `--extension` will _remove_ `.js` as a test file extension; use `--extension js` to re-add it.
-For example, to load `.mjs` and `.js` test files, you must supply `--extension mjs --extension js`.
+Specifying `--extension` will _remove_ the default extensions; use `--extension js` to re-add it.
+For example, to load `.ts` and `.js` test files, you must supply `--extension ts --extension js`.
 
 The option can be given multiple times.
 The option accepts a comma-delimited list: `--extension a,b` is equivalent to `--extension a --extension b`.

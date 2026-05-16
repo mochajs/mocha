@@ -65,12 +65,12 @@ describe("Mocha", function () {
       () => require("../../lib/mocha"),
       (r) => ({
         "../../lib/utils.js": r.with(stubs.utils).callThrough(),
-        "../../lib/suite.js": stubs.Suite,
+        "../../lib/suite.mjs": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.js":
           stubs.ParallelBufferedRunner,
         "../../lib/nodejs/esm-utils": stubs.esmUtils,
         "../../lib/runner.js": stubs.Runner,
-        "../../lib/errors.js": stubs.errors,
+        "../../lib/errors.mjs": stubs.errors,
       }),
     );
     delete require.cache[DUMB_FIXTURE_PATH];
@@ -264,7 +264,7 @@ describe("Mocha", function () {
 
         it("should load from current working directory", function () {
           expect(function () {
-            mocha.reporter("./lib/reporters/spec.js");
+            mocha.reporter("./lib/reporters/spec.mjs");
           }, "not to throw");
         });
 
