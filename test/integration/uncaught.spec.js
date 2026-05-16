@@ -215,4 +215,22 @@ describe("uncaught exceptions", function () {
       });
     });
   });
+
+  it("indents a suite with an uncaught exception at its nested depth", function (done) {
+    runMocha(
+      "uncaught/completed-test-exception-bail",
+      ["--reporter", "spec"],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        var failLine = res.output.split("\n").find(function (line) {
+          return /\d+\)/.test(line) && line.indexOf("should pass") !== -1;
+        });
+        expect(failLine, "not to be undefined");
+        expect(failLine, "to match", /^ {4}\d+\) /);
+        done();
+      },
+    );
+  });
 });
