@@ -7,7 +7,6 @@ describe('Diff hang protection', function () {
     const buf1 = Buffer.alloc(50000, 'a');
     const buf2 = Buffer.alloc(50000, 'b');
     
-    // This should fail without hanging
     expect(buf1).to.deep.equal(buf2);
   });
   
