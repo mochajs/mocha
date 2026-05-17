@@ -4,7 +4,6 @@ const {expect} = require('chai');
 
 describe('Diff hang protection', function () {
   it('should not hang when comparing large buffers', function () {
-    // Create two large buffers that differ
     const buf1 = Buffer.alloc(50000, 'a');
     const buf2 = Buffer.alloc(50000, 'b');
     
