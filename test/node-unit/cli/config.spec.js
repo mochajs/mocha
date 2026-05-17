@@ -121,7 +121,9 @@ describe("cli/config", function () {
 
     describe("when config file parsing fails", function () {
       beforeEach(function () {
-        sinon.stub(parsers, "yaml").throws("goo.yaml is unparsable");
+        const err = new Error();
+        err.name = "goo.yaml is unparsable";
+        sinon.stub(parsers, "yaml").throws(err);
       });
 
       it("should throw", function () {
