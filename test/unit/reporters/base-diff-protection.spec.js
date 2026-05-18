@@ -65,12 +65,12 @@ describe('Base reporter diff hang protection', function () {
     it('should not hang when diffing deeply nested objects', function () {
       this.timeout(2000);
 
-      var obj1 = {value: 1};
-      var obj2 = {value: 2};
+      var obj1 = { value: 1 };
+      var obj2 = { value: 2 };
 
       for (var i = 0; i < 50; i++) {
-        obj1 = {nested: obj1, extra: obj1};
-        obj2 = {nested: obj2, extra: obj2};
+        obj1 = { nested: obj1, extra: obj1 };
+        obj2 = { nested: obj2, extra: obj2 };
       }
 
       var test = makeFailedTest('nested object test', obj1, obj2);
@@ -109,12 +109,11 @@ describe('Base reporter diff hang protection', function () {
 
   describe('normal-sized objects', function () {
     it('should still produce a valid diff for small objects', function () {
-      var test = makeFailedTest('small object test', {a: 1, b: 2}, {a: 1, b: 3});
+      var test = makeFailedTest('small object test', { a: 1, b: 2 }, { a: 1, b: 3 });
 
       list([test]);
 
       var output = stdout.join('');
-      // The diff should contain the actual values, not the fallback message
       chaiExpect(output).to.not.contain('too large to diff');
     });
   });
