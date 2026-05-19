@@ -217,6 +217,30 @@ describe("Runnable(title, fn)", function () {
       run.retries(1);
       expect(run.retries(), "to be", 1);
     });
+
+    it("should accept an options object with a numeric wait", function () {
+      var run = new Runnable();
+      run.retries(2, { wait: 250 });
+      expect(run.retries(), "to be", 2);
+      expect(run.retryDelay(), "to be", 250);
+    });
+
+    it("should accept a ms-shorthand wait string", function () {
+      var run = new Runnable();
+      run.retries(1, { wait: "1s" });
+      expect(run.retryDelay(), "to be", 1000);
+    });
+
+    it("should default the retry delay to 0", function () {
+      var run = new Runnable();
+      expect(run.retryDelay(), "to be", 0);
+    });
+
+    it("should clamp negative waits to 0", function () {
+      var run = new Runnable();
+      run.retries(1, { wait: -500 });
+      expect(run.retryDelay(), "to be", 0);
+    });
   });
 
   describe(".run(fn)", function () {

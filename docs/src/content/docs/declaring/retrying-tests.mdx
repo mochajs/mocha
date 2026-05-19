@@ -30,3 +30,20 @@ describe("retries", function () {
   });
 });
 ```
+
+### waiting between retries
+
+Pass an options object as the second argument to retries() to delay before each retry attempt. the "wait" option accepts a number of milliseconds or an (ms)[https://github.com/vercel/ms] -style shorthand string
+
+```js
+describe("flaky API", function () {
+  this.retries(3, { wait: 500 });
+  it("eventually returns 200", function () {
+    return fetch("/health").then((response) =>
+      expect(response.status).to.equal(200),
+    );
+  });
+});
+```
+
+The wait happens after the test's afterEach hooks complete and before the next attempt's beforeEach hooks run so it acts as a back off between attempts without counting toward each attempt's individual timeout.

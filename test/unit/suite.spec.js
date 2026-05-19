@@ -13,6 +13,34 @@ describe("Suite", function () {
     sinon.restore();
   });
 
+  describe("#retries(n, options)", function () {
+    it("stores wait via options object", function () {
+      const suite = new Suite("with wait", {}, true);
+      suite.retries(2, { wait: 300 });
+      expect(suite.retries(), "to be", 2);
+      expect(suite.retryDelay(), "to be", 300);
+    });
+
+    it("parses ms-shorthand string wait", function () {
+      const suite = new Suite("with wait", {}, true);
+      suite.retries(1, { wait: "2s" });
+      expect(suite.retryDelay(), "to be", 2000);
+    });
+
+    it("propagates retryDelay to children added later", function () {
+      const parent = new Suite("parent", {}, true);
+      parent.retries(2, { wait: 150 });
+
+      const child = new Suite("child", {});
+      parent.addSuite(child);
+      expect(child.retryDelay(), "to be", 150);
+
+      const test = new Test("inherit", function () {});
+      parent.addTest(test);
+      expect(test.retryDelay(), "to be", 150);
+    });
+  });
+
   describe("instance method", function () {
     let suite;
 

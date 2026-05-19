@@ -89,6 +89,28 @@ describe("retries", function () {
     });
   });
 
+  it("waits between attempts when wait option is provided", function (done) {
+    runJSON("retries/wait.fixture.js", args, function (err, res) {
+      if (err) return done(err);
+      expect(res, "to have passed")
+        .and("to have passed test count", 1)
+        .and("to have failed test count", 0)
+        .and("to have retried test", "waits between attempts", 2);
+      done();
+    });
+  });
+
+  it("accepts ms shorthand string for wait", function (done) {
+    runJSON("retries/wait-string.fixture.js", args, function (err, res) {
+      if (err) return done(err);
+      expect(res, "to have passed")
+        .and("to have passed test count", 1)
+        .and("to have failed test count", 0)
+        .and("to have retried test", "waits between attempts (string form)", 1);
+      done();
+    });
+  });
+
   it("should not hang w/ async test", function (done) {
     helpers.runMocha(
       "retries/async.fixture.js",
