@@ -13,6 +13,52 @@ describe("Suite", function () {
     sinon.restore();
   });
 
+  describe("#allowUncaught(value)", function () {
+    it("defaults to undefined on a new Suite", function () {
+      const suite = new Suite("inherits", {}, true);
+      expect(suite._allowUncaught, "to be undefined");
+    });
+
+    it("enables for the suite when called with no arguments", function () {
+      const suite = new Suite("explicit", {}, true);
+      suite.allowUncaught();
+      expect(suite._allowUncaught, "to be true");
+    });
+
+    it("propagates to children registered later via addTest/addSuite", function () {
+      const parent = new Suite("parent", {}, true);
+      parent.allowUncaught();
+
+      const child = new Suite("child", {});
+      parent.addSuite(child);
+      expect(child._allowUncaught, "to be true");
+
+      const test = new Test("inherit", function () {});
+      parent.addTest(test);
+      expect(test._allowUncaught, "to be true");
+    });
+
+    it("propagates to children registered before the call", function () {
+      const parent = new Suite("parent", {}, true);
+      const child = new Suite("child", {});
+      const test = new Test("inherit", function () {});
+      parent.addSuite(child);
+      parent.addTest(test);
+      parent.allowUncaught(false);
+      expect(child._allowUncaught, "to be false");
+      expect(test._allowUncaught, "to be false");
+    });
+
+    it("does not overwrite an explicit child value", function () {
+      const parent = new Suite("parent", {}, true);
+      const test = new Test("explicit-child", function () {});
+      test.allowUncaught(false);
+      parent.addTest(test);
+      parent.allowUncaught(true);
+      expect(test._allowUncaught, "to be false");
+    });
+  });
+
   describe("instance method", function () {
     let suite;
 

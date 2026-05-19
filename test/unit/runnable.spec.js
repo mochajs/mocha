@@ -219,6 +219,40 @@ describe("Runnable(title, fn)", function () {
     });
   });
 
+  describe("#allowUncaught", function () {
+    it("defaults to undefined (inherit) on a new Runnable", function () {
+      var run = new Runnable("foo", function () {});
+      expect(run._allowUncaught, "to be undefined");
+    });
+
+    it("called with no arguments enables the flag", function () {
+      var run = new Runnable("foo", function () {});
+      run.allowUncaught();
+      expect(run._allowUncaught, "to be true");
+    });
+
+    it("accepts an explicit boolean and is chainable", function () {
+      var run = new Runnable("foo", function () {});
+      var returned = run.allowUncaught(false);
+      expect(returned, "to be", run);
+      expect(run._allowUncaught, "to be false");
+    });
+
+    it("rethrows sync errors when set via the method", function () {
+      var runnable = new Runnable("foo", function () {
+        throw new Error("kaboom");
+      });
+      runnable.allowUncaught();
+      expect(
+        function () {
+          runnable.run(function () {});
+        },
+        "to throw",
+        "kaboom",
+      );
+    });
+  });
+
   describe(".run(fn)", function () {
     describe("when .pending", function () {
       it("should not invoke the callback", function (done) {

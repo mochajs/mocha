@@ -111,6 +111,7 @@ Use `--allow-uncaught` to disable this behavior and allow uncaught exceptions to
 Will typically cause the process to crash.
 
 This flag is useful when debugging particularly difficult-to-track exceptions.
+You can also opt in on a per suite or per test basis by calling this.allowUncaught() from inside a describe block or a hook or an "it" callback. pass "false" to explicitly opt out and override a parent suite or runner level setting.
 
 ### `--async-only, -A`
 

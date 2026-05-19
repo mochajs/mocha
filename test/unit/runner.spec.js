@@ -899,6 +899,72 @@ describe("Runner", function () {
 
         runner.hook("beforeEach", noop);
       });
+
+      it("propagates a test-level allowUncaught() opt-in", function () {
+        var newRunner = new Runner(suite);
+        var test = new Test("opt-in test", function () {
+          throw new Error("per-test bubble");
+        });
+        test.allowUncaught();
+        suite.addTest(test);
+        newRunner.test = test;
+        expect(
+          function () {
+            newRunner.runTest();
+          },
+          "to throw",
+          "per-test bubble",
+        );
+      });
+
+      it("inherits allowUncaught() from a parent suite", function () {
+        var parent = new Suite("parent", {}, true);
+        parent.allowUncaught();
+        var test = new Test("inherits", function () {
+          throw new Error("suite-bubble");
+        });
+        parent.addTest(test);
+        var newRunner = new Runner(parent);
+        newRunner.test = test;
+        expect(
+          function () {
+            newRunner.runTest();
+          },
+          "to throw",
+          "suite-bubble",
+        );
+      });
+
+      it("test-level allowUncaught(false) overrides runner.allowUncaught", function () {
+        var newRunner = new Runner(suite);
+        newRunner.allowUncaught = true;
+        var test = new Test("opted-out", function () {
+          throw new Error("should-not-bubble");
+        });
+        test.allowUncaught(false);
+        suite.addTest(test);
+        newRunner.test = test;
+        expect(function () {
+          newRunner.runTest(noop);
+        }, "not to throw");
+      });
+
+      it("legacy direct-property assignment still bubbles", function () {
+        var newRunner = new Runner(suite);
+        var test = new Test("legacy", function () {
+          throw new Error("legacy-bubble");
+        });
+        test.allowUncaught = true;
+        suite.addTest(test);
+        newRunner.test = test;
+        expect(
+          function () {
+            newRunner.runTest();
+          },
+          "to throw",
+          "legacy-bubble",
+        );
+      });
     });
 
     describe("abort()", function () {
