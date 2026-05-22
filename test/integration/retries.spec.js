@@ -89,6 +89,39 @@ describe("retries", function () {
     });
   });
 
+  it("should report both the test error and the afterEach hook error when retries > 0 (#5007)", function (done) {
+    runJSON(
+      "retries/after-each-error.fixture.js",
+      ["--retries", "1"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+
+        assert.strictEqual(res.stats.passes, 0);
+        assert.strictEqual(res.stats.failures, 2);
+
+        var failureMessages = res.failures.map(function (f) {
+          return f.err.message;
+        });
+        assert.ok(
+          failureMessages.indexOf("Error from test") !== -1,
+          "expected the original test error to be reported, got: " +
+            JSON.stringify(failureMessages),
+        );
+        assert.ok(
+          failureMessages.indexOf("Error from after each") !== -1,
+          "expected the afterEach hook error to be reported, got: " +
+            JSON.stringify(failureMessages),
+        );
+
+        assert.strictEqual(res.code, 2);
+        done();
+      },
+    );
+  });
+
   it("should not hang w/ async test", function (done) {
     helpers.runMocha(
       "retries/async.fixture.js",
