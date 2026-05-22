@@ -215,4 +215,19 @@ describe("uncaught exceptions", function () {
       });
     });
   });
+
+  describe("user unhandledRejection listener should be invoked only once", function () {
+    it("should invoke a user-registered process listener exactly once", async function () {
+      const [, promise] = invokeMochaAsync(
+        [
+          resolveFixturePath("uncaught/unhandled-with-user-listener"),
+          "--unhandled-rejections=warn",
+        ],
+        { stdio: "pipe" },
+      );
+      const res = await promise;
+      const matches = res.output.match(/USER_LISTENER_CALLED \d+/g) || [];
+      expect(matches, "to equal", ["USER_LISTENER_CALLED 1"]);
+    });
+  });
 });
