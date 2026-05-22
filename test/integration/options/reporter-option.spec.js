@@ -83,4 +83,46 @@ describe("--reporter-option", function () {
       );
     });
   });
+
+  describe("when given options on the CLI and in a config file", function () {
+    var reporterFixture = path.join(
+      __dirname,
+      "..",
+      "fixtures",
+      "options",
+      "reporter-with-options.fixture.js",
+    );
+    var configFixture = path.join(
+      __dirname,
+      "..",
+      "fixtures",
+      "options",
+      "reporter-option-mocharc.yml",
+    );
+
+    it("should allow the CLI to override clashing keys from the config", function (done) {
+      runMocha(
+        "passing.fixture.js",
+        [
+          "--config",
+          configFixture,
+          "--reporter",
+          reporterFixture,
+          "--reporter-option",
+          "foo=fromCli",
+        ],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and(
+            "to contain output",
+            /{"foo":"fromCli","extra":"keepMe"}/,
+          );
+          done();
+        },
+        "pipe",
+      );
+    });
+  });
 });
