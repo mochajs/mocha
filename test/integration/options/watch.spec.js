@@ -40,9 +40,15 @@ describe("--watch", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
-      return runMochaWatchJSONAsync([testFile], tempDir, () => {
-        touchFile(testFile);
-      }).then((results) => {
+      return runMochaWatchJSONAsync(
+        [testFile],
+        tempDir,
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
+          touchFile(testFile);
+          await waitForRunFinished();
+        },
+      ).then((results) => {
         expect(results, "to have length", 2);
       });
     });
@@ -65,9 +71,15 @@ describe("--watch", function () {
         const testFile = path.join(tempDir, "test.js");
         copyFixture(DEFAULT_FIXTURE, testFile);
 
-        return runMochaWatchJSONAsync(["--parallel", testFile], tempDir, () => {
-          touchFile(testFile);
-        }).then((results) => {
+        return runMochaWatchJSONAsync(
+          ["--parallel", testFile],
+          tempDir,
+          async (_mochaProcess, { waitForRunFinished }) => {
+            await waitForRunFinished();
+            touchFile(testFile);
+            await waitForRunFinished();
+          },
+        ).then((results) => {
           expect(results, "to have length", 2);
         });
       });
@@ -96,8 +108,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/*.xyz"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results.length, "to equal", 2);
@@ -112,8 +126,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "**/*.xyz"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -132,14 +148,14 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         tempDir,
-        async () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           fs.mkdirSync(libPath);
-          await sleep(1000);
-
+          await waitForRunFinished();
           fs.mkdirSync(dirPath);
-          await sleep(1000);
-
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 4);
@@ -156,8 +172,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/**/*.xyz"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           fs.rmSync(watchedFile, { recursive: true, force: true });
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -174,8 +192,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/file.xyz"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -192,8 +212,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -210,8 +232,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "**/lib"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -228,8 +252,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/**/*"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -246,8 +272,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/**/dir"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -270,8 +298,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", watchFilePattern],
         tempCwd,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -303,9 +333,11 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         ["test/**/*.js", "--watch-files", "test/**/*.js"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           const addedTestFile = path.join(tempDir, "test/b.js");
           copyFixture("passing", addedTestFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -324,8 +356,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--extension", "xyz,js"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -336,9 +370,15 @@ describe("--watch", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
-      return runMochaWatchJSONAsync([testFile], tempDir, (mochaProcess) => {
-        mochaProcess.stdin.write("rs\n");
-      }).then((results) => {
+      return runMochaWatchJSONAsync(
+        [testFile],
+        tempDir,
+        async (mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
+          mochaProcess.stdin.write("rs\n");
+          await waitForRunFinished();
+        },
+      ).then((results) => {
         expect(results, "to have length", 2);
       });
     });
@@ -353,8 +393,10 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--extension", "xyz,js"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           touchFile(watchedFile);
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -433,12 +475,14 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "**/*.js"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           replaceFileContents(
             testFile,
             "testShouldFail = true",
             "testShouldFail = false",
           );
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -459,12 +503,14 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/**/*.js"],
         tempDir,
-        () => {
+        async (_mochaProcess, { waitForRunFinished }) => {
+          await waitForRunFinished();
           replaceFileContents(
             dependency,
             "module.exports.testShouldFail = false",
             "module.exports.testShouldFail = true",
           );
+          await waitForRunFinished();
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -481,9 +527,15 @@ describe("--watch", function () {
       copyFixture("options/grep", testFile);
 
       return expect(
-        runMochaWatchJSONAsync([testFile, "--fgrep", "match"], tempDir, () => {
-          touchFile(testFile);
-        }),
+        runMochaWatchJSONAsync(
+          [testFile, "--fgrep", "match"],
+          tempDir,
+          async (_mochaProcess, { waitForRunFinished }) => {
+            await waitForRunFinished();
+            touchFile(testFile);
+            await waitForRunFinished();
+          },
+        ),
         "when fulfilled",
         "to satisfy",
         {
@@ -514,8 +566,10 @@ describe("--watch", function () {
           return runMochaWatchJSONAsync(
             [testFile, "--require", hookFile],
             tempDir,
-            () => {
+            async (_mochaProcess, { waitForRunFinished }) => {
+              await waitForRunFinished();
               touchFile(testFile);
+              await waitForRunFinished();
             },
           ).then((results) => {
             expect(results.length, "to equal", 2);
@@ -541,8 +595,6 @@ describe("--watch", function () {
           [testFile],
           { cwd: tempDir, stdio: "pipe" },
           async () => {
-            // we want to cause _n + 1_ reruns, which should cause the warning
-            // to occur if the listeners aren't properly destroyed
             const iterations = new Array(process.getMaxListeners() + 1);
             // eslint-disable-next-line no-unused-vars
             for await (const _ of iterations) {

@@ -434,30 +434,95 @@ async function runMochaWatchAsync(args, opts, change) {
     sleepMs: 2000,
     stdio: ["pipe", "pipe", "inherit"],
     ...opts,
-    fork: process.platform === "win32",
+    fork: true,
   };
+  if (typeof opts.stdio === "string") {
+    opts.stdio = [opts.stdio, opts.stdio, opts.stdio];
+  }
+
+  const useIpc = typeof change === "function" && change.length >= 2;
+
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, "--watch"],
     opts,
   );
-  await sleep(opts.sleepMs);
-  await change(mochaProcess);
-  await sleep(opts.sleepMs);
 
-  if (
-    !(mochaProcess.connected
-      ? mochaProcess.send("SIGINT")
-      : mochaProcess.kill("SIGINT"))
-  ) {
-    throw new Error("failed to send signal to subprocess");
+  let cleanup = () => {};
+  let waitForRunFinished;
+  if (useIpc) {
+    const pending = [];
+    const waiters = [];
+    const onMessage = (msg) => {
+      if (
+        !msg ||
+        typeof msg !== "object" ||
+        msg.type !== "mocha:watch:runFinished"
+      ) {
+        return;
+      }
+      const waiter = waiters.shift();
+      if (waiter) {
+        clearTimeout(waiter.timer);
+        waiter.resolve();
+      } else {
+        pending.push(msg);
+      }
+    };
+    mochaProcess.on("message", onMessage);
+
+    cleanup = () => {
+      mochaProcess.removeListener("message", onMessage);
+      for (const w of waiters) clearTimeout(w.timer);
+    };
+
+    waitForRunFinished = () => {
+      if (pending.length > 0) {
+        pending.shift();
+        return Promise.resolve();
+      }
+      const timeoutMs = opts.sleepMs * 3;
+      return new Promise((resolve, reject) => {
+        const waiter = { resolve };
+        waiter.timer = setTimeout(() => {
+          const idx = waiters.indexOf(waiter);
+          if (idx >= 0) waiters.splice(idx, 1);
+          reject(
+            new Error(
+              `runMochaWatchAsync: timed out after ${timeoutMs}ms waiting for watch run to finish`,
+            ),
+          );
+        }, timeoutMs);
+        waiters.push(waiter);
+      });
+    };
   }
 
-  const res = await resultPromise;
+  try {
+    if (useIpc) {
+      await change(mochaProcess, { waitForRunFinished });
+    } else {
+      await sleep(opts.sleepMs);
+      await change(mochaProcess);
+      await sleep(opts.sleepMs);
+    }
 
-  // we kill the process with `SIGINT`, so it will always appear as "failed" to our
-  // custom assertions (a non-zero exit code 130). just change it to 0.
-  res.code = 0;
-  return res;
+    if (
+      !(mochaProcess.connected
+        ? mochaProcess.send("SIGINT")
+        : mochaProcess.kill("SIGINT"))
+    ) {
+      throw new Error("failed to send signal to subprocess");
+    }
+
+    const res = await resultPromise;
+
+    // we kill the process with `SIGINT`, so it will always appear as "failed" to our
+    // custom assertions (a non-zero exit code 130). just change it to 0.
+    res.code = 0;
+    return res;
+  } finally {
+    cleanup();
+  }
 }
 
 /**
