@@ -98,4 +98,19 @@ describe("--timeout", function () {
       },
     );
   });
+
+  it("should not be re-enabled by an inner `this.timeout(N)` (GH-4834)", function (done) {
+    runMochaJSON(
+      "options/timeout-zero-sticky",
+      ["--timeout", "0"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed").and("to have passed test count", 1);
+        done();
+      },
+    );
+  });
 });
