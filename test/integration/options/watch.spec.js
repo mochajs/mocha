@@ -53,9 +53,13 @@ describe("--watch", function () {
 
       replaceFileContents(testFile, "done();", "done((;");
 
-      return runMochaWatchJSONAsync([testFile], tempDir, () => {
-        replaceFileContents(testFile, "done((;", "done();");
-      }).then((results) => {
+      return runMochaWatchJSONAsync(
+        [testFile],
+        { cwd: tempDir, expectedRuns: 1 },
+        () => {
+          replaceFileContents(testFile, "done((;", "done();");
+        },
+      ).then((results) => {
         expect(results, "to have length", 1);
       });
     });
@@ -78,9 +82,13 @@ describe("--watch", function () {
 
         replaceFileContents(testFile, "done();", "done((;");
 
-        return runMochaWatchJSONAsync([testFile], tempDir, () => {
-          replaceFileContents(testFile, "done((;", "done();");
-        }).then((results) => {
+        return runMochaWatchJSONAsync(
+          [testFile],
+          { cwd: tempDir, expectedRuns: 1 },
+          () => {
+            replaceFileContents(testFile, "done((;", "done();");
+          },
+        ).then((results) => {
           expect(results, "to have length", 1);
         });
       });
@@ -131,7 +139,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
-        tempDir,
+        { cwd: tempDir, expectedRuns: 4 },
         async () => {
           fs.mkdirSync(libPath);
           await sleep(1000);
@@ -287,7 +295,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/*.xyz"],
-        tempDir,
+        { cwd: tempDir, expectedRuns: 1 },
         () => {
           touchFile(watchedFile);
         },
@@ -373,7 +381,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--extension", "xyz,js"],
-        tempDir,
+        { cwd: tempDir, expectedRuns: 1 },
         () => {
           touchFile(gitFile);
           touchFile(nodeModulesFile);
@@ -398,7 +406,7 @@ describe("--watch", function () {
           "--watch-ignore",
           "dir/*ignore*",
         ],
-        tempDir,
+        { cwd: tempDir, expectedRuns: 1 },
         () => {
           touchFile(watchedFile);
         },
@@ -417,7 +425,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/[ab].js"],
-        tempDir,
+        { cwd: tempDir, expectedRuns: 1 },
         () => {
           touchFile(watchedFile);
         },

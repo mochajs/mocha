@@ -432,32 +432,92 @@ async function runMochaWatchAsync(args, opts, change) {
   }
   opts = {
     sleepMs: 2000,
+    expectedRuns: 2,
     stdio: ["pipe", "pipe", "inherit"],
     ...opts,
     fork: process.platform === "win32",
   };
+  const { sleepMs, expectedRuns } = opts;
+  const isJSON = args.some(
+    (arg, i) =>
+      arg === "--reporter=json" ||
+      (arg === "--reporter" && args[i + 1] === "json"),
+  );
+
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, "--watch"],
     opts,
   );
-  await sleep(opts.sleepMs);
-  await change(mochaProcess);
-  await sleep(opts.sleepMs);
 
-  if (
-    !(mochaProcess.connected
-      ? mochaProcess.send("SIGINT")
-      : mochaProcess.kill("SIGINT"))
-  ) {
-    throw new Error("failed to send signal to subprocess");
+  const RUN_DONE_MARKER = '"stats":';
+  let buf = "";
+  let runsDone = 0;
+  let notifyProgress = null;
+
+  const onStdout = (data) => {
+    buf += data.toString();
+    let advanced = false;
+    let idx;
+    while ((idx = buf.indexOf(RUN_DONE_MARKER)) !== -1) {
+      runsDone += 1;
+      buf = buf.slice(idx + RUN_DONE_MARKER.length);
+      advanced = true;
+    }
+    if (advanced && notifyProgress) notifyProgress();
+  };
+
+  const waitForRuns = (target, timeoutMs) =>
+    new Promise((resolve) => {
+      if (runsDone >= target) return resolve(true);
+      const timer = setTimeout(() => {
+        notifyProgress = null;
+        debug("watch run wait timed out at %d/%d", runsDone, target);
+        resolve(false);
+      }, timeoutMs);
+      notifyProgress = () => {
+        if (runsDone >= target) {
+          clearTimeout(timer);
+          notifyProgress = null;
+          resolve(true);
+        }
+      };
+    });
+
+  mochaProcess.stdout.on("data", onStdout);
+
+  try {
+    if (isJSON) {
+      await waitForRuns(1, sleepMs * 3);
+    } else {
+      await sleep(sleepMs);
+    }
+
+    const baseline = runsDone;
+    await change(mochaProcess);
+
+    if (isJSON && expectedRuns > baseline) {
+      await waitForRuns(expectedRuns, sleepMs * 3);
+    } else {
+      await sleep(sleepMs);
+    }
+
+    if (
+      !(mochaProcess.connected
+        ? mochaProcess.send("SIGINT")
+        : mochaProcess.kill("SIGINT"))
+    ) {
+      throw new Error("failed to send signal to subprocess");
+    }
+
+    const res = await resultPromise;
+
+    // we kill the process with `SIGINT`, so it will always appear as "failed" to our
+    // custom assertions (a non-zero exit code 130). just change it to 0.
+    res.code = 0;
+    return res;
+  } finally {
+    mochaProcess.stdout.removeListener("data", onStdout);
   }
-
-  const res = await resultPromise;
-
-  // we kill the process with `SIGINT`, so it will always appear as "failed" to our
-  // custom assertions (a non-zero exit code 130). just change it to 0.
-  res.code = 0;
-  return res;
 }
 
 /**
