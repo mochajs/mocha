@@ -3,6 +3,7 @@
 const js = require("@eslint/js");
 const { defineConfig, globalIgnores } = require("eslint/config");
 const { default: n } = require("eslint-plugin-n");
+const promise = require("eslint-plugin-promise");
 const globals = require("globals");
 const { default: markdown } = require("@eslint/markdown");
 
@@ -14,7 +15,11 @@ const messages = {
 module.exports = defineConfig(
   {
     files: ["**/*.{cjs,js,mjs}"],
-    extends: [n.configs["flat/recommended-script"], js.configs.recommended],
+    extends: [
+      n.configs["flat/recommended-script"],
+      js.configs.recommended,
+      promise.configs["flat/recommended"],
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       globals: {

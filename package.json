@@ -129,6 +129,7 @@
     "cross-env": "^10.0.0",
     "eslint": "^10.0.0",
     "eslint-plugin-n": "^18.0.0",
+    "eslint-plugin-promise": "^7.3.0",
     "globals": "^17.0.0",
     "installed-check": "^10.0.0",
     "karma": "^6.4.2",

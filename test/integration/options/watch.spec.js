@@ -43,7 +43,7 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync([testFile], tempDir, () => {
         touchFile(testFile);
       }).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -56,7 +56,7 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync([testFile], tempDir, () => {
         replaceFileContents(testFile, "done((;", "done();");
       }).then((results) => {
-        expect(results, "to have length", 1);
+        return expect(results, "to have length", 1);
       });
     });
 
@@ -68,7 +68,7 @@ describe("--watch", function () {
         return runMochaWatchJSONAsync(["--parallel", testFile], tempDir, () => {
           touchFile(testFile);
         }).then((results) => {
-          expect(results, "to have length", 2);
+          return expect(results, "to have length", 2);
         });
       });
 
@@ -81,7 +81,7 @@ describe("--watch", function () {
         return runMochaWatchJSONAsync([testFile], tempDir, () => {
           replaceFileContents(testFile, "done((;", "done();");
         }).then((results) => {
-          expect(results, "to have length", 1);
+          return expect(results, "to have length", 1);
         });
       });
     });
@@ -100,7 +100,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results.length, "to equal", 2);
+        return expect(results.length, "to equal", 2);
       });
     });
 
@@ -116,7 +116,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -142,7 +142,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 4);
+        return expect(results, "to have length", 4);
       });
     });
 
@@ -160,7 +160,7 @@ describe("--watch", function () {
           fs.rmSync(watchedFile, { recursive: true, force: true });
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -178,7 +178,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -196,7 +196,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -214,7 +214,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -232,7 +232,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -250,7 +250,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -274,7 +274,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -292,7 +292,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results.length, "to equal", 1);
+        return expect(results.length, "to equal", 1);
       });
     });
 
@@ -310,7 +310,7 @@ describe("--watch", function () {
       ).then((results) => {
         expect(results, "to have length", 2);
         expect(results[0].passes, "to have length", 1);
-        expect(results[1].passes, "to have length", 3);
+        return expect(results[1].passes, "to have length", 3);
       });
     });
 
@@ -328,7 +328,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -339,7 +339,7 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync([testFile], tempDir, (mochaProcess) => {
         mochaProcess.stdin.write("rs\n");
       }).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -357,7 +357,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 2);
+        return expect(results, "to have length", 2);
       });
     });
 
@@ -379,7 +379,7 @@ describe("--watch", function () {
           touchFile(nodeModulesFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 1);
+        return expect(results, "to have length", 1);
       });
     });
 
@@ -403,7 +403,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results.length, "to equal", 1);
+        return expect(results.length, "to equal", 1);
       });
     });
 
@@ -422,7 +422,7 @@ describe("--watch", function () {
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results.length, "to equal", 1);
+        return expect(results.length, "to equal", 1);
       });
     });
 
@@ -445,7 +445,7 @@ describe("--watch", function () {
         expect(results[0].passes, "to have length", 0);
         expect(results[0].failures, "to have length", 1);
         expect(results[1].passes, "to have length", 1);
-        expect(results[1].failures, "to have length", 0);
+        return expect(results[1].failures, "to have length", 0);
       });
     });
 
@@ -471,7 +471,7 @@ describe("--watch", function () {
         expect(results[0].passes, "to have length", 1);
         expect(results[0].failures, "to have length", 0);
         expect(results[1].passes, "to have length", 0);
-        expect(results[1].failures, "to have length", 1);
+        return expect(results[1].failures, "to have length", 1);
       });
     });
 
@@ -520,7 +520,7 @@ describe("--watch", function () {
           ).then((results) => {
             expect(results.length, "to equal", 2);
             expect(results[0].failures, "to have length", 1);
-            expect(results[1].failures, "to have length", 1);
+            return expect(results[1].failures, "to have length", 1);
           });
         };
       }
