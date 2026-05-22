@@ -139,6 +139,30 @@ describe("multiple calls to done()", function () {
     });
   });
 
+  describe("when test body synchronously throws after done()", function () {
+    before(function (done) {
+      runMochaJSON("sync-error-after-done", function (err, result) {
+        res = result;
+        done(err);
+      });
+    });
+
+    it("results in failure (GH-4202)", function () {
+      expect(res, "to have failed test count", 1)
+        .and("to have passed test count", 1)
+        .and("to have pending test count", 0)
+        .and("to have failed");
+    });
+
+    it("throws a descriptive error", function () {
+      expect(res, "to have failed with error", {
+        message:
+          /done\(\) called multiple times in test <should fail in a test-case> \(of root suite\) of file.+sync-error-after-done\.fixture\.js; in addition, done\(\) received error: AssertionError/,
+        code: MULTIPLE_DONE,
+      });
+    });
+  });
+
   describe("when done() called asynchronously", function () {
     before(function (done) {
       // we can't be sure that mocha won't fail with an uncaught exception here, which would cause any JSON
