@@ -5,7 +5,7 @@ const rewiremock = require("rewiremock/node");
 const { SerializableWorkerResult } = require("../../lib/nodejs/serializer");
 const sinon = require("sinon");
 
-const WORKER_PATH = require.resolve("../../lib/nodejs/worker.js");
+const WORKER_PATH = require.resolve("../../lib/nodejs/worker.mjs");
 
 describe("worker", function () {
   let worker;
