@@ -175,6 +175,36 @@ This is a _public_ Discord, and _anyone_ can join.
 Videoconference (or audio) calls may happen on a regular or irregular basis, as schedules allow.
 This is mainly because we have Real Lives and time zones suck.
 
+### Courtesy and Kindness
+
+**All maintainers should be courteous and kind.**
+Maintainers are representatives of the Mocha project and stewards of discussions.
+As such, maintainers are are held to a higher standard of friendly engagement than other contributors.
+
+Maintainers are expected to:
+
+- _Always_ de-escalate any potentially disruptive situations
+- Default to treating disagreements as discussions rather than arguments
+- _Never_ engage in or escalate aggressiveness -active or passive- or personal negativity
+
+Mocha spans many cultures and styles of communications across users who may share little personal context.
+We clarity and confirm the intent of messages before treating them or their senders as hostile.
+
+### Working with External Contributors
+
+Our goal is for non-team contributors to always feel encouraged to join Mocha.
+Many of them may end up joining the team and/or spreading word of mouth about the project!
+Even if they don't, their experiences in the Mocha project are important to keep pleasant.
+
+Always thank external contributors for their contributions (e.g. issue or pull request), even when they are not accepted.
+
+If their contribution is not accepted due to not following our guidelines, let them know gently.
+For example, if a pull request has been opened (and subsequently closed) without discussion in a corresponding issue, let them know that by creating an issue first, they could have saved wasted effort.
+_Clearly and objectively_ explain the reasoning for their rejected contribution.
+
+Whenever you need more information, nicely ask the user to provide it.
+Remind them to use the issue/PR templates if they have not.
+
 ## Working with Issues & Pull Requests
 
 All new issues will need to be triaged, and pull requests must be examined.
@@ -314,15 +344,6 @@ For any issue which is a duplicate, write "duplicate of #000" in a new comment, 
 If the issue is a support question, and you believe it has been answered, close the issue.
 
 If the issue is not Mocha-related, and/or a bug cannot be confirmed, label it `invalid` and close.
-
-## Commenting on Issues and Reviewing Pull Requests
-
-**All maintainers should be courteous and kind.** Thank the external contributor for the pull request, even if it is not merged.
-If the pull request has been opened (and subsequently closed) without discussion in a corresponding issue, let them know that by creating an issue first, they could have saved wasted effort.
-_Clearly and objectively_ explain the reasoning for rejecting any PR.
-
-If you need more information in an issue, nicely ask the user to provide it.
-Remind them to use the issue/PR templates if they have not.
 
 ### Reviewing Code
 
