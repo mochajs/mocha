@@ -5,8 +5,10 @@ title: Third party reporters
 
 Mocha allows you to define custom third-party reporters within your own test suite, or by using npm modules. For example if "lcov-reporter" was published to npm, you would simply add it to your package.json in `devDependencies` and use `--reporter lcov-reporter`.
 
-{/* todo detail the migration path, maybe on a separate page (Mocha 12 migration guide / announcement?) */}
-In Mocha 12, we've updated our extension logic to use `class`es instead of `util.inherits`.
+:::note[New in v12.0.0]
+In Mocha 12, the extension logic is switched to modern `class`es instead of `util.inherits`.
+If you're on Mocha &lte;11, use `mocha.util.inherits`.
+:::
 
 Here is a minimalistic sample reporter for Mocha 12, which you can use by executing: `mocha --reporter my-reporter.js`
 
