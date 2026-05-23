@@ -442,12 +442,8 @@ It is, however, charged with ensuring the continued vitality and sustainability 
 
 As a maintainer, you have access to the resources the OpenJS Foundation provides.
 
-## About OpenCollective
+## Donations and Expenses
 
-Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs). As a maintainer, you may help decide how the funds are used. These decisions are made via a consensus-seeking process, much like any other decision.
-
-Expense transparency is built in to OpenCollective.
-
----
-
-Questions? Ask in the [Mocha Discord](https://discord.gg/KeDn2uXhER)!
+Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs).
+As a maintainer, you may help decide how those funds are used.
+See [FUNDING.md](./FUNDING.md) for more details.
