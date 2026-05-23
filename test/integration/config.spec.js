@@ -89,6 +89,8 @@ describe("config", function () {
           if (err.code === "EEXIST") {
             console.log("setup:", 'package already exists in "node_modules"');
             installedLocally = true;
+          } else if (err.code === "EPERM" && process.platform === "win32") {
+            console.log("setup:", "symlinks not available (non-admin Windows); skipping");
           } else {
             console.error("setup failed:", err);
           }
