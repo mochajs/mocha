@@ -66,8 +66,9 @@ describe("Mocha", function () {
       (r) => ({
         "../../lib/utils.js": r.with(stubs.utils).callThrough(),
         "../../lib/suite.mjs": { Suite: stubs.Suite },
-        "../../lib/nodejs/parallel-buffered-runner.js":
-          stubs.ParallelBufferedRunner,
+        "../../lib/nodejs/parallel-buffered-runner.mjs": {
+          ParallelBufferedRunner: stubs.ParallelBufferedRunner,
+        },
         "../../lib/nodejs/esm-utils": stubs.esmUtils,
         "../../lib/runner.js": stubs.Runner,
         "../../lib/errors.mjs": stubs.errors,

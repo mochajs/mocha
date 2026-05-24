@@ -7,56 +7,39 @@ const {
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
 } = require("../../lib/runner").constants;
-const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.mjs");
 const Runner = require("../../lib/runner");
 const sinon = require("sinon");
 const { constants } = require("../../lib/utils");
+const {
+  BufferedWorkerPool,
+} = require("../../lib/nodejs/buffered-worker-pool.mjs");
+const {
+  ParallelBufferedRunner,
+} = require("../../lib/nodejs/parallel-buffered-runner.mjs");
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {
   describe("ParallelBufferedRunner", function () {
     let run;
-    let BufferedWorkerPool;
     let terminate;
-    let ParallelBufferedRunner;
     let suite;
-    let warn;
-    let fatalError;
 
     beforeEach(function () {
       suite = new Suite("a root suite", {}, true);
-      warn = sinon.stub();
-
-      fatalError = new Error();
 
       // tests will want to further define the behavior of these.
       run = sinon.stub();
       terminate = sinon.stub();
-      BufferedWorkerPool = {
-        create: sinon.stub().returns({
-          run,
-          terminate,
-          stats: sinon.stub().returns({}),
-        }),
-      };
-      /**
-       * @type {ParallelBufferedRunner}
-       */
-      ParallelBufferedRunner = rewiremock.proxy(
-        () => require("../../lib/nodejs/parallel-buffered-runner"),
-        (r) => ({
-          "../../lib/nodejs/buffered-worker-pool": {
-            BufferedWorkerPool,
-          },
-          "../../lib/utils": r.with({ warn }).callThrough(),
-          "../../lib/errors": r
-            .with({
-              createFatalError: sinon.stub().returns(fatalError),
-            })
-            .callThrough(),
-        }),
-      );
+      sinon.stub(BufferedWorkerPool, "create").returns({
+        run,
+        terminate,
+        stats: sinon.stub().returns({}),
+      });
+    });
+
+    afterEach(function () {
+      sinon.restore();
     });
 
     describe("constructor", function () {
@@ -228,7 +211,7 @@ describe("parallel-buffered-runner", function () {
               runner.run(
                 () => {
                   expect(runner.uncaught, "to have a call satisfying", [
-                    fatalError,
+                    expect.it("to have property", "code", "ERR_MOCHA_FATAL"),
                   ]);
                   done();
                 },

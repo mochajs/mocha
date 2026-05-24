@@ -20,8 +20,14 @@ const {
 } = require("../../../lib/runner").constants;
 const { EventEmitter } = require("node:events");
 const sinon = require("sinon");
-const rewiremock = require("rewiremock/node");
 const semver = require("semver");
+const {
+  createParallelBufferedClass,
+} = require("../../../lib/nodejs/reporters/parallel-buffered.mjs");
+const {
+  SerializableEvent,
+  SerializableWorkerResult,
+} = require("../../../lib/nodejs/serializer");
 
 describe("ParallelBuffered", function () {
   /** @type {EventEmitter} */
@@ -30,29 +36,9 @@ describe("ParallelBuffered", function () {
 
   beforeEach(function () {
     runner = new EventEmitter();
-    ParallelBuffered = rewiremock.proxy(
-      () => require("../../../lib/nodejs/reporters/parallel-buffered"),
-      {
-        "../../../lib/nodejs/serializer": {
-          SerializableEvent: {
-            create: (eventName, runnable, err) => ({
-              eventName,
-              data: runnable,
-              error: err,
-              __type: "MockSerializableEvent",
-            }),
-          },
-          SerializableWorkerResult: {
-            create: (events, failures) => ({
-              events,
-              failures,
-              __type: "MockSerializableWorkerResult",
-            }),
-          },
-        },
-        "../../../lib/reporters/base": class MockBase {},
-      },
-    );
+    ParallelBuffered = createParallelBufferedClass({
+      Base: class MockBase {},
+    });
   });
 
   afterEach(function () {
@@ -133,33 +119,45 @@ describe("ParallelBuffered", function () {
         runner.emit(EVENT_TEST_PASS, test);
         runner.emit(EVENT_TEST_END, test);
         runner.emit(EVENT_SUITE_END, suite);
-        expect(reporter.events, "to equal", [
-          {
-            eventName: EVENT_SUITE_BEGIN,
-            data: suite,
-            __type: "MockSerializableEvent",
-          },
-          {
-            eventName: EVENT_TEST_BEGIN,
-            data: test,
-            __type: "MockSerializableEvent",
-          },
-          {
-            eventName: EVENT_TEST_PASS,
-            data: test,
-            __type: "MockSerializableEvent",
-          },
-          {
-            eventName: EVENT_TEST_END,
-            data: test,
-            __type: "MockSerializableEvent",
-          },
-          {
-            eventName: EVENT_SUITE_END,
-            data: suite,
-            __type: "MockSerializableEvent",
-          },
-        ]);
+        expect(reporter.events, "to have length", 5);
+        reporter.events.forEach((event) => {
+          expect(event, "to be a", SerializableEvent);
+        });
+        expect(
+          reporter.events[0],
+          "to have property",
+          "eventName",
+          EVENT_SUITE_BEGIN,
+        );
+        expect(reporter.events[0].originalValue, "to be", suite);
+        expect(
+          reporter.events[1],
+          "to have property",
+          "eventName",
+          EVENT_TEST_BEGIN,
+        );
+        expect(reporter.events[1].originalValue, "to be", test);
+        expect(
+          reporter.events[2],
+          "to have property",
+          "eventName",
+          EVENT_TEST_PASS,
+        );
+        expect(reporter.events[2].originalValue, "to be", test);
+        expect(
+          reporter.events[3],
+          "to have property",
+          "eventName",
+          EVENT_TEST_END,
+        );
+        expect(reporter.events[3].originalValue, "to be", test);
+        expect(
+          reporter.events[4],
+          "to have property",
+          "eventName",
+          EVENT_SUITE_END,
+        );
+        expect(reporter.events[4].originalValue, "to be", suite);
       });
     });
   });
@@ -187,37 +185,10 @@ describe("ParallelBuffered", function () {
         const cb = sinon.stub();
         reporter.done(0, cb);
         expect(cb, "to have a call satisfying", [
-          {
-            events: [
-              {
-                eventName: EVENT_SUITE_BEGIN,
-                data: suite,
-                __type: "MockSerializableEvent",
-              },
-              {
-                eventName: EVENT_TEST_BEGIN,
-                data: test,
-                __type: "MockSerializableEvent",
-              },
-              {
-                eventName: EVENT_TEST_PASS,
-                data: test,
-                __type: "MockSerializableEvent",
-              },
-              {
-                eventName: EVENT_TEST_END,
-                data: test,
-                __type: "MockSerializableEvent",
-              },
-              {
-                eventName: EVENT_SUITE_END,
-                data: suite,
-                __type: "MockSerializableEvent",
-              },
-            ],
-            failures: 0,
-            __type: "MockSerializableWorkerResult",
-          },
+          expect.it("to be a", SerializableWorkerResult).and("to satisfy", {
+            events: expect.it("to have length", 5),
+            failureCount: 0,
+          }),
         ]);
       });
 
