@@ -1,7 +1,7 @@
 /* global BigInt */
 "use strict";
 
-var utils = require("../../lib/utils");
+var utils = require("../../lib/utils.mjs");
 var sinon = require("sinon");
 
 describe("lib/utils", function () {

@@ -64,7 +64,7 @@ describe("Mocha", function () {
     Mocha = rewiremock.proxy(
       () => require("../../lib/mocha"),
       (r) => ({
-        "../../lib/utils.js": r.with(stubs.utils).callThrough(),
+        "../../lib/utils.mjs": r.with(stubs.utils).callThrough(),
         "../../lib/suite.mjs": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.js":
           stubs.ParallelBufferedRunner,
@@ -288,7 +288,7 @@ describe("Mocha", function () {
       describe('when a reporter exists relative to the "mocha" module path', function () {
         it("should load from module path", function () {
           expect(function () {
-            mocha.reporter("./reporters/spec");
+            mocha.reporter("./lib/reporters/spec.mjs");
           }, "not to throw");
         });
 

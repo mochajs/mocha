@@ -11,7 +11,7 @@ const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.mjs");
 const Runner = require("../../lib/runner");
 const sinon = require("sinon");
-const { constants } = require("../../lib/utils");
+const { constants } = require("../../lib/utils.mjs");
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {

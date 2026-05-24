@@ -3,7 +3,6 @@
 var fs = require("node:fs");
 var sinon = require("sinon");
 var JSONReporter = require("../../lib/reporters/json.mjs").JSONReporter;
-var utils = require("../../lib/utils");
 var Mocha = require("../../");
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
@@ -222,12 +221,19 @@ describe("JSON reporter", function () {
     });
 
     it('should throw "unsupported error" in browser', function () {
-      sinon.stub(utils, "isBrowser").callsFake(() => true);
-      expect(
-        () => new JSONReporter(runner, options),
-        "to throw",
-        "file output not supported in browser",
-      );
+      Object.defineProperty(process, "browser", {
+        configurable: true,
+        value: true,
+      });
+      try {
+        expect(
+          () => new JSONReporter(runner, options),
+          "to throw",
+          "file output not supported in browser",
+        );
+      } finally {
+        delete process.browser;
+      }
     });
   });
 });

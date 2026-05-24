@@ -3,7 +3,7 @@
 var sinon = require("sinon");
 var EventEmitter = require("node:events").EventEmitter;
 var Mocha = require("../../lib/mocha");
-var utils = require("../../lib/utils");
+var utils = require("../../lib/utils.mjs");
 
 describe("Mocha", function () {
   /**

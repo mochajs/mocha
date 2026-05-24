@@ -1,7 +1,7 @@
 "use strict";
 
 var path = require("node:path");
-var utils = require("../../lib/utils");
+var utils = require("../../lib/utils.mjs");
 
 describe("stackTraceFilter()", function () {
   describe("on node", function () {
