@@ -1,6 +1,6 @@
 "use strict";
 
-const { builder } = require("../../../lib/cli/run");
+const { builder } = require("../../../lib/cli/run.mjs");
 const { types } = require("../../../lib/cli/run-option-metadata.mjs");
 
 describe("command", function () {
@@ -18,6 +18,17 @@ describe("command", function () {
             }
           });
         });
+      });
+    });
+
+    it("is available as an ESM command module", async function () {
+      const runModule = await import("../../../lib/cli/run.mjs");
+
+      expect(runModule, "to satisfy", {
+        command: ["$0 [spec..]", "inspect"],
+        describe: "Run tests with Mocha",
+        builder: expect.it("to be a function"),
+        handler: expect.it("to be a function"),
       });
     });
   });
