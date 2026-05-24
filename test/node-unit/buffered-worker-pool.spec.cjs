@@ -1,7 +1,9 @@
 "use strict";
 
-const rewiremock = require("rewiremock/node");
 const sinon = require("sinon");
+const {
+  createBufferedWorkerPoolClass,
+} = require("../../lib/nodejs/buffered-worker-pool.mjs");
 
 describe("class BufferedWorkerPool", function () {
   let BufferedWorkerPool;
@@ -29,6 +31,7 @@ describe("class BufferedWorkerPool", function () {
     };
 
     serializeJavascript = sinon.spy(require("serialize-javascript"));
+<<<<<<< HEAD:test/node-unit/buffered-worker-pool.spec.cjs
     BufferedWorkerPool = rewiremock.proxy(
       require.resolve("../../lib/nodejs/buffered-worker-pool.cjs"),
       {
@@ -38,8 +41,17 @@ describe("class BufferedWorkerPool", function () {
         },
         "../../lib/nodejs/serializer.js": serializer,
         "serialize-javascript": serializeJavascript,
+=======
+    BufferedWorkerPool = createBufferedWorkerPoolClass({
+      workerPath: "worker.mjs",
+      workerpool: {
+        pool: sinon.stub().returns(pool),
+        cpus: 8,
+>>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/buffered-worker-pool.spec.js
       },
-    ).BufferedWorkerPool;
+      deserialize: serializer.deserialize,
+      serializeJavascript,
+    });
 
     // reset cache
     BufferedWorkerPool.resetOptionsCache();
