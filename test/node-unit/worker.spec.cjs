@@ -1,17 +1,12 @@
 "use strict";
 
 const serializeJavascript = require("serialize-javascript");
-<<<<<<< HEAD:test/node-unit/worker.spec.cjs
-const rewiremock = require("rewiremock/node");
-const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.js");
-const sinon = require("sinon");
-
-const WORKER_PATH = require.resolve("../../lib/nodejs/worker.cjs");
-=======
 const { SerializableWorkerResult } = require("../../lib/nodejs/serializer");
 const sinon = require("sinon");
-const { startWorker } = require("../../lib/nodejs/worker-core.mjs");
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/worker.spec.js
+const {
+  createWorker,
+  startWorker,
+} = require("../../lib/nodejs/worker-core.mjs");
 
 describe("worker", function () {
   let worker;
@@ -28,6 +23,10 @@ describe("worker", function () {
   });
 
   describe("when run as main process", function () {
+    it("should throw with the default workerpool", function () {
+      expect(startWorker, "to throw");
+    });
+
     it("should throw", function () {
       expect(() => {
         startWorker({
@@ -37,6 +36,14 @@ describe("worker", function () {
           },
         });
       }, "to throw");
+    });
+  });
+
+  describe("when created with default dependencies", function () {
+    it("should expose a run function", function () {
+      expect(createWorker(), "to satisfy", {
+        run: expect.it("to be a function"),
+      });
     });
   });
 
@@ -66,17 +73,10 @@ describe("worker", function () {
 
       worker = startWorker({
         workerpool: stubs.workerpool,
-<<<<<<< HEAD:test/node-unit/worker.spec.cjs
-        "../../lib/mocha.cjs": stubs.Mocha,
-        "../../lib/nodejs/serializer.js": stubs.serializer,
-        "../../lib/cli/run-helpers.cjs": stubs.runHelpers,
-        "../../lib/plugin-loader.js": stubs.plugin,
-=======
         Mocha: stubs.Mocha,
         handleRequires: stubs.runHelpers.handleRequires,
         validateLegacyPlugin: stubs.runHelpers.validateLegacyPlugin,
         serialize: stubs.serializer.serialize,
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/worker.spec.js
       });
     });
 
