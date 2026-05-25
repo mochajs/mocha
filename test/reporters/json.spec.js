@@ -4,7 +4,7 @@ var fs = require("node:fs");
 var sinon = require("sinon");
 var JSONReporter = require("../../lib/reporters/json.mjs").JSONReporter;
 var utils = require("../../lib/utils");
-var Mocha = require("../../");
+var { Mocha } = require("../../index.mjs");
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 var Test = Mocha.Test;
@@ -15,7 +15,7 @@ describe("JSON reporter", function () {
   var runner;
   var testTitle = "json test 1";
   var testFile = "someTest.spec.js";
-  var noop = function () {};
+  var noop = function () { };
 
   beforeEach(function () {
     mocha = new Mocha({
@@ -93,7 +93,7 @@ describe("JSON reporter", function () {
     });
 
     it("should have 1 test pass", function (done) {
-      const test = new Test(testTitle, () => {});
+      const test = new Test(testTitle, () => { });
 
       test.file = testFile;
       suite.addTest(test);
@@ -168,7 +168,7 @@ describe("JSON reporter", function () {
 
     beforeEach(function () {
       // Add one test to suite to avoid assertions against empty test results
-      var test = new Test(testTitle, () => {});
+      var test = new Test(testTitle, () => { });
       test.file = testFile;
       suite.addTest(test);
     });

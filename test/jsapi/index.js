@@ -1,6 +1,6 @@
 "use strict";
 
-var Mocha = require("../../");
+var { Mocha } = require("../../index.mjs");
 
 var mocha = new Mocha({
   ui: "bdd",

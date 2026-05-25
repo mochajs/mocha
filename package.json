@@ -32,8 +32,7 @@
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
   "bin": {
-    "mocha": "./bin/mocha.js",
-    "_mocha": "./bin/_mocha"
+    "mocha": "./bin/mocha.mjs"
   },
   "directories": {
     "lib": "./lib",
@@ -65,8 +64,8 @@
     "test-browser": "run-s clean build test-browser:*",
     "test-coverage-clean": "rimraf .nyc_output coverage",
     "test-coverage-generate": "nyc report --reporter=lcov --reporter=text",
-    "test-node-run-only": "cross-env NODE_OPTIONS=--enable-source-maps nyc --no-clean --reporter=json node bin/mocha.js --no-forbid-only",
-    "test-node-run": "cross-env NODE_OPTIONS=--enable-source-maps nyc --no-clean --reporter=json node bin/mocha.js --forbid-only",
+    "test-node-run-only": "cross-env NODE_OPTIONS=--enable-source-maps nyc --no-clean --reporter=json node bin/mocha.mjs --no-forbid-only",
+    "test-node-run": "cross-env NODE_OPTIONS=--enable-source-maps nyc --no-clean --reporter=json node bin/mocha.mjs --forbid-only",
     "test-node:integration": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/**/*.spec.js\"",
     "test-node:integration:watch": "run-s clean build && npm run -s test-node-run -- --parallel --timeout 10000 --slow 3750 \"test/integration/options/watch.spec.js\"",
     "test-node:interfaces:bdd": "npm run -s test-node-run -- --ui bdd test/interfaces/bdd.spec",
@@ -84,7 +83,7 @@
     "test-node:requires": "npm run -s test-node-run -- --require coffeescript/register --require test/require/a.js --require test/require/b.coffee --require test/require/c.js --require test/require/d.coffee test/require/require.spec.js",
     "test-node:unit": "npm run -s test-node-run -- \"test/unit/*.spec.js\" \"test/node-unit/**/*.spec.js\"",
     "test-node": "run-s test-coverage-clean test-node:* test-coverage-generate",
-    "test-smoke": "node ./bin/mocha --no-config test/smoke/smoke.spec.js",
+    "test-smoke": "node ./bin/mocha.mjs --no-config test/smoke/smoke.spec.js",
     "test": "run-s lint test-node test-browser",
     "tsc": "tsc",
     "version:linkify-changelog": "node scripts/linkify-changelog.mjs",
@@ -161,16 +160,19 @@
   },
   "files": [
     "bin/*mocha*",
-    "lib/**/*.{js,mjs,html,json}",
-    "index.js",
+    "lib/**/*.html",
+    "lib/**/*.js",
+    "lib/**/*.json",
+    "lib/**/*.mjs",
+    "index.mjs",
     "mocha.css",
     "mocha.js",
     "mocha.js.map",
     "mocha.mjs",
-    "browser-entry.js"
+    "browser-entry.mjs"
   ],
   "browser": {
-    "./index.js": "./browser-entry.js",
+    "./index.mjs": "./browser-entry.mjs",
     "fs": false,
     "path": false,
     "supports-color": false,

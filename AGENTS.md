@@ -28,7 +28,7 @@ Agent onboarding for the `mochajs/mocha` repository.
 ## Repository map (quick)
 
 - `lib/` — core runtime (runner, suite, hooks, reporters, CLI internals)
-- `bin/` — CLI entrypoints (`mocha`, `_mocha`)
+- `bin/` — CLI entrypoints (`mocha`)
 - `test/` — unit, integration, node-only, browser-specific, smoke
 - `docs/` — Astro/Starlight docs app with separate lockfile/scripts
 - `mocha.js` / `mocha.js.map` — browser bundle outputs (generated)
