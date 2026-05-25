@@ -115,6 +115,22 @@ describe("parallel-buffered-runner", function () {
           );
         });
 
+        it("should return without completing when aborting", function (done) {
+          const callback = sinon.stub();
+          run.callsFake(async () => {
+            runner._state = "ABORTING";
+            return { failureCount: 0, events: [] };
+          });
+
+          runner.run(callback, { files: ["some-file.js"], options: {} });
+
+          setImmediate(() => {
+            expect(callback, "was not called");
+            expect(runner._state, "to be", "ABORTING");
+            done();
+          });
+        });
+
         describe("when instructed to link objects", function () {
           beforeEach(function () {
             runner._linkPartialObjects = true;
@@ -222,6 +238,52 @@ describe("parallel-buffered-runner", function () {
         });
 
         describe("when a worker fails", function () {
+          it("should force-terminate and reject when uncaught errors are allowed", async function () {
+            const options = { reporter: runner._workerReporter };
+            const err = new Error("whoops");
+            runner.allowUncaught = true;
+            runner._state = "RUNNING";
+            run.withArgs("some-file.js", options).rejects(err);
+
+            await expect(
+              () =>
+                runner._createFileRunner(
+                  { run, terminate, stats: sinon.stub().returns({}) },
+                  options,
+                )("some-file.js"),
+              "to be rejected with",
+              err,
+            );
+            expect(terminate, "to have a call satisfying", [true]).and(
+              "was called once",
+            );
+            expect(runner._state, "to be", "ABORTING");
+          });
+
+          it("should schedule uncaught worker failures to be rethrown", function (done) {
+            const err = new Error("whoops");
+            const originalNextTick = process.nextTick;
+            runner.allowUncaught = true;
+            run.rejects(err);
+            sinon.stub(process, "nextTick").callsFake((callback, ...args) => {
+              if (String(callback).includes("re-throwing uncaught exception")) {
+                try {
+                  callback(...args);
+                } catch (thrownError) {
+                  expect(thrownError, "to be", err);
+                  done();
+                }
+                return;
+              }
+              return originalNextTick(callback, ...args);
+            });
+
+            runner.run(sinon.stub(), {
+              files: ["some-file.js"],
+              options: {},
+            });
+          });
+
           it("should recover", function (done) {
             const options = { reporter: runner._workerReporter };
             run.withArgs("some-file.js", options).rejects(new Error("whoops"));
@@ -686,6 +748,59 @@ describe("parallel-buffered-runner", function () {
 
         it("should return its context", function () {
           expect(runner.workerReporter(), "to be", runner);
+        });
+      });
+
+      describe("_bindSigIntListener()", function () {
+        let runner;
+        let pool;
+
+        beforeEach(function () {
+          runner = new ParallelBufferedRunner(suite);
+          pool = {
+            terminate: sinon.stub().resolves(),
+          };
+          sinon.stub(process, "kill");
+          sinon.stub(process, "once");
+        });
+
+        it("should force-terminate the worker pool before re-sending SIGINT", async function () {
+          const sigIntListener = runner._bindSigIntListener(pool);
+
+          await sigIntListener();
+          await new Promise((resolve) => setImmediate(resolve));
+
+          expect(pool.terminate, "to have a call satisfying", [true]).and(
+            "was called once",
+          );
+          expect(runner._state, "to be", "ABORTED");
+          expect(process.kill, "to have a call satisfying", [
+            process.pid,
+            "SIGINT",
+          ]);
+        });
+
+        it("should set the exit code when force-termination fails", async function () {
+          const originalExitCode = process.exitCode;
+          pool.terminate.rejects(new Error("nope"));
+          sinon.stub(console, "error");
+
+          try {
+            process.exitCode = undefined;
+            const sigIntListener = runner._bindSigIntListener(pool);
+
+            await sigIntListener();
+            await new Promise((resolve) => setImmediate(resolve));
+
+            expect(console.error, "was called once");
+            expect(process.exitCode, "to be", 1);
+            expect(process.kill, "to have a call satisfying", [
+              process.pid,
+              "SIGINT",
+            ]);
+          } finally {
+            process.exitCode = originalExitCode;
+          }
         });
       });
     });

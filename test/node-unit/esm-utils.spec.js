@@ -1,6 +1,7 @@
 "use strict";
 
 const esmUtils = require("../../lib/nodejs/esm-utils");
+const path = require("node:path");
 const sinon = require("sinon");
 const url = require("node:url");
 
@@ -61,6 +62,62 @@ describe("esm-utils", function () {
           message: /`\.only` is not supported in parallel mode/,
         },
       );
+    });
+
+    describe("when require falls back to import", function () {
+      const missingFile = path.resolve(
+        "test/node-unit/fixtures/missing-file.js",
+      );
+
+      beforeEach(function () {
+        if (!process.features.require_module) {
+          this.skip();
+        }
+      });
+
+      afterEach(function () {
+        sinon.restore();
+      });
+
+      it("should return a namespace object without a default export", async function () {
+        sinon.stub(esmUtils, "doImport").resolves({ named: true });
+
+        const result = await esmUtils.requireOrImport(missingFile);
+
+        expect(result, "to satisfy", {
+          named: true,
+          default: undefined,
+        });
+      });
+
+      it("should throw the import error when fallback import fails", async function () {
+        const importError = Object.assign(new Error("import failed"), {
+          code: "ERR_IMPORT_FAILED",
+        });
+        sinon.stub(esmUtils, "doImport").rejects(importError);
+
+        return expect(
+          () => esmUtils.requireOrImport(missingFile),
+          "to be rejected with",
+          importError,
+        );
+      });
+
+      it("should throw the require error for internal assertion import failures", async function () {
+        sinon.stub(esmUtils, "doImport").rejects(
+          Object.assign(new Error("internal assertion"), {
+            code: "ERR_INTERNAL_ASSERTION",
+          }),
+        );
+
+        return expect(
+          () => esmUtils.requireOrImport(missingFile),
+          "to be rejected with error satisfying",
+          {
+            code: "MODULE_NOT_FOUND",
+          },
+        );
+      });
     });
   });
 

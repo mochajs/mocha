@@ -111,6 +111,46 @@ describe("class BufferedWorkerPool", function () {
         },
       });
     });
+
+    it("should apply an explicit max worker count", function () {
+      expect(new BufferedWorkerPool({ maxWorkers: 4 }), "to satisfy", {
+        options: {
+          maxWorkers: 4,
+        },
+      });
+    });
+
+    it("should assign incremental worker ids", function () {
+      const workerPool = new BufferedWorkerPool();
+
+      expect(
+        workerPool.options.onCreateWorker({
+          forkOpts: {
+            detached: true,
+          },
+        }),
+        "to satisfy",
+        {
+          forkOpts: {
+            detached: true,
+            env: {
+              MOCHA_WORKER_ID: 0,
+            },
+          },
+        },
+      );
+      expect(
+        workerPool.options.onCreateWorker({ forkOpts: {} }),
+        "to satisfy",
+        {
+          forkOpts: {
+            env: {
+              MOCHA_WORKER_ID: 1,
+            },
+          },
+        },
+      );
+    });
   });
 
   describe("instance method", function () {
