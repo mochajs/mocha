@@ -1,20 +1,20 @@
 "use strict";
 
-const { builder } = require("../../../lib/cli/run.mjs");
 const { types } = require("../../../lib/cli/run-option-metadata.mjs");
 
 describe("command", function () {
   describe("run", function () {
     describe("builder", function () {
       const IGNORED_OPTIONS = new Set(["help", "version"]);
-      const options = builder(require("yargs")()).getOptions();
+
       ["number", "string", "boolean", "array"].forEach((type) => {
-        describe(`${type} type`, function () {
+        it(`should include ${type} options in metadata`, async function () {
+          const { builder } = await import("../../../lib/cli/run.mjs");
+          const options = builder(require("yargs")()).getOptions();
+
           Array.from(new Set(options[type])).forEach((option) => {
             if (!IGNORED_OPTIONS.has(option)) {
-              it(`should include option ${option}`, function () {
-                expect(types[type], "to contain", option);
-              });
+              expect(types[type], "to contain", option);
             }
           });
         });

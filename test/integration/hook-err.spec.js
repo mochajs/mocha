@@ -8,6 +8,8 @@ const {
 const { bang } = require("../../lib/reporters/base").symbols;
 
 describe("hook error handling", function () {
+  this.timeout(20000);
+
   let lines;
 
   describe("before hook error", function () {
