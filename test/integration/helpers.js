@@ -442,6 +442,16 @@ async function runMochaWatchAsync(args, opts, change) {
 
   const useIpc = typeof change === "function" && change.length >= 2;
 
+  const _t0 = Date.now();
+  const _ttrace = (...a) =>
+    console.error(`[TRACE-helper +${Date.now() - _t0}ms]`, ...a);
+  _ttrace(
+    "runMochaWatchAsync start; useIpc=",
+    useIpc,
+    "args=",
+    JSON.stringify(args),
+  );
+
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, "--watch"],
     opts,
@@ -453,6 +463,7 @@ async function runMochaWatchAsync(args, opts, change) {
     const pending = [];
     const waiters = [];
     const onMessage = (msg) => {
+      _ttrace("on('message'):", JSON.stringify(msg));
       if (
         !msg ||
         typeof msg !== "object" ||
@@ -476,16 +487,24 @@ async function runMochaWatchAsync(args, opts, change) {
     };
 
     waitForRunFinished = () => {
+      _ttrace("waitForRunFinished() called; pending=", pending.length);
       if (pending.length > 0) {
         pending.shift();
+        _ttrace("waitForRunFinished: consumed pending immediately");
         return Promise.resolve();
       }
       const timeoutMs = opts.sleepMs * 3;
       return new Promise((resolve, reject) => {
-        const waiter = { resolve };
+        const waiter = {
+          resolve: () => {
+            _ttrace("waitForRunFinished: resolved by message");
+            resolve();
+          },
+        };
         waiter.timer = setTimeout(() => {
           const idx = waiters.indexOf(waiter);
           if (idx >= 0) waiters.splice(idx, 1);
+          _ttrace("waitForRunFinished: TIMED OUT");
           reject(
             new Error(
               `runMochaWatchAsync: timed out after ${timeoutMs}ms waiting for watch run to finish`,
