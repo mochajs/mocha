@@ -212,7 +212,7 @@ global.mocha = mocha;
   'describe', 'context', 'it', 'specify',
   'xdescribe', 'xcontext', 'xit', 'xspecify',
   'before', 'beforeEach', 'afterEach', 'after'
-].forEach(function (key) {
+].forEach(function(key) {
   mocha[key] = global[key];
 });
 
