@@ -2,7 +2,7 @@ import BrowserStdout from "browser-stdout";
 
 import { parseQuery } from "./lib/browser/parse-query.mjs";
 import { highlightTags } from "./lib/browser/highlight-tags.mjs";
-import { Mocha } from "./lib/mocha.js";
+import Mocha from "./lib/mocha.js";
 
 /**
  * Shim process.stdout.
@@ -208,7 +208,7 @@ global.mocha = mocha;
 // for bundlers: enable `import {describe, it} from 'mocha'`
 // `bdd` interface only
 // prettier-ignore
-[ 
+[
   'describe', 'context', 'it', 'specify',
   'xdescribe', 'xcontext', 'xit', 'xspecify',
   'before', 'beforeEach', 'afterEach', 'after'
