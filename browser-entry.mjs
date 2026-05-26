@@ -38,7 +38,7 @@ process.removeListener = function (e, fn) {
     if (originalOnerrorHandler) {
       global.onerror = originalOnerrorHandler;
     } else {
-      global.onerror = function () { };
+      global.onerror = function () {};
     }
     var i = uncaughtExceptionHandlers.indexOf(fn);
     if (i !== -1) {
@@ -208,7 +208,7 @@ global.mocha = mocha;
 // for bundlers: enable `import {describe, it} from 'mocha'`
 // `bdd` interface only
 // prettier-ignore
-[
+[ 
   'describe', 'context', 'it', 'specify',
   'xdescribe', 'xcontext', 'xit', 'xspecify',
   'before', 'beforeEach', 'afterEach', 'after'
