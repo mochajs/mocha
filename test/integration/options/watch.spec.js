@@ -145,31 +145,19 @@ describe("--watch", function () {
       const dirPath = path.join(libPath, "dir");
       const watchedFile = path.join(dirPath, "file.xyz");
 
-      const _t = (...a) => console.error("[TRACE-test]", ...a);
-      _t("tempDir=", tempDir, "libPath=", libPath);
-
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         tempDir,
         async (_mochaProcess, { waitForRunFinished }) => {
-          _t("awaiting initial run");
           await waitForRunFinished();
-          _t("initial run done; mkdir libPath");
           fs.mkdirSync(libPath);
-          _t("awaiting rerun after mkdir libPath");
           await waitForRunFinished();
-          _t("rerun 1 done; mkdir dirPath");
           fs.mkdirSync(dirPath);
-          _t("awaiting rerun after mkdir dirPath");
           await waitForRunFinished();
-          _t("rerun 2 done; touchFile watchedFile");
           touchFile(watchedFile);
-          _t("awaiting rerun after touchFile");
           await waitForRunFinished();
-          _t("rerun 3 done; change callback complete");
         },
       ).then((results) => {
-        _t("results.length=", results.length);
         expect(results, "to have length", 4);
       });
     });
