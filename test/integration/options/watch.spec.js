@@ -145,19 +145,53 @@ describe("--watch", function () {
       const dirPath = path.join(libPath, "dir");
       const watchedFile = path.join(dirPath, "file.xyz");
 
+      const _t0 = process.hrtime.bigint();
+      const _trace = (...a) => {
+        const elapsedMs = Number(process.hrtime.bigint() - _t0) / 1e6;
+        process.stderr.write(
+          `[TRACE-spec +${elapsedMs.toFixed(1)}ms] ${a
+            .map((x) => (typeof x === "string" ? x : JSON.stringify(x)))
+            .join(" ")}\n`,
+        );
+      };
+      _trace(
+        "test start; platform=",
+        process.platform,
+        "node=",
+        process.version,
+      );
+      _trace("tempDir=", tempDir);
+      _trace("testFile=", testFile);
+      _trace("libPath=", libPath);
+      _trace("dirPath=", dirPath);
+      _trace("watchedFile=", watchedFile);
+
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         tempDir,
         async (_mochaProcess, { waitForRunFinished }) => {
+          _trace("step 1: awaiting initial run");
           await waitForRunFinished();
+          _trace("step 1 done: initial run finished; about to mkdir libPath");
           fs.mkdirSync(libPath);
+          _trace("step 2: mkdir libPath done; awaiting rerun");
           await waitForRunFinished();
+          _trace(
+            "step 2 done: rerun after mkdir libPath; about to mkdir dirPath",
+          );
           fs.mkdirSync(dirPath);
+          _trace("step 3: mkdir dirPath done; awaiting rerun");
           await waitForRunFinished();
+          _trace(
+            "step 3 done: rerun after mkdir dirPath; about to touch watchedFile",
+          );
           touchFile(watchedFile);
+          _trace("step 4: touchFile done; awaiting rerun");
           await waitForRunFinished();
+          _trace("step 4 done: all reruns observed; change callback complete");
         },
       ).then((results) => {
+        _trace("results.length=", results.length);
         expect(results, "to have length", 4);
       });
     });
