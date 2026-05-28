@@ -2,7 +2,11 @@ import fs from "node:fs";
 import { restore, stub } from "sinon";
 import { JSONReporter } from "../../lib/reporters/json.mjs";
 import utils from "../../lib/utils.js";
-import Mocha, { Suite as _Suite, Runner as _Runner, Test as _Test } from "../../index.mjs";
+import Mocha, {
+  Suite as _Suite,
+  Runner as _Runner,
+  Test as _Test,
+} from "../../index.mjs";
 var Suite = _Suite;
 var Runner = _Runner;
 var Test = _Test;
@@ -182,7 +186,10 @@ describe("JSON reporter", function () {
       });
 
       runner.run(function () {
-        expect(fsMkdirSync.calledWith(expectedDirName, { recursive: true }), "to be true");
+        expect(
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
+          "to be true",
+        );
         expect(fsWriteFileSync.calledOnce, "to be true");
         done();
       });
@@ -201,9 +208,16 @@ describe("JSON reporter", function () {
 
       runner.run(function () {
         restore();
-        expect(fsMkdirSync.calledWith(expectedDirName, { recursive: true }), "to be true");
+        expect(
+          fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
+          "to be true",
+        );
         expect(fsWriteFileSync.calledOnce, "to be true");
-        expect(outLog[0], "to contain", `[mocha] writing output to "${expectedFileName}" failed:`);
+        expect(
+          outLog[0],
+          "to contain",
+          `[mocha] writing output to "${expectedFileName}" failed:`,
+        );
         expect(outLog[1], "to match", /"fullTitle": "JSON suite json test 1"/);
         done();
       });
