@@ -1,7 +1,4 @@
-"use strict";
-
-var Mocha = require("../../index.mjs");
-console.log({ Mocha });
+import Mocha from "../../index.mjs";
 
 var mocha = new Mocha({
   ui: "bdd",
@@ -9,7 +6,7 @@ var mocha = new Mocha({
   growl: true,
 });
 
-require("../setup");
+import "../setup.js";
 
 mocha.addFile("test/unit/suite.spec.js");
 mocha.addFile("test/unit/runner.spec.js");
