@@ -442,49 +442,17 @@ async function runMochaWatchAsync(args, opts, change) {
 
   const useIpc = typeof change === "function" && change.length >= 2;
 
-  const _t0 = process.hrtime.bigint();
-  const _trace = (...a) => {
-    const elapsedMs = Number(process.hrtime.bigint() - _t0) / 1e6;
-    process.stderr.write(
-      `[TRACE-helper +${elapsedMs.toFixed(1)}ms] ${a
-        .map((x) => (typeof x === "string" ? x : JSON.stringify(x)))
-        .join(" ")}\n`,
-    );
-  };
-  _trace(
-    "runMochaWatchAsync start; useIpc=",
-    useIpc,
-    "sleepMs=",
-    opts.sleepMs,
-    "args=",
-    args,
-  );
-
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, "--watch"],
     opts,
   );
-  _trace("invokeMochaAsync returned; child pid=", mochaProcess.pid);
-  mochaProcess.on("exit", (code, signal) =>
-    _trace(`child 'exit' code=${code} signal=${signal}`),
-  );
-  mochaProcess.on("close", (code, signal) =>
-    _trace(`child 'close' code=${code} signal=${signal}`),
-  );
-  mochaProcess.on("disconnect", () => _trace(`child 'disconnect'`));
 
   let cleanup = () => {};
   let waitForRunFinished;
   if (useIpc) {
     const pending = [];
     const waiters = [];
-    let msgCount = 0;
     const onMessage = (msg) => {
-      msgCount += 1;
-      _trace(
-        `child IPC message #${msgCount}; pending=${pending.length} waiters=${waiters.length} msg=`,
-        msg,
-      );
       if (
         !msg ||
         typeof msg !== "object" ||
@@ -495,15 +463,9 @@ async function runMochaWatchAsync(args, opts, change) {
       const waiter = waiters.shift();
       if (waiter) {
         clearTimeout(waiter.timer);
-        _trace(
-          `child IPC message #${msgCount}: handed to waiter; waiters left=${waiters.length}`,
-        );
         waiter.resolve();
       } else {
         pending.push(msg);
-        _trace(
-          `child IPC message #${msgCount}: queued in pending; pending=${pending.length}`,
-        );
       }
     };
     mochaProcess.on("message", onMessage);
@@ -513,34 +475,17 @@ async function runMochaWatchAsync(args, opts, change) {
       for (const w of waiters) clearTimeout(w.timer);
     };
 
-    let waitCount = 0;
     waitForRunFinished = () => {
-      waitCount += 1;
-      const thisWait = waitCount;
-      _trace(
-        `waitForRunFinished #${thisWait} entry; pending=${pending.length} waiters=${waiters.length}`,
-      );
       if (pending.length > 0) {
         pending.shift();
-        _trace(
-          `waitForRunFinished #${thisWait}: consumed pending immediately; pending left=${pending.length}`,
-        );
         return Promise.resolve();
       }
       const timeoutMs = opts.sleepMs * 3;
       return new Promise((resolve, reject) => {
-        const waiter = {
-          resolve: () => {
-            _trace(`waitForRunFinished #${thisWait}: resolved by message`);
-            resolve();
-          },
-        };
+        const waiter = { resolve };
         waiter.timer = setTimeout(() => {
           const idx = waiters.indexOf(waiter);
           if (idx >= 0) waiters.splice(idx, 1);
-          _trace(
-            `waitForRunFinished #${thisWait}: TIMED OUT after ${timeoutMs}ms; pending=${pending.length} waiters=${waiters.length}`,
-          );
           reject(
             new Error(
               `runMochaWatchAsync: timed out after ${timeoutMs}ms waiting for watch run to finish`,
@@ -548,9 +493,6 @@ async function runMochaWatchAsync(args, opts, change) {
           );
         }, timeoutMs);
         waiters.push(waiter);
-        _trace(
-          `waitForRunFinished #${thisWait}: queued waiter; timeoutMs=${timeoutMs}`,
-        );
       });
     };
   }
