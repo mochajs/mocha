@@ -13,6 +13,12 @@ const {
   DEFAULT_FIXTURE,
 } = require("../helpers");
 
+// For documentation:
+// Chokidar can take a moment to attach an inotify watch to a newly-created directory on Linux.
+// Since there's no signal for when the watch is ready we wait briefly before creating anything inside it.
+// 1000ms has been reliable in practice, 500ms is what mark suggested in PR 5988.
+const WATCH_INSTALL_SETTLE_MS = 1000;
+
 describe("--watch", function () {
   describe("when enabled", function () {
     /**
@@ -152,8 +158,13 @@ describe("--watch", function () {
           await waitForRunFinished();
           fs.mkdirSync(libPath);
           await waitForRunFinished();
+          // Chokidar can take a moment to attach an inotify watch to a newly-created directory on Linux.
+          // If we create something inside it immediately, the event may be missed (see chokidar/chokidar#1422).
+          // We add a short delay to avoid racing the watcher.
+          await sleep(WATCH_INSTALL_SETTLE_MS);
           fs.mkdirSync(dirPath);
           await waitForRunFinished();
+          await sleep(WATCH_INSTALL_SETTLE_MS);
           touchFile(watchedFile);
           await waitForRunFinished();
         },
