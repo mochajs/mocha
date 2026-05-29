@@ -1,1 +1,33 @@
-@.github/workflows/auto-label-review.yml
+name: Labels
+
+on:
+  pull_request_target:
+    types: [review_requested]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  auto-label-review:
+    if: ${{ github.event.requested_team == null && github.event.reviewer != null }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const lastReview = reviews.at(-1);
+            if (lastReview && lastReview.state === 'CHANGES_REQUESTED') {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'status: waiting for author',
+              }).catch(() => {
+                // Label may not exist; ignore
+              });
+            }
