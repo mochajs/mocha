@@ -176,12 +176,12 @@
     "supports-color": false,
     "./lib/nodejs/buffered-worker-pool.js": false,
     "./lib/nodejs/esm-utils.js": false,
-    "./lib/nodejs/file-unloader.js": false,
     "./lib/nodejs/parallel-buffered-runner.js": false,
     "./lib/nodejs/serializer.js": false,
     "./lib/nodejs/worker.js": false,
     "./lib/nodejs/reporters/parallel-buffered.js": false,
-    "./lib/cli/index.js": false
+    "./lib/cli/index.js": false,
+    "./lib/nodejs/file-unloader.mjs": false
   },
   "overrides": {
     "@types/eslint": "^9.6.1",
