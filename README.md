@@ -50,6 +50,54 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+## Generous Supporters
+
+We are grateful for the support of these organizations that provide tools and services to help make Mocha better:
+
+<p align="center">
+  <a href="https://wallabyjs.com" title="WallabyJS provides a free license for their test runner tooling">
+    <img src="https://img.shields.io/badge/WallabyJS-Test_Runner_Tooling-00B4D8?style=for-the-badge" alt="WallabyJS" height="40">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://saucelabs.com" title="Sauce Labs provides upgraded browser testing infrastructure">
+    <img src="https://img.shields.io/badge/Sauce_Labs-Browser_Testing-E2231A?style=for-the-badge&logo=sauce-labs&logoColor=white" alt="Sauce Labs" height="40">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://jetbrains.com" title="JetBrains provides WebStorm licenses for development">
+    <img src="https://img.shields.io/badge/JetBrains-WebStorm_Licenses-000000?style=for-the-badge&logo=jetbrains&logoColor=white" alt="JetBrains" height="40">
+  </a>
+</p>
+
+<p align="center">
+  <sub>WallabyJS provides a free license for their test runner tooling. Sauce Labs provides upgraded browser testing infrastructure. JetBrains provides WebStorm licenses for development.</sub>
+</p>
+
+## Infrastructure
+
+Mocha's infrastructure is powered by these amazing services:
+
+<p align="center">
+  <a href="https://travis-ci.com" title="Travis CI">
+    <img src="https://img.shields.io/badge/Travis_CI-CI/CD-3EAAAF?style=for-the-badge&logo=travis-ci&logoColor=white" alt="Travis CI" height="35">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.appveyor.com" title="AppVeyor">
+    <img src="https://img.shields.io/badge/AppVeyor-CI/CD-00B3E0?style=for-the-badge&logo=appveyor&logoColor=white" alt="AppVeyor" height="35">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://coveralls.io" title="Coveralls provides code coverage reporting">
+    <img src="https://img.shields.io/badge/Coveralls-Code_Coverage-3E576A?style=for-the-badge&logo=coveralls&logoColor=white" alt="Coveralls" height="35">
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.netlify.com" title="Netlify provides documentation hosting">
+    <img src="https://img.shields.io/badge/Netlify-Docs_Hosting-00C7B7?style=for-the-badge&logo=netlify&logoColor=white" alt="Netlify" height="35">
+  </a>
+</p>
+
+<p align="center">
+  <sub>Travis CI and AppVeyor provide CI/CD pipelines for cross-platform testing. Coveralls provides code coverage reporting. Netlify provides documentation site hosting.</sub>
+</p>
+
 ## Development
 
 You might want to know that:
