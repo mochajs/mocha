@@ -1,15 +1,8 @@
 import fs from "node:fs";
-import { restore, stub } from "sinon";
+import sinon from "sinon";
 import { JSONReporter } from "../../lib/reporters/json.mjs";
 import utils from "../../lib/utils.js";
-import Mocha, {
-  Suite as _Suite,
-  Runner as _Runner,
-  Test as _Test,
-} from "../../index.mjs";
-var Suite = _Suite;
-var Runner = _Runner;
-var Test = _Test;
+import { Mocha, Suite, Runner, Test, } from "../../index.mjs";
 
 describe("JSON reporter", function () {
   var mocha;
@@ -17,7 +10,7 @@ describe("JSON reporter", function () {
   var runner;
   var testTitle = "json test 1";
   var testFile = "someTest.spec.js";
-  var noop = function () {};
+  var noop = function () { };
 
   beforeEach(function () {
     mocha = new Mocha({
@@ -28,7 +21,7 @@ describe("JSON reporter", function () {
   });
 
   afterEach(function () {
-    restore();
+    sinon.restore();
   });
 
   describe("test results", function () {
@@ -39,7 +32,7 @@ describe("JSON reporter", function () {
     });
 
     beforeEach(function () {
-      stub(process.stdout, "write").callsFake(noop);
+      sinon.stub(process.stdout, "write").callsFake(noop);
     });
 
     it("should have 1 test failure", function (done) {
@@ -53,7 +46,7 @@ describe("JSON reporter", function () {
       suite.addTest(test);
 
       runner.run(function (failureCount) {
-        restore();
+        sinon.restore();
         expect(runner, "to satisfy", {
           testResults: {
             failures: [
@@ -78,7 +71,7 @@ describe("JSON reporter", function () {
       suite.addTest(test);
 
       runner.run(function (failureCount) {
-        restore();
+        sinon.restore();
         expect(runner, "to satisfy", {
           testResults: {
             pending: [
@@ -95,13 +88,13 @@ describe("JSON reporter", function () {
     });
 
     it("should have 1 test pass", function (done) {
-      const test = new Test(testTitle, () => {});
+      const test = new Test(testTitle, () => { });
 
       test.file = testFile;
       suite.addTest(test);
 
       runner.run(function (failureCount) {
-        restore();
+        sinon.restore();
         expect(runner, "to satisfy", {
           testResults: {
             passes: [
@@ -134,7 +127,7 @@ describe("JSON reporter", function () {
       suite.addTest(test);
 
       runner.run(function (failureCount) {
-        restore();
+        sinon.restore();
         expect(runner, "to satisfy", {
           testResults: {
             failures: [
@@ -170,14 +163,14 @@ describe("JSON reporter", function () {
 
     beforeEach(function () {
       // Add one test to suite to avoid assertions against empty test results
-      var test = new Test(testTitle, () => {});
+      var test = new Test(testTitle, () => { });
       test.file = testFile;
       suite.addTest(test);
     });
 
     it("should write test results to file", function (done) {
-      const fsMkdirSync = stub(fs, "mkdirSync");
-      const fsWriteFileSync = stub(fs, "writeFileSync");
+      const fsMkdirSync = sinon.stub(fs, "mkdirSync");
+      const fsWriteFileSync = sinon.stub(fs, "writeFileSync");
 
       fsWriteFileSync.callsFake(function (filename, content) {
         const expectedJson = JSON.stringify(runner.testResults, null, 2);
@@ -196,18 +189,18 @@ describe("JSON reporter", function () {
     });
 
     it("should warn and write test results to console", function (done) {
-      const fsMkdirSync = stub(fs, "mkdirSync");
-      const fsWriteFileSync = stub(fs, "writeFileSync");
+      const fsMkdirSync = sinon.stub(fs, "mkdirSync");
+      const fsWriteFileSync = sinon.stub(fs, "writeFileSync");
 
       fsWriteFileSync.throws("unable to write file");
 
       const outLog = [];
       const fake = (chunk) => outLog.push(chunk);
-      stub(process.stderr, "write").callsFake(fake);
-      stub(process.stdout, "write").callsFake(fake);
+      sinon.stub(process.stderr, "write").callsFake(fake);
+      sinon.stub(process.stdout, "write").callsFake(fake);
 
       runner.run(function () {
-        restore();
+        sinon.restore();
         expect(
           fsMkdirSync.calledWith(expectedDirName, { recursive: true }),
           "to be true",
@@ -224,7 +217,7 @@ describe("JSON reporter", function () {
     });
 
     it('should throw "unsupported error" in browser', function () {
-      stub(utils, "isBrowser").callsFake(() => true);
+      sinon.stub(utils, "isBrowser").callsFake(() => true);
       expect(
         () => new JSONReporter(runner, options),
         "to throw",
