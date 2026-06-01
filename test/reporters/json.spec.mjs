@@ -2,7 +2,7 @@ import fs from "node:fs";
 import sinon from "sinon";
 import { JSONReporter } from "../../lib/reporters/json.mjs";
 import utils from "../../lib/utils.js";
-import { Mocha, Suite, Runner, Test, } from "../../index.mjs";
+import { Mocha, Suite, Runner, Test } from "../../index.mjs";
 
 describe("JSON reporter", function () {
   var mocha;
@@ -10,7 +10,7 @@ describe("JSON reporter", function () {
   var runner;
   var testTitle = "json test 1";
   var testFile = "someTest.spec.js";
-  var noop = function () { };
+  var noop = function () {};
 
   beforeEach(function () {
     mocha = new Mocha({
@@ -88,7 +88,7 @@ describe("JSON reporter", function () {
     });
 
     it("should have 1 test pass", function (done) {
-      const test = new Test(testTitle, () => { });
+      const test = new Test(testTitle, () => {});
 
       test.file = testFile;
       suite.addTest(test);
@@ -163,7 +163,7 @@ describe("JSON reporter", function () {
 
     beforeEach(function () {
       // Add one test to suite to avoid assertions against empty test results
-      var test = new Test(testTitle, () => { });
+      var test = new Test(testTitle, () => {});
       test.file = testFile;
       suite.addTest(test);
     });
