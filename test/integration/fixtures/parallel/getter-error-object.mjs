@@ -1,4 +1,4 @@
-import {describe, it} from '../../../../index.js';
+import {describe, it} from '../../../../index.mjs';
 
 describe('test1', () => {
   it('test', async () => {

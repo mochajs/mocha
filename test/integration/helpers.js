@@ -13,7 +13,7 @@ const SIGNAL_OFFSET = 128;
 /**
  * Path to `mocha` executable
  */
-const MOCHA_EXECUTABLE = require.resolve("../../bin/mocha");
+const MOCHA_EXECUTABLE = require.resolve("../../bin/mocha.mjs");
 
 /**
  * regular expression used for splitting lines based on new line / dot symbol.
