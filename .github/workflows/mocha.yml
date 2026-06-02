@@ -80,11 +80,25 @@ jobs:
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
-  test-browser-local:
-    uses: ./.github/workflows/npm-script.yml
-    with:
-      browsers: ChromeHeadless
-      npm-script: test-browser
+  test-browser:
+    name: Browser tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test-browser
+        env:
+          NODE_OPTIONS: "--trace-warnings"
 
   tsc:
     uses: ./.github/workflows/npm-script.yml

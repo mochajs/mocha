@@ -2,9 +2,14 @@
 docs/images/supporters
 mocha.js
 mocha.js.map
-.karma/
 !bin/mocha.mjs
 !lib/mocha.js
+
+# Playwright browser tests
+test/browser/.generated/
+/test-results/
+/playwright-report/
+/blob-report/
 
 # Bundle debugging
 stats.html
