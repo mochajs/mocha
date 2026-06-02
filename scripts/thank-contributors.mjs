@@ -5,7 +5,7 @@
 
 import { pathToFileURL } from "node:url";
 
-const heading = "### ❤️ Thank you";
+const heading = "### 🤎 Thank you";
 const botLogins = new Set([
   "allcontributors",
   "codecov",
