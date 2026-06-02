@@ -30,6 +30,17 @@ module.exports = defineConfig(
       "n/no-unsupported-features/node-builtins": "off",
       strict: ["error", "global"],
     },
+    settings: {
+      "import/extensions": [".js", ".mjs"],
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".mjs"],
+        },
+      },
+      node: {
+        tryExtensions: [".js", ".json", ".node", ".mjs"],
+      },
+    },
   },
   {
     files: [

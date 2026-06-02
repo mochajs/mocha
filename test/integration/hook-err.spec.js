@@ -5,7 +5,7 @@ const {
   runMochaJSONAsync,
   SPLIT_DOT_REPORTER_REGEXP,
 } = require("./helpers");
-const { bang } = require("../../lib/reporters/base").symbols;
+const { bang } = require("../../lib/reporters/base.mjs").Base.symbols;
 
 describe("hook error handling", function () {
   let lines;
