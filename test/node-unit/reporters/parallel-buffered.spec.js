@@ -50,7 +50,7 @@ describe("ParallelBuffered", function () {
             }),
           },
         },
-        "../../../lib/reporters/base": class MockBase {},
+        "../../../lib/reporters/base.mjs": { Base: class MockBase {} },
       },
     );
   });
