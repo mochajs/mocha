@@ -3,7 +3,7 @@ docs/images/supporters
 mocha.js
 mocha.js.map
 .karma/
-!bin/mocha.js
+!bin/mocha.mjs
 !lib/mocha.js
 
 # Bundle debugging

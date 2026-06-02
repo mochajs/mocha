@@ -11,7 +11,7 @@ import pickFromPackageJson from "./scripts/pick-from-package-json.mjs";
 import packageJson from "./package.json" with { type: "json" };
 
 const config = {
-  input: "./browser-entry.js",
+  input: "./browser-entry.mjs",
   strictDeprecations: true,
   output: {
     file: "./mocha.js",
