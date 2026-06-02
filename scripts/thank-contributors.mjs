@@ -1,5 +1,5 @@
 // Append a "Thank you" section crediting contributors to a Github release.
-// For now release please does writes the curated sectioned release notes but does not credit the one who authored the merged pull requests. 
+// For now release please does writes the curated sectioned release notes but does not credit the one who authored the merged pull requests.
 // This runs after Release please publishes a release, make Github compute the contributor list for the release and patches the existing release body to add an @-mention shout out without disturbing the curated sections.
 // re-running it on a release that already has the section is a no op, meaning a re-triggered workflow will not duplicate the credits.
 
@@ -14,18 +14,17 @@ const botLogins = new Set([
   "mochajs-bot",
   "renovate",
   "claude",
-  "codex"
+  "codex",
 ]);
 
 const isBot = (login) =>
   /\[bot\]$/i.test(login) || botLogins.has(login.toLowerCase());
 
- 
- /**
+/**
  * @param {string} notes Body returned by the `generate-notes` endpoint.
  * @returns {string[]} Sorted, de-duplicated human contributor logins.
  */
- // Extract the unique human contributor logins from a Github generated release notes body. Github renders each merged PR as "… by @login in <url>", so we collect every such mention, drop bots, and sort case insensitively.
+// Extract the unique human contributor logins from a Github generated release notes body. Github renders each merged PR as "… by @login in <url>", so we collect every such mention, drop bots, and sort case insensitively.
 export const extractContributors = (notes) => {
   const logins = new Set();
   for (const [, login] of notes.matchAll(/\bby @([a-z\d-]+(?:\[bot\])?)/gi)) {
@@ -53,7 +52,6 @@ const formatMentions = (logins) => {
   }
   return `${mentions.slice(0, -1).join(", ")}, and ${mentions.at(-1)}`;
 };
-
 
 const githubApi = async (path, options = {}) => {
   const baseUrl = process.env.GITHUB_API_URL || "https://api.github.com";
