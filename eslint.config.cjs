@@ -57,11 +57,7 @@ module.exports = defineConfig(
     },
   },
   {
-    files: [
-      "**/*.js",
-      "**/*.mjs",
-      "lib/nodejs/esm-utils.cjs",
-    ],
+    files: ["**/*.js", "**/*.mjs", "lib/nodejs/esm-utils.cjs"],
     languageOptions: {
       sourceType: "module",
       ecmaVersion: 2025,

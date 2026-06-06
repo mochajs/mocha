@@ -3,7 +3,8 @@
 var assert = require("node:assert");
 var runMocha = require("./helpers.cjs").runMocha;
 var runMochaJSON = require("./helpers.cjs").runMochaJSON;
-var SPLIT_DOT_REPORTER_REGEXP = require("./helpers.cjs").SPLIT_DOT_REPORTER_REGEXP;
+var SPLIT_DOT_REPORTER_REGEXP =
+  require("./helpers.cjs").SPLIT_DOT_REPORTER_REGEXP;
 var args = ["--reporter", "dot"];
 
 describe("hooks", function () {
