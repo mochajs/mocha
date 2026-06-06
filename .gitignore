@@ -3,8 +3,8 @@ docs/images/supporters
 mocha.js
 mocha.js.map
 .karma/
-!bin/mocha.mjs
-!lib/mocha.js
+!bin/mocha.js
+!lib/mocha.cjs
 
 # Bundle debugging
 stats.html
