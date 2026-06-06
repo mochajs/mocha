@@ -32,15 +32,12 @@ describe("parallel run", () => {
   });
 
   it("should correctly handle circular array references in an exception", async () => {
-    const result = await runMochaJSONAsync(
-      "parallel/circular-error-array.js",
-      [
-        "--parallel",
-        "--jobs",
-        "2",
-        require.resolve("./fixtures/parallel/testworkerid1.js"),
-      ],
-    );
+    const result = await runMochaJSONAsync("parallel/circular-error-array.js", [
+      "--parallel",
+      "--jobs",
+      "2",
+      require.resolve("./fixtures/parallel/testworkerid1.js"),
+    ]);
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, "Foo");
@@ -48,17 +45,14 @@ describe("parallel run", () => {
   });
 
   it("should correctly handle an exception with retries", async () => {
-    const result = await runMochaJSONAsync(
-      "parallel/circular-error-array.js",
-      [
-        "--parallel",
-        "--jobs",
-        "2",
-        "--retries",
-        "1",
-        require.resolve("./fixtures/parallel/testworkerid1.js"),
-      ],
-    );
+    const result = await runMochaJSONAsync("parallel/circular-error-array.js", [
+      "--parallel",
+      "--jobs",
+      "2",
+      "--retries",
+      "1",
+      require.resolve("./fixtures/parallel/testworkerid1.js"),
+    ]);
     assert.strictEqual(result.stats.failures, 1);
     assert.strictEqual(result.stats.passes, 1);
     assert.strictEqual(result.failures[0].err.message, "Foo");
