@@ -19,8 +19,8 @@ import {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts,
-} from "../lib/cli/node-flags.js";
-import { aliases } from "../lib/cli/run-option-metadata.js";
+} from "../lib/cli/node-flags.cjs";
+import { aliases } from "../lib/cli/run-option-metadata.cjs";
 import { fileURLToPath } from "node:url";
 
 const debug = d.debug("mocha:cli:mocha");

@@ -5,9 +5,9 @@ const {
   isNodeFlag,
   impliesNoTimeouts,
   unparseNodeFlags,
-} = require("../../../lib/cli/node-flags.js");
+} = require("../../../lib/cli/node-flags.cjs");
 
-const { isMochaFlag } = require("../../../lib/cli/run-option-metadata.js");
+const { isMochaFlag } = require("../../../lib/cli/run-option-metadata.cjs");
 
 describe("node-flags", function () {
   describe("isNodeFlag()", function () {
