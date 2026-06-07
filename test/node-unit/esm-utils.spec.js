@@ -34,6 +34,20 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should surface the ts-node TSError error rather than falling back to `import(...)`", async function () {
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            "../../test/node-unit/fixtures/mock-ts-node-compile-err.ts",
+          ),
+        "to be rejected with error satisfying",
+        {
+          name: "TSError",
+          message: /A TS compilation error/,
+        },
+      );
+    });
   });
 
   describe("loadFilesAsync()", function () {
