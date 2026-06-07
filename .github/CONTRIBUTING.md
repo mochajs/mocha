@@ -129,6 +129,7 @@ If you use AI to help generate code for a pull request:
 
 - **All automated tests must pass**: Your code must pass linting, unit tests, integration tests, and any other automated checks.
 - **Manual review is required**: AI-generated code must undergo the same thorough manual inspection as any other contribution. This includes checking for correctness, security vulnerabilities, adherence to project conventions, and overall code quality.
+- **Ensure quality descriptions**: When submitting a PR or issue, summarize it succinctly. AI-generated PR and issue descriptions tend to be verbose and low-quality, making it harder for maintainers to review your request.
 - **You are responsible**: As the submitter of the pull request, you are fully responsible for understanding and maintaining the code, regardless of how it was generated.
 
 These requirements apply to all contributions and are not unique to AI-generated code—they simply reinforce our existing standards.
