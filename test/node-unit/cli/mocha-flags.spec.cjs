@@ -4,7 +4,7 @@ var { expect } = require("chai");
 const {
   types,
   expectedTypeForFlag,
-} = require("../../../lib/cli/run-option-metadata.js");
+} = require("../../../lib/cli/run-option-metadata.cjs");
 
 describe("mocha-flags", function () {
   describe("expectedTypeForFlag()", function () {
