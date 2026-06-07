@@ -1,5 +1,37 @@
 # Changelog
 
+## [12.0.0-beta-9.5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.4...v12.0.0-beta-9.5) (2026-06-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove `bin/_mocha` and convert `bin/` and entry points to ESM ([#6017](https://github.com/mochajs/mocha/issues/6017))
+
+### 🌟 Features
+
+* remove `bin/_mocha` and convert `bin/` and entry points to ESM ([#6017](https://github.com/mochajs/mocha/issues/6017)) ([930972a](https://github.com/mochajs/mocha/commit/930972a9a705e0b2953d518c0f7ef8ec36c0b9db))
+
+
+### 🩹 Fixes
+
+* lookupFiles() now returns string[] for direct file paths ([#5941](https://github.com/mochajs/mocha/issues/5941)) ([4718476](https://github.com/mochajs/mocha/commit/4718476be9727d8ce1c22be65d8f5cca5babc78b)), closes [#5940](https://github.com/mochajs/mocha/issues/5940)
+* prevent diff hang on large/complex objects ([#5898](https://github.com/mochajs/mocha/issues/5898)) ([6695fba](https://github.com/mochajs/mocha/commit/6695fba397a6d1ca2d7cd4de86d9dda2d3fba342))
+
+
+### 🧹 Chores
+
+* convert `lib/nodejs/` utility files to ESM ([#6011](https://github.com/mochajs/mocha/issues/6011)) ([a8ffaa9](https://github.com/mochajs/mocha/commit/a8ffaa9375e5b8bce9fe8d692474660540586a91))
+* convert `lib/reporters/base` to ESM ([#6012](https://github.com/mochajs/mocha/issues/6012)) ([d12dd90](https://github.com/mochajs/mocha/commit/d12dd906aeb7d092a6834586b0c5a4c7d32a0fe3))
+* **deps:** update dependency eslint to v10.4.0 ([#5996](https://github.com/mochajs/mocha/issues/5996)) ([f2dd26b](https://github.com/mochajs/mocha/commit/f2dd26b996bfc6c902847a14246486bbfa233b58))
+* **deps:** update dependency knip to v6.14.2 ([#5982](https://github.com/mochajs/mocha/issues/5982)) ([b40e85b](https://github.com/mochajs/mocha/commit/b40e85be119b666981997369f582b3e2e1406e4d))
+* **deps:** update dependency npm-run-all2 to v9 ([#6019](https://github.com/mochajs/mocha/issues/6019)) ([70bea83](https://github.com/mochajs/mocha/commit/70bea8379aa5b76c50bbad4e4e9b584a0d0fbffc))
+* **deps:** update dependency webpack to v5.107.2 ([#6022](https://github.com/mochajs/mocha/issues/6022)) ([5eca67d](https://github.com/mochajs/mocha/commit/5eca67d149cf96474d5a5d18f553222da9d83439))
+
+
+### 🤖 Automation
+
+* **deps:** bump joelwmale/webhook-action in the github-actions group ([#6032](https://github.com/mochajs/mocha/issues/6032)) ([75c618d](https://github.com/mochajs/mocha/commit/75c618d6d85d9754b0d9bb8b2e1709be737de970))
+
 ## [12.0.0-beta-9.4](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.3...v12.0.0-beta-9.4) (2026-05-16)
 
 
