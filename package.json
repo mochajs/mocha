@@ -16,7 +16,7 @@
     "jest",
     "tape",
     "jasmine",
-    "karma"
+    "playwright"
   ],
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "license": "MIT",

@@ -528,7 +528,6 @@ describe("Runner", function () {
         });
       });
 
-      // karma-mocha is inexplicably doing this with a Hook
       it("should not throw an exception if something emits EVENT_TEST_END with a non-Test object", function () {
         expect(function () {
           runner.emit(EVENT_TEST_END, {});
