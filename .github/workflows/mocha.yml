@@ -95,7 +95,6 @@ jobs:
           node-version: "22"
           cache: "npm"
       - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
       - run: npm run test-browser
         env:
           NODE_OPTIONS: "--trace-warnings"

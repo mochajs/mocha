@@ -54,6 +54,7 @@
     "prelint": "npm run clean",
     "lint": "run-p lint:*",
     "prepublishOnly": "run-s clean build version",
+    "pretest-browser:playwright": "playwright install chromium --with-deps",
     "test-browser:playwright": "playwright test",
     "test-browser:webpack-compat": "webpack --mode development --config ./test/browser-specific/fixtures/webpack/webpack.config.js",
     "test-browser": "run-s clean build test-browser:*",

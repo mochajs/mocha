@@ -65,8 +65,7 @@ For clean CI reproduction on a fresh checkout, prefer `npm ci --ignore-scripts`;
 - Integration: `npm run test-node:integration`
 - Interfaces: `npm run test-node:interfaces`
 - Reporters: `npm run test-node:reporters`
-- Single browser suite: `npx playwright test --grep bdd` (after `npm run build`)
-- Full browser path: `npm run test-browser` (includes clean + build)
+- Full browser path: `npm run test-browser -- --grep bdd` (includes clean + build)
 
 ### Validation routing
 
@@ -88,7 +87,6 @@ For clean CI reproduction on a fresh checkout, prefer `npm ci --ignore-scripts`;
 
 - Browser tests depend on built bundle artifacts.
   - If you run `clean`, you **must** run `build` before invoking `playwright test` directly, or the page will 404 on `/mocha.js`.
-  - Playwright's Chromium must be installed once via `npx playwright install chromium`.
 - `test-browser` script is safer than calling `playwright test` directly because it includes `clean build`.
 
 ## CI parity notes
