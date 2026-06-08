@@ -81,7 +81,7 @@ describe("global setup/teardown", function () {
       });
     });
 
-    describe("when a global fixture throws (issue #5208)", function () {
+    describe("when a global fixture throws", function () {
       async function runWithFixture(fixturePath, extraArgs = []) {
         const [, promise] = invokeMochaAsync(
           [
