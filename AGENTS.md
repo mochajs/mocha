@@ -65,7 +65,8 @@ For clean CI reproduction on a fresh checkout, prefer `npm ci --ignore-scripts`;
 - Integration: `npm run test-node:integration`
 - Interfaces: `npm run test-node:interfaces`
 - Reporters: `npm run test-node:reporters`
-- Full browser path: `npm run test-browser -- --grep bdd` (includes clean + build)
+- Browser subset: `npm run test-browser -- --grep bdd`
+- Full browser path: `npm run test-browser` (includes clean + build)
 
 ### Validation routing
 

@@ -20,7 +20,7 @@ const root = path.resolve(fileURLToPath(import.meta.url), "../../..");
  *
  * @returns {Promise<void>}
  */
-export const buildSetupBundle = async () => {
+export default async function buildSetupBundle() {
   const bundle = await rollup({
     input: path.join(root, "test/browser-specific/setup.js"),
     plugins: [
@@ -40,6 +40,4 @@ export const buildSetupBundle = async () => {
     name: "mochaBrowserSetup",
   });
   await bundle.close();
-};
-
-export default buildSetupBundle;
+}

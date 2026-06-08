@@ -1,5 +1,3 @@
-// Runs each Mocha browser suite in a real Chromium page via Playwright and asserts that every test passed. This replaces the previous Karma setup.
-
 import { expect, test } from "@playwright/test";
 
 import { suites } from "./config.mjs";
@@ -19,7 +17,6 @@ for (const suite of suites) {
       0,
     );
 
-    // Needed to guard against a page that silently ran zero tests.
     expect(results.total).toBeGreaterThan(0);
   });
 }

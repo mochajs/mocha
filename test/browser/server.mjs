@@ -1,16 +1,3 @@
-/**
-// Tiny static file server for Mocha browser tests.
-// Serves the repository root so the browser can load mocha.js and the bundled setup.js and all spec files.
-// It also generates a per-suite runner page at /run/<suite> which:
-/*
-1. loads Mocha
-2. registers the requested interface
-3. loads the test specs
-4. exposes results on window.__mochaResults
-*/
-
-// This server is started by Playwright via the webServer option. referenced in playwright.config.mjs.
-
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";

@@ -2,8 +2,6 @@ import { defineConfig } from "@playwright/test";
 
 import { baseURL } from "./test/browser/config.mjs";
 
-// Playwright configuration for Mocha browser tests.
-// Playwright uses its own bundled Chromium (installed via "npx playwright install chromium"), so unlike the old Karma setup, it doesn't depend on a system-installed browser.
 export default defineConfig({
   testDir: "./test/browser",
   fullyParallel: true,

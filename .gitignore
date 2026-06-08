@@ -7,10 +7,9 @@ mocha.js.map
 
 # Playwright browser tests
 test/browser/.generated/
-/test-results/
-/playwright-report/
-/blob-report/
-
+test-results/
+playwright-report/
+blob-report/
 # Bundle debugging
 stats.html
 
