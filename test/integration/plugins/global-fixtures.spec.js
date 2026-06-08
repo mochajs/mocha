@@ -95,7 +95,7 @@ describe("global setup/teardown", function () {
         return promise;
       }
 
-      it("should exit non-zero and surface a teardown error", async function () {
+      it("should handle when global teardown throws", async function () {
         const res = await runWithFixture(
           "plugins/global-fixtures/global-teardown-throws",
         );
@@ -104,17 +104,11 @@ describe("global setup/teardown", function () {
           "to have failed with output",
           /\[mocha\] global teardown failed[\s\S]*teardown kaboom/,
         );
-      });
-
-      it("should preserve test results when teardown throws", async function () {
-        const res = await runWithFixture(
-          "plugins/global-fixtures/global-teardown-throws",
-        );
         expect(res.output, "to match", /setup ran/);
         expect(res.output, "to match", /1 passing/);
       });
 
-      it("should exit non-zero and surface a setup error", async function () {
+      it("should handle when global setup throws", async function () {
         const res = await runWithFixture(
           "plugins/global-fixtures/global-setup-throws",
         );
@@ -122,12 +116,6 @@ describe("global setup/teardown", function () {
           res,
           "to have failed with output",
           /\[mocha\] global setup failed[\s\S]*setup kaboom/,
-        );
-      });
-
-      it("should skip tests and teardown when setup throws", async function () {
-        const res = await runWithFixture(
-          "plugins/global-fixtures/global-setup-throws",
         );
         expect(res.output, "not to match", /teardown should not run/);
         expect(res.output, "not to match", /passing/);
