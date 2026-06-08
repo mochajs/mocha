@@ -66,4 +66,4 @@ npm run build
 ## Troubleshooting
 
 - **`npm test` fails right away with lint errors:** Run `npm run format:fix` to auto-fix formatting, then re-run.
-- **Browser tests fail with "Cannot find module 'mocha'":** Run `npm run build` first. Browser tests require the generated bundle.
+- **Playwright tests fail with `Test timeout of ___ms exceeded`:** Run `npm run build` first. Browser tests require the generated bundle. We recommend running `npm run test-browser` to automatically clean and build before each run.
