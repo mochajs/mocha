@@ -7,6 +7,7 @@ const {
   runMochaWatchAsync,
   copyFixture,
   DEFAULT_FIXTURE,
+  invokeMochaAsync,
   resolveFixturePath,
   createTempDir,
 } = require("../helpers");
@@ -77,6 +78,47 @@ describe("global setup/teardown", function () {
           "to contain once",
           /teardown: this.foo = 3/,
         );
+      });
+    });
+
+    describe("when a global fixture throws", function () {
+      async function runWithFixture(fixturePath, extraArgs = []) {
+        const [, promise] = invokeMochaAsync(
+          [
+            "--require",
+            resolveFixturePath(fixturePath),
+            resolveFixturePath(DEFAULT_FIXTURE),
+            ...extraArgs,
+          ],
+          { stdio: "pipe" },
+        );
+        return promise;
+      }
+
+      it("should handle when global teardown throws", async function () {
+        const res = await runWithFixture(
+          "plugins/global-fixtures/global-teardown-throws",
+        );
+        expect(
+          res,
+          "to have failed with output",
+          /\[mocha\] global teardown failed[\s\S]*teardown kaboom/,
+        );
+        expect(res.output, "to match", /setup ran/);
+        expect(res.output, "to match", /1 passing/);
+      });
+
+      it("should handle when global setup throws", async function () {
+        const res = await runWithFixture(
+          "plugins/global-fixtures/global-setup-throws",
+        );
+        expect(
+          res,
+          "to have failed with output",
+          /\[mocha\] global setup failed[\s\S]*setup kaboom/,
+        );
+        expect(res.output, "not to match", /teardown should not run/);
+        expect(res.output, "not to match", /passing/);
       });
     });
 
