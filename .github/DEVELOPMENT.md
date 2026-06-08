@@ -67,4 +67,3 @@ npm run build
 
 - **`npm test` fails right away with lint errors:** Run `npm run format:fix` to auto-fix formatting, then re-run.
 - **Browser tests fail with "Cannot find module 'mocha'":** Run `npm run build` first. Browser tests require the generated bundle.
-- **Browser not found during browser tests:** Run `npx playwright install chromium` once to download Playwright's bundled browser. Playwright manages it for you, no system Chrome is required.
