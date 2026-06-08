@@ -89,7 +89,7 @@ describe("retries", function () {
     });
   });
 
-  it("should report both the test error and the afterEach hook error when retries > 0 (#5007)", function (done) {
+  it("should report both the test error and the afterEach hook error when retries > 0", function (done) {
     runJSON(
       "retries/after-each-error.fixture.js",
       ["--retries", "1"],
