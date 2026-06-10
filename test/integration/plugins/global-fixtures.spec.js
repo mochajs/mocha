@@ -151,7 +151,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: 8500 },
             () => {
               touchFile(testFile);
             },
@@ -170,7 +170,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-teardown"),
                 testFile,
               ],
-              tempDir,
+              { cwd: tempDir, budgetMs: 8500 },
               () => {
                 touchFile(testFile);
               },
@@ -191,7 +191,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-setup"),
                 testFile,
               ],
-              tempDir,
+              { cwd: tempDir, budgetMs: 8500 },
               () => {
                 touchFile(testFile);
               },
@@ -213,7 +213,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: 8500 },
             () => {
               touchFile(testFile);
             },
@@ -299,7 +299,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: 8500 },
             () => {
               touchFile(testFile);
             },
@@ -320,7 +320,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: 8500 },
             () => {
               touchFile(testFile);
             },

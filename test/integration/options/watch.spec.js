@@ -25,6 +25,9 @@ describe("--watch", function () {
     let cleanup;
 
     this.slow(5000);
+    // tests wait on observed runs, bounded by the helpers' shared 50s budget
+    // with diagnostic output; keep mocha's own timeout above that budget
+    this.timeout(60000);
 
     beforeEach(async function () {
       const { dirpath, removeTempDir } = await createTempDir();
@@ -53,9 +56,13 @@ describe("--watch", function () {
 
       replaceFileContents(testFile, "done();", "done((;");
 
-      return runMochaWatchJSONAsync([testFile], tempDir, () => {
-        replaceFileContents(testFile, "done((;", "done();");
-      }).then((results) => {
+      return runMochaWatchJSONAsync(
+        [testFile],
+        { cwd: tempDir, firstRunCrashes: true, expectedRuns: 1 },
+        () => {
+          replaceFileContents(testFile, "done((;", "done();");
+        },
+      ).then((results) => {
         expect(results, "to have length", 1);
       });
     });
@@ -72,15 +79,21 @@ describe("--watch", function () {
         });
       });
 
+      // TODO: this test never passes `--parallel`, so it duplicates the
+      // non-parallel crash test above; kept as-is in this stabilization change
       it("reruns test when watched test file is crashed", function () {
         const testFile = path.join(tempDir, "test.js");
         copyFixture(DEFAULT_FIXTURE, testFile);
 
         replaceFileContents(testFile, "done();", "done((;");
 
-        return runMochaWatchJSONAsync([testFile], tempDir, () => {
-          replaceFileContents(testFile, "done((;", "done();");
-        }).then((results) => {
+        return runMochaWatchJSONAsync(
+          [testFile],
+          { cwd: tempDir, firstRunCrashes: true, expectedRuns: 1 },
+          () => {
+            replaceFileContents(testFile, "done((;", "done();");
+          },
+        ).then((results) => {
           expect(results, "to have length", 1);
         });
       });
@@ -131,12 +144,17 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
-        tempDir,
-        async () => {
+        { cwd: tempDir, expectedRuns: 4 },
+        async (mochaProcess, { waitForRuns }) => {
           fs.mkdirSync(libPath);
+          await waitForRuns(2);
+          // the watcher installs its watch on a newly created directory
+          // asynchronously; an event inside it before that is lost entirely
+          // (chokidar#1112), so give the installation a moment
           await sleep(1000);
 
           fs.mkdirSync(dirPath);
+          await waitForRuns(3);
           await sleep(1000);
 
           touchFile(watchedFile);
@@ -287,7 +305,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/*.xyz"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -373,7 +391,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--extension", "xyz,js"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(gitFile);
           touchFile(nodeModulesFile);
@@ -398,7 +416,7 @@ describe("--watch", function () {
           "--watch-ignore",
           "dir/*ignore*",
         ],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -417,7 +435,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/[ab].js"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -536,25 +554,28 @@ describe("--watch", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
+      // we want to cause _n + 1_ reruns, which should cause the warning
+      // to occur if the listeners aren't properly destroyed
+      const totalRuns = process.getMaxListeners() + 2;
+
       return expect(
         runMochaWatchAsync(
           [testFile],
-          { cwd: tempDir, stdio: "pipe" },
-          async () => {
-            // we want to cause _n + 1_ reruns, which should cause the warning
-            // to occur if the listeners aren't properly destroyed
-            const iterations = new Array(process.getMaxListeners() + 1);
-            // eslint-disable-next-line no-unused-vars
-            for await (const _ of iterations) {
+          { cwd: tempDir, expectedRuns: totalRuns },
+          async (mochaProcess, { waitForRuns }) => {
+            for (let run = 2; run <= totalRuns; run++) {
               touchFile(testFile);
-              await sleep(1000);
+              await waitForRuns(run);
+              // watchers coalesce same-file touches made in very quick
+              // succession; space them out so every touch causes a rerun
+              await sleep(250);
             }
           },
         ),
         "when fulfilled",
         "to satisfy",
         {
-          output: expect.it("not to match", /MaxListenersExceededWarning/),
+          stderr: expect.it("not to match", /MaxListenersExceededWarning/),
         },
       );
     });
