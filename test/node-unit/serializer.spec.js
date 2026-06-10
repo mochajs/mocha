@@ -6,7 +6,7 @@ const {
   deserialize,
   SerializableEvent,
   SerializableWorkerResult,
-} = require("../../lib/nodejs/serializer");
+} = require("../../lib/nodejs/serializer.mjs");
 
 describe("serializer", function () {
   afterEach(function () {
