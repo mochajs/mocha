@@ -1,5 +1,34 @@
 # Changelog
 
+## [12.0.0-beta-9.6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.5...v12.0.0-beta-9.6) (2026-06-10)
+
+
+### 🩹 Fixes
+
+* require serializer.mjs in parallel worker pool files ([#6055](https://github.com/mochajs/mocha/issues/6055)) ([ffdf37c](https://github.com/mochajs/mocha/commit/ffdf37c513481856ee953a9c1ae6418cf435634a))
+* surface global setup/teardown errors with a non-zero exit code ([#5994](https://github.com/mochajs/mocha/issues/5994)) ([ad81ec6](https://github.com/mochajs/mocha/commit/ad81ec68b5182b155937a123e14490e15ae217fe))
+
+
+### 📚 Documentation
+
+* clarify supported mocha version for ESM configuration ([#6027](https://github.com/mochajs/mocha/issues/6027)) ([5921837](https://github.com/mochajs/mocha/commit/5921837be8d53ea2f6d41e0ca0419aafd428f69e))
+* fix inconsistencies in docs ([#6000](https://github.com/mochajs/mocha/issues/6000)) ([6310d0e](https://github.com/mochajs/mocha/commit/6310d0ef5e20272d6cc885c5e10534cbed0db662))
+* include the released version in the npm badge alt text ([#5959](https://github.com/mochajs/mocha/issues/5959)) ([de924ba](https://github.com/mochajs/mocha/commit/de924bab471e3570415ed2585db4fbd8becd21ff))
+* modernize spies example, drop should.js ([#6016](https://github.com/mochajs/mocha/issues/6016)) ([3b321a3](https://github.com/mochajs/mocha/commit/3b321a36f13e7317f748547508f376a5f02d1066))
+
+
+### 🧹 Chores
+
+* add "descriptions" item to "AI-generated code" ([#6041](https://github.com/mochajs/mocha/issues/6041)) ([efe6167](https://github.com/mochajs/mocha/commit/efe6167abef9f79001af163924bd8fb3582c4145))
+* **deps:** update dependency js-yaml to v4.2.0 ([#6047](https://github.com/mochajs/mocha/issues/6047)) ([8df3ba6](https://github.com/mochajs/mocha/commit/8df3ba64950fe264fb9ed446b91f58af3e55bd32))
+* **deps:** update dependency knip to v6.15.0 ([#6043](https://github.com/mochajs/mocha/issues/6043)) ([0c03d7d](https://github.com/mochajs/mocha/commit/0c03d7d0681dc5fcc5e1128dd6c0b74a7bbf221a))
+* rollback devDep npm-run-all2 to v8 for Node 20 ([#6040](https://github.com/mochajs/mocha/issues/6040)) ([d7d095b](https://github.com/mochajs/mocha/commit/d7d095b6d5e7e0d33e783c4f196c106102d3b82f))
+
+
+### 🤖 Automation
+
+* **deps:** bump astro from 6.1.9 to 6.4.4 in /docs ([#6046](https://github.com/mochajs/mocha/issues/6046)) ([f47bcf5](https://github.com/mochajs/mocha/commit/f47bcf5ee91f1a7b747bc82ae9c1642c5e1985ad))
+
 ## [12.0.0-beta-9.5](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.4...v12.0.0-beta-9.5) (2026-06-03)
 
 
