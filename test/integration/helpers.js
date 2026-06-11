@@ -459,8 +459,8 @@ function parseWatchJSONOutput(output) {
   return (
     output
       // eslint-disable-next-line no-control-regex
-      .replace(/\[\?25./g, "")
-      .split("[2K")
+      .replace(/\u001b\[\?25./g, "")
+      .split("\u001b[2K")
       .filter(Boolean)
       .map((segment) => {
         try {
