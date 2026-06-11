@@ -18,4 +18,4 @@ jobs:
       - name: 'Remove "status: waiting for author" label'
         uses: actions-ecosystem/action-remove-labels@v1
         with:
-          labels: 'status: waiting for author'
+          labels: "status: waiting for author"
