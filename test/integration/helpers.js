@@ -605,7 +605,7 @@ async function shutdownWatchChild(mochaProcess, closed) {
  * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process` plus the watch options below
  * @param {number} [opts.expectedRuns] - Total completed runs (including the first) to wait for before killing mocha; defaults to `2`
  * @param {boolean} [opts.noRerun] - If `true`, expect NO rerun: observe a bounded grace period after `change` instead of waiting for a second run
- * @param {boolean} [opts.firstRunCrashes] - If `true`, the first run fails to load: it prints only an error stack, so there is no countable run output to wait for
+ * @param {RegExp} [opts.firstRunCrashPattern] - If set, expect the first run to fail to load, printing only an error stack (no stdout) with a message matching this pattern. No countable run output to wait for.
  * @param {'json'|'marker'} [opts.runDetector] - How completed runs are counted; `runMochaWatchJSONAsync` sets `json`
  * @param {number} [opts.budgetMs] - Shared deadline for everything this call waits on; must stay below the test's timeout
  * @param {Function} change - A potentially `Promise`-returning callback which changes a watched file; receives the child process and `{waitForRuns, runCount}`
@@ -618,7 +618,7 @@ async function runMochaWatchAsync(args, opts, change) {
   const {
     expectedRuns = 2,
     noRerun = false,
-    firstRunCrashes = false,
+    firstRunCrashPattern = null,
     runDetector = "marker",
     budgetMs = DEFAULT_WATCH_BUDGET_MS,
     ...spawnOpts
@@ -650,9 +650,9 @@ async function runMochaWatchAsync(args, opts, change) {
     // is armed and `change` cannot be lost. If watch mode ever starts the
     // first run before the watcher is ready (e.g. mochajs/mocha#5409), this
     // gate needs an explicit watcher-ready signal instead.
-    if (firstRunCrashes) {
+    if (firstRunCrashPattern) {
       await observer.waitForStderr(
-        /SyntaxError/,
+        firstRunCrashPattern,
         "the first (crashing) watch run to print its error",
       );
     } else {

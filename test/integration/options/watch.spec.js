@@ -58,7 +58,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile],
-        { cwd: tempDir, firstRunCrashes: true, expectedRuns: 1 },
+        { cwd: tempDir, firstRunCrashPattern: /SyntaxError/, expectedRuns: 1 },
         () => {
           replaceFileContents(testFile, "done((;", "done();");
         },
@@ -89,7 +89,11 @@ describe("--watch", function () {
 
         return runMochaWatchJSONAsync(
           [testFile],
-          { cwd: tempDir, firstRunCrashes: true, expectedRuns: 1 },
+          {
+            cwd: tempDir,
+            firstRunCrashPattern: /SyntaxError/,
+            expectedRuns: 1,
+          },
           () => {
             replaceFileContents(testFile, "done((;", "done();");
           },
