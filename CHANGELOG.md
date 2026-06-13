@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.7.7](https://github.com/mochajs/mocha/compare/v11.7.6...v11.7.7) (2026-06-13)
+
+
+### 🩹 Fixes
+
+* surface ts-node compile errors ([#6045](https://github.com/mochajs/mocha/issues/6045)) ([3477563](https://github.com/mochajs/mocha/commit/3477563fb99b5e294e7b940716ee95b3d28dfb84))
+
 ## [11.7.6](https://github.com/mochajs/mocha/compare/v11.7.5...v11.7.6) (2026-02-14)
 
 
