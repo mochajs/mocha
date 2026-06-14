@@ -3,7 +3,6 @@
 var sinon = require("sinon");
 var EventEmitter = require("node:events").EventEmitter;
 var Mocha = require("../../lib/mocha.cjs");
-var utils = require("../../lib/utils.cjs");
 
 describe("Mocha", function () {
   /**
@@ -76,9 +75,6 @@ describe("Mocha", function () {
     };
     Suite = sinon.stub(Mocha, "Suite").returns(suite);
     Suite.constants = {};
-
-    sinon.stub(utils, "isString");
-    sinon.stub(utils, "noop");
   });
 
   afterEach(function () {
@@ -1001,7 +997,11 @@ describe("Mocha", function () {
     describe("parallelMode()", function () {
       describe("when `Mocha` is running in a browser", function () {
         beforeEach(function () {
-          sinon.stub(utils, "isBrowser").returns(true);
+          process.browser = true;
+        });
+
+        afterEach(function () {
+          delete process.browser;
         });
 
         it("should throw", function () {
@@ -1019,7 +1019,11 @@ describe("Mocha", function () {
     describe("unloadFile()", function () {
       describe("when run in a browser", function () {
         beforeEach(function () {
-          sinon.stub(utils, "isBrowser").returns(true);
+          process.browser = true;
+        });
+
+        afterEach(function () {
+          delete process.browser;
         });
 
         it("should throw", function () {

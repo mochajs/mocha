@@ -11,7 +11,7 @@ const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.js");
 const Runner = require("../../lib/runner.cjs");
 const sinon = require("sinon");
-const { constants } = require("../../lib/utils.cjs");
+const { constants } = require("../../lib/utils.js");
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {
@@ -49,7 +49,7 @@ describe("parallel-buffered-runner", function () {
           "../../lib/nodejs/buffered-worker-pool.cjs": {
             BufferedWorkerPool,
           },
-          "../../lib/utils.cjs": r.with({ warn }).callThrough(),
+          "../../lib/utils.js": r.with({ warn }).callThrough(),
           "../../lib/errors.js": r
             .with({
               createFatalError: sinon.stub().returns(fatalError),

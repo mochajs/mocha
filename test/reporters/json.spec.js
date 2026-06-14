@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import sinon from "sinon";
 import { JSONReporter } from "../../lib/reporters/json.js";
-import utils from "../../lib/utils.cjs";
 import { Mocha, Suite, Runner, Test } from "../../index.js";
 
 describe("JSON reporter", function () {
@@ -217,12 +216,16 @@ describe("JSON reporter", function () {
     });
 
     it('should throw "unsupported error" in browser', function () {
-      sinon.stub(utils, "isBrowser").callsFake(() => true);
-      expect(
-        () => new JSONReporter(runner, options),
-        "to throw",
-        "file output not supported in browser",
-      );
+      process.browser = true;
+      try {
+        expect(
+          () => new JSONReporter(runner, options),
+          "to throw",
+          "file output not supported in browser",
+        );
+      } finally {
+        delete process.browser;
+      }
     });
   });
 });
