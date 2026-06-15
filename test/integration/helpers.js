@@ -475,6 +475,32 @@ function parseWatchJSONOutput(output) {
 }
 
 /**
+ * Returns non-empty segments from the watch child's `STDOUT` that cannot be
+ * parsed as JSON. A non-empty unparseable segment means a run started but its
+ * output was truncated (e.g. the child was killed mid-flush).
+ *
+ * @param {string} output - Raw `STDOUT` of the watch child
+ * @returns {string[]} Segments that failed JSON.parse
+ */
+function getUnparsedSegments(output) {
+  return (
+    output
+      // eslint-disable-next-line no-control-regex
+      .replace(/\[\?25./g, "")
+      .split("[2K")
+      .filter(Boolean)
+      .filter((segment) => {
+        try {
+          JSON.parse(segment);
+          return false;
+        } catch {
+          return true;
+        }
+      })
+  );
+}
+
+/**
  * Observes a `mocha --watch` child's output, letting callers wait until a
  * given number of test runs have verifiably completed instead of sleeping
  * and hoping (fixed sleeps lose the race on slow CI runners: a file change
@@ -676,6 +702,17 @@ async function runMochaWatchAsync(args, opts, change) {
   }
 
   const res = await resultPromise;
+
+  if (noRerun && runDetector === "json" && !firstRunCrashPattern) {
+    const unparsed = getUnparsedSegments(res.output);
+    if (unparsed.length > 0) {
+      throw new Error(
+        `noRerun: ${unparsed.length} non-empty unparseable JSON segment(s) found ` +
+          `after the grace period — an erroneous rerun was killed mid-flush\n` +
+          `=== watch child STDOUT ===\n${res.output}`,
+      );
+    }
+  }
 
   // we kill the process with `SIGINT`, so it will always appear as "failed" to our
   // custom assertions (a non-zero exit code 130). just change it to 0.
