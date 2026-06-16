@@ -435,8 +435,7 @@ const DEFAULT_WATCH_BUDGET_MS = 50000;
 
 /**
  * Bounded window observed by "no rerun expected" tests between the change
- * and `SIGINT`: long enough for an erroneous rerun to begin, mirroring the
- * fixed sleep these helpers used historically.
+ * and `SIGINT`: long enough for an erroneous rerun to begin
  */
 const WATCH_NO_RERUN_GRACE_MS = 2000;
 
@@ -456,8 +455,8 @@ const WATCH_KILL_GRACE_MS = 2000;
 /**
  * Parses the output of a `mocha --watch --reporter json` child into one
  * object per **completed** test run, ignoring a trailing segment which has
- * not fully arrived yet. Watch mode erases the line (writes `\u001b[2K` to
- * `STDOUT`) immediately before every rerun, which delimits the segments.
+ * not fully arrived yet. Watch mode erases the line immediately before every rerun,
+ * which delimiting the segments.
  *
  * @param {string} output - Raw `STDOUT` of the watch child
  * @returns {object[]} One parsed JSON result per completed run
@@ -466,9 +465,9 @@ function parseWatchJSONOutput(output) {
   return (
     output
       // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, "")
-      .split("\u001b[2K")
-      .filter(Boolean)
+      .replace(/\u001b\[\?25./g, "") // strip "hide cursor" and "show cursor" outputs
+      .split("\u001b[2K") // split on line erasure
+      .filter(Boolean) // remove empty strings
       .map((segment) => {
         try {
           return JSON.parse(segment);
