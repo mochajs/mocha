@@ -122,19 +122,21 @@ describe("--watch", function () {
       const libPath = path.join(tempDir, "lib");
       const dirPath = path.join(libPath, "dir");
       const watchedFile = path.join(dirPath, "file.xyz");
+      // 1 first run + 3 creations = 4
+      const expectedRunCount = 4;
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
-        { cwd: tempDir, expectedRuns: 4 },
+        { cwd: tempDir, expectedRuns: expectedRunCount },
         async (mochaProcess, { waitForRuns }) => {
           fs.mkdirSync(libPath);
-          await waitForRuns(2);
+          await waitForRuns(2); // wait for second run
           fs.mkdirSync(dirPath);
-          await waitForRuns(3);
+          await waitForRuns(3); // wait for third run
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 4);
+        expect(results, "to have length", expectedRunCount);
       });
     });
 
