@@ -625,8 +625,7 @@ async function shutdownWatchChild(mochaProcess, closed) {
 }
 
 /**
- * Runs the mocha executable in watch mode, calls `change` and returns the
- * raw result.
+ * Runs the mocha executable in watch mode, calls `change`, returns the raw result.
  *
  * The function starts mocha with the given arguments and `--watch`, waits
  * until the first test run has verifiably completed (which also proves the
