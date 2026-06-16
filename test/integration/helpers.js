@@ -526,7 +526,8 @@ function createWatchRunObserver(mochaProcess, { runDetector, budgetMs }) {
 
   const runCount = () =>
     runDetector === "json"
-      ? parseWatchJSONOutput(stdout).length
+      ? // wait for JSON payload to flush for future assertions
+        parseWatchJSONOutput(stdout).length
       : stderr.split(WATCH_RUN_MARKER).length - 1;
 
   const evaluate = () => {
