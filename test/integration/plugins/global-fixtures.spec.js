@@ -13,6 +13,8 @@ const {
 } = require("../helpers");
 
 describe("global setup/teardown", function () {
+  const watchBudgetMs = 8500;
+
   describe("when mocha run in serial mode", function () {
     it("should execute global setup and teardown", async function () {
       return expect(
@@ -151,7 +153,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            { cwd: tempDir, budgetMs: 8500 },
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -170,7 +172,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-teardown"),
                 testFile,
               ],
-              { cwd: tempDir, budgetMs: 8500 },
+              { cwd: tempDir, budgetMs: watchBudgetMs },
               () => {
                 touchFile(testFile);
               },
@@ -191,7 +193,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-setup"),
                 testFile,
               ],
-              { cwd: tempDir, budgetMs: 8500 },
+              { cwd: tempDir, budgetMs: watchBudgetMs },
               () => {
                 touchFile(testFile);
               },
@@ -213,7 +215,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            { cwd: tempDir, budgetMs: 8500 },
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -299,7 +301,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            { cwd: tempDir, budgetMs: 8500 },
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -320,7 +322,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            { cwd: tempDir, budgetMs: 8500 },
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
