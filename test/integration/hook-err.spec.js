@@ -267,6 +267,93 @@ describe("hook error handling", function () {
     });
   });
 
+  describe("--fail-hook-affected-tests", function () {
+    describe("error in `before` hook", function () {
+      it("should fail all affected tests", function (done) {
+        runMochaJSON(
+          "hooks/before-hook-error-with-fail-affected",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 3)
+              .and("to have failed test", '"before all" hook for "test 1"')
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have passed test count", 1)
+              .and("to have passed test", "test 3");
+            done();
+          },
+        );
+      });
+    });
+
+    describe("error in `beforeEach` hook", function () {
+      it("should fail all affected tests", function (done) {
+        runMochaJSON(
+          "hooks/before-each-hook-error-with-fail-affected",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 3)
+              .and("to have failed test", '"before each" hook for "test 1"')
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have passed test count", 1)
+              .and("to have passed test", "test 3");
+            done();
+          },
+        );
+      });
+    });
+
+    describe("non-Error thrown in `before` hook", function () {
+      it("should handle null, undefined, and other non-Error values", function (done) {
+        runMochaJSON(
+          "hooks/before-hook-throw-non-error",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 8) // 4 hooks + 4 affected tests
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have failed test", "test 3")
+              .and("to have failed test", "test 4");
+            done();
+          },
+        );
+      });
+    });
+
+    describe("non-Error thrown in `beforeEach` hook", function () {
+      it("should handle null, undefined, and other non-Error values", function (done) {
+        runMochaJSON(
+          "hooks/before-each-hook-throw-non-error",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 6) // 3 hooks + 3 affected tests
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have failed test", "test 3");
+            done();
+          },
+        );
+      });
+    });
+  });
+
   function run(fnPath, outputFilter) {
     return (done) =>
       runMocha(fnPath, ["--reporter", "dot"], (err, res) => {
