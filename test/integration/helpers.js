@@ -619,7 +619,10 @@ async function shutdownWatchChild(mochaProcess, closed) {
       // already gone
     }
   }, WATCH_EXIT_TIMEOUT_MS);
-  await Promise.race([closed, sleep(WATCH_EXIT_TIMEOUT_MS + WATCH_KILL_GRACE_MS)]);
+  await Promise.race([
+    closed,
+    sleep(WATCH_EXIT_TIMEOUT_MS + WATCH_KILL_GRACE_MS),
+  ]);
   clearTimeout(killTimer);
 }
 
@@ -660,7 +663,7 @@ async function runMochaWatchAsync(args, opts, change) {
   } = opts;
   if (noRerun && opts.expectedRuns !== undefined) {
     throw new Error(
-      "runMochaWatchAsync: `noRerun` and `expectedRuns` are mutually exclusive"
+      "runMochaWatchAsync: `noRerun` and `expectedRuns` are mutually exclusive",
     );
   }
   opts = {
