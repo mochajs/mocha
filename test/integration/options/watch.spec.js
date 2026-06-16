@@ -12,6 +12,7 @@ const {
   createTempDir,
   DEFAULT_FIXTURE,
 } = require("../helpers");
+const { DEFAULT_WATCH_BUDGET_MS } = require("../constants.mjs");
 
 describe("--watch", function () {
   describe("when enabled", function () {
@@ -25,9 +26,8 @@ describe("--watch", function () {
     let cleanup;
 
     this.slow(5000);
-    // tests wait on observed runs, bounded by the helpers' shared 50s budget
-    // with diagnostic output; keep mocha's own timeout above that budget
-    this.timeout(60000);
+    // with diagnostic output; keep Mocha's own timeout above that budget
+    this.timeout(DEFAULT_WATCH_BUDGET_MS + 10_000);
 
     beforeEach(async function () {
       const { dirpath, removeTempDir } = await createTempDir();

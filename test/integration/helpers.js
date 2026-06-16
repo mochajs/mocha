@@ -9,6 +9,7 @@ const { Base } = require("../../lib/reporters/base.mjs");
 const { escapeRegExp } = require("../../lib/utils/regexp.mjs");
 const debug = require("debug")("mocha:test:integration:helpers");
 const SIGNAL_OFFSET = 128;
+const { DEFAULT_WATCH_BUDGET_MS } = require("./constants.mjs");
 
 /**
  * Path to `mocha` executable
@@ -424,14 +425,6 @@ function getSummary(res) {
  * scheduled, including the very first run.
  */
 const WATCH_RUN_MARKER = "[mocha] waiting for changes";
-
-/**
- * Shared deadline for everything a single `runMochaWatchAsync` call waits
- * on. Suites using the watch helpers must keep their test timeouts above
- * this, so that the helper's diagnostic error wins the race against mocha's
- * own opaque timeout.
- */
-const DEFAULT_WATCH_BUDGET_MS = 50000;
 
 /**
  * Bounded window observed by "no rerun expected" tests between the change
