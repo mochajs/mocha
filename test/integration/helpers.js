@@ -643,7 +643,7 @@ async function shutdownWatchChild(mochaProcess, closed) {
  * @param {RegExp} [opts.firstRunCrashPattern] - If set, expect the first run to fail to load, printing only an error stack (no stdout) with a message matching this pattern. No countable run output to wait for.
  * @param {'json'|'marker'} [opts.runDetector] - How completed runs are counted; `runMochaWatchJSONAsync` sets `json`
  * @param {number} [opts.budgetMs] - Shared deadline for everything this call waits on; must stay below the test's timeout
- * @param {Function} change - A potentially `Promise`-returning callback which changes a watched file; receives the child process and `{waitForRuns, runCount}`
+ * @param {Function} change - A potentially `Promise`-returning callback which changes a watched file; receives the child process and `{waitForRuns}`
  * @returns {Promise<RawResult>}
  */
 async function runMochaWatchAsync(args, opts, change) {
@@ -701,7 +701,6 @@ async function runMochaWatchAsync(args, opts, change) {
 
     await change(mochaProcess, {
       waitForRuns: observer.waitForRuns,
-      runCount: observer.runCount,
     });
 
     if (noRerun) {
