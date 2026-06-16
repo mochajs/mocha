@@ -866,6 +866,7 @@ module.exports = {
  * @property {number?} code - Exit code or `null` in some circumstances
  * @property {string[]} args - Array of program arguments
  * @property {string} command - Complete command executed
+ * @property {string} stderr - Process stderr output
  */
 
 /**
