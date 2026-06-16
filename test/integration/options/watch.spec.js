@@ -129,15 +129,8 @@ describe("--watch", function () {
         async (mochaProcess, { waitForRuns }) => {
           fs.mkdirSync(libPath);
           await waitForRuns(2);
-          // the watcher installs its watch on a newly created directory
-          // asynchronously; an event inside it before that is lost entirely
-          // (chokidar#1112), so give the installation a moment
-          await sleep(1000);
-
           fs.mkdirSync(dirPath);
           await waitForRuns(3);
-          await sleep(1000);
-
           touchFile(watchedFile);
         },
       ).then((results) => {
