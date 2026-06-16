@@ -9,6 +9,7 @@ const { Base } = require("../../lib/reporters/base.mjs");
 const { escapeRegExp } = require("../../lib/utils/regexp.mjs");
 const debug = require("debug")("mocha:test:integration:helpers");
 const SIGNAL_OFFSET = 128;
+const { DEFAULT_WATCH_BUDGET_MS } = require("./constants.mjs");
 
 /**
  * Path to `mocha` executable
@@ -301,10 +302,12 @@ function invokeNode(args, done, opts = {}) {
  * @param {RawResultCallback} done - Callback
  * @param {Object|string} [opts] - Options to `child_process` or 'pipe' for shortcut to `{stdio: pipe}`
  * @param {boolean} [opts.fork] - If `true`, use `child_process.fork` instead
+ * @param {boolean} [opts.separateStderr] - If `true`, accumulate piped `STDERR` into the result's `stderr` field instead of merging it into `output`
  * @returns {import('child_process').ChildProcess}
  */
 function createSubprocess(args, done, opts = {}) {
   let output = "";
+  let stderrOutput = "";
 
   if (opts === "pipe") {
     opts = { stdio: ["inherit", "pipe", "pipe"] };
@@ -347,13 +350,20 @@ function createSubprocess(args, done, opts = {}) {
 
   mocha.stdout.on("data", listener);
   if (mocha.stderr) {
-    mocha.stderr.on("data", listener);
+    if (opts.separateStderr) {
+      mocha.stderr.on("data", (data) => {
+        stderrOutput += data;
+      });
+    } else {
+      mocha.stderr.on("data", listener);
+    }
   }
   mocha.on("error", done);
 
   mocha.on("close", (code) => {
     done(null, {
       output,
+      stderr: stderrOutput,
       code,
       args,
       command: args.join(" "),
@@ -410,49 +420,305 @@ function getSummary(res) {
 }
 
 /**
- * Runs the mocha executable in watch mode calls `change` and returns the
- * raw result.
+ * Marker printed to `STDERR` by mocha's watch mode (`lib/cli/watch-run.js`)
+ * after every completed test run which did not already have a rerun
+ * scheduled, including the very first run.
+ */
+const WATCH_RUN_MARKER = "[mocha] waiting for changes";
+
+/**
+ * Time to wait for an erroneous rerun to begin after run finishes
+ */
+const WATCH_NO_RERUN_GRACE_MS = 2000;
+
+/**
+ * How long to wait for the watch child to exit after `SIGINT` before
+ * escalating to `SIGKILL`.
+ */
+const WATCH_EXIT_TIMEOUT_MS = 10000;
+
+/**
+ * How long to wait for the `close` event after `SIGKILL` is sent.  SIGKILL is
+ * unignorable, so the OS delivers it almost instantly; this is just a safety
+ * cap so {@link shutdownWatchChild} has a finite deadline.
+ */
+const WATCH_KILL_GRACE_MS = 2000;
+
+/**
+ * Parses the output of a `mocha --watch --reporter json` child into one
+ * object per **completed** test run, ignoring a trailing segment which has
+ * not fully arrived yet.
  *
- * The function starts mocha with the given arguments and `--watch` and
- * waits until the first test run has completed. Then it calls `change`
- * and waits until the second test run has been completed. Mocha is
- * killed and the result is returned.
+ * @param {string} output - Raw `STDOUT` of the watch child
+ * @returns {object[]} One parsed JSON result per completed run
+ */
+function parseWatchJSONOutput(output) {
+  return getJsonSegments(output)
+    .map((segment) => {
+      try {
+        return JSON.parse(segment);
+      } catch {
+        // an incomplete segment still crossing the pipe
+        return null;
+      }
+    })
+    .filter((parsed) => parsed !== null);
+}
+
+/**
+ * Returns non-empty segments from the watch child's `STDOUT` that cannot be
+ * parsed as JSON. A non-empty unparseable segment means a run started but its
+ * output was truncated (e.g. the child was killed mid-flush).
+ *
+ * @param {string} output - Raw `STDOUT` of the watch child
+ * @returns {string[]} Segments that failed JSON.parse
+ */
+function getUnparsedSegments(output) {
+  return getJsonSegments(output).filter((segment) => {
+    try {
+      JSON.parse(segment);
+      return false;
+    } catch {
+      return true;
+    }
+  });
+}
+
+/**
+ * Returns the split JSON for each run in the `output` session.
+ * @param {string} output stdout from a `mocha --watch --reporter json` session
+ * @returns {string[]} truthy strings, test run CLI output.
+ */
+function getJsonSegments(output) {
+  /** Pattern for CLI output hiding or showing the cursor */
+  // eslint-disable-next-line no-control-regex
+  const hideOrShowCursorRegex = /\u001b\[\?25./g;
+  /** CLI output for erasing the current line */
+  const lineErasureCliOutput = "\u001b[2K";
+  return output
+    .replace(hideOrShowCursorRegex, "")
+    .split(lineErasureCliOutput)
+    .filter(Boolean);
+}
+
+/**
+ * Observes a `mocha --watch` child's output, letting callers wait until a
+ * given number of test runs have verifiably completed.
+ *
+ * Two detectors are available:
+ * - `json` counts fully parseable `--reporter json` payloads on `STDOUT`. A
+ *   successful parse proves the run completed AND its output completely
+ *   crossed the pipe, making it safe to `SIGINT` the child afterwards
+ *   (killing the child can discard output it has not flushed yet).
+ * - `marker` counts watch mode's "waiting for changes" `STDERR` messages,
+ *   for tests using reporters other than `json`.
+ *
+ * @param {import('child_process').ChildProcess} mochaProcess - Watch child with piped stdio
+ * @param {Object} opts - Options
+ * @param {'json'|'marker'} opts.runDetector - How to count completed runs
+ * @param {number} opts.budgetMs - Shared deadline for all waits of one helper call
+ */
+function createWatchRunObserver(mochaProcess, { runDetector, budgetMs }) {
+  const deadlineAt = Date.now() + budgetMs;
+  let stdout = "";
+  let stderr = "";
+  const waiters = new Set();
+
+  const runCount = () =>
+    runDetector === "json"
+      ? // wait for JSON payload to flush for future assertions
+        parseWatchJSONOutput(stdout).length
+      : stderr.split(WATCH_RUN_MARKER).length - 1;
+
+  const evaluate = () => {
+    for (const waiter of waiters) {
+      if (waiter.isSatisfied()) {
+        waiters.delete(waiter);
+        clearTimeout(waiter.timer);
+        waiter.resolve();
+      }
+    }
+  };
+
+  mochaProcess.stdout.on("data", (chunk) => {
+    stdout += chunk;
+    evaluate();
+  });
+  mochaProcess.stderr.on("data", (chunk) => {
+    stderr += chunk;
+    evaluate();
+  });
+
+  const waitFor = (isSatisfied, description) => {
+    if (isSatisfied()) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve, reject) => {
+      const waiter = { isSatisfied, resolve };
+      waiter.timer = setTimeout(
+        () => {
+          waiters.delete(waiter);
+          reject(
+            new Error(
+              `runMochaWatchAsync: timed out waiting for ${description}; ` +
+                `${runCount()} run(s) completed so far\n` +
+                `=== watch child STDOUT ===\n${stdout}\n` +
+                `=== watch child STDERR ===\n${stderr}`,
+            ),
+          );
+        },
+        Math.max(deadlineAt - Date.now(), 1),
+      );
+      waiters.add(waiter);
+    });
+  };
+
+  return {
+    runCount,
+    waitForRuns: (n) =>
+      waitFor(() => runCount() >= n, `${n} run(s) to complete`),
+    waitForStderr: (pattern, description) =>
+      waitFor(() => pattern.test(stderr), description),
+  };
+}
+
+/**
+ * Shuts a watch child down with `SIGINT` (sent as an IPC message when the
+ * child was forked, as on Windows), escalating to `SIGKILL` if it has not
+ * exited within {@link WATCH_EXIT_TIMEOUT_MS}, then waits for the `close`
+ * event with a {@link WATCH_KILL_GRACE_MS} grace period so the total deadline
+ * is always finite.
+ *
+ * @param {import('child_process').ChildProcess} mochaProcess - Watch child
+ * @param {Promise<void>} closed - Resolves once the child has closed
+ */
+async function shutdownWatchChild(mochaProcess, closed) {
+  if (mochaProcess.exitCode === null && mochaProcess.signalCode === null) {
+    try {
+      if (mochaProcess.connected) {
+        mochaProcess.send("SIGINT");
+      } else {
+        mochaProcess.kill("SIGINT");
+      }
+    } catch {
+      // the child exited in between; the bounded wait below settles it
+    }
+  }
+  const killTimer = setTimeout(() => {
+    try {
+      mochaProcess.kill("SIGKILL");
+    } catch {
+      // already gone
+    }
+  }, WATCH_EXIT_TIMEOUT_MS);
+  await Promise.race([
+    closed,
+    sleep(WATCH_EXIT_TIMEOUT_MS + WATCH_KILL_GRACE_MS),
+  ]);
+  clearTimeout(killTimer);
+}
+
+/**
+ * Runs the mocha executable in watch mode, calls `change`, returns the raw result.
+ *
+ * The function starts mocha with the given arguments and `--watch`, waits
+ * until the first test run has verifiably completed (which also proves the
+ * file watcher is ready), calls `change`, and waits until
+ * `opts.expectedRuns` runs have completed in total. Mocha is then killed
+ * and the result is returned.
  *
  * On Windows, this will call `child_process.fork()` instead of `spawn()`.
  *
  * **Exit code will always be 0**
  * @param {string[]} args - Array of argument strings
- * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process`
- * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
+ * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process` plus the watch options below
+ * @param {number} [opts.expectedRuns] - Total completed runs (including the first) to wait for before killing mocha; defaults to `2`
+ * @param {boolean} [opts.noRerun] - If `true`, expect NO rerun: observe a bounded grace period after `change` instead of waiting for a second run
+ * @param {RegExp} [opts.firstRunCrashPattern] - If set, expect the first run to fail to load, printing only an error stack (no stdout) with a message matching this pattern. No countable run output to wait for.
+ * @param {'json'|'marker'} [opts.runDetector] - How completed runs are counted; `runMochaWatchJSONAsync` sets `json`
+ * @param {number} [opts.budgetMs] - Shared deadline for everything this call waits on; must stay below the test's timeout
+ * @param {Function} change - A potentially `Promise`-returning callback which changes a watched file; receives the child process and `{waitForRuns}`
  * @returns {Promise<RawResult>}
  */
 async function runMochaWatchAsync(args, opts, change) {
   if (typeof opts === "string") {
     opts = { cwd: opts };
   }
+  const {
+    expectedRuns = 2,
+    noRerun = false,
+    firstRunCrashPattern = null,
+    runDetector = "marker",
+    budgetMs = DEFAULT_WATCH_BUDGET_MS,
+    ...spawnOpts
+  } = opts;
+  if (noRerun && opts.expectedRuns !== undefined) {
+    throw new Error(
+      "runMochaWatchAsync: `noRerun` and `expectedRuns` are mutually exclusive",
+    );
+  }
   opts = {
-    sleepMs: 2000,
-    stdio: ["pipe", "pipe", "inherit"],
-    ...opts,
+    stdio: ["pipe", "pipe", "pipe"],
+    separateStderr: true,
+    ...spawnOpts,
     fork: process.platform === "win32",
   };
   const [mochaProcess, resultPromise] = invokeMochaAsync(
     [...args, "--watch"],
     opts,
   );
-  await sleep(opts.sleepMs);
-  await change(mochaProcess);
-  await sleep(opts.sleepMs);
+  // avoid an unhandled rejection when a wait below throws first
+  resultPromise.catch(() => {});
+  const closed = new Promise((resolve) => {
+    mochaProcess.once("close", resolve);
+  });
+  const observer = createWatchRunObserver(mochaProcess, {
+    runDetector,
+    budgetMs,
+  });
 
-  if (
-    !(mochaProcess.connected
-      ? mochaProcess.send("SIGINT")
-      : mochaProcess.kill("SIGINT"))
-  ) {
-    throw new Error("failed to send signal to subprocess");
+  try {
+    // The first watch run only starts inside chokidar's `ready` handler, and
+    // file events from before then are ignored (`ignoreInitial` in
+    // lib/cli/watch-run.js) -- so a completed first run proves the watcher
+    // is armed and `change` cannot be lost. If watch mode ever starts the
+    // first run before the watcher is ready (e.g. mochajs/mocha#5409), this
+    // gate needs an explicit watcher-ready signal instead.
+    if (firstRunCrashPattern) {
+      await observer.waitForStderr(
+        firstRunCrashPattern,
+        "the first (crashing) watch run to print its error",
+      );
+    } else {
+      await observer.waitForRuns(1);
+    }
+
+    await change(mochaProcess, {
+      waitForRuns: observer.waitForRuns,
+    });
+
+    if (noRerun) {
+      // Give an erroneous rerun time to show up
+      await sleep(WATCH_NO_RERUN_GRACE_MS);
+    } else {
+      await observer.waitForRuns(expectedRuns);
+    }
+  } finally {
+    await shutdownWatchChild(mochaProcess, closed);
   }
 
   const res = await resultPromise;
+
+  if (noRerun && runDetector === "json" && !firstRunCrashPattern) {
+    const unparsed = getUnparsedSegments(res.output);
+    if (unparsed.length > 0) {
+      throw new Error(
+        `noRerun: ${unparsed.length} non-empty unparseable JSON segment(s) found ` +
+          `after the grace period — an erroneous rerun was killed mid-flush\n` +
+          `=== watch child STDOUT ===\n${res.output}`,
+      );
+    }
+  }
 
   // we kill the process with `SIGINT`, so it will always appear as "failed" to our
   // custom assertions (a non-zero exit code 130). just change it to 0.
@@ -461,53 +727,55 @@ async function runMochaWatchAsync(args, opts, change) {
 }
 
 /**
- * Runs the mocha executable in watch mode calls `change` and returns the
- * JSON result.
+ * Runs the mocha executable in watch mode, calls `change` and returns the
+ * JSON result of every completed test run.
  *
- * The function starts mocha with the given arguments and `--watch` and
- * waits until the first test run has completed. Then it calls `change`
- * and waits until the second test run has been completed. Mocha is
- * killed and the result is returned.
- *
- * On Windows, this will call `child_process.fork()` instead of `spawn()`.
+ * See {@link runMochaWatchAsync} for the synchronization behavior and
+ * options; completed runs are counted by parsing the json reporter's
+ * output.
  *
  * **Exit code will always be 0**
  * @param {string[]} args - Array of argument strings
- * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for `child_process`
+ * @param {object|string} opts - If a `string`, then `cwd`, otherwise options for {@link runMochaWatchAsync}
  * @param {Function} change - A potentially `Promise`-returning callback to execute which will change a watched file
  * @returns {Promise<JSONResult>}
  */
 async function runMochaWatchJSONAsync(args, opts, change) {
+  if (typeof opts === "string") {
+    opts = { cwd: opts };
+  }
   const res = await runMochaWatchAsync(
     [...args, "--reporter", "json"],
-    opts,
+    { runDetector: "json", ...opts },
     change,
   );
-  return (
-    res.output
-      // eslint-disable-next-line no-control-regex
-      .replace(/\u001b\[\?25./g, "")
-      .split("\u001b[2K")
-      .filter((x) => x)
-      .map((x) => JSON.parse(x))
-  );
+  return parseWatchJSONOutput(res.output);
 }
 
-const touchRef = new Date();
+let lastTouchedTime = Date.now();
 
 /**
- * Synchronously touch a file. Creates
- * the file and all its parent directories if necessary.
+ * Synchronously touch a file with a fresh, strictly-increasing mtime.
+ * Creates the file and all its parent directories if necessary.
+ *
+ * Every touch gets its own mtime so that each one registers as a change on
+ * every file-watcher backend; repeatedly setting an identical mtime is
+ * invisible to polling watchers. Note that watchers may still coalesce
+ * repeated touches of the same file made in very quick succession --
+ * space them out in time.
  *
  * @param {string} filepath - Path to file
  */
 function touchFile(filepath) {
   fs.mkdirSync(path.dirname(filepath), { recursive: true });
+  lastTouchedTime = Math.max(lastTouchedTime + 1000, Date.now());
+  const touchTime = new Date(lastTouchedTime);
   try {
-    fs.utimesSync(filepath, touchRef, touchRef);
+    fs.utimesSync(filepath, touchTime, touchTime);
   } catch {
     const fd = fs.openSync(filepath, "a");
     fs.closeSync(fd);
+    fs.utimesSync(filepath, touchTime, touchTime);
   }
 }
 
@@ -604,6 +872,7 @@ module.exports = {
  * @property {number?} code - Exit code or `null` in some circumstances
  * @property {string[]} args - Array of program arguments
  * @property {string} command - Complete command executed
+ * @property {string} stderr - Process stderr output
  */
 
 /**

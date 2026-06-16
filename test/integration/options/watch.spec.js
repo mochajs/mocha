@@ -12,6 +12,7 @@ const {
   createTempDir,
   DEFAULT_FIXTURE,
 } = require("../helpers");
+const { DEFAULT_WATCH_BUDGET_MS } = require("../constants.mjs");
 
 describe("--watch", function () {
   describe("when enabled", function () {
@@ -25,6 +26,8 @@ describe("--watch", function () {
     let cleanup;
 
     this.slow(5000);
+    // with diagnostic output; keep Mocha's own timeout above that budget
+    this.timeout(DEFAULT_WATCH_BUDGET_MS + 10_000);
 
     beforeEach(async function () {
       const { dirpath, removeTempDir } = await createTempDir();
@@ -53,9 +56,13 @@ describe("--watch", function () {
 
       replaceFileContents(testFile, "done();", "done((;");
 
-      return runMochaWatchJSONAsync([testFile], tempDir, () => {
-        replaceFileContents(testFile, "done((;", "done();");
-      }).then((results) => {
+      return runMochaWatchJSONAsync(
+        [testFile],
+        { cwd: tempDir, firstRunCrashPattern: /SyntaxError/, expectedRuns: 1 },
+        () => {
+          replaceFileContents(testFile, "done((;", "done();");
+        },
+      ).then((results) => {
         expect(results, "to have length", 1);
       });
     });
@@ -69,19 +76,6 @@ describe("--watch", function () {
           touchFile(testFile);
         }).then((results) => {
           expect(results, "to have length", 2);
-        });
-      });
-
-      it("reruns test when watched test file is crashed", function () {
-        const testFile = path.join(tempDir, "test.js");
-        copyFixture(DEFAULT_FIXTURE, testFile);
-
-        replaceFileContents(testFile, "done();", "done((;");
-
-        return runMochaWatchJSONAsync([testFile], tempDir, () => {
-          replaceFileContents(testFile, "done((;", "done();");
-        }).then((results) => {
-          expect(results, "to have length", 1);
         });
       });
     });
@@ -128,21 +122,24 @@ describe("--watch", function () {
       const libPath = path.join(tempDir, "lib");
       const dirPath = path.join(libPath, "dir");
       const watchedFile = path.join(dirPath, "file.xyz");
+      // 1 first run + 3 creations = 4
+      const expectedRunCount = 4;
+      const graceMs = 1_000; // buffer time for watcher
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
-        tempDir,
-        async () => {
+        { cwd: tempDir, expectedRuns: expectedRunCount },
+        async (mochaProcess, { waitForRuns }) => {
           fs.mkdirSync(libPath);
-          await sleep(1000);
-
+          await waitForRuns(2); // wait for second run
+          await sleep(graceMs); // grace
           fs.mkdirSync(dirPath);
-          await sleep(1000);
-
+          await waitForRuns(3); // wait for third run
+          await sleep(graceMs);
           touchFile(watchedFile);
         },
       ).then((results) => {
-        expect(results, "to have length", 4);
+        expect(results, "to have length", expectedRunCount);
       });
     });
 
@@ -287,7 +284,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/*.xyz"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -373,7 +370,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--extension", "xyz,js"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(gitFile);
           touchFile(nodeModulesFile);
@@ -398,7 +395,7 @@ describe("--watch", function () {
           "--watch-ignore",
           "dir/*ignore*",
         ],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -417,7 +414,7 @@ describe("--watch", function () {
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "dir/[ab].js"],
-        tempDir,
+        { cwd: tempDir, noRerun: true },
         () => {
           touchFile(watchedFile);
         },
@@ -536,25 +533,29 @@ describe("--watch", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
+      // we want to cause _n + 1_ reruns (n + 2 total runs), which should cause the warning
+      // to occur if the listeners aren't properly destroyed
+      const totalRuns = process.getMaxListeners() + 2;
+
       return expect(
         runMochaWatchAsync(
           [testFile],
-          { cwd: tempDir, stdio: "pipe" },
-          async () => {
-            // we want to cause _n + 1_ reruns, which should cause the warning
-            // to occur if the listeners aren't properly destroyed
-            const iterations = new Array(process.getMaxListeners() + 1);
-            // eslint-disable-next-line no-unused-vars
-            for await (const _ of iterations) {
+          { cwd: tempDir, expectedRuns: totalRuns },
+          async (mochaProcess, { waitForRuns }) => {
+            // 1-based indexing, starting with second run
+            for (let run = 2; run <= totalRuns; run++) {
               touchFile(testFile);
-              await sleep(1000);
+              await waitForRuns(run);
+              // watchers coalesce same-file touches made in very quick
+              // succession; space them out so every touch causes a rerun
+              if (run < totalRuns) await sleep(250);
             }
           },
         ),
         "when fulfilled",
         "to satisfy",
         {
-          output: expect.it("not to match", /MaxListenersExceededWarning/),
+          stderr: expect.it("not to match", /MaxListenersExceededWarning/),
         },
       );
     });
