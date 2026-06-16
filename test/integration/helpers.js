@@ -427,8 +427,7 @@ function getSummary(res) {
 const WATCH_RUN_MARKER = "[mocha] waiting for changes";
 
 /**
- * Bounded window observed by "no rerun expected" tests between the change
- * and `SIGINT`: long enough for an erroneous rerun to begin
+ * Time to wait for an erroneous rerun to begin after run finishes
  */
 const WATCH_NO_RERUN_GRACE_MS = 2000;
 
@@ -448,8 +447,7 @@ const WATCH_KILL_GRACE_MS = 2000;
 /**
  * Parses the output of a `mocha --watch --reporter json` child into one
  * object per **completed** test run, ignoring a trailing segment which has
- * not fully arrived yet. Watch mode erases the line immediately before every rerun,
- * which delimits the segments.
+ * not fully arrived yet.
  *
  * @param {string} output - Raw `STDOUT` of the watch child
  * @returns {object[]} One parsed JSON result per completed run
@@ -486,6 +484,11 @@ function getUnparsedSegments(output) {
   });
 }
 
+/**
+ * Returns the split JSON for each run in the `output` session.
+ * @param {string} output stdout from a `mocha --watch --reporter json` session
+ * @returns {string[]} truthy strings, test run CLI output. 
+ */
 function getJsonSegments(output) {
   /** Pattern for CLI output hiding or showing the cursor */
   // eslint-disable-next-line no-control-regex
@@ -500,10 +503,7 @@ function getJsonSegments(output) {
 
 /**
  * Observes a `mocha --watch` child's output, letting callers wait until a
- * given number of test runs have verifiably completed instead of sleeping
- * and hoping (fixed sleeps lose the race on slow CI runners: a file change
- * made before the watcher is ready is ignored entirely, and killing the
- * child too early discards the final run).
+ * given number of test runs have verifiably completed.
  *
  * Two detectors are available:
  * - `json` counts fully parseable `--reporter json` payloads on `STDOUT`. A
@@ -576,7 +576,7 @@ function createWatchRunObserver(mochaProcess, { runDetector, budgetMs }) {
   return {
     runCount,
     waitForRuns: (n) =>
-      waitFor(() => runCount() >= n, `watch run #${n} to complete`),
+      waitFor(() => runCount() >= n, `${n} run(s) to complete`),
     waitForStderr: (pattern, description) =>
       waitFor(() => pattern.test(stderr), description),
   };
