@@ -698,8 +698,7 @@ async function runMochaWatchAsync(args, opts, change) {
     });
 
     if (noRerun) {
-      // the absence of a rerun cannot be awaited; give an erroneous rerun a
-      // bounded window to show up, like the fixed sleep used historically
+      // Give an erroneous rerun time to show up
       await sleep(WATCH_NO_RERUN_GRACE_MS);
     } else {
       await observer.waitForRuns(expectedRuns);
