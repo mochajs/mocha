@@ -447,6 +447,13 @@ const WATCH_NO_RERUN_GRACE_MS = 2000;
 const WATCH_EXIT_TIMEOUT_MS = 10000;
 
 /**
+ * How long to wait for the `close` event after `SIGKILL` is sent.  SIGKILL is
+ * unignorable, so the OS delivers it almost instantly; this is just a safety
+ * cap so {@link shutdownWatchChild} has a finite deadline.
+ */
+const WATCH_KILL_GRACE_MS = 2000;
+
+/**
  * Parses the output of a `mocha --watch --reporter json` child into one
  * object per **completed** test run, ignoring a trailing segment which has
  * not fully arrived yet. Watch mode erases the line (writes `\u001b[2K` to
@@ -586,7 +593,9 @@ function createWatchRunObserver(mochaProcess, { runDetector, budgetMs }) {
 /**
  * Shuts a watch child down with `SIGINT` (sent as an IPC message when the
  * child was forked, as on Windows), escalating to `SIGKILL` if it has not
- * exited within {@link WATCH_EXIT_TIMEOUT_MS}.
+ * exited within {@link WATCH_EXIT_TIMEOUT_MS}, then waits for the `close`
+ * event with a {@link WATCH_KILL_GRACE_MS} grace period so the total deadline
+ * is always finite.
  *
  * @param {import('child_process').ChildProcess} mochaProcess - Watch child
  * @param {Promise<void>} closed - Resolves once the child has closed
@@ -610,7 +619,7 @@ async function shutdownWatchChild(mochaProcess, closed) {
       // already gone
     }
   }, WATCH_EXIT_TIMEOUT_MS);
-  await closed;
+  await Promise.race([closed, sleep(WATCH_EXIT_TIMEOUT_MS + WATCH_KILL_GRACE_MS)]);
   clearTimeout(killTimer);
 }
 
