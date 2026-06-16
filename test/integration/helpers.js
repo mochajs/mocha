@@ -649,6 +649,11 @@ async function runMochaWatchAsync(args, opts, change) {
     budgetMs = DEFAULT_WATCH_BUDGET_MS,
     ...spawnOpts
   } = opts;
+  if (noRerun && opts.expectedRuns !== undefined) {
+    throw new Error(
+      "runMochaWatchAsync: `noRerun` and `expectedRuns` are mutually exclusive"
+    );
+  }
   opts = {
     stdio: ["pipe", "pipe", "pipe"],
     separateStderr: true,
