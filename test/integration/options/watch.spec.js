@@ -124,6 +124,7 @@ describe("--watch", function () {
       const watchedFile = path.join(dirPath, "file.xyz");
       // 1 first run + 3 creations = 4
       const expectedRunCount = 4;
+      const graceMs = 100; // buffer time for watcher
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
@@ -131,8 +132,10 @@ describe("--watch", function () {
         async (mochaProcess, { waitForRuns }) => {
           fs.mkdirSync(libPath);
           await waitForRuns(2); // wait for second run
+          await sleep(graceMs); // grace
           fs.mkdirSync(dirPath);
           await waitForRuns(3); // wait for third run
+          await sleep(graceMs);
           touchFile(watchedFile);
         },
       ).then((results) => {
