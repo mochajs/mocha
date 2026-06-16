@@ -530,7 +530,7 @@ describe("--watch", function () {
       const testFile = path.join(tempDir, "test.js");
       copyFixture(DEFAULT_FIXTURE, testFile);
 
-      // we want to cause _n + 1_ reruns, which should cause the warning
+      // we want to cause _n + 1_ reruns (n + 2 total runs), which should cause the warning
       // to occur if the listeners aren't properly destroyed
       const totalRuns = process.getMaxListeners() + 2;
 
