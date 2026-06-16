@@ -567,12 +567,13 @@ describe("--watch", function () {
           [testFile],
           { cwd: tempDir, expectedRuns: totalRuns },
           async (mochaProcess, { waitForRuns }) => {
+            // 1-based indexing, starting with second run
             for (let run = 2; run <= totalRuns; run++) {
               touchFile(testFile);
               await waitForRuns(run);
               // watchers coalesce same-file touches made in very quick
               // succession; space them out so every touch causes a rerun
-              await sleep(250);
+              if (run < totalRuns) await sleep(250);
             }
           },
         ),
