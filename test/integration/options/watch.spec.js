@@ -78,29 +78,6 @@ describe("--watch", function () {
           expect(results, "to have length", 2);
         });
       });
-
-      // TODO: this test never passes `--parallel`, so it duplicates the
-      // non-parallel crash test above; kept as-is in this stabilization change
-      it("reruns test when watched test file is crashed", function () {
-        const testFile = path.join(tempDir, "test.js");
-        copyFixture(DEFAULT_FIXTURE, testFile);
-
-        replaceFileContents(testFile, "done();", "done((;");
-
-        return runMochaWatchJSONAsync(
-          [testFile],
-          {
-            cwd: tempDir,
-            firstRunCrashPattern: /SyntaxError/,
-            expectedRuns: 1,
-          },
-          () => {
-            replaceFileContents(testFile, "done((;", "done();");
-          },
-        ).then((results) => {
-          expect(results, "to have length", 1);
-        });
-      });
     });
 
     it("reruns test when file matching --watch-files changes", function () {
