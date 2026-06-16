@@ -487,7 +487,7 @@ function getUnparsedSegments(output) {
 /**
  * Returns the split JSON for each run in the `output` session.
  * @param {string} output stdout from a `mocha --watch --reporter json` session
- * @returns {string[]} truthy strings, test run CLI output. 
+ * @returns {string[]} truthy strings, test run CLI output.
  */
 function getJsonSegments(output) {
   /** Pattern for CLI output hiding or showing the cursor */
