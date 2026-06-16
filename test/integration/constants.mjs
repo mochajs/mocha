@@ -1,3 +1,5 @@
+// Shared constants to avoid circular dependencies
+
 /**
  * Shared deadline for everything a single `runMochaWatchAsync` call waits
  * on.
