@@ -10,6 +10,6 @@
 - `mocha.opts` will require `test/setup.js`, which is the main harness.
 - `test/assertions.js` contains Mocha-specific types and assertions for `unexpected`
 - `test/node-unit/` only runs in Node.js; `test/browser-specific/` only runs in the browser.
-  - See `../karma.conf.js` for more information on which tests run in the browser.
+  - See `./browser/config.mjs` for the list of suites that run in the browser via Playwright.
 - We can't run all of the Node.js tests in one `mocha` command, because we need to use different command-line options to test the various reporters and interfaces.
   - See `../package-scripts.js` for more info about how things are split up.
