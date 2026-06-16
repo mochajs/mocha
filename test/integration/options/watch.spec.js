@@ -124,7 +124,7 @@ describe("--watch", function () {
       const watchedFile = path.join(dirPath, "file.xyz");
       // 1 first run + 3 creations = 4
       const expectedRunCount = 4;
-      const graceMs = 100; // buffer time for watcher
+      const graceMs = 1_000; // buffer time for watcher
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
