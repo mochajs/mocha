@@ -10,14 +10,12 @@ var loadConfig = require("../../lib/cli/config.cjs").loadConfig;
 describe("config", function () {
   it("should return the same values for all supported config types", function () {
     var configDir = path.join(__dirname, "fixtures", "config");
-    var js = loadConfig(path.join(configDir, "mocharc.js")); // canonical form
+    var js = loadConfig(path.join(configDir, "mocharc.js")); // canonical form, ESM
     var cjs = loadConfig(path.join(configDir, "mocharc.cjs"));
     var json = loadConfig(path.join(configDir, "mocharc.json"));
-    var mjs = loadConfig(path.join(configDir, "mocharc.mjs"));
     var yaml = loadConfig(path.join(configDir, "mocharc.yaml"));
     expect(cjs, "to equal", js);
     expect(json, "to equal", js);
-    expect(mjs, "to equal", js);
     expect(yaml, "to equal", js);
   });
 
