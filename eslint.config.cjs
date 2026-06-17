@@ -165,7 +165,7 @@ module.exports = defineConfig(
     },
   },
   globalIgnores([
-    "**/*.{fixture,min}.{js,mjs}",
+    "**/*.{fixture,min}.{js,mjs,cjs}",
     "coverage/**",
     "docs/{.astro,dist}/**",
     "mocha.js",
