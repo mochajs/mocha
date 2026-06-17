@@ -20,7 +20,7 @@ describe("global setup/teardown", function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown"),
+          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
         ]),
         "when fulfilled",
         "to have passed",
@@ -32,7 +32,7 @@ describe("global setup/teardown", function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             "--require",
-            resolveFixturePath("plugins/global-fixtures/global-teardown"),
+            resolveFixturePath("plugins/global-fixtures/global-teardown.fixture.cjs"),
           ]),
           "when fulfilled",
           "to contain once",
@@ -46,7 +46,7 @@ describe("global setup/teardown", function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             "--require",
-            resolveFixturePath("plugins/global-fixtures/global-setup"),
+            resolveFixturePath("plugins/global-fixtures/global-setup.fixture.cjs"),
           ]),
           "when fulfilled",
           "to contain once",
@@ -59,7 +59,7 @@ describe("global setup/teardown", function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown"),
+          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
         ]),
         "when fulfilled",
         "to contain once",
@@ -73,7 +73,7 @@ describe("global setup/teardown", function () {
           runMochaAsync(DEFAULT_FIXTURE, [
             "--require",
             resolveFixturePath(
-              "plugins/global-fixtures/global-setup-teardown-multiple",
+              "plugins/global-fixtures/global-setup-teardown-multiple.fixture.cjs",
             ),
           ]),
           "when fulfilled",
@@ -99,7 +99,7 @@ describe("global setup/teardown", function () {
 
       it("should handle when global teardown throws", async function () {
         const res = await runWithFixture(
-          "plugins/global-fixtures/global-teardown-throws",
+          "plugins/global-fixtures/global-teardown-throws.fixture.cjs",
         );
         expect(
           res,
@@ -112,7 +112,7 @@ describe("global setup/teardown", function () {
 
       it("should handle when global setup throws", async function () {
         const res = await runWithFixture(
-          "plugins/global-fixtures/global-setup-throws",
+          "plugins/global-fixtures/global-setup-throws.fixture.cjs",
         );
         expect(
           res,
@@ -149,7 +149,7 @@ describe("global setup/teardown", function () {
             [
               "--require",
               resolveFixturePath(
-                "plugins/global-fixtures/global-setup-teardown",
+                "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
               ),
               testFile,
             ],
@@ -169,7 +169,7 @@ describe("global setup/teardown", function () {
             runMochaWatchAsync(
               [
                 "--require",
-                resolveFixturePath("plugins/global-fixtures/global-teardown"),
+                resolveFixturePath("plugins/global-fixtures/global-teardown.fixture.cjs"),
                 testFile,
               ],
               { cwd: tempDir, budgetMs: watchBudgetMs },
@@ -190,7 +190,7 @@ describe("global setup/teardown", function () {
             runMochaWatchAsync(
               [
                 "--require",
-                resolveFixturePath("plugins/global-fixtures/global-setup"),
+                resolveFixturePath("plugins/global-fixtures/global-setup.fixture.cjs"),
                 testFile,
               ],
               { cwd: tempDir, budgetMs: watchBudgetMs },
@@ -211,7 +211,7 @@ describe("global setup/teardown", function () {
             [
               "--require",
               resolveFixturePath(
-                "plugins/global-fixtures/global-setup-teardown-multiple",
+                "plugins/global-fixtures/global-setup-teardown-multiple.fixture.cjs",
               ),
               testFile,
             ],
@@ -234,7 +234,7 @@ describe("global setup/teardown", function () {
         runMochaAsync(DEFAULT_FIXTURE, [
           "--parallel",
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown"),
+          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
         ]),
         "when fulfilled",
         "to have passed",
@@ -246,7 +246,7 @@ describe("global setup/teardown", function () {
         runMochaAsync(DEFAULT_FIXTURE, [
           "--parallel",
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown"),
+          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
         ]),
         "when fulfilled",
         "to contain once",
@@ -261,7 +261,7 @@ describe("global setup/teardown", function () {
             "--parallel",
             "--require",
             resolveFixturePath(
-              "plugins/global-fixtures/global-setup-teardown-multiple",
+              "plugins/global-fixtures/global-setup-teardown-multiple.fixture.cjs",
             ),
           ]),
           "when fulfilled",
@@ -297,7 +297,7 @@ describe("global setup/teardown", function () {
               "--parallel",
               "--require",
               resolveFixturePath(
-                "plugins/global-fixtures/global-setup-teardown",
+                "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
               ),
               testFile,
             ],
@@ -318,7 +318,7 @@ describe("global setup/teardown", function () {
               "--parallel",
               "--require",
               resolveFixturePath(
-                "plugins/global-fixtures/global-setup-teardown-multiple",
+                "plugins/global-fixtures/global-setup-teardown-multiple.fixture.cjs",
               ),
               testFile,
             ],
