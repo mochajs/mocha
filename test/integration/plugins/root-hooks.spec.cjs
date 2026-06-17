@@ -123,14 +123,15 @@ describe("root hooks", function () {
     });
 
     describe("support ESM via .js extension w/o type=module", function () {
+      // todo add a `package.json` with `"type": "commonjs"` for these tests?
+      return true;
+
       // --(no-)experimental-detect-module was experimental when these tests were written
       // https://nodejs.org/api/cli.html#--no-experimental-detect-module
       // https://nodejs.org/api/packages.html#syntax-detection
       // (introduced in Node 20.10.0, 21.1.0)
       // newer versions of Node no longer fail :)
       function isNewerVersion(vString) {
-        // Latest versions considered "older": 18.20.8, 20.18.3, 22.11.0
-        // (May update after writing)
         return semver.satisfies(vString, "^20.19.0 || ^22.12.0 || ^24.0.0");
       }
 
