@@ -9,7 +9,7 @@ const { Base } = require("../../lib/reporters/base.js");
 const { escapeRegExp } = require("../../lib/utils/regexp.js");
 const debug = require("debug")("mocha:test:integration:helpers");
 const SIGNAL_OFFSET = 128;
-const { DEFAULT_WATCH_BUDGET_MS } = require("./constants.mjs");
+const { DEFAULT_WATCH_BUDGET_MS } = require("./constants.js");
 
 /**
  * Path to `mocha` executable

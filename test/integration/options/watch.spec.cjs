@@ -12,7 +12,7 @@ const {
   createTempDir,
   DEFAULT_FIXTURE,
 } = require("../helpers.cjs");
-const { DEFAULT_WATCH_BUDGET_MS } = require("../constants.mjs");
+const { DEFAULT_WATCH_BUDGET_MS } = require("../constants.js");
 
 describe("--watch", function () {
   describe("when enabled", function () {
