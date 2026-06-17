@@ -20,7 +20,9 @@ describe("global setup/teardown", function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
+          resolveFixturePath(
+            "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
+          ),
         ]),
         "when fulfilled",
         "to have passed",
@@ -32,7 +34,9 @@ describe("global setup/teardown", function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             "--require",
-            resolveFixturePath("plugins/global-fixtures/global-teardown.fixture.cjs"),
+            resolveFixturePath(
+              "plugins/global-fixtures/global-teardown.fixture.cjs",
+            ),
           ]),
           "when fulfilled",
           "to contain once",
@@ -46,7 +50,9 @@ describe("global setup/teardown", function () {
         return expect(
           runMochaAsync(DEFAULT_FIXTURE, [
             "--require",
-            resolveFixturePath("plugins/global-fixtures/global-setup.fixture.cjs"),
+            resolveFixturePath(
+              "plugins/global-fixtures/global-setup.fixture.cjs",
+            ),
           ]),
           "when fulfilled",
           "to contain once",
@@ -59,7 +65,9 @@ describe("global setup/teardown", function () {
       return expect(
         runMochaAsync(DEFAULT_FIXTURE, [
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
+          resolveFixturePath(
+            "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
+          ),
         ]),
         "when fulfilled",
         "to contain once",
@@ -169,7 +177,9 @@ describe("global setup/teardown", function () {
             runMochaWatchAsync(
               [
                 "--require",
-                resolveFixturePath("plugins/global-fixtures/global-teardown.fixture.cjs"),
+                resolveFixturePath(
+                  "plugins/global-fixtures/global-teardown.fixture.cjs",
+                ),
                 testFile,
               ],
               { cwd: tempDir, budgetMs: watchBudgetMs },
@@ -190,7 +200,9 @@ describe("global setup/teardown", function () {
             runMochaWatchAsync(
               [
                 "--require",
-                resolveFixturePath("plugins/global-fixtures/global-setup.fixture.cjs"),
+                resolveFixturePath(
+                  "plugins/global-fixtures/global-setup.fixture.cjs",
+                ),
                 testFile,
               ],
               { cwd: tempDir, budgetMs: watchBudgetMs },
@@ -234,7 +246,9 @@ describe("global setup/teardown", function () {
         runMochaAsync(DEFAULT_FIXTURE, [
           "--parallel",
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
+          resolveFixturePath(
+            "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
+          ),
         ]),
         "when fulfilled",
         "to have passed",
@@ -246,7 +260,9 @@ describe("global setup/teardown", function () {
         runMochaAsync(DEFAULT_FIXTURE, [
           "--parallel",
           "--require",
-          resolveFixturePath("plugins/global-fixtures/global-setup-teardown.fixture.cjs"),
+          resolveFixturePath(
+            "plugins/global-fixtures/global-setup-teardown.fixture.cjs",
+          ),
         ]),
         "when fulfilled",
         "to contain once",

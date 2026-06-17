@@ -9,7 +9,11 @@ describe("--allow-uncaught", function () {
   var args = ["--allow-uncaught"];
 
   it("should throw an uncaught error and exit process", function (done) {
-    var fixture = path.join("options", "allow-uncaught", "propagate.fixture.cjs");
+    var fixture = path.join(
+      "options",
+      "allow-uncaught",
+      "propagate.fixture.cjs",
+    );
     runMocha(
       fixture,
       args,
