@@ -105,7 +105,7 @@ describe("ParallelBuffered", function () {
       it("should remove all listeners", function () {
         runner.emit(EVENT_RUN_END);
         // Some node versions throw instead of returning `[]` due to a bug
-        // Fix is in Node ^22.14 and ^24.0, but not yet backported to 20 as of writing
+        // Fix is in Node ^22.14 and ^24.0, but not backported to 20 (now EOL)
         // Problem was introduced in 20.19.0, not present in 20.18.3
         // https://github.com/nodejs/node/issues/56263
         const nodeVersionThrows = semver.satisfies(
