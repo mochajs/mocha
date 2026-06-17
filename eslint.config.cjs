@@ -49,7 +49,7 @@ module.exports = defineConfig(
       "bin/*",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
-      "scripts/**/*.{js,mjs}",
+      "scripts/**/*.{js,cjs}",
       "test/**/*.{js,mjs}",
     ],
     languageOptions: {
@@ -64,7 +64,7 @@ module.exports = defineConfig(
     },
   },
   {
-    files: ["test/**/*.{js,mjs}"],
+    files: ["test/**/*.{js,mjs,cjs}"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -75,7 +75,7 @@ module.exports = defineConfig(
     },
   },
   {
-    files: ["bin/*", "lib/**/*.js"],
+    files: ["bin/*", "lib/**/*.{js,cjs}"],
     ignores: ["lib/stats-collector.js"],
     rules: {
       "no-restricted-globals": [
@@ -134,7 +134,7 @@ module.exports = defineConfig(
     },
   },
   {
-    files: ["lib/reporters/*.js"],
+    files: ["lib/reporters/*.{js,cjs}"],
     rules: {
       "no-restricted-syntax": [
         "error",
