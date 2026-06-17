@@ -397,19 +397,7 @@ function resolveFixturePath(fixture) {
   }
 
   if ([".cjs", ".js", ".mjs", ".ts"].includes(path.extname(fixture))) {
-    const resolved = path.resolve(__dirname, "fixtures", fixture);
-    if (fs.existsSync(resolved)) {
-      return resolved;
-    }
-
-    if (path.extname(fixture) === ".js") {
-      const cjsFixture = resolved.replace(/\.js$/, ".cjs");
-      if (fs.existsSync(cjsFixture)) {
-        return cjsFixture;
-      }
-    }
-
-    return resolved;
+    return path.resolve(__dirname, "fixtures", fixture);
   }
 
   for (const extension of [".cjs", ".js", ".mjs", ".ts"]) {
