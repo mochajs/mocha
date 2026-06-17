@@ -83,9 +83,19 @@ Anyone can work on any issue marked `status: accepting prs` 🙂 Please check if
 First follow the steps in [DEVELOPMENT.md](./DEVELOPMENT.md) to get Mocha's repository installed locally.
 Then:
 
+<a id="trivial-changes"></a>
+
+### 🤏 Trivial Changes
+
+A trivial change is a typo fix, comment update, or similar very small change. These changes do not require backing issues and can be opened in a PR directly.
+
+Trivial changes are still important! Nobody likes typos or stale comments, and we appreciate the time you take to propose updates to any and all parts of Mocha.
+
+Feel free to open PRs for changes you think are trivial. If a maintainer believes the change needs a backing issue and discussion first, they'll ask kindly.
+
 ### 🎋 Initial Creation
 
-1. Make sure the issue is labeled with [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+accepting+prs%22)
+1. Make sure the issue is labeled with [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aissue+is%3Aopen+label%3A%22status%3A+accepting+prs%22) (or your change is [trivial](#trivial-changes))
 1. Create a new branch in your working copy.
 1. Make your changes and add them via `git add`.
    - Your changes will likely be somewhere in `lib/`, `bin/`, or (if your changes are browser-specific) `browser-entry.mjs`.
