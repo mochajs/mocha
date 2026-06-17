@@ -142,14 +142,14 @@ describe("--parallel", function () {
       const expected = getSummary(
         await invokeMochaAsync([
           "--no-parallel",
-          resolveFixturePath("esm/*.fixture.mjs"),
+          resolveFixturePath("esm/*.fixture.js"),
         ])[1],
       );
 
       const actual = getSummary(
         await invokeMochaAsync([
           "--parallel",
-          resolveFixturePath("esm/*.fixture.mjs"),
+          resolveFixturePath("esm/*.fixture.js"),
         ])[1],
       );
 
