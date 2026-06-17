@@ -1,7 +1,6 @@
 "use strict";
 
 var invokeMochaAsync = require("../helpers.cjs").invokeMochaAsync;
-const semver = require("semver");
 
 /**
  * Extracts root hook log messages from run results
