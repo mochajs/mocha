@@ -98,7 +98,7 @@ afterEach(function () {
 When run (in the default "serial" mode) via this command:
 
 ```bash
-mocha --file "./test/setup.cjs" "./test/**/*.spec.js"
+mocha --file "./test/setup.js" "./test/**/*.spec.js"
 ```
 
 `setup.js` will be executed _first_, and install the two hooks shown above for every test found in `./test/**/*.spec.js`.
