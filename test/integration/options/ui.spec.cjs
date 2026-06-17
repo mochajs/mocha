@@ -5,7 +5,7 @@ var runMochaJSON = helpers.runMochaJSON;
 
 describe("--ui", function () {
   var simpleUiPath = require.resolve("../fixtures/simple-ui.fixture.cjs");
-  var simpleUiESMPath = require.resolve("../fixtures/simple-ui.fixture.cjs");
+  var simpleUiESMPath = require.resolve("../fixtures/simple-ui.fixture.js");
 
   it("should load interface and run it", function (done) {
     runMochaJSON(
