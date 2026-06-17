@@ -10,7 +10,7 @@ describe("support CJS require.extension compilers with esm syntax", function () 
         process.execPath +
         '" "' +
         path.join("bin", "mocha") +
-        '" -R json --require test/setup.cjs --require test/compiler-fixtures/js.fixture.cjs "test/compiler-cjs/*.js"',
+        '" -R json --require test/compiler-fixtures/js.fixture.cjs "test/compiler-cjs/*.js"',
       { cwd: path.join(__dirname, "..", "..") },
       function (error, stdout) {
         if (error && !stdout) {
@@ -38,7 +38,7 @@ describe("support CJS require.extension compilers with esm syntax", function () 
         process.execPath +
         '" "' +
         path.join("bin", "mocha") +
-        '" -R json --require test/setup.cjs --require test/compiler-fixtures/ts.fixture.cjs "test/compiler-cjs/*.ts"',
+        '" -R json --require test/compiler-fixtures/ts.fixture.cjs "test/compiler-cjs/*.ts"',
       { cwd: path.join(__dirname, "..", "..") },
       function (error, stdout) {
         if (error && !stdout) {

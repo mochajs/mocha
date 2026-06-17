@@ -15,7 +15,7 @@ describe("support ESM module loader compilers", function () {
         process.execPath +
         '" "' +
         path.join("bin", "mocha") +
-        `" -R json --require test/setup.cjs --require test/compiler-fixtures/esm.fixture.cjs "${filename}"`,
+        `" -R json --require test/compiler-fixtures/esm.fixture.cjs "${filename}"`,
       { cwd: path.join(__dirname, "..", "..") },
       function (error, stdout) {
         if (error && !stdout) {
