@@ -11,7 +11,7 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import { rollup } from "rollup";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 
-import { SETUP_BUNDLE_PATH } from "./config.mjs";
+import { SETUP_BUNDLE_PATH } from "./config.js";
 
 const root = path.resolve(fileURLToPath(import.meta.url), "../../..");
 

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { suites } from "./config.mjs";
+import { suites } from "./config.js";
 
 for (const suite of suites) {
   test(`browser suite: ${suite.name}`, async ({ page }) => {

@@ -3,7 +3,7 @@ import http from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { baseURL, PORT, SETUP_BUNDLE_PATH, suites } from "./config.mjs";
+import { baseURL, PORT, SETUP_BUNDLE_PATH, suites } from "./config.js";
 
 const root = path.resolve(fileURLToPath(import.meta.url), "../../..");
 
@@ -19,7 +19,7 @@ const MIME_TYPES = {
 /**
  * Builds the HTML runner page for a single suite.
  *
- * @param {import("./config.mjs").BrowserSuite} suite
+ * @param {import("./config.js").BrowserSuite} suite
  * @returns {string}
  */
 const renderRunner = (suite) => {

@@ -1,6 +1,6 @@
 import { defineConfig } from "@playwright/test";
 
-import { baseURL } from "./test/browser/config.mjs";
+import { baseURL } from "./test/browser/config.js";
 
 export default defineConfig({
   testDir: "./test/browser",
