@@ -1,10 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
-  "entry": ["docs/_data/supporters.cjs", "index.mjs!", "lib/cli/index.js!"],
+  "entry": ["docs/_data/supporters.cjs", "index.js!", "lib/cli/index.cjs!"],
   "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
-    "test/integration/fixtures/options/watch/test-with-dependency.fixture.js",
+    "test/integration/fixtures/options/watch/test-with-dependency.fixture.cjs",
   ],
   "ignoreDependencies": [
     "@test/esm-only-loader",
@@ -15,8 +15,11 @@
   "mocha": {
     "entry": ["test/**/*.{js,ts,mjs,cjs}"],
   },
+  "karma": {
+    "config": "karma.conf.cjs",
+  },
   "webpack": {
-    "config": "test/browser-specific/fixtures/webpack/webpack.config.js",
+    "config": "test/browser-specific/fixtures/webpack/webpack.config.cjs",
   },
   "rules": {
     "exports": "off",

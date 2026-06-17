@@ -1,19 +1,19 @@
-'use strict';
+import Mocha from '../../../lib/mocha.cjs'
+import { createCommon as MochaInterface } from '../../../lib/interfaces/common.js';
 
-var Mocha = require('../../../lib/mocha');
-var Test = Mocha.Test;
-var EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
+const Test = Mocha.Test;
+const EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
 
 /**
  * A simple UI that only exposes a single function: test
  */
-module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
+function SimpleUI(suite) {
   suite.on(EVENT_FILE_PRE_REQUIRE, function(
     context,
     file,
     mocha
   ) {
-    var common = require('../../../lib/interfaces/common.mjs').createCommon(
+    const common = MochaInterface(
       [suite],
       context
     );
@@ -25,7 +25,7 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
      * and callback `fn` acting as a thunk.
      */
     context.test = function(title, fn) {
-      var test = new Test(title, fn);
+      const test = new Test(title, fn);
       test.file = file;
       suite.addTest(test);
 
@@ -33,3 +33,7 @@ module.exports = Mocha.interfaces['simple-ui'] = function(suite) {
     };
   });
 };
+
+Mocha.interfaces['simple-ui'] = SimpleUI;
+
+export default SimpleUI;

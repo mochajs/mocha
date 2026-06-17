@@ -82,7 +82,7 @@ A _root hook_ is a hook in a test file which is _not defined_ within a suite.
 An example using the `bdd` interface:
 
 ```js
-// test/setup.js
+// test/setup.cjs
 
 // root hook to run before every test (even in other files)
 beforeEach(function () {
@@ -98,7 +98,7 @@ afterEach(function () {
 When run (in the default "serial" mode) via this command:
 
 ```bash
-mocha --file "./test/setup.js" "./test/**/*.spec.js"
+mocha --file "./test/setup.cjs" "./test/**/*.spec.js"
 ```
 
 `setup.js` will be executed _first_, and install the two hooks shown above for every test found in `./test/**/*.spec.js`.
