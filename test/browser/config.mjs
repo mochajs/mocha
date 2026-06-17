@@ -21,5 +21,5 @@ export const suites = [
   { name: "bdd", ui: "bdd", specs: ["/test/interfaces/bdd.spec.js"] },
   { name: "tdd", ui: "tdd", specs: ["/test/interfaces/tdd.spec.js"] },
   { name: "qunit", ui: "qunit", specs: ["/test/interfaces/qunit.spec.js"] },
-  { name: "esm", ui: "bdd", modules: ["/test/browser-specific/esm.spec.mjs"] },
+  { name: "esm", ui: "bdd", modules: ["/test/browser-specific/esm.spec.js"] },
 ];
