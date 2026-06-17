@@ -396,11 +396,13 @@ function resolveFixturePath(fixture) {
     return fixture;
   }
 
-  if ([".cjs", ".js", ".mjs", ".ts"].includes(path.extname(fixture))) {
+  const supportedFixtureExtensions = [".cjs", ".js", ".ts"];
+
+  if (supportedFixtureExtensions.includes(path.extname(fixture))) {
     return path.resolve(__dirname, "fixtures", fixture);
   }
 
-  for (const extension of [".cjs", ".js", ".mjs", ".ts"]) {
+  for (const extension of supportedFixtureExtensions) {
     const resolved = path.resolve(
       __dirname,
       "fixtures",
