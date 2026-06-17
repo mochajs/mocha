@@ -1,5 +1,3 @@
-"use strict";
-
 // Root-only test cases
 test.only("#Root-Suite, should run this qunit test-case #1", function () {
   expect(true, "to be", true);

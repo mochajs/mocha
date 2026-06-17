@@ -1,5 +1,3 @@
-"use strict";
-
 describe("integer primitives", function () {
   describe("arithmetic", function () {
     it("should add", function () {

@@ -1,5 +1,3 @@
-"use strict";
-
 suite("integer primitives");
 
 test("should add", function () {

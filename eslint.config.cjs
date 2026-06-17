@@ -62,9 +62,6 @@ module.exports = defineConfig(
       sourceType: "module",
       ecmaVersion: 2025,
     },
-    rules: {
-      strict: "off",
-    },
   },
   {
     files: ["test/**/*.{js,mjs}"],
