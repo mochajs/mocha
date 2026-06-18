@@ -15,9 +15,6 @@
   "mocha": {
     "entry": ["test/**/*.{js,ts,mjs,cjs}"],
   },
-  "karma": {
-    "config": "karma.conf.cjs",
-  },
   "webpack": {
     "config": "test/browser-specific/fixtures/webpack/webpack.config.cjs",
   },
