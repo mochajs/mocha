@@ -4,34 +4,56 @@ title: Mocha 12 is here!
 ---
 
 Mocha 12 is the first release to follow our [even-odd major release pattern](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md#major-releases).
-As an even release, Mocha 12 does not introduce any significant breaking changes.
-We've upgraded Node and removed some broken, deprecated features,
-but everything else works just as before.
+As an even release, Mocha 12 introduces very few breaking changes:
+We've bumped our Node floor, removed some long-deprecated features,
+and modernized a bit, but everything else works just as before.
 
 {/* some stats about dependency bumps? */}
 {/* talk about surfaced errors in CJS vs ESM module handling */}
 {/* talk about internal conversion from CJS to ESM */}
 
+<a id="breaking-changes"></a>
+
 ## Breaking changes
 
-{/* this list is complete as of commit d103e34e, 2026-04-02 PDT */}
+- bump minimum Node.js version from 18.18.0 to 20.19.0 and 22.12.0 ([#5477](https://github.com/mochajs/mocha/issues/5477)): We know that Node 20 is now EOL, but we didn't want to jump 2 LTS versions in one release. Mocha 13 will drop support for Node 20. These are the lowest Node versions that support `require(esm)` (see [internal modernization](#internal-modernization)).
+- remove `bin/_mocha` and convert `bin/` and entry points to ESM ([#6017](https://github.com/mochajs/mocha/pull/6017)): todo {/* todo migration guide */}
+- change root package.json type to module ([#6078](https://github.com/mochajs/mocha/pull/6078)): This should not be a breaking change for the vast majority of users, see [internal modernization](#internal-modernization).
+- change the default of --forbid-only to check for process.env.CI ([#5496](https://github.com/mochajs/mocha/issues/5496)): This should improve CI runs, but rare use-cases may need to explicitly set `--no-forbid-only` to restore the previous default behavior.
+- remove unused legacy `errors.js` functions ([#5835](https://github.com/mochajs/mocha/pull/5835)): The public function `createInvalidPluginError` has been deprecated for years. Callers should use `createInvalidLegacyPluginError` instead, which has the exact same contract and behavior.
+- cleanup references of --compilers ([#5403](https://github.com/mochajs/mocha/issues/5403)): This flag has been deprecated for a long time. It has not had any impact on behavior for years. It is now removed from the codebase.
 
-- cleanup references of --compilers ([#5403](https://github.com/mochajs/mocha/issues/5403))
+## Notable new features
+
+- allow FIFOs as test files ([#5512](https://github.com/mochajs/mocha/issues/5512))
 - change the default of --forbid-only to check for process.env.CI ([#5496](https://github.com/mochajs/mocha/issues/5496))
-- bump minimum Node.js version from 18.18.0 to 20.19.0 ([#5477](https://github.com/mochajs/mocha/issues/5477))
-
-## New features
-
-This is only a summary!
-
-- allow FIFOs as test files ([#5512](https://github.com/mochajs/mocha/issues/5512)) ([ca4af43](https://github.com/mochajs/mocha/commit/ca4af439d5766fdfb2b5a7d7e06db0280b1abb6e))
-- change the default of --forbid-only to check for process.env.CI ([#5496](https://github.com/mochajs/mocha/issues/5496)) ([3d94dde](https://github.com/mochajs/mocha/commit/3d94ddea2f45d18473bf00e71db2b9766ab227fe))
-- add mocha.mjs export ([#5527](https://github.com/mochajs/mocha/issues/5527)) ([e1cf23c](https://github.com/mochajs/mocha/commit/e1cf23cbc2049a375ab9980337dbf2486450f7cb))
-- add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519)) ([0ed524a](https://github.com/mochajs/mocha/commit/0ed524af347b59200e03b972c2450d36f6818a45))
+- add mocha.mjs export ([#5527](https://github.com/mochajs/mocha/issues/5527))
+- add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519))
 
 ## Notable fixes
 
-- allow importing ESM interface and reporters ([#5563](https://github.com/mochajs/mocha/issues/5563)) ([bc9fc84](https://github.com/mochajs/mocha/commit/bc9fc842213d00cf7ac4a4b0de898bf29e38bdad))
+- allow importing ESM interface and reporters ([#5563](https://github.com/mochajs/mocha/issues/5563))
+- support file: URLs in loadFilesAsync ([#5833](https://github.com/mochajs/mocha/pull/5833))
+- support modern RegExp flags in Mocha#grep ([#5825](https://github.com/mochajs/mocha/pull/5825))
+- prevent diff hang on large/complex objects ([#5898](https://github.com/mochajs/mocha/pull/5898))
+- surface global setup/teardown errors with a non-zero exit code ([#5994](https://github.com/mochajs/mocha/pull/5994))
+
+<a id="internal-modernization"></a>
+
+## Internal modernization
+
+- As mentioned in [breaking changes](#breaking-changes), Mocha is now an ESM-first package, using `"type": "module"` instead of `"type": "commonjs"` in `package.json`. This should not be a breaking change for the vast majority of users; CJS consumers can still `require('mocha')` just as before, thanks to new support in Node 20.19.0 and 22.12.0. We've marked it as "breaking" for users that depend on Mocha's internal structure for any reason. ESM is the modern, canonical way of managing modules, supported officially by the EcmaScript spec. CJS was always a placeholder approach until a better solution came along. ([#5400](https://github.com/mochajs/mocha/issues/5400))
+- Mocha now uses Playwright instead of Karma for its internal tests. This is not a user-facing change in any way, but it means that Mocha contributors can now use a modern browser automation library instead of the long-deprecated Karma approach. This will help us better support browser-based testing in the future. ([#6031](https://github.com/mochajs/mocha/pull/6031))
+
+## Thank you!
+
+Mocha development could not continue without the support of contributors who have opened issues, submitted PRs, and commented in discussions. 98 merged PRs for Mocha 12 were [opened by community members](https://github.com/search?q=repo%3Amochajs%2Fmocha+is%3Apr+is%3Amerged+merged%3A2025-10-02..2026-06-18+-author%3Amark-wiemer+-author%3Ajoshuakgoldberg+-author%3Avoxpelli+-author%3Arenovate%5Bbot%5D+-author%3Agithub-actions%5Bbot%5D+-author%3Adependabot%5Bbot%5D&type=pullrequests&s=updated&o=desc)! We are also very grateful to our many [financial donors](https://opencollective.com/mochajs).
+
+Mocha continues to thrive thanks to all of these generous contributions. Thank you.
+
+## Questions, comments, concerns?
+
+As always, you can [open an issue on GitHub](https://github.com/mochajs/mocha/issues?q=sort%3Aupdated-desc+is%3Aissue+state%3Aopen+) or [message us on Discord](https://discord.gg/KeDn2uXhER) for support.
 
 ## References
 
