@@ -4,7 +4,7 @@ var assert = require("node:assert");
 var helpers = require("./helpers");
 var runJSON = helpers.runMochaJSON;
 var args = [];
-var bang = require("../../lib/reporters/base").symbols.bang;
+var { bang } = require("../../lib/reporters/base.mjs").Base.symbols;
 
 describe("retries", function () {
   it("are ran in correct order", function (done) {

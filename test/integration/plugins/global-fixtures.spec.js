@@ -7,11 +7,14 @@ const {
   runMochaWatchAsync,
   copyFixture,
   DEFAULT_FIXTURE,
+  invokeMochaAsync,
   resolveFixturePath,
   createTempDir,
 } = require("../helpers");
 
 describe("global setup/teardown", function () {
+  const watchBudgetMs = 8500;
+
   describe("when mocha run in serial mode", function () {
     it("should execute global setup and teardown", async function () {
       return expect(
@@ -80,6 +83,47 @@ describe("global setup/teardown", function () {
       });
     });
 
+    describe("when a global fixture throws", function () {
+      async function runWithFixture(fixturePath, extraArgs = []) {
+        const [, promise] = invokeMochaAsync(
+          [
+            "--require",
+            resolveFixturePath(fixturePath),
+            resolveFixturePath(DEFAULT_FIXTURE),
+            ...extraArgs,
+          ],
+          { stdio: "pipe" },
+        );
+        return promise;
+      }
+
+      it("should handle when global teardown throws", async function () {
+        const res = await runWithFixture(
+          "plugins/global-fixtures/global-teardown-throws",
+        );
+        expect(
+          res,
+          "to have failed with output",
+          /\[mocha\] global teardown failed[\s\S]*teardown kaboom/,
+        );
+        expect(res.output, "to match", /setup ran/);
+        expect(res.output, "to match", /1 passing/);
+      });
+
+      it("should handle when global setup throws", async function () {
+        const res = await runWithFixture(
+          "plugins/global-fixtures/global-setup-throws",
+        );
+        expect(
+          res,
+          "to have failed with output",
+          /\[mocha\] global setup failed[\s\S]*setup kaboom/,
+        );
+        expect(res.output, "not to match", /teardown should not run/);
+        expect(res.output, "not to match", /passing/);
+      });
+    });
+
     describe("when run in watch mode", function () {
       let tempDir;
       let testFile;
@@ -109,7 +153,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -128,7 +172,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-teardown"),
                 testFile,
               ],
-              tempDir,
+              { cwd: tempDir, budgetMs: watchBudgetMs },
               () => {
                 touchFile(testFile);
               },
@@ -149,7 +193,7 @@ describe("global setup/teardown", function () {
                 resolveFixturePath("plugins/global-fixtures/global-setup"),
                 testFile,
               ],
-              tempDir,
+              { cwd: tempDir, budgetMs: watchBudgetMs },
               () => {
                 touchFile(testFile);
               },
@@ -171,7 +215,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -257,7 +301,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },
@@ -278,7 +322,7 @@ describe("global setup/teardown", function () {
               ),
               testFile,
             ],
-            tempDir,
+            { cwd: tempDir, budgetMs: watchBudgetMs },
             () => {
               touchFile(testFile);
             },

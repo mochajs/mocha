@@ -30,12 +30,22 @@ module.exports = defineConfig(
       "n/no-unsupported-features/node-builtins": "off",
       strict: ["error", "global"],
     },
+    settings: {
+      "import/extensions": [".js", ".mjs"],
+      "import/resolver": {
+        node: {
+          extensions: [".js", ".mjs"],
+        },
+      },
+      node: {
+        tryExtensions: [".js", ".json", ".node", ".mjs"],
+      },
+    },
   },
   {
     files: [
       ".wallaby.js",
       "package-scripts.js",
-      "karma.conf.js",
       "bin/*",
       "lib/cli/**/*.js",
       "lib/nodejs/**/*.js",
@@ -157,12 +167,12 @@ module.exports = defineConfig(
     },
   },
   globalIgnores([
-    ".karma/**",
     "**/*.{fixture,min}.{js,mjs}",
     "coverage/**",
     "docs/{.astro,dist}/**",
     "mocha.js",
     "out/**",
+    "test/browser/.generated/**",
     "test/integration/fixtures/**",
     "scripts/pick-from-package-json.mjs",
   ]),
