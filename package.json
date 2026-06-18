@@ -77,7 +77,7 @@
     "test-node:only": "run-p test-node:only:*",
     "test-node:reporters": "npm run -s test-node-run -- \"test/reporters/*.spec.{cjs,js}\"",
     "test-node:requires": "npm run -s test-node-run -- --require coffeescript/register --require test/require/a.cjs --require test/require/b.coffee --require test/require/c.cjs --require test/require/d.coffee test/require/require.spec.cjs",
-    "test-node:unit": "npm run -s test-node-run -- \"test/unit/*.spec.cjs\" \"test/node-unit/**/*.spec.{cjs,js}\"",
+    "test-node:unit": "npm run -s test-node-run -- \"test/unit/**/*.spec.cjs\" \"test/node-unit/**/*.spec.{cjs,js}\"",
     "test-node": "run-s test-coverage-clean test-node:* test-coverage-generate",
     "test-smoke": "node ./bin/mocha.js --no-config test/smoke/smoke.spec.cjs",
     "test": "run-s lint test-node test-browser",
