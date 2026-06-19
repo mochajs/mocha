@@ -20,6 +20,15 @@ and modernized a bit, but everything else works just as before.
   Mocha 13 will drop support for Node 20.
   The new minimum versions are the lowest Node versions that support `require(esm)`
   (see [internal modernization](#internal-modernization)).
+- remove util.inherits / convert to classes
+  ([#5025](https://github.com/mochajs/mocha/issues/5025)):
+  Through Mocha 11, reporters inherited behavior through `util.inherits`.
+  This was deprecated a long time ago.
+  Reporters now inherit through canonical `class` syntax.
+  This means that the syntax for custom reporters has changed,
+  but the core behavior is the same. See the updated
+  [third-party reporters](https://mochajs.org/explainers/third-party-reporters/)
+  page for details.
 - remove `bin/_mocha` and convert `bin/` and entry points to ESM
   ([#6017](https://github.com/mochajs/mocha/pull/6017)):
   todo {/* todo migration guide */}
