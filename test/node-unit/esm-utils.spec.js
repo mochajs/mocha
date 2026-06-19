@@ -62,6 +62,27 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should show both require() and import() errors when both fail with non-special-case errors", async function () {
+      // Stub doImport to throw a different error than the require error
+      sinon.stub(esmUtils, "doImport").rejects(new Error("Custom import failure"));
+
+      try {
+        await expect(
+          () =>
+            esmUtils.requireOrImport(
+              "../../test/node-unit/fixtures/combined-require-import-err.js",
+            ),
+          "to be rejected with error satisfying",
+          {
+            code: "ERR_MOCHA_MODULE_LOAD_FAILED",
+            message: /Failed to load file via both require\(\) and import\(\)/,
+          },
+        );
+      } finally {
+        sinon.restore();
+      }
+    });
   });
 
   describe("loadFilesAsync()", function () {
