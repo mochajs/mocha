@@ -49,7 +49,6 @@
     "docs-watch": "eleventy --serve",
     "docs:api": "jsdoc -c jsdoc.conf.json",
     "docs:build": "eleventy",
-    "docs:build-new": "cd docs-next && npm i && npm run build-with-old",
     "docs:preview": "http-server docs/_site -o",
     "docs": "run-s docs-clean docs:api docs:build docs:build-new",
     "format:check": "prettier --check .",
