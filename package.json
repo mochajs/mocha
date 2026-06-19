@@ -39,7 +39,7 @@
     "test": "./test"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "build": "rollup -c ./rollup.config.js",
@@ -92,7 +92,6 @@
     "debug": "^4.3.5",
     "diff": "^9.0.0",
     "find-up": "^5.0.0",
-    "glob": "^13.0.0",
     "he": "^1.2.0",
     "is-path-inside": "^3.0.3",
     "is-unicode-supported": "^0.1.0",
