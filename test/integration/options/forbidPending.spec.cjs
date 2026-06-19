@@ -14,7 +14,7 @@ describe("--forbid-pending", function () {
   });
 
   it("should succeed if there are only passed tests", function (done) {
-    var fixture = path.join("options", "forbid-pending", "passed");
+    var fixture = path.join("options", "forbid-pending", "passed.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -25,7 +25,11 @@ describe("--forbid-pending", function () {
   });
 
   it("should fail if there are tests in suites marked skip", function (done) {
-    var fixture = path.join("options", "forbid-pending", "skip-suite");
+    var fixture = path.join(
+      "options",
+      "forbid-pending",
+      "skip-suite.fixture.js",
+    );
     var spawnOpts = { stdio: "pipe" };
     runMocha(
       fixture,
@@ -45,7 +49,11 @@ describe("--forbid-pending", function () {
   });
 
   it("should fail if there is empty suite marked pending", function (done) {
-    var fixture = path.join("options", "forbid-pending", "skip-empty-suite");
+    var fixture = path.join(
+      "options",
+      "forbid-pending",
+      "skip-empty-suite.fixture.js",
+    );
     var spawnOpts = { stdio: "pipe" };
     runMocha(
       fixture,
@@ -65,11 +73,12 @@ describe("--forbid-pending", function () {
   });
 
   var forbidPendingFailureTests = {
-    "should fail if there are tests marked skip": "skip",
-    "should fail if there are pending tests": "pending",
-    "should fail if tests call `skip()`": "this-skip",
-    "should fail if beforeEach calls `skip()`": "beforeEach-this-skip",
-    "should fail if before calls `skip()`": "before-this-skip",
+    "should fail if there are tests marked skip": "skip.fixture.js",
+    "should fail if there are pending tests": "pending.fixture.js",
+    "should fail if tests call `skip()`": "this-skip.fixture.js",
+    "should fail if beforeEach calls `skip()`":
+      "beforeEach-this-skip.fixture.js",
+    "should fail if before calls `skip()`": "before-this-skip.fixture.js",
   };
 
   Object.keys(forbidPendingFailureTests).forEach(function (title) {

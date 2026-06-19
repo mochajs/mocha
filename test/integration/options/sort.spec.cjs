@@ -12,7 +12,7 @@ describe("--sort", function () {
   });
 
   it("should sort tests in alphabetical order", function (done) {
-    var fixtures = path.join("options", "sort*");
+    var fixtures = path.join("options", "sort*.fixture.js");
     runMochaJSON(fixtures, args, function (err, res) {
       if (err) {
         done(err);
