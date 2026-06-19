@@ -154,7 +154,7 @@ export default defineConfig({
         discord: "https://discord.gg/KeDn2uXhER",
         github: "https://github.com/mochajs/mocha",
       },
-      title: "Mocha",
+      title: "Mocha 11",
     }),
   ],
 });
