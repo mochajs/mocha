@@ -7,7 +7,7 @@ on:
 
 jobs:
   check-manifest-author:
-    name: Verify manifest updated by Release Please
+    name: Verify manifest not manually edited
     runs-on: ubuntu-latest
     steps:
       - name: Block manual manifest edits
