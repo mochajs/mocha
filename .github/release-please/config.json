@@ -5,6 +5,7 @@
 
   "prerelease": true,
   "versioning": "prerelease",
+  "prerelease-type": "rc",
 
   "changelog-sections": [
     { "type": "feat", "section": "🌟 Features", "hidden": false },
