@@ -16,9 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Verify "status: blocked" label is not applied'
-        uses: mheap/github-action-required-labels@v5
-        with:
-          mode: exactly
-          count: 0
-          labels: "status: blocked"
-          message: "This PR has the 'status: blocked' label and cannot be merged until that label is removed."
+        if: contains(github.event.pull_request.labels.*.name, 'status: blocked')
+        run: |
+          echo "::error::This PR has the 'status: blocked' label and cannot be merged until that label is removed."
+          exit 1
