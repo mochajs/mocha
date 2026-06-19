@@ -62,6 +62,28 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should surface the require error when import() throws ERR_UNSUPPORTED_DIR_IMPORT", async function () {
+      const stub = sinon.stub(esmUtils, "doImport").rejects(
+        Object.assign(new Error("Directory import is not supported"), {
+          code: "ERR_UNSUPPORTED_DIR_IMPORT",
+        }),
+      );
+      try {
+        return await expect(
+          () =>
+            esmUtils.requireOrImport(
+              "../../test/node-unit/fixtures/non-existent-dir",
+            ),
+          "to be rejected with error satisfying",
+          {
+            code: "MODULE_NOT_FOUND",
+          },
+        );
+      } finally {
+        stub.restore();
+      }
+    });
   });
 
   describe("loadFilesAsync()", function () {
