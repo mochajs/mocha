@@ -1,0 +1,10 @@
+[build]
+  command = "npm run docs"
+  publish = "dist/"
+
+[build.environment]
+  DEBUG = "mocha:docs*"
+
+[context.deploy-preview]
+  command = "npm run docs"
+  publish = "dist/"
