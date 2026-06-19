@@ -1,5 +1,3 @@
-"use strict";
-
 // Root-only test cases
 it.only("#Root-Suite, should run this bdd test-case #1", function () {
   expect(true, "to be", true);

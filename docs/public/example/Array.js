@@ -1,5 +1,3 @@
-"use strict";
-
 describe("Array", function () {
   describe(".push()", function () {
     it("should append a value", function () {
