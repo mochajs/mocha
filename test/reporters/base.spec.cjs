@@ -593,6 +593,59 @@ describe("Base reporter", function () {
     });
   });
 
+  describe("reporter resilience", function () {
+    it("should not throw out of Base.list when rendering a failure throws", function () {
+      var poison = new Proxy(
+        {},
+        {
+          ownKeys: function () {
+            throw new TypeError("poisoned ownKeys");
+          },
+          getOwnPropertyDescriptor: function () {
+            throw new TypeError("poisoned descriptor");
+          },
+          get: function () {
+            throw new TypeError("poisoned get");
+          },
+        },
+      );
+      var err = new AssertionError({
+        actual: poison,
+        expected: { a: 1 },
+        message: "boom",
+      });
+      var test = makeTest(err);
+
+      expect(function () {
+        list([test]);
+      }, "not to throw");
+
+      var errOut = stdout.join("\n");
+      expect(errOut, "to contain", "test title");
+      expect(errOut, "to contain", "failed to render error");
+    });
+
+    it("should fall back to a placeholder when stringifyDiffObjs throws", function () {
+      var utils = require("../../lib/utils");
+      sinon
+        .stub(utils, "stringify")
+        .throws(new Error("simulated stringify failure"));
+      var err = new AssertionError({
+        actual: { a: 1 },
+        expected: { a: 2 },
+        message: "boom",
+      });
+      var test = makeTest(err);
+
+      expect(function () {
+        list([test]);
+      }, "not to throw");
+      var errOut = stdout.join("\n");
+      expect(errOut, "to contain", "test title");
+      expect(errOut, "not to contain", "failed to render error");
+    });
+  });
+
   it("should list multiple Errors per test", function () {
     var err = new Error("First Error");
     err.multiple = [new Error("Second Error - same test")];
