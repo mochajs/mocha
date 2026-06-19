@@ -439,6 +439,15 @@ function getSummary(res) {
 const WATCH_RUN_MARKER = "[mocha] waiting for changes";
 
 /**
+ * ANSI sequence that shows the terminal cursor. Watch mode
+ * hides the cursor and only restores it on a clean exit. When a
+ * watch test fails we dump the killed child's `STDOUT`, which still contains
+ * the "hide cursor" sequence with no matching "show cursor", appending this
+ * keeps the developer's cursor from staying hidden.
+ */
+const SHOW_CURSOR_ANSI = "\u001b[?25h";
+
+/**
  * Time to wait for an erroneous rerun to begin after run finishes
  */
 const WATCH_NO_RERUN_GRACE_MS = 2000;
@@ -575,7 +584,8 @@ function createWatchRunObserver(mochaProcess, { runDetector, budgetMs }) {
               `runMochaWatchAsync: timed out waiting for ${description}; ` +
                 `${runCount()} run(s) completed so far\n` +
                 `=== watch child STDOUT ===\n${stdout}\n` +
-                `=== watch child STDERR ===\n${stderr}`,
+                `=== watch child STDERR ===\n${stderr}` +
+                SHOW_CURSOR_ANSI,
             ),
           );
         },
@@ -727,7 +737,8 @@ async function runMochaWatchAsync(args, opts, change) {
       throw new Error(
         `noRerun: ${unparsed.length} non-empty unparseable JSON segment(s) found ` +
           `after the grace period — an erroneous rerun was killed mid-flush\n` +
-          `=== watch child STDOUT ===\n${res.output}`,
+          `=== watch child STDOUT ===\n${res.output}` +
+          SHOW_CURSOR_ANSI,
       );
     }
   }
