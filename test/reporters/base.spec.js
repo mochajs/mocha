@@ -491,6 +491,66 @@ describe("Base reporter", function () {
     expect(errOut, "to be", "1) test title:\n     Error\n  foo\n  bar");
   });
 
+  describe("message and stack splitting", function () {
+    it("should render the message and frames when the stack is only frames", function () {
+      var err = {
+        message: "Error",
+        stack: "    at foo (foo.js:1:1)\n    at bar (bar.js:2:2)",
+        showDiff: false,
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n      at foo (foo.js:1:1)\n      at bar (bar.js:2:2)",
+      );
+    });
+
+    it("should not duplicate an embedded stack when the message's frames are rewritten in the stack", function () {
+      var embeddedMessage =
+        "An error occured with following trace:\n\nError\n    at inner (/original/foo.js:1:1)";
+      var rewritten = embeddedMessage.replace(/\/original\//g, "/filtered/");
+      var err = {
+        message: embeddedMessage,
+        stack: "Error: " + rewritten + "\n    at runTest (lib/runner.js:1:1)",
+        showDiff: false,
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error: An error occured with following trace:\n\nError\n      at inner (/filtered/foo.js:1:1)\n      at runTest (lib/runner.js:1:1)",
+      );
+    });
+
+    it("should split identically when the rewritten stack has a trailing newline", function () {
+      var embeddedMessage =
+        "An error occured with following trace:\n\nError\n    at inner (/original/foo.js:1:1)";
+      var rewritten = embeddedMessage.replace(/\/original\//g, "/filtered/");
+      var err = {
+        message: embeddedMessage,
+        stack: "Error: " + rewritten + "\n    at runTest (lib/runner.js:1:1)\n",
+        showDiff: false,
+      };
+      var test = makeTest(err);
+      list([test]);
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error: An error occured with following trace:\n\nError\n      at inner (/filtered/foo.js:1:1)\n      at runTest (lib/runner.js:1:1)",
+      );
+    });
+  });
+
   describe("error causes", function () {
     it("should append any error cause trail to stack traces", function () {
       var err = {
