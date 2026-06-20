@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import starlightBlog from "starlight-blog";
 
 export default defineConfig({
   integrations: [
@@ -14,6 +15,7 @@ export default defineConfig({
         dark: "./src/components/icon-dark.svg",
         light: "./src/components/icon-light.svg",
       },
+      plugins: [starlightBlog()],
       sidebar: [
         { label: "Getting Started", slug: "getting-started" },
         {

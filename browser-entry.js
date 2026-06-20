@@ -1,16 +1,13 @@
-"use strict";
+import BrowserStdout from "browser-stdout";
 
-/* eslint no-unused-vars: off */
+import { parseQuery } from "./lib/browser/parse-query.js";
+import { highlightTags } from "./lib/browser/highlight-tags.js";
+import Mocha from "./lib/mocha.cjs";
 
 /**
  * Shim process.stdout.
  */
-
-process.stdout = require("browser-stdout")({ label: false });
-
-var parseQuery = require("./lib/browser/parse-query.mjs").parseQuery;
-var highlightTags = require("./lib/browser/highlight-tags.mjs").highlightTags;
-var Mocha = require("./lib/mocha");
+process.stdout = BrowserStdout({ label: false });
 
 /**
  * Create a Mocha instance.
@@ -26,9 +23,6 @@ var mocha = new Mocha({ reporter: "html" });
 
 var Date = global.Date;
 var setTimeout = global.setTimeout;
-var setInterval = global.setInterval;
-var clearTimeout = global.clearTimeout;
-var clearInterval = global.clearInterval;
 
 var uncaughtExceptionHandlers = [];
 
@@ -214,7 +208,7 @@ global.mocha = mocha;
 // for bundlers: enable `import {describe, it} from 'mocha'`
 // `bdd` interface only
 // prettier-ignore
-[ 
+[
   'describe', 'context', 'it', 'specify',
   'xdescribe', 'xcontext', 'xit', 'xspecify',
   'before', 'beforeEach', 'afterEach', 'after'
@@ -222,4 +216,4 @@ global.mocha = mocha;
   mocha[key] = global[key];
 });
 
-module.exports = mocha;
+export default mocha;

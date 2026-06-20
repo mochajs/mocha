@@ -28,7 +28,7 @@ Agent onboarding for the `mochajs/mocha` repository.
 ## Repository map (quick)
 
 - `lib/` — core runtime (runner, suite, hooks, reporters, CLI internals)
-- `bin/` — CLI entrypoints (`mocha`, `_mocha`)
+- `bin/` — CLI entrypoints (`mocha`)
 - `test/` — unit, integration, node-only, browser-specific, smoke
 - `docs/` — Astro/Starlight docs app with separate lockfile/scripts
 - `mocha.js` / `mocha.js.map` — browser bundle outputs (generated)
@@ -65,7 +65,7 @@ For clean CI reproduction on a fresh checkout, prefer `npm ci --ignore-scripts`;
 - Integration: `npm run test-node:integration`
 - Interfaces: `npm run test-node:interfaces`
 - Reporters: `npm run test-node:reporters`
-- Browser reporters subset: `npm run test-browser:reporters:bdd`
+- Browser subset: `npm run test-browser -- --grep bdd`
 - Full browser path: `npm run test-browser` (includes clean + build)
 
 ### Validation routing
@@ -87,9 +87,8 @@ For clean CI reproduction on a fresh checkout, prefer `npm ci --ignore-scripts`;
 ## Critical command-order gotchas
 
 - Browser tests depend on built bundle artifacts.
-  - If you run `clean`, you **must** run `build` before low-level browser runner commands.
-  - `npm run test-browser-run` after `clean` (without build) can fail with "Cannot find module 'mocha'" in Karma.
-- `test-browser` script is safer than calling `test-browser-run` directly because it includes `clean build`.
+  - If you run `clean`, you **must** run `build` before invoking `playwright test` directly, or the page will 404 on `/mocha.js`.
+- `test-browser` script is safer than calling `playwright test` directly because it includes `clean build`.
 
 ## CI parity notes
 

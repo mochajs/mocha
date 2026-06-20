@@ -1,13 +1,8 @@
-"use strict";
-
-var fs = require("node:fs");
-var sinon = require("sinon");
-var JSONReporter = require("../../lib/reporters/json.mjs").JSONReporter;
-var utils = require("../../lib/utils");
-var Mocha = require("../../");
-var Suite = Mocha.Suite;
-var Runner = Mocha.Runner;
-var Test = Mocha.Test;
+import fs from "node:fs";
+import sinon from "sinon";
+import { JSONReporter } from "../../lib/reporters/json.js";
+import utils from "../../lib/utils.cjs";
+import { Mocha, Suite, Runner, Test } from "../../index.js";
 
 describe("JSON reporter", function () {
   var mocha;

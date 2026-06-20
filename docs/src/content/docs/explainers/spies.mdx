@@ -3,7 +3,7 @@ description: How to use spies with Mocha for testing callbacks and function call
 title: Spies
 ---
 
-Mocha does not come equipped with spies, though libraries like [Sinon](https://github.com/sinonjs/sinon) provide this behaviour if desired. The following is an example of Mocha utilizing Sinon and [Should.js](https://github.com/shouldjs/should.js) to test an EventEmitter:
+Mocha does not come equipped with spies, though libraries like [Sinon](https://github.com/sinonjs/sinon) provide this behaviour if desired. The following is an example of Mocha utilizing Sinon to test an EventEmitter:
 
 ```javascript
 import sinon from "sinon";
@@ -17,7 +17,7 @@ describe("EventEmitter", function () {
 
       emitter.on("foo", spy);
       emitter.emit("foo");
-      spy.called.should.equal.true;
+      sinon.assert.calledOnce(spy);
     });
 
     it("should pass arguments to the callbacks", function () {
@@ -36,6 +36,9 @@ describe("EventEmitter", function () {
 The following is the same test, performed without any special spy library, utilizing the Mocha `done([err])` callback as a means to assert that the callback has occurred, otherwise resulting in a timeout. Note that Mocha only allows `done()` to be invoked once, and will otherwise error.
 
 ```javascript
+import { strict as assert } from "node:assert";
+import { EventEmitter } from "node:events";
+
 describe("EventEmitter", function () {
   describe("#emit()", function () {
     it("should invoke the callback", function (done) {
@@ -49,8 +52,8 @@ describe("EventEmitter", function () {
       const emitter = new EventEmitter();
 
       emitter.on("foo", function (a, b) {
-        a.should.equal("bar");
-        b.should.equal("baz");
+        assert.equal(a, "bar");
+        assert.equal(b, "baz");
         done();
       });
       emitter.emit("foo", "bar", "baz");
