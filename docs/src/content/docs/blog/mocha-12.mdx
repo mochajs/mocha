@@ -9,6 +9,8 @@ excerpt: "Mocha 12 is the first release to follow our
   and modernized a bit, but everything else works just as before."
 ---
 
+import { PackageManagers } from "starlight-package-managers";
+
 Mocha 12 is the first release to follow our
 [even-odd major release pattern](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md#major-releases).
 As an even release, Mocha 12 introduces very few breaking changes:
@@ -17,9 +19,11 @@ and modernized a bit, but everything else works just as before.
 
 These notes cover all changes in our first release candidate, `12.0.0-rc.1`. The baseline is `11.7.4`, after which we started releasing betas. To view the full changelog, see [CHANGELOG.md on Github](https://github.com/mochajs/mocha/blob/main/CHANGELOG.md).
 
-As a release candidate, RC 1 contains all features that will be in `12.0.0`. We will work to fix bugs for future release candidates, then release a stable `12.0.0` when it's ready.
+As a release candidate, RC 1 contains all the features that will be in `12.0.0`. We will work to fix bugs for future release candidates, then release a stable `12.0.0` when it's ready.
 
 We will continue to support critical bugfixes in Mocha 11 while customers upgrade to Mocha 12. We've also deployed [v11.mochajs.org](https://v11.mochajs.org) for users that may rely on Mocha 11 in the long-term.
+
+You can try the RC now with a standard install:
 
 {/* todo validate after publish of RC 1, before publish of this post */}
 
@@ -29,15 +33,15 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
 
 ## Breaking changes
 
-- bump minimum Node.js version from 18.18.0 to 20.19.0 and 22.12.0
-  ([#5477](https://github.com/mochajs/mocha/issues/5477)):
+- [Bump minimum Node.js version from 18.18.0 to 20.19.0 and 22.12.0
+  (#5477)](https://github.com/mochajs/mocha/issues/5477):
   We know that Node 20 is now EOL,
   but we didn't want to jump 2 LTS versions in one release.
   Mocha 13 will drop support for Node 20.
   The new minimum versions are the lowest Node versions that support `require(esm)`
   (see [internal modernization](#internal-modernization)).
-- remove util.inherits / convert to classes
-  ([#5025](https://github.com/mochajs/mocha/issues/5025)):
+- [Remove `util.inherits` / convert to classes
+  (#5025)](https://github.com/mochajs/mocha/issues/5025):
   Through Mocha 11, reporters inherited behavior through `util.inherits`.
   This was deprecated a long time ago.
   Reporters now inherit through canonical `class` syntax.
@@ -45,50 +49,50 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
   but the core behavior is the same. See the updated
   [third-party reporters](https://mochajs.org/explainers/third-party-reporters/)
   page for details.
-- remove `bin/_mocha` and convert `bin/` and entry points to ESM
-  ([#6017](https://github.com/mochajs/mocha/pull/6017)):
+- [Remove `bin/_mocha` and convert `bin/` and entry points to ESM
+  (#6017)](https://github.com/mochajs/mocha/pull/6017):
   The `_mocha` entry point had been kept as a workaround for old coverage providers.
   Swapping `path/to/_mocha` with `mocha` should work without issue.
-- change root package.json type to module
-  ([#6078](https://github.com/mochajs/mocha/pull/6078)):
+- [Change root `package.json` type to `module`
+  (#6078)](https://github.com/mochajs/mocha/pull/6078):
   This should not be a breaking change for the vast majority of users,
   see [internal modernization](#internal-modernization).
-- change the default of --forbid-only to check for process.env.CI
-  ([#5496](https://github.com/mochajs/mocha/issues/5496)):
+- [Change the default of `--forbid-only` to check for process.env.CI
+  (#5496)](https://github.com/mochajs/mocha/issues/5496):
   This should improve CI runs, but rare use-cases may need to
   explicitly set `--no-forbid-only` to restore the previous default behavior.
-- remove unused legacy `errors.js` functions
-  ([#5835](https://github.com/mochajs/mocha/pull/5835)):
+- [Remove unused legacy `errors.js` functions
+  (#5835)](https://github.com/mochajs/mocha/pull/5835):
   The public function `createInvalidPluginError` has been deprecated for years.
   Callers should use `createInvalidLegacyPluginError` instead,
   which has the exact same contract and behavior.
-- cleanup references of --compilers
-  ([#5403](https://github.com/mochajs/mocha/issues/5403)):
-  This flag has been deprecated for a long time.
-  It has not had any impact on behavior for years.
+- [Cleanup references of `--compilers`
+  (#5403)](https://github.com/mochajs/mocha/issues/5403):
+  This flag had been deprecated for a long time.
+  It had not had any impact on behavior for years.
   It is now removed from the codebase.
 
 ## Notable new features
 
-- allow FIFOs as test files
+- Allow FIFOs as test files
   ([#5512](https://github.com/mochajs/mocha/issues/5512))
-- add mocha.mjs export
+- Add mocha.mjs export
   ([#5527](https://github.com/mochajs/mocha/issues/5527)):
   This has since been renamed `mocha.js` but it still works for use in the browser!
-- add --fail-hook-affected-tests option to report skipped tests as failed
+- Add `--fail-hook-affected-tests` option to report skipped tests as failed
   ([#5519](https://github.com/mochajs/mocha/issues/5519))
 
 ## Notable fixes
 
-- allow importing ESM interface and reporters
+- Allow importing ESM interface and reporters
   ([#5563](https://github.com/mochajs/mocha/issues/5563))
-- support file: URLs in loadFilesAsync
+- Support file: URLs in loadFilesAsync
   ([#5833](https://github.com/mochajs/mocha/pull/5833))
-- support modern RegExp flags in Mocha#grep
+- Support modern RegExp flags in Mocha#grep
   ([#5825](https://github.com/mochajs/mocha/pull/5825))
-- prevent diff hang on large/complex objects
+- Prevent diff hang on large/complex objects
   ([#5898](https://github.com/mochajs/mocha/pull/5898))
-- surface global setup/teardown errors with a non-zero exit code
+- Surface global setup/teardown errors with a non-zero exit code
   ([#5994](https://github.com/mochajs/mocha/pull/5994))
 
 <a id="internal-modernization"></a>
