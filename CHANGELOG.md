@@ -1,5 +1,48 @@
 # Changelog
 
+## [12.0.0-rc.1](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.6...v12.0.0-rc.1) (2026-06-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* change root package.json type to module ([#6078](https://github.com/mochajs/mocha/issues/6078))
+
+### 🌟 Features
+
+* change root package.json type to module ([#6078](https://github.com/mochajs/mocha/issues/6078)) ([da015de](https://github.com/mochajs/mocha/commit/da015de4493f6f497802c4fc35ab294e46a59dad))
+
+
+### 📚 Documentation
+
+* add blog ([#6095](https://github.com/mochajs/mocha/issues/6095)) ([c0280ba](https://github.com/mochajs/mocha/commit/c0280baad8e07d3d7e6f4bce524bf47c102836c1))
+* switch util.inherits to class extends ([#5677](https://github.com/mochajs/mocha/issues/5677)) ([f6e8d9a](https://github.com/mochajs/mocha/commit/f6e8d9ab58217971e24fd1fb0a4569f50a6ff488))
+
+
+### 🧹 Chores
+
+* configure Release Please for RC ([#6083](https://github.com/mochajs/mocha/issues/6083)) ([8f3a61c](https://github.com/mochajs/mocha/commit/8f3a61c7137632062105e0fdaa6abdd82fe1627d))
+* **deps:** update dependency @types/node to v24.13.0 ([#6066](https://github.com/mochajs/mocha/issues/6066)) ([fb1998a](https://github.com/mochajs/mocha/commit/fb1998a350dec3f424015b5b5f01ba98309e5b95))
+* **deps:** update dependency eslint-plugin-n to v18.1.0 ([#6072](https://github.com/mochajs/mocha/issues/6072)) ([6f56135](https://github.com/mochajs/mocha/commit/6f56135a3d64cd450782f442417a731f40e1a97c))
+* **deps:** update dependency knip to v6.16.1 ([#6067](https://github.com/mochajs/mocha/issues/6067)) ([b204395](https://github.com/mochajs/mocha/commit/b20439531ef88cf766eadc1b8d4c1a12cae17240))
+* **deps:** update dependency rollup to v4.61.0 ([#6050](https://github.com/mochajs/mocha/issues/6050)) ([87696d5](https://github.com/mochajs/mocha/commit/87696d57e4418899e2289c9a2f03143a2ccd92e0))
+* **deps:** update dependency rollup to v4.62.0 ([#6103](https://github.com/mochajs/mocha/issues/6103)) ([69e04bf](https://github.com/mochajs/mocha/commit/69e04bf0b9a9becf4875732bbdeca587d8e21b3f))
+* **deps:** update eslint monorepo to v10.5.0 ([#6100](https://github.com/mochajs/mocha/issues/6100)) ([ac372e0](https://github.com/mochajs/mocha/commit/ac372e07960f1d41ddba0fe9632c278cfdde0284))
+* explain "trivial changes", update PR template ([#6075](https://github.com/mochajs/mocha/issues/6075)) ([6cbe3d5](https://github.com/mochajs/mocha/commit/6cbe3d5f9fd2e83ef10e97cc2a2cc49aa484a4d4))
+* fix "remove 'waiting for author' " workflow ([#6090](https://github.com/mochajs/mocha/issues/6090)) ([b80d44b](https://github.com/mochajs/mocha/commit/b80d44b3bea01cb4cd7e0bda295ea00a1d6e157d))
+* fix formatting on new remove-waiting-label file ([#6062](https://github.com/mochajs/mocha/issues/6062)) ([bfcb02a](https://github.com/mochajs/mocha/commit/bfcb02a1d12c0f03e8be6771e27aa4135f377bc9))
+* fix Release Please manifest ([#6097](https://github.com/mochajs/mocha/issues/6097)) ([cfd9cf7](https://github.com/mochajs/mocha/commit/cfd9cf7610f436384ef23d8dcd32f55492fa350c))
+* remove "status: waiting for author" label on review request ([#5983](https://github.com/mochajs/mocha/issues/5983)) ([fa3488d](https://github.com/mochajs/mocha/commit/fa3488d80db56ee328348c4901e25bd9eff8fb4b))
+* replace Karma with Playwright for browser tests ([#6031](https://github.com/mochajs/mocha/issues/6031)) ([7c9b004](https://github.com/mochajs/mocha/commit/7c9b0046f30076b39f1cb161adad0416ea827606))
+* restore cursor in watch failure diagnostics ([#6102](https://github.com/mochajs/mocha/issues/6102)) ([d640269](https://github.com/mochajs/mocha/commit/d640269413414b401980d676d1383b5974010681))
+* synchronize watch integration tests on observed runs instead of sleeps ([#6058](https://github.com/mochajs/mocha/issues/6058)) ([84af186](https://github.com/mochajs/mocha/commit/84af186b327ac44dd832ae272e31705c4ce19c70))
+* upgrade Astro and its deps ([#6089](https://github.com/mochajs/mocha/issues/6089)) ([66cdd8f](https://github.com/mochajs/mocha/commit/66cdd8f02ce420803d70532215ea9b588e7e78c9))
+* use 1st-party script for blocked-pr.yml ([#6085](https://github.com/mochajs/mocha/issues/6085)) ([54aee06](https://github.com/mochajs/mocha/commit/54aee06a9c49a0bb7827b217ab8ef6986cb071af))
+
+
+### 🤖 Automation
+
+* **deps:** bump codecov/codecov-action from 6 to 7 in the github-actions group ([#6051](https://github.com/mochajs/mocha/issues/6051)) ([00db758](https://github.com/mochajs/mocha/commit/00db758fdbd61762d735ce7d7f76972da43561aa))
+
 ## [12.0.0-beta-9.6](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.5...v12.0.0-beta-9.6) (2026-06-10)
 
 
