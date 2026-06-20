@@ -21,7 +21,7 @@ The `helpers.js` module contains many functions to handle the common cases of sp
 
 ### Return Types
 
-- `RawResult`: an object containing props `args`, `code`, `output` and `command`
+- `RawResult`: an object containing props `args`, `code`, `output`, `command`, and `stderr`
 - `SummarizedResult`: a `RawResult` + props `passing`, `failing` and `pending`
 - `JSONResult`: a `RawResult` + parsed output of `json` reporter
 

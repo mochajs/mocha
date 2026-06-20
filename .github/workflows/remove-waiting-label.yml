@@ -1,0 +1,31 @@
+name: Remove "waiting for author" label on review request
+
+on:
+  pull_request_target:
+    types: [review_requested]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  remove-label:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Remove "status: waiting for author" label'
+        uses: actions/github-script@v7
+        with:
+          # REST gives 404 if label isn't present
+          script: |
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'status: waiting for author',
+              });
+            } catch (e) {
+              if (e.status !== 404) throw e;
+            }

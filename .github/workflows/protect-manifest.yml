@@ -1,0 +1,18 @@
+name: Protect Release Please Manifest
+
+on:
+  pull_request:
+    paths:
+      - .github/release-please/manifest.json
+
+jobs:
+  check-manifest-author:
+    name: Verify manifest not manually edited
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block manual manifest edits
+        if: github.event.pull_request.user.login != 'github-actions[bot]'
+        run: |
+          echo ".github/release-please/manifest.json should only be updated by Release Please (github-actions[bot])"
+          echo "See [MAINTAINERS.md#mochas-release-process](https://github.com/mochajs/mocha/blob/main/MAINTAINERS.md#mochas-release-process) for more details"
+          exit 1

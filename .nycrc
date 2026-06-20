@@ -10,7 +10,8 @@
     "test{,-*}.{js,cjs,mjs,ts}",
     "**/*{.,-}test.{js,cjs,mjs,ts}",
     "**/__tests__/**",
-    "**/{karma,rollup,webpack}.config.js",
+    "**/{rollup,webpack}.config.js",
+    "**/playwright.config.js",
     "**/{babel.config,.eslintrc,.mocharc}.{js,cjs}",
     "lib/browser/**",
     "package-scripts.js",
@@ -18,6 +19,6 @@
     "**/package-lock.json",
     "node_modules/**",
     "scripts/**",
-    "!test/integration/fixtures/stack-trace.fixture.js"
+    "!test/integration/fixtures/stack-trace.fixture.cjs"
   ]
 }
