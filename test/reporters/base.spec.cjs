@@ -626,7 +626,7 @@ describe("Base reporter", function () {
     });
 
     it("should fall back to a placeholder when stringifyDiffObjs throws", function () {
-      var utils = require("../../lib/utils");
+      var utils = require("../../lib/utils.cjs");
       sinon
         .stub(utils, "stringify")
         .throws(new Error("simulated stringify failure"));
