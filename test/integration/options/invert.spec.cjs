@@ -6,7 +6,7 @@ describe("--invert", function () {
   describe("when used without --fgrep or --grep", function () {
     it("it should report an error", function (done) {
       runMocha(
-        "options/grep",
+        "options/grep.fixture.js",
         ["--invert"],
         function (err, res) {
           if (err) {
