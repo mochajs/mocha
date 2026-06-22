@@ -1,5 +1,21 @@
 # Changelog
 
+## [12.0.0-rc.2](https://github.com/mochajs/mocha/compare/v12.0.0-rc.1...v12.0.0-rc.2) (2026-06-22)
+
+
+### 📚 Documentation
+
+* move legacy site link to bottom of homepage ([#6093](https://github.com/mochajs/mocha/issues/6093)) ([f3e7d37](https://github.com/mochajs/mocha/commit/f3e7d374c717cb1a61297233237c8be53ba5e68e))
+
+
+### 🧹 Chores
+
+* add "Protect Release Please Manifest" workflow ([#6099](https://github.com/mochajs/mocha/issues/6099)) ([2d7bc22](https://github.com/mochajs/mocha/commit/2d7bc22dda9d14beeae1bf89ae7ea5bdbfa8f56a))
+* add v12 RC 1 release notes ([#5848](https://github.com/mochajs/mocha/issues/5848)) ([275ce51](https://github.com/mochajs/mocha/commit/275ce519122c154cdd75434de9fde2800416dad1))
+* **deps:** update playwright monorepo to v1.61.0 ([#6108](https://github.com/mochajs/mocha/issues/6108)) ([7ad398e](https://github.com/mochajs/mocha/commit/7ad398ebf14e4a9255984338619907bf485d6a17))
+* fix RC 1 blog publish time, rename to `...-rc-1` ([#6106](https://github.com/mochajs/mocha/issues/6106)) ([00d59bc](https://github.com/mochajs/mocha/commit/00d59bc5ff3f8c95235c0b7f500521dc6320440b))
+* require exact fixture references in integration tests ([#6096](https://github.com/mochajs/mocha/issues/6096)) ([d602cc7](https://github.com/mochajs/mocha/commit/d602cc7ab9b93169916d267e19071fbeb6cd0468))
+
 ## [12.0.0-rc.1](https://github.com/mochajs/mocha/compare/v12.0.0-beta-9.6...v12.0.0-rc.1) (2026-06-20)
 
 
