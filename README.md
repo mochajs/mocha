@@ -50,6 +50,18 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Supporters
+
+[![WallabyJS](https://wallabyjs.com/assets/img/logo.svg)](https://wallabyjs.com)
+[![SauceLabs](https://saucelabs.com/images/logo.svg)](https://saucelabs.com)
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://www.jetbrains.com/webstorm/)
+
+### Services
+
+[![GitHub Actions](https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png)](https://github.com/features/actions)
+[![AppVeyor](https://www.appveyor.com/assets/img/appveyor-logo-256.png)](https://appveyor.com)
+[![Netlify](https://img.shields.io/badge/Netlify-Hosting-00C7B7?logo=netlify&logoColor=white)](https://netlify.com)
+
 ## Development
 
 You might want to know that:
