@@ -52,16 +52,15 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 
 ### Supporters
 
-[![WallabyJS](https://img.shields.io/badge/WallabyJS-Provided%20license-blue)](https://wallabyjs.com)
-[![SauceLabs](https://img.shields.io/badge/SauceLabs-Upgraded%20service-blue)](https://saucelabs.com)
-[![JetBrains](https://img.shields.io/badge/JetBrains-WebStorm%20licenses-blue)](https://www.jetbrains.com/webstorm/)
+[![WallabyJS](https://wallabyjs.com/assets/img/logo.svg)](https://wallabyjs.com)
+[![SauceLabs](https://saucelabs.com/images/logo.svg)](https://saucelabs.com)
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://www.jetbrains.com/webstorm/)
 
-## Services
+### Services
 
-[![Travis CI](https://img.shields.io/badge/Travis%20CI-Continuous%20Integration-blue)](https://travis-ci.org)
-[![AppVeyor](https://img.shields.io/badge/AppVeyor-Windows%20CI-blue)](https://appveyor.com)
-[![Coveralls](https://img.shields.io/badge/Coveralls-Code%20Coverage-blue)](https://coveralls.io)
-[![Netlify](https://img.shields.io/badge/Netlify-Hosting-blue)](https://netlify.com)
+[![GitHub Actions](https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png)](https://github.com/features/actions)
+[![AppVeyor](https://www.appveyor.com/assets/img/appveyor-logo-256.png)](https://appveyor.com)
+[![Netlify](https://img.shields.io/badge/Netlify-Hosting-00C7B7?logo=netlify&logoColor=white)](https://netlify.com)
 
 ## Development
 
