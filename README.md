@@ -50,6 +50,19 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Supporters
+
+[![WallabyJS](https://img.shields.io/badge/WallabyJS-Provided%20license-blue)](https://wallabyjs.com)
+[![SauceLabs](https://img.shields.io/badge/SauceLabs-Upgraded%20service-blue)](https://saucelabs.com)
+[![JetBrains](https://img.shields.io/badge/JetBrains-WebStorm%20licenses-blue)](https://www.jetbrains.com/webstorm/)
+
+## Services
+
+[![Travis CI](https://img.shields.io/badge/Travis%20CI-Continuous%20Integration-blue)](https://travis-ci.org)
+[![AppVeyor](https://img.shields.io/badge/AppVeyor-Windows%20CI-blue)](https://appveyor.com)
+[![Coveralls](https://img.shields.io/badge/Coveralls-Code%20Coverage-blue)](https://coveralls.io)
+[![Netlify](https://img.shields.io/badge/Netlify-Hosting-blue)](https://netlify.com)
+
 ## Development
 
 You might want to know that:
