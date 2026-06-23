@@ -50,6 +50,29 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Supporters
+
+Mocha is grateful for the generous support of the following organizations:
+
+<a href="https://wallabyjs.com">
+  <img src="https://img.shields.io/badge/Wallaby.js-powered-blue.svg" alt="Wallaby.js - powered by Wallaby.js">
+</a>
+<a href="https://saucelabs.com">
+  <img src="https://img.shields.io/badge/Sauce%20Labs-cross_browser_testing-green.svg" alt="Sauce Labs - cross browser testing">
+</a>
+<a href="https://www.jetbrains.com/webstorm/">
+  <img src="https://img.shields.io/badge/JetBrains-powered-f49e4b.svg" alt="JetBrains - WebStorm">
+</a>
+
+## Services
+
+Mocha uses the following services:
+
+<a href="https://www.travis-ci.com"><img src="https://img.shields.io/badge/Travis%20CI-CI%2FCD-blue.svg" alt="Travis CI"></a>
+<a href="https://www.appveyor.com"><img src="https://img.shields.io/badge/AppVeyor-Windows%20CI-blue.svg" alt="AppVeyor"></a>
+<a href="https://coveralls.io"><img src="https://img.shields.io/badge/Coveralls-code%20coverage-brightgreen.svg" alt="Coveralls"></a>
+<a href="https://www.netlify.com"><img src="https://img.shields.io/badge/Netlify-documentation%20hosting-blue.svg" alt="Netlify"></a>
+
 ## Development
 
 You might want to know that:
