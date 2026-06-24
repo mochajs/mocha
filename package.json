@@ -47,7 +47,7 @@
     "docs": "cd docs; npm run docs",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "lint:installed-check": "installed-check --engine-check --ignore-dev",
+    "lint:installed-check": "installed-check --engine-check --ignore \"@eslint/*\" --ignore eslint --ignore eslint-plugin-n --ignore installed-check",
     "lint:knip": "knip --cache",
     "lint:knip-docs": "cd docs && npm run lint:knip",
     "lint:code": "eslint . --max-warnings 0",
