@@ -172,6 +172,7 @@
     "./lib/nodejs/esm-utils.cjs": false,
     "./lib/nodejs/file-unloader.cjs": false,
     "./lib/nodejs/parallel-buffered-runner.cjs": false,
+    "./lib/nodejs/runnable-context.cjs": false,
     "./lib/nodejs/serializer.js": false,
     "./lib/nodejs/worker.cjs": false,
     "./lib/nodejs/reporters/parallel-buffered.cjs": false,

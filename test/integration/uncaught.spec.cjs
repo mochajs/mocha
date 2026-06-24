@@ -46,17 +46,44 @@ describe("uncaught exceptions", function () {
     });
   });
 
-  it("handles uncaught exceptions from which Mocha cannot recover", function (done) {
-    run("uncaught/fatal.fixture.js", args, function (err, res) {
+  it("keeps running after an already-passed test fails asynchronously", function (done) {
+    run("uncaught/recover-after-pass.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
 
-      var testName = "should bail if a successful test asynchronously fails";
+      var testName = "passes synchronously then fails asynchronously";
       expect(res, "to have failed with error", "global error")
-        .and("to have passed test count", 1)
+        .and("to have passed test count", 3)
         .and("to have failed test count", 1)
-        .and("to have passed test", testName)
+        .and(
+          "to have passed test",
+          testName,
+          "still runs after the async failure",
+          "also still runs",
+        )
+        .and("to have failed test", testName);
+
+      done();
+    });
+  });
+
+  it("attributes an async failure to the test that scheduled it, not the running one", function (done) {
+    run("uncaught/async-attribution.fixture.js", args, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      var testName = "passes but schedules a late failure";
+      expect(res, "to have failed with error", "late boom")
+        .and("to have passed test count", 3)
+        .and("to have failed test count", 1)
+        .and(
+          "to have passed test",
+          testName,
+          "unrelated test 1",
+          "unrelated test 2",
+        )
         .and("to have failed test", testName);
 
       done();
@@ -149,15 +176,15 @@ describe("uncaught exceptions", function () {
     );
   });
 
-  it("issue-1327: should run the first test and then bail", function (done) {
+  it("issue-1327: attributes the async failure to the right test and keeps running", function (done) {
     run("uncaught/issue-1327.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
       expect(res, "to have failed with error", "Too bad")
-        .and("to have passed test count", 1)
+        .and("to have passed test count", 3)
         .and("to have failed test count", 1)
-        .and("to have passed test", "test 1")
+        .and("to have passed test", "test 1", "test 2", "test 3")
         .and("to have failed test", "test 1");
       done();
     });
