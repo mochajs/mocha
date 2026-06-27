@@ -24,7 +24,7 @@ const SPLIT_DOT_REPORTER_REGEXP = new RegExp("[\\n" + Base.symbols.dot + "]+");
 /**
  * Name of "default" fixture file.
  */
-const DEFAULT_FIXTURE = "__default__";
+const DEFAULT_FIXTURE = "__default__.fixture.js";
 
 /**
  * Path to "default" fixture file
@@ -386,9 +386,14 @@ function createSubprocess(args, done, opts = {}) {
 }
 
 /**
- * Given a fixture "name" (a relative path from `${__dirname}/fixtures`),
- * with or without extension, or an absolute path, resolve a fixture filepath
- * @param {string} fixture - Fixture name
+ * Given an exact fixture reference (a relative path from `${__dirname}/fixtures`,
+ * including its extension) or an absolute path, resolve a fixture filepath.
+ *
+ * Fixture references must be exact. Passing a bare name such as my-file and
+ * relying on my-file.fixture.js being found is no longer supported, pass the
+ * full file name (for example: my-file.fixture.js) instead.
+ *
+ * @param {string} fixture - Exact fixture reference
  * @returns {string} Resolved filepath
  */
 function resolveFixturePath(fixture) {
@@ -396,24 +401,14 @@ function resolveFixturePath(fixture) {
     return fixture;
   }
 
-  const supportedFixtureExtensions = [".cjs", ".js", ".ts"];
-
-  if (supportedFixtureExtensions.includes(path.extname(fixture))) {
-    return path.resolve(__dirname, "fixtures", fixture);
-  }
-
-  for (const extension of supportedFixtureExtensions) {
-    const resolved = path.resolve(
-      __dirname,
-      "fixtures",
-      `${fixture}.fixture${extension}`,
+  if (!path.extname(fixture)) {
+    throw new Error(
+      `Fixture "${fixture}" must be referenced by its exact file name, ` +
+        `e.g. "${fixture}.fixture.js".`,
     );
-    if (fs.existsSync(resolved)) {
-      return resolved;
-    }
   }
 
-  return path.resolve(__dirname, "fixtures", `${fixture}.fixture.js`);
+  return path.resolve(__dirname, "fixtures", fixture);
 }
 
 /**

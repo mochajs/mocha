@@ -4,7 +4,7 @@ var helpers = require("../helpers.cjs");
 var runMocha = helpers.runMocha;
 var runMochaJSON = helpers.runMochaJSON;
 
-var FIXTURE = "options/grep";
+var FIXTURE = "options/grep.fixture.js";
 
 describe("--grep", function () {
   it("should run specs matching a string", function (done) {

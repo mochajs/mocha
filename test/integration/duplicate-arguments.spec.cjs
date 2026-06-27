@@ -6,7 +6,7 @@ describe("when non-array argument is provided multiple times", function () {
   describe("when the same argument name is used", function () {
     it("should prefer the last value", function (done) {
       runMochaJSON(
-        "passing-sync",
+        "passing-sync.fixture.js",
         ["--no-async-only", "--async-only", "--no-async-only"],
         function (err, result) {
           if (err) {
@@ -22,7 +22,7 @@ describe("when non-array argument is provided multiple times", function () {
   describe("when a different argument name is used", function () {
     it("should prefer the last value", function (done) {
       runMochaJSON(
-        "passing-async",
+        "passing-async.fixture.js",
         ["--timeout", "100", "-t", "10"],
         function (err, result) {
           if (err) {

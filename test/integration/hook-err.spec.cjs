@@ -29,51 +29,63 @@ describe("hook error handling", function () {
 
   describe("before hook root error", function () {
     it("should verify results", function (done) {
-      runMochaJSON("hooks/before-hook-root-error", [], (err, res) => {
-        if (err) {
-          return done(err);
-        }
-        expect(res, "to have failed with error", "before hook root error")
-          .and("to have failed test", '"before all" hook in "{root}"')
-          .and("to have passed test count", 0);
-        done();
-      });
+      runMochaJSON(
+        "hooks/before-hook-root-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "before hook root error")
+            .and("to have failed test", '"before all" hook in "{root}"')
+            .and("to have passed test count", 0);
+          done();
+        },
+      );
     });
   });
 
   describe("before hook nested error", function () {
     it("should verify results", function (done) {
-      runMochaJSON("hooks/before-hook-nested-error", [], (err, res) => {
-        if (err) {
-          return done(err);
-        }
-        expect(res, "to have failed with error", "before hook nested error")
-          .and(
-            "to have failed test",
-            '"before all" hook for "it nested - this title should be used"',
-          )
-          .and("to have passed test count", 1)
-          .and("to have passed test", "should pass");
-        done();
-      });
+      runMochaJSON(
+        "hooks/before-hook-nested-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "before hook nested error")
+            .and(
+              "to have failed test",
+              '"before all" hook for "it nested - this title should be used"',
+            )
+            .and("to have passed test count", 1)
+            .and("to have passed test", "should pass");
+          done();
+        },
+      );
     });
   });
 
   describe("before hook deepnested error", function () {
     it("should verify results", function (done) {
-      runMochaJSON("hooks/before-hook-deepnested-error", [], (err, res) => {
-        if (err) {
-          return done(err);
-        }
-        expect(res, "to have failed with error", "before hook nested error")
-          .and(
-            "to have failed test",
-            '"before all" hook in "spec 2 nested - this title should be used"',
-          )
-          .and("to have passed test count", 1)
-          .and("to have passed test", "should pass");
-        done();
-      });
+      runMochaJSON(
+        "hooks/before-hook-deepnested-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "before hook nested error")
+            .and(
+              "to have failed test",
+              '"before all" hook in "spec 2 nested - this title should be used"',
+            )
+            .and("to have passed test count", 1)
+            .and("to have passed test", "should pass");
+          done();
+        },
+      );
     });
   });
 
@@ -93,46 +105,54 @@ describe("hook error handling", function () {
 
   describe("after hook nested error", function () {
     it("should verify results", function (done) {
-      runMochaJSON("hooks/after-hook-nested-error", [], (err, res) => {
-        if (err) {
-          return done(err);
-        }
-        expect(res, "to have failed with error", "after hook nested error")
-          .and(
-            "to have failed test",
-            '"after all" hook for "it nested - this title should be used"',
-          )
-          .and("to have passed test count", 3)
-          .and(
-            "to have passed test order",
-            "should pass",
-            "it nested - this title should be used",
-            "it nested - not this title",
-          );
-        done();
-      });
+      runMochaJSON(
+        "hooks/after-hook-nested-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "after hook nested error")
+            .and(
+              "to have failed test",
+              '"after all" hook for "it nested - this title should be used"',
+            )
+            .and("to have passed test count", 3)
+            .and(
+              "to have passed test order",
+              "should pass",
+              "it nested - this title should be used",
+              "it nested - not this title",
+            );
+          done();
+        },
+      );
     });
   });
 
   describe("after hook deepnested error", function () {
     it("should verify results", function (done) {
-      runMochaJSON("hooks/after-hook-deepnested-error", [], (err, res) => {
-        if (err) {
-          return done(err);
-        }
-        expect(res, "to have failed with error", "after hook nested error")
-          .and(
-            "to have failed test",
-            '"after all" hook in "spec 2 nested - this title should be used"',
-          )
-          .and("to have passed test count", 2)
-          .and(
-            "to have passed test order",
-            "should pass",
-            "it nested - this title should not be used",
-          );
-        done();
-      });
+      runMochaJSON(
+        "hooks/after-hook-deepnested-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "after hook nested error")
+            .and(
+              "to have failed test",
+              '"after all" hook in "spec 2 nested - this title should be used"',
+            )
+            .and("to have passed test count", 2)
+            .and(
+              "to have passed test order",
+              "should pass",
+              "it nested - this title should not be used",
+            );
+          done();
+        },
+      );
     });
   });
 
@@ -256,7 +276,7 @@ describe("hook error handling", function () {
   describe('"this.test.error()-style failure', function () {
     it("should fail the associated test", async function () {
       return expect(
-        runMochaJSONAsync("hooks/after-each-this-test-error"),
+        runMochaJSONAsync("hooks/after-each-this-test-error.fixture.js"),
         "when fulfilled",
         "to have failed",
       ).and(
@@ -271,7 +291,7 @@ describe("hook error handling", function () {
     describe("error in `before` hook", function () {
       it("should fail all affected tests", function (done) {
         runMochaJSON(
-          "hooks/before-hook-error-with-fail-affected",
+          "hooks/before-hook-error-with-fail-affected.fixture.js",
           ["--fail-hook-affected-tests"],
           (err, res) => {
             if (err) {
@@ -293,7 +313,7 @@ describe("hook error handling", function () {
     describe("error in `beforeEach` hook", function () {
       it("should fail all affected tests", function (done) {
         runMochaJSON(
-          "hooks/before-each-hook-error-with-fail-affected",
+          "hooks/before-each-hook-error-with-fail-affected.fixture.js",
           ["--fail-hook-affected-tests"],
           (err, res) => {
             if (err) {
@@ -315,7 +335,7 @@ describe("hook error handling", function () {
     describe("non-Error thrown in `before` hook", function () {
       it("should handle null, undefined, and other non-Error values", function (done) {
         runMochaJSON(
-          "hooks/before-hook-throw-non-error",
+          "hooks/before-hook-throw-non-error.fixture.js",
           ["--fail-hook-affected-tests"],
           (err, res) => {
             if (err) {
@@ -336,7 +356,7 @@ describe("hook error handling", function () {
     describe("non-Error thrown in `beforeEach` hook", function () {
       it("should handle null, undefined, and other non-Error values", function (done) {
         runMochaJSON(
-          "hooks/before-each-hook-throw-non-error",
+          "hooks/before-each-hook-throw-non-error.fixture.js",
           ["--fail-hook-affected-tests"],
           (err, res) => {
             if (err) {

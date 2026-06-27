@@ -8,7 +8,7 @@ describe("--jobs", function () {
     it("should run tests in serial", function () {
       return expect(
         runMochaAsync(
-          "options/jobs/fail-in-parallel",
+          "options/jobs/fail-in-parallel.fixture.cjs",
           ["--parallel", "--jobs", "1"],
           "pipe",
         ),
@@ -22,7 +22,7 @@ describe("--jobs", function () {
     it("should run tests in parallel", function () {
       return expect(
         runMochaAsync(
-          "options/jobs/fail-in-parallel",
+          "options/jobs/fail-in-parallel.fixture.cjs",
           ["--parallel", "--jobs", "2"],
           "pipe",
         ),

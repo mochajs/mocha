@@ -33,7 +33,11 @@ describe("--allow-uncaught", function () {
   });
 
   it("should run with conditional `this.skip()`", function (done) {
-    var fixture = path.join("options", "allow-uncaught", "this-skip-it");
+    var fixture = path.join(
+      "options",
+      "allow-uncaught",
+      "this-skip-it.fixture.js",
+    );
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

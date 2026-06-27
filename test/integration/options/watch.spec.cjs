@@ -302,7 +302,7 @@ describe("--watch", function () {
         tempDir,
         () => {
           const addedTestFile = path.join(tempDir, "test/b.js");
-          copyFixture("passing", addedTestFile);
+          copyFixture("passing.fixture.cjs", addedTestFile);
         },
       ).then((results) => {
         expect(results, "to have length", 2);
@@ -425,7 +425,7 @@ describe("--watch", function () {
 
     it("reloads test files when they change", function () {
       const testFile = path.join(tempDir, "test.js");
-      copyFixture("options/watch/test-file-change", testFile);
+      copyFixture("options/watch/test-file-change.fixture.js", testFile);
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "**/*.js"],
@@ -448,10 +448,10 @@ describe("--watch", function () {
 
     it("reloads test dependencies when they change", function () {
       const testFile = path.join(tempDir, "test.js");
-      copyFixture("options/watch/test-with-dependency", testFile);
+      copyFixture("options/watch/test-with-dependency.fixture.cjs", testFile);
 
       const dependency = path.join(tempDir, "lib", "dependency.js");
-      copyFixture("options/watch/dependency", dependency);
+      copyFixture("options/watch/dependency.fixture.cjs", dependency);
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib/**/*.js"],
@@ -475,7 +475,7 @@ describe("--watch", function () {
     // Regression test for https://github.com/mochajs/mocha/issues/2027
     it("respects --fgrep on re-runs", async function () {
       const testFile = path.join(tempDir, "test.js");
-      copyFixture("options/grep", testFile);
+      copyFixture("options/grep.fixture.js", testFile);
 
       return expect(
         runMochaWatchJSONAsync([testFile, "--fgrep", "match"], tempDir, () => {
@@ -503,8 +503,8 @@ describe("--watch", function () {
           const testFile = path.join(tempDir, "test.js");
           const hookFile = path.join(tempDir, "hook.js");
 
-          copyFixture("__default__", testFile);
-          copyFixture("options/watch/hook", hookFile);
+          copyFixture("__default__.fixture.js", testFile);
+          copyFixture("options/watch/hook.fixture.cjs", hookFile);
 
           replaceFileContents(hookFile, "<hook>", hookName);
 

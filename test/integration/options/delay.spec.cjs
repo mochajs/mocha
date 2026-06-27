@@ -8,7 +8,7 @@ describe("--delay", function () {
   var args = ["--delay", "--no-forbid-only"];
 
   it("should run the generated test suite", function (done) {
-    var fixture = path.join("options", "delay");
+    var fixture = path.join("options", "delay.fixture.cjs");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -20,7 +20,7 @@ describe("--delay", function () {
   });
 
   it("should execute exclusive tests only", function (done) {
-    var fixture = path.join("options", "delay-only");
+    var fixture = path.join("options", "delay-only.fixture.cjs");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -38,7 +38,7 @@ describe("--delay", function () {
   });
 
   it("should throw an error if the test suite failed to run", function (done) {
-    var fixture = path.join("options", "delay-fail");
+    var fixture = path.join("options", "delay-fail.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

@@ -9,7 +9,7 @@ describe("--ui", function () {
 
   it("should load interface and run it", function (done) {
     runMochaJSON(
-      "test-for-simple-ui",
+      "test-for-simple-ui.fixture.js",
       ["--ui", simpleUiPath],
       function (err, res) {
         if (err) {
@@ -24,7 +24,7 @@ describe("--ui", function () {
 
   it("should work if required and name added to Mocha's `interfaces` prop", function (done) {
     runMochaJSON(
-      "test-for-simple-ui",
+      "test-for-simple-ui.fixture.js",
       ["--require", simpleUiPath, "--ui", "simple-ui"],
       function (err, res) {
         if (err) {
@@ -39,7 +39,7 @@ describe("--ui", function () {
 
   it("should work for ESM", function (done) {
     runMochaJSON(
-      "test-for-simple-ui",
+      "test-for-simple-ui.fixture.js",
       ["--require", simpleUiESMPath, "--ui", "simple-ui"],
       function (err, res) {
         if (err) {
@@ -54,7 +54,7 @@ describe("--ui", function () {
 
   it("should work for ESM when imported via path", function (done) {
     runMochaJSON(
-      "test-for-simple-ui",
+      "test-for-simple-ui.fixture.js",
       ["--ui", simpleUiESMPath],
       function (err, res) {
         if (err) {
