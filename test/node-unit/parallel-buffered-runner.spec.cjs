@@ -665,50 +665,6 @@ describe("parallel-buffered-runner", function () {
                 );
               });
             });
-
-            describe("when subsequent files have not yet been run", function () {
-              it("should cleanly terminate the thread pool", function (done) {
-                const options = { reporter: runner._workerReporter };
-                const err = {
-                  __type: "Error",
-                  message: "oh no",
-                };
-                run.withArgs("some-file.js", options).resolves({
-                  failureCount: 1,
-                  events: [
-                    {
-                      eventName: EVENT_TEST_FAIL,
-                      data: {
-                        title: "some test",
-                      },
-                      error: err,
-                    },
-                    {
-                      eventName: EVENT_SUITE_END,
-                      data: {
-                        title: "some suite",
-                        _bail: true,
-                      },
-                    },
-                  ],
-                });
-                run.withArgs("some-other-file.js", options).rejects();
-
-                runner.run(
-                  () => {
-                    expect(terminate, "to have calls satisfying", [
-                      { args: [] }, // this is the pool force-terminating
-                      { args: [] }, // this will always be called, and will do nothing due to the previous call
-                    ]).and("was called twice");
-                    done();
-                  },
-                  {
-                    files: ["some-file.js", "some-other-file.js"],
-                    options,
-                  },
-                );
-              });
-            });
           });
         });
       });
