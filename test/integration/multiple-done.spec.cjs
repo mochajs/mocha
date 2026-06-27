@@ -9,7 +9,7 @@ describe("multiple calls to done()", function () {
   var res;
   describe("from a spec", function () {
     before(function (done) {
-      runMochaJSON("multiple-done", function (err, result) {
+      runMochaJSON("multiple-done.fixture.js", function (err, result) {
         res = result;
         done(err);
       });
@@ -33,10 +33,13 @@ describe("multiple calls to done()", function () {
 
   describe("with error passed on second call", function () {
     before(function (done) {
-      runMochaJSON("multiple-done-with-error", function (err, result) {
-        res = result;
-        done(err);
-      });
+      runMochaJSON(
+        "multiple-done-with-error.fixture.js",
+        function (err, result) {
+          res = result;
+          done(err);
+        },
+      );
     });
 
     it("results in failure", function () {
@@ -57,7 +60,7 @@ describe("multiple calls to done()", function () {
 
   describe("with multiple specs", function () {
     before(function (done) {
-      runMochaJSON("multiple-done-specs", function (err, result) {
+      runMochaJSON("multiple-done-specs.fixture.js", function (err, result) {
         res = result;
         done(err);
       });
@@ -84,7 +87,7 @@ describe("multiple calls to done()", function () {
 
   describe("from a before hook", function () {
     before(function (done) {
-      runMochaJSON("multiple-done-before", function (err, result) {
+      runMochaJSON("multiple-done-before.fixture.js", function (err, result) {
         res = result;
         done(err);
       });
@@ -110,10 +113,13 @@ describe("multiple calls to done()", function () {
 
   describe('from a "before each" hook', function () {
     before(function (done) {
-      runMochaJSON("multiple-done-before-each", function (err, result) {
-        res = result;
-        done(err);
-      });
+      runMochaJSON(
+        "multiple-done-before-each.fixture.js",
+        function (err, result) {
+          res = result;
+          done(err);
+        },
+      );
     });
 
     it("results in a failure", function () {

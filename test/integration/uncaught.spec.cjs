@@ -11,7 +11,7 @@ var args = [];
 
 describe("uncaught exceptions", function () {
   it("handles uncaught exceptions from hooks", function (done) {
-    run("uncaught/hook", args, function (err, res) {
+    run("uncaught/hook.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -27,7 +27,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("handles uncaught exceptions from async specs", function (done) {
-    run("uncaught/double", args, function (err, res) {
+    run("uncaught/double.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -47,7 +47,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("handles uncaught exceptions from which Mocha cannot recover", function (done) {
-    run("uncaught/fatal", args, function (err, res) {
+    run("uncaught/fatal.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -64,7 +64,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("handles uncaught exceptions within pending tests", function (done) {
-    run("uncaught/pending", args, function (err, res) {
+    run("uncaught/pending.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -87,7 +87,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("handles uncaught exceptions within open tests", function (done) {
-    run("uncaught/recover", args, function (err, res) {
+    run("uncaught/recover.fixture.cjs", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -114,19 +114,22 @@ describe("uncaught exceptions", function () {
   });
 
   it("removes uncaught exceptions handlers correctly", function (done) {
-    invokeNode([resolveFixturePath("uncaught/listeners")], function (err, res) {
-      if (err) {
-        return done(err);
-      }
+    invokeNode(
+      [resolveFixturePath("uncaught/listeners.fixture.cjs")],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
 
-      expect(res, "to have passed");
-      done();
-    });
+        expect(res, "to have passed");
+        done();
+      },
+    );
   });
 
   it("handles uncaught exceptions after runner's end", function (done) {
     runMocha(
-      "uncaught/after-runner",
+      "uncaught/after-runner.fixture.js",
       args,
       function (err, res) {
         if (err) {
@@ -147,7 +150,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("issue-1327: should run the first test and then bail", function (done) {
-    run("uncaught/issue-1327", args, function (err, res) {
+    run("uncaught/issue-1327.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -161,7 +164,7 @@ describe("uncaught exceptions", function () {
   });
 
   it("issue-1417: uncaught exceptions from async specs", function (done) {
-    run("uncaught/issue-1417", args, function (err, res) {
+    run("uncaught/issue-1417.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
@@ -182,7 +185,7 @@ describe("uncaught exceptions", function () {
       it("should warn", async function () {
         const [, promise] = invokeMochaAsync(
           [
-            resolveFixturePath("uncaught/unhandled"),
+            resolveFixturePath("uncaught/unhandled.fixture.js"),
             "--unhandled-rejections=warn",
           ],
           { stdio: "pipe" },
@@ -201,7 +204,7 @@ describe("uncaught exceptions", function () {
       it("should fail with an uncaught exception", async function () {
         const [, promise] = invokeMochaAsync(
           [
-            resolveFixturePath("uncaught/unhandled"),
+            resolveFixturePath("uncaught/unhandled.fixture.js"),
             "--unhandled-rejections=strict",
           ],
           { stdio: "pipe" },

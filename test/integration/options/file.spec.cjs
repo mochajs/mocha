@@ -10,9 +10,9 @@ const {
 describe("--file", function () {
   var args = [];
   var fixtures = {
-    alpha: path.join("options", "file-alpha"),
-    beta: path.join("options", "file-beta"),
-    theta: path.join("options", "file-theta"),
+    alpha: path.join("options", "file-alpha.fixture.js"),
+    beta: path.join("options", "file-beta.fixture.js"),
+    theta: path.join("options", "file-theta.fixture.js"),
   };
 
   it("should run tests passed via file first", function (done) {

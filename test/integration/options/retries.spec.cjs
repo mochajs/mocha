@@ -9,7 +9,7 @@ describe("--retries", function () {
 
   it("should retry test failures after a certain threshold", function (done) {
     args = ["--retries", "3"];
-    var fixture = path.join("options", "retries");
+    var fixture = path.join("options", "retries.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

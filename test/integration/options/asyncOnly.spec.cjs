@@ -12,7 +12,7 @@ describe("--async-only", function () {
   });
 
   it("should fail synchronous specs", function (done) {
-    var fixture = path.join("options", "async-only-sync");
+    var fixture = path.join("options", "async-only-sync.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -24,7 +24,7 @@ describe("--async-only", function () {
   });
 
   it("should allow asynchronous specs", function (done) {
-    var fixture = path.join("options", "async-only-async");
+    var fixture = path.join("options", "async-only-async.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);

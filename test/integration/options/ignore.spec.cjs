@@ -27,12 +27,15 @@ describe("--ignore", function () {
   }
 
   it("should ignore specific files", function (done) {
-    var fixtures = path.join("options", "ignore", "*");
+    var fixtures = path.join("options", "ignore", "*.fixture.js");
     runMochaTest(
       fixtures,
       [
         "--ignore",
-        resolvePath(path.join("options", "ignore", "fail")).replace(/\\/g, "/"),
+        resolvePath(path.join("options", "ignore", "fail.fixture.js")).replace(
+          /\\/g,
+          "/",
+        ),
       ],
       function (res) {
         expect(res, "to have passed")
@@ -44,7 +47,7 @@ describe("--ignore", function () {
   });
 
   it("should ignore globbed files", function (done) {
-    var fixtures = path.join("options", "ignore", "**", "*");
+    var fixtures = path.join("options", "ignore", "**", "*.fixture.js");
     runMochaTest(
       fixtures,
       ["--ignore", "**/fail.fixture.js"],
@@ -58,17 +61,19 @@ describe("--ignore", function () {
   });
 
   it("should ignore multiple patterns", function (done) {
-    var fixtures = path.join("options", "ignore", "**", "*");
+    var fixtures = path.join("options", "ignore", "**", "*.fixture.js");
     runMochaTest(
       fixtures,
       [
         "--ignore",
-        resolvePath(path.join("options", "ignore", "fail")).replace(/\\/g, "/"),
-        "--ignore",
-        resolvePath(path.join("options", "ignore", "nested", "fail")).replace(
+        resolvePath(path.join("options", "ignore", "fail.fixture.js")).replace(
           /\\/g,
           "/",
         ),
+        "--ignore",
+        resolvePath(
+          path.join("options", "ignore", "nested", "fail.fixture.js"),
+        ).replace(/\\/g, "/"),
       ],
       function (res) {
         expect(res, "to have passed")

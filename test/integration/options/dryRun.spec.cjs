@@ -8,7 +8,7 @@ describe("--dry-run", function () {
   var args = ["--dry-run", "--no-forbid-only"];
 
   it("should only report, but not execute any test", function (done) {
-    var fixture = path.join("options/dry-run", "dry-run");
+    var fixture = path.join("options/dry-run", "dry-run.fixture.js");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
@@ -29,7 +29,7 @@ describe("--dry-run", function () {
   });
 
   it('should pass without "RangeError: maximum call stack size exceeded"', function (done) {
-    var fixture = path.join("options/dry-run", "stack-size");
+    var fixture = path.join("options/dry-run", "stack-size.fixture.cjs");
     runMochaJSON(fixture, args, function (err, res) {
       if (err) {
         return done(err);
