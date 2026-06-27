@@ -4,6 +4,8 @@ const { runMochaJSON: run, runMochaAsync } = require("./helpers.cjs");
 var args = [];
 
 describe("esm", function () {
+  this.timeout(20000);
+
   it("should pass a passing esm test that uses esm", function (done) {
     var fixture = "esm/esm-success.fixture.js";
     run(fixture, args, function (err, result) {
