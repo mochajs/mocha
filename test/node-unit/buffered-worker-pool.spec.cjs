@@ -1,7 +1,9 @@
 "use strict";
 
-const rewiremock = require("rewiremock/node");
 const sinon = require("sinon");
+const {
+  createBufferedWorkerPoolClass,
+} = require("../../lib/nodejs/buffered-worker-pool.mjs");
 
 describe("class BufferedWorkerPool", function () {
   let BufferedWorkerPool;
@@ -29,17 +31,15 @@ describe("class BufferedWorkerPool", function () {
     };
 
     serializeJavascript = sinon.spy(require("serialize-javascript"));
-    BufferedWorkerPool = rewiremock.proxy(
-      require.resolve("../../lib/nodejs/buffered-worker-pool.cjs"),
-      {
-        workerpool: {
-          pool: sinon.stub().returns(pool),
-          cpus: 8,
-        },
-        "../../lib/nodejs/serializer.js": serializer,
-        "serialize-javascript": serializeJavascript,
+    BufferedWorkerPool = createBufferedWorkerPoolClass({
+      workerPath: "worker.mjs",
+      workerpool: {
+        pool: sinon.stub().returns(pool),
+        cpus: 8,
       },
-    ).BufferedWorkerPool;
+      deserialize: serializer.deserialize,
+      serializeJavascript,
+    });
 
     // reset cache
     BufferedWorkerPool.resetOptionsCache();
@@ -110,6 +110,46 @@ describe("class BufferedWorkerPool", function () {
           maxWorkers: expect.it("to be greater than or equal to", 1),
         },
       });
+    });
+
+    it("should apply an explicit max worker count", function () {
+      expect(new BufferedWorkerPool({ maxWorkers: 4 }), "to satisfy", {
+        options: {
+          maxWorkers: 4,
+        },
+      });
+    });
+
+    it("should assign incremental worker ids", function () {
+      const workerPool = new BufferedWorkerPool();
+
+      expect(
+        workerPool.options.onCreateWorker({
+          forkOpts: {
+            detached: true,
+          },
+        }),
+        "to satisfy",
+        {
+          forkOpts: {
+            detached: true,
+            env: {
+              MOCHA_WORKER_ID: 0,
+            },
+          },
+        },
+      );
+      expect(
+        workerPool.options.onCreateWorker({ forkOpts: {} }),
+        "to satisfy",
+        {
+          forkOpts: {
+            env: {
+              MOCHA_WORKER_ID: 1,
+            },
+          },
+        },
+      );
     });
   });
 
