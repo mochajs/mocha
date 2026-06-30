@@ -1,4 +1,5 @@
 import { main } from "../../../lib/cli/cli.js";
+import sinon from "sinon";
 
 describe("cli", function () {
   describe("main()", function () {
@@ -14,12 +15,12 @@ describe("cli", function () {
 
     it("prints version and exits for --version", function () {
       expect(() => main(["--version"]), "to throw", /process\.exit/);
-      expect(process.exit, "was called with", 0);
+      expect(process.exit, "to have a call satisfying", [0]);
     });
 
     it("prints help and exits for --help", function () {
       expect(() => main(["--help"]), "to throw", /process\.exit/);
-      expect(process.exit, "was called with", 0);
+      expect(process.exit, "to have a call satisfying", [0]);
     });
   });
 });
