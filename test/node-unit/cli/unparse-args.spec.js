@@ -85,7 +85,7 @@ describe("unparse-args", function () {
       );
     });
 
-    it("unparses reporter-option object values in yargs-unparser-compatible dotted form", function () {
+    it("unparses reporter-option object values in legacy dotted form", function () {
       expect(
         unparseMochaArgs({
           "reporter-option": {
