@@ -35,4 +35,18 @@ describe("--list-interfaces", function () {
       done();
     });
   });
+
+  it("should fail when combined with another one-and-done option", function (done) {
+    invokeMocha(
+      ["--list-interfaces", "--list-reporters"],
+      function (err, result) {
+        if (err) {
+          return done(err);
+        }
+        expect(result, "to have failed with output", /mutually exclusive/i);
+        done();
+      },
+      { stdio: "pipe" },
+    );
+  });
 });
