@@ -1,10 +1,8 @@
-"use strict";
-
-var invokeMocha = require("./helpers.cjs").invokeMocha;
-var fs = require("node:fs");
-var os = require("node:os");
-var path = require("node:path");
-var rimraf = require("rimraf");
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { sync as rimrafSync } from "rimraf";
+import { invokeMocha } from "./helpers.cjs";
 
 function expectSuccessfulOutput(args, matcher, done) {
   invokeMocha(
@@ -45,13 +43,13 @@ describe("help", function () {
   });
 
   it("prints help for init --help without writing files", function (done) {
-    var tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-init-help-"));
+    const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-init-help-"));
 
     invokeMocha(
       ["init", tmpdir, "--help"],
       function (err, result) {
-        var files = fs.readdirSync(tmpdir);
-        rimraf.sync(tmpdir);
+        const files = fs.readdirSync(tmpdir);
+        rimrafSync(tmpdir);
         if (err) {
           return done(err);
         }

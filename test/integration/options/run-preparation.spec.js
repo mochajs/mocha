@@ -1,6 +1,4 @@
-"use strict";
-
-var runMocha = require("../helpers.cjs").runMocha;
+import { runMocha } from "../helpers.cjs";
 
 describe("run preparation", function () {
   it("should fail when a required module cannot be loaded", function (done) {
