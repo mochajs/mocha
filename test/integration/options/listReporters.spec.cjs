@@ -37,4 +37,18 @@ describe("--list-reporters", function () {
       done();
     });
   });
+
+  it("should fail when combined with another one-and-done option", function (done) {
+    invokeMocha(
+      ["--list-reporters", "--list-interfaces"],
+      function (err, result) {
+        if (err) {
+          return done(err);
+        }
+        expect(result, "to have failed with output", /mutually exclusive/i);
+        done();
+      },
+      { stdio: "pipe" },
+    );
+  });
 });

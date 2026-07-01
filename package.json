@@ -103,8 +103,7 @@
     "serialize-javascript": "^7.0.2",
     "strip-json-comments": "^5.0.3",
     "supports-color": "^8.1.1",
-    "workerpool": "^10.0.0",
-    "yargs": "^17.7.2"
+    "workerpool": "^10.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
@@ -116,7 +115,6 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@test/esm-only-loader": "./test/compiler-fixtures/esm-only-loader",
     "@types/node": "^24.0.0",
-    "@types/yargs": "^17.0.33",
     "chai": "^6.0.0",
     "coffeescript": "^2.6.1",
     "cross-env": "^10.0.0",
