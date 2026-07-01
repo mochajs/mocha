@@ -166,5 +166,38 @@ describe("--reporter-option", function () {
         { cwd: tmpdir, stdio: "pipe" },
       );
     });
+
+    it("should preserve package config reporter option objects after respawning with a Node option", function (done) {
+      var tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-reporter-option-"));
+      fs.writeFileSync(
+        path.join(tmpdir, "package.json"),
+        JSON.stringify({
+          mocha: {
+            reporter: customReporter,
+            "reporter-option": {
+              foo: "bar",
+              baz: true,
+            },
+            spec: [path.join(__dirname, "..", "fixtures", "passing.fixture.cjs")],
+          },
+        }),
+      );
+
+      invokeMocha(
+        ["--node-option", "trace-warnings"],
+        function (err, res) {
+          rimraf.sync(tmpdir);
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and(
+            "to contain output",
+            /{"foo":"bar","baz":true}/,
+          );
+          done();
+        },
+        { cwd: tmpdir, stdio: "pipe" },
+      );
+    });
   });
 });
