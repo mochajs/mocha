@@ -332,6 +332,29 @@ describe("hook error handling", function () {
       });
     });
 
+    describe("error in `beforeEach` hook with nested suites", function () {
+      it("should fail affected tests in nested suites", function (done) {
+        runMochaJSON(
+          "hooks/before-each-hook-error-with-fail-affected-nested.fixture.js",
+          ["--fail-hook-affected-tests"],
+          (err, res) => {
+            if (err) {
+              return done(err);
+            }
+            expect(res, "to have failed")
+              .and("to have failed test count", 4)
+              .and("to have failed test", '"before each" hook for "test 1"')
+              .and("to have failed test", "test 1")
+              .and("to have failed test", "test 2")
+              .and("to have failed test", "test 3")
+              .and("to have passed test count", 1)
+              .and("to have passed test", "test 4");
+            done();
+          },
+        );
+      });
+    });
+
     describe("non-Error thrown in `before` hook", function () {
       it("should handle null, undefined, and other non-Error values", function (done) {
         runMochaJSON(
