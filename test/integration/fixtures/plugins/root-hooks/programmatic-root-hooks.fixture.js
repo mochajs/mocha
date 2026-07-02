@@ -1,7 +1,7 @@
 "use strict";
 
 const path = require("node:path");
-const Mocha = require("../../../../../lib/mocha");
+const Mocha = require("../../../../../lib/mocha.cjs");
 
 const mocha = new Mocha({
     require: [path.join(__dirname, "root-hook-defs-a.fixture.js")],
