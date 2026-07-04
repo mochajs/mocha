@@ -143,6 +143,7 @@
     "sinon": "^22.0.0",
     "typescript": "^5.8.3",
     "unexpected": "^13.2.1",
+    "unexpected-sinon": "^11.1.0",
     "webpack": "^5.67.0",
     "webpack-cli": "^7.0.2"
   },
