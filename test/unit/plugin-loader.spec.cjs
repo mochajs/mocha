@@ -18,10 +18,9 @@ describe("plugin module", function () {
         it("should register the custom plugins", function () {
           const plugin = { exportName: "mochaBananaPhone" };
           expect(
-            new PluginLoader({ pluginDefs: [plugin] }).registered,
+            Object.fromEntries(new PluginLoader({ pluginDefs: [plugin] }).registered),
             "to satisfy",
-            new Map([["mochaBananaPhone", plugin]]),
-          );
+            { "mochaBananaPhone": plugin });
         });
       });
 
@@ -142,7 +141,7 @@ describe("plugin module", function () {
           it("should return false", function () {
             // also it should not throw
             expect(
-              pluginLoader.load({ mochaBananaPhone: () => {} }),
+              pluginLoader.load({ mochaBananaPhone: () => { } }),
               "to be false",
             );
           });
@@ -161,22 +160,21 @@ describe("plugin module", function () {
           });
 
           it("should return true", function () {
-            const func = () => {};
+            const func = () => { };
             expect(pluginLoader.load({ mochaBananaPhone: func }), "to be true");
           });
 
           it("should retain the value of any matching property in its mapping", function () {
-            const func = () => {};
+            const func = () => { };
             pluginLoader.load({ mochaBananaPhone: func });
             expect(
-              pluginLoader.loaded,
+              Object.fromEntries(pluginLoader.loaded),
               "to satisfy",
-              new Map([["mochaBananaPhone", [func]]]),
-            );
+              { mochaBananaPhone: [func] });
           });
 
           it("should call the associated validator, if present", function () {
-            const func = () => {};
+            const func = () => { };
             pluginLoader.load({ mochaBananaPhone: func });
             expect(plugin.validate, "was called once");
           });
@@ -220,7 +218,7 @@ describe("plugin module", function () {
             let retval;
 
             beforeEach(function () {
-              retval = pluginLoader.load({ butts: () => {} });
+              retval = pluginLoader.load({ butts: () => { } });
             });
 
             it("should return false", function () {
@@ -260,18 +258,16 @@ describe("plugin module", function () {
 
               it("should add the implementation to the internal mapping", function () {
                 expect(
-                  pluginLoader.loaded,
+                  Object.fromEntries(pluginLoader.loaded),
                   "to satisfy",
-                  new Map([["foo", expect.it("to have length", 1)]]),
-                );
+                  { "foo": expect.it("to have length", 1) });
               });
 
               it("should not add an implementation of plugins not present", function () {
                 expect(
-                  pluginLoader.loaded,
+                  Object.fromEntries(pluginLoader.loaded),
                   "to satisfy",
-                  new Map([["bar", expect.it("to be empty")]]),
-                );
+                  { "bar": expect.it("to be empty") });
               });
             });
 
@@ -386,11 +382,11 @@ describe("plugin module", function () {
 
     describe("when a loaded impl is finalized", function () {
       it("should flatten the implementations", async function () {
-        function a() {}
-        function b() {}
-        function d() {}
-        function g() {}
-        async function f() {}
+        function a() { }
+        function b() { }
+        function d() { }
+        function g() { }
+        async function f() { }
         function c() {
           return {
             beforeAll: d,
