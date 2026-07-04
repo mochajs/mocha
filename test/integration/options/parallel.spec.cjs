@@ -473,8 +473,8 @@ describe("--parallel", function () {
       });
     });
 
-    describe.only("when a single test file is run with --reporter=json", function () {
-      it.only("should have the same output as when run with --no-parallel", async function () {
+    describe("when a single test file is run with --reporter=json", function () {
+      it("should have the same output as when run with --no-parallel", async function () {
         // this one has some timings/durations that we can safely ignore
         const { expected, actual } = await compareReporters("json");
         expected.output = JSON.parse(expected.output);
