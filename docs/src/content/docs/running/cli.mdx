@@ -59,6 +59,8 @@ Reporting & Output
                                                       [string] [default: "spec"]
   -O, --reporter-option,                    Reporter-specific options
   --reporter-options                        (<k=v,[k1=v1,..]>)           [array]
+      --clear-screen                        Clear the terminal before each run
+                                            in watch mode              [boolean]
 
 Configuration
       --config       Path to config file   [string] [default: (nearest rc file)]
@@ -77,8 +79,6 @@ File Handling
   -S, --sort               Sort test files                             [boolean]
   -w, --watch              Watch files in the current working directory for
                            changes                                     [boolean]
-      --clear-screen       Clear the terminal before each run in watch mode
-                                                                       [boolean]
       --watch-files        List of paths or globs to watch               [array]
       --watch-ignore       List of paths or globs to exclude from watching
                                       [array] [default: ["node_modules",".git"]]
@@ -356,6 +356,15 @@ Not all reporters accept options.
 
 Can be specified as a comma-delimited list.
 
+### `--clear-screen`
+
+:::note[New in v12.0.0]
+:::
+
+Clear the terminal before each run when `--watch` is set.
+
+This keeps only the latest run's output on screen, similar to the built-in behavior of the [`min` reporter](/reporters/min). It has no effect without `--watch`.
+
 ## Configuration
 
 ### `--config <path>`
@@ -483,15 +492,6 @@ Rerun tests on file changes.
 The `--watch-files` and `--watch-ignore` options can be used to control which files are watched for changes.
 
 Tests may be rerun manually by typing `rs` and pressing enter (same shortcut as `nodemon`).
-
-### `--clear-screen`
-
-:::note[New in v12.0.0]
-:::
-
-Clear the terminal before each run when `--watch` is set.
-
-This keeps only the latest run's output on screen, similar to the built-in behavior of the [`min` reporter](/reporters/min). It has no effect without `--watch`.
 
 ### `--watch-files <file|directory|glob>`
 
