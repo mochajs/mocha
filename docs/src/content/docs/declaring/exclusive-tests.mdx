@@ -108,5 +108,6 @@ Hooks, if present, will still be executed.
 
 :::tip
 Be mindful not to commit usages of `.only()` to version control, unless you really mean it!
-To do so one can run mocha with the option `--forbid-only` in the continuous integration test command (or in a git precommit hook).
+Since v12, Mocha guards against this by default in continuous integration: [`--forbid-only`](/running/cli#--forbid-only) defaults to `true` when the `CI` environment variable is set.
+On older versions, or outside of CI (for example in a git precommit hook), pass `--forbid-only` explicitly.
 :::
