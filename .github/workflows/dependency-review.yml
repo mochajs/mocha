@@ -1,8 +1,7 @@
 name: Dependency Review
 
-# Reviews dependencies in PRs for security vulnerabilities and license issues
-# Prevents vulnerable or incompatible dependencies from being merged
-# Learn more: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review
+# Reviews dependencies in PRs for security vulnerabilities
+# https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review
 
 on:
   pull_request:
