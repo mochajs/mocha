@@ -1,0 +1,14 @@
+---
+description: The GitHub Actions test reporter for Mocha.
+title: GitHub Actions
+---
+
+Alias: `GithubActions`, `github-actions`
+
+The GitHub Actions reporter behaves like the [Spec](/reporters/spec) reporter, with extra output tailored to [GitHub Actions](https://docs.github.com/actions) workflows.
+
+When a test fails, it emits an [`::error` workflow command](https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#setting-an-error-message) annotated with the file, line, and column parsed from the error's stack trace, so failures are shown inline on the pull request diff.
+
+When the `GITHUB_STEP_SUMMARY` environment variable is set (as it is on GitHub-hosted runners), it also appends a short passing/pending/failing summary to the [job summary](https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary).
+
+Enable it from the command line with `--reporter github-actions`, or from a [configuration file](/running/configuring).
