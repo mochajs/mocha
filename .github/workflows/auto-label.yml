@@ -24,29 +24,6 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
           sync-labels: false
-
-  label-size:
-    # Label PRs by size (lines changed)
-    # Learn more: https://github.com/codelytv/pr-size-labeler
-    if: github.event_name == 'pull_request_target'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
-      - uses: codelytv/pr-size-labeler@v1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          xs_label: 'size: xs'
-          xs_max_size: 30
-          s_label: 'size: s'
-          s_max_size: 100
-          m_label: 'size: m'
-          m_max_size: 300
-          l_label: 'size: l'
-          l_max_size: 1000
-          xl_label: 'size: xl'
-          fail_if_xl: false
-
   triage-issues:
     # Label issues as "needs: triage" when first opened
     if: github.event_name == 'issues' && github.event.action == 'opened'
