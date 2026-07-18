@@ -15,15 +15,6 @@ permissions:
   contents: read
 
 jobs:
-  label-prs:
-    if: github.event_name == 'pull_request_target'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/labeler@v5
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: .github/labeler.yml
-          sync-labels: false
   triage-issues:
     # Label issues as "needs: triage" when first opened
     if: github.event_name == 'issues' && github.event.action == 'opened'
