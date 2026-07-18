@@ -30,9 +30,9 @@ jobs:
             🎉 Thanks for opening your first pull request! A maintainer will review it soon.
 
             Please make sure you've:
-            - ✅ Read our [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
-            - ✅ Run `npm test` locally and all tests pass
-            - ✅ Added tests for any new functionality
-            - ✅ Updated documentation if needed
+            - Read our [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
+            - Run `npm test` locally and all tests pass
+            - Added tests for any new functionality
+            - Updated documentation if needed
 
             Join our [Discord community](https://discord.gg/KeDn2uXhER) if you have any questions!

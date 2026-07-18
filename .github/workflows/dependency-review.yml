@@ -21,9 +21,6 @@ jobs:
 
       - uses: actions/dependency-review-action@v4
         with:
-          # Fail the build if vulnerabilities are found
           fail-on-severity: moderate
-          # Comment on the PR with the review
           comment-summary-in-pr: always
-          # Allow dev dependencies to have vulnerabilities (not shipped)
           fail-on-scopes: runtime
