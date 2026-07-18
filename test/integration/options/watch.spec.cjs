@@ -562,5 +562,31 @@ describe("--watch", function () {
         },
       );
     });
+
+    describe("--clear-screen", function () {
+      const CLEAR_SCREEN = String.fromCharCode(27) + "[2J";
+
+      it("clears the terminal before each run when enabled", function () {
+        const testFile = path.join(tempDir, "test.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchAsync([testFile, "--clear-screen"], tempDir, () => {
+          touchFile(testFile);
+        }).then((result) => {
+          expect(result.output, "to contain", CLEAR_SCREEN);
+        });
+      });
+
+      it("does not clear the terminal when disabled", function () {
+        const testFile = path.join(tempDir, "test.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchAsync([testFile], tempDir, () => {
+          touchFile(testFile);
+        }).then((result) => {
+          expect(result.output, "not to contain", CLEAR_SCREEN);
+        });
+      });
+    });
   });
 });
