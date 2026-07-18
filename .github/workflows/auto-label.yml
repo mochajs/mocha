@@ -1,13 +1,9 @@
-name: Auto Label Issues and PRs
-
-# Automatically labels issues and PRs based on various criteria
-# Learn more: https://github.com/actions/labeler
+# Labels issues as "needs: triage" when first opened
+name: Auto Label Issues
 
 on:
   issues:
-    types: [opened, edited]
-  pull_request_target:
-    types: [opened, edited, synchronize]
+    types: [opened]
 
 permissions:
   issues: write
@@ -15,9 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  triage-issues:
-    # Label issues as "needs: triage" when first opened
-    if: github.event_name == 'issues' && github.event.action == 'opened'
+  add-needs-triage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v7
