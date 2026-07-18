@@ -1,4 +1,4 @@
-name: Auto Add to Project
+name: Auto Add to Mocha Project
 
 # Automatically adds issues and PRs to GitHub Projects
 # Uses built-in GITHUB_TOKEN with enhanced permissions (no token rotation needed!)
