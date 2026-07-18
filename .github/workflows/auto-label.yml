@@ -1,5 +1,6 @@
-# Labels issues as "needs: triage" when first opened
 name: Auto Label Issues
+
+# Labels issues as "needs: triage" when first opened
 
 on:
   issues:
