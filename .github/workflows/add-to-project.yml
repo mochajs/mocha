@@ -1,13 +1,11 @@
 name: Auto Add to Mocha Project
 
-# Automatically adds issues and PRs to GitHub Projects
+# Automatically adds issues to our GitHub Project
 # Uses built-in GITHUB_TOKEN with enhanced permissions (no token rotation needed!)
 # Learn more: https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions
 
 on:
   issues:
-    types: [opened, reopened]
-  pull_request_target:
     types: [opened, reopened]
 
 permissions:
