@@ -40,7 +40,7 @@ jobs:
     needs: release_please
     if: needs.release_please.outputs.releaseCreated
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           show-progress: false
       - uses: actions/setup-node@v6

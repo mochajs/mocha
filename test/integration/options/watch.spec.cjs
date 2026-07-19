@@ -129,14 +129,17 @@ describe("--watch", function () {
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         { cwd: tempDir, expectedRuns: expectedRunCount },
-        async (mochaProcess, { waitForRuns }) => {
+        async (mochaProcess, { waitForRuns, runCount }) => {
           fs.mkdirSync(libPath);
           await waitForRuns(2); // wait for second run
-          await sleep(graceMs); // grace
+          await sleep(graceMs); // let the watch on `lib` install
           fs.mkdirSync(dirPath);
           await waitForRuns(3); // wait for third run
-          await sleep(graceMs);
-          touchFile(watchedFile);
+          // re-touch until the new subdir's watch catches the change, only re-touches when idle (no rerun happened) so it can not abort a run
+          while (runCount() < expectedRunCount) {
+            touchFile(watchedFile);
+            await sleep(graceMs);
+          }
         },
       ).then((results) => {
         expect(results, "to have length", expectedRunCount);
@@ -558,6 +561,32 @@ describe("--watch", function () {
           stderr: expect.it("not to match", /MaxListenersExceededWarning/),
         },
       );
+    });
+
+    describe("--clear-screen", function () {
+      const CLEAR_SCREEN = String.fromCharCode(27) + "[2J";
+
+      it("clears the terminal before each run when enabled", function () {
+        const testFile = path.join(tempDir, "test.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchAsync([testFile, "--clear-screen"], tempDir, () => {
+          touchFile(testFile);
+        }).then((result) => {
+          expect(result.output, "to contain", CLEAR_SCREEN);
+        });
+      });
+
+      it("does not clear the terminal when disabled", function () {
+        const testFile = path.join(tempDir, "test.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchAsync([testFile], tempDir, () => {
+          touchFile(testFile);
+        }).then((result) => {
+          expect(result.output, "not to contain", CLEAR_SCREEN);
+        });
+      });
     });
   });
 });
