@@ -66,7 +66,7 @@ describe("Mocha", function () {
     Mocha = rewiremock.proxy(
       () => require("../../lib/mocha.cjs"),
       (r) => ({
-        "../../lib/utils.cjs": r.with(stubs.utils).callThrough(),
+        "../../lib/utils.js": r.with(stubs.utils).callThrough(),
         "../../lib/suite.js": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.cjs":
           stubs.ParallelBufferedRunner,

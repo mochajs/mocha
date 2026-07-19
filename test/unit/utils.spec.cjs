@@ -1,7 +1,7 @@
 /* global BigInt */
 "use strict";
 
-var utils = require("../../lib/utils.cjs");
+var utils = require("../../lib/utils.js");
 var pkg = require("../../package.json");
 var sinon = require("sinon");
 
