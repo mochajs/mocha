@@ -2,7 +2,7 @@
 
 const js = require("@eslint/js");
 const { defineConfig, globalIgnores } = require("eslint/config");
-const { default: n } = require("eslint-plugin-n");
+const n = require("eslint-plugin-n");
 const globals = require("globals");
 const { default: markdown } = require("@eslint/markdown");
 
