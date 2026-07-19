@@ -72,6 +72,7 @@ export default defineConfig({
             { label: "About", slug: "reporters/about" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },
+            { label: "GitHub Actions", slug: "reporters/github-actions" },
             { label: "HTML", slug: "reporters/html" },
             { label: "JSON Stream", slug: "reporters/json-stream" },
             { label: "JSON", slug: "reporters/json" },
