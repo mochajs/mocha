@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
-  "entry": ["docs/_data/supporters.cjs", "index.js!", "lib/cli/index.cjs!"],
+  "entry": ["docs/_data/supporters.cjs", "lib/cli/index.cjs!"],
   "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
