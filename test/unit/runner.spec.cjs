@@ -754,6 +754,42 @@ describe("Runner", function () {
           });
         });
       });
+
+      describe("when _uncaught() ends the run before prepare() fires", function () {
+        it("should not reset state to STATE_RUNNING", function (done) {
+          // Simulate the race: _uncaught() fires synchronously and sets state
+          // to STATE_STOPPED before the Runner.immediately(prepare) callback runs.
+          runner.run();
+          // Force the runner into STATE_STOPPED as _uncaught() would after
+          // emitting EVENT_RUN_BEGIN + EVENT_RUN_END.
+          runner.state = STATE_STOPPED;
+
+          // Let the setImmediate / Runner.immediately tick fire.
+          setImmediate(function () {
+            expect(runner.state, "to be", STATE_STOPPED);
+            done();
+          });
+        });
+
+        it("should not emit EVENT_RUN_BEGIN a second time", function (done) {
+          var beginCount = 0;
+          runner.on("start", function () {
+            beginCount += 1;
+          });
+
+          runner.run();
+          // Simulate _uncaught() having already emitted start/end and stopped
+          // the run before our queued prepare() fires.
+          runner.emit("start");
+          runner.state = STATE_STOPPED;
+
+          setImmediate(function () {
+            // Only the one we emitted manually above should have fired.
+            expect(beginCount, "to be", 1);
+            done();
+          });
+        });
+      });
     });
 
     describe("runAsync()", function () {
