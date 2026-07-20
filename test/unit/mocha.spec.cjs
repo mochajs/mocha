@@ -615,8 +615,7 @@ describe("Mocha", function () {
                 mocha.suite,
                 {
                   delay: mocha.options.delay,
-                  cleanReferencesAfterRun:
-                    mocha._cleanReferencesAfterRun,
+                  cleanReferencesAfterRun: mocha._cleanReferencesAfterRun,
                 },
               ],
             }).and("was called once");
