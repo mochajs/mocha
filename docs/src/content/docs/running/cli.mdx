@@ -39,6 +39,9 @@ Rules & Behavior
   -j, --jobs                        Number of concurrent jobs for --parallel;
                                     use 1 to run in serial
                                    [number] [default: (number of CPU cores - 1)]
+      --order                       Run order of tests; "random" or
+                                    "random:<seed>" shuffles execution order
+                                                   [string] [default: "default"]
   -p, --parallel                    Run tests in parallel              [boolean]
       --retries                     Retry failed tests this many times  [number]
   -s, --slow                        Specify "slow" test threshold (in
@@ -233,6 +236,32 @@ Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
 :::
 
 Has no effect unless used with [`--parallel`](#--parallel--p).
+
+### `--order <order>`
+
+Set the order in which tests run.
+Accepted values are `default`, `random` and `random:<seed>`.
+
+Use `--order random` to shuffle the run order of tests.
+Sibling suites and sibling tests are shuffled ([Fisher-Yates](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)) within their parent suite; the suite hierarchy is preserved, so hooks run exactly as often as they otherwise would.
+Running in a random order helps to uncover accidental dependencies between tests.
+
+Each randomized run reports the seed it used.
+To reproduce a particular order (say, one that produced a failure), pass the reported seed back via `--order random:<seed>`:
+
+```bash
+mocha --order random
+# Mocha: test order randomized with seed 42; use --order random:42 to reproduce
+mocha --order random:42
+```
+
+The seed is reported on `STDERR`, so machine-readable reporter output on `STDOUT` (such as `json` or `xunit`) is unaffected.
+
+`--order random` is mutually exclusive with [`--sort`](#--sort--s).
+
+:::note
+In [parallel mode](/features/parallel-mode), test files are handed to workers in a nondeterministic order; `--order random` shuffles the run order of suites and tests within each file.
+:::
 
 ### `--parallel, -p`
 
