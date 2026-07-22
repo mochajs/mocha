@@ -38,12 +38,7 @@ describe("--reporter-option", function () {
     it("should allow comma-separated values", function (done) {
       runMocha(
         "passing.fixture.cjs",
-        [
-          "--reporter",
-          customReporter,
-          "--reporter-option",
-          "foo=bar,baz=quux",
-        ],
+        ["--reporter", customReporter, "--reporter-option", "foo=bar,baz=quux"],
         function (err, res) {
           if (err) {
             return done(err);
@@ -138,14 +133,18 @@ describe("--reporter-option", function () {
     });
 
     it("should preserve package config reporter options after respawning with a Node option", function (done) {
-      var tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-reporter-option-"));
+      var tmpdir = fs.mkdtempSync(
+        path.join(os.tmpdir(), "mocha-reporter-option-"),
+      );
       fs.writeFileSync(
         path.join(tmpdir, "package.json"),
         JSON.stringify({
           mocha: {
             reporter: customReporter,
             "reporter-option": ["foo=bar"],
-            spec: [path.join(__dirname, "..", "fixtures", "passing.fixture.cjs")],
+            spec: [
+              path.join(__dirname, "..", "fixtures", "passing.fixture.cjs"),
+            ],
           },
         }),
       );
@@ -168,7 +167,9 @@ describe("--reporter-option", function () {
     });
 
     it("should preserve package config reporter option objects after respawning with a Node option", function (done) {
-      var tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-reporter-option-"));
+      var tmpdir = fs.mkdtempSync(
+        path.join(os.tmpdir(), "mocha-reporter-option-"),
+      );
       fs.writeFileSync(
         path.join(tmpdir, "package.json"),
         JSON.stringify({
@@ -178,7 +179,9 @@ describe("--reporter-option", function () {
               foo: "bar",
               baz: true,
             },
-            spec: [path.join(__dirname, "..", "fixtures", "passing.fixture.cjs")],
+            spec: [
+              path.join(__dirname, "..", "fixtures", "passing.fixture.cjs"),
+            ],
           },
         }),
       );
