@@ -25,6 +25,12 @@ describe("Mocha", function () {
       createMochaInstanceAlreadyDisposedError: sinon
         .stub()
         .throws({ code: "ERR_MOCHA_INSTANCE_ALREADY_DISPOSED" }),
+      createMochaInstanceAlreadyRunningError: sinon
+        .stub()
+        .throws({ code: "ERR_MOCHA_INSTANCE_ALREADY_RUNNING" }),
+      createInvalidInterfaceError: sinon
+        .stub()
+        .throws({ code: "ERR_MOCHA_INVALID_INTERFACE" }),
       createInvalidReporterError: sinon
         .stub()
         .throws({ code: "ERR_MOCHA_INVALID_REPORTER" }),
@@ -68,8 +74,9 @@ describe("Mocha", function () {
       (r) => ({
         "../../lib/utils.cjs": r.with(stubs.utils).callThrough(),
         "../../lib/suite.js": { Suite: stubs.Suite },
-        "../../lib/nodejs/parallel-buffered-runner.cjs":
-          stubs.ParallelBufferedRunner,
+        "../../lib/nodejs/parallel-buffered-runner.mjs": {
+          ParallelBufferedRunner: stubs.ParallelBufferedRunner,
+        },
         "../../lib/nodejs/esm-utils.cjs": stubs.esmUtils,
         "../../lib/runner.cjs": stubs.Runner,
         "../../lib/errors.js": stubs.errors,
@@ -206,6 +213,21 @@ describe("Mocha", function () {
       });
     });
 
+    describe("ui()", function () {
+      it("should use a custom interface function", function () {
+        const bindInterface = sinon.stub();
+
+        expect(mocha.ui(bindInterface), "to be", mocha);
+        expect(bindInterface, "to have a call satisfying", [stubs.suite]);
+      });
+
+      it("should throw for an invalid interface", function () {
+        expect(() => mocha.ui("unknown-interface"), "to throw", {
+          code: "ERR_MOCHA_INVALID_INTERFACE",
+        });
+      });
+    });
+
     describe("loadFiles()", function () {
       it("should load all files from the files array", function () {
         this.timeout(1000);
@@ -329,6 +351,47 @@ describe("Mocha", function () {
           "to throw",
           { code: "ERR_MOCHA_INSTANCE_ALREADY_DISPOSED" },
         );
+      });
+    });
+
+    describe("dispose()", function () {
+      it("should not be allowed while the current instance is running", function () {
+        mocha._state = "running";
+
+        expect(() => mocha.dispose(), "to throw", {
+          code: "ERR_MOCHA_INSTANCE_ALREADY_RUNNING",
+        });
+      });
+    });
+
+    describe("failHookAffectedTests()", function () {
+      it("should be disabled only when passed false", function () {
+        expect(mocha.failHookAffectedTests(false), "to be", mocha);
+        expect(mocha.options.failHookAffectedTests, "to be false");
+
+        mocha.failHookAffectedTests(0);
+        expect(mocha.options.failHookAffectedTests, "to be true");
+      });
+    });
+
+    describe("_runGlobalFixtures()", function () {
+      it("should use default fixtures and context", async function () {
+        await expect(mocha._runGlobalFixtures(), "to be fulfilled with", {});
+      });
+
+      it("should call fixtures with the provided context", async function () {
+        const context = {};
+        const fixture = sinon.stub().callsFake(function () {
+          this.loaded = true;
+        });
+
+        await expect(
+          mocha._runGlobalFixtures([fixture], context),
+          "to be fulfilled with",
+          context,
+        );
+        expect(fixture, "was called once");
+        expect(context, "to satisfy", { loaded: true });
       });
     });
 
