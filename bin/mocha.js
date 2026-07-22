@@ -11,7 +11,7 @@
 import d from "debug";
 import { spawn } from "node:child_process";
 import os from "node:os";
-import unparse from "yargs-unparser";
+import { unparseMochaArgs } from "../lib/cli/unparse-args.js";
 
 import { main } from "../lib/cli/cli.js";
 import { loadOptions } from "../lib/cli/options.cjs";
@@ -20,7 +20,6 @@ import {
   isNodeFlag,
   impliesNoTimeouts,
 } from "../lib/cli/node-flags.cjs";
-import { aliases } from "../lib/cli/run-option-metadata.cjs";
 import { fileURLToPath } from "node:url";
 
 const debug = d.debug("mocha:cli:mocha");
@@ -99,7 +98,7 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   const args = [].concat(
     nodeArgv,
     mochaPath,
-    unparse(mochaArgs, { alias: aliases }),
+    unparseMochaArgs(mochaArgs),
   );
 
   debug(
