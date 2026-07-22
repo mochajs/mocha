@@ -45,7 +45,11 @@ describe("--list-reporters", function () {
         if (err) {
           return done(err);
         }
-        expect(result, "to have failed with output", /mutually exclusive/i);
+        expect(
+          result,
+          "to have failed with output",
+          /Arguments list-interfaces and list-reporters are mutually exclusive/,
+        );
         done();
       },
       { stdio: "pipe" },
