@@ -59,6 +59,8 @@ Reporting & Output
                                                       [string] [default: "spec"]
   -O, --reporter-option,                    Reporter-specific options
   --reporter-options                        (<k=v,[k1=v1,..]>)           [array]
+      --clear-screen                        Clear the terminal before each run
+                                            in watch mode              [boolean]
 
 Configuration
       --config       Path to config file   [string] [default: (nearest rc file)]
@@ -353,6 +355,15 @@ Provide options specific to a reporter in `<key>=<value>` format, e.g., `--repor
 Not all reporters accept options.
 
 Can be specified as a comma-delimited list.
+
+### `--clear-screen`
+
+:::note[New in v12.0.0]
+:::
+
+Clear the terminal before each run when `--watch` is set.
+
+This keeps only the latest run's output on screen, similar to the built-in behavior of the [`min` reporter](/reporters/min). It has no effect without `--watch`.
 
 ## Configuration
 
