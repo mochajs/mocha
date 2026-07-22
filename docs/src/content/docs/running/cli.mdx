@@ -28,14 +28,14 @@ Rules & Behavior
       --dry-run                     Report tests without executing them[boolean]
       --exit                        Force Mocha to quit after tests complete
                                                                        [boolean]
-      --pass-on-failing-test-suite  Not fail test run if tests were failed
+      --pass-on-failing-test-suite  Pass test run if only error is test failures
                                                       [boolean] [default: false]
       --fail-zero                   Fail test run if no test(s) encountered
                                                                        [boolean]
       --forbid-only                 Fail if exclusive test(s) encountered
                                                                        [boolean]
       --forbid-pending              Fail if pending test(s) encountered[boolean]
-      --global, --globals           List of allowed global variables     [array]
+      --global, --globals           List allowed global variables        [array]
   -j, --jobs                        Number of concurrent jobs for --parallel;
                                     use 1 to run in serial
                                    [number] [default: (number of CPU cores - 1)]
