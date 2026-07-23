@@ -3,25 +3,50 @@ description: The require interface for Mocha.
 title: Require
 ---
 
-The `require` interface allows you to require the `describe` and friend words directly using `require` and call them whatever you want.
-This interface is also useful if you want to avoid global variables in your tests.
+The `require` interface lets you import Mocha's test DSL from the `mocha` module instead of relying on globals.
+This opts out of Mocha injecting `describe()`, `it()`, `suite()`, and related helpers into the global scope.
+
+Because the DSL comes from the module, you can mix the function-style interfaces in the same file.
+For example, `describe()` and `suite()` can be imported together and used side by side.
 
 :::note
 The `require` interface cannot be run via the `node` executable, and must be run via `mocha`.
 :::
 
+Use it from the CLI:
+
+```sh
+mocha --ui require
+```
+
+Or from config:
+
+```json
+{
+  "ui": "require"
+}
+```
+
+With CommonJS:
+
 ```js
-import { describe as testCase, before as pre, it as assertions } from "mocha";
+const { describe, it, suite, test } = require("mocha");
+```
+
+With ES modules:
+
+```js
+import { describe, it, suite, test } from "mocha";
 import { assert } from "chai";
 
-testCase("Array", function () {
-  pre(function () {
-    // ...
-  });
-
-  testCase("#indexOf()", function () {
-    assertions("should return -1 when not present", function () {
+describe("Array", function () {
+  suite("#indexOf()", function () {
+    it("should return -1 when not present", function () {
       assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+
+    test("can mix TDD and BDD-style helpers", function () {
+      assert.equal([1, 2, 3].indexOf(2), 1);
     });
   });
 });
