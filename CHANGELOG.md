@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.0-rc.5](https://github.com/mochajs/mocha/compare/v12.0.0-rc.4...v12.0.0-rc.5) (2026-07-23)
+
+
+### 🩹 Fixes
+
+* add package.json exports to avoid DEP0151 warning ([#6168](https://github.com/mochajs/mocha/issues/6168)) ([3031567](https://github.com/mochajs/mocha/commit/3031567913b544a97402f449722cc110e9890420))
+
 ## [12.0.0-rc.4](https://github.com/mochajs/mocha/compare/v12.0.0-rc.3...v12.0.0-rc.4) (2026-07-23)
 
 
