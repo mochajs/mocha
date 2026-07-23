@@ -31,6 +31,10 @@
   "homepage": "https://mochajs.org/",
   "logo": "https://cldup.com/S9uQ-cOLYz.svg",
   "notifyLogo": "https://ibin.co/4QuRuGjXvl36.png",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
   "bin": {
     "mocha": "./bin/mocha.js"
   },
