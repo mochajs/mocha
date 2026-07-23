@@ -8,7 +8,9 @@ const { invokeNode } = require("./helpers.cjs");
 describe("package entrypoint", function () {
   it("should resolve the package root without DEP0151 warnings", async function () {
     const repoRoot = path.resolve(__dirname, "..", "..");
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-package-root-"));
+    const tempDir = fs.mkdtempSync(
+      path.join(os.tmpdir(), "mocha-package-root-"),
+    );
     const packageDir = path.join(tempDir, "node_modules", "mocha");
 
     fs.mkdirSync(path.dirname(packageDir), { recursive: true });
