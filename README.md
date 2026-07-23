@@ -6,7 +6,7 @@
 
 <div align="center">
 
-<a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="npm version 12.0.0-rc.3-9.6-9.3"></a> <!-- x-release-please-version -->
+<a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="npm version 12.0.0-rc.4-9.6-9.3"></a> <!-- x-release-please-version -->
 <a href="https://github.com/mochajs/mocha"><img src="https://img.shields.io/node/v/mocha.svg" alt="Node Version"></a>
 [![GitHub Actions Build Status](https://github.com/mochajs/mocha/actions/workflows/mocha.yml/badge.svg)](https://github.com/mochajs/mocha/actions/workflows/mocha.yml)
 <a href="https://codecov.io/gh/mochajs/mocha"><img src="https://codecov.io/gh/mochajs/mocha/branch/main/graph/badge.svg" alt="Codecov Coverage Status"></a>

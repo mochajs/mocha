@@ -1,5 +1,16 @@
 # Changelog
 
+## [12.0.0-rc.4](https://github.com/mochajs/mocha/compare/v12.0.0-rc.3...v12.0.0-rc.4) (2026-07-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* replace yargs with Node.js util.parseArgs ([#6164](https://github.com/mochajs/mocha/issues/6164))
+
+### 🧹 Chores
+
+* replace yargs with Node.js util.parseArgs ([#6164](https://github.com/mochajs/mocha/issues/6164)) ([21a3902](https://github.com/mochajs/mocha/commit/21a39022861e08a3a8836f365f313f6274dcf485))
+
 ## [12.0.0-rc.3](https://github.com/mochajs/mocha/compare/v12.0.0-rc.2...v12.0.0-rc.3) (2026-07-22)
 
 
