@@ -1,5 +1,18 @@
 # Changelog
 
+## [12.0.0-rc.3](https://github.com/mochajs/mocha/compare/v12.0.0-rc.2...v12.0.0-rc.3) (2026-07-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* replace yargs-unparser in CLI respawn paths ([#6125](https://github.com/mochajs/mocha/issues/6125))
+* replace yargs-parser in CLI option loading ([#6124](https://github.com/mochajs/mocha/issues/6124))
+
+### 🌟 Features
+
+* replace yargs-parser in CLI option loading ([#6124](https://github.com/mochajs/mocha/issues/6124)) ([e846f8f](https://github.com/mochajs/mocha/commit/e846f8f54754ecbbfca868885e255bbce51e0582))
+* replace yargs-unparser in CLI respawn paths ([#6125](https://github.com/mochajs/mocha/issues/6125)) ([1d2bb2e](https://github.com/mochajs/mocha/commit/1d2bb2efea721474b7fcaac4e209a844e5a463a0))
+
 ## [12.0.0-rc.2](https://github.com/mochajs/mocha/compare/v12.0.0-rc.1...v12.0.0-rc.2) (2026-07-20)
 
 
