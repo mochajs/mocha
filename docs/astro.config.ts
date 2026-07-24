@@ -192,4 +192,7 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  redirects: {
+    "/blog/community-contributions": "/blog/2026-community-sponsorships",
+  },
 });
