@@ -1,0 +1,23 @@
+name: Auto Add to Mocha Project
+
+# Automatically adds issues to our GitHub Project
+# https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  pull-requests: write
+  repository-projects: write
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # Project URL for Mocha project board
+          project-url: https://github.com/orgs/mochajs/projects/6
