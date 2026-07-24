@@ -236,7 +236,7 @@ describe("reporters", function () {
         for (var i = 0; i + 1 < outputLines.length; i++) {
           if (
             testLinePredicate(outputLines[i]) &&
-            testLinePredicate(outputLines[i + 1]) === false
+            anythingElsePredicate(outputLines[i + 1])
           ) {
             var blockLinesStart = i + 1;
             var blockLinesEnd =
