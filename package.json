@@ -97,7 +97,7 @@
     "diff": "^9.0.0",
     "find-up": "^5.0.0",
     "glob": "^13.0.0",
-    "is-path-inside": "^3.0.3",
+    "is-path-inside": "^4.0.0",
     "is-unicode-supported": "^0.1.0",
     "js-yaml": "^5.0.0",
     "minimatch": "^10.2.2",
