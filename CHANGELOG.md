@@ -1,5 +1,21 @@
 # Changelog
 
+## [12.0.0-rc.6](https://github.com/mochajs/mocha/compare/v12.0.0-rc.5...v12.0.0-rc.6) (2026-07-24)
+
+
+### 📚 Documentation
+
+* **blog:** add community contributions post ([#6172](https://github.com/mochajs/mocha/issues/6172)) ([5fcc0fe](https://github.com/mochajs/mocha/commit/5fcc0fe4e2bf7a260cd1cc7f312132e26abd1a05))
+* **blog:** update community-contributions to 2026-community-sponsorships ([5462d84](https://github.com/mochajs/mocha/commit/5462d841264d28f0bd3c1fe90479b40af6ba03d3))
+* fix blog/2026-community-sponsorships description ([#6177](https://github.com/mochajs/mocha/issues/6177)) ([98c4746](https://github.com/mochajs/mocha/commit/98c47466fc7bdfb7e1ff7bdabad04739e892ff09))
+* sync CLI docs with v12 options and defaults ([#6140](https://github.com/mochajs/mocha/issues/6140)) ([579fd15](https://github.com/mochajs/mocha/commit/579fd1563822564d528d99e10303dd3a5e29116c))
+
+
+### 🧹 Chores
+
+* extract stripLeadingDashes helper + cover CLI arg-parsing edge cases ([#6171](https://github.com/mochajs/mocha/issues/6171)) ([867e175](https://github.com/mochajs/mocha/commit/867e17566beb8f7077e969e9c58e9383bcf6d657))
+* limit token perms in protect-manifest workflow ([#6175](https://github.com/mochajs/mocha/issues/6175)) ([8cf0030](https://github.com/mochajs/mocha/commit/8cf003021a4184dfce85367c6622a08b0c8d0891))
+
 ## [12.0.0-rc.5](https://github.com/mochajs/mocha/compare/v12.0.0-rc.4...v12.0.0-rc.5) (2026-07-23)
 
 
