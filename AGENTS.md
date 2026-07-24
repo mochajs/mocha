@@ -21,7 +21,7 @@ Agent onboarding for the `mochajs/mocha` repository.
 
 ## Environment prerequisites
 
-- Node.js: `^20.19.0 || >=22.12.0` (prefer Node 22 locally)
+- Node.js: `>=22.12.0` (prefer Node 22 locally)
 - npm (do not use pnpm/yarn for this repo)
 - Google Chrome (required for browser tests)
 
@@ -98,7 +98,7 @@ CI partitions checks into separate jobs:
 
 - `format:check`
 - `lint`
-- `test-smoke` (Node 20/22/24)
+- `test-smoke` (Node 22/24)
 - `test-node:*` matrix (interfaces/unit/integration/jsapi/requires/reporters/only)
 - browser tests (`test-browser` with ChromeHeadless)
 - `tsc`
