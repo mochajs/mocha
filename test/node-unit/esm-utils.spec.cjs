@@ -53,7 +53,7 @@ describe("esm-utils", function () {
       return expect(
         () =>
           esmUtils.requireOrImport(
-            "../../test/node-unit/fixtures/mock-mocha-forbidden-exclusivity-err.ts",
+            "../../test/node-unit/fixtures/mock-mocha-forbidden-exclusivity-err.cts",
           ),
         "to be rejected with error satisfying",
         {
