@@ -30,6 +30,8 @@ Rules & Behavior
                                                                        [boolean]
       --pass-on-failing-test-suite  Not fail test run if tests were failed
                                                       [boolean] [default: false]
+      --fail-hook-affected-tests    Report tests as failed when affected by hook
+                                    failures (before/beforeEach)       [boolean]
       --fail-zero                   Fail test run if no test(s) encountered
                                                                        [boolean]
       --forbid-only                 Fail if exclusive test(s) encountered
@@ -40,6 +42,8 @@ Rules & Behavior
                                     use 1 to run in serial
                                    [number] [default: (number of CPU cores - 1)]
   -p, --parallel                    Run tests in parallel              [boolean]
+      --posix-exit-codes            Use POSIX and UNIX shell exit codes as
+                                    Mocha's return value               [boolean]
       --retries                     Retry failed tests this many times  [number]
   -s, --slow                        Specify "slow" test threshold (in
                                     milliseconds)         [string] [default: 75]
@@ -183,6 +187,14 @@ To ensure your tests aren't leaving messes around, here are some ideas to get st
 
 If set to `true`, Mocha returns exit code `0` even if there are failed tests during the run.
 
+### `--fail-hook-affected-tests`
+
+:::note[New in v12.0.0]
+:::
+
+When a `before` or `beforeEach` hook fails, Mocha skips the tests affected by that hook; only the hook itself is reported as a failure.
+Use `--fail-hook-affected-tests` to also report each affected test as failed.
+
 ### `--fail-zero`
 
 :::note[New in v9.1.0]
@@ -195,6 +207,13 @@ Fail test run with `exit-code: 1` if no tests are encountered.
 Enforce a rule that tests may not be exclusive (use of e.g., `describe.only()` or `it.only()` is disallowed).
 
 `--forbid-only` causes Mocha to fail when an exclusive ("only'd") test or suite is encountered, and it will abort further test execution.
+
+:::note[Updated in v12.0.0]
+Before v12, `--forbid-only` defaulted to `false`.
+Since v12, it defaults to `true` when the `CI` environment variable is set, and `false` otherwise.
+Most CI providers, like GitHub Actions and GitLab, set `CI` automatically.
+Use `--no-forbid-only` to allow exclusive tests in CI.
+:::
 
 ### `--forbid-pending`
 
@@ -247,6 +266,21 @@ Each test file will be put into a queue and executed as workers become available
 `--parallel` has certain implications for Mocha's behavior which you must be aware of.
 Read more about [running tests in parallel](/features/parallel-mode).
 :::
+
+### `--posix-exit-codes`
+
+:::note[New in v11.3.0]
+:::
+
+Exits with standard POSIX exit codes instead of the number of failed tests.
+
+Those exit codes are:
+
+- `0`: if all tests passed
+- `1`: if any test failed
+- `128 + <signal>` if given a signal, such as:
+  - 134: `SIGABRT` (`128 + 6`)
+  - 143: `SIGTERM` (`128 + 15`)
 
 ### `--retries <n>`
 
