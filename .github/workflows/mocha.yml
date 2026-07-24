@@ -74,9 +74,15 @@ jobs:
             coverage: false
     with:
       os: "ubuntu-latest,windows-latest"
-      # We pin exact versions here per https://github.com/mochajs/mocha/issues/5052
+      # We pin exact versions here per
+      # https://github.com/mochajs/mocha/issues/5052
       # Ref https://nodejs.org/en/about/previous-releases
-      node-versions: "20.19.4,22.18.0,24.6.0"
+      # Versions tested:
+      # - Only LTS majors (even numbers)
+      # - Lowest patch of EOL majors still supported
+      # - Lowest patch of explicitly referenced majors
+      # - Highest current patch of all LTS majors (updated sporadically)
+      node-versions: "20.19.0,20.20.2,22.12.0,22.23.1,24.18.0,26.5.0"
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
