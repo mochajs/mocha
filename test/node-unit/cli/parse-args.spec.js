@@ -289,4 +289,53 @@ describe("parse-args", function () {
       expected: "boolean",
     });
   });
+
+  it("throws an unsupported error for a bare numeric positional argument", function () {
+    expect(() => parseMochaArgs(["123"], defaults), "to throw", {
+      message: "Option 123 is unsupported by the mocha cli",
+      code: constants.UNSUPPORTED,
+    });
+  });
+
+  it("accepts a space-delimited string of arguments", function () {
+    expect(parseMochaArgs("--bail --grep foo", defaults), "to satisfy", {
+      bail: true,
+      grep: "foo",
+    });
+  });
+
+  it("treats an empty string of arguments as no arguments", function () {
+    expect(parseMochaArgs("", defaults), "to satisfy", {
+      _: [],
+      timeout: 1000,
+      extension: ["js"],
+    });
+  });
+
+  it("ignores falsy config objects while merging the rest", function () {
+    expect(
+      parseMochaArgs(["--bail"], defaults, null, undefined, { grep: "x" }),
+      "to satisfy",
+      {
+        bail: true,
+        grep: "x",
+      },
+    );
+  });
+
+  it("merges positional arguments across multiple config objects", function () {
+    expect(
+      parseMochaArgs([], defaults, { _: ["a.js"] }, { _: ["b.js"] }),
+      "to satisfy",
+      {
+        _: ["a.js", "b.js"],
+      },
+    );
+  });
+
+  it("keeps a non-boolean value for a boolean option given in equals form", function () {
+    expect(parseMochaArgs(["--bail=maybe"], defaults), "to satisfy", {
+      bail: "maybe",
+    });
+  });
 });
