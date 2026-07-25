@@ -60,7 +60,7 @@ describe("FIFO support", function () {
           done(err);
         }
       },
-      { stdio: "pipe" },
+      { separateStderr: true, stdio: "pipe" },
     );
   });
 });
