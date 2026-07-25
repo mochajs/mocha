@@ -3,6 +3,7 @@ import starlight from "@astrojs/starlight";
 import starlightBlog from "starlight-blog";
 
 export default defineConfig({
+  compressHTML: true,
   integrations: [
     starlight({
       components: {
