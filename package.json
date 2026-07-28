@@ -167,7 +167,7 @@
     "supports-color": false,
     "./lib/nodejs/buffered-worker-pool.cjs": false,
     "./lib/nodejs/esm-utils.cjs": false,
-    "./lib/nodejs/file-unloader.cjs": false,
+    "./lib/nodejs/file-unloader.js": false,
     "./lib/nodejs/parallel-buffered-runner.cjs": false,
     "./lib/nodejs/serializer.js": false,
     "./lib/nodejs/worker.cjs": false,
