@@ -140,7 +140,7 @@
     "rollup-plugin-visualizer": "^6.0.5",
     "semver": "^7.7.2",
     "sinon": "^22.0.0",
-    "typescript": "^5.8.3",
+    "typescript": "^7.0.0",
     "unexpected": "^13.2.1",
     "unexpected-eventemitter": "^2.4.0",
     "unexpected-sinon": "^11.1.0",
