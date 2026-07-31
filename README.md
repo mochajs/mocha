@@ -50,6 +50,18 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Tools & Services
+
+The Mocha project gratefully acknowledges the following organizations for providing tools and services that help us build, test, and host the project:
+
+- [JetBrains](https://www.jetbrains.com/) — WebStorm licenses for maintainers
+- [WallabyJS](https://wallabyjs.com/) — WallabyJS licenses for maintainers
+- [SauceLabs](https://saucelabs.com/) — cross-browser testing credits
+- [Travis CI](https://www.travis-ci.com/) — Linux/macOS CI
+- [AppVeyor](https://www.appveyor.com/) — Windows CI
+- [Coveralls](https://coveralls.io/) — code-coverage reporting
+- [Netlify](https://www.netlify.com/) — documentation site hosting
+
 ## Development
 
 You might want to know that:
