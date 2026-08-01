@@ -50,6 +50,23 @@ Also, your company's logo will show [on GitHub](https://github.com/mochajs/mocha
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/2/avatar)](https://opencollective.com/mochajs/tiers/sponsors/2/website)
 [![MochaJS Sponsor](https://opencollective.com/mochajs/tiers/sponsors/3/avatar)](https://opencollective.com/mochajs/tiers/sponsors/3/website)
 
+### Non-OpenCollective Sponsors
+
+These companies support Mocha by providing licenses and services:
+
+[![WallabyJS](https://wallabyjs.com/assets/logo/wallaby_100x100.png)](https://wallabyjs.com)
+[![SauceLabs](https://saucelabs.com/images/logo.png)](https://saucelabs.com)
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)](https://jetbrains.com)
+
+### Services
+
+Mocha uses these services for CI/CD, code quality, and hosting:
+
+[![Travis CI](https://travis-ci.org/images/logos/TravisCI-Mascot-blue.png)](https://travis-ci.org)
+[![AppVeyor](https://avatars.githubusercontent.com/u/5079124?s=100)](https://appveyor.com)
+[![Coveralls](https://coveralls.io/img/favicon.png)](https://coveralls.io)
+[![Netlify](https://www.netlify.com/v3/img/components/logomark.png)](https://netlify.com)
+
 ## Development
 
 You might want to know that:
