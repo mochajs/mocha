@@ -1,5 +1,19 @@
 # Changelog
 
+## [11.8.0](https://github.com/mochajs/mocha/compare/v11.7.7...v11.8.0) (2026-08-02)
+
+
+### 🌟 Features
+
+* add --fail-hook-affected-tests option to report skipped tests as failed ([#5519](https://github.com/mochajs/mocha/issues/5519)) ([#6052](https://github.com/mochajs/mocha/issues/6052)) ([7830309](https://github.com/mochajs/mocha/commit/78303092b0f7a6e5c328d3cc4e7246e2bb02d511))
+
+
+### 🧹 Chores
+
+* add modern Netlify to v11.x branch ([#6082](https://github.com/mochajs/mocha/issues/6082)) ([26deb23](https://github.com/mochajs/mocha/commit/26deb2319892b0c3e297c9364f2c9a0e24455489)), closes [#5696](https://github.com/mochajs/mocha/issues/5696)
+* change site title to Mocha 11, update index note ([#6086](https://github.com/mochajs/mocha/issues/6086)) ([1f44d5f](https://github.com/mochajs/mocha/commit/1f44d5fc78d7e5c3804164fecd9a7abec495a310))
+* **CI:** bump Node from 22 to 24 in publish action ([#6206](https://github.com/mochajs/mocha/issues/6206)) ([05aec43](https://github.com/mochajs/mocha/commit/05aec436cd268ceab50cc9422d03cfd0cf309391))
+
 ## [11.7.7](https://github.com/mochajs/mocha/compare/v11.7.6...v11.7.7) (2026-06-13)
 
 
