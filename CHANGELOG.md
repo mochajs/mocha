@@ -1,5 +1,13 @@
 # Changelog
 
+## [12.0.0-rc.7](https://github.com/mochajs/mocha/compare/v12.0.0-rc.6...v12.0.0-rc.7) (2026-08-09)
+
+
+### 📚 Documentation
+
+* fix minor correctness issues ([#6215](https://github.com/mochajs/mocha/issues/6215)) ([e6b9ee7](https://github.com/mochajs/mocha/commit/e6b9ee773481fd739ae24caeb42f32ac0b010f95))
+* link to mochajs.org instead of the wiki ([#6216](https://github.com/mochajs/mocha/issues/6216)) ([8720225](https://github.com/mochajs/mocha/commit/8720225413002aeda0a8760e911374fddd6e7b24))
+
 ## [12.0.0-rc.6](https://github.com/mochajs/mocha/compare/v12.0.0-rc.5...v12.0.0-rc.6) (2026-08-09)
 
 
