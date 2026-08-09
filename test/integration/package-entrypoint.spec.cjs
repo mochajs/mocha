@@ -61,4 +61,16 @@ describe("package entrypoint", function () {
     expect(result.code, "to be", 0);
     expect(result.output, "to contain", "resolved deep subpaths");
   });
+
+  it("should resolve deep subpaths with a file extension", async function () {
+    const result = await invokeNodeWithLinkedMocha([
+      "-e",
+      "require.resolve('mocha/lib/reporters/base.js');" +
+        "require.resolve('mocha/lib/stats-collector.js');" +
+        "console.log('resolved deep subpaths');",
+    ]);
+
+    expect(result.code, "to be", 0);
+    expect(result.output, "to contain", "resolved deep subpaths");
+  });
 });
