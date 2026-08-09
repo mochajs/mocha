@@ -1,5 +1,43 @@
 # Changelog
 
+## [12.0.0-rc.6](https://github.com/mochajs/mocha/compare/v12.0.0-rc.5...v12.0.0-rc.6) (2026-08-09)
+
+
+### 🩹 Fixes
+
+* **deps:** update dependency starlight-blog to ^0.28.0 ([#6153](https://github.com/mochajs/mocha/issues/6153)) ([6b79044](https://github.com/mochajs/mocha/commit/6b79044a260d096d8266585dfbd7daf173886937))
+* **docs:** restore homepage logo ([#6183](https://github.com/mochajs/mocha/issues/6183)) ([06e81a8](https://github.com/mochajs/mocha/commit/06e81a800356bb5ea42304e978919d833c8558b4))
+* **docs:** restore spacing around footer links ([#6185](https://github.com/mochajs/mocha/issues/6185)) ([163d751](https://github.com/mochajs/mocha/commit/163d751ebb0a9587559ed24aae74564c09f10312))
+* use main instead of exports for the package entry point ([#6193](https://github.com/mochajs/mocha/issues/6193)) ([c32a696](https://github.com/mochajs/mocha/commit/c32a696f0963737eedc9dde5a3e122a6fa1586b3))
+
+
+### 📚 Documentation
+
+* **blog:** add community contributions post ([#6172](https://github.com/mochajs/mocha/issues/6172)) ([5fcc0fe](https://github.com/mochajs/mocha/commit/5fcc0fe4e2bf7a260cd1cc7f312132e26abd1a05))
+* **blog:** update community-contributions to 2026-community-sponsorships ([5462d84](https://github.com/mochajs/mocha/commit/5462d841264d28f0bd3c1fe90479b40af6ba03d3))
+* fix blog/2026-community-sponsorships description ([#6177](https://github.com/mochajs/mocha/issues/6177)) ([98c4746](https://github.com/mochajs/mocha/commit/98c47466fc7bdfb7e1ff7bdabad04739e892ff09))
+* sync CLI docs with v12 options and defaults ([#6140](https://github.com/mochajs/mocha/issues/6140)) ([579fd15](https://github.com/mochajs/mocha/commit/579fd1563822564d528d99e10303dd3a5e29116c))
+
+
+### 🧹 Chores
+
+* **deps:** update dependency @playwright/test to v1.62.1 ([#6197](https://github.com/mochajs/mocha/issues/6197)) ([dcc539a](https://github.com/mochajs/mocha/commit/dcc539ad05427c010136bd17f57e9d3148f3ebee))
+* **deps:** update dependency eslint to v10.8.0 ([#6196](https://github.com/mochajs/mocha/issues/6196)) ([deeeec6](https://github.com/mochajs/mocha/commit/deeeec61f2f40fafa035dfd25dffa8fed672a877))
+* **deps:** update dependency globals to v17.9.0 ([#6201](https://github.com/mochajs/mocha/issues/6201)) ([c2c6d63](https://github.com/mochajs/mocha/commit/c2c6d63967a7def05452c9f2074ec092ef80e4c0))
+* **deps:** update dependency knip to v6.31.0 ([#6166](https://github.com/mochajs/mocha/issues/6166)) ([b7cd1bd](https://github.com/mochajs/mocha/commit/b7cd1bd9d75cef7d6f350dd038fdaaf553e27e82))
+* **deps:** update dependency sinon to v22.1.0 ([#6188](https://github.com/mochajs/mocha/issues/6188)) ([284f0c2](https://github.com/mochajs/mocha/commit/284f0c23082e3e55106d61c3e69e29f6637b86bd))
+* **deps:** update dependency webpack to v5.109.2 ([#6194](https://github.com/mochajs/mocha/issues/6194)) ([badf733](https://github.com/mochajs/mocha/commit/badf73375430c5352fcf0314417b2d87ce1f7c3d))
+* extract stripLeadingDashes helper + cover CLI arg-parsing edge cases ([#6171](https://github.com/mochajs/mocha/issues/6171)) ([867e175](https://github.com/mochajs/mocha/commit/867e17566beb8f7077e969e9c58e9383bcf6d657))
+* fix esm-utils tests when run without coverage ([#6160](https://github.com/mochajs/mocha/issues/6160)) ([c54539f](https://github.com/mochajs/mocha/commit/c54539f570c005ea1a6b74b283664e0aee7972b1))
+* keep stderr out of the JSON parsed by the FIFO test ([#6187](https://github.com/mochajs/mocha/issues/6187)) ([ea6489e](https://github.com/mochajs/mocha/commit/ea6489e973fde53ef2a9e3455110befc064f5ed0))
+* limit token perms in protect-manifest workflow ([#6175](https://github.com/mochajs/mocha/issues/6175)) ([8cf0030](https://github.com/mochajs/mocha/commit/8cf003021a4184dfce85367c6622a08b0c8d0891))
+* **repo:** change stale threshold from 2+2 to 1+1 ([#6179](https://github.com/mochajs/mocha/issues/6179)) ([7cb2678](https://github.com/mochajs/mocha/commit/7cb267830c51d0b9a851086eb8d87013ee7663bd))
+
+
+### 🤖 Automation
+
+* **deps:** bump actions/stale from 10 to 11 in the github-actions group ([#6207](https://github.com/mochajs/mocha/issues/6207)) ([ce13809](https://github.com/mochajs/mocha/commit/ce1380932dbc47e02cbaf969875f0cc8534e6ccd))
+
 ## [12.0.0-rc.5](https://github.com/mochajs/mocha/compare/v12.0.0-rc.4...v12.0.0-rc.5) (2026-07-23)
 
 
