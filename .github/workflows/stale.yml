@@ -13,7 +13,7 @@ jobs:
   stale:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/stale@v10
+      - uses: actions/stale@v11
         with:
           close-issue-message: >
             This issue has been automatically closed after waiting 2 weeks with no response from the author.
