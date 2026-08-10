@@ -1,11 +1,12 @@
 "use strict";
 
 const serializeJavascript = require("serialize-javascript");
-const rewiremock = require("rewiremock/node");
 const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.js");
 const sinon = require("sinon");
-
-const WORKER_PATH = require.resolve("../../lib/nodejs/worker.cjs");
+const {
+  createWorker,
+  startWorker,
+} = require("../../lib/nodejs/worker-core.mjs");
 
 describe("worker", function () {
   let worker;
@@ -22,15 +23,27 @@ describe("worker", function () {
   });
 
   describe("when run as main process", function () {
+    it("should throw with the default workerpool", function () {
+      expect(startWorker, "to throw");
+    });
+
     it("should throw", function () {
       expect(() => {
-        rewiremock.proxy(WORKER_PATH, {
+        startWorker({
           workerpool: {
             isMainThread: true,
             worker: stubs.workerpool.worker,
           },
         });
       }, "to throw");
+    });
+  });
+
+  describe("when created with default dependencies", function () {
+    it("should expose a run function", function () {
+      expect(createWorker(), "to satisfy", {
+        run: expect.it("to be a function"),
+      });
     });
   });
 
@@ -58,16 +71,12 @@ describe("worker", function () {
         validateLegacyPlugin: sinon.stub(),
       };
 
-      stubs.plugin = {
-        aggregateRootHooks: sinon.stub().resolves(),
-      };
-
-      worker = rewiremock.proxy(WORKER_PATH, {
+      worker = startWorker({
         workerpool: stubs.workerpool,
-        "../../lib/mocha.cjs": stubs.Mocha,
-        "../../lib/nodejs/serializer.js": stubs.serializer,
-        "../../lib/cli/run-helpers.cjs": stubs.runHelpers,
-        "../../lib/plugin-loader.js": stubs.plugin,
+        Mocha: stubs.Mocha,
+        handleRequires: stubs.runHelpers.handleRequires,
+        validateLegacyPlugin: stubs.runHelpers.validateLegacyPlugin,
+        serialize: stubs.serializer.serialize,
       });
     });
 
