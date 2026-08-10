@@ -75,12 +75,13 @@ describe("config", function () {
       var pkgName = "mocha-config";
       var installedLocally = false;
       var symlinkedPkg = false;
+      var linkType = process.platform === "win32" ? "junction" : "dir";
 
       before(function () {
         try {
           var srcPath = path.join(configDir, pkgName);
           var targetPath = path.join(nodeModulesDir, pkgName);
-          fs.symlinkSync(srcPath, targetPath, "dir");
+          fs.symlinkSync(srcPath, targetPath, linkType);
           symlinkedPkg = true;
           installedLocally = true;
         } catch (err) {
