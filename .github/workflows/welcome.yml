@@ -1,0 +1,38 @@
+name: Welcome New Contributors
+
+# Greets first-time contributors
+# Learn more: https://github.com/actions/first-interaction
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            👋 Thanks for opening your first issue! A maintainer will be with you shortly.
+
+            Please make sure you've read our [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md) and provided all the requested information.
+
+            If you haven't already, join our [Discord community](https://discord.gg/KeDn2uXhER) for help and discussion!
+          pr-message: |
+            🎉 Thanks for opening your first pull request! A maintainer will review it soon.
+
+            Please make sure you've:
+            - Read our [Contributing Guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md)
+            - Run `npm test` locally and all tests pass
+            - Added tests for any new functionality
+            - Updated documentation if needed
+
+            Join our [Discord community](https://discord.gg/KeDn2uXhER) if you have any questions!
