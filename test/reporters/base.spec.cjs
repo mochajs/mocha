@@ -593,6 +593,121 @@ describe("Base reporter", function () {
     });
   });
 
+  describe("aggregate errors", function () {
+    it("should append each aggregated error to the stack trace", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\nfoo\nbar",
+        showDiff: false,
+        errors: [
+          { message: "Err1", stack: "Err1\na\nb", showDiff: false },
+          { message: "Err2", stack: "Err2\nc\nd", showDiff: false },
+        ],
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n  foo\n  bar\n     Aggregated error: Err1\n  a\n  b\n     Aggregated error: Err2\n  c\n  d",
+      );
+    });
+
+    it("should append a single aggregated error", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\nfoo\nbar",
+        showDiff: false,
+        errors: [{ message: "Err1", stack: "Err1\na\nb", showDiff: false }],
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n  foo\n  bar\n     Aggregated error: Err1\n  a\n  b",
+      );
+    });
+
+    it("should render aggregated errors that are not Error instances", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\nfoo\nbar",
+        showDiff: false,
+        errors: ["boom"],
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n  foo\n  bar\n     Aggregated error: boom",
+      );
+    });
+
+    it("should recurse into nested aggregated errors", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\nfoo\nbar",
+        showDiff: false,
+        errors: [
+          {
+            message: "Err1",
+            stack: "Err1\na\nb",
+            showDiff: false,
+            errors: [
+              { message: "Nested", stack: "Nested\nx\ny", showDiff: false },
+            ],
+          },
+        ],
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n  foo\n  bar\n     Aggregated error: Err1\n  a\n  b\n     Aggregated error: Nested\n  x\n  y",
+      );
+    });
+
+    it("should not get stuck in a circular aggregated error trail", function () {
+      var err1 = {
+        message: "Error",
+        stack: "Error\nfoo\nbar",
+        showDiff: false,
+      };
+      var err2 = {
+        message: "Cause1",
+        stack: "Cause1\nbar\nfoo",
+        showDiff: false,
+        errors: [err1],
+      };
+      err1.errors = [err2];
+      var test = makeTest(err1);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(
+        errOut,
+        "to be",
+        "1) test title:\n     Error\n  foo\n  bar\n     Aggregated error: Cause1\n  bar\n  foo\n     Aggregated error: <circular>",
+      );
+    });
+  });
+
   it("should list multiple Errors per test", function () {
     var err = new Error("First Error");
     err.multiple = [new Error("Second Error - same test")];
