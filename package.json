@@ -121,7 +121,7 @@
     "eslint": "^10.0.0",
     "eslint-plugin-n": "^18.0.0",
     "globals": "^17.0.0",
-    "installed-check": "^10.0.0",
+    "installed-check": "^11.0.0",
     "knip": "^6.0.0",
     "npm-run-all2": "^8.0.0",
     "nyc": "^18.0.0",
