@@ -100,7 +100,7 @@ export interface MochaOptions {
   /** Hooks to bootstrap the root suite with. */
   rootHooks?: MochaRootHookObject;
 
-  /** Pathname of `rootHooks` plugin for parallel runs. */
+  /** Module(s) to require, including `rootHooks` plugins. */
   require?: string[];
 
   /** Should be `true` if `Mocha` process is running in a worker process. */

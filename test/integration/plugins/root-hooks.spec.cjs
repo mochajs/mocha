@@ -1,6 +1,8 @@
 "use strict";
 
-var invokeMochaAsync = require("../helpers.cjs").invokeMochaAsync;
+var helpers = require("../helpers.cjs");
+var invokeMochaAsync = helpers.invokeMochaAsync;
+var invokeNode = helpers.invokeNode;
 
 /**
  * Extracts root hook log messages from run results
@@ -82,6 +84,27 @@ describe("root hooks", function () {
           "beforeEach array 1",
           "beforeEach array 2",
         ],
+      );
+    });
+
+    it("should run root hooks when provided via require in programmatic API", function (done) {
+      invokeNode(
+        [
+          require.resolve("../fixtures/plugins/root-hooks/programmatic-serial.fixture.cjs"),
+        ],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
+          expect(extractHookOutputFromResult(res), "to equal", [
+            "afterAll",
+            "afterEach",
+            "beforeAll",
+            "beforeEach",
+          ]);
+          done();
+        },
       );
     });
 
