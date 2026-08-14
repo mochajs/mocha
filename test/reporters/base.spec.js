@@ -367,6 +367,22 @@ describe("Base reporter", function () {
     expect(errOut, "to match", /\+ expected/);
   });
 
+  it("should stringify empty Object.create(null)", function () {
+    var err = new Error("test");
+    err.actual = Object.create(null);
+    err.expected = { a: 1 };
+    err.showDiff = true;
+    var test = makeTest(err);
+
+    list([test]);
+
+    var errOut = stdout.join("\n");
+    expect(errOut, "to match", /test/);
+    expect(errOut, "to match", /- actual/);
+    expect(errOut, "to match", /\+ expected/);
+    expect(errOut, "not to match", /toString is not a function/);
+  });
+
   it("should handle error messages that are not strings", function () {
     try {
       assert(false, true);

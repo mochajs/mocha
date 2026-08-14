@@ -75,4 +75,18 @@ describe("regressions", function () {
       done();
     });
   });
+
+  it("issue-5507: null-prototype assertion diffs should exit non-zero", function (done) {
+    run("regression/issue-5507.fixture.js", [], function (err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res, "to have failed")
+        .and("to have failed test count", 1)
+        .and("to have passed test count", 0);
+      expect(res.output, "not to contain", "toString is not a function");
+      done();
+    });
+  });
 });
