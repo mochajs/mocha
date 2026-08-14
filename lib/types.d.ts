@@ -241,7 +241,9 @@ export interface BeforeWatchRunOptions {
  * Optionally, it can return a new `Mocha` instance.
  * @private
  */
-export type BeforeWatchRun = (options: BeforeWatchRunOptions) => Mocha;
+export type BeforeWatchRun = (
+  options: BeforeWatchRunOptions,
+) => Mocha | void | Promise<Mocha | void>;
 
 /**
  * Object containing run control methods

@@ -529,6 +529,55 @@ describe("--watch", function () {
       it("mochaHooks.beforeEach runs as expected", setupHookTest("beforeEach"));
       it("mochaHooks.afterAll runs as expected", setupHookTest("afterAll"));
       it("mochaHooks.afterEach runs as expected", setupHookTest("afterEach"));
+
+      /**
+       * Layout used by https://github.com/mochajs/mocha/issues/5149:
+       * mochaHooks mutates a singleton; the test reads it through a wrapper
+       * so a stale hook closure and a reloaded test module disagree.
+       */
+      function setupMochaHooksStateTest(extraArgs) {
+        return function () {
+          const testFile = path.join(tempDir, "test.js");
+          const hookFile = path.join(tempDir, "hooks.js");
+          const storeFile = path.join(tempDir, "lib/store.js");
+          const wrapperFile = path.join(tempDir, "lib/wrapper.js");
+
+          copyFixture("options/watch/test-via-wrapper.fixture.cjs", testFile);
+          copyFixture("options/watch/hook-init-store.fixture.cjs", hookFile);
+          copyFixture("options/watch/stateful-store.fixture.cjs", storeFile);
+          copyFixture("options/watch/wrapper.fixture.cjs", wrapperFile);
+
+          return runMochaWatchJSONAsync(
+            [testFile, "--require", hookFile, ...extraArgs],
+            tempDir,
+            () => {
+              touchFile(testFile);
+            },
+          ).then((results) => {
+            expect(results, "to have length", 2);
+            expect(results[0].passes, "to have length", 1);
+            expect(results[0].failures, "to have length", 0);
+            expect(results[1].passes, "to have length", 1);
+            expect(results[1].failures, "to have length", 0);
+          });
+        };
+      }
+
+      // Regression test for https://github.com/mochajs/mocha/issues/5149
+      it(
+        "shares mochaHooks module state with tests on re-runs",
+        setupMochaHooksStateTest([]),
+      );
+
+      it(
+        "shares mochaHooks module state when hooks are unwatched",
+        setupMochaHooksStateTest([
+          "--watch-files",
+          "test.js",
+          "--watch-files",
+          "lib/**/*.js",
+        ]),
+      );
     });
 
     it("should not leak event listeners", function () {
