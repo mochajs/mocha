@@ -2,6 +2,7 @@
 
 var run = require("./helpers.cjs").runMocha;
 var runJSON = require("./helpers.cjs").runMochaJSON;
+var runMochaJSONAsync = require("./helpers.cjs").runMochaJSONAsync;
 
 describe("regressions", function () {
   it("issue-1991: Declarations do not get cleaned up unless you set them to `null` - Memory Leak", function (done) {
@@ -81,6 +82,20 @@ describe("regressions", function () {
           .and("to have passed test count", 1);
         done();
       },
+    );
+  });
+
+  it("issue-4948: should print an error when a test file fails to load", async function () {
+    const res = await runMochaJSONAsync(
+      "regression/issue-4948-load-error.fixture.js",
+    );
+
+    expect(res, "to have failed").and("to have failed test count", 1);
+    expect(res.failures[0].file, "to contain", "issue-4948-load-error");
+    expect(
+      res.failures[0].err.message || res.failures[0].err.stack,
+      "to contain",
+      "intentional load failure from issue 4948",
     );
   });
 });
