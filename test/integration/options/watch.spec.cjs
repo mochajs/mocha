@@ -56,14 +56,18 @@ describe("--watch", function () {
 
       replaceFileContents(testFile, "done();", "done((;");
 
-      return runMochaWatchJSONAsync(
-        [testFile],
-        { cwd: tempDir, firstRunCrashPattern: /SyntaxError/, expectedRuns: 1 },
-        () => {
-          replaceFileContents(testFile, "done((;", "done();");
-        },
-      ).then((results) => {
-        expect(results, "to have length", 1);
+      return runMochaWatchJSONAsync([testFile], tempDir, () => {
+        replaceFileContents(testFile, "done((;", "done();");
+      }).then((results) => {
+        expect(results, "to have length", 2);
+        expect(results[0].stats.failures, "to be", 1);
+        expect(
+          results[0].failures[0].err.stack ||
+            results[0].failures[0].err.message,
+          "to match",
+          /SyntaxError/,
+        );
+        expect(results[1].stats.failures, "to be", 0);
       });
     });
 
