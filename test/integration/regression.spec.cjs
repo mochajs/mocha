@@ -2,6 +2,7 @@
 
 var run = require("./helpers.cjs").runMocha;
 var runJSON = require("./helpers.cjs").runMochaJSON;
+var { resolveFixturePath, runMochaJSONAsync } = require("./helpers.cjs");
 
 describe("regressions", function () {
   it("issue-1991: Declarations do not get cleaned up unless you set them to `null` - Memory Leak", function (done) {
@@ -81,6 +82,24 @@ describe("regressions", function () {
           .and("to have passed test count", 1);
         done();
       },
+    );
+  });
+
+  it("issue-5288: should continue running tests after a file with a syntax error", async function () {
+    const res = await runMochaJSONAsync("passing.fixture.cjs", [
+      resolveFixturePath("regression/issue-5288-syntax-error.fixture.js"),
+    ]);
+
+    expect(res, "to have failed")
+      .and("to have passed test count", 2)
+      .and("to have failed test count", 1)
+      .and("to have passed test", "test1")
+      .and("to have passed test", "test2");
+    expect(res.failures[0].file, "to contain", "issue-5288-syntax-error");
+    expect(
+      res.failures[0].err.stack || res.failures[0].err.message,
+      "to match",
+      /SyntaxError/,
     );
   });
 });

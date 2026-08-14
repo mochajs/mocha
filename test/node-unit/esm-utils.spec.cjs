@@ -144,5 +144,44 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should invoke onLoadError and continue loading remaining files", async function () {
+      const syntaxError = new SyntaxError("Unexpected token");
+      esmUtils.doImport.onFirstCall().rejects(syntaxError);
+      esmUtils.doImport.onSecondCall().resolves({});
+      const onLoadError = sinon.spy();
+      const loaded = [];
+
+      await esmUtils.loadFilesAsync(
+        ["/foo/bad.mjs", "/foo/good.mjs"],
+        () => {},
+        (file) => {
+          loaded.push(file);
+        },
+        undefined,
+        onLoadError,
+      );
+
+      expect(onLoadError, "to have a call satisfying", [
+        "/foo/bad.mjs",
+        syntaxError,
+      ]).and("was called once");
+      expect(loaded, "to equal", ["/foo/good.mjs"]);
+    });
+
+    it("should still reject when a file fails to load without onLoadError", async function () {
+      esmUtils.doImport.rejects(new SyntaxError("Unexpected token"));
+
+      return expect(
+        () =>
+          esmUtils.loadFilesAsync(
+            ["/foo/bad.mjs"],
+            () => {},
+            () => {},
+          ),
+        "to be rejected with error satisfying",
+        { name: "SyntaxError" },
+      );
+    });
   });
 });
