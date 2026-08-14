@@ -1,7 +1,11 @@
 "use strict";
 
 const assert = require("node:assert");
-const { runMochaJSONAsync } = require("./helpers.cjs");
+const {
+  invokeMochaAsync,
+  resolveFixturePath,
+  runMochaJSONAsync,
+} = require("./helpers.cjs");
 
 describe("parallel run", () => {
   /**
@@ -75,6 +79,43 @@ describe("parallel run", () => {
     assert.deepStrictEqual(result.failures[0].err.values, [
       { toB: { toA: "[Circular]" } },
     ]);
+  });
+
+  /**
+   * @see https://github.com/mochajs/mocha/issues/5184
+   */
+  describe("issue-5184: unhandled rejection after a test passes", function () {
+    it("should fail the run", async function () {
+      const [, promise] = invokeMochaAsync(
+        [
+          "--parallel",
+          "--jobs",
+          "2",
+          resolveFixturePath("parallel/unhandled-rejection.fixture.js"),
+        ],
+        { stdio: "pipe" },
+      );
+      return expect(
+        promise,
+        "when fulfilled",
+        "to have failed with output",
+        /late unhandled rejection/,
+      );
+    });
+
+    it("should fail the run when another file also fails", async function () {
+      const [, promise] = invokeMochaAsync(
+        [
+          "--parallel",
+          "--jobs",
+          "2",
+          resolveFixturePath("parallel/unhandled-rejection.fixture.js"),
+          resolveFixturePath("parallel/delayed-fail.fixture.js"),
+        ],
+        { stdio: "pipe" },
+      );
+      return expect(promise, "when fulfilled", "to have failed");
+    });
   });
 
   it("should correctly handle a non-writable getter reference in an exception", async () => {
