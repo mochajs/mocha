@@ -74,6 +74,7 @@ describe("worker", function () {
     it("should register itself with workerpool", function () {
       expect(stubs.workerpool.worker, "to have a call satisfying", [
         { run: worker.run },
+        { onTerminate: worker.flushV8Coverage },
       ]);
     });
 
@@ -222,6 +223,32 @@ describe("worker", function () {
               });
             });
           });
+        });
+      });
+
+      describe("flushV8Coverage()", function () {
+        const previousCoverage = process.env.NODE_V8_COVERAGE;
+
+        afterEach(function () {
+          if (previousCoverage === undefined) {
+            delete process.env.NODE_V8_COVERAGE;
+          } else {
+            process.env.NODE_V8_COVERAGE = previousCoverage;
+          }
+        });
+
+        it("should take coverage when NODE_V8_COVERAGE is set", function () {
+          const takeCoverage = sinon.stub(require("node:v8"), "takeCoverage");
+          process.env.NODE_V8_COVERAGE = "/tmp/coverage";
+          worker.flushV8Coverage();
+          expect(takeCoverage, "was called once");
+        });
+
+        it("should not take coverage when NODE_V8_COVERAGE is unset", function () {
+          const takeCoverage = sinon.stub(require("node:v8"), "takeCoverage");
+          delete process.env.NODE_V8_COVERAGE;
+          worker.flushV8Coverage();
+          expect(takeCoverage, "was not called");
         });
       });
     });

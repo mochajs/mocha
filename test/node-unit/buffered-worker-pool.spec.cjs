@@ -108,7 +108,52 @@ describe("class BufferedWorkerPool", function () {
           workerType: "process",
           forkOpts: { execArgv: process.execArgv },
           maxWorkers: expect.it("to be greater than or equal to", 1),
+          workerTerminateTimeout: expect.it("to be a number"),
         },
+      });
+    });
+
+    describe("workerTerminateTimeout", function () {
+      const previousCoverage = process.env.NODE_V8_COVERAGE;
+
+      afterEach(function () {
+        if (previousCoverage === undefined) {
+          delete process.env.NODE_V8_COVERAGE;
+        } else {
+          process.env.NODE_V8_COVERAGE = previousCoverage;
+        }
+      });
+
+      it("should honor an explicit timeout", function () {
+        delete process.env.NODE_V8_COVERAGE;
+        expect(
+          new BufferedWorkerPool({ workerTerminateTimeout: 5000 }),
+          "to satisfy",
+          { options: { workerTerminateTimeout: 5000 } },
+        );
+      });
+
+      it("should raise the timeout when NODE_V8_COVERAGE is set", function () {
+        process.env.NODE_V8_COVERAGE = "/tmp/coverage";
+        expect(new BufferedWorkerPool(), "to satisfy", {
+          options: { workerTerminateTimeout: 60000 },
+        });
+      });
+
+      it("should keep the default timeout when NODE_V8_COVERAGE is unset", function () {
+        delete process.env.NODE_V8_COVERAGE;
+        expect(new BufferedWorkerPool(), "to satisfy", {
+          options: { workerTerminateTimeout: 1000 },
+        });
+      });
+
+      it("should let an explicit timeout override NODE_V8_COVERAGE", function () {
+        process.env.NODE_V8_COVERAGE = "/tmp/coverage";
+        expect(
+          new BufferedWorkerPool({ workerTerminateTimeout: 2500 }),
+          "to satisfy",
+          { options: { workerTerminateTimeout: 2500 } },
+        );
       });
     });
   });
