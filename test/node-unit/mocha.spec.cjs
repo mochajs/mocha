@@ -45,6 +45,7 @@ describe("Mocha", function () {
       bail: sinon.stub(),
       reset: sinon.stub(),
       dispose: sinon.stub(),
+      addTest: sinon.stub(),
     });
     stubs.Suite = sinon.stub().returns(stubs.suite);
     stubs.Suite.constants = {};
@@ -236,6 +237,22 @@ describe("Mocha", function () {
           "to be",
           esmDecorator,
         );
+      });
+
+      it("should record a failing test when loading a file throws", async function () {
+        const loadErr = new Error("could not import suite");
+        mocha.files = ["/tmp/broken.spec.js"];
+        stubs.esmUtils.loadFilesAsync.callsFake(async (files, preLoad) => {
+          preLoad(files[0]);
+          throw loadErr;
+        });
+
+        await mocha.loadFilesAsync();
+
+        expect(stubs.suite.addTest, "was called once");
+        const test = stubs.suite.addTest.firstCall.args[0];
+        expect(test.file, "to contain", "broken.spec.js");
+        expect(() => test.fn(), "to throw", loadErr);
       });
     });
 
