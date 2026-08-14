@@ -995,6 +995,32 @@ describe("Mocha", function () {
           });
         });
       });
+
+      describe("when `require` option exports mochaHooks", function () {
+        it("should apply those root hooks in serial mode", function (done) {
+          mocha.options.require = [
+            require.resolve("../integration/fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js"),
+          ];
+          mocha.run(function () {
+            expect(suite.beforeAll, "was called");
+            expect(suite.beforeEach, "was called");
+            expect(suite.afterAll, "was called");
+            expect(suite.afterEach, "was called");
+            done();
+          });
+        });
+
+        it("should not load require plugins when rootHooks was already supplied", function (done) {
+          mocha.options.require = [
+            require.resolve("../integration/fixtures/plugins/root-hooks/root-hook-defs-a.fixture.js"),
+          ];
+          mocha.options.rootHooks = { beforeAll() {} };
+          mocha.run(function () {
+            expect(suite.beforeAll, "was not called");
+            done();
+          });
+        });
+      });
     });
 
     describe("parallelMode()", function () {
