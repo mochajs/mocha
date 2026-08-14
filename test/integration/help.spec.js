@@ -32,6 +32,7 @@ describe("help", function () {
         expect(result.output, "to contain", "mocha init <path>");
         expect(result.output, "to contain", "--reporter");
         expect(result.output, "to contain", "--timeout");
+        expect(result.output, "to contain", "--worker-terminate-timeout");
         done();
       },
       { stdio: "pipe" },

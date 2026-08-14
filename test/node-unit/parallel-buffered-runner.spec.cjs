@@ -120,6 +120,24 @@ describe("parallel-buffered-runner", function () {
           expect(runner.run(done, { files: [], options: {} }), "to be", runner);
         });
 
+        it("should pass workerTerminateTimeout to the worker pool", function (done) {
+          runner.run(
+            () => {
+              expect(BufferedWorkerPool.create, "to have a call satisfying", [
+                {
+                  maxWorkers: 3,
+                  workerTerminateTimeout: 5000,
+                },
+              ]);
+              done();
+            },
+            {
+              files: [],
+              options: { jobs: 3, workerTerminateTimeout: 5000 },
+            },
+          );
+        });
+
         it("should emit `EVENT_RUN_BEGIN`", async function () {
           return expect(
             () =>

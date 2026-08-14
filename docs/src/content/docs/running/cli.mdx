@@ -42,6 +42,9 @@ Rules & Behavior
                                     use 1 to run in serial
                                    [number] [default: (number of CPU cores - 1)]
   -p, --parallel                    Run tests in parallel              [boolean]
+      --worker-terminate-timeout    Milliseconds a --parallel worker may take
+                                    to exit before it is force-killed
+                                                        [number] [default: 1000]
       --posix-exit-codes            Use POSIX and UNIX shell exit codes as
                                     Mocha's return value               [boolean]
       --retries                     Retry failed tests this many times  [number]
@@ -250,6 +253,14 @@ The default value is the _number of CPU cores_ less 1.
 :::tip
 Use `--jobs 0` or `--jobs 1` to temporarily disable `--parallel`.
 :::
+
+Has no effect unless used with [`--parallel`](#--parallel--p).
+
+### `--worker-terminate-timeout <ms>`
+
+When Mocha shuts down a [`--parallel`](#--parallel--p) worker, it first asks the process to exit so Node can flush `NODE_V8_COVERAGE` data. If the worker is still alive after this timeout, it is force-killed and that flush is lost.
+
+The default is `1000` (workerpool's default). When `NODE_V8_COVERAGE` is set and this option is omitted, Mocha raises the grace period to `60000` so coverage tools such as `c8` can finish writing large profiles.
 
 Has no effect unless used with [`--parallel`](#--parallel--p).
 

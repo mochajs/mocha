@@ -161,6 +161,12 @@ Mocha does **not** provide an option to spawn a fresh process for each test file
 - Invoking `mocha` separately for each test file and merging results externally.
 - Using a test runner that provides process-level isolation per test file.
 
+## Code Coverage
+
+V8 coverage (`c8`, or `nyc` in V8 mode) is written when each worker process exits. Mocha asks workers to exit cleanly and flushes coverage over that shutdown path. If a worker is still exiting when the terminate grace period elapses, workerpool force-kills it and that worker's coverage dump is dropped.
+
+When `NODE_V8_COVERAGE` is set, Mocha automatically allows workers up to 60 seconds to exit. Override this with [`--worker-terminate-timeout`](/running/cli#--worker-terminate-timeout-ms) if a run still drops coverage.
+
 ## Parallel Mode Worker IDs
 
 :::note[New in v9.2.0]
