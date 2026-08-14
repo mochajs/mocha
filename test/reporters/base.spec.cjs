@@ -367,6 +367,28 @@ describe("Base reporter", function () {
     expect(errOut, "to match", /\+ expected/);
   });
 
+  it("should stringify circular objects with a custom @@toStringTag", function () {
+    var err = new Error("test");
+    var actual = { x: 1, [Symbol.toStringTag]: "CustomTag" };
+    actual.self = actual;
+    var expected = { x: 2, [Symbol.toStringTag]: "CustomTag" };
+    expected.self = expected;
+    err.actual = actual;
+    err.expected = expected;
+    err.showDiff = true;
+    var test = makeTest(err);
+
+    expect(function () {
+      list([test]);
+    }, "not to throw");
+
+    var errOut = stdout.join("\n");
+    expect(errOut, "to match", /\[Circular]/);
+    expect(errOut, "to match", /"x"/);
+    expect(errOut, "to match", /- actual/);
+    expect(errOut, "to match", /\+ expected/);
+  });
+
   it("should handle error messages that are not strings", function () {
     try {
       assert(false, true);
