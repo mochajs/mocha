@@ -237,6 +237,18 @@ describe("Runnable(title, fn)", function () {
     });
 
     describe("when sync", function () {
+      it("this.skip() should mark the runnable as skipped", function (done) {
+        var runnable = new Runnable("foo", function () {
+          runnable.skip();
+        });
+        runnable.run(function (err) {
+          expect(err, "to be undefined");
+          expect(runnable.pending, "to be true");
+          expect(runnable.skipped, "to be true");
+          done();
+        });
+      });
+
       describe("without error", function () {
         it("should invoke the callback", function (done) {
           var spy = sinon.spy();
@@ -634,6 +646,7 @@ describe("Runnable(title, fn)", function () {
         runnable.run(function (err) {
           expect(err, "to be undefined");
           expect(runnable.pending, "to be true");
+          expect(runnable.skipped, "to be true");
           done();
         });
       });

@@ -80,6 +80,30 @@ describe("List reporter", function () {
 
         expect(stdout[0], "to equal", "  - " + expectedTitle + "\n");
       });
+
+      it("should label this.skip() as skipped instead of pending", async function () {
+        var skippedTest = {
+          fullTitle: function () {
+            return expectedTitle;
+          },
+          skipped: true,
+        };
+        var runner = createMockRunner(
+          "pending test",
+          EVENT_TEST_PENDING,
+          null,
+          null,
+          skippedTest,
+        );
+        var options = {};
+        var fakeThis = {
+          epilogue: noop,
+        };
+        var { stdout } = await runReporter(fakeThis, runner, options);
+        sinon.restore();
+
+        expect(stdout[0], "to equal", "  - " + expectedTitle + " (skipped)\n");
+      });
     });
 
     describe("on 'pass' event", function () {
