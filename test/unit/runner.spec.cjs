@@ -497,6 +497,58 @@ describe("Runner", function () {
         );
         done();
       });
+
+      describe("when a parent teardown fails after a nested-suite failure", function () {
+        it("should keep the nested failure primary and attach the parent afterEach error", function () {
+          var inner = Suite.create(suite, "inner");
+          var innerTest = new Test("nested fail", noop);
+          inner.addTest(innerTest);
+          var afterEachHook = suite.afterEach(function () {});
+          var original = new Error("inner test failed");
+          var teardownErr = new Error("outer cleanup failed");
+          var failEvents = [];
+
+          runner.on(EVENT_TEST_FAIL, function (runnable, err) {
+            failEvents.push({ runnable: runnable, err: err });
+          });
+
+          runner.fail(innerTest, original);
+          runner.fail(afterEachHook, teardownErr);
+
+          expect(runner.failures, "to be", 1);
+          expect(failEvents, "to have length", 1);
+          expect(failEvents[0].runnable, "to be", innerTest);
+          expect(failEvents[0].err, "to be", original);
+          expect(original.cause, "to be", teardownErr);
+          expect(afterEachHook.state, "to be undefined");
+        });
+
+        it("should keep the nested failure primary and attach the parent afterAll error", function () {
+          var inner = Suite.create(suite, "inner");
+          var innerTest = new Test("nested fail", noop);
+          inner.addTest(innerTest);
+          var afterAllHook = suite.afterAll(function () {});
+          var original = new Error("inner test failed");
+          var teardownErr = new Error("outer cleanup failed");
+
+          runner.fail(innerTest, original);
+          runner.fail(afterAllHook, teardownErr);
+
+          expect(runner.failures, "to be", 1);
+          expect(original.cause, "to be", teardownErr);
+        });
+
+        it("should still report a same-suite afterEach failure independently", function () {
+          var test = new Test("failing test", noop);
+          suite.addTest(test);
+          var afterEachHook = suite.afterEach(function () {});
+
+          runner.fail(test, new Error("test failed"));
+          runner.fail(afterEachHook, new Error("after each failed"));
+
+          expect(runner.failures, "to be", 2);
+        });
+      });
     });
 
     describe("run()", function () {

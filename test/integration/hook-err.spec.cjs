@@ -273,6 +273,68 @@ describe("hook error handling", function () {
     });
   });
 
+  describe("parent teardown after nested-suite failure", function () {
+    it("should keep a nested beforeEach error as the primary failure when parent afterEach also throws", function (done) {
+      runMochaJSON(
+        "hooks/parent-after-each-nested-failure.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "inner setup failed")
+            .and("to have failed test count", 1)
+            .and(
+              "to have failed test",
+              '"before each" hook for "does something"',
+            )
+            .and(
+              "not to have failed test",
+              '"after each" hook for "does something"',
+            );
+          done();
+        },
+      );
+    });
+
+    it("should keep a nested test error as the primary failure when parent afterAll also throws", function (done) {
+      runMochaJSON(
+        "hooks/parent-after-all-nested-failure.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed with error", "inner test failed")
+            .and("to have failed test count", 1)
+            .and("to have failed test", "fails for the real reason")
+            .and(
+              "not to have failed test",
+              '"after all" hook in "outer suite"',
+            );
+          done();
+        },
+      );
+    });
+
+    it("should surface the parent afterEach error as a cause of the nested failure", function (done) {
+      runMocha(
+        "hooks/parent-after-each-nested-failure.fixture.js",
+        ["--reporter", "spec"],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed").and("to have failed test count", 1);
+          expect(res.output, "to contain", "Error: inner setup failed")
+            .and("to contain", "Caused by: Error: outer cleanup failed")
+            .and("not to contain", "2 failing");
+          done();
+        },
+      );
+    });
+  });
+
   describe('"this.test.error()-style failure', function () {
     it("should fail the associated test", async function () {
       return expect(
