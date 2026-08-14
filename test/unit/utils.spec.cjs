@@ -368,6 +368,58 @@ describe("lib/utils", function () {
       expect(stringify(travis), "to be", '{\n  "fn": [Circular]\n}');
     });
 
+    it("should stringify objects with a custom @@toStringTag", function () {
+      var obj = { x: 1, [Symbol.toStringTag]: "CustomTag" };
+
+      expect(stringify(obj), "to be", '{\n  "x": 1\n}');
+    });
+
+    it("should handle circular objects with a custom @@toStringTag", function () {
+      var obj = { x: 1, [Symbol.toStringTag]: "CustomTag" };
+      obj.self = obj;
+
+      expect(stringify(obj), "to be", '{\n  "self": [Circular]\n  "x": 1\n}');
+    });
+
+    it("should handle circular objects whose prototype defines @@toStringTag", function () {
+      function Custom() {
+        this.x = 1;
+      }
+      Custom.prototype[Symbol.toStringTag] = "CustomTag";
+      var obj = new Custom();
+      obj.self = obj;
+
+      expect(stringify(obj), "to be", '{\n  "self": [Circular]\n  "x": 1\n}');
+    });
+
+    it("should handle nested circular objects with a custom @@toStringTag", function () {
+      var inner = { x: 1, [Symbol.toStringTag]: "CustomTag" };
+      inner.self = inner;
+
+      expect(
+        stringify({ inner: inner }),
+        "to be",
+        '{\n  "inner": {\n    "self": [Circular]\n    "x": 1\n  }\n}',
+      );
+    });
+
+    it("should not treat a non-Date with @@toStringTag Date as a Date", function () {
+      var obj = { x: 1, [Symbol.toStringTag]: "Date" };
+      obj.self = obj;
+
+      expect(stringify(obj), "to be", '{\n  "self": [Circular]\n  "x": 1\n}');
+    });
+
+    it("should not throw on a circular Map with extra properties", function () {
+      var map = new Map();
+      map.self = map;
+
+      expect(function () {
+        stringify(map);
+      }, "not to throw");
+      expect(stringify(map), "to contain", "[Circular]");
+    });
+
     it("should handle various non-undefined, non-null, non-object, non-array, non-date, and non-function values", function () {
       var regexp = /(?:)/;
       var regExpObj = { regexp };

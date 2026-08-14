@@ -126,5 +126,19 @@ describe("Base reporter diff hang protection", function () {
       var output = stdout.join("");
       chaiExpect(output).to.not.contain("too large to diff");
     });
+
+    it("should still produce a valid diff for small circular objects", function () {
+      var actual = { x: 1 };
+      actual.self = actual;
+      var expected = { x: 2 };
+      expected.self = expected;
+      var test = makeFailedTest("small circular test", actual, expected);
+
+      list([test]);
+
+      var output = stdout.join("");
+      chaiExpect(output).to.not.contain("too large to diff");
+      chaiExpect(output).to.contain("[Circular]");
+    });
   });
 });
