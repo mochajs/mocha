@@ -538,6 +538,10 @@ describe("lib/utils", function () {
       expect(stringify(a), "to be", '{\n  "foo": 1\n}');
     });
 
+    it("should stringify an empty object without an Object prototype", function () {
+      expect(stringify(Object.create(null)), "to be", "{}");
+    });
+
     // In old version node.js, Symbol is not available by default.
     if (typeof global.Symbol === "function") {
       it("should handle Symbol", function () {
