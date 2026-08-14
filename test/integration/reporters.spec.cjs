@@ -7,6 +7,43 @@ var path = require("node:path");
 var run = require("./helpers.cjs").runMocha;
 
 describe("reporters", function () {
+  describe("spec", function () {
+    it("labels this.skip() as skipped instead of pending", function (done) {
+      run(
+        "pending/skip-sync-spec.fixture.cjs",
+        ["--reporter", "spec"],
+        function (err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res.output, "to contain", "should skip immediately (skipped)");
+          expect(res.output, "to contain", "1 skipped");
+          expect(res.output, "not to contain", "1 pending");
+          done();
+        },
+      );
+    });
+
+    it("still labels unimplemented tests as pending", function (done) {
+      run(
+        "pending/spec.fixture.js",
+        ["--reporter", "spec"],
+        function (err, res) {
+          if (err) {
+            done(err);
+            return;
+          }
+          expect(res.output, "to contain", "pending spec");
+          expect(res.output, "to contain", "1 pending");
+          expect(res.output, "not to contain", "(skipped)");
+          expect(res.output, "not to contain", "1 skipped");
+          done();
+        },
+      );
+    });
+  });
+
   describe("markdown", function () {
     var res;
 

@@ -69,6 +69,26 @@ describe("Spec reporter", function () {
         var expectedArray = ["  - " + expectedTitle + "\n"];
         expect(stdout, "to equal", expectedArray);
       });
+
+      it("should label this.skip() as skipped instead of pending", async function () {
+        var test = {
+          title: expectedTitle,
+          skipped: true,
+        };
+        var runner = createMockRunner(
+          "pending test",
+          EVENT_TEST_PENDING,
+          null,
+          null,
+          test,
+        );
+        var options = {};
+        var { stdout } = await runReporter({ epilogue: noop }, runner, options);
+        sinon.restore();
+
+        var expectedArray = ["  - " + expectedTitle + " (skipped)\n"];
+        expect(stdout, "to equal", expectedArray);
+      });
     });
 
     describe("on 'pass' event", function () {

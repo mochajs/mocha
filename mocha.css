@@ -144,6 +144,11 @@ body {
   font-family: arial, sans-serif;
 }
 
+#mocha .test.skipped:hover h2::after {
+  content: "(skipped)";
+  font-family: arial, sans-serif;
+}
+
 #mocha .test.pass.medium .duration {
   background: var(--mocha-test-pass-mediump-color);
 }
@@ -180,11 +185,13 @@ body {
   display: none;
 }
 
-#mocha .test.pending {
+#mocha .test.pending,
+#mocha .test.skipped {
   color: var(--mocha-test-pending-color);
 }
 
-#mocha .test.pending::before {
+#mocha .test.pending::before,
+#mocha .test.skipped::before {
   content: "◦";
   color: var(--mocha-test-pending-icon-color);
 }
@@ -327,7 +334,8 @@ body {
 #mocha-report.pending .test.fail {
   display: none;
 }
-#mocha-report.pending .test.pass.pending {
+#mocha-report.pending .test.pass.pending,
+#mocha-report.pending .test.pass.skipped {
   display: block;
 }
 
