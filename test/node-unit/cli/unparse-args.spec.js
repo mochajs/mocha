@@ -49,14 +49,10 @@ describe("unparse-args", function () {
         [
           "test/a.spec.js",
           "test/b.spec.js",
-          "--require",
-          "tsx",
-          "--require",
-          "./setup.js",
-          "--reporter",
-          "json",
-          "--timeout",
-          "0",
+          "--require=tsx",
+          "--require=./setup.js",
+          "--reporter=json",
+          "--timeout=0",
           "--no-color",
           "--bail",
         ],
@@ -70,7 +66,7 @@ describe("unparse-args", function () {
           _: ["test/a.spec.js"],
         }),
         "to equal",
-        ["test/a.spec.js", "--reporter", "json"],
+        ["test/a.spec.js", "--reporter=json"],
       );
     });
 
@@ -81,7 +77,17 @@ describe("unparse-args", function () {
           reporter: "json",
         }),
         "to equal",
-        ["--reporter", "json"],
+        ["--reporter=json"],
+      );
+    });
+
+    it("keeps the value of an unrecognized option attached to its flag", function () {
+      expect(
+        unparseMochaArgs({
+          $schema: "https://json.schemastore.org/mocharc.json",
+        }),
+        "to equal",
+        ["--$schema=https://json.schemastore.org/mocharc.json"],
       );
     });
 
