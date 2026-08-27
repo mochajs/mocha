@@ -22,16 +22,19 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
 
 ## Breaking changes
 
-- [`require('mocha')` now returns an object, not a function (#6245)](https://github.com/mochajs/mocha/issues/6245):
-  To workaround this, change `const Mocha = require('mocha')`
-  to `const { Mocha } = require ('mocha')`
 - [Bump minimum Node.js version from 18.18.0 to 20.19.0 and 22.12.0
   (#5477)](https://github.com/mochajs/mocha/issues/5477):
   We know that Node 20 is now EOL,
   but we didn't want to jump 2 LTS versions in one release.
   Mocha 13 will drop support for Node 20.
-  The new minimum versions are the lowest Node versions that support `require(esm)`
-  (see [internal modernization](#internal-modernization)).
+  The new minimum versions are the lowest Node versions that support `require(esm)`.
+- [Change root `package.json` type to `module`
+  (#6078)](https://github.com/mochajs/mocha/pull/6078):
+  Mocha is now an ESM-first package.
+  This means `require('mocha')` now returns an object, not a function.
+  To workaround this, change `const Mocha = require('mocha')`
+  to `const { Mocha } = require ('mocha')`.
+  See also [#6245](https://github.com/mochajs/mocha/issues/6245)
 - [Remove `util.inherits` / convert to classes
   (#5025)](https://github.com/mochajs/mocha/issues/5025):
   Through Mocha 11, reporters inherited behavior through `util.inherits`.
@@ -44,11 +47,7 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
 - [Remove `bin/_mocha` and convert `bin/` and entry points to ESM
   (#6017)](https://github.com/mochajs/mocha/pull/6017):
   The `_mocha` entry point had been kept as a workaround for old coverage providers.
-  Swapping `path/to/_mocha` with `mocha` should work without issue.
-- [Change root `package.json` type to `module`
-  (#6078)](https://github.com/mochajs/mocha/pull/6078):
-  This should not be a breaking change for the vast majority of users,
-  see [internal modernization](#internal-modernization).
+  Swapping `path/to/bin/_mocha` with `mocha` should work without issue.
 - [Change the default of `--forbid-only` to check for process.env.CI
   (#5496)](https://github.com/mochajs/mocha/issues/5496):
   This should improve CI runs, but rare use-cases may need to
@@ -81,28 +80,6 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
 - [Surface global setup/teardown errors with a non-zero exit code (#5994)](https://github.com/mochajs/mocha/pull/5994)
 
 <a id="internal-modernization"></a>
-
-## Internal modernization
-
-- As mentioned in [breaking changes](#breaking-changes),
-  Mocha is now an ESM-first package,
-  using `"type": "module"` instead of `"type": "commonjs"` in `package.json`.
-  This should not be a blocking change for the vast majority of users;
-  CJS consumers can still `require('mocha')` just as before,
-  but it returns .
-  We've marked it as "breaking" for users that depend on
-  Mocha's internal structure for any reason.
-  ESM is the modern, canonical way of managing modules,
-  supported officially by the ECMAScript spec.
-  CJS was always a placeholder approach until a better solution came along.
-  ([#5400](https://github.com/mochajs/mocha/issues/5400))
-- Mocha now uses Playwright instead of Karma for its internal tests.
-  This is not a user-facing change in any way,
-  but it means that Mocha contributors can now use
-  a modern browser automation library instead of
-  the long-deprecated Karma approach.
-  This will help us better support browser-based testing in the future.
-  ([#6031](https://github.com/mochajs/mocha/pull/6031))
 
 ## Thank you!
 
