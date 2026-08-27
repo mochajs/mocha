@@ -52,6 +52,15 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
   `he` was used for HTML encoding in some reporters, and in the exported `escape` function.
   The new approach should be functionally the same,
   but this was marked as a breaking change out of an abundance of caution.
+- Replace `yargs` with custom and native logic:
+  `yargs` and its related packages parsed command-line input to Mocha.
+  The new approach should be functionally the same,
+  with potential minor formatting differences
+  in human-facing output like `--help`.
+  These were marked as breaking changes out of an abundance of caution.
+  - [Replace yargs-parser in CLI option loading (#6124)](https://github.com/mochajs/mocha/pull/6124)
+  - [Replace yargs-unparser in CLI respawn paths (#6125)](https://github.com/mochajs/mocha/pull/6125)
+  - [Replace yargs with Node.js util.parseArgs (#6164)](https://github.com/mochajs/mocha/pull/6164)
 - [Remove `bin/_mocha` and convert `bin/` and entry points to ESM
   (#6017)](https://github.com/mochajs/mocha/pull/6017):
   The `_mocha` entry point had been kept as a workaround for old coverage providers.
