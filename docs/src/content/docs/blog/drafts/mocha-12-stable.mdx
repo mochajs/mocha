@@ -35,6 +35,10 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
   To workaround this, change `const Mocha = require('mocha')`
   to `const { Mocha } = require ('mocha')`.
   See also [#6245](https://github.com/mochajs/mocha/issues/6245)
+- [Change the default of `--forbid-only` to check for process.env.CI
+  (#5496)](https://github.com/mochajs/mocha/issues/5496):
+  This should improve CI runs, but rare use-cases may need to
+  explicitly set `--no-forbid-only` to restore the previous default behavior.
 - [Remove `util.inherits` / convert to classes
   (#5025)](https://github.com/mochajs/mocha/issues/5025):
   Through Mocha 11, reporters inherited behavior through `util.inherits`.
@@ -44,14 +48,14 @@ We will continue to support critical bugfixes in Mocha 11 while customers upgrad
   but the core behavior is the same. See the updated
   [third-party reporters](https://mochajs.org/explainers/third-party-reporters/)
   page for details.
+- [Replace `he` dependency with manual HTML encoding (#6129)](https://github.com/mochajs/mocha/issues/6129):
+  `he` was used for HTML encoding in some reporters, and in the exported `escape` function.
+  The new approach should be functionally the same,
+  but this was marked as a breaking change out of an abundance of caution.
 - [Remove `bin/_mocha` and convert `bin/` and entry points to ESM
   (#6017)](https://github.com/mochajs/mocha/pull/6017):
   The `_mocha` entry point had been kept as a workaround for old coverage providers.
   Swapping `path/to/bin/_mocha` with `mocha` should work without issue.
-- [Change the default of `--forbid-only` to check for process.env.CI
-  (#5496)](https://github.com/mochajs/mocha/issues/5496):
-  This should improve CI runs, but rare use-cases may need to
-  explicitly set `--no-forbid-only` to restore the previous default behavior.
 - [Remove unused legacy `errors.js` functions
   (#5835)](https://github.com/mochajs/mocha/pull/5835):
   The public function `createInvalidPluginError` has been deprecated for years.
