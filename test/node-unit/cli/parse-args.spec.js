@@ -319,13 +319,9 @@ describe("parse-args", function () {
   });
 
   it("accepts unterminated quoted arguments", function () {
-    expect(
-      parseMochaArgs('--grep "foo', defaults),
-      "to satisfy",
-      {
-        grep: '"foo',
-      },
-    );
+    expect(parseMochaArgs('--grep "foo', defaults), "to satisfy", {
+      grep: '"foo',
+    });
   });
 
   it("rejects dash-prefixed option values in separated form", function () {
