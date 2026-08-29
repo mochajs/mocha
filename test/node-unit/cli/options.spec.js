@@ -506,7 +506,7 @@ describe("options", function () {
         expect(loadOptions(), "to have property", "timeout", "-1");
       });
 
-      it("should allow strings starting with hyphen in MOCHA_OPTIONS", function () {
+      it("should allow dash-prefixed option values in MOCHA_OPTIONS", function () {
         readFileSync = sinon.stub().onFirstCall().returns("{}");
         findConfig = sinon.stub().returns("/some/.mocharc.json");
         loadConfig = sinon.stub().returns({});
@@ -521,8 +521,7 @@ describe("options", function () {
         });
 
         expect(loadOptions(), "to have property", "grep", "-1");
-
-      })
+      });
     });
 
     describe("config priority", function () {
