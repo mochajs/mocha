@@ -43,7 +43,7 @@ We know that Node 20 is now EOL,
 but we didn't want to jump 2 LTS versions in one release.
 Mocha 13 will drop support for Node 20.
 
-See [#5358 🧹 Versioning: Bump minimum Node.js version from 18.18.0 to 20.19.0](https://github.com/mochajs/mocha/issues/5477) for more details.
+See [#5358 🧹 Versioning: Bump minimum Node.js version from 18.18.0 to 20.19.0](https://github.com/mochajs/mocha/issues/5477) and [feat!: bump minimum Node.js version from 18.18.0 to 20.19.0 (#5477)](https://github.com/mochajs/mocha/pull/5477) for more details.
 
 ### ECMAScript Modules (ESM) package
 
@@ -72,7 +72,7 @@ Other package entrypoints for Mocha should work as before.
 Mocha 12's `package.json` still does not use ESM [`"exports"`](https://nodejs.org/api/packages.html#exports) to restrict imports of source files.
 We will wait until Mocha 13 to switch to legacy permissive [`"main"`](https://nodejs.org/api/packages.html#main) field.
 
-See [#6017 feat!: remove bin/\_mocha and convert bin/ and entry points to ESM](https://github.com/mochajs/mocha/pull/6017) for more details.
+See [#5970 🛠️ Repo: Convert bin/ and top-level entry points to ESM](https://github.com/mochajs/mocha/issues/5970) and [#6017 feat!: remove bin/\_mocha and convert bin/ and entry points to ESM](https://github.com/mochajs/mocha/pull/6017) for more details.
 
 #### `require('mocha')` now returns an object
 
@@ -119,9 +119,9 @@ explicitly set `--no-forbid-only` to restore the previous default behavior.
 npx mocha --no-forbid-only
 ```
 
-See [#5299 🚀 Feature: Exit with code 1 when .only is used by default in CI (--forbid-only)](https://github.com/mochajs/mocha/issues/5299) for more details.
+See [#5299 🚀 Feature: Exit with code 1 when .only is used by default in CI (--forbid-only)](https://github.com/mochajs/mocha/issues/5299) and [feat!: change the default of --forbid-only to check for process.env.CI- #5496](https://github.com/mochajs/mocha/pull/5496) for more details.
 
-### Replacing `util.inherits` with Classes
+### Replacing `util.inherits` with classes
 
 Through Mocha 11, reporters inherited behavior from a base object through the legacy [Node.js `util.inherits`](https://nodejs.org/api/util.html#utilinheritsconstructor-superconstructor).
 `util.inherits` has subtly different behavior from ES2015 JavaScript classes was deprecated in Node.js many years ago.
@@ -164,7 +164,7 @@ This can be convenient for quickly running small pieces of code in Mocha:
 npx mocha --preserve-symlinks <(echo 'it("t", () => require("node:assert").equal(1, 1))')
 ```
 
-See [#5511 🚀 Feature: execute tests from FIFOs](https://github.com/mochajs/mocha/issues/5511) for more details.
+See [#5511 🚀 Feature: execute tests from FIFOs](https://github.com/mochajs/mocha/issues/5511) and [feat: allow FIFOs as test files](https://github.com/mochajs/mocha/pull/5512) for more details.
 
 ### ESM export for browsers
 
