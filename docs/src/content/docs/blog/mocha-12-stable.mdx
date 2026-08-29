@@ -175,7 +175,7 @@ Mocha 12 now canonically supports an ESM browser import:
 ```html
 <script type="module">
   // TODO: Verify this & add a test!
-  import * as mocha from "./node_modules/mocha/mocha.mjs";
+  import * as mocha from "./node_modules/mocha/mocha.js";
 
   mocha.setup("bdd");
   await import("./unit-test.js");
