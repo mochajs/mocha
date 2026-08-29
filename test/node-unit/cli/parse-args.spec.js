@@ -239,6 +239,14 @@ describe("parse-args", function () {
     });
   });
 
+  it("rejects dash-prefixed option values in separated form", function () {
+    expect(
+      () => parseMochaArgs(["--grep", "-foo"], defaults),
+      "to throw",
+      /Not enough arguments following: grep/,
+    );
+  });
+
   it("accepts negative numeric option values in separated form", function () {
     expect(parseMochaArgs(["--timeout", "-1"], defaults), "to satisfy", {
       timeout: "-1",
@@ -316,14 +324,6 @@ describe("parse-args", function () {
     expect(parseMochaArgs('--grep "foo', defaults), "to satisfy", {
       grep: '"foo',
     });
-  });
-
-  it("rejects dash-prefixed option values in separated form", function () {
-    expect(
-      () => parseMochaArgs(["--grep", "-foo"], defaults),
-      "to throw",
-      /Not enough arguments following: grep/,
-    );
   });
 
   it("preserves directly-passed Node and V8 flags", function () {
