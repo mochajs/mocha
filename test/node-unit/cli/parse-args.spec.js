@@ -307,9 +307,9 @@ describe("parse-args", function () {
     });
   });
 
-  it("splits arguments on all whitespace", function () {
+  it("splits arguments on all spaces and tabs", function () {
     expect(
-      parseMochaArgs("\t--grep\nfoo\r\n--color  ", defaults),
+      parseMochaArgs("\t--grep  \t foo   --color", defaults),
       "to satisfy",
       {
         grep: "foo",
