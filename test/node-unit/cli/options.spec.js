@@ -494,9 +494,7 @@ describe("options", function () {
         findConfig = sinon.stub().returns("/some/.mocharc.json");
         loadConfig = sinon.stub().returns({});
         findupSync = sinon.stub().returns("/some/package.json");
-        sinon
-          .stub(process, "env")
-          .value({ MOCHA_OPTIONS: "--timeout -1" });
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--timeout -1" });
 
         loadOptions = proxyLoadOptions({
           readFileSync,

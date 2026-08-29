@@ -272,14 +272,10 @@ describe("parse-args", function () {
   });
 
   it("parses single-quoted arguments from strings", function () {
-    expect(
-      parseMochaArgs("--grep 'foo bar' --color", defaults),
-      "to satisfy",
-      {
-        grep: "foo bar",
-        color: true,
-      },
-    );
+    expect(parseMochaArgs("--grep 'foo bar' --color", defaults), "to satisfy", {
+      grep: "foo bar",
+      color: true,
+    });
   });
 
   it("parses quoted values attached to options from strings", function () {
