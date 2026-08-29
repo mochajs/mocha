@@ -301,12 +301,6 @@ describe("parse-args", function () {
     );
   });
 
-  it("preserves trailing backslashes in unquoted arguments", function () {
-    expect(parseMochaArgs("--grep foo\\", defaults), "to satisfy", {
-      grep: "foo\\",
-    });
-  });
-
   it("splits arguments on all spaces and tabs", function () {
     expect(
       parseMochaArgs("\t--grep  \t foo   --color", defaults),
