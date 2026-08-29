@@ -505,6 +505,24 @@ describe("options", function () {
 
         expect(loadOptions(), "to have property", "timeout", "-1");
       });
+
+      it("should allow strings starting with hyphen in MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--grep -1" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to have property", "grep", "-1");
+
+      })
     });
 
     describe("config priority", function () {
