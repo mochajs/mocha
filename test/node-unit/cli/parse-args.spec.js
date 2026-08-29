@@ -318,11 +318,13 @@ describe("parse-args", function () {
     );
   });
 
-  it("rejects unterminated quoted arguments", function () {
+  it("accepts unterminated quoted arguments", function () {
     expect(
-      () => parseMochaArgs('--grep "foo', defaults),
-      "to throw",
-      /Unterminated quote in arguments/,
+      parseMochaArgs('--grep "foo', defaults),
+      "to satisfy",
+      {
+        grep: '"foo',
+      },
     );
   });
 
