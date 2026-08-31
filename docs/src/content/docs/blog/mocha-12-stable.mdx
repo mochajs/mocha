@@ -111,7 +111,7 @@ Mocha's [`--forbid-only` CLI flag](/running/cli/#--forbid-only) fails test runs 
 Using the flag is useful to make sure exclusive tests aren't accidentally kept in changes.
 
 `--forbid-only` previously defaulted to `false`.
-Its new default is now whether an environment variable named `CI` is truthy.
+Its new default is whether an environment variable named `CI` is truthy.
 This matches other test runner behaviors such as [Vitest's `allowOnly`](https://vitest.dev/config/allowonly).
 
 If you intentionally want to use `.only` in CI,
@@ -160,7 +160,8 @@ They are now removed from the codebase.
 
 ### Executing FIFOs as test files
 
-A "FIFO", or **first**-**in** **first**-**out**, is a file piped directly to a command in a terminal.
+A "FIFO" (first-in, first-out) is a file piped directly to a command in a terminal.
+It's also referred to as a "named pipe."
 This can be convenient for quickly running small pieces of code in Mocha:
 
 ```shell
@@ -172,7 +173,7 @@ See [#5511 🚀 Feature: execute tests from FIFOs](https://github.com/mochajs/mo
 ### ESM export for browsers
 
 Mocha has long supported working in browsers.
-But until recently, did not have a canonical way to `import` from within a `<script type="module">`.
+But until recently, users did not have a canonical way to `import` from within a `<script type="module">`.
 Mocha 12 now canonically supports an ESM browser import:
 
 ```html
@@ -249,7 +250,7 @@ See [#1624 🐛 Bug: Comparing buffers hangs when computing the diff report](htt
 
 Mocha provides [global fixtures](https://mochajs.org/features/global-fixtures) so that test suites may run code once on setup or teardown.
 Previously, if an error was thrown in a global fixture, it would be ignored and Mocha would continue to run tests.
-This is could mask important failures in shared test logic.
+This could mask important failures in shared test logic.
 Mocha 12 will now exit with a non-zero status code on global fixture errors.
 
 See [#5208 🐛 Bug: Error in mochaGlobalTeardown is swallowed and exits with code 0](https://github.com/mochajs/mocha/issues/5208) and [fix: surface global setup/teardown errors with a non-zero exit code (#5994)](https://github.com/mochajs/mocha/pull/5994) for more details.
