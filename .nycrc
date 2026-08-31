@@ -19,6 +19,6 @@
     "**/package-lock.json",
     "node_modules/**",
     "scripts/**",
-    "!test/integration/fixtures/stack-trace.fixture.js"
+    "!test/integration/fixtures/stack-trace.fixture.cjs"
   ]
 }

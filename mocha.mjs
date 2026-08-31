@@ -1,3 +1,5 @@
+// This file is `/mocha.mjs` because the built file is `/mocha.js`
+
 // the .js built file is not committed to the repo
 /* eslint-disable-next-line n/no-missing-import */
 import "./mocha.js";

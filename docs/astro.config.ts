@@ -1,7 +1,9 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import starlightBlog from "starlight-blog";
 
 export default defineConfig({
+  compressHTML: true,
   integrations: [
     starlight({
       components: {
@@ -14,6 +16,7 @@ export default defineConfig({
         dark: "./src/components/icon-dark.svg",
         light: "./src/components/icon-light.svg",
       },
+      plugins: [starlightBlog()],
       sidebar: [
         { label: "Getting Started", slug: "getting-started" },
         {
@@ -70,6 +73,7 @@ export default defineConfig({
             { label: "About", slug: "reporters/about" },
             { label: "Doc", slug: "reporters/doc" },
             { label: "Dot", slug: "reporters/dot" },
+            { label: "GitHub Actions", slug: "reporters/github-actions" },
             { label: "HTML", slug: "reporters/html" },
             { label: "JSON Stream", slug: "reporters/json-stream" },
             { label: "JSON", slug: "reporters/json" },
@@ -189,4 +193,7 @@ export default defineConfig({
       title: "Mocha",
     }),
   ],
+  redirects: {
+    "/blog/community-contributions": "/blog/2026-community-sponsorships",
+  },
 });

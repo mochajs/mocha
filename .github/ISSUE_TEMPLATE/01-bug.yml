@@ -32,7 +32,7 @@ body:
     validations:
       required: true
   - attributes:
-      description: What do `mocha --version`, `node_modules/.bin/mocha.mjs --version`, and `node --version` output? What name and version of browser/environment, shell, and any other related modules such as transpilers are you using?
+      description: What do `mocha --version`, `node_modules/.bin/mocha.js --version`, and `node --version` output? What name and version of browser/environment, shell, and any other related modules such as transpilers are you using?
       label: Versions
     type: textarea
     validations:

@@ -1,0 +1,77 @@
+---
+date: 2023-11-14T09:01:00Z
+description: 👋 Hi all! @Uzlopak, @voxpelli, and I (@JoshuaKGoldberg) are happy to announce that we’ve picked up maintenance of the Mocha organization and packages. That primarily includes the mocha test framework.
+excerpt:
+  👋 Hi all! @Uzlopak, @voxpelli, and I (@JoshuaKGoldberg) are happy to announce that we’ve picked up maintenance of the Mocha organization and packages. That primarily includes the mocha test framework.
+  We aim to keep Mocha positioned as a stable test framework, minimizing breaking changes or significant new feature additions. Our priority is for the existing users who do not want to be broken by or have to spend time reacting to changes.
+title: Maintenance Reboot
+---
+
+:::tip[Repost]
+This was originally posted as GitHub issue [#5027 📌 Project Status: Maintenance Reboot](https://github.com/mochajs/mocha/issues/5027).
+:::
+
+👋 Hi all! [@Uzlopak](https://github.com/Uzlopak), [@voxpelli](https://github.com/voxpelli), and I ([@JoshuaKGoldberg](https://github.com/JoshuaKGoldberg)) are happy to announce that we've picked up maintenance of the Mocha organization and packages. That primarily includes the [`mocha`](https://www.npmjs.com/package/mocha) test framework.
+
+Shoutout and thanks to [@boneskull](https://github.com/boneskull) for inviting us on and helping set up many of the documentation and processes still in use today, as well as the other recent Mocha core team members: [@giltayar](https://github.com/giltayar), [@juergba](https://github.com/juergba), [@Munter](https://github.com/Munter), and [@outsideris](https://github.com/outsideris).
+
+## Context
+
+Mocha was not actively maintained for most of 2023. It was maintained off-and-on through 2022. This is natural in open source projects: because they are run by volunteers, maintenance often is dependent on personal voluntary availability in out-of-work hours.
+
+The three of us "reboot" maintainers are joining on to:
+
+- Get the project back into active maintenance, including regularly triaged issues and reviewed pull requests
+- Update the project's tooling to reduce the overhead of maintenance
+- Update Mocha as needed to stay up-to-date with the surrounding JavaScript ecosystem
+
+### Project Charter
+
+Mocha has been a core part of the JavaScript ecosystem for over a decade. Per its [`PROJECT_CHARTER.md`](https://github.com/mochajs/mocha/blob/ee2b70e8e82b0b67347d41028fa45521d43633d9/PROJECT_CHARTER.md):
+
+> **Mocha** is a unopinionated, general-purpose testing framework for the JavaScript community. **Mocha** favors flexibility over rigidity, stability over disruption, and deliberation over agility. **Mocha** aims to do one thing, and do it well. **Mocha** will strive to evolve with the needs of the community, but will make every effort not to abandon its current users in doing so.
+
+We intend to keep to this project charter. Mocha is positioned differently from other popular test frameworks in the ecosystem. Notably:
+
+- Higher-level frameworks [Jest](https://jestjs.io) and [Vitest](https://vitest.dev) provide more abstractions and utilities on top of testing
+- [Node's built-in runner](https://nodejs.org/api/test.html) integrates closely with Node itself at a lower level
+
+We aim to keep Mocha positioned as a stable test framework, minimizing breaking changes or significant new feature additions. Our priority is for the existing users who do not want to be broken by or have to spend time reacting to changes.
+
+## Next Steps
+
+Our current plan is to:
+
+- [x] Discuss this pinned issue and announce it
+- [x] Tidy up the existing contributing and maintenance documentation and processes, such as issue and PR templates: [#5038](https://github.com/mochajs/mocha/pull/5038)
+  - [x] Migrate https://gitter.im/mochajs/contributors to a new Mocha Discord server with a `#help` Q&A channel
+- [x] Review and triage existing issues and PRs
+  - [x] Align existing issues and PRs to the new templates
+  - [x] Close out duplicate, stale, or clearly wontfix-level issues
+  - [x] Triage pending bug reports and feature requests
+  - [x] Review open PRs
+- [x] Add tooling such as automatic security updates and static analysis to help with long-term maintenance
+  - [x] Refreshed linting, such as a new ESLint configuration: [#5058]([https://github.com/mochajs/mocha/issues/5058) -> [#5060]([https://github.com/mochajs/mocha/pulls/5060)
+  - [x] Unused code detection with Knip: [#5041]([https://github.com/mochajs/mocha/issues/5041) -> [#5042]([https://github.com/mochajs/mocha/pulls/5042)
+  - [x] Automatic security updates with Renovate: [#5055]([https://github.com/mochajs/mocha/issues/5055)
+- [x] Make a new release with no new features to test the release pipeline: [#5081](https://github.com/mochajs/mocha/issues/5081)
+  - [x] Merge a small `chore` refactor: [#5056]([https://github.com/mochajs/mocha/pulls/5056)
+  - [x] Ship a pre-release minor version on npm
+  - [x] Ship a true minor version release on npm
+- [x] Publicly propose and get approved an invoicing system for https://opencollective.com/mochajs, then reach out to previous maintainers to compensate them for their time
+
+> _Updated January 8th, 2024 with more detail._
+
+Items might be tackled out of order. You can see the full list of work items and their statuses on the [public Maintenance Reboot project board](https://github.com/orgs/mochajs/projects/6).
+
+### Out of Scope
+
+Note also that we're new to maintaining this project. We'll need to ramp up over the next few months. Don't expect any major overhauls anytime soon.
+
+We don't intend to make any major breaking changes unless absolutely necessary for the project. We will drop support for [EOL Node versions](https://github.com/nodejs/release#release-schedule) in occasional breaking changes well after those Node versions go EOL.
+
+We don't intend to overhaul any currently-useful resources such as https://mochajs.org or https://github.com/mochajs/mocha/wiki. Though, we will happily accept issue reports if those resources need improvement.
+
+---
+
+We're excited to help keep Mocha going forward as a project. Please do post feedback if you have any questions or suggestions. Cheers all! ❤️
