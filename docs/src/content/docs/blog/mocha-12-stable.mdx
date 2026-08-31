@@ -1,5 +1,5 @@
 ---
-date: 2026-09-01T00:00:00Z
+date: 2026-08-31T15:20:00Z
 description: Notable changes in Mocha 12
 excerpt: "Mocha 12 is ready for use in production environments.
   Below is a migration guide, including breaking changes,
@@ -53,7 +53,7 @@ For example, static analysis tools such as ESLint, Knip, and TypeScript are bett
 which will help us detect bugs and unused code in future versions of Mocha.
 
 Most users should not see any change from the ESM migration.
-We have identified some edge cases from programmatic usage of Mocha that require some changes:
+We have identified some edge cases from programmatic usage of Mocha that require some changes.
 
 See [#5400 🛠️ Repo: Switch from CJS to ESM internally ](https://github.com/mochajs/mocha/issues/5400) for more details.
 
@@ -69,8 +69,10 @@ Swapping `path/to/bin/_mocha` with `mocha` should work the same:
 ```
 
 Other package entrypoints for Mocha should work as before.
-Mocha 12's `package.json` still does not use ESM [`"exports"`](https://nodejs.org/api/packages.html#exports) to restrict imports of source files.
-We will wait until Mocha 13 to switch to legacy permissive [`"main"`](https://nodejs.org/api/packages.html#main) field.
+Mocha 12's `package.json` uses [`"main"`](https://nodejs.org/api/packages.html#main)
+to allow users to continue importing all source files.
+In Mocha 13, we will switch to the modern [`"exports"`](https://nodejs.org/api/packages.html#exports) field
+and limit our API to relevant files for a clearer contract with users.
 
 See [#5970 🛠️ Repo: Convert bin/ and top-level entry points to ESM](https://github.com/mochajs/mocha/issues/5970) and [#6017 feat!: remove bin/\_mocha and convert bin/ and entry points to ESM](https://github.com/mochajs/mocha/pull/6017) for more details.
 
@@ -91,7 +93,7 @@ See [#6245 🐛 Bug: require('mocha') now returns an object, not a function (12.
 ### Native Node.js CLI parsing
 
 Through Mocha 11, [`yargs`](https://www.npmjs.com/package/yargs) and its related packages parsed command-line input to Mocha.
-mocha now uses native [Node.js `util.parseArgs`](https://nodejs.org/api/util.html#utilparseargsconfig).
+Mocha now uses native [Node.js `util.parseArgs`](https://nodejs.org/api/util.html#utilparseargsconfig).
 
 The new approach should be functionally the same,
 with potential minor formatting differences
@@ -105,8 +107,8 @@ These were marked as breaking changes out of an abundance of caution.
 
 ### `--forbid-only` defaults to `process.env.CI`
 
-Mocha's [`--forbid-only` CLI flag](/running/cli/#--forbid-only) fails test runs if an [`.only`](/declaring/exclusive-tests/#_top) is declared.
-Using the flag is useful to make sure `.only`s aren't accidentally kept in changes.
+Mocha's [`--forbid-only` CLI flag](/running/cli/#--forbid-only) fails test runs if an [exclusive test (`.only`)](/declaring/exclusive-tests/#_top) is declared.
+Using the flag is useful to make sure exclusive tests aren't accidentally kept in changes.
 
 `--forbid-only` previously defaulted to `false`.
 Its new default is now whether an environment variable named `CI` is truthy.
@@ -124,13 +126,14 @@ See [#5299 🚀 Feature: Exit with code 1 when .only is used by default in CI (-
 ### Replacing `util.inherits` with classes
 
 Through Mocha 11, reporters inherited behavior from a base object through the legacy [Node.js `util.inherits`](https://nodejs.org/api/util.html#utilinheritsconstructor-superconstructor).
-`util.inherits` has subtly different behavior from ES2015 JavaScript classes was deprecated in Node.js many years ago.
+`util.inherits` has subtly different behavior from ES2015 JavaScript classes
+and was deprecated in Node.js many years ago.
 
 Reporters now inherit through canonical JavaScript `class` syntax.
 This means that the syntax for custom reporters has changed,
-but the core behavior is the same. See the updated
+but the core behavior is the same. See
 [third-party reporters](/explainers/third-party-reporters/)
-page for updated usage instructions.
+for updated instructions.
 
 See [#5025 🐛 Remove `util.inherits` / convert to classes](https://github.com/mochajs/mocha/issues/5025) for more details.
 
@@ -141,7 +144,7 @@ are marked as breaking changes out of an abundance of caution.
 
 - [Replace `he` dependency with manual HTML encoding (#6129)](https://github.com/mochajs/mocha/issues/6129): `he` was used for HTML encoding in some reporters, and in the exported `escape` function.
 - [Remove unused legacy `errors.js` functions (#5835)](https://github.com/mochajs/mocha/pull/5835):
-  The public function `createInvalidPluginError` has been deprecated for years. Callers should use `createInvalidLegacyPluginError` instead,
+  The public function `createInvalidPluginError` had been deprecated for years. Callers should use `createInvalidLegacyPluginError` instead,
   which has the same contract and behavior.
 
 ### Deprecated CLI flag removals
@@ -174,7 +177,6 @@ Mocha 12 now canonically supports an ESM browser import:
 
 ```html
 <script type="module">
-  // TODO: Verify this & add a test!
   import * as mocha from "./node_modules/mocha/mocha.js";
 
   mocha.setup("bdd");
@@ -188,8 +190,8 @@ See [#5211 🚀 Feature: Ability to import mocha from ESM in the browser](https:
 ### Added `--fail-hook-affected-tests` CLI flag
 
 Mocha allows declaring "hooks" like `before()` and `afterEach()` to run logic before and/or after tests.
-By default, thrown errors in those hooks don't not fail their related tests.
-This is unintuitive for many users and can mask important failures in shared test logic.
+Through Mocha 11, by default, thrown errors in those hooks didn't fail their related tests.
+This sometimes masked important failures in shared test logic.
 
 Mocha 12 introduces a new [`--fail-hook-affected-tests` CLI flag](running/cli/#--fail-hook-affected-tests) that causes failures in hooks to fail their affected tests:
 
@@ -222,13 +224,13 @@ This is now corrected to work as expected.
 
 See [#4993 🐛 Bug: esm-utils (mocha.addFile) should support URL](https://github.com/mochajs/mocha/issues/4993) and [fix: support file: URLs in loadFilesAsync (#5833)](https://github.com/mochajs/mocha/pull/5833) for more details.
 
-### Grepping with modern RegExp flags****
+### Grepping with modern RegExp flags
 
 Mocha supports a [`grep` CLI flag](https://mochajs.org/running/cli/#--grep-regexp--g-regexp) and [`grep` Node.js API method](https://legacy.mochajs.org/api/mocha#grep) for matching files on disk with regular expressions.
-Mocha's internal logic validates those regular expressions, but hadn't been updated since before the modern [`u`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/unicode "RegExp unicode flag"),
+Mocha's internal logic validates those regular expressions, but only supported a few flags. JavaScript now supports [`u`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/unicode "RegExp unicode flag"),
 [`s`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/dotAll "RegExp dotAll flag"),
-and [`v`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/unicodeSets "RegExp unicodeSets flag") RegExp flags were added to JavaScript.
-The validation logic is now updated to allow those modern flags.
+and [`v`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/unicodeSets "RegExp unicodeSets flag") RegExp flags.
+The validation logic now supports those flags.
 
 See [#5826 🐛 Bug: Mocha#grep fails to parse modern RegExp flags (u, s, v) from string input](https://github.com/mochajs/mocha/issues/5826) and [fix: support modern RegExp flags in Mocha (#5825)](https://github.com/mochajs/mocha/pull/5825) for more details.
 
@@ -247,7 +249,7 @@ See [#1624 🐛 Bug: Comparing buffers hangs when computing the diff report](htt
 
 Mocha provides [global fixtures](https://mochajs.org/features/global-fixtures) so that test suites may run code once on setup or teardown.
 Previously, if an error was thrown in a global fixture, it would be ignored and Mocha would continue to run tests.
-This is unintuitive for many users and can mask important failures in shared test logic.
+This is could mask important failures in shared test logic.
 Mocha 12 will now exit with a non-zero status code on global fixture errors.
 
 See [#5208 🐛 Bug: Error in mochaGlobalTeardown is swallowed and exits with code 0](https://github.com/mochajs/mocha/issues/5208) and [fix: surface global setup/teardown errors with a non-zero exit code (#5994)](https://github.com/mochajs/mocha/pull/5994) for more details.
