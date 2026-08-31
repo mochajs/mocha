@@ -1,5 +1,24 @@
 # Changelog
 
+## [12.0.0](https://github.com/mochajs/mocha/compare/v12.0.0-rc.6...v12.0.0) (2026-08-31)
+
+
+### 🩹 Fixes
+
+* fixup parsing negative numbers and quoted strings ([#6250](https://github.com/mochajs/mocha/issues/6250)) ([2962875](https://github.com/mochajs/mocha/commit/2962875f70df72ec5f0aaba45b3776167902894e))
+* preserve FIFO descriptors when respawning ([#6254](https://github.com/mochajs/mocha/issues/6254)) ([3bb317d](https://github.com/mochajs/mocha/commit/3bb317dbe7edc460f44328e630f607aa26773a4d))
+
+
+### 📚 Documentation
+
+* fix minor correctness issues ([#6215](https://github.com/mochajs/mocha/issues/6215)) ([e6b9ee7](https://github.com/mochajs/mocha/commit/e6b9ee773481fd739ae24caeb42f32ac0b010f95))
+* link to mochajs.org instead of the wiki ([#6216](https://github.com/mochajs/mocha/issues/6216)) ([8720225](https://github.com/mochajs/mocha/commit/8720225413002aeda0a8760e911374fddd6e7b24))
+
+
+### 🧹 Chores
+
+* setup Release Please for v12 stable ([#6084](https://github.com/mochajs/mocha/issues/6084)) ([219674f](https://github.com/mochajs/mocha/commit/219674fa5bfaf8fa740fab783344703a2991532d))
+
 ## [12.0.0-rc.6](https://github.com/mochajs/mocha/compare/v12.0.0-rc.5...v12.0.0-rc.6) (2026-08-09)
 
 
