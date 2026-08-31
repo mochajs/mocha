@@ -254,6 +254,19 @@ describe("Mocha", function () {
       it("should be chainable", function () {
         expect(mocha.unloadFiles(), "to be", mocha);
       });
+
+      it("should unload files added with paths relative to the current working directory", function () {
+        const relativeFixturePath = path.relative(
+          process.cwd(),
+          DUMB_FIXTURE_PATH,
+        );
+
+        require(DUMB_FIXTURE_PATH);
+        mocha.addFile(relativeFixturePath);
+        mocha.unloadFiles();
+
+        expect(require.cache, "not to have key", DUMB_FIXTURE_PATH);
+      });
     });
 
     describe("reporter()", function () {
