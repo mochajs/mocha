@@ -1,5 +1,5 @@
 'use strict';
-var Runner = require('../../../../lib/runner.cjs');
+var { Runner } = require('../../../../lib/runner.js');
 var assert = require('assert');
 var constants = Runner.constants;
 var EVENT_DELAY_BEGIN = constants.EVENT_DELAY_BEGIN;

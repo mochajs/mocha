@@ -71,7 +71,7 @@ describe("Mocha", function () {
         "../../lib/nodejs/parallel-buffered-runner.cjs":
           stubs.ParallelBufferedRunner,
         "../../lib/nodejs/esm-utils.cjs": stubs.esmUtils,
-        "../../lib/runner.cjs": stubs.Runner,
+        "../../lib/runner.js": { Runner: stubs.Runner },
         "../../lib/errors.js": stubs.errors,
       }),
     );

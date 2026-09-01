@@ -6,10 +6,10 @@ const {
   EVENT_TEST_FAIL,
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
-} = require("../../lib/runner.cjs").constants;
+} = require("../../lib/runner.js").Runner.constants;
 const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.js");
-const Runner = require("../../lib/runner.cjs");
+const { Runner } = require("../../lib/runner.js");
 const sinon = require("sinon");
 const { constants } = require("../../lib/utils.cjs");
 const { MOCHA_ID_PROP_NAME } = constants;
