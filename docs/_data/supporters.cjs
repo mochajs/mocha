@@ -7,6 +7,10 @@
  * - Sorts by tier and total contributions
  * - Validates images
  * - Writes images to a temp dir
+ *  
+ * We filter out spam based on the code below and these general guidelines:
+ * - Not based on deceiving people
+ *
  * @see https://docs.opencollective.com/help/contributing/development/api
  */
 
