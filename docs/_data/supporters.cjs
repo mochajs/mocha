@@ -39,7 +39,6 @@ const BLOCKED_CATEGORIES = [
 
 /**
  * The OC API endpoint
-
  */
 const API_ENDPOINT = "https://api.opencollective.com/graphql/v2";
 
