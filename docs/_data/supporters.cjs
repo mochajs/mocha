@@ -22,7 +22,7 @@ const blocklist = new Set(require("./blocklist.json"));
  * be displayed on the website.
  */
 const BLOCKED_STRINGS =
-  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
+  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
