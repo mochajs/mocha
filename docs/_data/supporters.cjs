@@ -2,11 +2,11 @@
  * This script gathers metadata for active supporters of Mocha from OpenCollective's
  * API by aggregating order ("donation") information.
  *
- * - gathers logo/avatar images (they are always pngs)
- * - gathers links
- * - sorts by tier and total contributions
- * - validates images
- * - writes images to a temp dir
+ * - Gathers logo/avatar images (they are always pngs)
+ * - Gathers links
+ * - Sorts by tier and total contributions
+ * - Validates images
+ * - Writes images to a temp dir
  * @see https://docs.opencollective.com/help/contributing/development/api
  */
 
