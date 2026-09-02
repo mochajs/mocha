@@ -2,9 +2,6 @@
  * This script gathers metadata for active supporters of Mocha from OpenCollective's
  * API by aggregating order ("donation") information.
  *
- * It's intended to be used with 11ty, but can be run directly. Running directly
- * enables debug output.
- *
  * - gathers logo/avatar images (they are always pngs)
  * - gathers links
  * - sorts by tier and total contributions
