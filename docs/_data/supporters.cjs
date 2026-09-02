@@ -30,7 +30,7 @@ const blocklist = new Set(require("./blocklist.json"));
  * be displayed on the website.
  */
 const BLOCKED_STRINGS =
-  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|cheap|instagram|hacks|tiktok|likes|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
+  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|cheap|instagram|hacks|tiktok|likes|subscriber|boost|deposit|mushroom|bingo|broker|promotion|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -117,10 +117,10 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
           );
         }
         const imageBuf = Buffer.from(await response.arrayBuffer());
-        debug("fetched %s", url);
+        // debug("fetched %s", url);
         const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
         await writeFile(filePath, imageBuf);
-        debug("wrote %s", filePath);
+        // debug("wrote %s", filePath);
       } catch (err) {
         console.error(
           `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
