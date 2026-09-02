@@ -77,6 +77,20 @@ describe("parallel run", () => {
     ]);
   });
 
+  it("should report the crashing spec file when a worker dies", async () => {
+    const result = await runMochaJSONAsync("parallel/worker-death.js", [
+      "--parallel",
+      "--jobs",
+      "2",
+      require.resolve("./fixtures/parallel/test1.js"),
+    ]);
+    assert.strictEqual(result.stats.failures, 1);
+    assert.strictEqual(result.stats.passes, 1);
+    const failure = result.failures[0];
+    assert.strictEqual(failure.title, "Uncaught error outside test suite");
+    assert.match(failure.file, /worker-death\.js$/);
+  });
+
   it("should correctly handle a non-writable getter reference in an exception", async () => {
     const result = await runMochaJSONAsync("parallel/getter-error-object.js", [
       "--parallel",
