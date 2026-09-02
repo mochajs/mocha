@@ -1,0 +1,21 @@
+name: Add issues and PRs to project
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions: {}
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to Maintenance Reboot project
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/mochajs/projects/6
+          # The default GITHUB_TOKEN can't write to org-level projects, so a
+          # PAT with the "project" scope must be stored as this secret.
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
