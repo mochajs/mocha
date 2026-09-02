@@ -10,6 +10,10 @@
  *  
  * We filter out spam based on the code below and these general guidelines:
  * - Not based on deceiving people
+ * 
+ * While we try our best, we cannot guarantee quality in the list of sponsors.
+ * Some non-spam may be blocked, and some spam may be allowed.
+ * Please let us know in the usual places if you feel there is a mistake.
  *
  * @see https://docs.opencollective.com/help/contributing/development/api
  */
