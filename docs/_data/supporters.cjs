@@ -117,10 +117,10 @@ const fetchImage = process.env.MOCHA_DOCS_SKIP_IMAGE_DOWNLOAD
           );
         }
         const imageBuf = Buffer.from(await response.arrayBuffer());
-        // debug("fetched %s", url);
+        debug("fetched %s", url);
         const filePath = resolve(SUPPORTER_IMAGE_PATH, supporter.id + ".png");
         await writeFile(filePath, imageBuf);
-        // debug("wrote %s", filePath);
+        debug("wrote %s", filePath);
       } catch (err) {
         console.error(
           `failed to load ${supporter.avatar}; will discard ${supporter.tier} "${supporter.name} (${supporter.slug}). reason:\n`,
