@@ -161,19 +161,19 @@ const getAllOrders = async (slug = "mochajs") => {
 };
 
 const isAllowed = ({ name, slug, website, categories }) => {
-  const reasons = [];
-  if (blocklist.has(slug)) reasons.push("slug in blocklist");
-  if (BLOCKED_STRINGS.test(name)) reasons.push("name blocked");
-  if (BLOCKED_STRINGS.test(slug)) reasons.push("slug blocked");
-  if (BLOCKED_STRINGS.test(website)) reasons.push("website blocked");
+  const blockReasons = [];
+  if (blocklist.has(slug)) blockReasons.push("slug in blocklist");
+  if (BLOCKED_STRINGS.test(name)) blockReasons.push("name blocked");
+  if (BLOCKED_STRINGS.test(slug)) blockReasons.push("slug blocked");
+  if (BLOCKED_STRINGS.test(website)) blockReasons.push("website blocked");
   if (categories.some((category) => BLOCKED_CATEGORIES.includes(category)))
-    reasons.push("category blocked");
+    blockReasons.push("category blocked");
 
-  const allowed = reasons.length === 0;
+  const allowed = blockReasons.length === 0;
 
   if (!allowed) {
-    debug("filtering %o", { categories, name, slug, website });
-    debug(`reason(s): ${reasons}`);
+    debug("blocking %o", { categories, name, slug, website });
+    debug(`reason(s): ${blockReasons}`);
   } else {
     debug("allowing %o", { categories, name, slug, website });
   }
