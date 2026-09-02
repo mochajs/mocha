@@ -528,6 +528,43 @@ describe("Runner", function () {
         });
       });
 
+      it("should report test failure when afterEach fails before a retry", function (done) {
+        var testErr = new Error("test error");
+        var hookErr = new Error("hook error");
+        var failed = [];
+
+        suite.retries(1);
+        suite.afterEach(function () {
+          throw hookErr;
+        });
+        suite.addTest(
+          new Test("im a test about bears", function () {
+            throw testErr;
+          }),
+        );
+
+        runner.on(EVENT_TEST_FAIL, function (runnable, err) {
+          failed.push({ runnable, err });
+        });
+
+        runner.run(function (failures) {
+          expect(failures, "to be", 2);
+          expect(
+            failed.some(function (failure) {
+              return failure.runnable instanceof Test && failure.err === testErr;
+            }),
+            "to be true",
+          );
+          expect(
+            failed.some(function (failure) {
+              return failure.runnable instanceof Hook && failure.err === hookErr;
+            }),
+            "to be true",
+          );
+          done();
+        });
+      });
+
       it("should not throw an exception if something emits EVENT_TEST_END with a non-Test object", function () {
         expect(function () {
           runner.emit(EVENT_TEST_END, {});
