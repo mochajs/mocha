@@ -67,19 +67,19 @@ jobs:
           node-version: ${{ matrix.node_version }}
           cache: "npm"
       - run: npm ci --ignore-scripts
-      - run: npm run ${{ inputs.npm-script }}
+      - id: npm-script
+        run: npm run ${{ inputs.npm-script }}
         env:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
           NODE_OPTIONS: "--trace-warnings"
-      # Generate and upload coverage, even if tests fail
       - name: Generate coverage report
-        if: always() && inputs.coverage
+        if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
         run: npm run test-coverage-generate
       # https://github.com/marketplace/actions/codecov
       # https://app.codecov.io/gh/mochajs/mocha
       - name: Upload coverage reports
-        if: always() && inputs.coverage
+        if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
         uses: codecov/codecov-action@v7
         with:
           fail_ci_if_error: true
