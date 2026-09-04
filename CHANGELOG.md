@@ -1,5 +1,34 @@
 # Changelog
 
+## [12.0.1](https://github.com/mochajs/mocha/compare/v12.0.0...v12.0.1) (2026-09-04)
+
+
+### 🩹 Fixes
+
+* **deps:** update dependency find-up to v8 ([#5747](https://github.com/mochajs/mocha/issues/5747)) ([ee11d29](https://github.com/mochajs/mocha/commit/ee11d292560ee49a97ee7b0ca5fed621daf388f1))
+* keep unknown config values from becoming test specs ([#6244](https://github.com/mochajs/mocha/issues/6244)) ([15aa7d1](https://github.com/mochajs/mocha/commit/15aa7d1554865fc7f37e166340903c1b752def7c))
+* **reporter:** split err.stack at trailing frame block so embedded stacks render once ([#5997](https://github.com/mochajs/mocha/issues/5997)) ([90f48e4](https://github.com/mochajs/mocha/commit/90f48e40b95eb622ad7123915e730c284652a1e8))
+
+
+### 📚 Documentation
+
+* **blog:** fixup v12 blog ([#6258](https://github.com/mochajs/mocha/issues/6258)) ([6bcbee4](https://github.com/mochajs/mocha/commit/6bcbee4fd9a95351cedf0fdcb14c7d696486bc5a))
+* fix minor API documentation issue ([#6241](https://github.com/mochajs/mocha/issues/6241)) ([683fd10](https://github.com/mochajs/mocha/commit/683fd10e50681bb13fd3ac487f55a2af8b3fe576))
+* publish v12 stable blog ([#6249](https://github.com/mochajs/mocha/issues/6249)) ([d5ad803](https://github.com/mochajs/mocha/commit/d5ad803fd8cf15da508a344ce8172db22d0ca66e))
+
+
+### 🧹 Chores
+
+* auto-add GitHub items to project ([#5686](https://github.com/mochajs/mocha/issues/5686)) ([d24c320](https://github.com/mochajs/mocha/commit/d24c3205cb0a61e758e1971db26324d2b30f5ccd))
+* **deps:** update dependency astro to v7.2.9 ([#6223](https://github.com/mochajs/mocha/issues/6223)) ([513bd50](https://github.com/mochajs/mocha/commit/513bd500a8bd87f6f70a227dc710b4301e4534ef))
+* **deps:** update dependency knip to v6.32.3 ([#6224](https://github.com/mochajs/mocha/issues/6224)) ([6781fa1](https://github.com/mochajs/mocha/commit/6781fa1e111fa36597bda03ad97dc2624007db40))
+* **deps:** update dependency rollup to v4.63.1 ([#6274](https://github.com/mochajs/mocha/issues/6274)) ([e5a779e](https://github.com/mochajs/mocha/commit/e5a779eb40bf2aa2659f41878fcb2f90f95fbcbf))
+* **deps:** update dependency serialize-javascript to v7.1.0 ([#6239](https://github.com/mochajs/mocha/issues/6239)) ([77e4d4a](https://github.com/mochajs/mocha/commit/77e4d4a92efdd4f1b61db10ab7a879a6c12ccd29))
+* **deps:** update dependency webpack to v5.110.1 ([#6275](https://github.com/mochajs/mocha/issues/6275)) ([ec436d5](https://github.com/mochajs/mocha/commit/ec436d581ea02dbfafde824491a45f4e6578f42c))
+* remove unused .lintstagedrc.json ([#6270](https://github.com/mochajs/mocha/issues/6270)) ([d84fdbf](https://github.com/mochajs/mocha/commit/d84fdbf117397df12179f9de514b4495d684c555))
+* update spam filter ([#6271](https://github.com/mochajs/mocha/issues/6271)) ([b932787](https://github.com/mochajs/mocha/commit/b932787b80f8a38e36b2e7027bb4ed2fae69b5c5))
+* use a junction to link the config fixture on Windows ([#6218](https://github.com/mochajs/mocha/issues/6218)) ([a6b5d98](https://github.com/mochajs/mocha/commit/a6b5d981b641525b09a0f4b11f6c8be7ff85bae3))
+
 ## [12.0.0](https://github.com/mochajs/mocha/compare/v12.0.0-rc.6...v12.0.0) (2026-08-31)
 
 
