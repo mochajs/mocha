@@ -73,6 +73,9 @@ export interface MochaOptions {
   /** Disable syntax highlighting? */
   noHighlighting?: boolean;
 
+  /** Run order of tests: "default", "random" or "random:<seed>". */
+  order?: string;
+
   /** Reporter name or constructor. */
   reporter?: string | Reporter;
 
