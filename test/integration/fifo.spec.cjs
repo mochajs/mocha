@@ -1,7 +1,8 @@
 "use strict";
 
 const assert = require("node:assert/strict");
-const { execSync } = require("node:child_process");
+const { execFile, execSync } = require("node:child_process");
+const { promisify } = require("node:util");
 const {
   createReadStream,
   createWriteStream,
@@ -12,8 +13,30 @@ const { join } = require("node:path");
 const { tmpdir } = require("node:os");
 
 const { invokeMocha, toJSONResult } = require("./helpers.cjs");
+const execFileAsync = promisify(execFile);
+const itPosix = process.platform === "win32" ? it.skip : it;
 
 describe("FIFO support", function () {
+  itPosix(
+    "should accept a test passed using process substitution when respawning",
+    async function () {
+      const source = "it('should pass', () => true);";
+      const mochaPath = require.resolve("../../bin/mocha.js");
+
+      const { stdout } = await execFileAsync("/bin/bash", [
+        "-c",
+        '"$1" --no-config --reporter json --preserve-symlinks <(printf %s "$2")',
+        "bash",
+        mochaPath,
+        source,
+      ]);
+
+      const result = JSON.parse(stdout);
+      assert.equal(result.stats.tests, 1);
+      assert.equal(result.stats.passes, 1);
+    },
+  );
+
   it("should accept a test passed as a FIFO", function (done) {
     const dir = mkdtempSync(join(tmpdir(), "mocha-test-fifo-"));
     const fifoPath = join(dir, "fifo-1");
@@ -60,7 +83,7 @@ describe("FIFO support", function () {
           done(err);
         }
       },
-      { stdio: "pipe" },
+      { separateStderr: true, stdio: "pipe" },
     );
   });
 });

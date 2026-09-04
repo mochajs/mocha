@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: 'Remove "status: waiting for author" label'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           # REST gives 404 if label isn't present
           script: |

@@ -429,6 +429,38 @@ describe("XUnit reporter", function () {
 
         expect(expectedWrite, "to contain", expectedDiff);
       });
+
+      it("should remove ANSI escape sequences and invalid XML control characters", function () {
+        var xunit = new XUnit(runner);
+        var expectedTest = {
+          state: STATE_FAILED,
+          title: "\x1b[32m" + expectedTitle + "\x1b[39m",
+          file: expectedFile,
+          parent: {
+            fullTitle: function () {
+              return expectedClassName;
+            },
+          },
+          duration: 1000,
+          err: {
+            actual: "foo",
+            expected: "bar",
+            message: "\x1b[31m" + expectedMessage + "\x1b[39m\u0007",
+            stack: "\x1b[31m" + expectedStack + "\x1b[39m\u0007",
+          },
+        };
+
+        xunit.test.call(fakeThis, expectedTest);
+        sinon.restore();
+
+        expect(expectedWrite, "to contain", 'name="' + expectedTitle + '"');
+        expect(expectedWrite, "to contain", "<failure>" + expectedMessage);
+        expect(expectedWrite, "to contain", expectedStack);
+        expect(expectedWrite, "not to contain", "&#x1B;");
+        expect(expectedWrite, "not to contain", "&#x7;");
+        expect(expectedWrite, "not to contain", "[31m");
+        expect(expectedWrite, "not to contain", "[39m");
+      });
     });
 
     describe("on test pending", function () {

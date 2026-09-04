@@ -3,10 +3,6 @@
   "release-type": "node",
   "include-component-in-tag": false,
 
-  "prerelease": true,
-  "versioning": "prerelease",
-  "prerelease-type": "rc",
-
   "changelog-sections": [
     { "type": "feat", "section": "🌟 Features", "hidden": false },
     { "type": "fix", "section": "🩹 Fixes", "hidden": false },

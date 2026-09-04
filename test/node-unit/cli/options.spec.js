@@ -466,6 +466,62 @@ describe("options", function () {
           color: true,
         });
       });
+
+      it("should parse quoted flags from MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon
+          .stub(process, "env")
+          .value({ MOCHA_OPTIONS: "--grep 'foo bar' --color" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to satisfy", {
+          grep: "foo bar",
+          color: true,
+        });
+      });
+
+      it("should allow negative numeric values in MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--timeout -1" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to have property", "timeout", "-1");
+      });
+
+      it("should allow dash-prefixed option values in MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--grep -1" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to have property", "grep", "-1");
+      });
     });
 
     describe("config priority", function () {
@@ -786,6 +842,45 @@ describe("options", function () {
 
       it("does not throw error if numeric value is passed to an array flag", function () {
         expect(() => loadOptions(`--spec ${numericArg}`), "not to throw");
+      });
+    });
+
+    describe("when parsing throws a non-Mocha error", function () {
+      let exit;
+      let consoleError;
+
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        findConfig = sinon.stub();
+        loadConfig = sinon.stub();
+        findupSync = sinon.stub();
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+        exit = sinon.stub(process, "exit");
+        consoleError = sinon.stub(console, "error");
+      });
+
+      it("prints the error message and exits with code 1", function () {
+        try {
+          // `--grep` requires a value, so a dash-prefixed follower throws a
+          // plain (non-Mocha) Error rather than a Mocha error.
+          loadOptions(["--grep", "-foo"]);
+        } catch {
+          // `process.exit` is stubbed, so execution continues past it and may
+          // throw later; we only assert that the error was reported and exit
+          // was requested.
+        }
+        expect(exit, "to have a call satisfying", [1]);
+        expect(consoleError, "was called");
+        expect(
+          consoleError.firstCall.args[0],
+          "to contain",
+          "Not enough arguments following: grep",
+        );
       });
     });
   });

@@ -10,8 +10,9 @@
 
 import d from "debug";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import os from "node:os";
-import unparse from "yargs-unparser";
+import { unparseMochaArgs } from "../lib/cli/unparse-args.js";
 
 import { main } from "../lib/cli/cli.js";
 import { loadOptions } from "../lib/cli/options.cjs";
@@ -20,7 +21,6 @@ import {
   isNodeFlag,
   impliesNoTimeouts,
 } from "../lib/cli/node-flags.cjs";
-import { aliases } from "../lib/cli/run-option-metadata.cjs";
 import { fileURLToPath } from "node:url";
 
 const debug = d.debug("mocha:cli:mocha");
@@ -96,10 +96,21 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
 
   debug("final node argv", nodeArgv);
 
+  const stdio = ["inherit", "inherit", "inherit"];
+  mochaArgs._ = mochaArgs._?.map((arg) => {
+    const match = /^\/dev\/fd\/(\d+)$/.exec(arg);
+    if (!match || !fs.existsSync(arg)) {
+      return arg;
+    }
+
+    stdio.push(Number(match[1]));
+    return `/dev/fd/${stdio.length - 1}`;
+  });
+
   const args = [].concat(
     nodeArgv,
     mochaPath,
-    unparse(mochaArgs, { alias: aliases }),
+    unparseMochaArgs(mochaArgs),
   );
 
   debug(
@@ -109,7 +120,7 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   );
 
   const proc = spawn(process.execPath, args, {
-    stdio: "inherit",
+    stdio,
   });
 
   proc.on("exit", (code, signal) => {

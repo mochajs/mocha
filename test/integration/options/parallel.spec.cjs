@@ -479,22 +479,22 @@ describe("--parallel", function () {
         const { expected, actual } = await compareReporters("json");
         expected.output = JSON.parse(expected.output);
         actual.output = JSON.parse(actual.output);
-        return expect(actual, "to satisfy", {
+        expect(actual, "to satisfy", {
           passing: expected.passing,
           failing: expected.failing,
           pending: expected.pending,
           code: expected.code,
-          output: {
-            stats: {
-              suites: expected.output.stats.suites,
-              tests: expected.output.stats.tests,
-              passes: expected.output.stats.passes,
-              pending: expected.output.stats.pending,
-              failures: expected.output.stats.failures,
-            },
-            tests: expected.tests,
+        });
+        expect(actual.output, "to satisfy", {
+          stats: {
+            suites: expected.output.stats.suites,
+            tests: expected.output.stats.tests,
+            passes: expected.output.stats.passes,
+            pending: expected.output.stats.pending,
+            failures: expected.output.stats.failures,
           },
         });
+        expect(actual.output.tests, "to satisfy", expected.output.tests);
       });
     });
 

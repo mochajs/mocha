@@ -5,6 +5,10 @@ on:
     paths:
       - .github/release-please/manifest.json
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   check-manifest-author:
     name: Verify manifest not manually edited

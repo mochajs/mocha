@@ -10,6 +10,8 @@ const DUMBER_FIXTURE_PATH =
   require.resolve("./fixtures/dumber-module.fixture.js");
 
 describe("Mocha", function () {
+  this.timeout(5000);
+
   let stubs;
   let opts;
   let Mocha;

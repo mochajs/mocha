@@ -2,14 +2,19 @@
  * This script gathers metadata for active supporters of Mocha from OpenCollective's
  * API by aggregating order ("donation") information.
  *
- * It's intended to be used with 11ty, but can be run directly. Running directly
- * enables debug output.
+ * - Gathers logo/avatar images (they are always pngs)
+ * - Gathers links
+ * - Sorts by tier and total contributions
+ * - Validates images
+ * - Writes images to a temp dir
  *
- * - gathers logo/avatar images (they are always pngs)
- * - gathers links
- * - sorts by tier and total contributions
- * - validates images
- * - writes images to a temp dir
+ * We filter out spam based on the code below and these general guidelines:
+ * - Not based on deceiving people
+ *
+ * While we try our best, we cannot guarantee quality in the list of sponsors.
+ * Some non-spam may be blocked, and some spam may be allowed.
+ * Please let us know in the usual places if you feel there is a mistake.
+ *
  * @see https://docs.opencollective.com/help/contributing/development/api
  */
 
@@ -25,7 +30,7 @@ const blocklist = new Set(require("./blocklist.json"));
  * be displayed on the website.
  */
 const BLOCKED_STRINGS =
-  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|follow|buy|cheap|instagram|hacks|tiktok|likes|youtube|subscriber|boost|deposit|mushroom|bingo|broker|promotion|bathroom|landscaping|lawn care|groundskeeping|remediation|esports|links|coupon|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
+  /(?:[ck]a[sz]ino|seo|slot|gambl(?:e|ing)|crypto|cheap|instagram|hacks|tiktok|likes|subscriber|boost|deposit|mushroom|bingo|broker|promotion|groundskeeping|links|review|refer|promocode|rabattkod|jämför|betting|reddit|hire|fortune|equity|download|marketing|comment|rank|scrapcar|lawyer|celeb|concrete|firestick|playground|betking)/i;
 
 /**
  * Add a few Categories exposed by Open Collective to help moderation
@@ -42,7 +47,6 @@ const BLOCKED_CATEGORIES = [
 
 /**
  * The OC API endpoint
-
  */
 const API_ENDPOINT = "https://api.opencollective.com/graphql/v2";
 
@@ -164,19 +168,22 @@ const getAllOrders = async (slug = "mochajs") => {
 };
 
 const isAllowed = ({ name, slug, website, categories }) => {
-  const allowed =
-    !blocklist.has(slug) &&
-    !BLOCKED_STRINGS.test(name) &&
-    !BLOCKED_STRINGS.test(slug) &&
-    !BLOCKED_STRINGS.test(website) &&
-    !categories.some((category) => BLOCKED_CATEGORIES.includes(category));
+  const blockReasons = [];
+  if (blocklist.has(slug)) blockReasons.push("slug in blocklist");
+  if (BLOCKED_STRINGS.test(name)) blockReasons.push("name blocked");
+  if (BLOCKED_STRINGS.test(slug)) blockReasons.push("slug blocked");
+  if (BLOCKED_STRINGS.test(website)) blockReasons.push("website blocked");
+  if (categories.some((category) => BLOCKED_CATEGORIES.includes(category)))
+    blockReasons.push("category blocked");
+
+  const allowed = blockReasons.length === 0;
 
   if (!allowed) {
-    debug("filtering %o", { categories, name, slug, website });
+    debug("blocking %o", { categories, name, slug, website });
+    debug(`reason(s): ${blockReasons}`);
   } else {
-    // debug('keeping %o', {categories, name, slug, website}, BLOCKED_STRINGS.test(website));
+    debug("allowing %o", { categories, name, slug, website });
   }
-
   return allowed;
 };
 

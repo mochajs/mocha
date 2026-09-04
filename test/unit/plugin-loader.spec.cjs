@@ -18,9 +18,11 @@ describe("plugin module", function () {
         it("should register the custom plugins", function () {
           const plugin = { exportName: "mochaBananaPhone" };
           expect(
-            new PluginLoader({ pluginDefs: [plugin] }).registered,
+            Object.fromEntries(
+              new PluginLoader({ pluginDefs: [plugin] }).registered,
+            ),
             "to satisfy",
-            new Map([["mochaBananaPhone", plugin]]),
+            { mochaBananaPhone: plugin },
           );
         });
       });
@@ -168,11 +170,9 @@ describe("plugin module", function () {
           it("should retain the value of any matching property in its mapping", function () {
             const func = () => {};
             pluginLoader.load({ mochaBananaPhone: func });
-            expect(
-              pluginLoader.loaded,
-              "to satisfy",
-              new Map([["mochaBananaPhone", [func]]]),
-            );
+            expect(Object.fromEntries(pluginLoader.loaded), "to satisfy", {
+              mochaBananaPhone: [func],
+            });
           });
 
           it("should call the associated validator, if present", function () {
@@ -259,19 +259,15 @@ describe("plugin module", function () {
               });
 
               it("should add the implementation to the internal mapping", function () {
-                expect(
-                  pluginLoader.loaded,
-                  "to satisfy",
-                  new Map([["foo", expect.it("to have length", 1)]]),
-                );
+                expect(Object.fromEntries(pluginLoader.loaded), "to satisfy", {
+                  foo: expect.it("to have length", 1),
+                });
               });
 
               it("should not add an implementation of plugins not present", function () {
-                expect(
-                  pluginLoader.loaded,
-                  "to satisfy",
-                  new Map([["bar", expect.it("to be empty")]]),
-                );
+                expect(Object.fromEntries(pluginLoader.loaded), "to satisfy", {
+                  bar: expect.it("to be empty"),
+                });
               });
             });
 

@@ -2,6 +2,7 @@
 "use strict";
 
 var utils = require("../../lib/utils.cjs");
+var pkg = require("../../package.json");
 var sinon = require("sinon");
 
 describe("lib/utils", function () {
@@ -685,24 +686,170 @@ describe("lib/utils", function () {
   });
 
   describe("escape()", function () {
-    it("replaces the usual xml suspects", function () {
-      expect(utils.escape("<a<bc<d<"), "to be", "&#x3C;a&#x3C;bc&#x3C;d&#x3C;");
-      expect(utils.escape(">a>bc>d>"), "to be", "&#x3E;a&#x3E;bc&#x3E;d&#x3E;");
-      expect(utils.escape('"a"bc"d"'), "to be", "&#x22;a&#x22;bc&#x22;d&#x22;");
-      expect(utils.escape('<>"&'), "to be", "&#x3C;&#x3E;&#x22;&#x26;");
-
-      expect(utils.escape("&a&bc&d&"), "to be", "&#x26;a&#x26;bc&#x26;d&#x26;");
-      expect(utils.escape("&amp;&lt;"), "to be", "&#x26;amp;&#x26;lt;");
+    [
+      ["null", null, "null"],
+      ["undefined", undefined, "undefined"],
+      ["number", 42, "42"],
+      ["boolean", false, "false"],
+      ["object", { toString: () => "<tag>" }, "&#x3C;tag&#x3E;"],
+    ].forEach(function ([label, input, expected]) {
+      it(`coerces ${label} to a string before escaping`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
     });
 
-    it("replaces invalid xml characters", function () {
+    [
+      [
+        "alphanumeric",
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+      ],
+      ["safe punctuation", " !#$%()*+,-./:;=?@[\\]^_{|}~"],
+    ].forEach(function ([label, input]) {
+      it(`leaves safe ascii ${label} unchanged`, function () {
+        expect(utils.escape(input), "to be", input);
+      });
+    });
+
+    [
+      ["less-than signs", "<a<bc<d<", "&#x3C;a&#x3C;bc&#x3C;d&#x3C;"],
+      ["greater-than signs", ">a>bc>d>", "&#x3E;a&#x3E;bc&#x3E;d&#x3E;"],
+      ["double quotes", '"a"bc"d"', "&#x22;a&#x22;bc&#x22;d&#x22;"],
+      ["ampersands", "&a&bc&d&", "&#x26;a&#x26;bc&#x26;d&#x26;"],
+      ["existing entities", "&amp;&lt;", "&#x26;amp;&#x26;lt;"],
+      [
+        "all sensitive punctuation",
+        "<>\"&'`",
+        "&#x3C;&#x3E;&#x22;&#x26;&#x27;&#x60;",
+      ],
+    ].forEach(function ([label, input, expected]) {
+      it(`replaces ${label} with uppercase hexadecimal references`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    [
+      ["nul", "\x00", "\x00"],
+      ["start of heading", "\x01", "&#x1;"],
+      ["start of text", "\x02", "&#x2;"],
+      ["end of text", "\x03", "&#x3;"],
+      ["end of transmission", "\x04", "&#x4;"],
+      ["enquiry", "\x05", "&#x5;"],
+      ["acknowledge", "\x06", "&#x6;"],
+      ["bell", "\x07", "&#x7;"],
+      ["backspace", "\x08", "&#x8;"],
+      ["tab", "\x09", "&#x9;"],
+      ["line feed", "\x0A", "\n"],
+      ["vertical tab", "\x0B", "&#xB;"],
+      ["form feed", "\x0C", "&#xC;"],
+      ["carriage return", "\x0D", "\r"],
+      ["shift out", "\x0E", "&#xE;"],
+      ["shift in", "\x0F", "&#xF;"],
+      ["data link escape", "\x10", "&#x10;"],
+      ["device control one", "\x11", "&#x11;"],
+      ["device control two", "\x12", "&#x12;"],
+      ["device control three", "\x13", "&#x13;"],
+      ["device control four", "\x14", "&#x14;"],
+      ["negative acknowledge", "\x15", "&#x15;"],
+      ["synchronous idle", "\x16", "&#x16;"],
+      ["end transmission block", "\x17", "&#x17;"],
+      ["cancel", "\x18", "&#x18;"],
+      ["end of medium", "\x19", "&#x19;"],
+      ["substitute", "\x1A", "&#x1A;"],
+      ["escape", "\x1B", "&#x1B;"],
+      ["file separator", "\x1C", "&#x1C;"],
+      ["group separator", "\x1D", "&#x1D;"],
+      ["record separator", "\x1E", "&#x1E;"],
+      ["unit separator", "\x1F", "&#x1F;"],
+    ].forEach(function ([label, input, expected]) {
+      it(`handles C0 control ${label}`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    [
+      ["delete", "\x7F", "&#x7F;"],
+      ["padding character", "\x80", "\x80"],
+      ["high octet preset", "\x81", "&#x81;"],
+      ["partial line backward", "\x8C", "\x8C"],
+      ["reverse line feed", "\x8D", "&#x8D;"],
+      ["single shift two", "\x8E", "\x8E"],
+      ["single shift three", "\x8F", "&#x8F;"],
+      ["device control string", "\x90", "&#x90;"],
+      ["private use one", "\x91", "\x91"],
+      ["string terminator", "\x9C", "\x9C"],
+      ["operating system command", "\x9D", "&#x9D;"],
+      ["privacy message", "\x9E", "\x9E"],
+      ["application program command", "\x9F", "\x9F"],
+    ].forEach(function ([label, input, expected]) {
+      it(`handles C1 control ${label}`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    [
+      ["copyright sign", "©", "&#xA9;"],
+      ["latin small e acute", "é", "&#xE9;"],
+      ["em dash", "—", "&#x2014;"],
+      ["CJK character", "中", "&#x4E2D;"],
+      ["replacement character", "\uFFFD", "&#xFFFD;"],
+      ["noncharacter FFFE", "\uFFFE", "&#xFFFE;"],
+      ["noncharacter FFFF", "\uFFFF", "&#xFFFF;"],
+    ].forEach(function ([label, input, expected]) {
+      it(`replaces non-ascii unicode ${label}`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    [
+      ["pile of poo", "💩", "&#x1F4A9;"],
+      ["grinning face", "😀", "&#x1F600;"],
+      ["tetragram", "𝌆", "&#x1D306;"],
+      ["CJK extension", "𠜎", "&#x2070E;"],
+    ].forEach(function ([label, input, expected]) {
+      it(`replaces astral unicode ${label} as one code point`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    [
+      ["lone high surrogate", "\uD800", "&#xD800;"],
+      ["lone low surrogate", "\uDC00", "&#xDC00;"],
+      ["high surrogate between ascii", "a\uD800b", "a&#xD800;b"],
+      ["low surrogate between ascii", "a\uDC00b", "a&#xDC00;b"],
+    ].forEach(function ([label, input, expected]) {
+      it(`replaces ${label}`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    it("does not rely on he as a runtime dependency", function () {
+      expect(pkg.dependencies, "not to have key", "he");
+    });
+
+    [
+      ["ansi color escapes", "\x1B[32mfoo\x1B[0m", "&#x1B;[32mfoo&#x1B;[0m"],
+      ["ascii whitespace controls", "\t\n\r", "&#x9;\n\r"],
+      ["mixed null and C1 controls", "\0\x7F\x80\x81", "\0&#x7F;\x80&#x81;"],
+    ].forEach(function ([label, input, expected]) {
+      it(`replaces ${label}`, function () {
+        expect(utils.escape(input), "to be", expected);
+      });
+    });
+
+    it("replaces unpaired surrogates without consuming neighboring characters", function () {
       expect(
-        utils.escape("\x1B[32mfoo\x1B[0m"),
+        utils.escape("\uD800\uD800\uDC00\uDC00"),
         "to be",
-        "&#x1B;[32mfoo&#x1B;[0m",
+        "&#xD800;&#x10000;&#xDC00;",
       );
-      // Ensure we can handle non-trivial unicode characters as well
-      expect(utils.escape("💩"), "to be", "&#x1F4A9;");
+    });
+
+    it("escapes mixed reporter content in order", function () {
+      expect(
+        utils.escape("Suite <root> failed: 💩 & \x1B[31mred\x1B[0m"),
+        "to be",
+        "Suite &#x3C;root&#x3E; failed: &#x1F4A9; &#x26; &#x1B;[31mred&#x1B;[0m",
+      );
     });
   });
 

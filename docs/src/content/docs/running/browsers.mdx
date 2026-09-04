@@ -58,11 +58,11 @@ Examples:
 ```js
 // Use "tdd" interface.  This is a shortcut to setting the interface;
 // any other options must be passed via an object.
-mocha.setup('tdd');
+mocha.setup("tdd");
 
 // This is equivalent to the above.
 mocha.setup({
-  ui: 'tdd'
+  ui: "tdd",
 });
 
 // Examples of options:
@@ -75,12 +75,17 @@ mocha.setup({
   failZero: true,
   forbidOnly: true,
   forbidPending: true,
-  global: ['MyLib'],
+  global: ["MyLib"],
   retries: 3,
-  rootHooks: { beforeEach(done) { ... done();} },
-  slow: '100',
-  timeout: '2000',
-  ui: 'bdd'
+  rootHooks: {
+    beforeEach(done) {
+      // your setup here
+      done();
+    },
+  },
+  slow: "100",
+  timeout: "2000",
+  ui: "bdd",
 });
 ```
 

@@ -59,10 +59,10 @@ jobs:
         os: ${{ fromJson(needs.resolve-inputs.outputs.os || '["ubuntu-latest"]') }}
         browser: ${{ fromJson(needs.resolve-inputs.outputs.browsers || '[""]') }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node_version }}
           cache: "npm"
