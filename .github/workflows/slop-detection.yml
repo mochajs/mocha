@@ -55,10 +55,10 @@ jobs:
           exempt-label: "spam: exempt"
           failure-add-pr-labels: "spam: likely slop"
           failure-pr-message: >
-            Thanks for the contribution. This pull request was automatically
-            closed because it matched multiple low-quality/spam signals.
-
-
-            If that was a mistake, please comment with more context, or ask a
-            maintainer to add the "spam: exempt" label before reopening.
+            Thanks for the contribution. This PR matched multiple low-quality/spam
+            signals and does not appear to conform to Mocha's AI contribution
+            guidelines. Please review the [AI-Generated Code section of our
+            contributing guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md#-ai-generated-code).
+            If this was a mistake, please comment with more context and ask a
+            maintainer to reconsider.
           lock-pr: false
