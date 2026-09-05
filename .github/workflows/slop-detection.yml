@@ -1,0 +1,64 @@
+name: Slop Detection
+
+on:
+  # WARNING: pull_request_target is needed to label/comment/close PRs from forks.
+  # DO NOT CHECK OUT THE REPO IN THIS WORKFLOW.
+  pull_request_target:
+    types: [opened, reopened]
+  issues:
+    types: [opened]
+
+permissions: {}
+
+jobs:
+  agentscan:
+    name: AgentScan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Cache AgentScan analysis
+        uses: actions/cache@v6
+        with:
+          path: .agentscan-cache
+          key: agentscan-cache-${{ github.actor }}
+          restore-keys: agentscan-cache-
+
+      - name: AgentScan
+        uses: MatteoGabriele/agentscan-action@v2.2.0
+        with:
+          auto-close: true
+          auto-close-classifications: automation
+          cache-path: .agentscan-cache
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          label-automation: "spam: automated account"
+          label-community-flagged: "spam: community flagged"
+          label-mixed: "spam: mixed signals"
+          scan-issues: true
+          trusted-author-associations: collaborator, member, owner
+
+  anti-slop:
+    name: Anti Slop
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: write
+    steps:
+      - name: Anti Slop
+        uses: peakoss/anti-slop@v0.3.0
+        with:
+          close-pr: true
+          exempt-label: "spam: exempt"
+          failure-add-pr-labels: "spam: likely slop"
+          failure-pr-message: >
+            Thanks for the contribution. This PR matched multiple low-quality/spam
+            signals and does not appear to conform to Mocha's AI contribution
+            guidelines. Please review the [AI-Generated Code section of our
+            contributing guidelines](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md#-ai-generated-code).
+            If this was a mistake, please comment with more context and ask a
+            maintainer to reconsider.
+          lock-pr: false
