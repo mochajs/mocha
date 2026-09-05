@@ -55,6 +55,9 @@ describe("utils", function () {
       it("returns false for a string that cannot be parsed as a number", function () {
         expect(utils.isNumeric("foo"), "to equal", false);
       });
+      it("returns false for a string that only begins with a number", function () {
+        expect(utils.isNumeric("1-spec.js"), "to equal", false);
+      });
       it("returns false for empty string", function () {
         expect(utils.isNumeric(""), "to equal", false);
       });
