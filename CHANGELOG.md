@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.8.1](https://github.com/mochajs/mocha/compare/v11.8.0...v11.8.1) (2026-09-06)
+
+
+### 🩹 Fixes
+
+* only reject positional args that are entirely numeric ([#6285](https://github.com/mochajs/mocha/issues/6285)) ([2b19e8e](https://github.com/mochajs/mocha/commit/2b19e8e034b129c1871c98a76c511b31dc1558ae))
+
 ## [11.8.0](https://github.com/mochajs/mocha/compare/v11.7.7...v11.8.0) (2026-08-02)
 
 
