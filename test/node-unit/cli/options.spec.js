@@ -843,6 +843,10 @@ describe("options", function () {
       it("does not throw error if numeric value is passed to an array flag", function () {
         expect(() => loadOptions(`--spec ${numericArg}`), "not to throw");
       });
+
+      it("does not throw error if a positional file name begins with a number", function () {
+        expect(() => loadOptions("1-spec.js"), "not to throw");
+      });
     });
 
     describe("when parsing throws a non-Mocha error", function () {
