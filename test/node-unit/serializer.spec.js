@@ -106,7 +106,7 @@ describe("serializer", function () {
 
     describe("instance method", function () {
       describe("serialize", function () {
-        it("should mutate the instance in-place", function () {
+        it("should return the same instance", function () {
           const evt = SerializableEvent.create("foo");
           expect(evt.serialize(), "to be", evt);
         });
@@ -142,7 +142,7 @@ describe("serializer", function () {
         });
 
         describe("when passed an object containing a non-`serialize` method", function () {
-          it("should remove the method", function () {
+          it("should omit the method from the serialized data", function () {
             const obj = {
               func: () => {},
             };
@@ -537,6 +537,343 @@ describe("serializer", function () {
           "to have readonly property",
           "__type",
         );
+      });
+    });
+  });
+
+  describe("non-mutating serialization", function () {
+    describe("SerializableEvent", function () {
+      it("should not mutate objects reachable from the error", function () {
+        const lib = { fn: () => {}, constant: 42 };
+        Object.defineProperty(lib, "locked", {
+          get: () => () => {},
+          enumerable: true,
+          configurable: false,
+        });
+        const err = new Error("boom");
+        err.appState = { lib };
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(typeof lib.fn, "to be", "function");
+        expect(
+          Object.getOwnPropertyDescriptor(lib, "locked").get,
+          "to be a",
+          "function",
+        );
+        expect(evt.error.appState.lib.constant, "to be", 42);
+        expect(evt.error.appState.lib, "not to have property", "fn");
+        expect(evt.error.appState.lib, "not to have property", "locked");
+      });
+
+      it("should not mutate the real crypto module", function () {
+        const crypto = require("node:crypto");
+        const propCountBefore = Object.getOwnPropertyNames(crypto).length;
+        const err = new Error("boom");
+        err.lib = crypto;
+
+        expect(
+          () => SerializableEvent.create("fail", {}, err).serialize(),
+          "not to throw",
+        );
+
+        expect(typeof crypto.randomBytes, "to be", "function");
+        expect(typeof crypto.createHash, "to be", "function");
+        expect(typeof crypto.getRandomValues, "to be", "function");
+        expect(
+          Object.getOwnPropertyNames(crypto).length,
+          "to be",
+          propCountBefore,
+        );
+      });
+
+      it("should not throw when the data contains frozen objects with function props", function () {
+        const data = { frozen: Object.freeze({ fn: () => {}, keep: "me" }) };
+
+        const evt = SerializableEvent.create("event", data).serialize();
+
+        expect(evt.data.frozen.keep, "to be", "me");
+        expect(evt.data.frozen, "not to have property", "fn");
+        expect(typeof data.frozen.fn, "to be", "function");
+      });
+
+      it("should not break on ESM module namespace objects", async function () {
+        const namespace = await import("node:crypto");
+        const err = new Error("boom");
+        err.deep = { mod: namespace };
+
+        expect(
+          () => SerializableEvent.create("fail", {}, err).serialize(),
+          "not to throw",
+        );
+
+        expect(typeof namespace.randomBytes, "to be", "function");
+      });
+
+      it('should replace cycles with "[Circular]" without mutating the original', function () {
+        const node = { name: "a" };
+        node.self = node;
+        const err = new Error("boom");
+        err.node = node;
+        const data = { items: [] };
+        data.items.push(data);
+
+        const evt = SerializableEvent.create("fail", data, err).serialize();
+
+        expect(evt.error.node.self, "to be", "[Circular]");
+        expect(evt.data.items[0], "to be", "[Circular]");
+        expect(node.self, "to be", node);
+        expect(data.items[0], "to be", data);
+        expect(() => JSON.stringify(evt.data), "not to throw");
+      });
+
+      it("should serialize same-named properties on sibling objects", function () {
+        const value = {
+          one: { mistake: new Error("first") },
+          two: { mistake: new Error("second") },
+          nested: { data: { marker: 1 }, error: { marker: 2 } },
+        };
+
+        const evt = SerializableEvent.create("event", value).serialize();
+
+        expect(evt.data.one.mistake.__type, "to be", "Error");
+        expect(evt.data.two.mistake.__type, "to be", "Error");
+        expect(evt.data.two.mistake.message, "to be", "second");
+        expect(evt.data.nested.data.marker, "to be", 1);
+        expect(evt.data.nested.error.marker, "to be", 2);
+      });
+
+      it("should serialize array contents", function () {
+        const err = new Error("boom");
+        err.multiple = [
+          new Error("second"),
+          () => {},
+          { fn: () => {}, keep: 1 },
+        ];
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.multiple[0].__type, "to be", "Error");
+        expect(evt.error.multiple[0].message, "to be", "second");
+        expect(evt.error.multiple[1], "to be", null);
+        expect(evt.error.multiple[2].keep, "to be", 1);
+        expect(evt.error.multiple[2], "not to have property", "fn");
+        expect(err.multiple[0], "to be an", Error);
+        expect(typeof err.multiple[2].fn, "to be", "function");
+      });
+
+      it("should normalize BigInt values", function () {
+        const err = new Error("boom");
+        err.big = BigInt(10);
+        err.nested = { big: BigInt(20) };
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.big, "to be", "10");
+        expect(evt.error.nested.big, "to be", "20");
+        expect(() => JSON.stringify(evt.error), "not to throw");
+      });
+
+      it("should omit properties whose getters throw", function () {
+        const obj = { keep: "me" };
+        Object.defineProperty(obj, "bad", {
+          get: () => {
+            throw new Error("nope");
+          },
+          enumerable: true,
+          configurable: true,
+        });
+        const err = new Error("boom");
+        err.obj = obj;
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.obj.keep, "to be", "me");
+        expect(evt.error.obj, "not to have property", "bad");
+      });
+
+      it("should invoke getters exactly once", function () {
+        const get = sinon.stub().returns("value");
+        const obj = {};
+        Object.defineProperty(obj, "prop", {
+          get,
+          enumerable: true,
+          configurable: true,
+        });
+
+        SerializableEvent.create("event", { obj }).serialize();
+
+        expect(get, "was called once");
+      });
+
+      it("should honor inherited toJSON but not own enumerable toJSON", function () {
+        const when = new Date(0);
+        const own = { toJSON: () => "custom", keep: 1 };
+
+        const evt = SerializableEvent.create("event", {
+          when,
+          own,
+        }).serialize();
+
+        expect(evt.data.when, "to be", "1970-01-01T00:00:00.000Z");
+        expect(evt.data.own.keep, "to be", 1);
+        expect(evt.data.own, "not to have property", "toJSON");
+      });
+
+      it("should carry a constructor-form error cause", function () {
+        const cause = new Error("root cause");
+        const err = new Error("top", { cause });
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.cause.__type, "to be", "Error");
+        expect(evt.error.cause.message, "to be", "root cause");
+        expect(err.cause, "to be", cause);
+      });
+
+      it('should serialize a self-referential cause as "[Circular]"', function () {
+        const err = new Error("top");
+        Object.defineProperty(err, "cause", {
+          value: err,
+          enumerable: false,
+          configurable: true,
+        });
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.cause, "to be", "[Circular]");
+      });
+
+      it("should keep message and stack of an AggregateError and drop its errors", function () {
+        const err = new AggregateError([new Error("inner")], "agg");
+
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+
+        expect(evt.error.message, "to be", "agg");
+        expect(evt.error.__type, "to be", "Error");
+        expect(evt.error, "not to have property", "errors");
+      });
+
+      it("should truncate beyond the depth cap", function () {
+        const root = {};
+        let current = root;
+        for (let i = 0; i < 300; i++) {
+          current.next = {};
+          current = current.next;
+        }
+        current.tip = "end";
+
+        const evt = SerializableEvent.create("event", {
+          chain: root,
+        }).serialize();
+
+        expect(JSON.stringify(evt.data), "to contain", '"[Truncated]"');
+      });
+
+      it("should terminate on lazily-infinite getter chains", function () {
+        const lazyNode = () => {
+          const obj = {};
+          Object.defineProperty(obj, "next", {
+            get: () => lazyNode(),
+            enumerable: true,
+            configurable: true,
+          });
+          return obj;
+        };
+
+        const evt = SerializableEvent.create("event", {
+          chain: lazyNode(),
+        }).serialize();
+
+        expect(JSON.stringify(evt.data), "to contain", '"[Truncated]"');
+      });
+
+      it("should bound work on self-expanding object graphs", function () {
+        const mintProxy = () =>
+          new Proxy(
+            {},
+            {
+              ownKeys: () => ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"],
+              getOwnPropertyDescriptor: () => ({
+                enumerable: true,
+                configurable: true,
+              }),
+              get: (target, key) =>
+                key === "serialize" || key === "toJSON"
+                  ? undefined
+                  : mintProxy(),
+            },
+          );
+
+        const evt = SerializableEvent.create("event", {
+          graph: mintProxy(),
+        }).serialize();
+
+        expect(() => JSON.stringify(evt.data), "not to throw");
+      });
+    });
+
+    describe("SerializableWorkerResult", function () {
+      it("should substitute a fallback event when one event cannot be serialized", function () {
+        const good = SerializableEvent.create("pass", { title: "ok" });
+        const bad = SerializableEvent.create("fail", {
+          nested: {
+            serialize: () => {
+              throw new Error("cannot");
+            },
+          },
+        });
+
+        const result = SerializableWorkerResult.create(
+          [good, bad],
+          1,
+        ).serialize();
+
+        expect(result.events.length, "to be", 2);
+        expect(result.events[0].data.title, "to be", "ok");
+        expect(result.events[1].eventName, "to be", "fail");
+        expect(
+          result.events[1].error.message,
+          "to contain",
+          "unable to serialize",
+        );
+        expect(() => JSON.stringify(result), "not to throw");
+      });
+
+      it("should serialize the same error attached to two events consistently", function () {
+        const lib = { fn: () => {} };
+        const err = new Error("boom");
+        err.lib = lib;
+        const eventOne = SerializableEvent.create("fail", { title: "t" }, err);
+        const eventTwo = SerializableEvent.create(
+          "test end",
+          { title: "t" },
+          err,
+        );
+
+        const result = SerializableWorkerResult.create(
+          [eventOne, eventTwo],
+          1,
+        ).serialize();
+
+        expect(typeof lib.fn, "to be", "function");
+        expect(result.events[0].error.message, "to be", "boom");
+        expect(result.events[1].error.message, "to be", "boom");
+      });
+    });
+
+    describe("deserialization parity", function () {
+      it("should leave nested __type markers under the error as plain objects", function () {
+        const err = new Error("boom");
+        err.multiple = [new Error("second")];
+        const evt = SerializableEvent.create("fail", {}, err).serialize();
+        const wire = JSON.parse(JSON.stringify(evt));
+
+        const deserialized = SerializableEvent.deserialize(wire);
+
+        expect(deserialized.error, "to be an", Error);
+        expect(deserialized.error.multiple[0], "not to be an", Error);
+        expect(deserialized.error.multiple[0].message, "to be", "second");
       });
     });
   });
