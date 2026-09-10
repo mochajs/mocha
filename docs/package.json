@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/starlight": "^0.41.3",
+    "@astrojs/starlight": "^0.42.0",
     "astro": "^7.1.1",
     "starlight-blog": "^0.29.0",
     "starlight-package-managers": "^0.12.0",
