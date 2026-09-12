@@ -1113,7 +1113,7 @@ describe("Runner", function () {
                 ]).and("was called once");
               });
 
-              it("should abort the runner without emitting end event", function () {
+              it("should keep running without emitting end event", function () {
                 expect(
                   function () {
                     runner.uncaught(err);
@@ -1122,7 +1122,7 @@ describe("Runner", function () {
                   runner,
                   "end",
                 );
-                expect(runner._abort, "to be", true);
+                expect(runner._abort, "to be", false);
               });
             });
 
