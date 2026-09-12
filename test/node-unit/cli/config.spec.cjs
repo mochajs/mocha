@@ -142,11 +142,11 @@ describe("cli/config", function () {
     let CONFIG_FILES;
 
     beforeEach(function () {
-      findup = { sync: sinon.stub().returns("/some/path/.mocharc.js") };
+      findup = sinon.stub().returns("/some/path/.mocharc.js");
       const config = rewiremock.proxy(
         require.resolve("../../../lib/cli/config.cjs"),
         (r) => ({
-          "find-up": r.by(() => findup),
+          "find-up": r.by(() => ({ findUpSync: findup })),
         }),
       );
       findConfig = config.findConfig;

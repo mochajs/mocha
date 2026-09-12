@@ -1,5 +1,0 @@
-{
-  "@(**/*.js|bin/*)": ["eslint --fix"],
-  "!(package*).json": ["prettier --write"],
-  "*.{yml,md,html}": ["prettier --write"]
-}
