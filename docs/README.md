@@ -14,3 +14,11 @@ npm i
 npm run generate
 npm run dev
 ```
+
+## Upgrade dependencies
+
+To upgrade Astro, use:
+
+```sh
+npx @astrojs/upgrade
+```
