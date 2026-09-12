@@ -52,11 +52,13 @@ describe("--exit", function () {
         done();
       });
 
+      var waitForExitMs = shouldExit ? 30000 : timeout - 500;
+
       // If this callback happens, then Mocha didn't automatically exit.
       timeoutObj = setTimeout(function () {
         didExit = false;
         killSubprocess();
-      }, timeout - 500);
+      }, waitForExitMs);
     };
   };
 
