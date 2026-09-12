@@ -1,5 +1,16 @@
 # Changelog
 
+## [12.0.2](https://github.com/mochajs/mocha/compare/v12.0.1...v12.0.2) (2026-09-12)
+
+
+### 🧹 Chores
+
+* add dependency conflict detection workflow ([#6246](https://github.com/mochajs/mocha/issues/6246)) ([ef0ae32](https://github.com/mochajs/mocha/commit/ef0ae32e6ef1d90fd72d08bc3ba7b507c9057911))
+* **deps:** update dependency @playwright/test to v1.63.0 ([#6299](https://github.com/mochajs/mocha/issues/6299)) ([931baa5](https://github.com/mochajs/mocha/commit/931baa53d43fe23a05ba09a889268215e450babd))
+* **deps:** update dependency eslint to v10.10.0 ([#6296](https://github.com/mochajs/mocha/issues/6296)) ([3cb22d1](https://github.com/mochajs/mocha/commit/3cb22d1a6e0393d88c4b173b860d9216709bfb61))
+* **site:** update Astro (7.3.2) and fast-uri (3.1.7) ([#6301](https://github.com/mochajs/mocha/issues/6301)) ([a4f2213](https://github.com/mochajs/mocha/commit/a4f221333238e72532019de1bd0dcb91731a4003))
+* widen --exit detection window ([#6293](https://github.com/mochajs/mocha/issues/6293)) ([ee3a4b1](https://github.com/mochajs/mocha/commit/ee3a4b1340a41d0f366e2e5628f5e5866f51b958))
+
 ## [12.0.1](https://github.com/mochajs/mocha/compare/v12.0.0...v12.0.1) (2026-09-08)
 
 
