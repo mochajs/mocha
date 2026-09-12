@@ -8,3 +8,6 @@ Alias: `Markdown`, `markdown`
 The Markdown reporter generates a markdown TOC and body for your test suite.
 This is great if you want to use the tests as documentation within a GitHub wiki page, or a markdown file in the repository that GitHub can render.
 For example, here is the Connect [test output](https://github.com/senchalabs/connect/blob/90a725343c2945aaee637e799b1cd11e065b2bff/tests.md).
+
+By default, suite and test titles are inserted into the markdown verbatim, so titles containing markdown special characters (such as `*`, `_`, backticks, or `#`) can break the rendered output.
+To backslash-escape special characters in titles instead, use `--reporter-option escapeSpecialCharacters=true`.
