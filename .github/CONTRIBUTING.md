@@ -149,7 +149,7 @@ These requirements apply to all contributions and are not unique to AI-generated
 Now that the pull request exists, some tasks will be run on it:
 
 1. If you have not signed our [Contributor License Agreement](docs.linuxfoundation.org/lfx/easycla/v2-current/contributors), a friendly robot will prompt you to do so.
-   A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
+   A [CLA](https://openjsf.org/cla) (electronic) signature is **required** for all contributions of code to Mocha.
 1. Continuous integration checks will run against your changes.
    The result of these checks will be displayed on your PR.
    - If the checks fail, you must address those before the PR is accepted.
@@ -173,7 +173,7 @@ Mocha uses several external services for project infrastructure:
 
 - **[Discord](https://discord.gg/KeDn2uXhER)**: Official community chat for support, discussions, and connecting with maintainers and users.
 
-- **[EasyCLA](https://cla.js.foundation/mochajs/mocha)**: Contributor License Agreement system via Linux Foundation. All code contributions require a signed CLA. A bot prompts contributors on their first PR.
+- **[EasyCLA](https://openjsf.org/cla)**: Contributor License Agreement system via Linux Foundation. All code contributions require a signed CLA. A bot prompts contributors on their first PR.
 
 - **Netlify**: Hosts the documentation website at mochajs.org. Provides automatic deploy previews for documentation PRs and nightly scheduled deploys to update supporter information.
 

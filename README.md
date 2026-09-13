@@ -71,4 +71,4 @@ Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXh
 
 ## License
 
-Copyright 2011-2024 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
+Copyright 2011-2026 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
