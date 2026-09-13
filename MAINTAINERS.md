@@ -436,7 +436,7 @@ To transition from betas or RCs to a full release, just change Release Please ba
 
 ## About The OpenJS Foundation
 
-The [OpenJS Foundation](https://js.foundation) retains copyright of all projects underneath the [mochajs org](https://github.com/mochajs).
+The [OpenJS Foundation](https://openjsf.org/) retains copyright of all projects underneath the [mochajs org](https://github.com/mochajs).
 The Foundation does not influence technical decisions nor the project roadmap.
 It is, however, charged with ensuring the continued vitality and sustainability of projects under its banner.
 
