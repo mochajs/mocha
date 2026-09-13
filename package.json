@@ -18,7 +18,10 @@
     "jasmine",
     "playwright"
   ],
-  "author": "TJ Holowaychuk <tj@vision-media.ca>",
+  "author": {
+    "name": "Mark Wiemer",
+    "url": "https://markwiemer.com/software/mocha"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
