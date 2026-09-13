@@ -1,7 +1,11 @@
 "use strict";
 
 const mochaPackageJson = require("../../package.json");
-const { runMochaAsync, resolveFixturePath, DEFAULT_FIXTURE } = require("./helpers");
+const {
+  runMochaAsync,
+  resolveFixturePath,
+  DEFAULT_FIXTURE,
+} = require("./helpers.cjs");
 
 describe('global "mocha" object', function () {
   it("exposes the runner name and version", function () {
@@ -18,7 +22,9 @@ describe('global "mocha" object', function () {
   });
 
   it("logs via debug instead of throwing when globalThis.mocha is already non-configurable", async function () {
-    const preloadPath = resolveFixturePath("global-variable-occupied");
+    const preloadPath = resolveFixturePath(
+      "global-variable-occupied.fixture.js",
+    );
     const result = await runMochaAsync(DEFAULT_FIXTURE, [], {
       stdio: "pipe",
       env: {
