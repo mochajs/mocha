@@ -46,6 +46,26 @@ jobs:
         if: inputs.os
         run: echo "splitted=$(echo '${{ inputs.os }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
 
+  find-conflicts:
+    permissions:
+      id-token: none
+    runs-on: ${{ matrix.os }}
+    needs:
+      - resolve-inputs
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: ${{ fromJson(needs.resolve-inputs.outputs.nodeVersions || '["22"]') }}
+        os: ${{ fromJson(needs.resolve-inputs.outputs.os || '["ubuntu-latest"]') }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Check dependency tree
+        run: npm i --no-fund --package-lock-only --dry-run
+
   script:
     name: ${{ inputs.npm-script }}${{ needs.resolve-inputs.outputs.browsers && format('[{0}]', matrix.browser) }}${{ needs.resolve-inputs.outputs.nodeVersions && format(' with node.js {0}', matrix.node_version) }}${{ needs.resolve-inputs.outputs.os && format(' on {0}', matrix.os) }}
     runs-on: ${{ matrix.os }}
