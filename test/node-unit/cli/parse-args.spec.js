@@ -154,6 +154,33 @@ describe("parse-args", function () {
     );
   });
 
+  it("orders reporter-option values from lowest to highest priority source", function () {
+    // `reporter-option` values are reduced downstream with last-writer-wins
+    // semantics, so config objects must merge in priority-LOW→HIGH order for
+    // a higher-priority source to override a lower-priority one (see #5532).
+    // Every other array option keeps the existing prepend order.
+    expect(
+      parseMochaArgs(
+        [],
+        defaults,
+        { "reporter-option": ["output=cli.xml"] },
+        { "reporter-option": ["output=env.xml"] },
+        { "reporter-option": ["output=config.xml", "extra=keepMe"] },
+        { "reporter-option": ["output=pkg.xml"] },
+      ),
+      "to satisfy",
+      {
+        "reporter-option": [
+          "output=pkg.xml",
+          "output=config.xml",
+          "extra=keepMe",
+          "output=env.xml",
+          "output=cli.xml",
+        ],
+      },
+    );
+  });
+
   it("preserves boolean negation including long alias negation", function () {
     expect(
       parseMochaArgs(
