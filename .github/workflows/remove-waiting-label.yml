@@ -1,8 +1,10 @@
-name: Remove "waiting for author" label on review request
+name: Remove "waiting for author" label on author activity
 
 on:
+  issue_comment:
+  pull_request_review_comment:
   pull_request_target:
-    types: [review_requested]
+    types: [review_requested, synchronize]
 
 permissions:
   issues: write
@@ -10,7 +12,11 @@ permissions:
 
 jobs:
   remove-label:
-    if: ${{ !github.event.pull_request.draft }}
+    if: >-
+      ${{ (github.event_name == 'pull_request_target' && github.event.action == 'review_requested' && !github.event.pull_request.draft) ||
+          (github.event_name == 'pull_request_target' && github.event.action == 'synchronize') ||
+          (github.event_name == 'issue_comment' && github.actor == github.event.issue.user.login) ||
+          (github.event_name == 'pull_request_review_comment' && github.actor == github.event.pull_request.user.login) }}
     runs-on: ubuntu-latest
 
     steps:
@@ -19,12 +25,23 @@ jobs:
         with:
           # REST gives 404 if label isn't present
           script: |
+            const labelName = 'status: waiting for author';
+            let issueNumber;
+
+            if (context.eventName === 'issue_comment') {
+              issueNumber = context.payload.issue.number;
+            } else if (context.eventName === 'pull_request_review_comment') {
+              issueNumber = context.payload.pull_request.number;
+            } else {
+              issueNumber = context.payload.pull_request.number;
+            }
+
             try {
               await github.rest.issues.removeLabel({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                issue_number: context.payload.pull_request.number,
-                name: 'status: waiting for author',
+                issue_number: issueNumber,
+                name: labelName,
               });
             } catch (e) {
               if (e.status !== 404) throw e;
