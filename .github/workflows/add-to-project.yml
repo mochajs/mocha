@@ -22,7 +22,7 @@ jobs:
           # https://github.com/mochajs/mocha/settings/secrets/actions
           client-id: ${{ secrets.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: mark-wiemer-org
+          owner: mochajs
       # https://github.com/actions/add-to-project
       - uses: actions/add-to-project@v2
         with:
