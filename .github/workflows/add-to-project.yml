@@ -1,8 +1,9 @@
-name: Auto Add to Mocha Project
+name: Auto-add item to Mocha project
 
-# Automatically adds issues to our GitHub Project
-# We silence all failures to reduce noise
-# https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions
+# Automatically adds issues to our GitHub project.
+# We silence "add" failures to reduce noise.
+# (This often happens when issues are created from project GUI.)
+# https://markwiemer.com/software/github/apps#auto-add
 
 on:
   issues:
@@ -10,19 +11,21 @@ on:
   pull_request:
     types: [opened, reopened]
 
-permissions:
-  issues: write
-  pull-requests: write
-  repository-projects: write
-
 jobs:
   add-to-project:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@v2.0.0
-        # non-critical workflow, we will investigate errors manually
-        continue-on-error: true
+      # https://github.com/actions/create-github-app-token
+      - uses: actions/create-github-app-token@v3
+        id: app-token
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          # Project URL for Mocha project board
+          # https://github.com/mochajs/mocha/settings/secrets/actions
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: mark-wiemer-org
+      # https://github.com/actions/add-to-project
+      - uses: actions/add-to-project@v2
+        with:
           project-url: https://github.com/orgs/mochajs/projects/6
+          github-token: ${{ steps.app-token.outputs.token }}
+        continue-on-error: true
