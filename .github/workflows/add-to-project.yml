@@ -23,6 +23,7 @@ jobs:
         # non-critical workflow, we will investigate errors manually
         continue-on-error: true
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # GITHUB_TOKEN cannot access Projects; use a PAT with project scope.
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
           # Project URL for Mocha project board
           project-url: https://github.com/orgs/mochajs/projects/6
