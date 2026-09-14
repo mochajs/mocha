@@ -14,7 +14,6 @@ on:
 jobs:
   add-to-project:
     runs-on: ubuntu-latest
-    permissions: {}
     steps:
       # https://github.com/actions/create-github-app-token
       - uses: actions/create-github-app-token@v3
