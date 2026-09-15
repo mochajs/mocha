@@ -185,6 +185,8 @@ Mocha uses several external services for project infrastructure:
 
 - **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
 
+- **[Renovate](https://developer.mend.io/github/mochajs/mocha)**: Automatic dependency updates.
+
 - **[Tidelift](https://tidelift.com/lifter/package/npm/mocha/overview)**: Minor additional funding, see also Open Collective.
 
 ## 🤝 Working Together
