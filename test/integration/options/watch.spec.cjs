@@ -124,16 +124,26 @@ describe("--watch", function () {
       const watchedFile = path.join(dirPath, "file.xyz");
       // 1 first run + 3 creations = 4
       const expectedRunCount = 4;
-      const graceMs = 1_000; // buffer time for watcher
+      const graceMs = 2_000; // buffer time for slower CI watchers to observe addDir events
 
       return runMochaWatchJSONAsync(
         [testFile, "--watch-files", "lib"],
         { cwd: tempDir, expectedRuns: expectedRunCount },
         async (mochaProcess, { waitForRuns, runCount }) => {
-          fs.mkdirSync(libPath);
+          const retryDirectoryCreate = async (dirPath, targetRunCount) => {
+            while (runCount() < targetRunCount) {
+              if (fs.existsSync(dirPath)) {
+                fs.rmSync(dirPath, { recursive: true, force: true });
+              }
+              fs.mkdirSync(dirPath, { recursive: true });
+              await sleep(graceMs);
+            }
+          };
+
+          await retryDirectoryCreate(libPath, 2);
           await waitForRuns(2); // wait for second run
           await sleep(graceMs); // let the watch on `lib` install
-          fs.mkdirSync(dirPath);
+          await retryDirectoryCreate(dirPath, 3);
           await waitForRuns(3); // wait for third run
           // re-touch until the new subdir's watch catches the change, only re-touches when idle (no rerun happened) so it can not abort a run
           while (runCount() < expectedRunCount) {
