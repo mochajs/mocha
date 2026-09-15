@@ -179,6 +179,8 @@ Mocha uses several external services for project infrastructure:
 
 - **[npm registry](https://www.npmjs.com/package/mocha)**: Package distribution. Mocha is also available via GitHub Releases.
 
+- **[OctoGuide](https://octo.guide/)**: Basic PR guidance, helping contributors know what they can do to get their items reviewed quicker.
+
 - **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers.
 
 - **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
