@@ -36,3 +36,77 @@ jobs:
             This pull request has been waiting for a response from the author for 1 week with no activity.
             If there is no further activity in the next 1 week, this pull request will be automatically closed.
             Maintainers: to keep this pull request open indefinitely, remove the "status: waiting for author" label.
+
+  triage-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Ping maintainers on stale triage issues'
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const staleAfter = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: 'open',
+              labels: 'status: in triage',
+              sort: 'created',
+              direction: 'asc',
+              per_page: 100,
+            });
+
+            for (const issue of issues) {
+              if (new Date(issue.created_at) > new Date(staleAfter)) {
+                continue;
+              }
+
+              const timeline = await github.paginate(github.rest.issues.listEventsForTimeline, {
+                owner,
+                repo,
+                issue_number: issue.number,
+                per_page: 100,
+              });
+
+              const hasMaintainerUpdate = timeline.some(event => {
+                if (!['labeled', 'unlabeled'].includes(event.event)) {
+                  return false;
+                }
+
+                if (!event.actor || !event.created_at) {
+                  return false;
+                }
+
+                return !event.actor.login.includes('github-actions') &&
+                  new Date(event.created_at) > new Date(issue.created_at);
+              });
+
+              if (hasMaintainerUpdate) {
+                continue;
+              }
+
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: issue.number,
+                per_page: 100,
+              });
+
+              const alreadyPinged = comments.some(comment => {
+                return comment.body && comment.body.includes('@mochajs/maintenance-crew') &&
+                  comment.body.includes('This issue has been waiting in triage for more than a week');
+              });
+
+              if (alreadyPinged) {
+                continue;
+              }
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issue.number,
+                body: 'This issue has been waiting in triage for more than a week without a maintainer update. @mochajs/maintenance-crew, could someone please take a look?',
+              });
+            }
