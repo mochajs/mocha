@@ -1,4 +1,4 @@
-name: Remove "waiting for author" label on author activity
+name: Adjust labels on author activity
 
 on:
   issue_comment:
@@ -20,12 +20,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Remove "status: waiting for author" label'
+      - name: 'Remove "waiting" and "stale" labels'
         uses: actions/github-script@v9
         with:
           # REST gives 404 if label isn't present
           script: |
-            const labelName = 'status: waiting for author';
+            const labelNames = ['status: waiting for author', 'status: stale'];
             let issueNumber;
 
             if (context.eventName === 'issue_comment') {
@@ -36,13 +36,15 @@ jobs:
               issueNumber = context.payload.pull_request.number;
             }
 
-            try {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                name: labelName,
-              });
-            } catch (e) {
-              if (e.status !== 404) throw e;
+            for (const labelName of labelNames) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: labelName,
+                });
+              } catch (e) {
+                if (e.status !== 404) throw e;
+              }
             }
