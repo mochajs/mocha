@@ -181,9 +181,11 @@ Mocha uses several external services for project infrastructure:
 
 - **[OctoGuide](https://octo.guide/)**: Basic PR guidance, helping contributors know what they can do to get their items reviewed quicker.
 
-- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers.
+- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers. See also Tidelift.
 
 - **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
+
+- **[Tidelift](https://tidelift.com/lifter/package/npm/mocha/overview)**: Minor additional funding, see also Open Collective.
 
 ## 🤝 Working Together
 
