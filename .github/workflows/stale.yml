@@ -40,7 +40,7 @@ jobs:
   triage-reminder:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Ping maintainers on stale triage issues'
+      - name: "Ping maintainers on stale triage issues"
         uses: actions/github-script@v9
         with:
           script: |
