@@ -1,0 +1,71 @@
+name: Manage stale branches
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Run daily at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  stale-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove branches with no recent activity and no open PR
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const protectedBranches = new Set(['main', '11.x']);
+            const staleAfterMs = 1000 * 60 * 60 * 24 * 7;
+            const now = Date.now();
+
+            const { data: openPullRequests } = await github.paginate(github.rest.pulls.list, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+
+            const openBranchRefs = new Set(
+              openPullRequests
+                .filter(pr => pr.head && pr.head.repo && pr.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}`)
+                .map(pr => pr.head.ref)
+            );
+
+            const { data: branches } = await github.paginate(github.rest.repos.listBranches, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            });
+
+            for (const branch of branches) {
+              if (protectedBranches.has(branch.name) || openBranchRefs.has(branch.name)) {
+                continue;
+              }
+
+              const { data: branchDetails } = await github.rest.repos.getBranch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                branch: branch.name,
+              });
+
+              const lastUpdated = Date.parse(branchDetails.commit.commit.committer.date);
+
+              if (Number.isNaN(lastUpdated) || now - lastUpdated < staleAfterMs) {
+                continue;
+              }
+
+              try {
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `heads/${branch.name}`,
+                });
+
+                core.info(`Deleted stale branch: ${branch.name}`);
+              } catch (error) {
+                core.warning(`Unable to delete stale branch ${branch.name}: ${error.message}`);
+              }
+            }
