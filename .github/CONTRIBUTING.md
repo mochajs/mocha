@@ -108,8 +108,7 @@ Feel free to open PRs for changes you think are trivial. If a maintainer believe
    - This will run both Node.js-based and browser-based tests.
    - Ultimately, your pull request will be built on our continuous integration servers ([GitHub Actions](https://github.com/mochajs/mocha/actions?query=workflow%3A%22Tests%22)).
      The first step to ensuring these checks pass is to test on your own machine.
-   - When tests are run in CI, a coverage check is sent to [Codecov](https://app.codecov.io/gh/mochajs/mocha). You'll need to [add the Codecov GitHub app](https://app.codecov.io/login) to upload these results from your fork. This is recommended but not necessary to open a PR.
-     **A drop in code coverage % is considered a failed check**.
+   - When tests are run in CI, coverage reports are available as workflow artifacts.
 1. Commit your changes.
    - Use a brief message on the first line, referencing a relevant issue (e.g. `closes #12345`).
    - Add detail in subsequent lines.
@@ -168,8 +167,6 @@ Join us in [our Discord](https://discord.gg/KeDn2uXhER)!
 ## 🌐 External Services
 
 Mocha uses several external services for project infrastructure:
-
-- **[Codecov](https://app.codecov.io/gh/mochajs/mocha)**: Code coverage tracking. PRs must not decrease coverage. Contributors should add the Codecov GitHub app to upload coverage from forks.
 
 - **[Discord](https://discord.gg/KeDn2uXhER)**: Official community chat for support, discussions, and connecting with maintainers and users.
 
