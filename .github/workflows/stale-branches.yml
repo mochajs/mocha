@@ -6,20 +6,22 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  issues: write
   pull-requests: read
 
 jobs:
   stale-branches:
     runs-on: ubuntu-latest
     steps:
-      - name: Remove branches with no recent activity and no open PR
+      - name: Open issues for stale branches that need maintainer review
         uses: actions/github-script@v9
         with:
           script: |
             const protectedBranches = new Set(['main', '11.x']);
             const staleAfterMs = 1000 * 60 * 60 * 24 * 7;
             const now = Date.now();
+            const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}`;
 
             const { data: openPullRequests } = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
@@ -33,6 +35,13 @@ jobs:
                 .filter(pr => pr.head && pr.head.repo && pr.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}`)
                 .map(pr => pr.head.ref)
             );
+
+            const { data: openIssues } = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
 
             const { data: branches } = await github.paginate(github.rest.repos.listBranches, {
               owner: context.repo.owner,
@@ -57,15 +66,34 @@ jobs:
                 continue;
               }
 
+              const issueTitle = `Review stale branch: ${branch.name}`;
+              const existingIssue = openIssues.find(issue => issue.title === issueTitle);
+
+              if (existingIssue) {
+                continue;
+              }
+
+              const issueBody = [
+                `This branch has been inactive for more than 7 days and is not associated with an open PR.`,
+                '',
+                `- Branch: \`${branch.name}\``,
+                `- Last updated: ${new Date(lastUpdated).toISOString()}`,
+                `- Branch URL: ${repoUrl}/tree/${encodeURIComponent(branch.name)}`,
+                '',
+                'A maintainer should review whether this branch should be kept, merged, or removed.',
+              ].join('\n');
+
               try {
-                await github.rest.git.deleteRef({
+                const issue = await github.rest.issues.create({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  ref: `heads/${branch.name}`,
+                  title: issueTitle,
+                  body: issueBody,
+                  labels: ['status: in triage', 'area: repository tooling'],
                 });
 
-                core.info(`Deleted stale branch: ${branch.name}`);
+                core.info(`Created stale-branch review issue: #${issue.data.number}`);
               } catch (error) {
-                core.warning(`Unable to delete stale branch ${branch.name}: ${error.message}`);
+                core.warning(`Unable to create review issue for stale branch ${branch.name}: ${error.message}`);
               }
             }
