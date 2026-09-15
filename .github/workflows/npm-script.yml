@@ -26,7 +26,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write
 
 jobs:
   resolve-inputs:
@@ -96,11 +95,9 @@ jobs:
       - name: Generate coverage report
         if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
         run: npm run test-coverage-generate
-      # https://github.com/marketplace/actions/codecov
-      # https://app.codecov.io/gh/mochajs/mocha
       - name: Upload coverage reports
         if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
-        uses: codecov/codecov-action@v7
+        uses: actions/upload-artifact@v4
         with:
-          fail_ci_if_error: true
-          use_oidc: true
+          name: coverage-${{ replace(inputs.npm-script, ':', '-') }}-${{ matrix.os }}-node-${{ matrix.node_version }}
+          path: coverage/
