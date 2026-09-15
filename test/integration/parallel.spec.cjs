@@ -77,6 +77,25 @@ describe("parallel run", () => {
     ]);
   });
 
+  it("should report the crashing spec file when a worker dies", async () => {
+    // Two different spec files, two workers. The dying worker never flushes its
+    // buffered events, so its passing test is lost and only test1.js reports one.
+    const result = await runMochaJSONAsync("parallel/worker-death.js", [
+      "--parallel",
+      "--jobs",
+      "2",
+      require.resolve("./fixtures/parallel/test1.js"),
+    ]);
+    assert.deepStrictEqual(
+      result.passes.map((test) => test.fullTitle),
+      ["test1 should pass"],
+    );
+    assert.strictEqual(result.failures.length, 1);
+    const failure = result.failures[0];
+    assert.strictEqual(failure.title, "Uncaught error outside test suite");
+    assert.match(failure.file, /worker-death\.js$/);
+  });
+
   it("should correctly handle a non-writable getter reference in an exception", async () => {
     const result = await runMochaJSONAsync("parallel/getter-error-object.js", [
       "--parallel",
