@@ -27,6 +27,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  issues: write
 
 jobs:
   resolve-inputs:
@@ -98,9 +99,66 @@ jobs:
         run: npm run test-coverage-generate
       # https://github.com/marketplace/actions/codecov
       # https://app.codecov.io/gh/mochajs/mocha
-      - name: Upload coverage reports
+      - id: upload-coverage
+        name: Upload coverage reports
         if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
+        continue-on-error: true
         uses: codecov/codecov-action@v7
         with:
           fail_ci_if_error: true
           use_oidc: true
+      - name: Track Codecov failures
+        if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') && steps.upload-coverage.outcome == 'failure' }}
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueTitle = 'Codecov upload failed';
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const issueBody = [
+              'Codecov failed to upload coverage reports for this repository.',
+              '',
+              `- Workflow run: ${runUrl}`,
+              `- Commit: ${context.sha}`,
+              `- Ref: ${context.ref}`,
+              '',
+              'This issue is automatically updated when the upload fails again in CI.',
+            ].join('\n');
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'all',
+              per_page: 100,
+            });
+
+            const existingIssue = issues.find(issue => issue.title === issueTitle && !issue.pull_request);
+
+            if (existingIssue) {
+              if (existingIssue.state === 'closed') {
+                await github.rest.issues.update({
+                  owner,
+                  repo,
+                  issue_number: existingIssue.number,
+                  state: 'open',
+                });
+              }
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: existingIssue.number,
+                body: `Codecov upload failed again.\n\n${issueBody}`,
+              });
+
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title: issueTitle,
+              body: issueBody,
+              labels: ['status: in triage', 'area: repository tooling'],
+            });
