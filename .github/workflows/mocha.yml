@@ -55,6 +55,7 @@ jobs:
     permissions:
       id-token: write # for Codecov OIDC
       contents: read # for Codecov OIDC
+      issues: write
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     # https://github.com/mochajs/mocha/issues/5183
     uses: ./.github/workflows/npm-script.yml
@@ -87,6 +88,7 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v7
         with:
