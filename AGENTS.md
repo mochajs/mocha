@@ -108,7 +108,7 @@ Reusable execution details in `.github/workflows/npm-script.yml`:
 - Uses `npm ci --ignore-scripts`
 - Default Node 22 unless overridden
 - `NODE_OPTIONS=--trace-warnings`
-- Optional coverage upload via Codecov
+- Optional coverage report upload, combined by the `coverage` job in `mocha.yml`
 
 ## Transient validation issues and environment drift
 
