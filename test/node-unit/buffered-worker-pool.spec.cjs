@@ -31,23 +31,11 @@ describe("class BufferedWorkerPool", function () {
     };
 
     serializeJavascript = sinon.spy(require("serialize-javascript"));
-<<<<<<< HEAD:test/node-unit/buffered-worker-pool.spec.cjs
-    BufferedWorkerPool = rewiremock.proxy(
-      require.resolve("../../lib/nodejs/buffered-worker-pool.cjs"),
-      {
-        workerpool: {
-          pool: sinon.stub().returns(pool),
-          cpus: 8,
-        },
-        "../../lib/nodejs/serializer.js": serializer,
-        "serialize-javascript": serializeJavascript,
-=======
     BufferedWorkerPool = createBufferedWorkerPoolClass({
       workerPath: "worker.mjs",
       workerpool: {
         pool: sinon.stub().returns(pool),
         cpus: 8,
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/buffered-worker-pool.spec.js
       },
       deserialize: serializer.deserialize,
       serializeJavascript,

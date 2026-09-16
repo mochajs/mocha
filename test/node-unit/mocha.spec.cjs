@@ -10,8 +10,6 @@ const DUMBER_FIXTURE_PATH =
   require.resolve("./fixtures/dumber-module.fixture.js");
 
 describe("Mocha", function () {
-  this.timeout(5000);
-
   let stubs;
   let opts;
   let Mocha;
@@ -72,24 +70,14 @@ describe("Mocha", function () {
     Mocha = rewiremock.proxy(
       () => require("../../lib/mocha.cjs"),
       (r) => ({
-<<<<<<< HEAD:test/node-unit/mocha.spec.cjs
         "../../lib/utils.cjs": r.with(stubs.utils).callThrough(),
         "../../lib/suite.js": { Suite: stubs.Suite },
-        "../../lib/nodejs/parallel-buffered-runner.cjs":
-          stubs.ParallelBufferedRunner,
-        "../../lib/nodejs/esm-utils.cjs": stubs.esmUtils,
-        "../../lib/runner.js": { Runner: stubs.Runner },
-        "../../lib/errors.js": stubs.errors,
-=======
-        "../../lib/utils.js": r.with(stubs.utils).callThrough(),
-        "../../lib/suite.mjs": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.mjs": {
           ParallelBufferedRunner: stubs.ParallelBufferedRunner,
         },
-        "../../lib/nodejs/esm-utils": stubs.esmUtils,
-        "../../lib/runner.js": stubs.Runner,
-        "../../lib/errors.mjs": stubs.errors,
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/mocha.spec.js
+        "../../lib/nodejs/esm-utils.cjs": stubs.esmUtils,
+        "../../lib/runner.cjs": stubs.Runner,
+        "../../lib/errors.js": stubs.errors,
       }),
     );
     delete require.cache[DUMB_FIXTURE_PATH];

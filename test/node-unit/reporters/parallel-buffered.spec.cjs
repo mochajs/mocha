@@ -27,7 +27,7 @@ const {
 const {
   SerializableEvent,
   SerializableWorkerResult,
-} = require("../../../lib/nodejs/serializer");
+} = require("../../../lib/nodejs/serializer.js");
 
 describe("ParallelBuffered", function () {
   /** @type {EventEmitter} */
@@ -36,35 +36,9 @@ describe("ParallelBuffered", function () {
 
   beforeEach(function () {
     runner = new EventEmitter();
-<<<<<<< HEAD:test/node-unit/reporters/parallel-buffered.spec.cjs
-    ParallelBuffered = rewiremock.proxy(
-      () => require("../../../lib/nodejs/reporters/parallel-buffered.cjs"),
-      {
-        "../../../lib/nodejs/serializer.js": {
-          SerializableEvent: {
-            create: (eventName, runnable, err) => ({
-              eventName,
-              data: runnable,
-              error: err,
-              __type: "MockSerializableEvent",
-            }),
-          },
-          SerializableWorkerResult: {
-            create: (events, failures) => ({
-              events,
-              failures,
-              __type: "MockSerializableWorkerResult",
-            }),
-          },
-        },
-        "../../../lib/reporters/base.js": { Base: class MockBase {} },
-      },
-    );
-=======
     ParallelBuffered = createParallelBufferedClass({
       Base: class MockBase {},
     });
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/reporters/parallel-buffered.spec.js
   });
 
   afterEach(function () {

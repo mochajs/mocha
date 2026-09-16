@@ -6,26 +6,17 @@ const {
   EVENT_TEST_FAIL,
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
-<<<<<<< HEAD:test/node-unit/parallel-buffered-runner.spec.cjs
 } = require("../../lib/runner.js").Runner.constants;
-const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.js");
 const { Runner } = require("../../lib/runner.js");
 const sinon = require("sinon");
 const { constants } = require("../../lib/utils.cjs");
-=======
-} = require("../../lib/runner").constants;
-const { Suite } = require("../../lib/suite.mjs");
-const Runner = require("../../lib/runner");
-const sinon = require("sinon");
-const { constants } = require("../../lib/utils");
 const {
   BufferedWorkerPool,
 } = require("../../lib/nodejs/buffered-worker-pool.mjs");
 const {
   ParallelBufferedRunner,
 } = require("../../lib/nodejs/parallel-buffered-runner.mjs");
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/parallel-buffered-runner.spec.js
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {
@@ -40,32 +31,6 @@ describe("parallel-buffered-runner", function () {
       // tests will want to further define the behavior of these.
       run = sinon.stub();
       terminate = sinon.stub();
-<<<<<<< HEAD:test/node-unit/parallel-buffered-runner.spec.cjs
-      BufferedWorkerPool = {
-        create: sinon.stub().returns({
-          run,
-          terminate,
-          stats: sinon.stub().returns({}),
-        }),
-      };
-      /**
-       * @type {ParallelBufferedRunner}
-       */
-      ParallelBufferedRunner = rewiremock.proxy(
-        () => require("../../lib/nodejs/parallel-buffered-runner.cjs"),
-        (r) => ({
-          "../../lib/nodejs/buffered-worker-pool.cjs": {
-            BufferedWorkerPool,
-          },
-          "../../lib/utils.cjs": r.with({ warn }).callThrough(),
-          "../../lib/errors.js": r
-            .with({
-              createFatalError: sinon.stub().returns(fatalError),
-            })
-            .callThrough(),
-        }),
-      );
-=======
       sinon.stub(BufferedWorkerPool, "create").returns({
         run,
         terminate,
@@ -75,7 +40,6 @@ describe("parallel-buffered-runner", function () {
 
     afterEach(function () {
       sinon.restore();
->>>>>>> 8101ac0 (Convert worker pool modules to ESM):test/node-unit/parallel-buffered-runner.spec.js
     });
 
     describe("constructor", function () {
