@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "cross-env": "10.1.0",
-    "mocha": "10.8.2"
+    "mocha": "11.7.5"
   },
   "mocha": {
     "require": "tsx"

@@ -71,6 +71,36 @@ Mocha 10.8.2
 Node v20.19.4
 ```
 
+Mocha 11 fails:
+
+```log
+$ npm t
+
+> test
+> mocha index.test.ts; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)
+
+
+
+  using tsx
+    1) should load module correctly
+
+
+  0 passing (4ms)
+  1 failing
+
+  1) using tsx
+       should load module correctly:
+     TypeError: Cannot read properties of undefined (reading 'Person')
+      at Context.<anonymous> (index.test.ts:7:32)
+      at process.processImmediate (node:internal/timers:483:21)
+
+
+
+Exit code 1
+Mocha 11.7.5
+Node v20.19.4
+```
+
 ### Debug logs
 
 For debug logs, use `npm run test:debug`.
