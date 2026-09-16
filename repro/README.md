@@ -68,7 +68,7 @@ $ npm t
 
 Exit code 0
 Mocha 10.8.2
-Node v22.21.1
+Node v20.19.4
 ```
 
 ### Debug logs
