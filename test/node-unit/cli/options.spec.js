@@ -7,7 +7,7 @@ import { constants } from "../../../lib/error-constants.js";
 const require = createRequire(import.meta.url);
 const { proxy } = rewiremock;
 
-const modulePath = require.resolve("../../../lib/cli/options.cjs");
+const modulePath = require.resolve("../../../lib/cli/options.mjs");
 const mocharcPath = require.resolve("../../../lib/mocharc.json");
 const configPath = require.resolve("../../../lib/cli/config.cjs");
 
