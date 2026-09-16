@@ -14,10 +14,18 @@
   },
   "scripts": {
     "test:debug": "npx cross-env DEBUG=mocha:* npm test",
-    "test": "mocha; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+    "test": "mocha index.test.ts; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+  },
+  "dependencies": {
+    "@zazuko/env": "^3.0.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "cross-env": "10.1.0",
-    "mocha": "file:.."
+    "mocha": "10.8.2"
+  },
+  "mocha": {
+    "require": "tsx"
   }
 }

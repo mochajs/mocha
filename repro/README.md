@@ -50,7 +50,26 @@ Below you'll find more details about this folder.
 
 #### Repro logs
 
-(This space intentionally left blank--feel free to put your logs here!)
+Mocha 10 works:
+
+```log
+$ npm t
+
+> test
+> mocha index.test.ts; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)
+
+
+
+  using tsx
+    ✔ should load module correctly
+
+
+  1 passing (1ms)
+
+Exit code 0
+Mocha 10.8.2
+Node v22.21.1
+```
 
 ### Debug logs
 
