@@ -80,7 +80,7 @@ jobs:
                 `- Last updated: ${new Date(lastUpdated).toISOString()}`,
                 `- Branch URL: ${repoUrl}/tree/${encodeURIComponent(branch.name)}`,
                 '',
-                'A maintainer should review whether this branch should be kept, merged, or removed.',
+                '@mochajs/maintenance-crew, could someone please review whether this branch should be kept, merged, or removed?',
               ].join('\n');
 
               try {
