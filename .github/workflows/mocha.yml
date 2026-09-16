@@ -24,12 +24,11 @@ jobs:
     uses: ./.github/workflows/npm-script.yml
     with:
       npm-script: lint
-      find-conflicts: true
 
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      node-versions: "20,22,24,26"
+      node-versions: "20.19.0,20,22.12.0,22,24,26"
       npm-script: test-smoke
 
   test-node-lts:
