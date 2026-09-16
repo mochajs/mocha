@@ -24,6 +24,7 @@ jobs:
     uses: ./.github/workflows/npm-script.yml
     with:
       npm-script: lint
+      find-conflicts: true
 
   smoke:
     uses: ./.github/workflows/npm-script.yml

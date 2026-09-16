@@ -23,6 +23,11 @@ on:
         description: "Whether to set up coverage reporting or not"
         required: false
         type: boolean
+      find-conflicts:
+        description: "Whether to run the dependency tree conflict check"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -48,6 +53,7 @@ jobs:
         run: echo "splitted=$(echo '${{ inputs.os }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
 
   find-conflicts:
+    if: ${{ inputs.find-conflicts }}
     permissions:
       id-token: none
     runs-on: ${{ matrix.os }}
