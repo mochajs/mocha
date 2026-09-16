@@ -15,7 +15,7 @@ import os from "node:os";
 import { unparseMochaArgs } from "../lib/cli/unparse-args.js";
 
 import { main } from "../lib/cli/cli.js";
-import { loadOptions } from "../lib/cli/options.cjs";
+import { loadOptions } from "../lib/cli/options.mjs";
 import {
   unparseNodeFlags,
   isNodeFlag,

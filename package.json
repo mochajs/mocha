@@ -153,6 +153,7 @@
     "lib/**/*.js",
     "lib/**/*.json",
     "lib/**/*.cjs",
+    "lib/**/*.mjs",
     "index.js",
     "mocha.css",
     "mocha.js",
