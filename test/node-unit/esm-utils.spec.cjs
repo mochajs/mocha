@@ -1,5 +1,7 @@
 "use strict";
 
+const path = require("node:path");
+const Module = require("node:module");
 const esmUtils = require("../../lib/nodejs/esm-utils.cjs");
 const sinon = require("sinon");
 const url = require("node:url");
@@ -61,6 +63,28 @@ describe("esm-utils", function () {
           message: /`\.only` is not supported in parallel mode/,
         },
       );
+    });
+
+    it("should prefer dynamic import for TypeScript files", async function () {
+      const file = path.resolve(
+        __dirname,
+        "fixtures/typescript-default-export.ts",
+      );
+      const originalLoad = Module._load;
+      const stub = sinon.stub(Module, "_load").callsFake((request, parent, isMain) => {
+        if (request === file) {
+          throw new Error("TypeScript files should not be loaded via require()");
+        }
+        return originalLoad.call(Module, request, parent, isMain);
+      });
+
+      try {
+        await expect(esmUtils.requireOrImport(file), "to be fulfilled with", {
+          value: "bar",
+        });
+      } finally {
+        stub.restore();
+      }
     });
   });
 
