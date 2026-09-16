@@ -23,7 +23,7 @@ jobs:
             const now = Date.now();
             const repoUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}`;
 
-            const { data: openPullRequests } = await github.paginate(github.rest.pulls.list, {
+            const openPullRequests = await github.paginate(github.rest.pulls.list, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
@@ -36,14 +36,14 @@ jobs:
                 .map(pr => pr.head.ref)
             );
 
-            const { data: openIssues } = await github.paginate(github.rest.issues.listForRepo, {
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'open',
               per_page: 100,
             });
 
-            const { data: branches } = await github.paginate(github.rest.repos.listBranches, {
+            const branches = await github.paginate(github.rest.repos.listBranches, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               per_page: 100,
