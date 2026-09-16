@@ -1,0 +1,13 @@
+{
+  "name": "find-up-export-repro",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "mocha --require tsx \"test/**/*.spec.js\""
+  },
+  "devDependencies": {
+    "mocha": "^12.0.1",
+    "tsx": "^4.19.2",
+    "unicorn-magic": "^0.1.0"
+  }
+}
