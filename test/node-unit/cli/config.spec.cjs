@@ -142,12 +142,11 @@ describe("cli/config", function () {
     let CONFIG_FILES;
 
     beforeEach(function () {
-      findup = sinon.stub();
-      findup.onFirstCall().returns("/some/path/.mocharc.js");
+      findup = sinon.stub().returns("/some/path/.mocharc.js");
       const config = rewiremock.proxy(
         require.resolve("../../../lib/cli/config.cjs"),
         (r) => ({
-          "find-up-simple": r.by(() => ({ findUpSync: findup })),
+          "find-up": r.by(() => ({ findUpSync: findup })),
         }),
       );
       findConfig = config.findConfig;
@@ -157,7 +156,7 @@ describe("cli/config", function () {
     it("should look for one of the config files using findup-sync", function () {
       findConfig();
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: process.cwd() }],
+        args: [CONFIG_FILES, { cwd: process.cwd() }],
         returned: "/some/path/.mocharc.js",
       });
     });
@@ -165,7 +164,7 @@ describe("cli/config", function () {
     it("should support an explicit `cwd`", function () {
       findConfig("/some/path/");
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: "/some/path/" }],
+        args: [CONFIG_FILES, { cwd: "/some/path/" }],
         returned: "/some/path/.mocharc.js",
       });
     });
