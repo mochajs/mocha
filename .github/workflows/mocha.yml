@@ -16,6 +16,8 @@ on:
 
 permissions:
   contents: read
+  id-token: write # for Codecov OIDC
+  issues: write
 
 jobs:
   lint:
