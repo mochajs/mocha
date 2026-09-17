@@ -1,7 +1,7 @@
 'use strict';
 
 describe('suite-level override', function() {
-  this.timeout(10);
+  this.timeout(1);
 
   it('should not time out an async test', function(done) {
     setTimeout(done, 2);
