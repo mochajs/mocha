@@ -1,0 +1,61 @@
+name: Check PR approval requirements
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review, review_requested]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  require-approval:
+    name: Require approval for unsafe PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR approval requirements
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const title = pr.title || '';
+            const author = pr.user && pr.user.login;
+            const isRenovate = /renovate\[bot\]|renovate-bot|mend-bot/.test(author || '');
+            const versionMatch = title.match(/from\s+v?(\d+)\.(\d+)\.(\d+)\s+to\s+v?(\d+)\.(\d+)\.(\d+)/i);
+            const isMinorRenovateUpdate = () => {
+              if (!versionMatch) {
+                return false;
+              }
+
+              const [, fromMajor, fromMinor, , toMajor, toMinor] = versionMatch;
+              return Number(fromMajor) === Number(toMajor) && Number(toMinor) > Number(fromMinor);
+            };
+
+            if (isRenovate) {
+              if (isMinorRenovateUpdate()) {
+                core.info(`Renovate minor update allowed without an approval: ${title}`);
+                return;
+              }
+
+              core.setFailed(
+                `Renovate PRs must be minor version bumps to receive automated approval. "${title}" does not match the allowed pattern; a human review is required.`
+              );
+              return;
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            const hasApproval = reviews.some(review => {
+              if (review.state !== 'APPROVED') {
+                return false;
+              }
+
+              return !(review.user && review.user.login.endsWith('[bot]'));
+            });
+
+            if (!hasApproval) {
+              core.setFailed('This PR requires a human approval before it can merge.');
+            }
