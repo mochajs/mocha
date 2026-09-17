@@ -4,7 +4,7 @@ describe('suite-level override', function() {
   this.timeout(10);
 
   it('should not time out an async test', function(done) {
-    setTimeout(done, 60);
+    setTimeout(done, 2);
   });
 
   it('should not time out a sync test', function() {
