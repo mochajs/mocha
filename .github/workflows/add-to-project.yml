@@ -1,4 +1,4 @@
-name: Auto-add item to Mocha project
+name: Auto-add issue to Mocha project
 
 # Automatically adds issues to our GitHub project.
 # We silence "add" failures to reduce noise.
@@ -7,9 +7,7 @@ name: Auto-add item to Mocha project
 
 on:
   issues:
-    types: [opened, reopened]
-  pull_request:
-    types: [opened, reopened]
+    types: [opened]
 
 jobs:
   add-to-project:
