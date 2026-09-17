@@ -311,6 +311,7 @@ Tests taking longer than this amount of time will be marked as failed.
 To override you may pass the timeout in milliseconds, or a value with the `s` suffix, e.g., `--timeout 2s` and `--timeout 2000` are equivalent.
 
 To disable timeouts, use `--timeout 0`.
+This disables them for the whole run so a `this.timeout(ms)` in a test file cannot bring them back.
 
 :::note
 Synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking.

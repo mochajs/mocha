@@ -88,6 +88,40 @@ describe("--timeout", function () {
     );
   });
 
+  it("should not be overridden by a timeout set in a spec file", function (done) {
+    runMochaJSON(
+      "options/timeout-in-file-override.fixture.js",
+      ["--timeout", "0"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed")
+          .and("to have passed test count", 4)
+          .and("to have failed test count", 0);
+        done();
+      },
+    );
+  });
+
+  it("should let a spec file set its own timeouts when not 0", function (done) {
+    runMochaJSON(
+      "options/timeout-in-file-override.fixture.js",
+      ["--timeout", "20000"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have failed")
+          .and("to have passed test count", 0)
+          .and("to have failed test count", 4);
+        done();
+      },
+    );
+  });
+
   it("should complete tests having unref'd async behavior", function (done) {
     runMochaJSON(
       "options/timeout-unref.fixture.js",
