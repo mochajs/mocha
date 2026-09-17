@@ -444,6 +444,37 @@ describe("options", function () {
       });
     });
 
+    describe("reporter-option", function () {
+      let result;
+
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        readFileSync.onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({
+          "reporter-option": ["output=config.xml", "extra=keepMe"],
+        });
+        findupSync = sinon.stub().returns("/some/package.json");
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        result = loadOptions(["--reporter-option", "output=cli.xml"]);
+      });
+
+      it("should merge rc reporter options before CLI reporter options", function () {
+        expect(result, "to have property", "reporter-option", [
+          "output=config.xml",
+          "extra=keepMe",
+          "output=cli.xml",
+        ]);
+      });
+    });
+
     describe("env options", function () {
       it("should parse flags from MOCHA_OPTIONS", function () {
         readFileSync = sinon.stub().onFirstCall().returns("{}");
