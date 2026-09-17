@@ -312,7 +312,6 @@ To override you may pass the timeout in milliseconds, or a value with the `s` su
 
 To disable timeouts, use `--timeout 0`.
 This disables them for the whole run so a `this.timeout(ms)` in a test file cannot bring them back.
-That is what keeps a breakpoint from failing a test when the inspect flags imply `--timeout 0`.
 
 :::note
 Synchronous (blocking) tests are also bound by the timeout, but they will not complete until the code stops blocking.
