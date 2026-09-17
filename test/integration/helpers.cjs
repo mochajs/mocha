@@ -774,10 +774,10 @@ async function runMochaWatchJSONAsync(args, opts, change) {
 let lastTouchedTime = Date.now();
 
 /**
-  * Synchronously touch a file, creating it and all its parent directories
+ * Synchronously touch a file, creating it and all its parent directories
  * if necessary.
  * One call is one change as far as a file watcher is concerned.
- * 
+ *
  * An existing file gets a fresh, significantly-increasing mtime
  * since repeatedly setting an identical mtime is invisible to polling watchers.
  * The timestamp increases significantly so watchers don't coalesce changes.
