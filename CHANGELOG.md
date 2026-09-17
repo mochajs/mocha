@@ -1,5 +1,12 @@
 # Changelog
 
+## [12.0.3](https://github.com/mochajs/mocha/compare/v12.0.2...v12.0.3) (2026-09-17)
+
+
+### 🧹 Chores
+
+* touch a new file without stamping it afterwards ([#6349](https://github.com/mochajs/mocha/issues/6349)) ([d59467a](https://github.com/mochajs/mocha/commit/d59467a8a50c07628f5ccb11c683e8820dd4a291))
+
 ## [12.0.2](https://github.com/mochajs/mocha/compare/v12.0.1...v12.0.2) (2026-09-17)
 
 
