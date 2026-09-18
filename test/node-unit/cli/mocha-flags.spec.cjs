@@ -4,6 +4,7 @@ var { expect } = require("chai");
 const {
   types,
   expectedTypeForFlag,
+  getRunOptionDefinitions,
 } = require("../../../lib/cli/run-option-metadata.cjs");
 
 describe("mocha-flags", function () {
@@ -24,5 +25,15 @@ describe("mocha-flags", function () {
     it("returns undefined for unsupported flags", function () {
       expect(expectedTypeForFlag("--foo")).to.equal(undefined);
     });
+  });
+
+  describe("getRunOptionDefinitions()", function () {
+    getRunOptionDefinitions()
+      .filter((option) => option.name !== "spec")
+      .forEach((option) => {
+        it(`gives ${option.name} a description`, function () {
+          expect(option.description).to.be.a("string").that.is.not.empty;
+        });
+      });
   });
 });
