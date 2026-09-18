@@ -50,4 +50,15 @@ describe('node flags using "--node-option"', function () {
 
     expect(result, "to have passed test count", 2);
   });
+
+  // Regression test for https://github.com/mochajs/mocha/issues/6319
+  it("should run TypeScript specs with --node-option import=tsx", async function () {
+    this.timeout(10000);
+    const result = await runMochaAsync("options/node-flags/tsx.fixture.ts", [
+      "--node-option",
+      "import=tsx",
+    ]);
+
+    expect(result, "to have passed test count", 1);
+  });
 });
