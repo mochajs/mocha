@@ -61,4 +61,20 @@ describe('node flags using "--node-option"', function () {
 
     expect(result, "to have passed test count", 1);
   });
+
+  it("should run TypeScript specs with node-option import=tsx from a config file", async function () {
+    this.timeout(10000);
+    const result = await runMochaAsync(
+      "options/node-flags/tsx.fixture.ts",
+      [],
+      {
+        cwd: path.resolve(
+          __dirname,
+          "../fixtures/options/node-flags/tsx-config",
+        ),
+      },
+    );
+
+    expect(result, "to have passed test count", 1);
+  });
 });
