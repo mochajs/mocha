@@ -16,8 +16,6 @@ on:
 
 permissions:
   contents: read
-  id-token: write # for Codecov OIDC
-  issues: write
 
 jobs:
   lint:
@@ -53,9 +51,7 @@ jobs:
   test-node-all:
     name: Test ${{ matrix.test-part }} in all environments
     permissions:
-      id-token: write # for Codecov OIDC
-      contents: read # for Codecov OIDC
-      issues: write
+      contents: read
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     # https://github.com/mochajs/mocha/issues/5183
     uses: ./.github/workflows/npm-script.yml
@@ -81,6 +77,36 @@ jobs:
       node-versions: "20.19.4,22.18.0,24.6.0,26.8.2"
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
+
+  coverage:
+    name: Merge coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    if: ${{ !cancelled() && needs.test-node-all.result != 'skipped' }}
+    needs: test-node-all
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "26"
+      - uses: actions/download-artifact@v8
+        with:
+          path: coverage-reports
+          pattern: coverage-*
+      - name: Merge coverage reports
+        shell: bash
+        run: |
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          node scripts/merge-coverage.js coverage-reports coverage/lcov.info | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/lcov.info
 
   test-browser:
     name: Browser tests
