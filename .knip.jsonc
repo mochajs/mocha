@@ -5,6 +5,7 @@
   "ignore": [
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.cjs",
+    "test/integration/fixtures/options/watch/test-with-global-install.fixture.cjs",
   ],
   "ignoreDependencies": [
     "@test/esm-only-loader",
