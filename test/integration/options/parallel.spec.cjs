@@ -95,6 +95,8 @@ async function waitForChildPids(pid) {
 }
 
 describe("--parallel", function () {
+  this.timeout(20000);
+
   describe("when a test has a syntax error", function () {
     describe("when there is only a single test file", function () {
       it("should fail gracefully", async function () {

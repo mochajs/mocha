@@ -817,6 +817,69 @@ describe("Runner", function () {
       });
     });
 
+    describe("runTests()", function () {
+      describe("when failHookAffectedTests is enabled", function () {
+        it("should fail remaining and nested tests on a failed `beforeEach` hook", function (done) {
+          var hookError = new Error("failed hook");
+          suite.beforeEach(function () {
+            throw hookError;
+          });
+          var nested = new Suite("nested");
+          suite.addSuite(nested);
+          var directTest = new Test("direct test", noop);
+          suite.addTest(directTest);
+          var nestedTest = new Test("nested test", noop);
+          nested.addTest(nestedTest);
+
+          var newRunner = new Runner(suite, { failHookAffectedTests: true });
+          var failedTests = [];
+          newRunner.on(EVENT_TEST_FAIL, function (test) {
+            if (test.type === "test") {
+              failedTests.push(test.title);
+            }
+          });
+
+          newRunner.runTests(suite, function () {
+            expect(newRunner.failures, "to be", 3);
+            expect(directTest.state, "to be", STATE_FAILED);
+            expect(nestedTest.state, "to be", STATE_FAILED);
+            expect(failedTests, "to have length", 2);
+            expect(failedTests, "to contain", "direct test", "nested test");
+            done();
+          });
+        });
+      });
+
+      describe("when failHookAffectedTests is disabled", function () {
+        it("should not fail nested tests on a failed `beforeEach` hook", function (done) {
+          var hookError = new Error("failed hook");
+          suite.beforeEach(function () {
+            throw hookError;
+          });
+          var nested = new Suite("nested");
+          suite.addSuite(nested);
+          var directTest = new Test("direct test", noop);
+          suite.addTest(directTest);
+          var nestedTest = new Test("nested test", noop);
+          nested.addTest(nestedTest);
+
+          var failedTests = [];
+          runner.on(EVENT_TEST_FAIL, function (test) {
+            if (test.type === "test") {
+              failedTests.push(test.title);
+            }
+          });
+
+          runner.runTests(suite, function () {
+            expect(runner.failures, "to be", 1);
+            expect(directTest.state, "to be undefined");
+            expect(nestedTest.state, "to be undefined");
+            done();
+          });
+        });
+      });
+    });
+
     describe("allowUncaught()", function () {
       it("should allow unhandled errors to propagate through", function () {
         var newRunner = new Runner(suite);

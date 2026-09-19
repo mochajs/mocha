@@ -1,6 +1,6 @@
 {
   "name": "mocha",
-  "version": "12.0.1",
+  "version": "12.0.2",
   "type": "module",
   "description": "Classic, reliable, trusted test framework for Node.js and the browser",
   "keywords": [
@@ -18,7 +18,10 @@
     "jasmine",
     "playwright"
   ],
-  "author": "TJ Holowaychuk <tj@vision-media.ca>",
+  "author": {
+    "name": "Mark Wiemer",
+    "url": "https://markwiemer.com/software/mocha"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -92,7 +95,7 @@
     "chokidar": "^5.0.0",
     "debug": "^4.3.5",
     "diff": "^9.0.0",
-    "find-up": "^8.0.0",
+    "find-up-simple": "^1.0.1",
     "glob": "^13.0.0",
     "is-path-inside": "^4.0.0",
     "is-unicode-supported": "^0.1.0",
@@ -164,7 +167,7 @@
     "supports-color": false,
     "./lib/nodejs/buffered-worker-pool.cjs": false,
     "./lib/nodejs/esm-utils.cjs": false,
-    "./lib/nodejs/file-unloader.cjs": false,
+    "./lib/nodejs/file-unloader.js": false,
     "./lib/nodejs/parallel-buffered-runner.cjs": false,
     "./lib/nodejs/serializer.js": false,
     "./lib/nodejs/worker.cjs": false,

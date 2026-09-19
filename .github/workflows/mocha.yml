@@ -17,6 +17,7 @@ on:
 permissions:
   contents: read
   id-token: write # for Codecov OIDC
+  issues: write
 
 jobs:
   lint:
@@ -27,7 +28,7 @@ jobs:
   smoke:
     uses: ./.github/workflows/npm-script.yml
     with:
-      node-versions: "20,22,24,26"
+      node-versions: "20.19.0,20,22.12.0,22,24,26"
       npm-script: test-smoke
 
   test-node-lts:
@@ -54,6 +55,7 @@ jobs:
     permissions:
       id-token: write # for Codecov OIDC
       contents: read # for Codecov OIDC
+      issues: write
     # TODO: Restore "mocha-github-actions-reporter" style reporting without relying on third party module
     # https://github.com/mochajs/mocha/issues/5183
     uses: ./.github/workflows/npm-script.yml
@@ -86,6 +88,7 @@ jobs:
     timeout-minutes: 20
     permissions:
       contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v7
         with:

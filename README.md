@@ -6,7 +6,7 @@
 
 <div align="center">
 
-<a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="npm version 12.0.1-9.3"></a> <!-- x-release-please-version -->
+<a href="https://www.npmjs.com/package/mocha"><img src="https://img.shields.io/npm/v/mocha.svg" alt="npm version 12.0.2"></a> <!-- x-release-please-version -->
 <a href="https://github.com/mochajs/mocha"><img src="https://img.shields.io/node/v/mocha.svg" alt="Node Version"></a>
 [![GitHub Actions Build Status](https://github.com/mochajs/mocha/actions/workflows/mocha.yml/badge.svg)](https://github.com/mochajs/mocha/actions/workflows/mocha.yml)
 <a href="https://codecov.io/gh/mochajs/mocha"><img src="https://codecov.io/gh/mochajs/mocha/branch/main/graph/badge.svg" alt="Codecov Coverage Status"></a>
@@ -16,8 +16,8 @@
 <div align="center">
 
 <a href="https://discord.gg/KeDn2uXhER"><img alt="Chat - Discord" src="https://img.shields.io/badge/Chat-Discord-5765F2.svg" /></a>
-<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="OpenCollective Sponsors"></a>
-<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="OpenCollective Backers"></a>
+<a href="https://github.com/mochajs/mocha#sponsors"><img src="https://opencollective.com/mochajs/tiers/sponsors/badge.svg" alt="Open Collective Sponsors"></a>
+<a href="https://github.com/mochajs/mocha#backers"><img src="https://opencollective.com/mochajs/tiers/backers/badge.svg" alt="Open Collective Backers"></a>
 [![Collective Funds Guidelines v0.1](https://img.shields.io/badge/collective_funds_guidelines-v0.1-D8E8D4?style=flat&labelColor=3A6457)](https://github.com/collective-funds/guidelines)
 
 </div>
@@ -71,4 +71,4 @@ Finally, come [chat with the maintainers on Discord](https://discord.gg/KeDn2uXh
 
 ## License
 
-Copyright 2011-2024 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).
+Copyright 2011-2026 OpenJS Foundation and contributors. Licensed [MIT](https://github.com/mochajs/mocha/blob/main/LICENSE).

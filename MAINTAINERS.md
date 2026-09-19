@@ -436,17 +436,17 @@ To transition from betas or RCs to a full release, just change Release Please ba
 
 ## About The OpenJS Foundation
 
-The [OpenJS Foundation](https://js.foundation) retains copyright of all projects underneath the [mochajs org](https://github.com/mochajs).
+The [OpenJS Foundation](https://openjsf.org/) retains copyright of all projects underneath the [mochajs org](https://github.com/mochajs).
 The Foundation does not influence technical decisions nor the project roadmap.
 It is, however, charged with ensuring the continued vitality and sustainability of projects under its banner.
 
 As a maintainer, you have access to the resources the OpenJS Foundation provides.
 
-## About OpenCollective
+## About Open Collective
 
-Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs). As a maintainer, you may help decide how the funds are used. These decisions are made via a consensus-seeking process, much like any other decision.
+Mocha collects donations [via Open Collective](https://opencollective.com/mochajs). As a maintainer, you may help decide how the funds are used. These decisions are made via a consensus-seeking process, much like any other decision.
 
-Expense transparency is built in to OpenCollective.
+Expense transparency is built in to Open Collective.
 
 ---
 

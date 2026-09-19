@@ -19,19 +19,17 @@ This includes bugs, feature requests, and improvements to documentation.
 Sorry!
 It happens to the best of us.
 
-Please [file an issue using the bug report template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=type%3A+bug&projects=&template=01-bug.yml&title=%F0%9F%90%9B+Bug%3A+%3Cshort+description+of+the+bug%3E) with _as much detail as possible_ to help us reproduce and diagnose the bug.
-Most importantly:
+First, please confirm the bug by reproducing it in a minimal project.
+You can use the [repro folder](../repro/README.md) for this,
+or you can describe the minimal reproduction in the bug description.
 
-- Let us know _how_ you're running Mocha (options, flags, environment, browser or Node.js, etc.).
-- Include your test code or file(s).
-  If large, please provide a link to a repository or [gist](https://gist.github.com).
+Then, [file an issue using the bug report template](https://github.com/mochajs/mocha/issues/new?template=01-bug.yml).
 
 If we need more information from you, we'll let you know.
-If you don't within a few weeks, your issue will be closed for inactivity.
 
 ### ❗️ Propose a Change
 
-Please [file an issue using the feature request template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=type%3A+feature&projects=&template=03-feature-request.yml&title=%F0%9F%9A%80+Feature%3A+%3Cshort+description+of+the+feature%3E).
+Please [file an issue using the feature request template](https://github.com/mochajs/mocha/issues/new?assignees=&labels=type%3A+feature&projects=&template=03-feature-request.yml).
 Most importantly:
 
 - Let us know _what_ the proposed change is, in as much detail as you can
@@ -149,7 +147,7 @@ These requirements apply to all contributions and are not unique to AI-generated
 Now that the pull request exists, some tasks will be run on it:
 
 1. If you have not signed our [Contributor License Agreement](docs.linuxfoundation.org/lfx/easycla/v2-current/contributors), a friendly robot will prompt you to do so.
-   A [CLA](https://cla.js.foundation/mochajs/mocha) (electronic) signature is **required** for all contributions of code to Mocha.
+   A [CLA](https://openjsf.org/cla) (electronic) signature is **required** for all contributions of code to Mocha.
 1. Continuous integration checks will run against your changes.
    The result of these checks will be displayed on your PR.
    - If the checks fail, you must address those before the PR is accepted.
@@ -173,15 +171,21 @@ Mocha uses several external services for project infrastructure:
 
 - **[Discord](https://discord.gg/KeDn2uXhER)**: Official community chat for support, discussions, and connecting with maintainers and users.
 
-- **[EasyCLA](https://cla.js.foundation/mochajs/mocha)**: Contributor License Agreement system via Linux Foundation. All code contributions require a signed CLA. A bot prompts contributors on their first PR.
+- **[EasyCLA](https://openjsf.org/cla)**: Contributor License Agreement system via Linux Foundation. All code contributions require a signed CLA. A bot prompts contributors on their first PR.
 
 - **Netlify**: Hosts the documentation website at mochajs.org. Provides automatic deploy previews for documentation PRs and nightly scheduled deploys to update supporter information.
 
 - **[npm registry](https://www.npmjs.com/package/mocha)**: Package distribution. Mocha is also available via GitHub Releases.
 
-- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers.
+- **[OctoGuide](https://octo.guide/)**: Basic PR guidance, helping contributors know what they can do to get their items reviewed quicker.
+
+- **[Open Collective](https://opencollective.com/mochajs)**: Transparent donations to Mocha and expenses from maintainers. See also Tidelift.
 
 - **[OpenJS Foundation](https://openjsf.org)**: Mocha is part of the OpenJS Foundation which provides governance and infrastructure support. See [PROJECT_CHARTER.md](../PROJECT_CHARTER.md) for governance details.
+
+- **[Renovate](https://developer.mend.io/github/mochajs/mocha)**: Automatic dependency updates.
+
+- **[Tidelift](https://tidelift.com/lifter/package/npm/mocha/overview)**: Minor additional funding, see also Open Collective.
 
 ## 🤝 Working Together
 

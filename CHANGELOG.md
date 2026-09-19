@@ -1,5 +1,50 @@
 # Changelog
 
+## [12.0.2](https://github.com/mochajs/mocha/compare/v12.0.1...v12.0.2) (2026-09-17)
+
+
+### 🩹 Fixes
+
+* fail nested tests on beforeEach failure ([#6292](https://github.com/mochajs/mocha/issues/6292)) ([a75b43b](https://github.com/mochajs/mocha/commit/a75b43b0d69fb0529945bc71aaca9a1a5dc24188))
+* give CLI reporter-option precedence over config file ([#6331](https://github.com/mochajs/mocha/issues/6331)) ([571110f](https://github.com/mochajs/mocha/commit/571110f0e87a3871b7ae6cea3eb4f19101a39f2c))
+* propagate spec file path on parallel worker death ([#6268](https://github.com/mochajs/mocha/issues/6268)) ([55a544a](https://github.com/mochajs/mocha/commit/55a544a409cc1dc8171b715ab4010c705ab53027))
+* use find-up-simple to workaround ERR_PACKAGE_PATH_NOT_EXPORTED ([#6342](https://github.com/mochajs/mocha/issues/6342)) ([a652ff5](https://github.com/mochajs/mocha/commit/a652ff5c1b14e2476a0e81ddabf5992fb7de5c12))
+* watch existing dirs so first run starts armed ([#6263](https://github.com/mochajs/mocha/issues/6263)) ([f5c8aca](https://github.com/mochajs/mocha/commit/f5c8acac5f556e58d6d7327e660070684b8d06bb))
+
+
+### 📚 Documentation
+
+* add remaining external services ([#6316](https://github.com/mochajs/mocha/issues/6316)) ([bfe0b5d](https://github.com/mochajs/mocha/commit/bfe0b5d2f93f9c3f44a0da8936884c64ddf997e0))
+* update copyright year, holder, and URLs ([#6303](https://github.com/mochajs/mocha/issues/6303)) ([288c075](https://github.com/mochajs/mocha/commit/288c075644caef5e4cb30223677b2f5a9784de46))
+
+
+### 🧹 Chores
+
+* add "stale branch" workflow ([#6315](https://github.com/mochajs/mocha/issues/6315)) ([ad17f9f](https://github.com/mochajs/mocha/commit/ad17f9f5f8f5d56e0a6b3e05aaf1290b9adf2375))
+* add dependency conflict detection workflow ([#6246](https://github.com/mochajs/mocha/issues/6246)) ([ef0ae32](https://github.com/mochajs/mocha/commit/ef0ae32e6ef1d90fd72d08bc3ba7b507c9057911))
+* add folder for reproducing issues ([#6330](https://github.com/mochajs/mocha/issues/6330)) ([6728030](https://github.com/mochajs/mocha/commit/672803069c1f927103ca9ed3937c4a3e4a341550))
+* add stale triage reminder for unreviewed issues ([#6314](https://github.com/mochajs/mocha/issues/6314)) ([ee35133](https://github.com/mochajs/mocha/commit/ee351334a007970a06ae1810a85d6cd3297fcac4))
+* auto-remove "waiting for author" label on author activity ([#6213](https://github.com/mochajs/mocha/issues/6213)) ([dbd4322](https://github.com/mochajs/mocha/commit/dbd43220b3ff3a00aed3fb6e04a44178ba04b869))
+* convert file-unloader to ESM ([#6294](https://github.com/mochajs/mocha/issues/6294)) ([dc73f4c](https://github.com/mochajs/mocha/commit/dc73f4c7f5244911d019ace1eda4f746d6b393ce))
+* **deps:** update dependency @playwright/test to v1.63.0 ([#6299](https://github.com/mochajs/mocha/issues/6299)) ([931baa5](https://github.com/mochajs/mocha/commit/931baa53d43fe23a05ba09a889268215e450babd))
+* **deps:** update dependency eslint to v10.10.0 ([#6296](https://github.com/mochajs/mocha/issues/6296)) ([3cb22d1](https://github.com/mochajs/mocha/commit/3cb22d1a6e0393d88c4b173b860d9216709bfb61))
+* **deps:** update dependency knip to v6.35.0 ([#6324](https://github.com/mochajs/mocha/issues/6324)) ([a2416af](https://github.com/mochajs/mocha/commit/a2416af29d057f1df122f5961ad030f56151ac7b))
+* **deps:** update octoguide/bot action to v0.23.0 ([#6304](https://github.com/mochajs/mocha/issues/6304)) ([bbe5a27](https://github.com/mochajs/mocha/commit/bbe5a27ea957f1960179646c8f4a0e752a9757cc))
+* exclude "v11.x" from "stale branch" workflow ([#6338](https://github.com/mochajs/mocha/issues/6338)) ([e7b7fe1](https://github.com/mochajs/mocha/commit/e7b7fe12499fd709302a60add0dc6e19a9a901e1))
+* fix owner in auto-add workflow ([#6309](https://github.com/mochajs/mocha/issues/6309)) ([037aa8b](https://github.com/mochajs/mocha/commit/037aa8bc39378fc87bf8d5e9c61d2a0c9a85c49e))
+* fixup "auto-add" workflow ([#6308](https://github.com/mochajs/mocha/issues/6308)) ([b3f7cbc](https://github.com/mochajs/mocha/commit/b3f7cbcb9915a9b83220e9bff31eb2d798cc3185))
+* fixup workflow perms in-job ([#6327](https://github.com/mochajs/mocha/issues/6327)) ([633480c](https://github.com/mochajs/mocha/commit/633480c976dc49d73693148b43983778e2f44f49))
+* provide write perms to workflows ([#6325](https://github.com/mochajs/mocha/issues/6325)) ([d6f6f4c](https://github.com/mochajs/mocha/commit/d6f6f4cd13d1bfe1a5fc53fbefff56c1825022d8))
+* remove "stale" label on author activity ([#6312](https://github.com/mochajs/mocha/issues/6312)) ([e60fbda](https://github.com/mochajs/mocha/commit/e60fbda5769ea693d0969646b5fcdd742b9cc873))
+* remove unused .editorconfig file ([#6306](https://github.com/mochajs/mocha/issues/6306)) ([880269f](https://github.com/mochajs/mocha/commit/880269ff709414c6015bb0aee45213ed965ca51d))
+* replace find-conflicts with improved smoke versions ([#6344](https://github.com/mochajs/mocha/issues/6344)) ([2668e71](https://github.com/mochajs/mocha/commit/2668e712ee733c93005323ce0218853171f57449))
+* set author to Mark Wiemer ([#6305](https://github.com/mochajs/mocha/issues/6305)) ([cd2a730](https://github.com/mochajs/mocha/commit/cd2a73057f6bce8a29dbfb1b39912ea950d31af4))
+* **site:** update Astro (7.3.2) and fast-uri (3.1.7) ([#6301](https://github.com/mochajs/mocha/issues/6301)) ([a4f2213](https://github.com/mochajs/mocha/commit/a4f221333238e72532019de1bd0dcb91731a4003))
+* stabilize `--parallel` integration suite ([#6313](https://github.com/mochajs/mocha/issues/6313)) ([856a1ae](https://github.com/mochajs/mocha/commit/856a1ae6a8626b0ebe265fd151983c2323e9ea31))
+* stop auto-adding PRs to project ([#6352](https://github.com/mochajs/mocha/issues/6352)) ([a8309fd](https://github.com/mochajs/mocha/commit/a8309fd4a82f573b23a6185525cdfc18517f081d))
+* track Codecov in issue without failing CI ([#6323](https://github.com/mochajs/mocha/issues/6323)) ([c39f602](https://github.com/mochajs/mocha/commit/c39f602fcec5ad9dd9f8ce20f62ba18b899e590a))
+* widen --exit detection window ([#6293](https://github.com/mochajs/mocha/issues/6293)) ([ee3a4b1](https://github.com/mochajs/mocha/commit/ee3a4b1340a41d0f366e2e5628f5e5866f51b958))
+
 ## [12.0.1](https://github.com/mochajs/mocha/compare/v12.0.0...v12.0.1) (2026-09-08)
 
 
