@@ -50,7 +50,20 @@ Below you'll find more details about this folder.
 
 #### Repro logs
 
-(This space intentionally left blank--feel free to put your logs here!)
+https://github.com/mochajs/mocha/issues/980
+
+We expect `Exit code 1` but we are getting `Exit code 0`:
+
+```
+$ npm t
+
+> test
+> mocha --reporter ./crash-reporter.js; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)
+
+Exit code 0
+Mocha 12.0.2
+Node v26.5.0
+```
 
 ### Debug logs
 

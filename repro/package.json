@@ -1,5 +1,5 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "//": {
     "1": "See README.md for details on this file",
     "dependencies": {
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test:debug": "npx cross-env DEBUG=mocha:* npm test",
-    "test": "mocha; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+    "test": "mocha --reporter ./crash-reporter.js; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
   },
   "devDependencies": {
     "cross-env": "10.1.0",
