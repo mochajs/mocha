@@ -50,7 +50,49 @@ Below you'll find more details about this folder.
 
 #### Repro logs
 
-(This space intentionally left blank--feel free to put your logs here!)
+https://github.com/mochajs/mocha/issues/1948
+
+Reproduced.
+
+The run hangs until I send SIGKILL via Ctrl+C, exits with `130` (`echo $?`).
+Node 26.5.0, Linux Mint 22.1 Cinnamon, Bash.
+
+```
+$ npm t
+
+> test
+> mocha --watch --check-leaks; echo Exit code $?; echo Mocha $(mocha --version);echo Node $(node --version)
+
+
+
+  ✔ leaks a global
+  1) leaks a global
+
+  1 passing (2ms)
+  1 failing
+
+  1) leaks a global:
+     Error: global leak(s) detected: 'leakedVar'
+      at Runner.checkGlobals (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:441:21)
+      at Runner.<anonymous> (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:208:12)
+      at Runner.emit (node:events:521:24)
+      at file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:982:14
+      at done (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runnable.js:304:7)
+      at callFn (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runnable.js:385:9)
+      at Test.run (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runnable.js:348:7)
+      at Runner.runTest (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:809:10)
+      at file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:949:12
+      at next (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:724:14)
+      at file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:734:7
+      at next (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:595:14)
+      at Immediate._onImmediate (file:///home/markw/my-stuff/hello-hello/packages/mocha/packages/mocha/lib/runner.js:702:5)
+      at process.processImmediate (node:internal/timers:534:21)
+
+
+
+ℹ [mocha] waiting for changes...
+^C⚠ [mocha] cleaning up, please wait...
+```
 
 ### Debug logs
 
