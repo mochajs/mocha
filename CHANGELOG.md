@@ -1,5 +1,24 @@
 # Changelog
 
+## [12.0.3](https://github.com/mochajs/mocha/compare/v12.0.2...v12.0.3) (2026-09-19)
+
+
+### 🩹 Fixes
+
+* keep watching when the last test file is removed ([#6355](https://github.com/mochajs/mocha/issues/6355)) ([921c161](https://github.com/mochajs/mocha/commit/921c161f90a0982fe021873db1fc87b64aead525))
+* show require() error on unsupported directory import ([#6354](https://github.com/mochajs/mocha/issues/6354)) ([a68344f](https://github.com/mochajs/mocha/commit/a68344fdce07a3a26356a175ff65f6b990e3761c))
+
+
+### 📚 Documentation
+
+* refresh help output, fix stale links ([#6357](https://github.com/mochajs/mocha/issues/6357)) ([bb2e69a](https://github.com/mochajs/mocha/commit/bb2e69a953645fa12b534d20182a5ca5fbbc995b))
+
+
+### 🧹 Chores
+
+* add --import=tsx integration test ([#6356](https://github.com/mochajs/mocha/issues/6356)) ([3382fdd](https://github.com/mochajs/mocha/commit/3382fdd29e920deb625e279d3bf83b6bf0bbe405))
+* touch a new file without stamping it afterwards ([#6349](https://github.com/mochajs/mocha/issues/6349)) ([d59467a](https://github.com/mochajs/mocha/commit/d59467a8a50c07628f5ccb11c683e8820dd4a291))
+
 ## [12.0.2](https://github.com/mochajs/mocha/compare/v12.0.1...v12.0.2) (2026-09-17)
 
 
