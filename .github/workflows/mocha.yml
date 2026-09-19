@@ -92,7 +92,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: "22"
+          node-version: "26"
       - uses: actions/download-artifact@v8
         with:
           path: coverage-reports
