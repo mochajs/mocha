@@ -89,6 +89,29 @@ describe("esm-utils", function () {
         },
       );
     });
+
+    it("should surface the import() error for a TypeScript file when the require() error is unrelated", async function () {
+      sinon
+        .stub(esmUtils, "doImport")
+        .rejects(
+          Object.assign(
+            new Error("Cannot find package 'non-existent-package'"),
+            { code: "ERR_MODULE_NOT_FOUND" },
+          ),
+        );
+
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            "../../test/node-unit/fixtures/this-module-does-not-exist.ts",
+          ),
+        "to be rejected with error satisfying",
+        {
+          code: "ERR_MODULE_NOT_FOUND",
+          message: /non-existent-package/,
+        },
+      );
+    });
   });
 
   describe("loadFilesAsync()", function () {
