@@ -5,102 +5,62 @@ description: Running Mocha in your terminal.
 
 Running `npx mocha --help` will show the full list of available commands:
 
-{/* This output is defined in lib/cli/run.cjs */}
+{/* This output is defined in lib/cli/cli.js and lib/cli/run-option-metadata.cjs */}
 
 ```plaintext
-mocha [spec..]
+Usage: mocha [spec..]
+       mocha init <path>
 
-Run tests with Mocha
+Commands:
+  init <path>  create a client-side Mocha setup at <path>
 
-Commands
-  mocha inspect [spec..]  Run tests with Mocha                         [default]
-  mocha init <path>       create a client-side Mocha setup at <path>
-
-Rules & Behavior
-      --allow-uncaught              Allow uncaught errors to propagate [boolean]
-  -A, --async-only                  Require all tests to use a callback (async)
-                                    or return a Promise                [boolean]
-  -b, --bail                        Abort ("bail") after first test failure
-                                                                       [boolean]
-      --check-leaks                 Check for global variable leaks    [boolean]
-      --delay                       Delay initial execution of root suite
-                                                                       [boolean]
-      --dry-run                     Report tests without executing them[boolean]
-      --exit                        Force Mocha to quit after tests complete
-                                                                       [boolean]
-      --pass-on-failing-test-suite  Not fail test run if tests were failed
-                                                      [boolean] [default: false]
-      --fail-hook-affected-tests    Report tests as failed when affected by hook
-                                    failures (before/beforeEach)       [boolean]
-      --fail-zero                   Fail test run if no test(s) encountered
-                                                                       [boolean]
-      --forbid-only                 Fail if exclusive test(s) encountered
-                                                                       [boolean]
-      --forbid-pending              Fail if pending test(s) encountered[boolean]
-      --global, --globals           List of allowed global variables     [array]
-  -j, --jobs                        Number of concurrent jobs for --parallel;
-                                    use 1 to run in serial
-                                   [number] [default: (number of CPU cores - 1)]
-  -p, --parallel                    Run tests in parallel              [boolean]
-      --posix-exit-codes            Use POSIX and UNIX shell exit codes as
-                                    Mocha's return value               [boolean]
-      --retries                     Retry failed tests this many times  [number]
-  -s, --slow                        Specify "slow" test threshold (in
-                                    milliseconds)         [string] [default: 75]
-  -t, --timeout, --timeouts         Specify test timeout threshold (in
-                                    milliseconds)       [string] [default: 2000]
-  -u, --ui                          Specify user interface
-                                                       [string] [default: "bdd"]
-
-Reporting & Output
-  -c, --color, --colors                     Force-enable color output  [boolean]
-      --diff                                Show diff on failure
-                                                       [boolean] [default: true]
-      --full-trace                          Display full stack traces  [boolean]
-      --inline-diffs                        Display actual/expected differences
-                                            inline within each string  [boolean]
-  -R, --reporter                            Specify reporter to use
-                                                      [string] [default: "spec"]
-  -O, --reporter-option,                    Reporter-specific options
-  --reporter-options                        (<k=v,[k1=v1,..]>)           [array]
-      --clear-screen                        Clear the terminal before each run
-                                            in watch mode              [boolean]
-
-Configuration
-      --config       Path to config file   [string] [default: (nearest rc file)]
-  -n, --node-option  Node or V8 option (no leading "--")                 [array]
-      --package      Path to package.json for config                    [string]
-
-File Handling
-      --extension          File extension(s) to load
-                                           [array] [default: ["js","cjs","mjs"]]
-      --file               Specify file(s) to be loaded prior to root suite
-                           execution                   [array] [default: (none)]
-      --ignore, --exclude  Ignore file(s) or glob pattern(s)
-                                                       [array] [default: (none)]
-      --recursive          Look for tests in subdirectories            [boolean]
-  -r, --require            Require module              [array] [default: (none)]
-  -S, --sort               Sort test files                             [boolean]
-  -w, --watch              Watch files in the current working directory for
-                           changes                                     [boolean]
-      --watch-files        List of paths or globs to watch               [array]
-      --watch-ignore       List of paths or globs to exclude from watching
-                                      [array] [default: ["node_modules",".git"]]
-
-Test Filters
-  -f, --fgrep   Only run tests containing this string                   [string]
-  -g, --grep    Only run tests matching this string or regexp           [string]
-  -i, --invert  Inverts --grep and --fgrep matches                     [boolean]
-
-Positional Arguments
-  spec  One or more files, directories, or globs to test
-                                                     [array] [default: ["test"]]
-
-Other Options
-  -h, --help             Show usage information & exit                 [boolean]
-  -V, --version          Show version number & exit                    [boolean]
-      --list-interfaces  List built-in user interfaces & exit          [boolean]
-      --list-reporters   List built-in reporters & exit                [boolean]
+Options:
+  --extension                        File extension(s) to load
+  --file                             Specify file(s) to be loaded prior to root suite execution
+  --global, --globals                List of allowed global variables
+  --ignore, --exclude                Ignore file(s) or glob pattern(s)
+  --node-option, -n                  Node or V8 option (no leading "--")
+  --reporter-option, --reporter-options, -O Reporter-specific options (<k=v,[k1=v1,..]>)
+  --require, -r                      Require module
+  --watch-files                      List of paths or globs to watch
+  --watch-ignore                     List of paths or globs to exclude from watching
+  --allow-uncaught                   Allow uncaught errors to propagate
+  --async-only, -A                   Require all tests to use a callback (async) or return a Promise
+  --bail, -b                         Abort ("bail") after first test failure
+  --check-leaks                      Check for global variable leaks
+  --color, -c, --colors              Force-enable color output
+  --delay                            Delay initial execution of root suite
+  --diff                             Show diff on failure
+  --dry-run                          Report tests without executing them
+  --exit                             Force Mocha to quit after tests complete
+  --fail-hook-affected-tests         Report tests as failed when affected by hook failures (before/beforeEach)
+  --pass-on-failing-test-suite       Not fail test run if tests were failed
+  --fail-zero                        Fail test run if no test(s) encountered
+  --forbid-only                      Fail if exclusive test(s) encountered
+  --forbid-pending                   Fail if pending test(s) encountered
+  --full-trace                       Display full stack traces
+  --inline-diffs                     Display actual/expected differences inline within each string
+  --invert, -i                       Inverts --grep and --fgrep matches
+  --list-interfaces                  List built-in user interfaces & exit
+  --list-reporters                   List built-in reporters & exit
+  --no-colors, -C                    Force-disable color output
+  --parallel, -p                     Run tests in parallel
+  --posix-exit-codes                 Use POSIX and UNIX shell exit codes as Mocha's return value
+  --recursive                        Look for tests in subdirectories
+  --sort, -S                         Sort test files
+  --watch, -w                        Watch files in the current working directory for changes
+  --retries                          Retry failed tests this many times
+  --jobs, -j                         Number of concurrent jobs for --parallel; use 1 to run in serial
+  --config                           Path to config file
+  --fgrep, -f                        Only run tests containing this string
+  --grep, -g                         Only run tests matching this string or regexp
+  --package                          Path to package.json for config
+  --reporter, -R                     Specify reporter to use
+  --ui, -u                           Specify user interface
+  --slow, -s                         Specify "slow" test threshold (in milliseconds)
+  --timeout, -t, --timeouts          Specify test timeout threshold (in milliseconds)
+  --help, -h                         Show usage information & exit
+  --version, -V                      Show version number & exit
 
 Mocha Resources
     Chat: https://discord.gg/KeDn2uXhER
@@ -175,7 +135,7 @@ It _can_ be time-consuming to debug--because it's not always obvious where the p
 
 To ensure your tests aren't leaving messes around, here are some ideas to get started:
 
-- See the [Node.js guide to debugging](https://nodejs.org/en/docs/inspector)
+- See the [Node.js guide to debugging](https://nodejs.org/en/learn/getting-started/debugging)
 - Use the new [`async_hooks`](https://github.com/nodejs/node/blob/master/doc/api/async_hooks.md) API ([example](https://gist.github.com/boneskull/7fe75b63d613fa940db7ec990a5f5843))
 - Try something like [wtfnode](https://npm.im/wtfnode)
 - Use [`.only`](/declaring/exclusive-tests) until you find the test that causes Mocha to hang
@@ -630,7 +590,7 @@ Implies `--timeout 0`.
 :::note[Updated in v6.0.0]
 :::
 
-Each flag annotated of type `[boolean]` in Mocha's `--help` output can be _negated_ by prepending `--no-` to the flag name.
+Each boolean flag can be _negated_ by prepending `--no-` to the flag name.
 For example, `--no-color` will disable Mocha's color output, which is enabled by default.
 
 Unless otherwise noted, _all_ boolean flags default to `false`.
@@ -649,10 +609,7 @@ You can also pass `node` flags to Node.js using [`--node-option`](#--node-option
 
 ### `--enable-source-maps`
 
-:::note[New in Node.js v12.12.0]
-:::
-
-If the [`--enable-source-maps`](https://nodejs.org/dist/latest-v12.x/docs/api/cli.html#cli_enable_source_maps) flag
+If the [`--enable-source-maps`](https://nodejs.org/api/cli.html#--enable-source-maps) flag
 is passed to Mocha, source maps will be collected and used to provide accurate stack traces for transpiled code:
 
 ```bash
