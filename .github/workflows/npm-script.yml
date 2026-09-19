@@ -42,7 +42,8 @@ jobs:
       - id: split-node-versions
         if: inputs.node-versions
         run: echo "splitted=$(echo '${{ inputs.node-versions }}' | jq -R -c 'split(",")')" >> $GITHUB_OUTPUT
-      # Artifact names cannot contain ":" which every test script uses.
+      # Artifact names cannot contain `:` (colon) which every test script uses.
+      # Replace `:` with `-` (dash) in artifact names
       - id: sanitize-npm-script
         env:
           NPM_SCRIPT: ${{ inputs.npm-script }}
