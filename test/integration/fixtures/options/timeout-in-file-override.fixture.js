@@ -9,21 +9,21 @@ describe('suite-level override', function() {
 
   it('should not time out a sync test', function() {
     var start = Date.now();
-    while (Date.now() - start < 60);
+    while (Date.now() - start < 2);
   });
 });
 
 describe('test-level override', function() {
   it('should not time out', function(done) {
-    this.timeout(10);
-    setTimeout(done, 60);
+    this.timeout(1);
+    setTimeout(done, 2);
   });
 });
 
 describe('hook-level override', function() {
   before(function(done) {
-    this.timeout(10);
-    setTimeout(done, 60);
+    this.timeout(1);
+    setTimeout(done, 2);
   });
 
   it('should run once the hook is done', function() {});
