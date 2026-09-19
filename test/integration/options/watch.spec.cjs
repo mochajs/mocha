@@ -515,6 +515,49 @@ describe("--watch", function () {
       });
     });
 
+    // Regression test for https://github.com/mochajs/mocha/issues/1948
+    it("reports a global leak on every run", function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture("options/watch/global-leak.fixture.cjs", testFile);
+
+      return runMochaWatchJSONAsync(
+        [testFile, "--check-leaks"],
+        tempDir,
+        () => {
+          touchFile(testFile);
+        },
+      ).then((results) => {
+        expect(results, "to have length", 2);
+        expect(results[0].failures, "to have length", 1);
+        expect(results[1].failures, "to have length", 1);
+      });
+    });
+
+    it("keeps globals introduced by the first run", function () {
+      const testFile = path.join(tempDir, "test.js");
+      copyFixture(
+        "options/watch/test-with-global-install.fixture.cjs",
+        testFile,
+      );
+      copyFixture(
+        "options/watch/global-install.fixture.cjs",
+        path.join(tempDir, "lib", "global-install.js"),
+      );
+
+      return runMochaWatchJSONAsync(
+        [testFile, "--check-leaks", "--watch-files", "test.js"],
+        tempDir,
+        () => {
+          touchFile(testFile);
+        },
+      ).then((results) => {
+        expect(results, "to have length", 2);
+        expect(results[0].failures, "to have length", 0);
+        expect(results[1].failures, "to have length", 0);
+        expect(results[1].passes, "to have length", 1);
+      });
+    });
+
     // Regression test for https://github.com/mochajs/mocha/issues/2027
     it("respects --fgrep on re-runs", async function () {
       const testFile = path.join(tempDir, "test.js");
