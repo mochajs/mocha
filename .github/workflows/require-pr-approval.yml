@@ -1,0 +1,48 @@
+name: Check PR approval requirements
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, edited, ready_for_review, review_requested]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  require-approval:
+    name: Require approval for unsafe PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Gather PR metadata
+        id: metadata
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            const hasHumanApproval = reviews.some(review => {
+              if (review.state !== 'APPROVED') {
+                return false;
+              }
+
+              return !(review.user && review.user.login.endsWith('[bot]'));
+            });
+
+            core.setOutput('author', pr.user.login);
+            core.setOutput('title', pr.title);
+            core.setOutput('has-human-approval', String(hasHumanApproval));
+
+      - name: Validate PR approval requirements
+        env:
+          PR_AUTHOR: ${{ steps.metadata.outputs.author }}
+          PR_TITLE: ${{ steps.metadata.outputs.title }}
+          HAS_HUMAN_APPROVAL: ${{ steps.metadata.outputs.has-human-approval }}
+        run: node ./scripts/check-pr-approval.cjs --author "$PR_AUTHOR" --title "$PR_TITLE" --has-human-approval "$HAS_HUMAN_APPROVAL"
