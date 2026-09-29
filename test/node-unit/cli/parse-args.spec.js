@@ -52,6 +52,18 @@ describe("parse-args", function () {
     );
   });
 
+  it("expands one-letter aliases after two dashes", function () {
+    expect(parseMochaArgs(["--t", "0"], defaults), "to satisfy", {
+      timeout: "0",
+    });
+    expect(parseMochaArgs(["--t=0"], defaults), "to satisfy", {
+      timeout: "0",
+    });
+    expect(parseMochaArgs(["-t", "0"], defaults), "to satisfy", {
+      timeout: "0",
+    });
+  });
+
   it("canonicalizes long aliases in equals form", function () {
     const result = parseMochaArgs(
       ["--reporter-options=a=b", "--timeouts=200"],
