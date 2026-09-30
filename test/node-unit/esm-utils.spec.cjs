@@ -6,6 +6,10 @@ const url = require("node:url");
 
 describe("esm-utils", function () {
   describe("requireOrImport", function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
     it("should show an informative error message for a broken default import", async function () {
       return expect(
         () =>
@@ -53,12 +57,35 @@ describe("esm-utils", function () {
       return expect(
         () =>
           esmUtils.requireOrImport(
-            "../../test/node-unit/fixtures/mock-mocha-forbidden-exclusivity-err.ts",
+            "../../test/node-unit/fixtures/commonjs/mock-mocha-forbidden-exclusivity-err.ts",
           ),
         "to be rejected with error satisfying",
         {
           code: "ERR_MOCHA_FORBIDDEN_EXCLUSIVITY",
           message: /`\.only` is not supported in parallel mode/,
+        },
+      );
+    });
+
+    it("should surface the require() error when import() fails on a directory specifier", async function () {
+      sinon
+        .stub(esmUtils, "doImport")
+        .rejects(
+          Object.assign(
+            new Error("Directory import '/fixtures/lib' is not supported"),
+            { code: "ERR_UNSUPPORTED_DIR_IMPORT" },
+          ),
+        );
+
+      return expect(
+        () =>
+          esmUtils.requireOrImport(
+            "../../test/node-unit/fixtures/this-module-does-not-exist.cjs",
+          ),
+        "to be rejected with error satisfying",
+        {
+          code: "MODULE_NOT_FOUND",
+          message: /this-module-does-not-exist/,
         },
       );
     });

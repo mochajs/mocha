@@ -1,12 +1,9 @@
 ---
 import Default from "@astrojs/starlight/components/PageTitle.astro";
-import type { ComponentProps } from "astro/types";
 
 import HomepagePageTitle from "./HomepagePageTitle.astro";
 
-type Props = ComponentProps<typeof Default>;
-
-const isHomepage = Astro.props.slug === "";
+const isHomepage = Astro.locals.starlightRoute.id === "";
 ---
 
-{isHomepage ? <HomepagePageTitle /> : <Default {...Astro.props} />}
+{isHomepage ? <HomepagePageTitle /> : <Default />}

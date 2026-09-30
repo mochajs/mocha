@@ -10,6 +10,7 @@
 
 import d from "debug";
 import { spawn } from "node:child_process";
+import fs from "node:fs";
 import os from "node:os";
 import { unparseMochaArgs } from "../lib/cli/unparse-args.js";
 
@@ -95,6 +96,17 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
 
   debug("final node argv", nodeArgv);
 
+  const stdio = ["inherit", "inherit", "inherit"];
+  mochaArgs._ = mochaArgs._?.map((arg) => {
+    const match = /^\/dev\/fd\/(\d+)$/.exec(arg);
+    if (!match || !fs.existsSync(arg)) {
+      return arg;
+    }
+
+    stdio.push(Number(match[1]));
+    return `/dev/fd/${stdio.length - 1}`;
+  });
+
   const args = [].concat(
     nodeArgv,
     mochaPath,
@@ -108,7 +120,7 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   );
 
   const proc = spawn(process.execPath, args, {
-    stdio: "inherit",
+    stdio,
   });
 
   proc.on("exit", (code, signal) => {

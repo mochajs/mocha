@@ -20,8 +20,8 @@ const proxyLoadOptions = ({
   proxy(modulePath, (r) => ({
     "node:fs": r.with({ readFileSync }).directChildOnly(),
     [mocharcPath]: defaults,
-    "find-up": r
-      .by(() => (findupSync ? { sync: findupSync } : {}))
+    "find-up-simple": r
+      .by(() => (findupSync ? { findUpSync: findupSync } : {}))
       .directChildOnly(),
     [configPath]: r.with({ findConfig, loadConfig }).directChildOnly(),
   })).loadOptions;
@@ -444,6 +444,37 @@ describe("options", function () {
       });
     });
 
+    describe("reporter-option", function () {
+      let result;
+
+      beforeEach(function () {
+        readFileSync = sinon.stub();
+        readFileSync.onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({
+          "reporter-option": ["output=config.xml", "extra=keepMe"],
+        });
+        findupSync = sinon.stub().returns("/some/package.json");
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        result = loadOptions(["--reporter-option", "output=cli.xml"]);
+      });
+
+      it("should merge rc reporter options before CLI reporter options", function () {
+        expect(result, "to have property", "reporter-option", [
+          "output=config.xml",
+          "extra=keepMe",
+          "output=cli.xml",
+        ]);
+      });
+    });
+
     describe("env options", function () {
       it("should parse flags from MOCHA_OPTIONS", function () {
         readFileSync = sinon.stub().onFirstCall().returns("{}");
@@ -465,6 +496,62 @@ describe("options", function () {
           retries: 42,
           color: true,
         });
+      });
+
+      it("should parse quoted flags from MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon
+          .stub(process, "env")
+          .value({ MOCHA_OPTIONS: "--grep 'foo bar' --color" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to satisfy", {
+          grep: "foo bar",
+          color: true,
+        });
+      });
+
+      it("should allow negative numeric values in MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--timeout -1" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to have property", "timeout", "-1");
+      });
+
+      it("should allow dash-prefixed option values in MOCHA_OPTIONS", function () {
+        readFileSync = sinon.stub().onFirstCall().returns("{}");
+        findConfig = sinon.stub().returns("/some/.mocharc.json");
+        loadConfig = sinon.stub().returns({});
+        findupSync = sinon.stub().returns("/some/package.json");
+        sinon.stub(process, "env").value({ MOCHA_OPTIONS: "--grep -1" });
+
+        loadOptions = proxyLoadOptions({
+          readFileSync,
+          findConfig,
+          loadConfig,
+          findupSync,
+        });
+
+        expect(loadOptions(), "to have property", "grep", "-1");
       });
     });
 
@@ -786,6 +873,10 @@ describe("options", function () {
 
       it("does not throw error if numeric value is passed to an array flag", function () {
         expect(() => loadOptions(`--spec ${numericArg}`), "not to throw");
+      });
+
+      it("does not throw error if a positional file name begins with a number", function () {
+        expect(() => loadOptions("1-spec.js"), "not to throw");
       });
     });
 

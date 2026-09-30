@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "//": {
+    "1": "See README.md for details on this file",
+    "dependencies": {
+      "mocha-local": "file:..",
+      "mocha-v11": "11.8.0",
+      "mocha-v12": "12.0.1"
+    },
+    "scripts": {
+      "test:debug": "npx cross-env DEBUG=mocha:* npm test",
+      "test": "mocha; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+    }
+  },
+  "scripts": {
+    "test:debug": "npx cross-env DEBUG=mocha:* npm test",
+    "test": "mocha; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+  },
+  "devDependencies": {
+    "cross-env": "10.1.0",
+    "mocha": "file:.."
+  }
+}

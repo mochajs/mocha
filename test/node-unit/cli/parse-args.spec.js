@@ -154,6 +154,29 @@ describe("parse-args", function () {
     );
   });
 
+  it("orders reporter-option values from lowest to highest priority source", function () {
+    expect(
+      parseMochaArgs(
+        [],
+        defaults,
+        { "reporter-option": ["output=cli.xml"] },
+        { "reporter-option": ["output=env.xml"] },
+        { "reporter-option": ["output=config.xml", "extra=keepMe"] },
+        { "reporter-option": ["output=pkg.xml"] },
+      ),
+      "to satisfy",
+      {
+        "reporter-option": [
+          "output=pkg.xml",
+          "output=config.xml",
+          "extra=keepMe",
+          "output=env.xml",
+          "output=cli.xml",
+        ],
+      },
+    );
+  });
+
   it("preserves boolean negation including long alias negation", function () {
     expect(
       parseMochaArgs(
@@ -245,6 +268,85 @@ describe("parse-args", function () {
       "to throw",
       /Not enough arguments following: grep/,
     );
+  });
+
+  it("accepts negative numeric option values in separated form", function () {
+    expect(parseMochaArgs(["--timeout", "-1"], defaults), "to satisfy", {
+      timeout: "-1",
+    });
+  });
+
+  it("accepts negative numeric option values from strings", function () {
+    expect(parseMochaArgs("--timeout -1", defaults), "to satisfy", {
+      timeout: "-1",
+    });
+  });
+
+  it("accepts decimal and exponential negative numeric option values", function () {
+    ["-1.5", "-.5", "-1e3"].forEach((timeout) => {
+      expect(parseMochaArgs(["--timeout", timeout], defaults), "to satisfy", {
+        timeout,
+      });
+    });
+  });
+
+  it("parses double-quoted arguments from strings", function () {
+    expect(
+      parseMochaArgs('--grep "foo bar" --retries 3 --color', defaults),
+      "to satisfy",
+      {
+        grep: "foo bar",
+        retries: 3,
+        color: true,
+      },
+    );
+  });
+
+  it("parses single-quoted arguments from strings", function () {
+    expect(parseMochaArgs("--grep 'foo bar' --color", defaults), "to satisfy", {
+      grep: "foo bar",
+      color: true,
+    });
+  });
+
+  it("parses quoted values attached to options from strings", function () {
+    expect(parseMochaArgs('--grep="foo bar"', defaults), "to satisfy", {
+      grep: "foo bar",
+    });
+  });
+
+  it("preserves empty quoted option values from strings", function () {
+    expect(parseMochaArgs('--grep ""', defaults), "to satisfy", {
+      grep: "",
+    });
+  });
+
+  it("parses escaped spaces and quotes from strings", function () {
+    expect(
+      parseMochaArgs('--grep foo\\ bar --fgrep "a \\"quote\\""', defaults),
+      "to satisfy",
+      {
+        grep: "foo bar",
+        fgrep: 'a "quote"',
+      },
+    );
+  });
+
+  it("splits arguments on all spaces and tabs", function () {
+    expect(
+      parseMochaArgs("\t--grep  \t foo   --color", defaults),
+      "to satisfy",
+      {
+        grep: "foo",
+        color: true,
+      },
+    );
+  });
+
+  it("accepts unterminated quoted arguments", function () {
+    expect(parseMochaArgs('--grep "foo', defaults), "to satisfy", {
+      grep: '"foo',
+    });
   });
 
   it("preserves directly-passed Node and V8 flags", function () {

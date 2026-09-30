@@ -23,7 +23,9 @@ env CI=STAGE mocha
 Then in your test or code reference it via `process.env.CI`. e.g.
 
 ```javascript
-if (process.env.CI === "STAGE") // do something
+if (process.env.CI === "STAGE") {
+  // do something
+}
 ```
 
 The value is available from anywhere in a spec file allowing you to set values from it before the tests run. e.g.

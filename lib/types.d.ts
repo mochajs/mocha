@@ -10,7 +10,7 @@ import type { FSWatcher, MatchFunction } from "chokidar" with {
 
 import type { constants } from "./error-constants.js";
 import type Mocha from "./mocha.cjs";
-import Runner from "./runner.cjs";
+import { Runner } from "./runner.js";
 
 /**
  * Command-line options
@@ -194,6 +194,8 @@ export type PluginFinalizer = (
  * An object to configure how Mocha gathers test files
  */
 export interface FileCollectionOptions {
+  /** Return an empty list instead of exiting when no test files are found */
+  allowEmpty?: boolean;
   /** File extensions to use */
   extension?: string[];
   /** Files, dirs, globs to run */

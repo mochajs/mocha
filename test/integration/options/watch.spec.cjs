@@ -67,6 +67,26 @@ describe("--watch", function () {
       });
     });
 
+    it("keeps watching when the last test file is removed", function () {
+      const testFile = path.join(tempDir, "test/a.js");
+      copyFixture(DEFAULT_FIXTURE, testFile);
+
+      return runMochaWatchJSONAsync(
+        ["test/**/*.js", "--watch-files", "test/**/*.js"],
+        { cwd: tempDir, expectedRuns: 3 },
+        async (_mochaProcess, { waitForRuns }) => {
+          fs.rmSync(testFile, { force: true });
+          await waitForRuns(2);
+          copyFixture("passing.fixture.cjs", path.join(tempDir, "test/b.js"));
+        },
+      ).then((results) => {
+        expect(results, "to have length", 3);
+        expect(results[0].passes, "to have length", 1);
+        expect(results[1].passes, "to have length", 0);
+        expect(results[2].passes, "to have length", 2);
+      });
+    });
+
     describe("when in parallel mode", function () {
       it("reruns test when watched test file is touched", function () {
         const testFile = path.join(tempDir, "test.js");
@@ -76,6 +96,26 @@ describe("--watch", function () {
           touchFile(testFile);
         }).then((results) => {
           expect(results, "to have length", 2);
+        });
+      });
+
+      it("keeps watching when the last test file is removed", function () {
+        const testFile = path.join(tempDir, "test/a.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchJSONAsync(
+          ["--parallel", "test/**/*.js", "--watch-files", "test/**/*.js"],
+          { cwd: tempDir, expectedRuns: 3 },
+          async (_mochaProcess, { waitForRuns }) => {
+            fs.rmSync(testFile, { force: true });
+            await waitForRuns(2);
+            copyFixture("passing.fixture.cjs", path.join(tempDir, "test/b.js"));
+          },
+        ).then((results) => {
+          expect(results, "to have length", 3);
+          expect(results[0].passes, "to have length", 1);
+          expect(results[1].passes, "to have length", 0);
+          expect(results[2].passes, "to have length", 2);
         });
       });
     });

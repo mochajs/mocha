@@ -774,14 +774,14 @@ async function runMochaWatchJSONAsync(args, opts, change) {
 let lastTouchedTime = Date.now();
 
 /**
- * Synchronously touch a file with a fresh, strictly-increasing mtime.
- * Creates the file and all its parent directories if necessary.
+ * Synchronously touch a file, creating it and all its parent directories
+ * if necessary.
+ * One call is one change as far as a file watcher is concerned.
  *
- * Every touch gets its own mtime so that each one registers as a change on
- * every file-watcher backend; repeatedly setting an identical mtime is
- * invisible to polling watchers. Note that watchers may still coalesce
- * repeated touches of the same file made in very quick succession --
- * space them out in time.
+ * An existing file gets a fresh, significantly-increasing mtime
+ * since repeatedly setting an identical mtime is invisible to polling watchers.
+ * The timestamp increases significantly so watchers don't coalesce changes.
+ * A new file is only created: its timestamp is irrelevant.
  *
  * @param {string} filepath - Path to file
  */
@@ -791,10 +791,12 @@ function touchFile(filepath) {
   const touchTime = new Date(lastTouchedTime);
   try {
     fs.utimesSync(filepath, touchTime, touchTime);
-  } catch {
+  } catch (err) {
+    if (err.code !== "ENOENT") {
+      throw err;
+    }
     const fd = fs.openSync(filepath, "a");
     fs.closeSync(fd);
-    fs.utimesSync(filepath, touchTime, touchTime);
   }
 }
 

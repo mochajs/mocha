@@ -11,6 +11,7 @@
     "coffeescript",
     "fake",
     "non-existent-package",
+    "tsx",
   ],
   "mocha": {
     "entry": ["test/**/*.{js,ts,mjs,cjs}"],

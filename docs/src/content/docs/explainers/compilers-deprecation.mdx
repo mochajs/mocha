@@ -1,17 +1,9 @@
 ---
-description: Compilers deprecation notice.
+description: Moving off the removed `--compilers` option.
 title: Compilers deprecation
 ---
 
-If you're here, you probably hit the deprecation notice. Sorry about that!
-
-## Will it break?
-
-This is a _soft_ deprecation, which means you get nagged about it, but it won't break (yet).
-
-## Make it go away
-
-To suppress this warning, execute `mocha` with the `--no-deprecation` flag (though you won't get notice of any _other_ deprecations you may encounter either).
+`--compilers` was deprecated in v4.0.0 and removed in v6.0.0. As of v12.0.0, Mocha treats it as normal text, not as an option.
 
 ## ... but why?
 
@@ -40,7 +32,7 @@ You'll have to handle file extensions as well. Mocha, by default, only loads `.j
 $ mocha --compilers coffee:coffee-script/register --recursive ./test
 ```
 
-Then this is how you'd accomplish the same thing (`**` roughly means "recursive") in v4:
+Then this is how you'd accomplish the same thing (`**` roughly means "recursive") in v4 and later:
 
 ```bash
 $ mocha --require coffeescript/register "test/**/*.js"
@@ -59,6 +51,6 @@ $ mocha --require coffeescript/register "test/**/*.{js,coffee}"
 
 When using `--watch`, you will also need to specify the extension(s) to watch via `--watch-extensions`, e.g.:
 
-```js
+```bash
 $ mocha --require coffeescript/register --watch --watch-extensions js,coffee "test/**/*.{js,coffee}"
 ```
