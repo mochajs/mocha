@@ -14,10 +14,15 @@
   },
   "scripts": {
     "test:debug": "npx cross-env DEBUG=mocha:* npm test",
-    "test": "mocha; echo Exit code $?; echo Mocha $(mocha --version); echo Node $(node --version)"
+    "test": "npm run test:v12; npm run test:v11; npm run test:local",
+    "test:v12": "node node_modules/mocha-v12/bin/mocha.js test/hello.spec.js --t 0",
+    "test:v11": "node node_modules/mocha-v11/bin/mocha.js test/hello.spec.js --t 0",
+    "test:local": "node ../bin/mocha.js test/hello.spec.js --t 0"
   },
   "devDependencies": {
     "cross-env": "10.1.0",
-    "mocha": "file:.."
+    "mocha": "file:..",
+    "mocha-v12": "npm:mocha@12.0.1",
+    "mocha-v11": "npm:mocha@11.7.5"
   }
 }
