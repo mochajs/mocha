@@ -43,11 +43,57 @@ describe("PR approval check", function () {
       );
     });
 
+    it("rejects a major update hidden by swapping duplicate package versions", function () {
+      const baseLockfile = lockfile("10.8.2");
+      const headLockfile = lockfile("10.9.1");
+      baseLockfile.packages["node_modules/mocha"] = {
+        version: "11.0.0",
+        name: "mocha",
+      };
+      baseLockfile.packages["node_modules/eslint/node_modules/mocha"] = {
+        version: "12.0.0",
+        name: "mocha",
+      };
+      headLockfile.packages["node_modules/mocha"] = {
+        version: "12.0.0",
+        name: "mocha",
+      };
+      headLockfile.packages["node_modules/eslint/node_modules/mocha"] = {
+        version: "11.1.0",
+        name: "mocha",
+      };
+
+      expect(
+        isSafeMinorUpdate(
+          { "package-lock.json": baseLockfile },
+          { "package-lock.json": headLockfile },
+        ),
+        "to be false",
+      );
+    });
+
     it("rejects patch-only updates", function () {
       expect(
         isSafeMinorUpdate(
           { "package-lock.json": lockfile("10.8.1") },
           { "package-lock.json": lockfile("10.8.2") },
+        ),
+        "to be false",
+      );
+    });
+
+    it("rejects removed packages", function () {
+      const baseLockfile = lockfile("10.8.2");
+      const headLockfile = lockfile("10.9.1");
+      baseLockfile.packages["node_modules/mocha"] = {
+        version: "11.0.0",
+        name: "mocha",
+      };
+
+      expect(
+        isSafeMinorUpdate(
+          { "package-lock.json": baseLockfile },
+          { "package-lock.json": headLockfile },
         ),
         "to be false",
       );

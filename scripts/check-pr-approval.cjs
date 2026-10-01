@@ -39,15 +39,17 @@ const getVersions = (lockfile) => {
       }
 
       const name = pkg.name || path.split("node_modules/").at(-1);
-      versions.set(name, [...(versions.get(name) || []), pkg.version]);
+      versions.set(path, { name, version: pkg.version });
     }
   } else if (lockfile.dependencies) {
-    const visit = (dependencies) => {
+    const visit = (dependencies, parentPath = "") => {
       for (const [name, pkg] of Object.entries(dependencies)) {
+        const path = `${parentPath}node_modules/${name}`;
+
         if (typeof pkg.version === "string") {
-          versions.set(name, [...(versions.get(name) || []), pkg.version]);
+          versions.set(path, { name, version: pkg.version });
         }
-        visit(pkg.dependencies || {});
+        visit(pkg.dependencies || {}, `${path}/`);
       }
     };
 
@@ -77,58 +79,54 @@ const isSafeMinorUpdate = (baseLockfiles, headLockfiles) => {
     const oldVersions = getVersions(baseLockfile);
     const newVersions = getVersions(headLockfile);
 
-    for (const [name, versions] of newVersions) {
-      const previousVersions = oldVersions.get(name) || [];
+    for (const path of oldVersions.keys()) {
+      if (!newVersions.has(path)) {
+        return false;
+      }
+    }
 
-      for (const newVersion of versions) {
-        if (previousVersions.includes(newVersion)) {
-          continue;
-        }
+    for (const [path, { name, version: newVersion }] of newVersions) {
+      const previousPackage = oldVersions.get(path);
 
-        hasLockfileVersionChange = true;
-        const parsedNewVersion = parseVersion(newVersion);
-
-        if (!parsedNewVersion) {
+      if (!previousPackage) {
+        if ([...oldVersions.values()].some((pkg) => pkg.name === name)) {
           return false;
         }
+        continue;
+      }
 
-        const parsedPreviousVersions = previousVersions.map(parseVersion);
+      if (previousPackage.name !== name) {
+        return false;
+      }
 
-        if (parsedPreviousVersions.some((version) => !version)) {
-          return false;
-        }
+      if (previousPackage.version === newVersion) {
+        continue;
+      }
 
-        const sameMajorVersions = parsedPreviousVersions.filter(
-          ([major]) => major === parsedNewVersion[0],
-        );
+      hasLockfileVersionChange = true;
+      const parsedNewVersion = parseVersion(newVersion);
+      const parsedPreviousVersion = parseVersion(previousPackage.version);
 
-        if (previousVersions.length > 0 && sameMajorVersions.length === 0) {
-          return false;
-        }
+      if (!parsedNewVersion || !parsedPreviousVersion) {
+        return false;
+      }
 
-        if (sameMajorVersions.length === 0) {
-          continue;
-        }
+      if (parsedPreviousVersion[0] !== parsedNewVersion[0]) {
+        return false;
+      }
 
-        const [, oldMinor, oldPatch] = sameMajorVersions.reduce(
-          (latest, version) =>
-            version[1] > latest[1] ||
-            (version[1] === latest[1] && version[2] > latest[2])
-              ? version
-              : latest,
-        );
-        const [, newMinor, newPatch] = parsedNewVersion;
+      const [, oldMinor, oldPatch] = parsedPreviousVersion;
+      const [, newMinor, newPatch] = parsedNewVersion;
 
-        if (
-          newMinor < oldMinor ||
-          (newMinor === oldMinor && newPatch < oldPatch)
-        ) {
-          return false;
-        }
+      if (
+        newMinor < oldMinor ||
+        (newMinor === oldMinor && newPatch < oldPatch)
+      ) {
+        return false;
+      }
 
-        if (newMinor > oldMinor) {
-          hasMinorUpdate = true;
-        }
+      if (newMinor > oldMinor) {
+        hasMinorUpdate = true;
       }
     }
   }
