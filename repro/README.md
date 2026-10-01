@@ -50,31 +50,7 @@ Below you'll find more details about this folder.
 
 #### Repro logs
 
-Issue [#6374](https://github.com/mochajs/mocha/issues/6374): `--t 0` should
-remain a valid shorthand for `--timeout 0`.
-
-Run comparisons from this directory:
-
-```sh
-npm install
-npm run test:v12
-npm run test:v11
-npm run test:local
-```
-
-`test:v12` uses the reported Mocha 12.0.1 release, `test:v11` uses Mocha 11.7.5,
-and `test:local` uses the Mocha checkout at `file:..`. Each command invokes its
-version's executable directly to avoid npm's shared `mocha` bin name.
-
-#### Results
-
-Tested with Node.js v22.21.1:
-
-| Version | Result |
-| --- | --- |
-| Mocha 12.0.1 | Fails with `ERR_MOCHA_INVALID_ARG_TYPE` (`expected: 'string'`, `actual: 'number'`) |
-| Mocha 11.7.5 | Passes: 1 test |
-| Local checkout (Mocha 12.0.2) | Fails with the same `ERR_MOCHA_INVALID_ARG_TYPE` |
+(This space intentionally left blank--feel free to put your logs here!)
 
 ### Debug logs
 
