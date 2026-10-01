@@ -2,7 +2,15 @@ name: Check PR approval requirements
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, edited, ready_for_review, review_requested]
+    types:
+      [
+        opened,
+        reopened,
+        synchronize,
+        edited,
+        ready_for_review,
+        review_requested,
+      ]
 
 permissions:
   contents: read
@@ -15,6 +23,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
 
       - name: Gather PR metadata
         id: metadata
@@ -45,4 +55,13 @@ jobs:
           PR_AUTHOR: ${{ steps.metadata.outputs.author }}
           PR_TITLE: ${{ steps.metadata.outputs.title }}
           HAS_HUMAN_APPROVAL: ${{ steps.metadata.outputs.has-human-approval }}
-        run: node ./scripts/check-pr-approval.cjs --author "$PR_AUTHOR" --title "$PR_TITLE" --has-human-approval "$HAS_HUMAN_APPROVAL"
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags origin "refs/pull/${{ github.event.pull_request.number }}/head"
+          PR_HEAD_SHA="$(git rev-parse FETCH_HEAD)"
+          node ./scripts/check-pr-approval.cjs \
+            --author "$PR_AUTHOR" \
+            --title "$PR_TITLE" \
+            --has-human-approval "$HAS_HUMAN_APPROVAL" \
+            --base-sha "$PR_BASE_SHA" \
+            --head-sha "$PR_HEAD_SHA"
