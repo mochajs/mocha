@@ -812,6 +812,7 @@ function replaceFileContents(filepath, pattern, replacement) {
   const contents = fs.readFileSync(filepath, "utf-8");
   const newContents = contents.replace(pattern, replacement);
   fs.writeFileSync(filepath, newContents, "utf-8");
+  touchFile(filepath);
 }
 
 /**
