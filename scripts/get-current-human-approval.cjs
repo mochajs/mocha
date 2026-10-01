@@ -11,7 +11,8 @@ module.exports = (reviews, headSha) => {
       !login ||
       login.endsWith("[bot]") ||
       !Number.isFinite(submittedAt) ||
-      review.state === "PENDING"
+      review.state === "PENDING" ||
+      review.state === "COMMENTED"
     ) {
       continue;
     }

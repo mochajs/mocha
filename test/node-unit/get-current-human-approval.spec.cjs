@@ -39,6 +39,20 @@ describe("getCurrentHumanApproval()", function () {
     );
   });
 
+  it("should not let a later comment-only review supersede an approval", function () {
+    expect(
+      getCurrentHumanApproval(
+        [
+          review("reviewer", "APPROVED", headSha, "2026-09-29T12:00:00Z"),
+          review("reviewer", "COMMENTED"),
+        ],
+        headSha,
+      ),
+      "to be",
+      true,
+    );
+  });
+
   it("should reject an approval when another reviewer has an active changes request", function () {
     expect(
       getCurrentHumanApproval(
