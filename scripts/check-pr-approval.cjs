@@ -370,11 +370,13 @@ const isSafeMinorUpdate = (
 
     if (changedManifest) {
       const updatedNames = new Set(
-        [...newVersions].flatMap(([name, versions]) =>
-          versions.some((version) => !oldVersions.get(name)?.includes(version))
-            ? [name]
-            : [],
-        ),
+        [...newVersions].flatMap(([path, pkg]) => {
+          const previousPackage = oldVersions.get(path);
+
+          return !previousPackage || previousPackage.version !== pkg.version
+            ? [pkg.name]
+            : [];
+        }),
       );
 
       for (const section of [
