@@ -142,11 +142,11 @@ describe("cli/config", function () {
     let CONFIG_FILES;
 
     beforeEach(function () {
-      findup = sinon.stub().returns("/some/path/.mocharc.js");
+      findup = sinon.stub();
       const config = rewiremock.proxy(
         require.resolve("../../../lib/cli/config.cjs"),
         (r) => ({
-          "find-up": r.by(() => ({ findUpSync: findup })),
+          "find-up-simple": r.by(() => ({ findUpSync: findup })),
         }),
       );
       findConfig = config.findConfig;
@@ -154,19 +154,55 @@ describe("cli/config", function () {
     });
 
     it("should look for one of the config files using findup-sync", function () {
+      findup.onFirstCall().returns("/some/path/.mocharc.js");
       findConfig();
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES, { cwd: process.cwd() }],
+        args: [CONFIG_FILES[0], { cwd: process.cwd() }],
         returned: "/some/path/.mocharc.js",
       });
     });
 
     it("should support an explicit `cwd`", function () {
+      findup.onFirstCall().returns("/some/path/.mocharc.js");
       findConfig("/some/path/");
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES, { cwd: "/some/path/" }],
+        args: [CONFIG_FILES[0], { cwd: "/some/path/" }],
         returned: "/some/path/.mocharc.js",
       });
+    });
+
+    it("should call findup-sync with all config filename args in order", function () {
+      findup.returns(undefined);
+      findConfig("/some/path/");
+      expect(
+        findup,
+        "to have calls satisfying",
+        CONFIG_FILES.map((file) => ({ args: [file, { cwd: "/some/path/" }] })),
+      );
+    });
+
+    it("should not make extra calls once an item is found", function () {
+      const expected = "/some/path/.mocharc.mjs";
+      findup
+        .onFirstCall()
+        .returns(undefined)
+        .onSecondCall()
+        .returns(undefined)
+        .onThirdCall()
+        .returns(expected);
+
+      expect(findConfig("/some/path/"), "to equal", expected);
+      expect(findup, "was called times", 3);
+      expect(findup.getCalls(), "to satisfy", [
+        { args: [CONFIG_FILES[0], { cwd: "/some/path/" }] },
+        { args: [CONFIG_FILES[1], { cwd: "/some/path/" }] },
+        { args: [CONFIG_FILES[2], { cwd: "/some/path/" }] },
+      ]);
+    });
+
+    it("should return undefined if no item is found", function () {
+      findup.returns(undefined);
+      expect(findConfig("/some/path/"), "to be undefined");
     });
   });
 

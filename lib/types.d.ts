@@ -194,6 +194,8 @@ export type PluginFinalizer = (
  * An object to configure how Mocha gathers test files
  */
 export interface FileCollectionOptions {
+  /** Return an empty list instead of exiting when no test files are found */
+  allowEmpty?: boolean;
   /** File extensions to use */
   extension?: string[];
   /** Files, dirs, globs to run */

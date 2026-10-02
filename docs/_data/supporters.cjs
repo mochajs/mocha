@@ -1,5 +1,5 @@
 /**
- * This script gathers metadata for active supporters of Mocha from OpenCollective's
+ * This script gathers metadata for active supporters of Mocha from Open Collective's
  * API by aggregating order ("donation") information.
  *
  * - Gathers logo/avatar images (they are always pngs)

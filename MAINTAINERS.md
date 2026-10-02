@@ -442,11 +442,11 @@ It is, however, charged with ensuring the continued vitality and sustainability 
 
 As a maintainer, you have access to the resources the OpenJS Foundation provides.
 
-## About OpenCollective
+## About Open Collective
 
-Mocha collects donations [via OpenCollective](https://opencollective.com/mochajs). As a maintainer, you may help decide how the funds are used. These decisions are made via a consensus-seeking process, much like any other decision.
+Mocha collects donations [via Open Collective](https://opencollective.com/mochajs). As a maintainer, you may help decide how the funds are used. These decisions are made via a consensus-seeking process, much like any other decision.
 
-Expense transparency is built in to OpenCollective.
+Expense transparency is built in to Open Collective.
 
 ---
 

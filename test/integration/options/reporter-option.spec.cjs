@@ -132,6 +132,39 @@ describe("--reporter-option", function () {
       );
     });
 
+    it("should allow the CLI to override clashing keys from the config file", function (done) {
+      var tmpdir = fs.mkdtempSync(
+        path.join(os.tmpdir(), "mocha-reporter-option-"),
+      );
+      fs.writeFileSync(
+        path.join(tmpdir, ".mocharc.yml"),
+        [
+          `reporter: ${customReporter}`,
+          "reporter-option:",
+          "  - foo=fromConfig",
+          "  - extra=keepMe",
+          `spec: ${path.join(__dirname, "..", "fixtures", "passing.fixture.cjs")}`,
+          "",
+        ].join("\n"),
+      );
+
+      invokeMocha(
+        ["--reporter-option", "foo=fromCli"],
+        function (err, res) {
+          rimraf.sync(tmpdir);
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and(
+            "to contain output",
+            /{"foo":"fromCli","extra":"keepMe"}/,
+          );
+          done();
+        },
+        { cwd: tmpdir, stdio: "pipe" },
+      );
+    });
+
     it("should preserve package config reporter options after respawning with a Node option", function (done) {
       var tmpdir = fs.mkdtempSync(
         path.join(os.tmpdir(), "mocha-reporter-option-"),

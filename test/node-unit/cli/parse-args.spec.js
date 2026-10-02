@@ -42,6 +42,15 @@ describe("parse-args", function () {
     });
   });
 
+  it("canonicalizes single-character aliases with a long-option prefix", function () {
+    [["--t", "0"], ["--t=0"]].forEach((args) => {
+      expect(parseMochaArgs(args, defaults), "to satisfy", {
+        _: [],
+        timeout: "0",
+      });
+    });
+  });
+
   it("uses the last value for repeated scalar options across aliases", function () {
     expect(
       parseMochaArgs(["--timeout", "100", "-t", "10"], defaults),
@@ -150,6 +159,29 @@ describe("parse-args", function () {
       {
         require: ["./cli.js"],
         timeout: "100",
+      },
+    );
+  });
+
+  it("orders reporter-option values from lowest to highest priority source", function () {
+    expect(
+      parseMochaArgs(
+        [],
+        defaults,
+        { "reporter-option": ["output=cli.xml"] },
+        { "reporter-option": ["output=env.xml"] },
+        { "reporter-option": ["output=config.xml", "extra=keepMe"] },
+        { "reporter-option": ["output=pkg.xml"] },
+      ),
+      "to satisfy",
+      {
+        "reporter-option": [
+          "output=pkg.xml",
+          "output=config.xml",
+          "extra=keepMe",
+          "output=env.xml",
+          "output=cli.xml",
+        ],
       },
     );
   });

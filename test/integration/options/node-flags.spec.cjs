@@ -1,6 +1,9 @@
 "use strict";
 
+var path = require("node:path");
+var pathToFileURL = require("node:url").pathToFileURL;
 var invokeMocha = require("../helpers.cjs").invokeMocha;
+var runMochaAsync = require("../helpers.cjs").runMochaAsync;
 
 describe("node flags", function () {
   it("should not consider argument values to be node flags", function (done) {
@@ -31,5 +34,47 @@ describe('node flags using "--node-option"', function () {
       },
       "pipe",
     );
+  });
+
+  it("should work with import hooks that break find-up resolution", async function () {
+    this.timeout(5000);
+    const importHookPath = path.resolve(
+      __dirname,
+      "../fixtures/options/node-flags/import-break-find-up.mjs",
+    );
+    const importHookSpecifier = pathToFileURL(importHookPath).href;
+    const result = await runMochaAsync("passing.fixture.cjs", [
+      "--node-option",
+      `import=${importHookSpecifier}`,
+    ]);
+
+    expect(result, "to have passed test count", 2);
+  });
+
+  // Regression test for https://github.com/mochajs/mocha/issues/6319
+  it("should run TypeScript specs with --node-option import=tsx", async function () {
+    this.timeout(10000);
+    const result = await runMochaAsync("options/node-flags/tsx.fixture.ts", [
+      "--node-option",
+      "import=tsx",
+    ]);
+
+    expect(result, "to have passed test count", 1);
+  });
+
+  it("should run TypeScript specs with node-option import=tsx from a config file", async function () {
+    this.timeout(10000);
+    const result = await runMochaAsync(
+      "options/node-flags/tsx.fixture.ts",
+      [],
+      {
+        cwd: path.resolve(
+          __dirname,
+          "../fixtures/options/node-flags/tsx-config",
+        ),
+      },
+    );
+
+    expect(result, "to have passed test count", 1);
   });
 });
