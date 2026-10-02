@@ -95,6 +95,9 @@ Corresponding "after each" and "after all" hooks are executed for potential clea
 Use this option to have Mocha check for global variables that are leaked while running tests.
 Specify globals that are acceptable via the `--global` option (for example: `--check-leaks --global jQuery --global MyLib`).
 
+With [`--watch`](#--watch--w), every run is checked against the global variables that existed before the first run.
+Mocha never removes a leaked variable, so a leak keeps being reported until you restart Mocha even after you fix the test that caused it.
+
 ### `--compilers`
 
 :::note
