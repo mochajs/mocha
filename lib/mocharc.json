@@ -6,5 +6,5 @@
   "slow": 75,
   "timeout": 2000,
   "ui": "bdd",
-  "watch-ignore": ["node_modules", ".git"]
+  "watch-ignore": ["**/node_modules", "**/.git"]
 }
