@@ -551,6 +551,38 @@ describe("Base reporter", function () {
     });
   });
 
+  describe("secondary (cascade) failures", function () {
+    // https://github.com/mochajs/mocha/issues/5925
+    it("should label an error flagged as secondary", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\n    at foo (foo.js:1:1)",
+        showDiff: false,
+        secondary: true,
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(errOut, "to contain", "1) test title (secondary):");
+    });
+
+    it("should not label an ordinary error as secondary", function () {
+      var err = {
+        message: "Error",
+        stack: "Error\n    at foo (foo.js:1:1)",
+        showDiff: false,
+      };
+      var test = makeTest(err);
+
+      list([test]);
+
+      var errOut = stdout.join("\n").trim();
+      expect(errOut, "not to contain", "(secondary)");
+    });
+  });
+
   describe("error causes", function () {
     it("should append any error cause trail to stack traces", function () {
       var err = {
