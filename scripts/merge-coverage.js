@@ -194,6 +194,11 @@ for (const report of reports) {
   mergeInto(merged, sources);
 }
 
+if (merged.size === 0) {
+  console.error(`Coverage reports in ${inputDir} contain no coverage data`);
+  process.exit(1);
+}
+
 mkdirSync(dirname(outputFile), { recursive: true });
 writeFileSync(outputFile, formatReport(merged));
 
