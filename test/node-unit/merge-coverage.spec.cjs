@@ -95,4 +95,16 @@ describe("merge-coverage", function () {
     expect(stderr, "to contain", "No coverage reports found");
     expect(fs.existsSync(output), "to be false");
   });
+
+  it("should fail when the reports contain no coverage data", function () {
+    const dir = path.join(tmpDir, "coverage-empty");
+    fs.mkdirSync(dir);
+    fs.writeFileSync(path.join(dir, "lcov.info"), "");
+
+    const { output, status, stderr } = merge(tmpDir);
+
+    expect(status, "to be", 1);
+    expect(stderr, "to contain", "contain no coverage data");
+    expect(fs.existsSync(output), "to be false");
+  });
 });
