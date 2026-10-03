@@ -105,6 +105,24 @@ describe("Suite", function () {
           const newSuite = suite.timeout(5000);
           expect(newSuite.timeout(), "to be", 5000);
         });
+
+        it("should propagate the timeout to already-registered hooks", function () {
+          // https://github.com/mochajs/mocha/issues/6033
+          // The chained `describe(...).timeout(N)` form creates hooks during the
+          // describe callback (with the suite's default timeout) and only calls
+          // the setter afterwards, so the new value must reach the hook arrays.
+          suite.beforeAll(function () {});
+          suite.beforeEach(function () {});
+          suite.afterAll(function () {});
+          suite.afterEach(function () {});
+
+          suite.timeout(5000);
+
+          expect(suite.getHooks("beforeAll")[0].timeout(), "to be", 5000);
+          expect(suite.getHooks("beforeEach")[0].timeout(), "to be", 5000);
+          expect(suite.getHooks("afterAll")[0].timeout(), "to be", 5000);
+          expect(suite.getHooks("afterEach")[0].timeout(), "to be", 5000);
+        });
       });
     });
 
