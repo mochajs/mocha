@@ -19,8 +19,10 @@ const reports = {
     "DA:6,0",
     "LF:2",
     "LH:1",
-    "BRF:0",
-    "BRH:0",
+    "BRDA:5,0,0,1",
+    "BRDA:5,0,1,0",
+    "BRF:2",
+    "BRH:1",
     "end_of_record",
   ].join("\n"),
   "b.info": [
@@ -34,8 +36,10 @@ const reports = {
     "DA:6,0",
     "LF:2",
     "LH:1",
-    "BRF:0",
-    "BRH:0",
+    "BRDA:5,0,0,2",
+    "BRDA:5,0,1,-",
+    "BRF:2",
+    "BRH:1",
     "end_of_record",
   ].join("\n"),
 };
@@ -82,8 +86,10 @@ describe("merge-coverage", function () {
       "DA:6,0",
       "LF:2",
       "LH:1",
-      "BRF:0",
-      "BRH:0",
+      "BRDA:5,0,0,3",
+      "BRDA:5,0,1,0",
+      "BRF:2",
+      "BRH:1",
       "end_of_record",
     ]);
   });
