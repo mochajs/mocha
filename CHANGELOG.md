@@ -1,5 +1,19 @@
 # Changelog
 
+## [12.1.0](https://github.com/mochajs/mocha/compare/v12.0.3...v12.1.0) (2026-10-03)
+
+
+### 🌟 Features
+
+* expose globalThis.mocha with runner name and version ([#6396](https://github.com/mochajs/mocha/issues/6396)) ([a9fc529](https://github.com/mochajs/mocha/commit/a9fc5296831641fbbcc8862e561e498549d840dc))
+
+
+### 🩹 Fixes
+
+* detect global leaks on every watch rerun ([#6368](https://github.com/mochajs/mocha/issues/6368)) ([79db2ee](https://github.com/mochajs/mocha/commit/79db2ee53b863813b97bf2a74cafa1599115c074))
+* show --clear-screen in help command ([#6360](https://github.com/mochajs/mocha/issues/6360)) ([8f286b5](https://github.com/mochajs/mocha/commit/8f286b5c337706389b50b63e9bf57139ef0d3f23))
+* show built-in reporters in --list-reporters ([#6361](https://github.com/mochajs/mocha/issues/6361)) ([202bfe1](https://github.com/mochajs/mocha/commit/202bfe18f1541a1faee95043d8b1f0b919e1a31a))
+
 ## [12.0.3](https://github.com/mochajs/mocha/compare/v12.0.2...v12.0.3) (2026-10-01)
 
 
