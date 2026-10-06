@@ -446,6 +446,20 @@ describe("Runnable(title, fn)", function () {
             done();
           });
         });
+
+        it("should handle circular references without throwing", function (done) {
+          var circular = {};
+          circular.self = circular;
+          var runnable = new Runnable("foo", function (done) {
+            done(circular);
+          });
+
+          runnable.run(function (err) {
+            expect(err.message, "to contain", "done() invoked with non-Error:");
+            expect(err.message, "to contain", "[Circular]");
+            done();
+          });
+        });
       });
 
       describe("when done() is invoked with a string", function () {
