@@ -2,10 +2,14 @@
 import { Image } from "astro:assets";
 import Discord from "./discord.svg";
 
+// Kept in sync with the published release by Release Please so the alt text
+// still conveys the version if the badge image fails to load (see #5307).
+const npmVersion = "12.0.3"; // x-release-please-version
+
 const badges = [
   {
     href: "http://npmjs.com/package/mocha",
-    alt: "npm version",
+    alt: `npm version ${npmVersion}`,
     src: "https://img.shields.io/npm/v/mocha",
   },
   {
