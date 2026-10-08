@@ -1,5 +1,45 @@
 # Changelog
 
+## [12.1.0](https://github.com/mochajs/mocha/compare/v12.0.3...v12.1.0) (2026-10-08)
+
+
+### 🌟 Features
+
+* disable timeouts whenever the Node.js inspector is active ([#6397](https://github.com/mochajs/mocha/issues/6397)) ([f57f4b1](https://github.com/mochajs/mocha/commit/f57f4b19b4a451f0b29c10fe721889be012dd35e))
+* expose globalThis.mocha with runner name and version ([#6396](https://github.com/mochajs/mocha/issues/6396)) ([a9fc529](https://github.com/mochajs/mocha/commit/a9fc5296831641fbbcc8862e561e498549d840dc))
+
+
+### 🩹 Fixes
+
+* detect global leaks on every watch rerun ([#6368](https://github.com/mochajs/mocha/issues/6368)) ([79db2ee](https://github.com/mochajs/mocha/commit/79db2ee53b863813b97bf2a74cafa1599115c074))
+* preserve source file on exports-interface suites ([#6371](https://github.com/mochajs/mocha/issues/6371)) ([ee5d128](https://github.com/mochajs/mocha/commit/ee5d12846e3263b64eee6f65222280af54096ae8))
+* show --clear-screen in help command ([#6360](https://github.com/mochajs/mocha/issues/6360)) ([8f286b5](https://github.com/mochajs/mocha/commit/8f286b5c337706389b50b63e9bf57139ef0d3f23))
+* show built-in reporters in --list-reporters ([#6361](https://github.com/mochajs/mocha/issues/6361)) ([202bfe1](https://github.com/mochajs/mocha/commit/202bfe18f1541a1faee95043d8b1f0b919e1a31a))
+
+
+### 📚 Documentation
+
+* clarify CLI option help and parallel errors ([#6167](https://github.com/mochajs/mocha/issues/6167)) ([6fc8a83](https://github.com/mochajs/mocha/commit/6fc8a8377a514a4f9fb490f5a864d87ac1b786dd))
+* include version in npm badge alt text ([#6403](https://github.com/mochajs/mocha/issues/6403)) ([421b77d](https://github.com/mochajs/mocha/commit/421b77db576df533fedc2f8560257a000eb0ebd6))
+
+
+### 🧹 Chores
+
+* **deps:** update dependency chai to v6.3.0 ([#6404](https://github.com/mochajs/mocha/issues/6404)) ([93bef72](https://github.com/mochajs/mocha/commit/93bef727a7a4bcbc9148a996b324e6d9379a4034))
+* **deps:** update dependency eslint to v10.11.0 ([#6385](https://github.com/mochajs/mocha/issues/6385)) ([38681ba](https://github.com/mochajs/mocha/commit/38681ba530325f278bc5f0953f1b153da50fe6c5))
+* **deps:** update dependency eslint-plugin-n to v18.4.0 ([#6399](https://github.com/mochajs/mocha/issues/6399)) ([1afd8c2](https://github.com/mochajs/mocha/commit/1afd8c2c6c086778bc5be21a34bbe12b0c39a837))
+* **deps:** update dependency globals to v17.13.0 ([#6405](https://github.com/mochajs/mocha/issues/6405)) ([308f7e2](https://github.com/mochajs/mocha/commit/308f7e2553cde6ec0eb2f98dbf4e0a8803250398))
+* **deps:** update dependency knip to v6.39.0 ([#6377](https://github.com/mochajs/mocha/issues/6377)) ([53f09cf](https://github.com/mochajs/mocha/commit/53f09cf73e5e84bd9076ad1075d19869087f1497))
+* increase timeout for TypeScript integration test ([#6407](https://github.com/mochajs/mocha/issues/6407)) ([98b932f](https://github.com/mochajs/mocha/commit/98b932f2f9b88c744b195aad4c2de9a117c90a34))
+* label pull requests with unsigned CLAs ([#6410](https://github.com/mochajs/mocha/issues/6410)) ([2c2b896](https://github.com/mochajs/mocha/commit/2c2b89600e3ba8225bf11d7919e698060a55c86e))
+* make watch-mode file updates reliably detectable in tests ([#6393](https://github.com/mochajs/mocha/issues/6393)) ([e0716ed](https://github.com/mochajs/mocha/commit/e0716ed592abeb44daaf6280adc52ace9442327d))
+* point the ts loader fixture at the js file it documents ([#6366](https://github.com/mochajs/mocha/issues/6366)) ([262bd95](https://github.com/mochajs/mocha/commit/262bd95840e231486cfbc9ab7d254dfbe7f7ceb1))
+
+
+### 🤖 Automation
+
+* **deps:** bump OctoGuide/bot from 0.23.0 to 0.26.0 in the github-actions group across 1 directory ([#6388](https://github.com/mochajs/mocha/issues/6388)) ([b1f64d4](https://github.com/mochajs/mocha/commit/b1f64d4f90103ec008b188d180109d07315279a5))
+
 ## [12.0.3](https://github.com/mochajs/mocha/compare/v12.0.2...v12.0.3) (2026-10-01)
 
 
