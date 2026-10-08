@@ -31,6 +31,8 @@ jobs:
       - name: Gather PR metadata
         id: metadata
         uses: actions/github-script@v9
+        env:
+          PR_APPROVAL_REVIEWERS: ${{ vars.PR_APPROVAL_REVIEWERS }}
         with:
           script: |
             const pr = context.payload.pull_request;
@@ -46,9 +48,18 @@ jobs:
               pull_number: pr.number,
             });
 
+            const eligibleReviewers = (process.env.PR_APPROVAL_REVIEWERS || '')
+              .split(',')
+              .map((login) => login.trim())
+              .filter(Boolean);
+
+            if (eligibleReviewers.length === 0) {
+              core.warning('Set the PR_APPROVAL_REVIEWERS repository variable to eligible reviewer logins.');
+            }
+
             const hasHumanApproval = require(
               `${process.env.GITHUB_WORKSPACE}/scripts/get-current-human-approval.cjs`
-            )(reviews, pr.head.sha);
+            )(reviews, pr.head.sha, eligibleReviewers);
 
             core.setOutput('author', pr.user.login);
             core.setOutput('title', pr.title);

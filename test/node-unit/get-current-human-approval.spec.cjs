@@ -3,6 +3,7 @@
 const getCurrentHumanApproval = require("../../scripts/get-current-human-approval.cjs");
 
 const headSha = "current-head";
+const eligibleReviewers = ["reviewer", "approver", "requester"];
 const review = (
   login,
   state,
@@ -19,7 +20,11 @@ const review = (
 describe("getCurrentHumanApproval()", function () {
   it("should accept a latest human approval for the current head", function () {
     expect(
-      getCurrentHumanApproval([review("reviewer", "APPROVED")], headSha),
+      getCurrentHumanApproval(
+        [review("reviewer", "APPROVED")],
+        headSha,
+        eligibleReviewers,
+      ),
       "to be",
       true,
     );
@@ -33,6 +38,7 @@ describe("getCurrentHumanApproval()", function () {
           review("reviewer", "CHANGES_REQUESTED"),
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
@@ -47,6 +53,7 @@ describe("getCurrentHumanApproval()", function () {
           review("reviewer", "COMMENTED"),
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       true,
@@ -61,6 +68,7 @@ describe("getCurrentHumanApproval()", function () {
           review("requester", "CHANGES_REQUESTED"),
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
@@ -72,6 +80,7 @@ describe("getCurrentHumanApproval()", function () {
       getCurrentHumanApproval(
         [review("reviewer", "APPROVED", "old-head")],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
@@ -86,6 +95,7 @@ describe("getCurrentHumanApproval()", function () {
           review("reviewer", "DISMISSED"),
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
@@ -104,6 +114,7 @@ describe("getCurrentHumanApproval()", function () {
           },
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
@@ -123,9 +134,45 @@ describe("getCurrentHumanApproval()", function () {
           review("reviewer", "APPROVED", headSha, "2026-09-30T12:00:00Z"),
         ],
         headSha,
+        eligibleReviewers,
       ),
       "to be",
       false,
+    );
+  });
+
+  it("should ignore approvals from reviewers without trusted permissions", function () {
+    expect(
+      getCurrentHumanApproval([review("reviewer", "APPROVED")], headSha),
+      "to be",
+      false,
+    );
+  });
+
+  it("should ignore changes requests from reviewers without trusted permissions", function () {
+    expect(
+      getCurrentHumanApproval(
+        [
+          review("reviewer", "APPROVED"),
+          review("untrusted-reviewer", "CHANGES_REQUESTED"),
+        ],
+        headSha,
+        ["reviewer"],
+      ),
+      "to be",
+      true,
+    );
+  });
+
+  it("should accept approvals from reviewers with trusted permissions", function () {
+    expect(
+      getCurrentHumanApproval(
+        [review("reviewer", "APPROVED")],
+        headSha,
+        eligibleReviewers,
+      ),
+      "to be",
+      true,
     );
   });
 });

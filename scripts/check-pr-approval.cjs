@@ -90,7 +90,7 @@ const mutablePackageFields = [
   "cpu",
 ];
 
-const isSafeUpdatedPackage = (basePackage, headPackage) => {
+const isSafeUpdatedPackage = (basePackage, headPackage, name) => {
   const baseOtherFields = { ...basePackage };
   const headOtherFields = { ...headPackage };
 
@@ -105,10 +105,19 @@ const isSafeUpdatedPackage = (basePackage, headPackage) => {
 
   try {
     const resolved = new URL(headPackage.resolved);
+    const packageName = name || headPackage.name;
+    const tarballName = packageName.split("/").at(-1);
 
     if (
       resolved.protocol !== "https:" ||
       resolved.hostname !== "registry.npmjs.org" ||
+      resolved.port !== "" ||
+      resolved.username !== "" ||
+      resolved.password !== "" ||
+      resolved.search !== "" ||
+      resolved.hash !== "" ||
+      decodeURIComponent(resolved.pathname) !==
+        `/${packageName}/-/${tarballName}-${headPackage.version}.tgz` ||
       typeof headPackage.integrity !== "string" ||
       !/^sha(?:1|256|384|512)-[A-Za-z0-9+/]+=*$/.test(headPackage.integrity)
     ) {
@@ -182,7 +191,13 @@ const isSafePackageEntriesChange = (baseEntries, headEntries, manifestPair) => {
       if (!isDeepStrictEqual(basePackage, headPackage)) {
         return false;
       }
-    } else if (!isSafeUpdatedPackage(basePackage, headPackage)) {
+    } else if (
+      !isSafeUpdatedPackage(
+        basePackage,
+        headPackage,
+        headPackage.name || path.split("node_modules/").at(-1),
+      )
+    ) {
       return false;
     }
   }
@@ -214,7 +229,7 @@ const isSafeDependencyTreeChange = (baseDependencies, headDependencies) => {
       if (!isDeepStrictEqual(baseMetadata, headMetadata)) {
         return false;
       }
-    } else if (!isSafeUpdatedPackage(baseMetadata, headMetadata)) {
+    } else if (!isSafeUpdatedPackage(baseMetadata, headMetadata, name)) {
       return false;
     }
 

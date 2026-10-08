@@ -120,6 +120,46 @@ describe("PR approval check", function () {
       );
     });
 
+    it("rejects a registry tarball for a different package", function () {
+      const headLockfile = lockfile("10.9.1");
+      headLockfile.packages["node_modules/eslint"].resolved =
+        "https://registry.npmjs.org/mocha/-/mocha-10.9.1.tgz";
+
+      expect(
+        isSafeCompleteDiff(
+          baseFiles,
+          baseLockfiles,
+          { "package-lock.json": headLockfile },
+          baseManifests,
+          headManifests,
+        ),
+        "to be false",
+      );
+    });
+
+    it("allows a correctly named scoped package tarball", function () {
+      const scopedLockfile = (version) => ({
+        lockfileVersion: 3,
+        packages: {
+          "": {},
+          "node_modules/@scope/package": {
+            version,
+            name: "@scope/package",
+            resolved: `https://registry.npmjs.org/%40scope%2fpackage/-/package-${version}.tgz`,
+            integrity: "sha512-AAAA",
+          },
+        },
+      });
+
+      expect(
+        isSafeMinorUpdate(
+          { "package-lock.json": scopedLockfile("1.8.2") },
+          { "package-lock.json": scopedLockfile("1.9.1") },
+        ),
+        "to be true",
+      );
+    });
+
     it("rejects root dependency changes made only in the lockfile", function () {
       expect(
         isSafeCompleteDiff(

@@ -1,7 +1,8 @@
 "use strict";
 
-module.exports = (reviews, headSha) => {
+module.exports = (reviews, headSha, eligibleReviewers = []) => {
   const latestReviewsByReviewer = new Map();
+  const eligibleReviewerLogins = new Set(eligibleReviewers);
 
   for (const review of reviews) {
     const login = review.user && review.user.login;
@@ -10,6 +11,7 @@ module.exports = (reviews, headSha) => {
     if (
       !login ||
       login.endsWith("[bot]") ||
+      !eligibleReviewerLogins.has(login) ||
       !Number.isFinite(submittedAt) ||
       review.state === "PENDING" ||
       review.state === "COMMENTED"
