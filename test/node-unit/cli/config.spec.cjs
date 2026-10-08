@@ -142,13 +142,11 @@ describe("cli/config", function () {
   describe("findConfig()", function () {
     let tmpDir;
     let findConfig;
-    let CONFIG_FILES;
 
     beforeEach(function () {
       tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-config-test-"));
       const config = require("../../../lib/cli/config.cjs");
       findConfig = config.findConfig;
-      CONFIG_FILES = config.CONFIG_FILES;
     });
 
     afterEach(function () {
