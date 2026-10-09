@@ -1,4 +1,4 @@
-import Mocha from '../../../lib/mocha.cjs'
+import Mocha from '../../../lib/mocha.js'
 import { createCommon as MochaInterface } from '../../../lib/interfaces/common.js';
 
 const Test = Mocha.Test;

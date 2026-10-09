@@ -2,7 +2,7 @@
 
 const path = require("node:path");
 const sinon = require("sinon");
-const Mocha = require("../../lib/mocha.cjs");
+const { Mocha } = require("../../lib/mocha.js");
 const { PendingError } = require("../../lib/pending.js");
 const { Suite, Runner, Test, Hook, Runnable } = Mocha;
 const { noop } = Mocha.utils;

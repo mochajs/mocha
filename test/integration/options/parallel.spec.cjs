@@ -1,5 +1,5 @@
 "use strict";
-const Mocha = require("../../../lib/mocha.cjs");
+const { Mocha } = require("../../../lib/mocha.js");
 const {
   runMochaAsync,
   invokeMochaAsync,

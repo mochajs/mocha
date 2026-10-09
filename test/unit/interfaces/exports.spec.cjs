@@ -1,6 +1,6 @@
 "use strict";
 
-const Mocha = require("../../../lib/mocha.cjs");
+const { Mocha } = require("../../../lib/mocha.js");
 const { Suite } = Mocha;
 
 describe("exports interface", function () {

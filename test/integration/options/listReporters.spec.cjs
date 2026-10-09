@@ -3,7 +3,7 @@
 var helpers = require("../helpers.cjs");
 var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
-var reporters = require("../../../lib/mocha.cjs").reporters;
+var reporters = require("../../../lib/mocha.js").reporters;
 
 var NOT_LISTED = ["base", "html"];
 

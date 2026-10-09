@@ -1,7 +1,7 @@
 "use strict";
 
 var { expect } = require("chai");
-var Mocha = require("../../lib/mocha.cjs");
+var { Mocha } = require("../../lib/mocha.js");
 
 describe("Mocha", function () {
   describe('"grep" option', function () {

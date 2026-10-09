@@ -3,7 +3,7 @@
 var helpers = require("../helpers.cjs");
 var invokeMocha = helpers.invokeMocha;
 var escapeRegExp = helpers.escapeRegExp;
-var interfaces = require("../../../lib/mocha.cjs").interfaces;
+var interfaces = require("../../../lib/mocha.js").interfaces;
 
 describe("--list-interfaces", function () {
   it("should dump a list of all interfaces with descriptions", function (done) {

@@ -1,2 +1,2 @@
-export { default } from "./lib/mocha.cjs";
-export * from "./lib/mocha.cjs";
+export { default } from "./lib/mocha.js";
+export * from "./lib/mocha.js";

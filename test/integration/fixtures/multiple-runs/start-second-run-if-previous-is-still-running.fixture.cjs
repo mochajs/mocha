@@ -1,5 +1,5 @@
 'use strict';
-const Mocha = require('../../../../lib/mocha.cjs');
+const { Mocha } = require('../../../../lib/mocha.js');
 
 const mocha = new Mocha({ reporter: 'json' });
 mocha.addFile(require.resolve('./start-second-run-if-previous-is-still-running-suite.fixture.js'));
@@ -9,4 +9,3 @@ try {
 } catch (err) {
   console.error(err.code);
 }
-
