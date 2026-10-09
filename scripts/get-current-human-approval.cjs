@@ -1,5 +1,19 @@
 "use strict";
 
+const eligiblePermissions = new Set(["write", "maintain", "admin"]);
+
+const getEligibleReviewerLogins = (reviewerPermissions) =>
+  new Set(
+    reviewerPermissions
+      .filter(
+        ({ login, permission }) =>
+          typeof login === "string" &&
+          typeof permission === "string" &&
+          eligiblePermissions.has(permission.toLowerCase()),
+      )
+      .map(({ login }) => login),
+  );
+
 module.exports = (reviews, headSha, eligibleReviewers = []) => {
   const latestReviewsByReviewer = new Map();
   const eligibleReviewerLogins = new Set(eligibleReviewers);
@@ -44,3 +58,5 @@ module.exports = (reviews, headSha, eligibleReviewers = []) => {
     (review) => review.state === "APPROVED" && review.commit_id === headSha,
   );
 };
+
+module.exports.getEligibleReviewerLogins = getEligibleReviewerLogins;

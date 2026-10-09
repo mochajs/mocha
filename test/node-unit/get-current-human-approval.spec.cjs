@@ -141,7 +141,7 @@ describe("getCurrentHumanApproval()", function () {
     );
   });
 
-  it("should ignore approvals from reviewers without trusted permissions", function () {
+  it("should ignore approvals from reviewers outside the eligible set", function () {
     expect(
       getCurrentHumanApproval([review("reviewer", "APPROVED")], headSha),
       "to be",
@@ -149,7 +149,7 @@ describe("getCurrentHumanApproval()", function () {
     );
   });
 
-  it("should ignore changes requests from reviewers without trusted permissions", function () {
+  it("should ignore changes requests from reviewers outside the eligible set", function () {
     expect(
       getCurrentHumanApproval(
         [
@@ -164,7 +164,7 @@ describe("getCurrentHumanApproval()", function () {
     );
   });
 
-  it("should accept approvals from reviewers with trusted permissions", function () {
+  it("should accept approvals from reviewers in the eligible set", function () {
     expect(
       getCurrentHumanApproval(
         [review("reviewer", "APPROVED")],
@@ -173,6 +173,48 @@ describe("getCurrentHumanApproval()", function () {
       ),
       "to be",
       true,
+    );
+  });
+
+  it("should exclude read and triage reviewers from the eligible set", function () {
+    expect(
+      [
+        ...getCurrentHumanApproval.getEligibleReviewerLogins([
+          { login: "reader", permission: "read" },
+          { login: "triager", permission: "triage" },
+        ]),
+      ],
+      "to equal",
+      [],
+    );
+  });
+
+  it("should include write, maintain, and admin reviewers in the eligible set", function () {
+    expect(
+      [
+        ...getCurrentHumanApproval.getEligibleReviewerLogins([
+          { login: "writer", permission: "write" },
+          { login: "maintainer", permission: "maintain" },
+          { login: "admin", permission: "admin" },
+        ]),
+      ].sort(),
+      "to equal",
+      ["admin", "maintainer", "writer"],
+    );
+  });
+
+  it("should not count approvals with unknown repository permissions", function () {
+    const eligibleReviewers = getCurrentHumanApproval.getEligibleReviewerLogins(
+      [{ login: "reviewer", permission: "unknown" }],
+    );
+    expect(
+      getCurrentHumanApproval(
+        [review("reviewer", "APPROVED")],
+        headSha,
+        eligibleReviewers,
+      ),
+      "to be",
+      false,
     );
   });
 });
