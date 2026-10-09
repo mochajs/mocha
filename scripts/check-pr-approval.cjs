@@ -114,7 +114,11 @@ const isSafeUpdatedPackage = (basePackage, headPackage, name) => {
     const normalizePercentEncoding = (pathname) =>
       pathname.replace(/%[0-9a-f]{2}/gi, (escape) => escape.toUpperCase());
     const packagePaths = packageName.startsWith("@")
-      ? [`/${packageName}`, `/${encodeURIComponent(packageName)}`]
+      ? [
+          `/${packageName}`,
+          `/${encodeURIComponent(packageName)}`,
+          `/${packageName.replace("/", "%2F")}`,
+        ]
       : [`/${packageName}`];
     const expectedPaths = packagePaths.map(
       (packagePath) =>

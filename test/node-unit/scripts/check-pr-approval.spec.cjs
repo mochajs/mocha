@@ -172,7 +172,7 @@ describe("PR approval check", function () {
     });
 
     it("allows correctly named scoped package tarballs with encoded or plain paths", function () {
-      const scopedLockfile = (version, encoded) => ({
+      const scopedLockfile = (version, encoding) => ({
         lockfileVersion: 3,
         packages: {
           "": {},
@@ -180,18 +180,22 @@ describe("PR approval check", function () {
             version,
             name: "@scope/package",
             resolved: `https://registry.npmjs.org/${
-              encoded ? "%40scope%2fpackage" : "@scope/package"
+              encoding === "fully-encoded"
+                ? "%40scope%2fpackage"
+                : encoding === "slash-encoded"
+                  ? "@scope%2fpackage"
+                  : "@scope/package"
             }/-/package-${version}.tgz`,
             integrity: "sha512-AAAA",
           },
         },
       });
 
-      for (const encoded of [true, false]) {
+      for (const encoding of ["fully-encoded", "slash-encoded", "plain"]) {
         expect(
           isSafeMinorUpdate(
-            { "package-lock.json": scopedLockfile("1.8.2", encoded) },
-            { "package-lock.json": scopedLockfile("1.9.1", encoded) },
+            { "package-lock.json": scopedLockfile("1.8.2", encoding) },
+            { "package-lock.json": scopedLockfile("1.9.1", encoding) },
           ),
           "to be true",
         );
