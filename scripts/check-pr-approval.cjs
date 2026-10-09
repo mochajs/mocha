@@ -107,6 +107,19 @@ const isSafeUpdatedPackage = (basePackage, headPackage, name) => {
     const resolved = new URL(headPackage.resolved);
     const packageName = name || headPackage.name;
     const tarballName = packageName.split("/").at(-1);
+    const rawPath =
+      headPackage.resolved.match(
+        /^https:\/\/[^/?#]*(\/[^?#]*)?(?:[?#]|$)/i,
+      )?.[1] || "/";
+    const normalizePercentEncoding = (pathname) =>
+      pathname.replace(/%[0-9a-f]{2}/gi, (escape) => escape.toUpperCase());
+    const packagePaths = packageName.startsWith("@")
+      ? [`/${packageName}`, `/${encodeURIComponent(packageName)}`]
+      : [`/${packageName}`];
+    const expectedPaths = packagePaths.map(
+      (packagePath) =>
+        `${packagePath}/-/${tarballName}-${headPackage.version}.tgz`,
+    );
 
     if (
       resolved.protocol !== "https:" ||
@@ -116,8 +129,8 @@ const isSafeUpdatedPackage = (basePackage, headPackage, name) => {
       resolved.password !== "" ||
       resolved.search !== "" ||
       resolved.hash !== "" ||
-      decodeURIComponent(resolved.pathname) !==
-        `/${packageName}/-/${tarballName}-${headPackage.version}.tgz` ||
+      resolved.pathname !== rawPath ||
+      !expectedPaths.includes(normalizePercentEncoding(rawPath)) ||
       typeof headPackage.integrity !== "string" ||
       !/^sha(?:1|256|384|512)-[A-Za-z0-9+/]+=*$/.test(headPackage.integrity)
     ) {
