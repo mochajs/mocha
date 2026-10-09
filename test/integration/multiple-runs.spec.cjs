@@ -27,6 +27,22 @@ describe("multiple runs", function () {
     });
   });
 
+  it("should be allowed to run multiple times if cleanReferencesAfterRun is false in the options", function (done) {
+    var path =
+      require.resolve("./fixtures/multiple-runs/run-thrice-option.fixture.cjs");
+    invokeNode([path], function (err, res) {
+      if (err) {
+        done(err);
+        return;
+      }
+      expect(res.code, "to be", 0);
+      var results = JSON.parse(res.output);
+      expect(results, "to have length", 3);
+      expect(results[2].passes, "to have length", 1);
+      done();
+    });
+  });
+
   it("should not be allowed if cleanReferences is true", function (done) {
     var path =
       require.resolve("./fixtures/multiple-runs/clean-references.fixture.cjs");
