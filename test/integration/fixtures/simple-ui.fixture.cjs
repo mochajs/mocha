@@ -1,6 +1,6 @@
 'use strict';
 
-var Mocha = require('../../../lib/mocha.cjs');
+var { Mocha } = require('../../../lib/mocha.js');
 var Test = Mocha.Test;
 var EVENT_FILE_PRE_REQUIRE = Mocha.Suite.constants.EVENT_FILE_PRE_REQUIRE;
 

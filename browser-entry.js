@@ -2,7 +2,7 @@ import BrowserStdout from "browser-stdout";
 
 import { parseQuery } from "./lib/browser/parse-query.js";
 import { highlightTags } from "./lib/browser/highlight-tags.js";
-import Mocha from "./lib/mocha.cjs";
+import Mocha from "./lib/mocha.js";
 
 /**
  * Shim process.stdout.

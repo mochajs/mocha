@@ -64,7 +64,7 @@ describe("worker", function () {
 
       worker = rewiremock.proxy(WORKER_PATH, {
         workerpool: stubs.workerpool,
-        "../../lib/mocha.cjs": stubs.Mocha,
+        "../../lib/mocha.js": { Mocha: stubs.Mocha },
         "../../lib/nodejs/serializer.js": stubs.serializer,
         "../../lib/cli/run-helpers.cjs": stubs.runHelpers,
         "../../lib/plugin-loader.js": stubs.plugin,

@@ -1,7 +1,7 @@
 "use strict";
 
 var sinon = require("sinon");
-var mocha = require("../../lib/mocha.cjs");
+var { Mocha: mocha } = require("../../lib/mocha.js");
 var Test = mocha.Test;
 var Runnable = mocha.Runnable;
 

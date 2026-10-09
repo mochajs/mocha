@@ -4,7 +4,7 @@ const {
   validateLegacyPlugin,
   list,
 } = require("../../../lib/cli/run-helpers.cjs");
-const Mocha = require("../../../lib/mocha.cjs");
+const { Mocha } = require("../../../lib/mocha.js");
 
 describe("helpers", function () {
   describe("validateLegacyPlugin()", function () {
@@ -59,7 +59,7 @@ describe("helpers", function () {
     });
 
     describe("when used with a third-party interface", function () {
-      // this test name is referenced in a comment in `lib/mocha.cjs`
+      // this test name is referenced in a comment in `lib/mocha.js`
       // don't change here without also changing there
       it('should add the interface to "Mocha.interfaces"', function () {
         // let's suppose that `glob` is an interface

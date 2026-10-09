@@ -3,6 +3,7 @@
   "entry": ["docs/_data/supporters.cjs", "index.js!", "lib/cli/index.cjs!"],
   "project": ["{bin,lib,scripts,test}/**/*.{js,ts,mjs,cjs}"],
   "ignore": [
+    "lib/nodejs/file-unloader.js",
     "test/integration/fixtures/esm/type-module/test-that-imports-non-existing-module.fixture.js",
     "test/integration/fixtures/options/watch/test-with-dependency.fixture.cjs",
     "test/integration/fixtures/options/watch/test-with-global-install.fixture.cjs",

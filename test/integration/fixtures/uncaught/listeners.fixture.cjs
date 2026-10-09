@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const mocha = require('../../../../lib/mocha.cjs');
+const { Mocha: mocha } = require('../../../../lib/mocha.js');
 
 // keep this low to avoid warning
 for (let i = 0; i < 5; i++) {

@@ -3,7 +3,7 @@
 /* eslint no-throw-literal: off */
 
 var sinon = require("sinon");
-var Mocha = require("../../lib/mocha.cjs");
+var { Mocha } = require("../../lib/mocha.js");
 var Suite = Mocha.Suite;
 var Test = Mocha.Test;
 var Runnable = Mocha.Runnable;

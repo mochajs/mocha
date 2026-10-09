@@ -49,9 +49,6 @@ describe("Mocha", function () {
     stubs.Suite = sinon.stub().returns(stubs.suite);
     stubs.Suite.constants = {};
     stubs.ParallelBufferedRunner = sinon.stub().returns({});
-    stubs.esmUtils = {
-      loadFilesAsync: sinon.stub(),
-    };
     const runner = Object.assign(sinon.createStubInstance(EventEmitter), {
       runAsync: sinon.stub().resolves(0),
       globals: sinon.stub(),
@@ -64,17 +61,16 @@ describe("Mocha", function () {
     stubs.Runner.constants = {};
 
     Mocha = rewiremock.proxy(
-      () => require("../../lib/mocha.cjs"),
+      () => require("../../lib/mocha.js"),
       (r) => ({
         "../../lib/utils.cjs": r.with(stubs.utils).callThrough(),
         "../../lib/suite.js": { Suite: stubs.Suite },
         "../../lib/nodejs/parallel-buffered-runner.cjs":
           stubs.ParallelBufferedRunner,
-        "../../lib/nodejs/esm-utils.cjs": stubs.esmUtils,
         "../../lib/runner.js": { Runner: stubs.Runner },
         "../../lib/errors.js": stubs.errors,
       }),
-    );
+    ).Mocha;
     delete require.cache[DUMB_FIXTURE_PATH];
     delete require.cache[DUMBER_FIXTURE_PATH];
   });
@@ -226,16 +222,12 @@ describe("Mocha", function () {
 
     describe("loadFilesAsync()", function () {
       it("should pass esmDecorator to actual load function", async function () {
-        const esmDecorator = (x) => `${x}?foo=bar`;
+        const esmDecorator = sinon.spy((x) => x);
+        mocha.files = [require.resolve("./fixtures/esm.fixture.mjs")];
 
         await mocha.loadFilesAsync({ esmDecorator });
 
-        expect(stubs.esmUtils.loadFilesAsync, "was called once");
-        expect(
-          stubs.esmUtils.loadFilesAsync.firstCall.args[3],
-          "to be",
-          esmDecorator,
-        );
+        expect(esmDecorator, "was called once");
       });
     });
 
