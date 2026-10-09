@@ -4,5 +4,20 @@
   "minimumReleaseAge": "7 days",
   "patch": {
     "enabled": false
-  }
+  },
+  "packageRules": [
+    {
+      "description": "Blocklist grouped dependency updates that need human review, including Astro.",
+      "matchPackagePatterns": ["^astro$", "^@astrojs/"],
+      "enabled": false
+    },
+    {
+      "description": "Auto-merge Renovate minor dependency bumps only, excluding grouped Astro updates.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor"],
+      "excludePackagePatterns": ["^astro$", "^@astrojs/"],
+      "automerge": true,
+      "platformAutomerge": true
+    }
+  ]
 }

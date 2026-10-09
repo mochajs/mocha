@@ -1,0 +1,112 @@
+name: Check PR approval requirements
+
+on:
+  pull_request_target:
+    types:
+      [
+        opened,
+        reopened,
+        synchronize,
+        edited,
+        ready_for_review,
+        review_requested,
+      ]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  require-approval:
+    name: Require approval for unsafe PRs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Gather PR metadata
+        id: metadata
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+
+            if (!pr) {
+              core.setFailed(`Unable to determine pull request from the "${context.eventName}" event payload.`);
+              return;
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+            });
+
+            const getCurrentHumanApproval = require(
+              `${process.env.GITHUB_WORKSPACE}/scripts/get-current-human-approval.cjs`
+            );
+            const reviewerLogins = [
+              ...new Set(
+                reviews
+                  .map(({ user }) => user && user.login)
+                  .filter((login) => login && !login.endsWith("[bot]")),
+              ),
+            ];
+
+            let reviewerPermissions;
+            try {
+              reviewerPermissions = await Promise.all(
+                reviewerLogins.map(async (login) => {
+                  try {
+                    const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      username: login,
+                    });
+                    return { login, permission: data.permission };
+                  } catch (error) {
+                    if (error.status === 404) {
+                      return { login, permission: "none" };
+                    }
+                    throw error;
+                  }
+                }),
+              );
+            } catch (error) {
+              core.setFailed(
+                `Unable to retrieve repository permissions for PR reviewers; refusing to count reviewer approvals. ${error.message}`,
+              );
+              return;
+            }
+
+            const eligibleReviewers =
+              getCurrentHumanApproval.getEligibleReviewerLogins(reviewerPermissions);
+            const hasHumanApproval = getCurrentHumanApproval(
+              reviews,
+              pr.head.sha,
+              eligibleReviewers,
+            );
+
+            core.setOutput('author', pr.user.login);
+            core.setOutput('title', pr.title);
+            core.setOutput('has-human-approval', String(hasHumanApproval));
+
+      - name: Validate PR approval requirements
+        env:
+          PR_AUTHOR: ${{ steps.metadata.outputs.author }}
+          PR_TITLE: ${{ steps.metadata.outputs.title }}
+          HAS_HUMAN_APPROVAL: ${{ steps.metadata.outputs.has-human-approval }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags origin "refs/pull/${{ github.event.pull_request.number }}/head"
+          PR_HEAD_SHA="$(git rev-parse FETCH_HEAD)"
+          node ./scripts/check-pr-approval.cjs \
+            --author "$PR_AUTHOR" \
+            --title "$PR_TITLE" \
+            --has-human-approval "$HAS_HUMAN_APPROVAL" \
+            --base-sha "$PR_BASE_SHA" \
+            --head-sha "$PR_HEAD_SHA"
