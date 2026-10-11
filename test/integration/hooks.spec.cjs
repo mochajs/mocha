@@ -92,5 +92,19 @@ describe("hooks", function () {
         },
       );
     });
+
+    it("still finish when a hook installs fake timers", function (done) {
+      runMochaJSON(
+        "hooks/setup-hooks-fake-timers.fixture.cjs",
+        [],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and("to have passed test count", 1);
+          done();
+        },
+      );
+    });
   });
 });
