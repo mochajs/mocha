@@ -107,4 +107,15 @@ describe("hooks", function () {
       );
     });
   });
+
+  it("do not blow the call stack on big suites without hooks", function (done) {
+    runMocha("runner/stack-size.fixture.cjs", args, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+      // Do not trust the exit code alone here, a blown stack still exits 0.
+      expect(res, "to have passed").and("to have passed test count", 7000);
+      done();
+    });
+  });
 });
