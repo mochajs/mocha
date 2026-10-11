@@ -974,6 +974,61 @@ describe("Runner", function () {
       });
     });
 
+    describe("emit()", function () {
+      describe("when a listener throws", function () {
+        let err;
+
+        beforeEach(function () {
+          err = new Error("reporter error");
+          runner.on(EVENT_TEST_PASS, function () {
+            throw err;
+          });
+        });
+
+        // the Runner running these tests uses Runner.immediately too, so only
+        // stub it while emitting
+        function emitPass() {
+          const immediately = sinon.stub(Runner, "immediately");
+          try {
+            runner.emit(EVENT_TEST_PASS, {});
+          } finally {
+            immediately.restore();
+          }
+          return immediately;
+        }
+
+        it("should not throw", function () {
+          expect(emitPass, "not to throw");
+        });
+
+        it("should rethrow the error from a fresh stack", function () {
+          const immediately = emitPass();
+          expect(immediately, "was called once");
+          expect(immediately.firstCall.args[0], "to throw", err);
+        });
+
+        it('should stop listening for "uncaughtException"', function () {
+          runner.run(noop);
+          const uncaughtExceptionListenerCount =
+            process.listenerCount("uncaughtException");
+          emitPass();
+          expect(
+            process.listenerCount("uncaughtException"),
+            "to be",
+            uncaughtExceptionListenerCount - 1,
+          );
+        });
+
+        it("should not call back when the run ends", function () {
+          const fn = sinon.stub();
+          runner.run(fn);
+          emitPass();
+          runner.emit(EVENT_RUN_END);
+          expect(fn, "was not called");
+        });
+      });
+    });
+
     describe("_uncaught()", function () {
       describe("when called with a non-Runner context", function () {
         it("should throw", function () {

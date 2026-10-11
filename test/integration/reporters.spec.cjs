@@ -101,6 +101,53 @@ describe("reporters", function () {
     });
   });
 
+  describe("when the reporter throws", function () {
+    var reporter = "test/integration/fixtures/throwing-reporter.cjs";
+
+    [
+      ["start", "passing.fixture.cjs"],
+      ["pass", "passing.fixture.cjs"],
+      ["fail", "failing.fixture.cjs"],
+      ["test end", "passing.fixture.cjs"],
+      ["suite end", "passing.fixture.cjs"],
+      ["end", "passing.fixture.cjs"],
+    ].forEach(function ([event, fixture]) {
+      [[], ["--parallel"]].forEach(function (extraArgs) {
+        var title = `fails with the reporter's error when it throws on "${event}"`;
+        if (extraArgs.length) {
+          title += " in parallel mode";
+        }
+
+        it(`${title} (issue: 980)`, function (done) {
+          var args = [
+            "--reporter=" + reporter,
+            "--reporter-option",
+            "event=" + event,
+            ...extraArgs,
+          ];
+
+          run(
+            fixture,
+            args,
+            function (err, res) {
+              if (err) {
+                done(err);
+                return;
+              }
+              expect(
+                res,
+                "to have failed with output",
+                expect.it("to contain", `reporter threw on "${event}"`),
+              );
+              done();
+            },
+            "pipe",
+          );
+        });
+      });
+    });
+  });
+
   describe("tap", function () {
     var not = function (predicate) {
       return function () {
