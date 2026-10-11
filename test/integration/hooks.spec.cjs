@@ -63,4 +63,34 @@ describe("hooks", function () {
       done();
     });
   });
+
+  describe("setup hooks", function () {
+    it("run in the same event loop turn as the test", function (done) {
+      runMochaJSON(
+        "hooks/setup-hooks-same-turn.fixture.cjs",
+        [],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and("to have passed test count", 3);
+          done();
+        },
+      );
+    });
+
+    it("let the test handle a promise they rejected", function (done) {
+      runMochaJSON(
+        "hooks/setup-hook-rejection.fixture.cjs",
+        ["--unhandled-rejections=strict"],
+        function (err, res) {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have passed").and("to have passed test count", 2);
+          done();
+        },
+      );
+    });
+  });
 });
