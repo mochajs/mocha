@@ -56,6 +56,59 @@ describe("Runner", function () {
         newRunner.grep(/lions/, true);
         expect(newRunner.total, "to be", 1);
       });
+
+      [
+        ["RegExp with global flag", /foo/g],
+        ["RegExp with global and ignore-case flags", /foo/gi],
+        ["RegExp with sticky flag", /foo/y],
+        ["RegExp with global and sticky flags", /foo/gy],
+        ["RegExp-like string with global flag", "/foo/g"],
+        ["RegExp-like string with global and ignore-case flags", "/foo/gi"],
+        ["RegExp-like string with sticky flag", "/foo/y"],
+      ].forEach(function ([description, grep]) {
+        it("should handle stateful filtering with " + description, function () {
+          [
+            "prefix foo test 1",
+            "prefix foo test 2",
+            "prefix foo test 3",
+            "prefix foo test 4",
+          ].forEach(function (title) {
+            suite.addTest(new Test(title, noop));
+          });
+          var mocha = new Mocha({ grep: grep });
+          var newRunner = new Runner(suite);
+          newRunner.grep(mocha.options.grep);
+          expect(newRunner.total, "to be", 4);
+          expect(newRunner.grepTotal(suite), "to be", 4);
+          expect(newRunner.grepTotal(suite), "to be", 4);
+
+          newRunner.grep(mocha.options.grep, true);
+          expect(newRunner.total, "to be", 0);
+          expect(newRunner.grepTotal(suite), "to be", 0);
+          expect(newRunner.grepTotal(suite), "to be", 0);
+        });
+      });
+
+      it("should execute all matches for a stateful RegExp", function (done) {
+        [
+          "prefix foo test 1",
+          "prefix foo test 2",
+          "prefix foo test 3",
+          "prefix foo test 4",
+        ].forEach(function (title) {
+          suite.addTest(new Test(title, noop));
+        });
+        var newRunner = new Runner(suite);
+        newRunner.grep(/foo/g);
+        var passes = 0;
+        newRunner.on(EVENT_TEST_PASS, function () {
+          passes++;
+        });
+        newRunner.runTests(suite, function () {
+          expect(passes, "to be", 4);
+          done();
+        });
+      });
     });
 
     describe("grepTotal()", function () {
