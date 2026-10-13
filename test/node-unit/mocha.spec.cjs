@@ -47,7 +47,11 @@ describe("Mocha", function () {
       dispose: sinon.stub(),
     });
     stubs.Suite = sinon.stub().returns(stubs.suite);
-    stubs.Suite.constants = {};
+    stubs.Suite.constants = {
+      EVENT_FILE_PRE_REQUIRE: "pre-require",
+      EVENT_FILE_REQUIRE: "require",
+      EVENT_FILE_POST_REQUIRE: "post-require",
+    };
     stubs.ParallelBufferedRunner = sinon.stub().returns({});
     stubs.esmUtils = {
       loadFilesAsync: sinon.stub(),
@@ -222,6 +226,26 @@ describe("Mocha", function () {
           mocha.loadFiles(cb);
         }, "to call the callback");
       });
+
+      it("should use a private context for the require interface", function () {
+        mocha = new Mocha({ reporter: opts.reporter, ui: "require" });
+        mocha.files = [DUMB_FIXTURE_PATH];
+
+        mocha.loadFiles();
+
+        expect(stubs.suite.emit.firstCall.args, "to satisfy", [
+          "pre-require",
+          expect.it("not to be", global),
+          DUMB_FIXTURE_PATH,
+          mocha,
+        ]);
+        expect(stubs.suite.emit.thirdCall.args, "to satisfy", [
+          "post-require",
+          stubs.suite.emit.firstCall.args[1],
+          DUMB_FIXTURE_PATH,
+          mocha,
+        ]);
+      });
     });
 
     describe("loadFilesAsync()", function () {
@@ -236,6 +260,31 @@ describe("Mocha", function () {
           "to be",
           esmDecorator,
         );
+      });
+
+      it("should use a private context for the require interface", async function () {
+        mocha = new Mocha({ reporter: opts.reporter, ui: "require" });
+
+        await mocha.loadFilesAsync();
+
+        const preLoad = stubs.esmUtils.loadFilesAsync.firstCall.args[1];
+        const postLoad = stubs.esmUtils.loadFilesAsync.firstCall.args[2];
+        const context = preLoad(DUMB_FIXTURE_PATH);
+
+        postLoad(DUMB_FIXTURE_PATH, {}, context);
+
+        expect(stubs.suite.emit.firstCall.args, "to satisfy", [
+          "pre-require",
+          expect.it("not to be", global),
+          DUMB_FIXTURE_PATH,
+          mocha,
+        ]);
+        expect(stubs.suite.emit.thirdCall.args, "to satisfy", [
+          "post-require",
+          context,
+          DUMB_FIXTURE_PATH,
+          mocha,
+        ]);
       });
     });
 

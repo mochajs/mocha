@@ -1,74 +1,140 @@
-const { afterEach,
+const assert = require("node:assert");
+const {
+  afterEach,
   after,
   beforeEach,
   before,
+  context,
+  xcontext,
   describe,
   xdescribe,
   it,
+  specify,
   xit,
+  xspecify,
   setup,
   suiteSetup,
   suiteTeardown,
   suite,
   teardown,
   test,
-  run } = require('../../..');
+  run,
+} = require("../../..");
 
+assert.strictEqual(context, describe);
+assert.strictEqual(context.only, describe.only);
+assert.strictEqual(context.skip, describe.skip);
+assert.strictEqual(xcontext, xdescribe);
+assert.strictEqual(specify, it);
+assert.strictEqual(specify.only, it.only);
+assert.strictEqual(specify.skip, it.skip);
+assert.strictEqual(xspecify, xit);
+assert.strictEqual(suite, describe);
+assert.strictEqual(suite.only, describe.only);
+assert.strictEqual(suite.skip, describe.skip);
+assert.strictEqual(test, it);
+assert.strictEqual(test.only, it.only);
+assert.strictEqual(test.skip, it.skip);
+assert.strictEqual(setup, beforeEach);
+assert.strictEqual(suiteSetup, before);
+assert.strictEqual(suiteTeardown, after);
+assert.strictEqual(teardown, afterEach);
 
-suite('root suite', () => {
+suite("root suite", () => {
   setup(() => {
-    console.log('running setup');
-  })
+    console.log("running setup");
+  });
   before(() => {
-    console.log('running before');
+    console.log("running before");
   });
   beforeEach(() => {
-    console.log('running beforeEach');
+    console.log("running beforeEach");
   });
   afterEach(() => {
-    console.log('running afterEach');
+    console.log("running afterEach");
   });
   after(() => {
-    console.log('running after');
+    console.log("running after");
   });
   teardown(() => {
-    console.log('running teardown');
+    console.log("running teardown");
   });
   suiteSetup(() => {
-    console.log('running suiteSetup');
+    console.log("running suiteSetup");
   });
   suiteTeardown(() => {
-    console.log('running suiteTeardown');
+    console.log("running suiteTeardown");
   });
 
-  describe.only('describe only', () => {
-    it('it', () => {
-      console.log('running it');
+  describe.only("describe.only", () => {
+    it("it", () => {
+      console.log("running it");
     }).timeout(1000);
-    xit('it', () => {
-      console.log('running xit');
+
+    specify("specify", () => {
+      console.log("running specify");
     });
-    it.only('it.only', () => {
-      console.log('running it.only');
+
+    test("test", () => {
+      console.log("running test");
+    });
+
+    xit("xit", () => {
+      console.log("running xit");
+    });
+
+    xspecify("xspecify", () => {
+      console.log("running xspecify");
+    });
+
+    it.only("it.only", () => {
+      console.log("running it.only");
     }).retries(2);
-    it.skip('it.skip', () => {
-      console.log('running it.skip');
+
+    specify.only("specify.only", () => {
+      console.log("running specify.only");
     });
-    test('test', () => {
-      console.log('running test');
+
+    test.only("test.only", () => {
+      console.log("running test.only");
+    });
+
+    it.skip("it.skip", () => {
+      console.log("running it.skip");
+    });
+
+    specify.skip("specify.skip", () => {
+      console.log("running specify.skip");
+    });
+
+    test.skip("test.skip", () => {
+      console.log("running test.skip");
     });
   });
 
-  describe('describe', () => {});
+  context.only("context.only", () => {
+    it("runs context.only", () => {
+      console.log("running context.only");
+    });
+  });
 
-  xdescribe('xdescribe', () => {});
+  suite.only("suite.only", () => {
+    test("runs suite.only", () => {
+      console.log("running suite.only");
+    });
+  });
 
-  describe.skip('describe.skip', () => {});
+  describe("describe", () => {});
+  context("context", () => {});
+  xdescribe("xdescribe", () => {});
+  xcontext("xcontext", () => {});
+  describe.skip("describe.skip", () => {});
+  context.skip("context.skip", () => {});
+  suite.skip("suite.skip", () => {});
+  xit("top-level xit", () => {});
+  xspecify("top-level xspecify", () => {});
 
-  suite.only('suite only', () => {});
-
-  suite.skip('suite.skip', () => {});
-
+  assert.strictEqual(typeof run, "function");
 });
 
 // using `run` here makes it so this suite needs to be run with `--delay` mode.
