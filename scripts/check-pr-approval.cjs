@@ -117,7 +117,7 @@ const isSafeUpdatedPackage = (basePackage, headPackage, name) => {
       ? [
           `/${packageName}`,
           `/${encodeURIComponent(packageName)}`,
-          `/${packageName.replace("/", "%2F")}`,
+          `/${packageName.replaceAll("/", "%2F")}`,
         ]
       : [`/${packageName}`];
     const expectedPaths = packagePaths.map(

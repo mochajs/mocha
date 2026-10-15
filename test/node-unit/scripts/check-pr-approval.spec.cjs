@@ -50,18 +50,30 @@ describe("PR approval check", function () {
     const headLockfiles = { "package-lock.json": lockfile("10.9.1") };
     const baseManifests = {};
     const headManifests = {};
-
-    it("allows a minor lockfile update without unrelated changes", function () {
+    const expectSafeDiff = (
+      expected,
+      {
+        changedFiles = baseFiles,
+        baseLockfiles: baseLockfilesInput = baseLockfiles,
+        headLockfiles: headLockfilesInput = headLockfiles,
+        baseManifests: baseManifestsInput = baseManifests,
+        headManifests: headManifestsInput = headManifests,
+      } = {},
+    ) =>
       expect(
         isSafeCompleteDiff(
-          baseFiles,
-          baseLockfiles,
-          headLockfiles,
-          baseManifests,
-          headManifests,
+          changedFiles,
+          baseLockfilesInput,
+          headLockfilesInput,
+          baseManifestsInput,
+          headManifestsInput,
         ),
-        "to be true",
+        "to be",
+        expected,
       );
+
+    it("allows a minor lockfile update without unrelated changes", function () {
+      expectSafeDiff(true);
     });
 
     it("rejects source, workflow, and other unrelated file changes", function () {
@@ -70,16 +82,7 @@ describe("PR approval check", function () {
         ".github/workflows/ci.yml",
         "README.md",
       ]) {
-        expect(
-          isSafeCompleteDiff(
-            [...baseFiles, changedFile],
-            baseLockfiles,
-            headLockfiles,
-            baseManifests,
-            headManifests,
-          ),
-          "to be false",
-        );
+        expectSafeDiff(false, { changedFiles: [...baseFiles, changedFile] });
       }
     });
 
@@ -87,20 +90,17 @@ describe("PR approval check", function () {
       const baseManifest = packageManifest("^10.8.0");
       const headManifest = packageManifest("^10.9.0");
 
-      expect(
-        isSafeCompleteDiff(
-          ["package.json", ...baseFiles],
-          {
-            "package-lock.json": lockfileForManifest("10.8.2", baseManifest),
-          },
-          {
-            "package-lock.json": lockfileForManifest("10.9.1", headManifest),
-          },
-          { "package.json": baseManifest },
-          { "package.json": headManifest },
-        ),
-        "to be true",
-      );
+      expectSafeDiff(true, {
+        changedFiles: ["package.json", ...baseFiles],
+        baseLockfiles: {
+          "package-lock.json": lockfileForManifest("10.8.2", baseManifest),
+        },
+        headLockfiles: {
+          "package-lock.json": lockfileForManifest("10.9.1", headManifest),
+        },
+        baseManifests: { "package.json": baseManifest },
+        headManifests: { "package.json": headManifest },
+      });
     });
 
     it("rejects a changed package source in the lockfile", function () {
@@ -108,16 +108,9 @@ describe("PR approval check", function () {
       headLockfile.packages["node_modules/eslint"].resolved =
         "https://attacker.example/eslint.tgz";
 
-      expect(
-        isSafeCompleteDiff(
-          baseFiles,
-          baseLockfiles,
-          { "package-lock.json": headLockfile },
-          baseManifests,
-          headManifests,
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        headLockfiles: { "package-lock.json": headLockfile },
+      });
     });
 
     it("rejects a registry tarball for a different package", function () {
@@ -125,16 +118,9 @@ describe("PR approval check", function () {
       headLockfile.packages["node_modules/eslint"].resolved =
         "https://registry.npmjs.org/mocha/-/mocha-10.9.1.tgz";
 
-      expect(
-        isSafeCompleteDiff(
-          baseFiles,
-          baseLockfiles,
-          { "package-lock.json": headLockfile },
-          baseManifests,
-          headManifests,
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        headLockfiles: { "package-lock.json": headLockfile },
+      });
     });
 
     it("rejects a registry tarball whose filename has a different version", function () {
@@ -142,16 +128,9 @@ describe("PR approval check", function () {
       headLockfile.packages["node_modules/eslint"].resolved =
         "https://registry.npmjs.org/eslint/-/eslint-10.9.0.tgz";
 
-      expect(
-        isSafeCompleteDiff(
-          baseFiles,
-          baseLockfiles,
-          { "package-lock.json": headLockfile },
-          baseManifests,
-          headManifests,
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        headLockfiles: { "package-lock.json": headLockfile },
+      });
     });
 
     it("rejects a malformed registry tarball pathname", function () {
@@ -203,16 +182,14 @@ describe("PR approval check", function () {
     });
 
     it("rejects root dependency changes made only in the lockfile", function () {
-      expect(
-        isSafeCompleteDiff(
-          baseFiles,
-          { "package-lock.json": lockfile("10.8.2", "^10.8.0") },
-          { "package-lock.json": lockfile("10.9.1", "^10.9.0") },
-          baseManifests,
-          headManifests,
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        baseLockfiles: {
+          "package-lock.json": lockfile("10.8.2", "^10.8.0"),
+        },
+        headLockfiles: {
+          "package-lock.json": lockfile("10.9.1", "^10.9.0"),
+        },
+      });
     });
 
     it("requires manifest dependency updates to match the lockfile bump", function () {
@@ -233,16 +210,13 @@ describe("PR approval check", function () {
         integrity: "sha512-BBBB",
       };
 
-      expect(
-        isSafeCompleteDiff(
-          ["package.json", ...baseFiles],
-          { "package-lock.json": baseLockfile },
-          { "package-lock.json": headLockfile },
-          { "package.json": baseManifest },
-          { "package.json": headManifest },
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        changedFiles: ["package.json", ...baseFiles],
+        baseLockfiles: { "package-lock.json": baseLockfile },
+        headLockfiles: { "package-lock.json": headLockfile },
+        baseManifests: { "package.json": baseManifest },
+        headManifests: { "package.json": headManifest },
+      });
     });
 
     it("rejects changes to non-dependency manifest fields", function () {
@@ -250,20 +224,17 @@ describe("PR approval check", function () {
       const headManifest = packageManifest("^10.9.0");
       headManifest.scripts.test = "node arbitrary.js";
 
-      expect(
-        isSafeCompleteDiff(
-          ["package.json", ...baseFiles],
-          {
-            "package-lock.json": lockfileForManifest("10.8.2", baseManifest),
-          },
-          {
-            "package-lock.json": lockfileForManifest("10.9.1", headManifest),
-          },
-          { "package.json": baseManifest },
-          { "package.json": headManifest },
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        changedFiles: ["package.json", ...baseFiles],
+        baseLockfiles: {
+          "package-lock.json": lockfileForManifest("10.8.2", baseManifest),
+        },
+        headLockfiles: {
+          "package-lock.json": lockfileForManifest("10.9.1", headManifest),
+        },
+        baseManifests: { "package.json": baseManifest },
+        headManifests: { "package.json": headManifest },
+      });
     });
 
     it("rejects added dependencies and non-minor dependency range changes", function () {
@@ -281,30 +252,24 @@ describe("PR approval check", function () {
         const baseLockfile = lockfileForManifest("10.8.2", baseManifest);
         const headLockfile = lockfileForManifest("10.9.1", headManifest);
 
-        expect(
-          isSafeCompleteDiff(
-            ["package.json", ...baseFiles],
-            { "package-lock.json": baseLockfile },
-            { "package-lock.json": headLockfile },
-            { "package.json": baseManifest },
-            { "package.json": headManifest },
-          ),
-          "to be false",
-        );
+        expectSafeDiff(false, {
+          changedFiles: ["package.json", ...baseFiles],
+          baseLockfiles: { "package-lock.json": baseLockfile },
+          headLockfiles: { "package-lock.json": headLockfile },
+          baseManifests: { "package.json": baseManifest },
+          headManifests: { "package.json": headManifest },
+        });
       }
     });
 
     it("rejects manifest changes without a matching lockfile change", function () {
-      expect(
-        isSafeCompleteDiff(
-          ["package.json"],
-          {},
-          {},
-          { "package.json": packageManifest("^10.8.0") },
-          { "package.json": packageManifest("^10.9.0") },
-        ),
-        "to be false",
-      );
+      expectSafeDiff(false, {
+        changedFiles: ["package.json"],
+        baseLockfiles: {},
+        headLockfiles: {},
+        baseManifests: { "package.json": packageManifest("^10.8.0") },
+        headManifests: { "package.json": packageManifest("^10.9.0") },
+      });
     });
   });
 
