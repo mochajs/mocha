@@ -167,6 +167,20 @@ describe("lib/utils", function () {
       );
     });
 
+    it("should return '{}' for an empty null-prototype object without throwing", function () {
+      // https://github.com/mochajs/mocha/issues/5507 — an empty
+      // null-prototype object has no .toString(), which used to throw
+      // inside the reporter's fail handler and kill the process with
+      // exit code 0.
+      expect(stringify(Object.create(null)), "to be", "{}");
+    });
+
+    it("should stringify a null-prototype object with properties", function () {
+      var obj = Object.create(null);
+      obj.a = 1;
+      expect(stringify(obj), "to be", '{\n  "a": 1\n}');
+    });
+
     it("should return Date object with .toISOString() + string prefix", function () {
       expect(
         stringify(new Date(0)),
