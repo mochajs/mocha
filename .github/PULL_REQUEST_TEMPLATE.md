@@ -4,7 +4,7 @@ Otherwise we may not be able to review your PR. -->
 
 ## PR Checklist
 
-- [ ] Addresses an existing open issue: fixes #000
+- [ ] Addresses an existing open issue: fixes #000 (or is a [trivial change](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md#trivial-changes))
 - [ ] That issue was marked as [`status: accepting prs`](https://github.com/mochajs/mocha/issues?q=is%3Aopen+is%3Aissue+label%3A%22status%3A+accepting+prs%22)
 - [ ] Steps in [CONTRIBUTING.md](https://github.com/mochajs/mocha/blob/main/.github/CONTRIBUTING.md) were taken
 

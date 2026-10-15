@@ -1,4 +1,4 @@
-require: "test/setup"
+require: "./test/setup.cjs"
 ui: "bdd"
 global:
   - "okGlobalA,okGlobalB"

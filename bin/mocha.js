@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-"use strict";
-
 /**
  * This wrapper executable checks for known node flags and appends them when found,
  * before invoking the "real" executable (`lib/cli/cli.js`)
@@ -10,16 +8,22 @@
  * @private
  */
 
-const os = require("node:os");
-const { loadOptions } = require("../lib/cli/options");
-const {
+import d from "debug";
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import os from "node:os";
+import { unparseMochaArgs } from "../lib/cli/unparse-args.js";
+
+import { main } from "../lib/cli/cli.js";
+import { loadOptions } from "../lib/cli/options.cjs";
+import {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts,
-} = require("../lib/cli/node-flags");
-const unparse = require("yargs-unparser");
-const debug = require("debug")("mocha:cli:mocha");
-const { aliases } = require("../lib/cli/run-option-metadata");
+} from "../lib/cli/node-flags.cjs";
+import { fileURLToPath } from "node:url";
+
+const debug = d.debug("mocha:cli:mocha");
 
 const mochaArgs = {};
 const nodeArgs = {};
@@ -80,8 +84,7 @@ if (mochaArgs._) {
 }
 
 if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
-  const { spawn } = require("node:child_process");
-  const mochaPath = require.resolve("../lib/cli/cli.js");
+  const mochaPath = fileURLToPath(import.meta.resolve("../lib/cli/cli.js"));
 
   const nodeArgv =
     (mochaArgs["node-option"] &&
@@ -93,10 +96,21 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
 
   debug("final node argv", nodeArgv);
 
+  const stdio = ["inherit", "inherit", "inherit"];
+  mochaArgs._ = mochaArgs._?.map((arg) => {
+    const match = /^\/dev\/fd\/(\d+)$/.exec(arg);
+    if (!match || !fs.existsSync(arg)) {
+      return arg;
+    }
+
+    stdio.push(Number(match[1]));
+    return `/dev/fd/${stdio.length - 1}`;
+  });
+
   const args = [].concat(
     nodeArgv,
     mochaPath,
-    unparse(mochaArgs, { alias: aliases }),
+    unparseMochaArgs(mochaArgs),
   );
 
   debug(
@@ -106,7 +120,7 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   );
 
   const proc = spawn(process.execPath, args, {
-    stdio: "inherit",
+    stdio,
   });
 
   proc.on("exit", (code, signal) => {
@@ -146,5 +160,5 @@ if (mochaArgs["node-option"] || Object.keys(nodeArgs).length || hasInspect) {
   });
 } else {
   debug("running Mocha in-process");
-  require("../lib/cli/cli").main([], mochaArgs);
+  main([], mochaArgs);
 }

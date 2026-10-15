@@ -1,17 +1,9 @@
 ---
-description: Compilers deprecation notice.
+description: Moving off the removed `--compilers` option.
 title: Compilers deprecation
 ---
 
-If you're here, you probably hit the deprecation notice. Sorry about that!
-
-## Will it break?
-
-This is a _soft_ deprecation, which means you get nagged about it, but it won't break (yet).
-
-## Make it go away
-
-To suppress this warning, execute `mocha` with the `--no-deprecation` flag (though you won't get notice of any _other_ deprecations you may encounter either).
+`--compilers` was deprecated in v4.0.0 and removed in v6.0.0. As of v12.0.0, Mocha treats it as normal text, not as an option.
 
 ## ... but why?
 
@@ -34,13 +26,13 @@ Here's a list of popular compilers/transpilers:
 - LiveScript: `--compilers ls:livescript` becomes `--require livescript`
 - (feel free to add more examples!)
 
-You'll have to handle file extensions as well. Mocha, by default, only loads `.js` files when given a directory (and the default directory is `test`). Therefore, to use a _different_ file extension (such as `.coffee` or `.ts`), you will need to supply a _glob_ instead of simply a directory. If this was how you ran Mocha pre-v4:
+You'll have to handle file extensions as well. Mocha, by default, only loads `.js`, `.cjs`, and `.mjs` files when given a directory (and the default directory is `test`). Therefore, to use a _different_ file extension (such as `.coffee` or `.ts`), you will need to supply a _glob_ instead of simply a directory. If this was how you ran Mocha pre-v4:
 
 ```bash
 $ mocha --compilers coffee:coffee-script/register --recursive ./test
 ```
 
-Then this is how you'd accomplish the same thing (`**` roughly means "recursive") in v4:
+Then this is how you'd accomplish the same thing (`**` roughly means "recursive") in v4 and later:
 
 ```bash
 $ mocha --require coffeescript/register "test/**/*.js"
@@ -59,6 +51,6 @@ $ mocha --require coffeescript/register "test/**/*.{js,coffee}"
 
 When using `--watch`, you will also need to specify the extension(s) to watch via `--watch-extensions`, e.g.:
 
-```js
+```bash
 $ mocha --require coffeescript/register --watch --watch-extensions js,coffee "test/**/*.{js,coffee}"
 ```

@@ -3,9 +3,6 @@
   "release-type": "node",
   "include-component-in-tag": false,
 
-  "prerelease": true,
-  "versioning": "prerelease",
-
   "changelog-sections": [
     { "type": "feat", "section": "🌟 Features", "hidden": false },
     { "type": "fix", "section": "🩹 Fixes", "hidden": false },
@@ -20,6 +17,8 @@
     { "type": "ci", "section": "🤖 Automation", "hidden": true }
   ],
   "packages": {
-    ".": {}
+    ".": {
+      "extra-files": ["README.md", "docs/src/components/Badges.astro"]
+    }
   }
 }

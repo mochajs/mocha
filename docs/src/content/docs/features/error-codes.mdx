@@ -10,12 +10,21 @@ When Mocha itself throws exception, the associated `Error` will have a `code` pr
 Where applicable, consumers should check the `code` property instead of string-matching against the `message` property.
 The following table describes these error codes:
 
-| Code                               | Description                                                  |
-| ---------------------------------- | ------------------------------------------------------------ |
-| `ERR_MOCHA_INVALID_ARG_TYPE`       | wrong type was passed for a given argument                   |
-| `ERR_MOCHA_INVALID_ARG_VALUE`      | invalid or unsupported value was passed for a given argument |
-| `ERR_MOCHA_INVALID_EXCEPTION`      | a falsy or otherwise underspecified exception was thrown     |
-| `ERR_MOCHA_INVALID_INTERFACE`      | interface specified in options not found                     |
-| `ERR_MOCHA_INVALID_REPORTER`       | reporter specified in options not found                      |
-| `ERR_MOCHA_NO_FILES_MATCH_PATTERN` | test file(s) could not be found                              |
-| `ERR_MOCHA_UNSUPPORTED`            | requested behavior, option, or parameter is unsupported      |
+| Code                                      | Description                                                           |
+| ----------------------------------------- | --------------------------------------------------------------------- |
+| `ERR_MOCHA_FATAL`                         | an unrecoverable error occurred                                       |
+| `ERR_MOCHA_FORBIDDEN_EXCLUSIVITY`         | `.only()` was used with `--forbid-only`                               |
+| `ERR_MOCHA_INSTANCE_ALREADY_DISPOSED`     | `run()` was called on a Mocha instance that has already been disposed |
+| `ERR_MOCHA_INSTANCE_ALREADY_RUNNING`      | `run()` was called on a Mocha instance that is already running        |
+| `ERR_MOCHA_INVALID_ARG_TYPE`              | wrong type was passed for a given argument                            |
+| `ERR_MOCHA_INVALID_ARG_VALUE`             | invalid or unsupported value was passed for a given argument          |
+| `ERR_MOCHA_INVALID_EXCEPTION`             | a falsy or otherwise underspecified exception was thrown              |
+| `ERR_MOCHA_INVALID_INTERFACE`             | interface specified in options not found                              |
+| `ERR_MOCHA_INVALID_PLUGIN_DEFINITION`     | a plugin definition (e.g., `mochaHooks`) was invalid                  |
+| `ERR_MOCHA_INVALID_PLUGIN_IMPLEMENTATION` | a user-supplied plugin implementation was invalid                     |
+| `ERR_MOCHA_INVALID_REPORTER`              | reporter specified in options not found                               |
+| `ERR_MOCHA_MULTIPLE_DONE`                 | `done()` was called multiple times in a test or hook                  |
+| `ERR_MOCHA_NO_FILES_MATCH_PATTERN`        | test file(s) could not be found                                       |
+| `ERR_MOCHA_TIMEOUT`                       | a test or hook exceeded its allowed run time                          |
+| `ERR_MOCHA_UNPARSABLE_FILE`               | a configuration or test file could not be parsed                      |
+| `ERR_MOCHA_UNSUPPORTED`                   | requested behavior, option, or parameter is unsupported               |

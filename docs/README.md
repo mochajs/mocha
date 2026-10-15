@@ -14,3 +14,23 @@ npm i
 npm run generate
 npm run dev
 ```
+
+## Upgrade dependencies
+
+To upgrade Astro, use:
+
+```sh
+npx @astrojs/upgrade
+```
+
+To upgrade a particular transitive dependency:
+
+```sh
+npm update --package-lock-only __package_name__
+```
+
+e.g.
+
+```sh
+npm update --package-lock-only fast-uri
+```
