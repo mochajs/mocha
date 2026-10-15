@@ -149,6 +149,19 @@ describe("getCurrentHumanApproval()", function () {
     );
   });
 
+  it("should reject approvals from the PR author", function () {
+    expect(
+      getCurrentHumanApproval(
+        [review("author", "APPROVED")],
+        headSha,
+        ["author"],
+        "author",
+      ),
+      "to be",
+      false,
+    );
+  });
+
   it("should ignore changes requests from reviewers outside the eligible set", function () {
     expect(
       getCurrentHumanApproval(

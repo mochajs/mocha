@@ -89,6 +89,7 @@ jobs:
               reviews,
               pr.head.sha,
               eligibleReviewers,
+              pr.user.login,
             );
 
             core.setOutput('author', pr.user.login);

@@ -14,9 +14,10 @@ const getEligibleReviewerLogins = (reviewerPermissions) =>
       .map(({ login }) => login),
   );
 
-module.exports = (reviews, headSha, eligibleReviewers = []) => {
+module.exports = (reviews, headSha, eligibleReviewers = [], author = null) => {
   const latestReviewsByReviewer = new Map();
   const eligibleReviewerLogins = new Set(eligibleReviewers);
+  const normalizedAuthor = typeof author === "string" ? author : null;
 
   for (const review of reviews) {
     const login = review.user && review.user.login;
@@ -24,6 +25,7 @@ module.exports = (reviews, headSha, eligibleReviewers = []) => {
 
     if (
       !login ||
+      (normalizedAuthor && login === normalizedAuthor) ||
       login.endsWith("[bot]") ||
       !eligibleReviewerLogins.has(login) ||
       !Number.isFinite(submittedAt) ||
