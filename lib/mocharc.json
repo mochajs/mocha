@@ -1,6 +1,7 @@
 {
   "diff": true,
   "extension": ["js", "cjs", "mjs"],
+  "ignore": ["**/node_modules/**", "**/.git/**"],
   "package": "./package.json",
   "reporter": "spec",
   "slow": 75,

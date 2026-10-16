@@ -1,5 +1,7 @@
 "use strict";
 
+var fs = require("node:fs");
+var os = require("node:os");
 var path = require("node:path").posix;
 var helpers = require("../helpers.cjs");
 var runMochaJSON = helpers.runMochaJSON;
@@ -58,6 +60,61 @@ describe("--ignore", function () {
       },
       done,
     );
+  });
+
+  describe("by default", function () {
+    var tmpdir;
+
+    var passingFixture = [
+      "'use strict';",
+      "describe('ignore default pass', function () {",
+      "  it('should find this test', function () {});",
+      "});",
+      "",
+    ].join("\n");
+
+    var failingFixture = [
+      "'use strict';",
+      "describe('ignore default fail', function () {",
+      "  it('should not run this test', function () {",
+      "    throw new Error('should not run');",
+      "  });",
+      "});",
+      "",
+    ].join("\n");
+
+    before(function () {
+      tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-ignore-"));
+      fs.writeFileSync(path.join(tmpdir, "pass.fixture.js"), passingFixture);
+      [
+        path.join("node_modules", "dep"),
+        path.join("nested", "node_modules", "dep"),
+        ".git",
+      ].forEach(function (dir) {
+        fs.mkdirSync(path.join(tmpdir, dir), { recursive: true });
+        fs.writeFileSync(
+          path.join(tmpdir, dir, "fail.fixture.js"),
+          failingFixture,
+        );
+      });
+    });
+
+    after(function () {
+      fs.rmSync(tmpdir, { recursive: true, force: true });
+    });
+
+    it("should ignore files in node_modules and .git directories", function (done) {
+      runMochaTest(
+        tmpdir,
+        ["--recursive"],
+        function (res) {
+          expect(res, "to have passed")
+            .and("to have passed test count", 1)
+            .and("not to have pending tests");
+        },
+        done,
+      );
+    });
   });
 
   it("should ignore multiple patterns", function (done) {
