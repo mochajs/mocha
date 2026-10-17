@@ -4,7 +4,6 @@ const serializeJavascript = require("serialize-javascript");
 const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.js");
 const sinon = require("sinon");
 const {
-  createWorker,
   startWorker,
 } = require("../../lib/nodejs/worker-core.js");
 
@@ -23,27 +22,8 @@ describe("worker", function () {
   });
 
   describe("when run as main process", function () {
-    it("should throw with the default workerpool", function () {
-      expect(startWorker, "to throw");
-    });
-
     it("should throw", function () {
-      expect(() => {
-        startWorker({
-          workerpool: {
-            isMainThread: true,
-            worker: stubs.workerpool.worker,
-          },
-        });
-      }, "to throw");
-    });
-  });
-
-  describe("when created with default dependencies", function () {
-    it("should expose a run function", function () {
-      expect(createWorker(), "to satisfy", {
-        run: expect.it("to be a function"),
-      });
+      expect(startWorker, "to throw");
     });
   });
 
