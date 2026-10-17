@@ -1,16 +1,15 @@
 "use strict";
 
 const sinon = require("sinon");
+const workerpool = require("workerpool");
 const {
-  createBufferedWorkerPoolClass,
+  BufferedWorkerPool,
 } = require("../../lib/nodejs/buffered-worker-pool.js");
+const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.js");
 
 describe("class BufferedWorkerPool", function () {
-  let BufferedWorkerPool;
   let pool;
   let stats;
-  let serializeJavascript;
-  let serializer;
   let result;
 
   beforeEach(function () {
@@ -20,26 +19,19 @@ describe("class BufferedWorkerPool", function () {
       idleWorkers: 2,
       pendingTasks: 3,
     };
-    result = { failures: 0, events: [] };
+    result = {
+      __type: "SerializableWorkerResult",
+      events: [],
+      failureCount: 0,
+    };
     pool = {
       terminate: sinon.stub().resolves(),
       exec: sinon.stub().resolves(result),
       stats: sinon.stub().returns(stats),
     };
-    serializer = {
-      deserialize: sinon.stub(),
-    };
-
-    serializeJavascript = sinon.spy(require("serialize-javascript"));
-    BufferedWorkerPool = createBufferedWorkerPoolClass({
-      workerPath: "worker.js",
-      workerpool: {
-        pool: sinon.stub().returns(pool),
-        cpus: 8,
-      },
-      deserialize: serializer.deserialize,
-      serializeJavascript,
-    });
+    sinon.stub(workerpool, "pool").returns(pool);
+    sinon.spy(BufferedWorkerPool, "serializeOptionsInternal");
+    sinon.spy(SerializableWorkerResult, "deserialize");
 
     // reset cache
     BufferedWorkerPool.resetOptionsCache();
@@ -86,7 +78,10 @@ describe("class BufferedWorkerPool", function () {
           const obj = { foo: "bar" };
           BufferedWorkerPool.serializeOptions(obj);
           BufferedWorkerPool.serializeOptions(obj);
-          expect(serializeJavascript, "was called once");
+          expect(
+            BufferedWorkerPool.serializeOptionsInternal,
+            "was called once",
+          );
         });
 
         it("should return the same value", function () {
@@ -154,9 +149,11 @@ describe("class BufferedWorkerPool", function () {
 
       it("should deserialize the result", async function () {
         await workerPool.run("file.js", { foo: "bar" });
-        expect(serializer.deserialize, "to have a call satisfying", [
-          result,
-        ]).and("was called once");
+        expect(
+          SerializableWorkerResult.deserialize,
+          "to have a call satisfying",
+          [result],
+        ).and("was called once");
       });
     });
 
