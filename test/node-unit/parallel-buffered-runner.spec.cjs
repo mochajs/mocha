@@ -7,56 +7,39 @@ const {
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
 } = require("../../lib/runner.js").Runner.constants;
-const rewiremock = require("rewiremock/node");
 const { Suite } = require("../../lib/suite.js");
 const { Runner } = require("../../lib/runner.js");
 const sinon = require("sinon");
 const { constants } = require("../../lib/utils.cjs");
+const {
+  BufferedWorkerPool,
+} = require("../../lib/nodejs/buffered-worker-pool.js");
+const {
+  ParallelBufferedRunner,
+} = require("../../lib/nodejs/parallel-buffered-runner.js");
 const { MOCHA_ID_PROP_NAME } = constants;
 
 describe("parallel-buffered-runner", function () {
   describe("ParallelBufferedRunner", function () {
     let run;
-    let BufferedWorkerPool;
     let terminate;
-    let ParallelBufferedRunner;
     let suite;
-    let warn;
-    let fatalError;
 
     beforeEach(function () {
       suite = new Suite("a root suite", {}, true);
-      warn = sinon.stub();
-
-      fatalError = new Error();
 
       // tests will want to further define the behavior of these.
       run = sinon.stub();
       terminate = sinon.stub();
-      BufferedWorkerPool = {
-        create: sinon.stub().returns({
-          run,
-          terminate,
-          stats: sinon.stub().returns({}),
-        }),
-      };
-      /**
-       * @type {ParallelBufferedRunner}
-       */
-      ParallelBufferedRunner = rewiremock.proxy(
-        () => require("../../lib/nodejs/parallel-buffered-runner.cjs"),
-        (r) => ({
-          "../../lib/nodejs/buffered-worker-pool.cjs": {
-            BufferedWorkerPool,
-          },
-          "../../lib/utils.cjs": r.with({ warn }).callThrough(),
-          "../../lib/errors.js": r
-            .with({
-              createFatalError: sinon.stub().returns(fatalError),
-            })
-            .callThrough(),
-        }),
-      );
+      sinon.stub(BufferedWorkerPool, "create").returns({
+        run,
+        terminate,
+        stats: sinon.stub().returns({}),
+      });
+    });
+
+    afterEach(function () {
+      sinon.restore();
     });
 
     describe("constructor", function () {
@@ -228,7 +211,7 @@ describe("parallel-buffered-runner", function () {
               runner.run(
                 () => {
                   expect(runner.uncaught, "to have a call satisfying", [
-                    fatalError,
+                    expect.it("to have property", "code", "ERR_MOCHA_FATAL"),
                   ]);
                   done();
                 },
@@ -476,6 +459,50 @@ describe("parallel-buffered-runner", function () {
                 );
               });
             });
+
+            describe("when subsequent files have not yet been run", function () {
+              it("should cleanly terminate the thread pool", function (done) {
+                const options = { reporter: runner._workerReporter };
+                const err = {
+                  __type: "Error",
+                  message: "oh no",
+                };
+                run.withArgs("some-file.js", options).resolves({
+                  failureCount: 1,
+                  events: [
+                    {
+                      eventName: EVENT_TEST_FAIL,
+                      data: {
+                        title: "some test",
+                      },
+                      error: err,
+                    },
+                    {
+                      eventName: EVENT_SUITE_END,
+                      data: {
+                        title: "some suite",
+                        _bail: true,
+                      },
+                    },
+                  ],
+                });
+                run.withArgs("some-other-file.js", options).rejects();
+
+                runner.run(
+                  () => {
+                    expect(terminate, "to have calls satisfying", [
+                      { args: [] }, // this is the pool force-terminating
+                      { args: [] }, // this will always be called, and will do nothing due to the previous call
+                    ]).and("was called twice");
+                    done();
+                  },
+                  {
+                    files: ["some-file.js", "some-other-file.js"],
+                    options,
+                  },
+                );
+              });
+            });
           });
         });
 
@@ -604,50 +631,6 @@ describe("parallel-buffered-runner", function () {
                     },
                   ],
                 });
-
-                runner.run(
-                  () => {
-                    expect(terminate, "to have calls satisfying", [
-                      { args: [] }, // this is the pool force-terminating
-                      { args: [] }, // this will always be called, and will do nothing due to the previous call
-                    ]).and("was called twice");
-                    done();
-                  },
-                  {
-                    files: ["some-file.js", "some-other-file.js"],
-                    options,
-                  },
-                );
-              });
-            });
-
-            describe("when subsequent files have not yet been run", function () {
-              it("should cleanly terminate the thread pool", function (done) {
-                const options = { reporter: runner._workerReporter };
-                const err = {
-                  __type: "Error",
-                  message: "oh no",
-                };
-                run.withArgs("some-file.js", options).resolves({
-                  failureCount: 1,
-                  events: [
-                    {
-                      eventName: EVENT_TEST_FAIL,
-                      data: {
-                        title: "some test",
-                      },
-                      error: err,
-                    },
-                    {
-                      eventName: EVENT_SUITE_END,
-                      data: {
-                        title: "some suite",
-                        _bail: true,
-                      },
-                    },
-                  ],
-                });
-                run.withArgs("some-other-file.js", options).rejects();
 
                 runner.run(
                   () => {
