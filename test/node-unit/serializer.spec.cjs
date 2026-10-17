@@ -165,9 +165,7 @@ describe("serializer", function () {
             expect(
               SerializableEvent.create("some-event", obj).serialize(),
               "to satisfy",
-              {
-                data: { list: [{ herp: "derp" }, { bing: "bong" }] },
-              },
+              { data: { list: [{ herp: "derp" }, { bing: "bong" }] } },
             );
           });
         });

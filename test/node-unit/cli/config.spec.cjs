@@ -213,10 +213,7 @@ describe("cli/config", function () {
       expect(
         () => parsers.js(require.resolve("./fixtures/bad-require.fixture.cjs")),
         "to throw",
-        {
-          message: /Cannot find module 'fake'/,
-          code: "MODULE_NOT_FOUND",
-        },
+        { message: /Cannot find module 'fake'/, code: "MODULE_NOT_FOUND" },
       );
     });
 

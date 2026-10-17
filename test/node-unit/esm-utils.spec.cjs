@@ -68,14 +68,14 @@ describe("esm-utils", function () {
     });
 
     it("should surface the require() error when import() fails on a directory specifier", async function () {
-      sinon.stub(esmUtils, "doImport").rejects(
-        Object.assign(
-          new Error("Directory import '/fixtures/lib' is not supported"),
-          {
-            code: "ERR_UNSUPPORTED_DIR_IMPORT",
-          },
-        ),
-      );
+      sinon
+        .stub(esmUtils, "doImport")
+        .rejects(
+          Object.assign(
+            new Error("Directory import '/fixtures/lib' is not supported"),
+            { code: "ERR_UNSUPPORTED_DIR_IMPORT" },
+          ),
+        );
 
       return expect(
         () =>
