@@ -22,7 +22,7 @@ const { EventEmitter } = require("node:events");
 const sinon = require("sinon");
 const semver = require("semver");
 const {
-  createParallelBufferedClass,
+  ParallelBuffered,
 } = require("../../../lib/nodejs/reporters/parallel-buffered.js");
 const {
   SerializableEvent,
@@ -32,13 +32,9 @@ const {
 describe("ParallelBuffered", function () {
   /** @type {EventEmitter} */
   let runner;
-  let ParallelBuffered;
 
   beforeEach(function () {
     runner = new EventEmitter();
-    ParallelBuffered = createParallelBufferedClass({
-      Base: class MockBase {},
-    });
   });
 
   afterEach(function () {
@@ -54,6 +50,9 @@ describe("ParallelBuffered", function () {
 
       new ParallelBuffered(runner);
       expect(runner.on, "to have calls satisfying", [
+        // via Base
+        [EVENT_TEST_PASS, expect.it("to be a function")],
+        [EVENT_TEST_FAIL, expect.it("to be a function")],
         // via Buffered
         [EVENT_SUITE_BEGIN, expect.it("to be a function")],
         [EVENT_SUITE_END, expect.it("to be a function")],
@@ -113,6 +112,8 @@ describe("ParallelBuffered", function () {
         };
         const test = {
           title: "some test",
+          duration: 0,
+          slow: () => 75,
         };
         runner.emit(EVENT_SUITE_BEGIN, suite);
         runner.emit(EVENT_TEST_BEGIN, test);
@@ -176,6 +177,8 @@ describe("ParallelBuffered", function () {
         };
         const test = {
           title: "some test",
+          duration: 0,
+          slow: () => 75,
         };
         runner.emit(EVENT_SUITE_BEGIN, suite);
         runner.emit(EVENT_TEST_BEGIN, test);
@@ -198,6 +201,8 @@ describe("ParallelBuffered", function () {
         };
         const test = {
           title: "some test",
+          duration: 0,
+          slow: () => 75,
         };
         runner.emit(EVENT_SUITE_BEGIN, suite);
         runner.emit(EVENT_TEST_BEGIN, test);
