@@ -9,7 +9,7 @@
  */
 export async function resolve(specifier, context, defaultResolve) {
   return await defaultResolve(
-    specifier.replace('.ts', '.mjs'),
+    specifier.replace('.ts', '.js'),
     context,
     defaultResolve,
   );

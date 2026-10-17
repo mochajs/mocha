@@ -1,9 +1,12 @@
 "use strict";
 
+const inspector = require("node:inspector");
+const sinon = require("sinon");
 const nodeEnvFlags = [...process.allowedNodeEnvironmentFlags];
 const {
   isNodeFlag,
   impliesNoTimeouts,
+  isInspectorActive,
   unparseNodeFlags,
 } = require("../../../lib/cli/node-flags.cjs");
 
@@ -90,6 +93,22 @@ describe("node-flags", function () {
     it("should return true for inspect flags", function () {
       expect(impliesNoTimeouts("inspect"), "to be true");
       expect(impliesNoTimeouts("inspect-brk"), "to be true");
+    });
+  });
+
+  describe("isInspectorActive()", function () {
+    afterEach(function () {
+      sinon.restore();
+    });
+
+    it("should return false if the inspector is not active", function () {
+      sinon.stub(inspector, "url").returns(undefined);
+      expect(isInspectorActive(), "to be false");
+    });
+
+    it("should return true if the inspector is active", function () {
+      sinon.stub(inspector, "url").returns("ws://127.0.0.1:9229/some-uuid");
+      expect(isInspectorActive(), "to be true");
     });
   });
 

@@ -88,6 +88,66 @@ describe("--timeout", function () {
     );
   });
 
+  it('should disable timeout with "-n inspect=0"', function (done) {
+    var fixture = "options/slow-test.fixture.js";
+    runMochaJSON(
+      fixture,
+      ["-n", "inspect=0", "--timeout", "200"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed").and("to have passed test count", 2);
+        done();
+      },
+    );
+  });
+
+  it("should disable timeout when the inspector is enabled via NODE_OPTIONS", function (done) {
+    var fixture = "options/slow-test.fixture.js";
+    var nodeOptions = process.env.NODE_OPTIONS || "";
+    runMochaJSON(
+      fixture,
+      ["--timeout", "200"],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed").and("to have passed test count", 2);
+        done();
+      },
+      {
+        env: {
+          ...process.env,
+          NODE_OPTIONS: `${nodeOptions} --inspect=0`.trim(),
+        },
+      },
+    );
+  });
+
+  it("should disable timeout when the inspector is opened without inspect flags", function (done) {
+    var fixture = "options/slow-test.fixture.js";
+    runMochaJSON(
+      fixture,
+      [
+        "--require",
+        require.resolve("../fixtures/options/open-inspector.fixture.cjs"),
+        "--timeout",
+        "200",
+      ],
+      function (err, res) {
+        if (err) {
+          done(err);
+          return;
+        }
+        expect(res, "to have passed").and("to have passed test count", 2);
+        done();
+      },
+    );
+  });
+
   it("should complete tests having unref'd async behavior", function (done) {
     runMochaJSON(
       "options/timeout-unref.fixture.js",

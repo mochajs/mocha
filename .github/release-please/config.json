@@ -18,7 +18,7 @@
   ],
   "packages": {
     ".": {
-      "extra-files": ["README.md"]
+      "extra-files": ["README.md", "docs/src/components/Badges.astro"]
     }
   }
 }

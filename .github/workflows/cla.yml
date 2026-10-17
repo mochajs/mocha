@@ -1,0 +1,27 @@
+name: Label pull requests with unsigned CLAs
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  waiting-for-author:
+    if: >-
+      ${{ github.event.issue.pull_request &&
+          github.event.comment.user.login == 'linux-foundation-easycla[bot]' &&
+          contains(github.event.comment.body, 'CLA Not Signed') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add "waiting for author" label
+        uses: actions/github-script@v9
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['status: waiting for author'],
+            });
