@@ -868,10 +868,7 @@ describe("lib/utils", function () {
       expect(
         utils.createMap({ foo: "bar" }, { bar: "baz" }),
         "to exhaustively satisfy",
-        {
-          foo: "bar",
-          bar: "baz",
-        },
+        { foo: "bar", bar: "baz" },
       );
     });
   });

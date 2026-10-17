@@ -3,9 +3,7 @@
 const serializeJavascript = require("serialize-javascript");
 const { SerializableWorkerResult } = require("../../lib/nodejs/serializer.js");
 const sinon = require("sinon");
-const {
-  startWorker,
-} = require("../../lib/nodejs/worker-core.js");
+const { startWorker } = require("../../lib/nodejs/worker-core.js");
 
 describe("worker", function () {
   let worker;
