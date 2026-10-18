@@ -89,3 +89,4 @@ jobs:
           name: coverage-${{ needs.resolve-inputs.outputs.npmScript }}-${{ matrix.os }}-node-${{ matrix.node_version }}
           path: coverage/lcov.info
           retention-days: 1
+          overwrite:true
