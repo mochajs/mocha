@@ -78,6 +78,31 @@ jobs:
       npm-script: test-node:${{ matrix.test-part }}
       coverage: ${{ matrix.coverage }}
 
+  analyze-test-failures:
+    name: Analyze intermittent test failures
+    runs-on: ubuntu-latest
+    needs: test-node-all
+    if: ${{ failure() && needs.test-node-all.result == 'failure' }}
+    permissions:
+      actions: read
+      contents: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: test-results-*
+          path: test-results
+      - name: Find intermittent failures and related issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/analyze-ci-test-failures.js test-results
+
   coverage:
     name: Merge coverage
     runs-on: ubuntu-latest
