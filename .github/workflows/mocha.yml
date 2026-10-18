@@ -107,6 +107,7 @@ jobs:
         with:
           name: coverage
           path: coverage/lcov.info
+          overwrite: true
 
   test-browser:
     name: Browser tests
