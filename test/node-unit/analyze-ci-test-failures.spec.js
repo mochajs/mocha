@@ -1,5 +1,7 @@
 import {
+  formatIssueBody,
   formatSummary,
+  issueMatchesFailure,
   summarizeFailures,
 } from "../../scripts/analyze-ci-test-failures.js";
 
@@ -12,7 +14,11 @@ describe("analyze-ci-test-failures", function () {
             artifactName: "test-results-test-node-unit-ubuntu-latest-node-22",
             report: {
               failures: [
-                { title: "should work", fullTitle: "suite should work" },
+                {
+                  title: "should work",
+                  fullTitle: "suite should work",
+                  err: { message: "expected true to be false" },
+                },
               ],
             },
           },
@@ -20,7 +26,11 @@ describe("analyze-ci-test-failures", function () {
             artifactName: "test-results-test-node-unit-windows-latest-node-22",
             report: {
               failures: [
-                { title: "should work", fullTitle: "suite should work" },
+                {
+                  title: "should work",
+                  fullTitle: "suite should work",
+                  err: { message: "expected true to be false" },
+                },
               ],
             },
           },
@@ -44,6 +54,7 @@ describe("analyze-ci-test-failures", function () {
           part: "unit",
           title: "should work",
           totalConfigurations: 2,
+          errorMessages: ["expected true to be false"],
         },
       ]);
     });
@@ -113,5 +124,54 @@ describe("analyze-ci-test-failures", function () {
       "[#123](https://github.com/mochajs/mocha/issues/123)",
     );
     expect(summary, "to contain", "1 of 8 configurations");
+  });
+
+  it("matches existing flaky-test issues and marks issue reports for stable updates", function () {
+    const failure = {
+      configurations: new Set(["ubuntu-latest-node-22"]),
+      failureCount: 1,
+      fullTitle: "watch should rerun tests",
+      part: "integration",
+      title: "should rerun tests",
+      totalConfigurations: 8,
+      errorMessages: ["expected 1 to equal 2"],
+    };
+    const issue = {
+      title: 'Flaky test: "watch should rerun tests"',
+      body: "",
+    };
+
+    expect(issueMatchesFailure(issue, failure), "to be true");
+    expect(
+      issueMatchesFailure({ title: "Flaky test: another test" }, failure),
+      "to be false",
+    );
+    expect(
+      issueMatchesFailure(
+        {
+          title: 'Flaky test: "another suite should rerun tests"',
+          body: "<!-- mocha-ci-failure:different-test -->",
+        },
+        failure,
+      ),
+      "to be false",
+    );
+
+    const body = formatIssueBody(
+      failure,
+      "https://github.com/mochajs/mocha/actions/runs/123",
+      "Maintainer notes about this flaky test.",
+    );
+    const updatedBody = formatIssueBody(
+      failure,
+      "https://github.com/mochajs/mocha/actions/runs/123",
+      body,
+    );
+    expect(body, "to start with", "Maintainer notes about this flaky test.");
+    expect(updatedBody, "to equal", body);
+    expect(body, "to contain", "1 of 8 configurations");
+    expect(body, "to contain", "expected 1 to equal 2");
+    expect(body, "to contain", "actions/runs/123");
+    expect(body, "to contain", "<!-- mocha-ci-failure:");
   });
 });

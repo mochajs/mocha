@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { appendFileSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,9 +42,11 @@ export function summarizeFailures(reports, jobs) {
       const existing = failuresByTest.get(key);
       if (existing) {
         existing.configurations.add(artifactName);
+        if (failure.err?.message) existing.errors.add(failure.err.message);
       } else {
         failuresByTest.set(key, {
           configurations: new Set([artifactName]),
+          errors: new Set(failure.err?.message ? [failure.err.message] : []),
           fullTitle: failure.fullTitle,
           part,
           title: failure.title,
@@ -56,6 +59,7 @@ export function summarizeFailures(reports, jobs) {
     .map((failure) => ({
       ...failure,
       failureCount: failure.configurations.size,
+      errorMessages: [...failure.errors].sort(),
       totalConfigurations: configurationsByPart.get(failure.part) ?? 0,
     }))
     .sort((a, b) => a.fullTitle.localeCompare(b.fullTitle));
@@ -68,13 +72,16 @@ function normalize(text) {
     .trim();
 }
 
-async function requestGitHub(path) {
+async function requestGitHub(path, options = {}) {
   const response = await fetch(`${process.env.GITHUB_API_URL}${path}`, {
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + process.env.GITHUB_TOKEN,
       "x-github-api-version": "2022-11-28",
+      ...(options?.body ? { "content-type": "application/json" } : {}),
     },
+    ...options,
+    ...(options?.body ? { body: JSON.stringify(options.body) } : {}),
   });
   if (!response.ok) {
     throw new Error(`GitHub API request failed: ${response.status} ${path}`);
@@ -102,6 +109,116 @@ async function findIssues(testTitle) {
   return items.filter((issue) =>
     normalize(`${issue.title} ${issue.body ?? ""}`).includes(normalizedTitle),
   );
+}
+
+function issueMarker(failure) {
+  const hash = createHash("sha256")
+    .update(`${failure.part}\0${failure.fullTitle}`)
+    .digest("hex");
+  return `<!-- mocha-ci-failure:${hash} -->`;
+}
+
+export function issueMatchesFailure(issue, failure) {
+  const body = issue.body ?? "";
+  if (body.includes(issueMarker(failure))) return true;
+  if (body.includes("<!-- mocha-ci-failure:")) return false;
+  const testTitle = normalize(failure.title);
+  const issueTitle = normalize(issue.title).replace(/^flaky test\s*/, "");
+  return (
+    testTitle.length > 0 &&
+    /^flaky test\b/i.test(issue.title) &&
+    issueTitle.endsWith(testTitle)
+  );
+}
+
+export function formatIssueBody(failure, runUrl, existingBody = "") {
+  const configurations = [...failure.configurations]
+    .map((configuration) => `  - \`${configuration}\``)
+    .join("\n");
+  const marker = issueMarker(failure);
+  const endMarker = "<!-- /mocha-ci-failure -->";
+  const section = [
+    marker,
+    `This test failed in main-branch CI. See [workflow run](${runUrl}).`,
+    "",
+    `- Test: \`${failure.fullTitle}\``,
+    `- Test partition: \`test-node:${failure.part}\``,
+    `- Failed in ${failure.failureCount} of ${failure.totalConfigurations} configurations.`,
+    ...(failure.errorMessages?.length
+      ? [
+          "- Failure details:",
+          ...failure.errorMessages.map(
+            (message) => `  - \`${message.replace(/\s+/g, " ").trim()}\``,
+          ),
+        ]
+      : []),
+    "- Failing configurations:",
+    configurations,
+    "",
+    "Tracked under #5361.",
+    endMarker,
+  ].join("\n");
+  const markerIndex = existingBody.indexOf(marker);
+  if (markerIndex >= 0) {
+    const endIndex = existingBody.indexOf(endMarker, markerIndex);
+    if (endIndex >= 0) {
+      return (
+        existingBody.slice(0, markerIndex) +
+        section +
+        existingBody.slice(endIndex + endMarker.length)
+      );
+    }
+  }
+  return [existingBody.trimEnd(), section].filter(Boolean).join("\n\n");
+}
+
+async function upsertFailureIssues(failures) {
+  const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+  const repositoryPath = `/repos/${owner}/${repo}`;
+  const query = new URLSearchParams({
+    q: `repo:${owner}/${repo} is:issue "flaky test"`,
+    per_page: "100",
+  });
+  const { items } = await requestGitHub(`/search/issues?${query}`);
+  const runUrl = `${process.env.GITHUB_SERVER_URL}/${owner}/${repo}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+
+  for (const failure of failures) {
+    const existing = items
+      .filter((issue) => issueMatchesFailure(issue, failure))
+      .sort(
+        (a, b) => (a.state === "open" ? -1 : 1) - (b.state === "open" ? -1 : 1),
+      )[0];
+    const body = formatIssueBody(failure, runUrl, existing?.body ?? "");
+    try {
+      if (existing) {
+        await requestGitHub(`${repositoryPath}/issues/${existing.number}`, {
+          method: "PATCH",
+          body: { body, state: "open" },
+        });
+        console.log(
+          `Updated issue #${existing.number} for "${failure.fullTitle}".`,
+        );
+      } else {
+        const title = `Flaky test: "${failure.fullTitle}"`.slice(0, 256);
+        const issue = await requestGitHub(`${repositoryPath}/issues`, {
+          method: "POST",
+          body: {
+            title,
+            body,
+            labels: ["area: repository tooling", "status: in triage"],
+          },
+        });
+        items.push(issue);
+        console.log(
+          `Created issue #${issue.number} for "${failure.fullTitle}".`,
+        );
+      }
+    } catch (error) {
+      console.warn(
+        `Could not create or update an issue for "${failure.fullTitle}": ${error.message}`,
+      );
+    }
+  }
 }
 
 function escapeMarkdown(text) {
@@ -138,6 +255,11 @@ async function main() {
   }
 
   const failures = summarizeFailures(reports, await getJobs());
+  if (process.argv.includes("--update-issues")) {
+    await upsertFailureIssues(failures);
+    return;
+  }
+
   const issueMatches = new Map();
   for (const failure of failures) {
     if (failure.failureCount === 1 && failure.totalConfigurations > 1) {
