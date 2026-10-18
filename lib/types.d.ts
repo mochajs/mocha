@@ -28,6 +28,9 @@ export interface MochaOptions {
   /** Check for global variable leaks? */
   checkLeaks?: boolean;
 
+  /** Dispose of test functions and hooks after a run? Set to `false` to run the same instance more than once. */
+  cleanReferencesAfterRun?: boolean;
+
   /** Color TTY output from reporter? */
   color?: boolean;
 
