@@ -20,7 +20,7 @@ In a browser, test files are loaded by `<script>` tags, and calling `mocha.run()
    2. If not, Mocha ignores any exports of a `--require`'d module
 6. Mocha validates any custom reporters or interfaces which were loaded via `--require` or otherwise
 7. Mocha _discovers_ test files; when given no files or directories, it finds files with extensions `.js`, `.mjs` or `.cjs` in the `test` directory (but not its children), relative to the current working directory
-8. The (default) [bdd interface](/interfaces/bdd) loads the test files _in no particular order_, which are given an interface-specific `global` context (this is how, e.g., `describe()` ends up as a global in a test file)
+8. The selected interface loads the test files _in no particular order_. Most interfaces use an interface-specific `global` context, which is how, e.g., `describe()` ends up as a global in a test file. The [`require` interface](/interfaces/require) is the exception: it keeps the DSL off `globalThis`, and test files import it from `mocha` instead.
    1. When a test file is loaded, Mocha executes all of its suites and finds--_but does not execute_--any hooks and tests therein.
    2. Top-level hooks, tests and suites are all made members of an "invisible" _root suite_; there is only _one_ root suite for the entire process
 9. Mocha runs [global setup fixtures](/features/global-fixtures#global-setup-fixtures), if any
