@@ -97,6 +97,9 @@ export interface MochaOptions {
   /** Max number of worker processes for parallel runs. */
   jobs?: number;
 
+  /** Milliseconds to wait for a parallel worker to exit before force-killing it. */
+  workerTerminateTimeout?: number;
+
   /** Hooks to bootstrap the root suite with. */
   rootHooks?: MochaRootHookObject;
 

@@ -115,6 +115,19 @@ describe("parallel-buffered-runner", function () {
           );
         });
 
+        it("should pass workerTerminateTimeout to the worker pool", function (done) {
+          runner.once(EVENT_RUN_BEGIN, function () {
+            expect(BufferedWorkerPool.create, "to have calls satisfying", [
+              { args: [{ maxWorkers: 2, workerTerminateTimeout: 5000 }] },
+            ]);
+            done();
+          });
+          runner.run(function () {}, {
+            files: [],
+            options: { jobs: 2, workerTerminateTimeout: 5000 },
+          });
+        });
+
         describe("when instructed to link objects", function () {
           beforeEach(function () {
             runner._linkPartialObjects = true;

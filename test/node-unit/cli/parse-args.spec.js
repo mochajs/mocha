@@ -230,6 +230,16 @@ describe("parse-args", function () {
     );
   });
 
+  it("coerces --worker-terminate-timeout to a number", function () {
+    expect(
+      parseMochaArgs(["--worker-terminate-timeout", "5000"], defaults),
+      "to satisfy",
+      {
+        "worker-terminate-timeout": 5000,
+      },
+    );
+  });
+
   it("preserves unknown option negation", function () {
     expect(parseMochaArgs(["--no-foo"], defaults), "to satisfy", {
       foo: false,
