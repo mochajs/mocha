@@ -27,4 +27,23 @@ describe("--reporter", function () {
       "inherit",
     );
   });
+
+  it("should fail with a meaningful error for the HTML reporter", function (done) {
+    runMocha(
+      "passing.fixture.cjs",
+      ["--reporter", "html"],
+      function (err, res) {
+        if (err) {
+          return done(err);
+        }
+        expect(
+          res,
+          "to have failed with output",
+          /HTML reporter is only supported in a browser/,
+        );
+        done();
+      },
+      { stdio: "pipe" },
+    );
+  });
 });
