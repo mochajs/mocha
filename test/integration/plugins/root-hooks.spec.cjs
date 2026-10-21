@@ -121,7 +121,7 @@ describe("root hooks", function () {
       });
     });
 
-    describe("support ESM via .js extension when type=commonjs", function () {
+    describe("support ESM via .js extension w/o type field", function () {
       describe("should work", function () {
         const filename =
           "../fixtures/plugins/root-hooks/ambiguous/root-hook-defs-esm-broken.fixture.js";
