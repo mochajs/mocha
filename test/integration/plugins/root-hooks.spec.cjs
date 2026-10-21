@@ -92,7 +92,7 @@ describe("root hooks", function () {
             "--require=" +
               require.resolve(
                 // as object
-                "../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.js",
+                "../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.mjs",
               ),
             "--require=" +
               require.resolve(
