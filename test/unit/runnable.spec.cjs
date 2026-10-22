@@ -448,6 +448,28 @@ describe("Runnable(title, fn)", function () {
         });
       });
 
+      describe("when done() is invoked with a circular non-Error object", function () {
+        it("should invoke the callback with a descriptive Error", function (done) {
+          var runnable = new Runnable("foo", function (done) {
+            var obj = { error: "Test error" };
+            obj.self = obj;
+            done(obj);
+          });
+
+          runnable.run(function (err) {
+            expect(err, "to be an", Error);
+            expect(
+              err.message,
+              "to begin with",
+              "done() invoked with non-Error: ",
+            );
+            expect(err.message, "to contain", '"error": "Test error"');
+            expect(err.message, "to contain", '"self": [Circular]');
+            done();
+          });
+        });
+      });
+
       describe("when done() is invoked with a string", function () {
         it("should invoke the callback", function (done) {
           var runnable = new Runnable("foo", function (done) {
