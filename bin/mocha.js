@@ -20,7 +20,7 @@ import {
   unparseNodeFlags,
   isNodeFlag,
   impliesNoTimeouts,
-} from "../lib/cli/node-flags.cjs";
+} from "../lib/cli/node-flags.js";
 import { fileURLToPath } from "node:url";
 
 const debug = d.debug("mocha:cli:mocha");

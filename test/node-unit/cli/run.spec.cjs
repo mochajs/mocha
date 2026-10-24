@@ -3,7 +3,7 @@
 const {
   getRunOptionDefinitions,
   types,
-} = require("../../../lib/cli/run-option-metadata.cjs");
+} = require("../../../lib/cli/run-option-metadata.js");
 const { validateRunOptions } = require("../../../lib/cli/run.cjs");
 
 describe("command", function () {
