@@ -3,7 +3,7 @@
 const {
   validateLegacyPlugin,
   list,
-} = require("../../../lib/cli/run-helpers.cjs");
+} = require("../../../lib/cli/run-helpers.js");
 const Mocha = require("../../../lib/mocha.cjs");
 
 describe("helpers", function () {
