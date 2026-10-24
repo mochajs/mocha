@@ -8,7 +8,7 @@ const {
   impliesNoTimeouts,
   isInspectorActive,
   unparseNodeFlags,
-} = require("../../../lib/cli/node-flags.cjs");
+} = require("../../../lib/cli/node-flags.js");
 
 const { isMochaFlag } = require("../../../lib/cli/run-option-metadata.js");
 
