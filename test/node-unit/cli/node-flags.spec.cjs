@@ -10,7 +10,7 @@ const {
   unparseNodeFlags,
 } = require("../../../lib/cli/node-flags.cjs");
 
-const { isMochaFlag } = require("../../../lib/cli/run-option-metadata.cjs");
+const { isMochaFlag } = require("../../../lib/cli/run-option-metadata.js");
 
 describe("node-flags", function () {
   describe("isNodeFlag()", function () {

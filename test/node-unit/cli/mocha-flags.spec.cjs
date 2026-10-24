@@ -5,7 +5,7 @@ const {
   types,
   expectedTypeForFlag,
   getRunOptionDefinitions,
-} = require("../../../lib/cli/run-option-metadata.cjs");
+} = require("../../../lib/cli/run-option-metadata.js");
 
 describe("mocha-flags", function () {
   describe("expectedTypeForFlag()", function () {
