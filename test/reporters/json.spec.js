@@ -147,12 +147,43 @@ describe("JSON reporter", function () {
     });
   });
 
+  describe("indentation", function () {
+    for (const [indentation, expected] of [
+      [undefined, 2],
+      [null, 2],
+      [0, 0],
+      [4, 4],
+      ["0", 0],
+      ["4", 4],
+      ["\t", "\t"],
+      ["  ", "  "],
+      ["", ""],
+    ]) {
+      it(`should format output with indentation ${JSON.stringify(indentation)}`, async function () {
+        new JSONReporter(runner, { reporterOption: { indentation } });
+        suite.addTest(new Test(testTitle, noop));
+        const stdout = sinon.stub(process.stdout, "write");
+
+        await new Promise((resolve) => runner.run(resolve));
+        sinon.restore();
+        const json = stdout.firstCall.args[0];
+        expect(
+          json,
+          "to be",
+          JSON.stringify(runner.testResults, null, expected),
+        );
+        expect(JSON.parse(json).passes, "to have length", 1);
+      });
+    }
+  });
+
   describe('when "reporterOption.output" is provided', function () {
     var expectedDirName = "reports";
     var expectedFileName = "reports/test-results.json";
     var options = {
       reporterOption: {
         output: expectedFileName,
+        indentation: "\t",
       },
     };
 
@@ -173,7 +204,7 @@ describe("JSON reporter", function () {
       const fsWriteFileSync = sinon.stub(fs, "writeFileSync");
 
       fsWriteFileSync.callsFake(function (filename, content) {
-        const expectedJson = JSON.stringify(runner.testResults, null, 2);
+        const expectedJson = JSON.stringify(runner.testResults, null, "\t");
         expect(expectedFileName, "to be", filename);
         expect(content, "to be", expectedJson);
       });
@@ -211,7 +242,11 @@ describe("JSON reporter", function () {
           "to contain",
           `[mocha] writing output to "${expectedFileName}" failed:`,
         );
-        expect(outLog[1], "to match", /"fullTitle": "JSON suite json test 1"/);
+        expect(
+          outLog[1],
+          "to be",
+          JSON.stringify(runner.testResults, null, "\t"),
+        );
         done();
       });
     });

@@ -5,8 +5,26 @@ var fs = require("node:fs");
 var crypto = require("node:crypto");
 var path = require("node:path");
 var run = require("./helpers.cjs").runMocha;
+var runMochaAsync = require("./helpers.cjs").runMochaAsync;
 
 describe("reporters", function () {
+  describe("json", function () {
+    for (const indentation of [0, 4, "\t", "  ", ""]) {
+      it(`formats JSON with --reporter-option indentation=${JSON.stringify(indentation)}`, async function () {
+        const result = await runMochaAsync("passing.fixture.cjs", [
+          "--reporter",
+          "json",
+          "--reporter-option",
+          `indentation=${indentation}`,
+        ]);
+        const json = JSON.parse(result.output);
+        expect(result.code, "to be", 0);
+        expect(json.stats.passes, "to be", 2);
+        expect(result.output, "to be", JSON.stringify(json, null, indentation));
+      });
+    }
+  });
+
   describe("markdown", function () {
     var res;
 
