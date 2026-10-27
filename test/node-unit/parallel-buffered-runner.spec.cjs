@@ -4,6 +4,7 @@ const {
   EVENT_RUN_BEGIN,
   EVENT_TEST_PASS,
   EVENT_TEST_FAIL,
+  EVENT_TEST_END,
   EVENT_SUITE_END,
   EVENT_SUITE_BEGIN,
 } = require("../../lib/runner.js").Runner.constants;
@@ -603,6 +604,85 @@ describe("parallel-buffered-runner", function () {
                 );
               });
             });
+          });
+        });
+
+        describe("when the failZero option is set", function () {
+          beforeEach(function () {
+            runner = new ParallelBufferedRunner(suite, { failZero: true });
+          });
+
+          it("should fail if no tests ran", function (done) {
+            run.resolves({ failureCount: 0, events: [] });
+
+            runner.run(
+              (failures) => {
+                expect(failures, "to be", 1);
+                done();
+              },
+              {
+                files: ["some-file.js", "some-other-file.js"],
+                options: {},
+              },
+            );
+          });
+
+          it("should not fail if a test ran in any file", function (done) {
+            run.withArgs("some-file.js").resolves({
+              failureCount: 0,
+              events: [
+                {
+                  eventName: EVENT_TEST_END,
+                  data: {
+                    title: "some test",
+                  },
+                },
+              ],
+            });
+            run.withArgs("some-other-file.js").resolves({
+              failureCount: 0,
+              events: [],
+            });
+
+            runner.run(
+              (failures) => {
+                expect(failures, "to be", 0);
+                done();
+              },
+              {
+                files: ["some-file.js", "some-other-file.js"],
+                options: {},
+              },
+            );
+          });
+
+          it("should keep the failure count if no tests ran because a hook failed", function (done) {
+            run.resolves({
+              failureCount: 1,
+              events: [
+                {
+                  eventName: EVENT_TEST_FAIL,
+                  data: {
+                    title: '"before all" hook',
+                  },
+                  error: {
+                    __type: "Error",
+                    message: "oh no",
+                  },
+                },
+              ],
+            });
+
+            runner.run(
+              (failures) => {
+                expect(failures, "to be", 2);
+                done();
+              },
+              {
+                files: ["some-file.js", "some-other-file.js"],
+                options: {},
+              },
+            );
           });
         });
       });
