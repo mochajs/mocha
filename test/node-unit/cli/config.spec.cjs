@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("node:path");
 const sinon = require("sinon");
 const rewiremock = require("rewiremock/node");
 const { parsers } = require("../../../lib/cli/config.cjs");
@@ -157,7 +158,7 @@ describe("cli/config", function () {
       findup.onFirstCall().returns("/some/path/.mocharc.js");
       findConfig();
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: process.cwd() }],
+        args: [CONFIG_FILES[0], { cwd: process.cwd(), stopAt: process.cwd() }],
         returned: "/some/path/.mocharc.js",
       });
     });
@@ -166,19 +167,54 @@ describe("cli/config", function () {
       findup.onFirstCall().returns("/some/path/.mocharc.js");
       findConfig("/some/path/");
       expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: "/some/path/" }],
+        args: [CONFIG_FILES[0], { cwd: "/some/path", stopAt: "/some/path" }],
         returned: "/some/path/.mocharc.js",
       });
     });
 
-    it("should call findup-sync with all config filename args in order", function () {
+    it("should check all config filenames in a directory before walking up", function () {
       findup.returns(undefined);
-      findConfig("/some/path/");
+      findConfig("/some/path");
       expect(
-        findup,
-        "to have calls satisfying",
-        CONFIG_FILES.map((file) => ({ args: [file, { cwd: "/some/path/" }] })),
+        findup.getCalls().slice(0, CONFIG_FILES.length),
+        "to satisfy",
+        CONFIG_FILES.map((file) => ({
+          args: [file, { cwd: "/some/path", stopAt: "/some/path" }],
+        })),
       );
+      expect(findup.getCall(CONFIG_FILES.length).args, "to satisfy", [
+        CONFIG_FILES[0],
+        { cwd: "/some", stopAt: "/some" },
+      ]);
+    });
+
+    it("should prefer a local config file over a higher-priority filename in a parent directory", function () {
+      const existing = new Set([
+        "/some/.mocharc.cjs",
+        "/some/path/.mocharc.js",
+      ]);
+      // Simulate find-up-simple: search `stopAt` and below for `file`
+      findup.callsFake((file, options) => {
+        let directory = path.resolve(options.cwd);
+        const stopAt = path.resolve(
+          options.stopAt ?? path.parse(directory).root,
+        );
+        for (;;) {
+          const filepath = path.join(directory, file);
+          if (existing.has(filepath)) {
+            return filepath;
+          }
+          if (
+            directory === stopAt ||
+            directory === path.parse(directory).root
+          ) {
+            return undefined;
+          }
+          directory = path.dirname(directory);
+        }
+      });
+
+      expect(findConfig("/some/path"), "to equal", "/some/path/.mocharc.js");
     });
 
     it("should not make extra calls once an item is found", function () {
@@ -194,9 +230,15 @@ describe("cli/config", function () {
       expect(findConfig("/some/path/"), "to equal", expected);
       expect(findup, "was called times", 3);
       expect(findup.getCalls(), "to satisfy", [
-        { args: [CONFIG_FILES[0], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[1], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[2], { cwd: "/some/path/" }] },
+        {
+          args: [CONFIG_FILES[0], { cwd: "/some/path", stopAt: "/some/path" }],
+        },
+        {
+          args: [CONFIG_FILES[1], { cwd: "/some/path", stopAt: "/some/path" }],
+        },
+        {
+          args: [CONFIG_FILES[2], { cwd: "/some/path", stopAt: "/some/path" }],
+        },
       ]);
     });
 
