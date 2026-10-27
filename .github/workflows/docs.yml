@@ -1,4 +1,4 @@
-name: Docs
+name: Build site (not deploy)
 
 on:
   push:
