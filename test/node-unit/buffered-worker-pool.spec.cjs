@@ -147,6 +147,38 @@ describe("class BufferedWorkerPool", function () {
         ]).and("was called once");
       });
 
+      describe("when the worker dies and the pool has no workers left", function () {
+        it("should terminate the pool so queued files reject instead of hanging", async function () {
+          const termination = new workerpool.TerminateError(
+            "Workerpool Worker terminated Unexpectedly\n    exitCode: `1`"
+          );
+          pool.exec.rejects(termination);
+          pool.stats.returns({
+            totalWorkers: 0,
+            busyWorkers: 0,
+            idleWorkers: 0,
+            pendingTasks: 1,
+          });
+          await expect(workerPool.run("file.js", {}), "to be rejected with", /terminated Unexpectedly/);
+          expect(pool.terminate, "was called once");
+        });
+
+        it("should not terminate the pool while other workers are alive", async function () {
+          const termination = new workerpool.TerminateError(
+            "Workerpool Worker terminated Unexpectedly"
+          );
+          pool.exec.rejects(termination);
+          pool.stats.returns({
+            totalWorkers: 1,
+            busyWorkers: 0,
+            idleWorkers: 1,
+            pendingTasks: 1,
+          });
+          await expect(workerPool.run("file.js", {}), "to be rejected");
+          expect(pool.terminate, "was not called");
+        });
+      });
+
       it("should deserialize the result", async function () {
         await workerPool.run("file.js", { foo: "bar" });
         expect(
