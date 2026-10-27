@@ -1,0 +1,38 @@
+name: Build site (not deploy)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .npmrc
+      - package.json
+      - package-lock.json
+      - docs/**
+      - netlify.toml
+      - .github/workflows/docs.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .npmrc
+      - package.json
+      - package-lock.json
+      - docs/**
+      - netlify.toml
+      - .github/workflows/docs.yml
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "26"
+      - run: npm run docs
