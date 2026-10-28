@@ -78,7 +78,16 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
           COVERAGE: ${{ inputs.coverage && '1'}}
+          MOCHA_OPTIONS: ${{ startsWith(inputs.npm-script, 'test-node:') && format('--reporter-option output={0}/mocha-ci-results.json', runner.temp) || '' }}
+          MOCHA_REPORTER_OUTPUT: ${{ startsWith(inputs.npm-script, 'test-node:') && format('{0}/mocha-ci-results.json', runner.temp) || '' }}
           NODE_OPTIONS: "--trace-warnings"
+      - name: Upload test results
+        if: ${{ failure() && steps.npm-script.outcome == 'failure' && startsWith(inputs.npm-script, 'test-node:') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results-${{ needs.resolve-inputs.outputs.npmScript }}-${{ matrix.os }}-node-${{ matrix.node_version }}
+          path: ${{ runner.temp }}/mocha-ci-results.json
+          if-no-files-found: ignore
       - name: Generate coverage report
         if: ${{ !cancelled() && inputs.coverage && (steps.npm-script.conclusion == 'success' || steps.npm-script.conclusion == 'failure') }}
         run: npm run test-coverage-generate
