@@ -12,6 +12,7 @@ const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =
 const {
   EVENT_HOOK_BEGIN,
   EVENT_HOOK_END,
+  EVENT_TEST_BEGIN,
   EVENT_TEST_FAIL,
   EVENT_TEST_PASS,
   EVENT_TEST_RETRY,
@@ -845,6 +846,38 @@ describe("Runner", function () {
             expect(nestedTest.state, "to be", STATE_FAILED);
             expect(failedTests, "to have length", 2);
             expect(failedTests, "to contain", "direct test", "nested test");
+            done();
+          });
+        });
+
+        it("should emit each test event once on a failed `beforeEach` hook", function (done) {
+          suite.beforeEach(function () {
+            throw new Error("failed hook");
+          });
+          suite.addTest(new Test("test 1", noop));
+          suite.addTest(new Test("test 2", noop));
+
+          var newRunner = new Runner(suite, { failHookAffectedTests: true });
+          var events = [];
+          [EVENT_TEST_BEGIN, EVENT_TEST_FAIL, EVENT_TEST_END].forEach(
+            function (event) {
+              newRunner.on(event, function (test) {
+                if (test.type === "test") {
+                  events.push(event + " " + test.title);
+                }
+              });
+            },
+          );
+
+          newRunner.runTests(suite, function () {
+            expect(events, "to equal", [
+              "test test 1",
+              "fail test 1",
+              "test end test 1",
+              "test test 2",
+              "fail test 2",
+              "test end test 2",
+            ]);
             done();
           });
         });
