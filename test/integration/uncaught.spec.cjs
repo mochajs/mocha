@@ -46,17 +46,23 @@ describe("uncaught exceptions", function () {
     });
   });
 
-  it("handles uncaught exceptions from which Mocha cannot recover", function (done) {
+  it("keeps running after a passed test fails asynchronously", function (done) {
     run("uncaught/fatal.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
 
-      var testName = "should bail if a successful test asynchronously fails";
+      var testName =
+        "should continue if a successful test asynchronously fails";
       expect(res, "to have failed with error", "global error")
-        .and("to have passed test count", 1)
+        .and("to have passed test count", 3)
         .and("to have failed test count", 1)
-        .and("to have passed test", testName)
+        .and(
+          "to have passed test",
+          testName,
+          "should still run after the async failure",
+          "should also still run",
+        )
         .and("to have failed test", testName);
 
       done();
@@ -149,16 +155,41 @@ describe("uncaught exceptions", function () {
     );
   });
 
-  it("issue-1327: should run the first test and then bail", function (done) {
+  it("issue-1327: should fail the first test and keep running", function (done) {
     run("uncaught/issue-1327.fixture.js", args, function (err, res) {
       if (err) {
         return done(err);
       }
       expect(res, "to have failed with error", "Too bad")
-        .and("to have passed test count", 1)
+        .and("to have passed test count", 3)
         .and("to have failed test count", 1)
-        .and("to have passed test", "test 1")
+        .and("to have passed test", "test 1", "test 2", "test 3")
         .and("to have failed test", "test 1");
+      done();
+    });
+  });
+
+  it("issue-5251: should run remaining tests after an uncaught exception", function (done) {
+    run("uncaught/issue-5251.fixture.js", args, function (err, res) {
+      if (err) {
+        return done(err);
+      }
+
+      expect(res, "to have failed with error", "uncaught!!", "Oh no!")
+        .and("to have passed test count", 3)
+        .and("to have failed test count", 2)
+        .and(
+          "to have passed test",
+          "should pass",
+          "should pass, then fail",
+          "should still run and pass",
+        )
+        .and(
+          "to have failed test",
+          "should pass, then fail",
+          "should still run and fail",
+        );
+
       done();
     });
   });
