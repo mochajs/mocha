@@ -571,6 +571,38 @@ describe("Runner", function () {
         done();
       });
 
+      describe("when _uncaught() ends the run before prepare() fires", function () {
+        it("should not reset state to STATE_RUNNING", function (done) {
+          suite.addTest(new Test("should pass", function () {}));
+          runner.run();
+          // Simulate _uncaught() having already emitted start/end and stopped
+          // the run before the queued prepare() fires (#6116).
+          runner.state = STATE_STOPPED;
+
+          setImmediate(function () {
+            expect(runner.state, "to be", STATE_STOPPED);
+            done();
+          });
+        });
+
+        it("should not emit EVENT_RUN_BEGIN a second time", function (done) {
+          var beginCount = 0;
+          suite.addTest(new Test("should pass", function () {}));
+          runner.on("start", function () {
+            beginCount += 1;
+          });
+
+          runner.run();
+          runner.emit("start");
+          runner.state = STATE_STOPPED;
+
+          setImmediate(function () {
+            expect(beginCount, "to be", 1);
+            done();
+          });
+        });
+      });
+
       describe("stack traces", function () {
         var stack = [
           "AssertionError: foo bar",
