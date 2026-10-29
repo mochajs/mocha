@@ -107,6 +107,27 @@ describe("Mocha", function () {
       expect(new Mocha()._cleanReferencesAfterRun, "to be", true);
     });
 
+    describe("when `cleanReferencesAfterRun` option is `false`", function () {
+      it("should not clean references after a run", function () {
+        expect(
+          new Mocha({ cleanReferencesAfterRun: false })
+            ._cleanReferencesAfterRun,
+          "to be",
+          false,
+        );
+      });
+    });
+
+    describe("when `cleanReferencesAfterRun` option is `true`", function () {
+      it("should clean references after a run", function () {
+        expect(
+          new Mocha({ cleanReferencesAfterRun: true })._cleanReferencesAfterRun,
+          "to be",
+          true,
+        );
+      });
+    });
+
     describe("when `timeout` option is `undefined`", function () {
       it("should not attempt to set timeout", function () {
         new Mocha({ timeout: undefined });
