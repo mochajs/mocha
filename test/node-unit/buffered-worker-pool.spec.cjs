@@ -106,6 +106,36 @@ describe("class BufferedWorkerPool", function () {
         },
       });
     });
+
+    it("should safely resolve _removeWorker when worker is terminated", async function () {
+      const origStub = sinon.stub().resolves();
+      pool._removeWorker = origStub;
+      pool._removeWorkerFromList = sinon.stub();
+      pool._ensureMinWorkers = sinon.stub();
+      const bwp = new BufferedWorkerPool();
+      const terminatedWorker = { terminated: true };
+      const res = await bwp._pool._removeWorker(terminatedWorker);
+      expect(
+        pool._removeWorkerFromList,
+        "to have a call satisfying",
+        [terminatedWorker],
+      ).and("was called once");
+      expect(pool._ensureMinWorkers, "was called once");
+      expect(origStub, "was not called");
+      expect(res, "to be", terminatedWorker);
+    });
+
+    it("should delegate to original _removeWorker when worker is not terminated", async function () {
+      const origStub = sinon.stub().resolves("normal");
+      pool._removeWorker = origStub;
+      const bwp = new BufferedWorkerPool();
+      const activeWorker = { terminated: false };
+      const res = await bwp._pool._removeWorker(activeWorker);
+      expect(origStub, "to have a call satisfying", [activeWorker]).and(
+        "was called once",
+      );
+      expect(res, "to be", "normal");
+    });
   });
 
   describe("instance method", function () {
