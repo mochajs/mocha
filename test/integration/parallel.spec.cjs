@@ -1,7 +1,11 @@
 "use strict";
 
 const assert = require("node:assert");
-const { runMochaJSONAsync } = require("./helpers.cjs");
+const {
+  runMochaJSONAsync,
+  invokeMochaAsync,
+  resolveFixturePath,
+} = require("./helpers.cjs");
 
 describe("parallel run", () => {
   /**
@@ -94,6 +98,39 @@ describe("parallel run", () => {
     const failure = result.failures[0];
     assert.strictEqual(failure.title, "Uncaught error outside test suite");
     assert.match(failure.file, /worker-death\.js$/);
+  });
+
+  it("should exit non-zero when workers fail to start with more files than jobs", async () => {
+    // Regression for #6446: with more queued files than workers, a startup
+    // crash left work pending forever and the process exited 0 with no summary.
+    const crashRequire = resolveFixturePath("parallel/crash-on-start.cjs");
+    const [, resultPromise] = invokeMochaAsync(
+      [
+        "--parallel",
+        "--jobs",
+        "2",
+        resolveFixturePath("parallel/pass-a.fixture.cjs"),
+        resolveFixturePath("parallel/pass-b.fixture.cjs"),
+        resolveFixturePath("parallel/pass-c.fixture.cjs"),
+      ],
+      {
+        env: {
+          ...process.env,
+          NODE_OPTIONS: [
+            process.env.NODE_OPTIONS,
+            `--require ${crashRequire}`,
+          ]
+            .filter(Boolean)
+            .join(" "),
+        },
+      },
+    );
+    const result = await resultPromise;
+    assert.notStrictEqual(
+      result.code,
+      0,
+      "expected non-zero exit when parallel workers fail to start",
+    );
   });
 
   it("should correctly handle a non-writable getter reference in an exception", async () => {
