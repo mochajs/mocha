@@ -4,7 +4,7 @@ const {
   getRunOptionDefinitions,
   types,
 } = require("../../../lib/cli/run-option-metadata.cjs");
-const { validateRunOptions } = require("../../../lib/cli/run.cjs");
+const { validateRunOptions } = require("../../../lib/cli/run.js");
 
 describe("command", function () {
   describe("run", function () {
