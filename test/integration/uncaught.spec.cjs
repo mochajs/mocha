@@ -218,4 +218,19 @@ describe("uncaught exceptions", function () {
       });
     });
   });
+
+  it("does not print the suite tree after the summary when load-time nextTick throws (#6116)", async function () {
+    const [, resultPromise] = invokeMochaAsync(
+      [resolveFixturePath("uncaught/before-run.fixture.js")],
+      { stdio: "pipe" },
+    );
+    const result = await resultPromise;
+    expect(result.code, "to be greater than", 0);
+    expect(result.output, "to match", /0 passing/);
+    expect(result.output, "to match", /Uncaught error outside test suite/);
+    // Suite events must not fire after the summary (the pre-fix race).
+    const summaryIdx = result.output.indexOf("0 passing");
+    const suiteIdx = result.output.indexOf("suite");
+    expect(suiteIdx === -1 || suiteIdx < summaryIdx, "to be true");
+  });
 });
