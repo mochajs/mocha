@@ -15,6 +15,7 @@ var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 
 describe("Base reporter", function () {
+  var noop = function () {};
   var stdout;
 
   function list(tests) {
@@ -667,6 +668,33 @@ describe("Base reporter", function () {
       "Error: First Error",
       "Error: Second Error - same test",
     );
+  });
+
+  describe("epilogue", function () {
+    function epilogue(stats) {
+      var reporter = new reporters.Base(
+        { on: noop, once: noop, stats: { ...stats } },
+        {},
+      );
+
+      reporter.epilogue();
+
+      return stdout.join("\n");
+    }
+
+    it("should display skipped tests as skipped", function () {
+      var out = epilogue({ passes: 1, pending: 2, failures: 0, duration: 100 });
+
+      expect(out, "to contain", "2 skipped");
+      expect(out, "not to contain", "pending");
+    });
+
+    it("should omit the skipped line when no tests are skipped", function () {
+      var out = epilogue({ passes: 1, pending: 0, failures: 0, duration: 100 });
+
+      expect(out, "not to contain", "skipped");
+      expect(out, "not to contain", "pending");
+    });
   });
 
   describe("when reporter output immune to user test changes", function () {

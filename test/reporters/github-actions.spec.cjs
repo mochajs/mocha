@@ -186,7 +186,7 @@ describe("GitHub Actions reporter", function () {
         try {
           var content = fs.readFileSync(tmpFile, "utf8");
           expect(content, "to contain", "passing");
-          expect(content, "to contain", "pending");
+          expect(content, "to contain", "skipped");
           expect(content, "to contain", "failing");
         } finally {
           fs.rmSync(tmpFile, { force: true });
