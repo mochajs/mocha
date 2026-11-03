@@ -20,7 +20,6 @@ const {
 } = require("../../../lib/runner.js").Runner.constants;
 const { EventEmitter } = require("node:events");
 const sinon = require("sinon");
-const semver = require("semver");
 const {
   ParallelBuffered,
 } = require("../../../lib/nodejs/reporters/parallel-buffered.js");
@@ -28,6 +27,25 @@ const {
   SerializableEvent,
   SerializableWorkerResult,
 } = require("../../../lib/nodejs/serializer.js");
+
+// Some Node versions leave an internal hole in the events map when
+// `removeAllListeners()` empties it, so a following `listeners()` throws a
+// TypeError instead of returning `[]`. Probe for it rather than listing the
+// affected version ranges: the bug was introduced in 20.19.0, fixed for 22.14.0
+// and 24.0.0, never backported to the 23 line, and the ranges that reproduce it
+// are not covered by a single semver expression.
+// https://github.com/nodejs/node/issues/56263
+const listenersThrowsAfterRemoveAll = (() => {
+  const emitter = new EventEmitter();
+  emitter.on("probe", () => {});
+  emitter.removeAllListeners();
+  try {
+    emitter.listeners();
+    return false;
+  } catch {
+    return true;
+  }
+})();
 
 describe("ParallelBuffered", function () {
   /** @type {EventEmitter} */
@@ -89,15 +107,7 @@ describe("ParallelBuffered", function () {
     describe("on EVENT_RUN_END", function () {
       it("should remove all listeners", function () {
         runner.emit(EVENT_RUN_END);
-        // Some node versions throw instead of returning `[]` due to a bug
-        // Fix is in Node ^22.14 and ^24.0, but not backported to 20 (now EOL)
-        // Problem was introduced in 20.19.0, not present in 20.18.3
-        // https://github.com/nodejs/node/issues/56263
-        const nodeVersionThrows = semver.satisfies(
-          process.versions.node,
-          "^20.19.0 || >=22.0.0 <22.14.0",
-        );
-        if (nodeVersionThrows) {
+        if (listenersThrowsAfterRemoveAll) {
           expect(runner.listeners, "to throw");
         } else {
           expect(runner.listeners(), "to be empty");
