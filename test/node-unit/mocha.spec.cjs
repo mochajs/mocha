@@ -360,6 +360,12 @@ describe("Mocha", function () {
         Mocha.unloadFile(DUMB_FIXTURE_PATH);
         expect(require.cache, "not to have key", DUMB_FIXTURE_PATH);
       });
+
+      it("should resolve a relative path against the current working directory", function () {
+        require(DUMB_FIXTURE_PATH);
+        Mocha.unloadFile(path.relative(process.cwd(), DUMB_FIXTURE_PATH));
+        expect(require.cache, "not to have key", DUMB_FIXTURE_PATH);
+      });
     });
   });
 });
