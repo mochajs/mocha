@@ -44,6 +44,16 @@ describe("esm", function () {
     );
   });
 
+  it("should fail with the file name when a test file never finishes loading", async function () {
+    var fixture = "esm/unsettled-import/unsettled-import.fixture.mjs";
+    const res = await runMochaAsync(fixture, args, { stdio: "pipe" });
+    expect(res.code, "to be", 1);
+    expect(res.output, "to contain", "ERR_MOCHA_FATAL").and(
+      "to contain",
+      "unsettled-import.fixture.mjs",
+    );
+  });
+
   it("should recognize esm files ending with .js due to package.json type flag", function (done) {
     var fixture = "esm/js-folder/esm-in-js.fixture.js";
     run(fixture, args, function (err, result) {
