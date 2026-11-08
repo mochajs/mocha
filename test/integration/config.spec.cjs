@@ -4,8 +4,9 @@
 // Instead we just avoid test doubles.
 
 var fs = require("node:fs");
+var os = require("node:os");
 var path = require("node:path");
-var loadConfig = require("../../lib/cli/config.cjs").loadConfig;
+var { loadConfig, findConfig } = require("../../lib/cli/config.cjs");
 
 describe("config", function () {
   it("should return the same values for all supported config types", function () {
@@ -118,6 +119,37 @@ describe("config", function () {
           }
         }
       });
+    });
+  });
+
+  describe("findConfig()", function () {
+    var tempDir;
+    var childDir;
+
+    beforeEach(function () {
+      tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "mocha-config-test-"));
+      childDir = path.join(tempDir, "child");
+      fs.mkdirSync(childDir);
+    });
+
+    afterEach(function () {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    });
+
+    it("should choose local .mocharc.js over ancestor .mocharc.cjs", function () {
+      var parentConfig = path.join(tempDir, ".mocharc.cjs");
+      var childConfig = path.join(childDir, ".mocharc.js");
+      fs.writeFileSync(parentConfig, "module.exports = {};");
+      fs.writeFileSync(childConfig, "module.exports = {};");
+
+      expect(findConfig(childDir), "to equal", childConfig);
+    });
+
+    it("should find ancestor .mocharc.cjs when child has no config", function () {
+      var parentConfig = path.join(tempDir, ".mocharc.cjs");
+      fs.writeFileSync(parentConfig, "module.exports = {};");
+
+      expect(findConfig(childDir), "to equal", parentConfig);
     });
   });
 });

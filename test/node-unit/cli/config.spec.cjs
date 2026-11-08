@@ -137,72 +137,105 @@ describe("cli/config", function () {
   });
 
   describe("findConfig()", function () {
-    let findup;
+    let statSync;
     let findConfig;
     let CONFIG_FILES;
+    const fs = require("node:fs");
+    const path = require("node:path");
 
     beforeEach(function () {
-      findup = sinon.stub();
+      statSync = sinon.stub();
       const config = rewiremock.proxy(
         require.resolve("../../../lib/cli/config.cjs"),
         (r) => ({
-          "find-up-simple": r.by(() => ({ findUpSync: findup })),
+          "node:fs": r.by(() => ({ ...fs, statSync })),
+          fs: r.by(() => ({ ...fs, statSync })),
         }),
       );
       findConfig = config.findConfig;
       CONFIG_FILES = config.CONFIG_FILES;
     });
 
-    it("should look for one of the config files using findup-sync", function () {
-      findup.onFirstCall().returns("/some/path/.mocharc.js");
-      findConfig();
-      expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: process.cwd() }],
-        returned: "/some/path/.mocharc.js",
-      });
+    it("should find config file in current working directory", function () {
+      const expected = path.join(process.cwd(), CONFIG_FILES[0]);
+      statSync.withArgs(expected).returns({ isFile: () => true });
+      expect(findConfig(), "to equal", expected);
     });
 
     it("should support an explicit `cwd`", function () {
-      findup.onFirstCall().returns("/some/path/.mocharc.js");
-      findConfig("/some/path/");
-      expect(findup, "to have a call satisfying", {
-        args: [CONFIG_FILES[0], { cwd: "/some/path/" }],
-        returned: "/some/path/.mocharc.js",
+      const targetDir = path.resolve("/some/path");
+      const expected = path.join(targetDir, CONFIG_FILES[0]);
+      statSync.withArgs(expected).returns({ isFile: () => true });
+      expect(findConfig(targetDir), "to equal", expected);
+    });
+
+    it("should prioritize local config over ancestor config (issue #6395)", function () {
+      const parentDir = path.resolve("/some/path");
+      const childDir = path.join(parentDir, "child");
+      const parentConfig = path.join(parentDir, ".mocharc.cjs");
+      const childConfig = path.join(childDir, ".mocharc.js");
+
+      statSync.callsFake((filePath) => {
+        if (filePath === parentConfig || filePath === childConfig) {
+          return { isFile: () => true };
+        }
+        return undefined;
       });
+
+      expect(findConfig(childDir), "to equal", childConfig);
     });
 
-    it("should call findup-sync with all config filename args in order", function () {
-      findup.returns(undefined);
-      findConfig("/some/path/");
-      expect(
-        findup,
-        "to have calls satisfying",
-        CONFIG_FILES.map((file) => ({ args: [file, { cwd: "/some/path/" }] })),
-      );
+    it("should search ancestor directories if no config in cwd", function () {
+      const parentDir = path.resolve("/some/path");
+      const childDir = path.join(parentDir, "child");
+      const parentConfig = path.join(parentDir, ".mocharc.yaml");
+
+      statSync.callsFake((filePath) => {
+        if (filePath === parentConfig) {
+          return { isFile: () => true };
+        }
+        return undefined;
+      });
+
+      expect(findConfig(childDir), "to equal", parentConfig);
     });
 
-    it("should not make extra calls once an item is found", function () {
-      const expected = "/some/path/.mocharc.mjs";
-      findup
-        .onFirstCall()
-        .returns(undefined)
-        .onSecondCall()
-        .returns(undefined)
-        .onThirdCall()
-        .returns(expected);
+    it("should prioritize files in CONFIG_FILES order within the same directory", function () {
+      const targetDir = path.resolve("/some/path");
+      const cjsConfig = path.join(targetDir, ".mocharc.cjs");
+      const jsConfig = path.join(targetDir, ".mocharc.js");
 
-      expect(findConfig("/some/path/"), "to equal", expected);
-      expect(findup, "was called times", 3);
-      expect(findup.getCalls(), "to satisfy", [
-        { args: [CONFIG_FILES[0], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[1], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[2], { cwd: "/some/path/" }] },
-      ]);
+      statSync.callsFake((filePath) => {
+        if (filePath === cjsConfig || filePath === jsConfig) {
+          return { isFile: () => true };
+        }
+        return undefined;
+      });
+
+      expect(findConfig(targetDir), "to equal", cjsConfig);
+    });
+
+    it("should ignore directories with matching names", function () {
+      const targetDir = path.resolve("/some/path");
+      const dirConfig = path.join(targetDir, CONFIG_FILES[0]);
+      const fileConfig = path.join(targetDir, CONFIG_FILES[1]);
+
+      statSync.callsFake((filePath) => {
+        if (filePath === dirConfig) {
+          return { isFile: () => false };
+        }
+        if (filePath === fileConfig) {
+          return { isFile: () => true };
+        }
+        return undefined;
+      });
+
+      expect(findConfig(targetDir), "to equal", fileConfig);
     });
 
     it("should return undefined if no item is found", function () {
-      findup.returns(undefined);
-      expect(findConfig("/some/path/"), "to be undefined");
+      statSync.returns(undefined);
+      expect(findConfig("/some/path"), "to be undefined");
     });
   });
 
