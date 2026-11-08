@@ -128,6 +128,31 @@ describe("--parallel", function () {
     });
   });
 
+  describe("when workers crash on startup and files exceed jobs (issue #6446)", function () {
+    it("should report failure and exit non-zero", async function () {
+      const crashFixture = resolveFixturePath(
+        "options/parallel/crash-worker.fixture.cjs",
+      );
+      return expect(
+        invokeMochaAsync(
+          [
+            resolveFixturePath("options/parallel/test-a.fixture.js"),
+            resolveFixturePath("options/parallel/test-b.fixture.js"),
+            resolveFixturePath("options/parallel/test-c.fixture.js"),
+            "--parallel",
+            "--jobs",
+            "2",
+            "--node-option",
+            `require=${crashFixture}`,
+          ],
+          "pipe",
+        )[1],
+        "when fulfilled",
+        "to have failed",
+      );
+    });
+  });
+
   describe("when used with CJS tests", function () {
     it("should have the same result as with --no-parallel", async function () {
       const expected = await runMochaAsync(
