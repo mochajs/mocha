@@ -181,7 +181,7 @@ describe("cli/config", function () {
       );
     });
 
-    it("should not make extra calls once an item is found", function () {
+    it("should check every config filename, even after one is found", function () {
       const expected = "/some/path/.mocharc.mjs";
       findup
         .onFirstCall()
@@ -192,12 +192,40 @@ describe("cli/config", function () {
         .returns(expected);
 
       expect(findConfig("/some/path/"), "to equal", expected);
-      expect(findup, "was called times", 3);
-      expect(findup.getCalls(), "to satisfy", [
-        { args: [CONFIG_FILES[0], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[1], { cwd: "/some/path/" }] },
-        { args: [CONFIG_FILES[2], { cwd: "/some/path/" }] },
-      ]);
+      expect(findup, "was called times", CONFIG_FILES.length);
+      expect(
+        findup.getCalls(),
+        "to satisfy",
+        CONFIG_FILES.map((file) => ({
+          args: [file, { cwd: "/some/path/" }],
+        })),
+      );
+    });
+
+    it("should return a config file in the current directory over one in an ancestor directory", function () {
+      findup
+        .onFirstCall()
+        .returns("/some/.mocharc.cjs")
+        .onSecondCall()
+        .returns("/some/path/.mocharc.js");
+
+      expect(findConfig("/some/path/"), "to equal", "/some/path/.mocharc.js");
+    });
+
+    it("should prefer the earlier filename when config files are in the same directory", function () {
+      findup
+        .onFirstCall()
+        .returns("/some/path/.mocharc.cjs")
+        .onSecondCall()
+        .returns("/some/path/.mocharc.js");
+
+      expect(findConfig("/some/path/"), "to equal", "/some/path/.mocharc.cjs");
+    });
+
+    it("should return a config file from an ancestor directory when nothing nearer exists", function () {
+      findup.onFirstCall().returns("/some/.mocharc.cjs");
+
+      expect(findConfig("/some/path/"), "to equal", "/some/.mocharc.cjs");
     });
 
     it("should return undefined if no item is found", function () {
