@@ -1,7 +1,7 @@
 // This file is `/mocha.mjs` because the built file is `/mocha.js`
 
 // the .js built file is not committed to the repo
-/* eslint-disable-next-line n/no-missing-import */
+/* eslint-disable-next-line n/no-missing-import, import-x/no-unresolved */
 import "./mocha.js";
 
 const { mocha, Mocha } = globalThis;
