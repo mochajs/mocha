@@ -366,6 +366,21 @@ describe("Mocha", function () {
         Mocha.unloadFile(path.relative(process.cwd(), DUMB_FIXTURE_PATH));
         expect(require.cache, "not to have key", DUMB_FIXTURE_PATH);
       });
+
+      it("should unload a file specified with a ./-prefixed relative path", function () {
+        require(DUMB_FIXTURE_PATH);
+        Mocha.unloadFile(
+          `./${path.relative(process.cwd(), DUMB_FIXTURE_PATH)}`,
+        );
+        expect(require.cache, "not to have key", DUMB_FIXTURE_PATH);
+      });
+
+      it("should unload a module specified as a bare package specifier", function () {
+        const resolved = require.resolve("ms");
+        require("ms");
+        Mocha.unloadFile("ms");
+        expect(require.cache, "not to have key", resolved);
+      });
     });
   });
 });
