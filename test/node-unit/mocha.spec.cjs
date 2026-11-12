@@ -1,5 +1,7 @@
 "use strict";
 
+const fs = require("node:fs");
+const os = require("node:os");
 const path = require("node:path");
 const rewiremock = require("rewiremock/node");
 const sinon = require("sinon");
@@ -254,6 +256,37 @@ describe("Mocha", function () {
 
       it("should be chainable", function () {
         expect(mocha.unloadFiles(), "to be", mocha);
+      });
+
+      describe("when a relative file path also resolves as a package subpath", function () {
+        let cwd;
+        let tmpDir;
+        let cwdFile;
+
+        beforeEach(function () {
+          cwd = process.cwd();
+          // `ms/index.js` exists both under the cwd and in node_modules
+          tmpDir = fs.realpathSync(
+            fs.mkdtempSync(path.join(os.tmpdir(), "mocha-unload-files-")),
+          );
+          cwdFile = path.join(tmpDir, "ms", "index.js");
+          fs.mkdirSync(path.dirname(cwdFile));
+          fs.writeFileSync(cwdFile, "module.exports = {};\n");
+          process.chdir(tmpDir);
+        });
+
+        afterEach(function () {
+          process.chdir(cwd);
+          delete require.cache[cwdFile];
+          fs.rmSync(tmpDir, { recursive: true, force: true });
+        });
+
+        it("should unload the file loaded from the current working directory", function () {
+          mocha.files = ["ms/index.js"];
+          require(path.resolve("ms/index.js"));
+          mocha.unloadFiles();
+          expect(require.cache, "not to have key", cwdFile);
+        });
       });
     });
 
