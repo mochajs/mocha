@@ -147,6 +147,58 @@ describe("JSON reporter", function () {
     });
   });
 
+  describe('when "reporterOption.indent" is provided', function () {
+    var written;
+
+    // Emits the end of the run directly rather than calling `runner.run()`,
+    // which registers process-level listeners that are never removed.
+    function runWith(reporterOption, assertions) {
+      new mocha._reporter(runner, { reporterOption });
+      written = "";
+      sinon.stub(process.stdout, "write").callsFake((chunk) => {
+        written += chunk;
+      });
+      runner.emit(Runner.constants.EVENT_RUN_END);
+      sinon.restore();
+      assertions();
+    }
+
+    it("should indent with 2 spaces by default", function () {
+      runWith({}, function () {
+        expect(written, "to be", JSON.stringify(runner.testResults, null, 2));
+      });
+    });
+
+    it("should indent with the given number of spaces", function () {
+      runWith({ indent: 4 }, function () {
+        expect(written, "to be", JSON.stringify(runner.testResults, null, 4));
+      });
+    });
+
+    it("should accept a numeric string, as given on the command line", function () {
+      runWith({ indent: "1" }, function () {
+        expect(written, "to be", JSON.stringify(runner.testResults, null, 1));
+      });
+    });
+
+    it("should output compact JSON when set to 0", function () {
+      runWith({ indent: 0 }, function () {
+        expect(written, "to be", JSON.stringify(runner.testResults));
+        expect(written, "not to contain", "\n");
+      });
+    });
+
+    [-1, 1.5, "abc", "", null, true].forEach(function (indent) {
+      it(`should throw for invalid value ${JSON.stringify(indent)}`, function () {
+        expect(
+          () => new mocha._reporter(runner, { reporterOption: { indent } }),
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+      });
+    });
+  });
+
   describe('when "reporterOption.output" is provided', function () {
     var expectedDirName = "reports";
     var expectedFileName = "reports/test-results.json";
