@@ -5,6 +5,8 @@ on:
   # DO NOT CHECK OUT THE REPO IN THIS WORKFLOW.
   pull_request_target:
     types: [opened, reopened]
+  issue_comment:
+    types: [created]
   issues:
     types: [opened]
 
@@ -13,6 +15,9 @@ permissions: {}
 jobs:
   agentscan:
     name: AgentScan
+    if: >-
+      ${{ (github.event_name == 'pull_request_target' && github.event.action == 'opened') ||
+          (github.event_name == 'issues' && github.event.action == 'opened') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,7 +46,9 @@ jobs:
 
   anti-slop:
     name: Anti Slop
-    if: github.event_name == 'pull_request_target'
+    if: >-
+      ${{ github.event_name == 'pull_request_target' &&
+          github.event.action == 'opened' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -62,3 +69,68 @@ jobs:
             If this was a mistake, please comment with more context and ask a
             maintainer to reconsider.
           lock-pr: false
+
+  reopen-spam-appeal:
+    name: Reopen spam appeal as draft
+    if: >-
+      ${{ github.event_name == 'issue_comment' &&
+          github.event.issue.pull_request &&
+          github.actor == github.event.issue.user.login }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: write
+    steps:
+      - name: Reopen as draft
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const pullNumber = context.payload.issue.number;
+            const { data: pull } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullNumber,
+            });
+
+            if (pull.state !== 'closed' || !pull.closed_at) {
+              return;
+            }
+
+            const commentAt = Date.parse(context.payload.comment.created_at);
+            const closedAt = Date.parse(pull.closed_at);
+            if (commentAt <= closedAt) {
+              return;
+            }
+
+            const spamLabels = [
+              'spam: automated account',
+              'spam: community flagged',
+              'spam: mixed signals',
+              'spam: likely slop',
+            ];
+            if (!pull.labels.some(label => spamLabels.includes(label.name))) {
+              return;
+            }
+            if (pull.labels.some(label => label.name === 'spam: exempt')) {
+              return;
+            }
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullNumber,
+              state: 'open',
+            });
+
+            if (!pull.draft) {
+              await github.graphql(
+                `mutation ConvertPullRequestToDraft($pullRequestId: ID!) {
+                  convertPullRequestToDraft(input: {pullRequestId: $pullRequestId}) {
+                    pullRequest {
+                      isDraft
+                    }
+                  }
+                }`,
+                { pullRequestId: pull.node_id }
+              );
+            }
