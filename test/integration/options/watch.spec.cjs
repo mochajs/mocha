@@ -660,6 +660,17 @@ describe("--watch", function () {
         });
       });
 
+      it("clears the scrollback buffer before each run when enabled", function () {
+        const testFile = path.join(tempDir, "test.js");
+        copyFixture(DEFAULT_FIXTURE, testFile);
+
+        return runMochaWatchAsync([testFile, "--clear-screen"], tempDir, () => {
+          touchFile(testFile);
+        }).then((result) => {
+          expect(result.output, "to contain", String.fromCharCode(27) + "[3J");
+        });
+      });
+
       it("does not clear the terminal when disabled", function () {
         const testFile = path.join(tempDir, "test.js");
         copyFixture(DEFAULT_FIXTURE, testFile);
