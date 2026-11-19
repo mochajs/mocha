@@ -1,6 +1,6 @@
 # About Mocha's Tests
 
-- **All assertions should be made using [unexpected](http://unexpected.js.org)**, unless there's a good reason not to. Exceptions include:
+- **All assertions should be made using [unexpected](https://unexpected.js.org)**, unless there's a good reason not to. Exceptions include:
   - Testing diff output. Mocha generates diff output unless the assertion library decides to do this itself. Since `unexpected` generates its _own_ diff output, we need to use an assertion library that does not; we use the built-in `assert` module.
   - `test/unit/runnable.spec.cjs` must avoid 3rd-party code; read source for more info
   - Tests asserting interop with other specific assertion libraries.
