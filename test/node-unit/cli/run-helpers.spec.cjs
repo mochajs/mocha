@@ -62,12 +62,14 @@ describe("helpers", function () {
       // this test name is referenced in a comment in `lib/mocha.cjs`
       // don't change here without also changing there
       it('should add the interface to "Mocha.interfaces"', function () {
-        // let's suppose that `glob` is an interface
-        const opts = { ui: "glob" };
+        // let's suppose that `minimatch` is an interface
+        const opts = { ui: "minimatch" };
         validateLegacyPlugin(opts, "ui", Mocha.interfaces);
-        expect(opts.ui, "to equal", "glob");
-        expect(Mocha.interfaces, "to satisfy", { glob: require("glob") });
-        delete Mocha.interfaces.glob;
+        expect(opts.ui, "to equal", "minimatch");
+        expect(Mocha.interfaces, "to satisfy", {
+          minimatch: require("minimatch"),
+        });
+        delete Mocha.interfaces.minimatch;
       });
     });
 
