@@ -97,6 +97,7 @@ jobs:
             }
 
             const pullNumber = context.payload.pull_request.number;
+            const isAuthor = context.actor === context.payload.pull_request.user.login;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
