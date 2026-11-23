@@ -130,6 +130,63 @@ describe("hook error handling", function () {
     });
   });
 
+  // https://github.com/mochajs/mocha/issues/5925
+  describe("teardown error masks original failure from nested suite", function () {
+    it("marks a cascading afterEach failure as secondary", function (done) {
+      runMochaJSON(
+        "hooks/after-each-hook-secondary-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed test count", 2);
+          const [primary, secondary] = res.failures;
+          expect(primary.err.message, "to contain", "inner setup failed");
+          expect(primary.err.secondary, "to be", undefined);
+          expect(secondary.err.message, "to contain", "outer cleanup failed");
+          expect(secondary.err.secondary, "to be", true);
+          done();
+        },
+      );
+    });
+
+    it("marks a cascading after all failure as secondary", function (done) {
+      runMochaJSON(
+        "hooks/after-all-hook-secondary-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed test count", 2);
+          const [primary, secondary] = res.failures;
+          expect(primary.err.message, "to contain", "inner test failed");
+          expect(primary.err.secondary, "to be", undefined);
+          expect(secondary.err.message, "to contain", "outer cleanup failed");
+          expect(secondary.err.secondary, "to be", true);
+          done();
+        },
+      );
+    });
+
+    it("does not mark an independent afterEach failure as secondary", function (done) {
+      runMochaJSON(
+        "hooks/after-each-hook-independent-error.fixture.js",
+        [],
+        (err, res) => {
+          if (err) {
+            return done(err);
+          }
+          expect(res, "to have failed test count", 1);
+          expect(res, "to have passed test count", 1);
+          expect(res.failures[0].err.secondary, "to be", undefined);
+          done();
+        },
+      );
+    });
+  });
+
   describe("after hook deepnested error", function () {
     it("should verify results", function (done) {
       runMochaJSON(

@@ -499,6 +499,86 @@ describe("Runner", function () {
       });
     });
 
+    describe("secondary (cascade) failures", function () {
+      function runAndCollect(theRunner, cb) {
+        var fails = [];
+        theRunner.on(EVENT_TEST_FAIL, function (runnable, err) {
+          fails.push({ message: err.message, secondary: err.secondary });
+        });
+        theRunner.run(function () {
+          cb(fails);
+        });
+      }
+
+      it("marks a parent afterEach that throws after a nested beforeEach failure as secondary", function (done) {
+        var outer = Suite.create(suite, "outer suite");
+        outer.afterEach(function () {
+          throw new Error("outer cleanup failed");
+        });
+        var inner = Suite.create(outer, "inner suite");
+        inner.beforeEach(function () {
+          throw new Error("inner setup failed");
+        });
+        inner.addTest(new Test("does something", noop));
+
+        runAndCollect(runner, function (fails) {
+          expect(fails.length, "to be", 2);
+          expect(fails[0].message, "to be", "inner setup failed");
+          expect(fails[0].secondary, "to be", undefined);
+          expect(fails[1].message, "to be", "outer cleanup failed");
+          expect(fails[1].secondary, "to be", true);
+          done();
+        });
+      });
+
+      it("marks a parent after all that throws after a nested test failure as secondary", function (done) {
+        var outer = Suite.create(suite, "outer suite");
+        outer.afterAll(function () {
+          throw new Error("outer cleanup failed");
+        });
+        var inner = Suite.create(outer, "inner suite");
+        inner.addTest(
+          new Test("fails for the real reason", function () {
+            throw new Error("inner test failed");
+          }),
+        );
+
+        runAndCollect(runner, function (fails) {
+          expect(fails.length, "to be", 2);
+          expect(fails[0].message, "to be", "inner test failed");
+          expect(fails[0].secondary, "to be", undefined);
+          expect(fails[1].message, "to be", "outer cleanup failed");
+          expect(fails[1].secondary, "to be", true);
+          done();
+        });
+      });
+
+      it("does not mark an afterEach failure as secondary when nothing failed before it", function (done) {
+        suite.afterEach(function () {
+          throw new Error("standalone cleanup failed");
+        });
+        suite.addTest(new Test("passes", noop));
+
+        runAndCollect(runner, function (fails) {
+          expect(fails.length, "to be", 1);
+          expect(fails[0].message, "to be", "standalone cleanup failed");
+          expect(fails[0].secondary, "to be", undefined);
+          done();
+        });
+      });
+
+      it("clears a stale secondary marker when the same error instance is reused", function () {
+        var err = new Error("shared");
+
+        runner._failSecondary = true;
+        runner.fail(new Test("cascade", noop), err);
+        expect(err.secondary, "to be", true);
+
+        runner.fail(new Test("independent", noop), err);
+        expect(err.secondary, "to be", undefined);
+      });
+    });
+
     describe("run()", function () {
       it('should emit "retry" when a retryable test fails', function (done) {
         var retries = 2;
