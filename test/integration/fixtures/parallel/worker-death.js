@@ -1,5 +1,6 @@
-// Fixture: a spec whose worker dies via process.exit in after()
+// Fixture: a spec whose worker dies via SIGKILL in after()
+// (process.exit is intercepted by the runner during a run)
 describe('worker death', () => {
   it('passes before crash', () => {});
-  after(() => process.exit(1));
+  after(() => process.kill(process.pid, 'SIGKILL'));
 });
