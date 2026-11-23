@@ -106,6 +106,41 @@ describe("Suite", function () {
           expect(newSuite.timeout(), "to be", 5000);
         });
       });
+
+      describe("when given an invalid duration string", function () {
+        it("should throw", function () {
+          expect(
+            () => {
+              suite.timeout("abc");
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
+        });
+
+        it("should not change the timeout value", function () {
+          expect(
+            () => {
+              suite.timeout("abc");
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
+          expect(suite.timeout(), "to be", 2000);
+        });
+      });
+
+      describe("when given NaN", function () {
+        it("should throw", function () {
+          expect(
+            () => {
+              suite.timeout(NaN);
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
+        });
+      });
     });
 
     describe("slow()", function () {
@@ -130,6 +165,41 @@ describe("Suite", function () {
         it("should return the Suite object", function () {
           const newSuite = suite.slow(5000);
           expect(newSuite.slow(), "to be", 5000);
+        });
+      });
+
+      describe("when given an invalid duration string", function () {
+        it("should throw", function () {
+          expect(
+            () => {
+              suite.slow("abc");
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
+        });
+
+        it("should not change the slow value", function () {
+          expect(
+            () => {
+              suite.slow("abc");
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
+          expect(suite.slow(), "to be", 75);
+        });
+      });
+
+      describe("when given NaN", function () {
+        it("should throw", function () {
+          expect(
+            () => {
+              suite.slow(NaN);
+            },
+            "to throw",
+            { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+          );
         });
       });
     });

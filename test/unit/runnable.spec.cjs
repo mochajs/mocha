@@ -96,6 +96,44 @@ describe("Runnable(title, fn)", function () {
         });
       });
     });
+
+    describe("when value is an invalid duration string", function () {
+      it("should throw", function () {
+        var run = new Runnable();
+        expect(
+          function () {
+            run.timeout("abc");
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+      });
+
+      it("should not change the timeout value", function () {
+        var run = new Runnable();
+        expect(
+          function () {
+            run.timeout("abc");
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+        expect(run.timeout(), "to be", 2000);
+      });
+    });
+
+    describe("when value is NaN", function () {
+      it("should throw", function () {
+        var run = new Runnable();
+        expect(
+          function () {
+            run.timeout(NaN);
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+      });
+    });
   });
 
   describe("#slow(ms)", function () {
@@ -124,6 +162,41 @@ describe("Runnable(title, fn)", function () {
       it("should convert to ms", function () {
         run.slow("1s");
         expect(run.slow(), "to be", 1000);
+      });
+    });
+
+    describe("when passed an invalid duration string", function () {
+      it("should throw", function () {
+        expect(
+          function () {
+            run.slow("abc");
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+      });
+
+      it("should not change the slow threshold", function () {
+        expect(
+          function () {
+            run.slow("abc");
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
+        expect(run.slow(), "to be", 75);
+      });
+    });
+
+    describe("when passed NaN", function () {
+      it("should throw", function () {
+        expect(
+          function () {
+            run.slow(NaN);
+          },
+          "to throw",
+          { code: "ERR_MOCHA_INVALID_ARG_VALUE" },
+        );
       });
     });
   });
