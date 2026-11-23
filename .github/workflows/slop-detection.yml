@@ -13,6 +13,7 @@ permissions: {}
 jobs:
   agentscan:
     name: AgentScan
+    if: github.event_name == 'issues' || github.event.action == 'opened'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -41,7 +42,7 @@ jobs:
 
   anti-slop:
     name: Anti Slop
-    if: github.event_name == 'pull_request_target'
+    if: github.event_name == 'pull_request_target' && github.event.action == 'opened'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -62,3 +63,50 @@ jobs:
             If this was a mistake, please comment with more context and ask a
             maintainer to reconsider.
           lock-pr: false
+
+  reopened-pr:
+    name: Validate PR reopen
+    if: github.event_name == 'pull_request_target' && github.event.action == 'reopened'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Comment and re-close unauthorized reopen
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const maintainerTeam = 'maintenance-crew';
+            let isMaintainer = false;
+
+            try {
+              const membership = await github.rest.teams.getMembershipForUserInOrg({
+                org: 'mochajs',
+                team_slug: maintainerTeam,
+                username: context.actor
+              });
+              isMaintainer = membership.data.state === 'active';
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+            }
+
+            if (isMaintainer) {
+              return;
+            }
+
+            const pullNumber = context.payload.pull_request.number;
+            const isAuthor = context.actor === context.payload.pull_request.user.login;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pullNumber,
+              body: 'Only maintainers can reopen PRs closed for suspected spam'
+            });
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullNumber,
+              state: 'closed'
+            });
