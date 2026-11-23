@@ -28,7 +28,7 @@ jobs:
           restore-keys: agentscan-cache-
 
       - name: AgentScan
-        uses: MatteoGabriele/agentscan-action@v2.5.0
+        uses: MatteoGabriele/agentscan-action@v2.8.0
         with:
           auto-close: true
           auto-close-classifications: automation
@@ -73,7 +73,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Comment and re-close unauthorized reopen
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             let isMaintainer = false;
