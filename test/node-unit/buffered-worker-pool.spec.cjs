@@ -155,6 +155,81 @@ describe("class BufferedWorkerPool", function () {
           [result],
         ).and("was called once");
       });
+
+      describe("when the task fails", function () {
+        let taskError;
+
+        beforeEach(function () {
+          taskError = new Error("worker terminated");
+          pool.exec.rejects(taskError);
+        });
+
+        describe("when tasks remain queued and no workers remain", function () {
+          beforeEach(function () {
+            pool.stats.returns({
+              totalWorkers: 0,
+              busyWorkers: 0,
+              idleWorkers: 0,
+              pendingTasks: 1,
+            });
+          });
+
+          it("should terminate the pool, so the queued tasks reject instead of never settling", async function () {
+            await expect(workerPool.run("file.js"), "to be rejected with", {
+              message: "worker terminated",
+            });
+            expect(pool.terminate, "to have a call satisfying", [true]).and(
+              "was called once",
+            );
+          });
+
+          it("should reject with the error of the failed task", async function () {
+            let caught;
+            try {
+              await workerPool.run("file.js");
+            } catch (err) {
+              caught = err;
+            }
+            expect(caught, "to be", taskError);
+          });
+        });
+
+        describe("when a worker remains", function () {
+          beforeEach(function () {
+            pool.stats.returns({
+              totalWorkers: 1,
+              busyWorkers: 1,
+              idleWorkers: 0,
+              pendingTasks: 1,
+            });
+          });
+
+          it("should not terminate the pool", async function () {
+            await expect(workerPool.run("file.js"), "to be rejected with", {
+              message: "worker terminated",
+            });
+            expect(pool.terminate, "was not called");
+          });
+        });
+
+        describe("when no tasks remain queued", function () {
+          beforeEach(function () {
+            pool.stats.returns({
+              totalWorkers: 0,
+              busyWorkers: 0,
+              idleWorkers: 0,
+              pendingTasks: 0,
+            });
+          });
+
+          it("should not terminate the pool", async function () {
+            await expect(workerPool.run("file.js"), "to be rejected with", {
+              message: "worker terminated",
+            });
+            expect(pool.terminate, "was not called");
+          });
+        });
+      });
     });
 
     describe("terminate()", function () {

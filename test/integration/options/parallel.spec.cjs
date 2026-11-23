@@ -128,6 +128,34 @@ describe("--parallel", function () {
     });
   });
 
+  describe("when workers fail to start", function () {
+    it("should fail with a summary instead of exiting 0 without one", async function () {
+      // the fixture makes every worker crash while starting; with more
+      // test files than --jobs, the file still queued must not be lost
+      const crashFixture = resolveFixturePath(
+        "options/parallel/worker-startup-crash.fixture.cjs",
+      );
+      process.env.NODE_OPTIONS = `--require ${crashFixture}`;
+      try {
+        const result = await invokeMochaAsync(
+          [
+            "--parallel",
+            "--jobs",
+            "2",
+            resolveFixturePath("options/parallel/test-a.fixture.js"),
+            resolveFixturePath("options/parallel/test-b.fixture.js"),
+            resolveFixturePath("options/parallel/test-c.fixture.js"),
+          ],
+          "pipe",
+        )[1];
+        expect(result.code, "to be greater than", 0);
+        expect(result.output, "to contain", "failing");
+      } finally {
+        delete process.env.NODE_OPTIONS;
+      }
+    });
+  });
+
   describe("when used with CJS tests", function () {
     it("should have the same result as with --no-parallel", async function () {
       const expected = await runMochaAsync(
