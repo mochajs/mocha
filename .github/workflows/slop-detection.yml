@@ -76,16 +76,15 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
-            const maintainerTeam = 'maintenance-crew';
             let isMaintainer = false;
 
             try {
-              const membership = await github.rest.teams.getMembershipForUserInOrg({
-                org: 'mochajs',
-                team_slug: maintainerTeam,
+              const permission = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
                 username: context.actor
               });
-              isMaintainer = membership.data.state === 'active';
+              isMaintainer = ['admin', 'maintain', 'write'].includes(permission.data.permission);
             } catch (error) {
               if (error.status !== 404) {
                 throw error;
@@ -97,7 +96,6 @@ jobs:
             }
 
             const pullNumber = context.payload.pull_request.number;
-            const isAuthor = context.actor === context.payload.pull_request.user.login;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
