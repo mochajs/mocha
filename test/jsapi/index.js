@@ -1,10 +1,17 @@
 import Mocha from "../../index.js";
 
-var mocha = new Mocha({
+const options = {
   ui: "bdd",
   globals: ["okGlobalA", "okGlobalB", "okGlobalC", "callback*"],
   growl: true,
-});
+};
+
+if (process.env.MOCHA_REPORTER_OUTPUT) {
+  options.reporter = "json";
+  options.reporterOption = { output: process.env.MOCHA_REPORTER_OUTPUT };
+}
+
+var mocha = new Mocha(options);
 
 import "../setup.cjs";
 
