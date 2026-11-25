@@ -14,6 +14,15 @@ var Mocha = require("../../");
 var Suite = Mocha.Suite;
 var Runner = Mocha.Runner;
 
+describe("vendored picocolors", function () {
+  it("should allow colors to be enabled and disabled", async function () {
+    var {default: colors} = await import("../../lib/reporters/picocolors.js");
+
+    expect(colors, "to have property", "red");
+    expect(colors.red("x"), "to start with", "\u001b[31m");
+  });
+});
+
 describe("Base reporter", function () {
   var stdout;
 
