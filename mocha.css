@@ -315,10 +315,12 @@ body {
   opacity: 1;
 }
 
+#mocha-report.pass .suite:not(.has-pass),
 #mocha-report.pass .test.fail {
   display: none;
 }
 
+#mocha-report.fail .suite:not(.has-fail),
 #mocha-report.fail .test.pass {
   display: none;
 }
