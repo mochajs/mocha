@@ -417,8 +417,14 @@ function resolveFixturePath(fixture) {
  * @returns {Summary}
  */
 function getSummary(res) {
+  const epilogueWords = {
+    passing: "passing",
+    pending: "skipped",
+    failing: "failing",
+  };
+
   return ["passing", "pending", "failing"].reduce((summary, type) => {
-    const pattern = new RegExp(`  (\\d+) ${type}\\s`);
+    const pattern = new RegExp(`  (\\d+) ${epilogueWords[type]}\\s`);
     const match = pattern.exec(res.output);
     summary[type] = match ? parseInt(match, 10) : 0;
 
