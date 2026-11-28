@@ -1,6 +1,10 @@
 "use strict";
 var path = require("node:path");
-const { runMochaJSON: run, runMochaAsync } = require("./helpers.cjs");
+const {
+  runMochaJSON: run,
+  runMochaAsync,
+  resolveFixturePath,
+} = require("./helpers.cjs");
 var args = [];
 
 describe("esm", function () {
@@ -101,5 +105,31 @@ describe("esm", function () {
       "to contain",
       "non-existent-package",
     );
+  });
+
+  it("should fail and name the file when a test file never finishes loading", async function () {
+    const fixture = "esm/top-level-await/never-settles.fixture.mjs";
+    const result = await runMochaAsync(
+      fixture,
+      [resolveFixturePath("esm/esm-success.fixture.js")],
+      { stdio: "pipe" },
+    );
+
+    expect(result, "to have completed with exit code", 1);
+    expect(
+      result.output,
+      "to contain",
+      `Test file "${resolveFixturePath(fixture)}" never finished loading`,
+    );
+  });
+
+  it("should run a test file whose top-level await settles", async function () {
+    const result = await runMochaAsync(
+      "esm/top-level-await/settles.fixture.mjs",
+      [],
+      { stdio: "pipe" },
+    );
+
+    expect(result, "to have passed").and("to have passed test count", 1);
   });
 });
