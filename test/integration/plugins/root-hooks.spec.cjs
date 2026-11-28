@@ -92,7 +92,7 @@ describe("root hooks", function () {
             "--require=" +
               require.resolve(
                 // as object
-                "../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.js",
+                "../fixtures/plugins/root-hooks/root-hook-defs-esm.fixture.mjs",
               ),
             "--require=" +
               require.resolve(
@@ -121,10 +121,10 @@ describe("root hooks", function () {
       });
     });
 
-    describe("support ESM via .js extension when type=commonjs", function () {
+    describe("support ESM via .js extension w/o type field", function () {
       describe("should work", function () {
         const filename =
-          "../fixtures/plugins/root-hooks/root-hook-defs-esm-broken.fixture.js";
+          "../fixtures/plugins/root-hooks/ambiguous/root-hook-defs-esm-broken.fixture.js";
         const runSuccessRegex = /0 passing/;
 
         it("with --no-experimental-detect-module", function () {
