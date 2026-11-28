@@ -12,6 +12,8 @@ const { FATAL, MULTIPLE_DONE, UNSUPPORTED } =
 const {
   EVENT_HOOK_BEGIN,
   EVENT_HOOK_END,
+  EVENT_RUN_BEGIN,
+  EVENT_SUITE_BEGIN,
   EVENT_TEST_FAIL,
   EVENT_TEST_PASS,
   EVENT_TEST_RETRY,
@@ -526,6 +528,28 @@ describe("Runner", function () {
 
           done();
         });
+      });
+
+      it("should not start a phantom run when an uncaught error ends the run before it starts", function (done) {
+        suite.addTest(new Test("im a test about lions", noop));
+        var runBegins = 0;
+        var suiteBegins = 0;
+        runner.on(EVENT_RUN_BEGIN, function () {
+          runBegins += 1;
+        });
+        runner.on(EVENT_SUITE_BEGIN, function () {
+          suiteBegins += 1;
+        });
+        runner.run(function (failures) {
+          setImmediate(function () {
+            expect(runBegins, "to be", 1);
+            expect(suiteBegins, "to be", 0);
+            expect(failures, "to be", 1);
+            done();
+          });
+        });
+        // an uncaught error arriving before the deferred start ends the run
+        runner.uncaught(new Error("boom"));
       });
 
       it("should not throw an exception if something emits EVENT_TEST_END with a non-Test object", function () {
