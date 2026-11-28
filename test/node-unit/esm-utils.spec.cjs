@@ -179,6 +179,34 @@ describe("esm-utils", function () {
       );
     });
 
+    it("should remove its beforeExit listener after loading files", async function () {
+      const listenerCount = process.listenerCount("beforeExit");
+      await esmUtils.loadFilesAsync(
+        ["/foo/bar.mjs", "/foo/baz.mjs"],
+        () => {},
+        () => {},
+      );
+
+      expect(process.listenerCount("beforeExit"), "to be", listenerCount);
+    });
+
+    it("should remove its beforeExit listener when a file fails to load", async function () {
+      const listenerCount = process.listenerCount("beforeExit");
+      esmUtils.doImport.rejects(new Error("load failed"));
+
+      await expect(
+        () =>
+          esmUtils.loadFilesAsync(
+            ["/foo/bar.mjs"],
+            () => {},
+            () => {},
+          ),
+        "to be rejected with",
+        "load failed",
+      );
+      expect(process.listenerCount("beforeExit"), "to be", listenerCount);
+    });
+
     it("should throw for unsupported URL protocols", async function () {
       return expect(
         () =>
